@@ -2925,9 +2925,6 @@ input art_rev_bool_exp {
 # unique or primary key constraints on table "art_rev"
 enum art_rev_constraint {
   # unique or primary key constraint
-  art_rev_id__rev_key
-
-  # unique or primary key constraint
   art_rev_pkey
 }
 
@@ -4483,9 +4480,6 @@ input event_rev_bool_exp {
 # unique or primary key constraints on table "event_rev"
 enum event_rev_constraint {
   # unique or primary key constraint
-  event_rev_id__rev_key
-
-  # unique or primary key constraint
   event_rev_pkey
 }
 
@@ -5791,9 +5785,6 @@ input garten_rev_bool_exp {
 
 # unique or primary key constraints on table "garten_rev"
 enum garten_rev_constraint {
-  # unique or primary key constraint
-  garten_rev_id__rev_key
-
   # unique or primary key constraint
   garten_rev_pkey
 }
@@ -8124,9 +8115,6 @@ input herkunft_rev_bool_exp {
 # unique or primary key constraints on table "herkunft_rev"
 enum herkunft_rev_constraint {
   # unique or primary key constraint
-  herkunft_rev_id__rev_key
-
-  # unique or primary key constraint
   herkunft_rev_pkey
 }
 
@@ -9503,6 +9491,12 @@ input kultur_bool_exp {
 enum kultur_constraint {
   # unique or primary key constraint
   kultur_pkey
+
+  # unique or primary key constraint
+  single_art_herkunft_garden_active_idx
+
+  # unique or primary key constraint
+  single_art_herkunft_garden_zwischenlager_active_idx
 }
 
 # columns and relationships of "kultur_file"
@@ -10182,9 +10176,6 @@ input kultur_option_rev_bool_exp {
 
 # unique or primary key constraints on table "kultur_option_rev"
 enum kultur_option_rev_constraint {
-  # unique or primary key constraint
-  kultur_option_rev_id__rev_key
-
   # unique or primary key constraint
   kultur_option_rev_pkey
 }
@@ -12816,9 +12807,6 @@ input kultur_rev_bool_exp {
 # unique or primary key constraints on table "kultur_rev"
 enum kultur_rev_constraint {
   # unique or primary key constraint
-  kultur_rev_id__rev_key
-
-  # unique or primary key constraint
   kultur_rev_pkey
 }
 
@@ -14136,9 +14124,6 @@ input lieferung_rev_bool_exp {
 
 # unique or primary key constraints on table "lieferung_rev"
 enum lieferung_rev_constraint {
-  # unique or primary key constraint
-  lieferung_rev_id__rev_key
-
   # unique or primary key constraint
   lieferung_rev_pkey
 }
@@ -18400,6 +18385,8 @@ type person_option {
   hk_kanton: Boolean
   hk_land: Boolean
   id: ID!
+  ku_erhaltungskultur: Boolean
+  ku_zwischenlager: Boolean
 
   # Ob die Sammel-Lieferung neben der Lieferung angezeigt wird
   li_show_sl: Boolean
@@ -18499,6 +18486,8 @@ input person_option_bool_exp {
   hk_kanton: Boolean_comparison_exp
   hk_land: Boolean_comparison_exp
   id: uuid_comparison_exp
+  ku_erhaltungskultur: Boolean_comparison_exp
+  ku_zwischenlager: Boolean_comparison_exp
   li_show_sl: Boolean_comparison_exp
   li_show_sl_felder: Boolean_comparison_exp
   person: person_bool_exp
@@ -18545,6 +18534,8 @@ input person_option_insert_input {
   hk_kanton: Boolean
   hk_land: Boolean
   id: ID
+  ku_erhaltungskultur: Boolean
+  ku_zwischenlager: Boolean
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
   person: person_obj_rel_insert_input
@@ -18642,6 +18633,8 @@ input person_option_order_by {
   hk_kanton: order_by
   hk_land: order_by
   id: order_by
+  ku_erhaltungskultur: order_by
+  ku_zwischenlager: order_by
   li_show_sl: order_by
   li_show_sl_felder: order_by
   person: person_order_by
@@ -18676,6 +18669,8 @@ type person_option_rev {
   hk_kanton: Boolean
   hk_land: Boolean
   id: ID!
+  ku_erhaltungskultur: Boolean
+  ku_zwischenlager: Boolean
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
 
@@ -18768,6 +18763,8 @@ input person_option_rev_bool_exp {
   hk_kanton: Boolean_comparison_exp
   hk_land: Boolean_comparison_exp
   id: uuid_comparison_exp
+  ku_erhaltungskultur: Boolean_comparison_exp
+  ku_zwischenlager: Boolean_comparison_exp
   li_show_sl: Boolean_comparison_exp
   li_show_sl_felder: Boolean_comparison_exp
   person: person_bool_exp
@@ -18783,9 +18780,6 @@ input person_option_rev_bool_exp {
 
 # unique or primary key constraints on table "person_option_rev"
 enum person_option_rev_constraint {
-  # unique or primary key constraint
-  person_option_rev_id__rev_key
-
   # unique or primary key constraint
   person_option_rev_pkey
 }
@@ -18817,6 +18811,8 @@ input person_option_rev_insert_input {
   hk_kanton: Boolean
   hk_land: Boolean
   id: ID
+  ku_erhaltungskultur: Boolean
+  ku_zwischenlager: Boolean
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
   person: person_obj_rel_insert_input
@@ -18918,6 +18914,8 @@ input person_option_rev_order_by {
   hk_kanton: order_by
   hk_land: order_by
   id: order_by
+  ku_erhaltungskultur: order_by
+  ku_zwischenlager: order_by
   li_show_sl: order_by
   li_show_sl_felder: order_by
   person: person_order_by
@@ -18999,6 +18997,12 @@ enum person_option_rev_select_column {
   id
 
   # column name
+  ku_erhaltungskultur
+
+  # column name
+  ku_zwischenlager
+
+  # column name
   li_show_sl
 
   # column name
@@ -19051,6 +19055,8 @@ input person_option_rev_set_input {
   hk_kanton: Boolean
   hk_land: Boolean
   id: ID
+  ku_erhaltungskultur: Boolean
+  ku_zwischenlager: Boolean
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
   person_id: uuid
@@ -19164,6 +19170,12 @@ enum person_option_rev_update_column {
 
   # column name
   id
+
+  # column name
+  ku_erhaltungskultur
+
+  # column name
+  ku_zwischenlager
 
   # column name
   li_show_sl
@@ -19292,6 +19304,12 @@ enum person_option_select_column {
   id
 
   # column name
+  ku_erhaltungskultur
+
+  # column name
+  ku_zwischenlager
+
+  # column name
   li_show_sl
 
   # column name
@@ -19342,6 +19360,8 @@ input person_option_set_input {
   hk_kanton: Boolean
   hk_land: Boolean
   id: ID
+  ku_erhaltungskultur: Boolean
+  ku_zwischenlager: Boolean
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
   sl_auto_copy_edits: Boolean
@@ -19457,6 +19477,12 @@ enum person_option_update_column {
 
   # column name
   id
+
+  # column name
+  ku_erhaltungskultur
+
+  # column name
+  ku_zwischenlager
 
   # column name
   li_show_sl
@@ -19919,9 +19945,6 @@ input person_rev_bool_exp {
 
 # unique or primary key constraints on table "person_rev"
 enum person_rev_constraint {
-  # unique or primary key constraint
-  person_rev_id__rev_key
-
   # unique or primary key constraint
   person_rev_pkey
 }
@@ -23197,9 +23220,6 @@ input sammel_lieferung_rev_bool_exp {
 # unique or primary key constraints on table "sammel_lieferung_rev"
 enum sammel_lieferung_rev_constraint {
   # unique or primary key constraint
-  sammel_lieferung_rev_id__rev_key
-
-  # unique or primary key constraint
   sammel_lieferung_rev_pkey
 }
 
@@ -24929,9 +24949,6 @@ input sammlung_rev_bool_exp {
 
 # unique or primary key constraints on table "sammlung_rev"
 enum sammlung_rev_constraint {
-  # unique or primary key constraint
-  sammlung_rev_id__rev_key
-
   # unique or primary key constraint
   sammlung_rev_pkey
 }
@@ -28595,9 +28612,6 @@ input teilkultur_rev_bool_exp {
 # unique or primary key constraints on table "teilkultur_rev"
 enum teilkultur_rev_constraint {
   # unique or primary key constraint
-  teilkultur_rev_id__rev_key
-
-  # unique or primary key constraint
   teilkultur_rev_pkey
 }
 
@@ -29633,9 +29647,6 @@ input teilzaehlung_rev_bool_exp {
 
 # unique or primary key constraints on table "teilzaehlung_rev"
 enum teilzaehlung_rev_constraint {
-  # unique or primary key constraint
-  teilzaehlung_rev_id__rev_key
-
   # unique or primary key constraint
   teilzaehlung_rev_pkey
 }
@@ -31123,9 +31134,6 @@ input zaehlung_rev_bool_exp {
 
 # unique or primary key constraints on table "zaehlung_rev"
 enum zaehlung_rev_constraint {
-  # unique or primary key constraint
-  zaehlung_rev_id__rev_key
-
   # unique or primary key constraint
   zaehlung_rev_pkey
 }

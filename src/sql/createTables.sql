@@ -923,6 +923,8 @@ create table person_option (
   hk_land boolean default true,
   hk_bemerkungen boolean default true,
   hk_geom_point boolean default true,
+  ku_zwischenlager boolean default false,
+  ku_erhaltungskultur boolean default false,
   li_show_sl_felder boolean default false,
   li_show_sl boolean default true,
   sl_show_empty_when_next_to_li boolean default false,
@@ -941,6 +943,8 @@ create table person_option (
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table person_option add column ku_zwischenlager boolean default false;
+alter table person_option add column ku_erhaltungskultur boolean default false;
 create index on person_option using btree (id);
 create index on person_option using btree (_deleted);
 comment on column person_option.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';
@@ -964,6 +968,8 @@ create table person_option_rev (
   hk_land boolean default true,
   hk_bemerkungen boolean default true,
   hk_geom_point boolean default true,
+  ku_zwischenlager boolean default false,
+  ku_erhaltungskultur boolean default false,
   li_show_sl_felder boolean default false,
   li_show_sl boolean default true,
   sl_show_empty_when_next_to_li boolean default false,
@@ -981,6 +987,8 @@ create table person_option_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table person_option_rev add column ku_zwischenlager boolean default false;
+alter table person_option_rev add column ku_erhaltungskultur boolean default false;
 create index on person_option_rev using btree (rev_id);
 create index on person_option_rev using btree (id);
 create index on person_option_rev using btree (_rev);

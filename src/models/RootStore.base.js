@@ -1287,6 +1287,7 @@ import { subscription_rootModelPrimitives, subscription_rootModelSelector } from
 
 
 
+
 /**
 * Store, managing, among others, all the objects received through graphQL
 */
@@ -3550,739 +3551,739 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    subscribeAe_art(variables, resultSelector = ae_artModelPrimitives.toString(), onData) {
+    subscribeAe_art(variables, resultSelector = ae_artModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription ae_art($distinct_on: [ae_art_select_column!], $limit: Int, $offset: Int, $order_by: [ae_art_order_by!], $where: ae_art_bool_exp) { ae_art(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new ae_artModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeAe_art_aggregate(variables, resultSelector = ae_art_aggregateModelPrimitives.toString(), onData) {
+    subscribeAe_art_aggregate(variables, resultSelector = ae_art_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription ae_art_aggregate($distinct_on: [ae_art_select_column!], $limit: Int, $offset: Int, $order_by: [ae_art_order_by!], $where: ae_art_bool_exp) { ae_art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new ae_art_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt(variables, resultSelector = artModelPrimitives.toString(), onData) {
+    subscribeArt(variables, resultSelector = artModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art($distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_aggregate(variables, resultSelector = art_aggregateModelPrimitives.toString(), onData) {
+    subscribeArt_aggregate(variables, resultSelector = art_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_aggregate($distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_by_pk(variables, resultSelector = artModelPrimitives.toString(), onData) {
+    subscribeArt_by_pk(variables, resultSelector = artModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_by_pk($id: ID!) { art_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_file(variables, resultSelector = art_fileModelPrimitives.toString(), onData) {
+    subscribeArt_file(variables, resultSelector = art_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_file($distinct_on: [art_file_select_column!], $limit: Int, $offset: Int, $order_by: [art_file_order_by!], $where: art_file_bool_exp) { art_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_file_aggregate(variables, resultSelector = art_file_aggregateModelPrimitives.toString(), onData) {
+    subscribeArt_file_aggregate(variables, resultSelector = art_file_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_file_aggregate($distinct_on: [art_file_select_column!], $limit: Int, $offset: Int, $order_by: [art_file_order_by!], $where: art_file_bool_exp) { art_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_file_by_pk(variables, resultSelector = art_fileModelPrimitives.toString(), onData) {
+    subscribeArt_file_by_pk(variables, resultSelector = art_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_file_by_pk($id: ID!) { art_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk(variables, resultSelector = art_qkModelPrimitives.toString(), onData) {
+    subscribeArt_qk(variables, resultSelector = art_qkModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk($distinct_on: [art_qk_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_order_by!], $where: art_qk_bool_exp) { art_qk(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_aggregate(variables, resultSelector = art_qk_aggregateModelPrimitives.toString(), onData) {
+    subscribeArt_qk_aggregate(variables, resultSelector = art_qk_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_aggregate($distinct_on: [art_qk_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_order_by!], $where: art_qk_bool_exp) { art_qk_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_by_pk(variables, resultSelector = art_qkModelPrimitives.toString(), onData) {
+    subscribeArt_qk_by_pk(variables, resultSelector = art_qkModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_by_pk($id: ID!) { art_qk_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_choosen(variables, resultSelector = art_qk_choosenModelPrimitives.toString(), onData) {
+    subscribeArt_qk_choosen(variables, resultSelector = art_qk_choosenModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_choosen($distinct_on: [art_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_order_by!], $where: art_qk_choosen_bool_exp) { art_qk_choosen(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosenModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_choosen_aggregate(variables, resultSelector = art_qk_choosen_aggregateModelPrimitives.toString(), onData) {
+    subscribeArt_qk_choosen_aggregate(variables, resultSelector = art_qk_choosen_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_choosen_aggregate($distinct_on: [art_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_order_by!], $where: art_qk_choosen_bool_exp) { art_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_choosen_by_pk(variables, resultSelector = art_qk_choosenModelPrimitives.toString(), onData) {
+    subscribeArt_qk_choosen_by_pk(variables, resultSelector = art_qk_choosenModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_choosen_by_pk($id: ID!) { art_qk_choosen_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosenModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_choosen_rev(variables, resultSelector = art_qk_choosen_revModelPrimitives.toString(), onData) {
+    subscribeArt_qk_choosen_rev(variables, resultSelector = art_qk_choosen_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_choosen_rev($distinct_on: [art_qk_choosen_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_rev_order_by!], $where: art_qk_choosen_rev_bool_exp) { art_qk_choosen_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_choosen_rev_aggregate(variables, resultSelector = art_qk_choosen_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeArt_qk_choosen_rev_aggregate(variables, resultSelector = art_qk_choosen_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_choosen_rev_aggregate($distinct_on: [art_qk_choosen_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_rev_order_by!], $where: art_qk_choosen_rev_bool_exp) { art_qk_choosen_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_choosen_rev_by_pk(variables, resultSelector = art_qk_choosen_revModelPrimitives.toString(), onData) {
+    subscribeArt_qk_choosen_rev_by_pk(variables, resultSelector = art_qk_choosen_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_choosen_rev_by_pk($id: ID!) { art_qk_choosen_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_rev(variables, resultSelector = art_qk_revModelPrimitives.toString(), onData) {
+    subscribeArt_qk_rev(variables, resultSelector = art_qk_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_rev($distinct_on: [art_qk_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_rev_order_by!], $where: art_qk_rev_bool_exp) { art_qk_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_rev_aggregate(variables, resultSelector = art_qk_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeArt_qk_rev_aggregate(variables, resultSelector = art_qk_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_rev_aggregate($distinct_on: [art_qk_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_rev_order_by!], $where: art_qk_rev_bool_exp) { art_qk_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_qk_rev_by_pk(variables, resultSelector = art_qk_revModelPrimitives.toString(), onData) {
+    subscribeArt_qk_rev_by_pk(variables, resultSelector = art_qk_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_rev_by_pk($id: ID!) { art_qk_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_rev(variables, resultSelector = art_revModelPrimitives.toString(), onData) {
+    subscribeArt_rev(variables, resultSelector = art_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_rev($distinct_on: [art_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_rev_order_by!], $where: art_rev_bool_exp) { art_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_rev_aggregate(variables, resultSelector = art_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeArt_rev_aggregate(variables, resultSelector = art_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_rev_aggregate($distinct_on: [art_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_rev_order_by!], $where: art_rev_bool_exp) { art_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeArt_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), onData) {
+    subscribeArt_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_rev_by_pk($id: ID!) { art_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeAv(variables, resultSelector = avModelPrimitives.toString(), onData) {
+    subscribeAv(variables, resultSelector = avModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription av($distinct_on: [av_select_column!], $limit: Int, $offset: Int, $order_by: [av_order_by!], $where: av_bool_exp) { av(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new avModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeAv_aggregate(variables, resultSelector = av_aggregateModelPrimitives.toString(), onData) {
+    subscribeAv_aggregate(variables, resultSelector = av_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription av_aggregate($distinct_on: [av_select_column!], $limit: Int, $offset: Int, $order_by: [av_order_by!], $where: av_bool_exp) { av_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeAv_by_pk(variables, resultSelector = avModelPrimitives.toString(), onData) {
+    subscribeAv_by_pk(variables, resultSelector = avModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription av_by_pk($id: ID!) { av_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new avModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeAv_rev(variables, resultSelector = av_revModelPrimitives.toString(), onData) {
+    subscribeAv_rev(variables, resultSelector = av_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription av_rev($distinct_on: [av_rev_select_column!], $limit: Int, $offset: Int, $order_by: [av_rev_order_by!], $where: av_rev_bool_exp) { av_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeAv_rev_aggregate(variables, resultSelector = av_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeAv_rev_aggregate(variables, resultSelector = av_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription av_rev_aggregate($distinct_on: [av_rev_select_column!], $limit: Int, $offset: Int, $order_by: [av_rev_order_by!], $where: av_rev_bool_exp) { av_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeAv_rev_by_pk(variables, resultSelector = av_revModelPrimitives.toString(), onData) {
+    subscribeAv_rev_by_pk(variables, resultSelector = av_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription av_rev_by_pk($id: ID!) { av_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new av_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeEvent(variables, resultSelector = eventModelPrimitives.toString(), onData) {
+    subscribeEvent(variables, resultSelector = eventModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription event($distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeEvent_aggregate(variables, resultSelector = event_aggregateModelPrimitives.toString(), onData) {
+    subscribeEvent_aggregate(variables, resultSelector = event_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription event_aggregate($distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeEvent_by_pk(variables, resultSelector = eventModelPrimitives.toString(), onData) {
+    subscribeEvent_by_pk(variables, resultSelector = eventModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription event_by_pk($id: ID!) { event_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeEvent_rev(variables, resultSelector = event_revModelPrimitives.toString(), onData) {
+    subscribeEvent_rev(variables, resultSelector = event_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription event_rev($distinct_on: [event_rev_select_column!], $limit: Int, $offset: Int, $order_by: [event_rev_order_by!], $where: event_rev_bool_exp) { event_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeEvent_rev_aggregate(variables, resultSelector = event_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeEvent_rev_aggregate(variables, resultSelector = event_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription event_rev_aggregate($distinct_on: [event_rev_select_column!], $limit: Int, $offset: Int, $order_by: [event_rev_order_by!], $where: event_rev_bool_exp) { event_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeEvent_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), onData) {
+    subscribeEvent_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription event_rev_by_pk($id: ID!) { event_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGarten(variables, resultSelector = gartenModelPrimitives.toString(), onData) {
+    subscribeGarten(variables, resultSelector = gartenModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten($distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGarten_aggregate(variables, resultSelector = garten_aggregateModelPrimitives.toString(), onData) {
+    subscribeGarten_aggregate(variables, resultSelector = garten_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_aggregate($distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGarten_by_pk(variables, resultSelector = gartenModelPrimitives.toString(), onData) {
+    subscribeGarten_by_pk(variables, resultSelector = gartenModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_by_pk($id: ID!) { garten_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGarten_file(variables, resultSelector = garten_fileModelPrimitives.toString(), onData) {
+    subscribeGarten_file(variables, resultSelector = garten_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_file($distinct_on: [garten_file_select_column!], $limit: Int, $offset: Int, $order_by: [garten_file_order_by!], $where: garten_file_bool_exp) { garten_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGarten_file_aggregate(variables, resultSelector = garten_file_aggregateModelPrimitives.toString(), onData) {
+    subscribeGarten_file_aggregate(variables, resultSelector = garten_file_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_file_aggregate($distinct_on: [garten_file_select_column!], $limit: Int, $offset: Int, $order_by: [garten_file_order_by!], $where: garten_file_bool_exp) { garten_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGarten_file_by_pk(variables, resultSelector = garten_fileModelPrimitives.toString(), onData) {
+    subscribeGarten_file_by_pk(variables, resultSelector = garten_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_file_by_pk($id: ID!) { garten_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGarten_rev(variables, resultSelector = garten_revModelPrimitives.toString(), onData) {
+    subscribeGarten_rev(variables, resultSelector = garten_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_rev($distinct_on: [garten_rev_select_column!], $limit: Int, $offset: Int, $order_by: [garten_rev_order_by!], $where: garten_rev_bool_exp) { garten_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGarten_rev_aggregate(variables, resultSelector = garten_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeGarten_rev_aggregate(variables, resultSelector = garten_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_rev_aggregate($distinct_on: [garten_rev_select_column!], $limit: Int, $offset: Int, $order_by: [garten_rev_order_by!], $where: garten_rev_bool_exp) { garten_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGarten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), onData) {
+    subscribeGarten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_rev_by_pk($id: ID!) { garten_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGv(variables, resultSelector = gvModelPrimitives.toString(), onData) {
+    subscribeGv(variables, resultSelector = gvModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription gv($distinct_on: [gv_select_column!], $limit: Int, $offset: Int, $order_by: [gv_order_by!], $where: gv_bool_exp) { gv(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gvModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGv_aggregate(variables, resultSelector = gv_aggregateModelPrimitives.toString(), onData) {
+    subscribeGv_aggregate(variables, resultSelector = gv_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription gv_aggregate($distinct_on: [gv_select_column!], $limit: Int, $offset: Int, $order_by: [gv_order_by!], $where: gv_bool_exp) { gv_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gv_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGv_by_pk(variables, resultSelector = gvModelPrimitives.toString(), onData) {
+    subscribeGv_by_pk(variables, resultSelector = gvModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription gv_by_pk($id: ID!) { gv_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new gvModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGv_rev(variables, resultSelector = gv_revModelPrimitives.toString(), onData) {
+    subscribeGv_rev(variables, resultSelector = gv_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription gv_rev($distinct_on: [gv_rev_select_column!], $limit: Int, $offset: Int, $order_by: [gv_rev_order_by!], $where: gv_rev_bool_exp) { gv_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gv_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGv_rev_aggregate(variables, resultSelector = gv_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeGv_rev_aggregate(variables, resultSelector = gv_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription gv_rev_aggregate($distinct_on: [gv_rev_select_column!], $limit: Int, $offset: Int, $order_by: [gv_rev_order_by!], $where: gv_rev_bool_exp) { gv_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gv_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeGv_rev_by_pk(variables, resultSelector = gv_revModelPrimitives.toString(), onData) {
+    subscribeGv_rev_by_pk(variables, resultSelector = gv_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription gv_rev_by_pk($id: ID!) { gv_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new gv_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeHerkunft(variables, resultSelector = herkunftModelPrimitives.toString(), onData) {
+    subscribeHerkunft(variables, resultSelector = herkunftModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft($distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeHerkunft_aggregate(variables, resultSelector = herkunft_aggregateModelPrimitives.toString(), onData) {
+    subscribeHerkunft_aggregate(variables, resultSelector = herkunft_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft_aggregate($distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeHerkunft_by_pk(variables, resultSelector = herkunftModelPrimitives.toString(), onData) {
+    subscribeHerkunft_by_pk(variables, resultSelector = herkunftModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft_by_pk($id: ID!) { herkunft_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeHerkunft_file(variables, resultSelector = herkunft_fileModelPrimitives.toString(), onData) {
+    subscribeHerkunft_file(variables, resultSelector = herkunft_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft_file($distinct_on: [herkunft_file_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_file_order_by!], $where: herkunft_file_bool_exp) { herkunft_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeHerkunft_file_aggregate(variables, resultSelector = herkunft_file_aggregateModelPrimitives.toString(), onData) {
+    subscribeHerkunft_file_aggregate(variables, resultSelector = herkunft_file_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft_file_aggregate($distinct_on: [herkunft_file_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_file_order_by!], $where: herkunft_file_bool_exp) { herkunft_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeHerkunft_file_by_pk(variables, resultSelector = herkunft_fileModelPrimitives.toString(), onData) {
+    subscribeHerkunft_file_by_pk(variables, resultSelector = herkunft_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft_file_by_pk($id: ID!) { herkunft_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeHerkunft_rev(variables, resultSelector = herkunft_revModelPrimitives.toString(), onData) {
+    subscribeHerkunft_rev(variables, resultSelector = herkunft_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft_rev($distinct_on: [herkunft_rev_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_rev_order_by!], $where: herkunft_rev_bool_exp) { herkunft_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeHerkunft_rev_aggregate(variables, resultSelector = herkunft_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeHerkunft_rev_aggregate(variables, resultSelector = herkunft_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft_rev_aggregate($distinct_on: [herkunft_rev_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_rev_order_by!], $where: herkunft_rev_bool_exp) { herkunft_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeHerkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), onData) {
+    subscribeHerkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft_rev_by_pk($id: ID!) { herkunft_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur(variables, resultSelector = kulturModelPrimitives.toString(), onData) {
+    subscribeKultur(variables, resultSelector = kulturModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur($distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_aggregate(variables, resultSelector = kultur_aggregateModelPrimitives.toString(), onData) {
+    subscribeKultur_aggregate(variables, resultSelector = kultur_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_aggregate($distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_by_pk(variables, resultSelector = kulturModelPrimitives.toString(), onData) {
+    subscribeKultur_by_pk(variables, resultSelector = kulturModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_by_pk($id: ID!) { kultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_file(variables, resultSelector = kultur_fileModelPrimitives.toString(), onData) {
+    subscribeKultur_file(variables, resultSelector = kultur_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_file($distinct_on: [kultur_file_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_file_order_by!], $where: kultur_file_bool_exp) { kultur_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_file_aggregate(variables, resultSelector = kultur_file_aggregateModelPrimitives.toString(), onData) {
+    subscribeKultur_file_aggregate(variables, resultSelector = kultur_file_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_file_aggregate($distinct_on: [kultur_file_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_file_order_by!], $where: kultur_file_bool_exp) { kultur_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_file_by_pk(variables, resultSelector = kultur_fileModelPrimitives.toString(), onData) {
+    subscribeKultur_file_by_pk(variables, resultSelector = kultur_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_file_by_pk($id: ID!) { kultur_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_option(variables, resultSelector = kultur_optionModelPrimitives.toString(), onData) {
+    subscribeKultur_option(variables, resultSelector = kultur_optionModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_option($distinct_on: [kultur_option_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_order_by!], $where: kultur_option_bool_exp) { kultur_option(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_optionModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_option_aggregate(variables, resultSelector = kultur_option_aggregateModelPrimitives.toString(), onData) {
+    subscribeKultur_option_aggregate(variables, resultSelector = kultur_option_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_option_aggregate($distinct_on: [kultur_option_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_order_by!], $where: kultur_option_bool_exp) { kultur_option_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_option_rev(variables, resultSelector = kultur_option_revModelPrimitives.toString(), onData) {
+    subscribeKultur_option_rev(variables, resultSelector = kultur_option_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_option_rev($distinct_on: [kultur_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_rev_order_by!], $where: kultur_option_rev_bool_exp) { kultur_option_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_option_rev_aggregate(variables, resultSelector = kultur_option_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeKultur_option_rev_aggregate(variables, resultSelector = kultur_option_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_option_rev_aggregate($distinct_on: [kultur_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_rev_order_by!], $where: kultur_option_rev_bool_exp) { kultur_option_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), onData) {
+    subscribeKultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_option_rev_by_pk($id: ID!) { kultur_option_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk(variables, resultSelector = kultur_qkModelPrimitives.toString(), onData) {
+    subscribeKultur_qk(variables, resultSelector = kultur_qkModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk($distinct_on: [kultur_qk_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_order_by!], $where: kultur_qk_bool_exp) { kultur_qk(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_aggregate(variables, resultSelector = kultur_qk_aggregateModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_aggregate(variables, resultSelector = kultur_qk_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_aggregate($distinct_on: [kultur_qk_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_order_by!], $where: kultur_qk_bool_exp) { kultur_qk_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_by_pk(variables, resultSelector = kultur_qkModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_by_pk(variables, resultSelector = kultur_qkModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_by_pk($name: String!) { kultur_qk_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_choosen(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_choosen(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_choosen($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_choosen_aggregate(variables, resultSelector = kultur_qk_choosen_aggregateModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_choosen_aggregate(variables, resultSelector = kultur_qk_choosen_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_choosen_aggregate($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_choosen_by_pk(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_choosen_by_pk(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_choosen_by_pk($id: ID!) { kultur_qk_choosen_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_choosen_rev(variables, resultSelector = kultur_qk_choosen_revModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_choosen_rev(variables, resultSelector = kultur_qk_choosen_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_choosen_rev($distinct_on: [kultur_qk_choosen_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_rev_order_by!], $where: kultur_qk_choosen_rev_bool_exp) { kultur_qk_choosen_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_choosen_rev_aggregate(variables, resultSelector = kultur_qk_choosen_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_choosen_rev_aggregate(variables, resultSelector = kultur_qk_choosen_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_choosen_rev_aggregate($distinct_on: [kultur_qk_choosen_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_rev_order_by!], $where: kultur_qk_choosen_rev_bool_exp) { kultur_qk_choosen_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_choosen_rev_by_pk(variables, resultSelector = kultur_qk_choosen_revModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_choosen_rev_by_pk(variables, resultSelector = kultur_qk_choosen_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_choosen_rev_by_pk($id: ID!) { kultur_qk_choosen_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_rev(variables, resultSelector = kultur_qk_revModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_rev(variables, resultSelector = kultur_qk_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_rev($distinct_on: [kultur_qk_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_rev_order_by!], $where: kultur_qk_rev_bool_exp) { kultur_qk_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_rev_aggregate(variables, resultSelector = kultur_qk_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_rev_aggregate(variables, resultSelector = kultur_qk_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_rev_aggregate($distinct_on: [kultur_qk_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_rev_order_by!], $where: kultur_qk_rev_bool_exp) { kultur_qk_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_rev_by_pk(variables, resultSelector = kultur_qk_revModelPrimitives.toString(), onData) {
+    subscribeKultur_qk_rev_by_pk(variables, resultSelector = kultur_qk_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_rev_by_pk($name: String!) { kultur_qk_rev_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_rev(variables, resultSelector = kultur_revModelPrimitives.toString(), onData) {
+    subscribeKultur_rev(variables, resultSelector = kultur_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_rev($distinct_on: [kultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_rev_order_by!], $where: kultur_rev_bool_exp) { kultur_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_rev_aggregate(variables, resultSelector = kultur_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeKultur_rev_aggregate(variables, resultSelector = kultur_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_rev_aggregate($distinct_on: [kultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_rev_order_by!], $where: kultur_rev_bool_exp) { kultur_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeKultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), onData) {
+    subscribeKultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_rev_by_pk($id: ID!) { kultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeLieferung(variables, resultSelector = lieferungModelPrimitives.toString(), onData) {
+    subscribeLieferung(variables, resultSelector = lieferungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeLieferung_aggregate(variables, resultSelector = lieferung_aggregateModelPrimitives.toString(), onData) {
+    subscribeLieferung_aggregate(variables, resultSelector = lieferung_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung_aggregate($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeLieferung_by_pk(variables, resultSelector = lieferungModelPrimitives.toString(), onData) {
+    subscribeLieferung_by_pk(variables, resultSelector = lieferungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung_by_pk($id: ID!) { lieferung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeLieferung_file(variables, resultSelector = lieferung_fileModelPrimitives.toString(), onData) {
+    subscribeLieferung_file(variables, resultSelector = lieferung_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung_file($distinct_on: [lieferung_file_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_file_order_by!], $where: lieferung_file_bool_exp) { lieferung_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeLieferung_file_aggregate(variables, resultSelector = lieferung_file_aggregateModelPrimitives.toString(), onData) {
+    subscribeLieferung_file_aggregate(variables, resultSelector = lieferung_file_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung_file_aggregate($distinct_on: [lieferung_file_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_file_order_by!], $where: lieferung_file_bool_exp) { lieferung_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeLieferung_file_by_pk(variables, resultSelector = lieferung_fileModelPrimitives.toString(), onData) {
+    subscribeLieferung_file_by_pk(variables, resultSelector = lieferung_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung_file_by_pk($id: ID!) { lieferung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeLieferung_rev(variables, resultSelector = lieferung_revModelPrimitives.toString(), onData) {
+    subscribeLieferung_rev(variables, resultSelector = lieferung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung_rev($distinct_on: [lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_rev_order_by!], $where: lieferung_rev_bool_exp) { lieferung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeLieferung_rev_aggregate(variables, resultSelector = lieferung_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeLieferung_rev_aggregate(variables, resultSelector = lieferung_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung_rev_aggregate($distinct_on: [lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_rev_order_by!], $where: lieferung_rev_bool_exp) { lieferung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeLieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), onData) {
+    subscribeLieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung_rev_by_pk($id: ID!) { lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson(variables, resultSelector = personModelPrimitives.toString(), onData) {
+    subscribePerson(variables, resultSelector = personModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person($distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_aggregate(variables, resultSelector = person_aggregateModelPrimitives.toString(), onData) {
+    subscribePerson_aggregate(variables, resultSelector = person_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_aggregate($distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_by_pk(variables, resultSelector = personModelPrimitives.toString(), onData) {
+    subscribePerson_by_pk(variables, resultSelector = personModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_by_pk($id: ID!) { person_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_file(variables, resultSelector = person_fileModelPrimitives.toString(), onData) {
+    subscribePerson_file(variables, resultSelector = person_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_file($distinct_on: [person_file_select_column!], $limit: Int, $offset: Int, $order_by: [person_file_order_by!], $where: person_file_bool_exp) { person_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_file_aggregate(variables, resultSelector = person_file_aggregateModelPrimitives.toString(), onData) {
+    subscribePerson_file_aggregate(variables, resultSelector = person_file_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_file_aggregate($distinct_on: [person_file_select_column!], $limit: Int, $offset: Int, $order_by: [person_file_order_by!], $where: person_file_bool_exp) { person_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_file_by_pk(variables, resultSelector = person_fileModelPrimitives.toString(), onData) {
+    subscribePerson_file_by_pk(variables, resultSelector = person_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_file_by_pk($id: ID!) { person_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_option(variables, resultSelector = person_optionModelPrimitives.toString(), onData) {
+    subscribePerson_option(variables, resultSelector = person_optionModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_option($distinct_on: [person_option_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_order_by!], $where: person_option_bool_exp) { person_option(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_optionModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_option_aggregate(variables, resultSelector = person_option_aggregateModelPrimitives.toString(), onData) {
+    subscribePerson_option_aggregate(variables, resultSelector = person_option_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_option_aggregate($distinct_on: [person_option_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_order_by!], $where: person_option_bool_exp) { person_option_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_option_rev(variables, resultSelector = person_option_revModelPrimitives.toString(), onData) {
+    subscribePerson_option_rev(variables, resultSelector = person_option_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_option_rev($distinct_on: [person_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_rev_order_by!], $where: person_option_rev_bool_exp) { person_option_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_option_rev_aggregate(variables, resultSelector = person_option_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribePerson_option_rev_aggregate(variables, resultSelector = person_option_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_option_rev_aggregate($distinct_on: [person_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_rev_order_by!], $where: person_option_rev_bool_exp) { person_option_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), onData) {
+    subscribePerson_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_option_rev_by_pk($id: ID!) { person_option_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_rev(variables, resultSelector = person_revModelPrimitives.toString(), onData) {
+    subscribePerson_rev(variables, resultSelector = person_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_rev($distinct_on: [person_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_rev_order_by!], $where: person_rev_bool_exp) { person_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_rev_aggregate(variables, resultSelector = person_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribePerson_rev_aggregate(variables, resultSelector = person_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_rev_aggregate($distinct_on: [person_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_rev_order_by!], $where: person_rev_bool_exp) { person_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribePerson_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), onData) {
+    subscribePerson_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_rev_by_pk($id: ID!) { person_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammel_lieferung(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), onData) {
+    subscribeSammel_lieferung(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammel_lieferung($distinct_on: [sammel_lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_order_by!], $where: sammel_lieferung_bool_exp) { sammel_lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammel_lieferung_aggregate(variables, resultSelector = sammel_lieferung_aggregateModelPrimitives.toString(), onData) {
+    subscribeSammel_lieferung_aggregate(variables, resultSelector = sammel_lieferung_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammel_lieferung_aggregate($distinct_on: [sammel_lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_order_by!], $where: sammel_lieferung_bool_exp) { sammel_lieferung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammel_lieferung_by_pk(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), onData) {
+    subscribeSammel_lieferung_by_pk(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammel_lieferung_by_pk($id: ID!) { sammel_lieferung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammel_lieferung_rev(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), onData) {
+    subscribeSammel_lieferung_rev(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammel_lieferung_rev($distinct_on: [sammel_lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_rev_order_by!], $where: sammel_lieferung_rev_bool_exp) { sammel_lieferung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammel_lieferung_rev_aggregate(variables, resultSelector = sammel_lieferung_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeSammel_lieferung_rev_aggregate(variables, resultSelector = sammel_lieferung_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammel_lieferung_rev_aggregate($distinct_on: [sammel_lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_rev_order_by!], $where: sammel_lieferung_rev_bool_exp) { sammel_lieferung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), onData) {
+    subscribeSammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammel_lieferung_rev_by_pk($id: ID!) { sammel_lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammlung(variables, resultSelector = sammlungModelPrimitives.toString(), onData) {
+    subscribeSammlung(variables, resultSelector = sammlungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung($distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammlung_aggregate(variables, resultSelector = sammlung_aggregateModelPrimitives.toString(), onData) {
+    subscribeSammlung_aggregate(variables, resultSelector = sammlung_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung_aggregate($distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammlung_by_pk(variables, resultSelector = sammlungModelPrimitives.toString(), onData) {
+    subscribeSammlung_by_pk(variables, resultSelector = sammlungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung_by_pk($id: ID!) { sammlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammlung_file(variables, resultSelector = sammlung_fileModelPrimitives.toString(), onData) {
+    subscribeSammlung_file(variables, resultSelector = sammlung_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung_file($distinct_on: [sammlung_file_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_file_order_by!], $where: sammlung_file_bool_exp) { sammlung_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammlung_file_aggregate(variables, resultSelector = sammlung_file_aggregateModelPrimitives.toString(), onData) {
+    subscribeSammlung_file_aggregate(variables, resultSelector = sammlung_file_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung_file_aggregate($distinct_on: [sammlung_file_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_file_order_by!], $where: sammlung_file_bool_exp) { sammlung_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammlung_file_by_pk(variables, resultSelector = sammlung_fileModelPrimitives.toString(), onData) {
+    subscribeSammlung_file_by_pk(variables, resultSelector = sammlung_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung_file_by_pk($id: ID!) { sammlung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammlung_rev(variables, resultSelector = sammlung_revModelPrimitives.toString(), onData) {
+    subscribeSammlung_rev(variables, resultSelector = sammlung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung_rev($distinct_on: [sammlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_rev_order_by!], $where: sammlung_rev_bool_exp) { sammlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammlung_rev_aggregate(variables, resultSelector = sammlung_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeSammlung_rev_aggregate(variables, resultSelector = sammlung_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung_rev_aggregate($distinct_on: [sammlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_rev_order_by!], $where: sammlung_rev_bool_exp) { sammlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), onData) {
+    subscribeSammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung_rev_by_pk($id: ID!) { sammlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSpatial_ref_sys(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), onData) {
+    subscribeSpatial_ref_sys(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription spatial_ref_sys($distinct_on: [spatial_ref_sys_select_column!], $limit: Int, $offset: Int, $order_by: [spatial_ref_sys_order_by!], $where: spatial_ref_sys_bool_exp) { spatial_ref_sys(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSpatial_ref_sys_aggregate(variables, resultSelector = spatial_ref_sys_aggregateModelPrimitives.toString(), onData) {
+    subscribeSpatial_ref_sys_aggregate(variables, resultSelector = spatial_ref_sys_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription spatial_ref_sys_aggregate($distinct_on: [spatial_ref_sys_select_column!], $limit: Int, $offset: Int, $order_by: [spatial_ref_sys_order_by!], $where: spatial_ref_sys_bool_exp) { spatial_ref_sys_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sys_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeSpatial_ref_sys_by_pk(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), onData) {
+    subscribeSpatial_ref_sys_by_pk(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription spatial_ref_sys_by_pk($srid: Int!) { spatial_ref_sys_by_pk(srid: $srid) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilkultur(variables, resultSelector = teilkulturModelPrimitives.toString(), onData) {
+    subscribeTeilkultur(variables, resultSelector = teilkulturModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilkultur($distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilkultur_aggregate(variables, resultSelector = teilkultur_aggregateModelPrimitives.toString(), onData) {
+    subscribeTeilkultur_aggregate(variables, resultSelector = teilkultur_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilkultur_aggregate($distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilkultur_by_pk(variables, resultSelector = teilkulturModelPrimitives.toString(), onData) {
+    subscribeTeilkultur_by_pk(variables, resultSelector = teilkulturModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilkultur_by_pk($id: ID!) { teilkultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilkultur_rev(variables, resultSelector = teilkultur_revModelPrimitives.toString(), onData) {
+    subscribeTeilkultur_rev(variables, resultSelector = teilkultur_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilkultur_rev($distinct_on: [teilkultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_rev_order_by!], $where: teilkultur_rev_bool_exp) { teilkultur_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilkultur_rev_aggregate(variables, resultSelector = teilkultur_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeTeilkultur_rev_aggregate(variables, resultSelector = teilkultur_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilkultur_rev_aggregate($distinct_on: [teilkultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_rev_order_by!], $where: teilkultur_rev_bool_exp) { teilkultur_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), onData) {
+    subscribeTeilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilkultur_rev_by_pk($id: ID!) { teilkultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilzaehlung(variables, resultSelector = teilzaehlungModelPrimitives.toString(), onData) {
+    subscribeTeilzaehlung(variables, resultSelector = teilzaehlungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilzaehlung($distinct_on: [teilzaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_order_by!], $where: teilzaehlung_bool_exp) { teilzaehlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilzaehlung_aggregate(variables, resultSelector = teilzaehlung_aggregateModelPrimitives.toString(), onData) {
+    subscribeTeilzaehlung_aggregate(variables, resultSelector = teilzaehlung_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilzaehlung_aggregate($distinct_on: [teilzaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_order_by!], $where: teilzaehlung_bool_exp) { teilzaehlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilzaehlung_by_pk(variables, resultSelector = teilzaehlungModelPrimitives.toString(), onData) {
+    subscribeTeilzaehlung_by_pk(variables, resultSelector = teilzaehlungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilzaehlung_by_pk($id: ID!) { teilzaehlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilzaehlung_rev(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), onData) {
+    subscribeTeilzaehlung_rev(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilzaehlung_rev($distinct_on: [teilzaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_rev_order_by!], $where: teilzaehlung_rev_bool_exp) { teilzaehlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilzaehlung_rev_aggregate(variables, resultSelector = teilzaehlung_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeTeilzaehlung_rev_aggregate(variables, resultSelector = teilzaehlung_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilzaehlung_rev_aggregate($distinct_on: [teilzaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_rev_order_by!], $where: teilzaehlung_rev_bool_exp) { teilzaehlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeTeilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), onData) {
+    subscribeTeilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilzaehlung_rev_by_pk($id: ID!) { teilzaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeUser_role(variables, resultSelector = user_roleModelPrimitives.toString(), onData) {
+    subscribeUser_role(variables, resultSelector = user_roleModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription user_role($distinct_on: [user_role_select_column!], $limit: Int, $offset: Int, $order_by: [user_role_order_by!], $where: user_role_bool_exp) { user_role(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeUser_role_aggregate(variables, resultSelector = user_role_aggregateModelPrimitives.toString(), onData) {
+    subscribeUser_role_aggregate(variables, resultSelector = user_role_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription user_role_aggregate($distinct_on: [user_role_select_column!], $limit: Int, $offset: Int, $order_by: [user_role_order_by!], $where: user_role_bool_exp) { user_role_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new user_role_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeUser_role_by_pk(variables, resultSelector = user_roleModelPrimitives.toString(), onData) {
+    subscribeUser_role_by_pk(variables, resultSelector = user_roleModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription user_role_by_pk($id: ID!) { user_role_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeZaehlung(variables, resultSelector = zaehlungModelPrimitives.toString(), onData) {
+    subscribeZaehlung(variables, resultSelector = zaehlungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription zaehlung($distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeZaehlung_aggregate(variables, resultSelector = zaehlung_aggregateModelPrimitives.toString(), onData) {
+    subscribeZaehlung_aggregate(variables, resultSelector = zaehlung_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription zaehlung_aggregate($distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeZaehlung_by_pk(variables, resultSelector = zaehlungModelPrimitives.toString(), onData) {
+    subscribeZaehlung_by_pk(variables, resultSelector = zaehlungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription zaehlung_by_pk($id: ID!) { zaehlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeZaehlung_rev(variables, resultSelector = zaehlung_revModelPrimitives.toString(), onData) {
+    subscribeZaehlung_rev(variables, resultSelector = zaehlung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription zaehlung_rev($distinct_on: [zaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_rev_order_by!], $where: zaehlung_rev_bool_exp) { zaehlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeZaehlung_rev_aggregate(variables, resultSelector = zaehlung_rev_aggregateModelPrimitives.toString(), onData) {
+    subscribeZaehlung_rev_aggregate(variables, resultSelector = zaehlung_rev_aggregateModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription zaehlung_rev_aggregate($distinct_on: [zaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_rev_order_by!], $where: zaehlung_rev_bool_exp) { zaehlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
-    subscribeZaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), onData) {
+    subscribeZaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription zaehlung_rev_by_pk($id: ID!) { zaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
+      } }`, variables, onData, onError)
     },
   }))
