@@ -18,6 +18,7 @@ Um die Historie eines Datensatzes zu sehen, klickt man auf das entsprechende Sym
   - Gärten
   - Herkünfte
   - Kulturen
+  - Lieferungen
   - Personen
   - Sammlungen
 
