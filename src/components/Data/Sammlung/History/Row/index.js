@@ -1,96 +1,22 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
 import History from '../../../../shared/History'
-import herkunftLabelFromHerkunft from '../../herkunftLabelFromHerkunft'
 import { StoreContext } from '../../../../../models/reactUtils'
 import checkForOnlineError from '../../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../../utils/toPgArray'
-import moment from 'moment'
+import createDataArrayForRevComparison from '../../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
   const { user, addNotification, upsertSammlungModel } = store
 
-  const dataArray = [
-    {
-      valueInRow: row?.art?.art_ae_art?.name,
-      valueInRev: revRow?.art?.art_ae_art?.name,
-      label: 'Art',
-    },
-    {
-      valueInRow: row?.person?.fullname,
-      valueInRev: revRow?.person?.fullname,
-      label: 'Person',
-    },
-    {
-      valueInRow: herkunftLabelFromHerkunft(row.herkunft),
-      valueInRev: herkunftLabelFromHerkunft(revRow.herkunft),
-      label: 'Herkunft',
-    },
-    {
-      valueInRow: row?.nr,
-      valueInRev: revRow?.nr,
-      label: 'Nr',
-    },
-    {
-      valueInRow: moment(row?.datum).format('DD.MM.YYYY'),
-      valueInRev: moment(revRow?.datum).format('DD.MM.YYYY'),
-      label: 'Datum',
-    },
-    {
-      valueInRow: row?.von_anzahl_individuen,
-      valueInRev: revRow?.von_anzahl_individuen,
-      label: 'Von Anzahl Individuen',
-    },
-    {
-      valueInRow: row?.anzahl_pflanzen,
-      valueInRev: revRow?.anzahl_pflanzen,
-      label: 'Anzahl Pflanzen',
-    },
-    {
-      valueInRow: row?.gramm_samen,
-      valueInRev: revRow?.gramm_samen,
-      label: 'Gramm Samen',
-    },
-    {
-      valueInRow: row?.andere_menge,
-      valueInRev: revRow?.andere_menge,
-      label: 'Andere Menge',
-    },
-    {
-      valueInRow: row?.geom_point?.coordinates,
-      valueInRev: revRow?.geom_point?.coordinates,
-      label: 'Längen- und Breitengrad',
-    },
-    {
-      valueInRow: row?.geplant == true,
-      valueInRev: revRow?.geplant == true,
-      label: 'geplant',
-    },
-    {
-      valueInRow: row?.bemerkungen,
-      valueInRev: revRow?.bemerkungen,
-      label: 'bemerkungen',
-    },
-    {
-      valueInRow: row?.changed,
-      valueInRev: revRow?.changed,
-      label: 'geändert',
-    },
-    {
-      valueInRow: row?.changed_by,
-      valueInRev: revRow?.changed_by,
-      label: 'geändert von',
-    },
-    {
-      valueInRow: row._deleted,
-      valueInRev: revRow._deleted,
-      label: 'gelöscht',
-    },
-  ]
+  const dataArray = useMemo(
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
+  )
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
