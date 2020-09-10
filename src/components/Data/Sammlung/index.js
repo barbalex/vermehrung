@@ -6,50 +6,21 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
-import Select from '../../shared/Select'
-import TextField from '../../shared/TextField'
-import Date from '../../shared/Date'
 import FormTitle from './FormTitle'
-import Checkbox2States from '../../shared/Checkbox2States'
-import Checkbox3States from '../../shared/Checkbox3States'
-import Coordinates from '../../shared/Coordinates'
-import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import Files from '../Files'
-import getConstants from '../../../utils/constants'
+import Form from './Form'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
-import ConflictList from '../../shared/ConflictList'
-import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
-import exists from '../../../utils/exists'
-
-const constants = getConstants()
+import History from './History'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const FieldsContainer = styled.div`
-  padding: 10px;
-  overflow: auto !important;
-  height: 100%;
-`
-const FieldRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > div:not(:last-of-type) {
-    padding-right: 8px;
-  }
-  > div > button {
-    margin-top: 8px;
-  }
 `
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px - 48px) !important;
@@ -78,32 +49,13 @@ const StyledSplitPane = styled(SplitPane)`
     overflow: hidden;
   }
 `
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
 
 const Sammlung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    artsSorted,
-    herkunftsSorted,
-    personsSorted,
-    sammlungsSorted,
-    errors,
-    unsetError,
-    setError,
-  } = store
+  const { filter, online } = store
 
   const row = useMemo(
     () => (showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}),
@@ -125,98 +77,16 @@ const Sammlung = ({
     setActiveConflict(null)
   }, [id])
 
-  useEffect(() => {
-    unsetError('sammlung')
-  }, [id, unsetError])
-
-  const personWerte = useMemo(
-    () =>
-      personsSorted.map((el) => ({
-        value: el.id,
-        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-      })),
-    [personsSorted],
-  )
-
-  const herkunftWerte = useMemo(
-    () =>
-      herkunftsSorted.map((el) => ({
-        value: el.id,
-        label: herkunftLabelFromHerkunft(el),
-      })),
-    [herkunftsSorted],
-  )
-
-  const artWerte = useMemo(
-    () =>
-      artsSorted.map((el) => ({
-        value: el.id,
-        label: el?.art_ae_art?.name ?? '(kein Artname)',
-      })),
-    [artsSorted],
-  )
-
-  const saveToDb = useCallback(
-    (event) => {
-      const field = event.target.name
-      let value = ifIsNumericAsNumber(event.target.value)
-      if (event.target.value === undefined) value = null
-      if (event.target.value === '') value = null
-      const previousValue = row[field]
-
-      if (showFilter) {
-        return filter.setValue({ table: 'sammlung', key: field, value })
-      }
-
-      // only update if value has changed
-      if (value === previousValue) return
-      row.edit({ field, value })
-    },
-    [filter, row, showFilter],
-  )
-  const openPlanenDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Planen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
-  const openGenVielfaldDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
-
-  const rowNr = row?.nr
-  const nrCount = useMemo(() => {
-    if (!exists(rowNr)) return 0
-    return sammlungsSorted.filter((h) => h.nr === rowNr).length
-  }, [sammlungsSorted, rowNr])
-  useEffect(() => {
-    if (nrCount > 1) {
-      setError({
-        path: 'sammlung.nr',
-        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
-      })
-    }
-  }, [nrCount, setError])
-
-  const showDeleted = showFilter || row._deleted
-
   const [showHistory, setShowHistory] = useState(null)
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   if (!row || (!showFilter && filter.show)) return null
 
-  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  const paneIsSplit = online && (activeConflict || showHistory)
+
+  const firstPaneWidth = paneIsSplit ? '50%' : '100%'
   // hide resizer when tree is hidden
-  const resizerStyle = !activeConflict ? { width: 0 } : {}
+  const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
   return (
     <ErrorBoundary>
@@ -234,193 +104,33 @@ const Sammlung = ({
             minSize={200}
             resizerStyle={resizerStyle}
           >
-            <FieldsContainer>
-              {activeConflict && (
-                <CaseConflictTitle>
-                  Aktuelle Version<Rev>{row._rev}</Rev>
-                </CaseConflictTitle>
-              )}
-              {showDeleted && (
-                <>
-                  {showFilter ? (
-                    <Checkbox3States
-                      key={`${row.id}_deleted`}
-                      label="gelöscht"
-                      name="_deleted"
-                      value={row._deleted}
-                      saveToDb={saveToDb}
-                      error={errors?.sammlung?._deleted}
-                    />
-                  ) : (
-                    <Checkbox2States
-                      key={`${row.id}_deleted`}
-                      label="gelöscht"
-                      name="_deleted"
-                      value={row._deleted}
-                      saveToDb={saveToDb}
-                      error={errors?.sammlung?._deleted}
-                    />
-                  )}
-                </>
-              )}
-              <TextField
-                key={`${row.id}nr`}
-                name="nr"
-                label="Nr."
-                value={row.nr}
-                saveToDb={saveToDb}
-                error={errors?.sammlung?.nr}
-                type="text"
-              />
-              <Select
-                key={`${row.id}${row.art_id}art_id`}
-                name="art_id"
-                value={row.art_id}
-                field="art_id"
-                label="Art"
-                options={artWerte}
-                saveToDb={saveToDb}
-                error={errors?.sammlung?.art_id}
-              />
-              <Select
-                key={`${row.id}${row.herkunft_id}herkunft_id`}
-                name="herkunft_id"
-                value={row.herkunft_id}
-                field="herkunft_id"
-                label="Herkunft"
-                options={herkunftWerte}
-                saveToDb={saveToDb}
-                error={errors?.sammlung?.herkunft_id}
-              />
-              <Select
-                key={`${row.id}${row.person_id}person_id`}
-                name="person_id"
-                value={row.person_id}
-                field="person_id"
-                label="Person"
-                options={personWerte}
-                saveToDb={saveToDb}
-                error={errors?.sammlung?.person_id}
-              />
-              <Date
-                key={`${row.id}datum`}
-                name="datum"
-                label="Datum"
-                value={row.datum}
-                saveToDb={saveToDb}
-                error={errors?.sammlung?.datum}
-              />
-              <TextField
-                key={`${row.id}anzahl_pflanzen`}
-                name="anzahl_pflanzen"
-                label="Anzahl Pflanzen"
-                value={row.anzahl_pflanzen}
-                saveToDb={saveToDb}
-                error={errors?.sammlung?.anzahl_pflanzen}
-                type="number"
-              />
-              <FieldRow>
-                <TextField
-                  key={`${row.id}gramm_samen`}
-                  name="gramm_samen"
-                  label="Gramm Samen"
-                  value={row.gramm_samen}
-                  saveToDb={saveToDb}
-                  error={errors?.sammlung?.gramm_samen}
-                  type="number"
-                />
-                <TextField
-                  key={`${row.id}andere_menge`}
-                  name="andere_menge"
-                  label={`Andere Menge (z.B. "3 Zwiebeln")`}
-                  value={row.andere_menge}
-                  saveToDb={saveToDb}
-                  error={errors?.sammlung?.andere_menge}
-                  type="text"
-                />
-              </FieldRow>
-              <FieldRow>
-                <TextField
-                  key={`${row.id}von_anzahl_individuen`}
-                  name="von_anzahl_individuen"
-                  label="von Anzahl Individuen"
-                  value={row.von_anzahl_individuen}
-                  saveToDb={saveToDb}
-                  error={errors?.sammlung?.von_anzahl_individuen}
-                  type="number"
-                />
-                <div>
-                  <IconButton
-                    aria-label="Anleitung öffnen"
-                    title="Anleitung öffnen"
-                    onClick={openGenVielfaldDocs}
-                  >
-                    <IoMdInformationCircleOutline />
-                  </IconButton>
-                </div>
-              </FieldRow>
-              {!showFilter && <Coordinates row={row} saveToDb={saveToDb} />}
-              <FieldRow>
-                {showFilter ? (
-                  <Checkbox3States
-                    key={`${row.id}geplant`}
-                    label="Geplant"
-                    name="geplant"
-                    value={row.geplant}
-                    saveToDb={saveToDb}
-                    error={errors?.sammlung?.geplant}
-                  />
-                ) : (
-                  <Checkbox2States
-                    key={`${row.id}geplant`}
-                    label="Geplant"
-                    name="geplant"
-                    value={row.geplant}
-                    saveToDb={saveToDb}
-                    error={errors?.sammlung?.geplant}
-                  />
-                )}
-                <div>
-                  <IconButton
-                    aria-label="Anleitung öffnen"
-                    title="Anleitung öffnen"
-                    onClick={openPlanenDocs}
-                  >
-                    <IoMdInformationCircleOutline />
-                  </IconButton>
-                </div>
-              </FieldRow>
-              <TextField
-                key={`${row.id}bemerkungen`}
-                name="bemerkungen"
-                label="Bemerkungen"
-                value={row.bemerkungen}
-                saveToDb={saveToDb}
-                error={errors?.sammlung?.bemerkungen}
-                multiLine
-              />
-              {online &&
-                !showFilter &&
-                row._conflicts &&
-                row._conflicts.map && (
-                  <ConflictList
-                    conflicts={row._conflicts}
-                    activeConflict={activeConflict}
-                    setActiveConflict={setActiveConflict}
-                  />
-                )}
-              {!showFilter && <Files parentId={row.id} parent="sammlung" />}
-            </FieldsContainer>
+            <Form
+              showFilter={showFilter}
+              id={id}
+              row={row}
+              activeConflict={activeConflict}
+              setActiveConflict={setActiveConflict}
+              showHistory={showHistory}
+            />
             <>
-              {online && !!activeConflict && (
-                <Conflict
-                  rev={activeConflict}
-                  id={id}
-                  row={row}
-                  conflictDisposalCallback={conflictDisposalCallback}
-                  conflictSelectionCallback={conflictSelectionCallback}
-                  setActiveConflict={setActiveConflict}
-                />
+              {online && (
+                <>
+                  {activeConflict ? (
+                    <Conflict
+                      rev={activeConflict}
+                      id={id}
+                      row={row}
+                      conflictDisposalCallback={conflictDisposalCallback}
+                      conflictSelectionCallback={conflictSelectionCallback}
+                      setActiveConflict={setActiveConflict}
+                    />
+                  ) : showHistory ? (
+                    <History
+                      row={row}
+                      historyTakeoverCallback={historyTakeoverCallback}
+                    />
+                  ) : null}
+                </>
               )}
             </>
           </StyledSplitPane>
