@@ -8,8 +8,7 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
-import herkunftLabelFromHerkunft from './History/Row/herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from './History/Row/gartenLabelFromGarten'
+import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
 const kulturRevQuery = gql`
   query kulturRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -90,64 +89,10 @@ const KulturConflict = ({
     [id, rev, store.kultur_revs],
   )
 
-  const dataArray = [
-    {
-      valueInRow: row?.art?.art_ae_art?.name,
-      valueInRev: revRow?.art?.art_ae_art?.name,
-      label: 'Art',
-    },
-    {
-      valueInRow: herkunftLabelFromHerkunft(row),
-      valueInRev: herkunftLabelFromHerkunft(revRow),
-      label: 'Herkunft',
-    },
-    { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
-    {
-      valueInRow: gartenLabelFromGarten(row),
-      valueInRev: gartenLabelFromGarten(revRow),
-      label: 'Garten',
-    },
-    {
-      valueInRow: row?.zwischenlager == true,
-      valueInRev: revRow?.zwischenlager == true,
-      label: 'Zwischenlager',
-    },
-    {
-      valueInRow: row?.erhaltungskultur == true,
-      valueInRev: revRow?.erhaltungskultur == true,
-      label: 'Erhaltungskultur',
-    },
-    {
-      valueInRow: row?.von_anzahl_individuen,
-      valueInRev: revRow?.von_anzahl_individuen,
-      label: 'Von Anzahl Individuen',
-    },
-    {
-      valueInRow: row?.bemerkungen,
-      valueInRev: revRow?.bemerkungen,
-      label: 'bemerkungen',
-    },
-    {
-      valueInRow: row?.aktiv == true,
-      valueInRev: revRow?.aktiv == true,
-      label: 'aktiv',
-    },
-    {
-      valueInRow: row?.changed,
-      valueInRev: revRow?.changed,
-      label: 'geändert',
-    },
-    {
-      valueInRow: row?.changed_by,
-      valueInRev: revRow?.changed_by,
-      label: 'geändert von',
-    },
-    {
-      valueInRow: row._deleted,
-      valueInRev: revRow._deleted,
-      label: 'gelöscht',
-    },
-  ]
+  const dataArray = useMemo(
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
+  )
 
   const onClickVerwerfen = useCallback(() => {
     console.log('Kultur Conflict, onClickVerwerfen, revRow:', revRow)
