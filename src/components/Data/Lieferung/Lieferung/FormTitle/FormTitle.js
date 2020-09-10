@@ -10,6 +10,8 @@ import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import Anleitung from './Anleitung'
 import FilterNumbers from '../../../../shared/FilterNumbers'
+import HistoryButton from '../../../../shared/HistoryButton'
+import Menu from '../../../../shared/Menu'
 import UpSvg from '../../../../../svg/to_up.inline.svg'
 import KuDownSvg from '../../../../../svg/to_ku_down.inline.svg'
 
@@ -62,6 +64,37 @@ const LieferungTitleFormTitle = ({
   )
   const showToKu = activeNodeArray[0] === 'Sammlungen'
 
+  if (width < 520) {
+    return (
+      <TitleContainer>
+        <Title>Lieferung</Title>
+        <TitleSymbols>
+          <IconButton title="Zur Liste" onClick={onClickUp}>
+            <UpSvg />
+          </IconButton>
+          {showToKu && (
+            <IconButton title="Zur Kultur" onClick={onClickToKultur}>
+              <KuDownSvg />
+            </IconButton>
+          )}
+          <AddButton />
+          <DeleteButton row={row} />
+          <Menu white={false}>
+            <HistoryButton
+              row={row}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
+            <Settings asMenu />
+            <Anleitung asMenu />
+            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+          </Menu>
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  }
+
   return (
     <TitleContainer>
       <Title>Lieferung</Title>
@@ -76,6 +109,11 @@ const LieferungTitleFormTitle = ({
         )}
         <AddButton />
         <DeleteButton row={row} />
+        <HistoryButton
+          row={row}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
         <Settings />
         <Anleitung />
         <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
