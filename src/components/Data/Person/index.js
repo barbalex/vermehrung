@@ -1,4 +1,10 @@
-import React, { useContext, useState, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
@@ -65,6 +71,11 @@ const Person = ({
     () => setActiveConflict(null),
     [],
   )
+  // ensure that activeConflict is reset
+  // when changing dataset
+  useEffect(() => {
+    setActiveConflict(null)
+  }, [id])
 
   const [showHistory, setShowHistory] = useState(null)
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])

@@ -166,6 +166,11 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     () => setActiveConflict(null),
     [],
   )
+  // ensure that activeConflict is reset
+  // when changing dataset
+  useEffect(() => {
+    setActiveConflict(null)
+  }, [id])
 
   const { li_show_sl_felder } = userPersonOption
 

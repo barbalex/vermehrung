@@ -107,6 +107,11 @@ const SammelLieferung = ({
     () => setActiveConflict(null),
     [],
   )
+  // ensure that activeConflict is reset
+  // when changing dataset
+  useEffect(() => {
+    setActiveConflict(null)
+  }, [id])
 
   const { sl_show_empty_when_next_to_li } = userPersonOption
 
