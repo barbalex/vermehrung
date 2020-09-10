@@ -8,7 +8,7 @@ import { useQuery, StoreContext } from '../../../../../models/reactUtils'
 import checkForOnlineError from '../../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../../utils/toPgArray'
 import Conflict from '../../../../shared/Conflict'
-import teilkulturLabelFromTeilkultur from './teilkulturLabelFromTeilkultur'
+import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
 const teilzaehlungRevQuery = gql`
   query teilzaehlungRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -74,63 +74,10 @@ const TeilzaehlungConflict = ({
     [id, rev, store.teilzaehlung_revs],
   )
 
-  const dataArray = [
-    {
-      valueInRow: row?.zaehlung_id,
-      valueInRev: revRow?.zaehlung_id,
-      label: 'Zaehlung ID',
-    },
-    {
-      valueInRow: teilkulturLabelFromTeilkultur(row?.teilkultur),
-      valueInRev: teilkulturLabelFromTeilkultur(revRow?.teilkultur),
-      label: 'Teilkultur',
-    },
-    {
-      valueInRow: row?.anzahl_pflanzen,
-      valueInRev: revRow?.anzahl_pflanzen,
-      label: 'Anzahl Pflanzen',
-    },
-    {
-      valueInRow: row?.anzahl_auspflanzbereit,
-      valueInRev: revRow?.anzahl_auspflanzbereit,
-      label: 'Anzahl auspflanzbereit',
-    },
-    {
-      valueInRow: row?.anzahl_mutterpflanzen,
-      valueInRev: revRow?.anzahl_mutterpflanzen,
-      label: 'Anzahl Mutterpflanzen',
-    },
-    {
-      valueInRow: row?.andere_menge,
-      valueInRev: revRow?.andere_menge,
-      label: 'Andere Menge',
-    },
-    {
-      valueInRow: row?.auspflanzbereit_beschreibung,
-      valueInRev: revRow?.auspflanzbereit_beschreibung,
-      label: 'Auspflanzbereit Beschreibung',
-    },
-    {
-      valueInRow: row?.bemerkungen,
-      valueInRev: revRow?.bemerkungen,
-      label: 'bemerkungen',
-    },
-    {
-      valueInRow: row?.changed,
-      valueInRev: revRow?.changed,
-      label: 'geändert',
-    },
-    {
-      valueInRow: row?.changed_by,
-      valueInRev: revRow?.changed_by,
-      label: 'geändert von',
-    },
-    {
-      valueInRow: row._deleted,
-      valueInRev: revRow._deleted,
-      label: 'gelöscht',
-    },
-  ]
+  const dataArray = useMemo(
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
+  )
 
   const onClickVerwerfen = useCallback(() => {
     revRow.setDeleted()
