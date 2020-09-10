@@ -67,7 +67,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObjectForStore._conflicts = row._conflicts
     // for store: convert rev to winner
     newObjectForStore.id = row.id
-    delete newObjectForStore.kultur_id
+    delete newObjectForStore.garten_id
     // optimistically update store
     upsertGartenModel(newObjectForStore)
   }, [

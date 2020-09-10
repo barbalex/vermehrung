@@ -47,7 +47,7 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const Kultur = ({
+const KulturForm = ({
   showFilter,
   id,
   row,
@@ -417,4 +417,4 @@ const Kultur = ({
   )
 }
 
-export default observer(Kultur)
+export default observer(KulturForm)
