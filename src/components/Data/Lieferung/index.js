@@ -2,6 +2,8 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import isUuid from 'is-uuid'
+import last from 'lodash/last'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
@@ -35,12 +37,16 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const LieferungContainer = ({
-  filter: showFilter,
-  id = '99999999-9999-9999-9999-999999999999',
-}) => {
+const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
   const store = useContext(StoreContext)
   const { userPersonOption } = store
+  const { activeNodeArray } = store.tree
+  let id = idPassed
+  if (!idPassed) {
+    id = showFilter
+      ? '99999999-9999-9999-9999-999999999999'
+      : last(activeNodeArray.filter((e) => isUuid.v1(e)))
+  }
   const lieferung = store.lieferungs.get(id) || {}
   const sammelLieferungId =
     lieferung?.sammel_lieferung_id ?? '99999999-9999-9999-9999-999999999999'
@@ -56,7 +62,11 @@ const LieferungContainer = ({
     // show that too
     return (
       <StyledSplitPane split="vertical" size="50%" minSize={200}>
-        <Lieferung showFilter={showFilter} sammelLieferung={sammelLieferung} />
+        <Lieferung
+          showFilter={showFilter}
+          sammelLieferung={sammelLieferung}
+          id={id}
+        />
         <SammelLieferung
           showFilter={showFilter}
           id={sammelLieferungId}
@@ -65,7 +75,13 @@ const LieferungContainer = ({
       </StyledSplitPane>
     )
   }
-  return <Lieferung showFilter={showFilter} sammelLieferung={sammelLieferung} />
+  return (
+    <Lieferung
+      id={id}
+      showFilter={showFilter}
+      sammelLieferung={sammelLieferung}
+    />
+  )
 }
 
 export default observer(LieferungContainer)

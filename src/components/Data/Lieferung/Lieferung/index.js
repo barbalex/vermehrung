@@ -7,10 +7,8 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import isUuid from 'is-uuid'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../../models/reactUtils'
@@ -105,7 +103,7 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
+const Lieferung = ({ id, showFilter, sammelLieferung = {} }) => {
   const existsSammelLieferung = !!sammelLieferung?.id
   const store = useContext(StoreContext)
 
@@ -123,10 +121,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     userPersonOption,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-
-  const id = showFilter
-    ? '99999999-9999-9999-9999-999999999999'
-    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
   const hierarchyFilter = (e) => {
     if (kulturIdInActiveNodeArray) {
