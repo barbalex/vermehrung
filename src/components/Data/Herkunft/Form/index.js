@@ -2,15 +2,15 @@ import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../models/reactUtils'
-import TextField from '../../shared/TextField'
-import Checkbox2States from '../../shared/Checkbox2States'
-import Checkbox3States from '../../shared/Checkbox3States'
-import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import Files from '../Files'
-import Coordinates from '../../shared/Coordinates'
-import ConflictList from '../../shared/ConflictList'
-import exists from '../../../utils/exists'
+import { StoreContext } from '../../../../models/reactUtils'
+import TextField from '../../../shared/TextField'
+import Checkbox2States from '../../../shared/Checkbox2States'
+import Checkbox3States from '../../../shared/Checkbox3States'
+import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
+import Files from '../../Files'
+import Coordinates from '../../../shared/Coordinates'
+import ConflictList from '../../../shared/ConflictList'
+import exists from '../../../../utils/exists'
 
 const Container = styled.div`
   padding: 10px;
@@ -92,6 +92,8 @@ const Herkunft = ({
   }, [nrCount, setError])
 
   const showDeleted = showFilter || row._deleted
+
+  console.log('Herkunft, row:', row)
 
   return (
     <Container>
