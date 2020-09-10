@@ -151,6 +151,11 @@ const Event = ({
     () => setActiveConflict(null),
     [],
   )
+  // ensure that activeConflict is reset
+  // when changing dataset
+  useEffect(() => {
+    setActiveConflict(null)
+  }, [id])
 
   useEffect(() => {
     unsetError('event')
