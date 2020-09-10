@@ -56,7 +56,11 @@ const LieferungContainer = ({
     // show that too
     return (
       <StyledSplitPane split="vertical" size="50%" minSize={200}>
-        <Lieferung showFilter={showFilter} sammelLieferung={sammelLieferung} />
+        <Lieferung
+          showFilter={showFilter}
+          sammelLieferung={sammelLieferung}
+          id={id}
+        />
         <SammelLieferung
           showFilter={showFilter}
           id={sammelLieferungId}
