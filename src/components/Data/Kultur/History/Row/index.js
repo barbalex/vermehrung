@@ -1,77 +1,22 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
 import History from '../../../../shared/History'
-import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from './gartenLabelFromGarten'
 import { StoreContext } from '../../../../../models/reactUtils'
 import checkForOnlineError from '../../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../../utils/toPgArray'
+import createDataArrayForRevComparison from '../../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
   const { user, addNotification, upsertKulturModel } = store
 
-  const dataArray = [
-    {
-      valueInRow: row?.art?.art_ae_art?.name,
-      valueInRev: revRow?.art?.art_ae_art?.name,
-      label: 'Art',
-    },
-    {
-      valueInRow: herkunftLabelFromHerkunft(row),
-      valueInRev: herkunftLabelFromHerkunft(revRow),
-      label: 'Herkunft',
-    },
-    { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
-    {
-      valueInRow: gartenLabelFromGarten(row),
-      valueInRev: gartenLabelFromGarten(revRow),
-      label: 'Garten',
-    },
-    {
-      valueInRow: row?.zwischenlager == true,
-      valueInRev: revRow?.zwischenlager == true,
-      label: 'Zwischenlager',
-    },
-    {
-      valueInRow: row?.erhaltungskultur == true,
-      valueInRev: revRow?.erhaltungskultur == true,
-      label: 'Erhaltungskultur',
-    },
-    {
-      valueInRow: row?.von_anzahl_individuen,
-      valueInRev: revRow?.von_anzahl_individuen,
-      label: 'Von Anzahl Individuen',
-    },
-    {
-      valueInRow: row?.bemerkungen,
-      valueInRev: revRow?.bemerkungen,
-      label: 'bemerkungen',
-    },
-    {
-      valueInRow: row?.aktiv == true,
-      valueInRev: revRow?.aktiv == true,
-      label: 'aktiv',
-    },
-    {
-      valueInRow: row?.changed,
-      valueInRev: revRow?.changed,
-      label: 'geändert',
-    },
-    {
-      valueInRow: row?.changed_by,
-      valueInRev: revRow?.changed_by,
-      label: 'geändert von',
-    },
-    {
-      valueInRow: row._deleted,
-      valueInRev: revRow._deleted,
-      label: 'gelöscht',
-    },
-  ]
+  const dataArray = useMemo(
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
+  )
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
