@@ -93,8 +93,6 @@ const Herkunft = ({
 
   const showDeleted = showFilter || row._deleted
 
-  console.log('Herkunft, row:', row)
-
   return (
     <Container>
       {(activeConflict || showHistory) && (
