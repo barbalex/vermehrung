@@ -7,58 +7,26 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
 import Checkbox3States from '../../shared/Checkbox3States'
-import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
-import DeleteButton from './DeleteButton'
-import AddButton from './AddButton'
 import Coordinates from '../../shared/Coordinates'
-import Settings from './Settings'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import FilterNumbers from '../../shared/FilterNumbers'
-import getConstants from '../../../utils/constants'
 import exists from '../../../utils/exists'
-import UpSvg from '../../../svg/to_up.inline.svg'
-import SaDownSvg from '../../../svg/to_sa_down.inline.svg'
-
-const constants = getConstants()
+import FormTitle from './FormTitle'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-  padding 0 10px;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -112,22 +80,10 @@ const Herkunft = ({
     online,
     userPersonOption,
     herkunftsSorted,
-    herkunftsFiltered,
-    sammlungIdInActiveNodeArray,
     errors,
     setError,
     unsetError,
   } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
-
-  const hierarchyFilter = (e) => {
-    if (sammlungIdInActiveNodeArray) {
-      return (e?.sammlungs ?? [])
-        .map((s) => s.id)
-        .includes(sammlungIdInActiveNodeArray)
-    }
-    return true
-  }
 
   const row = useMemo(
     () => (showFilter ? filter.herkunft : store.herkunfts.get(id) || {}),
@@ -148,9 +104,6 @@ const Herkunft = ({
   useEffect(() => {
     setActiveConflict(null)
   }, [id])
-
-  const totalNr = herkunftsSorted.filter(hierarchyFilter).length
-  const filteredNr = herkunftsFiltered.filter(hierarchyFilter).length
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = userPersonOption
 
@@ -176,15 +129,6 @@ const Herkunft = ({
     },
     [filter, row, showFilter],
   )
-  const openHerkunftDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Herkuenfte`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
 
   const rowNr = row?.nr
   const nrCount = useMemo(() => {
@@ -200,17 +144,10 @@ const Herkunft = ({
     }
   }, [nrCount, setError])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToSammlungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const showToSa = activeNodeArray[0] === 'Herkuenfte'
-
   const showDeleted = showFilter || row._deleted
+
+  const [showHistory, setShowHistory] = useState(null)
+  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -221,44 +158,13 @@ const Herkunft = ({
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        {showFilter ? (
-          <FilterTitle
-            title="Herkunft"
-            table="herkunft"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
-          />
-        ) : (
-          <TitleContainer>
-            <Title>{`Herkunft${
-              activeConflict ? ': Konflikt lösen' : ''
-            }`}</Title>
-            <TitleSymbols>
-              <IconButton title="Zur Liste" onClick={onClickUp}>
-                <UpSvg />
-              </IconButton>
-              {showToSa && (
-                <IconButton
-                  title="Zu den Sammlungen"
-                  onClick={onClickToSammlungen}
-                >
-                  <SaDownSvg />
-                </IconButton>
-              )}
-              <AddButton />
-              <DeleteButton row={row} />
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openHerkunftDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-              <Settings />
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-            </TitleSymbols>
-          </TitleContainer>
-        )}
+        <FormTitle
+          row={row}
+          showFilter={showFilter}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+          activeConflict={activeConflict}
+        />
         <Container>
           <StyledSplitPane
             split="vertical"
