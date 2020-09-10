@@ -142,6 +142,11 @@ const Teilkultur = ({
     () => setActiveConflict(null),
     [],
   )
+  // ensure that activeConflict is reset
+  // when changing dataset
+  useEffect(() => {
+    setActiveConflict(null)
+  }, [id])
 
   const kulturOpion = store.kultur_options.get(row.kultur_id) || {}
   const { tk_bemerkungen } = kulturOpion

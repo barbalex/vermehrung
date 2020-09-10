@@ -150,6 +150,11 @@ const Zaehlung = ({
     () => setActiveConflict(null),
     [],
   )
+  // ensure that activeConflict is reset
+  // when changing dataset
+  useEffect(() => {
+    setActiveConflict(null)
+  }, [id])
 
   const { z_bemerkungen } = row?.kultur?.kultur_option ?? {}
 
