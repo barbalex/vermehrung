@@ -15,24 +15,18 @@ import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
-import FilterTitle from '../../shared/FilterTitle'
+import FormTitle from './FormTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
 import Checkbox3States from '../../shared/Checkbox3States'
 import Coordinates from '../../shared/Coordinates'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
-import DeleteButton from './DeleteButton'
-import AddButton from './AddButton'
 import getConstants from '../../../utils/constants'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import FilterNumbers from '../../shared/FilterNumbers'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 import exists from '../../../utils/exists'
-import UpSvg from '../../../svg/to_up.inline.svg'
-import LiDownSvg from '../../../svg/to_ausli_down.inline.svg'
-import HeDownSvg from '../../../svg/to_he_down.inline.svg'
 
 const constants = getConstants()
 
@@ -41,27 +35,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-  padding 0 10px;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -123,35 +96,14 @@ const Sammlung = ({
   const {
     filter,
     online,
-    artIdInActiveNodeArray,
-    herkunftIdInActiveNodeArray,
-    personIdInActiveNodeArray,
     artsSorted,
     herkunftsSorted,
     personsSorted,
-    sammlungsFiltered,
     sammlungsSorted,
     errors,
     unsetError,
     setError,
   } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
-
-  const hierarchyFilter = (s) => {
-    if (artIdInActiveNodeArray) {
-      return s.art_id === artIdInActiveNodeArray
-    }
-    if (herkunftIdInActiveNodeArray) {
-      return s.herkunft_id === herkunftIdInActiveNodeArray
-    }
-    if (personIdInActiveNodeArray) {
-      return s.person_id === personIdInActiveNodeArray
-    }
-    return true
-  }
-
-  const totalNr = sammlungsSorted.filter(hierarchyFilter).length
-  const filteredNr = sammlungsFiltered.filter(hierarchyFilter).length
 
   const row = useMemo(
     () => (showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}),
@@ -240,15 +192,6 @@ const Sammlung = ({
       window.open(url)
     }
   }, [])
-  const openSammlungDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Sammlungen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
 
   const rowNr = row?.nr
   const nrCount = useMemo(() => {
@@ -264,22 +207,10 @@ const Sammlung = ({
     }
   }, [nrCount, setError])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToLieferungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToHerkuenfte = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Herkuenfte']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const showToHe = activeNodeArray[0] === 'Sammlungen'
-  const showToLi = activeNodeArray[0] !== 'Personen'
-
   const showDeleted = showFilter || row._deleted
+
+  const [showHistory, setShowHistory] = useState(null)
+  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -290,49 +221,12 @@ const Sammlung = ({
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        {showFilter ? (
-          <FilterTitle
-            title="Sammlung"
-            table="sammlung"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
-          />
-        ) : (
-          <TitleContainer>
-            <Title>Sammlung</Title>
-            <TitleSymbols>
-              <IconButton title="Zur Sammlungs-Liste" onClick={onClickUp}>
-                <UpSvg />
-              </IconButton>
-              {showToHe && (
-                <IconButton
-                  title="Zu den Herkünften dieser Sammlung"
-                  onClick={onClickToHerkuenfte}
-                >
-                  <HeDownSvg />
-                </IconButton>
-              )}
-              {showToLi && (
-                <IconButton
-                  title="Zu den Aus-Lieferungen dieser Sammlung"
-                  onClick={onClickToLieferungen}
-                >
-                  <LiDownSvg />
-                </IconButton>
-              )}
-              <AddButton />
-              <DeleteButton row={row} />
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openSammlungDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-            </TitleSymbols>
-          </TitleContainer>
-        )}
+        <FormTitle
+          row={row}
+          showFilter={showFilter}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
         <Container>
           <StyledSplitPane
             split="vertical"
