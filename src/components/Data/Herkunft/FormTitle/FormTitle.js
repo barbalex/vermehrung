@@ -82,7 +82,7 @@ const Herkunft = ({
               asMenu
             />
             <Anleitung asMenu />
-            <Settings />
+            <Settings asMenu />
             <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
           </Menu>
         </TitleSymbols>
