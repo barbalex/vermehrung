@@ -3,13 +3,12 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
-import kulturLabelFromKultur from './kulturLabelFromKultur'
+import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
 const zaehlungRevQuery = gql`
   query zaehlungRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -83,45 +82,10 @@ const ZaehlungConflict = ({
     [id, rev, store.zaehlung_revs],
   )
 
-  const dataArray = [
-    {
-      valueInRow: kulturLabelFromKultur(row),
-      valueInRev: kulturLabelFromKultur(revRow),
-      label: 'Kultur',
-    },
-    {
-      valueInRow: row?.datum ? moment(row.datum).format('DD.MM.YYYY') : null,
-      valueInRev: revRow?.datum
-        ? moment(revRow.datum).format('DD.MM.YYYY')
-        : null,
-      label: 'Datum',
-    },
-    {
-      valueInRow: row?.prognose == true,
-      valueInRev: revRow?.prognose == true,
-      label: 'Prognose',
-    },
-    {
-      valueInRow: row?.bemerkungen,
-      valueInRev: revRow?.bemerkungen,
-      label: 'bemerkungen',
-    },
-    {
-      valueInRow: row?.changed,
-      valueInRev: revRow?.changed,
-      label: 'geändert',
-    },
-    {
-      valueInRow: row?.changed_by,
-      valueInRev: revRow?.changed_by,
-      label: 'geändert von',
-    },
-    {
-      valueInRow: row._deleted,
-      valueInRev: revRow._deleted,
-      label: 'gelöscht',
-    },
-  ]
+  const dataArray = useMemo(
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
+  )
 
   const onClickVerwerfen = useCallback(() => {
     revRow.setDeleted()
