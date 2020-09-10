@@ -8,6 +8,7 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
 const artRevQuery = gql`
   query artRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -59,28 +60,10 @@ const ArtConflict = ({
     [id, rev, store.art_revs],
   )
 
-  const dataArray = [
-    {
-      valueInRow: row?.art_ae_art?.name, // this is key in row
-      valueInRev: revRow?.art_rev_ae_art?.name, // this is key in rev
-      label: 'Art',
-    },
-    {
-      valueInRow: row?.changed,
-      valueInRev: revRow?.changed,
-      label: 'geändert',
-    },
-    {
-      valueInRow: row?.changed_by,
-      valueInRev: revRow?.changed_by,
-      label: 'geändert von',
-    },
-    {
-      valueInRow: row._deleted,
-      valueInRev: revRow._deleted,
-      label: 'gelöscht',
-    },
-  ]
+  const dataArray = useMemo(
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
+  )
 
   //console.log('Art Conflict', { dataArray, row, revRow, id, rev })
 

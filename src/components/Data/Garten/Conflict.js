@@ -8,6 +8,7 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
+import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
 const gartenRevQuery = gql`
   query gartenRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -66,55 +67,10 @@ const GartenConflict = ({
     [id, rev, store.garten_revs],
   )
 
-  const dataArray = [
-    {
-      valueInRow: row?.name,
-      valueInRev: revRow?.name,
-      label: 'Name',
-    },
-    {
-      valueInRow: row?.person?.fullname,
-      valueInRev: revRow?.person?.fullname,
-      label: 'Person',
-    },
-    { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
-    {
-      valueInRow: row?.plz,
-      valueInRev: revRow?.plz,
-      label: 'PLZ',
-    },
-    { valueInRow: row?.ort, valueInRev: revRow?.ort, label: 'Ort' },
-    {
-      valueInRow: row?.geom_point?.coordinates,
-      valueInRev: revRow?.geom_point?.coordinates,
-      label: 'Längen- und Breitengrad',
-    },
-    {
-      valueInRow: row?.aktiv == true,
-      valueInRev: revRow?.aktiv == true,
-      label: 'aktiv',
-    },
-    {
-      valueInRow: row?.bemerkungen,
-      valueInRev: revRow?.bemerkungen,
-      label: 'bemerkungen',
-    },
-    {
-      valueInRow: row?.changed,
-      valueInRev: revRow?.changed,
-      label: 'geändert',
-    },
-    {
-      valueInRow: row?.changed_by,
-      valueInRev: revRow?.changed_by,
-      label: 'geändert von',
-    },
-    {
-      valueInRow: row._deleted,
-      valueInRev: revRow._deleted,
-      label: 'gelöscht',
-    },
-  ]
+  const dataArray = useMemo(
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
+  )
 
   const onClickVerwerfen = useCallback(() => {
     revRow.setDeleted()
