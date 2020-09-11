@@ -11,10 +11,12 @@ import TextFieldNonUpdatable from '../../../../../shared/TextFieldNonUpdatable'
 import Checkbox2States from '../../../../../shared/Checkbox2States'
 import Select from '../../../../../shared/SelectCreatable'
 import ConflictList from '../../../../../shared/ConflictList'
+import HistoryButton from '../../../../../shared/HistoryButton'
 import ifIsNumericAsNumber from '../../../../../../utils/ifIsNumericAsNumber'
 import PrognoseMenu from './PrognoseMenu'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
 import Conflict from './Conflict'
+import History from './History'
 
 const Container = styled.div`
   padding-left: 10px;
@@ -90,6 +92,7 @@ const StyledSplitPane = styled(SplitPane)`
 `
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
+  flex-grow: 1;
 `
 const Rev = styled.span`
   font-weight: normal;
@@ -191,11 +194,16 @@ const Teilzaehlung = ({
     setActiveConflict(null)
   }, [id])
 
+  const [showHistory, setShowHistory] = useState(null)
+  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
+
   const showDeleted = row._deleted
 
-  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  const paneIsSplit = online && (activeConflict || showHistory)
+
+  const firstPaneWidth = paneIsSplit ? '50%' : '100%'
   // hide resizer when tree is hidden
-  const resizerStyle = !activeConflict ? { width: 0 } : {}
+  const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
   return (
     <ErrorBoundary>
@@ -208,7 +216,7 @@ const Teilzaehlung = ({
           resizerStyle={resizerStyle}
         >
           <FieldContainer>
-            {activeConflict && (
+            {(activeConflict || showHistory) && (
               <CaseConflictTitle>
                 Aktuelle Version<Rev>{row._rev}</Rev>
               </CaseConflictTitle>
@@ -327,6 +335,11 @@ const Teilzaehlung = ({
               </Last>
             )}
             <div>
+              <HistoryButton
+                row={row}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+              />
               {!row._deleted && (
                 <IconButton
                   aria-label="löschen"
@@ -364,15 +377,24 @@ const Teilzaehlung = ({
             )}
           </FieldContainer>
           <>
-            {online && !!activeConflict && (
-              <Conflict
-                rev={activeConflict}
-                id={id}
-                row={row}
-                conflictDisposalCallback={conflictDisposalCallback}
-                conflictSelectionCallback={conflictSelectionCallback}
-                setActiveConflict={setActiveConflict}
-              />
+            {online && (
+              <>
+                {activeConflict ? (
+                  <Conflict
+                    rev={activeConflict}
+                    id={id}
+                    row={row}
+                    conflictDisposalCallback={conflictDisposalCallback}
+                    conflictSelectionCallback={conflictSelectionCallback}
+                    setActiveConflict={setActiveConflict}
+                  />
+                ) : showHistory ? (
+                  <History
+                    row={row}
+                    historyTakeoverCallback={historyTakeoverCallback}
+                  />
+                ) : null}
+              </>
             )}
           </>
         </StyledSplitPane>
