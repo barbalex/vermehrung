@@ -14,6 +14,7 @@ Um die Historie eines Datensatzes zu sehen, klickt man auf das entsprechende Sym
 
 - In der Mobil-Ansicht gibt es statt des Symbols einen Menü-Eintrag
 - Das Historie-Symbol ist inaktiv, wenn es keine historische Versionen gibt
+- Es ist auch inaktiv, wenn man offline ist (historische Versionen sind nur online verfügbar)
 
 Nun öffnet sich rechts der aktuellen Version eine neue Spalte. Sie stellt alle verfügbaren Versionen in einem "Karussell" dar:<br/>
 ![Version](002_version.png)<br/>
