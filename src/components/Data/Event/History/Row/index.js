@@ -11,7 +11,7 @@ import createDataArrayForRevComparison from '../../createDataArrayForRevComparis
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, upsertKulturModel } = store
+  const { user, addNotification, upsertEventModel } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow }),
@@ -67,7 +67,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObjectForStore.id = row.id
     delete newObjectForStore.event_id
     // optimistically update store
-    upsertKulturModel(newObjectForStore)
+    upsertEventModel(newObjectForStore)
   }, [
     addNotification,
     historyTakeoverCallback,
@@ -85,7 +85,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     row._revisions,
     row.id,
     store,
-    upsertKulturModel,
+    upsertEventModel,
     user.email,
   ])
 
