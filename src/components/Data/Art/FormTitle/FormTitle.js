@@ -1,17 +1,14 @@
-import React, { useContext, useCallback } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
 
-import { StoreContext } from '../../../../models/reactUtils'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import NavButtons from './NavButtons'
-import UpSvg from '../../../../svg/to_up.inline.svg'
-import SaDownSvg from '../../../../svg/to_sa_down.inline.svg'
-import KuDownSvg from '../../../../svg/to_ku_down.inline.svg'
 import FilterNumbers from '../../../shared/FilterNumbers'
+import Menu from '../../../shared/Menu'
+import HistoryButton from '../../../shared/HistoryButton'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -43,22 +40,6 @@ const Art = ({
   showHistory,
   setShowHistory,
 }) => {
-  const store = useContext(StoreContext)
-  const { tree } = store
-  const { activeNodeArray, setActiveNodeArray } = tree
-
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToSammlungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToKulturen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Kulturen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
   if (width < 520) {
     return (
       <TitleContainer>
@@ -67,7 +48,15 @@ const Art = ({
           <NavButtons />
           <AddButton />
           <DeleteButton row={row} />
-          <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+          <Menu white={false}>
+            <HistoryButton
+              row={row}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
+            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+          </Menu>
         </TitleSymbols>
       </TitleContainer>
     )
@@ -80,6 +69,11 @@ const Art = ({
         <NavButtons />
         <AddButton />
         <DeleteButton row={row} />
+        <HistoryButton
+          row={row}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
         <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
       </TitleSymbols>
     </TitleContainer>
