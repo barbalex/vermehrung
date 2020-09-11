@@ -11,6 +11,8 @@ const SammelLieferungFormTitleChooser = ({
   row,
   setPrintPreview,
   showFilter,
+  showHistory,
+  setShowHistory,
 }) => {
   const store = useContext(StoreContext)
 
@@ -45,6 +47,8 @@ const SammelLieferungFormTitleChooser = ({
       lieferungId={lieferungId}
       printPreview={printPreview}
       setPrintPreview={setPrintPreview}
+      showHistory={showHistory}
+      setShowHistory={setShowHistory}
     />
   )
 }

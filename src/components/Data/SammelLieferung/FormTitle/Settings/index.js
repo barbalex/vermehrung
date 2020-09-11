@@ -22,7 +22,7 @@ const SettingsSammelLieferung = ({ asMenu }) => {
           aria-haspopup="true"
           onClick={onClickConfig}
         >
-          Felder wählen
+          Optionen wählen
         </MenuItem>
         <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
       </>
@@ -32,10 +32,10 @@ const SettingsSammelLieferung = ({ asMenu }) => {
   return (
     <ErrorBoundary>
       <IconButton
-        aria-label="Felder wählen"
+        aria-label="Optionen wählen"
         aria-owns={anchorEl ? 'long-menu' : null}
         aria-haspopup="true"
-        title="Felder wählen"
+        title="Optionen wählen"
         onClick={onClickConfig}
       >
         <FaCog />
