@@ -7,56 +7,28 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
 import Checkbox2States from '../../shared/Checkbox2States'
 import Checkbox3States from '../../shared/Checkbox3States'
-import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Timeline from './Timeline'
 import HerkunftTimeline from './HerkunftTimeline'
-import DeleteButton from './DeleteButton'
-import AddButton from './AddButton'
 import QK from './QK'
 import Personen from './Personen'
-import UpSvg from '../../../svg/to_up.inline.svg'
-import SaDownSvg from '../../../svg/to_sa_down.inline.svg'
-import KuDownSvg from '../../../svg/to_ku_down.inline.svg'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import FilterNumbers from '../../shared/FilterNumbers'
+import FormTitle from './FormTitle'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-  padding 0 10px;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -105,20 +77,7 @@ const Art = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const {
-    artsFiltered,
-    artsSorted,
-    filter,
-    online,
-    tree,
-    aeArtsSorted,
-    errors,
-    unsetError,
-  } = store
-  const { activeNodeArray, setActiveNodeArray } = tree
-
-  const totalNr = artsSorted.length
-  const filteredNr = artsFiltered.length
+  const { artsSorted, filter, online, aeArtsSorted, errors, unsetError } = store
 
   const row = useMemo(
     () => (showFilter ? filter.art : store.arts.get(id) || {}),
@@ -163,19 +122,6 @@ const Art = ({
     [filter, row, showFilter],
   )
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToSammlungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToKulturen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Kulturen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-
   const aeArtIdsNotToShow = artsSorted
     .map((a) => a.ae_id)
     .filter((ae_id) => ae_id !== row.ae_id)
@@ -196,47 +142,26 @@ const Art = ({
 
   const showDeleted = showFilter || row._deleted
 
+  const [showHistory, setShowHistory] = useState(null)
+  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
+
   if (!row || (!showFilter && filter.show)) return null
 
-  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  const paneIsSplit = online && (activeConflict || showHistory)
+
+  const firstPaneWidth = paneIsSplit ? '50%' : '100%'
   // hide resizer when tree is hidden
-  const resizerStyle = !activeConflict ? { width: 0 } : {}
+  const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        {showFilter ? (
-          <FilterTitle
-            title="Art"
-            table="art"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
-          />
-        ) : (
-          <TitleContainer>
-            <Title>Art</Title>
-            <TitleSymbols>
-              <IconButton title="Zur Liste" onClick={onClickUp}>
-                <UpSvg />
-              </IconButton>
-              <IconButton
-                title="Zu den Sammlungen dieser Art"
-                onClick={onClickToSammlungen}
-              >
-                <SaDownSvg />
-              </IconButton>
-              <IconButton
-                title="Zu den Kulturen dieser Art"
-                onClick={onClickToKulturen}
-              >
-                <KuDownSvg />
-              </IconButton>
-              <AddButton />
-              <DeleteButton row={row} />
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-            </TitleSymbols>
-          </TitleContainer>
-        )}
+        <FormTitle
+          row={row}
+          showFilter={showFilter}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
         <Container>
           <StyledSplitPane
             split="vertical"
