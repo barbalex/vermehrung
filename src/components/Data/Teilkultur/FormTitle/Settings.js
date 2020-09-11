@@ -9,9 +9,9 @@ import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../models/reactUtils'
-import getConstants from '../../../utils/constants'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import { StoreContext } from '../../../../models/reactUtils'
+import getConstants from '../../../../utils/constants'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const constants = getConstants()
 
