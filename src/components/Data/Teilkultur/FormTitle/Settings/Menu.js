@@ -59,7 +59,7 @@ const SettingsTeilkulturenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
     }
   }, [setAnchorEl])
 
-  const onClose = useCallback(() => setAnchorEl(null), [])
+  const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
 
   return (
     <Menu
