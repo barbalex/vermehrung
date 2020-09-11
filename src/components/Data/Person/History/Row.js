@@ -3,15 +3,15 @@ import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
-import History from '../../../../shared/History'
-import { StoreContext } from '../../../../../models/reactUtils'
-import checkForOnlineError from '../../../../../utils/checkForOnlineError'
-import toPgArray from '../../../../../utils/toPgArray'
-import createDataArrayForRevComparison from '../../createDataArrayForRevComparison'
+import History from '../../../shared/History'
+import { StoreContext } from '../../../../models/reactUtils'
+import checkForOnlineError from '../../../../utils/checkForOnlineError'
+import toPgArray from '../../../../utils/toPgArray'
+import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, upsertSammelLieferungModel } = store
+  const { user, addNotification, upsertPersonModel } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow }),
@@ -22,21 +22,25 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
     const newObject = {
-      sammel_lieferung_id: revRow.sammel_lieferung_id,
-      art_id: revRow.art_id,
       person_id: revRow.person_id,
-      von_sammlung_id: revRow.von_sammlung_id,
-      von_kultur_id: revRow.von_kultur_id,
-      datum: revRow.datum,
-      nach_kultur_id: revRow.nach_kultur_id,
-      nach_ausgepflanzt: revRow.nach_ausgepflanzt,
-      von_anzahl_individuen: revRow.von_anzahl_individuen,
-      anzahl_pflanzen: revRow.anzahl_pflanzen,
-      anzahl_auspflanzbereit: revRow.anzahl_auspflanzbereit,
-      gramm_samen: revRow.gramm_samen,
-      andere_menge: revRow.andere_menge,
-      geplant: revRow.geplant,
+      nr: revRow.nr,
+      vorname: revRow.vorname,
+      name: revRow.name,
+      adresszusatz: revRow.adresszusatz,
+      strasse: revRow.strasse,
+      plz: revRow.plz,
+      ort: revRow.ort,
+      telefon_privat: revRow.telefon_privat,
+      telefon_geschaeft: revRow.telefon_geschaeft,
+      telefon_mobile: revRow.telefon_mobile,
+      email: revRow.email,
+      kein_email: revRow.kein_email,
       bemerkungen: revRow.bemerkungen,
+      account_id: revRow.account_id,
+      user_role: revRow.user_role,
+      kommerziell: revRow.kommerziell,
+      info: revRow.info,
+      aktiv: revRow.aktiv,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -48,12 +52,12 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('SammelLieferung History', { row, revRow, newObject })
+    //console.log('Person History', { row, revRow, newObject })
     try {
-      await store.mutateInsert_sammel_lieferung_rev_one({
+      await store.mutateInsert_person_rev_one({
         object: newObject,
         on_conflict: {
-          constraint: 'sammel_lieferung_rev_pkey',
+          constraint: 'person_rev_pkey',
           update_columns: ['id'],
         },
       })
@@ -73,35 +77,39 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObjectForStore._conflicts = row._conflicts
     // for store: convert rev to winner
     newObjectForStore.id = row.id
-    delete newObjectForStore.kultur_id
+    delete newObjectForStore.person_id
     // optimistically update store
-    upsertSammelLieferungModel(newObjectForStore)
+    upsertPersonModel(newObjectForStore)
   }, [
     addNotification,
     historyTakeoverCallback,
     revRow._deleted,
-    revRow.andere_menge,
-    revRow.anzahl_auspflanzbereit,
-    revRow.anzahl_pflanzen,
-    revRow.art_id,
+    revRow.account_id,
+    revRow.adresszusatz,
+    revRow.aktiv,
     revRow.bemerkungen,
-    revRow.datum,
-    revRow.geplant,
-    revRow.gramm_samen,
-    revRow.nach_ausgepflanzt,
-    revRow.nach_kultur_id,
+    revRow.email,
+    revRow.info,
+    revRow.kein_email,
+    revRow.kommerziell,
+    revRow.name,
+    revRow.nr,
+    revRow.ort,
     revRow.person_id,
-    revRow.sammel_lieferung_id,
-    revRow.von_anzahl_individuen,
-    revRow.von_kultur_id,
-    revRow.von_sammlung_id,
+    revRow.plz,
+    revRow.strasse,
+    revRow.telefon_geschaeft,
+    revRow.telefon_mobile,
+    revRow.telefon_privat,
+    revRow.user_role,
+    revRow.vorname,
     row._conflicts,
     row._depth,
     row._rev,
     row._revisions,
     row.id,
     store,
-    upsertSammelLieferungModel,
+    upsertPersonModel,
     user.email,
   ])
 
