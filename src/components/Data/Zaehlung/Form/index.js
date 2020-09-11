@@ -52,6 +52,9 @@ const ZaehlungForm = ({
   const store = useContext(StoreContext)
   const { filter, online, kultursSorted, errors, unsetError } = store
 
+  // TODO:
+  // after editing any value, z_bemerkungen is reset and refetched????
+  // so bemerkungen appears and disappears :-(
   const z_bemerkungen = row?.kultur?.kultur_option?.z_bemerkungen ?? true
 
   useEffect(() => {
