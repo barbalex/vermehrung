@@ -31,12 +31,10 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsZaehlungenMenu = ({ anchorEl, setAnchorEl, zaehlungId }) => {
+const SettingsZaehlungenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const store = useContext(StoreContext)
-  const { zaehlungs, kultur_options } = store
+  const { kultur_options } = store
 
-  const zaehlung = zaehlungs.get(zaehlungId) ?? {}
-  const kulturId = zaehlung.kultur_id
   const kulturOption = useMemo(() => kultur_options.get(kulturId) ?? {}, [
     kulturId,
     kultur_options,
@@ -62,7 +60,7 @@ const SettingsZaehlungenMenu = ({ anchorEl, setAnchorEl, zaehlungId }) => {
     }
   }, [setAnchorEl])
 
-  const onClose = useCallback(() => setAnchorEl(null), [])
+  const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
 
   return (
     <Menu
