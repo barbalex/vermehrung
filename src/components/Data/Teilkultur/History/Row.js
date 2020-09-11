@@ -3,11 +3,11 @@ import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
-import History from '../../../../shared/History'
-import { StoreContext } from '../../../../../models/reactUtils'
-import checkForOnlineError from '../../../../../utils/checkForOnlineError'
-import toPgArray from '../../../../../utils/toPgArray'
-import createDataArrayForRevComparison from '../../createDataArrayForRevComparison'
+import History from '../../../shared/History'
+import { StoreContext } from '../../../../models/reactUtils'
+import checkForOnlineError from '../../../../utils/checkForOnlineError'
+import toPgArray from '../../../../utils/toPgArray'
+import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
