@@ -172,11 +172,16 @@ const SammelLieferung = ({
 
   const showDeleted = showFilter || row._deleted
 
+  const [showHistory, setShowHistory] = useState(null)
+  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
+
   if (!row || (!showFilter && filter.show)) return null
 
-  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  const paneIsSplit = online && (activeConflict || showHistory)
+
+  const firstPaneWidth = paneIsSplit ? '50%' : '100%'
   // hide resizer when tree is hidden
-  const resizerStyle = !activeConflict ? { width: 0 } : {}
+  const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
   return (
     <ErrorBoundary>
@@ -187,6 +192,8 @@ const SammelLieferung = ({
           lieferungId={lieferungId}
           printPreview={printPreview}
           setPrintPreview={setPrintPreview}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
         />
         {printPreview ? (
           <Lieferschein row={row} />
@@ -199,7 +206,7 @@ const SammelLieferung = ({
               resizerStyle={resizerStyle}
             >
               <FieldsContainer>
-                {activeConflict && (
+                {(activeConflict || showHistory) && (
                   <CaseConflictTitle>
                     Aktuelle Version<Rev>{row._rev}</Rev>
                   </CaseConflictTitle>

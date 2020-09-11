@@ -10,6 +10,7 @@ import Add from './Add'
 import Delete from './Delete'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import Menu from '../../../shared/Menu'
+import HistoryButton from '../../../shared/HistoryButton'
 import NavButtons from './NavButtons'
 import PrintButtons from './PrintButtons'
 import Anleitung from './Anleitung'
@@ -45,6 +46,8 @@ const SammelLieferungFormTitle = ({
   printPreview,
   setPrintPreview,
   width,
+  showHistory,
+  setShowHistory,
 }) => {
   const store = useContext(StoreContext)
 
@@ -80,6 +83,12 @@ const SammelLieferungFormTitle = ({
                 asMenu
               />
               <Anleitung asMenu />
+              <HistoryButton
+                row={row}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+                asMenu
+              />
               {row.id && <Settings asMenu />}
               {shownAsSammelLieferung && (
                 <FilterNumbers
@@ -111,13 +120,18 @@ const SammelLieferungFormTitle = ({
             <Copy sammelLieferung={row} lieferungId={lieferungId} asMenu />
           )}
           <>
-            {row.id && <Settings />}
+            <PrintButtons
+              printPreview={printPreview}
+              setPrintPreview={setPrintPreview}
+            />
             <Menu white={false}>
-              <PrintButtons
-                printPreview={printPreview}
-                setPrintPreview={setPrintPreview}
+              <HistoryButton
+                row={row}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
                 asMenu
               />
+              {row.id && <Settings asMenu />}
               <Anleitung asMenu />
               {shownAsSammelLieferung && (
                 <FilterNumbers
@@ -143,6 +157,48 @@ const SammelLieferungFormTitle = ({
               <NavButtons />
               <Add />
               <Delete row={row} />
+            </>
+          )}
+          {!sl_auto_copy_edits && (
+            <Copy sammelLieferung={row} lieferungId={lieferungId} asMenu />
+          )}
+          <PrintButtons
+            printPreview={printPreview}
+            setPrintPreview={setPrintPreview}
+          />
+          <HistoryButton
+            row={row}
+            showHistory={showHistory}
+            setShowHistory={setShowHistory}
+          />
+          <>
+            <Menu white={false}>
+              {row.id && <Settings asMenu />}
+              <Anleitung asMenu />
+              {shownAsSammelLieferung && (
+                <FilterNumbers
+                  filteredNr={filteredNr}
+                  totalNr={totalNr}
+                  asMenu
+                />
+              )}
+            </Menu>
+          </>
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  }
+
+  if (width < 657) {
+    return (
+      <TitleContainer>
+        <Title>Sammel-Lieferung</Title>
+        <TitleSymbols>
+          {shownAsSammelLieferung && (
+            <>
+              <NavButtons />
+              <Add />
+              <Delete row={row} />
               <PrintButtons
                 printPreview={printPreview}
                 setPrintPreview={setPrintPreview}
@@ -152,8 +208,13 @@ const SammelLieferungFormTitle = ({
           {!sl_auto_copy_edits && (
             <Copy sammelLieferung={row} lieferungId={lieferungId} />
           )}
+          <HistoryButton
+            row={row}
+            showHistory={showHistory}
+            setShowHistory={setShowHistory}
+          />
+          {row.id && <Settings />}
           <>
-            {row.id && <Settings />}
             <Menu white={false}>
               <Anleitung asMenu />
               {shownAsSammelLieferung && (
@@ -189,6 +250,11 @@ const SammelLieferungFormTitle = ({
           <Copy sammelLieferung={row} lieferungId={lieferungId} />
         )}
         <>
+          <HistoryButton
+            row={row}
+            showHistory={showHistory}
+            setShowHistory={setShowHistory}
+          />
           {row.id && <Settings />}
           <Anleitung />
           {shownAsSammelLieferung && (

@@ -28,7 +28,9 @@ const SlPrint = ({ printPreview, setPrintPreview, asMenu }) => {
         <MenuItem onClick={showLieferschein}>
           {printPreview ? 'Formular' : 'Lieferschein'}
         </MenuItem>
-        <MenuItem onClick={printLieferschein}>drucken</MenuItem>
+        {printPreview && (
+          <MenuItem onClick={printLieferschein}>Lieferschein drucken</MenuItem>
+        )}
       </>
     )
   }
@@ -44,8 +46,8 @@ const SlPrint = ({ printPreview, setPrintPreview, asMenu }) => {
       </IconButton>
       {printPreview && (
         <IconButton
-          aria-label="drucken"
-          title="drucken"
+          aria-label="Lieferschein drucken"
+          title="Lieferschein drucken"
           onClick={printLieferschein}
         >
           <MdPrint />
