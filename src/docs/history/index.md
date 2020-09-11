@@ -1,6 +1,6 @@
 ---
 path: '/Dokumentation/Historisierung'
-date: '2020-09-10'
+date: '2020-09-11'
 title: 'Daten-Historie'
 sort1: 25
 ---
@@ -15,12 +15,15 @@ Um die Historie eines Datensatzes zu sehen, klickt man auf das entsprechende Sym
 - In der Mobil-Ansicht gibt es statt des Symbols einen Menü-Eintrag
 - Das Historie-Symbol ist inaktiv, wenn es keine historische Versionen gibt
 - Aktuell (Anfang September 2020) ist die Benutzer-Oberfläche für die Historisierung erst implementiert für:
+  - Events
   - Gärten
   - Herkünfte
   - Kulturen
   - Lieferungen
   - Personen
   - Sammlungen
+  - Zählungen
+  - Teilzählungen
 
 Nun öffnet sich rechts der aktuellen Version eine neue Spalte. Sie stellt alle verfügbaren Versionen in einem "Karussell" dar:<br/>
 ![Version](002_version.png)<br/>
