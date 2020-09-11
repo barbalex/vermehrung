@@ -68,9 +68,7 @@ const ZaehlungFormTitle = ({
               setShowHistory={setShowHistory}
               asMenu
             />
-            {row.kultur_id && (
-              <Settings kulturId={row.kultur_id} zaehlungId={row.id} asMenu />
-            )}
+            {row.kultur_id && <Settings kulturId={row.kultur_id} asMenu />}
             <Anleitung asMenu />
             <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
           </Menu>
@@ -93,9 +91,7 @@ const ZaehlungFormTitle = ({
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
-        {row.kultur_id && (
-          <Settings kulturId={row.kultur_id} zaehlungId={row.id} />
-        )}
+        {row.kultur_id && <Settings kulturId={row.kultur_id} />}
         <Anleitung />
         <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
       </TitleSymbols>
