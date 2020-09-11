@@ -10,6 +10,8 @@ import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import Anleitung from './Anleitung'
 import FilterNumbers from '../../../shared/FilterNumbers'
+import HistoryButton from '../../../shared/HistoryButton'
+import Menu from '../../../shared/Menu'
 import UpSvg from '../../../../svg/to_up.inline.svg'
 
 const TitleContainer = styled.div`
@@ -49,6 +51,31 @@ const EventFormTitle = ({
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
     [activeNodeArray, setActiveNodeArray],
   )
+  if (width < 520) {
+    return (
+      <TitleContainer>
+        <Title>Event</Title>
+        <TitleSymbols>
+          <IconButton title="Zur Liste" onClick={onClickUp}>
+            <UpSvg />
+          </IconButton>
+          <AddButton />
+          <DeleteButton row={row} />
+          <Menu white={false}>
+            <HistoryButton
+              row={row}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
+            {row.kultur_id && <Settings kulturId={row.kultur_id} asMenu />}
+            <Anleitung asMenu />
+            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+          </Menu>
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  }
 
   return (
     <TitleContainer>
@@ -59,6 +86,11 @@ const EventFormTitle = ({
         </IconButton>
         <AddButton />
         <DeleteButton row={row} />
+        <HistoryButton
+          row={row}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
         {row.kultur_id && <Settings kulturId={row.kultur_id} />}
         <Anleitung />
         <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
