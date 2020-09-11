@@ -3,15 +3,15 @@ import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
-import History from '../../../../shared/History'
-import { StoreContext } from '../../../../../models/reactUtils'
-import checkForOnlineError from '../../../../../utils/checkForOnlineError'
-import toPgArray from '../../../../../utils/toPgArray'
-import createDataArrayForRevComparison from '../../createDataArrayForRevComparison'
+import History from '../../../shared/History'
+import { StoreContext } from '../../../../models/reactUtils'
+import checkForOnlineError from '../../../../utils/checkForOnlineError'
+import toPgArray from '../../../../utils/toPgArray'
+import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, upsertKulturModel } = store
+  const { user, addNotification, upsertGartenModel } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow }),
@@ -22,15 +22,15 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
     const newObject = {
-      kultur_id: revRow.kultur_id,
-      art_id: revRow.art_id,
-      herkunft_id: revRow.herkunft_id,
       garten_id: revRow.garten_id,
-      zwischenlager: revRow.zwischenlager,
-      erhaltungskultur: revRow.erhaltungskultur,
-      von_anzahl_individuen: revRow.von_anzahl_individuen,
-      bemerkungen: revRow.bemerkungen,
+      name: revRow.name,
+      person_id: revRow.person_id,
+      strasse: revRow.strasse,
+      plz: revRow.plz,
+      ort: revRow.ort,
+      geom_point: revRow.geom_point,
       aktiv: revRow.aktiv,
+      bemerkungen: revRow.bemerkungen,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -44,10 +44,10 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     const newObjectForStore = { ...newObject }
     //console.log('Kultur History', { row, revRow, newObject })
     try {
-      await store.mutateInsert_kultur_rev_one({
+      await store.mutateInsert_garten_rev_one({
         object: newObject,
         on_conflict: {
-          constraint: 'kultur_rev_pkey',
+          constraint: 'garten_rev_pkey',
           update_columns: ['id'],
         },
       })
@@ -67,29 +67,29 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObjectForStore._conflicts = row._conflicts
     // for store: convert rev to winner
     newObjectForStore.id = row.id
-    delete newObjectForStore.kultur_id
+    delete newObjectForStore.garten_id
     // optimistically update store
-    upsertKulturModel(newObjectForStore)
+    upsertGartenModel(newObjectForStore)
   }, [
     addNotification,
     historyTakeoverCallback,
     revRow._deleted,
     revRow.aktiv,
-    revRow.art_id,
     revRow.bemerkungen,
-    revRow.erhaltungskultur,
     revRow.garten_id,
-    revRow.herkunft_id,
-    revRow.kultur_id,
-    revRow.von_anzahl_individuen,
-    revRow.zwischenlager,
+    revRow.geom_point,
+    revRow.name,
+    revRow.ort,
+    revRow.person_id,
+    revRow.plz,
+    revRow.strasse,
     row._conflicts,
     row._depth,
     row._rev,
     row._revisions,
     row.id,
     store,
-    upsertKulturModel,
+    upsertGartenModel,
     user.email,
   ])
 
