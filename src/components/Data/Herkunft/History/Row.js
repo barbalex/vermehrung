@@ -3,15 +3,15 @@ import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
-import History from '../../../../shared/History'
-import { StoreContext } from '../../../../../models/reactUtils'
-import checkForOnlineError from '../../../../../utils/checkForOnlineError'
-import toPgArray from '../../../../../utils/toPgArray'
-import createDataArrayForRevComparison from '../../createDataArrayForRevComparison'
+import History from '../../../shared/History'
+import { StoreContext } from '../../../../models/reactUtils'
+import checkForOnlineError from '../../../../utils/checkForOnlineError'
+import toPgArray from '../../../../utils/toPgArray'
+import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, upsertEventModel } = store
+  const { user, addNotification, upsertHerkunftModel } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow }),
@@ -22,13 +22,14 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
     const newObject = {
-      event_id: revRow.event_id,
-      kultur_id: revRow.kultur_id,
-      teilkultur_id: revRow.teilkultur_id,
-      person_id: revRow.person_id,
-      beschreibung: revRow.beschreibung,
-      geplant: revRow.geplant,
-      datum: revRow.datum,
+      herkunft_id: revRow.herkunft_id,
+      nr: revRow.nr,
+      lokalname: revRow.lokalname,
+      gemeinde: revRow.gemeinde,
+      kanton: revRow.kanton,
+      land: revRow.land,
+      geom_point: revRow.geom_point,
+      bemerkungen: revRow.bemerkungen,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -40,12 +41,12 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('Event History', { row, revRow, newObject })
+    //console.log('Herkunft History', { row, revRow, newObject })
     try {
-      await store.mutateInsert_event_rev_one({
+      await store.mutateInsert_herkunft_rev_one({
         object: newObject,
         on_conflict: {
-          constraint: 'event_rev_pkey',
+          constraint: 'herkunft_rev_pkey',
           update_columns: ['id'],
         },
       })
@@ -65,27 +66,28 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObjectForStore._conflicts = row._conflicts
     // for store: convert rev to winner
     newObjectForStore.id = row.id
-    delete newObjectForStore.event_id
+    delete newObjectForStore.herkunft_id
     // optimistically update store
-    upsertEventModel(newObjectForStore)
+    upsertHerkunftModel(newObjectForStore)
   }, [
     addNotification,
     historyTakeoverCallback,
     revRow._deleted,
-    revRow.beschreibung,
-    revRow.datum,
-    revRow.event_id,
-    revRow.geplant,
-    revRow.kultur_id,
-    revRow.person_id,
-    revRow.teilkultur_id,
+    revRow.bemerkungen,
+    revRow.gemeinde,
+    revRow.geom_point,
+    revRow.herkunft_id,
+    revRow.kanton,
+    revRow.land,
+    revRow.lokalname,
+    revRow.nr,
     row._conflicts,
     row._depth,
     row._rev,
     row._revisions,
     row.id,
     store,
-    upsertEventModel,
+    upsertHerkunftModel,
     user.email,
   ])
 
