@@ -3,15 +3,15 @@ import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
-import History from '../../../../shared/History'
-import { StoreContext } from '../../../../../models/reactUtils'
-import checkForOnlineError from '../../../../../utils/checkForOnlineError'
-import toPgArray from '../../../../../utils/toPgArray'
-import createDataArrayForRevComparison from '../../createDataArrayForRevComparison'
+import History from '../../../shared/History'
+import { StoreContext } from '../../../../models/reactUtils'
+import checkForOnlineError from '../../../../utils/checkForOnlineError'
+import toPgArray from '../../../../utils/toPgArray'
+import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, upsertArtModel } = store
+  const { user, addNotification, upsertEventModel } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow }),
@@ -22,8 +22,13 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
     const newObject = {
-      art_id: revRow.art_id,
-      ae_id: revRow.ae_id,
+      event_id: revRow.event_id,
+      kultur_id: revRow.kultur_id,
+      teilkultur_id: revRow.teilkultur_id,
+      person_id: revRow.person_id,
+      beschreibung: revRow.beschreibung,
+      geplant: revRow.geplant,
+      datum: revRow.datum,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -35,12 +40,12 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('Art History', { row, revRow, newObject })
+    //console.log('Event History', { row, revRow, newObject })
     try {
-      await store.mutateInsert_art_rev_one({
+      await store.mutateInsert_event_rev_one({
         object: newObject,
         on_conflict: {
-          constraint: 'art_rev_pkey',
+          constraint: 'event_rev_pkey',
           update_columns: ['id'],
         },
       })
@@ -60,22 +65,27 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObjectForStore._conflicts = row._conflicts
     // for store: convert rev to winner
     newObjectForStore.id = row.id
-    delete newObjectForStore.kultur_id
+    delete newObjectForStore.event_id
     // optimistically update store
-    upsertArtModel(newObjectForStore)
+    upsertEventModel(newObjectForStore)
   }, [
     addNotification,
     historyTakeoverCallback,
     revRow._deleted,
-    revRow.ae_id,
-    revRow.art_id,
+    revRow.beschreibung,
+    revRow.datum,
+    revRow.event_id,
+    revRow.geplant,
+    revRow.kultur_id,
+    revRow.person_id,
+    revRow.teilkultur_id,
     row._conflicts,
     row._depth,
     row._rev,
     row._revisions,
     row.id,
     store,
-    upsertArtModel,
+    upsertEventModel,
     user.email,
   ])
 
