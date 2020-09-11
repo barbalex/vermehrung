@@ -55,8 +55,6 @@ const ZaehlungForm = ({
   const kulturOption = store.kultur_options.get(row.kultur_id)
   const z_bemerkungen = kulturOption?.z_bemerkungen ?? true
 
-  console.log('Zaehlung Form', { kulturOption, z_bemerkungen, store, row })
-
   useEffect(() => {
     unsetError('zaehlung')
   }, [id, unsetError])
