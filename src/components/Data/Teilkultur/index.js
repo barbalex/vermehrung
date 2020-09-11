@@ -7,8 +7,6 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
-import IconButton from '@material-ui/core/IconButton'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -16,49 +14,20 @@ import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
 import Checkbox3States from '../../shared/Checkbox3States'
-import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import Settings from './Settings'
-import DeleteButton from './DeleteButton'
-import AddButton from './AddButton'
 import Zaehlungen from './Zaehlungen'
 import Events from './Events'
-import getConstants from '../../../utils/constants'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import FilterNumbers from '../../shared/FilterNumbers'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
-import UpSvg from '../../../svg/to_up.inline.svg'
-
-const constants = getConstants()
+import FormTitle from './FormTitle'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-  padding 0 10px;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -107,31 +76,11 @@ const Teilkultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    kulturIdInActiveNodeArray,
-    kultursSorted,
-    teilkultursSorted,
-    teilkultursFiltered,
-    errors,
-    unsetError,
-  } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { filter, online, kultursSorted, errors, unsetError } = store
   const row = useMemo(
     () => (showFilter ? filter.teilkultur : store.teilkulturs.get(id) || {}),
     [filter.teilkultur, id, showFilter, store.teilkulturs],
   )
-
-  const hierarchyFilter = (r) => {
-    if (kulturIdInActiveNodeArray) {
-      return r.kultur_id === kulturIdInActiveNodeArray
-    }
-    return true
-  }
-
-  const totalNr = teilkultursSorted.filter(hierarchyFilter).length
-  const filteredNr = teilkultursFiltered.filter(hierarchyFilter).length
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -182,60 +131,28 @@ const Teilkultur = ({
     },
     [filter, row, showFilter],
   )
-  const openTeilkulturDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Teilkulturen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
-
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
-
   const showDeleted = showFilter || row._deleted
+
+  const [showHistory, setShowHistory] = useState(null)
+  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   if (!row || (!showFilter && filter.show)) return null
 
-  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  const paneIsSplit = online && (activeConflict || showHistory)
+
+  const firstPaneWidth = paneIsSplit ? '50%' : '100%'
   // hide resizer when tree is hidden
-  const resizerStyle = !activeConflict ? { width: 0 } : {}
+  const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        {showFilter ? (
-          <FilterTitle
-            title="Teilkultur"
-            table="teilkultur"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
-          />
-        ) : (
-          <TitleContainer>
-            <Title>Teilkultur</Title>
-            <TitleSymbols>
-              <IconButton title="Zur Liste" onClick={onClickUp}>
-                <UpSvg />
-              </IconButton>
-              <AddButton />
-              <DeleteButton row={row} />
-              <Settings kulturId={row.kultur_id} />
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openTeilkulturDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-            </TitleSymbols>
-          </TitleContainer>
-        )}
+        <FormTitle
+          row={row}
+          showFilter={showFilter}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
         <Container>
           <StyledSplitPane
             split="vertical"
