@@ -17,24 +17,27 @@ export default ({ store }) => {
     )
 
     return kulturen
-      .map((el) => {
-        const art = el?.art?.art_ae_art?.name ?? '(keine Art)'
-        const herkunft = el?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+      .map((k) => {
+        const art = k?.art?.art_ae_art?.name ?? '(keine Art)'
+        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const label = `${art}, von: ${herkunft}`
+        const labelWithZl = `${label}${
+          k?.zwischenlager ? '. Zwischenlager' : ''
+        }`
 
         return {
           nodeType: 'table',
           menuTitle: 'Kultur',
           table: 'kultur',
-          id: `${gartenId}${el.id}`,
-          label,
-          url: ['Gaerten', gartenId, 'Kulturen', el.id],
+          id: `${gartenId}${k.id}`,
+          label: labelWithZl,
+          url: ['Gaerten', gartenId, 'Kulturen', k.id],
           hasChildren: true,
         }
       })
-      .map((el, index) => {
-        el.sort = [4, gartenIndex, 1, index]
-        return el
+      .map((k, index) => {
+        k.sort = [4, gartenIndex, 1, index]
+        return k
       })
   })
 }

@@ -1,3 +1,5 @@
+import kulturLabelFromKultur from '../../../../../Data/Lieferung/Lieferung/kulturLabelFromKultur'
+
 export default ({ store }) => {
   const {
     showSammlung,
@@ -33,26 +35,25 @@ export default ({ store }) => {
     if (!kultur) return []
 
     return [kultur]
-      .map((el) => ({
+      .map((k) => ({
         nodeType: 'table_without_menu',
         menuTitle: 'Kultur',
         table: 'kultur',
-        id: `${sammlungId}${lieferungId}${el.id}`,
-        label:
-          el?.garten?.name ?? `${el?.garten?.person?.fullname ?? 'kein Name'}`,
+        id: `${sammlungId}${lieferungId}${k.id}`,
+        label: kulturLabelFromKultur(k),
         url: [
           'Sammlungen',
           sammlungId,
           'Aus-Lieferungen',
           lieferungId,
           'Kulturen',
-          el.id,
+          k.id,
         ],
         hasChildren: true,
       }))
-      .map((el, index) => {
-        el.sort = [3, sammlungIndex, 3, lieferungIndex, 1, index]
-        return el
+      .map((k, index) => {
+        k.sort = [3, sammlungIndex, 3, lieferungIndex, 1, index]
+        return k
       })
   })
 }
