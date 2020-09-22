@@ -3,6 +3,7 @@ export default (k) => {
   const personOrt = k?.garten?.person?.ort ?? null
   const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
   const label = k?.garten?.name ?? personLabel
+  const labelWithZl = `${label}${k?.zwischenlager ? '. Zwischenlager' : ''}`
 
-  return label
+  return labelWithZl
 }
