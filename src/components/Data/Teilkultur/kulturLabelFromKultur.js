@@ -5,6 +5,7 @@ export default (k) => {
   const gartenName = k?.garten?.name ?? personLabel
   const artName = k?.art?.art_ae_art?.name ?? '(keine Art)'
   const label = `${gartenName}: ${artName}`
+  const labelWithZl = `${label}${k?.zwischenlager ? '. Zwischenlager' : ''}`
 
-  return label
+  return labelWithZl
 }
