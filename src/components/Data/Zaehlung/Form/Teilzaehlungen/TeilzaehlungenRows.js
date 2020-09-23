@@ -33,7 +33,6 @@ const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
           kulturId={kulturId}
           teilzaehlung={r}
           teilkulturenWerte={teilkulturenWerte}
-          rows={rows}
         />
       ))}
     </ErrorBoundary>
