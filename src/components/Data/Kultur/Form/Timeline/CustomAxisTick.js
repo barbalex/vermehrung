@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 const CustomAxisTick = ({ x, y, payload }) => (
   <g transform={`translate(${x},${y})`}>
@@ -12,7 +12,7 @@ const CustomAxisTick = ({ x, y, payload }) => (
       transform="rotate(-35)"
       style={{ fontSize: 12 }}
     >
-      {moment(payload.value).format('YYYY.MM.DD')}
+      {DateTime.fromSQL(payload.value).toFormat('yyyy.LL.dd')}
     </text>
   </g>
 )
