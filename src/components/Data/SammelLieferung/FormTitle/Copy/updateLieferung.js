@@ -1,5 +1,5 @@
 import md5 from 'blueimp-md5'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import { v1 as uuidv1 } from 'uuid'
 
 import {
@@ -49,7 +49,7 @@ export default async ({ lieferungId, sammelLieferung, store, field }) => {
   delete newObject._conflicts
   delete newObject.__typename
   const depth = lfLastVersion._depth + 1
-  newObject.changed = moment().format('YYYY-MM-DD')
+  newObject.changed = DateTime.local().toFormat('yyyy.LL.dd')
   newObject.changed_by = store.user.email
   newObject._parent_rev = lfLastVersion._rev
   newObject._depth = depth
