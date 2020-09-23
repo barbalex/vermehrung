@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import exists from '../../../../../utils/exists'
 
@@ -24,7 +24,7 @@ export default ({ store }) => {
     return lieferungen
       .map((el) => {
         const datum = el.datum
-          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
           : 'kein Datum'
         const anz = exists(el.anzahl_pflanzen) ? el.anzahl_pflanzen : '_'
         const anzAb = exists(el.anzahl_auspflanzbereit)

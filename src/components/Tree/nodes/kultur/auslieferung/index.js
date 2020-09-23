@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 export default ({ store }) => {
   const { showKultur, visibleOpenNodes, kultur } = store.tree
@@ -24,7 +24,7 @@ export default ({ store }) => {
     return auslieferungen
       .map((el) => {
         const datum = el.datum
-          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
           : 'kein Datum'
         const anz = el.anzahl_pflanzen ?? '_'
         const anzAb = el.anzahl_auspflanzbereit ?? '_'
