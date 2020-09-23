@@ -3,6 +3,7 @@ import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import moment from 'moment'
+import { DateTime } from 'luxon'
 import DatePicker from 'react-datepicker'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -77,7 +78,7 @@ const DateField = ({
   popperPlacement = 'auto',
 }) => {
   const onChangeDatePicker = useCallback(
-    date => {
+    (date) => {
       if (date === null) {
         saveToDb({
           target: {

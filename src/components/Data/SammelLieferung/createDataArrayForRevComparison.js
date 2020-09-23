@@ -1,4 +1,3 @@
-import moment from 'moment'
 import { DateTime } from 'luxon'
 
 import sammlungLabelFromSammlung from '../Lieferung/Lieferung/sammlungLabelFromSammlung'
