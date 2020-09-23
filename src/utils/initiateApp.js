@@ -86,8 +86,9 @@ export default async () => {
   if (store.online) {
     console.log('initiateApp querying initial data')
     // wait a tick - had trouble with user.uid not existing yet
-    //setTimeout(() => queryAllData({ store }))
-    queryAllData({ store })
+    setTimeout(() => queryAllData({ store }))
+    // 2020.09.23: had cases where: checkForOnlineError, error: Error: no such type exists in the schema: 'user_role'
+    //queryAllData({ store })
   }
 
   return { store, unregister }
