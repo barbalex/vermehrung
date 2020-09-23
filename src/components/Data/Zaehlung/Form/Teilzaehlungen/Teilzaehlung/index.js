@@ -10,8 +10,14 @@ import Form from './Form'
 import History from './History'
 
 const Container = styled.div`
-  padding-left: 10px;
   position: relative;
+`
+const InnerContainer = styled.div`
+  padding-left: 10px;
+`
+const SplitPaneContainer = styled.div`
+  padding-left: 10px;
+  height: 650px;
 `
 const TopLine = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -21,7 +27,7 @@ const TopLine = styled.div`
   margin-bottom: 10px;
 `
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - 64px - 48px) !important;
+  height: 650px !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
@@ -55,7 +61,6 @@ const Teilzaehlung = ({
   teilzaehlung: row,
   teilkulturenWerte,
   index,
-  rows,
 }) => {
   const store = useContext(StoreContext)
   const { online } = store
@@ -84,16 +89,62 @@ const Teilzaehlung = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
+  if (online && (activeConflict || showHistory)) {
+    return (
+      <ErrorBoundary>
+        <Container>
+          {!!index && <TopLine />}
+          <SplitPaneContainer>
+            <StyledSplitPane
+              split="vertical"
+              size={firstPaneWidth}
+              minSize={200}
+              resizerStyle={resizerStyle}
+            >
+              <Form
+                id={id}
+                zaehlungId={zaehlungId}
+                kulturId={kulturId}
+                row={row}
+                teilkulturenWerte={teilkulturenWerte}
+                activeConflict={activeConflict}
+                setActiveConflict={setActiveConflict}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+              />
+              <>
+                {online && (
+                  <>
+                    {activeConflict ? (
+                      <Conflict
+                        rev={activeConflict}
+                        id={id}
+                        row={row}
+                        conflictDisposalCallback={conflictDisposalCallback}
+                        conflictSelectionCallback={conflictSelectionCallback}
+                        setActiveConflict={setActiveConflict}
+                      />
+                    ) : showHistory ? (
+                      <History
+                        row={row}
+                        historyTakeoverCallback={historyTakeoverCallback}
+                      />
+                    ) : null}
+                  </>
+                )}
+              </>
+            </StyledSplitPane>
+          </SplitPaneContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  }
+
   return (
     <ErrorBoundary>
-      {!!index && <TopLine />}
       <Container>
-        <StyledSplitPane
-          split="vertical"
-          size={firstPaneWidth}
-          minSize={200}
-          resizerStyle={resizerStyle}
-        >
+        {!!index && <TopLine />}
+        <InnerContainer>
           <Form
             id={id}
             zaehlungId={zaehlungId}
@@ -104,30 +155,8 @@ const Teilzaehlung = ({
             setActiveConflict={setActiveConflict}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
-            rows={rows}
           />
-          <>
-            {online && (
-              <>
-                {activeConflict ? (
-                  <Conflict
-                    rev={activeConflict}
-                    id={id}
-                    row={row}
-                    conflictDisposalCallback={conflictDisposalCallback}
-                    conflictSelectionCallback={conflictSelectionCallback}
-                    setActiveConflict={setActiveConflict}
-                  />
-                ) : showHistory ? (
-                  <History
-                    row={row}
-                    historyTakeoverCallback={historyTakeoverCallback}
-                  />
-                ) : null}
-              </>
-            )}
-          </>
-        </StyledSplitPane>
+        </InnerContainer>
       </Container>
     </ErrorBoundary>
   )
