@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 const Popup = styled.div`
   background-color: white;
@@ -25,7 +25,7 @@ const CustomTooltip = ({ payload, label, active }) => {
     return (
       <Popup>
         <PTitle>
-          <div>{moment(label).format('YYYY.MM.DD')}</div>
+          <div>{DateTime.fromSQL(label).toFormat('yyyy.LL.dd')}</div>
           <Ereignis>{payload?.[0]?.payload?.title ?? ''}</Ereignis>
         </PTitle>
         {payload
