@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 export default ({ store }) => {
   const { showHerkunft, visibleOpenNodes, herkunft } = store.tree
@@ -22,7 +22,7 @@ export default ({ store }) => {
     return sammlungen
       .map((el) => {
         const datum = el.datum
-          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
           : 'kein Datum'
         const artName = el?.art?.art_ae_art?.name ?? '(keine Art)'
         const geplant = el.geplant ? ' (geplant)' : ''
