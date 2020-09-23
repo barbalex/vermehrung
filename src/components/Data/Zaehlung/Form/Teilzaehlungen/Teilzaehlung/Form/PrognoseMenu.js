@@ -6,12 +6,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
-import { StoreContext } from '../../../../../../models/reactUtils'
-import TextField from '../../../../../shared/TextField'
-import ifIsNumericAsNumber from '../../../../../../utils/ifIsNumericAsNumber'
-import exists from '../../../../../../utils/exists'
-import getConstants from '../../../../../../utils/constants'
-import ErrorBoundary from '../../../../../shared/ErrorBoundary'
+import { StoreContext } from '../../../../../../../models/reactUtils'
+import TextField from '../../../../../../shared/TextField'
+import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
+import exists from '../../../../../../../utils/exists'
+import getConstants from '../../../../../../../utils/constants'
+import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
 
 const constants = getConstants()
 
