@@ -42,7 +42,6 @@ const EventsRows = ({ row, style, last }) => {
   const geplant = row.geplant ? ' (geplant)' : ''
   const event = `${row?.beschreibung ?? '(nicht beschrieben)'}${geplant}`
   const label = `${datum || '(kein Datum)'}: ${event}`
-  console.log('EventsRows:', { rowDatum: row.datum, datum })
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
