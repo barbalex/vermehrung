@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { graphql, useStaticQuery } from 'gatsby'
 import Img from 'gatsby-image'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -120,7 +120,7 @@ const Lieferschein = ({ row }) => {
     : '(keine Person erfasst)'
 
   const am = row.datum
-    ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
+    ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
     : '(Kein Datum erfasst)'
 
   const lieferungen = lieferungsSorted.filter(
