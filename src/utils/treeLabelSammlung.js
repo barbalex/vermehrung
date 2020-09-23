@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 export default (el) => {
   const artName = el?.art
@@ -11,7 +11,7 @@ export default (el) => {
     ? el?.herkunft?.nr ?? '(Herkunft ohne Nr)'
     : '(keine Herkunft)'
   const date = el?.datum
-    ? moment(el?.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
+    ? DateTime.fromSQL(el?.datum).toFormat('yyyy.LL.dd')
     : 'kein Datum'
   const geplant = el?.geplant ? ' (geplant)' : ''
   return `${

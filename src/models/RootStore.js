@@ -9,7 +9,7 @@ import set from 'lodash/set'
 import unset from 'lodash/unset'
 import uniqBy from 'lodash/uniqBy'
 import isUuid from 'is-uuid'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
@@ -57,7 +57,7 @@ import queryAllData from '../utils/queryAllData'
 import Errors, { defaultValue as defaultErrors } from './Errors'
 
 const formatDatumForSearch = (datum) =>
-  datum ? moment(datum, 'YYYY-MM-DD').format('DD.MM.YYYY') : ''
+  datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
