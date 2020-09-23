@@ -79,7 +79,6 @@ const TeilzaehlungForm = ({
   setActiveConflict,
   showHistory,
   setShowHistory,
-  rows,
 }) => {
   const store = useContext(StoreContext)
   const { insertTeilkulturRev, errors, unsetError, online } = store
