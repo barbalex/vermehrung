@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import { StoreContext } from '../../../models/reactUtils'
 
@@ -37,7 +37,7 @@ const Arten = ({ row, style, last }) => {
     [activeNodeArray, row.id, setActiveNodeArray],
   )
   const datum = row.datum
-    ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
+    ? DateTime.fromSQL(row.datum).toFormat('yyyy.LL.dd')
     : 'kein Datum'
   const anz =
     row?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '-'

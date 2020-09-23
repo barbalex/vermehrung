@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import { observer } from 'mobx-react-lite'
 import { FaUndoAlt } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
@@ -101,8 +101,8 @@ const QueuedQuery = ({ qq, index }) => {
 
   return (
     <>
-      <Value bt={index === 0}>{`${moment(time).format(
-        'YYYY.MM.DD hh.mm.ss',
+      <Value bt={index === 0}>{`${DateTime.fromMillis(time).toFormat(
+        'yyyy.LL.dd HH.mm.ss',
       )}`}</Value>
       <Value bt={index === 0}>{revertTable}</Value>
       <Value bt={index === 0}>
