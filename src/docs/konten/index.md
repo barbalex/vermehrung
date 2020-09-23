@@ -56,7 +56,7 @@ Gärtner haben ausschliesslich Zugriff auf diese Daten. Artverantwortliche zusä
 
 ### Erstmalige Anmeldung
 
-1. vermerhung.ch besuchen
+1. vermehrung.ch besuchen
 1. Auf "Daten bearbeiten" klicken
 1. Login-Formular erscheint
 1. Email eingeben
