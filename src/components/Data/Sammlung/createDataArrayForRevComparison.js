@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 
@@ -24,8 +24,12 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'Nr',
   },
   {
-    valueInRow: moment(row?.datum).format('DD.MM.YYYY'),
-    valueInRev: moment(revRow?.datum).format('DD.MM.YYYY'),
+    valueInRow: row?.datum
+      ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
+      : '',
+    valueInRev: revRow?.datum
+      ? DateTime.fromSQL(revRow.datum).toFormat('dd.LL.yyyy')
+      : '',
     label: 'Datum',
   },
   {
