@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import exists from '../../../../../utils/exists'
 
@@ -43,7 +43,7 @@ const CustomTooltip = ({ payload: payloadPassed, label, active }) => {
     return (
       <Popup>
         <PTitle>
-          {moment(label).format('YYYY.MM.DD')}
+          {DateTime.fromSQL(label).toFormat('yyyy.LL.dd')}
           <Ereignis>{ereignis}</Ereignis>
         </PTitle>
         {payload.map((o, i) => {

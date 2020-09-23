@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
@@ -50,8 +50,12 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'Von Kultur',
   },
   {
-    valueInRow: row?.datum ? moment(row?.datum).format('DD.MM.YYYY') : null,
-    valueInRev: row?.datum ? moment(revRow?.datum).format('DD.MM.YYYY') : null,
+    valueInRow: row?.datum
+      ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
+      : null,
+    valueInRev: revRow?.datum
+      ? DateTime.fromSQL(revRow.datum).toFormat('dd.LL.yyyy')
+      : null,
     label: 'Datum',
   },
   {

@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import { StoreContext } from '../../../models/reactUtils'
 
@@ -37,11 +37,12 @@ const EventsRows = ({ row, style, last }) => {
     [activeNodeArray, row.id, setActiveNodeArray],
   )
   const datum = row.datum
-    ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
+    ? DateTime.fromSQL(row.datum).toFormat('yyyy.LL.dd')
     : null
   const geplant = row.geplant ? ' (geplant)' : ''
   const event = `${row?.beschreibung ?? '(nicht beschrieben)'}${geplant}`
   const label = `${datum || '(kein Datum)'}: ${event}`
+  console.log('EventsRows:', { rowDatum: row.datum, datum })
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
