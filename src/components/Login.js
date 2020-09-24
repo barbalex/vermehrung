@@ -53,6 +53,7 @@ const Login = () => {
     async ({ email: emailPassed, password: passwordPassed }) => {
       const emailToUse = emailPassed || email
       const passwordToUse = passwordPassed || password
+      // do everything to clean up so no data is left
       await firebase.auth().signOut()
       localForage.clear()
       window.localStorage.removeItem('token')
