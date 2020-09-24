@@ -11,7 +11,7 @@ const getAuthToken = async ({ store }) => {
   } = store
   if (!user?.uid) {
     console.log('getAuthToken returning because of missing user.uid')
-    setTimeout(() => getAuthToken({ store }), 200)
+    //setTimeout(() => getAuthToken({ store }), 200)
     return
   }
   /*if (authorizing) {
