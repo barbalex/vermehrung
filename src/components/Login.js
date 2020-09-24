@@ -12,6 +12,7 @@ import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
+import localForage from 'localforage'
 
 import ErrorBoundary from './shared/ErrorBoundary'
 import { StoreContext } from '../models/reactUtils'
@@ -49,15 +50,20 @@ const Login = () => {
   const fetchLogin = useCallback(
     // callbacks pass email or password
     // because state is not up to date yet
-    async ({ email: emailPassed, password: passwordPassed }) => {
+    ({ email: emailPassed, password: passwordPassed }) => {
       const emailToUse = emailPassed || email
       const passwordToUse = passwordPassed || password
-      try {
-        firebase.auth().signInWithEmailAndPassword(emailToUse, passwordToUse)
-      } catch (error) {
-        setEmailErrorText(error.message)
-        return setPasswordErrorText(error.message)
-      }
+      setTimeout(() => {
+        localForage.clear()
+        window.localStorage.removeItem('token')
+        //window.location.reload(true)
+        try {
+          firebase.auth().signInWithEmailAndPassword(emailToUse, passwordToUse)
+        } catch (error) {
+          setEmailErrorText(error.message)
+          return setPasswordErrorText(error.message)
+        }
+      })
     },
     [email, firebase, password],
   )
@@ -69,7 +75,7 @@ const Login = () => {
       if (!email) {
         setEmailErrorText('Bitte Email-Adresse eingeben')
       } else if (password) {
-        setTimeout(() => fetchLogin({ email }))
+        fetchLogin({ email })
       }
     },
     [fetchLogin, password],
@@ -82,7 +88,7 @@ const Login = () => {
       if (!password) {
         setPasswordErrorText('Bitte Passwort eingeben')
       } else if (email) {
-        setTimeout(() => fetchLogin({ password }))
+        fetchLogin({ password })
       }
     },
     [fetchLogin, email],
