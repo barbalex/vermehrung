@@ -50,9 +50,12 @@ const Login = () => {
   const fetchLogin = useCallback(
     // callbacks pass email or password
     // because state is not up to date yet
-    ({ email: emailPassed, password: passwordPassed }) => {
+    async ({ email: emailPassed, password: passwordPassed }) => {
       const emailToUse = emailPassed || email
       const passwordToUse = passwordPassed || password
+      await firebase.auth().signOut()
+      localForage.clear()
+      window.localStorage.removeItem('token')
       setTimeout(async () => {
         try {
           await firebase
@@ -62,8 +65,6 @@ const Login = () => {
           setEmailErrorText(error.message)
           return setPasswordErrorText(error.message)
         }
-        localForage.clear()
-        window.localStorage.removeItem('token')
         window.location.reload(true)
       })
     },
