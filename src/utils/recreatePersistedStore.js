@@ -3,6 +3,9 @@ import { navigate } from '@reach/router'
 import fb from 'firebase'
 import persist from 'mst-persist'
 
+import getAuthToken from './getAuthToken'
+import queryAllData from './queryAllData'
+
 // Configure Firebase
 const firebaseConfig = {
   apiKey: process.env.GATSBY_FIREBASE_API_KEY,
@@ -34,7 +37,7 @@ export default async ({ store }) => {
   })
   fb.initializeApp(firebaseConfig)
   setFirebase(fb)
-  unregisterAuthObserver = fb.auth().onAuthStateChanged((user) => {
+  unregisterAuthObserver = fb.auth().onAuthStateChanged(async (user) => {
     setUser(user)
     // set last activeNodeArray
     // only if top domain was visited
@@ -46,7 +49,13 @@ export default async ({ store }) => {
         navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
       }, 200)
     }
-    setGettingAuthUser(false)
+    setTimeout(async () => {
+      if (store.online) {
+        await getAuthToken({ store })
+        queryAllData({ store })
+      }
+      setGettingAuthUser(false)
+    })
   })
   return unregisterAuthObserver
 }
