@@ -22,6 +22,19 @@ const FieldsContainer = styled.div`
 const Root = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
   const { userPerson, initialDataQueried } = store
+  const {
+    showArt,
+    showEvent,
+    showGarten,
+    showHerkunft,
+    showKultur,
+    showLieferung,
+    showPerson,
+    showSammelLieferung,
+    showSammlung,
+    showTeilkultur,
+    showZaehlung,
+  } = store.tree
 
   // eslint-disable-next-line no-unused-vars
   const { user_role } = userPerson
@@ -29,27 +42,67 @@ const Root = ({ filter: showFilter }) => {
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value
   const rows = [
-    { name: 'Arten', url: ['Arten'], table: 'art', sort: 1 },
-    { name: 'Herkünfte', url: ['Herkuenfte'], table: 'herkunft', sort: 2 },
-    { name: 'Sammlungen', url: ['Sammlungen'], table: 'sammlung', sort: 3 },
-    { name: 'Gärten', url: ['Gaerten'], table: 'garten', sort: 4 },
-    { name: 'Kulturen', url: ['Kulturen'], table: 'kultur', sort: 5 },
-    {
-      name: 'Teilkulturen',
-      url: ['Teilkulturen'],
-      table: 'teilkultur',
-      sort: 6,
-    },
-    { name: 'Zählungen', url: ['Zaehlungen'], table: 'zaehlung', sort: 7 },
-    { name: 'Lieferungen', url: ['Lieferungen'], table: 'lieferung', sort: 8 },
-    {
-      name: 'Sammel-Lieferungen',
-      url: ['Sammel-Lieferungen'],
-      table: 'sammel_lieferung',
-      sort: 9,
-    },
-    { name: 'Events', url: ['Events'], table: 'event', sort: 10 },
-    { name: 'Personen', url: ['Personen'], table: 'person', sort: 11 },
+    ...(showArt
+      ? [{ name: 'Arten', url: ['Arten'], table: 'art', sort: 1 }]
+      : []),
+    ...(showHerkunft
+      ? [{ name: 'Herkünfte', url: ['Herkuenfte'], table: 'herkunft', sort: 2 }]
+      : []),
+    ...(showSammlung
+      ? [
+          {
+            name: 'Sammlungen',
+            url: ['Sammlungen'],
+            table: 'sammlung',
+            sort: 3,
+          },
+        ]
+      : []),
+    ...(showGarten
+      ? [{ name: 'Gärten', url: ['Gaerten'], table: 'garten', sort: 4 }]
+      : []),
+    ...(showKultur
+      ? [{ name: 'Kulturen', url: ['Kulturen'], table: 'kultur', sort: 5 }]
+      : []),
+    ...(showTeilkultur
+      ? [
+          {
+            name: 'Teilkulturen',
+            url: ['Teilkulturen'],
+            table: 'teilkultur',
+            sort: 6,
+          },
+        ]
+      : []),
+    ...(showZaehlung
+      ? [{ name: 'Zählungen', url: ['Zaehlungen'], table: 'zaehlung', sort: 7 }]
+      : []),
+    ...(showLieferung
+      ? [
+          {
+            name: 'Lieferungen',
+            url: ['Lieferungen'],
+            table: 'lieferung',
+            sort: 8,
+          },
+        ]
+      : []),
+    ...(showSammelLieferung
+      ? [
+          {
+            name: 'Sammel-Lieferungen',
+            url: ['Sammel-Lieferungen'],
+            table: 'sammel_lieferung',
+            sort: 9,
+          },
+        ]
+      : []),
+    ...(showEvent
+      ? [{ name: 'Events', url: ['Events'], table: 'event', sort: 10 }]
+      : []),
+    ...(showPerson
+      ? [{ name: 'Personen', url: ['Personen'], table: 'person', sort: 11 }]
+      : []),
   ]
 
   return (
