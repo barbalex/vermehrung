@@ -3,14 +3,12 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 import { RootStore } from '../models'
 import getConstants from './constants'
-import queryAllData from './queryAllData'
 
 const constants = getConstants()
 
-// TODO: this never runs. Why?
 const getToken = () => {
   const none =
-    'eyJhbGciOiJIUzUxMiIsImtpZCI6IjRlMjdmNWIwNjllYWQ4ZjliZWYxZDE0Y2M2Mjc5YmRmYWYzNGM1MWIiLCJ0eXAiOiJKV1QifQ.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6Im1hbmFnZXIiLCJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbIm1hbmFnZXIiXSwieC1oYXN1cmEtdXNlci1pZCI6ImFhYWFhYWFhLWFhYWEtMTFlYS1hYWFhLWFhYWFhYWFhYWFhYSJ9LCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdmVybWVocnVuZy1hYWFhYSIsImF1ZCI6InZlcm1laHJ1bmctZjQ4YzQiLCJhdXRoX3RpbWUiOjE1OTE5Njg3MzQsInVzZXJfaWQiOiJYUnV6eHAxWDJ3YWFhYWF5ek9hV1Y2emdhYWFhIiwic3ViIjoiWFJ1enhwMVhhYWFhb3l6T2FXVjZ6Z0NDTDIiLCJpYXQiOjE1OTE5NjkzNDksImV4cCI6MTU5MTk3Mjk0OSwiZW1haWwiOiJ0ZXN0QHRlc3QuY2giLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGVzdEB0ZXN0LmNoIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.AuCb49h4qCkT-bi-v31BtnkdYnCfzgy7KbVSMBNYmwrLx2KAhzvlSNl51QS5cy6MDzCe7hGGx2xb_EFbTZQwgA'
+    'eyJhbGciOiJIUzUxMiIsImtpZCI6IjRlMjdmNWIwNjllYWQ4ZjliZWYxZDE0Y2M2Mjc5YmRmYWYzNGM1MWIiLCJ0eXAiOiJKV1QifQ.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6Im5vbmUiLCJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbIm5vbmUiXSwieC1oYXN1cmEtdXNlci1pZCI6ImFhYWFhYWFhLWFhYWEtMTFlYS1hYWFhLWFhYWFhYWFhYWFhYSJ9LCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdmVybWVocnVuZy1hYWFhYSIsImF1ZCI6InZlcm1laHJ1bmctZjQ4YzQiLCJhdXRoX3RpbWUiOjE1OTE5Njg3MzQsInVzZXJfaWQiOiJYUnV6eHAxWDJ3YWFhYWF5ek9hV1Y2emdhYWFhIiwic3ViIjoiWFJ1enhwMVhhYWFhb3l6T2FXVjZ6Z0NDTDIiLCJpYXQiOjE1OTE5NjkzNDksImV4cCI6MTU5MTk3Mjk0OSwiZW1haWwiOiJ0ZXN0QHRlc3QuY2giLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGVzdEB0ZXN0LmNoIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0._BWw-QO7K_oTr72pHZBl4OlXox3_x59IGEnllj3PwaFO8fylhQX7YZyaNev7iqeiyzx2DRZyAQyFhffNjEWyog'
   if (typeof window === 'undefined') return none
   return window.localStorage.getItem('token') ?? none
 }
@@ -21,6 +19,7 @@ export default async () => {
   const gqlHttpClient = (() => {
     const client = createHttpClient(constants?.graphQlUri)
     client.setHeaders({ authorization: `Bearer ${getToken()}` })
+    //console.log('initiateApp set token:', getToken())
     return client
   })()
 
@@ -38,6 +37,8 @@ export default async () => {
     // https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
     gqlWsClient = (() => {
       let token = getToken()
+
+      //console.log('initiateApp, wsClient setting token:', token)
 
       return new SubscriptionClient(constants?.graphQlWsUri, {
         reconnect: true,
@@ -83,13 +84,6 @@ export default async () => {
   const module = await import('./recreatePersistedStore')
   const recreatePersistedStore = module.default
   const unregister = await recreatePersistedStore({ store })
-  if (store.online) {
-    console.log('initiateApp querying initial data')
-    // wait a tick - had trouble with user.uid not existing yet
-    setTimeout(() => queryAllData({ store }))
-    // 2020.09.23: had cases where: checkForOnlineError, error: Error: no such type exists in the schema: 'user_role'
-    //queryAllData({ store })
-  }
 
   return { store, unregister }
 }

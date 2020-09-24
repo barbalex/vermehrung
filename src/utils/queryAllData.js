@@ -178,4 +178,5 @@ export default async ({ store }) => {
   }
   removeSurplusNotRevModels({ store, data })
   setInitialDataQueried(true)
+  //console.log('queryAllData, data:', data)
 }

@@ -52,7 +52,7 @@ const getAuthToken = async ({ store }) => {
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-348492358
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
-    console.log('getAuthToken got new token')
+    //console.log('getAuthToken got new token:', token)
     window.localStorage.setItem('token', token)
     gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
     setAuthorizing(false)
