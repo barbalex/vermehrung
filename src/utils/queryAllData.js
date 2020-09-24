@@ -179,5 +179,6 @@ export default async ({ store }) => {
   }
   removeSurplusNotRevModels({ store, data })
   setInitialDataQueried(true)
-  //console.log('queryAllData, data:', data)
+  // TODO: remove next log
+  console.log('queryAllData, data:', data)
 }
