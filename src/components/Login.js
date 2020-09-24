@@ -53,16 +53,16 @@ const Login = () => {
     ({ email: emailPassed, password: passwordPassed }) => {
       const emailToUse = emailPassed || email
       const passwordToUse = passwordPassed || password
+      localForage.clear()
+      window.localStorage.removeItem('token')
       setTimeout(() => {
-        localForage.clear()
-        window.localStorage.removeItem('token')
-        //window.location.reload(true)
         try {
           firebase.auth().signInWithEmailAndPassword(emailToUse, passwordToUse)
         } catch (error) {
           setEmailErrorText(error.message)
           return setPasswordErrorText(error.message)
         }
+        //window.location.reload(true)
       })
     },
     [email, firebase, password],
