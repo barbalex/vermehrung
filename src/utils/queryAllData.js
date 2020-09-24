@@ -169,6 +169,7 @@ export default async ({ store }) => {
     })
   } catch (error) {
     if (error && error.message.includes('JWT')) {
+      console.log('queryAllData, will get new auth token')
       await getAuthToken({ store })
     } else {
       checkForOnlineError(error)
