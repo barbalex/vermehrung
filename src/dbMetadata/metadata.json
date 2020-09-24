@@ -26,7 +26,12 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["id", "name", "name_deutsch", "name_latein"],
+            "columns": [
+              "id",
+              "name",
+              "name_deutsch",
+              "name_latein"
+            ],
             "filter": {
               "_or": [
                 {
@@ -72,7 +77,12 @@
         {
           "role": "gaertner",
           "permission": {
-            "columns": ["id", "name", "name_deutsch", "name_latein"],
+            "columns": [
+              "id",
+              "name",
+              "name_deutsch",
+              "name_latein"
+            ],
             "filter": {
               "ae_art_art": {
                 "kulturs": {
@@ -92,7 +102,12 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["name", "name_deutsch", "name_latein", "id"],
+            "columns": [
+              "name",
+              "name_deutsch",
+              "name_latein",
+              "id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -1027,7 +1042,32 @@
               "_conflicts",
               "choosen"
             ],
-            "filter": {}
+            "filter": {
+              "art": {
+                "_or": [
+                  {
+                    "kulturs": {
+                      "garten": {
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kulturs": {
+                      "garten": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         {
@@ -1267,7 +1307,9 @@
         {
           "role": "gaertner",
           "permission": {
-            "columns": ["id"],
+            "columns": [
+              "id"
+            ],
             "filter": {}
           }
         },
@@ -2047,7 +2089,9 @@
         {
           "role": "gaertner",
           "permission": {
-            "columns": ["id"],
+            "columns": [
+              "id"
+            ],
             "filter": {}
           }
         },
@@ -17551,7 +17595,13 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["name", "sort", "comment", "id", "label"],
+            "columns": [
+              "name",
+              "sort",
+              "comment",
+              "id",
+              "label"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -17559,7 +17609,13 @@
         {
           "role": "gaertner",
           "permission": {
-            "columns": ["sort", "comment", "label", "name", "id"],
+            "columns": [
+              "sort",
+              "comment",
+              "label",
+              "name",
+              "id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -17567,7 +17623,13 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["sort", "comment", "label", "name", "id"],
+            "columns": [
+              "sort",
+              "comment",
+              "label",
+              "name",
+              "id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
