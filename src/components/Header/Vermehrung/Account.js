@@ -87,12 +87,6 @@ const Account = () => {
     setRefreshing('yes')
     flushData()
     window.location.reload(true)
-    /*await queryAllData({ store })
-    setRefreshing('done')
-    setTimeout(() => {
-      setAnchorEl(null)
-      setTimeout(() => setRefreshing('no'))
-    }, 1500)*/
   }, [flushData])
   const refreshText =
     refreshing === 'no'
