@@ -1011,6 +1011,26 @@
           }
         },
         {
+          "role": "gaertner",
+          "permission": {
+            "columns": [
+              "art_id",
+              "qk_name",
+              "id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts",
+              "choosen"
+            ],
+            "filter": {}
+          }
+        },
+        {
           "role": "manager",
           "permission": {
             "columns": [
@@ -1242,6 +1262,13 @@
               ]
             },
             "allow_aggregations": true
+          }
+        },
+        {
+          "role": "gaertner",
+          "permission": {
+            "columns": ["id"],
+            "filter": {}
           }
         },
         {
@@ -1856,6 +1883,50 @@
           }
         },
         {
+          "role": "gaertner",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "art_id",
+              "id",
+              "person_id"
+            ],
+            "filter": {
+              "art": {
+                "_or": [
+                  {
+                    "kulturs": {
+                      "garten": {
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "kulturs": {
+                      "garten": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
           "role": "manager",
           "permission": {
             "columns": [
@@ -1971,6 +2042,13 @@
               }
             },
             "allow_aggregations": true
+          }
+        },
+        {
+          "role": "gaertner",
+          "permission": {
+            "columns": ["id"],
+            "filter": {}
           }
         },
         {
@@ -4562,6 +4640,20 @@
             ],
             "filter": {},
             "allow_aggregations": true
+          }
+        },
+        {
+          "role": "gaertner",
+          "permission": {
+            "columns": [
+              "id",
+              "herkunft_id",
+              "file_id",
+              "file_mime_type",
+              "name",
+              "beschreibung"
+            ],
+            "filter": {}
           }
         },
         {
@@ -11453,7 +11545,7 @@
           "permission": {
             "check": {
               "id": {
-                "_eq": "[X-Hasura_user_id]"
+                "_eq": "X-Hasura-User-Id"
               }
             },
             "columns": [
@@ -11618,7 +11710,7 @@
             ],
             "filter": {
               "id": {
-                "_eq": "[X-Hasura_user_id]"
+                "_eq": "X-Hasura-User-Id"
               }
             },
             "allow_aggregations": true
@@ -11751,7 +11843,7 @@
             ],
             "filter": {
               "id": {
-                "_eq": "[X-Hasura_user_id]"
+                "_eq": "X-Hasura-User-Id"
               }
             },
             "check": null
@@ -11815,7 +11907,7 @@
           "permission": {
             "filter": {
               "id": {
-                "_eq": "[X-Hasura_user_id]"
+                "_eq": "X-Hasura-User-Id"
               }
             }
           }
@@ -11892,7 +11984,7 @@
           "permission": {
             "check": {
               "person_id": {
-                "_eq": "[X-Hasura_user_id]"
+                "_eq": "X-Hasura-User-Id"
               }
             },
             "columns": [
@@ -12059,7 +12151,7 @@
             ],
             "filter": {
               "person_id": {
-                "_eq": "[X-Hasura_user_id]"
+                "_eq": "X-Hasura-User-Id"
               }
             },
             "allow_aggregations": true
@@ -12192,7 +12284,7 @@
             ],
             "filter": {
               "person_id": {
-                "_eq": "[X-Hasura_user_id]"
+                "_eq": "X-Hasura-User-Id"
               }
             },
             "check": null
@@ -14809,6 +14901,78 @@
         }
       ],
       "select_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "id",
+              "sammlung_id",
+              "file_id",
+              "file_mime_type",
+              "name",
+              "beschreibung"
+            ],
+            "filter": {
+              "sammlung": {
+                "_or": [
+                  {
+                    "_or": [
+                      {
+                        "art_id": {
+                          "_is_null": true
+                        }
+                      },
+                      {
+                        "art": {
+                          "avs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "_or": [
+                      {
+                        "_and": [
+                          {
+                            "lieferungs": {
+                              "nach_ausgepflanzt": {
+                                "_is_null": true
+                              }
+                            }
+                          },
+                          {
+                            "lieferungs": {
+                              "nach_kultur_id": {
+                                "_is_null": true
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "lieferungs": {
+                          "kulturByNachKulturId": {
+                            "garten": {
+                              "gvs": {
+                                "person_id": {
+                                  "_eq": "X-Hasura-User-Id"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
         {
           "role": "gaertner",
           "permission": {
