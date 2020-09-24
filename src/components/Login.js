@@ -39,7 +39,7 @@ const ResetButton = styled(Button)`
 `
 
 const Login = () => {
-  const { firebase } = useContext(StoreContext)
+  const { firebase, flushData } = useContext(StoreContext)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -56,6 +56,7 @@ const Login = () => {
       await firebase.auth().signOut()
       localForage.clear()
       window.localStorage.removeItem('token')
+      flushData()
       setTimeout(async () => {
         try {
           await firebase
@@ -65,10 +66,10 @@ const Login = () => {
           setEmailErrorText(error.message)
           return setPasswordErrorText(error.message)
         }
-        window.location.reload(true)
+        setTimeout(() => window.location.reload(true))
       })
     },
-    [email, firebase, password],
+    [email, firebase, flushData, password],
   )
   const onBlurEmail = useCallback(
     (e) => {
