@@ -44,7 +44,7 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
   )
   const onClickShowActive = useCallback(
     (event) => {
-      const value = event.target.checked ? false : null
+      const value = event.target.checked ? true : null
       filter.setValue({ table: 'garten', key: 'aktiv', value })
       filter.setValue({ table: 'kultur', key: 'aktiv', value })
       filter.setValue({ table: 'person', key: 'aktiv', value })
@@ -52,9 +52,9 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
     [filter],
   )
   const activeValue =
-    filter.garten.aktiv === false &&
-    filter.kultur.aktiv === false &&
-    filter.person.aktiv === false
+    filter.garten.aktiv === true &&
+    filter.kultur.aktiv === true &&
+    filter.person.aktiv === true
   const deletedValue =
     filter.art._deleted === false &&
     filter.event._deleted === false &&
