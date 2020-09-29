@@ -139,7 +139,7 @@ const Account = () => {
             onClick={onClickLogoutAndClear}
             data-id="appbar-more-logout"
           >
-            Daten, Einstellungen und Anmeldung zurücksetzen
+            Daten neu laden plus: Einstellungen und Anmeldung zurücksetzen
           </MenuItem>
         </Menu>
       </>
