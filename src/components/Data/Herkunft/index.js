@@ -11,6 +11,7 @@ import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import Spinner from '../../shared/Spinner'
 import Conflict from './Conflict'
 import FormTitle from './FormTitle'
 import Form from './Form'
@@ -58,7 +59,7 @@ const Herkunft = ({
   const { filter, online, herkunfts } = store
 
   const row = useMemo(
-    () => (showFilter ? filter.herkunft : herkunfts.get(id) || {}),
+    () => (showFilter ? filter.herkunft : herkunfts.get(id) || null),
     // need herkunfts.size for when row arrives after first login
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filter.herkunft, id, showFilter, herkunfts, herkunfts.size],
@@ -82,7 +83,8 @@ const Herkunft = ({
   const [showHistory, setShowHistory] = useState(null)
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
-  if (!row || (!showFilter && filter.show)) return null
+  if (!row) return <Spinner />
+  if (!showFilter && filter.show) return null
 
   const paneIsSplit = online && (activeConflict || showHistory)
 
