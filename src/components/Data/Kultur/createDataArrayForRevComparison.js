@@ -1,7 +1,7 @@
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from './gartenLabelFromGarten'
 
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+const createDataArrayForRevComparison = ({ row, revRow, store }) => [
   {
     valueInRow: row?.art?.art_ae_art?.name,
     valueInRev: revRow?.art?.art_ae_art?.name,
@@ -14,8 +14,8 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
   },
   { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
   {
-    valueInRow: gartenLabelFromGarten(row),
-    valueInRev: gartenLabelFromGarten(revRow),
+    valueInRow: gartenLabelFromGarten({ garten: row, store }),
+    valueInRev: gartenLabelFromGarten({ garten: revRow, store }),
     label: 'Garten',
   },
   {
