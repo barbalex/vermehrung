@@ -55,11 +55,13 @@ const Sammlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter, online, sammlungs } = store
 
   const row = useMemo(
-    () => (showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}),
-    [filter.sammlung, id, showFilter, store.sammlungs],
+    () => (showFilter ? filter.sammlung : sammlungs.get(id) ?? {}),
+    // need sammlungs.size for when row arrives after first login
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filter.sammlung, id, showFilter, sammlungs, sammlungs.size],
   )
 
   const [activeConflict, setActiveConflict] = useState(null)
