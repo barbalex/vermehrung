@@ -58,14 +58,20 @@ const SammelLieferung = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, isPrint, online } = store
+  const { filter, isPrint, online, sammel_lieferungs } = store
 
   const row = useMemo(
     () =>
-      showFilter
-        ? filter.sammel_lieferung
-        : store.sammel_lieferungs.get(id) || {},
-    [filter.sammel_lieferung, id, showFilter, store.sammel_lieferungs],
+      showFilter ? filter.sammel_lieferung : sammel_lieferungs.get(id) || {},
+    // need sammel_lieferungs.size for when row arrives after first login
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      filter.sammel_lieferung,
+      id,
+      showFilter,
+      sammel_lieferungs,
+      sammel_lieferungs.size,
+    ],
   )
 
   const [activeConflict, setActiveConflict] = useState(null)

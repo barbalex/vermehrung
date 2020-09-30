@@ -55,11 +55,13 @@ const Teilkultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter, online, teilkulturs } = store
 
   const row = useMemo(
-    () => (showFilter ? filter.teilkultur : store.teilkulturs.get(id) || {}),
-    [filter.teilkultur, id, showFilter, store.teilkulturs],
+    () => (showFilter ? filter.teilkultur : teilkulturs.get(id) || {}),
+    // need teilkulturs.size for when row arrives after first login
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filter.teilkultur, id, showFilter, teilkulturs, teilkulturs.size],
   )
 
   const [activeConflict, setActiveConflict] = useState(null)
