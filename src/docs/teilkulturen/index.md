@@ -1,7 +1,7 @@
 ---
-path: "/Dokumentation/Teilkulturen"
-date: "2019-09-20"
-title: "Teil-Kulturen"
+path: '/Dokumentation/Teilkulturen'
+date: '2019-09-20'
+title: 'Teil-Kulturen'
 sort1: 8
 ---
 
@@ -9,6 +9,7 @@ Grössere Gärten oder gärtnerische Betriebe organisieren ihre Kulturen oft in 
 In vermehrung.ch werden diese Untereinheiten "Teil-Kulturen" genannt.<br/><br/>
 
 ### 1. Ziele
+
 - [Projekt-Ziel](/Dokumentation/Ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt."<br/>
   In grossen Kulturen erleichtert eine Unterteilung die Erfassung der Anzahlen
 - [Projekt-Ziel](/Dokumentation/Ziele) 6: "Effiziente und quell-nahe Erfassung und Nutzung."<br/>
@@ -24,6 +25,7 @@ Sie ermöglicht:
 <br/><br/>
 
 #### Es können Teil-Kulturen erfasst werden
+
 Neben der zugehörigen Kultur wird vorerst nur ein Name erfasst. "Name" ist eine simple Methode, damit verschiedene Systeme, Untereinheiten zu bilden möglich sind, ohne dass vermehrung.ch eines vorgeben muss.<br/><br/>
 
 Beispiel: Ein Betrieb hat Beete, darin Kästen und darin Reihen. Es soll pro Reihe gezählt werden. Von jeder Kategorie gibt es nie mehr als 99.<br/>
@@ -34,16 +36,21 @@ Um Teil-Kulturen erfassen zu können, erscheint im Navigations-Baum unter der Ku
 <br/><br/>
 
 #### Zählungen können pro Teil-Kultur erfasst werden
+
 Pro Kultur können (fakultativ) mehrere Teil-Zählungen erfasst werden. Die Teil-Zählungen können einer Teil-Kultur zugeordnet werden.<br/>
 vermehrung.ch summiert alle Zahlen der Einheiten "Anzahl Pflanzen", "anzahl auspflanz-bereit" und "Anzahl Mutter-Pflanzen" pro Kultur.
 <br/><br/>
 
 #### Events können Teil-Kulturen zugeordnet werden
+
 ...müssen aber nicht.
 <br/><br/>
 
 #### Kulturen können individuell organisiert werden
+
 Die Option "Teil-Kulturen" wirkt pro Kultur. Man kann daher in jeder Kultur wählen, ob Teil-Kulturen erfasst werden können und nach welchem System.
+<br/><br/>
 
 #### Teilkulturen können in drei Stufen zusätzlich beschrieben werden
+
 ...wozu die Felder "ort1", "ort2" und "ort3" dienen.
