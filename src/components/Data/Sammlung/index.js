@@ -13,6 +13,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import FormTitle from './FormTitle'
 import Form from './Form'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import Spinner from '../../shared/Spinner'
 import Conflict from './Conflict'
 import History from './History'
 
@@ -58,7 +59,7 @@ const Sammlung = ({
   const { filter, online, sammlungs } = store
 
   const row = useMemo(
-    () => (showFilter ? filter.sammlung : sammlungs.get(id) ?? {}),
+    () => (showFilter ? filter.sammlung : sammlungs.get(id) ?? null),
     // need sammlungs.size for when row arrives after first login
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filter.sammlung, id, showFilter, sammlungs, sammlungs.size],
@@ -82,7 +83,8 @@ const Sammlung = ({
   const [showHistory, setShowHistory] = useState(null)
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
-  if (!row || (!showFilter && filter.show)) return null
+  if (!row) return <Spinner />
+  if (!showFilter && filter.show) return null
 
   const paneIsSplit = online && (activeConflict || showHistory)
 
