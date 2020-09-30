@@ -12,6 +12,7 @@ import SplitPane from 'react-split-pane'
 import { StoreContext } from '../../../models/reactUtils'
 import FormTitle from './FormTitle'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import Spinner from '../../shared/Spinner'
 import Conflict from './Conflict'
 import Form from './Form'
 import History from './History'
@@ -58,7 +59,7 @@ const Event = ({
   const { filter, online, events } = store
 
   const row = useMemo(
-    () => (showFilter ? filter.event : store.events.get(id) || {}),
+    () => (showFilter ? filter.event : store.events.get(id) || null),
     // need events.size for when row arrives after first login
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filter.event, id, showFilter, events, events.size],
@@ -82,7 +83,8 @@ const Event = ({
   const [showHistory, setShowHistory] = useState(null)
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
-  if (!row || (!showFilter && filter.show)) return null
+  if (!row) return <Spinner />
+  if (!showFilter && filter.show) return null
 
   const paneIsSplit = online && (activeConflict || showHistory)
 

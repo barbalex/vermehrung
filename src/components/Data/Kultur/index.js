@@ -84,6 +84,7 @@ const Kultur = ({
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   if (!row) return <Spinner />
+  if (!showFilter && filter.show) return null
 
   const paneIsSplit = online && (activeConflict || showHistory)
 
