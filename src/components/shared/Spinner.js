@@ -21,7 +21,7 @@ const SpinnerComponent = ({ message }) => (
       backColor="#4a148c1a"
       loading={true}
     />
-    <SpinnerText>{message}</SpinnerText>
+    {!!message && <SpinnerText>{message}</SpinnerText>}
   </SpinnerContainer>
 )
 
