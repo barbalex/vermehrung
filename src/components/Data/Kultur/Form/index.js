@@ -252,8 +252,6 @@ const KulturForm = ({
 
   const showDeleted = showFilter || row._deleted
 
-  console.log('Kultur Form, row:', row)
-
   return (
     <ErrorBoundary>
       <Container>
