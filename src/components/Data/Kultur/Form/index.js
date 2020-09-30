@@ -192,9 +192,9 @@ const KulturForm = ({
     () =>
       gartensSorted.map((el) => ({
         value: el.id,
-        label: gartenLabelFromGarten(el),
+        label: gartenLabelFromGarten({ garten: el, store }),
       })),
-    [gartensSorted],
+    [gartensSorted, store],
   )
 
   const herkunftWerte = useMemo(
