@@ -13,7 +13,7 @@ export default ({ store }) => {
         visibleOpenNodes.some((node) => isEqual(['Kulturen'], node)),
       )
       .map((el) => {
-        const label = treeLabelKultur(el)
+        const label = treeLabelKultur({ kultur: el, store })
 
         return {
           nodeType: 'table',
