@@ -55,11 +55,13 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter, online, herkunfts } = store
 
   const row = useMemo(
-    () => (showFilter ? filter.herkunft : store.herkunfts.get(id) || {}),
-    [filter.herkunft, id, showFilter, store.herkunfts],
+    () => (showFilter ? filter.herkunft : herkunfts.get(id) || {}),
+    // need herkunfts.size for when row arrives after first login
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filter.herkunft, id, showFilter, herkunfts, herkunfts.size],
   )
 
   const [activeConflict, setActiveConflict] = useState(null)
