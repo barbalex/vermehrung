@@ -168,11 +168,21 @@ const KulturForm = ({
     () =>
       artsSorted
         .filter((a) => !!a.ae_id && artenToChoose.includes(a.id))
-        .map((el) => ({
-          value: el.id,
-          label: el?.art_ae_art?.name ?? '...',
-        })),
-    [artenToChoose, artsSorted],
+        .map((a) => {
+          let label = '...'
+          let aeArt
+          if (a.ae_id) {
+            aeArt = store.ae_arts.get(a.ae_id)
+            if (aeArt.name) {
+              label = aeArt.name
+            }
+          }
+          return {
+            value: a.id,
+            label,
+          }
+        }),
+    [artenToChoose, artsSorted, store.ae_arts],
   )
 
   // TODO:
@@ -187,16 +197,15 @@ const KulturForm = ({
     [gartensSorted],
   )
 
-  const herkunftWerteData = herkunftsSorted.filter((h) =>
-    herkunftToChoose.includes(h.id),
-  )
   const herkunftWerte = useMemo(
     () =>
-      herkunftWerteData.map((el) => ({
-        value: el.id,
-        label: herkunftLabelFromHerkunft(el),
-      })),
-    [herkunftWerteData],
+      herkunftsSorted
+        .filter((h) => herkunftToChoose.includes(h.id))
+        .map((el) => ({
+          value: el.id,
+          label: herkunftLabelFromHerkunft(el),
+        })),
+    [herkunftToChoose, herkunftsSorted],
   )
 
   const saveToDb = useCallback(
@@ -242,6 +251,8 @@ const KulturForm = ({
     : errors.kultur?.herkunft_id
 
   const showDeleted = showFilter || row._deleted
+
+  console.log('Kultur Form, row:', row)
 
   return (
     <ErrorBoundary>
