@@ -55,11 +55,13 @@ const Zaehlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter, online, zaehlungs } = store
 
   const row = useMemo(
-    () => (showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}),
-    [filter.zaehlung, id, showFilter, store.zaehlungs],
+    () => (showFilter ? filter.zaehlung : zaehlungs.get(id) || {}),
+    // need zaehlungs.size for when row arrives after first login
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filter.zaehlung, id, showFilter, zaehlungs, zaehlungs.size],
   )
 
   const [activeConflict, setActiveConflict] = useState(null)
