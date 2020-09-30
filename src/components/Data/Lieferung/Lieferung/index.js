@@ -52,12 +52,13 @@ const StyledSplitPane = styled(SplitPane)`
 
 const Lieferung = ({ id, showFilter, sammelLieferung = {} }) => {
   const store = useContext(StoreContext)
-
-  const { filter, online } = store
+  const { filter, online, lieferungs } = store
 
   const row = useMemo(
-    () => (showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}),
-    [filter.lieferung, id, showFilter, store.lieferungs],
+    () => (showFilter ? filter.lieferung : lieferungs.get(id) ?? {}),
+    // need lieferungs.size for when row arrives after first login
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filter.lieferung, id, showFilter, lieferungs, lieferungs.size],
   )
 
   const [activeConflict, setActiveConflict] = useState(null)
