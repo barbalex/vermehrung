@@ -123,7 +123,7 @@ const Documentation = ({ data, location, width }) => {
     <ErrorBoundary>
       <Layout>
         <Container>
-          <StyledSplitPane split="vertical" size="30%" minSize={200}>
+          <StyledSplitPane split="vertical" size="22%" minSize={200}>
             <ArticleList items={items} />
             {html ? (
               <Doku frontmatter={frontmatter} html={html} location={location} />
