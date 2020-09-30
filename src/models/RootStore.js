@@ -2013,7 +2013,7 @@ export const RootStore = RootStoreBase.props({
     get searchKulturSuggestions() {
       return self.kultursFiltered.map((o) => ({
         value: o.id,
-        label: treeLabelKultur(o),
+        label: treeLabelKultur({kultur: o, store: self}),
         artname: o?.art?.art_ae_art?.name,
         gartenname: o?.garten?.name,
         personname: o?.garten?.person?.fullname,
