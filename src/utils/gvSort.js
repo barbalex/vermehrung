@@ -1,13 +1,17 @@
 export default ({ a, b, store }) => {
-  const nameA = a?.garten?.name?.toString()?.toLowerCase() ?? ''
-  const nameB = b?.garten?.name?.toString()?.toLowerCase() ?? ''
+  const gartenA = a.garten_id ? store.gartens.get(a.garten_id) : {}
+  const gartenB = b.garten_id ? store.gartens.get(b.garten_id) : {}
+
+  const nameA = gartenA?.name?.toString()?.toLowerCase() ?? ''
+  const nameB = gartenB?.name?.toString()?.toLowerCase() ?? ''
   if (nameA < nameB) return -1
   if (nameA > nameB) return 1
 
-  const personNameA =
-    a?.garten?.person?.fullname?.toString()?.toLowerCase() ?? ''
-  const personNameB =
-    b?.garten?.person?.fullname?.toString()?.toLowerCase() ?? ''
+  const personA = gartenA?.person_id ? store.gartens.get(gartenA.person_id) : {}
+  const personB = gartenB?.person_id ? store.gartens.get(gartenB.person_id) : {}
+
+  const personNameA = personA?.fullname?.toString()?.toLowerCase() ?? ''
+  const personNameB = personB?.fullname?.toString()?.toLowerCase() ?? ''
   if (personNameA < personNameB) return -1
   if (personNameA > personNameB) return 1
 

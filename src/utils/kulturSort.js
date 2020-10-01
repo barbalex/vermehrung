@@ -1,37 +1,54 @@
+import artLabelFromKultur from './artLabelFromKultur'
+
 export default ({ a, b, store }) => {
-  const artnameA = a?.art?.art_ae_art?.name?.toString()?.toLowerCase() ?? ''
-  const artnameB = b?.art?.art_ae_art?.name?.toString()?.toLowerCase() ?? ''
+  const artnameA = artLabelFromKultur({ kultur: a, store })
+    .toString()
+    ?.toLowerCase()
+  const artnameB = artLabelFromKultur({ kultur: b, store })
+    .toString()
+    ?.toLowerCase()
   if (artnameA < artnameB) return -1
   if (artnameA > artnameB) return 1
 
-  const herkunftNrA = a?.herkunft?.nr?.toString()?.toLowerCase() ?? ''
-  const herkunftNrB = b?.herkunft?.nr?.toString()?.toLowerCase() ?? ''
+  const herkunftA = a?.herkunft_id ? store.herkunfts.get(a.herkunft_id) : {}
+  const herkunftB = b?.herkunft_id ? store.herkunfts.get(b.herkunft_id) : {}
+
+  const herkunftNrA = herkunftA?.nr?.toString()?.toLowerCase() ?? ''
+  const herkunftNrB = herkunftB?.nr?.toString()?.toLowerCase() ?? ''
   if (herkunftNrA < herkunftNrB) return -1
   if (herkunftNrA > herkunftNrB) return 1
 
-  const herkunftGemeindeA =
-    a?.herkunft?.gemeinde?.toString()?.toLowerCase() ?? ''
-  const herkunftGemeindeB =
-    b?.herkunft?.gemeinde?.toString()?.toLowerCase() ?? ''
+  const herkunftGemeindeA = herkunftA?.gemeinde?.toString()?.toLowerCase() ?? ''
+  const herkunftGemeindeB = herkunftB?.gemeinde?.toString()?.toLowerCase() ?? ''
   if (herkunftGemeindeA < herkunftGemeindeB) return -1
   if (herkunftGemeindeA > herkunftGemeindeB) return 1
 
   const herkunftLokalnameA =
-    a?.herkunft?.lokalname?.toString()?.toLowerCase() ?? ''
+    herkunftA?.lokalname?.toString()?.toLowerCase() ?? ''
   const herkunftLokalnameB =
-    b?.herkunft?.lokalname?.toString()?.toLowerCase() ?? ''
+    herkunftB?.lokalname?.toString()?.toLowerCase() ?? ''
   if (herkunftLokalnameA < herkunftLokalnameB) return -1
   if (herkunftLokalnameA > herkunftLokalnameB) return 1
 
-  const gartenNameA = a?.garten?.name?.toString()?.toLowerCase() ?? ''
-  const gartenNameB = b?.garten?.name?.toString()?.toLowerCase() ?? ''
+  const gartenA = a?.garten_id ? store.gartens.get(a.garten_id) : {}
+  const gartenB = b?.garten_id ? store.gartens.get(b.garten_id) : {}
+
+  const gartenNameA = gartenA?.name?.toString()?.toLowerCase() ?? ''
+  const gartenNameB = gartenB?.name?.toString()?.toLowerCase() ?? ''
   if (gartenNameA < gartenNameB) return -1
   if (gartenNameA > gartenNameB) return 1
 
+  const gartenPersonA = gartenA?.person_id
+    ? store.persons.get(gartenA.person_id)
+    : {}
+  const gartenPersonB = gartenB?.person_id
+    ? store.persons.get(gartenB.person_id)
+    : {}
+
   const gartenPersonNameA =
-    a?.garten?.person?.fullname?.toString()?.toLowerCase() ?? ''
+    gartenPersonA?.fullname?.toString()?.toLowerCase() ?? ''
   const gartenPersonNameB =
-    b?.garten?.person?.fullname?.toString()?.toLowerCase() ?? ''
+    gartenPersonB?.fullname?.toString()?.toLowerCase() ?? ''
   if (gartenPersonNameA < gartenPersonNameB) return -1
   if (gartenPersonNameA > gartenPersonNameB) return 1
 
