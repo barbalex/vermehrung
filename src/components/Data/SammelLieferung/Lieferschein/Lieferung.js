@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
+
+import { StoreContext } from '../../../../models/reactUtils'
+import artLabelFromLieferung from '../../../../utils/artLabelFromLieferung'
 
 const StyledTableCell = styled(TableCell)`
   vertical-align: top !important;
@@ -10,9 +13,9 @@ const StyledTableCell = styled(TableCell)`
 const Zeile = ({ value }) => <div>{value}</div>
 
 const LieferungForLieferschein = ({ lieferung: l }) => {
-  const art = l.art_id
-    ? l?.art?.art_ae_art?.name ?? '(kein Name)'
-    : '(keine Art gewählt)'
+  const store = useContext(StoreContext)
+
+  const art = artLabelFromLieferung({ lieferung: l, store })
   const herkunft = l.von_kultur_id
     ? `${l?.kulturByVonKulturId?.herkunft?.nr} (${
         l?.kulturByVonKulturId?.herkunft?.gemeinde ?? '(keine Gemeinde)'
