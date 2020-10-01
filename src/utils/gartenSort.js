@@ -4,8 +4,11 @@ export default ({ a, b, store }) => {
   if (nameA < nameB) return -1
   if (nameA > nameB) return 1
 
-  const personNameA = a?.person?.fullname?.toString()?.toLowerCase() ?? ''
-  const personNameB = b?.person?.fullname?.toString()?.toLowerCase() ?? ''
+  const personA = a?.person_id ? store.persons.get(a.person_id) : {}
+  const personB = b?.person_id ? store.persons.get(b.person_id) : {}
+
+  const personNameA = personA?.fullname?.toString()?.toLowerCase() ?? ''
+  const personNameB = personB?.fullname?.toString()?.toLowerCase() ?? ''
   if (personNameA < personNameB) return -1
   if (personNameA > personNameB) return 1
 

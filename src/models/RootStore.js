@@ -1731,7 +1731,7 @@ export const RootStore = RootStoreBase.props({
       return userPersonOption ?? {}
     },
     get aeArtsSorted() {
-      return [...self.ae_arts.values()].sort(aeArtSort)
+      return [...self.ae_arts.values()].sort((a, b) => aeArtSort({ a, b }))
     },
     get artFilter() {
       return queryFromTable({ store: self, table: 'art' })
@@ -1757,7 +1757,7 @@ export const RootStore = RootStoreBase.props({
     get avsSorted() {
       return [...self.avs.values()]
         .filter((a) => notDeletedOrHasConflict(a))
-        .sort(avSort)
+        .sort((a, b) => avSort({ a, b, store: self }))
     },
     get gvsSorted() {
       return [...self.gvs.values()]
@@ -1797,7 +1797,7 @@ export const RootStore = RootStoreBase.props({
         .filter((a) =>
           self.filter.garten.aktiv === true ? a.aktiv === true : true,
         )
-        .sort(gartenSort)
+        .sort((a, b) => gartenSort({ a, b, store: self }))
     },
     get herkunftFilter() {
       return queryFromTable({ store: self, table: 'herkunft' })
