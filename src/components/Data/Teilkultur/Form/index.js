@@ -12,7 +12,7 @@ import Zaehlungen from './Zaehlungen'
 import Events from './Events'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import kulturLabelFromKultur from '../kulturLabelFromKultur'
+import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -51,9 +51,9 @@ const TeilkulturForm = ({
     () =>
       kultursSorted.map((el) => ({
         value: el.id,
-        label: kulturLabelFromKultur(el),
+        label: kulturLabelFromKultur({ kultur: el, store }),
       })),
-    [kultursSorted],
+    [kultursSorted, store],
   )
 
   const saveToDb = useCallback(
