@@ -1,11 +1,12 @@
 import { DateTime } from 'luxon'
 
 import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft'
+import artLabelFromSammlung from '../../../utils/artLabelFromSammlung'
 
 const createDataArrayForRevComparison = ({ row, revRow, store }) => [
   {
-    valueInRow: row?.art?.art_ae_art?.name,
-    valueInRev: revRow?.art?.art_ae_art?.name,
+    valueInRow: artLabelFromSammlung({ sammlung: row, store }),
+    valueInRev: artLabelFromSammlung({ sammlung: revRow, store }),
     label: 'Art',
   },
   {
