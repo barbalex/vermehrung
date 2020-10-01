@@ -16,12 +16,24 @@ export default ({ store }) => {
         const datum = el.datum
           ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
           : `Kein Datum. ID: ${el.id}`
-        const garten = el?.kulturByVonKulturId?.garten?.name
-        const gartenPerson = el?.kulturByVonKulturId?.garten?.person?.fullname
+        const vonKultur = el.von_kultur_id
+          ? store.kulturs.get(el.von_kultur_id)
+          : {}
+        const vonGarten = vonKultur.garten_id
+          ? store.gartens.get(vonKultur.garten_id)
+          : {}
+        const gartenName = vonGarten?.name
+        const vonPerson = vonGarten.person_id
+          ? store.persons.get(vonGarten.person_id)
+          : {}
+        const gartenPerson = vonPerson?.fullname
         const von =
-          garten ?? gartenPerson ? `, von: ${garten || gartenPerson}` : ''
-        const werPerson = el?.person?.fullname
-        const wer = werPerson ? `, wer: ${werPerson}` : ''
+          gartenName ?? gartenPerson
+            ? `, von: ${gartenName || gartenPerson}`
+            : ''
+        const werPerson = el.person_id ? store.persons.get(el.person_id) : {}
+        const werPersonLabel = werPerson?.fullname
+        const wer = werPersonLabel ? `, wer: ${werPersonLabel}` : ''
         const label = `${datum}${von}${wer}`
 
         return {
