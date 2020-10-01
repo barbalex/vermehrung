@@ -16,7 +16,7 @@ import Timeline from './Timeline'
 import QK from './QK'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import herkunftLabelFromHerkunft from '../herkunftLabelFromHerkunft'
+import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
 import getConstants from '../../../../utils/constants'
 

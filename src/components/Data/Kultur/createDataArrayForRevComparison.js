@@ -1,4 +1,4 @@
-import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
+import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from '../../../utils/gartenLabelFromGarten'
 
 const createDataArrayForRevComparison = ({ row, revRow, store }) => [

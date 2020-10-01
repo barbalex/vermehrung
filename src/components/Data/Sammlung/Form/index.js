@@ -16,7 +16,7 @@ import Files from '../../Files'
 import getConstants from '../../../../utils/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import herkunftLabelFromHerkunft from '../herkunftLabelFromHerkunft'
+import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 import exists from '../../../../utils/exists'
 
 const constants = getConstants()
