@@ -85,5 +85,5 @@ export default ({ store, table }) => {
   const filteredValues = values.filter(test)
 
   const sortFunction = sorters[table] ?? nonSorter
-  return filteredValues.sort(sortFunction)
+  return filteredValues.sort((a, b) => sortFunction({ a, b, store }))
 }

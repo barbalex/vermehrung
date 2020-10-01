@@ -1,4 +1,4 @@
-export default (a, b) => {
+export default ({ a, b }) => {
   const nrA = a?.nr?.toString()?.toLowerCase() ?? ''
   const nrB = b?.nr?.toString()?.toLowerCase() ?? ''
   if (nrA < nrB) return -1
