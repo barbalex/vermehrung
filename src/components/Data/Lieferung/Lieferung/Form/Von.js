@@ -14,7 +14,7 @@ import Select from '../../../../shared/Select'
 import exists from '../../../../../utils/exists'
 import kulturSort from '../../../../../utils/kulturSort'
 import sammlungLabelFromSammlung from '../sammlungLabelFromSammlung'
-import kulturLabelFromKultur from '../kulturLabelFromKultur'
+import kulturLabelFromKultur from '../../../../../utils/kulturLabelFromKultur'
 
 const Title = styled.div`
   font-weight: bold;
@@ -85,9 +85,9 @@ const LieferungVon = ({ showFilter, row, saveToDb, ifNeeded }) => {
     () =>
       vonKulturWerteData.map((el) => ({
         value: el.id,
-        label: kulturLabelFromKultur(el),
+        label: kulturLabelFromKultur({ kultur: el, store }),
       })),
-    [vonKulturWerteData],
+    [store, vonKulturWerteData],
   )
 
   const sammlungWerte = useMemo(

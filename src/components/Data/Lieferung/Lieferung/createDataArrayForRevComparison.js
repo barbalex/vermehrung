@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
 
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+const createDataArrayForRevComparison = ({ row, revRow, store }) => [
   {
     valueInRow: row?.art?.art_ae_art?.name,
     valueInRev: revRow?.art?.art_ae_art?.name,
@@ -45,8 +45,14 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'Von Sammlung',
   },
   {
-    valueInRow: kulturLabelFromKultur(row.kulturByVonKulturId),
-    valueInRev: kulturLabelFromKultur(revRow.kulturByVonKulturId),
+    valueInRow: kulturLabelFromKultur({
+      kultur: row.kulturByVonKulturId,
+      store,
+    }),
+    valueInRev: kulturLabelFromKultur({
+      kultur: revRow.kulturByVonKulturId,
+      store,
+    }),
     label: 'Von Kultur',
   },
   {
@@ -59,8 +65,14 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'Datum',
   },
   {
-    valueInRow: kulturLabelFromKultur(row.kulturByNachKulturId),
-    valueInRev: kulturLabelFromKultur(revRow.kulturByNachKulturId),
+    valueInRow: kulturLabelFromKultur({
+      kultur: row.kulturByNachKulturId,
+      store,
+    }),
+    valueInRev: kulturLabelFromKultur({
+      kultur: revRow.kulturByNachKulturId,
+      store,
+    }),
     label: 'Nach Kultur',
   },
   {
