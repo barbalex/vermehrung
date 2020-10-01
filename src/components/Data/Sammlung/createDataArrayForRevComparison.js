@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
+import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft'
 
 const createDataArrayForRevComparison = ({ row, revRow }) => [
   {
