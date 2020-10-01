@@ -1,8 +1,10 @@
 import teilkulturSort from './teilkulturSort'
 
 export default ({ a, b, store }) => {
-  const tkA = a?.teilkultur || {}
-  const tkB = b?.teilkultur || {}
+  const tkAId = a.teilkultur_id
+  const tkA = tkAId ? store.teilkulturs.get(tkAId) : {}
+  const tkBId = b.teilkultur_id
+  const tkB = tkBId ? store.teilkulturs.get(tkBId) : {}
 
-  return teilkulturSort(tkA, tkB)
+  return teilkulturSort({ a: tkA, b: tkB })
 }

@@ -1904,7 +1904,7 @@ export const RootStore = RootStoreBase.props({
           }
           return true
         })
-        .sort(sammlungSort)
+        .sort((a, b) => sammlungSort({ a, b, store: self }))
     },
     get teilkulturFilter() {
       return queryFromTable({ store: self, table: 'teilkultur' })
@@ -1920,7 +1920,7 @@ export const RootStore = RootStoreBase.props({
           }
           return true
         })
-        .sort(teilkulturSort)
+        .sort((a, b) => teilkulturSort({ a, b, store: self }))
     },
     get teilzaehlungsSorted() {
       return [...self.teilzaehlungs.values()]
@@ -1930,10 +1930,12 @@ export const RootStore = RootStoreBase.props({
           }
           return true
         })
-        .sort(teilzaehlungSort)
+        .sort((a, b) => teilzaehlungSort({ a, b, store: self }))
     },
     get userRolesSorted() {
-      return [...self.user_roles.values()].sort(userRoleSort)
+      return [...self.user_roles.values()].sort((a, b) =>
+        userRoleSort({ a, b }),
+      )
     },
     get zaehlungFilter() {
       return queryFromTable({ store: self, table: 'zaehlung' })
@@ -1949,7 +1951,7 @@ export const RootStore = RootStoreBase.props({
           }
           return true
         })
-        .sort(zaehlungSort)
+        .sort((a, b) => zaehlungSort({ a, b, store: self }))
     },
     get loadingInitialData() {
       return [
