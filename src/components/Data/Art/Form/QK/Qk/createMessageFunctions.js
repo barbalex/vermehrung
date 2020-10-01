@@ -2,6 +2,7 @@ import format from 'date-fns/format'
 import groupBy from 'lodash/groupBy'
 
 import exists from '../../../../../../utils/exists'
+import artLabelFromArt from '../../../../../../utils/artLabelFromArt'
 
 export default ({ artId, store }) => {
   const {
@@ -22,6 +23,7 @@ export default ({ artId, store }) => {
   const now = new Date()
 
   return {
+    // TODO: use sammlungLabelFromSammlung instead
     sammlungsWithoutLieferung: () =>
       sammlungsSorted
         .filter((s) => s.art_id === artId)
@@ -77,10 +79,10 @@ export default ({ artId, store }) => {
     artsOhneAv: () =>
       artsSorted
         .filter((a) => a.id === artId)
-        .filter((a) => !a?.avs?.map((av) => !av._deleted).length)
+        .filter((a) => !a?.avs?.filter((av) => !av._deleted).length)
         .map((a) => ({
           url: ['Arten', a.id],
-          text: a?.art_ae_art?.name ?? '(kein Artname)',
+          text: artLabelFromArt({ art: a, store }),
         })),
     sammlungsWithoutNr: () =>
       sammlungsSorted
