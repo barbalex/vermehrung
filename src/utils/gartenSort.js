@@ -1,4 +1,4 @@
-export default (a, b) => {
+export default ({ a, b, store }) => {
   const nameA = a?.name?.toString()?.toLowerCase() ?? ''
   const nameB = b?.name?.toString()?.toLowerCase() ?? ''
   if (nameA < nameB) return -1
