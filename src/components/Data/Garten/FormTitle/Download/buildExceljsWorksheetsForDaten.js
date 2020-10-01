@@ -1,6 +1,7 @@
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook'
 import buildExceljsWorksheetsForKultur from '../../../Kultur/FormTitle/buildExceljsWorksheets'
 import removeMetadataFromDataset from '../../../../../utils/removeMetadataFromDataset'
+import artLabelFromKultur from '../../../../../utils/artLabelFromKultur'
 
 /**
  * this function cann be used from higher up
@@ -45,7 +46,7 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
       id: kultur.id,
       art_id: kultur.art_id,
       art_ae_id: kultur?.art?.art_ae_art?.id ?? '',
-      art_ae_name: kultur?.art?.art_ae_art?.name ?? '',
+      art_ae_name: artLabelFromKultur({ kultur, store }),
       herkunft_id: kultur.herkunft_id,
       herkunft_nr: kultur?.herkunft?.nr ?? '',
       herkunft_rohdaten: removeMetadataFromDataset({

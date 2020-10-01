@@ -1,10 +1,11 @@
 import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from '../../../utils/gartenLabelFromGarten'
+import artLabelFromKultur from '../../../utils/artLabelFromKultur'
 
 const createDataArrayForRevComparison = ({ row, revRow, store }) => [
   {
-    valueInRow: row?.art?.art_ae_art?.name,
-    valueInRev: revRow?.art?.art_ae_art?.name,
+    valueInRow: artLabelFromKultur({ kultur: row, store }),
+    valueInRev: artLabelFromKultur({ kultur: revRow, store }),
     label: 'Art',
   },
   {
