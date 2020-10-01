@@ -1752,7 +1752,7 @@ export const RootStore = RootStoreBase.props({
     get artQksSorted() {
       return [...self.art_qks.values()]
         .filter((a) => notDeletedOrHasConflict(a))
-        .sort(qkSort)
+        .sort((a, b) => qkSort({ a, b }))
     },
     get avsSorted() {
       return [...self.avs.values()]
@@ -1762,7 +1762,7 @@ export const RootStore = RootStoreBase.props({
     get gvsSorted() {
       return [...self.gvs.values()]
         .filter((a) => notDeletedOrHasConflict(a))
-        .sort(gvSort)
+        .sort((a, b) => gvSort({ a, b, store: self }))
     },
     get eventFilter() {
       return queryFromTable({ store: self, table: 'event' })
@@ -1778,7 +1778,7 @@ export const RootStore = RootStoreBase.props({
           }
           return true
         })
-        .sort(eventSort)
+        .sort((a, b) => eventSort({ a, b }))
     },
     get gartenFilter() {
       return queryFromTable({ store: self, table: 'garten' })
@@ -1813,7 +1813,7 @@ export const RootStore = RootStoreBase.props({
           }
           return true
         })
-        .sort(herkunftSort)
+        .sort((a, b) => herkunftSort({ a, b }))
     },
     get kulturFilter() {
       return queryFromTable({ store: self, table: 'kultur' })
@@ -1832,7 +1832,7 @@ export const RootStore = RootStoreBase.props({
         .filter((a) =>
           self.filter.kultur.aktiv === true ? a.aktiv === true : true,
         )
-        .sort(kulturSort)
+        .sort((a, b) => kulturSort({ a, b, store: self }))
     },
     get lieferungFilter() {
       return queryFromTable({ store: self, table: 'lieferung' })
@@ -1848,7 +1848,7 @@ export const RootStore = RootStoreBase.props({
           }
           return true
         })
-        .sort(lieferungSort)
+        .sort((a, b) => lieferungSort({ a, b }))
     },
     get personFilter() {
       return queryFromTable({ store: self, table: 'person' })
@@ -1867,12 +1867,12 @@ export const RootStore = RootStoreBase.props({
         .filter((a) =>
           self.filter.person.aktiv === true ? a.aktiv === true : true,
         )
-        .sort(personSort)
+        .sort((a, b) => personSort({ a, b }))
     },
     get kulturQksSorted() {
       return [...self.kultur_qks.values()]
         .filter((a) => notDeletedOrHasConflict(a))
-        .sort(qkSort)
+        .sort((a, b) => qkSort({ a, b }))
     },
     get sammelLieferungFilter() {
       return queryFromTable({ store: self, table: 'sammel_lieferung' })
@@ -1888,7 +1888,7 @@ export const RootStore = RootStoreBase.props({
           }
           return true
         })
-        .sort(lieferungSort)
+        .sort((a, b) => lieferungSort({ a, b }))
     },
     get sammlungFilter() {
       return queryFromTable({ store: self, table: 'sammlung' })
