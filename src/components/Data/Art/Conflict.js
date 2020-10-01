@@ -61,8 +61,8 @@ const ArtConflict = ({
   )
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow }),
-    [revRow, row],
+    () => createDataArrayForRevComparison({ row, revRow, store }),
+    [revRow, row, store],
   )
 
   //console.log('Art Conflict', { dataArray, row, revRow, id, rev })
