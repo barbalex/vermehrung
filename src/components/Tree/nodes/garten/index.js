@@ -8,15 +8,19 @@ export default ({ store }) => {
     store.gartensFiltered
       // only show if parent node exists
       .filter(() => visibleOpenNodes.some((node) => isEqual(['Gaerten'], node)))
-      .map((el) => ({
-        nodeType: 'table',
-        menuTitle: 'Garten',
-        table: 'garten',
-        id: el.id,
-        label: el.name ?? `${el?.person?.fullname ?? 'keine Person gewählt'}`,
-        url: ['Gaerten', el.id],
-        hasChildren: true,
-      }))
+      .map((el) => {
+        const person = el.person_id ? store.persons.get(el.person_id) : {}
+
+        return {
+          nodeType: 'table',
+          menuTitle: 'Garten',
+          table: 'garten',
+          id: el.id,
+          label: el.name ?? `${person?.fullname ?? 'kein Name'}`,
+          url: ['Gaerten', el.id],
+          hasChildren: true,
+        }
+      })
       .map((el, index) => {
         el.sort = [4, index]
         return el

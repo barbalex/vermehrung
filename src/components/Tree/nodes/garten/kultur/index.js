@@ -20,9 +20,12 @@ export default ({ store }) => {
 
     return kulturen
       .map((k) => {
-        const art = artLabelFromKultur({ kultur: k, store })
-        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-        const label = `${art}, von: ${herkunft}`
+        const artLabel = artLabelFromKultur({ kultur: k, store })
+        const herkunft = k.herkunft_id ? store.herkunfts.get(k.herkunft_id) : {}
+        const herkunftLabel = herkunft?.nr ?? '(Herkunft ohne Nr)'
+        const label = `${artLabel}${
+          herkunftLabel ? `, von: ${herkunftLabel}` : ''
+        }`
         const labelWithZl = `${label}${
           k?.zwischenlager ? '. Zwischenlager' : ''
         }`
