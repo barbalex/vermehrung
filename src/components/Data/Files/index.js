@@ -72,7 +72,7 @@ const Files = ({ parentId, parent }) => {
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
   const files = [...store[`${parent}_files`].values()]
-    .sort(fileSort)
+    .sort((a, b) => fileSort({ a, b }))
     .filter((f) => f[`${parent}_id`] === parentId)
 
   const onChangeUploader = useCallback(
