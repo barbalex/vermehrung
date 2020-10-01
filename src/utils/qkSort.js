@@ -1,4 +1,4 @@
-export default (a, b) => {
+export default ({ a, b }) => {
   const sortA = a?.sort ?? ''
   const sortB = b?.sort ?? ''
   if (sortA < sortB) return -1
