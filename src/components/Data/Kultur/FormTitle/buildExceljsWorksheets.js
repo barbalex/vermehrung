@@ -1,5 +1,7 @@
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
 import removeMetadataFromDataset from '../../../../utils/removeMetadataFromDataset'
+import artLabelFromKultur from '../../../../utils/artLabelFromKultur'
+import artLabelFromLieferung from '../../../../utils/artLabelFromLieferung'
 
 /**
  * this function cann be used from higher up
@@ -26,7 +28,7 @@ export default async ({
       id: kultur.id,
       art_id: kultur.art_id,
       art_ae_id: kultur?.art?.art_ae_art?.id ?? '',
-      art_ae_name: kultur?.art?.art_ae_art?.name ?? '',
+      art_ae_name: artLabelFromKultur({ kultur, store }),
       herkunft_id: kultur.herkunft_id,
       herkunft_nr: kultur?.herkunft?.nr ?? '',
       herkunft_rohdaten: removeMetadataFromDataset({
@@ -146,7 +148,7 @@ export default async ({
       }),
       art_id: z.art_id,
       art_ae_id: z?.art?.art_ae_art?.id ?? '',
-      art_ae_name: z?.art?.art_ae_art?.name ?? '',
+      art_ae_name: artLabelFromLieferung({ lieferung: z, store }),
       person_id: z.person_id,
       person_name: z?.person?.fullname ?? '',
       person_rohdaten: removeMetadataFromDataset({
@@ -251,7 +253,7 @@ export default async ({
       }),
       art_id: z.art_id,
       art_ae_id: z?.art?.art_ae_art?.id ?? '',
-      art_ae_name: z?.art?.art_ae_art?.name ?? '',
+      art_ae_name: artLabelFromLieferung({ lieferung: z, store }),
       person_id: z.person_id,
       person_name: z?.person?.fullname ?? '',
       person_rohdaten: removeMetadataFromDataset({

@@ -15,6 +15,7 @@ import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import getConstants from '../../../../utils/constants'
+import artLabelFromArt from '../../../../utils/artLabelFromArt'
 
 const constants = getConstants()
 
@@ -89,9 +90,9 @@ const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
     () =>
       artsSorted.map((el) => ({
         value: el.id,
-        label: el?.art_ae_art?.name ?? '(kein Artname)',
+        label: artLabelFromArt({ art: el, store }),
       })),
-    [artsSorted],
+    [artsSorted, store],
   )
 
   const openGenVielfaldDocs = useCallback(() => {

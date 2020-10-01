@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
+import artLabelFromKultur from '../../../utils/artLabelFromKultur'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -37,7 +38,7 @@ const Arten = ({ row, style, last }) => {
   )
   const garten =
     row?.garten?.name ?? `${row?.garten?.person?.fullname ?? 'kein Name'}`
-  const art = row?.art?.art_ae_art?.name ?? '(keine Art)'
+  const art = artLabelFromKultur({ kultur: row, store })
   const herkunft = row?.herkunft?.nr ?? '(Herkunft ohne Nr)'
   const zwischenlager = row?.zwischenlager ? `, Zwischenlager` : ''
   const label = `${art}, von: ${herkunft}, in: ${garten}${zwischenlager}`
