@@ -1,4 +1,4 @@
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+const createDataArrayForRevComparison = ({ row, revRow, store }) => [
   {
     valueInRow: row?.name,
     valueInRev: revRow?.name,

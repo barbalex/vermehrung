@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 
 import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft'
 
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+const createDataArrayForRevComparison = ({ row, revRow, store }) => [
   {
     valueInRow: row?.art?.art_ae_art?.name,
     valueInRev: revRow?.art?.art_ae_art?.name,
