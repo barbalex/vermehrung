@@ -30,8 +30,10 @@ export default ({ store }) => {
           ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
           : null
         const geplant = el.geplant ? ' (geplant)' : ''
-        const event = `${el?.beschreibung ?? '(nicht beschrieben)'}${geplant}`
-        const label = `${datum || '(kein Datum)'}: ${event}`
+        const eventLabel = `${
+          el?.beschreibung ?? '(nicht beschrieben)'
+        }${geplant}`
+        const label = `${datum || '(kein Datum)'}: ${eventLabel}`
 
         return {
           nodeType: 'table',

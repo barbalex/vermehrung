@@ -18,15 +18,24 @@ export default ({ store }) => {
     )
 
     return gaerten
-      .map((el) => ({
-        nodeType: 'table',
-        menuTitle: 'Garten',
-        table: 'garten',
-        id: `${personId}${el.id}`,
-        label: el.name || `${el?.person?.fullname ?? 'kein Name'}`,
-        url: ['Personen', personId, 'Gaerten', el.id],
-        hasChildren: true,
-      }))
+      .map((el) => {
+        let label = el.name
+        if (!label && el.person_id) {
+          const person = store.persons.get(el.person_id)
+          if (person) label = person?.fullname
+        }
+        if (!label) label = 'kein Name'
+
+        return {
+          nodeType: 'table',
+          menuTitle: 'Garten',
+          table: 'garten',
+          id: `${personId}${el.id}`,
+          label,
+          url: ['Personen', personId, 'Gaerten', el.id],
+          hasChildren: true,
+        }
+      })
       .map((el, index) => {
         el.sort = [11, personIndex, 2, index]
         return el
