@@ -1,6 +1,6 @@
 import teilkulturSort from './teilkulturSort'
 
-export default (a, b) => {
+export default ({ a, b, store }) => {
   const tkA = a?.teilkultur || {}
   const tkB = b?.teilkultur || {}
 
