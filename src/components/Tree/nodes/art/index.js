@@ -9,7 +9,7 @@ export default ({ store }) => {
       // only show if parent node exists
       .filter(() => visibleOpenNodes.some((node) => isEqual(['Arten'], node)))
       .map((n) => {
-        const aeArt = store.aeArtsSorted.find((a) => a.id === n.ae_id)
+        const aeArt = store.ae_arts.get(n.ae_id)
         const label = aeArt?.name ?? '(keine Art gewählt)'
 
         return {
