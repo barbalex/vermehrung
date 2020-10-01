@@ -14,7 +14,7 @@ import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import kulturLabelFromKultur from '../kulturLabelFromKultur'
+import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
 import getConstants from '../../../../utils/constants'
 
 const constants = getConstants()
@@ -69,9 +69,9 @@ const EventForm = ({
     () =>
       kultursSorted.map((el) => ({
         value: el.id,
-        label: kulturLabelFromKultur(el),
+        label: kulturLabelFromKultur({ kultur: el, store }),
       })),
-    [kultursSorted],
+    [kultursSorted, store],
   )
 
   const kulturId = row?.kultur_id
