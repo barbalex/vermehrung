@@ -17,7 +17,7 @@ import QK from './QK'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from '../gartenLabelFromGarten'
+import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
 import getConstants from '../../../../utils/constants'
 
 const constants = getConstants()

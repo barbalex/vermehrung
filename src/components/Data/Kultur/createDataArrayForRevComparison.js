@@ -1,5 +1,5 @@
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from './gartenLabelFromGarten'
+import gartenLabelFromGarten from '../../../utils/gartenLabelFromGarten'
 
 const createDataArrayForRevComparison = ({ row, revRow, store }) => [
   {
