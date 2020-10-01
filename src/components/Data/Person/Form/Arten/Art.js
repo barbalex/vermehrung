@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import artLabelFromArt from '../../../../../utils/artLabelFromArt'
 
 const Container = styled.div`
   display: flex;
@@ -53,7 +54,7 @@ const Av = ({ av }) => {
   const onClickDelete = useCallback(() => av.delete(), [av])
 
   const art = artsSorted.find((a) => a.id === av.art_id)
-  const artname = art?.art_ae_art?.name
+  const artname = artLabelFromArt({ art, store })
 
   if (!av) return null
 
