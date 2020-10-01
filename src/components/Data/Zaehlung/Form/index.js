@@ -15,7 +15,7 @@ import Teilzaehlungen from './Teilzaehlungen'
 import getConstants from '../../../../utils/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import kulturLabelFromKultur from '../../Teilkultur/kulturLabelFromKultur'
+import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
 
 const constants = getConstants()
 
@@ -68,9 +68,9 @@ const ZaehlungForm = ({
         })
         .map((el) => ({
           value: el.id,
-          label: kulturLabelFromKultur(el),
+          label: kulturLabelFromKultur({ kultur: el, store }),
         })),
-    [kultursSorted, row.art_id],
+    [kultursSorted, row.art_id, store],
   )
 
   const saveToDb = useCallback(
