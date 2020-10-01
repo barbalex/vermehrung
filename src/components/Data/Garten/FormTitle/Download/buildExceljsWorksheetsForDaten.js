@@ -12,13 +12,14 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
 
   // 1. Get Garten
   const garten = store.gartens.get(garten_id)
+  const person = garten.person_id ? store.persons.get(garten.person_id) : {}
   const newGarten = {
     id: garten.id,
     name: garten.name,
     person_id: garten.person_id,
-    person_name: garten?.person?.fullname ?? '',
+    person_name: person?.fullname ?? '',
     person_rohdaten: removeMetadataFromDataset({
-      dataset: garten?.person,
+      dataset: person,
       foreignKeys: [],
     }),
     strasse: garten.strasse,
@@ -42,21 +43,27 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
   // 2. Get Kulturen
   const kultursArray = kultursSorted.filter((k) => k.garten_id === garten_id)
   const kulturs = kultursArray.map((kultur) => {
+    const art = kultur.art_id ? store.arts.get(kultur.art_id) : {}
+    const aeArt = art.ae_id ? store.ae_arts.get(art.ae_id) : {}
+    const herkunft = kultur.herkunft_id
+      ? store.herkunfts.get(kultur.herkunft_id)
+      : {}
+    const garten = kultur.garten_id ? store.gartens.get(kultur.garten_id) : {}
     const newK = {
       id: kultur.id,
       art_id: kultur.art_id,
-      art_ae_id: kultur?.art?.art_ae_art?.id ?? '',
+      art_ae_id: aeArt?.id ?? '',
       art_ae_name: artLabelFromKultur({ kultur, store }),
       herkunft_id: kultur.herkunft_id,
-      herkunft_nr: kultur?.herkunft?.nr ?? '',
+      herkunft_nr: herkunft?.nr ?? '',
       herkunft_rohdaten: removeMetadataFromDataset({
-        dataset: kultur?.herkunft,
+        dataset: herkunft,
         foreignKeys: ['sammlungs'],
       }),
       garten_id: kultur.garten_id,
-      garten_name: kultur?.garten?.name ?? '',
+      garten_name: garten?.name ?? '',
       garten_rohdaten: removeMetadataFromDataset({
-        dataset: kultur?.garten,
+        dataset: garten,
         foreignKeys: ['kulturs', 'person'],
       }),
       zwischenlager: kultur.zwischenlager,

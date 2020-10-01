@@ -22,13 +22,16 @@ export default ({ store }) => {
           ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
           : 'kein Datum'
         const geplant = el.geplant ? ' (geplant)' : ''
-        const herkunftId = el?.herkunft?.id
-        const herkunft = herkunftId
-          ? `${el?.herkunft?.gemeinde ?? '(keine Gemeinde)'}, ${
-              el?.herkunft?.nr ?? '(keine Nr.)'
+        const herkunft = el.herkunft_id
+          ? store.herkunfts.get(el.herkunft_id)
+          : {}
+        const herkunftId = herkunft?.id
+        const herkunftLabel = herkunftId
+          ? `${herkunft?.gemeinde ?? '(keine Gemeinde)'}, ${
+              herkunft?.nr ?? '(keine Nr.)'
             }`
           : 'keine Herkunft'
-        const label = `${datum}: ${herkunft}${geplant}`
+        const label = `${datum}: ${herkunftLabel}${geplant}`
 
         return {
           nodeType: 'table',

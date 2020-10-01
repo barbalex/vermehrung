@@ -38,15 +38,21 @@ const Arten = ({ row, style, last }) => {
     [activeNodeArray, row.id, setActiveNodeArray],
   )
   const art = artLabelFromSammlung({ sammlung: row, store })
-  const person = row?.person?.fullname ?? '(keine Person)'
-  const herkunft = row?.herkunft?.nr ?? '(keine Herkunft-Nr)'
+  const person = row?.person_id ? store.persons.get(row.person_id) : {}
+  const personLabel = person
+    ? person?.fullname ?? '(Person ohne Name)'
+    : '(keine Person)'
+  const herkunft = row?.herkunft_id ? store.herkunfts.get(row.herkunft_id) : {}
+  const herkunftLabel = herkunft
+    ? herkunft?.nr ?? '(Herkunft ohne Nr)'
+    : '(keine Herkunft)'
   const date = row?.datum
     ? DateTime.fromSQL(row.datum).toFormat('yyyy.LL.dd')
     : 'kein Datum'
   const geplant = row.geplant ? ' (geplant)' : ''
   const label = `${
     row.nr ?? '(keine Nr)'
-  }, ${date}: Herkunft ${herkunft}, ${person}; ${art}${geplant}`
+  }, ${date}: von ${herkunftLabel}, ${personLabel}; ${art}${geplant}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
