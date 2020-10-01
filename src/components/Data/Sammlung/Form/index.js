@@ -17,6 +17,7 @@ import getConstants from '../../../../utils/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
+import artLabelFromArt from '../../../../utils/artLabelFromArt'
 import exists from '../../../../utils/exists'
 
 const constants = getConstants()
@@ -99,9 +100,9 @@ const SammlungForm = ({
     () =>
       artsSorted.map((el) => ({
         value: el.id,
-        label: el?.art_ae_art?.name ?? '(kein Artname)',
+        label: artLabelFromArt({ art: el, store }),
       })),
-    [artsSorted],
+    [artsSorted, store],
   )
 
   const saveToDb = useCallback(
