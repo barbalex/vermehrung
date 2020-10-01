@@ -1,6 +1,6 @@
 import teilkulturLabelFromTeilkultur from './teilkulturLabelFromTeilkultur'
 
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+const createDataArrayForRevComparison = ({ row, revRow, store }) => [
   {
     valueInRow: row?.zaehlung_id,
     valueInRev: revRow?.zaehlung_id,

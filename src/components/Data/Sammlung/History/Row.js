@@ -14,8 +14,8 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const { user, addNotification, upsertSammlungModel } = store
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow }),
-    [revRow, row],
+    () => createDataArrayForRevComparison({ row, revRow, store }),
+    [revRow, row, store],
   )
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
