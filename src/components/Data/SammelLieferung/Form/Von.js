@@ -13,7 +13,7 @@ import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
 import exists from '../../../../utils/exists'
 import sammlungLabelFromSammlung from '../../Lieferung/Lieferung/sammlungLabelFromSammlung'
-import kulturLabelFromKultur from '../../Lieferung/Lieferung/kulturLabelFromKultur'
+import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
 
 const Title = styled.div`
   font-weight: bold;
@@ -75,9 +75,9 @@ const SammelLieferungVon = ({ showFilter, row, ifNeeded, saveToDb }) => {
     () =>
       vonKulturWerteData.map((el) => ({
         value: el?.id,
-        label: kulturLabelFromKultur(el),
+        label: kulturLabelFromKultur({ kultur: el, store }),
       })),
-    [vonKulturWerteData],
+    [store, vonKulturWerteData],
   )
 
   const sammlungWerte = useMemo(

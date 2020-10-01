@@ -19,14 +19,5 @@ export default ({ kultur, store }) => {
     kultur?.zwischenlager ? '. Zwischenlager' : ''
   }`
 
-  console.log('kulturLabelFromKultur', {
-    garten,
-    person,
-    personName,
-    personOrt,
-    personLabel,
-    artName,
-  })
-
   return labelWithZl
 }
