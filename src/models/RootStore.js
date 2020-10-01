@@ -2107,14 +2107,14 @@ export const RootStore = RootStoreBase.props({
             : person
             ? `${person}; `
             : ''
-        const art = artLabelFromSammlung({ sammlung: o, store: self })
+        const artName = artLabelFromSammlung({ sammlung: o, store: self })
         const geplant = o.geplant ? ' (geplant)' : ''
-        const label = `${nrDate}${herkunftPerson}${art}${geplant}`
+        const label = `${nrDate}${herkunftPerson}${artName}${geplant}`
 
         return {
           value: o.id,
           label,
-          artname: o?.art?.art_ae_art?.name,
+          artname: artName,
           personname: o?.person?.fullname,
           herkunftnr: o?.herkunft?.nr,
           herkunftlokalname: o?.herkunft?.lokalname,
