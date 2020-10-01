@@ -2,11 +2,12 @@ import { DateTime } from 'luxon'
 
 import sammlungLabelFromSammlung from '../Lieferung/Lieferung/sammlungLabelFromSammlung'
 import kulturLabelFromKultur from '../../../utils/kulturLabelFromKultur'
+import artLabelFromLieferung from '../../../utils/artLabelFromLieferung'
 
 const createDataArrayForRevComparison = ({ row, revRow, store }) => [
   {
-    valueInRow: row?.art?.art_ae_art?.name,
-    valueInRev: revRow?.art?.art_ae_art?.name,
+    valueInRow: artLabelFromLieferung({ lieferung: row, store }),
+    valueInRev: artLabelFromLieferung({ lieferung: revRow, store }),
     label: 'Art',
   },
   {
