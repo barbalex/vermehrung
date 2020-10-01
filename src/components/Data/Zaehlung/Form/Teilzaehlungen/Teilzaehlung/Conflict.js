@@ -75,8 +75,8 @@ const TeilzaehlungConflict = ({
   )
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow }),
-    [revRow, row],
+    () => createDataArrayForRevComparison({ row, revRow, store }),
+    [revRow, row, store],
   )
 
   const onClickVerwerfen = useCallback(() => {
