@@ -54,6 +54,10 @@ import kulturIdOfAusLieferungInUrl from '../utils/kulturIdOfAusLieferungInUrl'
 import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
 import getAuthToken from '../utils/getAuthToken'
 import queryAllData from '../utils/queryAllData'
+import artLabelFromArt from '../utils/artLabelFromArt'
+import artLabelFromKultur from '../utils/artLabelFromKultur'
+import artLabelFromEvent from '../utils/artLabelFromEvent'
+import artLabelFromLieferung from '../utils/artLabelFromLieferung'
 import Errors, { defaultValue as defaultErrors } from './Errors'
 
 const formatDatumForSearch = (datum) =>
@@ -1982,7 +1986,7 @@ export const RootStore = RootStoreBase.props({
     get searchArtSuggestions() {
       return self.artsFiltered.map((o) => ({
         value: o.id,
-        label: o?.art_ae_art?.name ?? '',
+        label: artLabelFromArt({ art: o, store: self }),
         type: 'Arten',
       }))
     },
@@ -2013,8 +2017,8 @@ export const RootStore = RootStoreBase.props({
     get searchKulturSuggestions() {
       return self.kultursFiltered.map((o) => ({
         value: o.id,
-        label: treeLabelKultur({kultur: o, store: self}),
-        artname: o?.art?.art_ae_art?.name,
+        label: treeLabelKultur({ kultur: o, store: self }),
+        artname: artLabelFromKultur({ kultur: o, store: self }),
         gartenname: o?.garten?.name,
         personname: o?.garten?.person?.fullname,
         herkunftnr: o?.herkunft?.nr,
@@ -2029,7 +2033,7 @@ export const RootStore = RootStoreBase.props({
         value: o.id,
         label: `${formatDatumForSearch(o.datum)}: ${o?.beschreibung ?? ''}`,
         datum: formatDatumForSearch(o.datum),
-        artname: o?.kultur?.art?.art_ae_art?.name,
+        artname: artLabelFromEvent({ event: o, store: self }),
         gartenname: o?.kultur?.garten?.name,
         personname: o?.kultur?.garten?.person?.fullname,
         geplant: o.geplant ? 'geplant' : 'ausgeführt',
@@ -2042,7 +2046,7 @@ export const RootStore = RootStoreBase.props({
       return self.lieferungsFiltered.map((o) => ({
         value: o.id,
         label: formatDatumForSearch(o.datum),
-        artname: o?.art?.art_ae_art?.name,
+        artname: artLabelFromLieferung({ lieferung: o, store: self }),
         personname: o?.person?.fullname,
         datum: formatDatumForSearch(o.datum),
         sammlungNr: o?.sammlung?.nr,
