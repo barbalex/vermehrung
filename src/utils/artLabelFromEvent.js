@@ -1,5 +1,5 @@
 export default ({ event, store }) => {
-  if (!event.kultur_id) return '(keine Art)'
+  if (!event?.kultur_id) return '(keine Art)'
   const kultur = store.kulturs.get(event.kultur_id)
   if (!kultur.art_id) return '(keine Art)'
   const art = store.arts.get(kultur.art_id)
