@@ -1,9 +1,9 @@
-import kulturLabelFromKultur from './kulturLabelFromKultur'
+import kulturLabelFromKultur from '../../../utils/kulturLabelFromKultur'
 
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+const createDataArrayForRevComparison = ({ row, revRow, store }) => [
   {
-    valueInRow: kulturLabelFromKultur(row),
-    valueInRev: kulturLabelFromKultur(revRow),
+    valueInRow: kulturLabelFromKultur({ kultur: row, store }),
+    valueInRev: kulturLabelFromKultur({ kultur: revRow, store }),
     label: 'Kultur',
   },
   {
