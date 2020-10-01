@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
 
+import artLabelFromSammlung from '../../../../../utils/artLabelFromSammlung'
+
 export default ({ store }) => {
   const { showHerkunft, visibleOpenNodes, herkunft } = store.tree
   if (!showHerkunft) return []
@@ -24,7 +26,7 @@ export default ({ store }) => {
         const datum = el.datum
           ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
           : 'kein Datum'
-        const artName = el?.art?.art_ae_art?.name ?? '(keine Art)'
+        const artName = artLabelFromSammlung({ sammlung: el, store })
         const geplant = el.geplant ? ' (geplant)' : ''
         const label = `${datum}: ${artName}${geplant}`
 

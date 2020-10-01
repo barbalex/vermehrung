@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { DateTime } from 'luxon'
 
 import { StoreContext } from '../../../models/reactUtils'
+import artLabelFromSammlung from '../../../utils/artLabelFromSammlung'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -36,7 +37,7 @@ const Arten = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const art = row?.art?.art_ae_art?.name ?? '(keine Art)'
+  const art = artLabelFromSammlung({ sammlung: row, store })
   const person = row?.person?.fullname ?? '(keine Person)'
   const herkunft = row?.herkunft?.nr ?? '(keine Herkunft-Nr)'
   const date = row?.datum

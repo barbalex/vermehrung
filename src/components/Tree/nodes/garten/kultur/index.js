@@ -1,3 +1,5 @@
+import artLabelFromKultur from '../../../../../utils/artLabelFromKultur'
+
 export default ({ store }) => {
   const { showGarten, visibleOpenNodes, garten } = store.tree
   if (!showGarten) return []
@@ -18,7 +20,7 @@ export default ({ store }) => {
 
     return kulturen
       .map((k) => {
-        const art = k?.art?.art_ae_art?.name ?? '(keine Art)'
+        const art = artLabelFromKultur({ kultur: k, store })
         const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const label = `${art}, von: ${herkunft}`
         const labelWithZl = `${label}${
