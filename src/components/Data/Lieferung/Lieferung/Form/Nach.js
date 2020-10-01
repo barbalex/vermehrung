@@ -50,7 +50,9 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded }) => {
   const { errors, herkunftsSorted } = store
   const { activeNodeArray } = store.tree
   // BEWARE: need to include inactive kulturs, persons
-  const kultursSorted = [...store.kulturs.values()].sort(kulturSort)
+  const kultursSorted = [...store.kulturs.values()].sort((a, b) =>
+    kulturSort({ a, b, store }),
+  )
 
   const urlLastName = activeNodeArray[activeNodeArray.length - 2]
   const isAnlieferung = urlLastName === 'An-Lieferungen'
