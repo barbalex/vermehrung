@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
+import artLabelFromArt from '../../../utils/artLabelFromArt'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -38,7 +39,7 @@ const Arten = ({ row, style, last }) => {
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{row?.art_ae_art?.name}</div>
+      <div>{artLabelFromArt({ art: row, store })}</div>
     </Row>
   )
 }
