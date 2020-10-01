@@ -14,7 +14,7 @@ import Select from '../../../shared/Select'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import exists from '../../../../utils/exists'
-import kulturLabelFromKultur from '../../Lieferung/Lieferung/kulturLabelFromKultur'
+import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
 
 const Title = styled.div`
   font-weight: bold;
@@ -76,9 +76,9 @@ const SammelLieferungNach = ({ showFilter, row, ifNeeded, saveToDb }) => {
     () =>
       nachKulturWerteData.map((el) => ({
         value: el?.id,
-        label: kulturLabelFromKultur(el),
+        label: kulturLabelFromKultur({ kultur: el, store }),
       })),
-    [nachKulturWerteData],
+    [nachKulturWerteData, store],
   )
 
   const titleRowRef = useRef(null)
