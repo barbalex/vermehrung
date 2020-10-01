@@ -6,8 +6,8 @@ export default ({ a, b, store }) => {
   if (nrA < nrB) return -1
   if (nrA > nrB) return 1
 
-  const datumA = a?.datum ? new Date(a?.datum) : ''
-  const datumB = b?.datum ? new Date(b?.datum) : ''
+  const datumA = a?.datum ? new Date(a.datum) : ''
+  const datumB = b?.datum ? new Date(b.datum) : ''
   if (datumA < datumB) return -1
   if (datumA > datumB) return 1
 
