@@ -1747,7 +1747,7 @@ export const RootStore = RootStoreBase.props({
           }
           return true
         })
-        .sort(artSort)
+        .sort((a, b) => artSort({ a, b, store: self }))
     },
     get artQksSorted() {
       return [...self.art_qks.values()]
