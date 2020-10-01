@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import kulturLabelFromKultur from './kulturLabelFromKultur'
+import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
 import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
 
 const createDataArrayForRevComparison = ({ row, revRow, store }) => [

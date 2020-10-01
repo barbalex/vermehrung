@@ -1,4 +1,4 @@
-import kulturLabelFromKultur from '../../../../../Data/Lieferung/Lieferung/kulturLabelFromKultur'
+import kulturLabelFromKultur from '../../../../../../utils/kulturLabelFromKultur'
 
 export default ({ store }) => {
   const {
@@ -40,7 +40,7 @@ export default ({ store }) => {
         menuTitle: 'Kultur',
         table: 'kultur',
         id: `${sammlungId}${lieferungId}${k.id}`,
-        label: kulturLabelFromKultur(k),
+        label: kulturLabelFromKultur({ kultur: k, store }),
         url: [
           'Sammlungen',
           sammlungId,
