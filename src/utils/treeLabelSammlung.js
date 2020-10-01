@@ -1,20 +1,25 @@
 import { DateTime } from 'luxon'
 
-export default (el) => {
-  const artName = el?.art
-    ? el?.art?.art_ae_art?.name ?? '(Art ohne Name)'
-    : '(keine Art)'
-  const personName = el?.person
-    ? el?.person?.fullname ?? '(Person ohne Name)'
+export default ({ sammlung, store }) => {
+  const art = sammlung?.art_id ? store.arts.get(sammlung.art_id) : {}
+  const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
+  const person = sammlung.person_id ? store.persons.get(sammlung.person_id) : {}
+  const herkunft = sammlung.herkunft_id
+    ? store.herkunfts.get(sammlung.herkunft_id)
+    : {}
+
+  const artName = art ? aeArt?.name ?? '(Art ohne Name)' : '(keine Art)'
+  const personName = person
+    ? person?.fullname ?? '(Person ohne Name)'
     : '(keine Person)'
-  const herkunftNr = el?.herkunft
-    ? el?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+  const herkunftNr = herkunft
+    ? herkunft?.nr ?? '(Herkunft ohne Nr)'
     : '(keine Herkunft)'
-  const date = el?.datum
-    ? DateTime.fromSQL(el?.datum).toFormat('yyyy.LL.dd')
+  const date = sammlung?.datum
+    ? DateTime.fromSQL(sammlung?.datum).toFormat('yyyy.LL.dd')
     : 'kein Datum'
-  const geplant = el?.geplant ? ' (geplant)' : ''
+  const geplant = sammlung?.geplant ? ' (geplant)' : ''
   return `${
-    el?.nr ?? '(keine Nr)'
+    sammlung?.nr ?? '(keine Nr)'
   }, ${date}: von ${herkunftNr}, ${personName}; ${artName}${geplant}`
 }
