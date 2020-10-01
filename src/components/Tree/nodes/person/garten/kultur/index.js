@@ -28,19 +28,22 @@ export default ({ store }) => {
 
     return kulturen
       .map((k) => {
-        const art = artLabelFromKultur({ kultur: k, store })
-        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-        const label = `${art}, von: ${herkunft}`
-        const labelWithZl = `${label}${
-          k?.zwischenlager ? '. Zwischenlager' : ''
-        }`
+        const artLabel = artLabelFromKultur({ kultur: k, store })
+        const herkunft = k?.herkunft_id
+          ? store.herkunfts.get(k.herkunft_id)
+          : {}
+        const herkunftLabel = herkunft
+          ? herkunft?.nr ?? '(Herkunft ohne Nr)'
+          : '(keine Herkunft)'
+        const zlLabel = k?.zwischenlager ? '. Zwischenlager' : ''
+        const label = `${artLabel}, von: ${herkunftLabel}${zlLabel}`
 
         return {
           nodeType: 'table',
           menuTitle: 'Kultur',
           table: 'kultur',
           id: `${personId}${gartenId}${k.id}`,
-          label: labelWithZl,
+          label,
           url: ['Personen', personId, 'Gaerten', gartenId, 'Kulturen', k.id],
           hasChildren: true,
         }

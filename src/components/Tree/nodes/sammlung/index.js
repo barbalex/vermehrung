@@ -14,7 +14,7 @@ export default ({ store }) => {
         visibleOpenNodes.some((node) => isEqual(['Sammlungen'], node)),
       )
       .map((el) => {
-        const label = treeLabelSammlung(el)
+        const label = treeLabelSammlung({ sammlung: el, store })
 
         return {
           nodeType: 'table',

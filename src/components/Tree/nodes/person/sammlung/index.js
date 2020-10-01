@@ -26,10 +26,15 @@ export default ({ store }) => {
         const datum = el.datum
           ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
           : 'kein Datum'
-        const art = artLabelFromSammlung({ sammlung: el, store })
-        const herkunft = el?.herkunft?.nr ?? '(keine Herkunft-Nr)'
+        const artLabel = artLabelFromSammlung({ sammlung: el, store })
+        const herkunft = el.herkunft_id
+          ? store.herkunfts.get(el.herkunft_id)
+          : {}
+        const herkunftLabel = herkunft
+          ? herkunft?.nr ?? '(Herkunft ohne Nr)'
+          : '(keine Herkunft)'
         const geplant = el.geplant ? ' (geplant)' : ''
-        const label = `${datum}: Herkunft ${herkunft}: ${art}${geplant}`
+        const label = `${datum}: von ${herkunftLabel}: ${artLabel}${geplant}`
 
         return {
           nodeType: 'table',
