@@ -58,9 +58,10 @@ import artLabelFromArt from '../utils/artLabelFromArt'
 import artLabelFromKultur from '../utils/artLabelFromKultur'
 import artLabelFromEvent from '../utils/artLabelFromEvent'
 import artLabelFromLieferung from '../utils/artLabelFromLieferung'
+import artLabelFromSammlung from '../utils/artLabelFromSammlung'
 import Errors, { defaultValue as defaultErrors } from './Errors'
 
-const formatDatumForSearch = (datum) =>
+const formatDateForSearch = (datum) =>
   datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
 export const RootStore = RootStoreBase.props({
@@ -2031,8 +2032,8 @@ export const RootStore = RootStoreBase.props({
     get searchEventSuggestions() {
       return self.eventsFiltered.map((o) => ({
         value: o.id,
-        label: `${formatDatumForSearch(o.datum)}: ${o?.beschreibung ?? ''}`,
-        datum: formatDatumForSearch(o.datum),
+        label: `${formatDateForSearch(o.datum)}: ${o?.beschreibung ?? ''}`,
+        datum: formatDateForSearch(o.datum),
         artname: artLabelFromEvent({ event: o, store: self }),
         gartenname: o?.kultur?.garten?.name,
         personname: o?.kultur?.garten?.person?.fullname,
@@ -2045,12 +2046,12 @@ export const RootStore = RootStoreBase.props({
     get searchLieferungSuggestions() {
       return self.lieferungsFiltered.map((o) => ({
         value: o.id,
-        label: formatDatumForSearch(o.datum),
+        label: formatDateForSearch(o.datum),
         artname: artLabelFromLieferung({ lieferung: o, store: self }),
         personname: o?.person?.fullname,
-        datum: formatDatumForSearch(o.datum),
+        datum: formatDateForSearch(o.datum),
         sammlungNr: o?.sammlung?.nr,
-        sammlungDatum: formatDatumForSearch(o?.sammlung?.datum),
+        sammlungDatum: formatDateForSearch(o?.sammlung?.datum),
         sammlungPerson: o?.sammlung?.person?.fullname,
         sammlungHerkunftNr: o?.sammlung?.herkunft?.nr,
         sammlungHerkunftLokalname: o?.sammlung?.herkunft?.lokalname,
@@ -2087,7 +2088,7 @@ export const RootStore = RootStoreBase.props({
     get searchSammlungSuggestions() {
       return self.sammlungsFiltered.map((o) => {
         const nr = o.nr
-        const date = formatDatumForSearch(o.datum)
+        const date = formatDateForSearch(o.datum)
         const nrDate =
           nr && date
             ? `${nr}, ${date}: `
@@ -2106,9 +2107,7 @@ export const RootStore = RootStoreBase.props({
             : person
             ? `${person}; `
             : ''
-        const art = o?.art?.art_ae_art?.name
-          ? `${o?.art?.art_ae_art?.name} `
-          : ''
+        const art = artLabelFromSammlung({ sammlung: o, store: self })
         const geplant = o.geplant ? ' (geplant)' : ''
         const label = `${nrDate}${herkunftPerson}${art}${geplant}`
 
@@ -2122,7 +2121,7 @@ export const RootStore = RootStoreBase.props({
           herkunftgemeinde: o?.herkunft?.gemeinde,
           nr: o.nr,
           bemerkungen: o.bemerkungen,
-          datum: formatDatumForSearch(o.datum),
+          datum: formatDateForSearch(o.datum),
           geplant: o.geplant ? 'geplant' : 'ausgeführt',
           type: 'Sammlungen',
         }
@@ -2131,7 +2130,7 @@ export const RootStore = RootStoreBase.props({
     get searchZaehlungSuggestions() {
       return self.zaehlungsFiltered.map((o) => ({
         value: o.id,
-        label: formatDatumForSearch(o.datum),
+        label: formatDateForSearch(o.datum),
         parent: o.kultur_id,
         type: 'Zaehlungen',
       }))
