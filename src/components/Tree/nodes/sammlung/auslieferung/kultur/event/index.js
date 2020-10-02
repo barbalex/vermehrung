@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import eventLabelFromEvent from '../../../../../../../utils/eventLabelFromEvent'
 
 export default ({ store }) => {
   const {
@@ -36,33 +36,24 @@ export default ({ store }) => {
     const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
 
     return events
-      .map((el) => {
-        const datum = el.datum
-          ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
-          : null
-        const geplant = el.geplant ? ' (geplant)' : ''
-        const event = `${el?.beschreibung ?? '(nicht beschrieben)'}${geplant}`
-        const label = `${datum ?? '(kein Datum)'}: ${event}`
-
-        return {
-          nodeType: 'table',
-          menuTitle: 'Event',
-          table: 'event',
-          id: `${sammlungId}${lieferungId}${kulturId}${el.id}`,
-          label,
-          url: [
-            'Sammlungen',
-            sammlungId,
-            'Aus-Lieferungen',
-            lieferungId,
-            'Kulturen',
-            kulturId,
-            'Events',
-            el.id,
-          ],
-          hasChildren: false,
-        }
-      })
+      .map((el) => ({
+        nodeType: 'table',
+        menuTitle: 'Event',
+        table: 'event',
+        id: `${sammlungId}${lieferungId}${kulturId}${el.id}`,
+        label: eventLabelFromEvent({ event: el }),
+        url: [
+          'Sammlungen',
+          sammlungId,
+          'Aus-Lieferungen',
+          lieferungId,
+          'Kulturen',
+          kulturId,
+          'Events',
+          el.id,
+        ],
+        hasChildren: false,
+      }))
       .map((el, index) => {
         el.sort = [
           3,
