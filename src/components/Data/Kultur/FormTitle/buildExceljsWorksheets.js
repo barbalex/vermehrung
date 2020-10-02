@@ -24,10 +24,12 @@ export default async ({
   // 1. Get Kultur
   if (!calledFromHigherUp) {
     const kultur = store.kulturs.get(kultur_id)
+    const art = kultur.art_id ? store.arts.get(kultur.art_id) : {}
+    const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
     const newK = {
       id: kultur.id,
       art_id: kultur.art_id,
-      art_ae_id: kultur?.art?.art_ae_art?.id ?? '',
+      art_ae_id: aeArt?.id ?? '',
       art_ae_name: artLabelFromKultur({ kultur, store }),
       herkunft_id: kultur.herkunft_id,
       herkunft_nr: kultur?.herkunft?.nr ?? '',
@@ -130,6 +132,8 @@ export default async ({
     (l) => l.nach_kultur_id === kultur_id,
   )
   const anlieferungen = anlieferungenArray.map((z) => {
+    const art = z.art_id ? store.arts.get(z.art_id) : {}
+    const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
     const newZ = {
       id: z.id,
       sammel_lieferung_id: z.sammel_lieferung_id,
@@ -147,7 +151,7 @@ export default async ({
         ],
       }),
       art_id: z.art_id,
-      art_ae_id: z?.art?.art_ae_art?.id ?? '',
+      art_ae_id: aeArt?.id ?? '',
       art_ae_name: artLabelFromLieferung({ lieferung: z, store }),
       person_id: z.person_id,
       person_name: z?.person?.fullname ?? '',
@@ -235,6 +239,8 @@ export default async ({
     (l) => l.von_kultur_id === kultur_id,
   )
   const auslieferungen = auslieferungenArray.map((z) => {
+    const art = z.art_id ? store.arts.get(z.art_id) : {}
+    const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
     const newZ = {
       id: z.id,
       sammel_lieferung_id: z.sammel_lieferung_id,
@@ -252,7 +258,7 @@ export default async ({
         ],
       }),
       art_id: z.art_id,
-      art_ae_id: z?.art?.art_ae_art?.id ?? '',
+      art_ae_id: aeArt?.id ?? '',
       art_ae_name: artLabelFromLieferung({ lieferung: z, store }),
       person_id: z.person_id,
       person_name: z?.person?.fullname ?? '',

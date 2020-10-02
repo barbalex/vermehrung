@@ -3,6 +3,8 @@ import groupBy from 'lodash/groupBy'
 
 import exists from '../../../../../../utils/exists'
 import artLabelFromArt from '../../../../../../utils/artLabelFromArt'
+import artLabelFromSammlung from '../../../../../../utils/artLabelFromSammlung'
+import treeLabelSammlung from '../../../../../../utils/treeLabelSammlung'
 
 export default ({ artId, store }) => {
   const {
@@ -23,35 +25,6 @@ export default ({ artId, store }) => {
   const now = new Date()
 
   return {
-    // TODO: use sammlungLabelFromSammlung instead
-    sammlungsWithoutLieferung: () =>
-      sammlungsSorted
-        .filter((s) => s.art_id === artId)
-        .filter(
-          (s) => !lieferungsSorted.find((l) => l.von_sammlung_id === s.id),
-        )
-        .map((v) => ({
-          url: ['Sammlungen', v.id],
-          text: `${v.nr}${
-            v?.art?.art_ae_art?.name ? `, ${v?.art?.art_ae_art?.name}` : ''
-          }${v?.person?.name ? `, ${v?.person?.name}` : ''}`,
-        })),
-    sammlungsWithNonUniqueNr: () => {
-      const sGroupedByNr = groupBy(
-        sammlungsSorted.filter((s) => s.art_id === artId),
-        (h) => h.nr,
-      )
-      return Object.values(sGroupedByNr)
-        .filter((v) => v.length > 1)
-        .flatMap((vs) =>
-          vs.map((v) => ({
-            url: ['Sammlungen', v.id],
-            text: `${v.nr}${
-              v?.art?.art_ae_art?.name ? `, ${v?.art?.art_ae_art?.name}` : ''
-            }${v?.person?.name ? `, ${v?.person?.name}` : ''}`,
-          })),
-        )
-    },
     personsWithNonUniqueNr: () => {
       const pGroupedByNr = groupBy(personsSorted, (h) => h.nr)
       return Object.values(pGroupedByNr)
@@ -84,114 +57,78 @@ export default ({ artId, store }) => {
           url: ['Arten', a.id],
           text: artLabelFromArt({ art: a, store }),
         })),
+    sammlungsWithoutLieferung: () =>
+      sammlungsSorted
+        .filter((s) => s.art_id === artId)
+        .filter(
+          (s) => !lieferungsSorted.find((l) => l.von_sammlung_id === s.id),
+        )
+        .map((s) => ({
+          url: ['Sammlungen', s.id],
+          text: treeLabelSammlung({ sammlung: s, store }),
+        })),
+    sammlungsWithNonUniqueNr: () => {
+      const sGroupedByNr = groupBy(
+        sammlungsSorted.filter((s) => s.art_id === artId),
+        (h) => h.nr,
+      )
+      return Object.values(sGroupedByNr)
+        .filter((s) => s.length > 1)
+        .flatMap((vs) =>
+          vs.map((s) => ({
+            url: ['Sammlungen', s.id],
+            text: treeLabelSammlung({ sammlung: s, store }),
+          })),
+        )
+    },
     sammlungsWithoutNr: () =>
       sammlungsSorted
         .filter((s) => s.art_id === artId)
         .filter((s) => !exists(s.nr))
-        .map((s) => {
-          const datum = s.datum
-            ? format(new Date(s.datum), 'yyyy.MM.dd')
-            : 'kein Datum'
-          const geplant = s.geplant ? ' (geplant)' : ''
-          const text = `${datum}: ${
-            s?.herkunft?.gemeinde ?? '(keine Gemeinde)'
-          }, ${s?.herkunft?.nr ?? '(keine Nr.)'}${geplant}`
-
-          return {
-            url: ['Arten', artId, 'Sammlungen', s.id],
-            text,
-          }
-        }),
+        .map((s) => ({
+          url: ['Arten', artId, 'Sammlungen', s.id],
+          text: treeLabelSammlung({ sammlung: s, store }),
+        })),
     sammlungsWithoutHerkunft: () =>
       sammlungsSorted
         .filter((s) => s.art_id === artId)
         .filter((s) => !s.herkunft_id)
-        .map((s) => {
-          const datum = s.datum
-            ? format(new Date(s.datum), 'yyyy.MM.dd')
-            : 'kein Datum'
-          const geplant = s.geplant ? ' (geplant)' : ''
-          const text = `${datum}: ${
-            s?.herkunft?.gemeinde ?? '(keine Gemeinde)'
-          }, ${s?.herkunft?.nr ?? '(keine Nr.)'}${geplant}`
-
-          return {
-            url: ['Arten', artId, 'Sammlungen', s.id],
-            text,
-          }
-        }),
+        .map((s) => ({
+          url: ['Arten', artId, 'Sammlungen', s.id],
+          text: treeLabelSammlung({ sammlung: s, store }),
+        })),
     sammlungsWithoutPerson: () =>
       sammlungsSorted
         .filter((s) => s.art_id === artId)
         .filter((s) => !s.person_id)
-        .map((s) => {
-          const datum = s.datum
-            ? format(new Date(s.datum), 'yyyy.MM.dd')
-            : 'kein Datum'
-          const geplant = s.geplant ? ' (geplant)' : ''
-          const text = `${datum}: ${
-            s?.herkunft?.gemeinde ?? '(keine Gemeinde)'
-          }, ${s?.herkunft?.nr ?? '(keine Nr.)'}${geplant}`
-
-          return {
-            url: ['Arten', artId, 'Sammlungen', s.id],
-            text,
-          }
-        }),
+        .map((s) => ({
+          url: ['Arten', artId, 'Sammlungen', s.id],
+          text: treeLabelSammlung({ sammlung: s, store }),
+        })),
     sammlungsWithoutDatum: () =>
       sammlungsSorted
         .filter((s) => s.art_id === artId)
         .filter((s) => !s.datum)
-        .map((s) => {
-          const datum = s.datum
-            ? format(new Date(s.datum), 'yyyy.MM.dd')
-            : 'kein Datum'
-          const geplant = s.geplant ? ' (geplant)' : ''
-          const text = `${datum}: ${
-            s?.herkunft?.gemeinde ?? '(keine Gemeinde)'
-          }, ${s?.herkunft?.nr ?? '(keine Nr.)'}${geplant}`
-
-          return {
-            url: ['Arten', artId, 'Sammlungen', s.id],
-            text,
-          }
-        }),
+        .map((s) => ({
+          url: ['Arten', artId, 'Sammlungen', s.id],
+          text: treeLabelSammlung({ sammlung: s, store }),
+        })),
     sammlungsWithoutAnzahlPflanzen: () =>
       sammlungsSorted
         .filter((s) => s.art_id === artId)
         .filter((s) => !exists(s.anzahl_pflanzen))
-        .map((s) => {
-          const datum = s.datum
-            ? format(new Date(s.datum), 'yyyy.MM.dd')
-            : 'kein Datum'
-          const geplant = s.geplant ? ' (geplant)' : ''
-          const text = `${datum}: ${
-            s?.herkunft?.gemeinde ?? '(keine Gemeinde)'
-          }, ${s?.herkunft?.nr ?? '(keine Nr.)'}${geplant}`
-
-          return {
-            url: ['Arten', artId, 'Sammlungen', s.id],
-            text,
-          }
-        }),
+        .map((s) => ({
+          url: ['Arten', artId, 'Sammlungen', s.id],
+          text: treeLabelSammlung({ sammlung: s, store }),
+        })),
     sammlungsWithoutVonAnzahlIdividuen: () =>
       sammlungsSorted
         .filter((s) => s.art_id === artId)
         .filter((s) => !exists(s.von_anzahl_individuen))
-        .map((s) => {
-          const datum = s.datum
-            ? format(new Date(s.datum), 'yyyy.MM.dd')
-            : 'kein Datum'
-          const geplant = s.geplant ? ' (geplant)' : ''
-          const text = `${datum}: ${
-            s?.herkunft?.gemeinde ?? '(keine Gemeinde)'
-          }, ${s?.herkunft?.nr ?? '(keine Nr.)'}${geplant}`
-
-          return {
-            url: ['Arten', artId, 'Sammlungen', s.id],
-            text,
-          }
-        }),
+        .map((s) => ({
+          url: ['Arten', artId, 'Sammlungen', s.id],
+          text: treeLabelSammlung({ sammlung: s, store }),
+        })),
     gartensAllKultursInactive: () =>
       gartensSorted
         .filter((g) => {
@@ -274,7 +211,11 @@ export default ({ artId, store }) => {
         }),
     teilkultursWithoutName: () =>
       teilkultursSorted
-        .filter((tk) => tk?.kultur?.art_id === artId)
+        .filter((tk) => {
+          const kultur = tk.kultur_id ? store.kulturs.get(tk.kultur_id) : {}
+
+          return kultur?.art_id === artId
+        })
         .filter((tk) => !tk.name)
         .map((tk) => {
           const garten =
