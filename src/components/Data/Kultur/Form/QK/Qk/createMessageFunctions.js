@@ -1,6 +1,7 @@
 import format from 'date-fns/format'
 
 import exists from '../../../../../../utils/exists'
+import treeLabelKultur from '../../../../../../utils/treeLabelKultur'
 
 export default ({ kulturId, store }) => {
   const {
