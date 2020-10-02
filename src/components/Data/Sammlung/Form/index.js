@@ -91,7 +91,7 @@ const SammlungForm = ({
     () =>
       herkunftsSorted.map((el) => ({
         value: el.id,
-        label: herkunftLabelFromHerkunft(el),
+        label: herkunftLabelFromHerkunft({ herkunft: el }),
       })),
     [herkunftsSorted],
   )

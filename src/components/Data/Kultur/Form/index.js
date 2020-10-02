@@ -203,7 +203,7 @@ const KulturForm = ({
         .filter((h) => herkunftToChoose.includes(h.id))
         .map((el) => ({
           value: el.id,
-          label: herkunftLabelFromHerkunft(el),
+          label: herkunftLabelFromHerkunft({ herkunft: el }),
         })),
     [herkunftToChoose, herkunftsSorted],
   )
