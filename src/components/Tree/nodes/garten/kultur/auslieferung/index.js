@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import lieferungLabelFromLieferung from '../../../../../../utils/lieferungLabelFromLieferung'
 
 export default ({ store }) => {
   const { showGarten, visibleOpenNodes, garten, gartenKultur } = store.tree
@@ -27,36 +27,23 @@ export default ({ store }) => {
     )
 
     return auslieferungen
-      .map((el) => {
-        const datum = el.datum
-          ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
-          : 'kein Datum'
-        const anz = el.anzahl_pflanzen ?? '_'
-        const anzAb = el.anzahl_auspflanzbereit ?? '_'
-        const numbers = `${anz
-          .toString()
-          .padStart(3, '_')}/${anzAb.toString().padStart(3, '_')}`
-        const geplant = el.geplant ? ' (geplant)' : ''
-        const label = `${datum}: ${numbers}${geplant}`
-
-        return {
-          nodeType: 'table',
-          menuTitle: 'Aus-Lieferung',
-          table: 'lieferung',
-          id: `${gartenId}${kulturId}${el.id}`,
-          label,
-          url: [
-            'Gaerten',
-            gartenId,
-            'Kulturen',
-            kulturId,
-            'Aus-Lieferungen',
-            el.id,
-          ],
-          hasChildren: false,
-          mono: true,
-        }
-      })
+      .map((el) => ({
+        nodeType: 'table',
+        menuTitle: 'Aus-Lieferung',
+        table: 'lieferung',
+        id: `${gartenId}${kulturId}${el.id}`,
+        label: lieferungLabelFromLieferung({ lieferung: el }),
+        url: [
+          'Gaerten',
+          gartenId,
+          'Kulturen',
+          kulturId,
+          'Aus-Lieferungen',
+          el.id,
+        ],
+        hasChildren: false,
+        mono: true,
+      }))
       .map((el, index) => {
         el.sort = [4, gartenIndex, 1, kulturIndex, 4, index]
         return el
