@@ -15,8 +15,8 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => [
     label: 'Person',
   },
   {
-    valueInRow: herkunftLabelFromHerkunft(row.herkunft),
-    valueInRev: herkunftLabelFromHerkunft(revRow.herkunft),
+    valueInRow: herkunftLabelFromHerkunft({ herkunft: row.herkunft }),
+    valueInRev: herkunftLabelFromHerkunft({ herkunft: revRow.herkunft }),
     label: 'Herkunft',
   },
   {
