@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
+import teilkulturLabelFromTeilkultur from '../../../utils/teilkulturLabelFromTeilkultur'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -27,7 +28,7 @@ const Row = styled.div`
   }
 `
 
-const Arten = ({ row, style, last }) => {
+const Teilkulturen = ({ row, style, last }) => {
   const store = useContext(StoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -35,13 +36,12 @@ const Arten = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const label = row.name ?? '(kein Name)'
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{label}</div>
+      <div>{teilkulturLabelFromTeilkultur({ teilkultur: row })}</div>
     </Row>
   )
 }
 
-export default observer(Arten)
+export default observer(Teilkulturen)
