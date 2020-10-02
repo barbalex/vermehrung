@@ -11,11 +11,15 @@ export default async ({ store, garten_id, workbook }) => {
     (t) => t?.zaehlung?.kultur?.garten_id === garten_id,
   )
   const teilzaehlungen = teilzaehlungenArray.map((z) => {
+    const teilkultur = z.teilkultur_id
+      ? store.teilkulturs.get(z.teilkultur_id)
+      : {}
+
     const newZ = {
       id: z.id,
       zaehlung_id: z.zaehlung_id,
       teilkultur_id: z.teilkultur_id,
-      teilkultur_name: z?.teilkultur?.name ?? '',
+      teilkultur_name: teilkultur?.name ?? '',
       anzahl_pflanzen: z.anzahl_pflanzen,
       anzahl_auspflanzbereit: z.anzahl_auspflanzbereit,
       anzahl_mutterpflanzen: z.anzahl_mutterpflanzen,
@@ -23,6 +27,7 @@ export default async ({ store, garten_id, workbook }) => {
       auspflanzbereit_beschreibung: z.auspflanzbereit_beschreibung,
       bemerkungen: z.bemerkungen,
     }
+
     return newZ
   })
   addWorksheetToExceljsWorkbook({
@@ -30,5 +35,6 @@ export default async ({ store, garten_id, workbook }) => {
     title: `teilzahlungen_von_garten_${garten_id}`,
     data: teilzaehlungen,
   })
+
   return
 }

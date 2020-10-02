@@ -1,3 +1,11 @@
+/**
+ * keeping this for documentation
+ * this was very comfortable for fetching data
+ * but it seemed to work badly
+ * data fetched via references often did not turn up,
+ * especially after loading all data anew
+ * and it seemed to slow down the app
+ */
 import { selectFromart } from '../models/artModel.base'
 import { selectFromart_qk } from '../models/art_qkModel.base'
 import { selectFromart_qk_choosen } from '../models/art_qk_choosenModel.base'
@@ -238,7 +246,7 @@ TEILZAEHLUNG_FRAGMENT = selectFromteilzaehlung()
   .id.zaehlung_id.teilkultur_id.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen.andere_menge.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.zaehlung(
     () => ZAEHLUNG_FRAGMENT,
   )
-  //.teilkultur(() => TEILKULTUR_FRAGMENT)
+  .teilkultur(() => TEILKULTUR_FRAGMENT)
   .toString()
 
 USER_ROLE_FRAGMENT = selectFromuser_role().id.name.label.sort.comment.toString()
