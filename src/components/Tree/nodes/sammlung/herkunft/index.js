@@ -1,3 +1,5 @@
+import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft'
+
 export default ({ store }) => {
   const { showSammlung, visibleOpenNodes, sammlung: sammlungNodes } = store.tree
   if (!showSammlung) return []
@@ -22,21 +24,15 @@ export default ({ store }) => {
       herkunfts
         // there were null values causing errors
         .filter((n) => !!n)
-        .map((el) => {
-          const label = `${el.nr || '(keine Nr)'}: ${
-            el.gemeinde || '(keine Gemeinde)'
-          }, ${el.lokalname || '(kein Lokalname)'}`
-
-          return {
-            nodeType: 'table_no_menu',
-            menuTitle: 'Herkunft',
-            table: 'herkunft',
-            id: `${sammlungId}${el.id}`,
-            label,
-            url: ['Sammlungen', sammlungId, 'Herkuenfte', el.id],
-            hasChildren: false,
-          }
-        })
+        .map((el) => ({
+          nodeType: 'table_no_menu',
+          menuTitle: 'Herkunft',
+          table: 'herkunft',
+          id: `${sammlungId}${el.id}`,
+          label: herkunftLabelFromHerkunft({ herkunft: el }),
+          url: ['Sammlungen', sammlungId, 'Herkuenfte', el.id],
+          hasChildren: false,
+        }))
         .map((el, index) => {
           el.sort = [3, sammlungIndex, 1, index]
           return el
