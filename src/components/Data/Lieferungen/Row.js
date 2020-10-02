@@ -1,9 +1,9 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import { DateTime } from 'luxon'
 
 import { StoreContext } from '../../../models/reactUtils'
+import lieferungLabelFromLieferung from '../../../utils/lieferungLabelFromLieferung'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -36,20 +36,10 @@ const EventsRows = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const datum = row.datum
-    ? DateTime.fromSQL(row.datum).toFormat('yyyy.LL.dd')
-    : 'kein Datum'
-  const anz = row.anzahl_pflanzen ?? '_'
-  const anzAb = row.anzahl_auspflanzbereit ?? '_'
-  const numbers = `${anz
-    .toString()
-    .padStart(3, '_')}/${anzAb.toString().padStart(3, '_')}`
-  const geplant = row.geplant ? ' (geplant)' : ''
-  const label = `${datum}: ${numbers}${geplant}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{label}</div>
+      <div>{lieferungLabelFromLieferung({ lieferung: row })}</div>
     </Row>
   )
 }
