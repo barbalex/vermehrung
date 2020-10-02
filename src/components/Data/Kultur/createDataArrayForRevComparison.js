@@ -9,8 +9,8 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => [
     label: 'Art',
   },
   {
-    valueInRow: herkunftLabelFromHerkunft(row),
-    valueInRev: herkunftLabelFromHerkunft(revRow),
+    valueInRow: herkunftLabelFromHerkunft({ herkunft: row }),
+    valueInRev: herkunftLabelFromHerkunft({ herkunft: revRow }),
     label: 'Herkunft',
   },
   { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
