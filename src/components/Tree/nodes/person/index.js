@@ -1,5 +1,7 @@
 import isEqual from 'lodash/isEqual'
 
+import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
+
 export default ({ store }) => {
   const { showPerson, visibleOpenNodes } = store.tree
 
@@ -16,7 +18,7 @@ export default ({ store }) => {
         menuTitle: 'Person',
         table: 'person',
         id: el.id,
-        label: el?.fullname ?? '(kein Name)',
+        label: personLabelFromPerson({ person: el }),
         url: ['Personen', el.id],
         hasChildren: true,
       }))

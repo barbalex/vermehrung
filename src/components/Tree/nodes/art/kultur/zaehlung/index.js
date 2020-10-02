@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import zaehlungLabelFromZaehlung from '../../../../../../utils/zaehlungLabelFromZaehlung'
 
 export default ({ store }) => {
   const { showArt, visibleOpenNodes, art, artKultur } = store.tree
@@ -27,37 +27,16 @@ export default ({ store }) => {
     )
 
     return zaehlungen
-      .map((el) => {
-        const datum = el.datum
-          ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
-          : 'kein Datum'
-        const anz =
-          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '-'
-        const anzAb =
-          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ??
-          '-'
-        const anzMu =
-          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ??
-          '-'
-        const numbers = `${anz
-          .toString()
-          .padStart(3, '\u00A0')}/${anzAb
-          .toString()
-          .padStart(3, '\u00A0')}/${anzMu.toString().padStart(3, '\u00A0')}`
-        const prognose = el.prognose ? ' (Prognose)' : ''
-        const label = `${datum}: ${numbers}${prognose}`
-
-        return {
-          nodeType: 'table',
-          menuTitle: 'Zählung',
-          table: 'zaehlung',
-          id: `${artId}${kulturId}${el.id}`,
-          label,
-          url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
-          hasChildren: false,
-          mono: true,
-        }
-      })
+      .map((el) => ({
+        nodeType: 'table',
+        menuTitle: 'Zählung',
+        table: 'zaehlung',
+        id: `${artId}${kulturId}${el.id}`,
+        label: zaehlungLabelFromZaehlung({ zaehlung: el }),
+        url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
+        hasChildren: false,
+        mono: true,
+      }))
       .map((el, index) => {
         el.sort = [1, artIndex, 2, kulturIndex, 2, index]
         return el

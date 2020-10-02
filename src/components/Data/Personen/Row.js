@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
+import personLabelFromPerson from '../../../utils/personLabelFromPerson'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -35,11 +36,10 @@ const EventsRows = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const label = row?.fullname ?? '(kein Name)'
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{label}</div>
+      <div>{personLabelFromPerson({ person: row })}</div>
     </Row>
   )
 }

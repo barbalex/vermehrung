@@ -1,9 +1,9 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import { DateTime } from 'luxon'
 
 import { StoreContext } from '../../../models/reactUtils'
+import zaehlungLabelFromZaehlung from '../../../utils/zaehlungLabelFromZaehlung'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -36,26 +36,10 @@ const Arten = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const datum = row.datum
-    ? DateTime.fromSQL(row.datum).toFormat('yyyy.LL.dd')
-    : 'kein Datum'
-  const anz =
-    row?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '-'
-  const anzAb =
-    row?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ?? '-'
-  const anzMu =
-    row?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ?? '-'
-  const numbers = `${anz
-    .toString()
-    .padStart(3, '\u00A0')}/${anzAb
-    .toString()
-    .padStart(3, '\u00A0')}/${anzMu.toString().padStart(3, '\u00A0')}`
-  const prognose = row.prognose ? ' (Prognose)' : ''
-  const label = `${datum}: ${numbers}${prognose}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{label}</div>
+      <div>{zaehlungLabelFromZaehlung({ zaehlung: row })}</div>
     </Row>
   )
 }
