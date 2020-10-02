@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
 import artLabelFromKultur from '../../../utils/artLabelFromKultur'
+import treeLabelKultur from '../../../utils/treeLabelKultur'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -36,12 +37,7 @@ const Arten = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const garten =
-    row?.garten?.name ?? `${row?.garten?.person?.fullname ?? 'kein Name'}`
-  const art = artLabelFromKultur({ kultur: row, store })
-  const herkunft = row?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-  const zwischenlager = row?.zwischenlager ? `, Zwischenlager` : ''
-  const label = `${art}, von: ${herkunft}, in: ${garten}${zwischenlager}`
+  const label = treeLabelKultur({ kultur: row, store })
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>

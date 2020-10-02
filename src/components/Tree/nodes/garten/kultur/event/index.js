@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import eventLabelFromEvent from '../../../../../../utils/eventLabelFromEvent'
 
 export default ({ store }) => {
   const { showGarten, visibleOpenNodes, garten, gartenKultur } = store.tree
@@ -25,26 +25,15 @@ export default ({ store }) => {
     const events = store.eventsFiltered.filter((t) => t.kultur_id === kulturId)
 
     return events
-      .map((el) => {
-        const datum = el.datum
-          ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
-          : null
-        const geplant = el.geplant ? ' (geplant)' : ''
-        const eventLabel = `${
-          el?.beschreibung ?? '(nicht beschrieben)'
-        }${geplant}`
-        const label = `${datum || '(kein Datum)'}: ${eventLabel}`
-
-        return {
-          nodeType: 'table',
-          menuTitle: 'Event',
-          table: 'event',
-          id: `${gartenId}${kulturId}${el.id}`,
-          label,
-          url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Events', el.id],
-          hasChildren: false,
-        }
-      })
+      .map((el) => ({
+        nodeType: 'table',
+        menuTitle: 'Event',
+        table: 'event',
+        id: `${gartenId}${kulturId}${el.id}`,
+        label: eventLabelFromEvent({ event: el }),
+        url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Events', el.id],
+        hasChildren: false,
+      }))
       .map((el, index) => {
         el.sort = [4, gartenIndex, 1, kulturIndex, 5, index]
         return el
