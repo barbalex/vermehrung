@@ -3,7 +3,7 @@ import groupBy from 'lodash/groupBy'
 
 import exists from '../../../../../../utils/exists'
 import artLabelFromArt from '../../../../../../utils/artLabelFromArt'
-import artLabelFromSammlung from '../../../../../../utils/artLabelFromSammlung'
+import treeLabelKultur from '../../../../../../utils/treeLabelKultur'
 import treeLabelSammlung from '../../../../../../utils/treeLabelSammlung'
 
 export default ({ artId, store }) => {
@@ -148,44 +148,26 @@ export default ({ artId, store }) => {
       kultursSorted
         .filter((s) => s.art_id === artId)
         .filter((s) => !exists(s.von_anzahl_individuen))
-        .map((k) => {
-          const garten =
-            k?.garten?.name ?? `${k?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const text = `von: ${herkunft}, in: ${garten}`
-
-          return {
-            url: ['Arten', artId, 'Kulturen', k.id],
-            text,
-          }
-        }),
+        .map((k) => ({
+          url: ['Arten', artId, 'Kulturen', k.id],
+          text: treeLabelKultur({ kultur: k, store }),
+        })),
     kultursWithoutGarten: () =>
       kultursSorted
         .filter((s) => s.art_id === artId)
         .filter((s) => !s.garten_id)
-        .map((k) => {
-          const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const text = `ID: ${k.id}, von: ${herkunft}`
-
-          return {
-            url: ['Arten', artId, 'Kulturen', k.id],
-            text,
-          }
-        }),
+        .map((k) => ({
+          url: ['Arten', artId, 'Kulturen', k.id],
+          text: treeLabelKultur({ kultur: k, store }),
+        })),
     kultursWithoutHerkunft: () =>
       kultursSorted
         .filter((s) => s.art_id === artId)
         .filter((s) => !s.herkunft_id)
-        .map((k) => {
-          const garten =
-            k?.garten?.name ?? `${k?.garten?.person?.fullname ?? 'kein Name'}`
-          const text = `ID: ${k.id}, in: ${garten}`
-
-          return {
-            url: ['Arten', artId, 'Kulturen', k.id],
-            text,
-          }
-        }),
+        .map((k) => ({
+          url: ['Arten', artId, 'Kulturen', k.id],
+          text: treeLabelKultur({ kultur: k, store }),
+        })),
     kultursWithoutZaehlungThisYear: () =>
       kultursSorted
         .filter((s) => s.art_id === artId)
@@ -198,17 +180,10 @@ export default ({ artId, store }) => {
                   z.datum && z.datum > startYear && z.datum < startNextYear,
               ).length === 0,
         )
-        .map((k) => {
-          const garten =
-            k?.garten?.name ?? `${k?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const text = `von: ${herkunft}, in: ${garten}`
-
-          return {
-            url: ['Arten', artId, 'Kulturen', k.id],
-            text,
-          }
-        }),
+        .map((k) => ({
+          url: ['Arten', artId, 'Kulturen', k.id],
+          text: treeLabelKultur({ kultur: k, store }),
+        })),
     teilkultursWithoutName: () =>
       teilkultursSorted
         .filter((tk) => {
@@ -218,11 +193,12 @@ export default ({ artId, store }) => {
         })
         .filter((tk) => !tk.name)
         .map((tk) => {
-          const garten =
-            tk.kultur?.garten?.name ??
-            `${tk.kultur?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = tk.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const text = `von: ${herkunft}, in: ${garten}, Teilkultur-ID: ${tk.id}`
+          const kultur = tk.kultur_id ? store.kulturs.get(tk.kultur_id) : {}
+          const kulturLabel = treeLabelKultur({
+            kultur,
+            store,
+          })
+          const text = `${kulturLabel}, Teilkultur-ID: ${tk.id}`
 
           return {
             url: [
@@ -242,11 +218,12 @@ export default ({ artId, store }) => {
         .filter((z) => !!z.datum)
         .filter((z) => new Date(z.datum).getTime() > now)
         .map((z) => {
-          const garten =
-            z?.kultur?.garten?.name ??
-            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          const kulturLabel = treeLabelKultur({
+            kultur,
+            store,
+          })
+          const text = `${kulturLabel}, Zählung-ID: ${z.id}`
 
           return {
             url: ['Arten', artId, 'Kulturen', z.id, 'Zaehlungen', z.id],
@@ -258,11 +235,12 @@ export default ({ artId, store }) => {
         .filter((z) => z?.kultur?.art_id === artId)
         .filter((z) => !z.datum)
         .map((z) => {
-          const garten =
-            z?.kultur?.garten?.name ??
-            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          const kulturLabel = treeLabelKultur({
+            kultur,
+            store,
+          })
+          const text = `${kulturLabel}, Zählung-ID: ${z.id}`
 
           return {
             url: ['Arten', artId, 'Kulturen', z.id, 'Zaehlungen', z.id],
@@ -279,16 +257,17 @@ export default ({ artId, store }) => {
               .filter((tz) => !exists(tz.anzahl_pflanzen)).length,
         )
         .map((z) => {
-          const garten =
-            z?.kultur?.garten?.name ??
-            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          const kulturLabel = treeLabelKultur({
+            kultur,
+            store,
+          })
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
           const anzTz = (z?.teilzaehlungs ?? []).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-          const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
+          const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
           return {
             url: ['Arten', artId, 'Kulturen', z?.kultur.id, 'Zaehlungen', z.id],
@@ -305,16 +284,17 @@ export default ({ artId, store }) => {
               .filter((tz) => !exists(tz.anzahl_auspflanzbereit)).length,
         )
         .map((z) => {
-          const garten =
-            z?.kultur?.garten?.name ??
-            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          const kulturLabel = treeLabelKultur({
+            kultur,
+            store,
+          })
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
           const anzTz = (z?.teilzaehlungs ?? []).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-          const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
+          const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
           return {
             url: ['Arten', artId, 'Kulturen', z?.kultur.id, 'Zaehlungen', z.id],
@@ -331,16 +311,17 @@ export default ({ artId, store }) => {
               .filter((tz) => !exists(tz.anzahl_mutterpflanzen)).length,
         )
         .map((z) => {
-          const garten =
-            z?.kultur?.garten?.name ??
-            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          const kulturLabel = treeLabelKultur({
+            kultur,
+            store,
+          })
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
           const anzTz = (z?.teilzaehlungs ?? []).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-          const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
+          const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
           return {
             url: [
@@ -364,16 +345,17 @@ export default ({ artId, store }) => {
             (z.teilzaehlungs || []).filter((tz) => !tz.teilkultur_id).length,
         )
         .map((z) => {
-          const garten =
-            z?.kultur?.garten?.name ??
-            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          const kulturLabel = treeLabelKultur({
+            kultur,
+            store,
+          })
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
           const anzTz = (z?.teilzaehlungs ?? []).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-          const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
+          const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
           return {
             url: [
@@ -541,11 +523,12 @@ export default ({ artId, store }) => {
         .filter((e) => e?.kultur?.art_id === artId)
         .filter((e) => !e.beschreibung)
         .map((e) => {
-          const garten =
-            e?.kultur?.garten?.name ??
-            `${e?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = e?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${e.id}`
+          const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
+          const kulturLabel = treeLabelKultur({
+            kultur,
+            store,
+          })
+          const text = `${kulturLabel}, Event-ID: ${e.id}`
 
           return {
             url: ['Arten', artId, 'Kulturen', e?.kultur?.id, 'Events', e.id],
@@ -557,11 +540,12 @@ export default ({ artId, store }) => {
         .filter((e) => e?.kultur?.art_id === artId)
         .filter((e) => !e.datum)
         .map((e) => {
-          const garten =
-            e?.kultur?.garten?.name ??
-            `${e?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = e?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${e.id}`
+          const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
+          const kulturLabel = treeLabelKultur({
+            kultur,
+            store,
+          })
+          const text = `${kulturLabel}, Event-ID: ${e.id}`
 
           return {
             url: ['Arten', artId, 'Kulturen', e?.kultur.id, 'Events', e.id],
