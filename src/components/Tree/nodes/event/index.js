@@ -1,5 +1,6 @@
 import isEqual from 'lodash/isEqual'
-import { DateTime } from 'luxon'
+
+import eventLabelFromEvent from '../../../../utils/eventLabelFromEvent'
 
 export default ({ store }) => {
   const { visibleOpenNodes, showEvent } = store.tree
@@ -9,26 +10,15 @@ export default ({ store }) => {
     store.eventsFiltered
       // only show if parent node exists
       .filter(() => visibleOpenNodes.some((node) => isEqual(['Events'], node)))
-      .map((el) => {
-        const datum = el.datum
-          ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
-          : null
-        const geplant = el.geplant ? ' (geplant)' : ''
-        const eventLabel = `${
-          el?.beschreibung ?? '(nicht beschrieben)'
-        }${geplant}`
-        const label = `${datum || '(kein Datum)'}: ${eventLabel}`
-
-        return {
-          nodeType: 'table',
-          menuTitle: 'Event',
-          table: 'event',
-          id: el.id,
-          label,
-          url: ['Events', el.id],
-          hasChildren: false,
-        }
-      })
+      .map((el) => ({
+        nodeType: 'table',
+        menuTitle: 'Event',
+        table: 'event',
+        id: el.id,
+        label: eventLabelFromEvent({ event: el }),
+        url: ['Events', el.id],
+        hasChildren: false,
+      }))
       .map((el, index) => {
         el.sort = [10, index]
         return el
