@@ -141,22 +141,24 @@ export default ({ kulturId, store }) => {
         .filter((z) => z.kultur_id === kulturId)
         .filter(
           (z) =>
-            (z.teilzaehlungs ?? [])
+            [...store.teilzaehlungs.values()]
+              .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_pflanzen)).length,
         )
         .map((z) => {
-          const garten =
-            z.kultur?.garten?.name ??
-            `${z.kultur?.garten?.person?.fullname ?? 'kein Name'}`
-          const herkunft = z.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const zaehlung = z.datum
+          const kultur = z?.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          const gartenLabel = gartenLabelFromKultur({ kultur, store })
+          const herkunftLabel = herkunftLabelFromKultur({ kultur, store })
+          const zaehlungLabel = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = (z.teilzaehlungs ?? []).filter((tz) => !tz._deleted)
-            .length
+          const tzs = [...store.teilzaehlungs.values()]
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .filter((tz) => !tz._deleted)
+          const anzTz = tzs.length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-          const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
+          const text = `von: ${herkunftLabel}, in: ${gartenLabel}, ${zaehlungLabel}${teilzaehlung}`
 
           return {
             url: [
@@ -175,7 +177,8 @@ export default ({ kulturId, store }) => {
         .filter((z) => z.kultur_id === kulturId)
         .filter(
           (z) =>
-            (z.teilzaehlungs ?? [])
+            [...store.teilzaehlungs.values()]
+              .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_auspflanzbereit)).length,
         )
@@ -187,8 +190,9 @@ export default ({ kulturId, store }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = (z.teilzaehlungs ?? []).filter((tz) => !tz._deleted)
-            .length
+          const anzTz = [...store.teilzaehlungs.values()]
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
           const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
 
@@ -209,7 +213,8 @@ export default ({ kulturId, store }) => {
         .filter((z) => z.kultur_id === kulturId)
         .filter(
           (z) =>
-            (z.teilzaehlungs ?? [])
+            [...store.teilzaehlungs.values()]
+              .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_mutterpflanzen)).length,
         )
@@ -221,8 +226,9 @@ export default ({ kulturId, store }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = (z.teilzaehlungs ?? []).filter((tz) => !tz._deleted)
-            .length
+          const anzTz = [...store.teilzaehlungs.values()]
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
           const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
 
