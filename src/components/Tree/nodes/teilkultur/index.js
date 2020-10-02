@@ -1,5 +1,7 @@
 import isEqual from 'lodash/isEqual'
 
+import teilkulturLabelFromTeilkultur from '../../../../utils/teilkulturLabelFromTeilkultur'
+
 export default ({ store }) => {
   const { showTeilkultur, visibleOpenNodes } = store.tree
 
@@ -17,7 +19,7 @@ export default ({ store }) => {
           menuTitle: 'Teilkultur',
           table: 'teilkultur',
           id: el.id,
-          label: el.name || '(kein Name)',
+          label: teilkulturLabelFromTeilkultur({ teilkultur: el }),
           url: ['Teilkulturen', el.id],
           hasChildren: false,
         }
