@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
+import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -35,20 +36,10 @@ const HerkunftRow = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  // only show lokal if exist
-  // does not exist if user does not have right to see it
-  const lokal =
-    row.gemeinde ?? row.lokalname
-      ? `, ${row.gemeinde && `${row.gemeinde}, `}${
-          row.lokalname && row.lokalname
-        }`
-      : ''
-  const nr = row.nr || '(keine Nr.)'
-  const name = `${nr}${lokal}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{name}</div>
+      <div>{herkunftLabelFromHerkunft({ herkunft: row })}</div>
     </Row>
   )
 }
