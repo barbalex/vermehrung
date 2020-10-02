@@ -64,7 +64,7 @@ export default async ({
   // 2. Get Zählungen
   const zaehlungs = zaehlungsSorted.filter((z) => z.kultur_id === kultur_id)
   const zaehlungen = zaehlungs.map((z) => {
-    const tknodes = z?.teilzaehlungs_aggregate?.nodes ?? []
+    //const tknodes = z?.teilzaehlungs_aggregate?.nodes ?? []
     const newZ = {
       id: z.id,
       kultur_id: z.kultur_id,
@@ -79,18 +79,22 @@ export default async ({
         '',
       teilzaehlungen_anzahl_mutterpflanzen:
         z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ?? '',
-      teilzaehlungen_ids: tknodes
+      /*teilzaehlungen_ids: tknodes
         .filter((tk) => !!tk?.id)
         .map((tk) => tk?.id)
         .join(', '),
       teilzaehlungen_teilkulturen: tknodes
-        .filter((tk) => !!tk?.teilkultur?.name)
-        .map((tk) => tk?.teilkultur?.name)
+        .filter((tk) => {
+          return !!tk?.teilkultur?.name
+        })
+        .map((tk) => {
+          return tk?.teilkultur?.name
+        })
         .join(', '),
       teilzaehlungen_andere_mengen: tknodes
         .filter((tk) => !!tk?.andere_menge)
         .map((tk) => tk?.andere_menge)
-        .join(', '),
+        .join(', '),*/
     }
     return newZ
   })
@@ -108,11 +112,14 @@ export default async ({
     (t) => t?.zaehlung?.kultur_id === kultur_id,
   )
   const teilzaehlungen = teilzaehlungenArray.map((t) => {
+    const teilkultur = t.teilkultur_id
+      ? store.teilkulturs.get(t.teilkultur_id)
+      : {}
     const newZ = {
       id: t.id,
       zaehlung_id: t.zaehlung_id,
       teilkultur_id: t.teilkultur_id,
-      teilkultur_name: t?.teilkultur?.name ?? '',
+      teilkultur_name: teilkultur?.name ?? '',
       anzahl_pflanzen: t.anzahl_pflanzen,
       anzahl_auspflanzbereit: t.anzahl_auspflanzbereit,
       anzahl_mutterpflanzen: t.anzahl_mutterpflanzen,
@@ -400,13 +407,16 @@ export default async ({
   // 6. Get Events
   const eventsArray = eventsSorted.filter((e) => e.kultur_id === kultur_id)
   const events = eventsArray.map((e) => {
+    const teilkultur = e.teilkultur_id
+      ? store.teilkulturs.get(e.teilkultur_id)
+      : {}
     const newZ = {
       id: e.id,
       kultur_id: e.kultur_id,
       teilkultur_id: e.teilkultur_id,
-      teilkultur_name: e?.teilkultur?.name ?? '',
+      teilkultur_name: teilkultur?.name ?? '',
       teilkultur_rohdaten: removeMetadataFromDataset({
-        dataset: e?.teilkultur,
+        dataset: teilkultur,
         foreignKeys: [],
       }),
       person_id: e.person_id,
