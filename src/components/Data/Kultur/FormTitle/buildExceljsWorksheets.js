@@ -26,15 +26,19 @@ export default async ({
     const kultur = store.kulturs.get(kultur_id)
     const art = kultur.art_id ? store.arts.get(kultur.art_id) : {}
     const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
+    const herkunft = kultur?.herkunft_id
+      ? store.herkunfts.get(kultur.herkunft_id)
+      : {}
+
     const newK = {
       id: kultur.id,
       art_id: kultur.art_id,
       art_ae_id: aeArt?.id ?? '',
       art_ae_name: artLabelFromKultur({ kultur, store }),
       herkunft_id: kultur.herkunft_id,
-      herkunft_nr: kultur?.herkunft?.nr ?? '',
+      herkunft_nr: herkunft?.nr ?? '',
       herkunft_rohdaten: removeMetadataFromDataset({
-        dataset: kultur?.herkunft,
+        dataset: herkunft,
         foreignKeys: ['sammlungs'],
       }),
       garten_id: kultur.garten_id,
@@ -103,18 +107,18 @@ export default async ({
   const teilzaehlungenArray = teilzaehlungsSorted.filter(
     (t) => t?.zaehlung?.kultur_id === kultur_id,
   )
-  const teilzaehlungen = teilzaehlungenArray.map((z) => {
+  const teilzaehlungen = teilzaehlungenArray.map((t) => {
     const newZ = {
-      id: z.id,
-      zaehlung_id: z.zaehlung_id,
-      teilkultur_id: z.teilkultur_id,
-      teilkultur_name: z?.teilkultur?.name ?? '',
-      anzahl_pflanzen: z.anzahl_pflanzen,
-      anzahl_auspflanzbereit: z.anzahl_auspflanzbereit,
-      anzahl_mutterpflanzen: z.anzahl_mutterpflanzen,
-      andere_menge: z.andere_menge,
-      auspflanzbereit_beschreibung: z.auspflanzbereit_beschreibung,
-      bemerkungen: z.bemerkungen,
+      id: t.id,
+      zaehlung_id: t.zaehlung_id,
+      teilkultur_id: t.teilkultur_id,
+      teilkultur_name: t?.teilkultur?.name ?? '',
+      anzahl_pflanzen: t.anzahl_pflanzen,
+      anzahl_auspflanzbereit: t.anzahl_auspflanzbereit,
+      anzahl_mutterpflanzen: t.anzahl_mutterpflanzen,
+      andere_menge: t.andere_menge,
+      auspflanzbereit_beschreibung: t.auspflanzbereit_beschreibung,
+      bemerkungen: t.bemerkungen,
     }
     return newZ
   })
@@ -131,14 +135,43 @@ export default async ({
   const anlieferungenArray = lieferungsSorted.filter(
     (l) => l.nach_kultur_id === kultur_id,
   )
-  const anlieferungen = anlieferungenArray.map((z) => {
-    const art = z.art_id ? store.arts.get(z.art_id) : {}
+  const anlieferungen = anlieferungenArray.map((l) => {
+    const art = l.art_id ? store.arts.get(l.art_id) : {}
     const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
+    const lieferungPerson = l.person_id ? store.persons.get(l.person_id) : {}
+    const vonSammlung = l?.von_sammlung_id
+      ? store.sammlungs.get(l.von_sammlung_id)
+      : {}
+    const vonSammlungPerson = vonSammlung?.person_id
+      ? store.persons.get(vonSammlung?.person_id)
+      : {}
+    const vonSammlungHerkunft = vonSammlung?.herkunft_id
+      ? store.herkunfts.get(vonSammlung?.herkunft_id)
+      : {}
+    const vonKultur = l?.kultur_id ? store.kulturs.get(l.kultur_id) : {}
+    const vonKulturGarten = vonKultur?.garten_id
+      ? store.gartens.get(vonKultur.garten_id)
+      : {}
+    const vonKulturHerkunft = vonKultur.herkunft_id
+      ? store.herkunfts.get(vonKultur.herkunft_id)
+      : {}
+    const nachKultur = l.nach_kultur_id
+      ? store.kulturs.get(l.nach_kultur_id)
+      : {}
+    const nachKulturGarten = nachKultur.garten_id
+      ? store.gartens.get(nachKultur.garten_id)
+      : {}
+    const nachKulturHerkunft = nachKultur.herkunft_id
+      ? store.herkunfts.get(nachKultur.herkunft_id)
+      : {}
+    const sammelLieferung = l.sammel_lieferung_id
+      ? store.sammel_lieferungs.get(l.l.sammel_lieferung_id)
+      : {}
     const newZ = {
-      id: z.id,
-      sammel_lieferung_id: z.sammel_lieferung_id,
+      id: l.id,
+      sammel_lieferung_id: l.sammel_lieferung_id,
       sammel_lieferung_rohdaten: removeMetadataFromDataset({
-        dataset: z?.sammel_lieferung,
+        dataset: sammelLieferung,
         foreignKeys: [
           'art',
           'garten',
@@ -150,32 +183,32 @@ export default async ({
           'zaehlungs',
         ],
       }),
-      art_id: z.art_id,
+      art_id: l.art_id,
       art_ae_id: aeArt?.id ?? '',
-      art_ae_name: artLabelFromLieferung({ lieferung: z, store }),
-      person_id: z.person_id,
-      person_name: z?.person?.fullname ?? '',
+      art_ae_name: artLabelFromLieferung({ lieferung: l, store }),
+      person_id: l.person_id,
+      person_name: lieferungPerson?.fullname ?? '',
       person_rohdaten: removeMetadataFromDataset({
-        dataset: z?.person,
+        dataset: lieferungPerson,
         foreignKeys: [],
       }),
-      von_sammlung_id: z.von_sammlung_id,
-      von_sammlung_datum: z?.sammlung?.datum ?? '',
-      von_sammlung_herkunft_id: z?.sammlung?.herkunft_id ?? '',
-      von_sammlung_herkunft_nr: z?.sammlung?.herkunft?.nr ?? '',
-      von_sammlung_person_id: z?.sammlung?.person_id ?? '',
-      von_sammlung_person_name: z?.sammlung?.person?.fullname ?? '',
+      von_sammlung_id: l.von_sammlung_id,
+      von_sammlung_datum: vonSammlung?.datum ?? '',
+      von_sammlung_herkunft_id: vonSammlung?.herkunft_id ?? '',
+      von_sammlung_herkunft_nr: vonSammlungHerkunft?.nr ?? '',
+      von_sammlung_person_id: vonSammlung?.person_id ?? '',
+      von_sammlung_person_name: vonSammlungPerson?.fullname ?? '',
       von_sammlung_rohdaten: removeMetadataFromDataset({
-        dataset: z?.sammlung,
+        dataset: vonSammlung,
         foreignKeys: [],
       }),
-      von_kultur_id: z.von_kultur_id,
-      von_kultur_garten_id: z?.kulturByVonKulturId?.garten_id ?? '',
-      von_kultur_garten_name: z?.kulturByVonKulturId?.garten?.name ?? '',
-      von_kultur_herkunft_id: z?.kulturByVonKulturId?.herkunft_id ?? '',
-      von_kultur_herkunft_nr: z?.kulturByVonKulturId?.herkunft?.nr ?? '',
+      von_kultur_id: l.von_kultur_id,
+      von_kultur_garten_id: vonKultur?.garten_id ?? '',
+      von_kultur_garten_name: vonKulturGarten?.name ?? '',
+      von_kultur_herkunft_id: vonKultur?.herkunft_id ?? '',
+      von_kultur_herkunft_nr: vonKulturHerkunft?.nr ?? '',
       von_kultur_rohdaten: removeMetadataFromDataset({
-        dataset: z?.kulturByVonKulturId,
+        dataset: vonKultur,
         foreignKeys: [
           'art',
           'garten',
@@ -187,14 +220,14 @@ export default async ({
           'zaehlungs',
         ],
       }),
-      datum: z.datum,
-      nach_kultur_id: z.nach_kultur_id,
-      nach_kultur_garten_id: z?.kulturByNachKulturId?.garten_id ?? '',
-      nach_kultur_garten_name: z?.kulturByNachKulturId?.garten?.name ?? '',
-      nach_kultur_herkunft_id: z?.kulturByNachKulturId?.herkunft_id ?? '',
-      nach_kultur_herkunft_nr: z?.kulturByNachKulturId?.herkunft?.nr ?? '',
+      datum: l.datum,
+      nach_kultur_id: l.nach_kultur_id,
+      nach_kultur_garten_id: nachKultur?.garten_id ?? '',
+      nach_kultur_garten_name: nachKulturGarten?.name ?? '',
+      nach_kultur_herkunft_id: nachKultur?.herkunft_id ?? '',
+      nach_kultur_herkunft_nr: nachKulturHerkunft?.nr ?? '',
       nach_kultur_rohdaten: removeMetadataFromDataset({
-        dataset: z?.kulturByNachKulturId,
+        dataset: nachKultur,
         foreignKeys: [
           'art',
           'garten',
@@ -212,16 +245,16 @@ export default async ({
           'zaehlungsPlanned',
         ],
       }),
-      nach_ausgepflanzt: z.nach_ausgepflanzt,
-      von_anzahl_individuen: z.von_anzahl_individuen,
-      anzahl_pflanzen: z.anzahl_pflanzen,
-      anzahl_auspflanzbereit: z.anzahl_auspflanzbereit,
-      gramm_samen: z.gramm_samen,
-      andere_menge: z.andere_menge,
-      geplant: z.geplant,
-      bemerkungen: z.bemerkungen,
-      changed: z.changed,
-      changed_by: z.changed_by,
+      nach_ausgepflanzt: l.nach_ausgepflanzt,
+      von_anzahl_individuen: l.von_anzahl_individuen,
+      anzahl_pflanzen: l.anzahl_pflanzen,
+      anzahl_auspflanzbereit: l.anzahl_auspflanzbereit,
+      gramm_samen: l.gramm_samen,
+      andere_menge: l.andere_menge,
+      geplant: l.geplant,
+      bemerkungen: l.bemerkungen,
+      changed: l.changed,
+      changed_by: l.changed_by,
     }
     return newZ
   })
@@ -238,14 +271,43 @@ export default async ({
   const auslieferungenArray = lieferungsSorted.filter(
     (l) => l.von_kultur_id === kultur_id,
   )
-  const auslieferungen = auslieferungenArray.map((z) => {
-    const art = z.art_id ? store.arts.get(z.art_id) : {}
+  const auslieferungen = auslieferungenArray.map((l) => {
+    const art = l.art_id ? store.arts.get(l.art_id) : {}
     const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
+    const lieferungPerson = l.person_id ? store.persons.get(l.person_id) : {}
+    const vonSammlung = l?.von_sammlung_id
+      ? store.sammlungs.get(l.von_sammlung_id)
+      : {}
+    const vonSammlungPerson = vonSammlung?.person_id
+      ? store.persons.get(vonSammlung?.person_id)
+      : {}
+    const vonSammlungHerkunft = vonSammlung?.herkunft_id
+      ? store.herkunfts.get(vonSammlung?.herkunft_id)
+      : {}
+    const vonKultur = l?.kultur_id ? store.kulturs.get(l.kultur_id) : {}
+    const vonKulturGarten = vonKultur?.garten_id
+      ? store.gartens.get(vonKultur.garten_id)
+      : {}
+    const vonKulturHerkunft = vonKultur.herkunft_id
+      ? store.herkunfts.get(vonKultur.herkunft_id)
+      : {}
+    const nachKultur = l.nach_kultur_id
+      ? store.kulturs.get(l.nach_kultur_id)
+      : {}
+    const nachKulturGarten = nachKultur.garten_id
+      ? store.gartens.get(nachKultur.garten_id)
+      : {}
+    const nachKulturHerkunft = nachKultur.herkunft_id
+      ? store.herkunfts.get(nachKultur.herkunft_id)
+      : {}
+    const sammelLieferung = l.sammel_lieferung_id
+      ? store.sammel_lieferungs.get(l.l.sammel_lieferung_id)
+      : {}
     const newZ = {
-      id: z.id,
-      sammel_lieferung_id: z.sammel_lieferung_id,
+      id: l.id,
+      sammel_lieferung_id: l.sammel_lieferung_id,
       sammel_lieferung_rohdaten: removeMetadataFromDataset({
-        dataset: z?.sammel_lieferung,
+        dataset: sammelLieferung,
         foreignKeys: [
           'art',
           'garten',
@@ -257,32 +319,32 @@ export default async ({
           'zaehlungs',
         ],
       }),
-      art_id: z.art_id,
+      art_id: l.art_id,
       art_ae_id: aeArt?.id ?? '',
-      art_ae_name: artLabelFromLieferung({ lieferung: z, store }),
-      person_id: z.person_id,
-      person_name: z?.person?.fullname ?? '',
+      art_ae_name: artLabelFromLieferung({ lieferung: l, store }),
+      person_id: l.person_id,
+      person_name: lieferungPerson?.fullname ?? '',
       person_rohdaten: removeMetadataFromDataset({
-        dataset: z?.person,
+        dataset: lieferungPerson,
         foreignKeys: [],
       }),
-      von_sammlung_id: z.von_sammlung_id,
-      von_sammlung_datum: z?.sammlung?.datum ?? '',
-      von_sammlung_herkunft_id: z?.sammlung?.herkunft_id ?? '',
-      von_sammlung_herkunft_nr: z?.sammlung?.herkunft?.nr ?? '',
-      von_sammlung_person_id: z?.sammlung?.person_id ?? '',
-      von_sammlung_person_name: z?.sammlung?.person?.fullname ?? '',
+      von_sammlung_id: l.von_sammlung_id,
+      von_sammlung_datum: vonSammlung?.datum ?? '',
+      von_sammlung_herkunft_id: vonSammlung?.herkunft_id ?? '',
+      von_sammlung_herkunft_nr: vonSammlungHerkunft?.nr ?? '',
+      von_sammlung_person_id: vonSammlung?.person_id ?? '',
+      von_sammlung_person_name: vonSammlungPerson?.fullname ?? '',
       von_sammlung_rohdaten: removeMetadataFromDataset({
-        dataset: z?.sammlung,
+        dataset: vonSammlung,
         foreignKeys: [],
       }),
-      von_kultur_id: z.von_kultur_id,
-      von_kultur_garten_id: z?.kulturByVonKulturId?.garten_id ?? '',
-      von_kultur_garten_name: z?.kulturByVonKulturId?.garten?.name ?? '',
-      von_kultur_herkunft_id: z?.kulturByVonKulturId?.herkunft_id ?? '',
-      von_kultur_herkunft_nr: z?.kulturByVonKulturId?.herkunft?.nr ?? '',
+      von_kultur_id: l.von_kultur_id,
+      von_kultur_garten_id: vonKultur?.garten_id ?? '',
+      von_kultur_garten_name: vonKulturGarten?.name ?? '',
+      von_kultur_herkunft_id: vonKultur?.herkunft_id ?? '',
+      von_kultur_herkunft_nr: vonKulturHerkunft?.nr ?? '',
       von_kultur_rohdaten: removeMetadataFromDataset({
-        dataset: z?.kulturByVonKulturId,
+        dataset: vonKultur,
         foreignKeys: [
           'art',
           'garten',
@@ -294,14 +356,14 @@ export default async ({
           'zaehlungs',
         ],
       }),
-      datum: z.datum,
-      nach_kultur_id: z.nach_kultur_id,
-      nach_kultur_garten_id: z?.kulturByNachKulturId?.garten_id ?? '',
-      nach_kultur_garten_name: z?.kulturByNachKulturId?.garten?.name ?? '',
-      nach_kultur_herkunft_id: z?.kulturByNachKulturId?.herkunft_id ?? '',
-      nach_kultur_herkunft_nr: z?.kulturByNachKulturId?.herkunft?.nr ?? '',
+      datum: l.datum,
+      nach_kultur_id: l.nach_kultur_id,
+      nach_kultur_garten_id: nachKultur?.garten_id ?? '',
+      nach_kultur_garten_name: nachKulturGarten?.name ?? '',
+      nach_kultur_herkunft_id: nachKultur?.herkunft_id ?? '',
+      nach_kultur_herkunft_nr: nachKulturHerkunft?.nr ?? '',
       nach_kultur_rohdaten: removeMetadataFromDataset({
-        dataset: z?.kulturByNachKulturId,
+        dataset: nachKultur,
         foreignKeys: [
           'art',
           'garten',
@@ -313,16 +375,16 @@ export default async ({
           'zaehlungs',
         ],
       }),
-      nach_ausgepflanzt: z.nach_ausgepflanzt,
-      von_anzahl_individuen: z.von_anzahl_individuen,
-      anzahl_pflanzen: z.anzahl_pflanzen,
-      anzahl_auspflanzbereit: z.anzahl_auspflanzbereit,
-      gramm_samen: z.gramm_samen,
-      andere_menge: z.andere_menge,
-      geplant: z.geplant,
-      bemerkungen: z.bemerkungen,
-      changed: z.changed,
-      changed_by: z.changed_by,
+      nach_ausgepflanzt: l.nach_ausgepflanzt,
+      von_anzahl_individuen: l.von_anzahl_individuen,
+      anzahl_pflanzen: l.anzahl_pflanzen,
+      anzahl_auspflanzbereit: l.anzahl_auspflanzbereit,
+      gramm_samen: l.gramm_samen,
+      andere_menge: l.andere_menge,
+      geplant: l.geplant,
+      bemerkungen: l.bemerkungen,
+      changed: l.changed,
+      changed_by: l.changed_by,
     }
     return newZ
   })
@@ -337,30 +399,30 @@ export default async ({
   }
   // 6. Get Events
   const eventsArray = eventsSorted.filter((e) => e.kultur_id === kultur_id)
-  const events = eventsArray.map((z) => {
+  const events = eventsArray.map((e) => {
     const newZ = {
-      id: z.id,
-      kultur_id: z.kultur_id,
-      teilkultur_id: z.teilkultur_id,
-      teilkultur_name: z?.teilkultur?.name ?? '',
+      id: e.id,
+      kultur_id: e.kultur_id,
+      teilkultur_id: e.teilkultur_id,
+      teilkultur_name: e?.teilkultur?.name ?? '',
       teilkultur_rohdaten: removeMetadataFromDataset({
-        dataset: z?.teilkultur,
+        dataset: e?.teilkultur,
         foreignKeys: [],
       }),
-      person_id: z.person_id,
-      person_name: z?.person?.fullname ?? '',
+      person_id: e.person_id,
+      person_name: e?.person?.fullname ?? '',
       person_rohdaten: removeMetadataFromDataset({
-        dataset: z?.person,
+        dataset: e?.person,
         foreignKeys: [],
       }),
-      beschreibung: z.beschreibung,
-      geplant: z.geplant,
-      datum: z.datum,
-      changed: z.changed,
-      changed_by: z.changed_by,
+      beschreibung: e.beschreibung,
+      geplant: e.geplant,
+      datum: e.datum,
+      changed: e.changed,
+      changed_by: e.changed_by,
     }
-    delete z.teilkultur
-    delete z.person
+    delete e.teilkultur
+    delete e.person
     return newZ
   })
   if (events.length) {
