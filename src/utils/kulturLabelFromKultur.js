@@ -12,12 +12,13 @@ export default ({ kultur, store }) => {
 
   const gartenName = garten?.name ?? personLabel ?? '(kein Name)'
 
-  const artName = kultur?.art?.art_ae_art?.name ?? '(keine Art)'
+  const art = kultur?.art_id ? store.arts.get(kultur.art_id) : {}
+  const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
+  const artName = aeArt?.name ?? '(keine Art)'
 
-  const label = `${gartenName}: ${artName}`
-  const labelWithZl = `${label}${
-    kultur?.zwischenlager ? '. Zwischenlager' : ''
-  }`
+  const zlLabel = kultur?.zwischenlager ? '. Zwischenlager' : ''
 
-  return labelWithZl
+  const label = `${gartenName}: ${artName}${zlLabel}`
+
+  return label
 }

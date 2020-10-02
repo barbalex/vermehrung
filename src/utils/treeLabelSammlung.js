@@ -8,18 +8,20 @@ export default ({ sammlung, store }) => {
     ? store.herkunfts.get(sammlung.herkunft_id)
     : {}
 
-  const artName = art ? aeArt?.name ?? '(Art ohne Name)' : '(keine Art)'
-  const personName = person
-    ? person?.fullname ?? '(Person ohne Name)'
+  const artLabel = art ? aeArt?.name ?? '(Art ohne Name)' : '(keine Art)'
+  const personLabel = person?.id
+    ? person?.fullname
+      ? person.fullname
+      : '(Person ohne Name)'
     : '(keine Person)'
-  const herkunftNr = herkunft
+  const herkunftLabel = herkunft?.id
     ? herkunft?.nr ?? '(Herkunft ohne Nr)'
     : '(keine Herkunft)'
   const date = sammlung?.datum
     ? DateTime.fromSQL(sammlung?.datum).toFormat('yyyy.LL.dd')
-    : 'kein Datum'
+    : '(kein Datum)'
   const geplant = sammlung?.geplant ? ' (geplant)' : ''
   return `${
     sammlung?.nr ?? '(keine Nr)'
-  }, ${date}: von ${herkunftNr}, ${personName}; ${artName}${geplant}`
+  }, ${date}: von ${herkunftLabel}, ${personLabel}; ${artLabel}${geplant}`
 }
