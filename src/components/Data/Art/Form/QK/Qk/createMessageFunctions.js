@@ -263,7 +263,8 @@ export default ({ artId, store }) => {
         })
         .filter(
           (z) =>
-            (z.teilzaehlungs ?? [])
+            [...store.teilzaehlungs.values()]
+              .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_pflanzen)).length,
         )
@@ -276,7 +277,9 @@ export default ({ artId, store }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = (z?.teilzaehlungs ?? []).length
+          const anzTz = [...store.teilzaehlungs.values()]
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
           const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
@@ -293,7 +296,8 @@ export default ({ artId, store }) => {
         })
         .filter(
           (z) =>
-            (z.teilzaehlungs ?? [])
+            [...store.teilzaehlungs.values()]
+              .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_auspflanzbereit)).length,
         )
@@ -306,7 +310,9 @@ export default ({ artId, store }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = (z?.teilzaehlungs ?? []).length
+          const anzTz = [...store.teilzaehlungs.values()]
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
           const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
@@ -323,7 +329,8 @@ export default ({ artId, store }) => {
         })
         .filter(
           (z) =>
-            (z.teilzaehlungs ?? [])
+            [...store.teilzaehlungs.values()]
+              .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_mutterpflanzen)).length,
         )
@@ -336,7 +343,9 @@ export default ({ artId, store }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = (z?.teilzaehlungs ?? []).length
+          const anzTz = [...store.teilzaehlungs.values()]
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
           const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
@@ -354,11 +363,12 @@ export default ({ artId, store }) => {
             : {}
           return kultur?.art_id === artId && !!kulturOption?.tk
         })
-        .filter(
-          (z) =>
-            (z.teilzaehlungs || []).length &&
-            (z.teilzaehlungs || []).filter((tz) => !tz.teilkultur_id).length,
-        )
+        .filter((z) => {
+          const tz = [...store.teilzaehlungs.values()]
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .filter((tz) => !tz._deleted)
+          return tz.length && tz.filter((tz) => !tz.teilkultur_id).length
+        })
         .map((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
           const kulturLabel = treeLabelKultur({
@@ -368,7 +378,9 @@ export default ({ artId, store }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = (z?.teilzaehlungs ?? []).length
+          const anzTz = [...store.teilzaehlungs.values()]
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
           const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
