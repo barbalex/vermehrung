@@ -53,7 +53,12 @@ export default ({ artId, store }) => {
     artsOhneAv: () =>
       artsSorted
         .filter((a) => a.id === artId)
-        .filter((a) => !a?.avs?.filter((av) => !av._deleted).length)
+        .filter(
+          (a) =>
+            ![...store.avs.values()]
+              .filter((av) => av.art_id === a.id)
+              .filter((av) => !av._deleted).length,
+        )
         .map((a) => ({
           url: ['Arten', a.id],
           text: artLabelFromArt({ art: a, store }),

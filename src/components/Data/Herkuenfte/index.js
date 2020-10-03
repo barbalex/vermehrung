@@ -59,9 +59,10 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
   const activeNodeArray = anaRaw.toJSON()
 
-  const hierarchyFilter = (e) => {
+  const hierarchyFilter = (h) => {
     if (sammlungIdInActiveNodeArray) {
-      return (e?.sammlungs ?? [])
+      return [...store.sammlungs.values()]
+        .filter((s) => s.herkunft_id === h.id)
         .map((s) => s.id)
         .includes(sammlungIdInActiveNodeArray)
     }
