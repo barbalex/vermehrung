@@ -61,7 +61,6 @@ let ZAEHLUNG_FRAGMENT
 
 ART_FRAGMENT = selectFromart()
   .id.ae_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_ae_art()
-  .art_files()
   .kulturs(() => KULTUR_FRAGMENT)
   .lieferungs(() => LIEFERUNG_FRAGMENT)
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
