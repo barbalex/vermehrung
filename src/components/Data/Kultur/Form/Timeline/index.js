@@ -111,7 +111,9 @@ const KulturTimeline = ({ row, width }) => {
   const zaehlungenDoneData = useMemo(
     () =>
       zaehlungenDone.map((l) => {
-        const teilzaehlungs = l?.teilzaehlungs ?? []
+        const teilzaehlungs = [...store.teilzaehlungs.values()]
+          .filter((tz) => tz.zaehlung_id === l.id)
+          .filter((tz) => !tz._deleted)
 
         return {
           datum: new Date(l.datum).getTime(),
@@ -135,12 +137,14 @@ const KulturTimeline = ({ row, width }) => {
           ereignis: 'Zählung',
         }
       }),
-    [zaehlungenDone],
+    [store.teilzaehlungs, zaehlungenDone],
   )
   const zaehlungenPlannedIncludedData = useMemo(
     () =>
       zaehlungenPlannedIncluded.map((l) => {
-        const teilzaehlungs = l?.teilzaehlungs ?? []
+        const teilzaehlungs = [...store.teilzaehlungs.values()]
+          .filter((tz) => tz.zaehlung_id === l.id)
+          .filter((tz) => !tz._deleted)
 
         return {
           datum: new Date(l.datum).getTime(),
@@ -168,12 +172,14 @@ const KulturTimeline = ({ row, width }) => {
           ereignis: 'Zählung',
         }
       }),
-    [zaehlungenPlannedIncluded],
+    [store.teilzaehlungs, zaehlungenPlannedIncluded],
   )
   const zaehlungenPlannedIgnoredData = useMemo(
     () =>
       zaehlungenPlannedIgnored.map((l) => {
-        const teilzaehlungs = l?.teilzaehlungs ?? []
+        const teilzaehlungs = [...store.teilzaehlungs.values()]
+          .filter((tz) => tz.zaehlung_id === l.id)
+          .filter((tz) => !tz._deleted)
 
         return {
           datum: new Date(l.datum).getTime(),
@@ -201,7 +207,7 @@ const KulturTimeline = ({ row, width }) => {
           ereignis: 'Zählung',
         }
       }),
-    [zaehlungenPlannedIgnored],
+    [store.teilzaehlungs, zaehlungenPlannedIgnored],
   )
   const zaehlungenDataGroupedByDatum = useMemo(
     () =>

@@ -158,11 +158,7 @@ SAMMLUNG_FRAGMENT = selectFromsammlung()
 
 SAMMLUNG_FILE_FRAGMENT = selectFromsammlung_file().id.sammlung_id.file_id.file_mime_type.name.beschreibung.toString()
 
-TEILKULTUR_FRAGMENT = selectFromteilkultur()
-  .id.kultur_id.name.ort1.ort2.ort3.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.teilzaehlungs(
-    () => TEILZAEHLUNG_FRAGMENT,
-  )
-  .toString()
+TEILKULTUR_FRAGMENT = selectFromteilkultur().id.kultur_id.name.ort1.ort2.ort3.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 TEILZAEHLUNG_FRAGMENT = selectFromteilzaehlung().id.zaehlung_id.teilkultur_id.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen.andere_menge.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
@@ -177,7 +173,6 @@ ZAEHLUNG_FRAGMENT = selectFromzaehlung()
         ),
       ),
   )
-  .teilzaehlungs(() => TEILZAEHLUNG_FRAGMENT)
   .toString()
 
 export {
