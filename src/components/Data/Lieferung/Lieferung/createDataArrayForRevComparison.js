@@ -9,6 +9,12 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => {
   const revRowPerson = revRow?.person_id
     ? store.persons.get(revRow.person_id)
     : {}
+  const rowSammlung = row?.von_sammlung_id
+    ? store.sammlungs.get(row.von_sammlung_id)
+    : {}
+  const revRowSammlung = revRow?.von_sammlung_id
+    ? store.sammlungs.get(revRow.von_sammlung_id)
+    : {}
 
   return [
     {
@@ -47,9 +53,9 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => {
       label: 'Person',
     },
     {
-      valueInRow: sammlungLabelFromSammlung({ sammlung: row.sammlung, store }),
+      valueInRow: sammlungLabelFromSammlung({ sammlung: rowSammlung, store }),
       valueInRev: sammlungLabelFromSammlung({
-        sammlung: revRow.sammlung,
+        sammlung: revRowSammlung,
         store,
       }),
       label: 'Von Sammlung',
