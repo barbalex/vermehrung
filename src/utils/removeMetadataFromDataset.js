@@ -15,7 +15,6 @@ const removeMetadata = (d) => {
   delete d.art_files
   delete d.garten_files
   delete d.herkunft_files
-  delete d.kultur_files
   delete d.art_qks
   delete d.art_qk_choosens
   delete d.kultur_qks
