@@ -15,6 +15,7 @@ import { StoreContext } from '../../../../../models/reactUtils'
 import Garten from './Garten'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -29,8 +30,7 @@ const TitleRow = styled.div`
   user-select: none;
   ${(props) => props['data-open'] && 'position: sticky;'}
   ${(props) =>
-    props['data-sticky'] &&
-    'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
+    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
   top: -10px;
   z-index: 1;
   ${(props) => !props['data-open'] && 'margin-bottom: 10px;'}
@@ -75,9 +75,9 @@ const PersonArten = ({ personId }) => {
         .filter((a) => !gvArtIds.includes(a.id))
         .map((el) => ({
           value: el.id,
-          label: el?.name ?? `${el?.person?.fullname}`,
+          label: gartenLabelFromGarten({ garten: el, store }),
         })),
-    [gartensSorted, gvArtIds],
+    [gartensSorted, gvArtIds, store],
   )
 
   const saveToDb = useCallback(
