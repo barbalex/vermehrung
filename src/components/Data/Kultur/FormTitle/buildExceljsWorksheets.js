@@ -109,9 +109,10 @@ export default async ({
     })
   }
   // 3. Get Teil-Zählungen
-  const teilzaehlungenArray = teilzaehlungsSorted.filter(
-    (t) => t?.zaehlung?.kultur_id === kultur_id,
-  )
+  const teilzaehlungenArray = teilzaehlungsSorted.filter((t) => {
+    const zaehlung = t.zaehlung_id ? store.zaehlungs.get(t.zaehlung_id) : {}
+    return zaehlung?.kultur_id === kultur_id
+  })
   const teilzaehlungen = teilzaehlungenArray.map((t) => {
     const teilkultur = t.teilkultur_id
       ? store.teilkulturs.get(t.teilkultur_id)

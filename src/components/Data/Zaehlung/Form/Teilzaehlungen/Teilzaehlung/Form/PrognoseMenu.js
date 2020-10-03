@@ -91,7 +91,7 @@ const PrognoseMenu = ({
         .filter((z) => z.datum === dateOfZaehlung)
         .filter((z) => z.prognose)
         .filter((z) => z.kultur_id === kulturId)
-      const existingZaehlung = existingZaehlungData?.zaehlung?.[0]
+      const existingZaehlung = existingZaehlungData?.[0]
       // if not: create it first
       let newZaehlungId
       // if not: create it first

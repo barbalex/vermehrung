@@ -8,8 +8,6 @@ const removeMetadata = (d) => {
   delete d._revisions
   delete d.kulturs
   delete d.sammel_lieferungs
-  delete d.zaehlung
-  delete d.sammel_lieferungs
   delete d.zaehlungs
   delete d.teilzaehlungs
   delete d.teilzaehlungs
@@ -21,7 +19,6 @@ const removeMetadata = (d) => {
   delete d.lieferung_files
   delete d.sammlung_files
   delete d.user_roles
-  delete d.userRoleByUserRole
   delete d.art_qks
   delete d.art_qk_choosens
   delete d.kultur_qks
