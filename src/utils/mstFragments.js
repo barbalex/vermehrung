@@ -85,8 +85,9 @@ AV_FRAGMENT = selectFromav().id.art_id.person_id.changed.changed_by._rev._parent
 EVENT_FRAGMENT = selectFromevent().id.kultur_id.teilkultur_id.person_id.beschreibung.geplant.datum.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 GARTEN_FRAGMENT = selectFromgarten()
-  .id.name.person_id.strasse.plz.ort.aktiv.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.garten_files()
-  .kulturs(() => KULTUR_FRAGMENT)
+  .id.name.person_id.strasse.plz.ort.aktiv.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kulturs(
+    () => KULTUR_FRAGMENT,
+  )
   .toString()
 
 GARTEN_FILE_FRAGMENT = selectFromgarten_file().id.garten_id.file_id.file_mime_type.name.beschreibung.toString()
