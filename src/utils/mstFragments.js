@@ -103,18 +103,16 @@ HERKUNFT_FRAGMENT = selectFromherkunft()
 HERKUNFT_FILE_FRAGMENT = selectFromherkunft_file().id.herkunft_id.file_id.file_mime_type.name.beschreibung.toString()
 
 KULTUR_FRAGMENT = selectFromkultur()
-  .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted
-  .kultur_qk_choosens()
-  .lieferungsByNachKulturId(() => LIEFERUNG_FRAGMENT)
+  .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungsByNachKulturId(
+    () => LIEFERUNG_FRAGMENT,
+  )
   .lieferungsByVonKulturId(() => LIEFERUNG_FRAGMENT)
   .sammelLieferungsByNachKulturId(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .zaehlungs(() => ZAEHLUNG_FRAGMENT)
   .toString()
 
-KULTUR_QK_FRAGMENT = selectFromkultur_qk()
-  .id.name.titel.beschreibung.sort.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur_qk_choosens()
-  .toString()
+KULTUR_QK_FRAGMENT = selectFromkultur_qk().id.name.titel.beschreibung.sort.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 KULTUR_QK_CHOOSEN_FRAGMENT = selectFromkultur_qk_choosen()
   .id.kultur_id.qk_name.choosen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur_qk()
