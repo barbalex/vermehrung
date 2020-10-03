@@ -44,39 +44,14 @@ const TitleRow = styled.div`
   }
 `
 
-const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded }) => {
+const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
   const store = useContext(StoreContext)
+  const { errors } = store
 
-  const { errors, herkunftsSorted } = store
-  const { activeNodeArray } = store.tree
   // BEWARE: need to include inactive kulturs, persons
   const kultursSorted = [...store.kulturs.values()].sort((a, b) =>
     kulturSort({ a, b, store }),
   )
-
-  const urlLastName = activeNodeArray[activeNodeArray.length - 2]
-  const isAnlieferung = urlLastName === 'An-Lieferungen'
-
-  const nachKultur = row.nach_kultur_id
-    ? store.kulturs.get(row.nach_kultur_id)
-    : {}
-  const nachKulturHerkunft = nachKultur.herkunft_id
-    ? store.herkunfts.get(nachKultur.herkunft_id)
-    : {}
-  const vonKultur = row.von_kultur_id
-    ? store.kulturs.get(row.von_kultur_id)
-    : {}
-  const vonKulturHerkunft = vonKultur.herkunft_id
-    ? store.herkunfts.get(vonKultur.herkunft_id)
-    : {}
-  const herkunftByKultur = isAnlieferung
-    ? nachKulturHerkunft
-    : vonKulturHerkunft
-  const vonSammlung = row?.sammlung
-  const herkunftBySammlung = vonSammlung
-    ? herkunftsSorted.find((s) => s.id === vonSammlung.herkunft_id)
-    : null
-  const herkunft = herkunftByKultur || herkunftBySammlung
 
   const nachKulturWerteData = kultursSorted
     // show only kulturen of art_id

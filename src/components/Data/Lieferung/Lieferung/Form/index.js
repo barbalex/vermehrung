@@ -43,6 +43,7 @@ const LierferungForm = ({
   const store = useContext(StoreContext)
 
   const { errors, filter, unsetError, userPersonOption, online } = store
+  const { activeNodeArray } = store.tree
 
   const { li_show_sl_felder } = userPersonOption
 
@@ -85,6 +86,31 @@ const LierferungForm = ({
     },
     [filter, row, showFilter],
   )
+
+  const urlLastName = activeNodeArray[activeNodeArray.length - 2]
+  const isAnlieferung = urlLastName === 'An-Lieferungen'
+  const nachKultur = row.nach_kultur_id
+    ? store.kulturs.get(row.nach_kultur_id)
+    : {}
+  const nachKulturHerkunft = nachKultur.herkunft_id
+    ? store.herkunfts.get(nachKultur.herkunft_id)
+    : undefined
+  const vonKultur = row.von_kultur_id
+    ? store.kulturs.get(row.von_kultur_id)
+    : {}
+  const vonKulturHerkunft = vonKultur.herkunft_id
+    ? store.herkunfts.get(vonKultur.herkunft_id)
+    : undefined
+  const herkunftByKultur = isAnlieferung
+    ? nachKulturHerkunft
+    : vonKulturHerkunft
+  const vonSammlung = row.von_sammlung_id
+    ? store.sammlungs.get(row.von_sammlung_id)
+    : {}
+  const vonSammlungHerkunft = vonSammlung?.herkunft_id
+    ? store.herkunfts.get(vonSammlung.herkunft_id)
+    : undefined
+  const herkunft = herkunftByKultur || vonSammlungHerkunft
 
   const showDeleted = showFilter || row._deleted
 
@@ -139,12 +165,15 @@ const LierferungForm = ({
           row={row}
           saveToDb={saveToDb}
           ifNeeded={ifNeeded}
+          herkunft={herkunft}
+          herkunftByKultur={herkunftByKultur}
         />
         <Nach
           showFilter={showFilter}
           row={row}
           saveToDb={saveToDb}
           ifNeeded={ifNeeded}
+          herkunft={herkunft}
         />
         {ifSomeNeeded(['datum', 'geplant']) && (
           <Wann
