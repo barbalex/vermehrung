@@ -54,39 +54,22 @@ const HerkunftLabel = styled.div`
   padding-bottom: 2px;
 `
 
-const LieferungVon = ({ showFilter, row, saveToDb, ifNeeded }) => {
+const LieferungVon = ({
+  showFilter,
+  row,
+  saveToDb,
+  ifNeeded,
+  herkunft,
+  herkunftByKultur,
+}) => {
   const store = useContext(StoreContext)
+  const { errors, sammlungsSorted } = store
 
-  const { errors, herkunftsSorted, sammlungsSorted } = store
-  const { activeNodeArray } = store.tree
   // BEWARE: need to include inactive kulturs, persons
   const kultursSorted = [...store.kulturs.values()].sort((a, b) =>
     kulturSort({ a, b, store }),
   )
 
-  const urlLastName = activeNodeArray[activeNodeArray.length - 2]
-  const isAnlieferung = urlLastName === 'An-Lieferungen'
-
-  const nachKultur = row.nach_kultur_id
-    ? store.kulturs.get(row.nach_kultur_id)
-    : {}
-  const nachKulturHerkunft = nachKultur.herkunft_id
-    ? store.herkunfts.get(nachKultur.herkunft_id)
-    : undefined
-  const vonKultur = row.von_kultur_id
-    ? store.kulturs.get(row.von_kultur_id)
-    : {}
-  const vonKulturHerkunft = vonKultur.herkunft_id
-    ? store.herkunfts.get(vonKultur.herkunft_id)
-    : undefined
-  const herkunftByKultur = isAnlieferung
-    ? nachKulturHerkunft
-    : vonKulturHerkunft
-  const vonSammlung = row?.sammlung //sammlungsSorted.find((s) => s.id === row.von_sammlung_id)
-  const herkunftBySammlung = vonSammlung
-    ? herkunftsSorted.find((s) => s.id === vonSammlung.herkunft_id)
-    : undefined
-  const herkunft = herkunftByKultur || herkunftBySammlung
   const herkunftQuelle = herkunftByKultur ? 'Kultur' : 'Sammlung'
   const herkunftValue = herkunft
     ? herkunftLabelFromHerkunft({ herkunft })
@@ -100,7 +83,7 @@ const LieferungVon = ({ showFilter, row, saveToDb, ifNeeded }) => {
     })
     // show only kulturen with same herkunft
     .filter((k) => {
-      if (herkunft?.id) return k?.herkunft_id === herkunft.id
+      if (herkunft) return k?.herkunft_id === herkunft.id
       return true
     })
     // shall not be delivered to same kultur it came from

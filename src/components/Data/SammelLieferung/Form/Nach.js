@@ -43,16 +43,15 @@ const TitleRow = styled.div`
   }
 `
 
-const SammelLieferungNach = ({ showFilter, row, ifNeeded, saveToDb }) => {
+const SammelLieferungNach = ({
+  showFilter,
+  row,
+  ifNeeded,
+  saveToDb,
+  herkunft,
+}) => {
   const store = useContext(StoreContext)
-
   const { kultursSorted, errors } = store
-
-  const herkunftByNachKultur = row?.kulturByNachKulturId?.herkunft
-  const herkunftByVonKultur = row?.kulturByVonKulturId?.herkunft
-  const herkunftBySammlung = row?.sammlung?.herkunft
-  const herkunft =
-    herkunftByNachKultur ?? herkunftByVonKultur ?? herkunftBySammlung
 
   const nachKulturWerteData = kultursSorted
     // show only kulturen of art_id

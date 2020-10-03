@@ -96,6 +96,27 @@ const SammelLieferungForm = ({
     [ifNeeded],
   )
 
+  const nachKultur = row.nach_kultur_id
+    ? store.kulturs.get(row.nach_kultur_id)
+    : {}
+  const nachKulturHerkunft = nachKultur.herkunft_id
+    ? store.herkunfts.get(nachKultur.herkunft_id)
+    : undefined
+  const vonKultur = row.von_kultur_id
+    ? store.kulturs.get(row.von_kultur_id)
+    : {}
+  const vonKulturHerkunft = vonKultur.herkunft_id
+    ? store.herkunfts.get(vonKultur.herkunft_id)
+    : undefined
+  const vonSammlung = row.von_sammlung_id
+    ? store.sammlungs.get(row.von_sammlung_id)
+    : {}
+  const vonSammlungHerkunft = vonSammlung?.herkunft_id
+    ? store.herkunfts.get(vonSammlung.herkunft_id)
+    : undefined
+  const herkunft =
+    nachKulturHerkunft ?? vonKulturHerkunft ?? vonSammlungHerkunft
+
   const showDeleted = showFilter || row._deleted
 
   return (
@@ -150,6 +171,9 @@ const SammelLieferungForm = ({
             row={row}
             ifNeeded={ifNeeded}
             saveToDb={saveToDb}
+            herkunft={herkunft}
+            nachKulturHerkunft={nachKulturHerkunft}
+            vonKulturHerkunft={vonKulturHerkunft}
           />
         )}
         {ifSomeNeeded(['nach_kultur_id', 'nach_ausgepflanzt']) && (
@@ -158,6 +182,7 @@ const SammelLieferungForm = ({
             row={row}
             ifNeeded={ifNeeded}
             saveToDb={saveToDb}
+            herkunft={herkunft}
           />
         )}
         {ifSomeNeeded(['datum', 'geplant']) && (
