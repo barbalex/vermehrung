@@ -88,22 +88,16 @@ AV_FRAGMENT = selectFromav()
   .id.art_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
     () => ART_FRAGMENT,
   )
-  .person(() => PERSON_FRAGMENT)
   .toString()
 
 EVENT_FRAGMENT = selectFromevent()
   .id.kultur_id.teilkultur_id.person_id.beschreibung.geplant.datum.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur(
     () => KULTUR_FRAGMENT,
   )
-  //.teilkultur(() => TEILKULTUR_FRAGMENT)
-  .person(() => PERSON_FRAGMENT)
   .toString()
 
 GARTEN_FRAGMENT = selectFromgarten()
-  .id.name.person_id.strasse.plz.ort.aktiv.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.person(
-    () => PERSON_FRAGMENT,
-  )
-  .garten_files()
+  .id.name.person_id.strasse.plz.ort.aktiv.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.garten_files()
   .gvs(() => GV_FRAGMENT)
   .kulturs(() => KULTUR_FRAGMENT)
   .toString()
@@ -116,7 +110,6 @@ GV_FRAGMENT = selectFromgv()
   .id.garten_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.garten(
     () => GARTEN_FRAGMENT,
   )
-  .person(() => PERSON_FRAGMENT)
   .toString()
 
 HERKUNFT_FRAGMENT = selectFromherkunft()
@@ -141,7 +134,6 @@ KULTUR_FRAGMENT = selectFromkultur()
   .lieferungsByVonKulturId(() => LIEFERUNG_FRAGMENT)
   .sammelLieferungsByNachKulturId(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
-  .teilkulturs(() => TEILKULTUR_FRAGMENT)
   .zaehlungs(() => ZAEHLUNG_FRAGMENT)
   .toString()
 
@@ -171,7 +163,6 @@ LIEFERUNG_FRAGMENT = selectFromlieferung()
   .kulturByNachKulturId(() => KULTUR_FRAGMENT)
   .kulturByVonKulturId(() => KULTUR_FRAGMENT)
   .lieferung_files()
-  .person(() => PERSON_FRAGMENT)
   .sammel_lieferung(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .sammlung(() => SAMMLUNG_FRAGMENT)
   .toString()
@@ -196,16 +187,13 @@ PERSON_FRAGMENT = selectFromperson()
 
 PERSON_OPTION_FRAGMENT = selectFromperson_option().id.ar_name_deutsch.ga_strasse.ga_plz.ga_ort.ga_geom_point.ga_lat_lng.ga_aktiv.ga_bemerkungen.hk_kanton.hk_land.hk_bemerkungen.hk_geom_point.ku_zwischenlager.ku_erhaltungskultur.li_show_sl_felder.li_show_sl.sl_show_empty_when_next_to_li.sl_auto_copy_edits.tree_kultur.tree_teilkultur.tree_zaehlung.tree_lieferung.tree_event._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
-PERSON_FILE_FRAGMENT = selectFromperson_file()
-  .id.person_id.file_id.file_mime_type.name.beschreibung.person()
-  .toString()
+PERSON_FILE_FRAGMENT = selectFromperson_file().id.person_id.file_id.file_mime_type.name.beschreibung.toString()
 
 SAMMEL_LIEFERUNG_FRAGMENT = selectFromsammel_lieferung()
   .id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungs(
     () => LIEFERUNG_FRAGMENT,
   )
   .art(() => ART_FRAGMENT)
-  .person(() => PERSON_FRAGMENT)
   .sammlung(() => SAMMLUNG_FRAGMENT)
   .kulturByVonKulturId(() => KULTUR_FRAGMENT)
   .kulturByNachKulturId(() => KULTUR_FRAGMENT)
@@ -215,7 +203,6 @@ SAMMLUNG_FRAGMENT = selectFromsammlung()
   .id.art_id.person_id.herkunft_id.nr.datum.von_anzahl_individuen.anzahl_pflanzen.gramm_samen.andere_menge.geplant.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
     () => ART_FRAGMENT,
   )
-  .person(() => PERSON_FRAGMENT)
   .herkunft(() => HERKUNFT_FRAGMENT)
   .lieferungs(() => LIEFERUNG_FRAGMENT)
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
@@ -238,7 +225,6 @@ TEILZAEHLUNG_FRAGMENT = selectFromteilzaehlung()
   .id.zaehlung_id.teilkultur_id.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen.andere_menge.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.zaehlung(
     () => ZAEHLUNG_FRAGMENT,
   )
-  //.teilkultur(() => TEILKULTUR_FRAGMENT)
   .toString()
 
 USER_ROLE_FRAGMENT = selectFromuser_role().id.name.label.sort.comment.toString()
