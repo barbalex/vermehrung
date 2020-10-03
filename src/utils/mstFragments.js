@@ -138,7 +138,6 @@ PERSON_FRAGMENT = selectFromperson()
   .id.nr.vorname.name.adresszusatz.strasse.plz.ort.telefon_privat.telefon_geschaeft.telefon_mobile.email.kein_email.bemerkungen.account_id.user_role.kommerziell.info.aktiv.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungs(
     () => LIEFERUNG_FRAGMENT,
   )
-  .person_files()
   .person_option()
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .toString()
