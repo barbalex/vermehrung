@@ -76,15 +76,21 @@ const KulturForm = ({
   // => substract the ones with two existing in this garden?
   // => present arten of the rest
 
-  const garten_id = row?.garten?.id
   const art_id = row?.art_id
   const herkunft_id = row?.herkunft_id
-  const artHerkunftInGartenNichtZl = (row?.garten?.kulturs ?? [])
+  const thisGartenKulturs = useMemo(
+    () =>
+      [...store.kulturs.values()]
+        .filter((k) => !k._deleted)
+        .filter((k) => k.garten_id === row.garten_id),
+    [row.garten_id, store.kulturs],
+  )
+  const artHerkunftInGartenNichtZl = thisGartenKulturs
     .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => !!o.art_id && !!o.herkunft_id)
     .filter((k) => !k.zwischenlager)
-  const artHerkunftZwischenlagerInGarten = (row?.garten?.kulturs ?? [])
+  const artHerkunftZwischenlagerInGarten = thisGartenKulturs
     .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => !!o.art_id && !!o.herkunft_id)
@@ -97,7 +103,7 @@ const KulturForm = ({
           .filter((ah) => (herkunft_id ? ah.herkunft_id === herkunft_id : true))
           .filter((s) => {
             // do not filter if no garten choosen
-            if (!garten_id) return true
+            if (!row.garten_id) return true
             // do not return if exists nicht zl AND zl
             return !(
               !!artHerkunftInGartenNichtZl.find(
@@ -115,8 +121,8 @@ const KulturForm = ({
       artHerkuenfte,
       artHerkunftInGartenNichtZl,
       artHerkunftZwischenlagerInGarten,
-      garten_id,
       herkunft_id,
+      row.garten_id,
     ],
   )
   // do show own art
@@ -130,7 +136,7 @@ const KulturForm = ({
           .filter((s) => (art_id ? s.art_id === art_id : true))
           .filter((s) => {
             // do not filter if no garten choosen
-            if (!garten_id) return true
+            if (!row.garten_id) return true
             // do not return if exists nicht zl AND zl
             return !(
               !!artHerkunftInGartenNichtZl.find(
@@ -147,14 +153,21 @@ const KulturForm = ({
       artHerkuenfte,
       artHerkunftInGartenNichtZl,
       artHerkunftZwischenlagerInGarten,
-      garten_id,
       art_id,
+      row.garten_id,
     ],
   )
   // do show own herkunft
   if (herkunft_id && !herkunftToChoose.includes(herkunft_id)) {
     herkunftToChoose.push(herkunft_id)
   }
+  console.log('Kultur', {
+    thisGartenKulturs,
+    artHerkunftInGartenNichtZl,
+    artHerkunftZwischenlagerInGarten,
+    artenToChoose,
+    herkunftToChoose,
+  })
 
   useEffect(() => {
     unsetError('kultur')
@@ -304,9 +317,9 @@ const KulturForm = ({
           error={herkunftError}
         />
         <Select
-          key={`${row.id}${garten_id}garten_id`}
+          key={`${row.id}${row.garten_id}garten_id`}
           name="garten_id"
-          value={garten_id}
+          value={row.garten_id}
           field="garten_id"
           label="Garten"
           options={gartenWerte}
