@@ -55,40 +55,11 @@ const FieldRow = styled.div`
     margin-top: 8px;
   }
 `
-const Herkunft = styled.div`
-  height: 54px;
-  user-select: none;
-`
-const HerkunftLabel = styled.div`
-  color: rgb(0, 0, 0, 0.54);
-  font-size: 12px;
-  padding-bottom: 2px;
-`
 
 const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
   const store = useContext(StoreContext)
 
-  const { artsSorted, errors, herkunftsSorted } = store
-  const { activeNodeArray } = store.tree
-  // BEWARE: need to include inactive kulturs, persons
-
-  const urlLastName = activeNodeArray[activeNodeArray.length - 2]
-  const isAnlieferung = urlLastName === 'An-Lieferungen'
-
-  const herkunftByKultur = isAnlieferung
-    ? row?.kulturByNachKulturId?.herkunft
-    : row?.kulturByVonKulturId?.herkunft
-  const vonSammlung = row?.sammlung //sammlungsSorted.find((s) => s.id === row.von_sammlung_id)
-  const herkunftBySammlung = vonSammlung
-    ? herkunftsSorted.find((s) => s.id === vonSammlung.herkunft_id)
-    : null
-  const herkunft = herkunftByKultur || herkunftBySammlung
-  const herkunftQuelle = herkunftByKultur ? 'Kultur' : 'Sammlung'
-  const herkunftValue = herkunft
-    ? `${herkunft.nr || '(keine Nr)'}: ${
-        herkunft?.gemeinde || '(keine Gemeinde)'
-      }, ${herkunft.lokalname || '(kein Lokalname)'}`
-    : ''
+  const { artsSorted, errors } = store
 
   const artWerte = useMemo(
     () =>
@@ -143,12 +114,6 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
           saveToDb={saveToDb}
           error={errors?.lieferung?.art_id}
         />
-      )}
-      {herkunftValue && (
-        <Herkunft>
-          <HerkunftLabel>{`Herkunft (aus ${herkunftQuelle})`}</HerkunftLabel>
-          {herkunftValue}
-        </Herkunft>
       )}
       <FieldRow>
         {ifNeeded('anzahl_pflanzen') && (

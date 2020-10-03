@@ -1,4 +1,5 @@
 export default ({ herkunft }) => {
+  if (!herkunft?.id) return '(keine Herkunft)'
   // only show lokalname if exist
   // does not exist if user does not have right to see it
   const gemeinde = herkunft?.gemeinde ?? ''

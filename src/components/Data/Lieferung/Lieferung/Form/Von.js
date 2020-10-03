@@ -15,6 +15,7 @@ import exists from '../../../../../utils/exists'
 import kulturSort from '../../../../../utils/kulturSort'
 import sammlungLabelFromSammlung from '../sammlungLabelFromSammlung'
 import kulturLabelFromKultur from '../../../../../utils/kulturLabelFromKultur'
+import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft'
 
 const Title = styled.div`
   font-weight: bold;
@@ -42,6 +43,16 @@ const TitleRow = styled.div`
     margin-top: -10px;
   }
 `
+const Herkunft = styled.div`
+  height: 54px;
+  user-select: none;
+  ${(props) => !props['data-active'] && 'color: #c1c1c1;'}
+`
+const HerkunftLabel = styled.div`
+  color: rgb(0, 0, 0, 0.54);
+  font-size: 12px;
+  padding-bottom: 2px;
+`
 
 const LieferungVon = ({ showFilter, row, saveToDb, ifNeeded }) => {
   const store = useContext(StoreContext)
@@ -56,14 +67,30 @@ const LieferungVon = ({ showFilter, row, saveToDb, ifNeeded }) => {
   const urlLastName = activeNodeArray[activeNodeArray.length - 2]
   const isAnlieferung = urlLastName === 'An-Lieferungen'
 
+  const nachKultur = row.nach_kultur_id
+    ? store.kulturs.get(row.nach_kultur_id)
+    : {}
+  const nachKulturHerkunft = nachKultur.herkunft_id
+    ? store.herkunfts.get(nachKultur.herkunft_id)
+    : undefined
+  const vonKultur = row.von_kultur_id
+    ? store.kulturs.get(row.von_kultur_id)
+    : {}
+  const vonKulturHerkunft = vonKultur.herkunft_id
+    ? store.herkunfts.get(vonKultur.herkunft_id)
+    : undefined
   const herkunftByKultur = isAnlieferung
-    ? row?.kulturByNachKulturId?.herkunft
-    : row?.kulturByVonKulturId?.herkunft
+    ? nachKulturHerkunft
+    : vonKulturHerkunft
   const vonSammlung = row?.sammlung //sammlungsSorted.find((s) => s.id === row.von_sammlung_id)
   const herkunftBySammlung = vonSammlung
     ? herkunftsSorted.find((s) => s.id === vonSammlung.herkunft_id)
-    : null
+    : undefined
   const herkunft = herkunftByKultur || herkunftBySammlung
+  const herkunftQuelle = herkunftByKultur ? 'Kultur' : 'Sammlung'
+  const herkunftValue = herkunft
+    ? herkunftLabelFromHerkunft({ herkunft })
+    : '(verfügbar, wenn Sammlung oder Kultur gewählt)'
 
   const vonKulturWerteData = kultursSorted
     // show only kulturen of art_id
@@ -157,6 +184,12 @@ const LieferungVon = ({ showFilter, row, saveToDb, ifNeeded }) => {
           error={errors?.lieferung?.von_kultur_id}
         />
       )}
+      <Herkunft data-active={!!herkunft}>
+        <HerkunftLabel>
+          {herkunft ? `Herkunft (aus ${herkunftQuelle})` : 'Herkunft'}
+        </HerkunftLabel>
+        {herkunftValue}
+      </Herkunft>
     </>
   )
 }
