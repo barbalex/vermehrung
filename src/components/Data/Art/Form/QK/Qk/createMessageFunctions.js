@@ -3,6 +3,7 @@ import groupBy from 'lodash/groupBy'
 
 import exists from '../../../../../../utils/exists'
 import artLabelFromArt from '../../../../../../utils/artLabelFromArt'
+import gartenLabelFromGarten from '../../../../../../utils/gartenLabelFromGarten'
 import treeLabelKultur from '../../../../../../utils/treeLabelKultur'
 import treeLabelSammlung from '../../../../../../utils/treeLabelSammlung'
 
@@ -136,14 +137,10 @@ export default ({ artId, store }) => {
           const activeKultursCount = g.kulturs.filter((k) => k.aktiv).length
           return !!kultursCount && !activeKultursCount
         })
-        .map((g) => {
-          const text = g?.name ?? `${g?.person?.fullname ?? 'kein Name'}`
-
-          return {
-            url: ['Gaerten', g.id],
-            text,
-          }
-        }),
+        .map((g) => ({
+          url: ['Gaerten', g.id],
+          text: gartenLabelFromGarten({ garten: g, store }),
+        })),
     kultursWithoutVonAnzahlIndividuen: () =>
       kultursSorted
         .filter((s) => s.art_id === artId)

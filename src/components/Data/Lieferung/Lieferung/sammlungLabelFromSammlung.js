@@ -1,12 +1,20 @@
 import { DateTime } from 'luxon'
 
-export default (s) => {
-  const datum = s?.datum
-    ? DateTime.fromSQL(s.datum).toFormat('dd.LL.yyyy')
+import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
+
+export default ({ sammlung, store }) => {
+  const person = sammlung.person_id ? store.persons.get(sammlung.person_id) : {}
+  const herkunft = sammlung.herkunft_id
+    ? store.herkunfts.get(sammlung.herkunft_id)
+    : {}
+  const datum = sammlung?.datum
+    ? DateTime.fromSQL(sammlung.datum).toFormat('dd.LL.yyyy')
     : '(kein Datum)'
-  const nr = s?.herkunft?.nr ?? '(keine Nr)'
-  const person = s?.person?.fullname ?? '(kein Name)'
-  const label = `${datum}: Herkunft ${nr}; ${person}`
+  const personLabel = person?.fullname ?? '(kein Name)'
+  const label = `${datum}: von ${herkunftLabelFromHerkunft({
+    herkunft,
+    store,
+  })}; ${personLabel}`
 
   return label
 }
