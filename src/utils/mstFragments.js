@@ -60,13 +60,12 @@ let USER_ROLE_FRAGMENT
 let ZAEHLUNG_FRAGMENT
 
 ART_FRAGMENT = selectFromart()
-  .id.ae_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_ae_art()
-  .lieferungs(() => LIEFERUNG_FRAGMENT)
+  .id.ae_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungs(
+    () => LIEFERUNG_FRAGMENT,
+  )
   .toString()
 
-ART_QK_FRAGMENT = selectFromart_qk()
-  .id.name.titel.beschreibung.sort.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_qk_choosen()
-  .toString()
+ART_QK_FRAGMENT = selectFromart_qk().id.name.titel.beschreibung.sort.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen()
   .id.art_id.qk_name.choosen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_qk()
