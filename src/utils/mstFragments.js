@@ -61,7 +61,6 @@ let ZAEHLUNG_FRAGMENT
 
 ART_FRAGMENT = selectFromart()
   .id.ae_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_ae_art()
-  .kulturs(() => KULTUR_FRAGMENT)
   .lieferungs(() => LIEFERUNG_FRAGMENT)
   .toString()
 
@@ -81,21 +80,13 @@ AV_FRAGMENT = selectFromav().id.art_id.person_id.changed.changed_by._rev._parent
 
 EVENT_FRAGMENT = selectFromevent().id.kultur_id.teilkultur_id.person_id.beschreibung.geplant.datum.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
-GARTEN_FRAGMENT = selectFromgarten()
-  .id.name.person_id.strasse.plz.ort.aktiv.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kulturs(
-    () => KULTUR_FRAGMENT,
-  )
-  .toString()
+GARTEN_FRAGMENT = selectFromgarten().id.name.person_id.strasse.plz.ort.aktiv.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 GARTEN_FILE_FRAGMENT = selectFromgarten_file().id.garten_id.file_id.file_mime_type.name.beschreibung.toString()
 
 GV_FRAGMENT = selectFromgv().id.garten_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
-HERKUNFT_FRAGMENT = selectFromherkunft()
-  .id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kulturs(
-    () => KULTUR_FRAGMENT,
-  )
-  .toString()
+HERKUNFT_FRAGMENT = selectFromherkunft().id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 HERKUNFT_FILE_FRAGMENT = selectFromherkunft_file().id.herkunft_id.file_id.file_mime_type.name.beschreibung.toString()
 

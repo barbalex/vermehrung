@@ -138,8 +138,11 @@ export default ({ artId, store }) => {
     gartensAllKultursInactive: () =>
       gartensSorted
         .filter((g) => {
-          const kultursCount = g.kulturs.length
-          const activeKultursCount = g.kulturs.filter((k) => k.aktiv).length
+          const kulturs = [...store.kulturs.values()]
+            .filter((k) => k.garten_id === g.id)
+            .filter((k) => !k._deleted)
+          const kultursCount = kulturs.length
+          const activeKultursCount = kulturs.filter((k) => k.aktiv).length
           return !!kultursCount && !activeKultursCount
         })
         .map((g) => ({
