@@ -78,17 +78,11 @@ ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen()
   .id.art_id.qk_name.choosen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_qk()
   .toString()
 
-ART_FILE_FRAGMENT = selectFromart_file()
-  .id.art_id.file_id.file_mime_type.name.beschreibung.art()
-  .toString()
+ART_FILE_FRAGMENT = selectFromart_file().id.art_id.file_id.file_mime_type.name.beschreibung.toString()
 
 AE_ART_FRAGMENT = selectFromae_art().id.name.ae_art_art().toString()
 
-AV_FRAGMENT = selectFromav()
-  .id.art_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
-    () => ART_FRAGMENT,
-  )
-  .toString()
+AV_FRAGMENT = selectFromav().id.art_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 EVENT_FRAGMENT = selectFromevent()
   .id.kultur_id.teilkultur_id.person_id.beschreibung.geplant.datum.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur(
@@ -115,10 +109,7 @@ HERKUNFT_FRAGMENT = selectFromherkunft()
 HERKUNFT_FILE_FRAGMENT = selectFromherkunft_file().id.herkunft_id.file_id.file_mime_type.name.beschreibung.toString()
 
 KULTUR_FRAGMENT = selectFromkultur()
-  .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
-    () => ART_FRAGMENT,
-  )
-  .kultur_files()
+  .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur_files()
   .kultur_option()
   .kultur_qk_choosens()
   .lieferungsByNachKulturId(() => LIEFERUNG_FRAGMENT)
@@ -148,10 +139,9 @@ KULTUR_OPTION_FRAGMENT = selectFromkultur_option()
   .toString()
 
 LIEFERUNG_FRAGMENT = selectFromlieferung()
-  .id.sammel_lieferung_id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
-    () => ART_FRAGMENT,
+  .id.sammel_lieferung_id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kulturByNachKulturId(
+    () => KULTUR_FRAGMENT,
   )
-  .kulturByNachKulturId(() => KULTUR_FRAGMENT)
   .kulturByVonKulturId(() => KULTUR_FRAGMENT)
   .lieferung_files()
   .sammel_lieferung(() => SAMMEL_LIEFERUNG_FRAGMENT)
@@ -184,17 +174,15 @@ SAMMEL_LIEFERUNG_FRAGMENT = selectFromsammel_lieferung()
   .id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungs(
     () => LIEFERUNG_FRAGMENT,
   )
-  .art(() => ART_FRAGMENT)
   .sammlung(() => SAMMLUNG_FRAGMENT)
   .kulturByVonKulturId(() => KULTUR_FRAGMENT)
   .kulturByNachKulturId(() => KULTUR_FRAGMENT)
   .toString()
 
 SAMMLUNG_FRAGMENT = selectFromsammlung()
-  .id.art_id.person_id.herkunft_id.nr.datum.von_anzahl_individuen.anzahl_pflanzen.gramm_samen.andere_menge.geplant.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
-    () => ART_FRAGMENT,
+  .id.art_id.person_id.herkunft_id.nr.datum.von_anzahl_individuen.anzahl_pflanzen.gramm_samen.andere_menge.geplant.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungs(
+    () => LIEFERUNG_FRAGMENT,
   )
-  .lieferungs(() => LIEFERUNG_FRAGMENT)
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .sammlung_files()
   .toString()
