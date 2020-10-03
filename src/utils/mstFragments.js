@@ -95,7 +95,7 @@ EVENT_FRAGMENT = selectFromevent()
   .id.kultur_id.teilkultur_id.person_id.beschreibung.geplant.datum.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur(
     () => KULTUR_FRAGMENT,
   )
-  .teilkultur(() => TEILKULTUR_FRAGMENT)
+  //.teilkultur(() => TEILKULTUR_FRAGMENT)
   .person(() => PERSON_FRAGMENT)
   .toString()
 
