@@ -7,9 +7,13 @@ import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToEx
 export default async ({ store, garten_id, workbook }) => {
   const { teilzaehlungsSorted } = store
 
-  const teilzaehlungenArray = teilzaehlungsSorted.filter(
-    (t) => t?.zaehlung?.kultur?.garten_id === garten_id,
-  )
+  const teilzaehlungenArray = teilzaehlungsSorted.filter((t) => {
+    const zaehlung = t.zaehlung_id ? store.zaehlungs.get(t.zaehlung_id) : {}
+    const kultur = zaehlung.kultur_id
+      ? store.kulturs.get(zaehlung.kultur_id)
+      : {}
+    return kultur?.garten_id === garten_id
+  })
   const teilzaehlungen = teilzaehlungenArray.map((z) => {
     const teilkultur = z.teilkultur_id
       ? store.teilkulturs.get(z.teilkultur_id)
