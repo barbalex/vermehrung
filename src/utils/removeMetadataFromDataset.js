@@ -8,7 +8,6 @@ const removeMetadata = (d) => {
   delete d._revisions
   delete d.kulturs
   delete d.sammel_lieferungs
-  delete d.zaehlungs
 
   return d
 }

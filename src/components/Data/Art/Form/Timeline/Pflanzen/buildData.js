@@ -120,14 +120,17 @@ export default ({ artId, store }) => {
     const lastZaehlungsByKultur = kultursOfArt.map((k) => {
       // for every kultur return
       // last zaehlung and whether it is prognose
+      const zaehlungs = [...store.zaehlungs.values()]
+        .filter((z) => z.id === k.zaehlung_id)
+        .filter((z) => !z._deleted)
 
       const lastZaehlungDatum = max(
-        k?.zaehlungs
+        zaehlungs
           .map((z) => z.datum)
           .filter((d) => !!d)
           .filter((d) => d <= date),
       )
-      const lastZaehlungsOfKultur = k?.zaehlungs
+      const lastZaehlungsOfKultur = zaehlungs
         .filter((z) => !!z.datum)
         .filter((z) => z.datum === lastZaehlungDatum)
         .filter(

@@ -175,7 +175,8 @@ export default ({ artId, store }) => {
         .filter((s) => s.art_id === artId)
         .filter(
           (k) =>
-            (k.zaehlungs ?? [])
+            [...store.zaehlungs.values()]
+              .filter((z) => z.id === k.zaehlung_id)
               .filter((z) => !z._deleted)
               .filter(
                 (z) =>

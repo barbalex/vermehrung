@@ -107,7 +107,6 @@ KULTUR_FRAGMENT = selectFromkultur()
   .lieferungsByVonKulturId(() => LIEFERUNG_FRAGMENT)
   .sammelLieferungsByNachKulturId(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
-  .zaehlungs(() => ZAEHLUNG_FRAGMENT)
   .toString()
 
 KULTUR_QK_FRAGMENT = selectFromkultur_qk().id.name.titel.beschreibung.sort.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
