@@ -41,8 +41,8 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => [
     label: 'Person',
   },
   {
-    valueInRow: sammlungLabelFromSammlung(row.sammlung),
-    valueInRev: sammlungLabelFromSammlung(revRow.sammlung),
+    valueInRow: sammlungLabelFromSammlung({ sammlung: row.sammlung, store }),
+    valueInRev: sammlungLabelFromSammlung({ sammlung: revRow.sammlung, store }),
     label: 'Von Sammlung',
   },
   {

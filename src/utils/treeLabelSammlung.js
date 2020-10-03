@@ -21,6 +21,7 @@ export default ({ sammlung, store }) => {
     ? DateTime.fromSQL(sammlung?.datum).toFormat('yyyy.LL.dd')
     : '(kein Datum)'
   const geplant = sammlung?.geplant ? ' (geplant)' : ''
+
   return `${
     sammlung?.nr ?? '(keine Nr)'
   }, ${date}: von ${herkunftLabel}, ${personLabel}; ${artLabel}${geplant}`

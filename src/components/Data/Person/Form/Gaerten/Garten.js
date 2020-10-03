@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
 
 const Container = styled.div`
   display: flex;
@@ -45,16 +46,14 @@ const MenuTitle = styled.h3`
 
 const Garten = ({ gv }) => {
   const store = useContext(StoreContext)
-  const { gartensSorted } = store
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = useCallback(() => gv.delete(), [gv])
 
-  const garten = gartensSorted.find((a) => a.id === gv.garten_id)
-  const gartenname =
-    garten?.name ?? `${garten?.person?.fullname ?? 'kein Name'}`
+  const garten = store.gartens.get(gv.garten_id)
+  const gartenname = gartenLabelFromGarten({ garten, store })
 
   if (!gv) return null
 
