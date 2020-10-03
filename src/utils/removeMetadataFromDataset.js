@@ -17,7 +17,6 @@ const removeMetadata = (d) => {
   delete d.kultur_qks
   delete d.kultur_qk_choosens
   delete d.kultur_options
-  delete d.kultur_option
 
   return d
 }
