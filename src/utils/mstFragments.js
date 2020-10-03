@@ -128,7 +128,6 @@ LIEFERUNG_FRAGMENT = selectFromlieferung()
     () => KULTUR_FRAGMENT,
   )
   .kulturByVonKulturId(() => KULTUR_FRAGMENT)
-  .lieferung_files()
   .sammel_lieferung(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .toString()
 
