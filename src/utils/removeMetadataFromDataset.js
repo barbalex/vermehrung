@@ -6,7 +6,6 @@ const removeMetadata = (d) => {
   delete d._rev
   delete d._parent_rev
   delete d._revisions
-  delete d.kulturs
 
   return d
 }
