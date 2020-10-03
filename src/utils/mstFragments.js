@@ -63,7 +63,6 @@ ART_FRAGMENT = selectFromart()
   .id.ae_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_ae_art()
   .kulturs(() => KULTUR_FRAGMENT)
   .lieferungs(() => LIEFERUNG_FRAGMENT)
-  .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .toString()
 
 ART_QK_FRAGMENT = selectFromart_qk()
@@ -106,7 +105,6 @@ KULTUR_FRAGMENT = selectFromkultur()
   )
   .lieferungsByVonKulturId(() => LIEFERUNG_FRAGMENT)
   .sammelLieferungsByNachKulturId(() => SAMMEL_LIEFERUNG_FRAGMENT)
-  .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .toString()
 
 KULTUR_QK_FRAGMENT = selectFromkultur_qk().id.name.titel.beschreibung.sort.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
@@ -133,7 +131,6 @@ PERSON_FRAGMENT = selectFromperson()
   .id.nr.vorname.name.adresszusatz.strasse.plz.ort.telefon_privat.telefon_geschaeft.telefon_mobile.email.kein_email.bemerkungen.account_id.user_role.kommerziell.info.aktiv.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungs(
     () => LIEFERUNG_FRAGMENT,
   )
-  .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .toString()
 
 PERSON_OPTION_FRAGMENT = selectFromperson_option().id.ar_name_deutsch.ga_strasse.ga_plz.ga_ort.ga_geom_point.ga_lat_lng.ga_aktiv.ga_bemerkungen.hk_kanton.hk_land.hk_bemerkungen.hk_geom_point.ku_zwischenlager.ku_erhaltungskultur.li_show_sl_felder.li_show_sl.sl_show_empty_when_next_to_li.sl_auto_copy_edits.tree_kultur.tree_teilkultur.tree_zaehlung.tree_lieferung.tree_event._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
@@ -152,7 +149,6 @@ SAMMLUNG_FRAGMENT = selectFromsammlung()
   .id.art_id.person_id.herkunft_id.nr.datum.von_anzahl_individuen.anzahl_pflanzen.gramm_samen.andere_menge.geplant.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungs(
     () => LIEFERUNG_FRAGMENT,
   )
-  .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .toString()
 
 SAMMLUNG_FILE_FRAGMENT = selectFromsammlung_file().id.sammlung_id.file_id.file_mime_type.name.beschreibung.toString()
