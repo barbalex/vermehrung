@@ -80,16 +80,20 @@ const TkEvents = ({ kulturId, teilkulturId }) => {
         <Title>Events</Title>
       </TitleRow>
       <Rows>
-        {events.map((ev, i) => (
-          <Row key={ev.id} data-last={i === events.length - 1}>
-            <Datum>
-              {ev.datum ? `${format(new Date(ev.datum), 'yyyy.MM.dd')}:` : ''}
-            </Datum>
-            <Geplant>{ev?.geplant ? 'geplant' : ' '}</Geplant>
-            <Name>{ev?.person?.fullname ?? ''}</Name>
-            <Beschreibung>{ev?.beschreibung ?? ''}</Beschreibung>
-          </Row>
-        ))}
+        {events.map((ev, i) => {
+          const person = ev.person_id ? store.persons.get(ev.person_id) : {}
+
+          return (
+            <Row key={ev.id} data-last={i === events.length - 1}>
+              <Datum>
+                {ev.datum ? `${format(new Date(ev.datum), 'yyyy.MM.dd')}:` : ''}
+              </Datum>
+              <Geplant>{ev?.geplant ? 'geplant' : ' '}</Geplant>
+              <Name>{person?.fullname ?? ''}</Name>
+              <Beschreibung>{ev?.beschreibung ?? ''}</Beschreibung>
+            </Row>
+          )
+        })}
       </Rows>
     </ErrorBoundary>
   )
