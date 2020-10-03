@@ -4,10 +4,12 @@ import gartenLabelFromGarten from './gartenLabelFromGarten'
 import personLabelFromPerson from './personLabelFromPerson'
 
 export default ({ lieferung, store }) => {
+  if (!lieferung?.id) return '(keine Lieferung)'
+
   const vonKultur = lieferung.von_kultur_id
     ? store.sammel_lieferungs.get(lieferung.von_kultur_id)
     : {}
-  const vonGarten = vonKultur.garten_id
+  const vonGarten = vonKultur?.garten_id
     ? store.gartens.get(vonKultur.garten_id)
     : {}
   const datum = lieferung.datum
