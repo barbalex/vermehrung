@@ -132,9 +132,7 @@ LIEFERUNG_FRAGMENT = selectFromlieferung()
   .sammel_lieferung(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .toString()
 
-LIEFERUNG_FILE_FRAGMENT = selectFromlieferung_file()
-  .id.lieferung_id.file_id.file_mime_type.name.beschreibung.lieferung()
-  .toString()
+LIEFERUNG_FILE_FRAGMENT = selectFromlieferung_file().id.lieferung_id.file_id.file_mime_type.name.beschreibung.toString()
 
 PERSON_FRAGMENT = selectFromperson()
   .id.nr.vorname.name.adresszusatz.strasse.plz.ort.telefon_privat.telefon_geschaeft.telefon_mobile.email.kein_email.bemerkungen.account_id.user_role.kommerziell.info.aktiv.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungs(
