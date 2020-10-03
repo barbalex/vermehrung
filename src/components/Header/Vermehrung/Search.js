@@ -35,6 +35,7 @@ const SearchIcon = styled(FaSearch)`
   z-index: 1;
 `
 const threshold = 0.2
+const distance = 1000 // ensure text in long labels is found
 
 const formatOptionLabel = ({ label }, { inputValue }) => (
   <Highlighter searchWords={[inputValue]} textToHighlight={label} />
@@ -116,6 +117,7 @@ const Search = () => {
       const artSuggestionsFuse = new Fuse(searchArtSuggestions, {
         keys: [{ name: 'label', weight: 1 }],
         threshold,
+        distance,
       })
       const artSuggestions = artSuggestionsFuse.search(val).map((o) => o.item)
       if (artSuggestions.length) {
@@ -135,6 +137,7 @@ const Search = () => {
           { name: 'bemerkungen', weight: 0.5 },
         ],
         threshold,
+        distance,
       })
       const gartenSuggestions = gartenSuggestionsFuse
         .search(val)
@@ -155,6 +158,7 @@ const Search = () => {
           { name: 'bemerkungen', weight: 0.5 },
         ],
         threshold,
+        distance,
       })
       const herkunftSuggestions = herkunftSuggestionsFuse
         .search(val)
@@ -167,15 +171,14 @@ const Search = () => {
       }
       const kulturSuggestionsFuse = new Fuse(searchKulturSuggestions, {
         keys: [
-          { name: 'artname', weight: 1 },
-          { name: 'gartenname', weight: 1 },
+          { name: 'label', weight: 1 },
           { name: 'personname', weight: 0.7 },
-          { name: 'herkunftnr', weight: 0.7 },
           { name: 'herkunftlokalname', weight: 0.7 },
           { name: 'herkunftgemeinde', weight: 0.7 },
           { name: 'bemerkungen', weight: 0.5 },
         ],
         threshold,
+        distance,
       })
       const kulturSuggestions = kulturSuggestionsFuse
         .search(val)
@@ -191,11 +194,11 @@ const Search = () => {
           { name: 'artname', weight: 0.7 },
           { name: 'gartenname', weight: 0.7 },
           { name: 'personname', weight: 0.7 },
-          { name: 'datum', weight: 1 },
+          { name: 'label', weight: 1 },
           { name: 'geplant', weight: 1 },
-          { name: 'beschreibung', weight: 1 },
         ],
         threshold,
+        distance,
       })
       const eventSuggestions = eventSuggestionsFuse
         .search(val)
@@ -210,7 +213,7 @@ const Search = () => {
         keys: [
           { name: 'artname', weight: 1 },
           { name: 'personname', weight: 1 },
-          { name: 'datum', weight: 1 },
+          { name: 'label', weight: 1 },
           { name: 'sammlungNr', weight: 1 },
           { name: 'sammlungDatum', weight: 0.7 },
           { name: 'sammlungPerson', weight: 0.7 },
@@ -224,6 +227,7 @@ const Search = () => {
           { name: 'bemerkungen', weight: 0.5 },
         ],
         threshold,
+        distance,
       })
       const lieferungSuggestions = lieferungSuggestionsFuse
         .search(val)
@@ -237,9 +241,7 @@ const Search = () => {
       const personSuggestionsFuse = new Fuse(searchPersonSuggestions, {
         keys: [
           { name: 'nr', weight: 1 },
-          { name: 'vorname', weight: 1 },
-          { name: 'name', weight: 1 },
-          { name: 'ort', weight: 0.5 },
+          { name: 'label', weight: 1 },
           { name: 'adresszusatz', weight: 0.5 },
           { name: 'strasse', weight: 0.5 },
           { name: 'plz', weight: 0.5 },
@@ -250,6 +252,7 @@ const Search = () => {
           { name: 'bemerkungen', weight: 0.5 },
         ],
         threshold,
+        distance,
       })
       const personSuggestions = personSuggestionsFuse
         .search(val)
@@ -262,9 +265,7 @@ const Search = () => {
       }
       const sammlungSuggestionsFuse = new Fuse(searchSammlungSuggestions, {
         keys: [
-          { name: 'artname', weight: 0.7 },
-          { name: 'personname', weight: 0.7 },
-          { name: 'herkunftnr', weight: 0.7 },
+          { name: 'label', weight: 1 },
           { name: 'herkunftlokalname', weight: 0.7 },
           { name: 'herkunftgemeinde', weight: 0.7 },
           { name: 'nr', weight: 1 },
@@ -273,6 +274,7 @@ const Search = () => {
           { name: 'geplant', weight: 1 },
         ],
         threshold,
+        distance,
       })
       const sammlungSuggestions = sammlungSuggestionsFuse
         .search(val)
@@ -286,6 +288,7 @@ const Search = () => {
       const zaehlungSuggestionsFuse = new Fuse(searchZaehlungSuggestions, {
         keys: [{ name: 'label', weight: 1 }],
         threshold,
+        distance,
       })
       const zaehlungSuggestions = zaehlungSuggestionsFuse
         .search(val)

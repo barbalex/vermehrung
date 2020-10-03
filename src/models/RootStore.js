@@ -55,10 +55,14 @@ import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
 import getAuthToken from '../utils/getAuthToken'
 import queryAllData from '../utils/queryAllData'
 import artLabelFromArt from '../utils/artLabelFromArt'
-import artLabelFromKultur from '../utils/artLabelFromKultur'
 import artLabelFromEvent from '../utils/artLabelFromEvent'
 import artLabelFromLieferung from '../utils/artLabelFromLieferung'
-import artLabelFromSammlung from '../utils/artLabelFromSammlung'
+import eventLabelFromEvent from '../utils/eventLabelFromEvent'
+import gartenLabelFromGarten from '../utils/gartenLabelFromGarten'
+import herkunftLabelFromHerkunft from '../utils/herkunftLabelFromHerkunft'
+import lieferungLabelFromLieferung from '../utils/lieferungLabelFromLieferung'
+import treeLabelSammlung from '../utils/treeLabelSammlung'
+import personLabelFromPerson from '../utils/personLabelFromPerson'
 import Errors, { defaultValue as defaultErrors } from './Errors'
 
 const formatDateForSearch = (datum) =>
@@ -1987,153 +1991,166 @@ export const RootStore = RootStoreBase.props({
       ].includes(false)
     },
     get searchArtSuggestions() {
-      return self.artsFiltered.map((o) => ({
-        value: o.id,
-        label: artLabelFromArt({ art: o, store: self }),
+      return self.artsFiltered.map((a) => ({
+        value: a.id,
+        label: artLabelFromArt({ art: a, store: self }),
         type: 'Arten',
       }))
     },
     get searchGartenSuggestions() {
-      return self.gartensFiltered.map((o) => ({
-        value: o.id,
-        label: `${o.name || `${o?.person?.fullname ?? ''}`}${
-          o.ort ? `, ${o.ort}` : ''
-        }`,
-        name: o.name,
-        personname: o?.person?.fullname,
-        strasse: o.strasse,
-        plz: o.plz,
-        ort: o.ort,
-        bemerkungen: o.bemerkungen,
-        aktiv: o.aktiv ? 'aktiv' : 'historisch',
-        type: 'Gaerten',
-      }))
+      return self.gartensFiltered.map((g) => {
+        const person = g.person_id ? self.persons.get(g.person_id) : {}
+
+        return {
+          value: g.id,
+          label: gartenLabelFromGarten({ garten: g, store: self }),
+          name: g.name,
+          personname: person?.fullname,
+          strasse: g.strasse,
+          plz: g.plz,
+          ort: g.ort,
+          bemerkungen: g.bemerkungen,
+          aktiv: g.aktiv ? 'aktiv' : 'historisch',
+          type: 'Gaerten',
+        }
+      })
     },
     get searchHerkunftSuggestions() {
-      return self.herkunftsFiltered.map((o) => ({
-        value: o.id,
-        label: `${o?.nr ?? ''}: ${o?.gemeinde ?? ''}, ${o?.lokalname ?? ''}`,
-        ...o,
+      return self.herkunftsFiltered.map((h) => ({
+        value: h.id,
+        label: herkunftLabelFromHerkunft({ herkunft: h }),
+        ...h,
         type: 'Herkuenfte',
       }))
     },
     get searchKulturSuggestions() {
-      return self.kultursFiltered.map((o) => ({
-        value: o.id,
-        label: treeLabelKultur({ kultur: o, store: self }),
-        artname: artLabelFromKultur({ kultur: o, store: self }),
-        gartenname: o?.garten?.name,
-        personname: o?.garten?.person?.fullname,
-        herkunftnr: o?.herkunft?.nr,
-        herkunftlokalname: o?.herkunft?.lokalname,
-        herkunftgemeinde: o?.herkunft?.gemeinde,
-        bemerkungen: o.bemerkungen,
-        type: 'Kulturen',
-      }))
+      return self.kultursFiltered.map((k) => {
+        const garten = k.garten_id ? self.gartens.get(k.garten_id) : {}
+        const gartenPerson = garten.person_id
+          ? self.persons.get(garten.person_id)
+          : {}
+        const herkunft = k.herkunft_id ? self.herkunfts.get(k.herkunft_id) : {}
+
+        return {
+          value: k.id,
+          label: treeLabelKultur({ kultur: k, store: self }),
+          personname: gartenPerson?.fullname,
+          herkunftlokalname: herkunft?.lokalname,
+          herkunftgemeinde: herkunft?.gemeinde,
+          bemerkungen: k.bemerkungen,
+          type: 'Kulturen',
+        }
+      })
     },
     get searchEventSuggestions() {
-      return self.eventsFiltered.map((o) => ({
-        value: o.id,
-        label: `${formatDateForSearch(o.datum)}: ${o?.beschreibung ?? ''}`,
-        datum: formatDateForSearch(o.datum),
-        artname: artLabelFromEvent({ event: o, store: self }),
-        gartenname: o?.kultur?.garten?.name,
-        personname: o?.kultur?.garten?.person?.fullname,
-        geplant: o.geplant ? 'geplant' : 'ausgeführt',
-        beschreibung: o.beschreibung,
-        parent: o.kultur_id,
-        type: 'Events',
-      }))
+      return self.eventsFiltered.map((e) => {
+        const kultur = e.kultur_id ? self.kulturs.get(e.kultur_id) : {}
+        const garten = kultur.garten_id
+          ? self.gartens.get(kultur.garten_id)
+          : {}
+        const gartenPerson = garten.person_id
+          ? self.persons.get(garten.person_id)
+          : {}
+
+        return {
+          value: e.id,
+          label: eventLabelFromEvent({ event: e }),
+          artname: artLabelFromEvent({ event: e, store: self }),
+          gartenname: garten?.name,
+          personname: gartenPerson?.fullname,
+          geplant: e.geplant ? 'geplant' : 'ausgeführt',
+          parent: e.kultur_id,
+          type: 'Events',
+        }
+      })
     },
     get searchLieferungSuggestions() {
-      return self.lieferungsFiltered.map((o) => ({
-        value: o.id,
-        label: formatDateForSearch(o.datum),
-        artname: artLabelFromLieferung({ lieferung: o, store: self }),
-        personname: o?.person?.fullname,
-        datum: formatDateForSearch(o.datum),
-        sammlungNr: o?.sammlung?.nr,
-        sammlungDatum: formatDateForSearch(o?.sammlung?.datum),
-        sammlungPerson: o?.sammlung?.person?.fullname,
-        sammlungHerkunftNr: o?.sammlung?.herkunft?.nr,
-        sammlungHerkunftLokalname: o?.sammlung?.herkunft?.lokalname,
-        sammlungHerkunftGemeinde: o?.sammlung?.herkunft?.gemeinde,
-        vonKulturPersonName: o?.kulturByVonKulturId?.garten?.person?.fullname,
-        nachKulturPersonName: o?.kulturByNachKulturId?.garten?.person?.fullname,
-        ausgepflanzt: o.nach_ausgepflanzt ? 'ausgepflanzt' : '',
-        geplant: o.geplant ? 'geplant' : 'ausgeführt',
-        bemerkungen: o.bemerkungen,
-        type: 'Lieferungen',
-      }))
+      return self.lieferungsFiltered.map((l) => {
+        const person = l.person_id ? self.persons.get(l.person_id) : {}
+        const sammlung = l.sammlung_id ? self.sammlungs.get(l.sammlung_id) : {}
+        const sammlungPerson = sammlung.person_id
+          ? self.persons.get(sammlung.person_id)
+          : {}
+        const sammlungHerkunft = sammlung.herkunft_id
+          ? self.herkunfts.get(sammlung.herkunft_id)
+          : {}
+        const vonKultur = l.von_kultur_id
+          ? self.kulturs.get(l.von_kultur_id)
+          : {}
+        const vonKulturGarten = vonKultur.garten_id
+          ? self.gartens.get(vonKultur.garten_id)
+          : {}
+        const vonKulturGartenPerson = vonKulturGarten.person_id
+          ? self.persons.get(vonKulturGarten.person_id)
+          : {}
+        const nachKultur = l.nach_kultur_id
+          ? self.kulturs.get(l.nach_kultur_id)
+          : {}
+        const nachKulturGarten = nachKultur.garten_id
+          ? self.gartens.get(nachKultur.garten_id)
+          : {}
+        const nachKulturGartenPerson = nachKulturGarten.person_id
+          ? self.persons.get(nachKulturGarten.person_id)
+          : {}
+
+        return {
+          value: l.id,
+          label: lieferungLabelFromLieferung({ lieferung: l, store: self }),
+          artname: artLabelFromLieferung({ lieferung: l, store: self }),
+          personname: person?.fullname,
+          sammlungNr: sammlung?.nr,
+          sammlungDatum: formatDateForSearch(sammlung?.datum),
+          sammlungPerson: sammlungPerson?.fullname,
+          sammlungHerkunftNr: sammlungHerkunft?.nr,
+          sammlungHerkunftLokalname: sammlungHerkunft?.lokalname,
+          sammlungHerkunftGemeinde: sammlungHerkunft?.gemeinde,
+          vonKulturPersonName: vonKulturGartenPerson?.fullname,
+          nachKulturPersonName: nachKulturGartenPerson?.fullname,
+          ausgepflanzt: l.nach_ausgepflanzt ? 'ausgepflanzt' : '',
+          geplant: l.geplant ? 'geplant' : 'ausgeführt',
+          bemerkungen: l.bemerkungen,
+          type: 'Lieferungen',
+        }
+      })
     },
     get searchPersonSuggestions() {
-      return self.personsFiltered.map((o) => ({
-        value: o.id,
-        label: `${o.nr ? `${o.nr}: ` : ''}${o?.fullname ?? ''}${
-          o.ort ? `, ${o.ort}` : ''
-        }`,
-        nr: o.nr,
-        vorname: o.vorname,
-        name: o.name,
-        ort: o.ort,
-        adresszusatz: o.adresszusatz,
-        strasse: o.strasse,
-        plz: o.plz,
-        telefon_privat: o.telefon_privat,
-        telefon_geschaeft: o.telefon_geschaeft,
-        telefon_mobile: o.telefon_mobile,
-        email: o.email,
-        bemerkungen: o.bemerkungen,
+      return self.personsFiltered.map((p) => ({
+        value: p.id,
+        label: personLabelFromPerson({ person: p, store: self }),
+        nr: p.nr,
+        adresszusatz: p.adresszusatz,
+        strasse: p.strasse,
+        plz: p.plz,
+        telefon_privat: p.telefon_privat,
+        telefon_geschaeft: p.telefon_geschaeft,
+        telefon_mobile: p.telefon_mobile,
+        email: p.email,
+        bemerkungen: p.bemerkungen,
         type: 'Personen',
       }))
     },
     get searchSammlungSuggestions() {
-      return self.sammlungsFiltered.map((o) => {
-        const nr = o.nr
-        const date = formatDateForSearch(o.datum)
-        const nrDate =
-          nr && date
-            ? `${nr}, ${date}: `
-            : nr
-            ? `${nr}: `
-            : date
-            ? `${date}: `
-            : ''
-        const herkunft = o?.herkunft?.nr ? `von ${o?.herkunft?.nr}` : ''
-        const person = o.person?.fullname
-        const herkunftPerson =
-          herkunft && person
-            ? `${herkunft}, ${person}; `
-            : herkunft
-            ? `${herkunft}; `
-            : person
-            ? `${person}; `
-            : ''
-        const artName = artLabelFromSammlung({ sammlung: o, store: self })
-        const geplant = o.geplant ? ' (geplant)' : ''
-        const label = `${nrDate}${herkunftPerson}${artName}${geplant}`
+      return self.sammlungsFiltered.map((s) => {
+        const herkunft = s.herkunft_id ? self.herkunfts.get(s.herkunft_id) : {}
 
         return {
-          value: o.id,
-          label,
-          artname: artName,
-          personname: o?.person?.fullname,
-          herkunftnr: o?.herkunft?.nr,
-          herkunftlokalname: o?.herkunft?.lokalname,
-          herkunftgemeinde: o?.herkunft?.gemeinde,
-          nr: o.nr,
-          bemerkungen: o.bemerkungen,
-          datum: formatDateForSearch(o.datum),
-          geplant: o.geplant ? 'geplant' : 'ausgeführt',
+          value: s.id,
+          label: treeLabelSammlung({ sammlung: s, store: self }),
+          herkunftlokalname: herkunft?.lokalname,
+          herkunftgemeinde: herkunft?.gemeinde,
+          nr: s.nr,
+          bemerkungen: s.bemerkungen,
+          datum: formatDateForSearch(s.datum),
+          geplant: s.geplant ? 'geplant' : 'ausgeführt',
           type: 'Sammlungen',
         }
       })
     },
     get searchZaehlungSuggestions() {
-      return self.zaehlungsFiltered.map((o) => ({
-        value: o.id,
-        label: formatDateForSearch(o.datum),
-        parent: o.kultur_id,
+      return self.zaehlungsFiltered.map((z) => ({
+        value: z.id,
+        label: formatDateForSearch(z.datum),
+        parent: z.kultur_id,
         type: 'Zaehlungen',
       }))
     },

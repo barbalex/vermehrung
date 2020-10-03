@@ -1,4 +1,7 @@
 export default ({ person }) => {
   if (!person) return '(keine Person)'
-  return person?.fullname ?? '(kein Name)'
+  const ortLabel = person?.ort ? ` (${person.ort})` : ''
+  const nameLabel = person?.fullname ?? '(kein Name)'
+
+  return `${nameLabel}${ortLabel}`
 }
