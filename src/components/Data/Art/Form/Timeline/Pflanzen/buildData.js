@@ -8,14 +8,20 @@ export default ({ artId, store }) => {
   const { zaehlungsSorted, sammlungsSorted, lieferungsSorted } = store
 
   const zaehlungsDone = zaehlungsSorted
-    .filter((z) => z?.kultur?.art_id === artId)
+    .filter((z) => {
+      const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+      return kultur?.art_id === artId
+    })
     .filter((z) => z.prognose === false)
     .filter((z) => !!z.datum)
     .filter((z) =>
       exists(z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen),
     )
   const zaehlungsPlannedAll = zaehlungsSorted
-    .filter((z) => z?.kultur?.art_id === artId)
+    .filter((z) => {
+      const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+      return kultur?.art_id === artId
+    })
     .filter((z) => z.prognose === true)
     .filter((z) => !!z.datum)
     .filter((z) =>

@@ -207,7 +207,7 @@ export default ({ artId, store }) => {
               'Arten',
               artId,
               'Kulturen',
-              tk?.kultur?.id,
+              kultur?.id,
               'Teilkulturen',
               tk.id,
             ],
@@ -216,7 +216,10 @@ export default ({ artId, store }) => {
         }),
     zaehlungsInFutureNotPrognose: () =>
       zaehlungsSorted
-        .filter((z) => z?.kultur?.art_id === artId)
+        .filter((z) => {
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          return kultur?.art_id === artId
+        })
         .filter((z) => !!z.datum)
         .filter((z) => new Date(z.datum).getTime() > now)
         .map((z) => {
@@ -234,7 +237,10 @@ export default ({ artId, store }) => {
         }),
     zaehlungsWithoutDatum: () =>
       zaehlungsSorted
-        .filter((z) => z?.kultur?.art_id === artId)
+        .filter((z) => {
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          return kultur?.art_id === artId
+        })
         .filter((z) => !z.datum)
         .map((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
@@ -251,7 +257,10 @@ export default ({ artId, store }) => {
         }),
     zaehlungsWithoutAnzahlPflanzen: () =>
       zaehlungsSorted
-        .filter((z) => z?.kultur?.art_id === artId)
+        .filter((z) => {
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          return kultur?.art_id === artId
+        })
         .filter(
           (z) =>
             (z.teilzaehlungs ?? [])
@@ -272,13 +281,16 @@ export default ({ artId, store }) => {
           const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
           return {
-            url: ['Arten', artId, 'Kulturen', z?.kultur.id, 'Zaehlungen', z.id],
+            url: ['Arten', artId, 'Kulturen', kultur.id, 'Zaehlungen', z.id],
             text,
           }
         }),
     zaehlungsWithoutAnzahlAuspflanzbereit: () =>
       zaehlungsSorted
-        .filter((z) => z?.kultur?.art_id === artId)
+        .filter((z) => {
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          return kultur?.art_id === artId
+        })
         .filter(
           (z) =>
             (z.teilzaehlungs ?? [])
@@ -299,13 +311,16 @@ export default ({ artId, store }) => {
           const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
           return {
-            url: ['Arten', artId, 'Kulturen', z?.kultur.id, 'Zaehlungen', z.id],
+            url: ['Arten', artId, 'Kulturen', kultur.id, 'Zaehlungen', z.id],
             text,
           }
         }),
     zaehlungsWithoutAnzahlMutterpflanzen: () =>
       zaehlungsSorted
-        .filter((z) => z?.kultur?.art_id === artId)
+        .filter((z) => {
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          return kultur?.art_id === artId
+        })
         .filter(
           (z) =>
             (z.teilzaehlungs ?? [])
@@ -326,21 +341,19 @@ export default ({ artId, store }) => {
           const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
           return {
-            url: [
-              'Arten',
-              artId,
-              'Kulturen',
-              z?.kultur?.id,
-              'Zaehlungen',
-              z.id,
-            ],
+            url: ['Arten', artId, 'Kulturen', kultur?.id, 'Zaehlungen', z.id],
             text,
           }
         }),
     zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen: () =>
       zaehlungsSorted
-        .filter((z) => z?.kultur?.art_id === artId)
-        .filter((z) => !!z?.kultur?.kultur_option?.tk)
+        .filter((z) => {
+          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
+          const kulturOption = z.kultur_id
+            ? store.kultur_options.get(z.kultur_id)
+            : {}
+          return kultur?.art_id === artId && !!kulturOption?.tk
+        })
         .filter(
           (z) =>
             (z.teilzaehlungs || []).length &&
@@ -360,14 +373,7 @@ export default ({ artId, store }) => {
           const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
           return {
-            url: [
-              'Arten',
-              artId,
-              'Kulturen',
-              z?.kultur?.id,
-              'Zaehlungen',
-              z.id,
-            ],
+            url: ['Arten', artId, 'Kulturen', kultur?.id, 'Zaehlungen', z.id],
             text,
           }
         }),
@@ -522,7 +528,10 @@ export default ({ artId, store }) => {
         }),
     eventsWithoutBeschreibung: () =>
       eventsSorted
-        .filter((e) => e?.kultur?.art_id === artId)
+        .filter((e) => {
+          const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
+          return kultur?.art_id === artId
+        })
         .filter((e) => !e.beschreibung)
         .map((e) => {
           const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
@@ -533,13 +542,16 @@ export default ({ artId, store }) => {
           const text = `${kulturLabel}, Event-ID: ${e.id}`
 
           return {
-            url: ['Arten', artId, 'Kulturen', e?.kultur?.id, 'Events', e.id],
+            url: ['Arten', artId, 'Kulturen', kultur?.id, 'Events', e.id],
             text,
           }
         }),
     eventsWithoutDatum: () =>
       eventsSorted
-        .filter((e) => e?.kultur?.art_id === artId)
+        .filter((e) => {
+          const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
+          return kultur?.art_id === artId
+        })
         .filter((e) => !e.datum)
         .map((e) => {
           const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
@@ -550,7 +562,7 @@ export default ({ artId, store }) => {
           const text = `${kulturLabel}, Event-ID: ${e.id}`
 
           return {
-            url: ['Arten', artId, 'Kulturen', e?.kultur.id, 'Events', e.id],
+            url: ['Arten', artId, 'Kulturen', kultur.id, 'Events', e.id],
             text,
           }
         }),

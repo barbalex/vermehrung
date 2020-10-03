@@ -2,6 +2,10 @@ import kulturLabelFromKultur from '../../../utils/kulturLabelFromKultur'
 import teilkulturLabelFromTeilkultur from '../../../utils/teilkulturLabelFromTeilkultur'
 
 const createDataArrayForRevComparison = ({ row, revRow, store }) => {
+  const rowKultur = row.kultur_id ? store.kulturs.get(row.kultur_id) : {}
+  const revRowKultur = revRow.kultur_id
+    ? store.kulturs.get(revRow.kultur_id)
+    : {}
   const rowTeilkultur = row.teilkultur_id
     ? store.teilkulturs.get(row.teilkultur_id)
     : {}
@@ -15,8 +19,8 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => {
 
   return [
     {
-      valueInRow: kulturLabelFromKultur({ kultur: row?.kultur, store }),
-      valueInRev: kulturLabelFromKultur({ kultur: revRow?.kultur, store }),
+      valueInRow: kulturLabelFromKultur({ kultur: rowKultur, store }),
+      valueInRev: kulturLabelFromKultur({ kultur: revRowKultur, store }),
       label: 'Kultur',
     },
     {
