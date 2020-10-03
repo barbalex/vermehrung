@@ -82,11 +82,7 @@ AE_ART_FRAGMENT = selectFromae_art().id.name.ae_art_art().toString()
 
 AV_FRAGMENT = selectFromav().id.art_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
-EVENT_FRAGMENT = selectFromevent()
-  .id.kultur_id.teilkultur_id.person_id.beschreibung.geplant.datum.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur(
-    () => KULTUR_FRAGMENT,
-  )
-  .toString()
+EVENT_FRAGMENT = selectFromevent().id.kultur_id.teilkultur_id.person_id.beschreibung.geplant.datum.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 GARTEN_FRAGMENT = selectFromgarten()
   .id.name.person_id.strasse.plz.ort.aktiv.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.garten_files()
@@ -121,18 +117,11 @@ KULTUR_QK_FRAGMENT = selectFromkultur_qk()
 
 KULTUR_QK_CHOOSEN_FRAGMENT = selectFromkultur_qk_choosen()
   .id.kultur_id.qk_name.choosen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur_qk()
-  .kultur(() => KULTUR_FRAGMENT)
   .toString()
 
-KULTUR_FILE_FRAGMENT = selectFromkultur_file()
-  .id.kultur_id.file_id.file_mime_type.name.beschreibung.kultur(
-    () => KULTUR_FRAGMENT,
-  )
-  .toString()
+KULTUR_FILE_FRAGMENT = selectFromkultur_file().id.kultur_id.file_id.file_mime_type.name.beschreibung.toString()
 
-KULTUR_OPTION_FRAGMENT = selectFromkultur_option()
-  .id.ev_datum.ev_geplant.ev_person_id.ev_teilkultur_id.tk.tk_bemerkungen.tz_andere_menge.tz_anzahl_mutterpflanzen.tz_auspflanzbereit_beschreibung.tz_teilkultur_id.tz_bemerkungen.z_bemerkungen._rev._parent_rev._revisions._depth._conflicts._deleted.kultur()
-  .toString()
+KULTUR_OPTION_FRAGMENT = selectFromkultur_option().id.ev_datum.ev_geplant.ev_person_id.ev_teilkultur_id.tk.tk_bemerkungen.tz_andere_menge.tz_anzahl_mutterpflanzen.tz_auspflanzbereit_beschreibung.tz_teilkultur_id.tz_bemerkungen.z_bemerkungen._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 LIEFERUNG_FRAGMENT = selectFromlieferung()
   .id.sammel_lieferung_id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kulturByNachKulturId(
@@ -180,10 +169,9 @@ SAMMLUNG_FRAGMENT = selectFromsammlung()
 SAMMLUNG_FILE_FRAGMENT = selectFromsammlung_file().id.sammlung_id.file_id.file_mime_type.name.beschreibung.toString()
 
 TEILKULTUR_FRAGMENT = selectFromteilkultur()
-  .id.kultur_id.name.ort1.ort2.ort3.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur(
-    () => KULTUR_FRAGMENT,
+  .id.kultur_id.name.ort1.ort2.ort3.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.teilzaehlungs(
+    () => TEILZAEHLUNG_FRAGMENT,
   )
-  .teilzaehlungs(() => TEILZAEHLUNG_FRAGMENT)
   .toString()
 
 TEILZAEHLUNG_FRAGMENT = selectFromteilzaehlung()
@@ -203,7 +191,6 @@ ZAEHLUNG_FRAGMENT = selectFromzaehlung()
         ),
       ),
   )
-  .kultur(() => KULTUR_FRAGMENT)
   .teilzaehlungs(() => TEILZAEHLUNG_FRAGMENT)
   .toString()
 
