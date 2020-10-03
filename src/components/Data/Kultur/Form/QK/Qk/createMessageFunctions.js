@@ -105,7 +105,7 @@ export default ({ kulturId, store }) => {
           return {
             url: [
               'Arten',
-              z?.kultur?.art_id,
+              kultur?.art_id,
               'Kulturen',
               z.id,
               'Zaehlungen',
@@ -126,7 +126,7 @@ export default ({ kulturId, store }) => {
           return {
             url: [
               'Arten',
-              z?.kultur?.art_id,
+              kultur?.art_id,
               'Kulturen',
               kulturId,
               'Zaehlungen',
@@ -162,7 +162,7 @@ export default ({ kulturId, store }) => {
           return {
             url: [
               'Arten',
-              z?.kultur?.art_id,
+              kultur?.art_id,
               'Kulturen',
               kulturId,
               'Zaehlungen',
@@ -197,7 +197,7 @@ export default ({ kulturId, store }) => {
           return {
             url: [
               'Arten',
-              z?.kultur?.art_id,
+              kultur?.art_id,
               'Kulturen',
               kulturId,
               'Zaehlungen',
@@ -232,7 +232,7 @@ export default ({ kulturId, store }) => {
           return {
             url: [
               'Arten',
-              z?.kultur?.art_id,
+              kultur?.art_id,
               'Kulturen',
               kulturId,
               'Zaehlungen',
@@ -244,7 +244,12 @@ export default ({ kulturId, store }) => {
     zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen: () =>
       zaehlungsSorted
         .filter((z) => z.kultur_id === kulturId)
-        .filter((z) => !!z?.kultur?.kultur_option?.tk)
+        .filter((z) => {
+          const kulturOption = z.kultur_id
+            ? store.kultur_options.get(z.kultur_id)
+            : {}
+          return !!kulturOption?.tk
+        })
         .filter((z) => {
           const tzs = [...store.teilzaehlungs.values()]
             .filter((tz) => tz.zaehlung_id === z.id)
@@ -266,9 +271,9 @@ export default ({ kulturId, store }) => {
           return {
             url: [
               'Arten',
-              z?.kultur?.art_id,
+              kultur?.art_id,
               'Kulturen',
-              z?.kultur?.id,
+              kultur?.id,
               'Zaehlungen',
               z.id,
             ],
