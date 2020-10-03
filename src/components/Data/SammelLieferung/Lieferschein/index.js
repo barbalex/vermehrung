@@ -108,9 +108,12 @@ const Lieferschein = ({ row }) => {
   const image = imageData?.file?.childImageSharp?.fixed ?? {}
 
   const vonKultur = store.kulturs.get(row.von_kultur_id) ?? {}
+  const vonKulturGarten = vonKultur.garten_id
+    ? store.gartens.get(vonKultur.garten_id)
+    : {}
   const von = row.von_kultur_id
-    ? `${vonKultur?.garten?.name ?? '(kein Name)'} (${
-        vonKultur?.garten?.ort ?? 'kein Ort'
+    ? `${vonKulturGarten?.name ?? '(kein Name)'} (${
+        vonKulturGarten?.ort ?? 'kein Ort'
       })`
     : '(keine von-Kultur erfasst)'
 

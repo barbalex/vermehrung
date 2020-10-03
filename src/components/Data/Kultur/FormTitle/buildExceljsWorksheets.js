@@ -29,6 +29,7 @@ export default async ({
     const herkunft = kultur?.herkunft_id
       ? store.herkunfts.get(kultur.herkunft_id)
       : {}
+    const garten = kultur?.garten_id ? store.gartens.get(kultur.garten_id) : {}
 
     const newK = {
       id: kultur.id,
@@ -42,9 +43,9 @@ export default async ({
         foreignKeys: ['sammlungs'],
       }),
       garten_id: kultur.garten_id,
-      garten_name: kultur?.garten?.name ?? '',
+      garten_name: garten?.name ?? '',
       garten_rohdaten: removeMetadataFromDataset({
-        dataset: kultur?.garten,
+        dataset: garten,
         foreignKeys: ['kulturs', 'person'],
       }),
       zwischenlager: kultur.zwischenlager,
