@@ -14,7 +14,6 @@ const removeMetadata = (d) => {
   delete d.gvs
   delete d.event
   delete d.events
-  delete d.garten
   delete d.gartens
   delete d.herkunfts
   delete d.kultur

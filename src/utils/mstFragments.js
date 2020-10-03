@@ -102,15 +102,9 @@ GARTEN_FRAGMENT = selectFromgarten()
   .kulturs(() => KULTUR_FRAGMENT)
   .toString()
 
-GARTEN_FILE_FRAGMENT = selectFromgarten_file()
-  .id.garten_id.file_id.file_mime_type.name.beschreibung.garten()
-  .toString()
+GARTEN_FILE_FRAGMENT = selectFromgarten_file().id.garten_id.file_id.file_mime_type.name.beschreibung.toString()
 
-GV_FRAGMENT = selectFromgv()
-  .id.garten_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.garten(
-    () => GARTEN_FRAGMENT,
-  )
-  .toString()
+GV_FRAGMENT = selectFromgv().id.garten_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 HERKUNFT_FRAGMENT = selectFromherkunft()
   .id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.herkunft_files()
@@ -124,11 +118,9 @@ KULTUR_FRAGMENT = selectFromkultur()
   .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
     () => ART_FRAGMENT,
   )
-  .garten(() => GARTEN_FRAGMENT)
   .herkunft(() => HERKUNFT_FRAGMENT)
   .kultur_files()
   .kultur_option()
-  .events(() => EVENT_FRAGMENT)
   .kultur_qk_choosens()
   .lieferungsByNachKulturId(() => LIEFERUNG_FRAGMENT)
   .lieferungsByVonKulturId(() => LIEFERUNG_FRAGMENT)
