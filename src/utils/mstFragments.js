@@ -90,7 +90,6 @@ EVENT_FRAGMENT = selectFromevent()
 
 GARTEN_FRAGMENT = selectFromgarten()
   .id.name.person_id.strasse.plz.ort.aktiv.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.garten_files()
-  .gvs(() => GV_FRAGMENT)
   .kulturs(() => KULTUR_FRAGMENT)
   .toString()
 
@@ -153,7 +152,6 @@ PERSON_FRAGMENT = selectFromperson()
     () => EVENT_FRAGMENT,
   )
   .gartens(() => GARTEN_FRAGMENT)
-  .gvs(() => GV_FRAGMENT)
   .lieferungs(() => LIEFERUNG_FRAGMENT)
   .person_files()
   .person_option()
