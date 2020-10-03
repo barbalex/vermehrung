@@ -364,7 +364,6 @@ const Search = () => {
       }),
       menuList: (provided) => ({
         ...provided,
-        overflow: 'hidden',
         maxHeight: 'calc(100vh - 60px)',
       }),
       menu: (provided) => ({
