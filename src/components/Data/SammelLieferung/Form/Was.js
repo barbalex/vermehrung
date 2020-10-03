@@ -55,36 +55,11 @@ const FieldRow = styled.div`
     margin-top: 8px;
   }
 `
-const Herkunft = styled.div`
-  height: 54px;
-  user-select: none;
-`
-const HerkunftLabel = styled.div`
-  color: rgb(0, 0, 0, 0.54);
-  font-size: 12px;
-  padding-bottom: 2px;
-`
 
 const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
   const store = useContext(StoreContext)
 
   const { artsSorted, errors } = store
-
-  const herkunftByNachKultur = row?.kulturByNachKulturId?.herkunft
-  const herkunftByVonKultur = row?.kulturByVonKulturId?.herkunft
-  const herkunftBySammlung = row?.sammlung?.herkunft
-  const herkunft =
-    herkunftByNachKultur ?? herkunftByVonKultur ?? herkunftBySammlung
-  const herkunftQuelle = herkunftByNachKultur
-    ? 'nach-Kultur'
-    : herkunftByVonKultur
-    ? 'von-Kultur'
-    : 'Sammlung'
-  const herkunftValue = herkunft
-    ? `${herkunft?.nr ?? '(keine Nr)'}: ${
-        herkunft?.gemeinde ?? '(keine Gemeinde)'
-      }, ${herkunft.lokalname ?? '(kein Lokalname)'}`
-    : ''
 
   const artWerte = useMemo(
     () =>
@@ -139,12 +114,6 @@ const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
           saveToDb={saveToDb}
           error={errors?.sammel_lieferung?.art_id}
         />
-      )}
-      {herkunftValue && (
-        <Herkunft>
-          <HerkunftLabel>{`Herkunft (berechnet aus ${herkunftQuelle})`}</HerkunftLabel>
-          {herkunftValue}
-        </Herkunft>
       )}
       <FieldRow>
         {ifNeeded('anzahl_pflanzen') && (

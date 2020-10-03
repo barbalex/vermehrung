@@ -8,6 +8,12 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => {
   const revRowPerson = revRow.person_id
     ? store.persons.get(revRow.person_id)
     : {}
+  const rowHerkunft = row.herkunft_id
+    ? store.herkunfts.get(row.herkunft_id)
+    : {}
+  const revRowHerkunft = revRow.herkunft_id
+    ? store.herkunfts.get(revRow.herkunft_id)
+    : {}
 
   return [
     {
@@ -21,8 +27,8 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => {
       label: 'Person',
     },
     {
-      valueInRow: herkunftLabelFromHerkunft({ herkunft: row.herkunft }),
-      valueInRev: herkunftLabelFromHerkunft({ herkunft: revRow.herkunft }),
+      valueInRow: herkunftLabelFromHerkunft({ herkunft: rowHerkunft }),
+      valueInRev: herkunftLabelFromHerkunft({ herkunft: revRowHerkunft }),
       label: 'Herkunft',
     },
     {
