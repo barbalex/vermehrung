@@ -38,13 +38,14 @@ const KulturNavButtons = ({ row }) => {
     () => setActiveNodeArray([...activeNodeArray, 'Teilkulturen']),
     [activeNodeArray, setActiveNodeArray],
   )
+  const kulturOption = store.kultur_options.get(row.id)
 
   return (
     <>
       <IconButton title="Zur Kultur-Liste" onClick={onClickToKulturen}>
         <UpSvg />
       </IconButton>
-      {row?.kultur_option?.tk && (
+      {kulturOption?.tk && (
         <IconButton title="Zu den Teilkulturen" onClick={onClickToTks}>
           <TkDownSvg />
         </IconButton>

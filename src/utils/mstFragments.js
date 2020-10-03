@@ -103,7 +103,7 @@ HERKUNFT_FRAGMENT = selectFromherkunft()
 HERKUNFT_FILE_FRAGMENT = selectFromherkunft_file().id.herkunft_id.file_id.file_mime_type.name.beschreibung.toString()
 
 KULTUR_FRAGMENT = selectFromkultur()
-  .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur_option()
+  .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted
   .kultur_qk_choosens()
   .lieferungsByNachKulturId(() => LIEFERUNG_FRAGMENT)
   .lieferungsByVonKulturId(() => LIEFERUNG_FRAGMENT)
