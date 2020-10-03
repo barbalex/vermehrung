@@ -21,9 +21,6 @@ const removeMetadata = (d) => {
   delete d.herkunfts
   delete d.kulturs
   delete d.lieferung
-  delete d.lieferungs
-  delete d.person
-  delete d.persons
   delete d.sammlung
   delete d.sammlungs
   delete d.sammel_lieferungs
@@ -31,9 +28,7 @@ const removeMetadata = (d) => {
   delete d.sammel_lieferungs
   delete d.zaehlungs
   delete d.teilzaehlungs
-  //delete d.teilkultur
   delete d.teilzaehlungs
-  delete d.teilkulturs
   delete d.person_files
   delete d.art_files
   delete d.garten_files

@@ -434,7 +434,6 @@ export default async ({
       changed_by: e.changed_by,
     }
     delete e.teilkultur
-    delete e.person
     return newZ
   })
   if (events.length) {
