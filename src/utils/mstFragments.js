@@ -160,7 +160,6 @@ SAMMLUNG_FRAGMENT = selectFromsammlung()
     () => LIEFERUNG_FRAGMENT,
   )
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
-  .sammlung_files()
   .toString()
 
 SAMMLUNG_FILE_FRAGMENT = selectFromsammlung_file().id.sammlung_id.file_id.file_mime_type.name.beschreibung.toString()
