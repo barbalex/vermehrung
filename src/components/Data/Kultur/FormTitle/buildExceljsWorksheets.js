@@ -410,6 +410,8 @@ export default async ({
     const teilkultur = e.teilkultur_id
       ? store.teilkulturs.get(e.teilkultur_id)
       : {}
+    const person = e.person_id ? store.persons.get(e.person_id) : {}
+
     const newZ = {
       id: e.id,
       kultur_id: e.kultur_id,
@@ -420,9 +422,9 @@ export default async ({
         foreignKeys: [],
       }),
       person_id: e.person_id,
-      person_name: e?.person?.fullname ?? '',
+      person_name: person?.fullname ?? '',
       person_rohdaten: removeMetadataFromDataset({
-        dataset: e?.person,
+        dataset: person,
         foreignKeys: [],
       }),
       beschreibung: e.beschreibung,
