@@ -57,14 +57,24 @@ export default ({ artId, herkunftId, store }) => {
 
   const lieferungsDone = lieferungsSorted
     .filter((z) => z.art_id === artId)
-    .filter((z) => z?.kulturByVonKulturId?.herkunft_id === herkunftId)
+    .filter((z) => {
+      const vonKultur = z?.von_kultur_id
+        ? store.kulturs.get(z.von_kultur_id)
+        : {}
+      return vonKultur?.herkunft_id === herkunftId
+    })
     .filter((z) => z.nach_ausgepflanzt)
     .filter((z) => !z.geplant)
     .filter((z) => !!z.anzahl_pflanzen)
     .filter((z) => !!z.datum)
   const lieferungsPlannedAll = lieferungsSorted
     .filter((z) => z.art_id === artId)
-    .filter((z) => z?.kulturByVonKulturId?.herkunft_id === herkunftId)
+    .filter((z) => {
+      const nachKultur = z?.nach_kultur_id
+        ? store.kulturs.get(z.nach_kultur_id)
+        : {}
+      return nachKultur?.herkunft_id === herkunftId
+    })
     .filter((z) => z.nach_ausgepflanzt)
     .filter((z) => z.geplant)
     .filter((z) => !!z.anzahl_pflanzen)

@@ -15,6 +15,12 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => {
   const revRowSammlung = revRow?.von_sammlung_id
     ? store.sammlungs.get(revRow.von_sammlung_id)
     : {}
+  const rowVonKultur = row?.von_kultur_id
+    ? store.kulturs.get(row.von_kultur_id)
+    : {}
+  const revRowVonKultur = revRow?.von_kultur_id
+    ? store.kulturs.get(revRow.von_kultur_id)
+    : {}
 
   return [
     {
@@ -62,11 +68,11 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => {
     },
     {
       valueInRow: kulturLabelFromKultur({
-        kultur: row.kulturByVonKulturId,
+        kultur: rowVonKultur,
         store,
       }),
       valueInRev: kulturLabelFromKultur({
-        kultur: revRow.kulturByVonKulturId,
+        kultur: revRowVonKultur,
         store,
       }),
       label: 'Von Kultur',
