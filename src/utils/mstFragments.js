@@ -94,8 +94,9 @@ GARTEN_FILE_FRAGMENT = selectFromgarten_file().id.garten_id.file_id.file_mime_ty
 GV_FRAGMENT = selectFromgv().id.garten_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 HERKUNFT_FRAGMENT = selectFromherkunft()
-  .id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.herkunft_files()
-  .kulturs(() => KULTUR_FRAGMENT)
+  .id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kulturs(
+    () => KULTUR_FRAGMENT,
+  )
   .toString()
 
 HERKUNFT_FILE_FRAGMENT = selectFromherkunft_file().id.herkunft_id.file_id.file_mime_type.name.beschreibung.toString()

@@ -128,8 +128,9 @@ GV_FRAGMENT = selectFromgv()
   .toString()
 
 HERKUNFT_FRAGMENT = selectFromherkunft()
-  .id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.herkunft_files()
-  .kulturs(() => KULTUR_FRAGMENT)
+  .id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kulturs(
+    () => KULTUR_FRAGMENT,
+  )
   .sammlungs(() => SAMMLUNG_FRAGMENT)
   .toString()
 
