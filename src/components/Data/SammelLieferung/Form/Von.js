@@ -89,9 +89,9 @@ const SammelLieferungVon = ({ showFilter, row, ifNeeded, saveToDb }) => {
         })
         .map((el) => ({
           value: el?.id,
-          label: sammlungLabelFromSammlung(el),
+          label: sammlungLabelFromSammlung({ sammlung: el, store }),
         })),
-    [row.art_id, sammlungsSorted],
+    [row.art_id, sammlungsSorted, store],
   )
 
   const titleRowRef = useRef(null)
