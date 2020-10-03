@@ -141,7 +141,6 @@ PERSON_FRAGMENT = selectFromperson()
   .person_files()
   .person_option()
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
-  .userRoleByUserRole()
   .toString()
 
 PERSON_OPTION_FRAGMENT = selectFromperson_option().id.ar_name_deutsch.ga_strasse.ga_plz.ga_ort.ga_geom_point.ga_lat_lng.ga_aktiv.ga_bemerkungen.hk_kanton.hk_land.hk_bemerkungen.hk_geom_point.ku_zwischenlager.ku_erhaltungskultur.li_show_sl_felder.li_show_sl.sl_show_empty_when_next_to_li.sl_auto_copy_edits.tree_kultur.tree_teilkultur.tree_zaehlung.tree_lieferung.tree_event._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
@@ -172,11 +171,7 @@ TEILKULTUR_FRAGMENT = selectFromteilkultur()
   )
   .toString()
 
-TEILZAEHLUNG_FRAGMENT = selectFromteilzaehlung()
-  .id.zaehlung_id.teilkultur_id.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen.andere_menge.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.zaehlung(
-    () => ZAEHLUNG_FRAGMENT,
-  )
-  .toString()
+TEILZAEHLUNG_FRAGMENT = selectFromteilzaehlung().id.zaehlung_id.teilkultur_id.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen.andere_menge.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 USER_ROLE_FRAGMENT = selectFromuser_role().id.name.label.sort.comment.toString()
 

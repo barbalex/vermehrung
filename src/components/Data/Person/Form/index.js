@@ -97,6 +97,10 @@ const Person = ({
 
   const showDeleted = showFilter || row._deleted
 
+  const userRole = row.user_role
+    ? [...store.user_roles.values()].find((r) => r.name === row.user_role)
+    : {}
+
   return (
     <Container>
       {(activeConflict || showHistory) && (
@@ -133,7 +137,7 @@ const Person = ({
         value={row.user_role}
         field="user_role"
         label="Rolle"
-        helperText={row?.userRoleByUserRole?.comment || ' '}
+        helperText={userRole?.comment || ' '}
         options={userRoleWerte}
         saveToDb={saveToDb}
         error={errors?.person?.user_role}

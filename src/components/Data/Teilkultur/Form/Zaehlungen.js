@@ -77,10 +77,10 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
   const { teilzaehlungsSorted } = store
 
   // there should only be one tz per teilkultur_id
-  const teilzaehlungs = teilzaehlungsSorted.filter(
-    (tz) =>
-      tz?.zaehlung?.kultur_id === kulturId && tz.teilkultur_id === teilkulturId,
-  )
+  const teilzaehlungs = teilzaehlungsSorted.filter((tz) => {
+    const zaehlung = tz?.zaehlung_id ? store.zaehlungs.get(tz.zaehlung_id) : {}
+    return zaehlung?.kultur_id === kulturId && tz.teilkultur_id === teilkulturId
+  })
 
   return (
     <ErrorBoundary>
@@ -88,39 +88,45 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
         <Title>Zählungen</Title>
       </TitleRow>
       <Rows>
-        {teilzaehlungs.map((tz, i) => (
-          <Row key={tz.id} data-last={i === teilzaehlungs.length - 1}>
-            <Datum>{`${format(
-              new Date(tz?.zaehlung?.datum),
-              'yyyy.MM.dd',
-            )}:`}</Datum>
-            <Prognose>{tz?.zaehlung.prognose ? 'Prognose' : ' '}</Prognose>
-            <Pflanzen>
-              {exists(tz.anzahl_pflanzen)
-                ? `${tz.anzahl_pflanzen} Pflanzen`
-                : ''}
-            </Pflanzen>
-            <Auspflanzbereit>
-              {exists(tz.anzahl_auspflanzbereit)
-                ? `${tz.anzahl_auspflanzbereit} auspflanzbereit`
-                : ''}
-            </Auspflanzbereit>
-            <Auspflanzbereit>
-              {exists(tz.anzahl_mutterpflanzen)
-                ? `${tz.anzahl_mutterpflanzen} Mutterpflanzen`
-                : ''}
-            </Auspflanzbereit>
-            <Auspflanzbereit>
-              {exists(tz.andere_menge) ? tz.andere_menge : ''}
-            </Auspflanzbereit>
-            <Other>
-              {exists(tz.auspflanzebereit_beschreibung)
-                ? tz.auspflanzebereit_beschreibung
-                : ''}
-            </Other>
-            <Other>{tz.bemerkungen ? tz.bemerkungen : ''}</Other>
-          </Row>
-        ))}
+        {teilzaehlungs.map((tz, i) => {
+          const zaehlung = tz?.zaehlung_id
+            ? store.zaehlungs.get(tz.zaehlung_id)
+            : {}
+
+          return (
+            <Row key={tz.id} data-last={i === teilzaehlungs.length - 1}>
+              <Datum>{`${format(
+                new Date(zaehlung?.datum),
+                'yyyy.MM.dd',
+              )}:`}</Datum>
+              <Prognose>{zaehlung.prognose ? 'Prognose' : ' '}</Prognose>
+              <Pflanzen>
+                {exists(tz.anzahl_pflanzen)
+                  ? `${tz.anzahl_pflanzen} Pflanzen`
+                  : ''}
+              </Pflanzen>
+              <Auspflanzbereit>
+                {exists(tz.anzahl_auspflanzbereit)
+                  ? `${tz.anzahl_auspflanzbereit} auspflanzbereit`
+                  : ''}
+              </Auspflanzbereit>
+              <Auspflanzbereit>
+                {exists(tz.anzahl_mutterpflanzen)
+                  ? `${tz.anzahl_mutterpflanzen} Mutterpflanzen`
+                  : ''}
+              </Auspflanzbereit>
+              <Auspflanzbereit>
+                {exists(tz.andere_menge) ? tz.andere_menge : ''}
+              </Auspflanzbereit>
+              <Other>
+                {exists(tz.auspflanzebereit_beschreibung)
+                  ? tz.auspflanzebereit_beschreibung
+                  : ''}
+              </Other>
+              <Other>{tz.bemerkungen ? tz.bemerkungen : ''}</Other>
+            </Row>
+          )
+        })}
       </Rows>
     </ErrorBoundary>
   )
