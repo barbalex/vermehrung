@@ -14,6 +14,7 @@ import Select from '../../../shared/Select'
 import exists from '../../../../utils/exists'
 import sammlungLabelFromSammlung from '../../Lieferung/Lieferung/sammlungLabelFromSammlung'
 import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
+import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 
 const Title = styled.div`
   font-weight: bold;
@@ -41,17 +42,34 @@ const TitleRow = styled.div`
     margin-top: -10px;
   }
 `
+const Herkunft = styled.div`
+  height: 54px;
+  user-select: none;
+  ${(props) => !props['data-active'] && 'color: #c1c1c1;'}
+`
+const HerkunftLabel = styled.div`
+  color: rgb(0, 0, 0, 0.54);
+  font-size: 12px;
+  padding-bottom: 2px;
+`
 
-const SammelLieferungVon = ({ showFilter, row, ifNeeded, saveToDb }) => {
+const SammelLieferungVon = ({
+  showFilter,
+  row,
+  ifNeeded,
+  saveToDb,
+  herkunft,
+  nachKulturHerkunft,
+  vonKulturHerkunft,
+}) => {
   const store = useContext(StoreContext)
-
   const { kultursSorted, sammlungsSorted, errors } = store
 
-  const herkunftByNachKultur = row?.kulturByNachKulturId?.herkunft
-  const herkunftByVonKultur = row?.kulturByVonKulturId?.herkunft
-  const herkunftBySammlung = row?.sammlung?.herkunft
-  const herkunft =
-    herkunftByNachKultur ?? herkunftByVonKultur ?? herkunftBySammlung
+  const herkunftQuelle =
+    nachKulturHerkunft || vonKulturHerkunft ? 'Kultur' : 'Sammlung'
+  const herkunftValue = herkunft
+    ? herkunftLabelFromHerkunft({ herkunft })
+    : '(verfügbar, wenn Sammlung oder Kultur gewählt)'
 
   const vonKulturWerteData = kultursSorted
     // show only kulturen of art_id
@@ -145,6 +163,12 @@ const SammelLieferungVon = ({ showFilter, row, ifNeeded, saveToDb }) => {
           error={errors?.sammel_lieferung?.von_kultur_id}
         />
       )}
+      <Herkunft data-active={!!herkunft}>
+        <HerkunftLabel>
+          {herkunft ? `Herkunft (aus ${herkunftQuelle})` : 'Herkunft'}
+        </HerkunftLabel>
+        {herkunftValue}
+      </Herkunft>
     </>
   )
 }
