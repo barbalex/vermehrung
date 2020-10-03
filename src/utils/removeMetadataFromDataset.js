@@ -11,8 +11,6 @@ const removeMetadata = (d) => {
   delete d.zaehlungs
   delete d.teilzaehlungs
   delete d.teilzaehlungs
-  delete d.art_files
-  delete d.art_qks
 
   return d
 }
