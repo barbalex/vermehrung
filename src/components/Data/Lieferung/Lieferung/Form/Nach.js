@@ -57,10 +57,22 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded }) => {
   const urlLastName = activeNodeArray[activeNodeArray.length - 2]
   const isAnlieferung = urlLastName === 'An-Lieferungen'
 
+  const nachKultur = row.nach_kultur_id
+    ? store.kulturs.get(row.nach_kultur_id)
+    : {}
+  const nachKulturHerkunft = nachKultur.herkunft_id
+    ? store.herkunfts.get(nachKultur.herkunft_id)
+    : {}
+  const vonKultur = row.von_kultur_id
+    ? store.kulturs.get(row.von_kultur_id)
+    : {}
+  const vonKulturHerkunft = vonKultur.herkunft_id
+    ? store.herkunfts.get(vonKultur.herkunft_id)
+    : {}
   const herkunftByKultur = isAnlieferung
-    ? row?.kulturByNachKulturId?.herkunft
-    : row?.kulturByVonKulturId?.herkunft
-  const vonSammlung = row?.sammlung //sammlungsSorted.find((s) => s.id === row.von_sammlung_id)
+    ? nachKulturHerkunft
+    : vonKulturHerkunft
+  const vonSammlung = row?.sammlung
   const herkunftBySammlung = vonSammlung
     ? herkunftsSorted.find((s) => s.id === vonSammlung.herkunft_id)
     : null
