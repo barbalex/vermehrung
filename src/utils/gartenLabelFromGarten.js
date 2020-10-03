@@ -1,4 +1,5 @@
 export default ({ garten, store }) => {
+  if (!garten?.id) return '(kein Garten)'
   if (garten?.name) return garten.name
 
   if (garten?.person_id) {

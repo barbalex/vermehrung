@@ -118,7 +118,6 @@ KULTUR_FRAGMENT = selectFromkultur()
   .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
     () => ART_FRAGMENT,
   )
-  .herkunft(() => HERKUNFT_FRAGMENT)
   .kultur_files()
   .kultur_option()
   .kultur_qk_choosens()
@@ -195,7 +194,6 @@ SAMMLUNG_FRAGMENT = selectFromsammlung()
   .id.art_id.person_id.herkunft_id.nr.datum.von_anzahl_individuen.anzahl_pflanzen.gramm_samen.andere_menge.geplant.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
     () => ART_FRAGMENT,
   )
-  .herkunft(() => HERKUNFT_FRAGMENT)
   .lieferungs(() => LIEFERUNG_FRAGMENT)
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .sammlung_files()
