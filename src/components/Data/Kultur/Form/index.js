@@ -161,13 +161,6 @@ const KulturForm = ({
   if (herkunft_id && !herkunftToChoose.includes(herkunft_id)) {
     herkunftToChoose.push(herkunft_id)
   }
-  console.log('Kultur', {
-    thisGartenKulturs,
-    artHerkunftInGartenNichtZl,
-    artHerkunftZwischenlagerInGarten,
-    artenToChoose,
-    herkunftToChoose,
-  })
 
   useEffect(() => {
     unsetError('kultur')
