@@ -5,8 +5,19 @@ import AsyncSelect from 'react-select/Async'
 import Fuse from 'fuse.js'
 import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
+import { DateTime } from 'luxon'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../../models/reactUtils'
+import treeLabelSammlung from '../../../../utils/treeLabelSammlung'
+import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
+import lieferungLabelFromLieferung from '../../../../utils/lieferungLabelFromLieferung'
+import artLabelFromLieferung from '../../../../utils/artLabelFromLieferung'
+import eventLabelFromEvent from '../../../../utils/eventLabelFromEvent'
+import artLabelFromEvent from '../../../../utils/artLabelFromEvent'
+import treeLabelKultur from '../../../../utils/treeLabelKultur'
+import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
+import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
+import artLabelFromArt from '../../../../utils/artLabelFromArt'
 
 const Container = styled.div`
   border-radius: 3px;
@@ -37,25 +48,35 @@ const SearchIcon = styled(FaSearch)`
 const threshold = 0.2
 const distance = 1000 // ensure text in long labels is found
 
+const formatDateForSearch = (datum) =>
+  datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
+
 const formatOptionLabel = ({ label }, { inputValue }) => (
   <Highlighter searchWords={[inputValue]} textToHighlight={label} />
 )
 const formatGroupLabel = (data) => <div>{data.label}</div>
 const noOptionsMessage = () => null
+const loadingMessage = () => null
 
 const Search = () => {
   const store = useContext(StoreContext)
   const {
-    searchArtSuggestions,
-    searchGartenSuggestions,
-    searchHerkunftSuggestions,
-    searchKulturSuggestions,
-    searchEventSuggestions,
-    searchLieferungSuggestions,
-    searchPersonSuggestions,
-    searchSammlungSuggestions,
-    searchZaehlungSuggestions,
+    artsFiltered,
+    eventsFiltered,
+    filter,
+    gartens,
+    gartensFiltered,
+    herkunfts,
+    herkunftsFiltered,
+    kulturs,
+    kultursFiltered,
+    lieferungsFiltered,
+    persons,
+    personsFiltered,
+    sammlungs,
+    sammlungsFiltered,
     singleColumnView,
+    zaehlungsFiltered,
   } = store
   const { setActiveNodeArray } = store.tree
 
@@ -105,15 +126,21 @@ const Search = () => {
           // do nothing
         }
       }
-      store.filter.setShow(false)
+      filter.setShow(false)
       setActiveNodeArray(newActiveNodeArray)
     },
-    [setActiveNodeArray, store.filter],
+    [setActiveNodeArray, filter],
   )
 
   const loadOptions = useCallback(
     (val, cb) => {
+      console.log('Search, loadOptions-callback running')
       const options = []
+      const searchArtSuggestions = artsFiltered.map((a) => ({
+        value: a.id,
+        label: artLabelFromArt({ art: a, store }),
+        type: 'Arten',
+      }))
       const artSuggestionsFuse = new Fuse(searchArtSuggestions, {
         keys: [{ name: 'label', weight: 1 }],
         threshold,
@@ -126,6 +153,22 @@ const Search = () => {
           options: artSuggestions,
         })
       }
+      const searchGartenSuggestions = gartensFiltered.map((g) => {
+        const person = g.person_id ? persons.get(g.person_id) : {}
+
+        return {
+          value: g.id,
+          label: gartenLabelFromGarten({ garten: g, store }),
+          name: g.name,
+          personname: person?.fullname,
+          strasse: g.strasse,
+          plz: g.plz,
+          ort: g.ort,
+          bemerkungen: g.bemerkungen,
+          aktiv: g.aktiv ? 'aktiv' : 'historisch',
+          type: 'Gaerten',
+        }
+      })
       const gartenSuggestionsFuse = new Fuse(searchGartenSuggestions, {
         keys: [
           { name: 'name', weight: 1 },
@@ -148,6 +191,12 @@ const Search = () => {
           options: gartenSuggestions,
         })
       }
+      const searchHerkunftSuggestions = herkunftsFiltered.map((h) => ({
+        value: h.id,
+        label: herkunftLabelFromHerkunft({ herkunft: h }),
+        ...h,
+        type: 'Herkuenfte',
+      }))
       const herkunftSuggestionsFuse = new Fuse(searchHerkunftSuggestions, {
         keys: [
           { name: 'nr', weight: 1 },
@@ -169,6 +218,23 @@ const Search = () => {
           options: herkunftSuggestions,
         })
       }
+      const searchKulturSuggestions = kultursFiltered.map((k) => {
+        const garten = k.garten_id ? gartens.get(k.garten_id) : {}
+        const gartenPerson = garten.person_id
+          ? persons.get(garten.person_id)
+          : {}
+        const herkunft = k.herkunft_id ? herkunfts.get(k.herkunft_id) : {}
+
+        return {
+          value: k.id,
+          label: treeLabelKultur({ kultur: k, store }),
+          personname: gartenPerson?.fullname,
+          herkunftlokalname: herkunft?.lokalname,
+          herkunftgemeinde: herkunft?.gemeinde,
+          bemerkungen: k.bemerkungen,
+          type: 'Kulturen',
+        }
+      })
       const kulturSuggestionsFuse = new Fuse(searchKulturSuggestions, {
         keys: [
           { name: 'label', weight: 1 },
@@ -189,6 +255,24 @@ const Search = () => {
           options: kulturSuggestions,
         })
       }
+      const searchEventSuggestions = eventsFiltered.map((e) => {
+        const kultur = e.kultur_id ? kulturs.get(e.kultur_id) : {}
+        const garten = kultur.garten_id ? gartens.get(kultur.garten_id) : {}
+        const gartenPerson = garten.person_id
+          ? persons.get(garten.person_id)
+          : {}
+
+        return {
+          value: e.id,
+          label: eventLabelFromEvent({ event: e }),
+          artname: artLabelFromEvent({ event: e, store }),
+          gartenname: garten?.name,
+          personname: gartenPerson?.fullname,
+          geplant: e.geplant ? 'geplant' : 'ausgeführt',
+          parent: e.kultur_id,
+          type: 'Events',
+        }
+      })
       const eventSuggestionsFuse = new Fuse(searchEventSuggestions, {
         keys: [
           { name: 'artname', weight: 0.7 },
@@ -209,6 +293,49 @@ const Search = () => {
           options: eventSuggestions,
         })
       }
+      const searchLieferungSuggestions = lieferungsFiltered.map((l) => {
+        const person = l.person_id ? persons.get(l.person_id) : {}
+        const sammlung = l.sammlung_id ? sammlungs.get(l.sammlung_id) : {}
+        const sammlungPerson = sammlung.person_id
+          ? persons.get(sammlung.person_id)
+          : {}
+        const sammlungHerkunft = sammlung.herkunft_id
+          ? herkunfts.get(sammlung.herkunft_id)
+          : {}
+        const vonKultur = l.von_kultur_id ? kulturs.get(l.von_kultur_id) : {}
+        const vonKulturGarten = vonKultur.garten_id
+          ? gartens.get(vonKultur.garten_id)
+          : {}
+        const vonKulturGartenPerson = vonKulturGarten.person_id
+          ? persons.get(vonKulturGarten.person_id)
+          : {}
+        const nachKultur = l.nach_kultur_id ? kulturs.get(l.nach_kultur_id) : {}
+        const nachKulturGarten = nachKultur.garten_id
+          ? gartens.get(nachKultur.garten_id)
+          : {}
+        const nachKulturGartenPerson = nachKulturGarten.person_id
+          ? persons.get(nachKulturGarten.person_id)
+          : {}
+
+        return {
+          value: l.id,
+          label: lieferungLabelFromLieferung({ lieferung: l, store }),
+          artname: artLabelFromLieferung({ lieferung: l, store }),
+          personname: person?.fullname,
+          sammlungNr: sammlung?.nr,
+          sammlungDatum: formatDateForSearch(sammlung?.datum),
+          sammlungPerson: sammlungPerson?.fullname,
+          sammlungHerkunftNr: sammlungHerkunft?.nr,
+          sammlungHerkunftLokalname: sammlungHerkunft?.lokalname,
+          sammlungHerkunftGemeinde: sammlungHerkunft?.gemeinde,
+          vonKulturPersonName: vonKulturGartenPerson?.fullname,
+          nachKulturPersonName: nachKulturGartenPerson?.fullname,
+          ausgepflanzt: l.nach_ausgepflanzt ? 'ausgepflanzt' : '',
+          geplant: l.geplant ? 'geplant' : 'ausgeführt',
+          bemerkungen: l.bemerkungen,
+          type: 'Lieferungen',
+        }
+      })
       const lieferungSuggestionsFuse = new Fuse(searchLieferungSuggestions, {
         keys: [
           { name: 'artname', weight: 1 },
@@ -238,6 +365,20 @@ const Search = () => {
           options: lieferungSuggestions,
         })
       }
+      const searchPersonSuggestions = personsFiltered.map((p) => ({
+        value: p.id,
+        label: personLabelFromPerson({ person: p, store }),
+        nr: p.nr,
+        adresszusatz: p.adresszusatz,
+        strasse: p.strasse,
+        plz: p.plz,
+        telefon_privat: p.telefon_privat,
+        telefon_geschaeft: p.telefon_geschaeft,
+        telefon_mobile: p.telefon_mobile,
+        email: p.email,
+        bemerkungen: p.bemerkungen,
+        type: 'Personen',
+      }))
       const personSuggestionsFuse = new Fuse(searchPersonSuggestions, {
         keys: [
           { name: 'nr', weight: 1 },
@@ -263,6 +404,21 @@ const Search = () => {
           options: personSuggestions,
         })
       }
+      const searchSammlungSuggestions = sammlungsFiltered.map((s) => {
+        const herkunft = s.herkunft_id ? herkunfts.get(s.herkunft_id) : {}
+
+        return {
+          value: s.id,
+          label: treeLabelSammlung({ sammlung: s, store }),
+          herkunftlokalname: herkunft?.lokalname,
+          herkunftgemeinde: herkunft?.gemeinde,
+          nr: s.nr,
+          bemerkungen: s.bemerkungen,
+          datum: formatDateForSearch(s.datum),
+          geplant: s.geplant ? 'geplant' : 'ausgeführt',
+          type: 'Sammlungen',
+        }
+      })
       const sammlungSuggestionsFuse = new Fuse(searchSammlungSuggestions, {
         keys: [
           { name: 'label', weight: 1 },
@@ -285,6 +441,12 @@ const Search = () => {
           options: sammlungSuggestions,
         })
       }
+      const searchZaehlungSuggestions = zaehlungsFiltered.map((z) => ({
+        value: z.id,
+        label: formatDateForSearch(z.datum),
+        parent: z.kultur_id,
+        type: 'Zaehlungen',
+      }))
       const zaehlungSuggestionsFuse = new Fuse(searchZaehlungSuggestions, {
         keys: [{ name: 'label', weight: 1 }],
         threshold,
@@ -305,15 +467,21 @@ const Search = () => {
       cb(options)
     },
     [
-      searchArtSuggestions,
-      searchEventSuggestions,
-      searchGartenSuggestions,
-      searchHerkunftSuggestions,
-      searchKulturSuggestions,
-      searchLieferungSuggestions,
-      searchPersonSuggestions,
-      searchSammlungSuggestions,
-      searchZaehlungSuggestions,
+      artsFiltered,
+      eventsFiltered,
+      gartens,
+      gartensFiltered,
+      herkunfts,
+      herkunftsFiltered,
+      kulturs,
+      kultursFiltered,
+      lieferungsFiltered,
+      persons,
+      personsFiltered,
+      sammlungs,
+      sammlungsFiltered,
+      store,
+      zaehlungsFiltered,
     ],
   )
 
@@ -395,6 +563,7 @@ const Search = () => {
     }),
     [maxWidth, singleColumnView],
   )
+  console.log('Search, rendering')
 
   return (
     <Container ref={ref}>
@@ -406,8 +575,9 @@ const Search = () => {
         formatOptionLabel={formatOptionLabel}
         placeholder="suchen"
         noOptionsMessage={noOptionsMessage}
+        loadingMessage={loadingMessage}
         classNamePrefix="react-select"
-        loadOptions={loadOptions}
+        loadOptions={(val, cb) => setTimeout(() => loadOptions(val, cb))}
         isClearable
         spellCheck={false}
       />
