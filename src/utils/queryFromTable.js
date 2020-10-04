@@ -1,3 +1,4 @@
+// NOT IN USE
 import types from '../models/Filter/simpleTypes'
 
 export default ({ store, table }) => {
