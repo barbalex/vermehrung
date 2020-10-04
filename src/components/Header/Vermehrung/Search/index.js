@@ -2,22 +2,11 @@ import React, { useCallback, useContext, useMemo, useRef } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import styled from 'styled-components'
 import Select from 'react-select/Async'
-import Fuse from 'fuse.js'
 import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
-import { DateTime } from 'luxon'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { StoreContext } from '../../../../models/reactUtils'
-import treeLabelSammlung from '../../../../utils/treeLabelSammlung'
-import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
-import lieferungLabelFromLieferung from '../../../../utils/lieferungLabelFromLieferung'
-import artLabelFromLieferung from '../../../../utils/artLabelFromLieferung'
-import eventLabelFromEvent from '../../../../utils/eventLabelFromEvent'
-import artLabelFromEvent from '../../../../utils/artLabelFromEvent'
-import treeLabelKultur from '../../../../utils/treeLabelKultur'
-import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
-import artLabelFromArt from '../../../../utils/artLabelFromArt'
 import buildOptions from './buildOptions'
 
 const Container = styled.div`
@@ -46,11 +35,6 @@ const SearchIcon = styled(FaSearch)`
   margin-right: -25px;
   z-index: 1;
 `
-const threshold = 0.2
-const distance = 1000 // ensure text in long labels is found
-
-const formatDateForSearch = (datum) =>
-  datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
 const formatOptionLabel = ({ label }, { inputValue }) => (
   <Highlighter searchWords={[inputValue]} textToHighlight={label} />
@@ -61,24 +45,7 @@ const loadingMessage = () => null
 
 const Search = () => {
   const store = useContext(StoreContext)
-  const {
-    artsFiltered,
-    eventsFiltered,
-    filter,
-    gartens,
-    gartensFiltered,
-    herkunfts,
-    herkunftsFiltered,
-    kulturs,
-    kultursFiltered,
-    lieferungsFiltered,
-    persons,
-    personsFiltered,
-    sammlungs,
-    sammlungsFiltered,
-    singleColumnView,
-    zaehlungsFiltered,
-  } = store
+  const { filter, singleColumnView } = store
   const { setActiveNodeArray } = store.tree
 
   const onChange = useCallback(
@@ -133,12 +100,15 @@ const Search = () => {
     [setActiveNodeArray, filter],
   )
 
+  const loadOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
+    buildOptions({ store, cb, val })
+  }, 600)
   const loadOptions = useCallback(
     (val, cb) => {
       console.log('Search, loadOptions-callback running')
-      buildOptions({ store, cb, val })
+      loadOptionsDebounced.callback({ cb, val })
     },
-    [store],
+    [loadOptionsDebounced],
   )
 
   const ref = useRef(null)
