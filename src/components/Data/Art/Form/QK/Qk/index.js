@@ -47,7 +47,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const ApQkQk = ({ artId, qks }) => {
+const ApQkQk = ({ artId, qkChoosens }) => {
   const store = useContext(StoreContext)
 
   const [filter, setFilter] = useState('')
@@ -60,11 +60,16 @@ const ApQkQk = ({ artId, qks }) => {
     artId,
     store,
   })
-  const messageGroups = qks
-    .map((qk) => ({
-      title: qk?.art_qk?.titel,
-      messages: messageFunctions[qk?.art_qk?.name](),
-    }))
+  const messageGroups = qkChoosens
+    .map((qkChoosen) => {
+      const artQk = [...store.art_qks.values()].find(
+        (q) => q.name === qkChoosen.qk_name,
+      )
+      return {
+        title: artQk?.titel,
+        messages: messageFunctions[artQk?.name](),
+      }
+    })
     .filter((q) => !!q?.messages?.length)
   const messageGroupsFiltered = messageGroups.filter((messageGroup) => {
     if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {

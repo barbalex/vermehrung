@@ -63,9 +63,7 @@ ART_FRAGMENT = selectFromart().id.ae_id.changed.changed_by._rev._parent_rev._rev
 
 ART_QK_FRAGMENT = selectFromart_qk().id.name.titel.beschreibung.sort.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
-ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen()
-  .id.art_id.qk_name.choosen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_qk()
-  .toString()
+ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen().id.art_id.qk_name.choosen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 ART_FILE_FRAGMENT = selectFromart_file().id.art_id.file_id.file_mime_type.name.beschreibung.toString()
 

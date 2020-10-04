@@ -144,7 +144,11 @@ const ApQk = ({ artId }) => {
             />
           </StyledTabs>
           <Body>
-            {tab === 'qk' ? <Qk artId={artId} qks={qkChoosens} /> : <Choose />}
+            {tab === 'qk' ? (
+              <Qk artId={artId} qkChoosens={qkChoosens} />
+            ) : (
+              <Choose />
+            )}
           </Body>
         </>
       )}
