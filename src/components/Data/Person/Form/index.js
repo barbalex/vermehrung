@@ -13,6 +13,7 @@ import Arten from './Arten'
 import Gaerten from './Gaerten'
 import ConflictList from '../../../shared/ConflictList'
 import exists from '../../../../utils/exists'
+import userRoleSort from '../../../../utils/userRoleSort'
 
 const Container = styled.div`
   padding: 10px;
@@ -42,7 +43,7 @@ const Person = ({
     filter,
     online,
     personsSorted,
-    userRolesSorted,
+    user_roles,
     errors,
     unsetError,
     setError,
@@ -50,11 +51,13 @@ const Person = ({
 
   const userRoleWerte = useMemo(
     () =>
-      userRolesSorted.map((el) => ({
-        value: el.name,
-        label: el.label,
-      })),
-    [userRolesSorted],
+      [...user_roles.values()]
+        .sort((a, b) => userRoleSort({ a, b }))
+        .map((el) => ({
+          value: el.name,
+          label: el.label,
+        })),
+    [user_roles],
   )
 
   useEffect(() => {

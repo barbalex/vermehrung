@@ -1723,9 +1723,6 @@ export const RootStore = RootStoreBase.props({
         .filter((a) => notDeletedOrHasConflict(a))
         .sort((a, b) => gvSort({ a, b, store: self }))
     },
-    get eventFilter() {
-      return queryFromTable({ store: self, table: 'event' })
-    },
     get eventsFiltered() {
       return queryFromStore({ store: self, table: 'event' })
     },
@@ -1738,9 +1735,6 @@ export const RootStore = RootStoreBase.props({
           return true
         })
         .sort((a, b) => eventSort({ a, b }))
-    },
-    get gartenFilter() {
-      return queryFromTable({ store: self, table: 'garten' })
     },
     get gartensFiltered() {
       return queryFromStore({ store: self, table: 'garten' })
@@ -1758,9 +1752,6 @@ export const RootStore = RootStoreBase.props({
         )
         .sort((a, b) => gartenSort({ a, b, store: self }))
     },
-    get herkunftFilter() {
-      return queryFromTable({ store: self, table: 'herkunft' })
-    },
     get herkunftsFiltered() {
       return queryFromStore({ store: self, table: 'herkunft' })
     },
@@ -1773,9 +1764,6 @@ export const RootStore = RootStoreBase.props({
           return true
         })
         .sort((a, b) => herkunftSort({ a, b }))
-    },
-    get kulturFilter() {
-      return queryFromTable({ store: self, table: 'kultur' })
     },
     get kultursFiltered() {
       return queryFromStore({ store: self, table: 'kultur' })
@@ -1793,9 +1781,6 @@ export const RootStore = RootStoreBase.props({
         )
         .sort((a, b) => kulturSort({ a, b, store: self }))
     },
-    get lieferungFilter() {
-      return queryFromTable({ store: self, table: 'lieferung' })
-    },
     get lieferungsFiltered() {
       return queryFromStore({ store: self, table: 'lieferung' })
     },
@@ -1808,9 +1793,6 @@ export const RootStore = RootStoreBase.props({
           return true
         })
         .sort((a, b) => lieferungSort({ a, b }))
-    },
-    get personFilter() {
-      return queryFromTable({ store: self, table: 'person' })
     },
     get personsFiltered() {
       return queryFromStore({ store: self, table: 'person' })
@@ -1828,14 +1810,6 @@ export const RootStore = RootStoreBase.props({
         )
         .sort((a, b) => personSort({ a, b }))
     },
-    get kulturQksSorted() {
-      return [...self.kultur_qks.values()]
-        .filter((a) => notDeletedOrHasConflict(a))
-        .sort((a, b) => qkSort({ a, b }))
-    },
-    get sammelLieferungFilter() {
-      return queryFromTable({ store: self, table: 'sammel_lieferung' })
-    },
     get sammelLieferungsFiltered() {
       return queryFromStore({ store: self, table: 'sammel_lieferung' })
     },
@@ -1849,9 +1823,6 @@ export const RootStore = RootStoreBase.props({
         })
         .sort((a, b) => lieferungSort({ a, b }))
     },
-    get sammlungFilter() {
-      return queryFromTable({ store: self, table: 'sammlung' })
-    },
     get sammlungsFiltered() {
       return queryFromStore({ store: self, table: 'sammlung' })
     },
@@ -1864,9 +1835,6 @@ export const RootStore = RootStoreBase.props({
           return true
         })
         .sort((a, b) => sammlungSort({ a, b, store: self }))
-    },
-    get teilkulturFilter() {
-      return queryFromTable({ store: self, table: 'teilkultur' })
     },
     get teilkultursFiltered() {
       return queryFromStore({ store: self, table: 'teilkultur' })
@@ -1891,14 +1859,6 @@ export const RootStore = RootStoreBase.props({
         })
         .sort((a, b) => teilzaehlungSort({ a, b, store: self }))
     },
-    get userRolesSorted() {
-      return [...self.user_roles.values()].sort((a, b) =>
-        userRoleSort({ a, b }),
-      )
-    },
-    get zaehlungFilter() {
-      return queryFromTable({ store: self, table: 'zaehlung' })
-    },
     get zaehlungsFiltered() {
       return queryFromStore({ store: self, table: 'zaehlung' })
     },
@@ -1911,38 +1871,5 @@ export const RootStore = RootStoreBase.props({
           return true
         })
         .sort((a, b) => zaehlungSort({ a, b, store: self }))
-    },
-    get loadingInitialData() {
-      return [
-        self.aeArtLoaded,
-        self.artLoaded,
-        self.artFileLoaded,
-        self.artQkLoaded,
-        self.artQkChoosenLoaded,
-        self.avLoaded,
-        self.eventLoaded,
-        self.gartenLoaded,
-        self.gartenFileLoaded,
-        self.gvLoaded,
-        self.herkunftLoaded,
-        self.herkunftFileLoaded,
-        self.kulturLoaded,
-        self.kulturFileLoaded,
-        self.kulturOptionLoaded,
-        self.kulturQkLoaded,
-        self.kulturQkChoosenLoaded,
-        self.lieferungLoaded,
-        self.lieferungFileLoaded,
-        self.personLoaded,
-        self.personFileLoaded,
-        self.personOptionLoaded,
-        self.sammelLieferungLoaded,
-        self.sammlungLoaded,
-        self.sammlungFileLoaded,
-        self.teilkulturLoaded,
-        self.teilzaehlungLoaded,
-        self.userRoleLoaded,
-        self.zaehlungLoaded,
-      ].includes(false)
     },
   }))
