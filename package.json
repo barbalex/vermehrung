@@ -93,6 +93,7 @@
     "typeface-roboto-mono": "0.0.75",
     "typography": "0.16.19",
     "uploadcare-widget": "3.10.2",
+    "use-debounce": "^5.0.1",
     "uuid": "8.3.0"
   },
   "devDependencies": {
