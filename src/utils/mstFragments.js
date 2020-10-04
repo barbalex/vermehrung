@@ -67,7 +67,7 @@ ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen().id.art_id.qk_name.choosen.c
 
 ART_FILE_FRAGMENT = selectFromart_file().id.art_id.file_id.file_mime_type.name.beschreibung.toString()
 
-AE_ART_FRAGMENT = selectFromae_art().id.name.ae_art_art().toString()
+AE_ART_FRAGMENT = selectFromae_art().id.name.toString()
 
 AV_FRAGMENT = selectFromav().id.art_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
@@ -84,10 +84,9 @@ HERKUNFT_FRAGMENT = selectFromherkunft().id.nr.lokalname.gemeinde.kanton.land.be
 HERKUNFT_FILE_FRAGMENT = selectFromherkunft_file().id.herkunft_id.file_id.file_mime_type.name.beschreibung.toString()
 
 KULTUR_FRAGMENT = selectFromkultur()
-  .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungsByNachKulturId(
+  .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungsByVonKulturId(
     () => LIEFERUNG_FRAGMENT,
   )
-  .lieferungsByVonKulturId(() => LIEFERUNG_FRAGMENT)
   .sammelLieferungsByNachKulturId(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .toString()
 
