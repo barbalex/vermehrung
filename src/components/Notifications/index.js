@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { MdClose as CloseIcon } from 'react-icons/md'
+import sortBy from 'lodash/sortBy'
 
 const Container = styled.div`
   padding: 5px;
@@ -20,7 +21,13 @@ import Notification from './Notification'
 
 const Notifications = () => {
   const store = useContext(StoreContext)
-  const { notificationsSorted, removeAllNotifications } = store
+  const { removeAllNotifications, notifications } = store
+
+  const notificationsSorted = sortBy([...notifications.values()], 'time')
+    .reverse()
+    // limit to 4
+    .slice(0, 4)
+
   const onClickClose = useCallback(() => removeAllNotifications(), [
     removeAllNotifications,
   ])
