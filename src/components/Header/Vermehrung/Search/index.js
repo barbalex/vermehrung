@@ -188,7 +188,6 @@ const Search = () => {
     }),
     [maxWidth, singleColumnView],
   )
-  console.log('Search, rendering')
 
   return (
     <Container ref={ref}>

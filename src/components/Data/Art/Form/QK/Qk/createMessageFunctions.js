@@ -4,7 +4,7 @@ import groupBy from 'lodash/groupBy'
 import exists from '../../../../../../utils/exists'
 import artLabelFromArt from '../../../../../../utils/artLabelFromArt'
 import gartenLabelFromGarten from '../../../../../../utils/gartenLabelFromGarten'
-import treeLabelKultur from '../../../../../../utils/treeLabelKultur'
+import kulturLabelFromKultur from '../../../../../../utils/kulturLabelFromKultur'
 import treeLabelSammlung from '../../../../../../utils/treeLabelSammlung'
 
 export default ({ artId, store }) => {
@@ -155,7 +155,7 @@ export default ({ artId, store }) => {
         .filter((s) => !exists(s.von_anzahl_individuen))
         .map((k) => ({
           url: ['Arten', artId, 'Kulturen', k.id],
-          text: treeLabelKultur({ kultur: k, store }),
+          text: kulturLabelFromKultur({ kultur: k, store }),
         })),
     kultursWithoutGarten: () =>
       kultursSorted
@@ -163,7 +163,7 @@ export default ({ artId, store }) => {
         .filter((s) => !s.garten_id)
         .map((k) => ({
           url: ['Arten', artId, 'Kulturen', k.id],
-          text: treeLabelKultur({ kultur: k, store }),
+          text: kulturLabelFromKultur({ kultur: k, store }),
         })),
     kultursWithoutHerkunft: () =>
       kultursSorted
@@ -171,7 +171,7 @@ export default ({ artId, store }) => {
         .filter((s) => !s.herkunft_id)
         .map((k) => ({
           url: ['Arten', artId, 'Kulturen', k.id],
-          text: treeLabelKultur({ kultur: k, store }),
+          text: kulturLabelFromKultur({ kultur: k, store }),
         })),
     kultursWithoutZaehlungThisYear: () =>
       kultursSorted
@@ -188,7 +188,7 @@ export default ({ artId, store }) => {
         )
         .map((k) => ({
           url: ['Arten', artId, 'Kulturen', k.id],
-          text: treeLabelKultur({ kultur: k, store }),
+          text: kulturLabelFromKultur({ kultur: k, store }),
         })),
     teilkultursWithoutName: () =>
       teilkultursSorted
@@ -200,7 +200,7 @@ export default ({ artId, store }) => {
         .filter((tk) => !tk.name)
         .map((tk) => {
           const kultur = tk.kultur_id ? store.kulturs.get(tk.kultur_id) : {}
-          const kulturLabel = treeLabelKultur({
+          const kulturLabel = kulturLabelFromKultur({
             kultur,
             store,
           })
@@ -228,7 +228,7 @@ export default ({ artId, store }) => {
         .filter((z) => new Date(z.datum).getTime() > now)
         .map((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          const kulturLabel = treeLabelKultur({
+          const kulturLabel = kulturLabelFromKultur({
             kultur,
             store,
           })
@@ -248,7 +248,7 @@ export default ({ artId, store }) => {
         .filter((z) => !z.datum)
         .map((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          const kulturLabel = treeLabelKultur({
+          const kulturLabel = kulturLabelFromKultur({
             kultur,
             store,
           })
@@ -274,7 +274,7 @@ export default ({ artId, store }) => {
         )
         .map((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          const kulturLabel = treeLabelKultur({
+          const kulturLabel = kulturLabelFromKultur({
             kultur,
             store,
           })
@@ -307,7 +307,7 @@ export default ({ artId, store }) => {
         )
         .map((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          const kulturLabel = treeLabelKultur({
+          const kulturLabel = kulturLabelFromKultur({
             kultur,
             store,
           })
@@ -340,7 +340,7 @@ export default ({ artId, store }) => {
         )
         .map((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          const kulturLabel = treeLabelKultur({
+          const kulturLabel = kulturLabelFromKultur({
             kultur,
             store,
           })
@@ -375,7 +375,7 @@ export default ({ artId, store }) => {
         })
         .map((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          const kulturLabel = treeLabelKultur({
+          const kulturLabel = kulturLabelFromKultur({
             kultur,
             store,
           })
@@ -551,7 +551,7 @@ export default ({ artId, store }) => {
         .filter((e) => !e.beschreibung)
         .map((e) => {
           const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
-          const kulturLabel = treeLabelKultur({
+          const kulturLabel = kulturLabelFromKultur({
             kultur,
             store,
           })
@@ -571,7 +571,7 @@ export default ({ artId, store }) => {
         .filter((e) => !e.datum)
         .map((e) => {
           const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
-          const kulturLabel = treeLabelKultur({
+          const kulturLabel = kulturLabelFromKultur({
             kultur,
             store,
           })
