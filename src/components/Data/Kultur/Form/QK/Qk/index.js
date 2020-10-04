@@ -47,7 +47,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const KulturQkQk = ({ kultur, qks }) => {
+const KulturQkQk = ({ kultur, qkChoosens }) => {
   const store = useContext(StoreContext)
   const [filter, setFilter] = useState('')
   const onChangeFilter = useCallback(
@@ -59,12 +59,17 @@ const KulturQkQk = ({ kultur, qks }) => {
     kulturId: kultur.id,
     store,
   })
-  const messageGroups = qks
-    .map((qk) => ({
-      title: qk?.kultur_qk?.titel,
-      messages: messageFunctions[qk?.kultur_qk?.name](),
-    }))
-    .filter((q) => q.messages.length)
+  const messageGroups = qkChoosens
+    .map((qkChoosen) => {
+      const qk = [...store.kultur_qks.values()].find(
+        (qk) => qk.name === qkChoosen.qk_name,
+      )
+      return {
+        title: qk?.titel,
+        messages: messageFunctions[qk?.name](),
+      }
+    })
+    .filter((qk) => qk.messages.length)
   const messageGroupsFiltered = messageGroups.filter((messageGroup) => {
     if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
       return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
