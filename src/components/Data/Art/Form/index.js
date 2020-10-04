@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from 'react'
+import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
@@ -7,6 +7,7 @@ import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
+import aeArtSort from '../../../../utils/aeArtSort'
 import Files from '../../Files'
 import Timeline from './Timeline'
 import HerkunftTimeline from './HerkunftTimeline'
@@ -39,7 +40,12 @@ const ArtForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { artsSorted, filter, online, aeArtsSorted, errors, unsetError } = store
+  const { artsSorted, filter, online, errors, unsetError, ae_arts } = store
+
+  const aeArtsSorted = useMemo(
+    () => [...ae_arts.values()].sort((a, b) => aeArtSort({ a, b })),
+    [ae_arts],
+  )
 
   useEffect(() => {
     unsetError('art')

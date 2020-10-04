@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import last from 'lodash/last'
@@ -7,6 +7,8 @@ import isUuid from 'is-uuid'
 import RowComponent from './Row'
 import { StoreContext } from '../../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
+import qkSort from '../../../../../../utils/qkSort'
+import notDeletedOrHasConflict from '../../../../../../utils/notDeletedOrHasConflict'
 
 const Container = styled.div`
   display: flex;
@@ -18,9 +20,16 @@ const FieldsContainer = styled.div`
 
 const ChooseQk = () => {
   const store = useContext(StoreContext)
-  const { artQksSorted } = store
+  const { art_qks } = store
   const { activeNodeArray } = store.tree
   const artId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
+  const artQksSorted = useMemo(
+    () =>
+      [...art_qks.values()]
+        .filter((a) => notDeletedOrHasConflict(a))
+        .sort((a, b) => qkSort({ a, b })),
+    [art_qks],
+  )
 
   return (
     <ErrorBoundary>

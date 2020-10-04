@@ -7,7 +7,6 @@ import md5 from 'blueimp-md5'
 import last from 'lodash/last'
 import set from 'lodash/set'
 import unset from 'lodash/unset'
-import uniqBy from 'lodash/uniqBy'
 import isUuid from 'is-uuid'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
@@ -18,7 +17,6 @@ import queryFromTable from '../utils/queryFromTable'
 import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
 import NotificationType from './Notification'
-import aeArtSort from '../utils/aeArtSort'
 import artSort from '../utils/artSort'
 import avSort from '../utils/avSort'
 import gvSort from '../utils/gvSort'
@@ -1702,12 +1700,6 @@ export const RootStore = RootStoreBase.props({
       const userPersonOption = person_options.get(userPerson.id)
       return userPersonOption ?? {}
     },
-    get aeArtsSorted() {
-      return [...self.ae_arts.values()].sort((a, b) => aeArtSort({ a, b }))
-    },
-    get artFilter() {
-      return queryFromTable({ store: self, table: 'art' })
-    },
     get artsFiltered() {
       return queryFromStore({ store: self, table: 'art' })
     },
@@ -1720,11 +1712,6 @@ export const RootStore = RootStoreBase.props({
           return true
         })
         .sort((a, b) => artSort({ a, b, store: self }))
-    },
-    get artQksSorted() {
-      return [...self.art_qks.values()]
-        .filter((a) => notDeletedOrHasConflict(a))
-        .sort((a, b) => qkSort({ a, b }))
     },
     get avsSorted() {
       return [...self.avs.values()]
