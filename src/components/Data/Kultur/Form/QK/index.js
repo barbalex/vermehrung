@@ -147,7 +147,7 @@ const KulturQk = ({ kultur }) => {
           </StyledTabs>
           <Body>
             {tab === 'qk' ? (
-              <Qk kultur={kultur} qks={qkChoosens} />
+              <Qk kultur={kultur} qkChoosens={qkChoosens} />
             ) : (
               <Choose />
             )}
