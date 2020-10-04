@@ -7,7 +7,7 @@ import lieferungLabelFromLieferung from '../../../../utils/lieferungLabelFromLie
 import artLabelFromLieferung from '../../../../utils/artLabelFromLieferung'
 import eventLabelFromEvent from '../../../../utils/eventLabelFromEvent'
 import artLabelFromEvent from '../../../../utils/artLabelFromEvent'
-import treeLabelKultur from '../../../../utils/treeLabelKultur'
+import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
 import artLabelFromArt from '../../../../utils/artLabelFromArt'
@@ -124,7 +124,7 @@ export default ({ store, cb, val }) => {
 
     return {
       value: k.id,
-      label: treeLabelKultur({ kultur: k, store }),
+      label: kulturLabelFromKultur({ kultur: k, store }),
       personname: gartenPerson?.fullname,
       herkunftlokalname: herkunft?.lokalname,
       herkunftgemeinde: herkunft?.gemeinde,

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
-import treeLabelKultur from '../../../utils/treeLabelKultur'
+import kulturLabelFromKultur from '../../../utils/kulturLabelFromKultur'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -39,7 +39,7 @@ const Kulturen = ({ row, style, last }) => {
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{treeLabelKultur({ kultur: row, store })}</div>
+      <div>{kulturLabelFromKultur({ kultur: row, store })}</div>
     </Row>
   )
 }
