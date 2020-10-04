@@ -100,15 +100,14 @@ const Search = () => {
     [setActiveNodeArray, filter],
   )
 
-  const loadOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
+  const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
     buildOptions({ store, cb, val })
   }, 600)
   const loadOptions = useCallback(
     (val, cb) => {
-      console.log('Search, loadOptions-callback running')
-      loadOptionsDebounced.callback({ cb, val })
+      buildOptionsDebounced.callback({ cb, val })
     },
-    [loadOptionsDebounced],
+    [buildOptionsDebounced],
   )
 
   const ref = useRef(null)
