@@ -202,7 +202,7 @@ const Search = () => {
         noOptionsMessage={noOptionsMessage}
         loadingMessage={loadingMessage}
         classNamePrefix="react-select"
-        loadOptions={(val, cb) => setTimeout(() => loadOptions(val, cb), 50)}
+        loadOptions={loadOptions}
         isClearable
         spellCheck={false}
       />
