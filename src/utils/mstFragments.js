@@ -94,10 +94,9 @@ KULTUR_FILE_FRAGMENT = selectFromkultur_file().id.kultur_id.file_id.file_mime_ty
 KULTUR_OPTION_FRAGMENT = selectFromkultur_option().id.ev_datum.ev_geplant.ev_person_id.ev_teilkultur_id.tk.tk_bemerkungen.tz_andere_menge.tz_anzahl_mutterpflanzen.tz_auspflanzbereit_beschreibung.tz_teilkultur_id.tz_bemerkungen.z_bemerkungen._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 LIEFERUNG_FRAGMENT = selectFromlieferung()
-  .id.sammel_lieferung_id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kulturByNachKulturId(
-    () => KULTUR_FRAGMENT,
+  .id.sammel_lieferung_id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.sammel_lieferung(
+    () => SAMMEL_LIEFERUNG_FRAGMENT,
   )
-  .sammel_lieferung(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .toString()
 
 LIEFERUNG_FILE_FRAGMENT = selectFromlieferung_file().id.lieferung_id.file_id.file_mime_type.name.beschreibung.toString()
@@ -108,11 +107,7 @@ PERSON_OPTION_FRAGMENT = selectFromperson_option().id.ar_name_deutsch.ga_strasse
 
 PERSON_FILE_FRAGMENT = selectFromperson_file().id.person_id.file_id.file_mime_type.name.beschreibung.toString()
 
-SAMMEL_LIEFERUNG_FRAGMENT = selectFromsammel_lieferung()
-  .id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen._rev._parent_rev._revisions._depth._conflicts._deleted.kulturByNachKulturId(
-    () => KULTUR_FRAGMENT,
-  )
-  .toString()
+SAMMEL_LIEFERUNG_FRAGMENT = selectFromsammel_lieferung().id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 SAMMLUNG_FRAGMENT = selectFromsammlung().id.art_id.person_id.herkunft_id.nr.datum.von_anzahl_individuen.anzahl_pflanzen.gramm_samen.andere_menge.geplant.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
