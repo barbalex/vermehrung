@@ -3,7 +3,7 @@ export default ({ kultur, store }) => {
   if (kultur.garten_id) {
     garten = store.gartens.get(kultur.garten_id)
   }
-  let gartenName = ''
+  let gartenName = '(kein Garten)'
   if (garten && garten.name) {
     gartenName = garten.name
   }
@@ -12,7 +12,7 @@ export default ({ kultur, store }) => {
     if (person && person.fullname) {
       gartenName = person.fullname
     } else {
-      gartenName = 'kein Name'
+      gartenName = '(Garten ohne Name)'
     }
   }
 
@@ -29,14 +29,16 @@ export default ({ kultur, store }) => {
     artName = aeArt.name
   }
 
-  let herkunftName = '(Herkunft ohne Nr)'
+  let herkunftLabel = '(keine Herkunft)'
   if (kultur.herkunft_id) {
     const herkunft = store.herkunfts.get(kultur.herkunft_id)
     if (herkunft.nr) {
-      herkunftName = herkunft.nr
+      herkunftLabel = herkunft.nr
+    } else {
+      herkunftLabel = '(Herkunft ohne Nr)'
     }
   }
   const zwischenlager = kultur?.zwischenlager ? `, Zwischenlager` : ''
 
-  return `${artName}, von: ${herkunftName}, in: ${gartenName}${zwischenlager}`
+  return `${artName}, von: ${herkunftLabel}, in: ${gartenName}${zwischenlager}`
 }
