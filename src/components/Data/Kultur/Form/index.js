@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import uniq from 'lodash/uniq'
+import uniqBy from 'lodash/uniqBy'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 
@@ -57,13 +58,13 @@ const KulturForm = ({
 }) => {
   const store = useContext(StoreContext)
   const {
-    artHerkuenfte,
     artsSorted,
     errors,
     filter,
     gartensSorted,
     herkunftsSorted,
     online,
+    sammlungsSorted,
     unsetError,
     userPersonOption,
   } = store
@@ -95,6 +96,17 @@ const KulturForm = ({
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => !!o.art_id && !!o.herkunft_id)
     .filter((k) => k.zwischenlager)
+  const artHerkuenfte = useMemo(
+    () =>
+      uniqBy(
+        sammlungsSorted.map((a) => ({
+          art_id: a.art_id,
+          herkunft_id: a.herkunft_id,
+        })),
+        (ah) => `${ah.art_id}/${ah.herkunft_id}`,
+      ),
+    [sammlungsSorted],
+  )
   const artenToChoose = useMemo(
     () =>
       uniq(
