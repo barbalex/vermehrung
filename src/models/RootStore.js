@@ -1652,14 +1652,6 @@ export const RootStore = RootStoreBase.props({
     get activeForm() {
       return activeFormFromActiveNodeArray(self.tree.activeNodeArray)
     },
-    get notificationsSorted() {
-      return (
-        sortBy([...self.notifications.values()], 'time')
-          .reverse()
-          // limit to 4
-          .slice(0, 4)
-      )
-    },
     get queuedQueriesSorted() {
       return sortBy([...self.queuedQueries.values()], 'time')
     },
