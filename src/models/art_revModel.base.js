@@ -31,7 +31,6 @@ export const art_revModelBase = ModelBase.named('art_rev')
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     ae_id: types.union(types.undefined, types.null, types.frozen()),
     art_id: types.union(types.undefined, types.frozen()),
-    avs_aggregate: types.union(types.undefined, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,

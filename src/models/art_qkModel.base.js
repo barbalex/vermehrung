@@ -22,8 +22,6 @@ export const art_qkModelBase = ModelBase.named('art_qk')
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
-    art_qk_choosen_aggregate: types.union(types.undefined, types.frozen()),
-    art_qk_choosen_revs_aggregate: types.union(types.undefined, types.frozen()),
     beschreibung: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),

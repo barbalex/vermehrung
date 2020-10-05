@@ -61,7 +61,6 @@ export const kulturModelBase = ModelBase.named('kultur')
     garten_id: types.union(types.undefined, types.null, types.frozen()),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
-    teilkulturs_aggregate: types.union(types.undefined, types.frozen()),
     von_anzahl_individuen: types.union(
       types.undefined,
       types.null,
