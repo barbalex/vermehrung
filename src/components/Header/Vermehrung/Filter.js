@@ -40,13 +40,7 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
 const Filter = () => {
   const store = useContext(StoreContext)
   const { filter, singleColumnView } = store
-  const {
-    show: showFilter,
-    setShow: setShowFilter,
-    isFiltered: runIsFiltered,
-    empty,
-  } = filter
-  const isFiltered = runIsFiltered()
+  const { show: showFilter, setShow: setShowFilter, filtered, empty } = filter
 
   const onClickFilter = useCallback(() => setShowFilter(!showFilter), [
     setShowFilter,
@@ -62,7 +56,7 @@ const Filter = () => {
         title="Filter"
         data-active={showFilter}
       >
-        {isFiltered ? <RiFilterFill /> : <RiFilterLine />}
+        {filtered ? <RiFilterFill /> : <RiFilterLine />}
       </StyledIconButton>
     )
   }
@@ -74,11 +68,14 @@ const Filter = () => {
       data-active={showFilter}
     >
       Filter
-      {isFiltered && (
+      {filtered && (
         <IconButton
           aria-label="Alle Filter entfernen"
           title="Alle Filter entfernen"
-          onClick={empty}
+          onClick={(e) => {
+            e.stopPropagation()
+            empty()
+          }}
           size="medium"
         >
           <StyledDeleteFilterIcon />
