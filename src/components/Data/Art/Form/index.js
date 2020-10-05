@@ -90,6 +90,8 @@ const ArtForm = ({
 
   const showDeleted = showFilter || row._deleted
 
+  console.log('Art', { aeArtsSorted, row })
+
   return (
     <ErrorBoundary>
       <FieldsContainer>
