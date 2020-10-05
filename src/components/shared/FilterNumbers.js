@@ -32,10 +32,9 @@ const StyledMenuItem = styled(MenuItem)`
 
 const FilterNumbers = ({ filteredNr, totalNr, asMenu }) => {
   const store = useContext(StoreContext)
-  const { isFiltered: runIsFiltered, show } = store.filter
-  const isFiltered = runIsFiltered()
+  const { filtered, show } = store.filter
 
-  if (!(show || isFiltered)) return null
+  if (!(show || filtered)) return null
 
   if (asMenu) {
     return (

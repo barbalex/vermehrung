@@ -78,11 +78,6 @@ export default types
         ([key, value]) => value !== empty[key],
       )
     },
-    isFiltered() {
-      // DO NOT USE VIEW, THE RESULT WILL BE WRONG!!!!
-      const tables = Object.keys(self).filter((t) => t !== 'show')
-      return tables.some((table) => self.tableIsFiltered({ table }))
-    },
     setShow(val) {
       self.show = val
     },
