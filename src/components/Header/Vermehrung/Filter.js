@@ -28,13 +28,18 @@ const StyledIconButton = styled(IconButton)`
   ${(props) => props['data-active'] && 'border: 1px solid #9762d9 !important;'}
   font-size: 2rem !important;
 `
+const IconDiv = styled.div`
+  svg {
+    height: 34px;
+    vertical-align: middle;
+  }
+`
 const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
   cursor: pointer;
   pointer-events: auto;
   color: white;
   font-size: 1.3rem !important;
-  margin-left: -5px;
-  margin-right: -10px;
+  margin-left: 10px;
 `
 
 const Filter = () => {
@@ -69,17 +74,16 @@ const Filter = () => {
     >
       Filter
       {filtered && (
-        <IconButton
+        <IconDiv
           aria-label="Alle Filter entfernen"
           title="Alle Filter entfernen"
           onClick={(e) => {
             e.stopPropagation()
             empty()
           }}
-          size="medium"
         >
           <StyledDeleteFilterIcon />
-        </IconButton>
+        </IconDiv>
       )}
     </FilterButton>
   )
