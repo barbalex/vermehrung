@@ -73,20 +73,28 @@ export default types
       self[table] = emptyValues[table]
     },
     tableIsFiltered({ table }) {
-      let filtered = false
-      Object.entries(self[table]).forEach(([key, value]) => {
-        const empty = emptyHash[table]
-        if (value !== empty[key]) filtered = true
-      })
-      return filtered
+      const empty = emptyHash[table]
+      return Object.entries(self[table]).some(
+        ([key, value]) => value !== empty[key],
+      )
     },
     isFiltered() {
       // DO NOT USE VIEW, THE RESULT WILL BE WRONG!!!!
       const tables = Object.keys(self).filter((t) => t !== 'show')
-      console.log('Filter type, isFiltered', { tables })
       return tables.some((table) => self.tableIsFiltered({ table }))
     },
     setShow(val) {
       self.show = val
+    },
+  }))
+  .views((self) => ({
+    get filtered() {
+      const tables = Object.keys(self).filter((t) => t !== 'show')
+      return tables.some((table) => {
+        const empty = emptyHash[table]
+        return Object.entries(self[table]).some(
+          ([key, value]) => value !== empty[key],
+        )
+      })
     },
   }))
