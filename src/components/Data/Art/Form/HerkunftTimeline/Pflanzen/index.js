@@ -23,6 +23,7 @@ import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
 import { StoreContext } from '../../../../../../models/reactUtils'
+import herkunftLabelFromHerkunft from '../../../../../../utils/herkunftLabelFromHerkunft'
 import buildData from './buildData'
 
 const H4 = styled.h4`
@@ -48,9 +49,7 @@ const ArtTimeline = ({ artId, herkunft, width }) => {
     }
   }, [narrow, width])
 
-  const herkunftLabel = `${herkunft.nr || '(keine Nr)'}: ${
-    herkunft?.gemeinde || '(keine Gemeinde)'
-  }${herkunft.lokalname ? `, ${herkunft.lokalname}` : ''}`
+  const herkunftLabel = herkunftLabelFromHerkunft({ herkunft })
 
   if (!data.length) {
     return (

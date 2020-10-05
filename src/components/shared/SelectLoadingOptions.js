@@ -71,8 +71,8 @@ const StyledSelect = styled(AsyncSelect)`
 `
 
 const SelectLoadingOptions = ({
-  valueLabelPath,
-  valueLabel,
+  valueLabelFunction,
+  valueLabelKey,
   field = '',
   label,
   labelSize = 12,
@@ -81,10 +81,8 @@ const SelectLoadingOptions = ({
   error: saveToDbError,
   modelKey,
   modelFilter = () => true,
-  showFilterModel,
 }) => {
   const store = useContext(StoreContext)
-  const showFilter = store.filter.show
 
   const loadOptions = useCallback(
     (inputValue, cb) => {
@@ -114,9 +112,7 @@ const SelectLoadingOptions = ({
 
   const value = {
     value: row[field] || '',
-    label: showFilter
-      ? showFilterModel.find((m) => m.id === row[field])?.[valueLabel]
-      : get(row, valueLabelPath) || '',
+    label: valueLabelFunction({ [valueLabelKey]: row, store }),
   }
 
   return (
