@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback, useContext, useRef } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -47,10 +47,19 @@ const Login = () => {
   const [emailErrorText, setEmailErrorText] = useState('')
   const [passwordErrorText, setPasswordErrorText] = useState('')
 
+  const emailInput = useRef(null)
+  const passwordInput = useRef(null)
+
   const fetchLogin = useCallback(
     // callbacks pass email or password
     // because state is not up to date yet
     async ({ email: emailPassed, password: passwordPassed }) => {
+      // need to blur fields
+      // why? password-managers enter values but do not blur
+      // if password-manager enters values and user clicks "Anmelden"
+      // it will not work without previous blurring
+      emailInput.current.blur()
+      passwordInput.current.blur()
       const emailToUse = emailPassed || email
       const passwordToUse = passwordPassed || password
       // do everything to clean up so no data is left
@@ -148,6 +157,7 @@ const Login = () => {
               onBlur={onBlurEmail}
               autoFocus
               onKeyPress={onKeyPressEmail}
+              ref={emailInput}
             />
             <FormHelperText id="emailHelper">{emailErrorText}</FormHelperText>
           </FormControl>
@@ -167,6 +177,7 @@ const Login = () => {
               autoComplete="current-password"
               autoCorrect="off"
               spellCheck="false"
+              ref={passwordInput}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
