@@ -6,204 +6,106 @@ import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { ae_artModel } from "./ae_artModel"
 import { ae_artModelSelector } from "./ae_artModel.base"
-import { ae_art_aggregateModel } from "./ae_art_aggregateModel"
-import { ae_art_aggregateModelSelector } from "./ae_art_aggregateModel.base"
 import { artModel } from "./artModel"
 import { artModelSelector } from "./artModel.base"
-import { art_aggregateModel } from "./art_aggregateModel"
-import { art_aggregateModelSelector } from "./art_aggregateModel.base"
 import { art_fileModel } from "./art_fileModel"
 import { art_fileModelSelector } from "./art_fileModel.base"
-import { art_file_aggregateModel } from "./art_file_aggregateModel"
-import { art_file_aggregateModelSelector } from "./art_file_aggregateModel.base"
 import { art_qkModel } from "./art_qkModel"
 import { art_qkModelSelector } from "./art_qkModel.base"
-import { art_qk_aggregateModel } from "./art_qk_aggregateModel"
-import { art_qk_aggregateModelSelector } from "./art_qk_aggregateModel.base"
 import { art_qk_choosenModel } from "./art_qk_choosenModel"
 import { art_qk_choosenModelSelector } from "./art_qk_choosenModel.base"
-import { art_qk_choosen_aggregateModel } from "./art_qk_choosen_aggregateModel"
-import { art_qk_choosen_aggregateModelSelector } from "./art_qk_choosen_aggregateModel.base"
 import { art_qk_choosen_revModel } from "./art_qk_choosen_revModel"
 import { art_qk_choosen_revModelSelector } from "./art_qk_choosen_revModel.base"
-import { art_qk_choosen_rev_aggregateModel } from "./art_qk_choosen_rev_aggregateModel"
-import { art_qk_choosen_rev_aggregateModelSelector } from "./art_qk_choosen_rev_aggregateModel.base"
 import { art_qk_revModel } from "./art_qk_revModel"
 import { art_qk_revModelSelector } from "./art_qk_revModel.base"
-import { art_qk_rev_aggregateModel } from "./art_qk_rev_aggregateModel"
-import { art_qk_rev_aggregateModelSelector } from "./art_qk_rev_aggregateModel.base"
 import { art_revModel } from "./art_revModel"
 import { art_revModelSelector } from "./art_revModel.base"
-import { art_rev_aggregateModel } from "./art_rev_aggregateModel"
-import { art_rev_aggregateModelSelector } from "./art_rev_aggregateModel.base"
 import { avModel } from "./avModel"
 import { avModelSelector } from "./avModel.base"
-import { av_aggregateModel } from "./av_aggregateModel"
-import { av_aggregateModelSelector } from "./av_aggregateModel.base"
 import { av_revModel } from "./av_revModel"
 import { av_revModelSelector } from "./av_revModel.base"
-import { av_rev_aggregateModel } from "./av_rev_aggregateModel"
-import { av_rev_aggregateModelSelector } from "./av_rev_aggregateModel.base"
 import { eventModel } from "./eventModel"
 import { eventModelSelector } from "./eventModel.base"
-import { event_aggregateModel } from "./event_aggregateModel"
-import { event_aggregateModelSelector } from "./event_aggregateModel.base"
 import { event_revModel } from "./event_revModel"
 import { event_revModelSelector } from "./event_revModel.base"
-import { event_rev_aggregateModel } from "./event_rev_aggregateModel"
-import { event_rev_aggregateModelSelector } from "./event_rev_aggregateModel.base"
 import { gartenModel } from "./gartenModel"
 import { gartenModelSelector } from "./gartenModel.base"
-import { garten_aggregateModel } from "./garten_aggregateModel"
-import { garten_aggregateModelSelector } from "./garten_aggregateModel.base"
 import { garten_fileModel } from "./garten_fileModel"
 import { garten_fileModelSelector } from "./garten_fileModel.base"
-import { garten_file_aggregateModel } from "./garten_file_aggregateModel"
-import { garten_file_aggregateModelSelector } from "./garten_file_aggregateModel.base"
 import { garten_revModel } from "./garten_revModel"
 import { garten_revModelSelector } from "./garten_revModel.base"
-import { garten_rev_aggregateModel } from "./garten_rev_aggregateModel"
-import { garten_rev_aggregateModelSelector } from "./garten_rev_aggregateModel.base"
 import { gvModel } from "./gvModel"
 import { gvModelSelector } from "./gvModel.base"
-import { gv_aggregateModel } from "./gv_aggregateModel"
-import { gv_aggregateModelSelector } from "./gv_aggregateModel.base"
 import { gv_revModel } from "./gv_revModel"
 import { gv_revModelSelector } from "./gv_revModel.base"
-import { gv_rev_aggregateModel } from "./gv_rev_aggregateModel"
-import { gv_rev_aggregateModelSelector } from "./gv_rev_aggregateModel.base"
 import { herkunftModel } from "./herkunftModel"
 import { herkunftModelSelector } from "./herkunftModel.base"
-import { herkunft_aggregateModel } from "./herkunft_aggregateModel"
-import { herkunft_aggregateModelSelector } from "./herkunft_aggregateModel.base"
 import { herkunft_fileModel } from "./herkunft_fileModel"
 import { herkunft_fileModelSelector } from "./herkunft_fileModel.base"
-import { herkunft_file_aggregateModel } from "./herkunft_file_aggregateModel"
-import { herkunft_file_aggregateModelSelector } from "./herkunft_file_aggregateModel.base"
 import { herkunft_revModel } from "./herkunft_revModel"
 import { herkunft_revModelSelector } from "./herkunft_revModel.base"
-import { herkunft_rev_aggregateModel } from "./herkunft_rev_aggregateModel"
-import { herkunft_rev_aggregateModelSelector } from "./herkunft_rev_aggregateModel.base"
 import { kulturModel } from "./kulturModel"
 import { kulturModelSelector } from "./kulturModel.base"
-import { kultur_aggregateModel } from "./kultur_aggregateModel"
-import { kultur_aggregateModelSelector } from "./kultur_aggregateModel.base"
 import { kultur_fileModel } from "./kultur_fileModel"
 import { kultur_fileModelSelector } from "./kultur_fileModel.base"
-import { kultur_file_aggregateModel } from "./kultur_file_aggregateModel"
-import { kultur_file_aggregateModelSelector } from "./kultur_file_aggregateModel.base"
 import { kultur_optionModel } from "./kultur_optionModel"
 import { kultur_optionModelSelector } from "./kultur_optionModel.base"
-import { kultur_option_aggregateModel } from "./kultur_option_aggregateModel"
-import { kultur_option_aggregateModelSelector } from "./kultur_option_aggregateModel.base"
 import { kultur_option_revModel } from "./kultur_option_revModel"
 import { kultur_option_revModelSelector } from "./kultur_option_revModel.base"
-import { kultur_option_rev_aggregateModel } from "./kultur_option_rev_aggregateModel"
-import { kultur_option_rev_aggregateModelSelector } from "./kultur_option_rev_aggregateModel.base"
 import { kultur_qkModel } from "./kultur_qkModel"
 import { kultur_qkModelSelector } from "./kultur_qkModel.base"
-import { kultur_qk_aggregateModel } from "./kultur_qk_aggregateModel"
-import { kultur_qk_aggregateModelSelector } from "./kultur_qk_aggregateModel.base"
 import { kultur_qk_choosenModel } from "./kultur_qk_choosenModel"
 import { kultur_qk_choosenModelSelector } from "./kultur_qk_choosenModel.base"
-import { kultur_qk_choosen_aggregateModel } from "./kultur_qk_choosen_aggregateModel"
-import { kultur_qk_choosen_aggregateModelSelector } from "./kultur_qk_choosen_aggregateModel.base"
 import { kultur_qk_choosen_revModel } from "./kultur_qk_choosen_revModel"
 import { kultur_qk_choosen_revModelSelector } from "./kultur_qk_choosen_revModel.base"
-import { kultur_qk_choosen_rev_aggregateModel } from "./kultur_qk_choosen_rev_aggregateModel"
-import { kultur_qk_choosen_rev_aggregateModelSelector } from "./kultur_qk_choosen_rev_aggregateModel.base"
 import { kultur_qk_revModel } from "./kultur_qk_revModel"
 import { kultur_qk_revModelSelector } from "./kultur_qk_revModel.base"
-import { kultur_qk_rev_aggregateModel } from "./kultur_qk_rev_aggregateModel"
-import { kultur_qk_rev_aggregateModelSelector } from "./kultur_qk_rev_aggregateModel.base"
 import { kultur_revModel } from "./kultur_revModel"
 import { kultur_revModelSelector } from "./kultur_revModel.base"
-import { kultur_rev_aggregateModel } from "./kultur_rev_aggregateModel"
-import { kultur_rev_aggregateModelSelector } from "./kultur_rev_aggregateModel.base"
 import { lieferungModel } from "./lieferungModel"
 import { lieferungModelSelector } from "./lieferungModel.base"
-import { lieferung_aggregateModel } from "./lieferung_aggregateModel"
-import { lieferung_aggregateModelSelector } from "./lieferung_aggregateModel.base"
 import { lieferung_fileModel } from "./lieferung_fileModel"
 import { lieferung_fileModelSelector } from "./lieferung_fileModel.base"
-import { lieferung_file_aggregateModel } from "./lieferung_file_aggregateModel"
-import { lieferung_file_aggregateModelSelector } from "./lieferung_file_aggregateModel.base"
 import { lieferung_revModel } from "./lieferung_revModel"
 import { lieferung_revModelSelector } from "./lieferung_revModel.base"
-import { lieferung_rev_aggregateModel } from "./lieferung_rev_aggregateModel"
-import { lieferung_rev_aggregateModelSelector } from "./lieferung_rev_aggregateModel.base"
 import { personModel } from "./personModel"
 import { personModelSelector } from "./personModel.base"
-import { person_aggregateModel } from "./person_aggregateModel"
-import { person_aggregateModelSelector } from "./person_aggregateModel.base"
 import { person_fileModel } from "./person_fileModel"
 import { person_fileModelSelector } from "./person_fileModel.base"
-import { person_file_aggregateModel } from "./person_file_aggregateModel"
-import { person_file_aggregateModelSelector } from "./person_file_aggregateModel.base"
 import { person_optionModel } from "./person_optionModel"
 import { person_optionModelSelector } from "./person_optionModel.base"
-import { person_option_aggregateModel } from "./person_option_aggregateModel"
-import { person_option_aggregateModelSelector } from "./person_option_aggregateModel.base"
 import { person_option_revModel } from "./person_option_revModel"
 import { person_option_revModelSelector } from "./person_option_revModel.base"
-import { person_option_rev_aggregateModel } from "./person_option_rev_aggregateModel"
-import { person_option_rev_aggregateModelSelector } from "./person_option_rev_aggregateModel.base"
 import { person_revModel } from "./person_revModel"
 import { person_revModelSelector } from "./person_revModel.base"
-import { person_rev_aggregateModel } from "./person_rev_aggregateModel"
-import { person_rev_aggregateModelSelector } from "./person_rev_aggregateModel.base"
 import { sammel_lieferungModel } from "./sammel_lieferungModel"
 import { sammel_lieferungModelSelector } from "./sammel_lieferungModel.base"
-import { sammel_lieferung_aggregateModel } from "./sammel_lieferung_aggregateModel"
-import { sammel_lieferung_aggregateModelSelector } from "./sammel_lieferung_aggregateModel.base"
 import { sammel_lieferung_revModel } from "./sammel_lieferung_revModel"
 import { sammel_lieferung_revModelSelector } from "./sammel_lieferung_revModel.base"
-import { sammel_lieferung_rev_aggregateModel } from "./sammel_lieferung_rev_aggregateModel"
-import { sammel_lieferung_rev_aggregateModelSelector } from "./sammel_lieferung_rev_aggregateModel.base"
 import { sammlungModel } from "./sammlungModel"
 import { sammlungModelSelector } from "./sammlungModel.base"
-import { sammlung_aggregateModel } from "./sammlung_aggregateModel"
-import { sammlung_aggregateModelSelector } from "./sammlung_aggregateModel.base"
 import { sammlung_fileModel } from "./sammlung_fileModel"
 import { sammlung_fileModelSelector } from "./sammlung_fileModel.base"
-import { sammlung_file_aggregateModel } from "./sammlung_file_aggregateModel"
-import { sammlung_file_aggregateModelSelector } from "./sammlung_file_aggregateModel.base"
 import { sammlung_revModel } from "./sammlung_revModel"
 import { sammlung_revModelSelector } from "./sammlung_revModel.base"
-import { sammlung_rev_aggregateModel } from "./sammlung_rev_aggregateModel"
-import { sammlung_rev_aggregateModelSelector } from "./sammlung_rev_aggregateModel.base"
 import { spatial_ref_sysModel } from "./spatial_ref_sysModel"
 import { spatial_ref_sysModelSelector } from "./spatial_ref_sysModel.base"
-import { spatial_ref_sys_aggregateModel } from "./spatial_ref_sys_aggregateModel"
-import { spatial_ref_sys_aggregateModelSelector } from "./spatial_ref_sys_aggregateModel.base"
 import { teilkulturModel } from "./teilkulturModel"
 import { teilkulturModelSelector } from "./teilkulturModel.base"
-import { teilkultur_aggregateModel } from "./teilkultur_aggregateModel"
-import { teilkultur_aggregateModelSelector } from "./teilkultur_aggregateModel.base"
 import { teilkultur_revModel } from "./teilkultur_revModel"
 import { teilkultur_revModelSelector } from "./teilkultur_revModel.base"
-import { teilkultur_rev_aggregateModel } from "./teilkultur_rev_aggregateModel"
-import { teilkultur_rev_aggregateModelSelector } from "./teilkultur_rev_aggregateModel.base"
 import { teilzaehlungModel } from "./teilzaehlungModel"
 import { teilzaehlungModelSelector } from "./teilzaehlungModel.base"
 import { teilzaehlung_aggregateModel } from "./teilzaehlung_aggregateModel"
 import { teilzaehlung_aggregateModelSelector } from "./teilzaehlung_aggregateModel.base"
 import { teilzaehlung_revModel } from "./teilzaehlung_revModel"
 import { teilzaehlung_revModelSelector } from "./teilzaehlung_revModel.base"
-import { teilzaehlung_rev_aggregateModel } from "./teilzaehlung_rev_aggregateModel"
-import { teilzaehlung_rev_aggregateModelSelector } from "./teilzaehlung_rev_aggregateModel.base"
 import { user_roleModel } from "./user_roleModel"
 import { user_roleModelSelector } from "./user_roleModel.base"
-import { user_role_aggregateModel } from "./user_role_aggregateModel"
-import { user_role_aggregateModelSelector } from "./user_role_aggregateModel.base"
 import { zaehlungModel } from "./zaehlungModel"
 import { zaehlungModelSelector } from "./zaehlungModel.base"
-import { zaehlung_aggregateModel } from "./zaehlung_aggregateModel"
-import { zaehlung_aggregateModelSelector } from "./zaehlung_aggregateModel.base"
 import { zaehlung_revModel } from "./zaehlung_revModel"
 import { zaehlung_revModelSelector } from "./zaehlung_revModel.base"
-import { zaehlung_rev_aggregateModel } from "./zaehlung_rev_aggregateModel"
-import { zaehlung_rev_aggregateModelSelector } from "./zaehlung_rev_aggregateModel.base"
 
 
 /**
@@ -215,151 +117,151 @@ export const subscription_rootModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("subscription_root"), "subscription_root"),
     ae_art: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => ae_artModel)))),
-    ae_art_aggregate: types.union(types.undefined, types.late(() => ae_art_aggregateModel)),
+    ae_art_aggregate: types.union(types.undefined, types.frozen()),
     art: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => artModel)))),
-    art_aggregate: types.union(types.undefined, types.late(() => art_aggregateModel)),
+    art_aggregate: types.union(types.undefined, types.frozen()),
     art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     art_file: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_fileModel)))),
-    art_file_aggregate: types.union(types.undefined, types.late(() => art_file_aggregateModel)),
+    art_file_aggregate: types.union(types.undefined, types.frozen()),
     art_file_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_fileModel))),
     art_qk: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qkModel)))),
-    art_qk_aggregate: types.union(types.undefined, types.late(() => art_qk_aggregateModel)),
+    art_qk_aggregate: types.union(types.undefined, types.frozen()),
     art_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qkModel))),
     art_qk_choosen: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosenModel)))),
-    art_qk_choosen_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_aggregateModel)),
+    art_qk_choosen_aggregate: types.union(types.undefined, types.frozen()),
     art_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosenModel))),
     art_qk_choosen_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosen_revModel)))),
-    art_qk_choosen_rev_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_rev_aggregateModel)),
+    art_qk_choosen_rev_aggregate: types.union(types.undefined, types.frozen()),
     art_qk_choosen_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosen_revModel))),
     art_qk_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_revModel)))),
-    art_qk_rev_aggregate: types.union(types.undefined, types.late(() => art_qk_rev_aggregateModel)),
+    art_qk_rev_aggregate: types.union(types.undefined, types.frozen()),
     art_qk_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_revModel))),
     art_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_revModel)))),
-    art_rev_aggregate: types.union(types.undefined, types.late(() => art_rev_aggregateModel)),
+    art_rev_aggregate: types.union(types.undefined, types.frozen()),
     art_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_revModel))),
     av: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => avModel)))),
-    av_aggregate: types.union(types.undefined, types.late(() => av_aggregateModel)),
+    av_aggregate: types.union(types.undefined, types.frozen()),
     av_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => avModel))),
     av_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_revModel)))),
-    av_rev_aggregate: types.union(types.undefined, types.late(() => av_rev_aggregateModel)),
+    av_rev_aggregate: types.union(types.undefined, types.frozen()),
     av_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_revModel))),
     event: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => eventModel)))),
-    event_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
+    event_aggregate: types.union(types.undefined, types.frozen()),
     event_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => eventModel))),
     event_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => event_revModel)))),
-    event_rev_aggregate: types.union(types.undefined, types.late(() => event_rev_aggregateModel)),
+    event_rev_aggregate: types.union(types.undefined, types.frozen()),
     event_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => event_revModel))),
     garten: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gartenModel)))),
-    garten_aggregate: types.union(types.undefined, types.late(() => garten_aggregateModel)),
+    garten_aggregate: types.union(types.undefined, types.frozen()),
     garten_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gartenModel))),
     garten_file: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => garten_fileModel)))),
-    garten_file_aggregate: types.union(types.undefined, types.late(() => garten_file_aggregateModel)),
+    garten_file_aggregate: types.union(types.undefined, types.frozen()),
     garten_file_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => garten_fileModel))),
     garten_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => garten_revModel)))),
-    garten_rev_aggregate: types.union(types.undefined, types.late(() => garten_rev_aggregateModel)),
+    garten_rev_aggregate: types.union(types.undefined, types.frozen()),
     garten_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => garten_revModel))),
     gv: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gvModel)))),
-    gv_aggregate: types.union(types.undefined, types.late(() => gv_aggregateModel)),
+    gv_aggregate: types.union(types.undefined, types.frozen()),
     gv_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gvModel))),
     gv_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gv_revModel)))),
-    gv_rev_aggregate: types.union(types.undefined, types.late(() => gv_rev_aggregateModel)),
+    gv_rev_aggregate: types.union(types.undefined, types.frozen()),
     gv_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gv_revModel))),
     herkunft: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunftModel)))),
-    herkunft_aggregate: types.union(types.undefined, types.late(() => herkunft_aggregateModel)),
+    herkunft_aggregate: types.union(types.undefined, types.frozen()),
     herkunft_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_file: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_fileModel)))),
-    herkunft_file_aggregate: types.union(types.undefined, types.late(() => herkunft_file_aggregateModel)),
+    herkunft_file_aggregate: types.union(types.undefined, types.frozen()),
     herkunft_file_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunft_fileModel))),
     herkunft_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_revModel)))),
-    herkunft_rev_aggregate: types.union(types.undefined, types.late(() => herkunft_rev_aggregateModel)),
+    herkunft_rev_aggregate: types.union(types.undefined, types.frozen()),
     herkunft_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunft_revModel))),
     kultur: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
-    kultur_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
+    kultur_aggregate: types.union(types.undefined, types.frozen()),
     kultur_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_file: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_fileModel)))),
-    kultur_file_aggregate: types.union(types.undefined, types.late(() => kultur_file_aggregateModel)),
+    kultur_file_aggregate: types.union(types.undefined, types.frozen()),
     kultur_file_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_fileModel))),
     kultur_option: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_optionModel)))),
-    kultur_option_aggregate: types.union(types.undefined, types.late(() => kultur_option_aggregateModel)),
+    kultur_option_aggregate: types.union(types.undefined, types.frozen()),
     kultur_option_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_option_revModel)))),
-    kultur_option_rev_aggregate: types.union(types.undefined, types.late(() => kultur_option_rev_aggregateModel)),
+    kultur_option_rev_aggregate: types.union(types.undefined, types.frozen()),
     kultur_option_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_option_revModel))),
     kultur_qk: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qkModel)))),
-    kultur_qk_aggregate: types.union(types.undefined, types.late(() => kultur_qk_aggregateModel)),
+    kultur_qk_aggregate: types.union(types.undefined, types.frozen()),
     kultur_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qkModel))),
     kultur_qk_choosen: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel)))),
-    kultur_qk_choosen_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_aggregateModel)),
+    kultur_qk_choosen_aggregate: types.union(types.undefined, types.frozen()),
     kultur_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosenModel))),
     kultur_qk_choosen_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosen_revModel)))),
-    kultur_qk_choosen_rev_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_rev_aggregateModel)),
+    kultur_qk_choosen_rev_aggregate: types.union(types.undefined, types.frozen()),
     kultur_qk_choosen_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosen_revModel))),
     kultur_qk_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_revModel)))),
-    kultur_qk_rev_aggregate: types.union(types.undefined, types.late(() => kultur_qk_rev_aggregateModel)),
+    kultur_qk_rev_aggregate: types.union(types.undefined, types.frozen()),
     kultur_qk_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_revModel))),
     kultur_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_revModel)))),
-    kultur_rev_aggregate: types.union(types.undefined, types.late(() => kultur_rev_aggregateModel)),
+    kultur_rev_aggregate: types.union(types.undefined, types.frozen()),
     kultur_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_revModel))),
     lieferung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
-    lieferung_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
+    lieferung_aggregate: types.union(types.undefined, types.frozen()),
     lieferung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferungModel))),
     lieferung_file: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferung_fileModel)))),
-    lieferung_file_aggregate: types.union(types.undefined, types.late(() => lieferung_file_aggregateModel)),
+    lieferung_file_aggregate: types.union(types.undefined, types.frozen()),
     lieferung_file_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferung_fileModel))),
     lieferung_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferung_revModel)))),
-    lieferung_rev_aggregate: types.union(types.undefined, types.late(() => lieferung_rev_aggregateModel)),
+    lieferung_rev_aggregate: types.union(types.undefined, types.frozen()),
     lieferung_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferung_revModel))),
     person: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => personModel)))),
-    person_aggregate: types.union(types.undefined, types.late(() => person_aggregateModel)),
+    person_aggregate: types.union(types.undefined, types.frozen()),
     person_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_file: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_fileModel)))),
-    person_file_aggregate: types.union(types.undefined, types.late(() => person_file_aggregateModel)),
+    person_file_aggregate: types.union(types.undefined, types.frozen()),
     person_file_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => person_fileModel))),
     person_option: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_optionModel)))),
-    person_option_aggregate: types.union(types.undefined, types.late(() => person_option_aggregateModel)),
+    person_option_aggregate: types.union(types.undefined, types.frozen()),
     person_option_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_option_revModel)))),
-    person_option_rev_aggregate: types.union(types.undefined, types.late(() => person_option_rev_aggregateModel)),
+    person_option_rev_aggregate: types.union(types.undefined, types.frozen()),
     person_option_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => person_option_revModel))),
     person_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_revModel)))),
-    person_rev_aggregate: types.union(types.undefined, types.late(() => person_rev_aggregateModel)),
+    person_rev_aggregate: types.union(types.undefined, types.frozen()),
     person_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => person_revModel))),
     sammel_lieferung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
-    sammel_lieferung_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
+    sammel_lieferung_aggregate: types.union(types.undefined, types.frozen()),
     sammel_lieferung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammel_lieferungModel))),
     sammel_lieferung_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferung_revModel)))),
-    sammel_lieferung_rev_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_rev_aggregateModel)),
+    sammel_lieferung_rev_aggregate: types.union(types.undefined, types.frozen()),
     sammel_lieferung_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammel_lieferung_revModel))),
     sammlung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
-    sammlung_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
+    sammlung_aggregate: types.union(types.undefined, types.frozen()),
     sammlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlungModel))),
     sammlung_file: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlung_fileModel)))),
-    sammlung_file_aggregate: types.union(types.undefined, types.late(() => sammlung_file_aggregateModel)),
+    sammlung_file_aggregate: types.union(types.undefined, types.frozen()),
     sammlung_file_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlung_fileModel))),
     sammlung_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlung_revModel)))),
-    sammlung_rev_aggregate: types.union(types.undefined, types.late(() => sammlung_rev_aggregateModel)),
+    sammlung_rev_aggregate: types.union(types.undefined, types.frozen()),
     sammlung_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlung_revModel))),
     spatial_ref_sys: types.union(types.undefined, types.array(types.late(() => spatial_ref_sysModel))),
-    spatial_ref_sys_aggregate: types.union(types.undefined, types.late(() => spatial_ref_sys_aggregateModel)),
+    spatial_ref_sys_aggregate: types.union(types.undefined, types.frozen()),
     spatial_ref_sys_by_pk: types.union(types.undefined, types.null, types.late(() => spatial_ref_sysModel)),
     teilkultur: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkulturModel)))),
-    teilkultur_aggregate: types.union(types.undefined, types.late(() => teilkultur_aggregateModel)),
+    teilkultur_aggregate: types.union(types.undefined, types.frozen()),
     teilkultur_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkultur_revModel)))),
-    teilkultur_rev_aggregate: types.union(types.undefined, types.late(() => teilkultur_rev_aggregateModel)),
+    teilkultur_rev_aggregate: types.union(types.undefined, types.frozen()),
     teilkultur_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkultur_revModel))),
     teilzaehlung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     teilzaehlung_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     teilzaehlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
     teilzaehlung_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlung_revModel)))),
-    teilzaehlung_rev_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_rev_aggregateModel)),
+    teilzaehlung_rev_aggregate: types.union(types.undefined, types.frozen()),
     teilzaehlung_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlung_revModel))),
     user_role: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => user_roleModel)))),
-    user_role_aggregate: types.union(types.undefined, types.late(() => user_role_aggregateModel)),
+    user_role_aggregate: types.union(types.undefined, types.frozen()),
     user_role_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => user_roleModel))),
     zaehlung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => zaehlungModel)))),
-    zaehlung_aggregate: types.union(types.undefined, types.late(() => zaehlung_aggregateModel)),
+    zaehlung_aggregate: types.union(types.undefined, types.frozen()),
     zaehlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlungModel))),
     zaehlung_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => zaehlung_revModel)))),
-    zaehlung_rev_aggregate: types.union(types.undefined, types.late(() => zaehlung_rev_aggregateModel)),
+    zaehlung_rev_aggregate: types.union(types.undefined, types.frozen()),
     zaehlung_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlung_revModel))),
   })
   .views(self => ({

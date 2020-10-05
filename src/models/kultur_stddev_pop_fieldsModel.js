@@ -6,8 +6,6 @@ export { selectFromkultur_stddev_pop_fields, kultur_stddev_pop_fieldsModelPrimit
 
 /**
  * kultur_stddev_pop_fieldsModel
- *
- * aggregate stddev_pop on columns
  */
 export const kultur_stddev_pop_fieldsModel = kultur_stddev_pop_fieldsModelBase
   .actions(self => ({

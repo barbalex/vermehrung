@@ -6,8 +6,6 @@ export { selectFromart_rev_max_fields, art_rev_max_fieldsModelPrimitives, art_re
 
 /**
  * art_rev_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const art_rev_max_fieldsModel = art_rev_max_fieldsModelBase
   .actions(self => ({

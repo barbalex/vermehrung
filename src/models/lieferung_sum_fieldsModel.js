@@ -6,8 +6,6 @@ export { selectFromlieferung_sum_fields, lieferung_sum_fieldsModelPrimitives, li
 
 /**
  * lieferung_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const lieferung_sum_fieldsModel = lieferung_sum_fieldsModelBase
   .actions(self => ({

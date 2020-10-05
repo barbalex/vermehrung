@@ -6,8 +6,6 @@ export { selectFromgarten_rev_variance_fields, garten_rev_variance_fieldsModelPr
 
 /**
  * garten_rev_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const garten_rev_variance_fieldsModel = garten_rev_variance_fieldsModelBase
   .actions(self => ({

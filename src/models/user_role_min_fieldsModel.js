@@ -6,8 +6,6 @@ export { selectFromuser_role_min_fields, user_role_min_fieldsModelPrimitives, us
 
 /**
  * user_role_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const user_role_min_fieldsModel = user_role_min_fieldsModelBase
   .actions(self => ({

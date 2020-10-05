@@ -6,8 +6,6 @@ export { selectFromspatial_ref_sys_variance_fields, spatial_ref_sys_variance_fie
 
 /**
  * spatial_ref_sys_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const spatial_ref_sys_variance_fieldsModel = spatial_ref_sys_variance_fieldsModelBase
   .actions(self => ({

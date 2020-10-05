@@ -6,8 +6,6 @@ export { selectFromzaehlung_max_fields, zaehlung_max_fieldsModelPrimitives, zaeh
 
 /**
  * zaehlung_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const zaehlung_max_fieldsModel = zaehlung_max_fieldsModelBase
   .actions(self => ({

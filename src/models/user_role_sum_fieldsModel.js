@@ -6,8 +6,6 @@ export { selectFromuser_role_sum_fields, user_role_sum_fieldsModelPrimitives, us
 
 /**
  * user_role_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const user_role_sum_fieldsModel = user_role_sum_fieldsModelBase
   .actions(self => ({

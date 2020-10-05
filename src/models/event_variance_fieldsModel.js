@@ -6,8 +6,6 @@ export { selectFromevent_variance_fields, event_variance_fieldsModelPrimitives, 
 
 /**
  * event_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const event_variance_fieldsModel = event_variance_fieldsModelBase
   .actions(self => ({

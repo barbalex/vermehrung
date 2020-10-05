@@ -6,8 +6,6 @@ export { selectFromlieferung_file_min_fields, lieferung_file_min_fieldsModelPrim
 
 /**
  * lieferung_file_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const lieferung_file_min_fieldsModel = lieferung_file_min_fieldsModelBase
   .actions(self => ({

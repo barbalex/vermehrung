@@ -6,8 +6,6 @@ export { selectFromkultur_rev_stddev_fields, kultur_rev_stddev_fieldsModelPrimit
 
 /**
  * kultur_rev_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const kultur_rev_stddev_fieldsModel = kultur_rev_stddev_fieldsModelBase
   .actions(self => ({

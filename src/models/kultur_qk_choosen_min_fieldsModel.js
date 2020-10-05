@@ -6,8 +6,6 @@ export { selectFromkultur_qk_choosen_min_fields, kultur_qk_choosen_min_fieldsMod
 
 /**
  * kultur_qk_choosen_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const kultur_qk_choosen_min_fieldsModel = kultur_qk_choosen_min_fieldsModelBase
   .actions(self => ({

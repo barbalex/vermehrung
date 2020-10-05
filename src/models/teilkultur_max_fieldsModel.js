@@ -6,8 +6,6 @@ export { selectFromteilkultur_max_fields, teilkultur_max_fieldsModelPrimitives, 
 
 /**
  * teilkultur_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const teilkultur_max_fieldsModel = teilkultur_max_fieldsModelBase
   .actions(self => ({

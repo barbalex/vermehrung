@@ -6,8 +6,6 @@ export { selectFromevent_stddev_pop_fields, event_stddev_pop_fieldsModelPrimitiv
 
 /**
  * event_stddev_pop_fieldsModel
- *
- * aggregate stddev_pop on columns
  */
 export const event_stddev_pop_fieldsModel = event_stddev_pop_fieldsModelBase
   .actions(self => ({

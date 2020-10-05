@@ -6,8 +6,6 @@ export { selectFromperson_option_stddev_fields, person_option_stddev_fieldsModel
 
 /**
  * person_option_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const person_option_stddev_fieldsModel = person_option_stddev_fieldsModelBase
   .actions(self => ({

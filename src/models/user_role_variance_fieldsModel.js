@@ -6,8 +6,6 @@ export { selectFromuser_role_variance_fields, user_role_variance_fieldsModelPrim
 
 /**
  * user_role_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const user_role_variance_fieldsModel = user_role_variance_fieldsModelBase
   .actions(self => ({

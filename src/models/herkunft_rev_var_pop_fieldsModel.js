@@ -6,8 +6,6 @@ export { selectFromherkunft_rev_var_pop_fields, herkunft_rev_var_pop_fieldsModel
 
 /**
  * herkunft_rev_var_pop_fieldsModel
- *
- * aggregate var_pop on columns
  */
 export const herkunft_rev_var_pop_fieldsModel = herkunft_rev_var_pop_fieldsModelBase
   .actions(self => ({

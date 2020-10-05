@@ -6,8 +6,6 @@ export { selectFromherkunft_rev_variance_fields, herkunft_rev_variance_fieldsMod
 
 /**
  * herkunft_rev_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const herkunft_rev_variance_fieldsModel = herkunft_rev_variance_fieldsModelBase
   .actions(self => ({

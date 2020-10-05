@@ -6,8 +6,6 @@ export { selectFromgarten_sum_fields, garten_sum_fieldsModelPrimitives, garten_s
 
 /**
  * garten_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const garten_sum_fieldsModel = garten_sum_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromperson_file_min_fields, person_file_min_fieldsModelPrimitives
 
 /**
  * person_file_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const person_file_min_fieldsModel = person_file_min_fieldsModelBase
   .actions(self => ({

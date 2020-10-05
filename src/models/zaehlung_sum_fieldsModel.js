@@ -6,8 +6,6 @@ export { selectFromzaehlung_sum_fields, zaehlung_sum_fieldsModelPrimitives, zaeh
 
 /**
  * zaehlung_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const zaehlung_sum_fieldsModel = zaehlung_sum_fieldsModelBase
   .actions(self => ({

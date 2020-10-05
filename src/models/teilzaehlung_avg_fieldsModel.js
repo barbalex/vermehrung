@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_avg_fields, teilzaehlung_avg_fieldsModelPrimitiv
 
 /**
  * teilzaehlung_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const teilzaehlung_avg_fieldsModel = teilzaehlung_avg_fieldsModelBase
   .actions(self => ({

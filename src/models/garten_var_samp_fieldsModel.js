@@ -6,8 +6,6 @@ export { selectFromgarten_var_samp_fields, garten_var_samp_fieldsModelPrimitives
 
 /**
  * garten_var_samp_fieldsModel
- *
- * aggregate var_samp on columns
  */
 export const garten_var_samp_fieldsModel = garten_var_samp_fieldsModelBase
   .actions(self => ({

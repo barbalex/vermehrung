@@ -6,8 +6,6 @@ export { selectFromevent_rev_var_pop_fields, event_rev_var_pop_fieldsModelPrimit
 
 /**
  * event_rev_var_pop_fieldsModel
- *
- * aggregate var_pop on columns
  */
 export const event_rev_var_pop_fieldsModel = event_rev_var_pop_fieldsModelBase
   .actions(self => ({

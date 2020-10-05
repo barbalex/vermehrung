@@ -6,8 +6,6 @@ export { selectFromkultur_qk_choosen_max_fields, kultur_qk_choosen_max_fieldsMod
 
 /**
  * kultur_qk_choosen_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const kultur_qk_choosen_max_fieldsModel = kultur_qk_choosen_max_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromart_qk_choosen_min_fields, art_qk_choosen_min_fieldsModelPrim
 
 /**
  * art_qk_choosen_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const art_qk_choosen_min_fieldsModel = art_qk_choosen_min_fieldsModelBase
   .actions(self => ({

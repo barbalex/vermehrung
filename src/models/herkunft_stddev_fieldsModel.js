@@ -6,8 +6,6 @@ export { selectFromherkunft_stddev_fields, herkunft_stddev_fieldsModelPrimitives
 
 /**
  * herkunft_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const herkunft_stddev_fieldsModel = herkunft_stddev_fieldsModelBase
   .actions(self => ({

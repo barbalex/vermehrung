@@ -6,8 +6,6 @@ export { selectFromlieferung_file_max_fields, lieferung_file_max_fieldsModelPrim
 
 /**
  * lieferung_file_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const lieferung_file_max_fieldsModel = lieferung_file_max_fieldsModelBase
   .actions(self => ({

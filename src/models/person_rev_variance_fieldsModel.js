@@ -6,8 +6,6 @@ export { selectFromperson_rev_variance_fields, person_rev_variance_fieldsModelPr
 
 /**
  * person_rev_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const person_rev_variance_fieldsModel = person_rev_variance_fieldsModelBase
   .actions(self => ({

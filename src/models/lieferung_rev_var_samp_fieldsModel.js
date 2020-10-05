@@ -6,8 +6,6 @@ export { selectFromlieferung_rev_var_samp_fields, lieferung_rev_var_samp_fieldsM
 
 /**
  * lieferung_rev_var_samp_fieldsModel
- *
- * aggregate var_samp on columns
  */
 export const lieferung_rev_var_samp_fieldsModel = lieferung_rev_var_samp_fieldsModelBase
   .actions(self => ({

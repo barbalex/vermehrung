@@ -6,8 +6,6 @@ export { selectFromkultur_rev_stddev_samp_fields, kultur_rev_stddev_samp_fieldsM
 
 /**
  * kultur_rev_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const kultur_rev_stddev_samp_fieldsModel = kultur_rev_stddev_samp_fieldsModelBase
   .actions(self => ({

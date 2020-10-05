@@ -6,8 +6,6 @@ export { selectFromart_variance_fields, art_variance_fieldsModelPrimitives, art_
 
 /**
  * art_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const art_variance_fieldsModel = art_variance_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromteilkultur_rev_var_pop_fields, teilkultur_rev_var_pop_fieldsM
 
 /**
  * teilkultur_rev_var_pop_fieldsModel
- *
- * aggregate var_pop on columns
  */
 export const teilkultur_rev_var_pop_fieldsModel = teilkultur_rev_var_pop_fieldsModelBase
   .actions(self => ({

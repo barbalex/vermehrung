@@ -6,8 +6,6 @@ export { selectFromperson_rev_stddev_fields, person_rev_stddev_fieldsModelPrimit
 
 /**
  * person_rev_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const person_rev_stddev_fieldsModel = person_rev_stddev_fieldsModelBase
   .actions(self => ({

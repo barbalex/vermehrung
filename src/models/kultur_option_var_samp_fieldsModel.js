@@ -6,8 +6,6 @@ export { selectFromkultur_option_var_samp_fields, kultur_option_var_samp_fieldsM
 
 /**
  * kultur_option_var_samp_fieldsModel
- *
- * aggregate var_samp on columns
  */
 export const kultur_option_var_samp_fieldsModel = kultur_option_var_samp_fieldsModelBase
   .actions(self => ({

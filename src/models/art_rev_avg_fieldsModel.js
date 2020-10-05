@@ -6,8 +6,6 @@ export { selectFromart_rev_avg_fields, art_rev_avg_fieldsModelPrimitives, art_re
 
 /**
  * art_rev_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const art_rev_avg_fieldsModel = art_rev_avg_fieldsModelBase
   .actions(self => ({

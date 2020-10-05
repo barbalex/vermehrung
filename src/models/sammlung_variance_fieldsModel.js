@@ -6,8 +6,6 @@ export { selectFromsammlung_variance_fields, sammlung_variance_fieldsModelPrimit
 
 /**
  * sammlung_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const sammlung_variance_fieldsModel = sammlung_variance_fieldsModelBase
   .actions(self => ({

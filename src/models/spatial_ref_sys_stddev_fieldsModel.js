@@ -6,8 +6,6 @@ export { selectFromspatial_ref_sys_stddev_fields, spatial_ref_sys_stddev_fieldsM
 
 /**
  * spatial_ref_sys_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const spatial_ref_sys_stddev_fieldsModel = spatial_ref_sys_stddev_fieldsModelBase
   .actions(self => ({

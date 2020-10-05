@@ -6,8 +6,6 @@ export { selectFromperson_var_samp_fields, person_var_samp_fieldsModelPrimitives
 
 /**
  * person_var_samp_fieldsModel
- *
- * aggregate var_samp on columns
  */
 export const person_var_samp_fieldsModel = person_var_samp_fieldsModelBase
   .actions(self => ({

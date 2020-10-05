@@ -6,8 +6,6 @@ export { selectFromteilkultur_var_samp_fields, teilkultur_var_samp_fieldsModelPr
 
 /**
  * teilkultur_var_samp_fieldsModel
- *
- * aggregate var_samp on columns
  */
 export const teilkultur_var_samp_fieldsModel = teilkultur_var_samp_fieldsModelBase
   .actions(self => ({

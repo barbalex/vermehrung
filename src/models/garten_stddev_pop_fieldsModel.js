@@ -6,8 +6,6 @@ export { selectFromgarten_stddev_pop_fields, garten_stddev_pop_fieldsModelPrimit
 
 /**
  * garten_stddev_pop_fieldsModel
- *
- * aggregate stddev_pop on columns
  */
 export const garten_stddev_pop_fieldsModel = garten_stddev_pop_fieldsModelBase
   .actions(self => ({

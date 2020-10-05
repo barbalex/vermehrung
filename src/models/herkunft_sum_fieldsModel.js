@@ -6,8 +6,6 @@ export { selectFromherkunft_sum_fields, herkunft_sum_fieldsModelPrimitives, herk
 
 /**
  * herkunft_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const herkunft_sum_fieldsModel = herkunft_sum_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromherkunft_file_min_fields, herkunft_file_min_fieldsModelPrimit
 
 /**
  * herkunft_file_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const herkunft_file_min_fieldsModel = herkunft_file_min_fieldsModelBase
   .actions(self => ({

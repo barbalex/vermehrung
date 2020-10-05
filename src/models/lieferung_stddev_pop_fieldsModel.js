@@ -6,8 +6,6 @@ export { selectFromlieferung_stddev_pop_fields, lieferung_stddev_pop_fieldsModel
 
 /**
  * lieferung_stddev_pop_fieldsModel
- *
- * aggregate stddev_pop on columns
  */
 export const lieferung_stddev_pop_fieldsModel = lieferung_stddev_pop_fieldsModelBase
   .actions(self => ({

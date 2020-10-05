@@ -6,8 +6,6 @@ export { selectFromzaehlung_rev_stddev_pop_fields, zaehlung_rev_stddev_pop_field
 
 /**
  * zaehlung_rev_stddev_pop_fieldsModel
- *
- * aggregate stddev_pop on columns
  */
 export const zaehlung_rev_stddev_pop_fieldsModel = zaehlung_rev_stddev_pop_fieldsModelBase
   .actions(self => ({

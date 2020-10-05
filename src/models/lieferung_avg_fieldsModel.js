@@ -6,8 +6,6 @@ export { selectFromlieferung_avg_fields, lieferung_avg_fieldsModelPrimitives, li
 
 /**
  * lieferung_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const lieferung_avg_fieldsModel = lieferung_avg_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromsammlung_stddev_fields, sammlung_stddev_fieldsModelPrimitives
 
 /**
  * sammlung_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const sammlung_stddev_fieldsModel = sammlung_stddev_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromsammlung_var_pop_fields, sammlung_var_pop_fieldsModelPrimitiv
 
 /**
  * sammlung_var_pop_fieldsModel
- *
- * aggregate var_pop on columns
  */
 export const sammlung_var_pop_fieldsModel = sammlung_var_pop_fieldsModelBase
   .actions(self => ({

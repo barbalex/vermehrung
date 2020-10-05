@@ -6,8 +6,6 @@ export { selectFromevent_rev_avg_fields, event_rev_avg_fieldsModelPrimitives, ev
 
 /**
  * event_rev_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const event_rev_avg_fieldsModel = event_rev_avg_fieldsModelBase
   .actions(self => ({

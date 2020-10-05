@@ -6,8 +6,6 @@ export { selectFromevent_stddev_fields, event_stddev_fieldsModelPrimitives, even
 
 /**
  * event_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const event_stddev_fieldsModel = event_stddev_fieldsModelBase
   .actions(self => ({

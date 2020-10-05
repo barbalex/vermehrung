@@ -6,8 +6,6 @@ export { selectFromgarten_stddev_fields, garten_stddev_fieldsModelPrimitives, ga
 
 /**
  * garten_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const garten_stddev_fieldsModel = garten_stddev_fieldsModelBase
   .actions(self => ({

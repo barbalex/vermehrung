@@ -6,8 +6,6 @@ export { selectFromzaehlung_avg_fields, zaehlung_avg_fieldsModelPrimitives, zaeh
 
 /**
  * zaehlung_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const zaehlung_avg_fieldsModel = zaehlung_avg_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromart_file_min_fields, art_file_min_fieldsModelPrimitives, art_
 
 /**
  * art_file_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const art_file_min_fieldsModel = art_file_min_fieldsModelBase
   .actions(self => ({

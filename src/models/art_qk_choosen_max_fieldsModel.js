@@ -6,8 +6,6 @@ export { selectFromart_qk_choosen_max_fields, art_qk_choosen_max_fieldsModelPrim
 
 /**
  * art_qk_choosen_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const art_qk_choosen_max_fieldsModel = art_qk_choosen_max_fieldsModelBase
   .actions(self => ({

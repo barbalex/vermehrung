@@ -6,8 +6,6 @@ export { selectFromuser_role_var_samp_fields, user_role_var_samp_fieldsModelPrim
 
 /**
  * user_role_var_samp_fieldsModel
- *
- * aggregate var_samp on columns
  */
 export const user_role_var_samp_fieldsModel = user_role_var_samp_fieldsModelBase
   .actions(self => ({

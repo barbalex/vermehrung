@@ -6,8 +6,6 @@ export { selectFromlieferung_variance_fields, lieferung_variance_fieldsModelPrim
 
 /**
  * lieferung_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const lieferung_variance_fieldsModel = lieferung_variance_fieldsModelBase
   .actions(self => ({

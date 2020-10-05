@@ -6,8 +6,6 @@ export { selectFromteilkultur_rev_sum_fields, teilkultur_rev_sum_fieldsModelPrim
 
 /**
  * teilkultur_rev_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const teilkultur_rev_sum_fieldsModel = teilkultur_rev_sum_fieldsModelBase
   .actions(self => ({
