@@ -66,14 +66,11 @@ const FilterTitle = ({ title, table, totalNr, filteredNr }) => {
           </IconButton>
         )}
         {isFiltered && (
-          <IconButton
+          <StyledDeleteFilterIcon
             aria-label="Alle Filter entfernen"
             title="Alle Filter entfernen"
             onClick={empty}
-            size="medium"
-          >
-            <StyledDeleteFilterIcon />
-          </IconButton>
+          />
         )}
       </TitleRow>
     </Container>
