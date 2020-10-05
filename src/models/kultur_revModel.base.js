@@ -43,7 +43,6 @@ export const kultur_revModelBase = ModelBase.named('kultur_rev')
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     kultur_id: types.union(types.undefined, types.frozen()),
-    teilkulturs_aggregate: types.union(types.undefined, types.frozen()),
     von_anzahl_individuen: types.union(
       types.undefined,
       types.null,
