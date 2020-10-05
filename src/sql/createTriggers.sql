@@ -143,7 +143,11 @@ BEGIN
     and new.herkunft_id is not null
   then
     INSERT INTO kultur (art_id, herkunft_id, garten_id, zwischenlager)
-    VALUES (NEW.art_id, NEW.herkunft_id, 'cc033efa-b555-11ea-b3de-0242ac130004', true)
+    VALUES
+      -- gaw
+      (NEW.art_id, NEW.herkunft_id, 'cc033efa-b555-11ea-b3de-0242ac130004', true),
+      -- topos kühlschrank
+      (NEW.art_id, NEW.herkunft_id, '1c3ba9f0-ed20-11ea-be2b-93662cfc26b3', true)
     ON CONFLICT DO NOTHING;
   end if;
   RETURN NEW;
@@ -158,6 +162,18 @@ select
   art_id,
   herkunft_id,
   'cc033efa-b555-11ea-b3de-0242ac130004',
+  true
+from sammlung
+where art_id is not null and herkunft_id is not null
+group by art_id, herkunft_id
+ON CONFLICT DO NOTHING;
+
+-- topos kühlschrank
+insert into kultur (art_id, herkunft_id, garten_id, zwischenlager)
+select
+  art_id,
+  herkunft_id,
+  '1c3ba9f0-ed20-11ea-be2b-93662cfc26b3',
   true
 from sammlung
 where art_id is not null and herkunft_id is not null
