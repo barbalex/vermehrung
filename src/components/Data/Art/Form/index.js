@@ -7,6 +7,7 @@ import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
+import artLabelFromArt from '../../../../utils/artLabelFromArt'
 import aeArtSort from '../../../../utils/aeArtSort'
 import Files from '../../Files'
 import Timeline from './Timeline'
@@ -90,8 +91,6 @@ const ArtForm = ({
 
   const showDeleted = showFilter || row._deleted
 
-  console.log('Art', { aeArtsSorted, row })
-
   return (
     <ErrorBoundary>
       <FieldsContainer>
@@ -126,15 +125,14 @@ const ArtForm = ({
         <SelectLoadingOptions
           key={`${row.id}ae_id`}
           field="ae_id"
-          valueLabelPath="art_ae_art.name"
-          valueLabel="name"
+          valueLabelFunction={artLabelFromArt}
+          valueLabelKey="art"
           label="Art"
           row={row}
           saveToDb={saveToDb}
           error={errors?.art?.ae_id}
           modelKey="name"
           modelFilter={aeArtsFilter}
-          showFilterModel={aeArtsSorted}
         />
         {online && !showFilter && row._conflicts && row._conflicts.map && (
           <ConflictList
