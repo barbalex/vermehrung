@@ -1,7 +1,8 @@
 import React, { useContext, useCallback } from 'react'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import { FaFilter } from 'react-icons/fa'
+import { RiFilterFill, RiFilterLine } from 'react-icons/ri'
+import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -13,6 +14,7 @@ const StyledButton = styled(Button)`
   border-width: 0 !important;
   text-transform: none !important;
   margin-right: 5px !important;
+  height: 34px !important;
   &:hover {
     border-width: 1px !important;
   }
@@ -20,15 +22,31 @@ const StyledButton = styled(Button)`
 const FilterButton = styled(StyledButton)`
   border-width: ${(props) =>
     props['data-active'] ? '1px !important' : '0 !important'};
+  height: 34px !important;
 `
 const StyledIconButton = styled(IconButton)`
   ${(props) => props['data-active'] && 'border: 1px solid #9762d9 !important;'}
+  font-size: 2rem !important;
+`
+const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
+  cursor: pointer;
+  pointer-events: auto;
+  color: white;
+  font-size: 1.3rem !important;
+  margin-left: -5px;
+  margin-right: -10px;
 `
 
 const Filter = () => {
   const store = useContext(StoreContext)
   const { filter, singleColumnView } = store
-  const { show: showFilter, setShow: setShowFilter } = filter
+  const {
+    show: showFilter,
+    setShow: setShowFilter,
+    isFiltered: runIsFiltered,
+    empty,
+  } = filter
+  const isFiltered = runIsFiltered()
 
   const onClickFilter = useCallback(() => setShowFilter(!showFilter), [
     setShowFilter,
@@ -44,7 +62,7 @@ const Filter = () => {
         title="Filter"
         data-active={showFilter}
       >
-        <FaFilter />
+        {isFiltered ? <RiFilterFill /> : <RiFilterLine />}
       </StyledIconButton>
     )
   }
@@ -56,6 +74,16 @@ const Filter = () => {
       data-active={showFilter}
     >
       Filter
+      {isFiltered && (
+        <IconButton
+          aria-label="Alle Filter entfernen"
+          title="Alle Filter entfernen"
+          onClick={empty}
+          size="medium"
+        >
+          <StyledDeleteFilterIcon />
+        </IconButton>
+      )}
     </FilterButton>
   )
 }

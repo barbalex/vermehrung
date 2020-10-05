@@ -1,19 +1,43 @@
 import { types } from 'mobx-state-tree'
-
-import { type as art } from './art'
-import { type as event } from './event'
-import { type as garten } from './garten'
-import { type as herkunft } from './herkunft'
-import { type as kultur } from './kultur'
-import { type as kultur_option } from './kultur_option'
-import { type as lieferung } from './lieferung'
-import { type as sammel_lieferung } from './sammel_lieferung'
-import { type as person } from './person'
-import { type as sammlung } from './sammlung'
-import { type as zaehlung } from './zaehlung'
-import { type as teilkultur } from './teilkultur'
-import { type as teilzaehlung } from './teilzaehlung'
+import { type as art, empty as art_empty } from './art'
+import { type as event, empty as event_empty } from './event'
+import { type as garten, empty as garten_empty } from './garten'
+import { type as herkunft, empty as herkunft_empty } from './herkunft'
+import { type as kultur, empty as kultur_empty } from './kultur'
+import {
+  type as kultur_option,
+  empty as kultur_option_empty,
+} from './kultur_option'
+import { type as lieferung, empty as lieferung_empty } from './lieferung'
+import {
+  type as sammel_lieferung,
+  empty as sammel_lieferung_empty,
+} from './sammel_lieferung'
+import { type as person, empty as person_empty } from './person'
+import { type as sammlung, empty as sammlung_empty } from './sammlung'
+import { type as zaehlung, empty as zaehlung_empty } from './zaehlung'
+import { type as teilkultur, empty as teilkultur_empty } from './teilkultur'
+import {
+  type as teilzaehlung,
+  empty as teilzaehlung_empty,
+} from './teilzaehlung'
 import emptyValues from './emptyValues'
+
+const emptyHash = {
+  art: art_empty,
+  event: event_empty,
+  garten: garten_empty,
+  herkunft: herkunft_empty,
+  kultur: kultur_empty,
+  kultur_option: kultur_option_empty,
+  lieferung: lieferung_empty,
+  sammel_lieferung: sammel_lieferung_empty,
+  person: person_empty,
+  sammlung: sammlung_empty,
+  zaehlung: zaehlung_empty,
+  teilkultur: teilkultur_empty,
+  teilzaehlung: teilzaehlung_empty,
+}
 
 export default types
   .model({
@@ -49,13 +73,17 @@ export default types
       self[table] = emptyValues[table]
     },
     tableIsFiltered({ table }) {
-      return (
-        Object.values(self[table] || {}).filter((v) => v || v === 0).length > 0
-      )
+      let filtered = false
+      Object.entries(self[table]).forEach(([key, value]) => {
+        const empty = emptyHash[table]
+        if (value !== empty[key]) filtered = true
+      })
+      return filtered
     },
     isFiltered() {
       // DO NOT USE VIEW, THE RESULT WILL BE WRONG!!!!
       const tables = Object.keys(self).filter((t) => t !== 'show')
+      console.log('Filter type, isFiltered', { tables })
       return tables.some((table) => self.tableIsFiltered({ table }))
     },
     setShow(val) {
