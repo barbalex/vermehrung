@@ -38,7 +38,7 @@ const StyledDeleteFilterIcon2 = styled(DeleteFilterIcon2)`
 
 const FilterTitle = ({ title, table, totalNr, filteredNr }) => {
   const store = useContext(StoreContext)
-  const { tableIsFiltered, isFiltered, emptyTable, empty } = store.filter
+  const { tableIsFiltered, filtered, emptyTable, empty } = store.filter
 
   const existsTableFilter = tableIsFiltered({
     table,
@@ -65,7 +65,7 @@ const FilterTitle = ({ title, table, totalNr, filteredNr }) => {
             <StyledDeleteFilterIcon2 />
           </IconButton>
         )}
-        {isFiltered && (
+        {filtered && (
           <StyledDeleteFilterIcon
             aria-label="Alle Filter entfernen"
             title="Alle Filter entfernen"

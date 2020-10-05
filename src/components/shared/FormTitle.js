@@ -44,8 +44,7 @@ const FormTitle = ({
   filter,
 }) => {
   const store = useContext(StoreContext)
-  const { isFiltered: runIsFiltered, show } = store.filter
-  const isFiltered = runIsFiltered()
+  const { filtered, show } = store.filter
 
   const titleText = filter ? `${title} Filter` : title
 
@@ -54,7 +53,7 @@ const FormTitle = ({
       <Title>{titleText}</Title>
       {table && (
         <Symbols>
-          {(show || isFiltered) && (
+          {(show || filtered) && (
             <FilterNumbers title="Anzahl gefiltert/total">{`${rowsFilteredLength}/${rowsLength}`}</FilterNumbers>
           )}
         </Symbols>
