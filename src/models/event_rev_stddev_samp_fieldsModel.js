@@ -6,8 +6,6 @@ export { selectFromevent_rev_stddev_samp_fields, event_rev_stddev_samp_fieldsMod
 
 /**
  * event_rev_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const event_rev_stddev_samp_fieldsModel = event_rev_stddev_samp_fieldsModelBase
   .actions(self => ({

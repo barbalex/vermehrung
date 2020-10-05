@@ -6,8 +6,6 @@ export { selectFromuser_role_stddev_samp_fields, user_role_stddev_samp_fieldsMod
 
 /**
  * user_role_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const user_role_stddev_samp_fieldsModel = user_role_stddev_samp_fieldsModelBase
   .actions(self => ({

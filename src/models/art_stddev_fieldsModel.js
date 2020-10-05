@@ -6,8 +6,6 @@ export { selectFromart_stddev_fields, art_stddev_fieldsModelPrimitives, art_stdd
 
 /**
  * art_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const art_stddev_fieldsModel = art_stddev_fieldsModelBase
   .actions(self => ({

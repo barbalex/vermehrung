@@ -6,8 +6,6 @@ export { selectFromlieferung_var_pop_fields, lieferung_var_pop_fieldsModelPrimit
 
 /**
  * lieferung_var_pop_fieldsModel
- *
- * aggregate var_pop on columns
  */
 export const lieferung_var_pop_fieldsModel = lieferung_var_pop_fieldsModelBase
   .actions(self => ({

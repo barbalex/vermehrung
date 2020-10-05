@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_var_samp_fields, teilzaehlung_var_samp_fieldsMod
 
 /**
  * teilzaehlung_var_samp_fieldsModel
- *
- * aggregate var_samp on columns
  */
 export const teilzaehlung_var_samp_fieldsModel = teilzaehlung_var_samp_fieldsModelBase
   .actions(self => ({

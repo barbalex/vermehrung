@@ -6,8 +6,6 @@ export { selectFromgarten_stddev_samp_fields, garten_stddev_samp_fieldsModelPrim
 
 /**
  * garten_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const garten_stddev_samp_fieldsModel = garten_stddev_samp_fieldsModelBase
   .actions(self => ({

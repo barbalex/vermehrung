@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_aggregate_fields, teilzaehlung_aggregate_fieldsM
 
 /**
  * teilzaehlung_aggregate_fieldsModel
- *
- * aggregate fields of "teilzaehlung"
  */
 export const teilzaehlung_aggregate_fieldsModel = teilzaehlung_aggregate_fieldsModelBase
   .actions(self => ({

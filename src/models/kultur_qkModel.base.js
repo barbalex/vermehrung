@@ -1,23 +1,19 @@
 /* This is a mst-gql generated file, don't modify it manually */
 /* eslint-disable */
 
-import { types } from "mobx-state-tree"
-import { MSTGQLRef, QueryBuilder } from "mst-gql"
-import { ModelBase } from "./ModelBase"
-import { kultur_qk_choosenModel } from "./kultur_qk_choosenModel"
-import { kultur_qk_choosenModelSelector } from "./kultur_qk_choosenModel.base"
-import { kultur_qk_choosen_aggregateModel } from "./kultur_qk_choosen_aggregateModel"
-import { kultur_qk_choosen_aggregateModelSelector } from "./kultur_qk_choosen_aggregateModel.base"
-
+import { types } from 'mobx-state-tree'
+import { MSTGQLRef, QueryBuilder } from 'mst-gql'
+import { ModelBase } from './ModelBase'
+import { kultur_qk_choosenModel } from './kultur_qk_choosenModel'
+import { kultur_qk_choosenModelSelector } from './kultur_qk_choosenModel.base'
 
 /**
  * kultur_qkBase
  * auto generated base class for the model kultur_qkModel.
  */
-export const kultur_qkModelBase = ModelBase
-  .named('kultur_qk')
+export const kultur_qkModelBase = ModelBase.named('kultur_qk')
   .props({
-    __typename: types.optional(types.literal("kultur_qk"), "kultur_qk"),
+    __typename: types.optional(types.literal('kultur_qk'), 'kultur_qk'),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
     _deleted: types.union(types.undefined, types.null, types.boolean),
     _depth: types.union(types.undefined, types.null, types.integer),
@@ -28,37 +24,61 @@ export const kultur_qkModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
-    kultur_qk_choosens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel)))),
-    kultur_qk_choosens_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_aggregateModel)),
     name: types.union(types.undefined, types.string),
     sort: types.union(types.undefined, types.null, types.frozen()),
     titel: types.union(types.undefined, types.null, types.string),
   })
-  .views(self => ({
+  .views((self) => ({
     get store() {
       return self.__getStore()
-    }
+    },
   }))
 
 export class kultur_qkModelSelector extends QueryBuilder {
-  get _conflicts() { return this.__attr(`_conflicts`) }
-  get _deleted() { return this.__attr(`_deleted`) }
-  get _depth() { return this.__attr(`_depth`) }
-  get _parent_rev() { return this.__attr(`_parent_rev`) }
-  get _rev() { return this.__attr(`_rev`) }
-  get _revisions() { return this.__attr(`_revisions`) }
-  get beschreibung() { return this.__attr(`beschreibung`) }
-  get changed() { return this.__attr(`changed`) }
-  get changed_by() { return this.__attr(`changed_by`) }
-  get id() { return this.__attr(`id`) }
-  get name() { return this.__attr(`name`) }
-  get sort() { return this.__attr(`sort`) }
-  get titel() { return this.__attr(`titel`) }
-  kultur_qk_choosens(builder) { return this.__child(`kultur_qk_choosens`, kultur_qk_choosenModelSelector, builder) }
-  kultur_qk_choosens_aggregate(builder) { return this.__child(`kultur_qk_choosens_aggregate`, kultur_qk_choosen_aggregateModelSelector, builder) }
+  get _conflicts() {
+    return this.__attr(`_conflicts`)
+  }
+  get _deleted() {
+    return this.__attr(`_deleted`)
+  }
+  get _depth() {
+    return this.__attr(`_depth`)
+  }
+  get _parent_rev() {
+    return this.__attr(`_parent_rev`)
+  }
+  get _rev() {
+    return this.__attr(`_rev`)
+  }
+  get _revisions() {
+    return this.__attr(`_revisions`)
+  }
+  get beschreibung() {
+    return this.__attr(`beschreibung`)
+  }
+  get changed() {
+    return this.__attr(`changed`)
+  }
+  get changed_by() {
+    return this.__attr(`changed_by`)
+  }
+  get id() {
+    return this.__attr(`id`)
+  }
+  get name() {
+    return this.__attr(`name`)
+  }
+  get sort() {
+    return this.__attr(`sort`)
+  }
+  get titel() {
+    return this.__attr(`titel`)
+  }
 }
 export function selectFromkultur_qk() {
   return new kultur_qkModelSelector()
 }
 
-export const kultur_qkModelPrimitives = selectFromkultur_qk()._conflicts._deleted._depth._parent_rev._rev._revisions.beschreibung.changed.changed_by.name.sort.titel
+export const kultur_qkModelPrimitives = selectFromkultur_qk()._conflicts
+  ._deleted._depth._parent_rev._rev._revisions.beschreibung.changed.changed_by
+  .name.sort.titel

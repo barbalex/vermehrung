@@ -6,8 +6,6 @@ export { selectFromevent_min_fields, event_min_fieldsModelPrimitives, event_min_
 
 /**
  * event_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const event_min_fieldsModel = event_min_fieldsModelBase
   .actions(self => ({

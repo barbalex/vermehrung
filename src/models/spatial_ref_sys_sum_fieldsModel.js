@@ -6,8 +6,6 @@ export { selectFromspatial_ref_sys_sum_fields, spatial_ref_sys_sum_fieldsModelPr
 
 /**
  * spatial_ref_sys_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const spatial_ref_sys_sum_fieldsModel = spatial_ref_sys_sum_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromkultur_option_variance_fields, kultur_option_variance_fieldsM
 
 /**
  * kultur_option_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const kultur_option_variance_fieldsModel = kultur_option_variance_fieldsModelBase
   .actions(self => ({

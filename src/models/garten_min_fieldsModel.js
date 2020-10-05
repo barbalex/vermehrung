@@ -6,8 +6,6 @@ export { selectFromgarten_min_fields, garten_min_fieldsModelPrimitives, garten_m
 
 /**
  * garten_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const garten_min_fieldsModel = garten_min_fieldsModelBase
   .actions(self => ({

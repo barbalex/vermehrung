@@ -6,8 +6,6 @@ export { selectFromherkunft_rev_avg_fields, herkunft_rev_avg_fieldsModelPrimitiv
 
 /**
  * herkunft_rev_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const herkunft_rev_avg_fieldsModel = herkunft_rev_avg_fieldsModelBase
   .actions(self => ({

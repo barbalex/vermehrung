@@ -6,8 +6,6 @@ export { selectFromperson_option_rev_sum_fields, person_option_rev_sum_fieldsMod
 
 /**
  * person_option_rev_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const person_option_rev_sum_fieldsModel = person_option_rev_sum_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_rev_stddev_fields, teilzaehlung_rev_stddev_field
 
 /**
  * teilzaehlung_rev_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const teilzaehlung_rev_stddev_fieldsModel = teilzaehlung_rev_stddev_fieldsModelBase
   .actions(self => ({

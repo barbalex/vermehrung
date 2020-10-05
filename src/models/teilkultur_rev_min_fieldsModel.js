@@ -6,8 +6,6 @@ export { selectFromteilkultur_rev_min_fields, teilkultur_rev_min_fieldsModelPrim
 
 /**
  * teilkultur_rev_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const teilkultur_rev_min_fieldsModel = teilkultur_rev_min_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromteilkultur_rev_variance_fields, teilkultur_rev_variance_field
 
 /**
  * teilkultur_rev_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const teilkultur_rev_variance_fieldsModel = teilkultur_rev_variance_fieldsModelBase
   .actions(self => ({

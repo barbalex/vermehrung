@@ -6,8 +6,6 @@ export { selectFromherkunft_var_samp_fields, herkunft_var_samp_fieldsModelPrimit
 
 /**
  * herkunft_var_samp_fieldsModel
- *
- * aggregate var_samp on columns
  */
 export const herkunft_var_samp_fieldsModel = herkunft_var_samp_fieldsModelBase
   .actions(self => ({

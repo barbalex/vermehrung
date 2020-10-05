@@ -6,8 +6,6 @@ export { selectFromsammlung_rev_variance_fields, sammlung_rev_variance_fieldsMod
 
 /**
  * sammlung_rev_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const sammlung_rev_variance_fieldsModel = sammlung_rev_variance_fieldsModelBase
   .actions(self => ({

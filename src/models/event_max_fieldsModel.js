@@ -6,8 +6,6 @@ export { selectFromevent_max_fields, event_max_fieldsModelPrimitives, event_max_
 
 /**
  * event_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const event_max_fieldsModel = event_max_fieldsModelBase
   .actions(self => ({

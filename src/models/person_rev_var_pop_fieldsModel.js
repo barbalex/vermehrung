@@ -6,8 +6,6 @@ export { selectFromperson_rev_var_pop_fields, person_rev_var_pop_fieldsModelPrim
 
 /**
  * person_rev_var_pop_fieldsModel
- *
- * aggregate var_pop on columns
  */
 export const person_rev_var_pop_fieldsModel = person_rev_var_pop_fieldsModelBase
   .actions(self => ({

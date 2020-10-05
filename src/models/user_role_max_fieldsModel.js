@@ -6,8 +6,6 @@ export { selectFromuser_role_max_fields, user_role_max_fieldsModelPrimitives, us
 
 /**
  * user_role_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const user_role_max_fieldsModel = user_role_max_fieldsModelBase
   .actions(self => ({

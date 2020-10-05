@@ -6,8 +6,6 @@ export { selectFromevent_rev_sum_fields, event_rev_sum_fieldsModelPrimitives, ev
 
 /**
  * event_rev_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const event_rev_sum_fieldsModel = event_rev_sum_fieldsModelBase
   .actions(self => ({

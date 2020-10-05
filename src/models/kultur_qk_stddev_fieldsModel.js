@@ -6,8 +6,6 @@ export { selectFromkultur_qk_stddev_fields, kultur_qk_stddev_fieldsModelPrimitiv
 
 /**
  * kultur_qk_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const kultur_qk_stddev_fieldsModel = kultur_qk_stddev_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromperson_stddev_samp_fields, person_stddev_samp_fieldsModelPrim
 
 /**
  * person_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const person_stddev_samp_fieldsModel = person_stddev_samp_fieldsModelBase
   .actions(self => ({

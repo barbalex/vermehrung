@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_aggregate, teilzaehlung_aggregateModelPrimitives
 
 /**
  * teilzaehlung_aggregateModel
- *
- * aggregated selection of "teilzaehlung"
  */
 export const teilzaehlung_aggregateModel = teilzaehlung_aggregateModelBase
   .actions(self => ({

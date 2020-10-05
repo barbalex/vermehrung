@@ -6,8 +6,6 @@ export { selectFromzaehlung_rev_var_samp_fields, zaehlung_rev_var_samp_fieldsMod
 
 /**
  * zaehlung_rev_var_samp_fieldsModel
- *
- * aggregate var_samp on columns
  */
 export const zaehlung_rev_var_samp_fieldsModel = zaehlung_rev_var_samp_fieldsModelBase
   .actions(self => ({

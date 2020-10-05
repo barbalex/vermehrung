@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_max_fields, teilzaehlung_max_fieldsModelPrimitiv
 
 /**
  * teilzaehlung_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const teilzaehlung_max_fieldsModel = teilzaehlung_max_fieldsModelBase
   .actions(self => ({

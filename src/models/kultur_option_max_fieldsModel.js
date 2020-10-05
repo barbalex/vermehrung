@@ -6,8 +6,6 @@ export { selectFromkultur_option_max_fields, kultur_option_max_fieldsModelPrimit
 
 /**
  * kultur_option_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const kultur_option_max_fieldsModel = kultur_option_max_fieldsModelBase
   .actions(self => ({

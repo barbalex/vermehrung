@@ -6,8 +6,6 @@ export { selectFromart_rev_stddev_samp_fields, art_rev_stddev_samp_fieldsModelPr
 
 /**
  * art_rev_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const art_rev_stddev_samp_fieldsModel = art_rev_stddev_samp_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromkultur_rev_avg_fields, kultur_rev_avg_fieldsModelPrimitives, 
 
 /**
  * kultur_rev_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const kultur_rev_avg_fieldsModel = kultur_rev_avg_fieldsModelBase
   .actions(self => ({

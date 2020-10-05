@@ -6,8 +6,6 @@ export { selectFromkultur_rev_var_pop_fields, kultur_rev_var_pop_fieldsModelPrim
 
 /**
  * kultur_rev_var_pop_fieldsModel
- *
- * aggregate var_pop on columns
  */
 export const kultur_rev_var_pop_fieldsModel = kultur_rev_var_pop_fieldsModelBase
   .actions(self => ({

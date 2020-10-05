@@ -6,8 +6,6 @@ export { selectFromspatial_ref_sys_stddev_samp_fields, spatial_ref_sys_stddev_sa
 
 /**
  * spatial_ref_sys_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const spatial_ref_sys_stddev_samp_fieldsModel = spatial_ref_sys_stddev_samp_fieldsModelBase
   .actions(self => ({

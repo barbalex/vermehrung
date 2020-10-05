@@ -6,8 +6,6 @@ export { selectFromsammlung_rev_max_fields, sammlung_rev_max_fieldsModelPrimitiv
 
 /**
  * sammlung_rev_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const sammlung_rev_max_fieldsModel = sammlung_rev_max_fieldsModelBase
   .actions(self => ({

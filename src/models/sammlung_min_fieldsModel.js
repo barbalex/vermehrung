@@ -6,8 +6,6 @@ export { selectFromsammlung_min_fields, sammlung_min_fieldsModelPrimitives, samm
 
 /**
  * sammlung_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const sammlung_min_fieldsModel = sammlung_min_fieldsModelBase
   .actions(self => ({

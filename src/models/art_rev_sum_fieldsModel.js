@@ -6,8 +6,6 @@ export { selectFromart_rev_sum_fields, art_rev_sum_fieldsModelPrimitives, art_re
 
 /**
  * art_rev_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const art_rev_sum_fieldsModel = art_rev_sum_fieldsModelBase
   .actions(self => ({

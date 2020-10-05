@@ -6,8 +6,6 @@ export { selectFromuser_role_avg_fields, user_role_avg_fieldsModelPrimitives, us
 
 /**
  * user_role_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const user_role_avg_fieldsModel = user_role_avg_fieldsModelBase
   .actions(self => ({

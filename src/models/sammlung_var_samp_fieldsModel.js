@@ -6,8 +6,6 @@ export { selectFromsammlung_var_samp_fields, sammlung_var_samp_fieldsModelPrimit
 
 /**
  * sammlung_var_samp_fieldsModel
- *
- * aggregate var_samp on columns
  */
 export const sammlung_var_samp_fieldsModel = sammlung_var_samp_fieldsModelBase
   .actions(self => ({

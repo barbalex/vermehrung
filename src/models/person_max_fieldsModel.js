@@ -6,8 +6,6 @@ export { selectFromperson_max_fields, person_max_fieldsModelPrimitives, person_m
 
 /**
  * person_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const person_max_fieldsModel = person_max_fieldsModelBase
   .actions(self => ({

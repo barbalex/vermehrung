@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_variance_fields, teilzaehlung_variance_fieldsMod
 
 /**
  * teilzaehlung_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const teilzaehlung_variance_fieldsModel = teilzaehlung_variance_fieldsModelBase
   .actions(self => ({

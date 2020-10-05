@@ -6,8 +6,6 @@ export { selectFromherkunft_rev_stddev_samp_fields, herkunft_rev_stddev_samp_fie
 
 /**
  * herkunft_rev_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const herkunft_rev_stddev_samp_fieldsModel = herkunft_rev_stddev_samp_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromperson_rev_avg_fields, person_rev_avg_fieldsModelPrimitives, 
 
 /**
  * person_rev_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const person_rev_avg_fieldsModel = person_rev_avg_fieldsModelBase
   .actions(self => ({

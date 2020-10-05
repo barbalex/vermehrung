@@ -6,8 +6,6 @@ export { selectFromzaehlung_rev_stddev_fields, zaehlung_rev_stddev_fieldsModelPr
 
 /**
  * zaehlung_rev_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const zaehlung_rev_stddev_fieldsModel = zaehlung_rev_stddev_fieldsModelBase
   .actions(self => ({

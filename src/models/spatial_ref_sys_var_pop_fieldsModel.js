@@ -6,8 +6,6 @@ export { selectFromspatial_ref_sys_var_pop_fields, spatial_ref_sys_var_pop_field
 
 /**
  * spatial_ref_sys_var_pop_fieldsModel
- *
- * aggregate var_pop on columns
  */
 export const spatial_ref_sys_var_pop_fieldsModel = spatial_ref_sys_var_pop_fieldsModelBase
   .actions(self => ({

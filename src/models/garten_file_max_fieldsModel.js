@@ -6,8 +6,6 @@ export { selectFromgarten_file_max_fields, garten_file_max_fieldsModelPrimitives
 
 /**
  * garten_file_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const garten_file_max_fieldsModel = garten_file_max_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromkultur_sum_fields, kultur_sum_fieldsModelPrimitives, kultur_s
 
 /**
  * kultur_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const kultur_sum_fieldsModel = kultur_sum_fieldsModelBase
   .actions(self => ({

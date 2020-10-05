@@ -6,8 +6,6 @@ export { selectFromart_qk_stddev_fields, art_qk_stddev_fieldsModelPrimitives, ar
 
 /**
  * art_qk_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const art_qk_stddev_fieldsModel = art_qk_stddev_fieldsModelBase
   .actions(self => ({

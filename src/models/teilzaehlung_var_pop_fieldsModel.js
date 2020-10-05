@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_var_pop_fields, teilzaehlung_var_pop_fieldsModel
 
 /**
  * teilzaehlung_var_pop_fieldsModel
- *
- * aggregate var_pop on columns
  */
 export const teilzaehlung_var_pop_fieldsModel = teilzaehlung_var_pop_fieldsModelBase
   .actions(self => ({

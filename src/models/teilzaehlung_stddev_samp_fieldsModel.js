@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_stddev_samp_fields, teilzaehlung_stddev_samp_fie
 
 /**
  * teilzaehlung_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const teilzaehlung_stddev_samp_fieldsModel = teilzaehlung_stddev_samp_fieldsModelBase
   .actions(self => ({

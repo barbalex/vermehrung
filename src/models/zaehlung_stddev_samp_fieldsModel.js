@@ -6,8 +6,6 @@ export { selectFromzaehlung_stddev_samp_fields, zaehlung_stddev_samp_fieldsModel
 
 /**
  * zaehlung_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const zaehlung_stddev_samp_fieldsModel = zaehlung_stddev_samp_fieldsModelBase
   .actions(self => ({

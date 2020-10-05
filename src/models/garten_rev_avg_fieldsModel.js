@@ -6,8 +6,6 @@ export { selectFromgarten_rev_avg_fields, garten_rev_avg_fieldsModelPrimitives, 
 
 /**
  * garten_rev_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const garten_rev_avg_fieldsModel = garten_rev_avg_fieldsModelBase
   .actions(self => ({

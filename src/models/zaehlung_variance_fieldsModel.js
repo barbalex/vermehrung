@@ -6,8 +6,6 @@ export { selectFromzaehlung_variance_fields, zaehlung_variance_fieldsModelPrimit
 
 /**
  * zaehlung_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const zaehlung_variance_fieldsModel = zaehlung_variance_fieldsModelBase
   .actions(self => ({

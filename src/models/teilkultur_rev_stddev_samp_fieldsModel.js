@@ -6,8 +6,6 @@ export { selectFromteilkultur_rev_stddev_samp_fields, teilkultur_rev_stddev_samp
 
 /**
  * teilkultur_rev_stddev_samp_fieldsModel
- *
- * aggregate stddev_samp on columns
  */
 export const teilkultur_rev_stddev_samp_fieldsModel = teilkultur_rev_stddev_samp_fieldsModelBase
   .actions(self => ({

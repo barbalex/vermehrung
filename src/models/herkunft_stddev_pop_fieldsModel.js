@@ -6,8 +6,6 @@ export { selectFromherkunft_stddev_pop_fields, herkunft_stddev_pop_fieldsModelPr
 
 /**
  * herkunft_stddev_pop_fieldsModel
- *
- * aggregate stddev_pop on columns
  */
 export const herkunft_stddev_pop_fieldsModel = herkunft_stddev_pop_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_sum_fields, teilzaehlung_sum_fieldsModelPrimitiv
 
 /**
  * teilzaehlung_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const teilzaehlung_sum_fieldsModel = teilzaehlung_sum_fieldsModelBase
   .actions(self => ({

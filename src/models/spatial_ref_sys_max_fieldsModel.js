@@ -6,8 +6,6 @@ export { selectFromspatial_ref_sys_max_fields, spatial_ref_sys_max_fieldsModelPr
 
 /**
  * spatial_ref_sys_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const spatial_ref_sys_max_fieldsModel = spatial_ref_sys_max_fieldsModelBase
   .actions(self => ({

@@ -6,8 +6,6 @@ export { selectFromsammel_lieferung_stddev_fields, sammel_lieferung_stddev_field
 
 /**
  * sammel_lieferung_stddev_fieldsModel
- *
- * aggregate stddev on columns
  */
 export const sammel_lieferung_stddev_fieldsModel = sammel_lieferung_stddev_fieldsModelBase
   .actions(self => ({

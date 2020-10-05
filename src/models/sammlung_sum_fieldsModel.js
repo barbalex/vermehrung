@@ -6,8 +6,6 @@ export { selectFromsammlung_sum_fields, sammlung_sum_fieldsModelPrimitives, samm
 
 /**
  * sammlung_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const sammlung_sum_fieldsModel = sammlung_sum_fieldsModelBase
   .actions(self => ({

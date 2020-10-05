@@ -6,8 +6,6 @@ export { selectFromart_qk_avg_fields, art_qk_avg_fieldsModelPrimitives, art_qk_a
 
 /**
  * art_qk_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const art_qk_avg_fieldsModel = art_qk_avg_fieldsModelBase
   .actions(self => ({

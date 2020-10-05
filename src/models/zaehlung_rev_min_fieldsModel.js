@@ -6,8 +6,6 @@ export { selectFromzaehlung_rev_min_fields, zaehlung_rev_min_fieldsModelPrimitiv
 
 /**
  * zaehlung_rev_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const zaehlung_rev_min_fieldsModel = zaehlung_rev_min_fieldsModelBase
   .actions(self => ({

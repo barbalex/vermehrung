@@ -6,8 +6,6 @@ export { selectFromteilzaehlung_min_fields, teilzaehlung_min_fieldsModelPrimitiv
 
 /**
  * teilzaehlung_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const teilzaehlung_min_fieldsModel = teilzaehlung_min_fieldsModelBase
   .actions(self => ({

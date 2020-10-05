@@ -11,10 +11,6 @@ import { artModel } from "./artModel"
 import { artModelPrimitives, artModelSelector } from "./artModel.base"
 import { art_fileModel } from "./art_fileModel"
 import { art_fileModelPrimitives, art_fileModelSelector } from "./art_fileModel.base"
-import { art_file_aggregateModel } from "./art_file_aggregateModel"
-import { art_file_aggregateModelPrimitives, art_file_aggregateModelSelector } from "./art_file_aggregateModel.base"
-import { art_file_aggregate_fieldsModel } from "./art_file_aggregate_fieldsModel"
-import { art_file_aggregate_fieldsModelPrimitives, art_file_aggregate_fieldsModelSelector } from "./art_file_aggregate_fieldsModel.base"
 import { art_file_max_fieldsModel } from "./art_file_max_fieldsModel"
 import { art_file_max_fieldsModelPrimitives, art_file_max_fieldsModelSelector } from "./art_file_max_fieldsModel.base"
 import { art_file_min_fieldsModel } from "./art_file_min_fieldsModel"
@@ -23,10 +19,6 @@ import { art_qk_choosenModel } from "./art_qk_choosenModel"
 import { art_qk_choosenModelPrimitives, art_qk_choosenModelSelector } from "./art_qk_choosenModel.base"
 import { art_qkModel } from "./art_qkModel"
 import { art_qkModelPrimitives, art_qkModelSelector } from "./art_qkModel.base"
-import { art_qk_choosen_aggregateModel } from "./art_qk_choosen_aggregateModel"
-import { art_qk_choosen_aggregateModelPrimitives, art_qk_choosen_aggregateModelSelector } from "./art_qk_choosen_aggregateModel.base"
-import { art_qk_choosen_aggregate_fieldsModel } from "./art_qk_choosen_aggregate_fieldsModel"
-import { art_qk_choosen_aggregate_fieldsModelPrimitives, art_qk_choosen_aggregate_fieldsModelSelector } from "./art_qk_choosen_aggregate_fieldsModel.base"
 import { art_qk_choosen_avg_fieldsModel } from "./art_qk_choosen_avg_fieldsModel"
 import { art_qk_choosen_avg_fieldsModelPrimitives, art_qk_choosen_avg_fieldsModelSelector } from "./art_qk_choosen_avg_fieldsModel.base"
 import { art_qk_choosen_max_fieldsModel } from "./art_qk_choosen_max_fieldsModel"
@@ -49,10 +41,6 @@ import { art_qk_choosen_variance_fieldsModel } from "./art_qk_choosen_variance_f
 import { art_qk_choosen_variance_fieldsModelPrimitives, art_qk_choosen_variance_fieldsModelSelector } from "./art_qk_choosen_variance_fieldsModel.base"
 import { art_qk_choosen_revModel } from "./art_qk_choosen_revModel"
 import { art_qk_choosen_revModelPrimitives, art_qk_choosen_revModelSelector } from "./art_qk_choosen_revModel.base"
-import { art_qk_choosen_rev_aggregateModel } from "./art_qk_choosen_rev_aggregateModel"
-import { art_qk_choosen_rev_aggregateModelPrimitives, art_qk_choosen_rev_aggregateModelSelector } from "./art_qk_choosen_rev_aggregateModel.base"
-import { art_qk_choosen_rev_aggregate_fieldsModel } from "./art_qk_choosen_rev_aggregate_fieldsModel"
-import { art_qk_choosen_rev_aggregate_fieldsModelPrimitives, art_qk_choosen_rev_aggregate_fieldsModelSelector } from "./art_qk_choosen_rev_aggregate_fieldsModel.base"
 import { art_qk_choosen_rev_avg_fieldsModel } from "./art_qk_choosen_rev_avg_fieldsModel"
 import { art_qk_choosen_rev_avg_fieldsModelPrimitives, art_qk_choosen_rev_avg_fieldsModelSelector } from "./art_qk_choosen_rev_avg_fieldsModel.base"
 import { art_qk_choosen_rev_max_fieldsModel } from "./art_qk_choosen_rev_max_fieldsModel"
@@ -77,10 +65,6 @@ import { avModel } from "./avModel"
 import { avModelPrimitives, avModelSelector } from "./avModel.base"
 import { personModel } from "./personModel"
 import { personModelPrimitives, personModelSelector } from "./personModel.base"
-import { av_aggregateModel } from "./av_aggregateModel"
-import { av_aggregateModelPrimitives, av_aggregateModelSelector } from "./av_aggregateModel.base"
-import { av_aggregate_fieldsModel } from "./av_aggregate_fieldsModel"
-import { av_aggregate_fieldsModelPrimitives, av_aggregate_fieldsModelSelector } from "./av_aggregate_fieldsModel.base"
 import { av_avg_fieldsModel } from "./av_avg_fieldsModel"
 import { av_avg_fieldsModelPrimitives, av_avg_fieldsModelSelector } from "./av_avg_fieldsModel.base"
 import { av_max_fieldsModel } from "./av_max_fieldsModel"
@@ -105,10 +89,6 @@ import { event_revModel } from "./event_revModel"
 import { event_revModelPrimitives, event_revModelSelector } from "./event_revModel.base"
 import { kulturModel } from "./kulturModel"
 import { kulturModelPrimitives, kulturModelSelector } from "./kulturModel.base"
-import { event_rev_aggregateModel } from "./event_rev_aggregateModel"
-import { event_rev_aggregateModelPrimitives, event_rev_aggregateModelSelector } from "./event_rev_aggregateModel.base"
-import { event_rev_aggregate_fieldsModel } from "./event_rev_aggregate_fieldsModel"
-import { event_rev_aggregate_fieldsModelPrimitives, event_rev_aggregate_fieldsModelSelector } from "./event_rev_aggregate_fieldsModel.base"
 import { event_rev_avg_fieldsModel } from "./event_rev_avg_fieldsModel"
 import { event_rev_avg_fieldsModelPrimitives, event_rev_avg_fieldsModelSelector } from "./event_rev_avg_fieldsModel.base"
 import { event_rev_max_fieldsModel } from "./event_rev_max_fieldsModel"
@@ -133,10 +113,6 @@ import { eventModel } from "./eventModel"
 import { eventModelPrimitives, eventModelSelector } from "./eventModel.base"
 import { teilkulturModel } from "./teilkulturModel"
 import { teilkulturModelPrimitives, teilkulturModelSelector } from "./teilkulturModel.base"
-import { event_aggregateModel } from "./event_aggregateModel"
-import { event_aggregateModelPrimitives, event_aggregateModelSelector } from "./event_aggregateModel.base"
-import { event_aggregate_fieldsModel } from "./event_aggregate_fieldsModel"
-import { event_aggregate_fieldsModelPrimitives, event_aggregate_fieldsModelSelector } from "./event_aggregate_fieldsModel.base"
 import { event_avg_fieldsModel } from "./event_avg_fieldsModel"
 import { event_avg_fieldsModelPrimitives, event_avg_fieldsModelSelector } from "./event_avg_fieldsModel.base"
 import { event_max_fieldsModel } from "./event_max_fieldsModel"
@@ -161,10 +137,6 @@ import { teilzaehlung_revModel } from "./teilzaehlung_revModel"
 import { teilzaehlung_revModelPrimitives, teilzaehlung_revModelSelector } from "./teilzaehlung_revModel.base"
 import { teilzaehlungModel } from "./teilzaehlungModel"
 import { teilzaehlungModelPrimitives, teilzaehlungModelSelector } from "./teilzaehlungModel.base"
-import { teilzaehlung_rev_aggregateModel } from "./teilzaehlung_rev_aggregateModel"
-import { teilzaehlung_rev_aggregateModelPrimitives, teilzaehlung_rev_aggregateModelSelector } from "./teilzaehlung_rev_aggregateModel.base"
-import { teilzaehlung_rev_aggregate_fieldsModel } from "./teilzaehlung_rev_aggregate_fieldsModel"
-import { teilzaehlung_rev_aggregate_fieldsModelPrimitives, teilzaehlung_rev_aggregate_fieldsModelSelector } from "./teilzaehlung_rev_aggregate_fieldsModel.base"
 import { teilzaehlung_rev_avg_fieldsModel } from "./teilzaehlung_rev_avg_fieldsModel"
 import { teilzaehlung_rev_avg_fieldsModelPrimitives, teilzaehlung_rev_avg_fieldsModelSelector } from "./teilzaehlung_rev_avg_fieldsModel.base"
 import { teilzaehlung_rev_max_fieldsModel } from "./teilzaehlung_rev_max_fieldsModel"
@@ -215,20 +187,12 @@ import { gartenModel } from "./gartenModel"
 import { gartenModelPrimitives, gartenModelSelector } from "./gartenModel.base"
 import { garten_fileModel } from "./garten_fileModel"
 import { garten_fileModelPrimitives, garten_fileModelSelector } from "./garten_fileModel.base"
-import { garten_file_aggregateModel } from "./garten_file_aggregateModel"
-import { garten_file_aggregateModelPrimitives, garten_file_aggregateModelSelector } from "./garten_file_aggregateModel.base"
-import { garten_file_aggregate_fieldsModel } from "./garten_file_aggregate_fieldsModel"
-import { garten_file_aggregate_fieldsModelPrimitives, garten_file_aggregate_fieldsModelSelector } from "./garten_file_aggregate_fieldsModel.base"
 import { garten_file_max_fieldsModel } from "./garten_file_max_fieldsModel"
 import { garten_file_max_fieldsModelPrimitives, garten_file_max_fieldsModelSelector } from "./garten_file_max_fieldsModel.base"
 import { garten_file_min_fieldsModel } from "./garten_file_min_fieldsModel"
 import { garten_file_min_fieldsModelPrimitives, garten_file_min_fieldsModelSelector } from "./garten_file_min_fieldsModel.base"
 import { gvModel } from "./gvModel"
 import { gvModelPrimitives, gvModelSelector } from "./gvModel.base"
-import { gv_aggregateModel } from "./gv_aggregateModel"
-import { gv_aggregateModelPrimitives, gv_aggregateModelSelector } from "./gv_aggregateModel.base"
-import { gv_aggregate_fieldsModel } from "./gv_aggregate_fieldsModel"
-import { gv_aggregate_fieldsModelPrimitives, gv_aggregate_fieldsModelSelector } from "./gv_aggregate_fieldsModel.base"
 import { gv_avg_fieldsModel } from "./gv_avg_fieldsModel"
 import { gv_avg_fieldsModelPrimitives, gv_avg_fieldsModelSelector } from "./gv_avg_fieldsModel.base"
 import { gv_max_fieldsModel } from "./gv_max_fieldsModel"
@@ -255,18 +219,10 @@ import { herkunftModel } from "./herkunftModel"
 import { herkunftModelPrimitives, herkunftModelSelector } from "./herkunftModel.base"
 import { herkunft_fileModel } from "./herkunft_fileModel"
 import { herkunft_fileModelPrimitives, herkunft_fileModelSelector } from "./herkunft_fileModel.base"
-import { herkunft_file_aggregateModel } from "./herkunft_file_aggregateModel"
-import { herkunft_file_aggregateModelPrimitives, herkunft_file_aggregateModelSelector } from "./herkunft_file_aggregateModel.base"
-import { herkunft_file_aggregate_fieldsModel } from "./herkunft_file_aggregate_fieldsModel"
-import { herkunft_file_aggregate_fieldsModelPrimitives, herkunft_file_aggregate_fieldsModelSelector } from "./herkunft_file_aggregate_fieldsModel.base"
 import { herkunft_file_max_fieldsModel } from "./herkunft_file_max_fieldsModel"
 import { herkunft_file_max_fieldsModelPrimitives, herkunft_file_max_fieldsModelSelector } from "./herkunft_file_max_fieldsModel.base"
 import { herkunft_file_min_fieldsModel } from "./herkunft_file_min_fieldsModel"
 import { herkunft_file_min_fieldsModelPrimitives, herkunft_file_min_fieldsModelSelector } from "./herkunft_file_min_fieldsModel.base"
-import { kultur_rev_aggregateModel } from "./kultur_rev_aggregateModel"
-import { kultur_rev_aggregateModelPrimitives, kultur_rev_aggregateModelSelector } from "./kultur_rev_aggregateModel.base"
-import { kultur_rev_aggregate_fieldsModel } from "./kultur_rev_aggregate_fieldsModel"
-import { kultur_rev_aggregate_fieldsModelPrimitives, kultur_rev_aggregate_fieldsModelSelector } from "./kultur_rev_aggregate_fieldsModel.base"
 import { kultur_rev_avg_fieldsModel } from "./kultur_rev_avg_fieldsModel"
 import { kultur_rev_avg_fieldsModelPrimitives, kultur_rev_avg_fieldsModelSelector } from "./kultur_rev_avg_fieldsModel.base"
 import { kultur_rev_max_fieldsModel } from "./kultur_rev_max_fieldsModel"
@@ -287,10 +243,6 @@ import { kultur_rev_var_samp_fieldsModel } from "./kultur_rev_var_samp_fieldsMod
 import { kultur_rev_var_samp_fieldsModelPrimitives, kultur_rev_var_samp_fieldsModelSelector } from "./kultur_rev_var_samp_fieldsModel.base"
 import { kultur_rev_variance_fieldsModel } from "./kultur_rev_variance_fieldsModel"
 import { kultur_rev_variance_fieldsModelPrimitives, kultur_rev_variance_fieldsModelSelector } from "./kultur_rev_variance_fieldsModel.base"
-import { kultur_aggregateModel } from "./kultur_aggregateModel"
-import { kultur_aggregateModelPrimitives, kultur_aggregateModelSelector } from "./kultur_aggregateModel.base"
-import { kultur_aggregate_fieldsModel } from "./kultur_aggregate_fieldsModel"
-import { kultur_aggregate_fieldsModelPrimitives, kultur_aggregate_fieldsModelSelector } from "./kultur_aggregate_fieldsModel.base"
 import { kultur_avg_fieldsModel } from "./kultur_avg_fieldsModel"
 import { kultur_avg_fieldsModelPrimitives, kultur_avg_fieldsModelSelector } from "./kultur_avg_fieldsModel.base"
 import { kultur_max_fieldsModel } from "./kultur_max_fieldsModel"
@@ -317,20 +269,12 @@ import { lieferungModel } from "./lieferungModel"
 import { lieferungModelPrimitives, lieferungModelSelector } from "./lieferungModel.base"
 import { lieferung_fileModel } from "./lieferung_fileModel"
 import { lieferung_fileModelPrimitives, lieferung_fileModelSelector } from "./lieferung_fileModel.base"
-import { lieferung_file_aggregateModel } from "./lieferung_file_aggregateModel"
-import { lieferung_file_aggregateModelPrimitives, lieferung_file_aggregateModelSelector } from "./lieferung_file_aggregateModel.base"
-import { lieferung_file_aggregate_fieldsModel } from "./lieferung_file_aggregate_fieldsModel"
-import { lieferung_file_aggregate_fieldsModelPrimitives, lieferung_file_aggregate_fieldsModelSelector } from "./lieferung_file_aggregate_fieldsModel.base"
 import { lieferung_file_max_fieldsModel } from "./lieferung_file_max_fieldsModel"
 import { lieferung_file_max_fieldsModelPrimitives, lieferung_file_max_fieldsModelSelector } from "./lieferung_file_max_fieldsModel.base"
 import { lieferung_file_min_fieldsModel } from "./lieferung_file_min_fieldsModel"
 import { lieferung_file_min_fieldsModelPrimitives, lieferung_file_min_fieldsModelSelector } from "./lieferung_file_min_fieldsModel.base"
 import { sammel_lieferungModel } from "./sammel_lieferungModel"
 import { sammel_lieferungModelPrimitives, sammel_lieferungModelSelector } from "./sammel_lieferungModel.base"
-import { lieferung_aggregateModel } from "./lieferung_aggregateModel"
-import { lieferung_aggregateModelPrimitives, lieferung_aggregateModelSelector } from "./lieferung_aggregateModel.base"
-import { lieferung_aggregate_fieldsModel } from "./lieferung_aggregate_fieldsModel"
-import { lieferung_aggregate_fieldsModelPrimitives, lieferung_aggregate_fieldsModelSelector } from "./lieferung_aggregate_fieldsModel.base"
 import { lieferung_avg_fieldsModel } from "./lieferung_avg_fieldsModel"
 import { lieferung_avg_fieldsModelPrimitives, lieferung_avg_fieldsModelSelector } from "./lieferung_avg_fieldsModel.base"
 import { lieferung_max_fieldsModel } from "./lieferung_max_fieldsModel"
@@ -355,10 +299,6 @@ import { sammlungModel } from "./sammlungModel"
 import { sammlungModelPrimitives, sammlungModelSelector } from "./sammlungModel.base"
 import { lieferung_revModel } from "./lieferung_revModel"
 import { lieferung_revModelPrimitives, lieferung_revModelSelector } from "./lieferung_revModel.base"
-import { lieferung_rev_aggregateModel } from "./lieferung_rev_aggregateModel"
-import { lieferung_rev_aggregateModelPrimitives, lieferung_rev_aggregateModelSelector } from "./lieferung_rev_aggregateModel.base"
-import { lieferung_rev_aggregate_fieldsModel } from "./lieferung_rev_aggregate_fieldsModel"
-import { lieferung_rev_aggregate_fieldsModelPrimitives, lieferung_rev_aggregate_fieldsModelSelector } from "./lieferung_rev_aggregate_fieldsModel.base"
 import { lieferung_rev_avg_fieldsModel } from "./lieferung_rev_avg_fieldsModel"
 import { lieferung_rev_avg_fieldsModelPrimitives, lieferung_rev_avg_fieldsModelSelector } from "./lieferung_rev_avg_fieldsModel.base"
 import { lieferung_rev_max_fieldsModel } from "./lieferung_rev_max_fieldsModel"
@@ -381,10 +321,6 @@ import { lieferung_rev_variance_fieldsModel } from "./lieferung_rev_variance_fie
 import { lieferung_rev_variance_fieldsModelPrimitives, lieferung_rev_variance_fieldsModelSelector } from "./lieferung_rev_variance_fieldsModel.base"
 import { sammel_lieferung_revModel } from "./sammel_lieferung_revModel"
 import { sammel_lieferung_revModelPrimitives, sammel_lieferung_revModelSelector } from "./sammel_lieferung_revModel.base"
-import { sammel_lieferung_rev_aggregateModel } from "./sammel_lieferung_rev_aggregateModel"
-import { sammel_lieferung_rev_aggregateModelPrimitives, sammel_lieferung_rev_aggregateModelSelector } from "./sammel_lieferung_rev_aggregateModel.base"
-import { sammel_lieferung_rev_aggregate_fieldsModel } from "./sammel_lieferung_rev_aggregate_fieldsModel"
-import { sammel_lieferung_rev_aggregate_fieldsModelPrimitives, sammel_lieferung_rev_aggregate_fieldsModelSelector } from "./sammel_lieferung_rev_aggregate_fieldsModel.base"
 import { sammel_lieferung_rev_avg_fieldsModel } from "./sammel_lieferung_rev_avg_fieldsModel"
 import { sammel_lieferung_rev_avg_fieldsModelPrimitives, sammel_lieferung_rev_avg_fieldsModelSelector } from "./sammel_lieferung_rev_avg_fieldsModel.base"
 import { sammel_lieferung_rev_max_fieldsModel } from "./sammel_lieferung_rev_max_fieldsModel"
@@ -405,10 +341,6 @@ import { sammel_lieferung_rev_var_samp_fieldsModel } from "./sammel_lieferung_re
 import { sammel_lieferung_rev_var_samp_fieldsModelPrimitives, sammel_lieferung_rev_var_samp_fieldsModelSelector } from "./sammel_lieferung_rev_var_samp_fieldsModel.base"
 import { sammel_lieferung_rev_variance_fieldsModel } from "./sammel_lieferung_rev_variance_fieldsModel"
 import { sammel_lieferung_rev_variance_fieldsModelPrimitives, sammel_lieferung_rev_variance_fieldsModelSelector } from "./sammel_lieferung_rev_variance_fieldsModel.base"
-import { sammel_lieferung_aggregateModel } from "./sammel_lieferung_aggregateModel"
-import { sammel_lieferung_aggregateModelPrimitives, sammel_lieferung_aggregateModelSelector } from "./sammel_lieferung_aggregateModel.base"
-import { sammel_lieferung_aggregate_fieldsModel } from "./sammel_lieferung_aggregate_fieldsModel"
-import { sammel_lieferung_aggregate_fieldsModelPrimitives, sammel_lieferung_aggregate_fieldsModelSelector } from "./sammel_lieferung_aggregate_fieldsModel.base"
 import { sammel_lieferung_avg_fieldsModel } from "./sammel_lieferung_avg_fieldsModel"
 import { sammel_lieferung_avg_fieldsModelPrimitives, sammel_lieferung_avg_fieldsModelSelector } from "./sammel_lieferung_avg_fieldsModel.base"
 import { sammel_lieferung_max_fieldsModel } from "./sammel_lieferung_max_fieldsModel"
@@ -431,18 +363,10 @@ import { sammel_lieferung_variance_fieldsModel } from "./sammel_lieferung_varian
 import { sammel_lieferung_variance_fieldsModelPrimitives, sammel_lieferung_variance_fieldsModelSelector } from "./sammel_lieferung_variance_fieldsModel.base"
 import { sammlung_fileModel } from "./sammlung_fileModel"
 import { sammlung_fileModelPrimitives, sammlung_fileModelSelector } from "./sammlung_fileModel.base"
-import { sammlung_file_aggregateModel } from "./sammlung_file_aggregateModel"
-import { sammlung_file_aggregateModelPrimitives, sammlung_file_aggregateModelSelector } from "./sammlung_file_aggregateModel.base"
-import { sammlung_file_aggregate_fieldsModel } from "./sammlung_file_aggregate_fieldsModel"
-import { sammlung_file_aggregate_fieldsModelPrimitives, sammlung_file_aggregate_fieldsModelSelector } from "./sammlung_file_aggregate_fieldsModel.base"
 import { sammlung_file_max_fieldsModel } from "./sammlung_file_max_fieldsModel"
 import { sammlung_file_max_fieldsModelPrimitives, sammlung_file_max_fieldsModelSelector } from "./sammlung_file_max_fieldsModel.base"
 import { sammlung_file_min_fieldsModel } from "./sammlung_file_min_fieldsModel"
 import { sammlung_file_min_fieldsModelPrimitives, sammlung_file_min_fieldsModelSelector } from "./sammlung_file_min_fieldsModel.base"
-import { sammlung_rev_aggregateModel } from "./sammlung_rev_aggregateModel"
-import { sammlung_rev_aggregateModelPrimitives, sammlung_rev_aggregateModelSelector } from "./sammlung_rev_aggregateModel.base"
-import { sammlung_rev_aggregate_fieldsModel } from "./sammlung_rev_aggregate_fieldsModel"
-import { sammlung_rev_aggregate_fieldsModelPrimitives, sammlung_rev_aggregate_fieldsModelSelector } from "./sammlung_rev_aggregate_fieldsModel.base"
 import { sammlung_rev_avg_fieldsModel } from "./sammlung_rev_avg_fieldsModel"
 import { sammlung_rev_avg_fieldsModelPrimitives, sammlung_rev_avg_fieldsModelSelector } from "./sammlung_rev_avg_fieldsModel.base"
 import { sammlung_rev_max_fieldsModel } from "./sammlung_rev_max_fieldsModel"
@@ -463,10 +387,6 @@ import { sammlung_rev_var_samp_fieldsModel } from "./sammlung_rev_var_samp_field
 import { sammlung_rev_var_samp_fieldsModelPrimitives, sammlung_rev_var_samp_fieldsModelSelector } from "./sammlung_rev_var_samp_fieldsModel.base"
 import { sammlung_rev_variance_fieldsModel } from "./sammlung_rev_variance_fieldsModel"
 import { sammlung_rev_variance_fieldsModelPrimitives, sammlung_rev_variance_fieldsModelSelector } from "./sammlung_rev_variance_fieldsModel.base"
-import { sammlung_aggregateModel } from "./sammlung_aggregateModel"
-import { sammlung_aggregateModelPrimitives, sammlung_aggregateModelSelector } from "./sammlung_aggregateModel.base"
-import { sammlung_aggregate_fieldsModel } from "./sammlung_aggregate_fieldsModel"
-import { sammlung_aggregate_fieldsModelPrimitives, sammlung_aggregate_fieldsModelSelector } from "./sammlung_aggregate_fieldsModel.base"
 import { sammlung_avg_fieldsModel } from "./sammlung_avg_fieldsModel"
 import { sammlung_avg_fieldsModelPrimitives, sammlung_avg_fieldsModelSelector } from "./sammlung_avg_fieldsModel.base"
 import { sammlung_max_fieldsModel } from "./sammlung_max_fieldsModel"
@@ -487,10 +407,6 @@ import { sammlung_var_samp_fieldsModel } from "./sammlung_var_samp_fieldsModel"
 import { sammlung_var_samp_fieldsModelPrimitives, sammlung_var_samp_fieldsModelSelector } from "./sammlung_var_samp_fieldsModel.base"
 import { sammlung_variance_fieldsModel } from "./sammlung_variance_fieldsModel"
 import { sammlung_variance_fieldsModelPrimitives, sammlung_variance_fieldsModelSelector } from "./sammlung_variance_fieldsModel.base"
-import { teilkultur_aggregateModel } from "./teilkultur_aggregateModel"
-import { teilkultur_aggregateModelPrimitives, teilkultur_aggregateModelSelector } from "./teilkultur_aggregateModel.base"
-import { teilkultur_aggregate_fieldsModel } from "./teilkultur_aggregate_fieldsModel"
-import { teilkultur_aggregate_fieldsModelPrimitives, teilkultur_aggregate_fieldsModelSelector } from "./teilkultur_aggregate_fieldsModel.base"
 import { teilkultur_avg_fieldsModel } from "./teilkultur_avg_fieldsModel"
 import { teilkultur_avg_fieldsModelPrimitives, teilkultur_avg_fieldsModelSelector } from "./teilkultur_avg_fieldsModel.base"
 import { teilkultur_max_fieldsModel } from "./teilkultur_max_fieldsModel"
@@ -511,10 +427,6 @@ import { teilkultur_var_samp_fieldsModel } from "./teilkultur_var_samp_fieldsMod
 import { teilkultur_var_samp_fieldsModelPrimitives, teilkultur_var_samp_fieldsModelSelector } from "./teilkultur_var_samp_fieldsModel.base"
 import { teilkultur_variance_fieldsModel } from "./teilkultur_variance_fieldsModel"
 import { teilkultur_variance_fieldsModelPrimitives, teilkultur_variance_fieldsModelSelector } from "./teilkultur_variance_fieldsModel.base"
-import { zaehlung_aggregateModel } from "./zaehlung_aggregateModel"
-import { zaehlung_aggregateModelPrimitives, zaehlung_aggregateModelSelector } from "./zaehlung_aggregateModel.base"
-import { zaehlung_aggregate_fieldsModel } from "./zaehlung_aggregate_fieldsModel"
-import { zaehlung_aggregate_fieldsModelPrimitives, zaehlung_aggregate_fieldsModelSelector } from "./zaehlung_aggregate_fieldsModel.base"
 import { zaehlung_avg_fieldsModel } from "./zaehlung_avg_fieldsModel"
 import { zaehlung_avg_fieldsModelPrimitives, zaehlung_avg_fieldsModelSelector } from "./zaehlung_avg_fieldsModel.base"
 import { zaehlung_max_fieldsModel } from "./zaehlung_max_fieldsModel"
@@ -537,10 +449,6 @@ import { zaehlung_variance_fieldsModel } from "./zaehlung_variance_fieldsModel"
 import { zaehlung_variance_fieldsModelPrimitives, zaehlung_variance_fieldsModelSelector } from "./zaehlung_variance_fieldsModel.base"
 import { kultur_fileModel } from "./kultur_fileModel"
 import { kultur_fileModelPrimitives, kultur_fileModelSelector } from "./kultur_fileModel.base"
-import { kultur_file_aggregateModel } from "./kultur_file_aggregateModel"
-import { kultur_file_aggregateModelPrimitives, kultur_file_aggregateModelSelector } from "./kultur_file_aggregateModel.base"
-import { kultur_file_aggregate_fieldsModel } from "./kultur_file_aggregate_fieldsModel"
-import { kultur_file_aggregate_fieldsModelPrimitives, kultur_file_aggregate_fieldsModelSelector } from "./kultur_file_aggregate_fieldsModel.base"
 import { kultur_file_max_fieldsModel } from "./kultur_file_max_fieldsModel"
 import { kultur_file_max_fieldsModelPrimitives, kultur_file_max_fieldsModelSelector } from "./kultur_file_max_fieldsModel.base"
 import { kultur_file_min_fieldsModel } from "./kultur_file_min_fieldsModel"
@@ -549,10 +457,6 @@ import { kultur_optionModel } from "./kultur_optionModel"
 import { kultur_optionModelPrimitives, kultur_optionModelSelector } from "./kultur_optionModel.base"
 import { kultur_option_revModel } from "./kultur_option_revModel"
 import { kultur_option_revModelPrimitives, kultur_option_revModelSelector } from "./kultur_option_revModel.base"
-import { kultur_option_rev_aggregateModel } from "./kultur_option_rev_aggregateModel"
-import { kultur_option_rev_aggregateModelPrimitives, kultur_option_rev_aggregateModelSelector } from "./kultur_option_rev_aggregateModel.base"
-import { kultur_option_rev_aggregate_fieldsModel } from "./kultur_option_rev_aggregate_fieldsModel"
-import { kultur_option_rev_aggregate_fieldsModelPrimitives, kultur_option_rev_aggregate_fieldsModelSelector } from "./kultur_option_rev_aggregate_fieldsModel.base"
 import { kultur_option_rev_avg_fieldsModel } from "./kultur_option_rev_avg_fieldsModel"
 import { kultur_option_rev_avg_fieldsModelPrimitives, kultur_option_rev_avg_fieldsModelSelector } from "./kultur_option_rev_avg_fieldsModel.base"
 import { kultur_option_rev_max_fieldsModel } from "./kultur_option_rev_max_fieldsModel"
@@ -577,10 +481,6 @@ import { kultur_qk_choosenModel } from "./kultur_qk_choosenModel"
 import { kultur_qk_choosenModelPrimitives, kultur_qk_choosenModelSelector } from "./kultur_qk_choosenModel.base"
 import { kultur_qkModel } from "./kultur_qkModel"
 import { kultur_qkModelPrimitives, kultur_qkModelSelector } from "./kultur_qkModel.base"
-import { kultur_qk_choosen_aggregateModel } from "./kultur_qk_choosen_aggregateModel"
-import { kultur_qk_choosen_aggregateModelPrimitives, kultur_qk_choosen_aggregateModelSelector } from "./kultur_qk_choosen_aggregateModel.base"
-import { kultur_qk_choosen_aggregate_fieldsModel } from "./kultur_qk_choosen_aggregate_fieldsModel"
-import { kultur_qk_choosen_aggregate_fieldsModelPrimitives, kultur_qk_choosen_aggregate_fieldsModelSelector } from "./kultur_qk_choosen_aggregate_fieldsModel.base"
 import { kultur_qk_choosen_avg_fieldsModel } from "./kultur_qk_choosen_avg_fieldsModel"
 import { kultur_qk_choosen_avg_fieldsModelPrimitives, kultur_qk_choosen_avg_fieldsModelSelector } from "./kultur_qk_choosen_avg_fieldsModel.base"
 import { kultur_qk_choosen_max_fieldsModel } from "./kultur_qk_choosen_max_fieldsModel"
@@ -603,10 +503,6 @@ import { kultur_qk_choosen_variance_fieldsModel } from "./kultur_qk_choosen_vari
 import { kultur_qk_choosen_variance_fieldsModelPrimitives, kultur_qk_choosen_variance_fieldsModelSelector } from "./kultur_qk_choosen_variance_fieldsModel.base"
 import { teilkultur_revModel } from "./teilkultur_revModel"
 import { teilkultur_revModelPrimitives, teilkultur_revModelSelector } from "./teilkultur_revModel.base"
-import { teilkultur_rev_aggregateModel } from "./teilkultur_rev_aggregateModel"
-import { teilkultur_rev_aggregateModelPrimitives, teilkultur_rev_aggregateModelSelector } from "./teilkultur_rev_aggregateModel.base"
-import { teilkultur_rev_aggregate_fieldsModel } from "./teilkultur_rev_aggregate_fieldsModel"
-import { teilkultur_rev_aggregate_fieldsModelPrimitives, teilkultur_rev_aggregate_fieldsModelSelector } from "./teilkultur_rev_aggregate_fieldsModel.base"
 import { teilkultur_rev_avg_fieldsModel } from "./teilkultur_rev_avg_fieldsModel"
 import { teilkultur_rev_avg_fieldsModelPrimitives, teilkultur_rev_avg_fieldsModelSelector } from "./teilkultur_rev_avg_fieldsModel.base"
 import { teilkultur_rev_max_fieldsModel } from "./teilkultur_rev_max_fieldsModel"
@@ -629,10 +525,6 @@ import { teilkultur_rev_variance_fieldsModel } from "./teilkultur_rev_variance_f
 import { teilkultur_rev_variance_fieldsModelPrimitives, teilkultur_rev_variance_fieldsModelSelector } from "./teilkultur_rev_variance_fieldsModel.base"
 import { zaehlung_revModel } from "./zaehlung_revModel"
 import { zaehlung_revModelPrimitives, zaehlung_revModelSelector } from "./zaehlung_revModel.base"
-import { zaehlung_rev_aggregateModel } from "./zaehlung_rev_aggregateModel"
-import { zaehlung_rev_aggregateModelPrimitives, zaehlung_rev_aggregateModelSelector } from "./zaehlung_rev_aggregateModel.base"
-import { zaehlung_rev_aggregate_fieldsModel } from "./zaehlung_rev_aggregate_fieldsModel"
-import { zaehlung_rev_aggregate_fieldsModelPrimitives, zaehlung_rev_aggregate_fieldsModelSelector } from "./zaehlung_rev_aggregate_fieldsModel.base"
 import { zaehlung_rev_avg_fieldsModel } from "./zaehlung_rev_avg_fieldsModel"
 import { zaehlung_rev_avg_fieldsModelPrimitives, zaehlung_rev_avg_fieldsModelSelector } from "./zaehlung_rev_avg_fieldsModel.base"
 import { zaehlung_rev_max_fieldsModel } from "./zaehlung_rev_max_fieldsModel"
@@ -655,10 +547,6 @@ import { zaehlung_rev_variance_fieldsModel } from "./zaehlung_rev_variance_field
 import { zaehlung_rev_variance_fieldsModelPrimitives, zaehlung_rev_variance_fieldsModelSelector } from "./zaehlung_rev_variance_fieldsModel.base"
 import { garten_revModel } from "./garten_revModel"
 import { garten_revModelPrimitives, garten_revModelSelector } from "./garten_revModel.base"
-import { garten_rev_aggregateModel } from "./garten_rev_aggregateModel"
-import { garten_rev_aggregateModelPrimitives, garten_rev_aggregateModelSelector } from "./garten_rev_aggregateModel.base"
-import { garten_rev_aggregate_fieldsModel } from "./garten_rev_aggregate_fieldsModel"
-import { garten_rev_aggregate_fieldsModelPrimitives, garten_rev_aggregate_fieldsModelSelector } from "./garten_rev_aggregate_fieldsModel.base"
 import { garten_rev_avg_fieldsModel } from "./garten_rev_avg_fieldsModel"
 import { garten_rev_avg_fieldsModelPrimitives, garten_rev_avg_fieldsModelSelector } from "./garten_rev_avg_fieldsModel.base"
 import { garten_rev_max_fieldsModel } from "./garten_rev_max_fieldsModel"
@@ -679,10 +567,6 @@ import { garten_rev_var_samp_fieldsModel } from "./garten_rev_var_samp_fieldsMod
 import { garten_rev_var_samp_fieldsModelPrimitives, garten_rev_var_samp_fieldsModelSelector } from "./garten_rev_var_samp_fieldsModel.base"
 import { garten_rev_variance_fieldsModel } from "./garten_rev_variance_fieldsModel"
 import { garten_rev_variance_fieldsModelPrimitives, garten_rev_variance_fieldsModelSelector } from "./garten_rev_variance_fieldsModel.base"
-import { garten_aggregateModel } from "./garten_aggregateModel"
-import { garten_aggregateModelPrimitives, garten_aggregateModelSelector } from "./garten_aggregateModel.base"
-import { garten_aggregate_fieldsModel } from "./garten_aggregate_fieldsModel"
-import { garten_aggregate_fieldsModelPrimitives, garten_aggregate_fieldsModelSelector } from "./garten_aggregate_fieldsModel.base"
 import { garten_avg_fieldsModel } from "./garten_avg_fieldsModel"
 import { garten_avg_fieldsModelPrimitives, garten_avg_fieldsModelSelector } from "./garten_avg_fieldsModel.base"
 import { garten_max_fieldsModel } from "./garten_max_fieldsModel"
@@ -705,10 +589,6 @@ import { garten_variance_fieldsModel } from "./garten_variance_fieldsModel"
 import { garten_variance_fieldsModelPrimitives, garten_variance_fieldsModelSelector } from "./garten_variance_fieldsModel.base"
 import { person_fileModel } from "./person_fileModel"
 import { person_fileModelPrimitives, person_fileModelSelector } from "./person_fileModel.base"
-import { person_file_aggregateModel } from "./person_file_aggregateModel"
-import { person_file_aggregateModelPrimitives, person_file_aggregateModelSelector } from "./person_file_aggregateModel.base"
-import { person_file_aggregate_fieldsModel } from "./person_file_aggregate_fieldsModel"
-import { person_file_aggregate_fieldsModelPrimitives, person_file_aggregate_fieldsModelSelector } from "./person_file_aggregate_fieldsModel.base"
 import { person_file_max_fieldsModel } from "./person_file_max_fieldsModel"
 import { person_file_max_fieldsModelPrimitives, person_file_max_fieldsModelSelector } from "./person_file_max_fieldsModel.base"
 import { person_file_min_fieldsModel } from "./person_file_min_fieldsModel"
@@ -717,10 +597,6 @@ import { person_optionModel } from "./person_optionModel"
 import { person_optionModelPrimitives, person_optionModelSelector } from "./person_optionModel.base"
 import { person_option_revModel } from "./person_option_revModel"
 import { person_option_revModelPrimitives, person_option_revModelSelector } from "./person_option_revModel.base"
-import { person_option_rev_aggregateModel } from "./person_option_rev_aggregateModel"
-import { person_option_rev_aggregateModelPrimitives, person_option_rev_aggregateModelSelector } from "./person_option_rev_aggregateModel.base"
-import { person_option_rev_aggregate_fieldsModel } from "./person_option_rev_aggregate_fieldsModel"
-import { person_option_rev_aggregate_fieldsModelPrimitives, person_option_rev_aggregate_fieldsModelSelector } from "./person_option_rev_aggregate_fieldsModel.base"
 import { person_option_rev_avg_fieldsModel } from "./person_option_rev_avg_fieldsModel"
 import { person_option_rev_avg_fieldsModelPrimitives, person_option_rev_avg_fieldsModelSelector } from "./person_option_rev_avg_fieldsModel.base"
 import { person_option_rev_max_fieldsModel } from "./person_option_rev_max_fieldsModel"
@@ -745,10 +621,6 @@ import { user_roleModel } from "./user_roleModel"
 import { user_roleModelPrimitives, user_roleModelSelector } from "./user_roleModel.base"
 import { person_revModel } from "./person_revModel"
 import { person_revModelPrimitives, person_revModelSelector } from "./person_revModel.base"
-import { person_rev_aggregateModel } from "./person_rev_aggregateModel"
-import { person_rev_aggregateModelPrimitives, person_rev_aggregateModelSelector } from "./person_rev_aggregateModel.base"
-import { person_rev_aggregate_fieldsModel } from "./person_rev_aggregate_fieldsModel"
-import { person_rev_aggregate_fieldsModelPrimitives, person_rev_aggregate_fieldsModelSelector } from "./person_rev_aggregate_fieldsModel.base"
 import { person_rev_avg_fieldsModel } from "./person_rev_avg_fieldsModel"
 import { person_rev_avg_fieldsModelPrimitives, person_rev_avg_fieldsModelSelector } from "./person_rev_avg_fieldsModel.base"
 import { person_rev_max_fieldsModel } from "./person_rev_max_fieldsModel"
@@ -769,10 +641,6 @@ import { person_rev_var_samp_fieldsModel } from "./person_rev_var_samp_fieldsMod
 import { person_rev_var_samp_fieldsModelPrimitives, person_rev_var_samp_fieldsModelSelector } from "./person_rev_var_samp_fieldsModel.base"
 import { person_rev_variance_fieldsModel } from "./person_rev_variance_fieldsModel"
 import { person_rev_variance_fieldsModelPrimitives, person_rev_variance_fieldsModelSelector } from "./person_rev_variance_fieldsModel.base"
-import { person_aggregateModel } from "./person_aggregateModel"
-import { person_aggregateModelPrimitives, person_aggregateModelSelector } from "./person_aggregateModel.base"
-import { person_aggregate_fieldsModel } from "./person_aggregate_fieldsModel"
-import { person_aggregate_fieldsModelPrimitives, person_aggregate_fieldsModelSelector } from "./person_aggregate_fieldsModel.base"
 import { person_avg_fieldsModel } from "./person_avg_fieldsModel"
 import { person_avg_fieldsModelPrimitives, person_avg_fieldsModelSelector } from "./person_avg_fieldsModel.base"
 import { person_max_fieldsModel } from "./person_max_fieldsModel"
@@ -793,18 +661,10 @@ import { person_var_samp_fieldsModel } from "./person_var_samp_fieldsModel"
 import { person_var_samp_fieldsModelPrimitives, person_var_samp_fieldsModelSelector } from "./person_var_samp_fieldsModel.base"
 import { person_variance_fieldsModel } from "./person_variance_fieldsModel"
 import { person_variance_fieldsModelPrimitives, person_variance_fieldsModelSelector } from "./person_variance_fieldsModel.base"
-import { ae_art_aggregateModel } from "./ae_art_aggregateModel"
-import { ae_art_aggregateModelPrimitives, ae_art_aggregateModelSelector } from "./ae_art_aggregateModel.base"
-import { ae_art_aggregate_fieldsModel } from "./ae_art_aggregate_fieldsModel"
-import { ae_art_aggregate_fieldsModelPrimitives, ae_art_aggregate_fieldsModelSelector } from "./ae_art_aggregate_fieldsModel.base"
 import { ae_art_max_fieldsModel } from "./ae_art_max_fieldsModel"
 import { ae_art_max_fieldsModelPrimitives, ae_art_max_fieldsModelSelector } from "./ae_art_max_fieldsModel.base"
 import { ae_art_min_fieldsModel } from "./ae_art_min_fieldsModel"
 import { ae_art_min_fieldsModelPrimitives, ae_art_min_fieldsModelSelector } from "./ae_art_min_fieldsModel.base"
-import { art_aggregateModel } from "./art_aggregateModel"
-import { art_aggregateModelPrimitives, art_aggregateModelSelector } from "./art_aggregateModel.base"
-import { art_aggregate_fieldsModel } from "./art_aggregate_fieldsModel"
-import { art_aggregate_fieldsModelPrimitives, art_aggregate_fieldsModelSelector } from "./art_aggregate_fieldsModel.base"
 import { art_avg_fieldsModel } from "./art_avg_fieldsModel"
 import { art_avg_fieldsModelPrimitives, art_avg_fieldsModelSelector } from "./art_avg_fieldsModel.base"
 import { art_max_fieldsModel } from "./art_max_fieldsModel"
@@ -825,10 +685,6 @@ import { art_var_samp_fieldsModel } from "./art_var_samp_fieldsModel"
 import { art_var_samp_fieldsModelPrimitives, art_var_samp_fieldsModelSelector } from "./art_var_samp_fieldsModel.base"
 import { art_variance_fieldsModel } from "./art_variance_fieldsModel"
 import { art_variance_fieldsModelPrimitives, art_variance_fieldsModelSelector } from "./art_variance_fieldsModel.base"
-import { art_qk_aggregateModel } from "./art_qk_aggregateModel"
-import { art_qk_aggregateModelPrimitives, art_qk_aggregateModelSelector } from "./art_qk_aggregateModel.base"
-import { art_qk_aggregate_fieldsModel } from "./art_qk_aggregate_fieldsModel"
-import { art_qk_aggregate_fieldsModelPrimitives, art_qk_aggregate_fieldsModelSelector } from "./art_qk_aggregate_fieldsModel.base"
 import { art_qk_avg_fieldsModel } from "./art_qk_avg_fieldsModel"
 import { art_qk_avg_fieldsModelPrimitives, art_qk_avg_fieldsModelSelector } from "./art_qk_avg_fieldsModel.base"
 import { art_qk_max_fieldsModel } from "./art_qk_max_fieldsModel"
@@ -851,10 +707,6 @@ import { art_qk_variance_fieldsModel } from "./art_qk_variance_fieldsModel"
 import { art_qk_variance_fieldsModelPrimitives, art_qk_variance_fieldsModelSelector } from "./art_qk_variance_fieldsModel.base"
 import { art_qk_revModel } from "./art_qk_revModel"
 import { art_qk_revModelPrimitives, art_qk_revModelSelector } from "./art_qk_revModel.base"
-import { art_qk_rev_aggregateModel } from "./art_qk_rev_aggregateModel"
-import { art_qk_rev_aggregateModelPrimitives, art_qk_rev_aggregateModelSelector } from "./art_qk_rev_aggregateModel.base"
-import { art_qk_rev_aggregate_fieldsModel } from "./art_qk_rev_aggregate_fieldsModel"
-import { art_qk_rev_aggregate_fieldsModelPrimitives, art_qk_rev_aggregate_fieldsModelSelector } from "./art_qk_rev_aggregate_fieldsModel.base"
 import { art_qk_rev_avg_fieldsModel } from "./art_qk_rev_avg_fieldsModel"
 import { art_qk_rev_avg_fieldsModelPrimitives, art_qk_rev_avg_fieldsModelSelector } from "./art_qk_rev_avg_fieldsModel.base"
 import { art_qk_rev_max_fieldsModel } from "./art_qk_rev_max_fieldsModel"
@@ -877,10 +729,6 @@ import { art_qk_rev_variance_fieldsModel } from "./art_qk_rev_variance_fieldsMod
 import { art_qk_rev_variance_fieldsModelPrimitives, art_qk_rev_variance_fieldsModelSelector } from "./art_qk_rev_variance_fieldsModel.base"
 import { art_revModel } from "./art_revModel"
 import { art_revModelPrimitives, art_revModelSelector } from "./art_revModel.base"
-import { art_rev_aggregateModel } from "./art_rev_aggregateModel"
-import { art_rev_aggregateModelPrimitives, art_rev_aggregateModelSelector } from "./art_rev_aggregateModel.base"
-import { art_rev_aggregate_fieldsModel } from "./art_rev_aggregate_fieldsModel"
-import { art_rev_aggregate_fieldsModelPrimitives, art_rev_aggregate_fieldsModelSelector } from "./art_rev_aggregate_fieldsModel.base"
 import { art_rev_avg_fieldsModel } from "./art_rev_avg_fieldsModel"
 import { art_rev_avg_fieldsModelPrimitives, art_rev_avg_fieldsModelSelector } from "./art_rev_avg_fieldsModel.base"
 import { art_rev_max_fieldsModel } from "./art_rev_max_fieldsModel"
@@ -903,10 +751,6 @@ import { art_rev_variance_fieldsModel } from "./art_rev_variance_fieldsModel"
 import { art_rev_variance_fieldsModelPrimitives, art_rev_variance_fieldsModelSelector } from "./art_rev_variance_fieldsModel.base"
 import { av_revModel } from "./av_revModel"
 import { av_revModelPrimitives, av_revModelSelector } from "./av_revModel.base"
-import { av_rev_aggregateModel } from "./av_rev_aggregateModel"
-import { av_rev_aggregateModelPrimitives, av_rev_aggregateModelSelector } from "./av_rev_aggregateModel.base"
-import { av_rev_aggregate_fieldsModel } from "./av_rev_aggregate_fieldsModel"
-import { av_rev_aggregate_fieldsModelPrimitives, av_rev_aggregate_fieldsModelSelector } from "./av_rev_aggregate_fieldsModel.base"
 import { av_rev_avg_fieldsModel } from "./av_rev_avg_fieldsModel"
 import { av_rev_avg_fieldsModelPrimitives, av_rev_avg_fieldsModelSelector } from "./av_rev_avg_fieldsModel.base"
 import { av_rev_max_fieldsModel } from "./av_rev_max_fieldsModel"
@@ -929,10 +773,6 @@ import { av_rev_variance_fieldsModel } from "./av_rev_variance_fieldsModel"
 import { av_rev_variance_fieldsModelPrimitives, av_rev_variance_fieldsModelSelector } from "./av_rev_variance_fieldsModel.base"
 import { gv_revModel } from "./gv_revModel"
 import { gv_revModelPrimitives, gv_revModelSelector } from "./gv_revModel.base"
-import { gv_rev_aggregateModel } from "./gv_rev_aggregateModel"
-import { gv_rev_aggregateModelPrimitives, gv_rev_aggregateModelSelector } from "./gv_rev_aggregateModel.base"
-import { gv_rev_aggregate_fieldsModel } from "./gv_rev_aggregate_fieldsModel"
-import { gv_rev_aggregate_fieldsModelPrimitives, gv_rev_aggregate_fieldsModelSelector } from "./gv_rev_aggregate_fieldsModel.base"
 import { gv_rev_avg_fieldsModel } from "./gv_rev_avg_fieldsModel"
 import { gv_rev_avg_fieldsModelPrimitives, gv_rev_avg_fieldsModelSelector } from "./gv_rev_avg_fieldsModel.base"
 import { gv_rev_max_fieldsModel } from "./gv_rev_max_fieldsModel"
@@ -953,10 +793,6 @@ import { gv_rev_var_samp_fieldsModel } from "./gv_rev_var_samp_fieldsModel"
 import { gv_rev_var_samp_fieldsModelPrimitives, gv_rev_var_samp_fieldsModelSelector } from "./gv_rev_var_samp_fieldsModel.base"
 import { gv_rev_variance_fieldsModel } from "./gv_rev_variance_fieldsModel"
 import { gv_rev_variance_fieldsModelPrimitives, gv_rev_variance_fieldsModelSelector } from "./gv_rev_variance_fieldsModel.base"
-import { herkunft_aggregateModel } from "./herkunft_aggregateModel"
-import { herkunft_aggregateModelPrimitives, herkunft_aggregateModelSelector } from "./herkunft_aggregateModel.base"
-import { herkunft_aggregate_fieldsModel } from "./herkunft_aggregate_fieldsModel"
-import { herkunft_aggregate_fieldsModelPrimitives, herkunft_aggregate_fieldsModelSelector } from "./herkunft_aggregate_fieldsModel.base"
 import { herkunft_avg_fieldsModel } from "./herkunft_avg_fieldsModel"
 import { herkunft_avg_fieldsModelPrimitives, herkunft_avg_fieldsModelSelector } from "./herkunft_avg_fieldsModel.base"
 import { herkunft_max_fieldsModel } from "./herkunft_max_fieldsModel"
@@ -979,10 +815,6 @@ import { herkunft_variance_fieldsModel } from "./herkunft_variance_fieldsModel"
 import { herkunft_variance_fieldsModelPrimitives, herkunft_variance_fieldsModelSelector } from "./herkunft_variance_fieldsModel.base"
 import { herkunft_revModel } from "./herkunft_revModel"
 import { herkunft_revModelPrimitives, herkunft_revModelSelector } from "./herkunft_revModel.base"
-import { herkunft_rev_aggregateModel } from "./herkunft_rev_aggregateModel"
-import { herkunft_rev_aggregateModelPrimitives, herkunft_rev_aggregateModelSelector } from "./herkunft_rev_aggregateModel.base"
-import { herkunft_rev_aggregate_fieldsModel } from "./herkunft_rev_aggregate_fieldsModel"
-import { herkunft_rev_aggregate_fieldsModelPrimitives, herkunft_rev_aggregate_fieldsModelSelector } from "./herkunft_rev_aggregate_fieldsModel.base"
 import { herkunft_rev_avg_fieldsModel } from "./herkunft_rev_avg_fieldsModel"
 import { herkunft_rev_avg_fieldsModelPrimitives, herkunft_rev_avg_fieldsModelSelector } from "./herkunft_rev_avg_fieldsModel.base"
 import { herkunft_rev_max_fieldsModel } from "./herkunft_rev_max_fieldsModel"
@@ -1003,10 +835,6 @@ import { herkunft_rev_var_samp_fieldsModel } from "./herkunft_rev_var_samp_field
 import { herkunft_rev_var_samp_fieldsModelPrimitives, herkunft_rev_var_samp_fieldsModelSelector } from "./herkunft_rev_var_samp_fieldsModel.base"
 import { herkunft_rev_variance_fieldsModel } from "./herkunft_rev_variance_fieldsModel"
 import { herkunft_rev_variance_fieldsModelPrimitives, herkunft_rev_variance_fieldsModelSelector } from "./herkunft_rev_variance_fieldsModel.base"
-import { kultur_option_aggregateModel } from "./kultur_option_aggregateModel"
-import { kultur_option_aggregateModelPrimitives, kultur_option_aggregateModelSelector } from "./kultur_option_aggregateModel.base"
-import { kultur_option_aggregate_fieldsModel } from "./kultur_option_aggregate_fieldsModel"
-import { kultur_option_aggregate_fieldsModelPrimitives, kultur_option_aggregate_fieldsModelSelector } from "./kultur_option_aggregate_fieldsModel.base"
 import { kultur_option_avg_fieldsModel } from "./kultur_option_avg_fieldsModel"
 import { kultur_option_avg_fieldsModelPrimitives, kultur_option_avg_fieldsModelSelector } from "./kultur_option_avg_fieldsModel.base"
 import { kultur_option_max_fieldsModel } from "./kultur_option_max_fieldsModel"
@@ -1027,10 +855,6 @@ import { kultur_option_var_samp_fieldsModel } from "./kultur_option_var_samp_fie
 import { kultur_option_var_samp_fieldsModelPrimitives, kultur_option_var_samp_fieldsModelSelector } from "./kultur_option_var_samp_fieldsModel.base"
 import { kultur_option_variance_fieldsModel } from "./kultur_option_variance_fieldsModel"
 import { kultur_option_variance_fieldsModelPrimitives, kultur_option_variance_fieldsModelSelector } from "./kultur_option_variance_fieldsModel.base"
-import { kultur_qk_aggregateModel } from "./kultur_qk_aggregateModel"
-import { kultur_qk_aggregateModelPrimitives, kultur_qk_aggregateModelSelector } from "./kultur_qk_aggregateModel.base"
-import { kultur_qk_aggregate_fieldsModel } from "./kultur_qk_aggregate_fieldsModel"
-import { kultur_qk_aggregate_fieldsModelPrimitives, kultur_qk_aggregate_fieldsModelSelector } from "./kultur_qk_aggregate_fieldsModel.base"
 import { kultur_qk_avg_fieldsModel } from "./kultur_qk_avg_fieldsModel"
 import { kultur_qk_avg_fieldsModelPrimitives, kultur_qk_avg_fieldsModelSelector } from "./kultur_qk_avg_fieldsModel.base"
 import { kultur_qk_max_fieldsModel } from "./kultur_qk_max_fieldsModel"
@@ -1053,10 +877,6 @@ import { kultur_qk_variance_fieldsModel } from "./kultur_qk_variance_fieldsModel
 import { kultur_qk_variance_fieldsModelPrimitives, kultur_qk_variance_fieldsModelSelector } from "./kultur_qk_variance_fieldsModel.base"
 import { kultur_qk_choosen_revModel } from "./kultur_qk_choosen_revModel"
 import { kultur_qk_choosen_revModelPrimitives, kultur_qk_choosen_revModelSelector } from "./kultur_qk_choosen_revModel.base"
-import { kultur_qk_choosen_rev_aggregateModel } from "./kultur_qk_choosen_rev_aggregateModel"
-import { kultur_qk_choosen_rev_aggregateModelPrimitives, kultur_qk_choosen_rev_aggregateModelSelector } from "./kultur_qk_choosen_rev_aggregateModel.base"
-import { kultur_qk_choosen_rev_aggregate_fieldsModel } from "./kultur_qk_choosen_rev_aggregate_fieldsModel"
-import { kultur_qk_choosen_rev_aggregate_fieldsModelPrimitives, kultur_qk_choosen_rev_aggregate_fieldsModelSelector } from "./kultur_qk_choosen_rev_aggregate_fieldsModel.base"
 import { kultur_qk_choosen_rev_avg_fieldsModel } from "./kultur_qk_choosen_rev_avg_fieldsModel"
 import { kultur_qk_choosen_rev_avg_fieldsModelPrimitives, kultur_qk_choosen_rev_avg_fieldsModelSelector } from "./kultur_qk_choosen_rev_avg_fieldsModel.base"
 import { kultur_qk_choosen_rev_max_fieldsModel } from "./kultur_qk_choosen_rev_max_fieldsModel"
@@ -1079,10 +899,6 @@ import { kultur_qk_choosen_rev_variance_fieldsModel } from "./kultur_qk_choosen_
 import { kultur_qk_choosen_rev_variance_fieldsModelPrimitives, kultur_qk_choosen_rev_variance_fieldsModelSelector } from "./kultur_qk_choosen_rev_variance_fieldsModel.base"
 import { kultur_qk_revModel } from "./kultur_qk_revModel"
 import { kultur_qk_revModelPrimitives, kultur_qk_revModelSelector } from "./kultur_qk_revModel.base"
-import { kultur_qk_rev_aggregateModel } from "./kultur_qk_rev_aggregateModel"
-import { kultur_qk_rev_aggregateModelPrimitives, kultur_qk_rev_aggregateModelSelector } from "./kultur_qk_rev_aggregateModel.base"
-import { kultur_qk_rev_aggregate_fieldsModel } from "./kultur_qk_rev_aggregate_fieldsModel"
-import { kultur_qk_rev_aggregate_fieldsModelPrimitives, kultur_qk_rev_aggregate_fieldsModelSelector } from "./kultur_qk_rev_aggregate_fieldsModel.base"
 import { kultur_qk_rev_avg_fieldsModel } from "./kultur_qk_rev_avg_fieldsModel"
 import { kultur_qk_rev_avg_fieldsModelPrimitives, kultur_qk_rev_avg_fieldsModelSelector } from "./kultur_qk_rev_avg_fieldsModel.base"
 import { kultur_qk_rev_max_fieldsModel } from "./kultur_qk_rev_max_fieldsModel"
@@ -1103,10 +919,6 @@ import { kultur_qk_rev_var_samp_fieldsModel } from "./kultur_qk_rev_var_samp_fie
 import { kultur_qk_rev_var_samp_fieldsModelPrimitives, kultur_qk_rev_var_samp_fieldsModelSelector } from "./kultur_qk_rev_var_samp_fieldsModel.base"
 import { kultur_qk_rev_variance_fieldsModel } from "./kultur_qk_rev_variance_fieldsModel"
 import { kultur_qk_rev_variance_fieldsModelPrimitives, kultur_qk_rev_variance_fieldsModelSelector } from "./kultur_qk_rev_variance_fieldsModel.base"
-import { person_option_aggregateModel } from "./person_option_aggregateModel"
-import { person_option_aggregateModelPrimitives, person_option_aggregateModelSelector } from "./person_option_aggregateModel.base"
-import { person_option_aggregate_fieldsModel } from "./person_option_aggregate_fieldsModel"
-import { person_option_aggregate_fieldsModelPrimitives, person_option_aggregate_fieldsModelSelector } from "./person_option_aggregate_fieldsModel.base"
 import { person_option_avg_fieldsModel } from "./person_option_avg_fieldsModel"
 import { person_option_avg_fieldsModelPrimitives, person_option_avg_fieldsModelSelector } from "./person_option_avg_fieldsModel.base"
 import { person_option_max_fieldsModel } from "./person_option_max_fieldsModel"
@@ -1129,10 +941,6 @@ import { person_option_variance_fieldsModel } from "./person_option_variance_fie
 import { person_option_variance_fieldsModelPrimitives, person_option_variance_fieldsModelSelector } from "./person_option_variance_fieldsModel.base"
 import { spatial_ref_sysModel } from "./spatial_ref_sysModel"
 import { spatial_ref_sysModelPrimitives, spatial_ref_sysModelSelector } from "./spatial_ref_sysModel.base"
-import { spatial_ref_sys_aggregateModel } from "./spatial_ref_sys_aggregateModel"
-import { spatial_ref_sys_aggregateModelPrimitives, spatial_ref_sys_aggregateModelSelector } from "./spatial_ref_sys_aggregateModel.base"
-import { spatial_ref_sys_aggregate_fieldsModel } from "./spatial_ref_sys_aggregate_fieldsModel"
-import { spatial_ref_sys_aggregate_fieldsModelPrimitives, spatial_ref_sys_aggregate_fieldsModelSelector } from "./spatial_ref_sys_aggregate_fieldsModel.base"
 import { spatial_ref_sys_avg_fieldsModel } from "./spatial_ref_sys_avg_fieldsModel"
 import { spatial_ref_sys_avg_fieldsModelPrimitives, spatial_ref_sys_avg_fieldsModelSelector } from "./spatial_ref_sys_avg_fieldsModel.base"
 import { spatial_ref_sys_max_fieldsModel } from "./spatial_ref_sys_max_fieldsModel"
@@ -1153,10 +961,6 @@ import { spatial_ref_sys_var_samp_fieldsModel } from "./spatial_ref_sys_var_samp
 import { spatial_ref_sys_var_samp_fieldsModelPrimitives, spatial_ref_sys_var_samp_fieldsModelSelector } from "./spatial_ref_sys_var_samp_fieldsModel.base"
 import { spatial_ref_sys_variance_fieldsModel } from "./spatial_ref_sys_variance_fieldsModel"
 import { spatial_ref_sys_variance_fieldsModelPrimitives, spatial_ref_sys_variance_fieldsModelSelector } from "./spatial_ref_sys_variance_fieldsModel.base"
-import { user_role_aggregateModel } from "./user_role_aggregateModel"
-import { user_role_aggregateModelPrimitives, user_role_aggregateModelSelector } from "./user_role_aggregateModel.base"
-import { user_role_aggregate_fieldsModel } from "./user_role_aggregate_fieldsModel"
-import { user_role_aggregate_fieldsModelPrimitives, user_role_aggregate_fieldsModelSelector } from "./user_role_aggregate_fieldsModel.base"
 import { user_role_avg_fieldsModel } from "./user_role_avg_fieldsModel"
 import { user_role_avg_fieldsModelPrimitives, user_role_avg_fieldsModelSelector } from "./user_role_avg_fieldsModel.base"
 import { user_role_max_fieldsModel } from "./user_role_max_fieldsModel"
@@ -1293,7 +1097,7 @@ import { subscription_rootModelPrimitives, subscription_rootModelSelector } from
 */
 export const RootStoreBase = MSTGQLStore
   .named("RootStore")
-  .extend(configureStoreMixin([['query_root', () => query_rootModel], ['ae_art', () => ae_artModel], ['art', () => artModel], ['art_file', () => art_fileModel], ['art_file_aggregate', () => art_file_aggregateModel], ['art_file_aggregate_fields', () => art_file_aggregate_fieldsModel], ['art_file_max_fields', () => art_file_max_fieldsModel], ['art_file_min_fields', () => art_file_min_fieldsModel], ['art_qk_choosen', () => art_qk_choosenModel], ['art_qk', () => art_qkModel], ['art_qk_choosen_aggregate', () => art_qk_choosen_aggregateModel], ['art_qk_choosen_aggregate_fields', () => art_qk_choosen_aggregate_fieldsModel], ['art_qk_choosen_avg_fields', () => art_qk_choosen_avg_fieldsModel], ['art_qk_choosen_max_fields', () => art_qk_choosen_max_fieldsModel], ['art_qk_choosen_min_fields', () => art_qk_choosen_min_fieldsModel], ['art_qk_choosen_stddev_fields', () => art_qk_choosen_stddev_fieldsModel], ['art_qk_choosen_stddev_pop_fields', () => art_qk_choosen_stddev_pop_fieldsModel], ['art_qk_choosen_stddev_samp_fields', () => art_qk_choosen_stddev_samp_fieldsModel], ['art_qk_choosen_sum_fields', () => art_qk_choosen_sum_fieldsModel], ['art_qk_choosen_var_pop_fields', () => art_qk_choosen_var_pop_fieldsModel], ['art_qk_choosen_var_samp_fields', () => art_qk_choosen_var_samp_fieldsModel], ['art_qk_choosen_variance_fields', () => art_qk_choosen_variance_fieldsModel], ['art_qk_choosen_rev', () => art_qk_choosen_revModel], ['art_qk_choosen_rev_aggregate', () => art_qk_choosen_rev_aggregateModel], ['art_qk_choosen_rev_aggregate_fields', () => art_qk_choosen_rev_aggregate_fieldsModel], ['art_qk_choosen_rev_avg_fields', () => art_qk_choosen_rev_avg_fieldsModel], ['art_qk_choosen_rev_max_fields', () => art_qk_choosen_rev_max_fieldsModel], ['art_qk_choosen_rev_min_fields', () => art_qk_choosen_rev_min_fieldsModel], ['art_qk_choosen_rev_stddev_fields', () => art_qk_choosen_rev_stddev_fieldsModel], ['art_qk_choosen_rev_stddev_pop_fields', () => art_qk_choosen_rev_stddev_pop_fieldsModel], ['art_qk_choosen_rev_stddev_samp_fields', () => art_qk_choosen_rev_stddev_samp_fieldsModel], ['art_qk_choosen_rev_sum_fields', () => art_qk_choosen_rev_sum_fieldsModel], ['art_qk_choosen_rev_var_pop_fields', () => art_qk_choosen_rev_var_pop_fieldsModel], ['art_qk_choosen_rev_var_samp_fields', () => art_qk_choosen_rev_var_samp_fieldsModel], ['art_qk_choosen_rev_variance_fields', () => art_qk_choosen_rev_variance_fieldsModel], ['av', () => avModel], ['person', () => personModel], ['av_aggregate', () => av_aggregateModel], ['av_aggregate_fields', () => av_aggregate_fieldsModel], ['av_avg_fields', () => av_avg_fieldsModel], ['av_max_fields', () => av_max_fieldsModel], ['av_min_fields', () => av_min_fieldsModel], ['av_stddev_fields', () => av_stddev_fieldsModel], ['av_stddev_pop_fields', () => av_stddev_pop_fieldsModel], ['av_stddev_samp_fields', () => av_stddev_samp_fieldsModel], ['av_sum_fields', () => av_sum_fieldsModel], ['av_var_pop_fields', () => av_var_pop_fieldsModel], ['av_var_samp_fields', () => av_var_samp_fieldsModel], ['av_variance_fields', () => av_variance_fieldsModel], ['event_rev', () => event_revModel], ['kultur', () => kulturModel], ['event_rev_aggregate', () => event_rev_aggregateModel], ['event_rev_aggregate_fields', () => event_rev_aggregate_fieldsModel], ['event_rev_avg_fields', () => event_rev_avg_fieldsModel], ['event_rev_max_fields', () => event_rev_max_fieldsModel], ['event_rev_min_fields', () => event_rev_min_fieldsModel], ['event_rev_stddev_fields', () => event_rev_stddev_fieldsModel], ['event_rev_stddev_pop_fields', () => event_rev_stddev_pop_fieldsModel], ['event_rev_stddev_samp_fields', () => event_rev_stddev_samp_fieldsModel], ['event_rev_sum_fields', () => event_rev_sum_fieldsModel], ['event_rev_var_pop_fields', () => event_rev_var_pop_fieldsModel], ['event_rev_var_samp_fields', () => event_rev_var_samp_fieldsModel], ['event_rev_variance_fields', () => event_rev_variance_fieldsModel], ['event', () => eventModel], ['teilkultur', () => teilkulturModel], ['event_aggregate', () => event_aggregateModel], ['event_aggregate_fields', () => event_aggregate_fieldsModel], ['event_avg_fields', () => event_avg_fieldsModel], ['event_max_fields', () => event_max_fieldsModel], ['event_min_fields', () => event_min_fieldsModel], ['event_stddev_fields', () => event_stddev_fieldsModel], ['event_stddev_pop_fields', () => event_stddev_pop_fieldsModel], ['event_stddev_samp_fields', () => event_stddev_samp_fieldsModel], ['event_sum_fields', () => event_sum_fieldsModel], ['event_var_pop_fields', () => event_var_pop_fieldsModel], ['event_var_samp_fields', () => event_var_samp_fieldsModel], ['event_variance_fields', () => event_variance_fieldsModel], ['teilzaehlung_rev', () => teilzaehlung_revModel], ['teilzaehlung', () => teilzaehlungModel], ['teilzaehlung_rev_aggregate', () => teilzaehlung_rev_aggregateModel], ['teilzaehlung_rev_aggregate_fields', () => teilzaehlung_rev_aggregate_fieldsModel], ['teilzaehlung_rev_avg_fields', () => teilzaehlung_rev_avg_fieldsModel], ['teilzaehlung_rev_max_fields', () => teilzaehlung_rev_max_fieldsModel], ['teilzaehlung_rev_min_fields', () => teilzaehlung_rev_min_fieldsModel], ['teilzaehlung_rev_stddev_fields', () => teilzaehlung_rev_stddev_fieldsModel], ['teilzaehlung_rev_stddev_pop_fields', () => teilzaehlung_rev_stddev_pop_fieldsModel], ['teilzaehlung_rev_stddev_samp_fields', () => teilzaehlung_rev_stddev_samp_fieldsModel], ['teilzaehlung_rev_sum_fields', () => teilzaehlung_rev_sum_fieldsModel], ['teilzaehlung_rev_var_pop_fields', () => teilzaehlung_rev_var_pop_fieldsModel], ['teilzaehlung_rev_var_samp_fields', () => teilzaehlung_rev_var_samp_fieldsModel], ['teilzaehlung_rev_variance_fields', () => teilzaehlung_rev_variance_fieldsModel], ['teilzaehlung_aggregate', () => teilzaehlung_aggregateModel], ['teilzaehlung_aggregate_fields', () => teilzaehlung_aggregate_fieldsModel], ['teilzaehlung_avg_fields', () => teilzaehlung_avg_fieldsModel], ['teilzaehlung_max_fields', () => teilzaehlung_max_fieldsModel], ['teilzaehlung_min_fields', () => teilzaehlung_min_fieldsModel], ['teilzaehlung_stddev_fields', () => teilzaehlung_stddev_fieldsModel], ['teilzaehlung_stddev_pop_fields', () => teilzaehlung_stddev_pop_fieldsModel], ['teilzaehlung_stddev_samp_fields', () => teilzaehlung_stddev_samp_fieldsModel], ['teilzaehlung_sum_fields', () => teilzaehlung_sum_fieldsModel], ['teilzaehlung_var_pop_fields', () => teilzaehlung_var_pop_fieldsModel], ['teilzaehlung_var_samp_fields', () => teilzaehlung_var_samp_fieldsModel], ['teilzaehlung_variance_fields', () => teilzaehlung_variance_fieldsModel], ['zaehlung', () => zaehlungModel], ['garten', () => gartenModel], ['garten_file', () => garten_fileModel], ['garten_file_aggregate', () => garten_file_aggregateModel], ['garten_file_aggregate_fields', () => garten_file_aggregate_fieldsModel], ['garten_file_max_fields', () => garten_file_max_fieldsModel], ['garten_file_min_fields', () => garten_file_min_fieldsModel], ['gv', () => gvModel], ['gv_aggregate', () => gv_aggregateModel], ['gv_aggregate_fields', () => gv_aggregate_fieldsModel], ['gv_avg_fields', () => gv_avg_fieldsModel], ['gv_max_fields', () => gv_max_fieldsModel], ['gv_min_fields', () => gv_min_fieldsModel], ['gv_stddev_fields', () => gv_stddev_fieldsModel], ['gv_stddev_pop_fields', () => gv_stddev_pop_fieldsModel], ['gv_stddev_samp_fields', () => gv_stddev_samp_fieldsModel], ['gv_sum_fields', () => gv_sum_fieldsModel], ['gv_var_pop_fields', () => gv_var_pop_fieldsModel], ['gv_var_samp_fields', () => gv_var_samp_fieldsModel], ['gv_variance_fields', () => gv_variance_fieldsModel], ['kultur_rev', () => kultur_revModel], ['herkunft', () => herkunftModel], ['herkunft_file', () => herkunft_fileModel], ['herkunft_file_aggregate', () => herkunft_file_aggregateModel], ['herkunft_file_aggregate_fields', () => herkunft_file_aggregate_fieldsModel], ['herkunft_file_max_fields', () => herkunft_file_max_fieldsModel], ['herkunft_file_min_fields', () => herkunft_file_min_fieldsModel], ['kultur_rev_aggregate', () => kultur_rev_aggregateModel], ['kultur_rev_aggregate_fields', () => kultur_rev_aggregate_fieldsModel], ['kultur_rev_avg_fields', () => kultur_rev_avg_fieldsModel], ['kultur_rev_max_fields', () => kultur_rev_max_fieldsModel], ['kultur_rev_min_fields', () => kultur_rev_min_fieldsModel], ['kultur_rev_stddev_fields', () => kultur_rev_stddev_fieldsModel], ['kultur_rev_stddev_pop_fields', () => kultur_rev_stddev_pop_fieldsModel], ['kultur_rev_stddev_samp_fields', () => kultur_rev_stddev_samp_fieldsModel], ['kultur_rev_sum_fields', () => kultur_rev_sum_fieldsModel], ['kultur_rev_var_pop_fields', () => kultur_rev_var_pop_fieldsModel], ['kultur_rev_var_samp_fields', () => kultur_rev_var_samp_fieldsModel], ['kultur_rev_variance_fields', () => kultur_rev_variance_fieldsModel], ['kultur_aggregate', () => kultur_aggregateModel], ['kultur_aggregate_fields', () => kultur_aggregate_fieldsModel], ['kultur_avg_fields', () => kultur_avg_fieldsModel], ['kultur_max_fields', () => kultur_max_fieldsModel], ['kultur_min_fields', () => kultur_min_fieldsModel], ['kultur_stddev_fields', () => kultur_stddev_fieldsModel], ['kultur_stddev_pop_fields', () => kultur_stddev_pop_fieldsModel], ['kultur_stddev_samp_fields', () => kultur_stddev_samp_fieldsModel], ['kultur_sum_fields', () => kultur_sum_fieldsModel], ['kultur_var_pop_fields', () => kultur_var_pop_fieldsModel], ['kultur_var_samp_fields', () => kultur_var_samp_fieldsModel], ['kultur_variance_fields', () => kultur_variance_fieldsModel], ['sammlung_rev', () => sammlung_revModel], ['lieferung', () => lieferungModel], ['lieferung_file', () => lieferung_fileModel], ['lieferung_file_aggregate', () => lieferung_file_aggregateModel], ['lieferung_file_aggregate_fields', () => lieferung_file_aggregate_fieldsModel], ['lieferung_file_max_fields', () => lieferung_file_max_fieldsModel], ['lieferung_file_min_fields', () => lieferung_file_min_fieldsModel], ['sammel_lieferung', () => sammel_lieferungModel], ['lieferung_aggregate', () => lieferung_aggregateModel], ['lieferung_aggregate_fields', () => lieferung_aggregate_fieldsModel], ['lieferung_avg_fields', () => lieferung_avg_fieldsModel], ['lieferung_max_fields', () => lieferung_max_fieldsModel], ['lieferung_min_fields', () => lieferung_min_fieldsModel], ['lieferung_stddev_fields', () => lieferung_stddev_fieldsModel], ['lieferung_stddev_pop_fields', () => lieferung_stddev_pop_fieldsModel], ['lieferung_stddev_samp_fields', () => lieferung_stddev_samp_fieldsModel], ['lieferung_sum_fields', () => lieferung_sum_fieldsModel], ['lieferung_var_pop_fields', () => lieferung_var_pop_fieldsModel], ['lieferung_var_samp_fields', () => lieferung_var_samp_fieldsModel], ['lieferung_variance_fields', () => lieferung_variance_fieldsModel], ['sammlung', () => sammlungModel], ['lieferung_rev', () => lieferung_revModel], ['lieferung_rev_aggregate', () => lieferung_rev_aggregateModel], ['lieferung_rev_aggregate_fields', () => lieferung_rev_aggregate_fieldsModel], ['lieferung_rev_avg_fields', () => lieferung_rev_avg_fieldsModel], ['lieferung_rev_max_fields', () => lieferung_rev_max_fieldsModel], ['lieferung_rev_min_fields', () => lieferung_rev_min_fieldsModel], ['lieferung_rev_stddev_fields', () => lieferung_rev_stddev_fieldsModel], ['lieferung_rev_stddev_pop_fields', () => lieferung_rev_stddev_pop_fieldsModel], ['lieferung_rev_stddev_samp_fields', () => lieferung_rev_stddev_samp_fieldsModel], ['lieferung_rev_sum_fields', () => lieferung_rev_sum_fieldsModel], ['lieferung_rev_var_pop_fields', () => lieferung_rev_var_pop_fieldsModel], ['lieferung_rev_var_samp_fields', () => lieferung_rev_var_samp_fieldsModel], ['lieferung_rev_variance_fields', () => lieferung_rev_variance_fieldsModel], ['sammel_lieferung_rev', () => sammel_lieferung_revModel], ['sammel_lieferung_rev_aggregate', () => sammel_lieferung_rev_aggregateModel], ['sammel_lieferung_rev_aggregate_fields', () => sammel_lieferung_rev_aggregate_fieldsModel], ['sammel_lieferung_rev_avg_fields', () => sammel_lieferung_rev_avg_fieldsModel], ['sammel_lieferung_rev_max_fields', () => sammel_lieferung_rev_max_fieldsModel], ['sammel_lieferung_rev_min_fields', () => sammel_lieferung_rev_min_fieldsModel], ['sammel_lieferung_rev_stddev_fields', () => sammel_lieferung_rev_stddev_fieldsModel], ['sammel_lieferung_rev_stddev_pop_fields', () => sammel_lieferung_rev_stddev_pop_fieldsModel], ['sammel_lieferung_rev_stddev_samp_fields', () => sammel_lieferung_rev_stddev_samp_fieldsModel], ['sammel_lieferung_rev_sum_fields', () => sammel_lieferung_rev_sum_fieldsModel], ['sammel_lieferung_rev_var_pop_fields', () => sammel_lieferung_rev_var_pop_fieldsModel], ['sammel_lieferung_rev_var_samp_fields', () => sammel_lieferung_rev_var_samp_fieldsModel], ['sammel_lieferung_rev_variance_fields', () => sammel_lieferung_rev_variance_fieldsModel], ['sammel_lieferung_aggregate', () => sammel_lieferung_aggregateModel], ['sammel_lieferung_aggregate_fields', () => sammel_lieferung_aggregate_fieldsModel], ['sammel_lieferung_avg_fields', () => sammel_lieferung_avg_fieldsModel], ['sammel_lieferung_max_fields', () => sammel_lieferung_max_fieldsModel], ['sammel_lieferung_min_fields', () => sammel_lieferung_min_fieldsModel], ['sammel_lieferung_stddev_fields', () => sammel_lieferung_stddev_fieldsModel], ['sammel_lieferung_stddev_pop_fields', () => sammel_lieferung_stddev_pop_fieldsModel], ['sammel_lieferung_stddev_samp_fields', () => sammel_lieferung_stddev_samp_fieldsModel], ['sammel_lieferung_sum_fields', () => sammel_lieferung_sum_fieldsModel], ['sammel_lieferung_var_pop_fields', () => sammel_lieferung_var_pop_fieldsModel], ['sammel_lieferung_var_samp_fields', () => sammel_lieferung_var_samp_fieldsModel], ['sammel_lieferung_variance_fields', () => sammel_lieferung_variance_fieldsModel], ['sammlung_file', () => sammlung_fileModel], ['sammlung_file_aggregate', () => sammlung_file_aggregateModel], ['sammlung_file_aggregate_fields', () => sammlung_file_aggregate_fieldsModel], ['sammlung_file_max_fields', () => sammlung_file_max_fieldsModel], ['sammlung_file_min_fields', () => sammlung_file_min_fieldsModel], ['sammlung_rev_aggregate', () => sammlung_rev_aggregateModel], ['sammlung_rev_aggregate_fields', () => sammlung_rev_aggregate_fieldsModel], ['sammlung_rev_avg_fields', () => sammlung_rev_avg_fieldsModel], ['sammlung_rev_max_fields', () => sammlung_rev_max_fieldsModel], ['sammlung_rev_min_fields', () => sammlung_rev_min_fieldsModel], ['sammlung_rev_stddev_fields', () => sammlung_rev_stddev_fieldsModel], ['sammlung_rev_stddev_pop_fields', () => sammlung_rev_stddev_pop_fieldsModel], ['sammlung_rev_stddev_samp_fields', () => sammlung_rev_stddev_samp_fieldsModel], ['sammlung_rev_sum_fields', () => sammlung_rev_sum_fieldsModel], ['sammlung_rev_var_pop_fields', () => sammlung_rev_var_pop_fieldsModel], ['sammlung_rev_var_samp_fields', () => sammlung_rev_var_samp_fieldsModel], ['sammlung_rev_variance_fields', () => sammlung_rev_variance_fieldsModel], ['sammlung_aggregate', () => sammlung_aggregateModel], ['sammlung_aggregate_fields', () => sammlung_aggregate_fieldsModel], ['sammlung_avg_fields', () => sammlung_avg_fieldsModel], ['sammlung_max_fields', () => sammlung_max_fieldsModel], ['sammlung_min_fields', () => sammlung_min_fieldsModel], ['sammlung_stddev_fields', () => sammlung_stddev_fieldsModel], ['sammlung_stddev_pop_fields', () => sammlung_stddev_pop_fieldsModel], ['sammlung_stddev_samp_fields', () => sammlung_stddev_samp_fieldsModel], ['sammlung_sum_fields', () => sammlung_sum_fieldsModel], ['sammlung_var_pop_fields', () => sammlung_var_pop_fieldsModel], ['sammlung_var_samp_fields', () => sammlung_var_samp_fieldsModel], ['sammlung_variance_fields', () => sammlung_variance_fieldsModel], ['teilkultur_aggregate', () => teilkultur_aggregateModel], ['teilkultur_aggregate_fields', () => teilkultur_aggregate_fieldsModel], ['teilkultur_avg_fields', () => teilkultur_avg_fieldsModel], ['teilkultur_max_fields', () => teilkultur_max_fieldsModel], ['teilkultur_min_fields', () => teilkultur_min_fieldsModel], ['teilkultur_stddev_fields', () => teilkultur_stddev_fieldsModel], ['teilkultur_stddev_pop_fields', () => teilkultur_stddev_pop_fieldsModel], ['teilkultur_stddev_samp_fields', () => teilkultur_stddev_samp_fieldsModel], ['teilkultur_sum_fields', () => teilkultur_sum_fieldsModel], ['teilkultur_var_pop_fields', () => teilkultur_var_pop_fieldsModel], ['teilkultur_var_samp_fields', () => teilkultur_var_samp_fieldsModel], ['teilkultur_variance_fields', () => teilkultur_variance_fieldsModel], ['zaehlung_aggregate', () => zaehlung_aggregateModel], ['zaehlung_aggregate_fields', () => zaehlung_aggregate_fieldsModel], ['zaehlung_avg_fields', () => zaehlung_avg_fieldsModel], ['zaehlung_max_fields', () => zaehlung_max_fieldsModel], ['zaehlung_min_fields', () => zaehlung_min_fieldsModel], ['zaehlung_stddev_fields', () => zaehlung_stddev_fieldsModel], ['zaehlung_stddev_pop_fields', () => zaehlung_stddev_pop_fieldsModel], ['zaehlung_stddev_samp_fields', () => zaehlung_stddev_samp_fieldsModel], ['zaehlung_sum_fields', () => zaehlung_sum_fieldsModel], ['zaehlung_var_pop_fields', () => zaehlung_var_pop_fieldsModel], ['zaehlung_var_samp_fields', () => zaehlung_var_samp_fieldsModel], ['zaehlung_variance_fields', () => zaehlung_variance_fieldsModel], ['kultur_file', () => kultur_fileModel], ['kultur_file_aggregate', () => kultur_file_aggregateModel], ['kultur_file_aggregate_fields', () => kultur_file_aggregate_fieldsModel], ['kultur_file_max_fields', () => kultur_file_max_fieldsModel], ['kultur_file_min_fields', () => kultur_file_min_fieldsModel], ['kultur_option', () => kultur_optionModel], ['kultur_option_rev', () => kultur_option_revModel], ['kultur_option_rev_aggregate', () => kultur_option_rev_aggregateModel], ['kultur_option_rev_aggregate_fields', () => kultur_option_rev_aggregate_fieldsModel], ['kultur_option_rev_avg_fields', () => kultur_option_rev_avg_fieldsModel], ['kultur_option_rev_max_fields', () => kultur_option_rev_max_fieldsModel], ['kultur_option_rev_min_fields', () => kultur_option_rev_min_fieldsModel], ['kultur_option_rev_stddev_fields', () => kultur_option_rev_stddev_fieldsModel], ['kultur_option_rev_stddev_pop_fields', () => kultur_option_rev_stddev_pop_fieldsModel], ['kultur_option_rev_stddev_samp_fields', () => kultur_option_rev_stddev_samp_fieldsModel], ['kultur_option_rev_sum_fields', () => kultur_option_rev_sum_fieldsModel], ['kultur_option_rev_var_pop_fields', () => kultur_option_rev_var_pop_fieldsModel], ['kultur_option_rev_var_samp_fields', () => kultur_option_rev_var_samp_fieldsModel], ['kultur_option_rev_variance_fields', () => kultur_option_rev_variance_fieldsModel], ['kultur_qk_choosen', () => kultur_qk_choosenModel], ['kultur_qk', () => kultur_qkModel], ['kultur_qk_choosen_aggregate', () => kultur_qk_choosen_aggregateModel], ['kultur_qk_choosen_aggregate_fields', () => kultur_qk_choosen_aggregate_fieldsModel], ['kultur_qk_choosen_avg_fields', () => kultur_qk_choosen_avg_fieldsModel], ['kultur_qk_choosen_max_fields', () => kultur_qk_choosen_max_fieldsModel], ['kultur_qk_choosen_min_fields', () => kultur_qk_choosen_min_fieldsModel], ['kultur_qk_choosen_stddev_fields', () => kultur_qk_choosen_stddev_fieldsModel], ['kultur_qk_choosen_stddev_pop_fields', () => kultur_qk_choosen_stddev_pop_fieldsModel], ['kultur_qk_choosen_stddev_samp_fields', () => kultur_qk_choosen_stddev_samp_fieldsModel], ['kultur_qk_choosen_sum_fields', () => kultur_qk_choosen_sum_fieldsModel], ['kultur_qk_choosen_var_pop_fields', () => kultur_qk_choosen_var_pop_fieldsModel], ['kultur_qk_choosen_var_samp_fields', () => kultur_qk_choosen_var_samp_fieldsModel], ['kultur_qk_choosen_variance_fields', () => kultur_qk_choosen_variance_fieldsModel], ['teilkultur_rev', () => teilkultur_revModel], ['teilkultur_rev_aggregate', () => teilkultur_rev_aggregateModel], ['teilkultur_rev_aggregate_fields', () => teilkultur_rev_aggregate_fieldsModel], ['teilkultur_rev_avg_fields', () => teilkultur_rev_avg_fieldsModel], ['teilkultur_rev_max_fields', () => teilkultur_rev_max_fieldsModel], ['teilkultur_rev_min_fields', () => teilkultur_rev_min_fieldsModel], ['teilkultur_rev_stddev_fields', () => teilkultur_rev_stddev_fieldsModel], ['teilkultur_rev_stddev_pop_fields', () => teilkultur_rev_stddev_pop_fieldsModel], ['teilkultur_rev_stddev_samp_fields', () => teilkultur_rev_stddev_samp_fieldsModel], ['teilkultur_rev_sum_fields', () => teilkultur_rev_sum_fieldsModel], ['teilkultur_rev_var_pop_fields', () => teilkultur_rev_var_pop_fieldsModel], ['teilkultur_rev_var_samp_fields', () => teilkultur_rev_var_samp_fieldsModel], ['teilkultur_rev_variance_fields', () => teilkultur_rev_variance_fieldsModel], ['zaehlung_rev', () => zaehlung_revModel], ['zaehlung_rev_aggregate', () => zaehlung_rev_aggregateModel], ['zaehlung_rev_aggregate_fields', () => zaehlung_rev_aggregate_fieldsModel], ['zaehlung_rev_avg_fields', () => zaehlung_rev_avg_fieldsModel], ['zaehlung_rev_max_fields', () => zaehlung_rev_max_fieldsModel], ['zaehlung_rev_min_fields', () => zaehlung_rev_min_fieldsModel], ['zaehlung_rev_stddev_fields', () => zaehlung_rev_stddev_fieldsModel], ['zaehlung_rev_stddev_pop_fields', () => zaehlung_rev_stddev_pop_fieldsModel], ['zaehlung_rev_stddev_samp_fields', () => zaehlung_rev_stddev_samp_fieldsModel], ['zaehlung_rev_sum_fields', () => zaehlung_rev_sum_fieldsModel], ['zaehlung_rev_var_pop_fields', () => zaehlung_rev_var_pop_fieldsModel], ['zaehlung_rev_var_samp_fields', () => zaehlung_rev_var_samp_fieldsModel], ['zaehlung_rev_variance_fields', () => zaehlung_rev_variance_fieldsModel], ['garten_rev', () => garten_revModel], ['garten_rev_aggregate', () => garten_rev_aggregateModel], ['garten_rev_aggregate_fields', () => garten_rev_aggregate_fieldsModel], ['garten_rev_avg_fields', () => garten_rev_avg_fieldsModel], ['garten_rev_max_fields', () => garten_rev_max_fieldsModel], ['garten_rev_min_fields', () => garten_rev_min_fieldsModel], ['garten_rev_stddev_fields', () => garten_rev_stddev_fieldsModel], ['garten_rev_stddev_pop_fields', () => garten_rev_stddev_pop_fieldsModel], ['garten_rev_stddev_samp_fields', () => garten_rev_stddev_samp_fieldsModel], ['garten_rev_sum_fields', () => garten_rev_sum_fieldsModel], ['garten_rev_var_pop_fields', () => garten_rev_var_pop_fieldsModel], ['garten_rev_var_samp_fields', () => garten_rev_var_samp_fieldsModel], ['garten_rev_variance_fields', () => garten_rev_variance_fieldsModel], ['garten_aggregate', () => garten_aggregateModel], ['garten_aggregate_fields', () => garten_aggregate_fieldsModel], ['garten_avg_fields', () => garten_avg_fieldsModel], ['garten_max_fields', () => garten_max_fieldsModel], ['garten_min_fields', () => garten_min_fieldsModel], ['garten_stddev_fields', () => garten_stddev_fieldsModel], ['garten_stddev_pop_fields', () => garten_stddev_pop_fieldsModel], ['garten_stddev_samp_fields', () => garten_stddev_samp_fieldsModel], ['garten_sum_fields', () => garten_sum_fieldsModel], ['garten_var_pop_fields', () => garten_var_pop_fieldsModel], ['garten_var_samp_fields', () => garten_var_samp_fieldsModel], ['garten_variance_fields', () => garten_variance_fieldsModel], ['person_file', () => person_fileModel], ['person_file_aggregate', () => person_file_aggregateModel], ['person_file_aggregate_fields', () => person_file_aggregate_fieldsModel], ['person_file_max_fields', () => person_file_max_fieldsModel], ['person_file_min_fields', () => person_file_min_fieldsModel], ['person_option', () => person_optionModel], ['person_option_rev', () => person_option_revModel], ['person_option_rev_aggregate', () => person_option_rev_aggregateModel], ['person_option_rev_aggregate_fields', () => person_option_rev_aggregate_fieldsModel], ['person_option_rev_avg_fields', () => person_option_rev_avg_fieldsModel], ['person_option_rev_max_fields', () => person_option_rev_max_fieldsModel], ['person_option_rev_min_fields', () => person_option_rev_min_fieldsModel], ['person_option_rev_stddev_fields', () => person_option_rev_stddev_fieldsModel], ['person_option_rev_stddev_pop_fields', () => person_option_rev_stddev_pop_fieldsModel], ['person_option_rev_stddev_samp_fields', () => person_option_rev_stddev_samp_fieldsModel], ['person_option_rev_sum_fields', () => person_option_rev_sum_fieldsModel], ['person_option_rev_var_pop_fields', () => person_option_rev_var_pop_fieldsModel], ['person_option_rev_var_samp_fields', () => person_option_rev_var_samp_fieldsModel], ['person_option_rev_variance_fields', () => person_option_rev_variance_fieldsModel], ['user_role', () => user_roleModel], ['person_rev', () => person_revModel], ['person_rev_aggregate', () => person_rev_aggregateModel], ['person_rev_aggregate_fields', () => person_rev_aggregate_fieldsModel], ['person_rev_avg_fields', () => person_rev_avg_fieldsModel], ['person_rev_max_fields', () => person_rev_max_fieldsModel], ['person_rev_min_fields', () => person_rev_min_fieldsModel], ['person_rev_stddev_fields', () => person_rev_stddev_fieldsModel], ['person_rev_stddev_pop_fields', () => person_rev_stddev_pop_fieldsModel], ['person_rev_stddev_samp_fields', () => person_rev_stddev_samp_fieldsModel], ['person_rev_sum_fields', () => person_rev_sum_fieldsModel], ['person_rev_var_pop_fields', () => person_rev_var_pop_fieldsModel], ['person_rev_var_samp_fields', () => person_rev_var_samp_fieldsModel], ['person_rev_variance_fields', () => person_rev_variance_fieldsModel], ['person_aggregate', () => person_aggregateModel], ['person_aggregate_fields', () => person_aggregate_fieldsModel], ['person_avg_fields', () => person_avg_fieldsModel], ['person_max_fields', () => person_max_fieldsModel], ['person_min_fields', () => person_min_fieldsModel], ['person_stddev_fields', () => person_stddev_fieldsModel], ['person_stddev_pop_fields', () => person_stddev_pop_fieldsModel], ['person_stddev_samp_fields', () => person_stddev_samp_fieldsModel], ['person_sum_fields', () => person_sum_fieldsModel], ['person_var_pop_fields', () => person_var_pop_fieldsModel], ['person_var_samp_fields', () => person_var_samp_fieldsModel], ['person_variance_fields', () => person_variance_fieldsModel], ['ae_art_aggregate', () => ae_art_aggregateModel], ['ae_art_aggregate_fields', () => ae_art_aggregate_fieldsModel], ['ae_art_max_fields', () => ae_art_max_fieldsModel], ['ae_art_min_fields', () => ae_art_min_fieldsModel], ['art_aggregate', () => art_aggregateModel], ['art_aggregate_fields', () => art_aggregate_fieldsModel], ['art_avg_fields', () => art_avg_fieldsModel], ['art_max_fields', () => art_max_fieldsModel], ['art_min_fields', () => art_min_fieldsModel], ['art_stddev_fields', () => art_stddev_fieldsModel], ['art_stddev_pop_fields', () => art_stddev_pop_fieldsModel], ['art_stddev_samp_fields', () => art_stddev_samp_fieldsModel], ['art_sum_fields', () => art_sum_fieldsModel], ['art_var_pop_fields', () => art_var_pop_fieldsModel], ['art_var_samp_fields', () => art_var_samp_fieldsModel], ['art_variance_fields', () => art_variance_fieldsModel], ['art_qk_aggregate', () => art_qk_aggregateModel], ['art_qk_aggregate_fields', () => art_qk_aggregate_fieldsModel], ['art_qk_avg_fields', () => art_qk_avg_fieldsModel], ['art_qk_max_fields', () => art_qk_max_fieldsModel], ['art_qk_min_fields', () => art_qk_min_fieldsModel], ['art_qk_stddev_fields', () => art_qk_stddev_fieldsModel], ['art_qk_stddev_pop_fields', () => art_qk_stddev_pop_fieldsModel], ['art_qk_stddev_samp_fields', () => art_qk_stddev_samp_fieldsModel], ['art_qk_sum_fields', () => art_qk_sum_fieldsModel], ['art_qk_var_pop_fields', () => art_qk_var_pop_fieldsModel], ['art_qk_var_samp_fields', () => art_qk_var_samp_fieldsModel], ['art_qk_variance_fields', () => art_qk_variance_fieldsModel], ['art_qk_rev', () => art_qk_revModel], ['art_qk_rev_aggregate', () => art_qk_rev_aggregateModel], ['art_qk_rev_aggregate_fields', () => art_qk_rev_aggregate_fieldsModel], ['art_qk_rev_avg_fields', () => art_qk_rev_avg_fieldsModel], ['art_qk_rev_max_fields', () => art_qk_rev_max_fieldsModel], ['art_qk_rev_min_fields', () => art_qk_rev_min_fieldsModel], ['art_qk_rev_stddev_fields', () => art_qk_rev_stddev_fieldsModel], ['art_qk_rev_stddev_pop_fields', () => art_qk_rev_stddev_pop_fieldsModel], ['art_qk_rev_stddev_samp_fields', () => art_qk_rev_stddev_samp_fieldsModel], ['art_qk_rev_sum_fields', () => art_qk_rev_sum_fieldsModel], ['art_qk_rev_var_pop_fields', () => art_qk_rev_var_pop_fieldsModel], ['art_qk_rev_var_samp_fields', () => art_qk_rev_var_samp_fieldsModel], ['art_qk_rev_variance_fields', () => art_qk_rev_variance_fieldsModel], ['art_rev', () => art_revModel], ['art_rev_aggregate', () => art_rev_aggregateModel], ['art_rev_aggregate_fields', () => art_rev_aggregate_fieldsModel], ['art_rev_avg_fields', () => art_rev_avg_fieldsModel], ['art_rev_max_fields', () => art_rev_max_fieldsModel], ['art_rev_min_fields', () => art_rev_min_fieldsModel], ['art_rev_stddev_fields', () => art_rev_stddev_fieldsModel], ['art_rev_stddev_pop_fields', () => art_rev_stddev_pop_fieldsModel], ['art_rev_stddev_samp_fields', () => art_rev_stddev_samp_fieldsModel], ['art_rev_sum_fields', () => art_rev_sum_fieldsModel], ['art_rev_var_pop_fields', () => art_rev_var_pop_fieldsModel], ['art_rev_var_samp_fields', () => art_rev_var_samp_fieldsModel], ['art_rev_variance_fields', () => art_rev_variance_fieldsModel], ['av_rev', () => av_revModel], ['av_rev_aggregate', () => av_rev_aggregateModel], ['av_rev_aggregate_fields', () => av_rev_aggregate_fieldsModel], ['av_rev_avg_fields', () => av_rev_avg_fieldsModel], ['av_rev_max_fields', () => av_rev_max_fieldsModel], ['av_rev_min_fields', () => av_rev_min_fieldsModel], ['av_rev_stddev_fields', () => av_rev_stddev_fieldsModel], ['av_rev_stddev_pop_fields', () => av_rev_stddev_pop_fieldsModel], ['av_rev_stddev_samp_fields', () => av_rev_stddev_samp_fieldsModel], ['av_rev_sum_fields', () => av_rev_sum_fieldsModel], ['av_rev_var_pop_fields', () => av_rev_var_pop_fieldsModel], ['av_rev_var_samp_fields', () => av_rev_var_samp_fieldsModel], ['av_rev_variance_fields', () => av_rev_variance_fieldsModel], ['gv_rev', () => gv_revModel], ['gv_rev_aggregate', () => gv_rev_aggregateModel], ['gv_rev_aggregate_fields', () => gv_rev_aggregate_fieldsModel], ['gv_rev_avg_fields', () => gv_rev_avg_fieldsModel], ['gv_rev_max_fields', () => gv_rev_max_fieldsModel], ['gv_rev_min_fields', () => gv_rev_min_fieldsModel], ['gv_rev_stddev_fields', () => gv_rev_stddev_fieldsModel], ['gv_rev_stddev_pop_fields', () => gv_rev_stddev_pop_fieldsModel], ['gv_rev_stddev_samp_fields', () => gv_rev_stddev_samp_fieldsModel], ['gv_rev_sum_fields', () => gv_rev_sum_fieldsModel], ['gv_rev_var_pop_fields', () => gv_rev_var_pop_fieldsModel], ['gv_rev_var_samp_fields', () => gv_rev_var_samp_fieldsModel], ['gv_rev_variance_fields', () => gv_rev_variance_fieldsModel], ['herkunft_aggregate', () => herkunft_aggregateModel], ['herkunft_aggregate_fields', () => herkunft_aggregate_fieldsModel], ['herkunft_avg_fields', () => herkunft_avg_fieldsModel], ['herkunft_max_fields', () => herkunft_max_fieldsModel], ['herkunft_min_fields', () => herkunft_min_fieldsModel], ['herkunft_stddev_fields', () => herkunft_stddev_fieldsModel], ['herkunft_stddev_pop_fields', () => herkunft_stddev_pop_fieldsModel], ['herkunft_stddev_samp_fields', () => herkunft_stddev_samp_fieldsModel], ['herkunft_sum_fields', () => herkunft_sum_fieldsModel], ['herkunft_var_pop_fields', () => herkunft_var_pop_fieldsModel], ['herkunft_var_samp_fields', () => herkunft_var_samp_fieldsModel], ['herkunft_variance_fields', () => herkunft_variance_fieldsModel], ['herkunft_rev', () => herkunft_revModel], ['herkunft_rev_aggregate', () => herkunft_rev_aggregateModel], ['herkunft_rev_aggregate_fields', () => herkunft_rev_aggregate_fieldsModel], ['herkunft_rev_avg_fields', () => herkunft_rev_avg_fieldsModel], ['herkunft_rev_max_fields', () => herkunft_rev_max_fieldsModel], ['herkunft_rev_min_fields', () => herkunft_rev_min_fieldsModel], ['herkunft_rev_stddev_fields', () => herkunft_rev_stddev_fieldsModel], ['herkunft_rev_stddev_pop_fields', () => herkunft_rev_stddev_pop_fieldsModel], ['herkunft_rev_stddev_samp_fields', () => herkunft_rev_stddev_samp_fieldsModel], ['herkunft_rev_sum_fields', () => herkunft_rev_sum_fieldsModel], ['herkunft_rev_var_pop_fields', () => herkunft_rev_var_pop_fieldsModel], ['herkunft_rev_var_samp_fields', () => herkunft_rev_var_samp_fieldsModel], ['herkunft_rev_variance_fields', () => herkunft_rev_variance_fieldsModel], ['kultur_option_aggregate', () => kultur_option_aggregateModel], ['kultur_option_aggregate_fields', () => kultur_option_aggregate_fieldsModel], ['kultur_option_avg_fields', () => kultur_option_avg_fieldsModel], ['kultur_option_max_fields', () => kultur_option_max_fieldsModel], ['kultur_option_min_fields', () => kultur_option_min_fieldsModel], ['kultur_option_stddev_fields', () => kultur_option_stddev_fieldsModel], ['kultur_option_stddev_pop_fields', () => kultur_option_stddev_pop_fieldsModel], ['kultur_option_stddev_samp_fields', () => kultur_option_stddev_samp_fieldsModel], ['kultur_option_sum_fields', () => kultur_option_sum_fieldsModel], ['kultur_option_var_pop_fields', () => kultur_option_var_pop_fieldsModel], ['kultur_option_var_samp_fields', () => kultur_option_var_samp_fieldsModel], ['kultur_option_variance_fields', () => kultur_option_variance_fieldsModel], ['kultur_qk_aggregate', () => kultur_qk_aggregateModel], ['kultur_qk_aggregate_fields', () => kultur_qk_aggregate_fieldsModel], ['kultur_qk_avg_fields', () => kultur_qk_avg_fieldsModel], ['kultur_qk_max_fields', () => kultur_qk_max_fieldsModel], ['kultur_qk_min_fields', () => kultur_qk_min_fieldsModel], ['kultur_qk_stddev_fields', () => kultur_qk_stddev_fieldsModel], ['kultur_qk_stddev_pop_fields', () => kultur_qk_stddev_pop_fieldsModel], ['kultur_qk_stddev_samp_fields', () => kultur_qk_stddev_samp_fieldsModel], ['kultur_qk_sum_fields', () => kultur_qk_sum_fieldsModel], ['kultur_qk_var_pop_fields', () => kultur_qk_var_pop_fieldsModel], ['kultur_qk_var_samp_fields', () => kultur_qk_var_samp_fieldsModel], ['kultur_qk_variance_fields', () => kultur_qk_variance_fieldsModel], ['kultur_qk_choosen_rev', () => kultur_qk_choosen_revModel], ['kultur_qk_choosen_rev_aggregate', () => kultur_qk_choosen_rev_aggregateModel], ['kultur_qk_choosen_rev_aggregate_fields', () => kultur_qk_choosen_rev_aggregate_fieldsModel], ['kultur_qk_choosen_rev_avg_fields', () => kultur_qk_choosen_rev_avg_fieldsModel], ['kultur_qk_choosen_rev_max_fields', () => kultur_qk_choosen_rev_max_fieldsModel], ['kultur_qk_choosen_rev_min_fields', () => kultur_qk_choosen_rev_min_fieldsModel], ['kultur_qk_choosen_rev_stddev_fields', () => kultur_qk_choosen_rev_stddev_fieldsModel], ['kultur_qk_choosen_rev_stddev_pop_fields', () => kultur_qk_choosen_rev_stddev_pop_fieldsModel], ['kultur_qk_choosen_rev_stddev_samp_fields', () => kultur_qk_choosen_rev_stddev_samp_fieldsModel], ['kultur_qk_choosen_rev_sum_fields', () => kultur_qk_choosen_rev_sum_fieldsModel], ['kultur_qk_choosen_rev_var_pop_fields', () => kultur_qk_choosen_rev_var_pop_fieldsModel], ['kultur_qk_choosen_rev_var_samp_fields', () => kultur_qk_choosen_rev_var_samp_fieldsModel], ['kultur_qk_choosen_rev_variance_fields', () => kultur_qk_choosen_rev_variance_fieldsModel], ['kultur_qk_rev', () => kultur_qk_revModel], ['kultur_qk_rev_aggregate', () => kultur_qk_rev_aggregateModel], ['kultur_qk_rev_aggregate_fields', () => kultur_qk_rev_aggregate_fieldsModel], ['kultur_qk_rev_avg_fields', () => kultur_qk_rev_avg_fieldsModel], ['kultur_qk_rev_max_fields', () => kultur_qk_rev_max_fieldsModel], ['kultur_qk_rev_min_fields', () => kultur_qk_rev_min_fieldsModel], ['kultur_qk_rev_stddev_fields', () => kultur_qk_rev_stddev_fieldsModel], ['kultur_qk_rev_stddev_pop_fields', () => kultur_qk_rev_stddev_pop_fieldsModel], ['kultur_qk_rev_stddev_samp_fields', () => kultur_qk_rev_stddev_samp_fieldsModel], ['kultur_qk_rev_sum_fields', () => kultur_qk_rev_sum_fieldsModel], ['kultur_qk_rev_var_pop_fields', () => kultur_qk_rev_var_pop_fieldsModel], ['kultur_qk_rev_var_samp_fields', () => kultur_qk_rev_var_samp_fieldsModel], ['kultur_qk_rev_variance_fields', () => kultur_qk_rev_variance_fieldsModel], ['person_option_aggregate', () => person_option_aggregateModel], ['person_option_aggregate_fields', () => person_option_aggregate_fieldsModel], ['person_option_avg_fields', () => person_option_avg_fieldsModel], ['person_option_max_fields', () => person_option_max_fieldsModel], ['person_option_min_fields', () => person_option_min_fieldsModel], ['person_option_stddev_fields', () => person_option_stddev_fieldsModel], ['person_option_stddev_pop_fields', () => person_option_stddev_pop_fieldsModel], ['person_option_stddev_samp_fields', () => person_option_stddev_samp_fieldsModel], ['person_option_sum_fields', () => person_option_sum_fieldsModel], ['person_option_var_pop_fields', () => person_option_var_pop_fieldsModel], ['person_option_var_samp_fields', () => person_option_var_samp_fieldsModel], ['person_option_variance_fields', () => person_option_variance_fieldsModel], ['spatial_ref_sys', () => spatial_ref_sysModel], ['spatial_ref_sys_aggregate', () => spatial_ref_sys_aggregateModel], ['spatial_ref_sys_aggregate_fields', () => spatial_ref_sys_aggregate_fieldsModel], ['spatial_ref_sys_avg_fields', () => spatial_ref_sys_avg_fieldsModel], ['spatial_ref_sys_max_fields', () => spatial_ref_sys_max_fieldsModel], ['spatial_ref_sys_min_fields', () => spatial_ref_sys_min_fieldsModel], ['spatial_ref_sys_stddev_fields', () => spatial_ref_sys_stddev_fieldsModel], ['spatial_ref_sys_stddev_pop_fields', () => spatial_ref_sys_stddev_pop_fieldsModel], ['spatial_ref_sys_stddev_samp_fields', () => spatial_ref_sys_stddev_samp_fieldsModel], ['spatial_ref_sys_sum_fields', () => spatial_ref_sys_sum_fieldsModel], ['spatial_ref_sys_var_pop_fields', () => spatial_ref_sys_var_pop_fieldsModel], ['spatial_ref_sys_var_samp_fields', () => spatial_ref_sys_var_samp_fieldsModel], ['spatial_ref_sys_variance_fields', () => spatial_ref_sys_variance_fieldsModel], ['user_role_aggregate', () => user_role_aggregateModel], ['user_role_aggregate_fields', () => user_role_aggregate_fieldsModel], ['user_role_avg_fields', () => user_role_avg_fieldsModel], ['user_role_max_fields', () => user_role_max_fieldsModel], ['user_role_min_fields', () => user_role_min_fieldsModel], ['user_role_stddev_fields', () => user_role_stddev_fieldsModel], ['user_role_stddev_pop_fields', () => user_role_stddev_pop_fieldsModel], ['user_role_stddev_samp_fields', () => user_role_stddev_samp_fieldsModel], ['user_role_sum_fields', () => user_role_sum_fieldsModel], ['user_role_var_pop_fields', () => user_role_var_pop_fieldsModel], ['user_role_var_samp_fields', () => user_role_var_samp_fieldsModel], ['user_role_variance_fields', () => user_role_variance_fieldsModel], ['mutation_root', () => mutation_rootModel], ['ae_art_mutation_response', () => ae_art_mutation_responseModel], ['art_mutation_response', () => art_mutation_responseModel], ['art_file_mutation_response', () => art_file_mutation_responseModel], ['art_qk_mutation_response', () => art_qk_mutation_responseModel], ['art_qk_choosen_mutation_response', () => art_qk_choosen_mutation_responseModel], ['art_qk_choosen_rev_mutation_response', () => art_qk_choosen_rev_mutation_responseModel], ['art_qk_rev_mutation_response', () => art_qk_rev_mutation_responseModel], ['art_rev_mutation_response', () => art_rev_mutation_responseModel], ['av_mutation_response', () => av_mutation_responseModel], ['av_rev_mutation_response', () => av_rev_mutation_responseModel], ['event_mutation_response', () => event_mutation_responseModel], ['event_rev_mutation_response', () => event_rev_mutation_responseModel], ['garten_mutation_response', () => garten_mutation_responseModel], ['garten_file_mutation_response', () => garten_file_mutation_responseModel], ['garten_rev_mutation_response', () => garten_rev_mutation_responseModel], ['gv_mutation_response', () => gv_mutation_responseModel], ['gv_rev_mutation_response', () => gv_rev_mutation_responseModel], ['herkunft_mutation_response', () => herkunft_mutation_responseModel], ['herkunft_file_mutation_response', () => herkunft_file_mutation_responseModel], ['herkunft_rev_mutation_response', () => herkunft_rev_mutation_responseModel], ['kultur_mutation_response', () => kultur_mutation_responseModel], ['kultur_file_mutation_response', () => kultur_file_mutation_responseModel], ['kultur_option_mutation_response', () => kultur_option_mutation_responseModel], ['kultur_option_rev_mutation_response', () => kultur_option_rev_mutation_responseModel], ['kultur_qk_mutation_response', () => kultur_qk_mutation_responseModel], ['kultur_qk_choosen_mutation_response', () => kultur_qk_choosen_mutation_responseModel], ['kultur_qk_choosen_rev_mutation_response', () => kultur_qk_choosen_rev_mutation_responseModel], ['kultur_qk_rev_mutation_response', () => kultur_qk_rev_mutation_responseModel], ['kultur_rev_mutation_response', () => kultur_rev_mutation_responseModel], ['lieferung_mutation_response', () => lieferung_mutation_responseModel], ['lieferung_file_mutation_response', () => lieferung_file_mutation_responseModel], ['lieferung_rev_mutation_response', () => lieferung_rev_mutation_responseModel], ['person_mutation_response', () => person_mutation_responseModel], ['person_file_mutation_response', () => person_file_mutation_responseModel], ['person_option_mutation_response', () => person_option_mutation_responseModel], ['person_option_rev_mutation_response', () => person_option_rev_mutation_responseModel], ['person_rev_mutation_response', () => person_rev_mutation_responseModel], ['sammel_lieferung_mutation_response', () => sammel_lieferung_mutation_responseModel], ['sammel_lieferung_rev_mutation_response', () => sammel_lieferung_rev_mutation_responseModel], ['sammlung_mutation_response', () => sammlung_mutation_responseModel], ['sammlung_file_mutation_response', () => sammlung_file_mutation_responseModel], ['sammlung_rev_mutation_response', () => sammlung_rev_mutation_responseModel], ['spatial_ref_sys_mutation_response', () => spatial_ref_sys_mutation_responseModel], ['teilkultur_mutation_response', () => teilkultur_mutation_responseModel], ['teilkultur_rev_mutation_response', () => teilkultur_rev_mutation_responseModel], ['teilzaehlung_mutation_response', () => teilzaehlung_mutation_responseModel], ['teilzaehlung_rev_mutation_response', () => teilzaehlung_rev_mutation_responseModel], ['user_role_mutation_response', () => user_role_mutation_responseModel], ['zaehlung_mutation_response', () => zaehlung_mutation_responseModel], ['zaehlung_rev_mutation_response', () => zaehlung_rev_mutation_responseModel], ['subscription_root', () => subscription_rootModel]], ['ae_art', 'art', 'art_file', 'art_qk', 'art_qk_rev', 'art_qk_choosen', 'art_qk_choosen_rev', 'art_rev', 'av', 'av_rev', 'event', 'event_rev', 'garten', 'garten_file', 'garten_rev', 'gv', 'gv_rev', 'herkunft', 'herkunft_file', 'herkunft_rev', 'kultur', 'kultur_file', 'kultur_option', 'kultur_option_rev', 'kultur_qk', 'kultur_qk_rev', 'kultur_qk_choosen', 'kultur_qk_choosen_rev', 'kultur_rev', 'lieferung', 'lieferung_file', 'lieferung_rev', 'person', 'person_file', 'person_option', 'person_option_rev', 'person_rev', 'sammel_lieferung', 'sammel_lieferung_rev', 'sammlung', 'sammlung_file', 'sammlung_rev', 'teilkultur', 'teilkultur_rev', 'teilzaehlung', 'teilzaehlung_rev', 'user_role', 'zaehlung', 'zaehlung_rev']))
+  .extend(configureStoreMixin([['query_root', () => query_rootModel], ['ae_art', () => ae_artModel], ['art', () => artModel], ['art_file', () => art_fileModel], ['art_file_max_fields', () => art_file_max_fieldsModel], ['art_file_min_fields', () => art_file_min_fieldsModel], ['art_qk_choosen', () => art_qk_choosenModel], ['art_qk', () => art_qkModel], ['art_qk_choosen_avg_fields', () => art_qk_choosen_avg_fieldsModel], ['art_qk_choosen_max_fields', () => art_qk_choosen_max_fieldsModel], ['art_qk_choosen_min_fields', () => art_qk_choosen_min_fieldsModel], ['art_qk_choosen_stddev_fields', () => art_qk_choosen_stddev_fieldsModel], ['art_qk_choosen_stddev_pop_fields', () => art_qk_choosen_stddev_pop_fieldsModel], ['art_qk_choosen_stddev_samp_fields', () => art_qk_choosen_stddev_samp_fieldsModel], ['art_qk_choosen_sum_fields', () => art_qk_choosen_sum_fieldsModel], ['art_qk_choosen_var_pop_fields', () => art_qk_choosen_var_pop_fieldsModel], ['art_qk_choosen_var_samp_fields', () => art_qk_choosen_var_samp_fieldsModel], ['art_qk_choosen_variance_fields', () => art_qk_choosen_variance_fieldsModel], ['art_qk_choosen_rev', () => art_qk_choosen_revModel], ['art_qk_choosen_rev_avg_fields', () => art_qk_choosen_rev_avg_fieldsModel], ['art_qk_choosen_rev_max_fields', () => art_qk_choosen_rev_max_fieldsModel], ['art_qk_choosen_rev_min_fields', () => art_qk_choosen_rev_min_fieldsModel], ['art_qk_choosen_rev_stddev_fields', () => art_qk_choosen_rev_stddev_fieldsModel], ['art_qk_choosen_rev_stddev_pop_fields', () => art_qk_choosen_rev_stddev_pop_fieldsModel], ['art_qk_choosen_rev_stddev_samp_fields', () => art_qk_choosen_rev_stddev_samp_fieldsModel], ['art_qk_choosen_rev_sum_fields', () => art_qk_choosen_rev_sum_fieldsModel], ['art_qk_choosen_rev_var_pop_fields', () => art_qk_choosen_rev_var_pop_fieldsModel], ['art_qk_choosen_rev_var_samp_fields', () => art_qk_choosen_rev_var_samp_fieldsModel], ['art_qk_choosen_rev_variance_fields', () => art_qk_choosen_rev_variance_fieldsModel], ['av', () => avModel], ['person', () => personModel], ['av_avg_fields', () => av_avg_fieldsModel], ['av_max_fields', () => av_max_fieldsModel], ['av_min_fields', () => av_min_fieldsModel], ['av_stddev_fields', () => av_stddev_fieldsModel], ['av_stddev_pop_fields', () => av_stddev_pop_fieldsModel], ['av_stddev_samp_fields', () => av_stddev_samp_fieldsModel], ['av_sum_fields', () => av_sum_fieldsModel], ['av_var_pop_fields', () => av_var_pop_fieldsModel], ['av_var_samp_fields', () => av_var_samp_fieldsModel], ['av_variance_fields', () => av_variance_fieldsModel], ['event_rev', () => event_revModel], ['kultur', () => kulturModel], ['event_rev_avg_fields', () => event_rev_avg_fieldsModel], ['event_rev_max_fields', () => event_rev_max_fieldsModel], ['event_rev_min_fields', () => event_rev_min_fieldsModel], ['event_rev_stddev_fields', () => event_rev_stddev_fieldsModel], ['event_rev_stddev_pop_fields', () => event_rev_stddev_pop_fieldsModel], ['event_rev_stddev_samp_fields', () => event_rev_stddev_samp_fieldsModel], ['event_rev_sum_fields', () => event_rev_sum_fieldsModel], ['event_rev_var_pop_fields', () => event_rev_var_pop_fieldsModel], ['event_rev_var_samp_fields', () => event_rev_var_samp_fieldsModel], ['event_rev_variance_fields', () => event_rev_variance_fieldsModel], ['event', () => eventModel], ['teilkultur', () => teilkulturModel], ['event_avg_fields', () => event_avg_fieldsModel], ['event_max_fields', () => event_max_fieldsModel], ['event_min_fields', () => event_min_fieldsModel], ['event_stddev_fields', () => event_stddev_fieldsModel], ['event_stddev_pop_fields', () => event_stddev_pop_fieldsModel], ['event_stddev_samp_fields', () => event_stddev_samp_fieldsModel], ['event_sum_fields', () => event_sum_fieldsModel], ['event_var_pop_fields', () => event_var_pop_fieldsModel], ['event_var_samp_fields', () => event_var_samp_fieldsModel], ['event_variance_fields', () => event_variance_fieldsModel], ['teilzaehlung_rev', () => teilzaehlung_revModel], ['teilzaehlung', () => teilzaehlungModel], ['teilzaehlung_rev_avg_fields', () => teilzaehlung_rev_avg_fieldsModel], ['teilzaehlung_rev_max_fields', () => teilzaehlung_rev_max_fieldsModel], ['teilzaehlung_rev_min_fields', () => teilzaehlung_rev_min_fieldsModel], ['teilzaehlung_rev_stddev_fields', () => teilzaehlung_rev_stddev_fieldsModel], ['teilzaehlung_rev_stddev_pop_fields', () => teilzaehlung_rev_stddev_pop_fieldsModel], ['teilzaehlung_rev_stddev_samp_fields', () => teilzaehlung_rev_stddev_samp_fieldsModel], ['teilzaehlung_rev_sum_fields', () => teilzaehlung_rev_sum_fieldsModel], ['teilzaehlung_rev_var_pop_fields', () => teilzaehlung_rev_var_pop_fieldsModel], ['teilzaehlung_rev_var_samp_fields', () => teilzaehlung_rev_var_samp_fieldsModel], ['teilzaehlung_rev_variance_fields', () => teilzaehlung_rev_variance_fieldsModel], ['teilzaehlung_aggregate', () => teilzaehlung_aggregateModel], ['teilzaehlung_aggregate_fields', () => teilzaehlung_aggregate_fieldsModel], ['teilzaehlung_avg_fields', () => teilzaehlung_avg_fieldsModel], ['teilzaehlung_max_fields', () => teilzaehlung_max_fieldsModel], ['teilzaehlung_min_fields', () => teilzaehlung_min_fieldsModel], ['teilzaehlung_stddev_fields', () => teilzaehlung_stddev_fieldsModel], ['teilzaehlung_stddev_pop_fields', () => teilzaehlung_stddev_pop_fieldsModel], ['teilzaehlung_stddev_samp_fields', () => teilzaehlung_stddev_samp_fieldsModel], ['teilzaehlung_sum_fields', () => teilzaehlung_sum_fieldsModel], ['teilzaehlung_var_pop_fields', () => teilzaehlung_var_pop_fieldsModel], ['teilzaehlung_var_samp_fields', () => teilzaehlung_var_samp_fieldsModel], ['teilzaehlung_variance_fields', () => teilzaehlung_variance_fieldsModel], ['zaehlung', () => zaehlungModel], ['garten', () => gartenModel], ['garten_file', () => garten_fileModel], ['garten_file_max_fields', () => garten_file_max_fieldsModel], ['garten_file_min_fields', () => garten_file_min_fieldsModel], ['gv', () => gvModel], ['gv_avg_fields', () => gv_avg_fieldsModel], ['gv_max_fields', () => gv_max_fieldsModel], ['gv_min_fields', () => gv_min_fieldsModel], ['gv_stddev_fields', () => gv_stddev_fieldsModel], ['gv_stddev_pop_fields', () => gv_stddev_pop_fieldsModel], ['gv_stddev_samp_fields', () => gv_stddev_samp_fieldsModel], ['gv_sum_fields', () => gv_sum_fieldsModel], ['gv_var_pop_fields', () => gv_var_pop_fieldsModel], ['gv_var_samp_fields', () => gv_var_samp_fieldsModel], ['gv_variance_fields', () => gv_variance_fieldsModel], ['kultur_rev', () => kultur_revModel], ['herkunft', () => herkunftModel], ['herkunft_file', () => herkunft_fileModel], ['herkunft_file_max_fields', () => herkunft_file_max_fieldsModel], ['herkunft_file_min_fields', () => herkunft_file_min_fieldsModel], ['kultur_rev_avg_fields', () => kultur_rev_avg_fieldsModel], ['kultur_rev_max_fields', () => kultur_rev_max_fieldsModel], ['kultur_rev_min_fields', () => kultur_rev_min_fieldsModel], ['kultur_rev_stddev_fields', () => kultur_rev_stddev_fieldsModel], ['kultur_rev_stddev_pop_fields', () => kultur_rev_stddev_pop_fieldsModel], ['kultur_rev_stddev_samp_fields', () => kultur_rev_stddev_samp_fieldsModel], ['kultur_rev_sum_fields', () => kultur_rev_sum_fieldsModel], ['kultur_rev_var_pop_fields', () => kultur_rev_var_pop_fieldsModel], ['kultur_rev_var_samp_fields', () => kultur_rev_var_samp_fieldsModel], ['kultur_rev_variance_fields', () => kultur_rev_variance_fieldsModel], ['kultur_avg_fields', () => kultur_avg_fieldsModel], ['kultur_max_fields', () => kultur_max_fieldsModel], ['kultur_min_fields', () => kultur_min_fieldsModel], ['kultur_stddev_fields', () => kultur_stddev_fieldsModel], ['kultur_stddev_pop_fields', () => kultur_stddev_pop_fieldsModel], ['kultur_stddev_samp_fields', () => kultur_stddev_samp_fieldsModel], ['kultur_sum_fields', () => kultur_sum_fieldsModel], ['kultur_var_pop_fields', () => kultur_var_pop_fieldsModel], ['kultur_var_samp_fields', () => kultur_var_samp_fieldsModel], ['kultur_variance_fields', () => kultur_variance_fieldsModel], ['sammlung_rev', () => sammlung_revModel], ['lieferung', () => lieferungModel], ['lieferung_file', () => lieferung_fileModel], ['lieferung_file_max_fields', () => lieferung_file_max_fieldsModel], ['lieferung_file_min_fields', () => lieferung_file_min_fieldsModel], ['sammel_lieferung', () => sammel_lieferungModel], ['lieferung_avg_fields', () => lieferung_avg_fieldsModel], ['lieferung_max_fields', () => lieferung_max_fieldsModel], ['lieferung_min_fields', () => lieferung_min_fieldsModel], ['lieferung_stddev_fields', () => lieferung_stddev_fieldsModel], ['lieferung_stddev_pop_fields', () => lieferung_stddev_pop_fieldsModel], ['lieferung_stddev_samp_fields', () => lieferung_stddev_samp_fieldsModel], ['lieferung_sum_fields', () => lieferung_sum_fieldsModel], ['lieferung_var_pop_fields', () => lieferung_var_pop_fieldsModel], ['lieferung_var_samp_fields', () => lieferung_var_samp_fieldsModel], ['lieferung_variance_fields', () => lieferung_variance_fieldsModel], ['sammlung', () => sammlungModel], ['lieferung_rev', () => lieferung_revModel], ['lieferung_rev_avg_fields', () => lieferung_rev_avg_fieldsModel], ['lieferung_rev_max_fields', () => lieferung_rev_max_fieldsModel], ['lieferung_rev_min_fields', () => lieferung_rev_min_fieldsModel], ['lieferung_rev_stddev_fields', () => lieferung_rev_stddev_fieldsModel], ['lieferung_rev_stddev_pop_fields', () => lieferung_rev_stddev_pop_fieldsModel], ['lieferung_rev_stddev_samp_fields', () => lieferung_rev_stddev_samp_fieldsModel], ['lieferung_rev_sum_fields', () => lieferung_rev_sum_fieldsModel], ['lieferung_rev_var_pop_fields', () => lieferung_rev_var_pop_fieldsModel], ['lieferung_rev_var_samp_fields', () => lieferung_rev_var_samp_fieldsModel], ['lieferung_rev_variance_fields', () => lieferung_rev_variance_fieldsModel], ['sammel_lieferung_rev', () => sammel_lieferung_revModel], ['sammel_lieferung_rev_avg_fields', () => sammel_lieferung_rev_avg_fieldsModel], ['sammel_lieferung_rev_max_fields', () => sammel_lieferung_rev_max_fieldsModel], ['sammel_lieferung_rev_min_fields', () => sammel_lieferung_rev_min_fieldsModel], ['sammel_lieferung_rev_stddev_fields', () => sammel_lieferung_rev_stddev_fieldsModel], ['sammel_lieferung_rev_stddev_pop_fields', () => sammel_lieferung_rev_stddev_pop_fieldsModel], ['sammel_lieferung_rev_stddev_samp_fields', () => sammel_lieferung_rev_stddev_samp_fieldsModel], ['sammel_lieferung_rev_sum_fields', () => sammel_lieferung_rev_sum_fieldsModel], ['sammel_lieferung_rev_var_pop_fields', () => sammel_lieferung_rev_var_pop_fieldsModel], ['sammel_lieferung_rev_var_samp_fields', () => sammel_lieferung_rev_var_samp_fieldsModel], ['sammel_lieferung_rev_variance_fields', () => sammel_lieferung_rev_variance_fieldsModel], ['sammel_lieferung_avg_fields', () => sammel_lieferung_avg_fieldsModel], ['sammel_lieferung_max_fields', () => sammel_lieferung_max_fieldsModel], ['sammel_lieferung_min_fields', () => sammel_lieferung_min_fieldsModel], ['sammel_lieferung_stddev_fields', () => sammel_lieferung_stddev_fieldsModel], ['sammel_lieferung_stddev_pop_fields', () => sammel_lieferung_stddev_pop_fieldsModel], ['sammel_lieferung_stddev_samp_fields', () => sammel_lieferung_stddev_samp_fieldsModel], ['sammel_lieferung_sum_fields', () => sammel_lieferung_sum_fieldsModel], ['sammel_lieferung_var_pop_fields', () => sammel_lieferung_var_pop_fieldsModel], ['sammel_lieferung_var_samp_fields', () => sammel_lieferung_var_samp_fieldsModel], ['sammel_lieferung_variance_fields', () => sammel_lieferung_variance_fieldsModel], ['sammlung_file', () => sammlung_fileModel], ['sammlung_file_max_fields', () => sammlung_file_max_fieldsModel], ['sammlung_file_min_fields', () => sammlung_file_min_fieldsModel], ['sammlung_rev_avg_fields', () => sammlung_rev_avg_fieldsModel], ['sammlung_rev_max_fields', () => sammlung_rev_max_fieldsModel], ['sammlung_rev_min_fields', () => sammlung_rev_min_fieldsModel], ['sammlung_rev_stddev_fields', () => sammlung_rev_stddev_fieldsModel], ['sammlung_rev_stddev_pop_fields', () => sammlung_rev_stddev_pop_fieldsModel], ['sammlung_rev_stddev_samp_fields', () => sammlung_rev_stddev_samp_fieldsModel], ['sammlung_rev_sum_fields', () => sammlung_rev_sum_fieldsModel], ['sammlung_rev_var_pop_fields', () => sammlung_rev_var_pop_fieldsModel], ['sammlung_rev_var_samp_fields', () => sammlung_rev_var_samp_fieldsModel], ['sammlung_rev_variance_fields', () => sammlung_rev_variance_fieldsModel], ['sammlung_avg_fields', () => sammlung_avg_fieldsModel], ['sammlung_max_fields', () => sammlung_max_fieldsModel], ['sammlung_min_fields', () => sammlung_min_fieldsModel], ['sammlung_stddev_fields', () => sammlung_stddev_fieldsModel], ['sammlung_stddev_pop_fields', () => sammlung_stddev_pop_fieldsModel], ['sammlung_stddev_samp_fields', () => sammlung_stddev_samp_fieldsModel], ['sammlung_sum_fields', () => sammlung_sum_fieldsModel], ['sammlung_var_pop_fields', () => sammlung_var_pop_fieldsModel], ['sammlung_var_samp_fields', () => sammlung_var_samp_fieldsModel], ['sammlung_variance_fields', () => sammlung_variance_fieldsModel], ['teilkultur_avg_fields', () => teilkultur_avg_fieldsModel], ['teilkultur_max_fields', () => teilkultur_max_fieldsModel], ['teilkultur_min_fields', () => teilkultur_min_fieldsModel], ['teilkultur_stddev_fields', () => teilkultur_stddev_fieldsModel], ['teilkultur_stddev_pop_fields', () => teilkultur_stddev_pop_fieldsModel], ['teilkultur_stddev_samp_fields', () => teilkultur_stddev_samp_fieldsModel], ['teilkultur_sum_fields', () => teilkultur_sum_fieldsModel], ['teilkultur_var_pop_fields', () => teilkultur_var_pop_fieldsModel], ['teilkultur_var_samp_fields', () => teilkultur_var_samp_fieldsModel], ['teilkultur_variance_fields', () => teilkultur_variance_fieldsModel], ['zaehlung_avg_fields', () => zaehlung_avg_fieldsModel], ['zaehlung_max_fields', () => zaehlung_max_fieldsModel], ['zaehlung_min_fields', () => zaehlung_min_fieldsModel], ['zaehlung_stddev_fields', () => zaehlung_stddev_fieldsModel], ['zaehlung_stddev_pop_fields', () => zaehlung_stddev_pop_fieldsModel], ['zaehlung_stddev_samp_fields', () => zaehlung_stddev_samp_fieldsModel], ['zaehlung_sum_fields', () => zaehlung_sum_fieldsModel], ['zaehlung_var_pop_fields', () => zaehlung_var_pop_fieldsModel], ['zaehlung_var_samp_fields', () => zaehlung_var_samp_fieldsModel], ['zaehlung_variance_fields', () => zaehlung_variance_fieldsModel], ['kultur_file', () => kultur_fileModel], ['kultur_file_max_fields', () => kultur_file_max_fieldsModel], ['kultur_file_min_fields', () => kultur_file_min_fieldsModel], ['kultur_option', () => kultur_optionModel], ['kultur_option_rev', () => kultur_option_revModel], ['kultur_option_rev_avg_fields', () => kultur_option_rev_avg_fieldsModel], ['kultur_option_rev_max_fields', () => kultur_option_rev_max_fieldsModel], ['kultur_option_rev_min_fields', () => kultur_option_rev_min_fieldsModel], ['kultur_option_rev_stddev_fields', () => kultur_option_rev_stddev_fieldsModel], ['kultur_option_rev_stddev_pop_fields', () => kultur_option_rev_stddev_pop_fieldsModel], ['kultur_option_rev_stddev_samp_fields', () => kultur_option_rev_stddev_samp_fieldsModel], ['kultur_option_rev_sum_fields', () => kultur_option_rev_sum_fieldsModel], ['kultur_option_rev_var_pop_fields', () => kultur_option_rev_var_pop_fieldsModel], ['kultur_option_rev_var_samp_fields', () => kultur_option_rev_var_samp_fieldsModel], ['kultur_option_rev_variance_fields', () => kultur_option_rev_variance_fieldsModel], ['kultur_qk_choosen', () => kultur_qk_choosenModel], ['kultur_qk', () => kultur_qkModel], ['kultur_qk_choosen_avg_fields', () => kultur_qk_choosen_avg_fieldsModel], ['kultur_qk_choosen_max_fields', () => kultur_qk_choosen_max_fieldsModel], ['kultur_qk_choosen_min_fields', () => kultur_qk_choosen_min_fieldsModel], ['kultur_qk_choosen_stddev_fields', () => kultur_qk_choosen_stddev_fieldsModel], ['kultur_qk_choosen_stddev_pop_fields', () => kultur_qk_choosen_stddev_pop_fieldsModel], ['kultur_qk_choosen_stddev_samp_fields', () => kultur_qk_choosen_stddev_samp_fieldsModel], ['kultur_qk_choosen_sum_fields', () => kultur_qk_choosen_sum_fieldsModel], ['kultur_qk_choosen_var_pop_fields', () => kultur_qk_choosen_var_pop_fieldsModel], ['kultur_qk_choosen_var_samp_fields', () => kultur_qk_choosen_var_samp_fieldsModel], ['kultur_qk_choosen_variance_fields', () => kultur_qk_choosen_variance_fieldsModel], ['teilkultur_rev', () => teilkultur_revModel], ['teilkultur_rev_avg_fields', () => teilkultur_rev_avg_fieldsModel], ['teilkultur_rev_max_fields', () => teilkultur_rev_max_fieldsModel], ['teilkultur_rev_min_fields', () => teilkultur_rev_min_fieldsModel], ['teilkultur_rev_stddev_fields', () => teilkultur_rev_stddev_fieldsModel], ['teilkultur_rev_stddev_pop_fields', () => teilkultur_rev_stddev_pop_fieldsModel], ['teilkultur_rev_stddev_samp_fields', () => teilkultur_rev_stddev_samp_fieldsModel], ['teilkultur_rev_sum_fields', () => teilkultur_rev_sum_fieldsModel], ['teilkultur_rev_var_pop_fields', () => teilkultur_rev_var_pop_fieldsModel], ['teilkultur_rev_var_samp_fields', () => teilkultur_rev_var_samp_fieldsModel], ['teilkultur_rev_variance_fields', () => teilkultur_rev_variance_fieldsModel], ['zaehlung_rev', () => zaehlung_revModel], ['zaehlung_rev_avg_fields', () => zaehlung_rev_avg_fieldsModel], ['zaehlung_rev_max_fields', () => zaehlung_rev_max_fieldsModel], ['zaehlung_rev_min_fields', () => zaehlung_rev_min_fieldsModel], ['zaehlung_rev_stddev_fields', () => zaehlung_rev_stddev_fieldsModel], ['zaehlung_rev_stddev_pop_fields', () => zaehlung_rev_stddev_pop_fieldsModel], ['zaehlung_rev_stddev_samp_fields', () => zaehlung_rev_stddev_samp_fieldsModel], ['zaehlung_rev_sum_fields', () => zaehlung_rev_sum_fieldsModel], ['zaehlung_rev_var_pop_fields', () => zaehlung_rev_var_pop_fieldsModel], ['zaehlung_rev_var_samp_fields', () => zaehlung_rev_var_samp_fieldsModel], ['zaehlung_rev_variance_fields', () => zaehlung_rev_variance_fieldsModel], ['garten_rev', () => garten_revModel], ['garten_rev_avg_fields', () => garten_rev_avg_fieldsModel], ['garten_rev_max_fields', () => garten_rev_max_fieldsModel], ['garten_rev_min_fields', () => garten_rev_min_fieldsModel], ['garten_rev_stddev_fields', () => garten_rev_stddev_fieldsModel], ['garten_rev_stddev_pop_fields', () => garten_rev_stddev_pop_fieldsModel], ['garten_rev_stddev_samp_fields', () => garten_rev_stddev_samp_fieldsModel], ['garten_rev_sum_fields', () => garten_rev_sum_fieldsModel], ['garten_rev_var_pop_fields', () => garten_rev_var_pop_fieldsModel], ['garten_rev_var_samp_fields', () => garten_rev_var_samp_fieldsModel], ['garten_rev_variance_fields', () => garten_rev_variance_fieldsModel], ['garten_avg_fields', () => garten_avg_fieldsModel], ['garten_max_fields', () => garten_max_fieldsModel], ['garten_min_fields', () => garten_min_fieldsModel], ['garten_stddev_fields', () => garten_stddev_fieldsModel], ['garten_stddev_pop_fields', () => garten_stddev_pop_fieldsModel], ['garten_stddev_samp_fields', () => garten_stddev_samp_fieldsModel], ['garten_sum_fields', () => garten_sum_fieldsModel], ['garten_var_pop_fields', () => garten_var_pop_fieldsModel], ['garten_var_samp_fields', () => garten_var_samp_fieldsModel], ['garten_variance_fields', () => garten_variance_fieldsModel], ['person_file', () => person_fileModel], ['person_file_max_fields', () => person_file_max_fieldsModel], ['person_file_min_fields', () => person_file_min_fieldsModel], ['person_option', () => person_optionModel], ['person_option_rev', () => person_option_revModel], ['person_option_rev_avg_fields', () => person_option_rev_avg_fieldsModel], ['person_option_rev_max_fields', () => person_option_rev_max_fieldsModel], ['person_option_rev_min_fields', () => person_option_rev_min_fieldsModel], ['person_option_rev_stddev_fields', () => person_option_rev_stddev_fieldsModel], ['person_option_rev_stddev_pop_fields', () => person_option_rev_stddev_pop_fieldsModel], ['person_option_rev_stddev_samp_fields', () => person_option_rev_stddev_samp_fieldsModel], ['person_option_rev_sum_fields', () => person_option_rev_sum_fieldsModel], ['person_option_rev_var_pop_fields', () => person_option_rev_var_pop_fieldsModel], ['person_option_rev_var_samp_fields', () => person_option_rev_var_samp_fieldsModel], ['person_option_rev_variance_fields', () => person_option_rev_variance_fieldsModel], ['user_role', () => user_roleModel], ['person_rev', () => person_revModel], ['person_rev_avg_fields', () => person_rev_avg_fieldsModel], ['person_rev_max_fields', () => person_rev_max_fieldsModel], ['person_rev_min_fields', () => person_rev_min_fieldsModel], ['person_rev_stddev_fields', () => person_rev_stddev_fieldsModel], ['person_rev_stddev_pop_fields', () => person_rev_stddev_pop_fieldsModel], ['person_rev_stddev_samp_fields', () => person_rev_stddev_samp_fieldsModel], ['person_rev_sum_fields', () => person_rev_sum_fieldsModel], ['person_rev_var_pop_fields', () => person_rev_var_pop_fieldsModel], ['person_rev_var_samp_fields', () => person_rev_var_samp_fieldsModel], ['person_rev_variance_fields', () => person_rev_variance_fieldsModel], ['person_avg_fields', () => person_avg_fieldsModel], ['person_max_fields', () => person_max_fieldsModel], ['person_min_fields', () => person_min_fieldsModel], ['person_stddev_fields', () => person_stddev_fieldsModel], ['person_stddev_pop_fields', () => person_stddev_pop_fieldsModel], ['person_stddev_samp_fields', () => person_stddev_samp_fieldsModel], ['person_sum_fields', () => person_sum_fieldsModel], ['person_var_pop_fields', () => person_var_pop_fieldsModel], ['person_var_samp_fields', () => person_var_samp_fieldsModel], ['person_variance_fields', () => person_variance_fieldsModel], ['ae_art_max_fields', () => ae_art_max_fieldsModel], ['ae_art_min_fields', () => ae_art_min_fieldsModel], ['art_avg_fields', () => art_avg_fieldsModel], ['art_max_fields', () => art_max_fieldsModel], ['art_min_fields', () => art_min_fieldsModel], ['art_stddev_fields', () => art_stddev_fieldsModel], ['art_stddev_pop_fields', () => art_stddev_pop_fieldsModel], ['art_stddev_samp_fields', () => art_stddev_samp_fieldsModel], ['art_sum_fields', () => art_sum_fieldsModel], ['art_var_pop_fields', () => art_var_pop_fieldsModel], ['art_var_samp_fields', () => art_var_samp_fieldsModel], ['art_variance_fields', () => art_variance_fieldsModel], ['art_qk_avg_fields', () => art_qk_avg_fieldsModel], ['art_qk_max_fields', () => art_qk_max_fieldsModel], ['art_qk_min_fields', () => art_qk_min_fieldsModel], ['art_qk_stddev_fields', () => art_qk_stddev_fieldsModel], ['art_qk_stddev_pop_fields', () => art_qk_stddev_pop_fieldsModel], ['art_qk_stddev_samp_fields', () => art_qk_stddev_samp_fieldsModel], ['art_qk_sum_fields', () => art_qk_sum_fieldsModel], ['art_qk_var_pop_fields', () => art_qk_var_pop_fieldsModel], ['art_qk_var_samp_fields', () => art_qk_var_samp_fieldsModel], ['art_qk_variance_fields', () => art_qk_variance_fieldsModel], ['art_qk_rev', () => art_qk_revModel], ['art_qk_rev_avg_fields', () => art_qk_rev_avg_fieldsModel], ['art_qk_rev_max_fields', () => art_qk_rev_max_fieldsModel], ['art_qk_rev_min_fields', () => art_qk_rev_min_fieldsModel], ['art_qk_rev_stddev_fields', () => art_qk_rev_stddev_fieldsModel], ['art_qk_rev_stddev_pop_fields', () => art_qk_rev_stddev_pop_fieldsModel], ['art_qk_rev_stddev_samp_fields', () => art_qk_rev_stddev_samp_fieldsModel], ['art_qk_rev_sum_fields', () => art_qk_rev_sum_fieldsModel], ['art_qk_rev_var_pop_fields', () => art_qk_rev_var_pop_fieldsModel], ['art_qk_rev_var_samp_fields', () => art_qk_rev_var_samp_fieldsModel], ['art_qk_rev_variance_fields', () => art_qk_rev_variance_fieldsModel], ['art_rev', () => art_revModel], ['art_rev_avg_fields', () => art_rev_avg_fieldsModel], ['art_rev_max_fields', () => art_rev_max_fieldsModel], ['art_rev_min_fields', () => art_rev_min_fieldsModel], ['art_rev_stddev_fields', () => art_rev_stddev_fieldsModel], ['art_rev_stddev_pop_fields', () => art_rev_stddev_pop_fieldsModel], ['art_rev_stddev_samp_fields', () => art_rev_stddev_samp_fieldsModel], ['art_rev_sum_fields', () => art_rev_sum_fieldsModel], ['art_rev_var_pop_fields', () => art_rev_var_pop_fieldsModel], ['art_rev_var_samp_fields', () => art_rev_var_samp_fieldsModel], ['art_rev_variance_fields', () => art_rev_variance_fieldsModel], ['av_rev', () => av_revModel], ['av_rev_avg_fields', () => av_rev_avg_fieldsModel], ['av_rev_max_fields', () => av_rev_max_fieldsModel], ['av_rev_min_fields', () => av_rev_min_fieldsModel], ['av_rev_stddev_fields', () => av_rev_stddev_fieldsModel], ['av_rev_stddev_pop_fields', () => av_rev_stddev_pop_fieldsModel], ['av_rev_stddev_samp_fields', () => av_rev_stddev_samp_fieldsModel], ['av_rev_sum_fields', () => av_rev_sum_fieldsModel], ['av_rev_var_pop_fields', () => av_rev_var_pop_fieldsModel], ['av_rev_var_samp_fields', () => av_rev_var_samp_fieldsModel], ['av_rev_variance_fields', () => av_rev_variance_fieldsModel], ['gv_rev', () => gv_revModel], ['gv_rev_avg_fields', () => gv_rev_avg_fieldsModel], ['gv_rev_max_fields', () => gv_rev_max_fieldsModel], ['gv_rev_min_fields', () => gv_rev_min_fieldsModel], ['gv_rev_stddev_fields', () => gv_rev_stddev_fieldsModel], ['gv_rev_stddev_pop_fields', () => gv_rev_stddev_pop_fieldsModel], ['gv_rev_stddev_samp_fields', () => gv_rev_stddev_samp_fieldsModel], ['gv_rev_sum_fields', () => gv_rev_sum_fieldsModel], ['gv_rev_var_pop_fields', () => gv_rev_var_pop_fieldsModel], ['gv_rev_var_samp_fields', () => gv_rev_var_samp_fieldsModel], ['gv_rev_variance_fields', () => gv_rev_variance_fieldsModel], ['herkunft_avg_fields', () => herkunft_avg_fieldsModel], ['herkunft_max_fields', () => herkunft_max_fieldsModel], ['herkunft_min_fields', () => herkunft_min_fieldsModel], ['herkunft_stddev_fields', () => herkunft_stddev_fieldsModel], ['herkunft_stddev_pop_fields', () => herkunft_stddev_pop_fieldsModel], ['herkunft_stddev_samp_fields', () => herkunft_stddev_samp_fieldsModel], ['herkunft_sum_fields', () => herkunft_sum_fieldsModel], ['herkunft_var_pop_fields', () => herkunft_var_pop_fieldsModel], ['herkunft_var_samp_fields', () => herkunft_var_samp_fieldsModel], ['herkunft_variance_fields', () => herkunft_variance_fieldsModel], ['herkunft_rev', () => herkunft_revModel], ['herkunft_rev_avg_fields', () => herkunft_rev_avg_fieldsModel], ['herkunft_rev_max_fields', () => herkunft_rev_max_fieldsModel], ['herkunft_rev_min_fields', () => herkunft_rev_min_fieldsModel], ['herkunft_rev_stddev_fields', () => herkunft_rev_stddev_fieldsModel], ['herkunft_rev_stddev_pop_fields', () => herkunft_rev_stddev_pop_fieldsModel], ['herkunft_rev_stddev_samp_fields', () => herkunft_rev_stddev_samp_fieldsModel], ['herkunft_rev_sum_fields', () => herkunft_rev_sum_fieldsModel], ['herkunft_rev_var_pop_fields', () => herkunft_rev_var_pop_fieldsModel], ['herkunft_rev_var_samp_fields', () => herkunft_rev_var_samp_fieldsModel], ['herkunft_rev_variance_fields', () => herkunft_rev_variance_fieldsModel], ['kultur_option_avg_fields', () => kultur_option_avg_fieldsModel], ['kultur_option_max_fields', () => kultur_option_max_fieldsModel], ['kultur_option_min_fields', () => kultur_option_min_fieldsModel], ['kultur_option_stddev_fields', () => kultur_option_stddev_fieldsModel], ['kultur_option_stddev_pop_fields', () => kultur_option_stddev_pop_fieldsModel], ['kultur_option_stddev_samp_fields', () => kultur_option_stddev_samp_fieldsModel], ['kultur_option_sum_fields', () => kultur_option_sum_fieldsModel], ['kultur_option_var_pop_fields', () => kultur_option_var_pop_fieldsModel], ['kultur_option_var_samp_fields', () => kultur_option_var_samp_fieldsModel], ['kultur_option_variance_fields', () => kultur_option_variance_fieldsModel], ['kultur_qk_avg_fields', () => kultur_qk_avg_fieldsModel], ['kultur_qk_max_fields', () => kultur_qk_max_fieldsModel], ['kultur_qk_min_fields', () => kultur_qk_min_fieldsModel], ['kultur_qk_stddev_fields', () => kultur_qk_stddev_fieldsModel], ['kultur_qk_stddev_pop_fields', () => kultur_qk_stddev_pop_fieldsModel], ['kultur_qk_stddev_samp_fields', () => kultur_qk_stddev_samp_fieldsModel], ['kultur_qk_sum_fields', () => kultur_qk_sum_fieldsModel], ['kultur_qk_var_pop_fields', () => kultur_qk_var_pop_fieldsModel], ['kultur_qk_var_samp_fields', () => kultur_qk_var_samp_fieldsModel], ['kultur_qk_variance_fields', () => kultur_qk_variance_fieldsModel], ['kultur_qk_choosen_rev', () => kultur_qk_choosen_revModel], ['kultur_qk_choosen_rev_avg_fields', () => kultur_qk_choosen_rev_avg_fieldsModel], ['kultur_qk_choosen_rev_max_fields', () => kultur_qk_choosen_rev_max_fieldsModel], ['kultur_qk_choosen_rev_min_fields', () => kultur_qk_choosen_rev_min_fieldsModel], ['kultur_qk_choosen_rev_stddev_fields', () => kultur_qk_choosen_rev_stddev_fieldsModel], ['kultur_qk_choosen_rev_stddev_pop_fields', () => kultur_qk_choosen_rev_stddev_pop_fieldsModel], ['kultur_qk_choosen_rev_stddev_samp_fields', () => kultur_qk_choosen_rev_stddev_samp_fieldsModel], ['kultur_qk_choosen_rev_sum_fields', () => kultur_qk_choosen_rev_sum_fieldsModel], ['kultur_qk_choosen_rev_var_pop_fields', () => kultur_qk_choosen_rev_var_pop_fieldsModel], ['kultur_qk_choosen_rev_var_samp_fields', () => kultur_qk_choosen_rev_var_samp_fieldsModel], ['kultur_qk_choosen_rev_variance_fields', () => kultur_qk_choosen_rev_variance_fieldsModel], ['kultur_qk_rev', () => kultur_qk_revModel], ['kultur_qk_rev_avg_fields', () => kultur_qk_rev_avg_fieldsModel], ['kultur_qk_rev_max_fields', () => kultur_qk_rev_max_fieldsModel], ['kultur_qk_rev_min_fields', () => kultur_qk_rev_min_fieldsModel], ['kultur_qk_rev_stddev_fields', () => kultur_qk_rev_stddev_fieldsModel], ['kultur_qk_rev_stddev_pop_fields', () => kultur_qk_rev_stddev_pop_fieldsModel], ['kultur_qk_rev_stddev_samp_fields', () => kultur_qk_rev_stddev_samp_fieldsModel], ['kultur_qk_rev_sum_fields', () => kultur_qk_rev_sum_fieldsModel], ['kultur_qk_rev_var_pop_fields', () => kultur_qk_rev_var_pop_fieldsModel], ['kultur_qk_rev_var_samp_fields', () => kultur_qk_rev_var_samp_fieldsModel], ['kultur_qk_rev_variance_fields', () => kultur_qk_rev_variance_fieldsModel], ['person_option_avg_fields', () => person_option_avg_fieldsModel], ['person_option_max_fields', () => person_option_max_fieldsModel], ['person_option_min_fields', () => person_option_min_fieldsModel], ['person_option_stddev_fields', () => person_option_stddev_fieldsModel], ['person_option_stddev_pop_fields', () => person_option_stddev_pop_fieldsModel], ['person_option_stddev_samp_fields', () => person_option_stddev_samp_fieldsModel], ['person_option_sum_fields', () => person_option_sum_fieldsModel], ['person_option_var_pop_fields', () => person_option_var_pop_fieldsModel], ['person_option_var_samp_fields', () => person_option_var_samp_fieldsModel], ['person_option_variance_fields', () => person_option_variance_fieldsModel], ['spatial_ref_sys', () => spatial_ref_sysModel], ['spatial_ref_sys_avg_fields', () => spatial_ref_sys_avg_fieldsModel], ['spatial_ref_sys_max_fields', () => spatial_ref_sys_max_fieldsModel], ['spatial_ref_sys_min_fields', () => spatial_ref_sys_min_fieldsModel], ['spatial_ref_sys_stddev_fields', () => spatial_ref_sys_stddev_fieldsModel], ['spatial_ref_sys_stddev_pop_fields', () => spatial_ref_sys_stddev_pop_fieldsModel], ['spatial_ref_sys_stddev_samp_fields', () => spatial_ref_sys_stddev_samp_fieldsModel], ['spatial_ref_sys_sum_fields', () => spatial_ref_sys_sum_fieldsModel], ['spatial_ref_sys_var_pop_fields', () => spatial_ref_sys_var_pop_fieldsModel], ['spatial_ref_sys_var_samp_fields', () => spatial_ref_sys_var_samp_fieldsModel], ['spatial_ref_sys_variance_fields', () => spatial_ref_sys_variance_fieldsModel], ['user_role_avg_fields', () => user_role_avg_fieldsModel], ['user_role_max_fields', () => user_role_max_fieldsModel], ['user_role_min_fields', () => user_role_min_fieldsModel], ['user_role_stddev_fields', () => user_role_stddev_fieldsModel], ['user_role_stddev_pop_fields', () => user_role_stddev_pop_fieldsModel], ['user_role_stddev_samp_fields', () => user_role_stddev_samp_fieldsModel], ['user_role_sum_fields', () => user_role_sum_fieldsModel], ['user_role_var_pop_fields', () => user_role_var_pop_fieldsModel], ['user_role_var_samp_fields', () => user_role_var_samp_fieldsModel], ['user_role_variance_fields', () => user_role_variance_fieldsModel], ['mutation_root', () => mutation_rootModel], ['ae_art_mutation_response', () => ae_art_mutation_responseModel], ['art_mutation_response', () => art_mutation_responseModel], ['art_file_mutation_response', () => art_file_mutation_responseModel], ['art_qk_mutation_response', () => art_qk_mutation_responseModel], ['art_qk_choosen_mutation_response', () => art_qk_choosen_mutation_responseModel], ['art_qk_choosen_rev_mutation_response', () => art_qk_choosen_rev_mutation_responseModel], ['art_qk_rev_mutation_response', () => art_qk_rev_mutation_responseModel], ['art_rev_mutation_response', () => art_rev_mutation_responseModel], ['av_mutation_response', () => av_mutation_responseModel], ['av_rev_mutation_response', () => av_rev_mutation_responseModel], ['event_mutation_response', () => event_mutation_responseModel], ['event_rev_mutation_response', () => event_rev_mutation_responseModel], ['garten_mutation_response', () => garten_mutation_responseModel], ['garten_file_mutation_response', () => garten_file_mutation_responseModel], ['garten_rev_mutation_response', () => garten_rev_mutation_responseModel], ['gv_mutation_response', () => gv_mutation_responseModel], ['gv_rev_mutation_response', () => gv_rev_mutation_responseModel], ['herkunft_mutation_response', () => herkunft_mutation_responseModel], ['herkunft_file_mutation_response', () => herkunft_file_mutation_responseModel], ['herkunft_rev_mutation_response', () => herkunft_rev_mutation_responseModel], ['kultur_mutation_response', () => kultur_mutation_responseModel], ['kultur_file_mutation_response', () => kultur_file_mutation_responseModel], ['kultur_option_mutation_response', () => kultur_option_mutation_responseModel], ['kultur_option_rev_mutation_response', () => kultur_option_rev_mutation_responseModel], ['kultur_qk_mutation_response', () => kultur_qk_mutation_responseModel], ['kultur_qk_choosen_mutation_response', () => kultur_qk_choosen_mutation_responseModel], ['kultur_qk_choosen_rev_mutation_response', () => kultur_qk_choosen_rev_mutation_responseModel], ['kultur_qk_rev_mutation_response', () => kultur_qk_rev_mutation_responseModel], ['kultur_rev_mutation_response', () => kultur_rev_mutation_responseModel], ['lieferung_mutation_response', () => lieferung_mutation_responseModel], ['lieferung_file_mutation_response', () => lieferung_file_mutation_responseModel], ['lieferung_rev_mutation_response', () => lieferung_rev_mutation_responseModel], ['person_mutation_response', () => person_mutation_responseModel], ['person_file_mutation_response', () => person_file_mutation_responseModel], ['person_option_mutation_response', () => person_option_mutation_responseModel], ['person_option_rev_mutation_response', () => person_option_rev_mutation_responseModel], ['person_rev_mutation_response', () => person_rev_mutation_responseModel], ['sammel_lieferung_mutation_response', () => sammel_lieferung_mutation_responseModel], ['sammel_lieferung_rev_mutation_response', () => sammel_lieferung_rev_mutation_responseModel], ['sammlung_mutation_response', () => sammlung_mutation_responseModel], ['sammlung_file_mutation_response', () => sammlung_file_mutation_responseModel], ['sammlung_rev_mutation_response', () => sammlung_rev_mutation_responseModel], ['spatial_ref_sys_mutation_response', () => spatial_ref_sys_mutation_responseModel], ['teilkultur_mutation_response', () => teilkultur_mutation_responseModel], ['teilkultur_rev_mutation_response', () => teilkultur_rev_mutation_responseModel], ['teilzaehlung_mutation_response', () => teilzaehlung_mutation_responseModel], ['teilzaehlung_rev_mutation_response', () => teilzaehlung_rev_mutation_responseModel], ['user_role_mutation_response', () => user_role_mutation_responseModel], ['zaehlung_mutation_response', () => zaehlung_mutation_responseModel], ['zaehlung_rev_mutation_response', () => zaehlung_rev_mutation_responseModel], ['subscription_root', () => subscription_rootModel]], ['ae_art', 'art', 'art_file', 'art_qk', 'art_qk_rev', 'art_qk_choosen', 'art_qk_choosen_rev', 'art_rev', 'av', 'av_rev', 'event', 'event_rev', 'garten', 'garten_file', 'garten_rev', 'gv', 'gv_rev', 'herkunft', 'herkunft_file', 'herkunft_rev', 'kultur', 'kultur_file', 'kultur_option', 'kultur_option_rev', 'kultur_qk', 'kultur_qk_rev', 'kultur_qk_choosen', 'kultur_qk_choosen_rev', 'kultur_rev', 'lieferung', 'lieferung_file', 'lieferung_rev', 'person', 'person_file', 'person_option', 'person_option_rev', 'person_rev', 'sammel_lieferung', 'sammel_lieferung_rev', 'sammlung', 'sammlung_file', 'sammlung_rev', 'teilkultur', 'teilkultur_rev', 'teilzaehlung', 'teilzaehlung_rev', 'user_role', 'zaehlung', 'zaehlung_rev']))
   .props({
     ae_arts: types.optional(types.map(types.late(() => ae_artModel)), {}),
     arts: types.optional(types.map(types.late(() => artModel)), {}),
@@ -1351,19 +1155,9 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new ae_artModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryAe_art_aggregate(variables, resultSelector = ae_art_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query ae_art_aggregate($distinct_on: [ae_art_select_column!], $limit: Int, $offset: Int, $order_by: [ae_art_order_by!], $where: ae_art_bool_exp) { ae_art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new ae_art_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryArt(variables, resultSelector = artModelPrimitives.toString(), options = {}) {
       return self.query(`query art($distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryArt_aggregate(variables, resultSelector = art_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_aggregate($distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryArt_by_pk(variables, resultSelector = artModelPrimitives.toString(), options = {}) {
@@ -1376,11 +1170,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryArt_file_aggregate(variables, resultSelector = art_file_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_file_aggregate($distinct_on: [art_file_select_column!], $limit: Int, $offset: Int, $order_by: [art_file_order_by!], $where: art_file_bool_exp) { art_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryArt_file_by_pk(variables, resultSelector = art_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query art_file_by_pk($id: ID!) { art_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
@@ -1389,11 +1178,6 @@ export const RootStoreBase = MSTGQLStore
     queryArt_qk(variables, resultSelector = art_qkModelPrimitives.toString(), options = {}) {
       return self.query(`query art_qk($distinct_on: [art_qk_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_order_by!], $where: art_qk_bool_exp) { art_qk(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryArt_qk_aggregate(variables, resultSelector = art_qk_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_qk_aggregate($distinct_on: [art_qk_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_order_by!], $where: art_qk_bool_exp) { art_qk_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_qk_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryArt_qk_by_pk(variables, resultSelector = art_qkModelPrimitives.toString(), options = {}) {
@@ -1406,11 +1190,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosenModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryArt_qk_choosen_aggregate(variables, resultSelector = art_qk_choosen_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_qk_choosen_aggregate($distinct_on: [art_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_order_by!], $where: art_qk_choosen_bool_exp) { art_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryArt_qk_choosen_by_pk(variables, resultSelector = art_qk_choosenModelPrimitives.toString(), options = {}) {
       return self.query(`query art_qk_choosen_by_pk($id: ID!) { art_qk_choosen_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosenModelSelector()).toString() : resultSelector}
@@ -1419,11 +1198,6 @@ export const RootStoreBase = MSTGQLStore
     queryArt_qk_choosen_rev(variables, resultSelector = art_qk_choosen_revModelPrimitives.toString(), options = {}) {
       return self.query(`query art_qk_choosen_rev($distinct_on: [art_qk_choosen_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_rev_order_by!], $where: art_qk_choosen_rev_bool_exp) { art_qk_choosen_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryArt_qk_choosen_rev_aggregate(variables, resultSelector = art_qk_choosen_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_qk_choosen_rev_aggregate($distinct_on: [art_qk_choosen_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_rev_order_by!], $where: art_qk_choosen_rev_bool_exp) { art_qk_choosen_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryArt_qk_choosen_rev_by_pk(variables, resultSelector = art_qk_choosen_revModelPrimitives.toString(), options = {}) {
@@ -1436,11 +1210,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryArt_qk_rev_aggregate(variables, resultSelector = art_qk_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_qk_rev_aggregate($distinct_on: [art_qk_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_rev_order_by!], $where: art_qk_rev_bool_exp) { art_qk_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_qk_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryArt_qk_rev_by_pk(variables, resultSelector = art_qk_revModelPrimitives.toString(), options = {}) {
       return self.query(`query art_qk_rev_by_pk($id: ID!) { art_qk_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_revModelSelector()).toString() : resultSelector}
@@ -1449,11 +1218,6 @@ export const RootStoreBase = MSTGQLStore
     queryArt_rev(variables, resultSelector = art_revModelPrimitives.toString(), options = {}) {
       return self.query(`query art_rev($distinct_on: [art_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_rev_order_by!], $where: art_rev_bool_exp) { art_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryArt_rev_aggregate(variables, resultSelector = art_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_rev_aggregate($distinct_on: [art_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_rev_order_by!], $where: art_rev_bool_exp) { art_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryArt_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), options = {}) {
@@ -1466,11 +1230,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new avModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryAv_aggregate(variables, resultSelector = av_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query av_aggregate($distinct_on: [av_select_column!], $limit: Int, $offset: Int, $order_by: [av_order_by!], $where: av_bool_exp) { av_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new av_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryAv_by_pk(variables, resultSelector = avModelPrimitives.toString(), options = {}) {
       return self.query(`query av_by_pk($id: ID!) { av_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new avModelSelector()).toString() : resultSelector}
@@ -1479,11 +1238,6 @@ export const RootStoreBase = MSTGQLStore
     queryAv_rev(variables, resultSelector = av_revModelPrimitives.toString(), options = {}) {
       return self.query(`query av_rev($distinct_on: [av_rev_select_column!], $limit: Int, $offset: Int, $order_by: [av_rev_order_by!], $where: av_rev_bool_exp) { av_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryAv_rev_aggregate(variables, resultSelector = av_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query av_rev_aggregate($distinct_on: [av_rev_select_column!], $limit: Int, $offset: Int, $order_by: [av_rev_order_by!], $where: av_rev_bool_exp) { av_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new av_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryAv_rev_by_pk(variables, resultSelector = av_revModelPrimitives.toString(), options = {}) {
@@ -1496,11 +1250,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryEvent_aggregate(variables, resultSelector = event_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query event_aggregate($distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new event_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryEvent_by_pk(variables, resultSelector = eventModelPrimitives.toString(), options = {}) {
       return self.query(`query event_by_pk($id: ID!) { event_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
@@ -1509,11 +1258,6 @@ export const RootStoreBase = MSTGQLStore
     queryEvent_rev(variables, resultSelector = event_revModelPrimitives.toString(), options = {}) {
       return self.query(`query event_rev($distinct_on: [event_rev_select_column!], $limit: Int, $offset: Int, $order_by: [event_rev_order_by!], $where: event_rev_bool_exp) { event_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryEvent_rev_aggregate(variables, resultSelector = event_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query event_rev_aggregate($distinct_on: [event_rev_select_column!], $limit: Int, $offset: Int, $order_by: [event_rev_order_by!], $where: event_rev_bool_exp) { event_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new event_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryEvent_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), options = {}) {
@@ -1526,11 +1270,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryGarten_aggregate(variables, resultSelector = garten_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query garten_aggregate($distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new garten_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryGarten_by_pk(variables, resultSelector = gartenModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_by_pk($id: ID!) { garten_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
@@ -1539,11 +1278,6 @@ export const RootStoreBase = MSTGQLStore
     queryGarten_file(variables, resultSelector = garten_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_file($distinct_on: [garten_file_select_column!], $limit: Int, $offset: Int, $order_by: [garten_file_order_by!], $where: garten_file_bool_exp) { garten_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryGarten_file_aggregate(variables, resultSelector = garten_file_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query garten_file_aggregate($distinct_on: [garten_file_select_column!], $limit: Int, $offset: Int, $order_by: [garten_file_order_by!], $where: garten_file_bool_exp) { garten_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new garten_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryGarten_file_by_pk(variables, resultSelector = garten_fileModelPrimitives.toString(), options = {}) {
@@ -1556,11 +1290,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryGarten_rev_aggregate(variables, resultSelector = garten_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query garten_rev_aggregate($distinct_on: [garten_rev_select_column!], $limit: Int, $offset: Int, $order_by: [garten_rev_order_by!], $where: garten_rev_bool_exp) { garten_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new garten_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryGarten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_rev_by_pk($id: ID!) { garten_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
@@ -1569,11 +1298,6 @@ export const RootStoreBase = MSTGQLStore
     queryGv(variables, resultSelector = gvModelPrimitives.toString(), options = {}) {
       return self.query(`query gv($distinct_on: [gv_select_column!], $limit: Int, $offset: Int, $order_by: [gv_order_by!], $where: gv_bool_exp) { gv(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gvModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryGv_aggregate(variables, resultSelector = gv_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query gv_aggregate($distinct_on: [gv_select_column!], $limit: Int, $offset: Int, $order_by: [gv_order_by!], $where: gv_bool_exp) { gv_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new gv_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryGv_by_pk(variables, resultSelector = gvModelPrimitives.toString(), options = {}) {
@@ -1586,11 +1310,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new gv_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryGv_rev_aggregate(variables, resultSelector = gv_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query gv_rev_aggregate($distinct_on: [gv_rev_select_column!], $limit: Int, $offset: Int, $order_by: [gv_rev_order_by!], $where: gv_rev_bool_exp) { gv_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new gv_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryGv_rev_by_pk(variables, resultSelector = gv_revModelPrimitives.toString(), options = {}) {
       return self.query(`query gv_rev_by_pk($id: ID!) { gv_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new gv_revModelSelector()).toString() : resultSelector}
@@ -1599,11 +1318,6 @@ export const RootStoreBase = MSTGQLStore
     queryHerkunft(variables, resultSelector = herkunftModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft($distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryHerkunft_aggregate(variables, resultSelector = herkunft_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query herkunft_aggregate($distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new herkunft_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryHerkunft_by_pk(variables, resultSelector = herkunftModelPrimitives.toString(), options = {}) {
@@ -1616,11 +1330,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryHerkunft_file_aggregate(variables, resultSelector = herkunft_file_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query herkunft_file_aggregate($distinct_on: [herkunft_file_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_file_order_by!], $where: herkunft_file_bool_exp) { herkunft_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new herkunft_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryHerkunft_file_by_pk(variables, resultSelector = herkunft_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_file_by_pk($id: ID!) { herkunft_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
@@ -1629,11 +1338,6 @@ export const RootStoreBase = MSTGQLStore
     queryHerkunft_rev(variables, resultSelector = herkunft_revModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_rev($distinct_on: [herkunft_rev_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_rev_order_by!], $where: herkunft_rev_bool_exp) { herkunft_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryHerkunft_rev_aggregate(variables, resultSelector = herkunft_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query herkunft_rev_aggregate($distinct_on: [herkunft_rev_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_rev_order_by!], $where: herkunft_rev_bool_exp) { herkunft_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new herkunft_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryHerkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), options = {}) {
@@ -1646,11 +1350,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryKultur_aggregate(variables, resultSelector = kultur_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_aggregate($distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryKultur_by_pk(variables, resultSelector = kulturModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_by_pk($id: ID!) { kultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
@@ -1659,11 +1358,6 @@ export const RootStoreBase = MSTGQLStore
     queryKultur_file(variables, resultSelector = kultur_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_file($distinct_on: [kultur_file_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_file_order_by!], $where: kultur_file_bool_exp) { kultur_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryKultur_file_aggregate(variables, resultSelector = kultur_file_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_file_aggregate($distinct_on: [kultur_file_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_file_order_by!], $where: kultur_file_bool_exp) { kultur_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryKultur_file_by_pk(variables, resultSelector = kultur_fileModelPrimitives.toString(), options = {}) {
@@ -1676,19 +1370,9 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_optionModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryKultur_option_aggregate(variables, resultSelector = kultur_option_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_option_aggregate($distinct_on: [kultur_option_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_order_by!], $where: kultur_option_bool_exp) { kultur_option_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_option_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryKultur_option_rev(variables, resultSelector = kultur_option_revModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_option_rev($distinct_on: [kultur_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_rev_order_by!], $where: kultur_option_rev_bool_exp) { kultur_option_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryKultur_option_rev_aggregate(variables, resultSelector = kultur_option_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_option_rev_aggregate($distinct_on: [kultur_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_rev_order_by!], $where: kultur_option_rev_bool_exp) { kultur_option_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_option_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryKultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), options = {}) {
@@ -1701,11 +1385,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryKultur_qk_aggregate(variables, resultSelector = kultur_qk_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_qk_aggregate($distinct_on: [kultur_qk_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_order_by!], $where: kultur_qk_bool_exp) { kultur_qk_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryKultur_qk_by_pk(variables, resultSelector = kultur_qkModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_qk_by_pk($name: String!) { kultur_qk_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
@@ -1714,11 +1393,6 @@ export const RootStoreBase = MSTGQLStore
     queryKultur_qk_choosen(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_qk_choosen($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryKultur_qk_choosen_aggregate(variables, resultSelector = kultur_qk_choosen_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_qk_choosen_aggregate($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryKultur_qk_choosen_by_pk(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), options = {}) {
@@ -1731,11 +1405,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryKultur_qk_choosen_rev_aggregate(variables, resultSelector = kultur_qk_choosen_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_qk_choosen_rev_aggregate($distinct_on: [kultur_qk_choosen_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_rev_order_by!], $where: kultur_qk_choosen_rev_bool_exp) { kultur_qk_choosen_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryKultur_qk_choosen_rev_by_pk(variables, resultSelector = kultur_qk_choosen_revModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_qk_choosen_rev_by_pk($id: ID!) { kultur_qk_choosen_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_revModelSelector()).toString() : resultSelector}
@@ -1744,11 +1413,6 @@ export const RootStoreBase = MSTGQLStore
     queryKultur_qk_rev(variables, resultSelector = kultur_qk_revModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_qk_rev($distinct_on: [kultur_qk_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_rev_order_by!], $where: kultur_qk_rev_bool_exp) { kultur_qk_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryKultur_qk_rev_aggregate(variables, resultSelector = kultur_qk_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_qk_rev_aggregate($distinct_on: [kultur_qk_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_rev_order_by!], $where: kultur_qk_rev_bool_exp) { kultur_qk_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryKultur_qk_rev_by_pk(variables, resultSelector = kultur_qk_revModelPrimitives.toString(), options = {}) {
@@ -1761,11 +1425,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryKultur_rev_aggregate(variables, resultSelector = kultur_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_rev_aggregate($distinct_on: [kultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_rev_order_by!], $where: kultur_rev_bool_exp) { kultur_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryKultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_rev_by_pk($id: ID!) { kultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
@@ -1774,11 +1433,6 @@ export const RootStoreBase = MSTGQLStore
     queryLieferung(variables, resultSelector = lieferungModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryLieferung_aggregate(variables, resultSelector = lieferung_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query lieferung_aggregate($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryLieferung_by_pk(variables, resultSelector = lieferungModelPrimitives.toString(), options = {}) {
@@ -1791,11 +1445,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryLieferung_file_aggregate(variables, resultSelector = lieferung_file_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query lieferung_file_aggregate($distinct_on: [lieferung_file_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_file_order_by!], $where: lieferung_file_bool_exp) { lieferung_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new lieferung_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryLieferung_file_by_pk(variables, resultSelector = lieferung_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung_file_by_pk($id: ID!) { lieferung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
@@ -1804,11 +1453,6 @@ export const RootStoreBase = MSTGQLStore
     queryLieferung_rev(variables, resultSelector = lieferung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung_rev($distinct_on: [lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_rev_order_by!], $where: lieferung_rev_bool_exp) { lieferung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryLieferung_rev_aggregate(variables, resultSelector = lieferung_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query lieferung_rev_aggregate($distinct_on: [lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_rev_order_by!], $where: lieferung_rev_bool_exp) { lieferung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new lieferung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryLieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), options = {}) {
@@ -1821,11 +1465,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryPerson_aggregate(variables, resultSelector = person_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_aggregate($distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryPerson_by_pk(variables, resultSelector = personModelPrimitives.toString(), options = {}) {
       return self.query(`query person_by_pk($id: ID!) { person_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
@@ -1834,11 +1473,6 @@ export const RootStoreBase = MSTGQLStore
     queryPerson_file(variables, resultSelector = person_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query person_file($distinct_on: [person_file_select_column!], $limit: Int, $offset: Int, $order_by: [person_file_order_by!], $where: person_file_bool_exp) { person_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryPerson_file_aggregate(variables, resultSelector = person_file_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_file_aggregate($distinct_on: [person_file_select_column!], $limit: Int, $offset: Int, $order_by: [person_file_order_by!], $where: person_file_bool_exp) { person_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryPerson_file_by_pk(variables, resultSelector = person_fileModelPrimitives.toString(), options = {}) {
@@ -1851,19 +1485,9 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new person_optionModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryPerson_option_aggregate(variables, resultSelector = person_option_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_option_aggregate($distinct_on: [person_option_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_order_by!], $where: person_option_bool_exp) { person_option_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_option_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryPerson_option_rev(variables, resultSelector = person_option_revModelPrimitives.toString(), options = {}) {
       return self.query(`query person_option_rev($distinct_on: [person_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_rev_order_by!], $where: person_option_rev_bool_exp) { person_option_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryPerson_option_rev_aggregate(variables, resultSelector = person_option_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_option_rev_aggregate($distinct_on: [person_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_rev_order_by!], $where: person_option_rev_bool_exp) { person_option_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_option_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryPerson_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), options = {}) {
@@ -1876,11 +1500,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryPerson_rev_aggregate(variables, resultSelector = person_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_rev_aggregate($distinct_on: [person_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_rev_order_by!], $where: person_rev_bool_exp) { person_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryPerson_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), options = {}) {
       return self.query(`query person_rev_by_pk($id: ID!) { person_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
@@ -1889,11 +1508,6 @@ export const RootStoreBase = MSTGQLStore
     querySammel_lieferung(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), options = {}) {
       return self.query(`query sammel_lieferung($distinct_on: [sammel_lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_order_by!], $where: sammel_lieferung_bool_exp) { sammel_lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    querySammel_lieferung_aggregate(variables, resultSelector = sammel_lieferung_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammel_lieferung_aggregate($distinct_on: [sammel_lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_order_by!], $where: sammel_lieferung_bool_exp) { sammel_lieferung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     querySammel_lieferung_by_pk(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), options = {}) {
@@ -1906,11 +1520,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    querySammel_lieferung_rev_aggregate(variables, resultSelector = sammel_lieferung_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammel_lieferung_rev_aggregate($distinct_on: [sammel_lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_rev_order_by!], $where: sammel_lieferung_rev_bool_exp) { sammel_lieferung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     querySammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query sammel_lieferung_rev_by_pk($id: ID!) { sammel_lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
@@ -1919,11 +1528,6 @@ export const RootStoreBase = MSTGQLStore
     querySammlung(variables, resultSelector = sammlungModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung($distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    querySammlung_aggregate(variables, resultSelector = sammlung_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammlung_aggregate($distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     querySammlung_by_pk(variables, resultSelector = sammlungModelPrimitives.toString(), options = {}) {
@@ -1936,11 +1540,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    querySammlung_file_aggregate(variables, resultSelector = sammlung_file_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammlung_file_aggregate($distinct_on: [sammlung_file_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_file_order_by!], $where: sammlung_file_bool_exp) { sammlung_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammlung_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     querySammlung_file_by_pk(variables, resultSelector = sammlung_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung_file_by_pk($id: ID!) { sammlung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
@@ -1949,11 +1548,6 @@ export const RootStoreBase = MSTGQLStore
     querySammlung_rev(variables, resultSelector = sammlung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung_rev($distinct_on: [sammlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_rev_order_by!], $where: sammlung_rev_bool_exp) { sammlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    querySammlung_rev_aggregate(variables, resultSelector = sammlung_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammlung_rev_aggregate($distinct_on: [sammlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_rev_order_by!], $where: sammlung_rev_bool_exp) { sammlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammlung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     querySammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), options = {}) {
@@ -1966,11 +1560,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    querySpatial_ref_sys_aggregate(variables, resultSelector = spatial_ref_sys_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query spatial_ref_sys_aggregate($distinct_on: [spatial_ref_sys_select_column!], $limit: Int, $offset: Int, $order_by: [spatial_ref_sys_order_by!], $where: spatial_ref_sys_bool_exp) { spatial_ref_sys_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sys_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     querySpatial_ref_sys_by_pk(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), options = {}) {
       return self.query(`query spatial_ref_sys_by_pk($srid: Int!) { spatial_ref_sys_by_pk(srid: $srid) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
@@ -1981,11 +1570,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryTeilkultur_aggregate(variables, resultSelector = teilkultur_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilkultur_aggregate($distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new teilkultur_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryTeilkultur_by_pk(variables, resultSelector = teilkulturModelPrimitives.toString(), options = {}) {
       return self.query(`query teilkultur_by_pk($id: ID!) { teilkultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
@@ -1994,11 +1578,6 @@ export const RootStoreBase = MSTGQLStore
     queryTeilkultur_rev(variables, resultSelector = teilkultur_revModelPrimitives.toString(), options = {}) {
       return self.query(`query teilkultur_rev($distinct_on: [teilkultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_rev_order_by!], $where: teilkultur_rev_bool_exp) { teilkultur_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryTeilkultur_rev_aggregate(variables, resultSelector = teilkultur_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilkultur_rev_aggregate($distinct_on: [teilkultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_rev_order_by!], $where: teilkultur_rev_bool_exp) { teilkultur_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new teilkultur_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryTeilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), options = {}) {
@@ -2026,11 +1605,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryTeilzaehlung_rev_aggregate(variables, resultSelector = teilzaehlung_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilzaehlung_rev_aggregate($distinct_on: [teilzaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_rev_order_by!], $where: teilzaehlung_rev_bool_exp) { teilzaehlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryTeilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query teilzaehlung_rev_by_pk($id: ID!) { teilzaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
@@ -2039,11 +1613,6 @@ export const RootStoreBase = MSTGQLStore
     queryUser_role(variables, resultSelector = user_roleModelPrimitives.toString(), options = {}) {
       return self.query(`query user_role($distinct_on: [user_role_select_column!], $limit: Int, $offset: Int, $order_by: [user_role_order_by!], $where: user_role_bool_exp) { user_role(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryUser_role_aggregate(variables, resultSelector = user_role_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query user_role_aggregate($distinct_on: [user_role_select_column!], $limit: Int, $offset: Int, $order_by: [user_role_order_by!], $where: user_role_bool_exp) { user_role_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new user_role_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryUser_role_by_pk(variables, resultSelector = user_roleModelPrimitives.toString(), options = {}) {
@@ -2056,11 +1625,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryZaehlung_aggregate(variables, resultSelector = zaehlung_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query zaehlung_aggregate($distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new zaehlung_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryZaehlung_by_pk(variables, resultSelector = zaehlungModelPrimitives.toString(), options = {}) {
       return self.query(`query zaehlung_by_pk($id: ID!) { zaehlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
@@ -2069,11 +1633,6 @@ export const RootStoreBase = MSTGQLStore
     queryZaehlung_rev(variables, resultSelector = zaehlung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query zaehlung_rev($distinct_on: [zaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_rev_order_by!], $where: zaehlung_rev_bool_exp) { zaehlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryZaehlung_rev_aggregate(variables, resultSelector = zaehlung_rev_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query zaehlung_rev_aggregate($distinct_on: [zaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_rev_order_by!], $where: zaehlung_rev_bool_exp) { zaehlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new zaehlung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryZaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), options = {}) {
@@ -3556,19 +3115,9 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new ae_artModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeAe_art_aggregate(variables, resultSelector = ae_art_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription ae_art_aggregate($distinct_on: [ae_art_select_column!], $limit: Int, $offset: Int, $order_by: [ae_art_order_by!], $where: ae_art_bool_exp) { ae_art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new ae_art_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeArt(variables, resultSelector = artModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art($distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeArt_aggregate(variables, resultSelector = art_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription art_aggregate($distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeArt_by_pk(variables, resultSelector = artModelPrimitives.toString(), onData, onError) {
@@ -3581,11 +3130,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeArt_file_aggregate(variables, resultSelector = art_file_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription art_file_aggregate($distinct_on: [art_file_select_column!], $limit: Int, $offset: Int, $order_by: [art_file_order_by!], $where: art_file_bool_exp) { art_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeArt_file_by_pk(variables, resultSelector = art_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_file_by_pk($id: ID!) { art_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
@@ -3594,11 +3138,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeArt_qk(variables, resultSelector = art_qkModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk($distinct_on: [art_qk_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_order_by!], $where: art_qk_bool_exp) { art_qk(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeArt_qk_aggregate(variables, resultSelector = art_qk_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription art_qk_aggregate($distinct_on: [art_qk_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_order_by!], $where: art_qk_bool_exp) { art_qk_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_qk_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeArt_qk_by_pk(variables, resultSelector = art_qkModelPrimitives.toString(), onData, onError) {
@@ -3611,11 +3150,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosenModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeArt_qk_choosen_aggregate(variables, resultSelector = art_qk_choosen_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription art_qk_choosen_aggregate($distinct_on: [art_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_order_by!], $where: art_qk_choosen_bool_exp) { art_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeArt_qk_choosen_by_pk(variables, resultSelector = art_qk_choosenModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_choosen_by_pk($id: ID!) { art_qk_choosen_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosenModelSelector()).toString() : resultSelector}
@@ -3624,11 +3158,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeArt_qk_choosen_rev(variables, resultSelector = art_qk_choosen_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_choosen_rev($distinct_on: [art_qk_choosen_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_rev_order_by!], $where: art_qk_choosen_rev_bool_exp) { art_qk_choosen_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeArt_qk_choosen_rev_aggregate(variables, resultSelector = art_qk_choosen_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription art_qk_choosen_rev_aggregate($distinct_on: [art_qk_choosen_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_rev_order_by!], $where: art_qk_choosen_rev_bool_exp) { art_qk_choosen_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeArt_qk_choosen_rev_by_pk(variables, resultSelector = art_qk_choosen_revModelPrimitives.toString(), onData, onError) {
@@ -3641,11 +3170,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeArt_qk_rev_aggregate(variables, resultSelector = art_qk_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription art_qk_rev_aggregate($distinct_on: [art_qk_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_rev_order_by!], $where: art_qk_rev_bool_exp) { art_qk_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_qk_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeArt_qk_rev_by_pk(variables, resultSelector = art_qk_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_qk_rev_by_pk($id: ID!) { art_qk_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_revModelSelector()).toString() : resultSelector}
@@ -3654,11 +3178,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeArt_rev(variables, resultSelector = art_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription art_rev($distinct_on: [art_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_rev_order_by!], $where: art_rev_bool_exp) { art_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeArt_rev_aggregate(variables, resultSelector = art_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription art_rev_aggregate($distinct_on: [art_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_rev_order_by!], $where: art_rev_bool_exp) { art_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeArt_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), onData, onError) {
@@ -3671,11 +3190,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new avModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeAv_aggregate(variables, resultSelector = av_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription av_aggregate($distinct_on: [av_select_column!], $limit: Int, $offset: Int, $order_by: [av_order_by!], $where: av_bool_exp) { av_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new av_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeAv_by_pk(variables, resultSelector = avModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription av_by_pk($id: ID!) { av_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new avModelSelector()).toString() : resultSelector}
@@ -3684,11 +3198,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeAv_rev(variables, resultSelector = av_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription av_rev($distinct_on: [av_rev_select_column!], $limit: Int, $offset: Int, $order_by: [av_rev_order_by!], $where: av_rev_bool_exp) { av_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeAv_rev_aggregate(variables, resultSelector = av_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription av_rev_aggregate($distinct_on: [av_rev_select_column!], $limit: Int, $offset: Int, $order_by: [av_rev_order_by!], $where: av_rev_bool_exp) { av_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new av_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeAv_rev_by_pk(variables, resultSelector = av_revModelPrimitives.toString(), onData, onError) {
@@ -3701,11 +3210,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeEvent_aggregate(variables, resultSelector = event_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription event_aggregate($distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new event_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeEvent_by_pk(variables, resultSelector = eventModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription event_by_pk($id: ID!) { event_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
@@ -3714,11 +3218,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeEvent_rev(variables, resultSelector = event_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription event_rev($distinct_on: [event_rev_select_column!], $limit: Int, $offset: Int, $order_by: [event_rev_order_by!], $where: event_rev_bool_exp) { event_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeEvent_rev_aggregate(variables, resultSelector = event_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription event_rev_aggregate($distinct_on: [event_rev_select_column!], $limit: Int, $offset: Int, $order_by: [event_rev_order_by!], $where: event_rev_bool_exp) { event_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new event_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeEvent_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), onData, onError) {
@@ -3731,11 +3230,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeGarten_aggregate(variables, resultSelector = garten_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription garten_aggregate($distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new garten_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeGarten_by_pk(variables, resultSelector = gartenModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_by_pk($id: ID!) { garten_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
@@ -3744,11 +3238,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeGarten_file(variables, resultSelector = garten_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_file($distinct_on: [garten_file_select_column!], $limit: Int, $offset: Int, $order_by: [garten_file_order_by!], $where: garten_file_bool_exp) { garten_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeGarten_file_aggregate(variables, resultSelector = garten_file_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription garten_file_aggregate($distinct_on: [garten_file_select_column!], $limit: Int, $offset: Int, $order_by: [garten_file_order_by!], $where: garten_file_bool_exp) { garten_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new garten_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeGarten_file_by_pk(variables, resultSelector = garten_fileModelPrimitives.toString(), onData, onError) {
@@ -3761,11 +3250,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeGarten_rev_aggregate(variables, resultSelector = garten_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription garten_rev_aggregate($distinct_on: [garten_rev_select_column!], $limit: Int, $offset: Int, $order_by: [garten_rev_order_by!], $where: garten_rev_bool_exp) { garten_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new garten_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeGarten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription garten_rev_by_pk($id: ID!) { garten_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
@@ -3774,11 +3258,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeGv(variables, resultSelector = gvModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription gv($distinct_on: [gv_select_column!], $limit: Int, $offset: Int, $order_by: [gv_order_by!], $where: gv_bool_exp) { gv(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gvModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeGv_aggregate(variables, resultSelector = gv_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription gv_aggregate($distinct_on: [gv_select_column!], $limit: Int, $offset: Int, $order_by: [gv_order_by!], $where: gv_bool_exp) { gv_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new gv_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeGv_by_pk(variables, resultSelector = gvModelPrimitives.toString(), onData, onError) {
@@ -3791,11 +3270,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new gv_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeGv_rev_aggregate(variables, resultSelector = gv_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription gv_rev_aggregate($distinct_on: [gv_rev_select_column!], $limit: Int, $offset: Int, $order_by: [gv_rev_order_by!], $where: gv_rev_bool_exp) { gv_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new gv_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeGv_rev_by_pk(variables, resultSelector = gv_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription gv_rev_by_pk($id: ID!) { gv_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new gv_revModelSelector()).toString() : resultSelector}
@@ -3804,11 +3278,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeHerkunft(variables, resultSelector = herkunftModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft($distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeHerkunft_aggregate(variables, resultSelector = herkunft_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription herkunft_aggregate($distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new herkunft_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeHerkunft_by_pk(variables, resultSelector = herkunftModelPrimitives.toString(), onData, onError) {
@@ -3821,11 +3290,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeHerkunft_file_aggregate(variables, resultSelector = herkunft_file_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription herkunft_file_aggregate($distinct_on: [herkunft_file_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_file_order_by!], $where: herkunft_file_bool_exp) { herkunft_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new herkunft_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeHerkunft_file_by_pk(variables, resultSelector = herkunft_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft_file_by_pk($id: ID!) { herkunft_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
@@ -3834,11 +3298,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeHerkunft_rev(variables, resultSelector = herkunft_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription herkunft_rev($distinct_on: [herkunft_rev_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_rev_order_by!], $where: herkunft_rev_bool_exp) { herkunft_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeHerkunft_rev_aggregate(variables, resultSelector = herkunft_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription herkunft_rev_aggregate($distinct_on: [herkunft_rev_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_rev_order_by!], $where: herkunft_rev_bool_exp) { herkunft_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new herkunft_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeHerkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), onData, onError) {
@@ -3851,11 +3310,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeKultur_aggregate(variables, resultSelector = kultur_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription kultur_aggregate($distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeKultur_by_pk(variables, resultSelector = kulturModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_by_pk($id: ID!) { kultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
@@ -3864,11 +3318,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeKultur_file(variables, resultSelector = kultur_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_file($distinct_on: [kultur_file_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_file_order_by!], $where: kultur_file_bool_exp) { kultur_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeKultur_file_aggregate(variables, resultSelector = kultur_file_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription kultur_file_aggregate($distinct_on: [kultur_file_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_file_order_by!], $where: kultur_file_bool_exp) { kultur_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeKultur_file_by_pk(variables, resultSelector = kultur_fileModelPrimitives.toString(), onData, onError) {
@@ -3881,19 +3330,9 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_optionModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeKultur_option_aggregate(variables, resultSelector = kultur_option_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription kultur_option_aggregate($distinct_on: [kultur_option_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_order_by!], $where: kultur_option_bool_exp) { kultur_option_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_option_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeKultur_option_rev(variables, resultSelector = kultur_option_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_option_rev($distinct_on: [kultur_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_rev_order_by!], $where: kultur_option_rev_bool_exp) { kultur_option_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeKultur_option_rev_aggregate(variables, resultSelector = kultur_option_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription kultur_option_rev_aggregate($distinct_on: [kultur_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_rev_order_by!], $where: kultur_option_rev_bool_exp) { kultur_option_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_option_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeKultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), onData, onError) {
@@ -3906,11 +3345,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_aggregate(variables, resultSelector = kultur_qk_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription kultur_qk_aggregate($distinct_on: [kultur_qk_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_order_by!], $where: kultur_qk_bool_exp) { kultur_qk_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeKultur_qk_by_pk(variables, resultSelector = kultur_qkModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_by_pk($name: String!) { kultur_qk_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
@@ -3919,11 +3353,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeKultur_qk_choosen(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_choosen($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeKultur_qk_choosen_aggregate(variables, resultSelector = kultur_qk_choosen_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription kultur_qk_choosen_aggregate($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeKultur_qk_choosen_by_pk(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), onData, onError) {
@@ -3936,11 +3365,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeKultur_qk_choosen_rev_aggregate(variables, resultSelector = kultur_qk_choosen_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription kultur_qk_choosen_rev_aggregate($distinct_on: [kultur_qk_choosen_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_rev_order_by!], $where: kultur_qk_choosen_rev_bool_exp) { kultur_qk_choosen_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeKultur_qk_choosen_rev_by_pk(variables, resultSelector = kultur_qk_choosen_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_choosen_rev_by_pk($id: ID!) { kultur_qk_choosen_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_revModelSelector()).toString() : resultSelector}
@@ -3949,11 +3373,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeKultur_qk_rev(variables, resultSelector = kultur_qk_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_qk_rev($distinct_on: [kultur_qk_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_rev_order_by!], $where: kultur_qk_rev_bool_exp) { kultur_qk_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeKultur_qk_rev_aggregate(variables, resultSelector = kultur_qk_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription kultur_qk_rev_aggregate($distinct_on: [kultur_qk_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_rev_order_by!], $where: kultur_qk_rev_bool_exp) { kultur_qk_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeKultur_qk_rev_by_pk(variables, resultSelector = kultur_qk_revModelPrimitives.toString(), onData, onError) {
@@ -3966,11 +3385,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeKultur_rev_aggregate(variables, resultSelector = kultur_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription kultur_rev_aggregate($distinct_on: [kultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_rev_order_by!], $where: kultur_rev_bool_exp) { kultur_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeKultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription kultur_rev_by_pk($id: ID!) { kultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
@@ -3979,11 +3393,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeLieferung(variables, resultSelector = lieferungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeLieferung_aggregate(variables, resultSelector = lieferung_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription lieferung_aggregate($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeLieferung_by_pk(variables, resultSelector = lieferungModelPrimitives.toString(), onData, onError) {
@@ -3996,11 +3405,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeLieferung_file_aggregate(variables, resultSelector = lieferung_file_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription lieferung_file_aggregate($distinct_on: [lieferung_file_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_file_order_by!], $where: lieferung_file_bool_exp) { lieferung_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new lieferung_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeLieferung_file_by_pk(variables, resultSelector = lieferung_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung_file_by_pk($id: ID!) { lieferung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
@@ -4009,11 +3413,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeLieferung_rev(variables, resultSelector = lieferung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription lieferung_rev($distinct_on: [lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_rev_order_by!], $where: lieferung_rev_bool_exp) { lieferung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeLieferung_rev_aggregate(variables, resultSelector = lieferung_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription lieferung_rev_aggregate($distinct_on: [lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_rev_order_by!], $where: lieferung_rev_bool_exp) { lieferung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new lieferung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeLieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), onData, onError) {
@@ -4026,11 +3425,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribePerson_aggregate(variables, resultSelector = person_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription person_aggregate($distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribePerson_by_pk(variables, resultSelector = personModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_by_pk($id: ID!) { person_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
@@ -4039,11 +3433,6 @@ export const RootStoreBase = MSTGQLStore
     subscribePerson_file(variables, resultSelector = person_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_file($distinct_on: [person_file_select_column!], $limit: Int, $offset: Int, $order_by: [person_file_order_by!], $where: person_file_bool_exp) { person_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribePerson_file_aggregate(variables, resultSelector = person_file_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription person_file_aggregate($distinct_on: [person_file_select_column!], $limit: Int, $offset: Int, $order_by: [person_file_order_by!], $where: person_file_bool_exp) { person_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribePerson_file_by_pk(variables, resultSelector = person_fileModelPrimitives.toString(), onData, onError) {
@@ -4056,19 +3445,9 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new person_optionModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribePerson_option_aggregate(variables, resultSelector = person_option_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription person_option_aggregate($distinct_on: [person_option_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_order_by!], $where: person_option_bool_exp) { person_option_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_option_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribePerson_option_rev(variables, resultSelector = person_option_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_option_rev($distinct_on: [person_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_rev_order_by!], $where: person_option_rev_bool_exp) { person_option_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribePerson_option_rev_aggregate(variables, resultSelector = person_option_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription person_option_rev_aggregate($distinct_on: [person_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_rev_order_by!], $where: person_option_rev_bool_exp) { person_option_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_option_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribePerson_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), onData, onError) {
@@ -4081,11 +3460,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribePerson_rev_aggregate(variables, resultSelector = person_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription person_rev_aggregate($distinct_on: [person_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_rev_order_by!], $where: person_rev_bool_exp) { person_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribePerson_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription person_rev_by_pk($id: ID!) { person_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
@@ -4094,11 +3468,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeSammel_lieferung(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammel_lieferung($distinct_on: [sammel_lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_order_by!], $where: sammel_lieferung_bool_exp) { sammel_lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeSammel_lieferung_aggregate(variables, resultSelector = sammel_lieferung_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription sammel_lieferung_aggregate($distinct_on: [sammel_lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_order_by!], $where: sammel_lieferung_bool_exp) { sammel_lieferung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeSammel_lieferung_by_pk(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), onData, onError) {
@@ -4111,11 +3480,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeSammel_lieferung_rev_aggregate(variables, resultSelector = sammel_lieferung_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription sammel_lieferung_rev_aggregate($distinct_on: [sammel_lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_rev_order_by!], $where: sammel_lieferung_rev_bool_exp) { sammel_lieferung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeSammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammel_lieferung_rev_by_pk($id: ID!) { sammel_lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
@@ -4124,11 +3488,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeSammlung(variables, resultSelector = sammlungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung($distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeSammlung_aggregate(variables, resultSelector = sammlung_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription sammlung_aggregate($distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeSammlung_by_pk(variables, resultSelector = sammlungModelPrimitives.toString(), onData, onError) {
@@ -4141,11 +3500,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeSammlung_file_aggregate(variables, resultSelector = sammlung_file_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription sammlung_file_aggregate($distinct_on: [sammlung_file_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_file_order_by!], $where: sammlung_file_bool_exp) { sammlung_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammlung_file_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeSammlung_file_by_pk(variables, resultSelector = sammlung_fileModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung_file_by_pk($id: ID!) { sammlung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
@@ -4154,11 +3508,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeSammlung_rev(variables, resultSelector = sammlung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription sammlung_rev($distinct_on: [sammlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_rev_order_by!], $where: sammlung_rev_bool_exp) { sammlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeSammlung_rev_aggregate(variables, resultSelector = sammlung_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription sammlung_rev_aggregate($distinct_on: [sammlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_rev_order_by!], $where: sammlung_rev_bool_exp) { sammlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammlung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeSammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), onData, onError) {
@@ -4171,11 +3520,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeSpatial_ref_sys_aggregate(variables, resultSelector = spatial_ref_sys_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription spatial_ref_sys_aggregate($distinct_on: [spatial_ref_sys_select_column!], $limit: Int, $offset: Int, $order_by: [spatial_ref_sys_order_by!], $where: spatial_ref_sys_bool_exp) { spatial_ref_sys_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sys_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeSpatial_ref_sys_by_pk(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription spatial_ref_sys_by_pk($srid: Int!) { spatial_ref_sys_by_pk(srid: $srid) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
@@ -4186,11 +3530,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeTeilkultur_aggregate(variables, resultSelector = teilkultur_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription teilkultur_aggregate($distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new teilkultur_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeTeilkultur_by_pk(variables, resultSelector = teilkulturModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilkultur_by_pk($id: ID!) { teilkultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
@@ -4199,11 +3538,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeTeilkultur_rev(variables, resultSelector = teilkultur_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilkultur_rev($distinct_on: [teilkultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_rev_order_by!], $where: teilkultur_rev_bool_exp) { teilkultur_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeTeilkultur_rev_aggregate(variables, resultSelector = teilkultur_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription teilkultur_rev_aggregate($distinct_on: [teilkultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_rev_order_by!], $where: teilkultur_rev_bool_exp) { teilkultur_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new teilkultur_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeTeilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), onData, onError) {
@@ -4231,11 +3565,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeTeilzaehlung_rev_aggregate(variables, resultSelector = teilzaehlung_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription teilzaehlung_rev_aggregate($distinct_on: [teilzaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_rev_order_by!], $where: teilzaehlung_rev_bool_exp) { teilzaehlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_rev_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeTeilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription teilzaehlung_rev_by_pk($id: ID!) { teilzaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
@@ -4244,11 +3573,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeUser_role(variables, resultSelector = user_roleModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription user_role($distinct_on: [user_role_select_column!], $limit: Int, $offset: Int, $order_by: [user_role_order_by!], $where: user_role_bool_exp) { user_role(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeUser_role_aggregate(variables, resultSelector = user_role_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription user_role_aggregate($distinct_on: [user_role_select_column!], $limit: Int, $offset: Int, $order_by: [user_role_order_by!], $where: user_role_bool_exp) { user_role_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new user_role_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeUser_role_by_pk(variables, resultSelector = user_roleModelPrimitives.toString(), onData, onError) {
@@ -4261,11 +3585,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
-    subscribeZaehlung_aggregate(variables, resultSelector = zaehlung_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription zaehlung_aggregate($distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new zaehlung_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
     subscribeZaehlung_by_pk(variables, resultSelector = zaehlungModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription zaehlung_by_pk($id: ID!) { zaehlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
@@ -4274,11 +3593,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeZaehlung_rev(variables, resultSelector = zaehlung_revModelPrimitives.toString(), onData, onError) {
       return self.subscribe(`subscription zaehlung_rev($distinct_on: [zaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_rev_order_by!], $where: zaehlung_rev_bool_exp) { zaehlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData, onError)
-    },
-    subscribeZaehlung_rev_aggregate(variables, resultSelector = zaehlung_rev_aggregateModelPrimitives.toString(), onData, onError) {
-      return self.subscribe(`subscription zaehlung_rev_aggregate($distinct_on: [zaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_rev_order_by!], $where: zaehlung_rev_bool_exp) { zaehlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new zaehlung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData, onError)
     },
     subscribeZaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), onData, onError) {

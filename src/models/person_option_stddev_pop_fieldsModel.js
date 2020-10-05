@@ -6,8 +6,6 @@ export { selectFromperson_option_stddev_pop_fields, person_option_stddev_pop_fie
 
 /**
  * person_option_stddev_pop_fieldsModel
- *
- * aggregate stddev_pop on columns
  */
 export const person_option_stddev_pop_fieldsModel = person_option_stddev_pop_fieldsModelBase
   .actions(self => ({

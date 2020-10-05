@@ -6,8 +6,6 @@ export { selectFromspatial_ref_sys_avg_fields, spatial_ref_sys_avg_fieldsModelPr
 
 /**
  * spatial_ref_sys_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const spatial_ref_sys_avg_fieldsModel = spatial_ref_sys_avg_fieldsModelBase
   .actions(self => ({

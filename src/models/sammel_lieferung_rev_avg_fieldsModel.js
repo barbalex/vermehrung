@@ -6,8 +6,6 @@ export { selectFromsammel_lieferung_rev_avg_fields, sammel_lieferung_rev_avg_fie
 
 /**
  * sammel_lieferung_rev_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const sammel_lieferung_rev_avg_fieldsModel = sammel_lieferung_rev_avg_fieldsModelBase
   .actions(self => ({

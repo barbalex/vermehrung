@@ -6,8 +6,6 @@ export { selectFromherkunft_file_max_fields, herkunft_file_max_fieldsModelPrimit
 
 /**
  * herkunft_file_max_fieldsModel
- *
- * aggregate max on columns
  */
 export const herkunft_file_max_fieldsModel = herkunft_file_max_fieldsModelBase
   .actions(self => ({

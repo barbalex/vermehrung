@@ -6,8 +6,6 @@ export { selectFromperson_sum_fields, person_sum_fieldsModelPrimitives, person_s
 
 /**
  * person_sum_fieldsModel
- *
- * aggregate sum on columns
  */
 export const person_sum_fieldsModel = person_sum_fieldsModelBase
   .actions(self => ({

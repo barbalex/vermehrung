@@ -6,8 +6,6 @@ export { selectFromteilkultur_rev_avg_fields, teilkultur_rev_avg_fieldsModelPrim
 
 /**
  * teilkultur_rev_avg_fieldsModel
- *
- * aggregate avg on columns
  */
 export const teilkultur_rev_avg_fieldsModel = teilkultur_rev_avg_fieldsModelBase
   .actions(self => ({

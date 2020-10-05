@@ -6,8 +6,6 @@ export { selectFromsammel_lieferung_rev_variance_fields, sammel_lieferung_rev_va
 
 /**
  * sammel_lieferung_rev_variance_fieldsModel
- *
- * aggregate variance on columns
  */
 export const sammel_lieferung_rev_variance_fieldsModel = sammel_lieferung_rev_variance_fieldsModelBase
   .actions(self => ({

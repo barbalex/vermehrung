@@ -6,8 +6,6 @@ export { selectFromspatial_ref_sys_min_fields, spatial_ref_sys_min_fieldsModelPr
 
 /**
  * spatial_ref_sys_min_fieldsModel
- *
- * aggregate min on columns
  */
 export const spatial_ref_sys_min_fieldsModel = spatial_ref_sys_min_fieldsModelBase
   .actions(self => ({
