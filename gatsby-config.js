@@ -35,17 +35,11 @@ module.exports = {
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     {
-      resolve: 'gatsby-plugin-web-font-loader',
-      options: {
-        google: {
-          families: ['Roboto', 'Roboto Mono'],
-        },
-      },
-    },
-    {
       resolve: 'gatsby-plugin-typography',
       options: {
         pathToConfigModule: './src/utils/typography.js',
+        // omit google fonts because loaded directly above:
+        omitGoogleFont: true,
       },
     },
     'gatsby-plugin-react-helmet',

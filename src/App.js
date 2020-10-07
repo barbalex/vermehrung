@@ -15,6 +15,11 @@ import 'slick-carousel/slick/slick-theme.css'
 
 import Notifications from './components/Notifications'
 
+// see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
+import 'fontsource-roboto-mono'
+// see: https://github.com/fontsource/fontsource/tree/master/packages/roboto-mono
+import 'fontsource-roboto'
+
 import materialTheme from './utils/materialTheme'
 
 import createGlobalStyle from './utils/createGlobalStyle'
