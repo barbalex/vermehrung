@@ -14,7 +14,10 @@ CREATE SERVER ae_server
   OPTIONS (host '207.154.212.35', port '5432', dbname 'ae');
 -- need to use this view
 -- because joining tables is way too slow
-create foreign table ae_art (
+-- BUT: querying from this foreign table takes 2.4s
+-- while querying in ae takes 0.125xs
+-- so: insert into own table
+create foreign table ae_art_live (
   id uuid,
   name text,
   name_deutsch text,
@@ -26,3 +29,16 @@ CREATE USER MAPPING
     FOR postgres
  SERVER ae_server
 OPTIONS (user 'fdw_user', password 'secret');
+
+create table ae_art (
+  id uuid primary key,
+  name text,
+  name_deutsch text,
+  name_latein text
+);
+create index on ae_art using btree (id);
+create index on ae_art using btree (name);
+
+insert into ae_art (id,name,name_deutsch,name_latein)
+select id, name, name_deutsch, name_latein
+from ae_art_live;
