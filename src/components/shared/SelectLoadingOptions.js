@@ -2,7 +2,6 @@ import React, { useCallback, useContext } from 'react'
 import AsyncSelect from 'react-select/Async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import get from 'lodash/get'
 
 import { StoreContext } from '../../models/reactUtils'
 
