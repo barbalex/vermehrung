@@ -50,12 +50,11 @@ const Aven = styled.div`
 const ArtPersonen = ({ artId }) => {
   const store = useContext(StoreContext)
   const { avsSorted, personsSorted, insertAvRev, errors, unsetError } = store
-  const [open, setOpen] = useState(false)
-
-  let anim = useAnimation()
 
   useEffect(() => unsetError('av'), [artId, unsetError])
 
+  const [open, setOpen] = useState(false)
+  let anim = useAnimation()
   const onClickToggle = useCallback(
     async (e) => {
       e.stopPropagation()
