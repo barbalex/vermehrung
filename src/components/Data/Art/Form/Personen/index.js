@@ -59,7 +59,6 @@ const ArtPersonen = ({ artId }) => {
   const onClickToggle = useCallback(
     async (e) => {
       e.stopPropagation()
-      console.log('ArtPersonen, onClickToggle', { open })
       if (open) {
         setOpen(!open)
         await anim.start({ opacity: 0 })
@@ -74,8 +73,6 @@ const ArtPersonen = ({ artId }) => {
     },
     [anim, open],
   )
-
-  console.log('ArtPersonen, render, open:', open)
 
   const avs = avsSorted.filter((a) => a.art_id === artId)
   const avPersonIds = avs.map((v) => v.person_id)
