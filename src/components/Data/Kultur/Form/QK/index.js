@@ -12,6 +12,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
+import { motion, useAnimation } from 'framer-motion'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Qk from './Qk'
@@ -56,7 +57,6 @@ const Body = styled.div`
 
 const KulturQk = ({ kultur }) => {
   const store = useContext(StoreContext)
-  const [open, setOpen] = useState(false)
 
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)
@@ -93,12 +93,26 @@ const KulturQk = ({ kultur }) => {
       window.open(url)
     }
   }, [])
+
+  const [open, setOpen] = useState(false)
+  let anim = useAnimation()
   const onClickToggle = useCallback(
-    (e) => {
+    async (e) => {
       e.stopPropagation()
-      setOpen(!open)
+      if (open) {
+        const was = open
+        await anim.start({ opacity: 0 })
+        await anim.start({ height: 0 })
+        setOpen(!was)
+      } else {
+        setOpen(!open)
+        setTimeout(async () => {
+          await anim.start({ height: 'auto' })
+          await anim.start({ opacity: 1 })
+        })
+      }
     },
-    [open],
+    [anim, open],
   )
 
   return (
@@ -127,33 +141,35 @@ const KulturQk = ({ kultur }) => {
           </IconButton>
         </div>
       </TitleRow>
-      {open && (
-        <>
-          <StyledTabs
-            value={tab}
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <Tab label="ausführen" value="qk" data-id="qk" />
-            <Tab
-              label={`auswählen${
-                qkCount ? ` (${kulturQkCount}/${qkCount})` : ''
-              }`}
-              value="waehlen"
-              data-id="waehlen"
-            />
-          </StyledTabs>
-          <Body>
-            {tab === 'qk' ? (
-              <Qk kultur={kultur} qkChoosens={qkChoosens} />
-            ) : (
-              <Choose />
-            )}
-          </Body>
-        </>
-      )}
+      <motion.div animate={anim} transition={{ type: 'just', duration: 0.5 }}>
+        {open && (
+          <>
+            <StyledTabs
+              value={tab}
+              onChange={onChangeTab}
+              indicatorColor="primary"
+              textColor="primary"
+              centered
+            >
+              <Tab label="ausführen" value="qk" data-id="qk" />
+              <Tab
+                label={`auswählen${
+                  qkCount ? ` (${kulturQkCount}/${qkCount})` : ''
+                }`}
+                value="waehlen"
+                data-id="waehlen"
+              />
+            </StyledTabs>
+            <Body>
+              {tab === 'qk' ? (
+                <Qk kultur={kultur} qkChoosens={qkChoosens} />
+              ) : (
+                <Choose />
+              )}
+            </Body>
+          </>
+        )}
+      </motion.div>
     </ErrorBoundary>
   )
 }
