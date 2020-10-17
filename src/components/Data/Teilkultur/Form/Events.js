@@ -14,6 +14,7 @@ const TitleRow = styled.div`
   margin-left: -10px;
   margin-right: -10px;
   padding: 0 10px;
+  user-select: none;
   position: sticky;
   top: -10px;
   z-index: 1;
@@ -28,9 +29,8 @@ const Rows = styled.div`
   overflow: auto !important;
 `
 const Row = styled.div`
-  border-top: thin solid rgba(74, 20, 140, 0.1);
-  border-bottom: ${(props) => (props['data-last'] ? '1px' : 'thin')} solid
-    rgba(74, 20, 140, 0.1);
+  ${(props) =>
+    !props['data-last'] && 'border-bottom: thin solid rgba(74, 20, 140, 0.1);'}
   border-collapse: collapse;
   padding: 10px;
   display: flex;
@@ -82,12 +82,13 @@ const TkEvents = ({ kulturId, teilkulturId }) => {
       <Rows>
         {events.map((ev, i) => {
           const person = ev.person_id ? store.persons.get(ev.person_id) : {}
+          const datum = ev.datum
+            ? format(new Date(ev.datum), 'yyyy.MM.dd')
+            : 'kein Datum'
 
           return (
             <Row key={ev.id} data-last={i === events.length - 1}>
-              <Datum>
-                {ev.datum ? `${format(new Date(ev.datum), 'yyyy.MM.dd')}:` : ''}
-              </Datum>
+              <Datum>{datum}</Datum>
               <Geplant>{ev?.geplant ? 'geplant' : ' '}</Geplant>
               <Name>{person?.fullname ?? ''}</Name>
               <Beschreibung>{ev?.beschreibung ?? ''}</Beschreibung>
