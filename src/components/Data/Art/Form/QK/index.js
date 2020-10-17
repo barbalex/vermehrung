@@ -12,6 +12,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
+import { motion, useAnimation } from 'framer-motion'
 
 import Qk from './Qk'
 import Choose from './Choose'
@@ -56,7 +57,6 @@ const Body = styled.div`
 
 const ApQk = ({ artId }) => {
   const store = useContext(StoreContext)
-  const [open, setOpen] = useState(false)
 
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
@@ -79,12 +79,26 @@ const ApQk = ({ artId }) => {
       window.open(url)
     }
   }, [])
+
+  const [open, setOpen] = useState(false)
+  let anim = useAnimation()
   const onClickToggle = useCallback(
-    (e) => {
+    async (e) => {
       e.stopPropagation()
-      setOpen(!open)
+      if (open) {
+        const was = open
+        await anim.start({ opacity: 0 })
+        await anim.start({ height: 0 })
+        setOpen(!was)
+      } else {
+        setOpen(!open)
+        setTimeout(async () => {
+          await anim.start({ height: 'auto' })
+          await anim.start({ opacity: 1 })
+        })
+      }
     },
-    [open],
+    [anim, open],
   )
 
   const titleRowRef = useRef(null)
@@ -127,31 +141,35 @@ const ApQk = ({ artId }) => {
           </IconButton>
         </div>
       </TitleRow>
-      {open && (
-        <>
-          <StyledTabs
-            value={tab}
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <Tab label="ausführen" value="qk" data-id="qk" />
-            <Tab
-              label={`auswählen${qkCount ? ` (${artQkCount}/${qkCount})` : ''}`}
-              value="waehlen"
-              data-id="waehlen"
-            />
-          </StyledTabs>
-          <Body>
-            {tab === 'qk' ? (
-              <Qk artId={artId} qkChoosens={qkChoosens} />
-            ) : (
-              <Choose />
-            )}
-          </Body>
-        </>
-      )}
+      <motion.div animate={anim} transition={{ type: 'just', duration: 0.4 }}>
+        {open && (
+          <>
+            <StyledTabs
+              value={tab}
+              onChange={onChangeTab}
+              indicatorColor="primary"
+              textColor="primary"
+              centered
+            >
+              <Tab label="ausführen" value="qk" data-id="qk" />
+              <Tab
+                label={`auswählen${
+                  qkCount ? ` (${artQkCount}/${qkCount})` : ''
+                }`}
+                value="waehlen"
+                data-id="waehlen"
+              />
+            </StyledTabs>
+            <Body>
+              {tab === 'qk' ? (
+                <Qk artId={artId} qkChoosens={qkChoosens} />
+              ) : (
+                <Choose />
+              )}
+            </Body>
+          </>
+        )}
+      </motion.div>
     </ErrorBoundary>
   )
 }
