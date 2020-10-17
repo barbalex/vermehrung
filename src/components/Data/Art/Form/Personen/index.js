@@ -25,6 +25,7 @@ const TitleRow = styled.div`
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
+  margin-bottom: 10px;
   padding: 0 10px;
   cursor: pointer;
   user-select: none;
@@ -33,7 +34,6 @@ const TitleRow = styled.div`
     props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
   top: -10px;
   z-index: 1;
-  margin-bottom: 10px;
   &:first-of-type {
     margin-top: -10px;
   }
