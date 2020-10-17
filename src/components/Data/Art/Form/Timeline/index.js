@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import { motion, useAnimation, AnimatePresence } from 'framer-motion'
+import { motion, useAnimation } from 'framer-motion'
 
 import Pflanzen from './Pflanzen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
@@ -58,9 +58,10 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
     async (e) => {
       e.stopPropagation()
       if (open) {
-        setOpen(!open)
+        const was = open
         await anim.start({ opacity: 0 })
         await anim.start({ height: 0 })
+        setOpen(!was)
       } else {
         setOpen(!open)
         setTimeout(async () => {
@@ -113,16 +114,9 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
           </IconButton>
         </div>
       </TitleRow>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            animate={anim}
-            transition={{ type: 'just', duration: 0.2 }}
-          >
-            <Pflanzen key={artId} artId={artId} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
+        {open && <Pflanzen key={artId} artId={artId} />}
+      </motion.div>
     </ErrorBoundary>
   )
 }

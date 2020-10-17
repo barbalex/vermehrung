@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import { motion, useAnimation, AnimatePresence } from 'framer-motion'
+import { motion, useAnimation } from 'framer-motion'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Person from './Person'
@@ -60,9 +60,10 @@ const ArtPersonen = ({ artId }) => {
     async (e) => {
       e.stopPropagation()
       if (open) {
-        setOpen(!open)
+        const was = open
         await anim.start({ opacity: 0 })
         await anim.start({ height: 0 })
+        setOpen(!was)
       } else {
         setOpen(!open)
         setTimeout(async () => {
@@ -129,12 +130,9 @@ const ArtPersonen = ({ artId }) => {
           </IconButton>
         </div>
       </TitleRow>
-      <AnimatePresence>
+      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
         {open && (
-          <motion.div
-            animate={anim}
-            transition={{ type: 'just', duration: 0.2 }}
-          >
+          <>
             <Aven>
               {avs.map((av) => (
                 <Person key={`${av.art_id}/${av.person_id}`} av={av} />
@@ -152,9 +150,9 @@ const ArtPersonen = ({ artId }) => {
                 error={errors?.av?.person_id}
               />
             )}
-          </motion.div>
+          </>
         )}
-      </AnimatePresence>
+      </motion.div>
     </ErrorBoundary>
   )
 }
