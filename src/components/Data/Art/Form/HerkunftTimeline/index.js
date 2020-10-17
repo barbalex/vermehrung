@@ -10,6 +10,7 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import uniq from 'lodash/uniq'
+import { motion, useAnimation } from 'framer-motion'
 
 import Pflanzen from './Pflanzen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
@@ -29,8 +30,7 @@ const TitleRow = styled.div`
   user-select: none;
   ${(props) => props['data-open'] && 'position: sticky;'}
   ${(props) =>
-    props['data-sticky'] &&
-    'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
+    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
   top: -10px;
   z-index: 1;
   &:first-of-type {
@@ -57,12 +57,24 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
   )
 
   const [open, setOpen] = useState(false)
+  let anim = useAnimation()
   const onClickToggle = useCallback(
-    (e) => {
+    async (e) => {
       e.stopPropagation()
-      setOpen(!open)
+      if (open) {
+        const was = open
+        await anim.start({ opacity: 0 })
+        await anim.start({ height: 0 })
+        setOpen(!was)
+      } else {
+        setOpen(!open)
+        setTimeout(async () => {
+          await anim.start({ height: 'auto' })
+          await anim.start({ opacity: 1 })
+        })
+      }
     },
-    [open],
+    [anim, open],
   )
 
   const titleRowRef = useRef(null)
@@ -99,10 +111,12 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
           </IconButton>
         </div>
       </TitleRow>
-      {open &&
-        herkunftsSorted.map((herkunft) => (
-          <Pflanzen key={herkunft.id} artId={artId} herkunft={herkunft} />
-        ))}
+      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
+        {open &&
+          herkunftsSorted.map((herkunft) => (
+            <Pflanzen key={herkunft.id} artId={artId} herkunft={herkunft} />
+          ))}
+      </motion.div>
     </ErrorBoundary>
   )
 }
