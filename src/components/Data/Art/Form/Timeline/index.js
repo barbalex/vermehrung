@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
+import { motion, useAnimation, AnimatePresence } from 'framer-motion'
 
 import Pflanzen from './Pflanzen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
@@ -25,8 +26,7 @@ const TitleRow = styled.div`
   user-select: none;
   ${(props) => props['data-open'] && 'position: sticky;'}
   ${(props) =>
-    props['data-sticky'] &&
-    'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
+    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
   top: -10px;
   z-index: 1;
   &:first-of-type {
@@ -42,7 +42,10 @@ const Title = styled.div`
 const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
   const [open, setOpen] = useState(false)
 
-  const openDocs = useCallback(() => {
+  let anim = useAnimation()
+
+  const openDocs = useCallback((e) => {
+    e.stopPropagation()
     const url = `${constants?.appUri}/Dokumentation/Zeitachse-Art`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -52,11 +55,21 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
     }
   }, [])
   const onClickToggle = useCallback(
-    (e) => {
+    async (e) => {
       e.stopPropagation()
-      setOpen(!open)
+      if (open) {
+        setOpen(!open)
+        await anim.start({ opacity: 0 })
+        await anim.start({ height: 0 })
+      } else {
+        setOpen(!open)
+        setTimeout(async () => {
+          await anim.start({ height: 'auto' })
+          await anim.start({ opacity: 1 })
+        })
+      }
     },
-    [open],
+    [anim, open],
   )
 
   const titleRowRef = useRef(null)
@@ -100,7 +113,16 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
           </IconButton>
         </div>
       </TitleRow>
-      {open && <Pflanzen key={artId} artId={artId} />}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            animate={anim}
+            transition={{ type: 'just', duration: 0.2 }}
+          >
+            <Pflanzen key={artId} artId={artId} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </ErrorBoundary>
   )
 }
