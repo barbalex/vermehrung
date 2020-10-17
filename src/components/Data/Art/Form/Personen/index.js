@@ -44,7 +44,7 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 const Aven = styled.div`
-  /*padding-bottom: 8px;*/
+  padding-bottom: 8px;
 `
 
 const ArtPersonen = ({ artId }) => {
@@ -117,7 +117,6 @@ const ArtPersonen = ({ artId }) => {
         data-open={open}
         ref={titleRowRef}
         data-sticky={isSticky}
-        layout
       >
         <Title>{`Mitarbeitende Personen (${avs.length})`}</Title>
         <div>
@@ -136,7 +135,7 @@ const ArtPersonen = ({ artId }) => {
             animate={anim}
             transition={{ type: 'just', duration: 0.2 }}
           >
-            <Aven style={{ paddingBottom: '8px' }}>
+            <Aven>
               {avs.map((av) => (
                 <Person key={`${av.art_id}/${av.person_id}`} av={av} />
               ))}
