@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
+import { motion, useAnimation } from 'framer-motion'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Person from './Person'
@@ -24,16 +25,15 @@ const TitleRow = styled.div`
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
+  margin-bottom: 10px;
   padding: 0 10px;
   cursor: pointer;
   user-select: none;
   ${(props) => props['data-open'] && 'position: sticky;'}
   ${(props) =>
-    props['data-sticky'] &&
-    'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
+    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
   top: -10px;
   z-index: 1;
-  ${(props) => !props['data-open'] && 'margin-bottom: 10px;'}
   &:first-of-type {
     margin-top: -10px;
   }
@@ -43,9 +43,6 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
-const Content = styled.div`
-  padding-bottom: 10px;
-`
 const Aven = styled.div`
   padding-bottom: 8px;
 `
@@ -53,17 +50,29 @@ const Aven = styled.div`
 const GartenPersonen = ({ gartenId }) => {
   const store = useContext(StoreContext)
   const { gvsSorted, personsSorted, insertGvRev } = store
-  const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [gartenId])
 
+  const [open, setOpen] = useState(false)
+  let anim = useAnimation()
   const onClickToggle = useCallback(
-    (e) => {
+    async (e) => {
       e.stopPropagation()
-      setOpen(!open)
+      if (open) {
+        const was = open
+        await anim.start({ opacity: 0 })
+        await anim.start({ height: 0 })
+        setOpen(!was)
+      } else {
+        setOpen(!open)
+        setTimeout(async () => {
+          await anim.start({ height: 'auto' })
+          await anim.start({ opacity: 1 })
+        })
+      }
     },
-    [open],
+    [anim, open],
   )
 
   const gvs = gvsSorted.filter((a) => a.garten_id === gartenId)
@@ -124,27 +133,29 @@ const GartenPersonen = ({ gartenId }) => {
           </IconButton>
         </div>
       </TitleRow>
-      {open && (
-        <Content>
-          <Aven>
-            {gvs.map((gv) => (
-              <Person key={`${gv.garten_id}/${gv.person_id}`} gv={gv} />
-            ))}
-          </Aven>
-          {!!personWerte.length && (
-            <Select
-              name="person_id"
-              value={''}
-              field="person_id"
-              label="Person hinzufügen"
-              options={personWerte}
-              saveToDb={saveToDb}
-              isClearable={false}
-              error={errors.person_id}
-            />
-          )}
-        </Content>
-      )}
+      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
+        {open && (
+          <>
+            <Aven>
+              {gvs.map((gv) => (
+                <Person key={`${gv.garten_id}/${gv.person_id}`} gv={gv} />
+              ))}
+            </Aven>
+            {!!personWerte.length && (
+              <Select
+                name="person_id"
+                value={''}
+                field="person_id"
+                label="Person hinzufügen"
+                options={personWerte}
+                saveToDb={saveToDb}
+                isClearable={false}
+                error={errors.person_id}
+              />
+            )}
+          </>
+        )}
+      </motion.div>
     </ErrorBoundary>
   )
 }
