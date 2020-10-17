@@ -28,7 +28,6 @@ const TitleRow = styled.div`
   margin-right: -10px;
   ${(props) => props['data-margin-bottom'] && 'margin-bottom: 15px;'}
   padding: 0 10px;
-  ${(props) => props['data-online'] && 'cursor: pointer;'}
   user-select: none;
   position: sticky;
   ${(props) =>
