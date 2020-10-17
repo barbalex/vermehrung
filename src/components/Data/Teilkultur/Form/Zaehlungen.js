@@ -15,10 +15,10 @@ const TitleRow = styled.div`
   margin-left: -10px;
   margin-right: -10px;
   padding: 0 10px;
+  user-select: none;
   position: sticky;
   top: -10px;
   z-index: 1;
-  user-select: none;
 `
 const Title = styled.div`
   font-weight: bold;
@@ -29,9 +29,8 @@ const Rows = styled.div`
   overflow: auto !important;
 `
 const Row = styled.div`
-  border-top: thin solid rgba(74, 20, 140, 0.1);
-  border-bottom: ${(props) => (props['data-last'] ? '1px' : 'thin')} solid
-    rgba(74, 20, 140, 0.1);
+  ${(props) =>
+    !props['data-last'] && 'border-bottom: thin solid rgba(74, 20, 140, 0.1);'}
   border-collapse: collapse;
   padding: 10px;
   display: flex;
@@ -92,13 +91,13 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
           const zaehlung = tz?.zaehlung_id
             ? store.zaehlungs.get(tz.zaehlung_id)
             : {}
+          const datum = zaehlung?.datum
+            ? format(new Date(zaehlung?.datum), 'yyyy.MM.dd')
+            : 'kein Datum'
 
           return (
             <Row key={tz.id} data-last={i === teilzaehlungs.length - 1}>
-              <Datum>{`${format(
-                new Date(zaehlung?.datum),
-                'yyyy.MM.dd',
-              )}:`}</Datum>
+              <Datum>{datum}</Datum>
               <Prognose>{zaehlung.prognose ? 'Prognose' : ' '}</Prognose>
               <Pflanzen>
                 {exists(tz.anzahl_pflanzen)
