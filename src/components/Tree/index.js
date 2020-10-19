@@ -5,6 +5,7 @@ import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
+import SimpleBar from 'simplebar-react'
 
 import { StoreContext } from '../../models/reactUtils'
 import Row from './Row'
@@ -17,6 +18,20 @@ const Container = styled.div`
 `
 const StyledList = styled(List)`
   margin-top: 5px;
+
+  /* hide native scrollbar */
+  &::-webkit-scrollbar {
+    width: 1px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    box-shadow: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
   @media print {
     display: none !important;
   }
@@ -40,23 +55,31 @@ const Tree = ({ width, height }) => {
       <Container>
         <Settings />
         {!!width && (
-          <StyledList
-            height={height - 5}
-            itemCount={nodes.length}
-            itemSize={singleRowHeight}
-            width={width}
-            ref={listRef}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                node={nodes[index]}
-                nodes={nodes}
-              />
-            )}
-          </StyledList>
+          <SimpleBar style={{ maxHeight: height, height: '100%' }}>
+            {({ scrollableNodeRef, contentNodeRef }) => {
+              return (
+                <StyledList
+                  height={height - 5}
+                  itemCount={nodes.length}
+                  itemSize={singleRowHeight}
+                  width={width}
+                  ref={listRef}
+                  innerRef={contentNodeRef}
+                  outerRef={scrollableNodeRef}
+                >
+                  {({ index, style }) => (
+                    <Row
+                      key={index}
+                      style={style}
+                      index={index}
+                      node={nodes[index]}
+                      nodes={nodes}
+                    />
+                  )}
+                </StyledList>
+              )
+            }}
+          </SimpleBar>
         )}
       </Container>
     </ErrorBoundary>
