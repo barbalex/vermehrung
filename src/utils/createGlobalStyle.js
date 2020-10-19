@@ -66,13 +66,6 @@ export default () => createGlobalStyle`
       overflow: visible !important;
       
     }
-    
-    @page .hochformat {
-      size: A4 portrait;
-    }
-    @page .querformat {
-      size: A4 landscape;
-    }
   }
 
   /* scrollbars */
