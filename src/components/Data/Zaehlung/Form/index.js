@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import SimpleBar from 'simplebar-react'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -21,7 +22,6 @@ const constants = getConstants()
 
 const FieldsContainer = styled.div`
   padding: 10px;
-  overflow: auto !important;
   height: 100%;
 `
 const FieldRow = styled.div`
@@ -105,104 +105,106 @@ const ZaehlungForm = ({
 
   return (
     <ErrorBoundary>
-      <FieldsContainer>
-        {(activeConflict || showHistory) && (
-          <CaseConflictTitle>
-            Aktuelle Version<Rev>{row._rev}</Rev>
-          </CaseConflictTitle>
-        )}
-        {showDeleted && (
-          <>
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+        <FieldsContainer>
+          {(activeConflict || showHistory) && (
+            <CaseConflictTitle>
+              Aktuelle Version<Rev>{row._rev}</Rev>
+            </CaseConflictTitle>
+          )}
+          {showDeleted && (
+            <>
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.zaehlung?._deleted}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.zaehlung?._deleted}
+                />
+              )}
+            </>
+          )}
+          <Select
+            key={`${row.id}${row.kultur_id}kultur_id`}
+            name="kultur_id"
+            value={row.kultur_id}
+            field="kultur_id"
+            label="Kultur"
+            options={kulturWerte}
+            loading={false}
+            saveToDb={saveToDb}
+            error={errors?.zaehlung?.kultur_id}
+          />
+          <Date
+            key={`${row.id}datum`}
+            name="datum"
+            label="Datum"
+            value={row.datum}
+            saveToDb={saveToDb}
+            error={errors?.zaehlung?.datum}
+          />
+          <FieldRow>
             {showFilter ? (
               <Checkbox3States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
+                key={`${row.id}prognose`}
+                label="Prognose"
+                name="prognose"
+                value={row.prognose}
                 saveToDb={saveToDb}
-                error={errors?.zaehlung?._deleted}
+                error={errors?.zaehlung?.prognose}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
+                key={`${row.id}prognose`}
+                label="Prognose"
+                name="prognose"
+                value={row.prognose}
                 saveToDb={saveToDb}
-                error={errors?.zaehlung?._deleted}
+                error={errors?.zaehlung?.prognose}
               />
             )}
-          </>
-        )}
-        <Select
-          key={`${row.id}${row.kultur_id}kultur_id`}
-          name="kultur_id"
-          value={row.kultur_id}
-          field="kultur_id"
-          label="Kultur"
-          options={kulturWerte}
-          loading={false}
-          saveToDb={saveToDb}
-          error={errors?.zaehlung?.kultur_id}
-        />
-        <Date
-          key={`${row.id}datum`}
-          name="datum"
-          label="Datum"
-          value={row.datum}
-          saveToDb={saveToDb}
-          error={errors?.zaehlung?.datum}
-        />
-        <FieldRow>
-          {showFilter ? (
-            <Checkbox3States
-              key={`${row.id}prognose`}
-              label="Prognose"
-              name="prognose"
-              value={row.prognose}
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openPlanenDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
+          </FieldRow>
+          {(z_bemerkungen || showFilter) && (
+            <TextField
+              key={`${row.id}bemerkungen`}
+              name="bemerkungen"
+              label="Bemerkungen"
+              value={row.bemerkungen}
               saveToDb={saveToDb}
-              error={errors?.zaehlung?.prognose}
-            />
-          ) : (
-            <Checkbox2States
-              key={`${row.id}prognose`}
-              label="Prognose"
-              name="prognose"
-              value={row.prognose}
-              saveToDb={saveToDb}
-              error={errors?.zaehlung?.prognose}
+              error={errors?.zaehlung?.bemerkungen}
+              multiLine
             />
           )}
-          <div>
-            <IconButton
-              aria-label="Anleitung öffnen"
-              title="Anleitung öffnen"
-              onClick={openPlanenDocs}
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
-          </div>
-        </FieldRow>
-        {(z_bemerkungen || showFilter) && (
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={errors?.zaehlung?.bemerkungen}
-            multiLine
-          />
-        )}
-        {online && !showFilter && row._conflicts && row._conflicts.map && (
-          <ConflictList
-            conflicts={row._conflicts}
-            activeConflict={activeConflict}
-            setActiveConflict={setActiveConflict}
-          />
-        )}
-        {!showFilter && <Teilzaehlungen zaehlungId={id} />}
-      </FieldsContainer>
+          {online && !showFilter && row._conflicts && row._conflicts.map && (
+            <ConflictList
+              conflicts={row._conflicts}
+              activeConflict={activeConflict}
+              setActiveConflict={setActiveConflict}
+            />
+          )}
+          {!showFilter && <Teilzaehlungen zaehlungId={id} />}
+        </FieldsContainer>
+      </SimpleBar>
     </ErrorBoundary>
   )
 }
