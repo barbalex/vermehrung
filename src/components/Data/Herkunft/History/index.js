@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Slider from 'react-slick'
+import SimpleBar from 'simplebar-react'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
@@ -10,7 +11,6 @@ import Row from './Row'
 
 const Container = styled.div`
   padding: 0 25px;
-  overflow: auto !important;
   height: 100%;
   .slick-prev:before,
   .slick-next:before,
@@ -65,18 +65,20 @@ const HerkunftHistory = ({ row, historyTakeoverCallback }) => {
   }
 
   return (
-    <Container>
-      <Slider {...sliderSettings}>
-        {revRows.map((r) => (
-          <Row
-            key={row._rev}
-            revRow={r}
-            row={row}
-            historyTakeoverCallback={historyTakeoverCallback}
-          />
-        ))}
-      </Slider>
-    </Container>
+    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <Container>
+        <Slider {...sliderSettings}>
+          {revRows.map((r) => (
+            <Row
+              key={row._rev}
+              revRow={r}
+              row={row}
+              historyTakeoverCallback={historyTakeoverCallback}
+            />
+          ))}
+        </Slider>
+      </Container>
+    </SimpleBar>
   )
 }
 
