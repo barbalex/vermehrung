@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import camelCase from 'lodash/camelCase'
+import SimpleBar from 'simplebar-react'
 
 import Row from './Row'
 import { StoreContext } from '../../../models/reactUtils'
@@ -15,7 +16,6 @@ const Container = styled.div`
 `
 
 const FieldsContainer = styled.div`
-  overflow: auto !important;
   height: 100%;
 `
 
@@ -108,19 +108,21 @@ const Root = ({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FieldsContainer>
-          {rows.map((row) => (
-            <Row
-              key={row.name}
-              row={row}
-              length={
-                !initialDataQueried
-                  ? '...'
-                  : store[`${camelCase(row.table)}sFiltered`].length
-              }
-            />
-          ))}
-        </FieldsContainer>
+        <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+          <FieldsContainer>
+            {rows.map((row) => (
+              <Row
+                key={row.name}
+                row={row}
+                length={
+                  !initialDataQueried
+                    ? '...'
+                    : store[`${camelCase(row.table)}sFiltered`].length
+                }
+              />
+            ))}
+          </FieldsContainer>
+        </SimpleBar>
       </Container>
     </ErrorBoundary>
   )
