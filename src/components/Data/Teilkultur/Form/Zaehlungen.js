@@ -14,6 +14,7 @@ const TitleRow = styled.div`
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
+  ${(props) => !props['data-has-data'] && 'margin-bottom: 10px;'}
   padding: 0 10px;
   user-select: none;
   position: sticky;
@@ -25,9 +26,7 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
-const Rows = styled.div`
-  overflow: auto !important;
-`
+const Rows = styled.div``
 const Row = styled.div`
   ${(props) =>
     !props['data-last'] && 'border-bottom: thin solid rgba(74, 20, 140, 0.1);'}
@@ -83,7 +82,7 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow>
+      <TitleRow data-has-data={!!teilzaehlungs.length}>
         <Title>Zählungen</Title>
       </TitleRow>
       <Rows>
