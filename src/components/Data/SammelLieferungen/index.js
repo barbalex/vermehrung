@@ -5,6 +5,7 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
+import SimpleBar from 'simplebar-react'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -42,8 +43,21 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 const FieldsContainer = styled.div`
-  overflow: auto !important;
   height: 100%;
+`
+const StyledList = styled(FixedSizeList)`
+  /* hide native scrollbar */
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    box-shadow: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    box-shadow: none;
+  }
 `
 
 const singleRowHeight = 48
@@ -107,22 +121,28 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
         )}
         <FieldsContainer>
           {!!width && (
-            <FixedSizeList
-              height={height - 48}
-              itemCount={sammelLieferungsFiltered.length}
-              itemSize={singleRowHeight}
-              width={width}
-            >
-              {({ index, style }) => (
-                <Row
-                  key={index}
-                  style={style}
-                  index={index}
-                  row={sammelLieferungsFiltered[index]}
-                  last={index === sammelLieferungsFiltered.length - 1}
-                />
+            <SimpleBar style={{ maxHeight: height, height: height - 48 }}>
+              {({ scrollableNodeRef, contentNodeRef }) => (
+                <StyledList
+                  height={height - 48}
+                  itemCount={sammelLieferungsFiltered.length}
+                  itemSize={singleRowHeight}
+                  width={width}
+                  innerRef={contentNodeRef}
+                  outerRef={scrollableNodeRef}
+                >
+                  {({ index, style }) => (
+                    <Row
+                      key={index}
+                      style={style}
+                      index={index}
+                      row={sammelLieferungsFiltered[index]}
+                      last={index === sammelLieferungsFiltered.length - 1}
+                    />
+                  )}
+                </StyledList>
               )}
-            </FixedSizeList>
+            </SimpleBar>
           )}
         </FieldsContainer>
       </Container>
