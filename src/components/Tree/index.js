@@ -21,7 +21,7 @@ const StyledList = styled(List)`
 
   /* hide native scrollbar */
   &::-webkit-scrollbar {
-    width: 1px;
+    width: 0;
   }
   &::-webkit-scrollbar-track {
     background: transparent;
