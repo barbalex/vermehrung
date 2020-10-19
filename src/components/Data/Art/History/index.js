@@ -3,6 +3,8 @@ import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
+import SimpleBar from 'simplebar-react'
+import { withResizeDetector } from 'react-resize-detector'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
@@ -30,9 +32,8 @@ const artRevQuery = gql`
   }
 `
 
-const Container = styled.div`
+const InnerContainer = styled.div`
   padding: 0 25px;
-  overflow: auto !important;
   height: 100%;
   .slick-prev:before,
   .slick-next:before,
@@ -58,7 +59,7 @@ const sliderSettings = {
   infinite: false,
 }
 
-const ArtHistory = ({ row, historyTakeoverCallback }) => {
+const ArtHistory = ({ row, historyTakeoverCallback, height }) => {
   const store = useContext(StoreContext)
 
   // need to use this query to ensure that the person's name is queried
@@ -88,19 +89,21 @@ const ArtHistory = ({ row, historyTakeoverCallback }) => {
   }
 
   return (
-    <Container>
-      <Slider {...sliderSettings}>
-        {revRows.map((r) => (
-          <Row
-            key={row._rev}
-            revRow={r}
-            row={row}
-            historyTakeoverCallback={historyTakeoverCallback}
-          />
-        ))}
-      </Slider>
-    </Container>
+    <SimpleBar style={{ maxHeight: height, height: '100%' }}>
+      <InnerContainer>
+        <Slider {...sliderSettings}>
+          {revRows.map((r) => (
+            <Row
+              key={row._rev}
+              revRow={r}
+              row={row}
+              historyTakeoverCallback={historyTakeoverCallback}
+            />
+          ))}
+        </Slider>
+      </InnerContainer>
+    </SimpleBar>
   )
 }
 
-export default observer(ArtHistory)
+export default withResizeDetector(observer(ArtHistory))
