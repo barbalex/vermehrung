@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
-import { withResizeDetector } from 'react-resize-detector'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
@@ -35,7 +34,6 @@ const Rev = styled.span`
 
 const ArtForm = ({
   activeConflict,
-  height,
   id,
   row,
   setActiveConflict,
@@ -95,7 +93,7 @@ const ArtForm = ({
 
   return (
     <ErrorBoundary>
-      <SimpleBar style={{ maxHeight: height, height: '100%' }}>
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
         <FieldsContainer>
           {(activeConflict || showHistory) && (
             <CaseConflictTitle>
@@ -159,4 +157,4 @@ const ArtForm = ({
   )
 }
 
-export default withResizeDetector(observer(ArtForm))
+export default observer(ArtForm)

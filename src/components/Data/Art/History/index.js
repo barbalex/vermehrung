@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
 import SimpleBar from 'simplebar-react'
-import { withResizeDetector } from 'react-resize-detector'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
@@ -59,7 +58,7 @@ const sliderSettings = {
   infinite: false,
 }
 
-const ArtHistory = ({ row, historyTakeoverCallback, height }) => {
+const ArtHistory = ({ row, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
 
   // need to use this query to ensure that the person's name is queried
@@ -89,7 +88,7 @@ const ArtHistory = ({ row, historyTakeoverCallback, height }) => {
   }
 
   return (
-    <SimpleBar style={{ maxHeight: height, height: '100%' }}>
+    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
       <InnerContainer>
         <Slider {...sliderSettings}>
           {revRows.map((r) => (
@@ -106,4 +105,4 @@ const ArtHistory = ({ row, historyTakeoverCallback, height }) => {
   )
 }
 
-export default withResizeDetector(observer(ArtHistory))
+export default observer(ArtHistory)
