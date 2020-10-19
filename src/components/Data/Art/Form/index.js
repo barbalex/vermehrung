@@ -19,9 +19,6 @@ import Personen from './Personen'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 
-const Container = styled.div`
-  height: 100%;
-`
 const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
@@ -98,68 +95,66 @@ const ArtForm = ({
 
   return (
     <ErrorBoundary>
-      <Container>
-        <SimpleBar style={{ maxHeight: height }}>
-          <FieldsContainer>
-            {(activeConflict || showHistory) && (
-              <CaseConflictTitle>
-                Aktuelle Version<Rev>{row._rev}</Rev>
-              </CaseConflictTitle>
-            )}
-            {showDeleted && (
-              <>
-                {showFilter ? (
-                  <Checkbox3States
-                    key={`${row.id}_deleted`}
-                    label="gelöscht"
-                    name="_deleted"
-                    value={row._deleted}
-                    saveToDb={saveToDb}
-                    error={errors?.art?._deleted}
-                  />
-                ) : (
-                  <Checkbox2States
-                    key={`${row.id}_deleted`}
-                    label="gelöscht"
-                    name="_deleted"
-                    value={row._deleted}
-                    saveToDb={saveToDb}
-                    error={errors?.art?._deleted}
-                  />
-                )}
-              </>
-            )}
-            <SelectLoadingOptions
-              key={`${row.id}ae_id`}
-              field="ae_id"
-              valueLabelFunction={artLabelFromArt}
-              valueLabelKey="art"
-              label="Art"
-              row={row}
-              saveToDb={saveToDb}
-              error={errors?.art?.ae_id}
-              modelKey="name"
-              modelFilter={aeArtsFilter}
+      <SimpleBar style={{ maxHeight: height, height: '100%' }}>
+        <FieldsContainer>
+          {(activeConflict || showHistory) && (
+            <CaseConflictTitle>
+              Aktuelle Version<Rev>{row._rev}</Rev>
+            </CaseConflictTitle>
+          )}
+          {showDeleted && (
+            <>
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.art?._deleted}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.art?._deleted}
+                />
+              )}
+            </>
+          )}
+          <SelectLoadingOptions
+            key={`${row.id}ae_id`}
+            field="ae_id"
+            valueLabelFunction={artLabelFromArt}
+            valueLabelKey="art"
+            label="Art"
+            row={row}
+            saveToDb={saveToDb}
+            error={errors?.art?.ae_id}
+            modelKey="name"
+            modelFilter={aeArtsFilter}
+          />
+          {online && !showFilter && row._conflicts && row._conflicts.map && (
+            <ConflictList
+              conflicts={row._conflicts}
+              activeConflict={activeConflict}
+              setActiveConflict={setActiveConflict}
             />
-            {online && !showFilter && row._conflicts && row._conflicts.map && (
-              <ConflictList
-                conflicts={row._conflicts}
-                activeConflict={activeConflict}
-                setActiveConflict={setActiveConflict}
-              />
-            )}
-            {!showFilter && (
-              <>
-                <Personen artId={id} />
-                <Timeline artId={id} />
-                <HerkunftTimeline artId={id} />
-                <QK artId={id} />
-                <Files parentId={id} parent="art" />
-              </>
-            )}
-          </FieldsContainer>
-        </SimpleBar>
-      </Container>
+          )}
+          {!showFilter && (
+            <>
+              <Personen artId={id} />
+              <Timeline artId={id} />
+              <HerkunftTimeline artId={id} />
+              <QK artId={id} />
+              <Files parentId={id} parent="art" />
+            </>
+          )}
+        </FieldsContainer>
+      </SimpleBar>
     </ErrorBoundary>
   )
 }
