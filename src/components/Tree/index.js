@@ -55,7 +55,7 @@ const Tree = ({ width, height }) => {
       <Container>
         <Settings />
         {!!width && (
-          <SimpleBar style={{ maxHeight: height, height: '100%' }}>
+          <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
             {({ scrollableNodeRef, contentNodeRef }) => (
               <StyledList
                 height={height - 5}

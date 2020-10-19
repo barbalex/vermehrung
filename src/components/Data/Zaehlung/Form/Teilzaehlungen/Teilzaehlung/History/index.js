@@ -44,7 +44,6 @@ const teilzaehlungRevQuery = gql`
 
 const Container = styled.div`
   padding: 0 25px;
-  overflow: auto !important;
   height: 100%;
   .slick-prev:before,
   .slick-next:before,
