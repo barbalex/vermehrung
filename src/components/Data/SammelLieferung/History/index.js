@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
+import SimpleBar from 'simplebar-react'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
@@ -98,7 +99,6 @@ const sammelLieferungRevQuery = gql`
 
 const Container = styled.div`
   padding: 0 25px;
-  overflow: auto !important;
   height: 100%;
   .slick-prev:before,
   .slick-next:before,
@@ -154,18 +154,20 @@ const SammelLieferungHistory = ({ row, historyTakeoverCallback }) => {
   }
 
   return (
-    <Container>
-      <Slider {...sliderSettings}>
-        {revRows.map((r) => (
-          <Row
-            key={row._rev}
-            revRow={r}
-            row={row}
-            historyTakeoverCallback={historyTakeoverCallback}
-          />
-        ))}
-      </Slider>
-    </Container>
+    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <Container>
+        <Slider {...sliderSettings}>
+          {revRows.map((r) => (
+            <Row
+              key={row._rev}
+              revRow={r}
+              row={row}
+              historyTakeoverCallback={historyTakeoverCallback}
+            />
+          ))}
+        </Slider>
+      </Container>
+    </SimpleBar>
   )
 }
 
