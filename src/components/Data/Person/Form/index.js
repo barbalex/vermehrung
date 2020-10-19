@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import SimpleBar from 'simplebar-react'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import TextField from '../../../shared/TextField'
@@ -17,7 +18,6 @@ import userRoleSort from '../../../../utils/userRoleSort'
 
 const Container = styled.div`
   padding: 10px;
-  overflow: auto !important;
   height: 100%;
 `
 const CaseConflictTitle = styled.h4`
@@ -105,233 +105,235 @@ const Person = ({
     : {}
 
   return (
-    <Container>
-      {(activeConflict || showHistory) && (
-        <CaseConflictTitle>
-          Aktuelle Version<Rev>{row._rev}</Rev>
-        </CaseConflictTitle>
-      )}
-      {showDeleted && (
-        <>
-          {showFilter ? (
-            <Checkbox3States
-              key={`${row.id}_deleted`}
-              label="gelöscht"
-              name="_deleted"
-              value={row._deleted}
-              saveToDb={saveToDb}
-              error={errors?.person?._deleted}
-            />
-          ) : (
-            <Checkbox2States
-              key={`${row.id}_deleted`}
-              label="gelöscht"
-              name="_deleted"
-              value={row._deleted}
-              saveToDb={saveToDb}
-              error={errors?.person?._deleted}
-            />
-          )}
-        </>
-      )}
-      <Select
-        key={`${row.id}${row.user_role}user_role`}
-        name="user_role"
-        value={row.user_role}
-        field="user_role"
-        label="Rolle"
-        helperText={userRole?.comment || ' '}
-        options={userRoleWerte}
-        saveToDb={saveToDb}
-        error={errors?.person?.user_role}
-      />
-      <TextField
-        key={`${row.id}nr`}
-        name="nr"
-        label="Nr"
-        value={row.nr}
-        saveToDb={saveToDb}
-        error={errors?.person?.nr}
-      />
-      <TextField
-        key={`${row.id}vorname`}
-        name="vorname"
-        label="Vorname"
-        value={row.vorname}
-        saveToDb={saveToDb}
-        error={errors?.person?.vorname}
-      />
-      <TextField
-        key={`${row.id}name`}
-        name="name"
-        label="Nachname"
-        value={row.name}
-        saveToDb={saveToDb}
-        error={errors?.person?.name}
-      />
-      <TextField
-        key={`${row.id}adresszusatz`}
-        name="adresszusatz"
-        label="Adress-Zusatz"
-        value={row.adresszusatz}
-        saveToDb={saveToDb}
-        error={errors?.person?.adresszusatz}
-      />
-      <TextField
-        key={`${row.id}strasse`}
-        name="strasse"
-        label="Strasse"
-        value={row.strasse}
-        saveToDb={saveToDb}
-        error={errors?.person?.strasse}
-      />
-      <TextField
-        key={`${row.id}plz`}
-        name="plz"
-        label="PLZ"
-        value={row.plz}
-        saveToDb={saveToDb}
-        error={errors?.person?.plz}
-        type="number"
-      />
-      <TextField
-        key={`${row.id}ort`}
-        name="ort"
-        label="Ort"
-        value={row.ort}
-        saveToDb={saveToDb}
-        error={errors?.person?.ort}
-      />
-      <TextField
-        key={`${row.id}telefon_privat`}
-        name="telefon_privat"
-        label="Telefon privat"
-        value={row.telefon_privat}
-        saveToDb={saveToDb}
-        error={errors?.person?.telefon_privat}
-      />
-      <TextField
-        key={`${row.id}telefon_geschaeft`}
-        name="telefon_geschaeft"
-        label="Telefon Geschäft"
-        value={row.telefon_geschaeft}
-        saveToDb={saveToDb}
-        error={errors?.person?.telefon_geschaeft}
-      />
-      <TextField
-        key={`${row.id}telefon_mobile`}
-        name="telefon_mobile"
-        label="Telefon mobile"
-        value={row.telefon_mobile}
-        saveToDb={saveToDb}
-        error={errors?.person?.telefon_mobile}
-      />
-      <TextField
-        key={`${row.id}email`}
-        name="email"
-        label="Email"
-        value={row.email}
-        saveToDb={saveToDb}
-        error={errors?.person?.email}
-      />
-      {showFilter ? (
-        <Checkbox3States
-          key={`${row.id}kein_email`}
-          label="Kein Email"
-          name="kein_email"
-          value={row.kein_email}
+    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <Container>
+        {(activeConflict || showHistory) && (
+          <CaseConflictTitle>
+            Aktuelle Version<Rev>{row._rev}</Rev>
+          </CaseConflictTitle>
+        )}
+        {showDeleted && (
+          <>
+            {showFilter ? (
+              <Checkbox3States
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.person?._deleted}
+              />
+            ) : (
+              <Checkbox2States
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.person?._deleted}
+              />
+            )}
+          </>
+        )}
+        <Select
+          key={`${row.id}${row.user_role}user_role`}
+          name="user_role"
+          value={row.user_role}
+          field="user_role"
+          label="Rolle"
+          helperText={userRole?.comment || ' '}
+          options={userRoleWerte}
           saveToDb={saveToDb}
-          error={errors?.person?.kein_email}
+          error={errors?.person?.user_role}
         />
-      ) : (
-        <Checkbox2States
-          key={`${row.id}kein_email`}
-          label="Kein Email"
-          name="kein_email"
-          value={row.kein_email}
+        <TextField
+          key={`${row.id}nr`}
+          name="nr"
+          label="Nr"
+          value={row.nr}
           saveToDb={saveToDb}
-          error={errors?.person?.kein_email}
+          error={errors?.person?.nr}
         />
-      )}
-      {showFilter ? (
-        <Checkbox3States
-          key={`${row.id}kommerziell`}
-          label="Kommerziell"
-          name="kommerziell"
-          value={row.kommerziell}
+        <TextField
+          key={`${row.id}vorname`}
+          name="vorname"
+          label="Vorname"
+          value={row.vorname}
           saveToDb={saveToDb}
-          error={errors?.person?.kommerziell}
+          error={errors?.person?.vorname}
         />
-      ) : (
-        <Checkbox2States
-          key={`${row.id}kommerziell`}
-          label="Kommerziell"
-          name="kommerziell"
-          value={row.kommerziell}
+        <TextField
+          key={`${row.id}name`}
+          name="name"
+          label="Nachname"
+          value={row.name}
           saveToDb={saveToDb}
-          error={errors?.person?.kommerziell}
+          error={errors?.person?.name}
         />
-      )}
-      {showFilter ? (
-        <Checkbox3States
-          key={`${row.id}info`}
-          label="Info"
-          name="info"
-          value={row.info}
+        <TextField
+          key={`${row.id}adresszusatz`}
+          name="adresszusatz"
+          label="Adress-Zusatz"
+          value={row.adresszusatz}
           saveToDb={saveToDb}
-          error={errors?.person?.info}
+          error={errors?.person?.adresszusatz}
         />
-      ) : (
-        <Checkbox2States
-          key={`${row.id}info`}
-          label="Info"
-          name="info"
-          value={row.info}
+        <TextField
+          key={`${row.id}strasse`}
+          name="strasse"
+          label="Strasse"
+          value={row.strasse}
           saveToDb={saveToDb}
-          error={errors?.person?.info}
+          error={errors?.person?.strasse}
         />
-      )}
-      {showFilter ? (
-        <Checkbox3States
-          key={`${row.id}aktiv`}
-          label="aktiv"
-          name="aktiv"
-          value={row.aktiv}
+        <TextField
+          key={`${row.id}plz`}
+          name="plz"
+          label="PLZ"
+          value={row.plz}
           saveToDb={saveToDb}
-          error={errors?.person?.aktiv}
+          error={errors?.person?.plz}
+          type="number"
         />
-      ) : (
-        <Checkbox2States
-          key={`${row.id}aktiv`}
-          label="aktiv"
-          name="aktiv"
-          value={row.aktiv}
+        <TextField
+          key={`${row.id}ort`}
+          name="ort"
+          label="Ort"
+          value={row.ort}
           saveToDb={saveToDb}
-          error={errors?.person?.aktiv}
+          error={errors?.person?.ort}
         />
-      )}
-      <TextField
-        key={`${row.id}bemerkungen`}
-        name="bemerkungen"
-        label="Bemerkungen"
-        value={row.bemerkungen}
-        saveToDb={saveToDb}
-        error={errors?.person?.bemerkungen}
-        multiLine
-      />
-      {online && !showFilter && row._conflicts && row._conflicts.map && (
-        <ConflictList
-          conflicts={row._conflicts}
-          activeConflict={activeConflict}
-          setActiveConflict={setActiveConflict}
+        <TextField
+          key={`${row.id}telefon_privat`}
+          name="telefon_privat"
+          label="Telefon privat"
+          value={row.telefon_privat}
+          saveToDb={saveToDb}
+          error={errors?.person?.telefon_privat}
         />
-      )}
-      {row.user_role === 'artverantwortlich' && <Arten personId={row.id} />}
-      {['gaertner', 'artverantwortlich'].includes(row.user_role) && (
-        <Gaerten personId={row.id} />
-      )}
-      {!showFilter && row.id && <Files parentId={row.id} parent="person" />}
-    </Container>
+        <TextField
+          key={`${row.id}telefon_geschaeft`}
+          name="telefon_geschaeft"
+          label="Telefon Geschäft"
+          value={row.telefon_geschaeft}
+          saveToDb={saveToDb}
+          error={errors?.person?.telefon_geschaeft}
+        />
+        <TextField
+          key={`${row.id}telefon_mobile`}
+          name="telefon_mobile"
+          label="Telefon mobile"
+          value={row.telefon_mobile}
+          saveToDb={saveToDb}
+          error={errors?.person?.telefon_mobile}
+        />
+        <TextField
+          key={`${row.id}email`}
+          name="email"
+          label="Email"
+          value={row.email}
+          saveToDb={saveToDb}
+          error={errors?.person?.email}
+        />
+        {showFilter ? (
+          <Checkbox3States
+            key={`${row.id}kein_email`}
+            label="Kein Email"
+            name="kein_email"
+            value={row.kein_email}
+            saveToDb={saveToDb}
+            error={errors?.person?.kein_email}
+          />
+        ) : (
+          <Checkbox2States
+            key={`${row.id}kein_email`}
+            label="Kein Email"
+            name="kein_email"
+            value={row.kein_email}
+            saveToDb={saveToDb}
+            error={errors?.person?.kein_email}
+          />
+        )}
+        {showFilter ? (
+          <Checkbox3States
+            key={`${row.id}kommerziell`}
+            label="Kommerziell"
+            name="kommerziell"
+            value={row.kommerziell}
+            saveToDb={saveToDb}
+            error={errors?.person?.kommerziell}
+          />
+        ) : (
+          <Checkbox2States
+            key={`${row.id}kommerziell`}
+            label="Kommerziell"
+            name="kommerziell"
+            value={row.kommerziell}
+            saveToDb={saveToDb}
+            error={errors?.person?.kommerziell}
+          />
+        )}
+        {showFilter ? (
+          <Checkbox3States
+            key={`${row.id}info`}
+            label="Info"
+            name="info"
+            value={row.info}
+            saveToDb={saveToDb}
+            error={errors?.person?.info}
+          />
+        ) : (
+          <Checkbox2States
+            key={`${row.id}info`}
+            label="Info"
+            name="info"
+            value={row.info}
+            saveToDb={saveToDb}
+            error={errors?.person?.info}
+          />
+        )}
+        {showFilter ? (
+          <Checkbox3States
+            key={`${row.id}aktiv`}
+            label="aktiv"
+            name="aktiv"
+            value={row.aktiv}
+            saveToDb={saveToDb}
+            error={errors?.person?.aktiv}
+          />
+        ) : (
+          <Checkbox2States
+            key={`${row.id}aktiv`}
+            label="aktiv"
+            name="aktiv"
+            value={row.aktiv}
+            saveToDb={saveToDb}
+            error={errors?.person?.aktiv}
+          />
+        )}
+        <TextField
+          key={`${row.id}bemerkungen`}
+          name="bemerkungen"
+          label="Bemerkungen"
+          value={row.bemerkungen}
+          saveToDb={saveToDb}
+          error={errors?.person?.bemerkungen}
+          multiLine
+        />
+        {online && !showFilter && row._conflicts && row._conflicts.map && (
+          <ConflictList
+            conflicts={row._conflicts}
+            activeConflict={activeConflict}
+            setActiveConflict={setActiveConflict}
+          />
+        )}
+        {row.user_role === 'artverantwortlich' && <Arten personId={row.id} />}
+        {['gaertner', 'artverantwortlich'].includes(row.user_role) && (
+          <Gaerten personId={row.id} />
+        )}
+        {!showFilter && row.id && <Files parentId={row.id} parent="person" />}
+      </Container>
+    </SimpleBar>
   )
 }
 

@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
+import SimpleBar from 'simplebar-react'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -24,7 +25,6 @@ const constants = getConstants()
 
 const FieldsContainer = styled.div`
   padding: 10px;
-  overflow: auto !important;
   height: 100%;
 `
 const FieldRow = styled.div`
@@ -160,180 +160,182 @@ const SammlungForm = ({
 
   return (
     <ErrorBoundary>
-      <FieldsContainer>
-        {(activeConflict || showHistory) && (
-          <CaseConflictTitle>
-            Aktuelle Version<Rev>{row._rev}</Rev>
-          </CaseConflictTitle>
-        )}
-        {showDeleted && (
-          <>
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+        <FieldsContainer>
+          {(activeConflict || showHistory) && (
+            <CaseConflictTitle>
+              Aktuelle Version<Rev>{row._rev}</Rev>
+            </CaseConflictTitle>
+          )}
+          {showDeleted && (
+            <>
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.sammlung?._deleted}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.sammlung?._deleted}
+                />
+              )}
+            </>
+          )}
+          <TextField
+            key={`${row.id}nr`}
+            name="nr"
+            label="Nr."
+            value={row.nr}
+            saveToDb={saveToDb}
+            error={errors?.sammlung?.nr}
+            type="text"
+          />
+          <Select
+            key={`${row.id}${row.art_id}art_id`}
+            name="art_id"
+            value={row.art_id}
+            field="art_id"
+            label="Art"
+            options={artWerte}
+            saveToDb={saveToDb}
+            error={errors?.sammlung?.art_id}
+          />
+          <Select
+            key={`${row.id}${row.herkunft_id}herkunft_id`}
+            name="herkunft_id"
+            value={row.herkunft_id}
+            field="herkunft_id"
+            label="Herkunft"
+            options={herkunftWerte}
+            saveToDb={saveToDb}
+            error={errors?.sammlung?.herkunft_id}
+          />
+          <Select
+            key={`${row.id}${row.person_id}person_id`}
+            name="person_id"
+            value={row.person_id}
+            field="person_id"
+            label="Person"
+            options={personWerte}
+            saveToDb={saveToDb}
+            error={errors?.sammlung?.person_id}
+          />
+          <Date
+            key={`${row.id}datum`}
+            name="datum"
+            label="Datum"
+            value={row.datum}
+            saveToDb={saveToDb}
+            error={errors?.sammlung?.datum}
+          />
+          <TextField
+            key={`${row.id}anzahl_pflanzen`}
+            name="anzahl_pflanzen"
+            label="Anzahl Pflanzen"
+            value={row.anzahl_pflanzen}
+            saveToDb={saveToDb}
+            error={errors?.sammlung?.anzahl_pflanzen}
+            type="number"
+          />
+          <FieldRow>
+            <TextField
+              key={`${row.id}gramm_samen`}
+              name="gramm_samen"
+              label="Gramm Samen"
+              value={row.gramm_samen}
+              saveToDb={saveToDb}
+              error={errors?.sammlung?.gramm_samen}
+              type="number"
+            />
+            <TextField
+              key={`${row.id}andere_menge`}
+              name="andere_menge"
+              label={`Andere Menge (z.B. "3 Zwiebeln")`}
+              value={row.andere_menge}
+              saveToDb={saveToDb}
+              error={errors?.sammlung?.andere_menge}
+              type="text"
+            />
+          </FieldRow>
+          <FieldRow>
+            <TextField
+              key={`${row.id}von_anzahl_individuen`}
+              name="von_anzahl_individuen"
+              label="von Anzahl Individuen"
+              value={row.von_anzahl_individuen}
+              saveToDb={saveToDb}
+              error={errors?.sammlung?.von_anzahl_individuen}
+              type="number"
+            />
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openGenVielfaldDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
+          </FieldRow>
+          {!showFilter && <Coordinates row={row} saveToDb={saveToDb} />}
+          <FieldRow>
             {showFilter ? (
               <Checkbox3States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
+                key={`${row.id}geplant`}
+                label="Geplant"
+                name="geplant"
+                value={row.geplant}
                 saveToDb={saveToDb}
-                error={errors?.sammlung?._deleted}
+                error={errors?.sammlung?.geplant}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
+                key={`${row.id}geplant`}
+                label="Geplant"
+                name="geplant"
+                value={row.geplant}
                 saveToDb={saveToDb}
-                error={errors?.sammlung?._deleted}
+                error={errors?.sammlung?.geplant}
               />
             )}
-          </>
-        )}
-        <TextField
-          key={`${row.id}nr`}
-          name="nr"
-          label="Nr."
-          value={row.nr}
-          saveToDb={saveToDb}
-          error={errors?.sammlung?.nr}
-          type="text"
-        />
-        <Select
-          key={`${row.id}${row.art_id}art_id`}
-          name="art_id"
-          value={row.art_id}
-          field="art_id"
-          label="Art"
-          options={artWerte}
-          saveToDb={saveToDb}
-          error={errors?.sammlung?.art_id}
-        />
-        <Select
-          key={`${row.id}${row.herkunft_id}herkunft_id`}
-          name="herkunft_id"
-          value={row.herkunft_id}
-          field="herkunft_id"
-          label="Herkunft"
-          options={herkunftWerte}
-          saveToDb={saveToDb}
-          error={errors?.sammlung?.herkunft_id}
-        />
-        <Select
-          key={`${row.id}${row.person_id}person_id`}
-          name="person_id"
-          value={row.person_id}
-          field="person_id"
-          label="Person"
-          options={personWerte}
-          saveToDb={saveToDb}
-          error={errors?.sammlung?.person_id}
-        />
-        <Date
-          key={`${row.id}datum`}
-          name="datum"
-          label="Datum"
-          value={row.datum}
-          saveToDb={saveToDb}
-          error={errors?.sammlung?.datum}
-        />
-        <TextField
-          key={`${row.id}anzahl_pflanzen`}
-          name="anzahl_pflanzen"
-          label="Anzahl Pflanzen"
-          value={row.anzahl_pflanzen}
-          saveToDb={saveToDb}
-          error={errors?.sammlung?.anzahl_pflanzen}
-          type="number"
-        />
-        <FieldRow>
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openPlanenDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
+          </FieldRow>
           <TextField
-            key={`${row.id}gramm_samen`}
-            name="gramm_samen"
-            label="Gramm Samen"
-            value={row.gramm_samen}
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
             saveToDb={saveToDb}
-            error={errors?.sammlung?.gramm_samen}
-            type="number"
+            error={errors?.sammlung?.bemerkungen}
+            multiLine
           />
-          <TextField
-            key={`${row.id}andere_menge`}
-            name="andere_menge"
-            label={`Andere Menge (z.B. "3 Zwiebeln")`}
-            value={row.andere_menge}
-            saveToDb={saveToDb}
-            error={errors?.sammlung?.andere_menge}
-            type="text"
-          />
-        </FieldRow>
-        <FieldRow>
-          <TextField
-            key={`${row.id}von_anzahl_individuen`}
-            name="von_anzahl_individuen"
-            label="von Anzahl Individuen"
-            value={row.von_anzahl_individuen}
-            saveToDb={saveToDb}
-            error={errors?.sammlung?.von_anzahl_individuen}
-            type="number"
-          />
-          <div>
-            <IconButton
-              aria-label="Anleitung öffnen"
-              title="Anleitung öffnen"
-              onClick={openGenVielfaldDocs}
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
-          </div>
-        </FieldRow>
-        {!showFilter && <Coordinates row={row} saveToDb={saveToDb} />}
-        <FieldRow>
-          {showFilter ? (
-            <Checkbox3States
-              key={`${row.id}geplant`}
-              label="Geplant"
-              name="geplant"
-              value={row.geplant}
-              saveToDb={saveToDb}
-              error={errors?.sammlung?.geplant}
-            />
-          ) : (
-            <Checkbox2States
-              key={`${row.id}geplant`}
-              label="Geplant"
-              name="geplant"
-              value={row.geplant}
-              saveToDb={saveToDb}
-              error={errors?.sammlung?.geplant}
+          {online && !showFilter && row._conflicts && row._conflicts.map && (
+            <ConflictList
+              conflicts={row._conflicts}
+              activeConflict={activeConflict}
+              setActiveConflict={setActiveConflict}
             />
           )}
-          <div>
-            <IconButton
-              aria-label="Anleitung öffnen"
-              title="Anleitung öffnen"
-              onClick={openPlanenDocs}
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
-          </div>
-        </FieldRow>
-        <TextField
-          key={`${row.id}bemerkungen`}
-          name="bemerkungen"
-          label="Bemerkungen"
-          value={row.bemerkungen}
-          saveToDb={saveToDb}
-          error={errors?.sammlung?.bemerkungen}
-          multiLine
-        />
-        {online && !showFilter && row._conflicts && row._conflicts.map && (
-          <ConflictList
-            conflicts={row._conflicts}
-            activeConflict={activeConflict}
-            setActiveConflict={setActiveConflict}
-          />
-        )}
-        {!showFilter && <Files parentId={row.id} parent="sammlung" />}
-      </FieldsContainer>
+          {!showFilter && <Files parentId={row.id} parent="sammlung" />}
+        </FieldsContainer>
+      </SimpleBar>
     </ErrorBoundary>
   )
 }
