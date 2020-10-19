@@ -9,6 +9,15 @@ import SimpleBar from 'simplebar-react'
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 
+const StyledSimpleBar = styled(SimpleBar)`
+  max-height: calc(100vh - 64px);
+  height: calc(100vh - 64px);
+  .simplebar-scrollbar:before {
+    /*background: #4a148c !important;
+    background: #003e0c !important;*/
+    background: grey !important;
+  }
+`
 const ScrollContainer = styled.div`
   height: calc(100vh - 64px);
 `
@@ -100,7 +109,7 @@ const bgImageStyle = {
 const Index = ({ data }) => (
   <ErrorBoundary>
     <Layout>
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <StyledSimpleBar>
         <ScrollContainer>
           <Container>
             <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
@@ -209,7 +218,7 @@ const Index = ({ data }) => (
             </CardContainer>
           </Container>
         </ScrollContainer>
-      </SimpleBar>
+      </StyledSimpleBar>
     </Layout>
   </ErrorBoundary>
 )

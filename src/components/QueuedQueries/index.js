@@ -27,6 +27,10 @@ const Container = styled.div``
 const OuterContainer = styled.div`
   height: calc(100vh - 64px - 15px - 23px - 23px);
   overflow-x: hidden;
+  /* hide native scrollbar */
+  .simplebar-content-wrapper::-webkit-scrollbar {
+    display: none;
+  }
 `
 const QueriesContainer = styled.div`
   padding: 0 15px;
@@ -36,6 +40,7 @@ const QueriesContainer = styled.div`
   > * {
     position: relative;
   }
+  overflow: hidden;
 `
 const Heading = styled.div`
   font-weight: 600;
@@ -67,59 +72,57 @@ const QueuedQueries = () => {
 
   if (!queuedQueries.size) {
     return (
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-        <Container>
-          <TitleRow>
-            <Title>Ausstehende Operationen</Title>
-            <div>
-              <IconButton
-                aria-label={`Dokumentation zu "offline arbeiten" lesen`}
-                title={`Dokumentation zu "offline arbeiten" lesen`}
-                onClick={openDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-              <CloseIcon
-                title="schliessen"
-                aria-label="schliessen"
-                onClick={onClickCloseIcon}
-              >
-                <FaTimes />
-              </CloseIcon>
-            </div>
-          </TitleRow>
-          <NoOpsContainer>
-            Es gibt momentan keine pendenten Operationen
-          </NoOpsContainer>
-        </Container>
-      </SimpleBar>
+      <Container>
+        <TitleRow>
+          <Title>Ausstehende Operationen</Title>
+          <div>
+            <IconButton
+              aria-label={`Dokumentation zu "offline arbeiten" lesen`}
+              title={`Dokumentation zu "offline arbeiten" lesen`}
+              onClick={openDocs}
+            >
+              <IoMdInformationCircleOutline />
+            </IconButton>
+            <CloseIcon
+              title="schliessen"
+              aria-label="schliessen"
+              onClick={onClickCloseIcon}
+            >
+              <FaTimes />
+            </CloseIcon>
+          </div>
+        </TitleRow>
+        <NoOpsContainer>
+          Es gibt momentan keine pendenten Operationen
+        </NoOpsContainer>
+      </Container>
     )
   }
 
   return (
     <ErrorBoundary>
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-        <Container>
-          <TitleRow>
-            <Title>Ausstehende Operationen:</Title>
-            <div>
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-              <CloseIcon
-                title="schliessen"
-                aria-label="schliessen"
-                onClick={onClickCloseIcon}
-              >
-                <FaTimes />
-              </CloseIcon>
-            </div>
-          </TitleRow>
-          <OuterContainer>
+      <Container>
+        <TitleRow>
+          <Title>Ausstehende Operationen:</Title>
+          <div>
+            <IconButton
+              aria-label="Anleitung öffnen"
+              title="Anleitung öffnen"
+              onClick={openDocs}
+            >
+              <IoMdInformationCircleOutline />
+            </IconButton>
+            <CloseIcon
+              title="schliessen"
+              aria-label="schliessen"
+              onClick={onClickCloseIcon}
+            >
+              <FaTimes />
+            </CloseIcon>
+          </div>
+        </TitleRow>
+        <OuterContainer>
+          <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
             <QueriesContainer>
               <Heading>Zeit</Heading>
               <Heading>Tabelle</Heading>
@@ -132,9 +135,9 @@ const QueuedQueries = () => {
                 <QueuedQuery key={qq.id} qq={qq} index={i} />
               ))}
             </QueriesContainer>
-          </OuterContainer>
-        </Container>
-      </SimpleBar>
+          </SimpleBar>
+        </OuterContainer>
+      </Container>
     </ErrorBoundary>
   )
 }

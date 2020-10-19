@@ -11,7 +11,9 @@ const Container = styled.div`
 `
 
 const ArticleList = ({ items }) => (
-  <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+  <SimpleBar
+    style={{ maxHeight: 'calc(100vh - 64px)', height: 'calc(100vh - 64px)' }}
+  >
     <Container>
       <List component="nav">
         {items.map(({ node }) => (
