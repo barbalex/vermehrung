@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import SimpleBar from 'simplebar-react'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -21,7 +22,6 @@ const constants = getConstants()
 
 const FieldsContainer = styled.div`
   padding: 10px;
-  overflow: auto !important;
   height: 100%;
 `
 const FieldRow = styled.div`
@@ -150,127 +150,129 @@ const EventForm = ({
 
   return (
     <ErrorBoundary>
-      <FieldsContainer>
-        {(activeConflict || showHistory) && (
-          <CaseConflictTitle>
-            Aktuelle Version<Rev>{row._rev}</Rev>
-          </CaseConflictTitle>
-        )}
-        {showDeleted && (
-          <>
-            {showFilter ? (
-              <Checkbox3States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors?.event?._deleted}
-              />
-            ) : (
-              <Checkbox2States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors?.event?._deleted}
-              />
-            )}
-          </>
-        )}
-        <Select
-          key={`${row.id}${row.kultur_id}kultur_id`}
-          name="kultur_id"
-          value={row.kultur_id}
-          field="kultur_id"
-          label="Kultur"
-          options={kulturWerte}
-          saveToDb={saveToDb}
-          error={errors?.event?.kultur_id}
-        />
-        {((tk && ev_teilkultur_id) || showFilter) && (
-          <SelectCreatable
-            key={`${row.id}${row.teilkultur_id}teilkultur_id`}
-            row={row}
-            field="teilkultur_id"
-            label="Teilkultur"
-            options={teilkulturWerte}
-            error={errors?.event?.teilkultur_id}
-            onCreateNew={onCreateNewTeilkultur}
-          />
-        )}
-        <TextField
-          key={`${row.id}beschreibung`}
-          name="beschreibung"
-          label="Beschreibung"
-          value={row.beschreibung}
-          saveToDb={saveToDb}
-          error={errors?.event?.beschreibung}
-          multiline
-        />
-        {(ev_person_id || showFilter) && (
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+        <FieldsContainer>
+          {(activeConflict || showHistory) && (
+            <CaseConflictTitle>
+              Aktuelle Version<Rev>{row._rev}</Rev>
+            </CaseConflictTitle>
+          )}
+          {showDeleted && (
+            <>
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.event?._deleted}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.event?._deleted}
+                />
+              )}
+            </>
+          )}
           <Select
-            key={`${row.id}${row.person_id}person_id`}
-            name="person_id"
-            value={row.person_id}
-            field="person_id"
-            label="Wer"
-            options={personWerte}
+            key={`${row.id}${row.kultur_id}kultur_id`}
+            name="kultur_id"
+            value={row.kultur_id}
+            field="kultur_id"
+            label="Kultur"
+            options={kulturWerte}
             saveToDb={saveToDb}
-            error={errors?.event?.person_id}
+            error={errors?.event?.kultur_id}
           />
-        )}
-        {(ev_datum || showFilter) && (
-          <Date
-            key={`${row.id}datum`}
-            name="datum"
-            label="Datum"
-            value={row.datum}
+          {((tk && ev_teilkultur_id) || showFilter) && (
+            <SelectCreatable
+              key={`${row.id}${row.teilkultur_id}teilkultur_id`}
+              row={row}
+              field="teilkultur_id"
+              label="Teilkultur"
+              options={teilkulturWerte}
+              error={errors?.event?.teilkultur_id}
+              onCreateNew={onCreateNewTeilkultur}
+            />
+          )}
+          <TextField
+            key={`${row.id}beschreibung`}
+            name="beschreibung"
+            label="Beschreibung"
+            value={row.beschreibung}
             saveToDb={saveToDb}
-            error={errors?.event?.datum}
+            error={errors?.event?.beschreibung}
+            multiline
           />
-        )}
-        {(ev_geplant || showFilter) && (
-          <FieldRow>
-            {showFilter ? (
-              <Checkbox3States
-                key={`${row.id}geplant`}
-                label="geplant"
-                name="geplant"
-                value={row.geplant}
-                saveToDb={saveToDb}
-                error={errors?.event?.geplant}
-              />
-            ) : (
-              <Checkbox2States
-                key={`${row.id}geplant`}
-                label="geplant"
-                name="geplant"
-                value={row.geplant}
-                saveToDb={saveToDb}
-                error={errors?.event?.geplant}
-              />
-            )}
-            <div>
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openPlanenDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-            </div>
-          </FieldRow>
-        )}
-        {online && !showFilter && row._conflicts && row._conflicts.map && (
-          <ConflictList
-            conflicts={row._conflicts}
-            activeConflict={activeConflict}
-            setActiveConflict={setActiveConflict}
-          />
-        )}
-      </FieldsContainer>
+          {(ev_person_id || showFilter) && (
+            <Select
+              key={`${row.id}${row.person_id}person_id`}
+              name="person_id"
+              value={row.person_id}
+              field="person_id"
+              label="Wer"
+              options={personWerte}
+              saveToDb={saveToDb}
+              error={errors?.event?.person_id}
+            />
+          )}
+          {(ev_datum || showFilter) && (
+            <Date
+              key={`${row.id}datum`}
+              name="datum"
+              label="Datum"
+              value={row.datum}
+              saveToDb={saveToDb}
+              error={errors?.event?.datum}
+            />
+          )}
+          {(ev_geplant || showFilter) && (
+            <FieldRow>
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}geplant`}
+                  label="geplant"
+                  name="geplant"
+                  value={row.geplant}
+                  saveToDb={saveToDb}
+                  error={errors?.event?.geplant}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}geplant`}
+                  label="geplant"
+                  name="geplant"
+                  value={row.geplant}
+                  saveToDb={saveToDb}
+                  error={errors?.event?.geplant}
+                />
+              )}
+              <div>
+                <IconButton
+                  aria-label="Anleitung öffnen"
+                  title="Anleitung öffnen"
+                  onClick={openPlanenDocs}
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
+              </div>
+            </FieldRow>
+          )}
+          {online && !showFilter && row._conflicts && row._conflicts.map && (
+            <ConflictList
+              conflicts={row._conflicts}
+              activeConflict={activeConflict}
+              setActiveConflict={setActiveConflict}
+            />
+          )}
+        </FieldsContainer>
+      </SimpleBar>
     </ErrorBoundary>
   )
 }
