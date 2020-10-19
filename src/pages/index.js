@@ -4,13 +4,13 @@ import MaterialCard from '@material-ui/core/Card'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 import Img from 'gatsby-image'
+import SimpleBar from 'simplebar-react'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const ScrollContainer = styled.div`
   height: calc(100vh - 64px);
-  overflow-y: auto;
 `
 const Container = styled.div`
   padding: 15px;
@@ -100,110 +100,116 @@ const bgImageStyle = {
 const Index = ({ data }) => (
   <ErrorBoundary>
     <Layout>
-      <ScrollContainer>
-        <Container>
-          <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
-          <PageTitle align="center" variant="h6" color="inherit">
-            Bedrohte Pflanzen vermehren
-          </PageTitle>
-          <CardContainer>
-            <Card>
-              <CardTitle>Arten</CardTitle>
-              Vom Aussterben bedrohte Pflanzen-Arten werden gesammelt, vermehrt
-              und wieder ausgesetzt.
-            </Card>
-            <Card>
-              <CardTitle>Herkünfte</CardTitle>
-              Hier gibt es noch ursprüngliche Bestände der Arten.
-            </Card>
-            <Card>
-              <CardTitle>Sammlungen</CardTitle>
-              ...beschreiben das Sammeln an Herkunfts-Orten.
-            </Card>
-            <Card>
-              <CardTitle>Gärten</CardTitle>
-              In Gärten und Gärtnereien werden die Arten in Kultur vermehrt und
-              auf das Aussetzen vorbereitet.
-            </Card>
-            <Card>
-              <CardTitle>Kulturen</CardTitle>
-              Pflanzen einer Art und einer Herkunft in einem Garten bilden eine
-              Kultur.
-            </Card>
-            <Card>
-              <CardTitle>Teil-Kulturen</CardTitle>
-              {`Gärtnereien organisieren ihre Kulturen oft in Untereinheiten, wie zum Beispiel: "Beete", "Kästen", "Reihen".`}
-            </Card>
-            <Card>
-              <CardTitle>Lieferungen</CardTitle>
-              <p>Sammlungen werden an Kulturen geliefert.</p>
-              <p>
-                Aus Kulturen werden Pflanzen an andere Kulturen geliefert. Oder
-                in geeigneten Lebensräumen ausgesetzt.
-              </p>
-            </Card>
-            <Card>
-              <CardTitle>Zählungen</CardTitle>
-              <p>
-                Regelmässig wird der Bestand der Kulturen erfasst und die
-                Vermehrung geplant.
-              </p>
-              <p>So können Sammlungen und Aussetzungen geplant werden.</p>
-            </Card>
-            <Card>
-              <CardTitle>Events und Aufgaben</CardTitle>
-              ...erleichtern Verwaltung und Dokumentation des Projekts.
-            </Card>
-            <Card>
-              <CardTitle>Personen</CardTitle>
-              Die am Projekt beteiligten. Zum Beispiel Freiwillige, die in ihren
-              Gärten Kulturen pflegen.
-            </Card>
-            <Card>
-              <CardTitle>Wer organisiert das Projekt?</CardTitle>
-              <a href="//toposmm.ch" target="_blank" rel="noopener noreferrer">
-                Topos
-              </a>
-              &nbsp;im Auftrag der{' '}
-              <a
-                href="//aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Fachstelle Naturschutz des Kantons Zürich
-              </a>
-              .
-            </Card>
-            <Card>
-              <CardTitle>Interessiert?</CardTitle>
-              <p>
-                Sie haben einen Garten und möchten bedrohte Pflanzen vermehren?
-                Fragen Sie&nbsp;
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+        <ScrollContainer>
+          <Container>
+            <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
+            <PageTitle align="center" variant="h6" color="inherit">
+              Bedrohte Pflanzen vermehren
+            </PageTitle>
+            <CardContainer>
+              <Card>
+                <CardTitle>Arten</CardTitle>
+                Vom Aussterben bedrohte Pflanzen-Arten werden gesammelt,
+                vermehrt und wieder ausgesetzt.
+              </Card>
+              <Card>
+                <CardTitle>Herkünfte</CardTitle>
+                Hier gibt es noch ursprüngliche Bestände der Arten.
+              </Card>
+              <Card>
+                <CardTitle>Sammlungen</CardTitle>
+                ...beschreiben das Sammeln an Herkunfts-Orten.
+              </Card>
+              <Card>
+                <CardTitle>Gärten</CardTitle>
+                In Gärten und Gärtnereien werden die Arten in Kultur vermehrt
+                und auf das Aussetzen vorbereitet.
+              </Card>
+              <Card>
+                <CardTitle>Kulturen</CardTitle>
+                Pflanzen einer Art und einer Herkunft in einem Garten bilden
+                eine Kultur.
+              </Card>
+              <Card>
+                <CardTitle>Teil-Kulturen</CardTitle>
+                {`Gärtnereien organisieren ihre Kulturen oft in Untereinheiten, wie zum Beispiel: "Beete", "Kästen", "Reihen".`}
+              </Card>
+              <Card>
+                <CardTitle>Lieferungen</CardTitle>
+                <p>Sammlungen werden an Kulturen geliefert.</p>
+                <p>
+                  Aus Kulturen werden Pflanzen an andere Kulturen geliefert.
+                  Oder in geeigneten Lebensräumen ausgesetzt.
+                </p>
+              </Card>
+              <Card>
+                <CardTitle>Zählungen</CardTitle>
+                <p>
+                  Regelmässig wird der Bestand der Kulturen erfasst und die
+                  Vermehrung geplant.
+                </p>
+                <p>So können Sammlungen und Aussetzungen geplant werden.</p>
+              </Card>
+              <Card>
+                <CardTitle>Events und Aufgaben</CardTitle>
+                ...erleichtern Verwaltung und Dokumentation des Projekts.
+              </Card>
+              <Card>
+                <CardTitle>Personen</CardTitle>
+                Die am Projekt beteiligten. Zum Beispiel Freiwillige, die in
+                ihren Gärten Kulturen pflegen.
+              </Card>
+              <Card>
+                <CardTitle>Wer organisiert das Projekt?</CardTitle>
                 <a
-                  href="//toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
+                  href="//toposmm.ch"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Topos
                 </a>
-                .
-              </p>
-              <p>
-                Sie brauchen ein Werkzeug, um Vermehrungen zu verwalten? Fragen
-                Sie&nbsp;
+                &nbsp;im Auftrag der{' '}
                 <a
-                  href="https://gabriel-software.ch"
+                  href="//aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Gabriel-Software
+                  Fachstelle Naturschutz des Kantons Zürich
                 </a>
                 .
-              </p>
-            </Card>
-          </CardContainer>
-        </Container>
-      </ScrollContainer>
+              </Card>
+              <Card>
+                <CardTitle>Interessiert?</CardTitle>
+                <p>
+                  Sie haben einen Garten und möchten bedrohte Pflanzen
+                  vermehren? Fragen Sie&nbsp;
+                  <a
+                    href="//toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Topos
+                  </a>
+                  .
+                </p>
+                <p>
+                  Sie brauchen ein Werkzeug, um Vermehrungen zu verwalten?
+                  Fragen Sie&nbsp;
+                  <a
+                    href="https://gabriel-software.ch"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Gabriel-Software
+                  </a>
+                  .
+                </p>
+              </Card>
+            </CardContainer>
+          </Container>
+        </ScrollContainer>
+      </SimpleBar>
     </Layout>
   </ErrorBoundary>
 )
