@@ -4,6 +4,7 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { observer } from 'mobx-react-lite'
+import SimpleBar from 'simplebar-react'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import { StoreContext } from '../../models/reactUtils'
@@ -25,7 +26,6 @@ const NoOpsContainer = styled.div`
 const Container = styled.div``
 const OuterContainer = styled.div`
   height: calc(100vh - 64px - 15px - 23px - 23px);
-  overflow-y: auto;
   overflow-x: hidden;
 `
 const QueriesContainer = styled.div`
@@ -67,70 +67,74 @@ const QueuedQueries = () => {
 
   if (!queuedQueries.size) {
     return (
-      <Container>
-        <TitleRow>
-          <Title>Ausstehende Operationen</Title>
-          <div>
-            <IconButton
-              aria-label={`Dokumentation zu "offline arbeiten" lesen`}
-              title={`Dokumentation zu "offline arbeiten" lesen`}
-              onClick={openDocs}
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
-            <CloseIcon
-              title="schliessen"
-              aria-label="schliessen"
-              onClick={onClickCloseIcon}
-            >
-              <FaTimes />
-            </CloseIcon>
-          </div>
-        </TitleRow>
-        <NoOpsContainer>
-          Es gibt momentan keine pendenten Operationen
-        </NoOpsContainer>
-      </Container>
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+        <Container>
+          <TitleRow>
+            <Title>Ausstehende Operationen</Title>
+            <div>
+              <IconButton
+                aria-label={`Dokumentation zu "offline arbeiten" lesen`}
+                title={`Dokumentation zu "offline arbeiten" lesen`}
+                onClick={openDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+              <CloseIcon
+                title="schliessen"
+                aria-label="schliessen"
+                onClick={onClickCloseIcon}
+              >
+                <FaTimes />
+              </CloseIcon>
+            </div>
+          </TitleRow>
+          <NoOpsContainer>
+            Es gibt momentan keine pendenten Operationen
+          </NoOpsContainer>
+        </Container>
+      </SimpleBar>
     )
   }
 
   return (
     <ErrorBoundary>
-      <Container>
-        <TitleRow>
-          <Title>Ausstehende Operationen:</Title>
-          <div>
-            <IconButton
-              aria-label="Anleitung öffnen"
-              title="Anleitung öffnen"
-              onClick={openDocs}
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
-            <CloseIcon
-              title="schliessen"
-              aria-label="schliessen"
-              onClick={onClickCloseIcon}
-            >
-              <FaTimes />
-            </CloseIcon>
-          </div>
-        </TitleRow>
-        <OuterContainer>
-          <QueriesContainer>
-            <Heading>Zeit</Heading>
-            <Heading>Tabelle</Heading>
-            <Heading>Feld / Operation</Heading>
-            <Heading>ID</Heading>
-            <Heading>vorher</Heading>
-            <Heading>nachher</Heading>
-            <RevertHeading>widerrufen</RevertHeading>
-            {[...queuedQueries.values()].reverse().map((qq, i) => (
-              <QueuedQuery key={qq.id} qq={qq} index={i} />
-            ))}
-          </QueriesContainer>
-        </OuterContainer>
-      </Container>
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+        <Container>
+          <TitleRow>
+            <Title>Ausstehende Operationen:</Title>
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+              <CloseIcon
+                title="schliessen"
+                aria-label="schliessen"
+                onClick={onClickCloseIcon}
+              >
+                <FaTimes />
+              </CloseIcon>
+            </div>
+          </TitleRow>
+          <OuterContainer>
+            <QueriesContainer>
+              <Heading>Zeit</Heading>
+              <Heading>Tabelle</Heading>
+              <Heading>Feld / Operation</Heading>
+              <Heading>ID</Heading>
+              <Heading>vorher</Heading>
+              <Heading>nachher</Heading>
+              <RevertHeading>widerrufen</RevertHeading>
+              {[...queuedQueries.values()].reverse().map((qq, i) => (
+                <QueuedQuery key={qq.id} qq={qq} index={i} />
+              ))}
+            </QueriesContainer>
+          </OuterContainer>
+        </Container>
+      </SimpleBar>
     </ErrorBoundary>
   )
 }
