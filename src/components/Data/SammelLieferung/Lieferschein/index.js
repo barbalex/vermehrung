@@ -18,8 +18,8 @@ const Container = styled.div`
   background-color: #f8f8f8;
   font-size: 9pt;
   cursor: default;
-  overflow-y: auto;
-  height: 100vh;
+  overflow: auto;
+  height: calc(100vh - 64px - 48px);
   @media print {
     /* remove grey backgrond set for nice UI */
     background-color: #fff;

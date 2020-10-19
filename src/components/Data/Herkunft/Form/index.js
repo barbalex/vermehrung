@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import SimpleBar from 'simplebar-react'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import TextField from '../../../shared/TextField'
@@ -14,7 +15,6 @@ import exists from '../../../../utils/exists'
 
 const Container = styled.div`
   padding: 10px;
-  overflow: auto !important;
   height: 100%;
 `
 const CaseConflictTitle = styled.h4`
@@ -94,102 +94,104 @@ const Herkunft = ({
   const showDeleted = showFilter || row._deleted
 
   return (
-    <Container>
-      {(activeConflict || showHistory) && (
-        <CaseConflictTitle>
-          Aktuelle Version<Rev>{row._rev}</Rev>
-        </CaseConflictTitle>
-      )}
-      {showDeleted && (
-        <>
-          {showFilter ? (
-            <Checkbox3States
-              key={`${row.id}_deleted`}
-              label="gelöscht"
-              name="_deleted"
-              value={row._deleted}
-              saveToDb={saveToDb}
-              error={errors?.herkunft?._deleted}
-            />
-          ) : (
-            <Checkbox2States
-              key={`${row.id}_deleted`}
-              label="gelöscht"
-              name="_deleted"
-              value={row._deleted}
-              saveToDb={saveToDb}
-              error={errors?.herkunft?._deleted}
-            />
-          )}
-        </>
-      )}
-      <TextField
-        key={`${row.id}nr`}
-        name="nr"
-        label="Nr"
-        value={row.nr}
-        saveToDb={saveToDb}
-        error={errors?.herkunft?.nr}
-      />
-      <TextField
-        key={`${row.id}lokalname`}
-        name="lokalname"
-        label="Lokalname"
-        value={row.lokalname}
-        saveToDb={saveToDb}
-        error={errors?.herkunft?.lokalname}
-      />
-      <TextField
-        key={`${row.id}gemeinde`}
-        name="gemeinde"
-        label="Gemeinde"
-        value={row.gemeinde}
-        saveToDb={saveToDb}
-        error={errors?.herkunft?.gemeinde}
-      />
-      {hk_kanton && (
+    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <Container>
+        {(activeConflict || showHistory) && (
+          <CaseConflictTitle>
+            Aktuelle Version<Rev>{row._rev}</Rev>
+          </CaseConflictTitle>
+        )}
+        {showDeleted && (
+          <>
+            {showFilter ? (
+              <Checkbox3States
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.herkunft?._deleted}
+              />
+            ) : (
+              <Checkbox2States
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.herkunft?._deleted}
+              />
+            )}
+          </>
+        )}
         <TextField
-          key={`${row.id}kanton`}
-          name="kanton"
-          label="Kanton"
-          value={row.kanton}
+          key={`${row.id}nr`}
+          name="nr"
+          label="Nr"
+          value={row.nr}
           saveToDb={saveToDb}
-          error={errors?.herkunft?.kanton}
+          error={errors?.herkunft?.nr}
         />
-      )}
-      {hk_land && (
         <TextField
-          key={`${row.id}land`}
-          name="land"
-          label="Land"
-          value={row.land}
+          key={`${row.id}lokalname`}
+          name="lokalname"
+          label="Lokalname"
+          value={row.lokalname}
           saveToDb={saveToDb}
-          error={errors?.herkunft?.land}
+          error={errors?.herkunft?.lokalname}
         />
-      )}
-      {!showFilter && hk_geom_point && (
-        <Coordinates row={row} saveToDb={saveToDb} />
-      )}
-      {hk_bemerkungen && (
         <TextField
-          key={`${row.id}bemerkungen`}
-          name="bemerkungen"
-          label="Bemerkungen"
-          value={row.bemerkungen}
+          key={`${row.id}gemeinde`}
+          name="gemeinde"
+          label="Gemeinde"
+          value={row.gemeinde}
           saveToDb={saveToDb}
-          error={errors?.herkunft?.bemerkungen}
-          multiLine
+          error={errors?.herkunft?.gemeinde}
         />
-      )}
-      {online && !showFilter && row._conflicts && row._conflicts.map && (
-        <ConflictList
-          conflicts={row._conflicts}
-          activeConflict={activeConflict}
-          setActiveConflict={setActiveConflict}
-        />
-      )}
-      {!showFilter && row.id && <Files parentId={row.id} parent="herkunft" />}
-    </Container>
+        {hk_kanton && (
+          <TextField
+            key={`${row.id}kanton`}
+            name="kanton"
+            label="Kanton"
+            value={row.kanton}
+            saveToDb={saveToDb}
+            error={errors?.herkunft?.kanton}
+          />
+        )}
+        {hk_land && (
+          <TextField
+            key={`${row.id}land`}
+            name="land"
+            label="Land"
+            value={row.land}
+            saveToDb={saveToDb}
+            error={errors?.herkunft?.land}
+          />
+        )}
+        {!showFilter && hk_geom_point && (
+          <Coordinates row={row} saveToDb={saveToDb} />
+        )}
+        {hk_bemerkungen && (
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
+            saveToDb={saveToDb}
+            error={errors?.herkunft?.bemerkungen}
+            multiLine
+          />
+        )}
+        {online && !showFilter && row._conflicts && row._conflicts.map && (
+          <ConflictList
+            conflicts={row._conflicts}
+            activeConflict={activeConflict}
+            setActiveConflict={setActiveConflict}
+          />
+        )}
+        {!showFilter && row.id && <Files parentId={row.id} parent="herkunft" />}
+      </Container>
+    </SimpleBar>
   )
 }
 

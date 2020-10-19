@@ -5,6 +5,7 @@ import uniq from 'lodash/uniq'
 import uniqBy from 'lodash/uniqBy'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
+import SimpleBar from 'simplebar-react'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -25,7 +26,6 @@ const constants = getConstants()
 
 const Container = styled.div`
   padding: 10px;
-  overflow: auto !important;
   height: 100%;
 `
 const FieldRow = styled.div`
@@ -272,174 +272,176 @@ const KulturForm = ({
 
   return (
     <ErrorBoundary>
-      <Container>
-        {(activeConflict || showHistory) && (
-          <CaseConflictTitle>
-            Aktuelle Version<Rev>{row._rev}</Rev>
-          </CaseConflictTitle>
-        )}
-        {showDeleted && (
-          <>
-            {showFilter ? (
-              <Checkbox3States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors.kultur?._deleted}
-              />
-            ) : (
-              <Checkbox2States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors.kultur?._deleted}
-              />
-            )}
-          </>
-        )}
-        <Select
-          key={`${row.id}${art_id}art_id`}
-          name="art_id"
-          value={art_id}
-          field="art_id"
-          label="Art"
-          options={artWerte}
-          saveToDb={saveToDb}
-          error={artError}
-        />
-        <Select
-          key={`${row.id}${herkunft_id}herkunft_id`}
-          name="herkunft_id"
-          value={herkunft_id}
-          field="herkunft_id"
-          label="Herkunft"
-          options={herkunftWerte}
-          saveToDb={saveToDb}
-          error={herkunftError}
-        />
-        <Select
-          key={`${row.id}${row.garten_id}garten_id`}
-          name="garten_id"
-          value={row.garten_id}
-          field="garten_id"
-          label="Garten"
-          options={gartenWerte}
-          saveToDb={saveToDb}
-          error={errors.kultur?.garten_id}
-        />
-        {(ku_zwischenlager || !!row?.zwischenlager) && (
-          <>
-            {showFilter ? (
-              <Checkbox3States
-                key={`${row.id}zwischenlager`}
-                label="Zwischenlager"
-                name="zwischenlager"
-                value={row.zwischenlager}
-                saveToDb={saveToDb}
-                error={zwischenlagerError}
-              />
-            ) : (
-              <Checkbox2States
-                key={`${row.id}zwischenlager`}
-                label="Zwischenlager"
-                name="zwischenlager"
-                value={row.zwischenlager}
-                saveToDb={saveToDb}
-                error={zwischenlagerError}
-              />
-            )}
-          </>
-        )}
-        {(ku_erhaltungskultur || !!row?.erhaltungskultur) && (
-          <>
-            {showFilter ? (
-              <Checkbox3States
-                key={`${row.id}erhaltungskultur`}
-                label="Erhaltungskultur"
-                name="erhaltungskultur"
-                value={row.erhaltungskultur}
-                saveToDb={saveToDb}
-                error={errors.kultur?.erhaltungskultur}
-              />
-            ) : (
-              <Checkbox2States
-                key={`${row.id}erhaltungskultur`}
-                label="Erhaltungskultur"
-                name="erhaltungskultur"
-                value={row.erhaltungskultur}
-                saveToDb={saveToDb}
-                error={errors.kultur?.erhaltungskultur}
-              />
-            )}
-          </>
-        )}
-        <FieldRow>
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+        <Container>
+          {(activeConflict || showHistory) && (
+            <CaseConflictTitle>
+              Aktuelle Version<Rev>{row._rev}</Rev>
+            </CaseConflictTitle>
+          )}
+          {showDeleted && (
+            <>
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors.kultur?._deleted}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors.kultur?._deleted}
+                />
+              )}
+            </>
+          )}
+          <Select
+            key={`${row.id}${art_id}art_id`}
+            name="art_id"
+            value={art_id}
+            field="art_id"
+            label="Art"
+            options={artWerte}
+            saveToDb={saveToDb}
+            error={artError}
+          />
+          <Select
+            key={`${row.id}${herkunft_id}herkunft_id`}
+            name="herkunft_id"
+            value={herkunft_id}
+            field="herkunft_id"
+            label="Herkunft"
+            options={herkunftWerte}
+            saveToDb={saveToDb}
+            error={herkunftError}
+          />
+          <Select
+            key={`${row.id}${row.garten_id}garten_id`}
+            name="garten_id"
+            value={row.garten_id}
+            field="garten_id"
+            label="Garten"
+            options={gartenWerte}
+            saveToDb={saveToDb}
+            error={errors.kultur?.garten_id}
+          />
+          {(ku_zwischenlager || !!row?.zwischenlager) && (
+            <>
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}zwischenlager`}
+                  label="Zwischenlager"
+                  name="zwischenlager"
+                  value={row.zwischenlager}
+                  saveToDb={saveToDb}
+                  error={zwischenlagerError}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}zwischenlager`}
+                  label="Zwischenlager"
+                  name="zwischenlager"
+                  value={row.zwischenlager}
+                  saveToDb={saveToDb}
+                  error={zwischenlagerError}
+                />
+              )}
+            </>
+          )}
+          {(ku_erhaltungskultur || !!row?.erhaltungskultur) && (
+            <>
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}erhaltungskultur`}
+                  label="Erhaltungskultur"
+                  name="erhaltungskultur"
+                  value={row.erhaltungskultur}
+                  saveToDb={saveToDb}
+                  error={errors.kultur?.erhaltungskultur}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}erhaltungskultur`}
+                  label="Erhaltungskultur"
+                  name="erhaltungskultur"
+                  value={row.erhaltungskultur}
+                  saveToDb={saveToDb}
+                  error={errors.kultur?.erhaltungskultur}
+                />
+              )}
+            </>
+          )}
+          <FieldRow>
+            <TextField
+              key={`${row.id}von_anzahl_individuen`}
+              name="von_anzahl_individuen"
+              label="von Anzahl Individuen"
+              value={row.von_anzahl_individuen}
+              saveToDb={saveToDb}
+              error={errors.kultur?.von_anzahl_individuen}
+              type="number"
+            />
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openGenVielfaldDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
+          </FieldRow>
+          {showFilter ? (
+            <Checkbox3States
+              key={`${row.id}aktiv`}
+              label="aktiv"
+              name="aktiv"
+              value={row.aktiv}
+              saveToDb={saveToDb}
+              error={errors.kultur?.aktiv}
+            />
+          ) : (
+            <Checkbox2States
+              key={`${row.id}aktiv`}
+              label="aktiv"
+              name="aktiv"
+              value={row.aktiv}
+              saveToDb={saveToDb}
+              error={errors.kultur?.aktiv}
+            />
+          )}
           <TextField
-            key={`${row.id}von_anzahl_individuen`}
-            name="von_anzahl_individuen"
-            label="von Anzahl Individuen"
-            value={row.von_anzahl_individuen}
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
             saveToDb={saveToDb}
-            error={errors.kultur?.von_anzahl_individuen}
-            type="number"
+            error={errors.kultur?.bemerkungen}
+            multiLine
           />
-          <div>
-            <IconButton
-              aria-label="Anleitung öffnen"
-              title="Anleitung öffnen"
-              onClick={openGenVielfaldDocs}
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
-          </div>
-        </FieldRow>
-        {showFilter ? (
-          <Checkbox3States
-            key={`${row.id}aktiv`}
-            label="aktiv"
-            name="aktiv"
-            value={row.aktiv}
-            saveToDb={saveToDb}
-            error={errors.kultur?.aktiv}
-          />
-        ) : (
-          <Checkbox2States
-            key={`${row.id}aktiv`}
-            label="aktiv"
-            name="aktiv"
-            value={row.aktiv}
-            saveToDb={saveToDb}
-            error={errors.kultur?.aktiv}
-          />
-        )}
-        <TextField
-          key={`${row.id}bemerkungen`}
-          name="bemerkungen"
-          label="Bemerkungen"
-          value={row.bemerkungen}
-          saveToDb={saveToDb}
-          error={errors.kultur?.bemerkungen}
-          multiLine
-        />
-        {online && !showFilter && row._conflicts && row._conflicts.map && (
-          <ConflictList
-            conflicts={row._conflicts}
-            activeConflict={activeConflict}
-            setActiveConflict={setActiveConflict}
-          />
-        )}
-        {!showFilter && row.id && (
-          <>
-            <Timeline row={row} />
-            <QK kultur={row} />
-            <Files parentId={row.id} parent="kultur" />
-          </>
-        )}
-      </Container>
+          {online && !showFilter && row._conflicts && row._conflicts.map && (
+            <ConflictList
+              conflicts={row._conflicts}
+              activeConflict={activeConflict}
+              setActiveConflict={setActiveConflict}
+            />
+          )}
+          {!showFilter && row.id && (
+            <>
+              <Timeline row={row} />
+              <QK kultur={row} />
+              <Files parentId={row.id} parent="kultur" />
+            </>
+          )}
+        </Container>
+      </SimpleBar>
     </ErrorBoundary>
   )
 }
