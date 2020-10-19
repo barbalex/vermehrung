@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import SimpleBar from 'simplebar-react'
+import { withResizeDetector } from 'react-resize-detector'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
@@ -17,9 +19,11 @@ import Personen from './Personen'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 
+const Container = styled.div`
+  height: 100%;
+`
 const FieldsContainer = styled.div`
   padding: 10px;
-  overflow: auto !important;
   height: 100%;
 `
 const CaseConflictTitle = styled.h4`
@@ -33,11 +37,12 @@ const Rev = styled.span`
 `
 
 const ArtForm = ({
-  showFilter,
+  activeConflict,
+  height,
   id,
   row,
-  activeConflict,
   setActiveConflict,
+  showFilter,
   showHistory,
 }) => {
   const store = useContext(StoreContext)
@@ -93,66 +98,70 @@ const ArtForm = ({
 
   return (
     <ErrorBoundary>
-      <FieldsContainer>
-        {(activeConflict || showHistory) && (
-          <CaseConflictTitle>
-            Aktuelle Version<Rev>{row._rev}</Rev>
-          </CaseConflictTitle>
-        )}
-        {showDeleted && (
-          <>
-            {showFilter ? (
-              <Checkbox3States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors?.art?._deleted}
-              />
-            ) : (
-              <Checkbox2States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors?.art?._deleted}
+      <Container>
+        <SimpleBar style={{ maxHeight: height }}>
+          <FieldsContainer>
+            {(activeConflict || showHistory) && (
+              <CaseConflictTitle>
+                Aktuelle Version<Rev>{row._rev}</Rev>
+              </CaseConflictTitle>
+            )}
+            {showDeleted && (
+              <>
+                {showFilter ? (
+                  <Checkbox3States
+                    key={`${row.id}_deleted`}
+                    label="gelöscht"
+                    name="_deleted"
+                    value={row._deleted}
+                    saveToDb={saveToDb}
+                    error={errors?.art?._deleted}
+                  />
+                ) : (
+                  <Checkbox2States
+                    key={`${row.id}_deleted`}
+                    label="gelöscht"
+                    name="_deleted"
+                    value={row._deleted}
+                    saveToDb={saveToDb}
+                    error={errors?.art?._deleted}
+                  />
+                )}
+              </>
+            )}
+            <SelectLoadingOptions
+              key={`${row.id}ae_id`}
+              field="ae_id"
+              valueLabelFunction={artLabelFromArt}
+              valueLabelKey="art"
+              label="Art"
+              row={row}
+              saveToDb={saveToDb}
+              error={errors?.art?.ae_id}
+              modelKey="name"
+              modelFilter={aeArtsFilter}
+            />
+            {online && !showFilter && row._conflicts && row._conflicts.map && (
+              <ConflictList
+                conflicts={row._conflicts}
+                activeConflict={activeConflict}
+                setActiveConflict={setActiveConflict}
               />
             )}
-          </>
-        )}
-        <SelectLoadingOptions
-          key={`${row.id}ae_id`}
-          field="ae_id"
-          valueLabelFunction={artLabelFromArt}
-          valueLabelKey="art"
-          label="Art"
-          row={row}
-          saveToDb={saveToDb}
-          error={errors?.art?.ae_id}
-          modelKey="name"
-          modelFilter={aeArtsFilter}
-        />
-        {online && !showFilter && row._conflicts && row._conflicts.map && (
-          <ConflictList
-            conflicts={row._conflicts}
-            activeConflict={activeConflict}
-            setActiveConflict={setActiveConflict}
-          />
-        )}
-        {!showFilter && (
-          <>
-            <Personen artId={id} />
-            <Timeline artId={id} />
-            <HerkunftTimeline artId={id} />
-            <QK artId={id} />
-            <Files parentId={id} parent="art" />
-          </>
-        )}
-      </FieldsContainer>
+            {!showFilter && (
+              <>
+                <Personen artId={id} />
+                <Timeline artId={id} />
+                <HerkunftTimeline artId={id} />
+                <QK artId={id} />
+                <Files parentId={id} parent="art" />
+              </>
+            )}
+          </FieldsContainer>
+        </SimpleBar>
+      </Container>
     </ErrorBoundary>
   )
 }
 
-export default observer(ArtForm)
+export default withResizeDetector(observer(ArtForm))
