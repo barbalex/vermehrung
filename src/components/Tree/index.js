@@ -56,29 +56,27 @@ const Tree = ({ width, height }) => {
         <Settings />
         {!!width && (
           <SimpleBar style={{ maxHeight: height, height: '100%' }}>
-            {({ scrollableNodeRef, contentNodeRef }) => {
-              return (
-                <StyledList
-                  height={height - 5}
-                  itemCount={nodes.length}
-                  itemSize={singleRowHeight}
-                  width={width}
-                  ref={listRef}
-                  innerRef={contentNodeRef}
-                  outerRef={scrollableNodeRef}
-                >
-                  {({ index, style }) => (
-                    <Row
-                      key={index}
-                      style={style}
-                      index={index}
-                      node={nodes[index]}
-                      nodes={nodes}
-                    />
-                  )}
-                </StyledList>
-              )
-            }}
+            {({ scrollableNodeRef, contentNodeRef }) => (
+              <StyledList
+                height={height - 5}
+                itemCount={nodes.length}
+                itemSize={singleRowHeight}
+                width={width}
+                ref={listRef}
+                innerRef={contentNodeRef}
+                outerRef={scrollableNodeRef}
+              >
+                {({ index, style }) => (
+                  <Row
+                    key={index}
+                    style={style}
+                    index={index}
+                    node={nodes[index]}
+                    nodes={nodes}
+                  />
+                )}
+              </StyledList>
+            )}
           </SimpleBar>
         )}
       </Container>
