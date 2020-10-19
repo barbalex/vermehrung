@@ -7,6 +7,7 @@ import FormTitle from './FormTitle'
 
 const Container = styled.div`
   width: 100%;
+  height: calc(100vh - 64px - 48px);
   ul {
     margin-top: 0;
   }

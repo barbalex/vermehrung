@@ -10,6 +10,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import SimpleBar from 'simplebar-react'
 
 import Lieferung from './Lieferung'
 import { StoreContext } from '../../../../models/reactUtils'
@@ -18,8 +19,12 @@ const Container = styled.div`
   background-color: #f8f8f8;
   font-size: 9pt;
   cursor: default;
-  overflow: auto;
   height: calc(100vh - 64px - 48px);
+  width: 100%;
+  /* hide native scrollbar */
+  .simplebar-content-wrapper::-webkit-scrollbar {
+    display: none;
+  }
   @media print {
     /* remove grey backgrond set for nice UI */
     background-color: #fff;
@@ -45,8 +50,6 @@ const PageContainer = styled.div`
   width: 29.7cm;
   height: 21cm;
   padding: 1.5cm;
-
-  overflow-y: visible;
 
   @media print {
     height: 100%;
@@ -132,47 +135,56 @@ const Lieferschein = ({ row }) => {
 
   return (
     <Container>
-      <PageContainer className="querformat printer-content">
-        {image && <Img fixed={image} />}
-        <Title>Lieferschein</Title>
-        <HeaderRow>
-          <HaederLabel>Projekt:</HaederLabel>
-          <HeaderValue>
-            {
-              'Zwischenvermehrung von seltenen und bedrohten Pflanzenarten im Kanton Zürich'
-            }
-          </HeaderValue>
-        </HeaderRow>
-        <HeaderRow>
-          <HaederLabel>von:</HaederLabel>
-          <HeaderValue>{von}</HeaderValue>
-        </HeaderRow>
-        <HeaderRow>
-          <HaederLabel>an:</HaederLabel>
-          <HeaderValue>{an}</HeaderValue>
-        </HeaderRow>
-        <HeaderRow>
-          <HaederLabel>am:</HaederLabel>
-          <HeaderValue>{am}</HeaderValue>
-        </HeaderRow>
-        <StyledPaper square>
-          <StyledTable size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Art</TableCell>
-                <TableCell>Herkunft</TableCell>
-                <TableCell>Was</TableCell>
-                <TableCell>Bemerkungen</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {lieferungen.map((l) => (
-                <Lieferung key={l.id} lieferung={l} />
-              ))}
-            </TableBody>
-          </StyledTable>
-        </StyledPaper>
-      </PageContainer>
+      <SimpleBar
+        style={{
+          maxHeight: '100%',
+          height: '100%',
+          maxWidth: '100%',
+          width: '100%',
+        }}
+      >
+        <PageContainer className="querformat printer-content">
+          {image && <Img fixed={image} />}
+          <Title>Lieferschein</Title>
+          <HeaderRow>
+            <HaederLabel>Projekt:</HaederLabel>
+            <HeaderValue>
+              {
+                'Zwischenvermehrung von seltenen und bedrohten Pflanzenarten im Kanton Zürich'
+              }
+            </HeaderValue>
+          </HeaderRow>
+          <HeaderRow>
+            <HaederLabel>von:</HaederLabel>
+            <HeaderValue>{von}</HeaderValue>
+          </HeaderRow>
+          <HeaderRow>
+            <HaederLabel>an:</HaederLabel>
+            <HeaderValue>{an}</HeaderValue>
+          </HeaderRow>
+          <HeaderRow>
+            <HaederLabel>am:</HaederLabel>
+            <HeaderValue>{am}</HeaderValue>
+          </HeaderRow>
+          <StyledPaper square>
+            <StyledTable size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Art</TableCell>
+                  <TableCell>Herkunft</TableCell>
+                  <TableCell>Was</TableCell>
+                  <TableCell>Bemerkungen</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {lieferungen.map((l) => (
+                  <Lieferung key={l.id} lieferung={l} />
+                ))}
+              </TableBody>
+            </StyledTable>
+          </StyledPaper>
+        </PageContainer>
+      </SimpleBar>
     </Container>
   )
 }
