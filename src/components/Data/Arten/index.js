@@ -47,7 +47,7 @@ const FieldsContainer = styled.div`
 const StyledList = styled(FixedSizeList)`
   /* hide native scrollbar */
   &::-webkit-scrollbar {
-    width: 1px;
+    width: 0;
   }
   &::-webkit-scrollbar-track {
     background: transparent;
