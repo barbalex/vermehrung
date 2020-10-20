@@ -1,6 +1,6 @@
 ---
 path: '/Dokumentation/Technische-Voraussetzungen'
-date: '2020-05-20'
+date: '2020-10-22'
 title: 'Technische Voraussetzungen'
 sort1: 2
 ---

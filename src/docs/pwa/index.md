@@ -1,6 +1,6 @@
 ---
 path: '/Dokumentation/PWA'
-date: '2020-05-06'
+date: '2020-10-22'
 title: 'Progressive Web App'
 sort1: 22
 ---
