@@ -1,6 +1,7 @@
 import localForage from 'localforage'
 import { navigate } from '@reach/router'
-import fb from 'firebase'
+import fb from 'firebase/app'
+import 'firebase/auth'
 import persist from 'mst-persist'
 
 import getAuthToken from './getAuthToken'
