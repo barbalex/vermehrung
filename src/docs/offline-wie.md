@@ -2,7 +2,7 @@
 path: '/Dokumentation/offline-wie'
 date: '2020-09-03'
 title: 'Offline: Wie es funktioniert'
-sort1: 24
+sort1: 25
 ---
 
 Schon lange würden wir in apflora.ch gerne offline arbeiten können. In vermehrung.ch wäre es ebenso nützlich. Weil die Umsetzung sehr anspruchsvoll und aufwändig ist, gab es bisher kein Konzept dafür. Nachfolgend das beinahe umgesetzte Konzept für vermehrung.ch:<br/><br/>

@@ -2,7 +2,7 @@
 path: '/Dokumentation/Technologien'
 date: '2020-09-03'
 title: 'Verwendete Technologien'
-sort1: 26
+sort1: 27
 ---
 
 - [PostgreSQL](https://www.postgresql.org) als Datenbank

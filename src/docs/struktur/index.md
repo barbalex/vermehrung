@@ -2,7 +2,7 @@
 path: '/Dokumentation/Struktur'
 date: '2020-01-20'
 title: 'Daten-Struktur'
-sort1: 27
+sort1: 28
 ---
 
 ![Daten-Struktur](structure.png)
