@@ -14,7 +14,7 @@ Der langen Rede kurzer Sinn:<br/><br/>
 Um zu verstehen wieso das so ist, muss man etwas Hintergrund kennen:<br/><br/>
 
 - Apple verdient **jährlich 10 bis 15 Milliarden** mit dem App Store, indem sie 30% jeder Überweisung absahnen ([Quelle](https://www.statista.com/chart/9671/developer-earnings-apple-app-store)). Dies geht auf Kosten der Benutzer und der Innovation bei der App-Entwicklung
-- Apple will offensichtlich die Milchkuh App Store erhalten, koste es was es wolle. Es gibt mittlerweile eine Reihe von Firmen, welche sich dagegen wehren, auch gerichtlich. In den USA und der EU wird der Sachverhalt momentan von den Wettbewerbsbehörden untersucht ([Quelle](https://www.bbc.com/news/technology-54280982))
+- Apple will offensichtlich die Milchkuh App Store erhalten, koste es was es wolle. Es gibt mittlerweile eine Reihe von Firmen, welche sich dagegen wehren, auch gerichtlich. In den USA und der EU wird der Sachverhalt momentan von den Wettbewerbsbehörden untersucht ([Quelle](https://www.bbc.com/news/technology-54280982)). Sogar Microsoft hat sich klar dagegen gestellt ([Quelle](https://t3n.de/news/apple-vs-epic-microsoft-seite-1315266/))
 - Web-App's umgehen den App Store. Man kann sie direkt installieren. Das passt Apple nicht
 - Web-App's funktionieren aber nur (gut), wenn der Browser die dafür nötigen Fähigkeiten anbietet
 - Apple verbietet auf Mobilgeräten (iOS-Betriebssystem) die Installation anderer Browser und setzt dies im App Store durch
