@@ -1,18 +1,19 @@
 ---
-path: "/Dokumentation/Technische-Voraussetzungen"
-date: "2020-05-20"
-title: "Technische Voraussetzungen"
+path: '/Dokumentation/Technische-Voraussetzungen'
+date: '2020-05-20'
+title: 'Technische Voraussetzungen'
 sort1: 2
 ---
 
 Sie brauchen eine aktuelle Version eines modernen **Browsers**.<br/>
 Zum Beispiel (aber nicht abschliessend):
+
 - Chrome
 - Edge Chromium
 - Firefox
 - Opera
 
-Etwas weniger gut geeignet ist Safari. Sollte aber funktionieren.<br/><br/>
+Etwas weniger gut geeignet ist Safari auf macO£S. Sollte aber funktionieren. Leider [funktioniert vermehrung.ch auf iOS (iPhone, iPad) nicht](/Dokumentation/iOS)<br/><br/><br/>
 
 Nicht geeignet ist der Internet Explorer.<br/><br/>
 
