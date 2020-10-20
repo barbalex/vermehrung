@@ -1,8 +1,8 @@
 ---
-path: "/Dokumentation/offline"
-date: "2020-07-01"
-title: "Offline arbeiten"
-sort1: 23
+path: '/Dokumentation/offline'
+date: '2020-07-01'
+title: 'Offline arbeiten'
+sort1: 24
 ---
 
 ### Wieso?

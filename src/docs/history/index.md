@@ -2,7 +2,7 @@
 path: '/Dokumentation/Historisierung'
 date: '2020-09-11'
 title: 'Daten-Historie'
-sort1: 25
+sort1: 26
 ---
 
 Die Historisierung ermöglicht, Änderungen an Daten rückgängig zu machen. Aber sie zeigt alle bisherigen Versionen eines Datensatzes an, unabhängig davon wer sie wann durchführte. Und sie ermöglicht, jeden dieser Zustände wieder herzustellen.<br/><br/>

@@ -2,7 +2,7 @@
 path: '/Dokumentation/Konten'
 date: '2020-06-30'
 title: 'Konten und Benutzerrechte'
-sort1: 29
+sort1: 30
 ---
 
 ### Begriffe
