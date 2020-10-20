@@ -13,10 +13,10 @@ Zum Beispiel (aber nicht abschliessend):
 - Firefox
 - Opera
 
-Etwas weniger gut geeignet ist Safari auf macO£S. Sollte aber funktionieren. Leider [funktioniert vermehrung.ch auf iOS (iPhone, iPad) nicht](/Dokumentation/iOS)<br/><br/><br/>
+Etwas weniger gut geeignet ist Safari auf macOS. Sollte aber funktionieren. Leider [funktioniert vermehrung.ch auf iOS (iPhone, iPad) nicht](/Dokumentation/iOS)<br/><br/><br/>
 
 Nicht geeignet ist der Internet Explorer.<br/><br/>
 
 vermehrung.ch funktioniert **auf allen Betriebssystemen**. Mehr dazu [hier](/Dokumentation/PWA).<br/><br/>
 
-Um Daten zu erfassen, brauchen Sie eine Internet-Verbindung. [Aber vermutlich nicht mehr lange](/Dokumentation/offline).
+[Um Daten zu erfassen, brauchen Sie keine Internet-Verbindung.](/Dokumentation/offline).
