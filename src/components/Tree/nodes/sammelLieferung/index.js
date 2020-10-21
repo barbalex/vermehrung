@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual'
 
-import sammelLieferungFromSammelLieferung from '../../../../utils/sammelLieferungFromSammelLieferung'
+import sammelLieferungLabelFromSammelLieferung from '../../../../utils/sammelLieferungLabelFromSammelLieferung'
 
 export default ({ store }) => {
   const { showSammelLieferung, visibleOpenNodes } = store.tree
@@ -18,7 +18,10 @@ export default ({ store }) => {
         menuTitle: 'Sammel-Lieferung',
         table: 'sammel_lieferung',
         id: el.id,
-        label: sammelLieferungFromSammelLieferung({ lieferung: el, store }),
+        label: sammelLieferungLabelFromSammelLieferung({
+          lieferung: el,
+          store,
+        }),
         url: ['Sammel-Lieferungen', el.id],
         hasChildren: true,
         mono: true,
