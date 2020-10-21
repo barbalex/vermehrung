@@ -1,6 +1,26 @@
 import { DateTime } from 'luxon'
 
-import artLabelFromSammlung from '../../../../../utils/artLabelFromSammlung'
+const sammlungLabelFromSammlung = ({ sammlung, store }) => {
+  const art = sammlung?.art_id ? store.arts.get(sammlung.art_id) : {}
+  const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
+  const herkunft = sammlung.herkunft_id
+    ? store.herkunfts.get(sammlung.herkunft_id)
+    : {}
+
+  const artLabel = art ? aeArt?.name ?? '(Art ohne Name)' : '(keine Art)'
+  const herkunftLabel = herkunft?.id
+    ? `von ${herkunft?.nr}` ?? '(Herkunft ohne Nr)'
+    : '(keine Herkunft)'
+  const datumLabel = sammlung?.datum
+    ? DateTime.fromSQL(sammlung?.datum).toFormat('yyyy.LL.dd')
+    : 'Kein Datum'
+  const geplantLabel = sammlung?.geplant ? 'geplant' : undefined
+  const label = [datumLabel, herkunftLabel, artLabel, geplantLabel]
+    .filter((e) => !!e)
+    .join('; ')
+
+  return label
+}
 
 export default ({ store }) => {
   const { showPerson, visibleOpenNodes, person } = store.tree
@@ -22,30 +42,15 @@ export default ({ store }) => {
     )
 
     return sammlungen
-      .map((el) => {
-        const datum = el.datum
-          ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
-          : 'kein Datum'
-        const artLabel = artLabelFromSammlung({ sammlung: el, store })
-        const herkunft = el.herkunft_id
-          ? store.herkunfts.get(el.herkunft_id)
-          : {}
-        const herkunftLabel = herkunft
-          ? herkunft?.nr ?? '(Herkunft ohne Nr)'
-          : '(keine Herkunft)'
-        const geplant = el.geplant ? ' (geplant)' : ''
-        const label = `${datum}: von ${herkunftLabel}: ${artLabel}${geplant}`
-
-        return {
-          nodeType: 'table',
-          menuTitle: 'Sammlung',
-          table: 'sammlung',
-          id: `${personId}${el.id}`,
-          label,
-          url: ['Personen', personId, 'Sammlungen', el.id],
-          hasChildren: false,
-        }
-      })
+      .map((el) => ({
+        nodeType: 'table',
+        menuTitle: 'Sammlung',
+        table: 'sammlung',
+        id: `${personId}${el.id}`,
+        label: sammlungLabelFromSammlung({ sammlung: el, store }),
+        url: ['Personen', personId, 'Sammlungen', el.id],
+        hasChildren: false,
+      }))
       .map((el, index) => {
         el.sort = [11, personIndex, 1, index]
         return el

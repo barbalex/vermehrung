@@ -23,12 +23,18 @@ export default ({ store }) => {
 
     return sammlungen
       .map((el) => {
-        const datum = el.datum
+        const datumLabel = el.datum
           ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
-          : 'kein Datum'
-        const artName = artLabelFromSammlung({ sammlung: el, store })
-        const geplant = el.geplant ? ' (geplant)' : ''
-        const label = `${datum}: ${artName}${geplant}`
+          : 'Kein Datum'
+        const artLabel = artLabelFromSammlung({ sammlung: el, store })
+        const geplantLabel = el.geplant ? ' (geplant)' : ''
+        const person = el.person_id ? store.persons.get(el.person_id) : {}
+        const personLabel = person?.fullname
+          ? person.fullname ?? '(Person ohne Name)'
+          : ''
+        const label = [datumLabel, artLabel, personLabel, geplantLabel]
+          .filter((e) => !!e)
+          .join('; ')
 
         return {
           nodeType: 'table',
