@@ -92,7 +92,7 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
             : {}
           const datum = zaehlung?.datum
             ? format(new Date(zaehlung?.datum), 'yyyy.MM.dd')
-            : 'kein Datum'
+            : 'Kein Datum'
 
           return (
             <Row key={tz.id} data-last={i === teilzaehlungs.length - 1}>
