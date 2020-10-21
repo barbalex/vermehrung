@@ -1,11 +1,15 @@
 import { DateTime } from 'luxon'
 
 export default ({ event }) => {
+  if (!event?.id) return 'kein Event'
   const datumLabel = event.datum
     ? DateTime.fromSQL(event.datum).toFormat('yyyy.LL.dd')
-    : '(kein Datum)'
-  const geplant = event.geplant ? ' (geplant)' : ''
-  const eventLabel = `${event?.beschreibung ?? '(nicht beschrieben)'}${geplant}`
+    : 'Kein Datum'
+  const geplantLabel = event.geplant ? ' (geplant)' : undefined
+  const eventLabel = event?.beschreibung ?? 'nicht beschrieben'
+  const label = [datumLabel, eventLabel, geplantLabel]
+    .filter((e) => !!e)
+    .join('; ')
 
-  return `${datumLabel}: ${eventLabel}`
+  return label
 }
