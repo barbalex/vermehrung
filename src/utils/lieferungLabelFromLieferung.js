@@ -1,15 +1,18 @@
 import { DateTime } from 'luxon'
 
 export default ({ lieferung }) => {
-  const datum = lieferung.datum
+  const datumLabel = lieferung.datum
     ? DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
-    : 'kein Datum'
-  const anz = lieferung.anzahl_pflanzen ?? '_'
-  const anzAb = lieferung.anzahl_auspflanzbereit ?? '_'
-  const numbers = `${anz
+    : 'Kein Datum'
+  const anz = (lieferung.anzahl_pflanzen ?? '').toString().padStart(3, '_')
+  const anzAb = (lieferung.anzahl_auspflanzbereit ?? '')
     .toString()
-    .padStart(3, '_')}/${anzAb.toString().padStart(3, '_')}`
-  const geplant = lieferung.geplant ? ' (geplant)' : ''
+    .padStart(3, '_')
+  const numbersLabel = `${anz}/${anzAb}`
+  const geplantLabel = lieferung.geplant ? 'geplant' : undefined
+  const label = [datumLabel, numbersLabel, geplantLabel]
+    .filter((e) => !!e)
+    .join('; ')
 
-  return `${datum}: ${numbers}${geplant}`
+  return label
 }
