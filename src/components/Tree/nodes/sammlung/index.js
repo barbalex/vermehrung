@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual'
 
-import treeLabelSammlung from '../../../../utils/treeLabelSammlung'
+import sammlungLabelFromSammlung from '../../../../utils/sammlungLabelFromSammlung'
 
 export default ({ store }) => {
   const { showSammlung, visibleOpenNodes } = store.tree
@@ -14,7 +14,7 @@ export default ({ store }) => {
         visibleOpenNodes.some((node) => isEqual(['Sammlungen'], node)),
       )
       .map((el) => {
-        const label = treeLabelSammlung({ sammlung: el, store })
+        const label = sammlungLabelFromSammlung({ sammlung: el, store })
 
         return {
           nodeType: 'table',

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
-import treeLabelSammlung from '../../../utils/treeLabelSammlung'
+import sammlungLabelFromSammlung from '../../../utils/sammlungLabelFromSammlung'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -39,7 +39,7 @@ const Arten = ({ row, style, last }) => {
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{treeLabelSammlung({ sammlung: row, store })}</div>
+      <div>{sammlungLabelFromSammlung({ sammlung: row, store })}</div>
     </Row>
   )
 }
