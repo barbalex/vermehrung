@@ -9,18 +9,19 @@ export default ({ sammlung, store }) => {
     : {}
 
   const artLabel = art ? aeArt?.name ?? '(Art ohne Name)' : '(keine Art)'
-  const personLabel = person?.id
-    ? person?.fullname
-      ? `; ${person.fullname}`
-      : `; (Person ohne Name)`
+  const personLabel = person?.fullname
+    ? person.fullname ?? '(Person ohne Name)'
     : ''
   const herkunftLabel = herkunft?.id
-    ? herkunft?.nr ?? '(Herkunft ohne Nr)'
+    ? `von ${herkunft?.nr}` ?? '(Herkunft ohne Nr)'
     : '(keine Herkunft)'
-  const date = sammlung?.datum
+  const datumLabel = sammlung?.datum
     ? DateTime.fromSQL(sammlung?.datum).toFormat('yyyy.LL.dd')
-    : 'kein Datum'
-  const geplant = sammlung?.geplant ? ' (geplant)' : ''
+    : 'Kein Datum'
+  const geplantLabel = sammlung?.geplant ? 'geplant' : undefined
+  const label = [datumLabel, herkunftLabel, artLabel, personLabel, geplantLabel]
+    .filter((e) => !!e)
+    .join('; ')
 
-  return `${date}: von ${herkunftLabel}; ${artLabel}${personLabel}${geplant}`
+  return label
 }
