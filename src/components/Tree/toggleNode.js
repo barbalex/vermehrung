@@ -18,7 +18,7 @@ export default ({ node, store }) => {
     openNode({ node, store })
     const newActiveNodeArray = [...node.url]
     setActiveNodeArray(newActiveNodeArray)
-  } else if (node.id === tree.activeNode.id) {
+  } else if (node.id === tree?.activeNode?.id) {
     // the node is open
     // AND it is the active node
     // make it's parent the new active node
