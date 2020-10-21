@@ -1,5 +1,19 @@
 import gartenLabelFromKultur from '../../../../../utils/gartenLabelFromKultur'
-import herkunftLabelFromKultur from '../../../../../utils/herkunftLabelFromKultur'
+
+const herkunftLabelFromKultur = ({ kultur, store }) => {
+  const herkunft = kultur?.herkunft_id
+    ? store.herkunfts.get(kultur.herkunft_id)
+    : {}
+  if (!herkunft) return 'keine Herkunft'
+  if (!herkunft?.id) return 'keine Herkunft'
+  // only show lokalname if exist
+  // does not exist if user does not have right to see it
+  const gemeinde = herkunft?.gemeinde ?? 'keine Gemeinde'
+  const nr = herkunft?.nr ?? 'keine Nr.'
+  const label = [gemeinde, nr].filter((e) => !!e).join(', ')
+
+  return label
+}
 
 export default ({ store }) => {
   const { showArt, visibleOpenNodes, art } = store.tree
@@ -19,16 +33,24 @@ export default ({ store }) => {
 
     return kulturen
       .map((k) => {
-        const gartenLabel = gartenLabelFromKultur({ kultur: k, store })
-        const herkunft = herkunftLabelFromKultur({ kultur: k, store })
-        const zwischenlagerLabel = k?.zwischenlager ? ', Zwischenlager' : ''
+        const herkunftLabel = `von: ${herkunftLabelFromKultur({
+          kultur: k,
+          store,
+        })}`
+        const gartenLabel = `in: ${gartenLabelFromKultur({ kultur: k, store })}`
+        const zwischenlagerLabel = k?.zwischenlager
+          ? 'Zwischenlager'
+          : undefined
+        const label = [herkunftLabel, gartenLabel, zwischenlagerLabel]
+          .filter((e) => !!e)
+          .join('; ')
 
         return {
           nodeType: 'table',
           menuTitle: 'Kultur',
           table: 'kultur',
           id: `${artId}${k.id}`,
-          label: `von: ${herkunft}, in: ${gartenLabel}${zwischenlagerLabel}`,
+          label,
           url: ['Arten', artId, 'Kulturen', k.id],
           hasChildren: true,
         }

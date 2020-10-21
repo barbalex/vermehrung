@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
-import sammelLieferungFromSammelLieferung from '../../../utils/sammelLieferungFromSammelLieferung'
+import sammelLieferungLabelFromSammelLieferung from '../../../utils/sammelLieferungLabelFromSammelLieferung'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -39,7 +39,9 @@ const EventsRows = ({ row, style, last }) => {
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{sammelLieferungFromSammelLieferung({ lieferung: row, store })}</div>
+      <div>
+        {sammelLieferungLabelFromSammelLieferung({ lieferung: row, store })}
+      </div>
     </Row>
   )
 }

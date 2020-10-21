@@ -1,5 +1,17 @@
 import { DateTime } from 'luxon'
 
+const herkunftLabelFromHerkunft = ({ herkunft }) => {
+  if (!herkunft) return 'keine Herkunft'
+  if (!herkunft?.id) return 'keine Herkunft'
+  // only show lokalname if exist
+  // does not exist if user does not have right to see it
+  const gemeinde = herkunft?.gemeinde ?? 'keine Gemeinde'
+  const nr = herkunft?.nr ?? 'keine Nr.'
+  const label = [gemeinde, nr].filter((e) => !!e).join(', ')
+
+  return label
+}
+
 export default ({ store }) => {
   const { showArt, visibleOpenNodes, art } = store.tree
   if (!showArt) return []
@@ -18,20 +30,21 @@ export default ({ store }) => {
 
     return sammlungen
       .map((el) => {
-        const datum = el.datum
+        const person = el.person_id ? store.persons.get(el.person_id) : {}
+        const personLabel = person?.fullname
+          ? person.fullname ?? '(Person ohne Name)'
+          : ''
+        const datumLabel = el.datum
           ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
-          : 'kein Datum'
-        const geplant = el.geplant ? ' (geplant)' : ''
+          : 'Kein Datum'
         const herkunft = el.herkunft_id
           ? store.herkunfts.get(el.herkunft_id)
           : {}
-        const herkunftId = herkunft?.id
-        const herkunftLabel = herkunftId
-          ? `${herkunft?.gemeinde ?? '(keine Gemeinde)'}, ${
-              herkunft?.nr ?? '(keine Nr.)'
-            }`
-          : 'keine Herkunft'
-        const label = `${datum}: ${herkunftLabel}${geplant}`
+        const herkunftLabel = `von: ${herkunftLabelFromHerkunft({ herkunft })}`
+        const geplantLabel = el.geplant ? 'geplant' : undefined
+        const label = [datumLabel, herkunftLabel, personLabel, geplantLabel]
+          .filter((e) => !!e)
+          .join('; ')
 
         return {
           nodeType: 'table',

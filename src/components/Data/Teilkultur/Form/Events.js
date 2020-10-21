@@ -82,14 +82,14 @@ const TkEvents = ({ kulturId, teilkulturId }) => {
           const person = ev.person_id ? store.persons.get(ev.person_id) : {}
           const datum = ev.datum
             ? format(new Date(ev.datum), 'yyyy.MM.dd')
-            : 'kein Datum'
+            : 'Kein Datum'
 
           return (
             <Row key={ev.id} data-last={i === events.length - 1}>
               <Datum>{datum}</Datum>
               <Geplant>{ev?.geplant ? 'geplant' : ' '}</Geplant>
-              <Name>{person?.fullname ?? ''}</Name>
-              <Beschreibung>{ev?.beschreibung ?? ''}</Beschreibung>
+              <Name>{person?.fullname ?? ' '}</Name>
+              <Beschreibung>{ev?.beschreibung ?? ' '}</Beschreibung>
             </Row>
           )
         })}
