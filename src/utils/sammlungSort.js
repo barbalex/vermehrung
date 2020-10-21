@@ -1,11 +1,6 @@
 import artLabelFromSammlung from './artLabelFromSammlung'
 
 export default ({ a, b, store }) => {
-  const nrA = a?.nr?.toString()?.toLowerCase() ?? ''
-  const nrB = b?.nr?.toString()?.toLowerCase() ?? ''
-  if (nrA < nrB) return -1
-  if (nrA > nrB) return 1
-
   const datumA = a?.datum ? new Date(a.datum) : ''
   const datumB = b?.datum ? new Date(b.datum) : ''
   if (datumA < datumB) return -1

@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js'
 import { DateTime } from 'luxon'
 
-import treeLabelSammlung from '../../../../utils/treeLabelSammlung'
+import sammlungLabelFromSammlung from '../../../../utils/sammlungLabelFromSammlung'
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
 import lieferungLabelFromLieferung from '../../../../utils/lieferungLabelFromLieferung'
 import artLabelFromLieferung from '../../../../utils/artLabelFromLieferung'
@@ -298,7 +298,7 @@ export default ({ store, cb, val }) => {
 
     return {
       value: s.id,
-      label: treeLabelSammlung({ sammlung: s, store }),
+      label: sammlungLabelFromSammlung({ sammlung: s, store }),
       herkunftlokalname: herkunft?.lokalname,
       herkunftgemeinde: herkunft?.gemeinde,
       nr: s.nr,

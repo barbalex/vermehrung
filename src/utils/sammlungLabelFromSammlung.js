@@ -11,18 +11,16 @@ export default ({ sammlung, store }) => {
   const artLabel = art ? aeArt?.name ?? '(Art ohne Name)' : '(keine Art)'
   const personLabel = person?.id
     ? person?.fullname
-      ? person.fullname
-      : '(Person ohne Name)'
-    : '(keine Person)'
+      ? `; ${person.fullname}`
+      : `; (Person ohne Name)`
+    : ''
   const herkunftLabel = herkunft?.id
     ? herkunft?.nr ?? '(Herkunft ohne Nr)'
     : '(keine Herkunft)'
   const date = sammlung?.datum
     ? DateTime.fromSQL(sammlung?.datum).toFormat('yyyy.LL.dd')
-    : '(kein Datum)'
+    : 'kein Datum'
   const geplant = sammlung?.geplant ? ' (geplant)' : ''
 
-  return `${
-    sammlung?.nr ?? '(keine Nr)'
-  }, ${date}: von ${herkunftLabel}, ${personLabel}; ${artLabel}${geplant}`
+  return `${date}: von ${herkunftLabel}; ${artLabel}${personLabel}${geplant}`
 }

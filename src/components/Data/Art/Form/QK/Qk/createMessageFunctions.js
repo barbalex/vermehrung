@@ -5,7 +5,7 @@ import exists from '../../../../../../utils/exists'
 import artLabelFromArt from '../../../../../../utils/artLabelFromArt'
 import gartenLabelFromGarten from '../../../../../../utils/gartenLabelFromGarten'
 import kulturLabelFromKultur from '../../../../../../utils/kulturLabelFromKultur'
-import treeLabelSammlung from '../../../../../../utils/treeLabelSammlung'
+import sammlungLabelFromSammlung from '../../../../../../utils/sammlungLabelFromSammlung'
 
 export default ({ artId, store }) => {
   const {
@@ -71,7 +71,7 @@ export default ({ artId, store }) => {
         )
         .map((s) => ({
           url: ['Sammlungen', s.id],
-          text: treeLabelSammlung({ sammlung: s, store }),
+          text: sammlungLabelFromSammlung({ sammlung: s, store }),
         })),
     sammlungsWithNonUniqueNr: () => {
       const sGroupedByNr = groupBy(
@@ -83,7 +83,7 @@ export default ({ artId, store }) => {
         .flatMap((vs) =>
           vs.map((s) => ({
             url: ['Sammlungen', s.id],
-            text: treeLabelSammlung({ sammlung: s, store }),
+            text: sammlungLabelFromSammlung({ sammlung: s, store }),
           })),
         )
     },
@@ -93,7 +93,7 @@ export default ({ artId, store }) => {
         .filter((s) => !exists(s.nr))
         .map((s) => ({
           url: ['Arten', artId, 'Sammlungen', s.id],
-          text: treeLabelSammlung({ sammlung: s, store }),
+          text: sammlungLabelFromSammlung({ sammlung: s, store }),
         })),
     sammlungsWithoutHerkunft: () =>
       sammlungsSorted
@@ -101,7 +101,7 @@ export default ({ artId, store }) => {
         .filter((s) => !s.herkunft_id)
         .map((s) => ({
           url: ['Arten', artId, 'Sammlungen', s.id],
-          text: treeLabelSammlung({ sammlung: s, store }),
+          text: sammlungLabelFromSammlung({ sammlung: s, store }),
         })),
     sammlungsWithoutPerson: () =>
       sammlungsSorted
@@ -109,7 +109,7 @@ export default ({ artId, store }) => {
         .filter((s) => !s.person_id)
         .map((s) => ({
           url: ['Arten', artId, 'Sammlungen', s.id],
-          text: treeLabelSammlung({ sammlung: s, store }),
+          text: sammlungLabelFromSammlung({ sammlung: s, store }),
         })),
     sammlungsWithoutDatum: () =>
       sammlungsSorted
@@ -117,7 +117,7 @@ export default ({ artId, store }) => {
         .filter((s) => !s.datum)
         .map((s) => ({
           url: ['Arten', artId, 'Sammlungen', s.id],
-          text: treeLabelSammlung({ sammlung: s, store }),
+          text: sammlungLabelFromSammlung({ sammlung: s, store }),
         })),
     sammlungsWithoutAnzahlPflanzen: () =>
       sammlungsSorted
@@ -125,7 +125,7 @@ export default ({ artId, store }) => {
         .filter((s) => !exists(s.anzahl_pflanzen))
         .map((s) => ({
           url: ['Arten', artId, 'Sammlungen', s.id],
-          text: treeLabelSammlung({ sammlung: s, store }),
+          text: sammlungLabelFromSammlung({ sammlung: s, store }),
         })),
     sammlungsWithoutVonAnzahlIdividuen: () =>
       sammlungsSorted
@@ -133,7 +133,7 @@ export default ({ artId, store }) => {
         .filter((s) => !exists(s.von_anzahl_individuen))
         .map((s) => ({
           url: ['Arten', artId, 'Sammlungen', s.id],
-          text: treeLabelSammlung({ sammlung: s, store }),
+          text: sammlungLabelFromSammlung({ sammlung: s, store }),
         })),
     gartensAllKultursInactive: () =>
       gartensSorted
