@@ -217,7 +217,10 @@ const Row = ({ style, node, nodes }) => {
   let fontSize = node?.mono ? 15 : 16
   if (isMobile) fontSize = node?.mono ? 17 : 18
 
-  const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
+  const nodeIsInActiveNodePath = isNodeInActiveNodePath({
+    node,
+    activeNodeArray,
+  })
   const nodeIsOpen = isNodeOpen({ store, url: node?.url })
   // build symbols
   let useSymbolIcon = true
