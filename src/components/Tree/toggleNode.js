@@ -2,7 +2,7 @@ import isNodeOpen from './isNodeOpen'
 import openNode from './openNode'
 
 export default ({ node, store }) => {
-  const { addNotification } = store
+  const { addNotification, tree } = store
   if (!node.url) {
     console.log('passsed node has no url:', node)
     return addNotification({
@@ -11,13 +11,26 @@ export default ({ node, store }) => {
   }
   const { setActiveNodeArray } = store.tree
 
-  //console.log('toggleNode')
-
-  const newActiveNodeArray = [...node.url]
   const nodeIsOpen = isNodeOpen({ store, url: node.url })
   if (!nodeIsOpen) {
+    // node is closed
+    // open it and make it the active node
     openNode({ node, store })
+    const newActiveNodeArray = [...node.url]
+    setActiveNodeArray(newActiveNodeArray)
+  } else if (node.id === tree.activeNode.id) {
+    // the node is open
+    // AND it is the active node
+    // make it's parent the new active node
+    const newActiveNodeArray = [...node.url]
+    newActiveNodeArray.pop()
+    setActiveNodeArray(newActiveNodeArray)
+  } else {
+    // the node is open
+    // but not the active node
+    // make it the new active node
+    const newActiveNodeArray = [...node.url]
+    setActiveNodeArray(newActiveNodeArray)
   }
   store.filter.setShow(false)
-  setActiveNodeArray(newActiveNodeArray)
 }
