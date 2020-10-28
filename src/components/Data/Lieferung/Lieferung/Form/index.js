@@ -9,7 +9,6 @@ import Checkbox3States from '../../../../shared/Checkbox3States'
 import exists from '../../../../../utils/exists'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import ConflictList from '../../../../shared/ConflictList'
 import Was from './Was'
 import Von from './Von'
 import Nach from './Nach'
@@ -36,13 +35,12 @@ const LierferungForm = ({
   id,
   row,
   activeConflict,
-  setActiveConflict,
   showHistory,
 }) => {
   const existsSammelLieferung = !!sammelLieferung?.id
   const store = useContext(StoreContext)
 
-  const { errors, filter, unsetError, userPersonOption, online } = store
+  const { errors, filter, unsetError, userPersonOption } = store
   const { activeNodeArray } = store.tree
 
   const { li_show_sl_felder } = userPersonOption
@@ -190,13 +188,6 @@ const LierferungForm = ({
               row={row}
               saveToDb={saveToDb}
               ifNeeded={ifNeeded}
-            />
-          )}
-          {online && !showFilter && row._conflicts && row._conflicts.map && (
-            <ConflictList
-              conflicts={row._conflicts}
-              activeConflict={activeConflict}
-              setActiveConflict={setActiveConflict}
             />
           )}
         </FieldsContainer>
