@@ -16,7 +16,8 @@ import App from './src/App'
 export const wrapRootElement = ({ element }) => <App element={element} />
 
 // https://github.com/gatsbyjs/gatsby/issues/9087#issuecomment-459105021
-export const onServiceWorkerUpdateReady = () => {
+//export const onServiceWorkerUpdateReady = () => {
+export const onServiceWorkerUpdateFound = () => {
   if (
     window.confirm(
       'vermehrung.ch neu laden, um die neuste Version zu installieren?',
