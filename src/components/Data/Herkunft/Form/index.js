@@ -182,7 +182,7 @@ const Herkunft = ({
             multiLine
           />
         )}
-        {online && !showFilter && row._conflicts && row._conflicts.map && (
+        {online && !showFilter && row?._conflicts?.map && (
           <ConflictList
             conflicts={row._conflicts}
             activeConflict={activeConflict}
