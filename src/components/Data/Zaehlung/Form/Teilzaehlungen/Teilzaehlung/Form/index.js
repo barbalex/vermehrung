@@ -296,7 +296,7 @@ const TeilzaehlungForm = ({
             />
           )}
         </div>
-        {online && row._conflicts && row._conflicts.map && (
+        {online && row?._conflicts?.map && (
           <ConflictListContainer>
             <ConflictList
               conflicts={row._conflicts}
