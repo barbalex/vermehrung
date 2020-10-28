@@ -94,6 +94,24 @@ export default ({ artId, store }) => {
   //    - sum of last zaehlung
   //    - whether last zahlung includes prognose
 
+  /*console.log('buildData', {
+    artId,
+    zaehlungsDone,
+    zaehlungsPlannedAll,
+    zaehlungsPlannedIgnored,
+    zaehlungsPlanned,
+    sammlungsDone,
+    sammlungsPlannedAll,
+    sammlungsPlannedIgnored,
+    sammlungsPlanned,
+    lieferungsDone,
+    lieferungsPlannedAll,
+    lieferungsPlannedIgnored,
+    lieferungsPlanned,
+    dates,
+    kultursOfArt,
+  })*/
+
   return dates.map((date) => {
     const sammlungNow = sum(
       sammlungsDone
@@ -121,7 +139,7 @@ export default ({ artId, store }) => {
       // for every kultur return
       // last zaehlung and whether it is prognose
       const zaehlungs = [...store.zaehlungs.values()]
-        .filter((z) => z.id === k.zaehlung_id)
+        .filter((z) => z.kultur_id === k.id)
         .filter((z) => !z._deleted)
 
       const lastZaehlungDatum = max(
@@ -242,6 +260,11 @@ export default ({ artId, store }) => {
         .filter((e) => !!e)
         .join(', '),
     }
+    /*console.log('buildData, date', {
+      date,
+      data,
+      lastZaehlungs,
+    })*/
     return data
   })
 }
