@@ -137,7 +137,7 @@ export default ({ artId, herkunftId, store }) => {
         // for every kultur return
         // last zaehlung and whether it is prognose
         const zaehlungs = [...store.zaehlungs.values()]
-          .filter((z) => z.id === k.zaehlung_id)
+          .filter((z) => z.kultur_id === k.id)
           .filter((z) => !z._deleted)
 
         const lastZaehlungDatum = max(
