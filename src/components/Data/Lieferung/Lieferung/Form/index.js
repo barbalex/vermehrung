@@ -35,6 +35,7 @@ const LierferungForm = ({
   id,
   row,
   activeConflict,
+  setActiveConflict,
   showHistory,
 }) => {
   const existsSammelLieferung = !!sammelLieferung?.id
@@ -188,6 +189,8 @@ const LierferungForm = ({
               row={row}
               saveToDb={saveToDb}
               ifNeeded={ifNeeded}
+              activeConflict={activeConflict}
+              setActiveConflict={setActiveConflict}
             />
           )}
         </FieldsContainer>
