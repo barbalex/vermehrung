@@ -42,12 +42,17 @@ const TitleRow = styled.div`
   }
 `
 
-const LieferungWer = ({ showFilter, row, saveToDb, ifNeeded }) => {
+const LieferungWer = ({
+  showFilter,
+  row,
+  saveToDb,
+  ifNeeded,
+  activeConflict,
+  setActiveConflict,
+}) => {
   const store = useContext(StoreContext)
 
   const { errors, online, personsSorted } = store
-
-  const [activeConflict, setActiveConflict] = useState(null)
 
   const personWerte = useMemo(
     () =>
@@ -71,6 +76,14 @@ const LieferungWer = ({ showFilter, row, saveToDb, ifNeeded }) => {
       window.removeEventListener('scroll', scrollHandler, true)
     }
   }, [scrollHandler])
+
+  console.log('Lieferung Wer', {
+    row,
+    online,
+    showFilter,
+    conflicts: row?._conflicts,
+    conflictsMap: row?._conflicts?.map,
+  })
 
   return (
     <>
@@ -104,7 +117,7 @@ const LieferungWer = ({ showFilter, row, saveToDb, ifNeeded }) => {
           multiLine
         />
       )}
-      {online && !showFilter && row._conflicts && row._conflicts.map && (
+      {online && !showFilter && !!row?._conflicts?.map && (
         <ConflictList
           conflicts={row._conflicts}
           activeConflict={activeConflict}
