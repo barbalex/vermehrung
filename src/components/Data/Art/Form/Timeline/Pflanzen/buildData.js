@@ -161,12 +161,12 @@ export default ({ artId, store }) => {
             (z) => z.teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen,
           ),
         ),
-        geplant: lastZaehlungsOfKultur.some((z) => z.prognose),
+        prognose: lastZaehlungsOfKultur.some((z) => z.prognose),
       }
     })
     const lastZaehlungs = {
       anzahl_pflanzen: sum(lastZaehlungsByKultur.map((z) => z.anzahl_pflanzen)),
-      geplant: lastZaehlungsByKultur.some((z) => z.geplant),
+      prognose: lastZaehlungsByKultur.some((z) => z.prognose),
     }
 
     // need to return old date in case no zaehlung exists
