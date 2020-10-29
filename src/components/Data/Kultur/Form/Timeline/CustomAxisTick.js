@@ -12,7 +12,7 @@ const CustomAxisTick = ({ x, y, payload }) => (
       transform="rotate(-35)"
       style={{ fontSize: 12 }}
     >
-      {DateTime.fromSQL(payload.value).toFormat('yyyy.LL.dd')}
+      {DateTime.fromMillis(payload.value).toFormat('yyyy.LL.dd')}
     </text>
   </g>
 )
