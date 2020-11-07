@@ -11,25 +11,24 @@ vermehrung.ch funktioniert nicht auf iOS, d.h. auf iPhones und iPads.<br/><br/>
 
 Wollt ihr mehr wissen? Dann müssen wir etwas ausholen:<br/><br/>
 
-- Apple verdient **jährlich 10 bis 15 Milliarden** mit dem App Store: sie beanspruchen 30% jeder Überweisung ([Quelle](https://www.statista.com/chart/9671/developer-earnings-apple-app-store))
-- Das ist ungerechtfertigt und geht nur, weil Apple für Apps ihr Monopol ausnützt
-- Es gibt mittlerweile eine Reihe von Firmen, welche sich dagegen wehren, auch gerichtlich. Sogar Microsoft hat sich klar dagegen gestellt ([Quelle](https://t3n.de/news/apple-vs-epic-microsoft-seite-1315266/)). In den USA und der EU wird der Sachverhalt von den Wettbewerbsbehörden untersucht ([Quelle](https://www.bbc.com/news/technology-54280982))
+- Apple verdient **jährlich 10 bis 15 Milliarden** mit dem App Store: sie beanspruchen 30% jeder Überweisung für sich selbst ([Quelle](https://www.statista.com/chart/9671/developer-earnings-apple-app-store))
+- Das ist ungerechtfertigt und geht nur, weil Apple ihr Monopol ausnützt
+- Eine ganze Reihe von Firmen wehren sich dagegen, auch gerichtlich. Allen voran Epic Games mit Fortnite. Sogar Microsoft hat sich klar dagegen gestellt ([Quelle](https://t3n.de/news/apple-vs-epic-microsoft-seite-1315266/)). In den USA und der EU wird der Sachverhalt von den Wettbewerbsbehörden untersucht ([Quelle](https://www.bbc.com/news/technology-54280982))
 - vermehrung.ch ist eine [Web App](/Dokumentation/PWA)
-- Web App's umgehen den App Store. Man kann sie direkt installieren. Das passt Apple nicht
+- Web App's brauchen keinen App Store. Man kann sie direkt vom Browser aus installieren. Das passt Apple nicht
 - Web App's können aber nur mit anderen Apps konkurrieren, wenn der Browser die dafür nötigen Fähigkeiten anbietet
-- Apple verbietet auf Mobilgeräten (Betriebssystem iOS) die Installation anderer Browser und setzt dies im App Store durch
-- Chrome und Firefox (zum Beispiel) haben trotzdem entsprechend genannte Browser im App Store. Damit Benutzer z.B. ihre Einstellungen synchronisieren können. Sie sind aber nur eine Hülle um Safari
-- Weil auf Apple-Mobilgeräten (welche auf dem Betriebssystem iOS basieren) nur Safari zur Verfügung steht, hat Apple es in der Hand, zu verhindern, dass die für konkurrenzfähige Web-Apps nötigen Fähigkeiten zur Verfügung stehen. Apple stellt zwar einige grundlegende Fähigkeiten bereit, damit nicht zu viele Web-Apps den Dienst verweigern. Aber **sie schränken diese Fähigkeiten ganz bewusst ein, damit Web-Apps gegenüber Apps aus dem App Store nicht konkurrenzfähig sein können**
+- Apple verbietet auf den eigenen Mobilgeräten (Betriebssystem iOS) die Installation anderer Browser und setzt dies im App Store durch (die "Browser" von Chrome und Firefox sind nur eine Hülle um Safari)
+- Weil auf Apple-Mobilgeräten nur Safari zur Verfügung steht, kann Apple verhindern, dass die für konkurrenzfähige Web-Apps nötigen Fähigkeiten verfügbar sind. Apple stellt zwar einige grundlegende Fähigkeiten bereit, damit nicht zu viele Web-Apps den Dienst verweigern. Aber **sie schränken diese Fähigkeiten ganz bewusst ein, damit Web-Apps gegenüber Apps aus dem App Store nicht konkurrenzfähig sein können**
 - Eine zentrale Funktion konkurrenzfähiger Apps ist Offline-Fähigkeit
-- Offline-Fähigkeit bedingt, dass die benötigten Daten lokal gespeichert werden. Damit Web App's nicht konkurrenzfähig sein können, schränkt Apple unter anderem die lokal speicherbare Menge Daten sehr stark ein
-- Diese Einschränkungen werden ungenügend bis gar nicht dokumentiert. Apple hat kein Interesse, Web App Entwicklern das Leben einfach zu machen und ihre den Wettbewerb einschränkenden Handlungen bekannt zu machen
-- Wie es scheint, ermöglicht Apple es Web-Apps nur, 5 Megabytes zu speichern. Apple gibt Entwicklern keine Möglichkeit, diese Grenze im App-Code zu erkennen oder zu erhöhen. Benutzer können offenbar im Einstellungs-App die Grenze auf 50MB erhöhen ([Quelle](https://stackoverflow.com/a/8991626/712005))
-- Gibt es auf Ihrem Smartphone irgend ein App, dass heute mit 5 Megabytes auskommt? Vermutlich nicht
-- Im Gegensatz zu Safari stellen Chrome, Edge und Firefox Benutzern so viel Speicherplatz zur Verfügung, wie die Festplatte hergibt. Also potentiell mehrere Gigabytes. Android und Windows ermöglichen die Installation von Apps am App Store vorbei. Man kann sogar eigene App-Stores anbieten - und damit direkt diejenigen von Google bzw. Windows konkurrenzieren!
-- **vermehrung.ch benötigt 90 bis 120 MB lokalen Speicher. Damit kann vermehrung.ch nicht auf iOS-Geräten funktionieren**. Vielleicht gibt es noch weitere Gründe, wieso vermehrung.ch auf iOS-Geräten nicht funktioniert. Wie erwähnt hat Safari viele der wichtigen Funktionalitäten nicht (vollständig) implementiert und schlecht dokumentiert
+- Offline kann eine App nur funktionieren, wenn die benötigten Daten lokal gespeichert werden. Apple schränkt die lokal speicherbare Menge Daten sehr stark ein
+- Diese Einschränkungen werden ungenügend bis gar nicht dokumentiert. Apple hat kein Interesse, Web App Entwicklern das Leben einfach und ihre Wettbewerbs-Einschränkung bekannt zu machen
+- Apple erlaubt Web-Apps nur 5 Megabytes zu speichern. Apple gibt Entwicklern keine Möglichkeit, diese Grenze im App-Code zu erkennen oder zu erhöhen. Benutzer können offenbar im Einstellungs-App die Grenze auf 50MB erhöhen ([Quelle](https://stackoverflow.com/a/8991626/712005))
+- Gibt es auf Ihrem Smartphone ein offline fähiges App, dass mit 5 Megabytes auskommt? Vermutlich nicht
+- Im Gegensatz zu Safari stellen Chrome, Edge und Firefox Benutzern so viel Speicherplatz zur Verfügung, wie die Festplatte hergibt. Also potentiell mehrere Gigabytes
+- Android und Windows ermöglichen die Installation von Apps am App Store vorbei. Man kann sogar eigene App-Stores anbieten - und damit direkt diejenigen von Google oder Windows konkurrenzieren!
+- **vermehrung.ch benötigt 90 bis 120 MB lokalen Speicher. Damit kann vermehrung.ch nicht auf iOS-Geräten funktionieren**
 - Damit vermehrung.ch auf iOS funktionieren könnte, müsste es von Grund auf beruhend auf der Apple-Programmiersprache Swift neu entwickelt werden. Und über den App Store verteilt werden
-- Web-Apps erleben momentan einen enormen Aufschwung, denn: Entwickler können mit minimalem Mehraufwand (Web-)Apps entwickeln, die auf allen Betriebssystemen funktionieren, auf denen ein moderner Browser ausgeführt werden kann.<br/>
-  Zum Beispiel:
+- Web-Apps erleben momentan einen enormen Aufschwung, denn sie funktionieren auf allen Betriebssystemen, auf denen ein moderner Browser ausgeführt werden kann. Zum Beispiel:
   - Windows
   - Android
   - macOS
@@ -42,4 +41,4 @@ Wollt ihr mehr wissen? Dann müssen wir etwas ausholen:<br/><br/>
 - Müsste vermehrung.ch mit den bisher üblichen Mitteln für die vier wichtigsten Betriebssysteme (Windows, macOS, Android, iOS) programmiert werden, wäre der Aufwand ungefähr 6 mal so hoch als mit einer Web App alleine. Das wäre weder sinnvoll noch mit den verfügbaren (Naturschutz-!)Budgets finanzierbar
 - Apple weiss das. Und rechnet damit, dass sich kein App-Entwickler leisten kann, nicht auf iOS verfügbar zu sein. Weil dort für Apps die höchsten Preise bezahlt werden ([Quelle](https://fueled.com/blog/app-store-vs-google-play/#:~:text=In%20fact%2C%20research%20by%20Stardust,freely%20available%20on%20Android%20devices.))
 
-vermehrung.ch und iOS-Benutzerinnen sind Opfer des Kollateralschadens, der daher rührt, dass Apple an allen Überweisungen 30% verdienen will.<br/><br/>
+Vermehrung.ch und iOS-Benutzerinnen sind somit Opfer des Kollateralschadens, der entsteht, weil Apple an allen Zahlungen in und für Apps 30% verdienen will.<br/><br/>
