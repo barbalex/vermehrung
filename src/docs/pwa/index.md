@@ -9,7 +9,7 @@ vermehrung.ch ist eine [**Progressive Web App**](https://developers.google.com/w
 
 "Progressive Web Apps" sind Web-Apps und werden für Browser entwickelt. Weil sie einige zusätzliche Anforderungen erfüllen, können sie je länger je weniger von "normalen" Apps unterschieden werden. Das ist das erklärte Ziel von Google und Microsoft.<br/><br/>
 
-**Was ist der Unterschied zu einer gewöhnlichen Web-App?**
+**Was ist der Unterschied zu einer gewöhnlichen Webseite?**
 
 - Sie können vermehrung auf Desktop/Startseite platzieren bzw. "installieren".
   - In Chrome auf PC und Mac öffnen Sie dazu das Menü ganz oben rechts:
