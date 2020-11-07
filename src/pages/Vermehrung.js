@@ -1,8 +1,9 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
+import { navigate } from 'gatsby'
 
 import { StoreContext } from '../models/reactUtils'
 import Layout from '../components/Layout'
@@ -16,6 +17,7 @@ import Login from '../components/Login'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import ApiDetector from '../components/ApiDetector'
 import QueuedQueries from '../components/QueuedQueries'
+import isThisIOS from '../utils/isIOS'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);
@@ -74,6 +76,16 @@ const Vermehrung = ({ location }) => {
     user,
   } = store
 
+  const [isIOS, setIsIOS] = useState(false)
+  useEffect(() => {
+    setIsIOS(isThisIOS())
+    //setIsIOS(true)
+  }, [])
+
+  useEffect(() => {
+    if (isIOS) navigate('/Dokumentation/iOS')
+  }, [isIOS])
+
   const existsUser = !!user?.uid
   const {
     setOpenNodes,
@@ -123,7 +135,7 @@ const Vermehrung = ({ location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existsUser, initialDataQueried])
 
-  if (gettingAuthUser) {
+  if (gettingAuthUser || isIOS) {
     return (
       <ErrorBoundary>
         <Layout>
@@ -134,7 +146,7 @@ const Vermehrung = ({ location }) => {
               backColor="#4a148c1a"
               loading={true}
             />
-            <SpinnerText>autorisiere</SpinnerText>
+            <SpinnerText>{isIOS ? 'prüfe' : 'autorisiere'}</SpinnerText>
           </SpinnerContainer>
         </Layout>
       </ErrorBoundary>
