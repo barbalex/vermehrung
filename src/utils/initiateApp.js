@@ -13,7 +13,7 @@ const getToken = () => {
   return window.localStorage.getItem('token') ?? none
 }
 
-export default async () => {
+const initiateApp = async () => {
   // https://github.com/mobxjs/mst-gql/issues/247
   //const gqlHttpClient = createHttpClient(constants?.graphQlUri)
   const gqlHttpClient = (() => {
@@ -87,3 +87,5 @@ export default async () => {
 
   return { store, unregister }
 }
+
+export default initiateApp
