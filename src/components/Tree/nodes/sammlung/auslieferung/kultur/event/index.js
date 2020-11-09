@@ -1,6 +1,6 @@
 import eventLabelFromEvent from '../../../../../../../utils/eventLabelFromEvent'
 
-export default ({ store }) => {
+const sammlungAuslieferungKulturEventNodes = ({ store }) => {
   const {
     showSammlung,
     visibleOpenNodes,
@@ -69,3 +69,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default sammlungAuslieferungKulturEventNodes

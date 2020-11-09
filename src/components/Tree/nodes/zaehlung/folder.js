@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const zaehlungFolder = ({ store }) => {
   const { initialDataQueried } = store
   const { showZaehlung } = store.tree
 
@@ -21,3 +21,5 @@ export default ({ store }) => {
     },
   ]
 }
+
+export default zaehlungFolder
