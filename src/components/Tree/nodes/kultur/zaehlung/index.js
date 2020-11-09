@@ -1,6 +1,6 @@
 import zaehlungLabelFromZaehlung from '../../../../../utils/zaehlungLabelFromZaehlung'
 
-export default ({ store }) => {
+const kulturZaehlungNodes = ({ store }) => {
   const { showKultur, visibleOpenNodes, kultur } = store.tree
   if (!showKultur) return []
 
@@ -36,3 +36,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default kulturZaehlungNodes
