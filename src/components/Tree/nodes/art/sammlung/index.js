@@ -12,7 +12,7 @@ const herkunftLabelFromHerkunft = ({ herkunft }) => {
   return label
 }
 
-export default ({ store }) => {
+const artSammlungNodes = ({ store }) => {
   const { showArt, visibleOpenNodes, art } = store.tree
   if (!showArt) return []
 
@@ -59,3 +59,5 @@ export default ({ store }) => {
       .map((el, index) => ({ ...el, sort: [1, artIndex, 1, index] }))
   })
 }
+
+export default artSammlungNodes
