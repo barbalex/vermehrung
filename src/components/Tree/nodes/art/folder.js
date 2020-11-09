@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const artFolder = ({ store }) => {
   const { initialDataQueried, artsFiltered } = store
   const { showArt } = store.tree
   const arten = artsFiltered
@@ -19,3 +19,5 @@ export default ({ store }) => {
     },
   ]
 }
+
+export default artFolder
