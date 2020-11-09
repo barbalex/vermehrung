@@ -1,4 +1,4 @@
-export default ({ a, b }) => {
+const herkunftSort = ({ a, b }) => {
   const gemeindeA = a?.gemeinde?.toString()?.toLowerCase() ?? ''
   const gemeindeB = b?.gemeinde?.toString()?.toLowerCase() ?? ''
   if (gemeindeA < gemeindeB) return -1
@@ -16,3 +16,5 @@ export default ({ a, b }) => {
 
   return 0
 }
+
+export default herkunftSort
