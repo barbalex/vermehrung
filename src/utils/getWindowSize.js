@@ -1,7 +1,7 @@
 /**
  * see: https://stackoverflow.com/a/11744120/712005
  */
-export default () => {
+const getWindowSize = () => {
   if (typeof window === `undefined`) return { height: 200, width: 200 }
   const w = window
   const d = document
@@ -11,3 +11,5 @@ export default () => {
   const height = w.innerHeight || e.clientHeight || g.clientHeight
   return { width, height }
 }
+
+export default getWindowSize
