@@ -7,7 +7,7 @@ import artLabelFromLieferung from '../../../../utils/artLabelFromLieferung'
  * this function cann be used from higher up
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
-export default async ({
+const buildExceljsWorksheets = async ({
   store,
   kultur_id,
   kultur_name,
@@ -447,3 +447,5 @@ export default async ({
   }
   return
 }
+
+export default buildExceljsWorksheets

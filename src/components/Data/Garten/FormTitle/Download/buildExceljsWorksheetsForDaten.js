@@ -7,7 +7,12 @@ import artLabelFromKultur from '../../../../../utils/artLabelFromKultur'
  * this function cann be used from higher up
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
-export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
+const buildExceljsWorksheetsForDaten = async ({
+  store,
+  garten_id,
+  workbook,
+  calledFromHigherUp,
+}) => {
   const { kultursSorted } = store
 
   // 1. Get Garten
@@ -99,3 +104,5 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
   }
   return
 }
+
+export default buildExceljsWorksheetsForDaten

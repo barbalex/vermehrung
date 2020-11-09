@@ -4,7 +4,7 @@ import getConstants from './constants'
 
 const constants = getConstants()
 
-export default async ({ person, store }) => {
+const signup = async ({ person, store }) => {
   const { addNotification, online, setOnline } = store
 
   // fetch email of this person
@@ -48,3 +48,5 @@ export default async ({ person, store }) => {
   }
   person.edit({ field: 'account_id', value: res.data })
 }
+
+export default signup
