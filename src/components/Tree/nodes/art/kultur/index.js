@@ -15,7 +15,7 @@ const herkunftLabelFromKultur = ({ kultur, store }) => {
   return label
 }
 
-export default ({ store }) => {
+const artKulturNodes = ({ store }) => {
   const { showArt, visibleOpenNodes, art } = store.tree
   if (!showArt) return []
 
@@ -61,3 +61,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default artKulturNodes

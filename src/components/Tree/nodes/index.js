@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const nodesModule = ({ store }) => {
   const {
     artFolder,
     art,
@@ -207,3 +207,5 @@ export default ({ store }) => {
 
   return nodes
 }
+
+export default nodesModule

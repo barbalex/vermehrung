@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual'
 
-export default ({ store }) => {
+const artNodes = ({ store }) => {
   const { showArt, visibleOpenNodes } = store.tree
   if (!showArt) return []
 
@@ -28,3 +28,5 @@ export default ({ store }) => {
       })
   )
 }
+
+export default artNodes
