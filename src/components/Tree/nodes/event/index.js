@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import eventLabelFromEvent from '../../../../utils/eventLabelFromEvent'
 
-export default ({ store }) => {
+const eventNodes = ({ store }) => {
   const { visibleOpenNodes, showEvent } = store.tree
   if (!showEvent) return []
 
@@ -25,3 +25,5 @@ export default ({ store }) => {
       })
   )
 }
+
+export default eventNodes
