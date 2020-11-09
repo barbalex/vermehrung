@@ -1,4 +1,4 @@
-export default ({ art, store }) => {
+const artLabelFromArt = ({ art, store }) => {
   if (!art?.ae_id) return '(kein Name)'
 
   const aeArt = store.ae_arts.get(art.ae_id)
@@ -6,3 +6,5 @@ export default ({ art, store }) => {
 
   return aeArt?.name
 }
+
+export default artLabelFromArt

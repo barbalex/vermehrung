@@ -1,6 +1,6 @@
 import gartenLabelFromGarten from './gartenLabelFromGarten'
 
-export default ({ kultur, store }) => {
+const gartenLabelFromKultur = ({ kultur, store }) => {
   if (!kultur?.garten_id) return '(kein Garten)'
   const garten = kultur?.garten_id ? store.gartens.get(kultur.garten_id) : {}
 
@@ -10,3 +10,5 @@ export default ({ kultur, store }) => {
 
   return gartenLabelFromGarten({ garten, store })
 }
+
+export default gartenLabelFromKultur
