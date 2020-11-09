@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 
-export default ({ store }) => {
+const herkunftNodes = ({ store }) => {
   const { showHerkunft, visibleOpenNodes } = store.tree
   if (!showHerkunft) return []
 
@@ -27,3 +27,5 @@ export default ({ store }) => {
       })
   )
 }
+
+export default herkunftNodes

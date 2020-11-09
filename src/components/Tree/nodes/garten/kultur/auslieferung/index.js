@@ -1,6 +1,6 @@
 import lieferungLabelFromLieferung from '../../../../../../utils/lieferungLabelFromLieferung'
 
-export default ({ store }) => {
+const gartenKulturAuslieferungNodes = ({ store }) => {
   const { showGarten, visibleOpenNodes, garten, gartenKultur } = store.tree
   if (!showGarten) return []
 
@@ -50,3 +50,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default gartenKulturAuslieferungNodes

@@ -1,6 +1,6 @@
 import eventLabelFromEvent from '../../../../../../utils/eventLabelFromEvent'
 
-export default ({ store }) => {
+const gartenKulturEventNodes = ({ store }) => {
   const { showGarten, visibleOpenNodes, garten, gartenKultur } = store.tree
   if (!showGarten) return []
 
@@ -40,3 +40,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default gartenKulturEventNodes
