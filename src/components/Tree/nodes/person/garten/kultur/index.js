@@ -1,6 +1,6 @@
 import artLabelFromKultur from '../../../../../../utils/artLabelFromKultur'
 
-export default ({ store }) => {
+const personGartenKulturNodes = ({ store }) => {
   const { showPerson, visibleOpenNodes, person, personGarten } = store.tree
   if (!showPerson) return []
 
@@ -54,3 +54,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default personGartenKulturNodes
