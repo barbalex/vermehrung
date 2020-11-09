@@ -1,4 +1,4 @@
-export default ({ lieferung, store }) => {
+const artLabelFromLieferung = ({ lieferung, store }) => {
   if (!lieferung?.art_id) return '(keine Art)'
   const art = store.arts.get(lieferung.art_id)
   if (!art?.ae_id) return '(kein Name)'
@@ -6,3 +6,5 @@ export default ({ lieferung, store }) => {
   if (!aeArt?.name) return '(kein Name)'
   return aeArt?.name
 }
+
+export default artLabelFromLieferung
