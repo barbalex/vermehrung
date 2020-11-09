@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const artKulturEventFolder = ({ store }) => {
   const { initialDataQueried } = store
   const { showArt, visibleOpenNodes, art, artKultur } = store.tree
   if (!showArt) return []
@@ -30,3 +30,5 @@ export default ({ store }) => {
     }
   })
 }
+
+export default artKulturEventFolder
