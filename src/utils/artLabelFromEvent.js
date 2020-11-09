@@ -1,4 +1,4 @@
-export default ({ event, store }) => {
+const artLabelFromEvent = ({ event, store }) => {
   if (!event?.kultur_id) return '(keine Art)'
   const kultur = store.kulturs.get(event.kultur_id)
   if (!kultur.art_id) return '(keine Art)'
@@ -8,3 +8,5 @@ export default ({ event, store }) => {
   if (!aeArt?.name) return '(kein Name)'
   return aeArt?.name
 }
+
+export default artLabelFromEvent
