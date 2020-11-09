@@ -156,7 +156,7 @@ const allDataQuery = gql`
   ${zaehlung}
 `
 
-export default async ({ store }) => {
+const queryAllData = async ({ store }) => {
   if (!store.online) {
     return
   }
@@ -180,3 +180,5 @@ export default async ({ store }) => {
   removeSurplusNotRevModels({ store, data })
   setInitialDataQueried(true)
 }
+
+export default queryAllData

@@ -1,7 +1,7 @@
 // NOT IN USE
 import types from '../models/Filter/simpleTypes'
 
-export default ({ store, table }) => {
+const queryFromTable = ({ store, table }) => {
   const { filter: storeFilter } = store
   const deletedTableFilter = {
     _or: [
@@ -43,3 +43,5 @@ export default ({ store, table }) => {
 
   return filter
 }
+
+export default queryFromTable

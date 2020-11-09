@@ -10,7 +10,7 @@ const removeMetadata = (d) => {
   return d
 }
 
-export default ({ dataset: d, foreignKeys }) => {
+const removeMetadataFromDataset = ({ dataset: d, foreignKeys }) => {
   const datasetRaw = { ...d }
   const dataset = removeMetadata(datasetRaw)
   if (foreignKeys.length) {
@@ -34,3 +34,5 @@ export default ({ dataset: d, foreignKeys }) => {
   if (Object.keys(dataset).length) return dataset
   return null
 }
+
+export default removeMetadataFromDataset
