@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const sammelLieferungLieferungFolder = ({ store }) => {
   const { initialDataQueried } = store
   const { showSammelLieferung, visibleOpenNodes, sammelLieferung } = store.tree
   if (!showSammelLieferung) return []
@@ -31,3 +31,5 @@ export default ({ store }) => {
     }
   })
 }
+
+export default sammelLieferungLieferungFolder
