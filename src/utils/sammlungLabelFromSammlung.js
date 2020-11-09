@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-export default ({ sammlung, store }) => {
+const sammlungLabelFromSammlung = ({ sammlung, store }) => {
   const art = sammlung?.art_id ? store.arts.get(sammlung.art_id) : {}
   const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
   const person = sammlung.person_id ? store.persons.get(sammlung.person_id) : {}
@@ -25,3 +25,5 @@ export default ({ sammlung, store }) => {
 
   return label
 }
+
+export default sammlungLabelFromSammlung
