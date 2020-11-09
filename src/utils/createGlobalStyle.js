@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
-export default () => createGlobalStyle`
+const createGlobalStyleModule = () => createGlobalStyle`
   html {
     overflow: hidden !important;
   }
@@ -137,3 +137,5 @@ export default () => createGlobalStyle`
     background-color: rgba(74, 20, 140, 0.08);
   }
 `
+
+export default createGlobalStyleModule
