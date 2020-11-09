@@ -1,4 +1,4 @@
-export default () => {
+const constants = () => {
   if (typeof window === 'undefined') return
   const hostnameWithoutWww = window.location.hostname.replace('www.', '')
   const isLocalhost = hostnameWithoutWww === 'localhost'
@@ -30,3 +30,5 @@ export default () => {
     },
   }
 }
+
+export default constants
