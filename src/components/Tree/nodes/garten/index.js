@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
 
-export default ({ store }) => {
+const gartenNodes = ({ store }) => {
   const { showGarten, visibleOpenNodes } = store.tree
   if (!showGarten) return []
 
@@ -25,3 +25,5 @@ export default ({ store }) => {
       })
   )
 }
+
+export default gartenNodes

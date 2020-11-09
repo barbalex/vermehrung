@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const gartenFolder = ({ store }) => {
   const { initialDataQueried } = store
   const { showGarten } = store.tree
   const gaerten = store.gartensFiltered
@@ -19,3 +19,5 @@ export default ({ store }) => {
     },
   ]
 }
+
+export default gartenFolder

@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const eventFolder = ({ store }) => {
   const { initialDataQueried } = store
   if (!store.tree.showEvent) return []
 
@@ -18,3 +18,5 @@ export default ({ store }) => {
     },
   ]
 }
+
+export default eventFolder
