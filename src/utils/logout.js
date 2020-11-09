@@ -1,6 +1,6 @@
 import localForage from 'localforage'
 
-export default async ({ store }) => {
+const logout = async ({ store }) => {
   console.log('LOGGING OUT')
   if (typeof window !== 'undefined') {
     store.firebase.auth().signOut()
@@ -9,3 +9,5 @@ export default async ({ store }) => {
     window.location.reload(true)
   }
 }
+
+export default logout

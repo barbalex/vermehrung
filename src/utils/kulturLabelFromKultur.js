@@ -1,4 +1,4 @@
-export default ({ kultur, store }) => {
+const kulturLabelFromKultur = ({ kultur, store }) => {
   if (!kultur) return ''
   const { ae_arts, arts, gartens, herkunfts, persons } = store
 
@@ -47,3 +47,5 @@ export default ({ kultur, store }) => {
 
   return label
 }
+
+export default kulturLabelFromKultur
