@@ -1,4 +1,4 @@
-export default ({ a, b }) => {
+const userRoleSort = ({ a, b }) => {
   const sortA = a.sort ?? ''
   const sortB = b.sort ?? ''
   if (sortA < sortB) return -1
@@ -11,3 +11,5 @@ export default ({ a, b }) => {
 
   return 0
 }
+
+export default userRoleSort
