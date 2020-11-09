@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const kulturFolder = ({ store }) => {
   const { initialDataQueried } = store
   const { showKultur } = store.tree
 
@@ -20,3 +20,5 @@ export default ({ store }) => {
     },
   ]
 }
+
+export default kulturFolder

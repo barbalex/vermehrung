@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const herkunftFolder = ({ store }) => {
   const { initialDataQueried } = store
   const { showHerkunft } = store.tree
   const herkuenfte = store.herkunftsFiltered
@@ -20,3 +20,5 @@ export default ({ store }) => {
     },
   ]
 }
+
+export default herkunftFolder
