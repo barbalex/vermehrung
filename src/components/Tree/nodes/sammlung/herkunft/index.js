@@ -1,6 +1,6 @@
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft'
 
-export default ({ store }) => {
+const sammlungHerkunftNodes = ({ store }) => {
   const { showSammlung, visibleOpenNodes, sammlung: sammlungNodes } = store.tree
   if (!showSammlung) return []
 
@@ -40,3 +40,5 @@ export default ({ store }) => {
     )
   })
 }
+
+export default sammlungHerkunftNodes

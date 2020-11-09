@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import zaehlungLabelFromZaehlung from '../../../../utils/zaehlungLabelFromZaehlung'
 
-export default ({ store }) => {
+const zaehlungNodes = ({ store }) => {
   const { showZaehlung, visibleOpenNodes } = store.tree
 
   if (!showZaehlung) return []
@@ -29,3 +29,5 @@ export default ({ store }) => {
       })
   )
 }
+
+export default zaehlungNodes

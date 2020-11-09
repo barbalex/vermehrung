@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const teilkulturFolder = ({ store }) => {
   const { initialDataQueried } = store
   const { showTeilkultur } = store.tree
 
@@ -23,3 +23,5 @@ export default ({ store }) => {
     },
   ]
 }
+
+export default teilkulturFolder
