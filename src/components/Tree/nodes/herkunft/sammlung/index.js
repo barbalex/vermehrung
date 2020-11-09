@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 
 import artLabelFromSammlung from '../../../../../utils/artLabelFromSammlung'
 
-export default ({ store }) => {
+const herkunftSammlungNodes = ({ store }) => {
   const { showHerkunft, visibleOpenNodes, herkunft } = store.tree
   if (!showHerkunft) return []
 
@@ -52,3 +52,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default herkunftSammlungNodes
