@@ -1,6 +1,6 @@
 import isNodeOpen from './isNodeOpen'
 
-export default ({ node, store }) => {
+const openNode = ({ node, store }) => {
   const { addOpenNodes } = store.tree
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
@@ -24,3 +24,5 @@ export default ({ node, store }) => {
   }
   addNode(loadingNode)*/
 }
+
+export default openNode
