@@ -1,6 +1,6 @@
 import kulturLabelFromKultur from '../../../../../../utils/kulturLabelFromKultur'
 
-export default ({ store }) => {
+const sammlungAuslieferungKulturNodes = ({ store }) => {
   const {
     showSammlung,
     visibleOpenNodes,
@@ -57,3 +57,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default sammlungAuslieferungKulturNodes

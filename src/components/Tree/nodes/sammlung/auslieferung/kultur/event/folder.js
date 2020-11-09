@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const sammlungAuslieferungKulturEventFolder = ({ store }) => {
   const { initialDataQueried } = store
   const {
     showSammlung,
@@ -52,3 +52,5 @@ export default ({ store }) => {
     }
   })
 }
+
+export default sammlungAuslieferungKulturEventFolder
