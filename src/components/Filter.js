@@ -43,7 +43,7 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-export default () => {
+const Filter = () => {
   const { activeForm } = useContext(StoreContext)
   // ensure list views are directed to correct filter
   // use exact match or garten will become gart
@@ -138,3 +138,5 @@ export default () => {
     </ErrorBoundary>
   )
 }
+
+export default Filter
