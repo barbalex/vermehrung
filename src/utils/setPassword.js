@@ -2,7 +2,7 @@ import getConstants from './constants'
 
 const constants = getConstants()
 
-export default async ({ store, person }) => {
+const setPassword = async ({ store, person }) => {
   const { addNotification, firebase } = store
   // fetch email of this person
   const email = person?.email
@@ -21,3 +21,5 @@ export default async ({ store, person }) => {
     type: 'success',
   })
 }
+
+export default setPassword

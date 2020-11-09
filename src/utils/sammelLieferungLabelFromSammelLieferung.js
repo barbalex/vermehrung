@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import gartenLabelFromGarten from './gartenLabelFromGarten'
 import personLabelFromPerson from './personLabelFromPerson'
 
-export default ({ lieferung, store }) => {
+const sammelLieferungLabelFromSammelLieferung = ({ lieferung, store }) => {
   if (!lieferung?.id) return 'keine Lieferung'
 
   const vonKultur = lieferung.von_kultur_id
@@ -25,3 +25,5 @@ export default ({ lieferung, store }) => {
 
   return label
 }
+
+export default sammelLieferungLabelFromSammelLieferung
