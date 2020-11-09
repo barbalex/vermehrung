@@ -1,6 +1,10 @@
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
 
-export default ({ workbook, title, data: dataPassed }) => {
+const addWorksheetToExceljsWorkbook = ({
+  workbook,
+  title,
+  data: dataPassed,
+}) => {
   let data = dataPassed
   if (data.length === 0) {
     data = [{ 'keine Daten': 'Es gibt keine Daten' }]
@@ -46,3 +50,5 @@ export default ({ workbook, title, data: dataPassed }) => {
     },
   }
 }
+
+export default addWorksheetToExceljsWorkbook
