@@ -1,4 +1,4 @@
-export default ({ a, b }) => {
+const personSort = ({ a, b }) => {
   const nameA = a?.fullname?.toString()?.toLowerCase() ?? ''
   const nameB = b?.fullname?.toString()?.toLowerCase() ?? ''
   if (nameA < nameB) return -1
@@ -6,3 +6,5 @@ export default ({ a, b }) => {
 
   return 0
 }
+
+export default personSort

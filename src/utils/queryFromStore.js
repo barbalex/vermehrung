@@ -44,7 +44,7 @@ const nonSorter = () => true
 // filter is a passed filter for cases like:
 // list of teilkulturs of a kultur
 // > kultur_id is passed as filter
-export default ({ store, table }) => {
+const queryFromStore = ({ store, table }) => {
   const { filter: storeFilter } = store
   const viewName = `${camelCase(table)}sSorted`
 
@@ -87,3 +87,5 @@ export default ({ store, table }) => {
   const sortFunction = sorters[table] ?? nonSorter
   return filteredValues.sort((a, b) => sortFunction({ a, b, store }))
 }
+
+export default queryFromStore
