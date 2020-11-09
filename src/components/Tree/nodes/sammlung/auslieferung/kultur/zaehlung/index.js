@@ -1,6 +1,6 @@
 import zaehlungLabelFromZaehlung from '../../../../../../../utils/zaehlungLabelFromZaehlung'
 
-export default ({ store }) => {
+const sammlungAuslieferungKulturZaehlungNodes = ({ store }) => {
   const {
     showSammlung,
     visibleOpenNodes,
@@ -72,3 +72,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default sammlungAuslieferungKulturZaehlungNodes
