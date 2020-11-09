@@ -1,6 +1,6 @@
 import artLabelFromEvent from './artLabelFromEvent'
 
-export default ({ a, b, store }) => {
+const avSort = ({ a, b, store }) => {
   const nameA = artLabelFromEvent({ event: a, store })
   const nameB = artLabelFromEvent({ event: b, store })
   if (nameA < nameB) return -1
@@ -8,3 +8,5 @@ export default ({ a, b, store }) => {
 
   return 0
 }
+
+export default avSort

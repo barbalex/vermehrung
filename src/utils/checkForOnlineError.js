@@ -1,1 +1,4 @@
-export default (error) => console.log('checkForOnlineError, error:', error)
+const checkForOnlineError = (error) =>
+  console.log('checkForOnlineError, error:', error)
+
+export default checkForOnlineError
