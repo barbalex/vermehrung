@@ -1,4 +1,4 @@
-export default ({ a, b, store }) => {
+const gartenSort = ({ a, b, store }) => {
   const nameA = a?.name?.toString()?.toLowerCase() ?? ''
   const nameB = b?.name?.toString()?.toLowerCase() ?? ''
   if (nameA < nameB) return -1
@@ -14,3 +14,5 @@ export default ({ a, b, store }) => {
 
   return 0
 }
+
+export default gartenSort
