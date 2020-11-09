@@ -4,7 +4,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import isNodeOpen from './isNodeOpen'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 
-export default ({ node, store }) => {
+const toggleNodeSymbol = ({ node, store }) => {
   const { addNotification } = store
   const { setActiveNodeArray, activeNodeArray } = store.tree
   if (!node.url) {
@@ -33,3 +33,5 @@ export default ({ node, store }) => {
     addOpenNodes([node.url])
   }
 }
+
+export default toggleNodeSymbol

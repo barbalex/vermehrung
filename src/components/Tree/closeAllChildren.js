@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual'
 
-export default ({ node, store }) => {
+const closeAllChildren = ({ node, store }) => {
   const { setOpenNodes, openNodes } = store.tree
 
   const newOpenNodes = openNodes.filter((n) => {
@@ -11,3 +11,5 @@ export default ({ node, store }) => {
   })
   setOpenNodes(newOpenNodes)
 }
+
+export default closeAllChildren
