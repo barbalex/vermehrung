@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
 
-export default ({ store }) => {
+const kulturNodes = ({ store }) => {
   const { showKultur, visibleOpenNodes } = store.tree
   if (!showKultur) return []
 
@@ -31,3 +31,5 @@ export default ({ store }) => {
       })
   )
 }
+
+export default kulturNodes
