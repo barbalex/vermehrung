@@ -1,6 +1,6 @@
 import artLabelFromSammlung from './artLabelFromSammlung'
 
-export default ({ a, b, store }) => {
+const sammlungSort = ({ a, b, store }) => {
   const datumA = a?.datum ? new Date(a.datum) : ''
   const datumB = b?.datum ? new Date(b.datum) : ''
   if (datumA < datumB) return -1
@@ -41,3 +41,5 @@ export default ({ a, b, store }) => {
 
   return 0
 }
+
+export default sammlungSort

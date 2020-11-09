@@ -15,7 +15,7 @@ const firebaseConfig = {
   appId: process.env.GATSBY_FIREBASE_APP_ID,
 }
 
-export default async ({ store }) => {
+const recreatePersistedStore = async ({ store }) => {
   let unregisterAuthObserver = () => {}
   const { setUser, setGettingAuthUser, setFirebase } = store
   window.store = store
@@ -60,3 +60,5 @@ export default async ({ store }) => {
   })
   return unregisterAuthObserver
 }
+
+export default recreatePersistedStore
