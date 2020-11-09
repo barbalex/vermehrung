@@ -1,6 +1,6 @@
 import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
 
-export default ({ store }) => {
+const personGartenNodes = ({ store }) => {
   const { showPerson, visibleOpenNodes, person } = store.tree
   if (!showPerson) return []
 
@@ -35,3 +35,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default personGartenNodes
