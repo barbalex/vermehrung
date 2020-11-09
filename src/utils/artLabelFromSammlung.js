@@ -1,4 +1,4 @@
-export default ({ sammlung, store }) => {
+const artLabelFromSammlung = ({ sammlung, store }) => {
   if (!sammlung?.art_id) return '(keine Art)'
   const art = store.arts.get(sammlung.art_id)
   if (!art?.ae_id) return '(kein Name)'
@@ -6,3 +6,5 @@ export default ({ sammlung, store }) => {
   if (!aeArt?.name) return '(kein Name)'
   return aeArt?.name
 }
+
+export default artLabelFromSammlung
