@@ -4,7 +4,7 @@ import exists from '../../../../../../utils/exists'
 import herkunftLabelFromKultur from '../../../../../../utils/herkunftLabelFromKultur'
 import gartenLabelFromKultur from '../../../../../../utils/gartenLabelFromKultur'
 
-export default ({ kulturId, store }) => {
+const createMessageFunctions = ({ kulturId, store }) => {
   const {
     lieferungsSorted,
     kultursSorted,
@@ -536,3 +536,5 @@ export default ({ kulturId, store }) => {
         }),
   }
 }
+
+export default createMessageFunctions
