@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
 
-export default ({ store }) => {
+const personNodes = ({ store }) => {
   const { showPerson, visibleOpenNodes } = store.tree
 
   if (!showPerson) return []
@@ -28,3 +28,5 @@ export default ({ store }) => {
       })
   )
 }
+
+export default personNodes

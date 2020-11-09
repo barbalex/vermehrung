@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const personGartenKulturTeilkulturNodes = ({ store }) => {
   const {
     showPerson,
     visibleOpenNodes,
@@ -64,3 +64,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default personGartenKulturTeilkulturNodes

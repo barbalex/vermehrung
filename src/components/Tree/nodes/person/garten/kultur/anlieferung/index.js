@@ -1,6 +1,6 @@
 import lieferungLabelFromLieferung from '../../../../../../../utils/lieferungLabelFromLieferung'
 
-export default ({ store }) => {
+const personGartenKulturAnlieferungNodes = ({ store }) => {
   const {
     showPerson,
     visibleOpenNodes,
@@ -63,3 +63,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default personGartenKulturAnlieferungNodes
