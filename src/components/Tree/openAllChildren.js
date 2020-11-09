@@ -1,7 +1,7 @@
 import { getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
-export default ({ node, store, nodes }) => {
+const openAllChildren = ({ node, store, nodes }) => {
   const { setOpenNodes, openNodes: openNodesRaw } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
 
@@ -16,3 +16,5 @@ export default ({ node, store, nodes }) => {
   const newOpenNodes = [...openNodes, ...childNodes.map((n) => n.url)]
   setOpenNodes(newOpenNodes)
 }
+
+export default openAllChildren

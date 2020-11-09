@@ -5,4 +5,6 @@ const LoadingContainer = styled.div`
   padding: 10px;
 `
 
-export default () => <LoadingContainer>Lade...</LoadingContainer>
+const Fallback = () => <LoadingContainer>Lade...</LoadingContainer>
+
+export default Fallback

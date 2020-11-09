@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 
-export default ({ sammlung, store }) => {
+const sammlungLabelFromSammlung = ({ sammlung, store }) => {
   if (!sammlung) return '(keine Sammlung)'
   const person = sammlung.person_id ? store.persons.get(sammlung.person_id) : {}
   const herkunft = sammlung.herkunft_id
@@ -19,3 +19,5 @@ export default ({ sammlung, store }) => {
 
   return label
 }
+
+export default sammlungLabelFromSammlung
