@@ -1,6 +1,6 @@
 import zaehlungLabelFromZaehlung from '../../../../../../../utils/zaehlungLabelFromZaehlung'
 
-export default ({ store }) => {
+const personGartenKulturZaehlungNodes = ({ store }) => {
   const {
     showPerson,
     visibleOpenNodes,
@@ -63,3 +63,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default personGartenKulturZaehlungNodes

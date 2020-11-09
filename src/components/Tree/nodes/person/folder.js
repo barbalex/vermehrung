@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const personFolder = ({ store }) => {
   const { initialDataQueried } = store
   const { showPerson } = store.tree
 
@@ -20,3 +20,5 @@ export default ({ store }) => {
     },
   ]
 }
+
+export default personFolder

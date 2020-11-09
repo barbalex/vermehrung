@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const kulturTeilkulturNodes = ({ store }) => {
   const { showKultur, visibleOpenNodes, kultur } = store.tree
   if (!showKultur) return []
 
@@ -37,3 +37,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default kulturTeilkulturNodes
