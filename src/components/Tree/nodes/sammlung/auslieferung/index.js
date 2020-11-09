@@ -1,6 +1,6 @@
 import lieferungLabelFromLieferung from '../../../../../utils/lieferungLabelFromLieferung'
 
-export default ({ store }) => {
+const sammlungAuslieferungNodes = ({ store }) => {
   const { showSammlung, visibleOpenNodes, sammlung: sammlungNodes } = store.tree
   if (!showSammlung) return []
 
@@ -38,3 +38,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default sammlungAuslieferungNodes
