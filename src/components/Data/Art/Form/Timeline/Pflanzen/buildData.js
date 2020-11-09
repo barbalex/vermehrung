@@ -4,7 +4,7 @@ import max from 'lodash/max'
 
 import exists from '../../../../../../utils/exists'
 
-export default ({ artId, store }) => {
+const buildData = ({ artId, store }) => {
   const { zaehlungsSorted, sammlungsSorted, lieferungsSorted } = store
 
   const zaehlungsDone = zaehlungsSorted
@@ -268,3 +268,5 @@ export default ({ artId, store }) => {
     return data
   })
 }
+
+export default buildData

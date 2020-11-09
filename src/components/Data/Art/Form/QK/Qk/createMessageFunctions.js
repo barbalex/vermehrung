@@ -7,7 +7,7 @@ import gartenLabelFromGarten from '../../../../../../utils/gartenLabelFromGarten
 import kulturLabelFromKultur from '../../../../../../utils/kulturLabelFromKultur'
 import sammlungLabelFromSammlung from '../../../../../../utils/sammlungLabelFromSammlung'
 
-export default ({ artId, store }) => {
+const createMessageFunctions = ({ artId, store }) => {
   const {
     artsSorted,
     eventsSorted,
@@ -584,3 +584,5 @@ export default ({ artId, store }) => {
         }),
   }
 }
+
+export default createMessageFunctions
