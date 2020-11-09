@@ -22,7 +22,7 @@ const sammlungLabelFromSammlung = ({ sammlung, store }) => {
   return label
 }
 
-export default ({ store }) => {
+const personSammlungNodes = ({ store }) => {
   const { showPerson, visibleOpenNodes, person } = store.tree
   if (!showPerson) return []
 
@@ -57,3 +57,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default personSammlungNodes

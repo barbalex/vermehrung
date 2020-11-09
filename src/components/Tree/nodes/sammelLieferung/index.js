@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import sammelLieferungLabelFromSammelLieferung from '../../../../utils/sammelLieferungLabelFromSammelLieferung'
 
-export default ({ store }) => {
+const sammelLieferungNodes = ({ store }) => {
   const { showSammelLieferung, visibleOpenNodes } = store.tree
 
   if (!showSammelLieferung) return []
@@ -32,3 +32,5 @@ export default ({ store }) => {
       })
   )
 }
+
+export default sammelLieferungNodes
