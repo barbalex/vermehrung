@@ -1,6 +1,6 @@
 import { ZAEHLUNG_FRAGMENT } from './mstFragments'
 
-export default ({ store }) => {
+const initializeSubscriptions = ({ store }) => {
   const unsubscribe = {}
   unsubscribe.ae_art = store.subscribeAe_art()
   unsubscribe.art = store.subscribeArt()
@@ -33,3 +33,5 @@ export default ({ store }) => {
   unsubscribe.zaehlung = store.subscribeZaehlung(undefined, ZAEHLUNG_FRAGMENT)
   return unsubscribe
 }
+
+export default initializeSubscriptions
