@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-export default ({ zaehlung }) => {
+const zaehlungLabelFromZaehlung = ({ zaehlung }) => {
   const datumLabel = zaehlung.datum
     ? DateTime.fromSQL(zaehlung.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
@@ -29,3 +29,5 @@ export default ({ zaehlung }) => {
 
   return label
 }
+
+export default zaehlungLabelFromZaehlung

@@ -1,1 +1,3 @@
-export default (array) => (array.length ? `{${array.join(`,`)}}` : null)
+const toPgArray = (array) => (array.length ? `{${array.join(`,`)}}` : null)
+
+export default toPgArray
