@@ -1,6 +1,6 @@
 import lieferungLabelFromLieferung from '../../../../../../utils/lieferungLabelFromLieferung'
 
-export default ({ store }) => {
+const herkunftSammlungAuslieferungNodes = ({ store }) => {
   const {
     showHerkunft,
     visibleOpenNodes,
@@ -54,3 +54,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default herkunftSammlungAuslieferungNodes

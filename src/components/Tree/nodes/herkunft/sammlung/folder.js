@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const herkunftSammlungFolder = ({ store }) => {
   const { initialDataQueried } = store
   const { showHerkunft, visibleOpenNodes, herkunft } = store.tree
   if (!showHerkunft) return []
@@ -29,3 +29,5 @@ export default ({ store }) => {
     }
   })
 }
+
+export default herkunftSammlungFolder

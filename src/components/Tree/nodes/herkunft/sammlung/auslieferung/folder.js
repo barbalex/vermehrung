@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const herkunftSammlungAuslieferungFolder = ({ store }) => {
   const { initialDataQueried } = store
   const {
     showHerkunft,
@@ -45,3 +45,5 @@ export default ({ store }) => {
     }
   })
 }
+
+export default herkunftSammlungAuslieferungFolder
