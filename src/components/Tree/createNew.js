@@ -5,7 +5,7 @@ import isUuid from 'is-uuid'
 import tableFromTitleHash from '../../utils/tableFromTitleHash'
 import exists from '../../utils/exists'
 
-export default async ({ node, store }) => {
+const createNew = async ({ node, store }) => {
   // get parent table, parent table id and table from url
   const { nodeType, url } = node
   const { kultursSorted, sammlungsSorted, sammelLieferungsSorted } = store
@@ -117,3 +117,5 @@ export default async ({ node, store }) => {
     }),
   )
 }
+
+export default createNew
