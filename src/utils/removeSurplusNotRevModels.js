@@ -14,7 +14,8 @@ const tablesNotRevisioned = [
   'kultur_file',
   'lieferung_file',
 ]
-export default ({ store, data }) => {
+
+const removeSurplusNotRevModels = ({ store, data }) => {
   tablesNotRevisioned.forEach((table) => {
     const models = store[`${table}s`]
     const tableData = data[table]
@@ -46,3 +47,5 @@ export default ({ store, data }) => {
     }
   })
 }
+
+export default removeSurplusNotRevModels

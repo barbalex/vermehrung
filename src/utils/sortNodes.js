@@ -7,7 +7,7 @@ const compare = (a, b) => {
   return a - b
 }
 
-export default (nodes) => {
+const sortNodes = (nodes) => {
   /**
    * As all nodes are now in one flat list,
    * we need to sort them
@@ -41,3 +41,5 @@ export default (nodes) => {
       compare(a.sort[10], b.sort[10]),
   )
 }
+
+export default sortNodes
