@@ -18,7 +18,7 @@ const distance = 1000 // ensure text in long labels is found
 const formatDateForSearch = (datum) =>
   datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
-export default ({ store, cb, val }) => {
+const buildOptions = ({ store, cb, val }) => {
   const {
     artsFiltered,
     eventsFiltered,
@@ -355,3 +355,5 @@ export default ({ store, cb, val }) => {
   }
   cb(options)
 }
+
+export default buildOptions

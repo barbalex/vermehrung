@@ -1,4 +1,4 @@
-export default (tk) => {
+const teilkulturLabelFromTeilkultur = (tk) => {
   if (tk?.name) return tk?.name
   if (tk?.ort1) {
     return `${tk?.ort1}${
@@ -7,3 +7,5 @@ export default (tk) => {
   }
   return '(kein Name, kein Ort)'
 }
+
+export default teilkulturLabelFromTeilkultur
