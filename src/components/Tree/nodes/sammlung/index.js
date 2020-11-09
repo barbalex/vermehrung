@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import sammlungLabelFromSammlung from '../../../../utils/sammlungLabelFromSammlung'
 
-export default ({ store }) => {
+const sammlungNodes = ({ store }) => {
   const { showSammlung, visibleOpenNodes } = store.tree
 
   if (!showSammlung) return []
@@ -32,3 +32,5 @@ export default ({ store }) => {
       })
   )
 }
+
+export default sammlungNodes

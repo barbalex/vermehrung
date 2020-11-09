@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const sammlungAuslieferungKulturFolder = ({ store }) => {
   const { initialDataQueried } = store
   const {
     showSammlung,
@@ -57,3 +57,5 @@ export default ({ store }) => {
       .filter((n) => !!n.id)
   )
 }
+
+export default sammlungAuslieferungKulturFolder
