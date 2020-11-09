@@ -1,6 +1,6 @@
 import artLabelFromKultur from './artLabelFromKultur'
 
-export default ({ a, b, store }) => {
+const kulturSort = ({ a, b, store }) => {
   const artnameA = artLabelFromKultur({ kultur: a, store })
     .toString()
     ?.toLowerCase()
@@ -56,3 +56,5 @@ export default ({ a, b, store }) => {
 
   return 0
 }
+
+export default kulturSort

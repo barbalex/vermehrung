@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-export default ({ lieferung }) => {
+const lieferungLabelFromLieferung = ({ lieferung }) => {
   const datumLabel = lieferung.datum
     ? DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
@@ -16,3 +16,5 @@ export default ({ lieferung }) => {
 
   return label
 }
+
+export default lieferungLabelFromLieferung
