@@ -1,4 +1,4 @@
-export default ({ a, b }) => {
+const eventSort = ({ a, b }) => {
   const datumA = a?.datum ? new Date(a.datum) : ''
   const datumB = b?.datum ? new Date(b.datum) : ''
   if (datumA < datumB) return -1
@@ -11,3 +11,5 @@ export default ({ a, b }) => {
 
   return 0
 }
+
+export default eventSort
