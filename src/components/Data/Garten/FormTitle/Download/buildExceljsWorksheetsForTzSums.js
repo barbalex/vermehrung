@@ -4,7 +4,11 @@ import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToEx
  * this function cann be used from higher up
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
-export default async ({ store, garten_id, workbook }) => {
+const buildExceljsWorksheetsForTzSums = async ({
+  store,
+  garten_id,
+  workbook,
+}) => {
   const { teilzaehlungsSorted } = store
 
   const teilzaehlungenArray = teilzaehlungsSorted.filter((t) => {
@@ -42,3 +46,5 @@ export default async ({ store, garten_id, workbook }) => {
 
   return
 }
+
+export default buildExceljsWorksheetsForTzSums
