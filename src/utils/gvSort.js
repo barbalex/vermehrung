@@ -1,4 +1,4 @@
-export default ({ a, b, store }) => {
+const gvSort = ({ a, b, store }) => {
   const gartenA = a.garten_id ? store.gartens.get(a.garten_id) : {}
   const gartenB = b.garten_id ? store.gartens.get(b.garten_id) : {}
 
@@ -17,3 +17,5 @@ export default ({ a, b, store }) => {
 
   return 0
 }
+
+export default gvSort

@@ -1,4 +1,4 @@
-export default ({ garten, store }) => {
+const gartenLabelFromGarten = ({ garten, store }) => {
   if (!garten?.id) return 'kein Garten'
   if (garten?.name) return garten.name
 
@@ -10,3 +10,5 @@ export default ({ garten, store }) => {
 
   return 'kein Name'
 }
+
+export default gartenLabelFromGarten
