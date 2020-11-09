@@ -1,6 +1,6 @@
 import eventLabelFromEvent from '../../../../../utils/eventLabelFromEvent'
 
-export default ({ store }) => {
+const kulturEventNodes = ({ store }) => {
   const { showKultur, visibleOpenNodes, kultur } = store.tree
   if (!showKultur) return []
 
@@ -32,3 +32,5 @@ export default ({ store }) => {
       })
   })
 }
+
+export default kulturEventNodes

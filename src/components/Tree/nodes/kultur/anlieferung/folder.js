@@ -1,4 +1,4 @@
-export default ({ store }) => {
+const kulturAnlieferungFolder = ({ store }) => {
   const { initialDataQueried } = store
   const { showKultur, visibleOpenNodes, kultur } = store.tree
   if (!showKultur) return []
@@ -31,3 +31,5 @@ export default ({ store }) => {
     }
   })
 }
+
+export default kulturAnlieferungFolder
