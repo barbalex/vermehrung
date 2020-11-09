@@ -1,4 +1,4 @@
-export default (a, b) => {
+const compareLabel = (a, b) => {
   // catch if label is null
   if (!b.label && !a.label) return 0
   if (!b.label) return -1
@@ -11,3 +11,5 @@ export default (a, b) => {
   }
   return 0
 }
+
+export default compareLabel

@@ -1,7 +1,7 @@
 import isNodeOpen from './isNodeOpen'
 import openNode from './openNode'
 
-export default ({ node, store }) => {
+const toggleNode = ({ node, store }) => {
   const { addNotification, tree } = store
   if (!node.url) {
     console.log('passsed node has no url:', node)
@@ -34,3 +34,5 @@ export default ({ node, store }) => {
   }
   store.filter.setShow(false)
 }
+
+export default toggleNode
