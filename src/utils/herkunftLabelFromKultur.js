@@ -1,6 +1,6 @@
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 
-export default ({ kultur, store }) => {
+const herkunftLabelFromKultur = ({ kultur, store }) => {
   const herkunft = kultur?.herkunft_id
     ? store.herkunfts.get(kultur.herkunft_id)
     : {}
@@ -9,3 +9,5 @@ export default ({ kultur, store }) => {
 
   return herkunftLabelFromHerkunft({ herkunft, store })
 }
+
+export default herkunftLabelFromKultur

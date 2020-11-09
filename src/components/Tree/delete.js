@@ -1,6 +1,6 @@
 import tableFromTitleHash from '../../utils/tableFromTitleHash'
 
-export default async ({ node, store }) => {
+const deleteModule = async ({ node, store }) => {
   const {
     activeNodeArray,
     setActiveNodeArray,
@@ -18,3 +18,5 @@ export default async ({ node, store }) => {
   // need to remove openNode from openNodes
   removeOpenNodeWithChildren(node.url)
 }
+
+export default deleteModule
