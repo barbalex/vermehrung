@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import teilkulturLabelFromTeilkultur from '../../../../utils/teilkulturLabelFromTeilkultur'
 
-export default ({ store }) => {
+const teilkulturNodes = ({ store }) => {
   const { showTeilkultur, visibleOpenNodes } = store.tree
 
   if (!showTeilkultur) return []
@@ -30,3 +30,5 @@ export default ({ store }) => {
       })
   )
 }
+
+export default teilkulturNodes
