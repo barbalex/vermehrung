@@ -4,7 +4,7 @@ import getConstants from './constants'
 
 const constants = getConstants()
 
-export default async ({ store, person }) => {
+const deleteAccount = async ({ store, person }) => {
   const { addNotification, online, setOnline } = store
   // delete firebase user
   if (person?.account_id) {
@@ -38,3 +38,5 @@ export default async ({ store, person }) => {
     })
   }
 }
+
+export default deleteAccount

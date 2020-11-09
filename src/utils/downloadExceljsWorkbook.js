@@ -5,7 +5,7 @@ import format from 'date-fns/format'
  * this function cann be used from higher up
  * that is why it _can_ recieve a workbook
  */
-export default async ({ store, fileName, workbook }) => {
+const downloadExceljsWorkbook = async ({ store, fileName, workbook }) => {
   let buffer
   try {
     buffer = await workbook.xlsx.writeBuffer()
@@ -20,3 +20,5 @@ export default async ({ store, fileName, workbook }) => {
     `${file}.xlsx`,
   )
 }
+
+export default downloadExceljsWorkbook
