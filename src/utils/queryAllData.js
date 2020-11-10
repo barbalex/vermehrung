@@ -179,6 +179,8 @@ const queryAllData = async ({ store }) => {
   }
   removeSurplusNotRevModels({ store, data })
   setInitialDataQueried(true)
+  // TODO:
+  // remove data with _deleted flag?
 }
 
 export default queryAllData
