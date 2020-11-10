@@ -59,6 +59,7 @@ export const RootStore = RootStoreBase.props({
   singleColumnView: types.optional(types.boolean, false),
   showTreeInSingleColumnView: types.optional(types.boolean, false),
   online: types.optional(types.boolean, true),
+  lastUpdatedAt: types.optional(types.number, 0),
   /**
    * This is a queue of all queries
    * When online they they are immediatly executed by the reaction
@@ -184,6 +185,9 @@ export const RootStore = RootStoreBase.props({
         },
       )
     return {
+      setLastUpdatedAt(val) {
+        self.lastUpdatedAt = val
+      },
       setDiffConflict(val) {
         self.diffConflict = val
       },
