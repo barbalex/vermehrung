@@ -77,13 +77,13 @@ const LieferungWer = ({
     }
   }, [scrollHandler])
 
-  console.log('Lieferung Wer', {
+  /*console.log('Lieferung Wer', {
     row,
     online,
     showFilter,
     conflicts: row?._conflicts,
     conflictsMap: row?._conflicts?.map,
-  })
+  })*/
 
   return (
     <>
