@@ -1607,6 +1607,7 @@ export const RootStore = RootStoreBase.props({
         self.docFilter = val
       },
       flushData() {
+        self.lastUpdatedAt = 0
         self.ae_arts.clear()
         self.arts.clear()
         self.art_files.clear()
@@ -1635,7 +1636,6 @@ export const RootStore = RootStoreBase.props({
         self.teilzaehlungs.clear()
         self.user_roles.clear()
         self.zaehlungs.clear()
-        self.lastUpdatedAt = 0
       },
     }
   })
