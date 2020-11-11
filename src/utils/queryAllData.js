@@ -161,13 +161,11 @@ const queryAllData = async ({ store }) => {
   if (!store.online) {
     return
   }
-  // TODO: do this in worker?
-  // TODO:
   // query only newer than store.lastUpdatedAt
   const { setInitialDataQueried, lastUpdatedAt } = store
   let data
   const changed = DateTime.fromMillis(lastUpdatedAt).toISO()
-  console.log('queryAllData', { changed, lastUpdatedAt })
+  //console.log('queryAllData', { changed, lastUpdatedAt })
   try {
     data = await store.query(
       allDataQuery,
@@ -186,7 +184,7 @@ const queryAllData = async ({ store }) => {
     setInitialDataQueried(true)
     return
   }
-  console.log('queryAllData', { data })
+  //console.log('queryAllData', { data })
   removeSurplusNotRevModels({ store, data })
   setInitialDataQueried(true)
   store.setLastUpdatedAt(Date.now())
