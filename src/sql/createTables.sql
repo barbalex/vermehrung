@@ -8,11 +8,13 @@ create table user_role (
   name text unique,
   label text default null,
   sort integer,
-  comment text
+  comment text,
+  changed timestamp default now()
 );
 create index on user_role using btree (id);
 create index on user_role using btree (name);
 create index on user_role using btree (sort);
+create index on user_role using btree (changed);
 INSERT INTO user_role (name, sort, comment) VALUES
   ('gaertner', 1, 'liest und editiert Daten des eigenen Garten'),
   ('artverantwortlich', 2, 'liest und editiert Daten für bestimmte Arten'),
@@ -409,12 +411,15 @@ create table sammlung_file (
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
-  beschreibung text default null
+  beschreibung text default null,
+  changed timestamp default now()
 );
 create index on sammlung_file using btree (id);
 create index on sammlung_file using btree (sammlung_id);
 create index on sammlung_file using btree (file_id);
 create index on sammlung_file using btree (file_mime_type);
+create index on sammlung_file using btree (changed);
+
 
 drop table if exists garten cascade;
 create table garten (
@@ -484,12 +489,14 @@ create table garten_file (
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
-  beschreibung text default null
+  beschreibung text default null,
+  changed timestamp default now()
 );
 create index on garten_file using btree (id);
 create index on garten_file using btree (garten_id);
 create index on garten_file using btree (file_id);
 create index on garten_file using btree (file_mime_type);
+create index on garten_file using btree (changed);
 
 drop table if exists kultur cascade;
 create table kultur (
@@ -654,12 +661,14 @@ create table kultur_file (
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
-  beschreibung text default null
+  beschreibung text default null,
+  changed timestamp default now()
 );
 create index on kultur_file using btree (id);
 create index on kultur_file using btree (kultur_id);
 create index on kultur_file using btree (file_id);
 create index on kultur_file using btree (file_mime_type);
+create index on kultur_file using btree (changed);
 
 drop table if exists teilkultur cascade;
 create table teilkultur (
@@ -1169,12 +1178,14 @@ create table lieferung_file (
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
-  beschreibung text default null
+  beschreibung text default null,
+  changed timestamp default now()
 );
 create index on lieferung_file using btree (id);
 create index on lieferung_file using btree (lieferung_id);
 create index on lieferung_file using btree (file_id);
 create index on lieferung_file using btree (file_mime_type);
+create index on lieferung_file using btree (changed);
 
 drop table if exists av cascade;
 create table av (
