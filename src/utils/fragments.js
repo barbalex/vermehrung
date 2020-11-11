@@ -71,6 +71,7 @@ export const aeArt = gql`
     id
     __typename
     name
+    changed
     # name_deutsch
     # name_latein
   }
