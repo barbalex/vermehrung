@@ -64,6 +64,7 @@ export const artFile = gql`
     file_mime_type
     name
     beschreibung
+    changed
   }
 `
 export const aeArt = gql`
@@ -293,6 +294,7 @@ export const herkunftFile = gql`
     file_mime_type
     name
     beschreibung
+    changed
   }
 `
 export const kultur = gql`
