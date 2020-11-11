@@ -71,7 +71,7 @@ const allDataQuery = gql`
     herkunft(where: { changed: { _gt: $changed } }) {
       ...HerkunftFields
     }
-    herkunft_file {
+    herkunft_file(where: { changed: { _gt: $changed } }) {
       ...HerkunftFileFields
     }
     kultur(where: { changed: { _gt: $changed } }) {
