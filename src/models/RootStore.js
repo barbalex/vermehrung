@@ -186,6 +186,7 @@ export const RootStore = RootStoreBase.props({
       )
     return {
       setLastUpdatedAt(val) {
+        //console.log('store, setLastUpdatedAt:', val)
         self.lastUpdatedAt = val
       },
       setDiffConflict(val) {
@@ -1634,6 +1635,7 @@ export const RootStore = RootStoreBase.props({
         self.teilzaehlungs.clear()
         self.user_roles.clear()
         self.zaehlungs.clear()
+        self.lastUpdatedAt = 0
       },
     }
   })
