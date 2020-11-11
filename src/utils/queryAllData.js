@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { DateTime } from 'luxon'
 
 import {
   aeArt,
@@ -36,8 +37,8 @@ import removeSurplusNotRevModels from './removeSurplusNotRevModels'
 import checkForOnlineError from './checkForOnlineError'
 
 const allDataQuery = gql`
-  query AllDataQueryForTreeContainer {
-    ae_art {
+  query AllDataQueryForTreeContainer($changed: timestamp) {
+    ae_art(where: { changed: { _gt: $changed } }) {
       ...AeArtFields
     }
     art {
@@ -163,12 +164,18 @@ const queryAllData = async ({ store }) => {
   // TODO: do this in worker?
   // TODO:
   // query only newer than store.lastUpdatedAt
-  const { setInitialDataQueried } = store
+  const { setInitialDataQueried, lastUpdatedAt } = store
   let data
+  const changed = DateTime.fromMillis(lastUpdatedAt).toISO()
+  console.log('queryAllData', { changed, lastUpdatedAt })
   try {
-    data = await store.query(allDataQuery, undefined, {
-      fetchPolicy: 'network-only',
-    })
+    data = await store.query(
+      allDataQuery,
+      { changed },
+      {
+        fetchPolicy: 'network-only',
+      },
+    )
   } catch (error) {
     if (error && error.message.includes('JWT')) {
       console.log('queryAllData, will get new auth token')
@@ -179,6 +186,7 @@ const queryAllData = async ({ store }) => {
     setInitialDataQueried(true)
     return
   }
+  console.log('queryAllData', { data })
   removeSurplusNotRevModels({ store, data })
   setInitialDataQueried(true)
   store.setLastUpdatedAt(Date.now())
