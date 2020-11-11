@@ -243,6 +243,7 @@ export const gartenFile = gql`
     file_mime_type
     name
     beschreibung
+    changed
   }
 `
 export const gv = gql`
@@ -363,6 +364,7 @@ export const kulturFile = gql`
     file_mime_type
     name
     beschreibung
+    changed
   }
 `
 export const kulturOption = gql`
@@ -455,6 +457,7 @@ export const lieferungFile = gql`
     file_mime_type
     name
     beschreibung
+    changed
   }
 `
 export const person = gql`
@@ -600,6 +603,7 @@ export const sammlungFile = gql`
     file_mime_type
     name
     beschreibung
+    changed
   }
 `
 export const teilkultur = gql`
@@ -652,6 +656,7 @@ export const userRole = gql`
     label
     sort
     comment
+    changed
   }
 `
 export const zaehlung = gql`

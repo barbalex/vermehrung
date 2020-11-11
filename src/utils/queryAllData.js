@@ -62,7 +62,7 @@ const allDataQuery = gql`
     garten(where: { changed: { _gt: $changed } }) {
       ...GartenFields
     }
-    garten_file {
+    garten_file(where: { changed: { _gt: $changed } }) {
       ...GartenFileFields
     }
     gv(where: { changed: { _gt: $changed } }) {
@@ -77,7 +77,7 @@ const allDataQuery = gql`
     kultur(where: { changed: { _gt: $changed } }) {
       ...KulturFields
     }
-    kultur_file {
+    kultur_file(where: { changed: { _gt: $changed } }) {
       ...KulturFileFields
     }
     kultur_option(where: { changed: { _gt: $changed } }) {
@@ -92,7 +92,7 @@ const allDataQuery = gql`
     lieferung(where: { changed: { _gt: $changed } }) {
       ...LieferungFields
     }
-    lieferung_file {
+    lieferung_file(where: { changed: { _gt: $changed } }) {
       ...LieferungFileFields
     }
     person(where: { changed: { _gt: $changed } }) {
@@ -110,7 +110,7 @@ const allDataQuery = gql`
     sammlung(where: { changed: { _gt: $changed } }) {
       ...SammlungFields
     }
-    sammlung_file {
+    sammlung_file(where: { changed: { _gt: $changed } }) {
       ...SammlungFileFields
     }
     teilkultur(where: { changed: { _gt: $changed } }) {
@@ -119,7 +119,7 @@ const allDataQuery = gql`
     teilzaehlung(where: { changed: { _gt: $changed } }) {
       ...TeilzaehlungFields
     }
-    user_role {
+    user_role(where: { changed: { _gt: $changed } }) {
       ...UserRoleFields
     }
     zaehlung(where: { changed: { _gt: $changed } }) {
