@@ -533,6 +533,7 @@ export const personFile = gql`
     file_mime_type
     name
     beschreibung
+    changed
   }
 `
 export const sammelLieferung = gql`

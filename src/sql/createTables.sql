@@ -102,12 +102,14 @@ create table person_file (
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
-  beschreibung text default null
+  beschreibung text default null,
+  changed timestamp default now()
 );
 create index on person_file using btree (id);
 create index on person_file using btree (person_id);
 create index on person_file using btree (file_id);
 create index on person_file using btree (file_mime_type);
+create index on person_file using btree (changed);
 
 drop table if exists art cascade;
 create table art (
