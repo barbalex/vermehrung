@@ -41,88 +41,88 @@ const allDataQuery = gql`
     ae_art(where: { changed: { _gt: $changed } }) {
       ...AeArtFields
     }
-    art {
+    art(where: { changed: { _gt: $changed } }) {
       ...ArtFields
     }
-    art_file {
+    art_file(where: { changed: { _gt: $changed } }) {
       ...ArtFileFields
     }
-    art_qk {
+    art_qk(where: { changed: { _gt: $changed } }) {
       ...ArtQkFields
     }
-    art_qk_choosen {
+    art_qk_choosen(where: { changed: { _gt: $changed } }) {
       ...ArtQkChoosenFields
     }
-    av {
+    av(where: { changed: { _gt: $changed } }) {
       ...AvFields
     }
-    event {
+    event(where: { changed: { _gt: $changed } }) {
       ...EventFields
     }
-    garten {
+    garten(where: { changed: { _gt: $changed } }) {
       ...GartenFields
     }
     garten_file {
       ...GartenFileFields
     }
-    gv {
+    gv(where: { changed: { _gt: $changed } }) {
       ...GvFields
     }
-    herkunft {
+    herkunft(where: { changed: { _gt: $changed } }) {
       ...HerkunftFields
     }
     herkunft_file {
       ...HerkunftFileFields
     }
-    kultur {
+    kultur(where: { changed: { _gt: $changed } }) {
       ...KulturFields
     }
     kultur_file {
       ...KulturFileFields
     }
-    kultur_option {
+    kultur_option(where: { changed: { _gt: $changed } }) {
       ...KulturOptionFields
     }
-    kultur_qk {
+    kultur_qk(where: { changed: { _gt: $changed } }) {
       ...KulturQkFields
     }
-    kultur_qk_choosen {
+    kultur_qk_choosen(where: { changed: { _gt: $changed } }) {
       ...KulturQkChoosenFields
     }
-    lieferung {
+    lieferung(where: { changed: { _gt: $changed } }) {
       ...LieferungFields
     }
     lieferung_file {
       ...LieferungFileFields
     }
-    person {
+    person(where: { changed: { _gt: $changed } }) {
       ...PersonFields
     }
     person_file {
       ...PersonFileFields
     }
-    person_option {
+    person_option(where: { changed: { _gt: $changed } }) {
       ...PersonOptionFields
     }
-    sammel_lieferung {
+    sammel_lieferung(where: { changed: { _gt: $changed } }) {
       ...SammelLieferungFields
     }
-    sammlung {
+    sammlung(where: { changed: { _gt: $changed } }) {
       ...SammlungFields
     }
     sammlung_file {
       ...SammlungFileFields
     }
-    teilkultur {
+    teilkultur(where: { changed: { _gt: $changed } }) {
       ...TeilkulturFields
     }
-    teilzaehlung {
+    teilzaehlung(where: { changed: { _gt: $changed } }) {
       ...TeilzaehlungFields
     }
     user_role {
       ...UserRoleFields
     }
-    zaehlung {
+    zaehlung(where: { changed: { _gt: $changed } }) {
       ...ZaehlungFields
     }
   }
