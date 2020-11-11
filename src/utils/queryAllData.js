@@ -161,6 +161,8 @@ const queryAllData = async ({ store }) => {
     return
   }
   // TODO: do this in worker?
+  // TODO:
+  // query only newer than store.lastUpdatedAt
   const { setInitialDataQueried } = store
   let data
   try {
@@ -179,6 +181,7 @@ const queryAllData = async ({ store }) => {
   }
   removeSurplusNotRevModels({ store, data })
   setInitialDataQueried(true)
+  store.setLastUpdatedAt(Date.now())
   // TODO:
   // remove data with _deleted flag?
 }
