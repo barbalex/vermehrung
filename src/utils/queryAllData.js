@@ -98,7 +98,7 @@ const allDataQuery = gql`
     person(where: { changed: { _gt: $changed } }) {
       ...PersonFields
     }
-    person_file {
+    person_file(where: { changed: { _gt: $changed } }) {
       ...PersonFileFields
     }
     person_option(where: { changed: { _gt: $changed } }) {
