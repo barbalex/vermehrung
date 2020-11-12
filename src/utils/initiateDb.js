@@ -2,7 +2,7 @@ import { Database } from '@nozbe/watermelondb'
 import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
 
 import schema from '../dbSchema/schema'
-import Herkunft from '../dbModel/Herkunft'
+import { Herkunft } from '../dbModel'
 
 const initiateDb = () => {
   const adapter = new LokiJSAdapter({

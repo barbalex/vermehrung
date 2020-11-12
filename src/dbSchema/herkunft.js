@@ -24,7 +24,7 @@ const herkunft = {
     // TODO:
     { name: '_revisions', type: 'string', isOptional: true },
     { name: '_depth', type: 'string', isOptional: true },
-    { name: '_deleted', type: 'string', isOptional: true },
+    { name: '_deleted', type: 'boolean', isOptional: true },
     // TODO:
     { name: '_conflicts', type: 'string', isOptional: true },
   ],

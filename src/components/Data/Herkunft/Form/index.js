@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import withObservables from '@nozbe/with-observables'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import TextField from '../../../shared/TextField'
@@ -34,6 +35,7 @@ const Herkunft = ({
   activeConflict,
   setActiveConflict,
   showHistory,
+  herkunft,
 }) => {
   const store = useContext(StoreContext)
   const {
@@ -92,6 +94,8 @@ const Herkunft = ({
   }, [nrCount, setError])
 
   const showDeleted = showFilter || row._deleted
+
+  console.log('Herkunft, herkunft:', herkunft)
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
@@ -195,4 +199,8 @@ const Herkunft = ({
   )
 }
 
-export default observer(Herkunft)
+const enhance = withObservables(['herkunft'], ({ herkunft }) => ({
+  herkunft,
+}))
+
+export default enhance(observer(Herkunft))

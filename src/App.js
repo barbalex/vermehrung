@@ -28,6 +28,7 @@ import createGlobalStyle from './utils/createGlobalStyle'
 const GlobalStyle = createGlobalStyle()
 
 import initiateApp from './utils/initiateApp'
+import initiateDb from './utils/initiateDb'
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -53,6 +54,10 @@ if (typeof window !== 'undefined') {
 
 const App = ({ element }) => {
   const [store, setStore] = useState(null)
+
+  useEffect(() => {
+    initiateDb()
+  }, [])
 
   useEffect(() => {
     let unregister
