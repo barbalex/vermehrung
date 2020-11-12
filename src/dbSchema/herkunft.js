@@ -3,7 +3,8 @@ import { tableSchema } from '@nozbe/watermelondb'
 const herkunft = {
   name: 'herkunft',
   columns: [
-    { name: 'id', type: 'string' },
+    // can not add id here
+    // see: https://github.com/Nozbe/WatermelonDB/issues/7#issuecomment-419248401
     { name: 'nr', type: 'string', isOptional: true },
     { name: 'lokalname', type: 'string', isOptional: true },
     { name: 'gemeinde', type: 'string', isOptional: true },
