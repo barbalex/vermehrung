@@ -1,5 +1,9 @@
 import { Model } from '@nozbe/watermelondb'
-import { children, field, relation } from '@nozbe/watermelondb/decorators'
+import { children, field, json, relation } from '@nozbe/watermelondb/decorators'
+
+const sanitizeArray = (rawReactions) =>
+  Array.isArray(rawReactions) ? rawReactions.map(String) : []
+const sanitizeGeomPoint = (json) => json
 
 export class Herkunft extends Model {
   static table = 'herkunft'
@@ -13,7 +17,7 @@ export class Herkunft extends Model {
   @field('gemeinde') gemeinde
   @field('kanton') kanton
   @field('land') land
-  //@field('geom_point') geom_point
+  @json('geom_point', sanitizeGeomPoint) geom_point
   @field('wgs84_lat') wgs84_lat
   @field('wgs84_long') wgs84_long
   @field('lv95_x') lv95_x
@@ -23,10 +27,10 @@ export class Herkunft extends Model {
   @field('changed_by') changed_by
   @field('_rev') _rev
   @field('_parent_rev') _parent_rev
-  //@field('_revisions') _revisions
+  @json('_revisions', sanitizeArray) _revisions
   @field('_depth') _depth
   @field('_deleted') _deleted
-  //@field('_conflicts') _conflicts
+  @json('_conflicts', sanitizeArray) _conflicts
 
   @children('sammlung') sammlungs
 }
@@ -47,7 +51,7 @@ export class Sammlung extends Model {
   @field('anzahl_pflanzen') anzahl_pflanzen
   @field('gramm_samen') gramm_samen
   @field('andere_menge') andere_menge
-  //@field('geom_point') geom_point
+  @json('geom_point', sanitizeGeomPoint) geom_point
   @field('wgs84_lat') wgs84_lat
   @field('wgs84_long') wgs84_long
   @field('lv95_x') lv95_x
@@ -58,10 +62,10 @@ export class Sammlung extends Model {
   @field('changed_by') changed_by
   @field('_rev') _rev
   @field('_parent_rev') _parent_rev
-  //@field('_revisions') _revisions
+  @json('_revisions', sanitizeArray) _revisions
   @field('_depth') _depth
   @field('_deleted') _deleted
-  //@field('_conflicts') _conflicts
+  @json('_conflicts', sanitizeArray) _conflicts
 
   @relation('herkunft', 'herkunft_id') herkunft
 }
