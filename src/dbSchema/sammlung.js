@@ -1,22 +1,26 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const herkunft = {
-  name: 'herkunft',
+const sammlung = {
+  name: 'sammlung',
   columns: [
     // can not add id here
     // see: https://github.com/Nozbe/WatermelonDB/issues/7#issuecomment-419248401
+    { name: 'art_id', type: 'string', isOptional: true },
+    { name: 'person_id', type: 'string', isOptional: true },
+    { name: 'herkunft_id', type: 'string', isOptional: true },
     { name: 'nr', type: 'string', isOptional: true },
-    { name: 'lokalname', type: 'string', isOptional: true },
-    { name: 'gemeinde', type: 'string', isOptional: true },
-    { name: 'kanton', type: 'string', isOptional: true },
-    { name: 'land', type: 'string', isOptional: true },
+    { name: 'datum', type: 'string', isOptional: true },
+    { name: 'von_anzahl_individuen', type: 'number', isOptional: true },
+    { name: 'anzahl_pflanzen', type: 'number', isOptional: true },
+    { name: 'gramm_samen', type: 'number', isOptional: true },
+    { name: 'andere_menge', type: 'string', isOptional: true },
     // TODO:
     // https://nozbe.github.io/WatermelonDB/Advanced/AdvancedFields.html
     //{ name: 'geom_point', type: 'string', isOptional: true },
-    { name: 'wgs84_lat', type: 'string', isOptional: true },
     { name: 'wgs84_long', type: 'string', isOptional: true },
     { name: 'lv95_x', type: 'string', isOptional: true },
     { name: 'lv95_y', type: 'string', isOptional: true },
+    { name: 'geplant', type: 'boolean', isOptional: true },
     { name: 'bemerkungen', type: 'string', isOptional: true },
     { name: 'changed', type: 'string', isOptional: true },
     { name: 'changed_by', type: 'string', isOptional: true },
@@ -31,4 +35,4 @@ const herkunft = {
   ],
 }
 
-export default tableSchema(herkunft)
+export default tableSchema(sammlung)
