@@ -28,6 +28,8 @@ const initiateDb = () => {
     modelClasses: [Herkunft],
     actionsEnabled: true,
   })
+
+  return database
 }
 
 export default initiateDb

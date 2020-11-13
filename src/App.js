@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import 'isomorphic-fetch'
 import { observer } from 'mobx-react-lite'
+import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 
 import { StoreContext } from './models'
 
@@ -54,9 +55,10 @@ if (typeof window !== 'undefined') {
 
 const App = ({ element }) => {
   const [store, setStore] = useState(null)
+  const [database, setDatabse] = useState(null)
 
   useEffect(() => {
-    initiateDb()
+    setDatabse(initiateDb())
   }, [])
 
   useEffect(() => {
@@ -76,15 +78,17 @@ const App = ({ element }) => {
   if (!store) return null
 
   return (
-    <MuiThemeProvider theme={materialTheme}>
-      <StoreContext.Provider value={store}>
-        <>
-          <GlobalStyle />
-          {element}
-          <Notifications />
-        </>
-      </StoreContext.Provider>
-    </MuiThemeProvider>
+    <DatabaseProvider database={database}>
+      <MuiThemeProvider theme={materialTheme}>
+        <StoreContext.Provider value={store}>
+          <>
+            <GlobalStyle />
+            {element}
+            <Notifications />
+          </>
+        </StoreContext.Provider>
+      </MuiThemeProvider>
+    </DatabaseProvider>
   )
 }
 

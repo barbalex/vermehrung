@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
+//import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
-import withObservables from '@nozbe/with-observables'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import TextField from '../../../shared/TextField'
@@ -35,8 +37,16 @@ const Herkunft = ({
   activeConflict,
   setActiveConflict,
   showHistory,
-  herkunft,
 }) => {
+  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
+  const db = useDatabase()
+  // useObservable reduces recomputation
+  const herkunftCollection = useObservable(() =>
+    db.collections.get('herkunft').query().observe(),
+  )
+  const herkunfts = useObservableState(herkunftCollection, null)
+  console.log('Herkunft, herkunfts:', herkunfts)
+
   const store = useContext(StoreContext)
   const {
     filter,
@@ -94,8 +104,6 @@ const Herkunft = ({
   }, [nrCount, setError])
 
   const showDeleted = showFilter || row._deleted
-
-  console.log('Herkunft, herkunft:', herkunft)
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
@@ -199,8 +207,4 @@ const Herkunft = ({
   )
 }
 
-const enhance = withObservables(['herkunft'], ({ herkunft }) => ({
-  herkunft,
-}))
-
-export default enhance(observer(Herkunft))
+export default observer(Herkunft)
