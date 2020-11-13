@@ -8,7 +8,16 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.art_qk = store.subscribeArt_qk()
   unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen()
   unsubscribe.av = store.subscribeAv()
-  unsubscribe.event = store.subscribeEvent()
+  unsubscribe.event = store.subscribeEvent(
+    null,
+    null,
+    (onData) => {
+      console.log('subscribeEvent, onData:', onData)
+    },
+    (onError) => {
+      console.log('subscribeEvent, onError:', onError)
+    },
+  )
   unsubscribe.garten = store.subscribeGarten()
   unsubscribe.garten_file = store.subscribeGarten_file()
   unsubscribe.gv = store.subscribeGv()
