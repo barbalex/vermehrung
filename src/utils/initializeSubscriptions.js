@@ -1,5 +1,7 @@
 import { ZAEHLUNG_FRAGMENT } from './mstFragments'
 import { sanitizedRaw } from '@nozbe/watermelondb/RawRecord'
+import { getSnapshot } from 'mobx-state-tree'
+import isEqual from 'lodash/isEqual'
 
 import {
   herkunftModelPrimitives,
@@ -21,36 +23,58 @@ const initializeSubscriptions = ({ store, db }) => {
   unsubscribe.herkunft = store.subscribeHerkunft(
     undefined,
     herkunftModelPrimitives.toString(),
-    (data) => {
+    async (data) => {
       console.log('subscribeHerkunft, onData:', { data, db })
       const collection = db.collections.get('herkunft')
-      data.forEach(async (d, index) => {
+
+      const preparedCreations = []
+      const preparedUpdates = []
+      const idsToMarkAsDeleted = []
+      const recordsToMarkAsDeleted = []
+
+      for (const dRaw of data) {
+        // eslint-disable-next-line no-unused-vars
+        const { __typename, ...d } = getSnapshot(dRaw)
         let record
         try {
           record = await collection.find(d.id)
         } catch (error) {
           record = undefined
         }
-        index === 1 && console.log('subscribeHerkunft', { d, record })
-        if (record) {
-          //TODO: update
-          db.action(async () => {
-            await record.update((rc) => ({ ...rc, ...d }))
-            d._deleted && record.markAsDeleted()
-          })
+        if (record && !isEqual(record, d)) {
+          d._deleted && recordsToMarkAsDeleted.push(record)
+          preparedUpdates.push({ record, d })
         } else {
-          //TODO: create
-          db.action(async () => {
-            await collection.create((record) => {
-              record._raw = sanitizedRaw(d, collection.schema)
-            })
-            if (d._deleted) {
-              record = await collection.find(d.id)
-              record.markAsDeleted()
-            }
-          })
+          preparedCreations.push(d)
+          d._deleted && idsToMarkAsDeleted.push(d.id)
         }
+      }
+      await db.action(async () => {
+        const preparedCreationOperations = preparedCreations.map((d) => {
+          collection.prepareCreate((record) => {
+            record._raw = sanitizedRaw(d, collection.schema)
+          })
+        })
+        /*const preparredUpdateOperations = preparedUpdates.map(({ record, d }) =>
+          record.prepareUpdate({ ...record, ...d }),
+        )*/
+        await db.batch([
+          ...preparedCreationOperations,
+          //...preparredUpdateOperations,
+        ])
       })
+      if (idsToMarkAsDeleted.length) {
+        for (const id of idsToMarkAsDeleted) {
+          const record = await collection.find(id)
+          recordsToMarkAsDeleted.push(record)
+        }
+        db.action(async () => {
+          const preparedOperations = recordsToMarkAsDeleted.map((record) =>
+            record.prepareMarkAsDeleted(),
+          )
+          await db.batch(preparedOperations)
+        })
+      }
     },
     (d) => {
       console.log('subscribeHerkunft, onError:', d)
