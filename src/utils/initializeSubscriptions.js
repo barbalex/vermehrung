@@ -1,4 +1,5 @@
 import { ZAEHLUNG_FRAGMENT } from './mstFragments'
+import { sanitizedRaw } from '@nozbe/watermelondb/RawRecord'
 
 import {
   herkunftModelPrimitives,
@@ -23,24 +24,30 @@ const initializeSubscriptions = ({ store, db }) => {
     (data) => {
       console.log('subscribeHerkunft, onData:', { data, db })
       const collection = db.collections.get('herkunft')
-      data.forEach(async (d) => {
+      data.forEach(async (d, index) => {
         let record
         try {
           record = await collection.find(d.id)
         } catch (error) {
           record = undefined
         }
+        index === 1 && console.log('subscribeHerkunft', { d, record })
         if (record) {
           //TODO: update
           db.action(async () => {
-            await record.update((hk) => ({ ...hk, ...d }))
+            await record.update((rc) => ({ ...rc, ...d }))
             d._deleted && record.markAsDeleted()
           })
         } else {
           //TODO: create
           db.action(async () => {
-            record = await collection.create((hk) => ({ ...hk, ...d }))
-            d._deleted && record.markAsDeleted()
+            await collection.create((record) => {
+              record._raw = sanitizedRaw(d, collection.schema)
+            })
+            if (d._deleted) {
+              record = await collection.find(d.id)
+              record.markAsDeleted()
+            }
           })
         }
       })
