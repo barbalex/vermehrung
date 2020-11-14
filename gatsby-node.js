@@ -44,6 +44,9 @@ exports.createPages = async ({ actions, graphql }) => {
 
 // see: https://auth0.com/blog/securing-gatsby-with-auth0/
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
+  actions.setWebpackConfig({
+    node: { fs: 'empty' },
+  })
   if (stage === 'build-html') {
     /*
      * During the build step, `firebase` will break because it relies on
