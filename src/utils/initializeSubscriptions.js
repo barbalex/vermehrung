@@ -1,5 +1,10 @@
 import { ZAEHLUNG_FRAGMENT } from './mstFragments'
 
+import {
+  eventModelPrimitives,
+  eventModelSelector,
+} from '../models/EventModel.base'
+
 const initializeSubscriptions = ({ store }) => {
   const unsubscribe = {}
   unsubscribe.ae_art = store.subscribeAe_art()
@@ -9,13 +14,13 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen()
   unsubscribe.av = store.subscribeAv()
   unsubscribe.event = store.subscribeEvent(
-    null,
-    null,
-    (onData) => {
-      console.log('subscribeEvent, onData:', onData)
+    undefined,
+    eventModelPrimitives.toString(),
+    (d) => {
+      console.log('subscribeEvent, onData:', d)
     },
-    (onError) => {
-      console.log('subscribeEvent, onError:', onError)
+    (d) => {
+      console.log('subscribeEvent, onError:', d)
     },
   )
   unsubscribe.garten = store.subscribeGarten()
