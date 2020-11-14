@@ -36,7 +36,7 @@ export class Herkunft extends Model {
 }
 
 export class Sammlung extends Model {
-  static table = 'herkunft'
+  static table = 'sammlung'
   static associations = {
     herkunft: { type: 'belongs_to', key: 'herkunft_id' },
   }
