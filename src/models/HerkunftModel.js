@@ -2,7 +2,7 @@ import { getParent } from 'mobx-state-tree'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
-import { herkunftModelBase } from './herkunftModel.base'
+import { herkunftModelBase } from './HerkunftModel.base'
 import toPgArray from '../utils/toPgArray'
 import toStringIfPossible from '../utils/toStringIfPossible'
 
@@ -11,7 +11,7 @@ export {
   selectFromherkunft,
   herkunftModelPrimitives,
   herkunftModelSelector,
-} from './herkunftModel.base'
+} from './HerkunftModel.base'
 
 /**
  * herkunftModel
