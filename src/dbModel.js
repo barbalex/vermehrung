@@ -69,3 +69,13 @@ export class Sammlung extends Model {
 
   @relation('herkunft', 'herkunft_id') herkunft
 }
+
+export class AeArt extends Model {
+  static table = 'ae_art'
+
+  @field('id') id
+  @field('name') name
+  @field('name_deutsch') name_deutsch
+  @field('name_latein') name_latein
+  //@field('changed') changed
+}
