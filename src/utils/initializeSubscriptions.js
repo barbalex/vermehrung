@@ -1,11 +1,11 @@
 import { ZAEHLUNG_FRAGMENT } from './mstFragments'
 
 import {
-  eventModelPrimitives,
-  eventModelSelector,
-} from '../models/EventModel.base'
+  herkunftModelPrimitives,
+  //herkunftModelSelector,
+} from '../models/HerkunftModel.base'
 
-const initializeSubscriptions = ({ store }) => {
+const initializeSubscriptions = ({ store, db }) => {
   const unsubscribe = {}
   unsubscribe.ae_art = store.subscribeAe_art()
   unsubscribe.art = store.subscribeArt()
@@ -13,20 +13,42 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.art_qk = store.subscribeArt_qk()
   unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen()
   unsubscribe.av = store.subscribeAv()
-  unsubscribe.event = store.subscribeEvent(
-    undefined,
-    eventModelPrimitives.toString(),
-    (d) => {
-      console.log('subscribeEvent, onData:', d)
-    },
-    (d) => {
-      console.log('subscribeEvent, onError:', d)
-    },
-  )
+  unsubscribe.event = store.subscribeEvent()
   unsubscribe.garten = store.subscribeGarten()
   unsubscribe.garten_file = store.subscribeGarten_file()
   unsubscribe.gv = store.subscribeGv()
-  unsubscribe.herkunft = store.subscribeHerkunft()
+  unsubscribe.herkunft = store.subscribeHerkunft(
+    undefined,
+    herkunftModelPrimitives.toString(),
+    (data) => {
+      console.log('subscribeHerkunft, onData:', { data, db })
+      const collection = db.collections.get('herkunft')
+      data.forEach(async (d) => {
+        let record
+        try {
+          record = await collection.find(d.id)
+        } catch (error) {
+          record = undefined
+        }
+        if (record) {
+          //TODO: update
+          db.action(async () => {
+            await record.update((hk) => ({ ...hk, ...d }))
+            d._deleted && record.markAsDeleted()
+          })
+        } else {
+          //TODO: create
+          db.action(async () => {
+            record = await collection.create((hk) => ({ ...hk, ...d }))
+            d._deleted && record.markAsDeleted()
+          })
+        }
+      })
+    },
+    (d) => {
+      console.log('subscribeHerkunft, onError:', d)
+    },
+  )
   unsubscribe.herkunft_file = store.subscribeHerkunft_file()
   unsubscribe.kultur = store.subscribeKultur()
   unsubscribe.kultur_file = store.subscribeKultur_file()
