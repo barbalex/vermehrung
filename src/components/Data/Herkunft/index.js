@@ -8,6 +8,8 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -56,7 +58,20 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, herkunfts } = store
+  const { filter, online, herkunfts, addError } = store
+
+  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
+  const db = useDatabase()
+  const hkColl = db.collections.get('herkunft')
+  const [hk, setHk] = useState(undefined)
+  useEffect(() => {
+    console.log('Herkunft, useEffect', { hkColl, id })
+    hkColl &&
+      hkColl
+        .find(id)
+        .then((hk) => setHk(hk))
+        .catch((error) => addError(error))
+  }, [addError, hkColl, id])
 
   const row = useMemo(
     () => (showFilter ? filter.herkunft : herkunfts.get(id) || null),
@@ -64,6 +79,7 @@ const Herkunft = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filter.herkunft, id, showFilter, herkunfts, herkunfts.size],
   )
+  console.log('Herkunft:', { hk, row })
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
