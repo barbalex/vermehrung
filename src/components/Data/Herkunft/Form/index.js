@@ -3,8 +3,6 @@ import { observer } from 'mobx-react-lite'
 //import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import TextField from '../../../shared/TextField'
@@ -38,15 +36,6 @@ const Herkunft = ({
   setActiveConflict,
   showHistory,
 }) => {
-  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
-  const db = useDatabase()
-  // useObservable reduces recomputation
-  const herkunftCollection = useObservable(() =>
-    db.collections.get('herkunft').query().observe(),
-  )
-  const herkunfts = useObservableState(herkunftCollection, null)
-  console.log('Herkunft, herkunfts:', herkunfts)
-
   const store = useContext(StoreContext)
   const {
     filter,
