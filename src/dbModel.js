@@ -1,19 +1,6 @@
 import { Model } from '@nozbe/watermelondb'
 import { children, field, json, relation } from '@nozbe/watermelondb/decorators'
 
-const sanitizeArray = (val) => (Array.isArray(val) ? val.map(String) : [])
-const sanitizeGeomPoint = (val) => {
-  if (!val) return null
-  return {
-    coordinates: sanitizeArray(),
-    crs: {
-      properties: {
-        name: String,
-      },
-      type: String,
-    },
-  }
-}
 const dontSanitize = (val) => val
 
 export class Herkunft extends Model {
@@ -62,7 +49,7 @@ export class Sammlung extends Model {
   @field('anzahl_pflanzen') anzahl_pflanzen
   @field('gramm_samen') gramm_samen
   @field('andere_menge') andere_menge
-  @json('geom_point', sanitizeGeomPoint) geom_point
+  @json('geom_point', dontSanitize) geom_point
   @field('wgs84_lat') wgs84_lat
   @field('wgs84_long') wgs84_long
   @field('lv95_x') lv95_x
@@ -73,10 +60,10 @@ export class Sammlung extends Model {
   @field('changed_by') changed_by
   @field('_rev') _rev
   @field('_parent_rev') _parent_rev
-  @json('_revisions', sanitizeArray) _revisions
+  @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
   @field('_deleted') _deleted
-  @json('_conflicts', sanitizeArray) _conflicts
+  @json('_conflicts', dontSanitize) _conflicts
 
   @relation('herkunft', 'herkunft_id') herkunft
 }
@@ -88,5 +75,6 @@ export class AeArt extends Model {
   @field('name') name
   @field('name_deutsch') name_deutsch
   @field('name_latein') name_latein
+  // changed exists but is not yet in the mst-model
   //@field('changed') changed
 }
