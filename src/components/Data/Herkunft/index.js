@@ -58,19 +58,27 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, herkunfts, addError } = store
+  const { filter, online, herkunfts, addNotification } = store
 
   // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
   const db = useDatabase()
   const herkunftCollection = db.collections.get('herkunft')
+  console.log('Herkunft, herkunftCollection:', herkunftCollection)
   const [hk, setHk] = useState(undefined)
   useEffect(() => {
     herkunftCollection &&
       herkunftCollection
         .find(id)
         .then((hk) => setHk(hk))
-        .catch((error) => addError(error))
-  }, [addError, herkunftCollection, id])
+        .catch((error) => {
+          // exclude not found error
+          if (!error.message.includes('not found')) {
+            addNotification({
+              message: error.message,
+            })
+          }
+        })
+  }, [addNotification, herkunftCollection, id])
 
   const row = useMemo(
     () => (showFilter ? filter.herkunft : herkunfts.get(id) || null),

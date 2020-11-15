@@ -2,29 +2,18 @@
 import { ZAEHLUNG_FRAGMENT } from './mstFragments'
 import { sanitizedRaw } from '@nozbe/watermelondb/RawRecord'
 import { Q } from '@nozbe/watermelondb'
-import { getSnapshot } from 'mobx-state-tree'
-import isEqual from 'lodash/isEqual'
+//import isEqual from 'lodash/isEqual'
 
 import { ae_artModelPrimitives } from '../models/ae_artModel.base'
 import { herkunftModelPrimitives } from '../models/HerkunftModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
 
-/*const extractComparableRecord = (record) => {
-  const {
-    _status,
-    _changed,
-    // TODO: geom_point, _conflicts and _revisions: Data is not created!
-    geom_point,
-    _conflicts,
-    _revisions,
-    ...comparableRecord
-  } = record._raw
-  return comparableRecord
-}
-const extractComparableObject = (object) => {
-  const { geom_point, _conflicts, _revisions, ...comparableObject } = object
-  return comparableObject
-}*/
+const parseComplexFields = (object) => ({
+  ...object,
+  geom_point: JSON.stringify(object.geom_point),
+  _conflicts: JSON.stringify(object._conflicts),
+  _revisions: JSON.stringify(object._revisions),
+})
 
 const onData = async ({ data, table, db }) => {
   const collection = db.collections.get(table)
@@ -78,7 +67,7 @@ const onData = async ({ data, table, db }) => {
         })),
       ),
       ...dataToCreateObjectsFrom.map((d) =>
-        collection.prepareCreate((object) => ({ ...d })),
+        collection.prepareCreateFromDirtyRaw(parseComplexFields(d)),
       ),
     )
     // now run deletes
