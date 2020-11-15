@@ -48,17 +48,12 @@ const onData = async ({ data, table, db }) => {
       missingIds.includes(d.id),
     )
     console.log('subscribe, onData:', {
-      dataLength: data.length,
+      data: data.length,
       table,
-      toUpdateLength: objectsToUpdate.length,
-      toDeleteLength: objectsToDelete.length,
-      toCreateLength: missingIds.length,
+      toUpdate: objectsToUpdate.length,
+      toDelete: objectsToDelete.length,
+      toCreate: missingIds.length,
     })
-    /* do I need to compare data to detect what to update?
-    if (!isEqual(comparableRecord, comparableData)) {
-      d._deleted && !record.deleted && recordsToMarkAsDeleted.push(record)
-      preparedUpdates.push({ record, d })
-    }*/
     await db.batch(
       ...objectsToUpdate.map((object) =>
         object.prepareUpdate((object) => ({
