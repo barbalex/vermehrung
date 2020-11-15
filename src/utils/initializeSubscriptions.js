@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { ZAEHLUNG_FRAGMENT } from './mstFragments'
 import { sanitizedRaw } from '@nozbe/watermelondb/RawRecord'
+import { Q } from '@nozbe/watermelondb'
 import { getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
@@ -8,88 +9,86 @@ import { ae_artModelPrimitives } from '../models/ae_artModel.base'
 import { herkunftModelPrimitives } from '../models/HerkunftModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
 
+/*const extractComparableRecord = (record) => {
+  const {
+    _status,
+    _changed,
+    // TODO: geom_point, _conflicts and _revisions: Data is not created!
+    geom_point,
+    _conflicts,
+    _revisions,
+    ...comparableRecord
+  } = record._raw
+  return comparableRecord
+}
+const extractComparableObject = (object) => {
+  const { geom_point, _conflicts, _revisions, ...comparableObject } = object
+  return comparableObject
+}*/
+
 const onData = async ({ data, table, db }) => {
-  console.log('subscribe, onData:', { data, db, table })
   const collection = db.collections.get(table)
 
-  const preparedCreations = []
-  const preparedUpdates = []
-  const idsToMarkAsDeleted = []
-  const recordsToMarkAsDeleted = []
+  const incomingIds = data.map((d) => d.id)
+  const incomingIdsDeleted = data.filter((d) => d._deleted).map((d) => d.id)
+  //const incomingIdsNotDeleted = data.filter((d) => !d._deleted).map((d) => d.id)
 
-  for (const dRaw of data) {
-    const { __typename, ...d } = getSnapshot(dRaw)
-    let record
-    try {
-      // find is async
-      // so need to collect the records BEFORE entering the action
-      record = await collection.find(d.id)
-    } catch (error) {
-      record = undefined
-    }
-    if (record) {
-      const {
-        _status,
-        _changed,
-        // TODO: geom_point, _conflicts and _revisions: Data is not created!
-        geom_point,
-        _conflicts,
-        _revisions,
-        ...comparableRecord
-      } = record._raw
-      const {
-        geom_point: geom_point_d,
-        _conflicts: _conflicts_d,
-        _revisions: _revisions_d,
-        ...comparableData
-      } = d
-      if (!isEqual(comparableRecord, comparableData)) {
-        d._deleted && !record.deleted && recordsToMarkAsDeleted.push(record)
-        preparedUpdates.push({ record, d })
-      }
-    } else {
-      preparedCreations.push(d)
-      d._deleted && idsToMarkAsDeleted.push(d.id)
-    }
-  }
-  console.log({
-    preparedUpdates,
-    preparedCreations,
-    idsToMarkAsDeleted,
-    recordsToMarkAsDeleted,
+  db.action(async () => {
+    const objectsToUpdate = await db.collections
+      .get(table)
+      .query(Q.where('id', Q.oneOf(incomingIds)))
+    /*const objectsToUndelete = await db.collections
+      .get(table)
+      .query(
+        Q.and(
+          Q.where('id', Q.oneOf(incomingIdsNotDeleted)),
+          Q.where('deleted', true),
+        ),
+      )*/
+    const objectsToDelete = await db.collections
+      .get(table)
+      .query(
+        Q.and(
+          Q.where('id', Q.oneOf(incomingIdsDeleted)),
+          Q.where('deleted', false),
+        ),
+      )
+    const existingIds = objectsToUpdate.map((d) => d.id)
+    const missingIds = incomingIds.filter((d) => !existingIds.includes(d))
+    const dataToCreateObjectsFrom = data.filter((d) =>
+      missingIds.includes(d.id),
+    )
+    console.log('subscribe, onData:', {
+      dataLength: data.length,
+      table,
+      toUpdateLength: objectsToUpdate.length,
+      toDeleteLength: objectsToDelete.length,
+      toCreateLength: missingIds.length,
+    })
+    /* do I need to compare data to detect what to update?
+    if (!isEqual(comparableRecord, comparableData)) {
+      d._deleted && !record.deleted && recordsToMarkAsDeleted.push(record)
+      preparedUpdates.push({ record, d })
+    }*/
+    await db.batch(
+      ...objectsToUpdate.map((object) =>
+        object.prepareUpdate((object) => ({
+          ...object,
+          ...data.find((d) => d.id === object.id),
+        })),
+      ),
+      ...dataToCreateObjectsFrom.map((d) =>
+        collection.prepareCreate((object) => ({ ...d })),
+      ),
+    )
+    // now run deletes
+    // not possible earlier for newly created
+    // dont know how to undelete objectsToUndelete
+    // see: https://github.com/Nozbe/WatermelonDB/issues/864
+    await db.batch(
+      ...objectsToDelete.map((object) => object.prepareMarkAsDeleted()),
+    )
   })
-  if (preparedCreations.length || preparedUpdates.length) {
-    await db.action(async () => {
-      const preparedCreationOperations = preparedCreations.map((d) =>
-        collection.prepareCreate((record) => {
-          record._raw = sanitizedRaw(d, collection.schema)
-        }),
-      )
-      const preparredUpdateOperations = preparedUpdates.map(({ record, d }) =>
-        record.prepareUpdate((record) => ({ ...record, ...d })),
-      )
-      await db.batch([
-        ...preparedCreationOperations,
-        ...preparredUpdateOperations,
-      ])
-    })
-  }
-  if (idsToMarkAsDeleted.length || recordsToMarkAsDeleted.length) {
-    for (const id of idsToMarkAsDeleted) {
-      try {
-        const record = await collection.find(id)
-        recordsToMarkAsDeleted.push(record)
-      } catch (error) {
-        // do nothing
-      }
-    }
-    db.action(async () => {
-      const preparedOperations = recordsToMarkAsDeleted.map((record) =>
-        record.prepareMarkAsDeleted(),
-      )
-      await db.batch(preparedOperations)
-    })
-  }
 }
 
 const onError = ({ error }) => {

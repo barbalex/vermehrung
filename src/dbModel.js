@@ -3,7 +3,10 @@ import { children, field, json, relation } from '@nozbe/watermelondb/decorators'
 
 const sanitizeArray = (rawReactions) =>
   Array.isArray(rawReactions) ? rawReactions.map(String) : []
-const sanitizeGeomPoint = (json) => json
+const sanitizeGeomPoint = (json) => {
+  console.log('dbModel, sanitizeGeomPoint, json:', json)
+  return json
+}
 
 export class Herkunft extends Model {
   static table = 'herkunft'

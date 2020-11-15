@@ -62,16 +62,15 @@ const Herkunft = ({
 
   // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
   const db = useDatabase()
-  const hkColl = db.collections.get('herkunft')
+  const herkunftCollection = db.collections.get('herkunft')
   const [hk, setHk] = useState(undefined)
   useEffect(() => {
-    console.log('Herkunft, useEffect', { hkColl, id })
-    hkColl &&
-      hkColl
+    herkunftCollection &&
+      herkunftCollection
         .find(id)
         .then((hk) => setHk(hk))
         .catch((error) => addError(error))
-  }, [addError, hkColl, id])
+  }, [addError, herkunftCollection, id])
 
   const row = useMemo(
     () => (showFilter ? filter.herkunft : herkunfts.get(id) || null),
