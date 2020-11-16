@@ -62,23 +62,30 @@ const Herkunft = ({
 
   // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
   const db = useDatabase()
-  const herkunftCollection = db.collections.get('herkunft')
-  const [hk, setHk] = useState(undefined)
-  useEffect(() => {
-    !showFilter &&
-      herkunftCollection &&
-      herkunftCollection
-        .find(id)
-        .then((hk) => setHk(hk))
-        .catch((error) => {
-          // exclude not found error
-          if (!error.message.includes('not found')) {
-            addNotification({
-              message: error.message,
-            })
-          }
-        })
-  }, [addNotification, herkunftCollection, id, showFilter])
+
+  // useObservable reduces recomputation
+  const herkunftCollection = useObservable(() =>
+    db.collections.get('herkunft').query().observe(),
+  )
+  const herkunfts = useObservableState(herkunftCollection, null)
+  console.log('Herkunft, herkunfts:', herkunfts)
+  //const herkunftCollection = db.collections.get('herkunft')
+  //const [hk, setHk] = useState(undefined)
+  const hk = herkunfts ? herkunfts.find((hk) => hk.id === id) : undefined
+  /*useEffect(() => {
+    if (!(!showFilter && herkunfts)) return
+    herkunfts
+      .find((hk) => hk.id === id)
+      .then((hk) => setHk(hk))
+      .catch((error) => {
+        // exclude not found error
+        if (!error.message.includes('not found')) {
+          addNotification({
+            message: error.message,
+          })
+        }
+      })
+  }, [addNotification, herkunfts, id, showFilter])*/
 
   const row = useMemo(
     () => (showFilter ? filter.herkunft : hk),

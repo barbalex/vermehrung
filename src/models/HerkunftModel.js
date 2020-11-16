@@ -1,10 +1,6 @@
 import { getParent } from 'mobx-state-tree'
-import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 
 import { herkunftModelBase } from './HerkunftModel.base'
-import toPgArray from '../utils/toPgArray'
-import toStringIfPossible from '../utils/toStringIfPossible'
 
 /* A graphql query fragment builders for herkunftModel */
 export {
@@ -18,7 +14,8 @@ export {
  */
 export const herkunftModel = herkunftModelBase.actions((self) => ({
   edit({ field, value, row }) {
-    const store = getParent(self, 2)
+    console.log('herkunftModel, edit: nope')
+    /*const store = getParent(self, 2)
     const { addQueuedQuery, user, upsertHerkunftModel, unsetError, db } = store
 
     unsetError(`herkunft.${field}`)
@@ -85,7 +82,7 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
     db.action(async () => {
       await row.update((row) => ({ ...row, ...newObjectForStore }))
       if (field === '_deleted' && value) await row.markAsDeleted()
-    })
+    })*/
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
