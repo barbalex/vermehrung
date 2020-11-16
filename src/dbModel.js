@@ -1,5 +1,16 @@
 import { Model } from '@nozbe/watermelondb'
-import { children, field, json, relation } from '@nozbe/watermelondb/decorators'
+import {
+  children,
+  field,
+  json,
+  relation,
+  action,
+} from '@nozbe/watermelondb/decorators'
+import md5 from 'blueimp-md5'
+import { v1 as uuidv1 } from 'uuid'
+
+import toStringIfPossible from './utils/toStringIfPossible'
+import toPgArray from './utils/toPgArray'
 
 const dontSanitize = (val) => val
 
@@ -31,6 +42,88 @@ export class Herkunft extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @children('sammlung') sammlungs
+
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError, db } = store
+
+    unsetError(`herkunft.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._raw._depth + 1
+    const newObject = {
+      herkunft_id: this._raw.id,
+      nr: field === 'nr' ? toStringIfPossible(value) : this._raw.nr,
+      lokalname:
+        field === 'lokalname' ? toStringIfPossible(value) : this._raw.lokalname,
+      gemeinde:
+        field === 'gemeinde' ? toStringIfPossible(value) : this._raw.gemeinde,
+      kanton: field === 'kanton' ? toStringIfPossible(value) : this._raw.kanton,
+      land: field === 'land' ? toStringIfPossible(value) : this._raw.land,
+      geom_point: field === 'geom_point' ? value : this.geom_point,
+      bemerkungen:
+        field === 'bemerkungen'
+          ? toStringIfPossible(value)
+          : this._raw.bemerkungen,
+      _parent_rev: this._raw._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._raw._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    console.log('Herkunft Model', {
+      newObject,
+      newObjectForStore,
+      rev,
+      newDepth,
+      this: this._raw,
+    })
+    addQueuedQuery({
+      name: 'mutateInsert_herkunft_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'herkunft_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'herkunft',
+      revertId: this._raw.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert herkuft_rev to herkunft
+    newObjectForStore.id = this._raw.id
+    delete newObjectForStore.herkunft_id
+    // optimistically update store
+    // 1. mst
+    //upsertHerkunftModel(newObjectForStore)
+    //if (field === '_deleted' && value) this.deleteNSide()
+    // 2. wdb
+    db.action(async () => {
+      await this.update((row) => ({ ...row, ...newObjectForStore }))
+      if (field === '_deleted' && value) await this.markAsDeleted()
+    })
+  }
+  @action delete({ store }) {
+    this.edit({ field: '_deleted', value: true, store })
+  }
 }
 
 export class Sammlung extends Model {

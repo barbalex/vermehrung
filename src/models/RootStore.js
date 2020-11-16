@@ -82,6 +82,7 @@ export const RootStore = RootStoreBase.props({
     firebase: null,
     gqlHttpClient: null,
     gqlWsClient: null,
+    db: null,
   }))
   .actions((self) => {
     reaction(
@@ -185,6 +186,9 @@ export const RootStore = RootStoreBase.props({
         },
       )
     return {
+      setDb(val) {
+        self.db = val
+      },
       setLastUpdatedAt(val) {
         //console.log('store, setLastUpdatedAt:', val)
         self.lastUpdatedAt = val
