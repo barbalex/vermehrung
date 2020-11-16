@@ -58,7 +58,7 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, addNotification } = store
+  const { filter, online } = store
 
   // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
   const db = useDatabase()
@@ -67,33 +67,17 @@ const Herkunft = ({
   const herkunftCollection = useObservable(() =>
     db.collections.get('herkunft').query().observe(),
   )
-  const herkunfts = useObservableState(herkunftCollection, null)
-  console.log('Herkunft, herkunfts:', herkunfts)
+  const herkunfts = useObservableState(herkunftCollection, [])
   //const herkunftCollection = db.collections.get('herkunft')
-  //const [hk, setHk] = useState(undefined)
   const hk = herkunfts ? herkunfts.find((hk) => hk.id === id) : undefined
-  /*useEffect(() => {
-    if (!(!showFilter && herkunfts)) return
-    herkunfts
-      .find((hk) => hk.id === id)
-      .then((hk) => setHk(hk))
-      .catch((error) => {
-        // exclude not found error
-        if (!error.message.includes('not found')) {
-          addNotification({
-            message: error.message,
-          })
-        }
-      })
-  }, [addNotification, herkunfts, id, showFilter])*/
 
   const row = useMemo(
     () => (showFilter ? filter.herkunft : hk),
     // need herkunfts.size for when row arrives after first login
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.herkunft, id, showFilter, hk],
+    [filter.herkunft, showFilter, hk, herkunfts.length],
   )
-  console.log('Herkunft:', { row })
+  console.log('Herkunft, row:', row)
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(

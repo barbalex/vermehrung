@@ -60,30 +60,17 @@ const onData = async ({ data, table, db }) => {
       toCreate: missingIds.length,
     })
     await db.batch(
-      ...objectsToUpdate.map((object) =>
-        object.prepareUpdate((object) => {
-          object.id === 'ff78614e-b554-11ea-b3de-0242ac130004' &&
-            console.log({
-              object,
-              data,
-            })
-          const thisObjectsData = stripTypename(
-            data.find((d) => d.id === object.id),
-          )
-          const prepared = {
-            ...object,
-            ...thisObjectsData,
-          }
-          object.id === 'ff78614e-b554-11ea-b3de-0242ac130004' &&
-            console.log({
-              prepared,
-            })
-          return {
-            ...object,
-            ...thisObjectsData,
-          }
-        }),
-      ),
+      ...objectsToUpdate.map((object) => {
+        object.id === 'ff78614e-b554-11ea-b3de-0242ac130004' &&
+          console.log({
+            object,
+            data,
+          })
+        const thisObjectsData = stripTypename(
+          data.find((d) => d.id === object.id),
+        )
+        return object.prepareUpdate(() => thisObjectsData)
+      }),
       ...dataToCreateObjectsFrom.map((d) =>
         collection.prepareCreateFromDirtyRaw(parseComplexFields(d)),
       ),
