@@ -55,11 +55,15 @@ if (typeof window !== 'undefined') {
 
 const App = ({ element }) => {
   const [store, setStore] = useState(null)
-  const [database, setDatabse] = useState(null)
+  const [database, setDatabase] = useState(null)
 
   useEffect(() => {
-    setDatabse(initiateDb())
-  }, [])
+    if (store && !database) {
+      const db = initiateDb()
+      setDatabase(db)
+      store.setDb(db)
+    }
+  }, [store, database])
 
   useEffect(() => {
     let unregister
@@ -75,7 +79,7 @@ const App = ({ element }) => {
   }, [])
 
   // without store bad things happen
-  if (!store) return null
+  if (!store || !database) return null
 
   return (
     <DatabaseProvider database={database}>

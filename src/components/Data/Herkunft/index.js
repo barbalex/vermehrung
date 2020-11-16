@@ -58,15 +58,15 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, herkunfts, addNotification } = store
+  const { filter, online, addNotification } = store
 
   // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
   const db = useDatabase()
   const herkunftCollection = db.collections.get('herkunft')
-  console.log('Herkunft, herkunftCollection:', herkunftCollection)
   const [hk, setHk] = useState(undefined)
   useEffect(() => {
-    herkunftCollection &&
+    !showFilter &&
+      herkunftCollection &&
       herkunftCollection
         .find(id)
         .then((hk) => setHk(hk))
@@ -78,15 +78,15 @@ const Herkunft = ({
             })
           }
         })
-  }, [addNotification, herkunftCollection, id])
+  }, [addNotification, herkunftCollection, id, showFilter])
 
   const row = useMemo(
-    () => (showFilter ? filter.herkunft : herkunfts.get(id) || null),
+    () => (showFilter ? filter.herkunft : hk),
     // need herkunfts.size for when row arrives after first login
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.herkunft, id, showFilter, herkunfts, herkunfts.size],
+    [filter.herkunft, id, showFilter, hk],
   )
-  console.log('Herkunft:', { hk, row })
+  console.log('Herkunft:', { row })
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(

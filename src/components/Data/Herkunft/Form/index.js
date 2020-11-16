@@ -70,12 +70,13 @@ const Herkunft = ({
         return filter.setValue({ table: 'herkunft', key: field, value })
       }
 
-      const previousValue = row[field]
+      const previousValue = row._raw[field]
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      console.log('Herkunft, saveToDb', { field, value, previousValue, row })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
 
   const rowNr = row?.nr

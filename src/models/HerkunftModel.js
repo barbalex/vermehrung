@@ -17,9 +17,9 @@ export {
  * herkunftModel
  */
 export const herkunftModel = herkunftModelBase.actions((self) => ({
-  edit({ field, value }) {
+  edit({ field, value, row }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertHerkunftModel, unsetError } = store
+    const { addQueuedQuery, user, upsertHerkunftModel, unsetError, db } = store
 
     unsetError(`herkunft.${field}`)
     // first build the part that will be revisioned
@@ -78,8 +78,14 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
     newObjectForStore.id = self.id
     delete newObjectForStore.herkunft_id
     // optimistically update store
+    // 1. mst
     upsertHerkunftModel(newObjectForStore)
     if (field === '_deleted' && value) self.deleteNSide()
+    // 2. wdb
+    db.action(async () => {
+      await row.update((row) => ({ ...row, ...newObjectForStore }))
+      if (field === '_deleted' && value) await row.markAsDeleted()
+    })
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
