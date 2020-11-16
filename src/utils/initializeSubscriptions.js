@@ -8,12 +8,17 @@ import { ae_artModelPrimitives } from '../models/ae_artModel.base'
 import { herkunftModelPrimitives } from '../models/HerkunftModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
 
-const parseComplexFields = (object) => ({
-  ...object,
-  geom_point: JSON.stringify(object.geom_point),
-  _conflicts: JSON.stringify(object._conflicts),
-  _revisions: JSON.stringify(object._revisions),
-})
+const stripTypename = (object) => {
+  const { __typename, ...rest } = object
+  return rest
+}
+const parseComplexFields = (object) =>
+  stripTypename({
+    ...object,
+    geom_point: JSON.stringify(object.geom_point),
+    _conflicts: JSON.stringify(object._conflicts),
+    _revisions: JSON.stringify(object._revisions),
+  })
 
 const onData = async ({ data, table, db }) => {
   const collection = db.collections.get(table)
@@ -56,10 +61,28 @@ const onData = async ({ data, table, db }) => {
     })
     await db.batch(
       ...objectsToUpdate.map((object) =>
-        object.prepareUpdate((object) => ({
-          ...object,
-          ...data.find((d) => d.id === object.id),
-        })),
+        object.prepareUpdate((object) => {
+          object.id === 'ff78614e-b554-11ea-b3de-0242ac130004' &&
+            console.log({
+              object,
+              data,
+            })
+          const thisObjectsData = stripTypename(
+            data.find((d) => d.id === object.id),
+          )
+          const prepared = {
+            ...object,
+            ...thisObjectsData,
+          }
+          object.id === 'ff78614e-b554-11ea-b3de-0242ac130004' &&
+            console.log({
+              prepared,
+            })
+          return {
+            ...object,
+            ...thisObjectsData,
+          }
+        }),
       ),
       ...dataToCreateObjectsFrom.map((d) =>
         collection.prepareCreateFromDirtyRaw(parseComplexFields(d)),
