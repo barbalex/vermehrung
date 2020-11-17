@@ -67,7 +67,6 @@ const Herkunft = ({
     db.collections.get('herkunft').query().observe(),
   )
   const herkunfts = useObservableState(herkunftCollection, [])
-  //const herkunftCollection = db.collections.get('herkunft')
   const hk = herkunfts ? herkunfts.find((hk) => hk.id === id) : undefined
 
   const row = useMemo(

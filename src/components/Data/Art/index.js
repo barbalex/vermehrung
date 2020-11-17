@@ -8,6 +8,8 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -56,13 +58,22 @@ const Art = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, arts } = store
+  const { filter, online } = store
+
+  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
+  const db = useDatabase()
+  // useObservable reduces recomputation
+  const artCollection = useObservable(() =>
+    db.collections.get('art').query().observe(),
+  )
+  const arts = useObservableState(artCollection, [])
+  const art = arts ? arts.find((art) => art.id === id) : undefined
 
   const row = useMemo(
-    () => (showFilter ? filter.art : arts.get(id) || null),
+    () => (showFilter ? filter.art : art),
     // need arts.size for when row arrives after first login
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.art, id, showFilter, arts, arts.size],
+    [filter.art, art, showFilter, arts.length],
   )
 
   const [activeConflict, setActiveConflict] = useState(null)
