@@ -2,6 +2,7 @@ import { ZAEHLUNG_FRAGMENT } from './mstFragments'
 import { Q } from '@nozbe/watermelondb'
 
 import { ae_artModelPrimitives } from '../models/ae_artModel.base'
+import { artModelPrimitives } from '../models/artModel.base'
 import { herkunftModelPrimitives } from '../models/herkunftModel.base'
 import { lieferungModelPrimitives } from '../models/lieferungModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
@@ -88,7 +89,12 @@ const initializeSubscriptions = ({ store, db }) => {
     async (data) => onData({ data, table: 'ae_art', db }),
     (error) => onError({ error }),
   )
-  unsubscribe.art = store.subscribeArt()
+  unsubscribe.art = store.subscribeArt(
+    undefined,
+    artModelPrimitives.toString(),
+    async (data) => onData({ data, table: 'art', db }),
+    (error) => onError({ error }),
+  )
   unsubscribe.art_file = store.subscribeArt_file()
   unsubscribe.art_qk = store.subscribeArt_qk()
   unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen()

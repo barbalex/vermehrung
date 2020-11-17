@@ -363,6 +363,87 @@ export class Lieferung extends Model {
     )
   }
 }
+export class Art extends Model {
+  static table = 'art'
+
+  @field('id') id
+  @field('ae_id') ae_id
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @children('sammlung') sammlungs
+
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`art.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      art_id: this.id,
+      ae_id: field === 'ae_id' ? value : this.ae_id,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_art_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'art_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'art',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.art_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    if (field === '_deleted' && value) {
+      const sammlungs = await this.sammlungs.fetch()
+      console.log('art model, sammlungs:', sammlungs)
+      // TODO: edit to set _deleted true
+    }
+  }
+
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
+}
 
 export class AeArt extends Model {
   static table = 'ae_art'
