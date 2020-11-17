@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import isUuid from 'is-uuid'
 import last from 'lodash/last'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { useObservableState, useObservable } from 'observable-hooks'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
@@ -47,9 +49,21 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       ? '99999999-9999-9999-9999-999999999999'
       : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   }
-  const lieferung = store.lieferungs.get(id) || {}
+
+  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
+  const db = useDatabase()
+  // useObservable reduces recomputation
+  const lieferungCollection = useObservable(() =>
+    db.collections.get('lieferung').query().observe(),
+  )
+  const lieferungs = useObservableState(lieferungCollection, [])
+  const lieferung = lieferungs
+    ? lieferungs.find((li) => li.id === id)
+    : undefined
+
   const sammelLieferungId =
     lieferung?.sammel_lieferung_id ?? '99999999-9999-9999-9999-999999999999'
+  // TODO: convert once sammel_lieferung is built
   const sammelLieferung = store.sammel_lieferungs.get(sammelLieferungId) || {}
 
   const { li_show_sl } = userPersonOption
@@ -64,6 +78,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       <StyledSplitPane split="vertical" size="50%" minSize={200}>
         <Lieferung
           showFilter={showFilter}
+          lieferung={lieferung}
           sammelLieferung={sammelLieferung}
           id={id}
         />
@@ -78,6 +93,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
   return (
     <Lieferung
       id={id}
+      lieferung={lieferung}
       showFilter={showFilter}
       sammelLieferung={sammelLieferung}
     />

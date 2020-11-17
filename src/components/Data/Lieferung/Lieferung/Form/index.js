@@ -78,12 +78,12 @@ const LierferungForm = ({
         return filter.setValue({ table: 'lieferung', key: field, value })
       }
 
-      const previousValue = row[field]
       // only update if value has changed
+      const previousValue = row[field]
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
 
   const urlLastName = activeNodeArray[activeNodeArray.length - 2]

@@ -73,8 +73,6 @@ export const aeArt = gql`
     __typename
     name
     changed
-    # name_deutsch
-    # name_latein
   }
 `
 export const av = gql`
