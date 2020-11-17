@@ -279,6 +279,5 @@ export class AeArt extends Model {
   @field('name') name
   @field('name_deutsch') name_deutsch
   @field('name_latein') name_latein
-  // changed exists but is not yet in the mst-model
-  //@field('changed') changed
+  @field('changed') changed
 }
