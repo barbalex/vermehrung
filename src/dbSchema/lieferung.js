@@ -9,7 +9,7 @@ const lieferung = {
     { name: 'person_id', type: 'string', isOptional: true },
     { name: 'von_sammlung_id', type: 'string', isOptional: true },
     { name: 'von_kultur_id', type: 'string', isOptional: true },
-    { name: 'datum', type: 'string', isOptional: true },
+    { name: 'datum', type: 'string', isOptional: true, isIndexed: true },
     { name: 'nach_kultur_id', type: 'string', isOptional: true },
     { name: 'nach_ausgepflanzt', type: 'boolean', isOptional: true },
     { name: 'von_anzahl_individuen', type: 'number', isOptional: true },
