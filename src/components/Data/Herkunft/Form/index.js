@@ -73,7 +73,6 @@ const Herkunft = ({
       const previousValue = row._raw[field]
       // only update if value has changed
       if (value === previousValue) return
-      console.log('Herkunft, saveToDb', { field, value, previousValue, row })
       row.edit({ field, value, store })
     },
     [filter, row, showFilter, store],

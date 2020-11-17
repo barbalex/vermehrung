@@ -62,7 +62,6 @@ const Herkunft = ({
 
   // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
   const db = useDatabase()
-
   // useObservable reduces recomputation
   const herkunftCollection = useObservable(() =>
     db.collections.get('herkunft').query().observe(),
