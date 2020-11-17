@@ -109,13 +109,12 @@ const initializeSubscriptions = ({ store, db }) => {
   unsubscribe.kultur_option = store.subscribeKultur_option()
   unsubscribe.kultur_qk = store.subscribeKultur_qk()
   unsubscribe.kultur_qk_choosen = store.subscribeKultur_qk_choosen()
-  unsubscribe.lieferung = store.subscribeLieferung()
-  /*(
+  unsubscribe.lieferung = store.subscribeLieferung(
     undefined,
     lieferungModelPrimitives.toString(),
     async (data) => onData({ data, table: 'lieferung', db }),
     (error) => onError({ error }),
-  )*/
+  )
   unsubscribe.lieferung_file = store.subscribeLieferung_file()
   unsubscribe.person = store.subscribePerson()
   unsubscribe.person_file = store.subscribePerson_file()
