@@ -40,8 +40,8 @@ const HerkunftDeleteButton = ({ row }) => {
     (event) => setAnchorEl(event.currentTarget),
     [],
   )
-  const remove = useCallback(() => {
-    row.delete()
+  const remove = useCallback(async () => {
+    await row.delete({ store })
     setAnchorEl(null)
     if (filter.herkunft._deleted === false) {
       // need to remove openNode from openNodes
@@ -54,6 +54,7 @@ const HerkunftDeleteButton = ({ row }) => {
     removeOpenNodeWithChildren,
     activeNodeArray,
     setActiveNodeArray,
+    store,
   ])
 
   return (

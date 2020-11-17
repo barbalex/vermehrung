@@ -16,7 +16,7 @@ const herkunft = {
     { name: 'lv95_x', type: 'number', isOptional: true },
     { name: 'lv95_y', type: 'number', isOptional: true },
     { name: 'bemerkungen', type: 'string', isOptional: true },
-    { name: 'changed', type: 'string', isOptional: true },
+    { name: 'changed', type: 'string', isOptional: true, isIndexed: true },
     { name: 'changed_by', type: 'string', isOptional: true },
     { name: '_rev', type: 'string', isOptional: true },
     { name: '_parent_rev', type: 'string', isOptional: true },

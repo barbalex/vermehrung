@@ -146,7 +146,8 @@ const EventForm = ({
     [insertTeilkulturRev, row],
   )
 
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.event._deleted !== false || row._deleted
 
   return (
     <ErrorBoundary>

@@ -13,7 +13,7 @@ const deleteModule = async ({ node, store }) => {
 
   const me = store[`${table}s`].get(id)
   if (!me?.delete) throw new Error(`Kein Modell für Tabelle ${table} gefunden`)
-  me.delete()
+  me.delete({ store })
   setActiveNodeArray(activeNodeArray.slice(0, -1))
   // need to remove openNode from openNodes
   removeOpenNodeWithChildren(node.url)

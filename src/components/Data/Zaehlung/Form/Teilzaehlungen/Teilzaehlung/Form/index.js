@@ -81,7 +81,7 @@ const TeilzaehlungForm = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { insertTeilkulturRev, errors, unsetError, online } = store
+  const { insertTeilkulturRev, errors, unsetError, online, filter } = store
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -141,7 +141,7 @@ const TeilzaehlungForm = ({
     row.delete()
   }, [row])
 
-  const showDeleted = row._deleted
+  const showDeleted = row._deleted || filter.teilzaehlung._deleted !== false
 
   return (
     <ErrorBoundary>

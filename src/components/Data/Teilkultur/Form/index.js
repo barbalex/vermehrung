@@ -74,7 +74,8 @@ const TeilkulturForm = ({
     },
     [filter, row, showFilter],
   )
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.teilkultur._deleted !== false || row._deleted
 
   return (
     <ErrorBoundary>

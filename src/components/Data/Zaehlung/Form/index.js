@@ -101,7 +101,8 @@ const ZaehlungForm = ({
     }
   }, [])
 
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.zaehlung._deleted !== false || row._deleted
 
   return (
     <ErrorBoundary>

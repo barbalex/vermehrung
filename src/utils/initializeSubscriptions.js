@@ -1,14 +1,12 @@
-/* eslint-disable no-unused-vars */
 import { ZAEHLUNG_FRAGMENT } from './mstFragments'
-import { sanitizedRaw } from '@nozbe/watermelondb/RawRecord'
 import { Q } from '@nozbe/watermelondb'
-//import isEqual from 'lodash/isEqual'
 
 import { ae_artModelPrimitives } from '../models/ae_artModel.base'
 import { herkunftModelPrimitives } from '../models/HerkunftModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
 
 const stripTypename = (object) => {
+  // eslint-disable-next-line no-unused-vars
   const { __typename, ...rest } = object
   return rest
 }
@@ -24,64 +22,54 @@ const onData = async ({ data, table, db }) => {
   const collection = db.collections.get(table)
 
   const incomingIds = data.map((d) => d.id)
-  const incomingIdsDeleted = data.filter((d) => d._deleted).map((d) => d.id)
-  //const incomingIdsNotDeleted = data.filter((d) => !d._deleted).map((d) => d.id)
 
   db.action(async () => {
-    const objectsToUpdate = await db.collections
+    const objectsOfIncoming = await db.collections
       .get(table)
       .query(Q.where('id', Q.oneOf(incomingIds)))
-    /*const objectsToUndelete = await db.collections
-      .get(table)
-      .query(
-        Q.and(
-          Q.where('id', Q.oneOf(incomingIdsNotDeleted)),
-          Q.where('deleted', true),
-        ),
-      )*/
-    const objectsToDelete = await db.collections
-      .get(table)
-      .query(
-        Q.and(
-          Q.where('id', Q.oneOf(incomingIdsDeleted)),
-          Q.where('deleted', false),
-        ),
-      )
-    const existingIds = objectsToUpdate.map((d) => d.id)
+      .fetch()
+    const existingIds = objectsOfIncoming.map((d) => d.id)
     const missingIds = incomingIds.filter((d) => !existingIds.includes(d))
     const dataToCreateObjectsFrom = data.filter((d) =>
       missingIds.includes(d.id),
     )
+    // only if remote changed after local
+    const objectsToUpdate = objectsOfIncoming.filter((o) => {
+      const dat = data.find((d) => d.id === o.id)
+      if (!dat?.changed) return true
+      return o.changed < dat.changed
+    })
     console.log('subscribe, onData:', {
       data: data.length,
       table,
       toUpdate: objectsToUpdate.length,
-      toDelete: objectsToDelete.length,
       toCreate: missingIds.length,
     })
-    await db.batch(
-      ...objectsToUpdate.map((object) => {
-        object.id === 'ff78614e-b554-11ea-b3de-0242ac130004' &&
-          console.log({
-            object,
-            data,
+    if (objectsToUpdate.length || dataToCreateObjectsFrom.length) {
+      await db.batch(
+        ...objectsToUpdate.map((object) => {
+          const thisObjectsData = data.find((d) => d.id === object.id)
+          /*object.id === 'ff78614e-b554-11ea-b3de-0242ac130004' &&
+            console.log('initializeSubscriptions, preparing update', {
+              object,
+              thisObjectsData,
+            })*/
+
+          return object.prepareUpdate((ob) => {
+            Object.keys(thisObjectsData)
+              .filter((key) => !['id', '__typename'].includes(key))
+              .forEach((key) => {
+                if (ob[key] !== thisObjectsData[key]) {
+                  ob[key] = thisObjectsData[key]
+                }
+              })
           })
-        const thisObjectsData = stripTypename(
-          data.find((d) => d.id === object.id),
-        )
-        return object.prepareUpdate(() => thisObjectsData)
-      }),
-      ...dataToCreateObjectsFrom.map((d) =>
-        collection.prepareCreateFromDirtyRaw(parseComplexFields(d)),
-      ),
-    )
-    // now run deletes
-    // not possible earlier for newly created
-    // dont know how to undelete objectsToUndelete
-    // see: https://github.com/Nozbe/WatermelonDB/issues/864
-    await db.batch(
-      ...objectsToDelete.map((object) => object.prepareMarkAsDeleted()),
-    )
+        }),
+        ...dataToCreateObjectsFrom.map((d) =>
+          collection.prepareCreateFromDirtyRaw(parseComplexFields(d)),
+        ),
+      )
+    }
   })
 }
 

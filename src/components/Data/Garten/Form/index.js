@@ -92,7 +92,8 @@ const GartenForm = ({
     [filter, insertGvRev, row, showFilter],
   )
 
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.garten._deleted !== false || row._deleted
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>

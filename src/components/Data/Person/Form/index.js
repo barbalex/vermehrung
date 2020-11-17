@@ -98,7 +98,8 @@ const Person = ({
     }
   }, [nrCount, setError])
 
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.person._deleted !== false || row._deleted
 
   const userRole = row.user_role
     ? [...store.user_roles.values()].find((r) => r.name === row.user_role)

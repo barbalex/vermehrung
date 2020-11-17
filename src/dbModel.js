@@ -1,10 +1,10 @@
 import { Model } from '@nozbe/watermelondb'
 import {
+  action,
   children,
   field,
   json,
   relation,
-  action,
 } from '@nozbe/watermelondb/decorators'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
@@ -44,28 +44,26 @@ export class Herkunft extends Model {
   @children('sammlung') sammlungs
 
   @action async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError, db } = store
+    const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`herkunft.${field}`)
     // first build the part that will be revisioned
-    const newDepth = this._raw._depth + 1
+    const newDepth = this._depth + 1
     const newObject = {
-      herkunft_id: this._raw.id,
-      nr: field === 'nr' ? toStringIfPossible(value) : this._raw.nr,
+      herkunft_id: this.id,
+      nr: field === 'nr' ? toStringIfPossible(value) : this.nr,
       lokalname:
-        field === 'lokalname' ? toStringIfPossible(value) : this._raw.lokalname,
+        field === 'lokalname' ? toStringIfPossible(value) : this.lokalname,
       gemeinde:
-        field === 'gemeinde' ? toStringIfPossible(value) : this._raw.gemeinde,
-      kanton: field === 'kanton' ? toStringIfPossible(value) : this._raw.kanton,
-      land: field === 'land' ? toStringIfPossible(value) : this._raw.land,
+        field === 'gemeinde' ? toStringIfPossible(value) : this.gemeinde,
+      kanton: field === 'kanton' ? toStringIfPossible(value) : this.kanton,
+      land: field === 'land' ? toStringIfPossible(value) : this.land,
       geom_point: field === 'geom_point' ? value : this.geom_point,
       bemerkungen:
-        field === 'bemerkungen'
-          ? toStringIfPossible(value)
-          : this._raw.bemerkungen,
-      _parent_rev: this._raw._rev,
+        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
+      _parent_rev: this._rev,
       _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._raw._deleted,
+      _deleted: field === '_deleted' ? value : this._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
@@ -80,13 +78,13 @@ export class Herkunft extends Model {
     newObject._revisions = this._revisions
       ? toPgArray([rev, ...this._revisions])
       : toPgArray([rev])
-    console.log('Herkunft Model', {
+    /*console.log('Herkunft Model', {
       newObject,
       newObjectForStore,
       rev,
       newDepth,
       this: this._raw,
-    })
+    })*/
     addQueuedQuery({
       name: 'mutateInsert_herkunft_rev_one',
       variables: JSON.stringify({
@@ -97,7 +95,7 @@ export class Herkunft extends Model {
         },
       }),
       revertTable: 'herkunft',
-      revertId: this._raw.id,
+      revertId: this.id,
       revertField: field,
       revertValue: this[field],
       newValue: value,
@@ -109,20 +107,31 @@ export class Herkunft extends Model {
       : [rev]
     newObjectForStore._conflicts = this._conflicts
     // for store: convert herkuft_rev to herkunft
-    newObjectForStore.id = this._raw.id
+    newObjectForStore.id = this.id
     delete newObjectForStore.herkunft_id
     // optimistically update store
     // 1. mst
     //upsertHerkunftModel(newObjectForStore)
     //if (field === '_deleted' && value) this.deleteNSide()
     // 2. wdb
-    db.action(async () => {
-      await this.update((row) => ({ ...row, ...newObjectForStore }))
-      if (field === '_deleted' && value) await this.markAsDeleted()
-    })
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    // NOOOOO: this leads to conflicts due to multiple identical id's!
+    //if (field === '_deleted' && value) await this.markAsDeleted()
+    if (field === '_deleted' && value) {
+      /* was:
+        const store = getParent(self, 2)
+        store.sammlungsSorted
+          .filter((o) => o.herkunft_id === self.id)
+          .forEach((z) => z.delete())
+      */
+      const sammlungs = await this.sammlungs.fetch()
+      console.log('herkunft model, sammlungs:', sammlungs)
+    }
   }
-  @action delete({ store }) {
-    this.edit({ field: '_deleted', value: true, store })
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
   }
 }
 

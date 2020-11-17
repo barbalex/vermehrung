@@ -89,7 +89,8 @@ const ArtForm = ({
     return aeArtsSorted.filter((a) => !aeArtIdsNotToShow.includes(a.id))
   }
 
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.art._deleted !== false || row._deleted
 
   return (
     <ErrorBoundary>
