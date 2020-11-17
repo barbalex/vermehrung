@@ -239,6 +239,12 @@ export class Sammlung extends Model {
       }
     }
   }
+
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
 }
 
 export class Lieferung extends Model {
@@ -270,6 +276,92 @@ export class Lieferung extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @relation('lieferung', 'von_sammlung_id') lieferung
+
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`lieferung.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      lieferung_id: this.id,
+      sammel_lieferung_id:
+        field === 'sammel_lieferung_id' ? value : this.sammel_lieferung_id,
+      art_id: field === 'art_id' ? value : this.art_id,
+      person_id: field === 'person_id' ? value : this.person_id,
+      von_sammlung_id:
+        field === 'von_sammlung_id' ? value : this.von_sammlung_id,
+      von_kultur_id: field === 'von_kultur_id' ? value : this.von_kultur_id,
+      datum: field === 'datum' ? value : this.datum,
+      nach_kultur_id: field === 'nach_kultur_id' ? value : this.nach_kultur_id,
+      nach_ausgepflanzt:
+        field === 'nach_ausgepflanzt' ? value : this.nach_ausgepflanzt,
+      von_anzahl_individuen:
+        field === 'von_anzahl_individuen' ? value : this.von_anzahl_individuen,
+      anzahl_pflanzen:
+        field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
+      anzahl_auspflanzbereit:
+        field === 'anzahl_auspflanzbereit'
+          ? value
+          : this.anzahl_auspflanzbereit,
+      gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
+      andere_menge:
+        field === 'andere_menge'
+          ? toStringIfPossible(value)
+          : this.andere_menge,
+      geplant: field === 'geplant' ? value : this.geplant,
+      bemerkungen:
+        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_lieferung_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'lieferung_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'lieferung',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.lieferung_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+  }
+
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
 }
 
 export class AeArt extends Model {
@@ -277,7 +369,5 @@ export class AeArt extends Model {
 
   @field('id') id
   @field('name') name
-  @field('name_deutsch') name_deutsch
-  @field('name_latein') name_latein
   @field('changed') changed
 }

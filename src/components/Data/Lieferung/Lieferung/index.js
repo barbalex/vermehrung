@@ -51,16 +51,15 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const Lieferung = ({ id, showFilter, sammelLieferung = {} }) => {
+const Lieferung = ({ id, showFilter, sammelLieferung = {}, lieferung }) => {
   const store = useContext(StoreContext)
-  const { filter, online, lieferungs } = store
+  const { filter, online } = store
 
-  const row = useMemo(
-    () => (showFilter ? filter.lieferung : lieferungs.get(id) ?? null),
-    // need lieferungs.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.lieferung, id, showFilter, lieferungs, lieferungs.size],
-  )
+  const row = useMemo(() => (showFilter ? filter.lieferung : lieferung), [
+    filter.lieferung,
+    lieferung,
+    showFilter,
+  ])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
