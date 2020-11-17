@@ -2,7 +2,8 @@ import { ZAEHLUNG_FRAGMENT } from './mstFragments'
 import { Q } from '@nozbe/watermelondb'
 
 import { ae_artModelPrimitives } from '../models/ae_artModel.base'
-import { herkunftModelPrimitives } from '../models/HerkunftModel.base'
+import { herkunftModelPrimitives } from '../models/herkunftModel.base'
+import { lieferungModelPrimitives } from '../models/lieferungModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
 
 const stripTypename = (object) => {
@@ -13,7 +14,9 @@ const stripTypename = (object) => {
 const parseComplexFields = (object) =>
   stripTypename({
     ...object,
-    geom_point: JSON.stringify(object.geom_point),
+    ...(object.geom_point
+      ? { geom_point: JSON.stringify(object.geom_point) }
+      : {}),
     _conflicts: JSON.stringify(object._conflicts),
     _revisions: JSON.stringify(object._revisions),
   })
@@ -107,6 +110,12 @@ const initializeSubscriptions = ({ store, db }) => {
   unsubscribe.kultur_qk = store.subscribeKultur_qk()
   unsubscribe.kultur_qk_choosen = store.subscribeKultur_qk_choosen()
   unsubscribe.lieferung = store.subscribeLieferung()
+  /*(
+    undefined,
+    lieferungModelPrimitives.toString(),
+    async (data) => onData({ data, table: 'lieferung', db }),
+    (error) => onError({ error }),
+  )*/
   unsubscribe.lieferung_file = store.subscribeLieferung_file()
   unsubscribe.person = store.subscribePerson()
   unsubscribe.person_file = store.subscribePerson_file()
