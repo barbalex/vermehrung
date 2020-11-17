@@ -111,17 +111,17 @@ const SammlungForm = ({
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const previousValue = row[field]
 
       if (showFilter) {
         return filter.setValue({ table: 'sammlung', key: field, value })
       }
 
       // only update if value has changed
+      const previousValue = row[field]
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Planen`
