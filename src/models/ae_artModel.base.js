@@ -17,8 +17,6 @@ export const ae_artModelBase = ModelBase.named('ae_art')
     changed: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
-    name_deutsch: types.union(types.undefined, types.null, types.string),
-    name_latein: types.union(types.undefined, types.null, types.string),
   })
   .views((self) => ({
     get store() {
@@ -36,16 +34,9 @@ export class ae_artModelSelector extends QueryBuilder {
   get name() {
     return this.__attr(`name`)
   }
-  get name_deutsch() {
-    return this.__attr(`name_deutsch`)
-  }
-  get name_latein() {
-    return this.__attr(`name_latein`)
-  }
 }
 export function selectFromae_art() {
   return new ae_artModelSelector()
 }
 
 export const ae_artModelPrimitives = selectFromae_art().changed.name
-  .name_deutsch.name_latein
