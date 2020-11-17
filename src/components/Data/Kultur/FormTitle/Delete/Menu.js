@@ -32,8 +32,8 @@ const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
     setAnchorEl(null)
   }, [setAnchorEl])
 
-  const remove = useCallback(() => {
-    row.delete()
+  const remove = useCallback(async () => {
+    await row.delete({ store })
     setAnchorEl(null)
     if (filter.kultur.delete === false) {
       // need to remove openNode from openNodes
@@ -47,6 +47,7 @@ const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
     row,
     setActiveNodeArray,
     setAnchorEl,
+    store,
   ])
 
   return (

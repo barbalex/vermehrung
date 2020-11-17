@@ -4,7 +4,6 @@
 import { types } from 'mobx-state-tree'
 import { MSTGQLRef, QueryBuilder } from 'mst-gql'
 import { ModelBase } from './ModelBase'
-import { herkunftModel } from './herkunftModel'
 import { herkunftModelSelector } from './HerkunftModel.base'
 
 /**

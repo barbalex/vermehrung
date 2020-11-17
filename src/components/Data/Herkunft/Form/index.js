@@ -93,7 +93,13 @@ const Herkunft = ({
     }
   }, [nrCount, setError])
 
-  const showDeleted = showFilter || row._deleted
+  console.log('Herkunft, filter', {
+    filter,
+    _deleted: filter.herkunft._deleted,
+  })
+
+  const showDeleted =
+    showFilter || filter.herkunft._deleted !== false || row._deleted
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
