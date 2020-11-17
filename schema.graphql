@@ -23,7 +23,8 @@ input _text_comparison_exp {
 type ae_art {
   # An object relationship
   ae_art_art: art
-  id: ID
+  changed: timestamp
+  id: ID!
   name: String
   name_deutsch: String
   name_latein: String
@@ -52,6 +53,7 @@ input ae_art_aggregate_order_by {
 # input type for inserting array relation for remote table "ae_art"
 input ae_art_arr_rel_insert_input {
   data: [ae_art_insert_input!]!
+  on_conflict: ae_art_on_conflict
 }
 
 # Boolean expression to filter rows from the table "ae_art". All fields are combined with a logical 'AND'.
@@ -60,15 +62,23 @@ input ae_art_bool_exp {
   _not: ae_art_bool_exp
   _or: [ae_art_bool_exp]
   ae_art_art: art_bool_exp
+  changed: timestamp_comparison_exp
   id: uuid_comparison_exp
   name: String_comparison_exp
   name_deutsch: String_comparison_exp
   name_latein: String_comparison_exp
 }
 
+# unique or primary key constraints on table "ae_art"
+enum ae_art_constraint {
+  # unique or primary key constraint
+  ae_art_pkey
+}
+
 # input type for inserting data into table "ae_art"
 input ae_art_insert_input {
   ae_art_art: art_obj_rel_insert_input
+  changed: timestamp
   id: ID
   name: String
   name_deutsch: String
@@ -77,6 +87,7 @@ input ae_art_insert_input {
 
 # aggregate max on columns
 type ae_art_max_fields {
+  changed: timestamp
   id: ID
   name: String
   name_deutsch: String
@@ -85,6 +96,7 @@ type ae_art_max_fields {
 
 # order by max() on columns of table "ae_art"
 input ae_art_max_order_by {
+  changed: order_by
   id: order_by
   name: order_by
   name_deutsch: order_by
@@ -93,6 +105,7 @@ input ae_art_max_order_by {
 
 # aggregate min on columns
 type ae_art_min_fields {
+  changed: timestamp
   id: ID
   name: String
   name_deutsch: String
@@ -101,6 +114,7 @@ type ae_art_min_fields {
 
 # order by min() on columns of table "ae_art"
 input ae_art_min_order_by {
+  changed: order_by
   id: order_by
   name: order_by
   name_deutsch: order_by
@@ -119,19 +133,36 @@ type ae_art_mutation_response {
 # input type for inserting object relation for remote table "ae_art"
 input ae_art_obj_rel_insert_input {
   data: ae_art_insert_input!
+  on_conflict: ae_art_on_conflict
+}
+
+# on conflict condition type for table "ae_art"
+input ae_art_on_conflict {
+  constraint: ae_art_constraint!
+  update_columns: [ae_art_update_column!]!
+  where: ae_art_bool_exp
 }
 
 # ordering options when selecting data from "ae_art"
 input ae_art_order_by {
   ae_art_art: art_order_by
+  changed: order_by
   id: order_by
   name: order_by
   name_deutsch: order_by
   name_latein: order_by
 }
 
+# primary key columns input for table: "ae_art"
+input ae_art_pk_columns_input {
+  id: ID!
+}
+
 # select columns of table "ae_art"
 enum ae_art_select_column {
+  # column name
+  changed
+
   # column name
   id
 
@@ -147,10 +178,29 @@ enum ae_art_select_column {
 
 # input type for updating data in table "ae_art"
 input ae_art_set_input {
+  changed: timestamp
   id: ID
   name: String
   name_deutsch: String
   name_latein: String
+}
+
+# update columns of table "ae_art"
+enum ae_art_update_column {
+  # column name
+  changed
+
+  # column name
+  id
+
+  # column name
+  name
+
+  # column name
+  name_deutsch
+
+  # column name
+  name_latein
 }
 
 # columns and relationships of "art"
@@ -659,6 +709,7 @@ type art_file {
   art: art
   art_id: uuid
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID!
@@ -699,6 +750,7 @@ input art_file_bool_exp {
   art: art_bool_exp
   art_id: uuid_comparison_exp
   beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
   file_id: uuid_comparison_exp
   file_mime_type: String_comparison_exp
   id: uuid_comparison_exp
@@ -716,6 +768,7 @@ input art_file_insert_input {
   art: art_obj_rel_insert_input
   art_id: uuid
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -726,6 +779,7 @@ input art_file_insert_input {
 type art_file_max_fields {
   art_id: uuid
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -736,6 +790,7 @@ type art_file_max_fields {
 input art_file_max_order_by {
   art_id: order_by
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -746,6 +801,7 @@ input art_file_max_order_by {
 type art_file_min_fields {
   art_id: uuid
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -756,6 +812,7 @@ type art_file_min_fields {
 input art_file_min_order_by {
   art_id: order_by
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -789,6 +846,7 @@ input art_file_order_by {
   art: art_order_by
   art_id: order_by
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -809,6 +867,9 @@ enum art_file_select_column {
   beschreibung
 
   # column name
+  changed
+
+  # column name
   file_id
 
   # column name
@@ -825,6 +886,7 @@ enum art_file_select_column {
 input art_file_set_input {
   art_id: uuid
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -838,6 +900,9 @@ enum art_file_update_column {
 
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -5269,6 +5334,7 @@ enum garten_constraint {
 # columns and relationships of "garten_file"
 type garten_file {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
 
@@ -5311,6 +5377,7 @@ input garten_file_bool_exp {
   _not: garten_file_bool_exp
   _or: [garten_file_bool_exp]
   beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
   file_id: uuid_comparison_exp
   file_mime_type: String_comparison_exp
   garten: garten_bool_exp
@@ -5328,6 +5395,7 @@ enum garten_file_constraint {
 # input type for inserting data into table "garten_file"
 input garten_file_insert_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   garten: garten_obj_rel_insert_input
@@ -5339,6 +5407,7 @@ input garten_file_insert_input {
 # aggregate max on columns
 type garten_file_max_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   garten_id: uuid
@@ -5349,6 +5418,7 @@ type garten_file_max_fields {
 # order by max() on columns of table "garten_file"
 input garten_file_max_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   garten_id: order_by
@@ -5359,6 +5429,7 @@ input garten_file_max_order_by {
 # aggregate min on columns
 type garten_file_min_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   garten_id: uuid
@@ -5369,6 +5440,7 @@ type garten_file_min_fields {
 # order by min() on columns of table "garten_file"
 input garten_file_min_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   garten_id: order_by
@@ -5401,6 +5473,7 @@ input garten_file_on_conflict {
 # ordering options when selecting data from "garten_file"
 input garten_file_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   garten: garten_order_by
@@ -5418,6 +5491,9 @@ input garten_file_pk_columns_input {
 enum garten_file_select_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -5438,6 +5514,7 @@ enum garten_file_select_column {
 # input type for updating data in table "garten_file"
 input garten_file_set_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   garten_id: uuid
@@ -5449,6 +5526,9 @@ input garten_file_set_input {
 enum garten_file_update_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -7572,6 +7652,7 @@ enum herkunft_constraint {
 # columns and relationships of "herkunft_file"
 type herkunft_file {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
 
@@ -7614,6 +7695,7 @@ input herkunft_file_bool_exp {
   _not: herkunft_file_bool_exp
   _or: [herkunft_file_bool_exp]
   beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
   file_id: uuid_comparison_exp
   file_mime_type: String_comparison_exp
   herkunft: herkunft_bool_exp
@@ -7631,6 +7713,7 @@ enum herkunft_file_constraint {
 # input type for inserting data into table "herkunft_file"
 input herkunft_file_insert_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   herkunft: herkunft_obj_rel_insert_input
@@ -7642,6 +7725,7 @@ input herkunft_file_insert_input {
 # aggregate max on columns
 type herkunft_file_max_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   herkunft_id: uuid
@@ -7652,6 +7736,7 @@ type herkunft_file_max_fields {
 # order by max() on columns of table "herkunft_file"
 input herkunft_file_max_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   herkunft_id: order_by
@@ -7662,6 +7747,7 @@ input herkunft_file_max_order_by {
 # aggregate min on columns
 type herkunft_file_min_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   herkunft_id: uuid
@@ -7672,6 +7758,7 @@ type herkunft_file_min_fields {
 # order by min() on columns of table "herkunft_file"
 input herkunft_file_min_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   herkunft_id: order_by
@@ -7704,6 +7791,7 @@ input herkunft_file_on_conflict {
 # ordering options when selecting data from "herkunft_file"
 input herkunft_file_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   herkunft: herkunft_order_by
@@ -7721,6 +7809,9 @@ input herkunft_file_pk_columns_input {
 enum herkunft_file_select_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -7741,6 +7832,7 @@ enum herkunft_file_select_column {
 # input type for updating data in table "herkunft_file"
 input herkunft_file_set_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   herkunft_id: uuid
@@ -7752,6 +7844,9 @@ input herkunft_file_set_input {
 enum herkunft_file_update_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -9502,6 +9597,7 @@ enum kultur_constraint {
 # columns and relationships of "kultur_file"
 type kultur_file {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID!
@@ -9544,6 +9640,7 @@ input kultur_file_bool_exp {
   _not: kultur_file_bool_exp
   _or: [kultur_file_bool_exp]
   beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
   file_id: uuid_comparison_exp
   file_mime_type: String_comparison_exp
   id: uuid_comparison_exp
@@ -9561,6 +9658,7 @@ enum kultur_file_constraint {
 # input type for inserting data into table "kultur_file"
 input kultur_file_insert_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -9572,6 +9670,7 @@ input kultur_file_insert_input {
 # aggregate max on columns
 type kultur_file_max_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -9582,6 +9681,7 @@ type kultur_file_max_fields {
 # order by max() on columns of table "kultur_file"
 input kultur_file_max_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -9592,6 +9692,7 @@ input kultur_file_max_order_by {
 # aggregate min on columns
 type kultur_file_min_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -9602,6 +9703,7 @@ type kultur_file_min_fields {
 # order by min() on columns of table "kultur_file"
 input kultur_file_min_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -9634,6 +9736,7 @@ input kultur_file_on_conflict {
 # ordering options when selecting data from "kultur_file"
 input kultur_file_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -9651,6 +9754,9 @@ input kultur_file_pk_columns_input {
 enum kultur_file_select_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -9671,6 +9777,7 @@ enum kultur_file_select_column {
 # input type for updating data in table "kultur_file"
 input kultur_file_set_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -9682,6 +9789,9 @@ input kultur_file_set_input {
 enum kultur_file_update_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -13584,6 +13694,7 @@ enum lieferung_constraint {
 # columns and relationships of "lieferung_file"
 type lieferung_file {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID!
@@ -13626,6 +13737,7 @@ input lieferung_file_bool_exp {
   _not: lieferung_file_bool_exp
   _or: [lieferung_file_bool_exp]
   beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
   file_id: uuid_comparison_exp
   file_mime_type: String_comparison_exp
   id: uuid_comparison_exp
@@ -13643,6 +13755,7 @@ enum lieferung_file_constraint {
 # input type for inserting data into table "lieferung_file"
 input lieferung_file_insert_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -13654,6 +13767,7 @@ input lieferung_file_insert_input {
 # aggregate max on columns
 type lieferung_file_max_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -13664,6 +13778,7 @@ type lieferung_file_max_fields {
 # order by max() on columns of table "lieferung_file"
 input lieferung_file_max_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -13674,6 +13789,7 @@ input lieferung_file_max_order_by {
 # aggregate min on columns
 type lieferung_file_min_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -13684,6 +13800,7 @@ type lieferung_file_min_fields {
 # order by min() on columns of table "lieferung_file"
 input lieferung_file_min_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -13716,6 +13833,7 @@ input lieferung_file_on_conflict {
 # ordering options when selecting data from "lieferung_file"
 input lieferung_file_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -13733,6 +13851,9 @@ input lieferung_file_pk_columns_input {
 enum lieferung_file_select_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -13753,6 +13874,7 @@ enum lieferung_file_select_column {
 # input type for updating data in table "lieferung_file"
 input lieferung_file_set_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -13764,6 +13886,9 @@ input lieferung_file_set_input {
 enum lieferung_file_update_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -14944,6 +15069,9 @@ type mutation_root {
     where: ae_art_bool_exp!
   ): ae_art_mutation_response
 
+  # delete single row from the table: "ae_art"
+  delete_ae_art_by_pk(id: ID!): ae_art
+
   # delete data from the table: "art"
   delete_art(
     # filter the rows which have to be deleted
@@ -15386,12 +15514,18 @@ type mutation_root {
   insert_ae_art(
     # the rows to be inserted
     objects: [ae_art_insert_input!]!
+
+    # on conflict condition
+    on_conflict: ae_art_on_conflict
   ): ae_art_mutation_response
 
   # insert a single row into the table: "ae_art"
   insert_ae_art_one(
     # the row to be inserted
     object: ae_art_insert_input!
+
+    # on conflict condition
+    on_conflict: ae_art_on_conflict
   ): ae_art
 
   # insert data into the table: "art"
@@ -16284,6 +16418,13 @@ type mutation_root {
     # filter the rows which have to be updated
     where: ae_art_bool_exp!
   ): ae_art_mutation_response
+
+  # update single row of the table: "ae_art"
+  update_ae_art_by_pk(
+    # sets the columns of the filtered rows to the given values
+    _set: ae_art_set_input
+    pk_columns: ae_art_pk_columns_input!
+  ): ae_art
 
   # update data of the table: "art"
   update_art(
@@ -17992,6 +18133,7 @@ enum person_constraint {
 # columns and relationships of "person_file"
 type person_file {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID!
@@ -18034,6 +18176,7 @@ input person_file_bool_exp {
   _not: person_file_bool_exp
   _or: [person_file_bool_exp]
   beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
   file_id: uuid_comparison_exp
   file_mime_type: String_comparison_exp
   id: uuid_comparison_exp
@@ -18051,6 +18194,7 @@ enum person_file_constraint {
 # input type for inserting data into table "person_file"
 input person_file_insert_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -18062,6 +18206,7 @@ input person_file_insert_input {
 # aggregate max on columns
 type person_file_max_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -18072,6 +18217,7 @@ type person_file_max_fields {
 # order by max() on columns of table "person_file"
 input person_file_max_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -18082,6 +18228,7 @@ input person_file_max_order_by {
 # aggregate min on columns
 type person_file_min_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -18092,6 +18239,7 @@ type person_file_min_fields {
 # order by min() on columns of table "person_file"
 input person_file_min_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -18124,6 +18272,7 @@ input person_file_on_conflict {
 # ordering options when selecting data from "person_file"
 input person_file_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -18141,6 +18290,9 @@ input person_file_pk_columns_input {
 enum person_file_select_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -18161,6 +18313,7 @@ enum person_file_select_column {
 # input type for updating data in table "person_file"
 input person_file_set_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -18172,6 +18325,9 @@ input person_file_set_input {
 enum person_file_update_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -20763,6 +20919,9 @@ type query_root {
     # filter the rows returned
     where: ae_art_bool_exp
   ): ae_art_aggregate!
+
+  # fetch data from the table: "ae_art" using primary key columns
+  ae_art_by_pk(id: ID!): ae_art
 
   # fetch data from the table: "art"
   art(
@@ -24344,6 +24503,7 @@ enum sammlung_constraint {
 # columns and relationships of "sammlung_file"
 type sammlung_file {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID!
@@ -24386,6 +24546,7 @@ input sammlung_file_bool_exp {
   _not: sammlung_file_bool_exp
   _or: [sammlung_file_bool_exp]
   beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
   file_id: uuid_comparison_exp
   file_mime_type: String_comparison_exp
   id: uuid_comparison_exp
@@ -24403,6 +24564,7 @@ enum sammlung_file_constraint {
 # input type for inserting data into table "sammlung_file"
 input sammlung_file_insert_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -24414,6 +24576,7 @@ input sammlung_file_insert_input {
 # aggregate max on columns
 type sammlung_file_max_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -24424,6 +24587,7 @@ type sammlung_file_max_fields {
 # order by max() on columns of table "sammlung_file"
 input sammlung_file_max_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -24434,6 +24598,7 @@ input sammlung_file_max_order_by {
 # aggregate min on columns
 type sammlung_file_min_fields {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -24444,6 +24609,7 @@ type sammlung_file_min_fields {
 # order by min() on columns of table "sammlung_file"
 input sammlung_file_min_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -24476,6 +24642,7 @@ input sammlung_file_on_conflict {
 # ordering options when selecting data from "sammlung_file"
 input sammlung_file_order_by {
   beschreibung: order_by
+  changed: order_by
   file_id: order_by
   file_mime_type: order_by
   id: order_by
@@ -24493,6 +24660,9 @@ input sammlung_file_pk_columns_input {
 enum sammlung_file_select_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -24513,6 +24683,7 @@ enum sammlung_file_select_column {
 # input type for updating data in table "sammlung_file"
 input sammlung_file_set_input {
   beschreibung: String
+  changed: timestamp
   file_id: uuid
   file_mime_type: String
   id: ID
@@ -24524,6 +24695,9 @@ input sammlung_file_set_input {
 enum sammlung_file_update_column {
   # column name
   beschreibung
+
+  # column name
+  changed
 
   # column name
   file_id
@@ -26133,6 +26307,9 @@ type subscription_root {
     # filter the rows returned
     where: ae_art_bool_exp
   ): ae_art_aggregate!
+
+  # fetch data from the table: "ae_art" using primary key columns
+  ae_art_by_pk(id: ID!): ae_art
 
   # fetch data from the table: "art"
   art(
@@ -30331,6 +30508,7 @@ input timestamp_comparison_exp {
 
 # columns and relationships of "user_role"
 type user_role {
+  changed: timestamp
   comment: String
   id: ID!
   label: String
@@ -30467,6 +30645,7 @@ input user_role_bool_exp {
   _and: [user_role_bool_exp]
   _not: user_role_bool_exp
   _or: [user_role_bool_exp]
+  changed: timestamp_comparison_exp
   comment: String_comparison_exp
   id: uuid_comparison_exp
   label: String_comparison_exp
@@ -30492,6 +30671,7 @@ input user_role_inc_input {
 
 # input type for inserting data into table "user_role"
 input user_role_insert_input {
+  changed: timestamp
   comment: String
   id: ID
   label: String
@@ -30503,6 +30683,7 @@ input user_role_insert_input {
 
 # aggregate max on columns
 type user_role_max_fields {
+  changed: timestamp
   comment: String
   id: ID
   label: String
@@ -30512,6 +30693,7 @@ type user_role_max_fields {
 
 # order by max() on columns of table "user_role"
 input user_role_max_order_by {
+  changed: order_by
   comment: order_by
   id: order_by
   label: order_by
@@ -30521,6 +30703,7 @@ input user_role_max_order_by {
 
 # aggregate min on columns
 type user_role_min_fields {
+  changed: timestamp
   comment: String
   id: ID
   label: String
@@ -30530,6 +30713,7 @@ type user_role_min_fields {
 
 # order by min() on columns of table "user_role"
 input user_role_min_order_by {
+  changed: order_by
   comment: order_by
   id: order_by
   label: order_by
@@ -30561,6 +30745,7 @@ input user_role_on_conflict {
 
 # ordering options when selecting data from "user_role"
 input user_role_order_by {
+  changed: order_by
   comment: order_by
   id: order_by
   label: order_by
@@ -30577,6 +30762,9 @@ input user_role_pk_columns_input {
 
 # select columns of table "user_role"
 enum user_role_select_column {
+  # column name
+  changed
+
   # column name
   comment
 
@@ -30595,6 +30783,7 @@ enum user_role_select_column {
 
 # input type for updating data in table "user_role"
 input user_role_set_input {
+  changed: timestamp
   comment: String
   id: ID
   label: String
@@ -30644,6 +30833,9 @@ input user_role_sum_order_by {
 
 # update columns of table "user_role"
 enum user_role_update_column {
+  # column name
+  changed
+
   # column name
   comment
 

@@ -50,10 +50,6 @@ export const teilzaehlungModelBase = ModelBase.named('teilzaehlung')
     id: types.identifier,
     prognose_von_tz: types.union(types.undefined, types.null, types.frozen()),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
-    teilzaehlungs_aggregate: types.union(
-      types.undefined,
-      types.late(() => teilzaehlung_aggregateModel),
-    ),
     zaehlung_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views((self) => ({

@@ -7,7 +7,7 @@ import { ModelBase } from './ModelBase'
 import { artModel } from './artModel'
 import { artModelSelector } from './artModel.base'
 import { herkunftModel } from './herkunftModel'
-import { herkunftModelSelector } from './HerkunftModel.base'
+import { herkunftModelSelector } from './herkunftModel.base'
 import { lieferungModel } from './lieferungModel'
 import { lieferungModelSelector } from './lieferungModel.base'
 import { lieferung_revModel } from './lieferung_revModel'
@@ -139,6 +139,73 @@ export class sammlungModelSelector extends QueryBuilder {
   }
   get wgs84_long() {
     return this.__attr(`wgs84_long`)
+  }
+  art(builder) {
+    return this.__child(`art`, artModelSelector, builder)
+  }
+  herkunft(builder) {
+    return this.__child(`herkunft`, herkunftModelSelector, builder)
+  }
+  lieferung_revs(builder) {
+    return this.__child(`lieferung_revs`, lieferung_revModelSelector, builder)
+  }
+  lieferung_revs_aggregate(builder) {
+    return this.__child(
+      `lieferung_revs_aggregate`,
+      lieferung_rev_aggregateModelSelector,
+      builder,
+    )
+  }
+  lieferungs(builder) {
+    return this.__child(`lieferungs`, lieferungModelSelector, builder)
+  }
+  lieferungs_aggregate(builder) {
+    return this.__child(
+      `lieferungs_aggregate`,
+      lieferung_aggregateModelSelector,
+      builder,
+    )
+  }
+  person(builder) {
+    return this.__child(`person`, personModelSelector, builder)
+  }
+  sammel_lieferung_revs(builder) {
+    return this.__child(
+      `sammel_lieferung_revs`,
+      sammel_lieferung_revModelSelector,
+      builder,
+    )
+  }
+  sammel_lieferung_revs_aggregate(builder) {
+    return this.__child(
+      `sammel_lieferung_revs_aggregate`,
+      sammel_lieferung_rev_aggregateModelSelector,
+      builder,
+    )
+  }
+  sammel_lieferungs(builder) {
+    return this.__child(
+      `sammel_lieferungs`,
+      sammel_lieferungModelSelector,
+      builder,
+    )
+  }
+  sammel_lieferungs_aggregate(builder) {
+    return this.__child(
+      `sammel_lieferungs_aggregate`,
+      sammel_lieferung_aggregateModelSelector,
+      builder,
+    )
+  }
+  sammlung_files(builder) {
+    return this.__child(`sammlung_files`, sammlung_fileModelSelector, builder)
+  }
+  sammlung_files_aggregate(builder) {
+    return this.__child(
+      `sammlung_files_aggregate`,
+      sammlung_file_aggregateModelSelector,
+      builder,
+    )
   }
 }
 export function selectFromsammlung() {

@@ -84,6 +84,120 @@ export class artModelSelector extends QueryBuilder {
   get id() {
     return this.__attr(`id`)
   }
+  art_files(builder) {
+    return this.__child(`art_files`, art_fileModelSelector, builder)
+  }
+  art_files_aggregate(builder) {
+    return this.__child(
+      `art_files_aggregate`,
+      art_file_aggregateModelSelector,
+      builder,
+    )
+  }
+  art_qk_choosens(builder) {
+    return this.__child(`art_qk_choosens`, art_qk_choosenModelSelector, builder)
+  }
+  art_qk_choosens_aggregate(builder) {
+    return this.__child(
+      `art_qk_choosens_aggregate`,
+      art_qk_choosen_aggregateModelSelector,
+      builder,
+    )
+  }
+  avs(builder) {
+    return this.__child(`avs`, avModelSelector, builder)
+  }
+  avs_aggregate(builder) {
+    return this.__child(`avs_aggregate`, av_aggregateModelSelector, builder)
+  }
+  kultur_revs(builder) {
+    return this.__child(`kultur_revs`, kultur_revModelSelector, builder)
+  }
+  kultur_revs_aggregate(builder) {
+    return this.__child(
+      `kultur_revs_aggregate`,
+      kultur_rev_aggregateModelSelector,
+      builder,
+    )
+  }
+  kulturs(builder) {
+    return this.__child(`kulturs`, kulturModelSelector, builder)
+  }
+  kulturs_aggregate(builder) {
+    return this.__child(
+      `kulturs_aggregate`,
+      kultur_aggregateModelSelector,
+      builder,
+    )
+  }
+  lieferung_revs(builder) {
+    return this.__child(`lieferung_revs`, lieferung_revModelSelector, builder)
+  }
+  lieferung_revs_aggregate(builder) {
+    return this.__child(
+      `lieferung_revs_aggregate`,
+      lieferung_rev_aggregateModelSelector,
+      builder,
+    )
+  }
+  lieferungs(builder) {
+    return this.__child(`lieferungs`, lieferungModelSelector, builder)
+  }
+  lieferungs_aggregate(builder) {
+    return this.__child(
+      `lieferungs_aggregate`,
+      lieferung_aggregateModelSelector,
+      builder,
+    )
+  }
+  sammel_lieferung_revs(builder) {
+    return this.__child(
+      `sammel_lieferung_revs`,
+      sammel_lieferung_revModelSelector,
+      builder,
+    )
+  }
+  sammel_lieferung_revs_aggregate(builder) {
+    return this.__child(
+      `sammel_lieferung_revs_aggregate`,
+      sammel_lieferung_rev_aggregateModelSelector,
+      builder,
+    )
+  }
+  sammel_lieferungs(builder) {
+    return this.__child(
+      `sammel_lieferungs`,
+      sammel_lieferungModelSelector,
+      builder,
+    )
+  }
+  sammel_lieferungs_aggregate(builder) {
+    return this.__child(
+      `sammel_lieferungs_aggregate`,
+      sammel_lieferung_aggregateModelSelector,
+      builder,
+    )
+  }
+  sammlung_revs(builder) {
+    return this.__child(`sammlung_revs`, sammlung_revModelSelector, builder)
+  }
+  sammlung_revs_aggregate(builder) {
+    return this.__child(
+      `sammlung_revs_aggregate`,
+      sammlung_rev_aggregateModelSelector,
+      builder,
+    )
+  }
+  sammlungs(builder) {
+    return this.__child(`sammlungs`, sammlungModelSelector, builder)
+  }
+  sammlungs_aggregate(builder) {
+    return this.__child(
+      `sammlungs_aggregate`,
+      sammlung_aggregateModelSelector,
+      builder,
+    )
+  }
 }
 export function selectFromart() {
   return new artModelSelector()

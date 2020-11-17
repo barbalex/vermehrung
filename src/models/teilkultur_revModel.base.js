@@ -38,6 +38,10 @@ export const teilkultur_revModelBase = ModelBase.named('teilkultur_rev')
     ort2: types.union(types.undefined, types.null, types.string),
     ort3: types.union(types.undefined, types.null, types.string),
     teilkultur_id: types.union(types.undefined, types.frozen()),
+    teilzaehlungs_aggregate: types.union(
+      types.undefined,
+      types.late(() => teilzaehlung_aggregateModel),
+    ),
   })
   .views((self) => ({
     get store() {

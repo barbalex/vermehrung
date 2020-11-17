@@ -14,6 +14,7 @@ import { artModelSelector } from './artModel.base'
 export const ae_artModelBase = ModelBase.named('ae_art')
   .props({
     __typename: types.optional(types.literal('ae_art'), 'ae_art'),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
     name_deutsch: types.union(types.undefined, types.null, types.string),
@@ -26,6 +27,9 @@ export const ae_artModelBase = ModelBase.named('ae_art')
   }))
 
 export class ae_artModelSelector extends QueryBuilder {
+  get changed() {
+    return this.__attr(`changed`)
+  }
   get id() {
     return this.__attr(`id`)
   }
@@ -43,5 +47,5 @@ export function selectFromae_art() {
   return new ae_artModelSelector()
 }
 
-export const ae_artModelPrimitives = selectFromae_art().name.name_deutsch
-  .name_latein
+export const ae_artModelPrimitives = selectFromae_art().changed.name
+  .name_deutsch.name_latein

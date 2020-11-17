@@ -15,6 +15,7 @@ export const garten_fileModelBase = ModelBase.named('garten_file')
   .props({
     __typename: types.optional(types.literal('garten_file'), 'garten_file'),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
@@ -30,6 +31,9 @@ export const garten_fileModelBase = ModelBase.named('garten_file')
 export class garten_fileModelSelector extends QueryBuilder {
   get beschreibung() {
     return this.__attr(`beschreibung`)
+  }
+  get changed() {
+    return this.__attr(`changed`)
   }
   get file_id() {
     return this.__attr(`file_id`)
@@ -52,4 +56,4 @@ export function selectFromgarten_file() {
 }
 
 export const garten_fileModelPrimitives = selectFromgarten_file().beschreibung
-  .file_id.file_mime_type.garten_id.name
+  .changed.file_id.file_mime_type.garten_id.name

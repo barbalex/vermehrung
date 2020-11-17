@@ -1,11 +1,11 @@
-import { herkunftModelBase } from './HerkunftModel.base'
+import { herkunftModelBase } from './herkunftModel.base'
 
 /* A graphql query fragment builders for herkunftModel */
 export {
   selectFromherkunft,
   herkunftModelPrimitives,
   herkunftModelSelector,
-} from './HerkunftModel.base'
+} from './herkunftModel.base'
 
 /**
  * herkunftModel

@@ -16,6 +16,7 @@ export const art_file_max_fieldsModelBase = ModelBase
     __typename: types.optional(types.literal("art_file_max_fields"), "art_file_max_fields"),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
@@ -30,6 +31,7 @@ export const art_file_max_fieldsModelBase = ModelBase
 export class art_file_max_fieldsModelSelector extends QueryBuilder {
   get art_id() { return this.__attr(`art_id`) }
   get beschreibung() { return this.__attr(`beschreibung`) }
+  get changed() { return this.__attr(`changed`) }
   get file_id() { return this.__attr(`file_id`) }
   get file_mime_type() { return this.__attr(`file_mime_type`) }
   get id() { return this.__attr(`id`) }
@@ -39,4 +41,4 @@ export function selectFromart_file_max_fields() {
   return new art_file_max_fieldsModelSelector()
 }
 
-export const art_file_max_fieldsModelPrimitives = selectFromart_file_max_fields().art_id.beschreibung.file_id.file_mime_type.name
+export const art_file_max_fieldsModelPrimitives = selectFromart_file_max_fields().art_id.beschreibung.changed.file_id.file_mime_type.name

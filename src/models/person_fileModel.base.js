@@ -15,6 +15,7 @@ export const person_fileModelBase = ModelBase.named('person_file')
   .props({
     __typename: types.optional(types.literal('person_file'), 'person_file'),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
@@ -30,6 +31,9 @@ export const person_fileModelBase = ModelBase.named('person_file')
 export class person_fileModelSelector extends QueryBuilder {
   get beschreibung() {
     return this.__attr(`beschreibung`)
+  }
+  get changed() {
+    return this.__attr(`changed`)
   }
   get file_id() {
     return this.__attr(`file_id`)
@@ -52,4 +56,4 @@ export function selectFromperson_file() {
 }
 
 export const person_fileModelPrimitives = selectFromperson_file().beschreibung
-  .file_id.file_mime_type.name.person_id
+  .changed.file_id.file_mime_type.name.person_id

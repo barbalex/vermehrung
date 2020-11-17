@@ -16,6 +16,7 @@ import { person_revModelSelector } from './person_revModel.base'
 export const user_roleModelBase = ModelBase.named('user_role')
   .props({
     __typename: types.optional(types.literal('user_role'), 'user_role'),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     comment: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
     label: types.union(types.undefined, types.null, types.string),
@@ -29,6 +30,9 @@ export const user_roleModelBase = ModelBase.named('user_role')
   }))
 
 export class user_roleModelSelector extends QueryBuilder {
+  get changed() {
+    return this.__attr(`changed`)
+  }
   get comment() {
     return this.__attr(`comment`)
   }
@@ -49,5 +53,5 @@ export function selectFromuser_role() {
   return new user_roleModelSelector()
 }
 
-export const user_roleModelPrimitives = selectFromuser_role().comment.label.name
-  .sort
+export const user_roleModelPrimitives = selectFromuser_role().changed.comment
+  .label.name.sort

@@ -11,7 +11,7 @@ import { eventModelSelector } from './eventModel.base'
 import { gartenModel } from './gartenModel'
 import { gartenModelSelector } from './gartenModel.base'
 import { herkunftModel } from './herkunftModel'
-import { herkunftModelSelector } from './HerkunftModel.base'
+import { herkunftModelSelector } from './herkunftModel.base'
 import { lieferungModel } from './lieferungModel'
 import { lieferungModelSelector } from './lieferungModel.base'
 import { sammel_lieferungModel } from './sammel_lieferungModel'
@@ -43,6 +43,7 @@ export const kultur_revModelBase = ModelBase.named('kultur_rev')
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     kultur_id: types.union(types.undefined, types.frozen()),
+    teilkulturs_aggregate: types.union(types.undefined, types.frozen()),
     von_anzahl_individuen: types.union(
       types.undefined,
       types.null,
@@ -107,6 +108,101 @@ export class kultur_revModelSelector extends QueryBuilder {
   }
   get zwischenlager() {
     return this.__attr(`zwischenlager`)
+  }
+  art(builder) {
+    return this.__child(`art`, artModelSelector, builder)
+  }
+  events(builder) {
+    return this.__child(`events`, eventModelSelector, builder)
+  }
+  events_aggregate(builder) {
+    return this.__child(
+      `events_aggregate`,
+      event_aggregateModelSelector,
+      builder,
+    )
+  }
+  garten(builder) {
+    return this.__child(`garten`, gartenModelSelector, builder)
+  }
+  herkunft(builder) {
+    return this.__child(`herkunft`, herkunftModelSelector, builder)
+  }
+  lieferungsByNachKulturId(builder) {
+    return this.__child(
+      `lieferungsByNachKulturId`,
+      lieferungModelSelector,
+      builder,
+    )
+  }
+  lieferungsByNachKulturId_aggregate(builder) {
+    return this.__child(
+      `lieferungsByNachKulturId_aggregate`,
+      lieferung_aggregateModelSelector,
+      builder,
+    )
+  }
+  lieferungsByVonKulturId(builder) {
+    return this.__child(
+      `lieferungsByVonKulturId`,
+      lieferungModelSelector,
+      builder,
+    )
+  }
+  lieferungsByVonKulturId_aggregate(builder) {
+    return this.__child(
+      `lieferungsByVonKulturId_aggregate`,
+      lieferung_aggregateModelSelector,
+      builder,
+    )
+  }
+  sammelLieferungsByNachKulturId(builder) {
+    return this.__child(
+      `sammelLieferungsByNachKulturId`,
+      sammel_lieferungModelSelector,
+      builder,
+    )
+  }
+  sammelLieferungsByNachKulturId_aggregate(builder) {
+    return this.__child(
+      `sammelLieferungsByNachKulturId_aggregate`,
+      sammel_lieferung_aggregateModelSelector,
+      builder,
+    )
+  }
+  sammel_lieferungs(builder) {
+    return this.__child(
+      `sammel_lieferungs`,
+      sammel_lieferungModelSelector,
+      builder,
+    )
+  }
+  sammel_lieferungs_aggregate(builder) {
+    return this.__child(
+      `sammel_lieferungs_aggregate`,
+      sammel_lieferung_aggregateModelSelector,
+      builder,
+    )
+  }
+  teilkulturs(builder) {
+    return this.__child(`teilkulturs`, teilkulturModelSelector, builder)
+  }
+  teilkulturs_aggregate(builder) {
+    return this.__child(
+      `teilkulturs_aggregate`,
+      teilkultur_aggregateModelSelector,
+      builder,
+    )
+  }
+  zaehlungs(builder) {
+    return this.__child(`zaehlungs`, zaehlungModelSelector, builder)
+  }
+  zaehlungs_aggregate(builder) {
+    return this.__child(
+      `zaehlungs_aggregate`,
+      zaehlung_aggregateModelSelector,
+      builder,
+    )
   }
 }
 export function selectFromkultur_rev() {
