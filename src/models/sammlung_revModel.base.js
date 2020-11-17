@@ -7,7 +7,7 @@ import { ModelBase } from './ModelBase'
 import { artModel } from './artModel'
 import { artModelSelector } from './artModel.base'
 import { herkunftModel } from './herkunftModel'
-import { herkunftModelSelector } from './HerkunftModel.base'
+import { herkunftModelSelector } from './herkunftModel.base'
 import { lieferungModel } from './lieferungModel'
 import { lieferungModelSelector } from './lieferungModel.base'
 import { personModel } from './personModel'
@@ -117,6 +117,39 @@ export class sammlung_revModelSelector extends QueryBuilder {
   }
   get von_anzahl_individuen() {
     return this.__attr(`von_anzahl_individuen`)
+  }
+  art(builder) {
+    return this.__child(`art`, artModelSelector, builder)
+  }
+  herkunft(builder) {
+    return this.__child(`herkunft`, herkunftModelSelector, builder)
+  }
+  lieferungs(builder) {
+    return this.__child(`lieferungs`, lieferungModelSelector, builder)
+  }
+  lieferungs_aggregate(builder) {
+    return this.__child(
+      `lieferungs_aggregate`,
+      lieferung_aggregateModelSelector,
+      builder,
+    )
+  }
+  person(builder) {
+    return this.__child(`person`, personModelSelector, builder)
+  }
+  sammel_lieferungs(builder) {
+    return this.__child(
+      `sammel_lieferungs`,
+      sammel_lieferungModelSelector,
+      builder,
+    )
+  }
+  sammel_lieferungs_aggregate(builder) {
+    return this.__child(
+      `sammel_lieferungs_aggregate`,
+      sammel_lieferung_aggregateModelSelector,
+      builder,
+    )
   }
 }
 export function selectFromsammlung_rev() {

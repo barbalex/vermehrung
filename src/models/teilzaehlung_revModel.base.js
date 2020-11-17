@@ -119,13 +119,6 @@ export class teilzaehlung_revModelSelector extends QueryBuilder {
   get zaehlung_id() {
     return this.__attr(`zaehlung_id`)
   }
-  teilzaehlungs_aggregate(builder) {
-    return this.__child(
-      `teilzaehlungs_aggregate`,
-      teilzaehlung_aggregateModelSelector,
-      builder,
-    )
-  }
 }
 export function selectFromteilzaehlung_rev() {
   return new teilzaehlung_revModelSelector()

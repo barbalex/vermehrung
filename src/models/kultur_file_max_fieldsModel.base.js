@@ -15,6 +15,7 @@ export const kultur_file_max_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("kultur_file_max_fields"), "kultur_file_max_fields"),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
@@ -29,6 +30,7 @@ export const kultur_file_max_fieldsModelBase = ModelBase
 
 export class kultur_file_max_fieldsModelSelector extends QueryBuilder {
   get beschreibung() { return this.__attr(`beschreibung`) }
+  get changed() { return this.__attr(`changed`) }
   get file_id() { return this.__attr(`file_id`) }
   get file_mime_type() { return this.__attr(`file_mime_type`) }
   get id() { return this.__attr(`id`) }
@@ -39,4 +41,4 @@ export function selectFromkultur_file_max_fields() {
   return new kultur_file_max_fieldsModelSelector()
 }
 
-export const kultur_file_max_fieldsModelPrimitives = selectFromkultur_file_max_fields().beschreibung.file_id.file_mime_type.kultur_id.name
+export const kultur_file_max_fieldsModelPrimitives = selectFromkultur_file_max_fields().beschreibung.changed.file_id.file_mime_type.kultur_id.name

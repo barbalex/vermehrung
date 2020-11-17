@@ -15,6 +15,7 @@ export const herkunft_file_max_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("herkunft_file_max_fields"), "herkunft_file_max_fields"),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
@@ -29,6 +30,7 @@ export const herkunft_file_max_fieldsModelBase = ModelBase
 
 export class herkunft_file_max_fieldsModelSelector extends QueryBuilder {
   get beschreibung() { return this.__attr(`beschreibung`) }
+  get changed() { return this.__attr(`changed`) }
   get file_id() { return this.__attr(`file_id`) }
   get file_mime_type() { return this.__attr(`file_mime_type`) }
   get herkunft_id() { return this.__attr(`herkunft_id`) }
@@ -39,4 +41,4 @@ export function selectFromherkunft_file_max_fields() {
   return new herkunft_file_max_fieldsModelSelector()
 }
 
-export const herkunft_file_max_fieldsModelPrimitives = selectFromherkunft_file_max_fields().beschreibung.file_id.file_mime_type.herkunft_id.name
+export const herkunft_file_max_fieldsModelPrimitives = selectFromherkunft_file_max_fields().beschreibung.changed.file_id.file_mime_type.herkunft_id.name

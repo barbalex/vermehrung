@@ -9,6 +9,7 @@ import { types } from "mobx-state-tree"
 */
 export const lieferung_file_select_columnEnumType = types.enumeration("lieferung_file_select_column", [
         "beschreibung",
+  "changed",
   "file_id",
   "file_mime_type",
   "id",

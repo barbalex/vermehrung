@@ -4,7 +4,6 @@
 import { types } from 'mobx-state-tree'
 import { MSTGQLRef, QueryBuilder } from 'mst-gql'
 import { ModelBase } from './ModelBase'
-import { herkunftModelSelector } from './HerkunftModel.base'
 
 /**
  * herkunft_fileBase
@@ -14,6 +13,7 @@ export const herkunft_fileModelBase = ModelBase.named('herkunft_file')
   .props({
     __typename: types.optional(types.literal('herkunft_file'), 'herkunft_file'),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
@@ -29,6 +29,9 @@ export const herkunft_fileModelBase = ModelBase.named('herkunft_file')
 export class herkunft_fileModelSelector extends QueryBuilder {
   get beschreibung() {
     return this.__attr(`beschreibung`)
+  }
+  get changed() {
+    return this.__attr(`changed`)
   }
   get file_id() {
     return this.__attr(`file_id`)
@@ -51,4 +54,4 @@ export function selectFromherkunft_file() {
 }
 
 export const herkunft_fileModelPrimitives = selectFromherkunft_file()
-  .beschreibung.file_id.file_mime_type.herkunft_id.name
+  .beschreibung.changed.file_id.file_mime_type.herkunft_id.name

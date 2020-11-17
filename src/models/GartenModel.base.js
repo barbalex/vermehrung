@@ -33,6 +33,7 @@ export const gartenModelBase = ModelBase.named('garten')
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
+    gvs_aggregate: types.union(types.undefined, types.frozen()),
     id: types.identifier,
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
     lv95_y: types.union(types.undefined, types.null, types.frozen()),

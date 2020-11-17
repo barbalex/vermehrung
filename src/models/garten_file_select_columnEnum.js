@@ -9,6 +9,7 @@ import { types } from "mobx-state-tree"
 */
 export const garten_file_select_columnEnumType = types.enumeration("garten_file_select_column", [
         "beschreibung",
+  "changed",
   "file_id",
   "file_mime_type",
   "garten_id",

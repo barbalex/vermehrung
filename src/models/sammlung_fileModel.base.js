@@ -15,6 +15,7 @@ export const sammlung_fileModelBase = ModelBase.named('sammlung_file')
   .props({
     __typename: types.optional(types.literal('sammlung_file'), 'sammlung_file'),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
@@ -30,6 +31,9 @@ export const sammlung_fileModelBase = ModelBase.named('sammlung_file')
 export class sammlung_fileModelSelector extends QueryBuilder {
   get beschreibung() {
     return this.__attr(`beschreibung`)
+  }
+  get changed() {
+    return this.__attr(`changed`)
   }
   get file_id() {
     return this.__attr(`file_id`)
@@ -52,4 +56,4 @@ export function selectFromsammlung_file() {
 }
 
 export const sammlung_fileModelPrimitives = selectFromsammlung_file()
-  .beschreibung.file_id.file_mime_type.name.sammlung_id
+  .beschreibung.changed.file_id.file_mime_type.name.sammlung_id

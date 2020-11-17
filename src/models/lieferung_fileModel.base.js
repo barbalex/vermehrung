@@ -18,6 +18,7 @@ export const lieferung_fileModelBase = ModelBase.named('lieferung_file')
       'lieferung_file',
     ),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
@@ -33,6 +34,9 @@ export const lieferung_fileModelBase = ModelBase.named('lieferung_file')
 export class lieferung_fileModelSelector extends QueryBuilder {
   get beschreibung() {
     return this.__attr(`beschreibung`)
+  }
+  get changed() {
+    return this.__attr(`changed`)
   }
   get file_id() {
     return this.__attr(`file_id`)
@@ -55,4 +59,4 @@ export function selectFromlieferung_file() {
 }
 
 export const lieferung_fileModelPrimitives = selectFromlieferung_file()
-  .beschreibung.file_id.file_mime_type.lieferung_id.name
+  .beschreibung.changed.file_id.file_mime_type.lieferung_id.name

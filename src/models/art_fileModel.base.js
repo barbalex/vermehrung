@@ -16,6 +16,7 @@ export const art_fileModelBase = ModelBase.named('art_file')
     __typename: types.optional(types.literal('art_file'), 'art_file'),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
@@ -33,6 +34,9 @@ export class art_fileModelSelector extends QueryBuilder {
   }
   get beschreibung() {
     return this.__attr(`beschreibung`)
+  }
+  get changed() {
+    return this.__attr(`changed`)
   }
   get file_id() {
     return this.__attr(`file_id`)
@@ -52,4 +56,4 @@ export function selectFromart_file() {
 }
 
 export const art_fileModelPrimitives = selectFromart_file().art_id.beschreibung
-  .file_id.file_mime_type.name
+  .changed.file_id.file_mime_type.name
