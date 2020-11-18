@@ -4,15 +4,13 @@ import exists from './exists'
 
 const zaehlungLabelFromZaehlung = ({ zaehlung, store }) => {
   const { teilzaehlungsSorted } = store
-  const ownTz = teilzaehlungsSorted.filter(
-    (tz) => tz.zaehlung_id === zaehlung.id,
-  )
-  console.log('zaehlungLabelFromZaehlung, ownTz', ownTz)
   const datumLabel = zaehlung.datum
     ? DateTime.fromSQL(zaehlung.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
 
-  const anzahlenPfl = ownTz
+  const tzs = teilzaehlungsSorted.filter((tz) => tz.zaehlung_id === zaehlung.id)
+
+  const anzahlenPfl = tzs
     .map((tz) => tz.anzahl_pflanzen)
     .filter((a) => exists(a))
   const anzPflanzen = (anzahlenPfl.length
@@ -22,14 +20,14 @@ const zaehlungLabelFromZaehlung = ({ zaehlung, store }) => {
     .toString()
     .padStart(3, '_')
 
-  const anzahlenAb = ownTz
+  const anzahlenAb = tzs
     .map((tz) => tz.anzahl_auspflanzbereit)
     .filter((a) => exists(a))
   const anzAb = (anzahlenAb.length ? anzahlenAb.reduce((a, b) => a + b, 0) : '')
     .toString()
     .padStart(3, '_')
 
-  const anzahlenMu = ownTz
+  const anzahlenMu = tzs
     .map((tz) => tz.anzahl_mutterpflanzen)
     .filter((a) => exists(a))
   const anzMu = (anzahlenMu.length ? anzahlenMu.reduce((a, b) => a + b, 0) : '')
