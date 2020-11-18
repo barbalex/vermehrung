@@ -39,7 +39,7 @@ const Arten = ({ row, style, last }) => {
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{zaehlungLabelFromZaehlung({ zaehlung: row })}</div>
+      <div>{zaehlungLabelFromZaehlung({ zaehlung: row, store })}</div>
     </Row>
   )
 }

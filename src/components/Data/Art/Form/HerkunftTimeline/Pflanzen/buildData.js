@@ -5,7 +5,12 @@ import max from 'lodash/max'
 import exists from '../../../../../../utils/exists'
 
 const buildData = ({ artId, herkunftId, store }) => {
-  const { zaehlungsSorted, sammlungsSorted, lieferungsSorted } = store
+  const {
+    zaehlungsSorted,
+    sammlungsSorted,
+    lieferungsSorted,
+    teilzaehlungsSorted,
+  } = store
 
   const zaehlungsDone = zaehlungsSorted
     .filter((z) => {
@@ -14,9 +19,14 @@ const buildData = ({ artId, herkunftId, store }) => {
     })
     .filter((z) => z.prognose === false)
     .filter((z) => !!z.datum)
-    .filter((z) =>
-      exists(z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen),
-    )
+    .filter((z) => {
+      const anzs = teilzaehlungsSorted
+        .filter((tz) => tz.zaehlung_id === z.id)
+        .map((tz) => tz.anzahl_pflanzen)
+        .filter((a) => exists(a))
+
+      return anzs.length > 0
+    })
   const zaehlungsPlannedAll = zaehlungsSorted
     .filter((z) => {
       const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
@@ -24,9 +34,14 @@ const buildData = ({ artId, herkunftId, store }) => {
     })
     .filter((z) => z.prognose === true)
     .filter((z) => !!z.datum)
-    .filter((z) =>
-      exists(z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen),
-    )
+    .filter((z) => {
+      const anzs = teilzaehlungsSorted
+        .filter((tz) => tz.zaehlung_id === z.id)
+        .map((tz) => tz.anzahl_pflanzen)
+        .filter((a) => exists(a))
+
+      return anzs.length > 0
+    })
   const zaehlungsPlannedIgnored = zaehlungsPlannedAll.filter((zg) =>
     // check if more recent zaehlungsDone exists
     zaehlungsDone.some((z) => z.datum >= zg.datum),
@@ -149,15 +164,24 @@ const buildData = ({ artId, herkunftId, store }) => {
         const lastZaehlungsOfKultur = zaehlungs
           .filter((z) => !!z.datum)
           .filter((z) => z.datum === lastZaehlungDatum)
-          .filter(
-            (z) =>
-              !!z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen,
-          )
+          .filter((z) => {
+            const anzs = teilzaehlungsSorted
+              .filter((tz) => tz.zaehlung_id === z.id)
+              .map((tz) => tz.anzahl_pflanzen)
+              .filter((a) => exists(a))
+
+            return anzs.length > 0
+          })
 
         return {
           anzahl_pflanzen: sum(
-            lastZaehlungsOfKultur.map(
-              (z) => z.teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen,
+            lastZaehlungsOfKultur.map((z) =>
+              sum(
+                teilzaehlungsSorted
+                  .filter((tz) => tz.zaehlung_id === z.id)
+                  .map((tz) => tz.anzahl_pflanzen)
+                  .filter((a) => exists(a)),
+              ),
             ),
           ),
           prognose: lastZaehlungsOfKultur.some((z) => z.prognose),

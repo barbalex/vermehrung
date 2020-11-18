@@ -43,7 +43,7 @@ const sammlungAuslieferungKulturZaehlungNodes = ({ store }) => {
         menuTitle: 'Zählung',
         table: 'artKulturZaehlung',
         id: `${sammlungId}${lieferungId}${kulturId}${el.id}`,
-        label: zaehlungLabelFromZaehlung({ zaehlung: el }),
+        label: zaehlungLabelFromZaehlung({ zaehlung: el, store }),
         url: [
           'Sammlungen',
           sammlungId,

@@ -1,4 +1,3 @@
-import { ZAEHLUNG_FRAGMENT } from './mstFragments'
 import { Q } from '@nozbe/watermelondb'
 
 import { ae_artModelPrimitives } from '../models/ae_artModel.base'
@@ -136,7 +135,7 @@ const initializeSubscriptions = ({ store, db }) => {
   unsubscribe.teilkultur = store.subscribeTeilkultur()
   unsubscribe.teilzaehlung = store.subscribeTeilzaehlung()
   unsubscribe.user_role = store.subscribeUser_role()
-  unsubscribe.zaehlung = store.subscribeZaehlung(undefined, ZAEHLUNG_FRAGMENT)
+  unsubscribe.zaehlung = store.subscribeZaehlung()
   return unsubscribe
 }
 

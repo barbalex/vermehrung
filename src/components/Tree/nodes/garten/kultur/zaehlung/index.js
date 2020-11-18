@@ -31,7 +31,7 @@ const gartenKulturZaehlungNodes = ({ store }) => {
         menuTitle: 'Zählung',
         table: 'zaehlung',
         id: `${gartenId}${kulturId}${el.id}`,
-        label: zaehlungLabelFromZaehlung({ zaehlung: el }),
+        label: zaehlungLabelFromZaehlung({ zaehlung: el, store }),
         url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
         hasChildren: false,
         mono: true,
