@@ -30,10 +30,6 @@ export const zaehlung_revModelBase = ModelBase.named('zaehlung_rev')
     id: types.identifier,
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     prognose: types.union(types.undefined, types.null, types.boolean),
-    teilzaehlungs_aggregate: types.union(
-      types.undefined,
-      types.late(() => teilzaehlung_aggregateModel),
-    ),
     zaehlung_id: types.union(types.undefined, types.frozen()),
   })
   .views((self) => ({
@@ -81,13 +77,6 @@ export class zaehlung_revModelSelector extends QueryBuilder {
   }
   get zaehlung_id() {
     return this.__attr(`zaehlung_id`)
-  }
-  teilzaehlungs_aggregate(builder) {
-    return this.__child(
-      `teilzaehlungs_aggregate`,
-      teilzaehlung_aggregateModelSelector,
-      builder,
-    )
   }
 }
 export function selectFromzaehlung_rev() {

@@ -1,5 +1,3 @@
-import { ZAEHLUNG_FRAGMENT } from './mstFragments'
-
 const initializeSubscriptions = ({ store }) => {
   const unsubscribe = {}
   unsubscribe.ae_art = store.subscribeAe_art()
@@ -30,7 +28,7 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.teilkultur = store.subscribeTeilkultur()
   unsubscribe.teilzaehlung = store.subscribeTeilzaehlung()
   unsubscribe.user_role = store.subscribeUser_role()
-  unsubscribe.zaehlung = store.subscribeZaehlung(undefined, ZAEHLUNG_FRAGMENT)
+  unsubscribe.zaehlung = store.subscribeZaehlung()
   return unsubscribe
 }
 
