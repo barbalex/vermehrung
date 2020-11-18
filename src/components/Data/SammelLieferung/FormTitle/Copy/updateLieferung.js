@@ -13,12 +13,7 @@ import exists from '../../../../../utils/exists'
 const lieferungRevFields = fieldsFromFragment(lieferungRevFragment)
 const lieferungFields = fieldsFromFragment(lieferungFragment)
 
-const updateLieferung = async ({
-  lieferungId,
-  sammelLieferung,
-  store,
-  field,
-}) => {
+const updateLieferung = ({ lieferungId, sammelLieferung, store, field }) => {
   // pass field to mark which field should be updated
   // even if it has value null
   const newValuesFromSl = Object.fromEntries(
