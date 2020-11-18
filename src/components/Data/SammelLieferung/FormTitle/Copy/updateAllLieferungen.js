@@ -9,7 +9,7 @@ const updateAllLieferungen = async ({ sammelLieferung, store, field }) => {
   let error = null
   for (const l of lieferungs) {
     try {
-      await updateLieferung({
+      updateLieferung({
         lieferungId: l.id,
         sammelLieferung,
         store,

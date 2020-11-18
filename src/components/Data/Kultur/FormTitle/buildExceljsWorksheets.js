@@ -10,7 +10,7 @@ import exists from '../../../../utils/exists'
  * this function cann be used from higher up
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
-const buildExceljsWorksheets = async ({
+const buildExceljsWorksheets = ({
   store,
   kultur_id,
   kultur_name,
