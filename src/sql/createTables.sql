@@ -519,9 +519,9 @@ create table kultur (
   _conflicts text[] default null
 );
 create unique index single_art_herkunft_garden_active_idx on kultur (art_id, herkunft_id, garten_id) 
-where aktiv is true and zwischenlager is false and art_id is not null and herkunft_id is not null;
+where aktiv is true and zwischenlager is false and art_id is not null and herkunft_id is not null and _deleted is false;
 create unique index single_art_herkunft_garden_zwischenlager_active_idx on kultur (art_id, herkunft_id, garten_id, zwischenlager) 
-where aktiv is true and zwischenlager is true and art_id is not null and herkunft_id is not null;
+where aktiv is true and zwischenlager is true and art_id is not null and herkunft_id is not null and _deleted is false;
 create index on kultur using btree (id);
 create index on kultur using btree (art_id);
 create index on kultur using btree (herkunft_id);
