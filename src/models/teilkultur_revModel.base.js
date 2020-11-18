@@ -95,13 +95,6 @@ export class teilkultur_revModelSelector extends QueryBuilder {
   get teilkultur_id() {
     return this.__attr(`teilkultur_id`)
   }
-  teilzaehlungs_aggregate(builder) {
-    return this.__child(
-      `teilzaehlungs_aggregate`,
-      teilzaehlung_aggregateModelSelector,
-      builder,
-    )
-  }
 }
 export function selectFromteilkultur_rev() {
   return new teilkultur_revModelSelector()

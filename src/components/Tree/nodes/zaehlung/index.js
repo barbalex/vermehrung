@@ -18,7 +18,7 @@ const zaehlungNodes = ({ store }) => {
         menuTitle: 'Zählung',
         table: 'zaehlung',
         id: el.id,
-        label: zaehlungLabelFromZaehlung({ zaehlung: el }),
+        label: zaehlungLabelFromZaehlung({ zaehlung: el, store }),
         url: ['Zaehlungen', el.id],
         hasChildren: false,
         mono: true,

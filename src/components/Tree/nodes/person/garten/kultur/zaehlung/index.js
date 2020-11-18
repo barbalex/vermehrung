@@ -43,7 +43,7 @@ const personGartenKulturZaehlungNodes = ({ store }) => {
         menuTitle: 'Zählung',
         table: 'zaehlung',
         id: `${personId}${gartenId}${kulturId}${el.id}`,
-        label: zaehlungLabelFromZaehlung({ zaehlung: el }),
+        label: zaehlungLabelFromZaehlung({ zaehlung: el, store }),
         url: [
           'Personen',
           personId,

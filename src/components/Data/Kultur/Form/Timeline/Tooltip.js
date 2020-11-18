@@ -39,11 +39,12 @@ const CustomTooltip = ({ payload: payloadPassed, label, active }) => {
 
   if (active) {
     const ereignis = payload?.[0]?.payload?.ereignis ?? ''
+    const title = DateTime.fromMillis(label).toFormat('yyyy.LL.dd')
 
     return (
       <Popup>
         <PTitle>
-          {DateTime.fromSQL(label).toFormat('yyyy.LL.dd')}
+          {title}
           <Ereignis>{ereignis}</Ereignis>
         </PTitle>
         {payload.map((o, i) => {

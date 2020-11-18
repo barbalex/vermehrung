@@ -1,7 +1,10 @@
+import sum from 'lodash/sum'
+
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
 import removeMetadataFromDataset from '../../../../utils/removeMetadataFromDataset'
 import artLabelFromKultur from '../../../../utils/artLabelFromKultur'
 import artLabelFromLieferung from '../../../../utils/artLabelFromLieferung'
+import exists from '../../../../utils/exists'
 
 /**
  * this function cann be used from higher up
@@ -72,14 +75,31 @@ const buildExceljsWorksheets = async ({
       datum: z.datum,
       prognose: z.prognose,
       bemerkungen: z.bemerkungen,
-      teilzaehlungen_anzahl: z?.teilzaehlungs_aggregate?.aggregate?.count ?? '',
+      teilzaehlungen_anzahl: teilzaehlungsSorted
+        .filter((tz) => tz.zaehlung_id === z.id)
+        .map((tz) => tz.anzahl_pflanzen)
+        .filter((a) => exists(a)).length,
       teilzaehlungen_anzahl_pflanzen:
-        z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '',
+        sum(
+          teilzaehlungsSorted
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .map((tz) => tz.anzahl_pflanzen)
+            .filter((a) => exists(a)),
+        ) ?? '',
       teilzaehlungen_anzahl_auspflanzbereit:
-        z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ??
-        '',
+        sum(
+          teilzaehlungsSorted
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .map((tz) => tz.anzahl_auspflanzbereit)
+            .filter((a) => exists(a)),
+        ) ?? '',
       teilzaehlungen_anzahl_mutterpflanzen:
-        z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ?? '',
+        sum(
+          teilzaehlungsSorted
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .map((tz) => tz.anzahl_mutterpflanzen)
+            .filter((a) => exists(a)),
+        ) ?? '',
       /*teilzaehlungen_ids: tknodes
         .filter((tk) => !!tk?.id)
         .map((tk) => tk?.id)

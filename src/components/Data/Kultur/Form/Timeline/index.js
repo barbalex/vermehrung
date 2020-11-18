@@ -75,7 +75,7 @@ const Content = styled.div`
 
 const KulturTimeline = ({ row, width }) => {
   const store = useContext(StoreContext)
-  const { lieferungsSorted, zaehlungsSorted } = store
+  const { lieferungsSorted, zaehlungsSorted, teilzaehlungsSorted } = store
   const [narrow, setNarrow] = useState(false)
 
   const zaehlungenDone = zaehlungsSorted
@@ -111,21 +111,35 @@ const KulturTimeline = ({ row, width }) => {
   const zaehlungenForLineReversed = [...zaehlungenForLine].reverse()
   const zaehlungenDoneData = useMemo(
     () =>
-      zaehlungenDone.map((l) => {
+      zaehlungenDone.map((z) => {
         const teilzaehlungs = [...store.teilzaehlungs.values()]
-          .filter((tz) => tz.zaehlung_id === l.id)
+          .filter((tz) => tz.zaehlung_id === z.id)
           .filter((tz) => !tz._deleted)
+        const anzahlenPflanzen = teilzaehlungs
+          .map((tz) => tz.anzahl_pflanzen)
+          .filter((a) => exists(a))
+        const anzPflanzen = anzahlenPflanzen.length
+          ? anzahlenPflanzen.reduce((a, b) => a + b, 0)
+          : undefined
+        const anzahlenAuspflanzbereit = teilzaehlungs
+          .map((tz) => tz.anzahl_auspflanzbereit)
+          .filter((a) => exists(a))
+        const anzAuspflanzbereit = anzahlenAuspflanzbereit.length
+          ? anzahlenAuspflanzbereit.reduce((a, b) => a + b, 0)
+          : undefined
+        const anzahlenMutterPflanzen = teilzaehlungs
+          .map((tz) => tz.anzahl_mutterpflanzen)
+          .filter((a) => exists(a))
+        const anzMutterPflanzen = anzahlenMutterPflanzen.length
+          ? anzahlenMutterPflanzen.reduce((a, b) => a + b, 0)
+          : undefined
+        const datum = new Date(z.datum).getTime()
 
         return {
-          datum: new Date(l.datum).getTime(),
-          'Zählung Pflanzen':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ??
-            undefined,
-          'Zählung Pflanzen auspflanzbereit':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum
-              ?.anzahl_auspflanzbereit ?? undefined,
-          'Zählung Mutterpflanzen':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen,
+          datum: datum,
+          'Zählung Pflanzen': anzPflanzen,
+          'Zählung Pflanzen auspflanzbereit': anzAuspflanzbereit,
+          'Zählung Mutterpflanzen': anzMutterPflanzen,
           'Zählung andere Mengen': teilzaehlungs
             .map((t) => t.andere_menge)
             .join(', '),
@@ -142,22 +156,34 @@ const KulturTimeline = ({ row, width }) => {
   )
   const zaehlungenPlannedIncludedData = useMemo(
     () =>
-      zaehlungenPlannedIncluded.map((l) => {
+      zaehlungenPlannedIncluded.map((z) => {
         const teilzaehlungs = [...store.teilzaehlungs.values()]
-          .filter((tz) => tz.zaehlung_id === l.id)
+          .filter((tz) => tz.zaehlung_id === z.id)
           .filter((tz) => !tz._deleted)
+        const anzahlenPflanzen = teilzaehlungs
+          .map((tz) => tz.anzahl_pflanzen)
+          .filter((a) => exists(a))
+        const anzPflanzen = anzahlenPflanzen.length
+          ? anzahlenPflanzen.reduce((a, b) => a + b, 0)
+          : undefined
+        const anzahlenAuspflanzbereit = teilzaehlungs
+          .map((tz) => tz.anzahl_auspflanzbereit)
+          .filter((a) => exists(a))
+        const anzAuspflanzbereit = anzahlenAuspflanzbereit.length
+          ? anzahlenAuspflanzbereit.reduce((a, b) => a + b, 0)
+          : undefined
+        const anzahlenMutterPflanzen = teilzaehlungs
+          .map((tz) => tz.anzahl_mutterpflanzen)
+          .filter((a) => exists(a))
+        const anzMutterPflanzen = anzahlenMutterPflanzen.length
+          ? anzahlenMutterPflanzen.reduce((a, b) => a + b, 0)
+          : undefined
 
         return {
-          datum: new Date(l.datum).getTime(),
-          'Zählung Pflanzen Prognose':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ??
-            undefined,
-          'Zählung Pflanzen auspflanzbereit Prognose':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum
-              ?.anzahl_auspflanzbereit ?? undefined,
-          'Zählung Mutterpflanzen Prognose':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ??
-            undefined,
+          datum: new Date(z.datum).getTime(),
+          'Zählung Pflanzen Prognose': anzPflanzen,
+          'Zählung Pflanzen auspflanzbereit Prognose': anzAuspflanzbereit,
+          'Zählung Mutterpflanzen Prognose': anzMutterPflanzen,
           'Zählung Prognose': teilzaehlungs
             .map((t) => (t.prognose ? 'ja' : 'nein'))
             .join(', '),
@@ -177,22 +203,34 @@ const KulturTimeline = ({ row, width }) => {
   )
   const zaehlungenPlannedIgnoredData = useMemo(
     () =>
-      zaehlungenPlannedIgnored.map((l) => {
+      zaehlungenPlannedIgnored.map((z) => {
         const teilzaehlungs = [...store.teilzaehlungs.values()]
-          .filter((tz) => tz.zaehlung_id === l.id)
+          .filter((tz) => tz.zaehlung_id === z.id)
           .filter((tz) => !tz._deleted)
+        const anzahlenPflanzen = teilzaehlungs
+          .map((tz) => tz.anzahl_pflanzen)
+          .filter((a) => exists(a))
+        const anzPflanzen = anzahlenPflanzen.length
+          ? anzahlenPflanzen.reduce((a, b) => a + b, 0)
+          : undefined
+        const anzahlenAuspflanzbereit = teilzaehlungs
+          .map((tz) => tz.anzahl_auspflanzbereit)
+          .filter((a) => exists(a))
+        const anzAuspflanzbereit = anzahlenAuspflanzbereit.length
+          ? anzahlenAuspflanzbereit.reduce((a, b) => a + b, 0)
+          : undefined
+        const anzahlenMutterPflanzen = teilzaehlungs
+          .map((tz) => tz.anzahl_mutterpflanzen)
+          .filter((a) => exists(a))
+        const anzMutterPflanzen = anzahlenMutterPflanzen.length
+          ? anzahlenMutterPflanzen.reduce((a, b) => a + b, 0)
+          : undefined
 
         return {
-          datum: new Date(l.datum).getTime(),
-          'Zählung Pflanzen Prognose, ignoriert':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ??
-            undefined,
-          'Zählung Pflanzen auspflanzbereit Prognose, ignoriert':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum
-              ?.anzahl_auspflanzbereit ?? undefined,
-          'Zählung Mutterpflanzen Prognose, ignoriert':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ??
-            undefined,
+          datum: new Date(z.datum).getTime(),
+          'Zählung Pflanzen Prognose, ignoriert': anzPflanzen,
+          'Zählung Pflanzen auspflanzbereit Prognose, ignoriert': anzAuspflanzbereit,
+          'Zählung Mutterpflanzen Prognose, ignoriert': anzMutterPflanzen,
           'Zählung Prognose': teilzaehlungs
             .map((t) => (t.prognose ? 'ja' : 'nein'))
             .join(', '),
@@ -302,14 +340,27 @@ const KulturTimeline = ({ row, width }) => {
         const ausLieferungenSince = ausLieferungenForLine.filter(
           (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
+
+        const anzahlenPflanzen = teilzaehlungsSorted
+          .filter((tz) => tz.zaehlung_id === previousZaehlung.id)
+          .map((tz) => tz.anzahl_pflanzen)
+          .filter((a) => exists(a))
+        const anzPflanzen = anzahlenPflanzen.reduce((a, b) => a + b, 0)
+        const anzahlenAuspflanzbereit = teilzaehlungsSorted
+          .filter((tz) => tz.zaehlung_id === previousZaehlung.id)
+          .map((tz) => tz.anzahl_auspflanzbereit)
+          .filter((a) => exists(a))
+        const anzAuspflanzbereit = anzahlenAuspflanzbereit.reduce(
+          (a, b) => a + b,
+          0,
+        )
+
         const sumAnzahlPflanzen =
-          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
-            ?.anzahl_pflanzen ?? 0) +
+          anzPflanzen +
           (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
         const sumAnzahlAuspflanzbereit =
-          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
-            ?.anzahl_auspflanzbereit ?? 0) +
+          anzAuspflanzbereit +
           (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
@@ -333,6 +384,7 @@ const KulturTimeline = ({ row, width }) => {
       anLieferungenDone,
       anLieferungenForLine,
       ausLieferungenForLine,
+      teilzaehlungsSorted,
       zaehlungenForLineReversed,
     ],
   )
@@ -354,14 +406,25 @@ const KulturTimeline = ({ row, width }) => {
         const ausLieferungenSince = ausLieferungenForLine.filter(
           (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
+        const anzahlenPflanzen = teilzaehlungsSorted
+          .filter((tz) => tz.zaehlung_id === previousZaehlung.id)
+          .map((tz) => tz.anzahl_pflanzen)
+          .filter((a) => exists(a))
+        const anzPflanzen = anzahlenPflanzen.reduce((a, b) => a + b, 0)
+        const anzahlenAuspflanzbereit = teilzaehlungsSorted
+          .filter((tz) => tz.zaehlung_id === previousZaehlung.id)
+          .map((tz) => tz.anzahl_auspflanzbereit)
+          .filter((a) => exists(a))
+        const anzAuspflanzbereit = anzahlenAuspflanzbereit.reduce(
+          (a, b) => a + b,
+          0,
+        )
         const sumAnzahlPflanzen =
-          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
-            ?.anzahl_pflanzen ?? 0) +
+          anzPflanzen +
           (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
         const sumAnzahlAuspflanzbereit =
-          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
-            ?.anzahl_auspflanzbereit ?? 0) +
+          anzAuspflanzbereit +
           (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
@@ -385,6 +448,7 @@ const KulturTimeline = ({ row, width }) => {
       anLieferungenForLine,
       ausLieferungenDone,
       ausLieferungenForLine,
+      teilzaehlungsSorted,
       zaehlungenForLineReversed,
     ],
   )
@@ -407,14 +471,25 @@ const KulturTimeline = ({ row, width }) => {
         const ausLieferungenSince = ausLieferungenPlannedIncluded.filter(
           (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
+        const anzahlenPflanzen = teilzaehlungsSorted
+          .filter((tz) => tz.zaehlung_id === previousZaehlung.id)
+          .map((tz) => tz.anzahl_pflanzen)
+          .filter((a) => exists(a))
+        const anzPflanzen = anzahlenPflanzen.reduce((a, b) => a + b, 0)
+        const anzahlenAuspflanzbereit = teilzaehlungsSorted
+          .filter((tz) => tz.zaehlung_id === previousZaehlung.id)
+          .map((tz) => tz.anzahl_auspflanzbereit)
+          .filter((a) => exists(a))
+        const anzAuspflanzbereit = anzahlenAuspflanzbereit.reduce(
+          (a, b) => a + b,
+          0,
+        )
         const sumAnzahlPflanzen =
-          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
-            ?.anzahl_pflanzen ?? 0) +
+          anzPflanzen +
           (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
         const sumAnzahlAuspflanzbereit =
-          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
-            ?.anzahl_auspflanzbereit ?? 0) +
+          anzAuspflanzbereit +
           (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
@@ -446,6 +521,7 @@ const KulturTimeline = ({ row, width }) => {
       anLieferungenPlannedIncluded,
       ausLieferungenPlannedIncluded,
       lastZaehlungDone.datum,
+      teilzaehlungsSorted,
       zaehlungenForLineReversed,
     ],
   )
@@ -483,14 +559,25 @@ const KulturTimeline = ({ row, width }) => {
         const ausLieferungenSince = ausLieferungenPlannedIncluded.filter(
           (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
+        const anzahlenPflanzen = teilzaehlungsSorted
+          .filter((tz) => tz.zaehlung_id === previousZaehlung.id)
+          .map((tz) => tz.anzahl_pflanzen)
+          .filter((a) => exists(a))
+        const anzPflanzen = anzahlenPflanzen.reduce((a, b) => a + b, 0)
+        const anzahlenAuspflanzbereit = teilzaehlungsSorted
+          .filter((tz) => tz.zaehlung_id === previousZaehlung.id)
+          .map((tz) => tz.anzahl_auspflanzbereit)
+          .filter((a) => exists(a))
+        const anzAuspflanzbereit = anzahlenAuspflanzbereit.reduce(
+          (a, b) => a + b,
+          0,
+        )
         const sumAnzahlPflanzen =
-          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
-            ?.anzahl_pflanzen ?? 0) +
+          anzPflanzen +
           (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
         const sumAnzahlAuspflanzbereit =
-          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
-            ?.anzahl_auspflanzbereit ?? 0) +
+          anzAuspflanzbereit +
           (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
@@ -522,6 +609,7 @@ const KulturTimeline = ({ row, width }) => {
       anLieferungenPlannedIncluded,
       ausLieferungenPlannedIncluded,
       lastZaehlungDone.datum,
+      teilzaehlungsSorted,
       zaehlungenForLineReversed,
     ],
   )
