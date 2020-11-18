@@ -61,6 +61,16 @@ const Login = () => {
       const emailToUse = emailPassed || email || emailInput.current.value
       const passwordToUse =
         passwordPassed || password || passwordInput.current.value
+      console.log('Login, fetchLogin', {
+        emailToUse,
+        emailPassed,
+        email,
+        emailRefValue: emailInput.current.value,
+        passwordToUse,
+        passwordPassed,
+        password,
+        passwordRefValue: passwordInput.current.value,
+      })
       // do everything to clean up so no data is left
       await firebase.auth().signOut()
       localForage.clear()
