@@ -92,13 +92,6 @@ export class teilkulturModelSelector extends QueryBuilder {
   get ort3() {
     return this.__attr(`ort3`)
   }
-  teilzaehlungs_aggregate(builder) {
-    return this.__child(
-      `teilzaehlungs_aggregate`,
-      teilzaehlung_aggregateModelSelector,
-      builder,
-    )
-  }
 }
 export function selectFromteilkultur() {
   return new teilkulturModelSelector()
