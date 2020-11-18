@@ -1,28 +1,42 @@
 import { DateTime } from 'luxon'
 
-const zaehlungLabelFromZaehlung = ({ zaehlung }) => {
+import exists from './exists'
+
+const zaehlungLabelFromZaehlung = ({ zaehlung, store }) => {
+  const { teilzaehlungsSorted } = store
+  const ownTz = teilzaehlungsSorted.filter(
+    (tz) => tz.zaehlung_id === zaehlung.id,
+  )
+  console.log('zaehlungLabelFromZaehlung, ownTz', ownTz)
   const datumLabel = zaehlung.datum
     ? DateTime.fromSQL(zaehlung.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
 
-  const anz = (
-    zaehlung?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? ''
+  const anzahlenPfl = ownTz
+    .map((tz) => tz.anzahl_pflanzen)
+    .filter((a) => exists(a))
+  const anzPflanzen = (anzahlenPfl.length
+    ? anzahlenPfl.reduce((a, b) => a + b, 0)
+    : ''
   )
     .toString()
     .padStart(3, '_')
-  const anzAb = (
-    zaehlung?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ??
-    ''
-  )
+
+  const anzahlenAb = ownTz
+    .map((tz) => tz.anzahl_auspflanzbereit)
+    .filter((a) => exists(a))
+  const anzAb = (anzahlenAb.length ? anzahlenAb.reduce((a, b) => a + b, 0) : '')
     .toString()
     .padStart(3, '_')
-  const anzMu = (
-    zaehlung?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ??
-    ''
-  )
+
+  const anzahlenMu = ownTz
+    .map((tz) => tz.anzahl_mutterpflanzen)
+    .filter((a) => exists(a))
+  const anzMu = (anzahlenMu.length ? anzahlenMu.reduce((a, b) => a + b, 0) : '')
     .toString()
     .padStart(3, '_')
-  const numbers = `${anz}/${anzAb}/${anzMu}`
+
+  const numbers = `${anzPflanzen}/${anzAb}/${anzMu}`
 
   const prognose = zaehlung.prognose ? 'Prognose' : ''
   const label = [datumLabel, numbers, prognose].filter((e) => !!e).join('; ')
