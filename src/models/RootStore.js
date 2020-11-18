@@ -125,29 +125,35 @@ export const RootStore = RootStoreBase.props({
                 yield self[name]()
               }
             } catch (error) {
+              const lcMessage = error.message.toLowerCase()
               console.log('store, error:', { error, query })
               // In case a conflict was caused by two EXACT SAME changes,
               // this will bounce because of the same rev. We want to ignore this:
               if (error.message.includes('JWT')) {
                 return getAuthToken({ store: self })
               } else if (
-                error.message.includes('Uniqueness violation') &&
-                error.message.includes('_rev_id__rev_key')
+                lcMessage.includes('uniqueness violation') &&
+                lcMessage.includes('_rev_id__rev_key')
               ) {
-                //self.removeNotificationById(query.id)
-                return console.log(
+                console.log(
                   'There is a conflict with exact same changes - ingoring the error thrown',
                 )
-              } else if (error.message.includes('Unique-Constraint')) {
+              } else if (lcMessage.includes('unique-constraint')) {
+                let { message } = error
+                if (
+                  lcMessage.includes('single_art_herkunft_garden_active_idx')
+                ) {
+                  message =
+                    'Pro Art, Herkunft und Garten darf nur eine Kultur aktiv sein (plus ein Zwischenlager). Offenbar gibt es schon eine aktive Kultur'
+                }
                 // do not add a notification: show this error below the field
                 self.setError({
                   path: `${revertTable}.${revertField}`,
-                  value: error.message,
+                  value: message,
                 })
-                //self.removeQueuedQueryById(query.id)
                 console.log('a unique constraint was violated')
               } else if (error.message.includes('Failed to fetch')) {
-                return console.log('ignore fetch failing')
+                console.log('ignore fetch failing')
               } else {
                 self.setError({
                   path: `${revertTable}.${revertField}`,
