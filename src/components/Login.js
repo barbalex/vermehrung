@@ -61,16 +61,6 @@ const Login = () => {
       const emailToUse = emailPassed || email || emailInput.current.value
       const passwordToUse =
         passwordPassed || password || passwordInput.current.value
-      console.log('Login, fetchLogin', {
-        emailToUse,
-        emailPassed,
-        email,
-        emailRefValue: emailInput.current.value,
-        passwordToUse,
-        passwordPassed,
-        password,
-        passwordRefValue: passwordInput.current.value,
-      })
       // do everything to clean up so no data is left
       await firebase.auth().signOut()
       localForage.clear()
@@ -166,7 +156,7 @@ const Login = () => {
               onBlur={onBlurEmail}
               autoFocus
               onKeyPress={onKeyPressEmail}
-              ref={emailInput}
+              inputRef={emailInput}
             />
             <FormHelperText id="emailHelper">{emailErrorText}</FormHelperText>
           </FormControl>
@@ -186,7 +176,7 @@ const Login = () => {
               autoComplete="current-password"
               autoCorrect="off"
               spellCheck="false"
-              ref={passwordInput}
+              inputRef={passwordInput}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
