@@ -1,35 +1,33 @@
-const initializeSubscriptions = ({ store }) => {
-  const unsubscribe = {}
-  unsubscribe.ae_art = store.subscribeAe_art()
-  unsubscribe.art = store.subscribeArt()
-  unsubscribe.art_file = store.subscribeArt_file()
-  unsubscribe.art_qk = store.subscribeArt_qk()
-  unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen()
-  unsubscribe.av = store.subscribeAv()
-  unsubscribe.event = store.subscribeEvent()
-  unsubscribe.garten = store.subscribeGarten()
-  unsubscribe.garten_file = store.subscribeGarten_file()
-  unsubscribe.gv = store.subscribeGv()
-  unsubscribe.herkunft = store.subscribeHerkunft()
-  unsubscribe.herkunft_file = store.subscribeHerkunft_file()
-  unsubscribe.kultur = store.subscribeKultur()
-  unsubscribe.kultur_file = store.subscribeKultur_file()
-  unsubscribe.kultur_option = store.subscribeKultur_option()
-  unsubscribe.kultur_qk = store.subscribeKultur_qk()
-  unsubscribe.kultur_qk_choosen = store.subscribeKultur_qk_choosen()
-  unsubscribe.lieferung = store.subscribeLieferung()
-  unsubscribe.lieferung_file = store.subscribeLieferung_file()
-  unsubscribe.person = store.subscribePerson()
-  unsubscribe.person_file = store.subscribePerson_file()
-  unsubscribe.person_option = store.subscribePerson_option()
-  unsubscribe.sammel_lieferung = store.subscribeSammel_lieferung()
-  unsubscribe.sammlung = store.subscribeSammlung()
-  unsubscribe.sammlung_file = store.subscribeSammlung_file()
-  unsubscribe.teilkultur = store.subscribeTeilkultur()
-  unsubscribe.teilzaehlung = store.subscribeTeilzaehlung()
-  unsubscribe.user_role = store.subscribeUser_role()
-  unsubscribe.zaehlung = store.subscribeZaehlung()
-  return unsubscribe
-}
+const initializeSubscriptions = ({ store }) => ({
+  ae_art: store.subscribeAe_art(),
+  art: store.subscribeArt(),
+  art_file: store.subscribeArt_file(),
+  art_qk: store.subscribeArt_qk(),
+  art_qk_choosen: store.subscribeArt_qk_choosen(),
+  av: store.subscribeAv(),
+  event: store.subscribeEvent(),
+  garten: store.subscribeGarten(),
+  garten_file: store.subscribeGarten_file(),
+  gv: store.subscribeGv(),
+  herkunft: store.subscribeHerkunft(),
+  herkunft_file: store.subscribeHerkunft_file(),
+  kultur: store.subscribeKultur(),
+  kultur_file: store.subscribeKultur_file(),
+  kultur_option: store.subscribeKultur_option(),
+  kultur_qk: store.subscribeKultur_qk(),
+  kultur_qk_choosen: store.subscribeKultur_qk_choosen(),
+  lieferung: store.subscribeLieferung(),
+  lieferung_file: store.subscribeLieferung_file(),
+  person: store.subscribePerson(),
+  person_file: store.subscribePerson_file(),
+  person_option: store.subscribePerson_option(),
+  sammel_lieferung: store.subscribeSammel_lieferung(),
+  sammlung: store.subscribeSammlung(),
+  sammlung_file: store.subscribeSammlung_file(),
+  teilkultur: store.subscribeTeilkultur(),
+  teilzaehlung: store.subscribeTeilzaehlung(),
+  user_role: store.subscribeUser_role(),
+  zaehlung: store.subscribeZaehlung(),
+})
 
 export default initializeSubscriptions
