@@ -4,26 +4,26 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 
-//import { StoreContext } from '../../../../../models/reactUtils'
+import { StoreContext } from '../../../../../models/reactUtils'
+import buildExceljsWorksheets from './buildExceljsWorksheets'
 
 const SettingsOverallMenu = ({
   anchorEl: parentAnchorEl,
   setAnchorEl: setParentAnchorEl,
   setParentAnchorEl: setGrandParentAnchorEl,
 }) => {
-  //const store = useContext(StoreContext)
+  const store = useContext(StoreContext)
 
   const onClickLieferungenDesJahrs = useCallback(
     (event) => {
-      const value = event.target.value
-      console.log('Menu Export, value', value)
-      if (value.length === 4) {
-        console.log('Menu Export, jetzt rechnen')
+      const year = event.target.value
+      if (year.length === 4) {
+        buildExceljsWorksheets({ year, store })
         setParentAnchorEl(null)
         setGrandParentAnchorEl(null)
       }
     },
-    [setGrandParentAnchorEl, setParentAnchorEl],
+    [setGrandParentAnchorEl, setParentAnchorEl, store],
   )
 
   const onClose = useCallback(() => setParentAnchorEl(null), [
