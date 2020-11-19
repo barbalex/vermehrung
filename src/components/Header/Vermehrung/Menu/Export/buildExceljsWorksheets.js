@@ -12,9 +12,9 @@ import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkboo
 
 const buildExceljsWorksheets = ({ store, year }) => {
   const workbook = new ExcelJs.Workbook()
-  const { lieferungsFiltered } = store
+  const { lieferungsSorted } = store
 
-  const lieferungs = lieferungsFiltered
+  const lieferungs = lieferungsSorted
     .filter((l) => {
       if (!l.datum) return false
       const lYear = DateTime.fromSQL(l.datum).toFormat('yyyy')
