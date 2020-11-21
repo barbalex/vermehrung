@@ -564,8 +564,8 @@ export class Kultur extends Model {
     garten: { type: 'belongs_to', key: 'garten_id' },
     anlieferung: { type: 'has_many', key: 'von_kultur_id' },
     auslieferung: { type: 'has_many', key: 'nach_kultur_id' },
-    //teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
-    //zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
+    teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
+    zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
     //event: { type: 'has_many', foreignKey: 'kultur_id' },
     //kultur_option: { type: 'has_many', foreignKey: 'kultur_id' },
   }
@@ -588,8 +588,8 @@ export class Kultur extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
-  //@children('teilkultur') teilkulturs
-  //@children('zaehlung') zaehlungs
+  @children('teilkultur') teilkulturs
+  @children('zaehlung') zaehlungs
   //@children('event') events
   //@relation('kultur_option) kultur_option
   @lazy anlieferungs = this.collections
@@ -677,6 +677,186 @@ export class Kultur extends Model {
       // TODO: edit to set _deleted true
       const auslieferungs = await this.auslieferungs.fetch()
       console.log('kultur model, auslieferungs:', auslieferungs)
+      // TODO: edit to set _deleted true
+    }
+  }
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
+}
+
+export class Teilkultur extends Model {
+  static table = 'teilkultur'
+  static associations = {
+    kultur: { type: 'belongs_to', key: 'kultur_id' },
+  }
+
+  @field('id') id
+  @field('kultur_id') kultur_id
+  @field('name') name
+  @field('ort1') ort1
+  @field('ort2') ort2
+  @field('ort3') ort3
+  @field('bemerkungen') bemerkungen
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`teilkultur.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      teilkultur_id: this.id,
+      kultur_id: field === 'kultur_id' ? value : this.kultur_id,
+      name: field === 'name' ? toStringIfPossible(value) : this.name,
+      ort1: field === 'ort1' ? toStringIfPossible(value) : this.ort1,
+      ort2: field === 'ort2' ? toStringIfPossible(value) : this.ort2,
+      ort3: field === 'ort3' ? toStringIfPossible(value) : this.ort3,
+      bemerkungen:
+        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_teilkultur_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'teilkultur_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'teilkultur',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.teilkultur_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+  }
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
+}
+
+export class Zaehlung extends Model {
+  static table = 'zaehlung'
+  static associations = {
+    kultur: { type: 'belongs_to', key: 'kultur_id' },
+    //teilzaehlung: { type: 'has_many', key: 'zaehlung_id' },
+  }
+
+  @field('id') id
+  @field('kultur_id') kultur_id
+  @field('datum') datum
+  @field('prognose') prognose
+  @field('bemerkungen') bemerkungen
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  //@children('teilzaehlung') teilzaehlungs
+
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`zaehlung.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      zaehlung_id: this.id,
+      kultur_id: field === 'kultur_id' ? value : this.kultur_id,
+      datum: field === 'datum' ? value : this.datum,
+      prognose: field === 'prognose' ? value : this.prognose,
+      bemerkungen:
+        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_zaehlung_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'zaehlung_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'zaehlung',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.zaehlung_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    if (field === '_deleted' && value) {
+      const zaehlungs = await this.zaehlungs.fetch()
+      console.log('kultur model, zaehlungs:', zaehlungs)
       // TODO: edit to set _deleted true
     }
   }

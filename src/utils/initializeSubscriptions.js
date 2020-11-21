@@ -7,6 +7,8 @@ import { herkunftModelPrimitives } from '../models/herkunftModel.base'
 import { kulturModelPrimitives } from '../models/kulturModel.base'
 import { lieferungModelPrimitives } from '../models/lieferungModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
+import { teilkulturModelPrimitives } from '../models/teilkulturModel.base'
+import { zaehlungModelPrimitives } from '../models/zaehlungModel.base'
 
 const stripTypename = (object) => {
   // eslint-disable-next-line no-unused-vars
@@ -149,10 +151,20 @@ const initializeSubscriptions = ({ store, db }) => {
     (error) => onError({ error }),
   )
   unsubscribe.sammlung_file = store.subscribeSammlung_file()
-  unsubscribe.teilkultur = store.subscribeTeilkultur()
+  unsubscribe.teilkultur = store.subscribeTeilkultur(
+    undefined,
+    teilkulturModelPrimitives.toString(),
+    async (data) => onData({ data, table: 'teilkultur', db }),
+    (error) => onError({ error }),
+  )
   unsubscribe.teilzaehlung = store.subscribeTeilzaehlung()
   unsubscribe.user_role = store.subscribeUser_role()
-  unsubscribe.zaehlung = store.subscribeZaehlung()
+  unsubscribe.zaehlung = store.subscribeZaehlung(
+    undefined,
+    zaehlungModelPrimitives.toString(),
+    async (data) => onData({ data, table: 'zaehlung', db }),
+    (error) => onError({ error }),
+  )
   return unsubscribe
 }
 

@@ -8,6 +8,8 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -56,13 +58,22 @@ const Teilkultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, teilkulturs } = store
+  const { filter, online } = store
+
+  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
+  const db = useDatabase()
+  // useObservable reduces recomputation
+  const teilkulturCollection = useObservable(() =>
+    db.collections.get('teilkultur').query().observe(),
+  )
+  const teilkulturs = useObservableState(teilkulturCollection, [])
+  const tk = teilkulturs ? teilkulturs.find((tk) => tk.id === id) : undefined
 
   const row = useMemo(
-    () => (showFilter ? filter.teilkultur : teilkulturs.get(id) || null),
+    () => (showFilter ? filter.teilkultur : tk),
     // need teilkulturs.size for when row arrives after first login
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.teilkultur, id, showFilter, teilkulturs, teilkulturs.size],
+    [filter.teilkultur, id, showFilter, tk, teilkulturs.length],
   )
 
   const [activeConflict, setActiveConflict] = useState(null)

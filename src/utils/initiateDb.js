@@ -10,6 +10,8 @@ import {
   Kultur,
   Lieferung,
   Sammlung,
+  Teilkultur,
+  Zaehlung,
 } from '../dbModel'
 
 const initiateDb = () => {
@@ -33,7 +35,17 @@ const initiateDb = () => {
 
   const database = new Database({
     adapter,
-    modelClasses: [AeArt, Art, Garten, Herkunft, Kultur, Lieferung, Sammlung],
+    modelClasses: [
+      AeArt,
+      Art,
+      Garten,
+      Herkunft,
+      Kultur,
+      Lieferung,
+      Sammlung,
+      Teilkultur,
+      Zaehlung,
+    ],
     actionsEnabled: true,
   })
 

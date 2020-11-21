@@ -7,8 +7,20 @@ import herkunft from './herkunft'
 import kultur from './kultur'
 import lieferung from './lieferung'
 import sammlung from './sammlung'
+import teilkultur from './teilkultur'
+import zaehlung from './zaehlung'
 
 export default appSchema({
   version: 1,
-  tables: [ae_art, art, garten, herkunft, kultur, lieferung, sammlung],
+  tables: [
+    ae_art,
+    art,
+    garten,
+    herkunft,
+    kultur,
+    lieferung,
+    sammlung,
+    teilkultur,
+    zaehlung,
+  ],
 })
