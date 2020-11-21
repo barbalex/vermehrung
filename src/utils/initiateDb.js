@@ -11,6 +11,7 @@ import {
   Lieferung,
   Sammlung,
   Teilkultur,
+  Teilzaehlung,
   Zaehlung,
 } from '../dbModel'
 
@@ -44,6 +45,7 @@ const initiateDb = () => {
       Lieferung,
       Sammlung,
       Teilkultur,
+      Teilzaehlung,
       Zaehlung,
     ],
     actionsEnabled: true,

@@ -8,6 +8,7 @@ import { kulturModelPrimitives } from '../models/kulturModel.base'
 import { lieferungModelPrimitives } from '../models/lieferungModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
 import { teilkulturModelPrimitives } from '../models/teilkulturModel.base'
+import { teilzaehlungModelPrimitives } from '../models/teilzaehlungModel.base'
 import { zaehlungModelPrimitives } from '../models/zaehlungModel.base'
 
 const stripTypename = (object) => {
@@ -157,7 +158,12 @@ const initializeSubscriptions = ({ store, db }) => {
     async (data) => onData({ data, table: 'teilkultur', db }),
     (error) => onError({ error }),
   )
-  unsubscribe.teilzaehlung = store.subscribeTeilzaehlung()
+  unsubscribe.teilzaehlung = store.subscribeTeilzaehlung(
+    undefined,
+    teilzaehlungModelPrimitives.toString(),
+    async (data) => onData({ data, table: 'teilzaehlung', db }),
+    (error) => onError({ error }),
+  )
   unsubscribe.user_role = store.subscribeUser_role()
   unsubscribe.zaehlung = store.subscribeZaehlung(
     undefined,
