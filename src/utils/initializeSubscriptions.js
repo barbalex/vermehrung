@@ -2,6 +2,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import { ae_artModelPrimitives } from '../models/ae_artModel.base'
 import { artModelPrimitives } from '../models/artModel.base'
+import { gartenModelPrimitives } from '../models/gartenModel.base'
 import { herkunftModelPrimitives } from '../models/herkunftModel.base'
 import { lieferungModelPrimitives } from '../models/lieferungModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
@@ -99,7 +100,12 @@ const initializeSubscriptions = ({ store, db }) => {
   unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen()
   unsubscribe.av = store.subscribeAv()
   unsubscribe.event = store.subscribeEvent()
-  unsubscribe.garten = store.subscribeGarten()
+  unsubscribe.garten = store.subscribeGarten(
+    undefined,
+    gartenModelPrimitives.toString(),
+    async (data) => onData({ data, table: 'garten', db }),
+    (error) => onError({ error }),
+  )
   unsubscribe.garten_file = store.subscribeGarten_file()
   unsubscribe.gv = store.subscribeGv()
   unsubscribe.herkunft = store.subscribeHerkunft(
