@@ -452,3 +452,106 @@ export class AeArt extends Model {
   @field('name') name
   @field('changed') changed
 }
+
+export class Garten extends Model {
+  static table = 'garten'
+  static associations = {
+    kultur: { type: 'has_many', foreignKey: 'garten_id' },
+  }
+
+  @field('id') id
+  @field('name') name
+  @field('person_id') person_id
+  @field('strasse') strasse
+  @field('plz') plz
+  @field('ort') ort
+  @json('geom_point', dontSanitize) geom_point
+  @field('wgs84_lat') wgs84_lat
+  @field('wgs84_long') wgs84_long
+  @field('lv95_x') lv95_x
+  @field('lv95_y') lv95_y
+  @field('aktiv') aktiv
+  @field('bemerkungen') bemerkungen
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @children('kultur') kulturs
+
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`garten.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      garten_id: this.id,
+      name: field === 'name' ? toStringIfPossible(value) : this.name,
+      person_id: field === 'person_id' ? value : this.person_id,
+      strasse: field === 'strasse' ? toStringIfPossible(value) : this.strasse,
+      plz: field === 'plz' ? value : this.plz,
+      ort: field === 'ort' ? toStringIfPossible(value) : this.ort,
+      geom_point: field === 'geom_point' ? value : this.geom_point,
+      aktiv: field === 'aktiv' ? value : this.aktiv,
+      bemerkungen:
+        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_garten_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'garten_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'garten',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.garten_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    if (field === '_deleted' && value) {
+      const kulturs = await this.kulturs.fetch()
+      console.log('garten model, kulturs:', kulturs)
+      // TODO: edit to set _deleted true
+    }
+  }
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
+}
