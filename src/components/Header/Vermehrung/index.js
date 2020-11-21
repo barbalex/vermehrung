@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { withResizeDetector } from 'react-resize-detector'
 
 import Account from './Account'
-import Settings from './Settings'
+import HamburgerMenu from './Menu'
 import Online from './Online'
 import Search from './Search'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -35,7 +35,7 @@ const HeaderVermehrung = ({ width }) => {
             <Menu>
               <Home asMenu />
               <Docu asMenu />
-              <Settings asMenu />
+              <HamburgerMenu asMenu />
             </Menu>
           </Toolbar>
         </AppBar>
@@ -57,7 +57,7 @@ const HeaderVermehrung = ({ width }) => {
             <Account />
             <Menu>
               <Docu asMenu />
-              <Settings asMenu />
+              <HamburgerMenu asMenu />
             </Menu>
           </Toolbar>
         </AppBar>
@@ -77,7 +77,7 @@ const HeaderVermehrung = ({ width }) => {
             <Search />
             <Online />
             <Account />
-            <Settings />
+            <HamburgerMenu />
             <Menu>
               <Docu asMenu />
             </Menu>
@@ -99,7 +99,7 @@ const HeaderVermehrung = ({ width }) => {
           <Search />
           <Online />
           <Account />
-          <Settings />
+          <HamburgerMenu />
         </Toolbar>
       </AppBar>
     </ErrorBoundary>
