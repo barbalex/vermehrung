@@ -3,19 +3,19 @@ import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 
 import MenuItem from '@material-ui/core/MenuItem'
-import { FaCog } from 'react-icons/fa'
+import { MdMenu } from 'react-icons/md'
 import styled from 'styled-components'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Menu from './Menu'
 
-const Icon = styled(FaCog)`
+const Icon = styled(MdMenu)`
   color: white;
 `
 
-const SettingsOverall = ({ asMenu }) => {
+const MenuComponent = ({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
-  const onClickConfig = useCallback(
+  const onClickMenu = useCallback(
     (event) => setAnchorEl(event.currentTarget),
     [],
   )
@@ -26,9 +26,9 @@ const SettingsOverall = ({ asMenu }) => {
         <MenuItem
           aria-owns={anchorEl ? 'menu' : null}
           aria-haspopup="true"
-          onClick={onClickConfig}
+          onClick={onClickMenu}
         >
-          Optionen wählen
+          Menu
         </MenuItem>
         <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
       </>
@@ -38,11 +38,11 @@ const SettingsOverall = ({ asMenu }) => {
   return (
     <ErrorBoundary>
       <IconButton
-        aria-label="Optionen wählen"
+        aria-label="Menu"
         aria-owns={anchorEl ? 'menu' : null}
         aria-haspopup="true"
-        title="Optionen wählen"
-        onClick={onClickConfig}
+        title="Menu"
+        onClick={onClickMenu}
       >
         <Icon />
       </IconButton>
@@ -51,4 +51,4 @@ const SettingsOverall = ({ asMenu }) => {
   )
 }
 
-export default observer(SettingsOverall)
+export default observer(MenuComponent)

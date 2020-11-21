@@ -93,7 +93,7 @@ const buildExceljsWorksheetsForDaten = async ({
     // as explained in https://stackoverflow.com/a/34349073/712005
     // because excel limits length of names and uuid is too long
     for (const [index, kultur_id] of [myKulturIds].entries()) {
-      await buildExceljsWorksheetsForKultur({
+      buildExceljsWorksheetsForKultur({
         store,
         kultur_id: kultur_id[0],
         kultur_name: index + 1,

@@ -53,32 +53,29 @@ const Login = () => {
   const fetchLogin = useCallback(
     // callbacks pass email or password
     // because state is not up to date yet
-    ({ email: emailPassed, password: passwordPassed }) => {
-      // need to blur fields
-      // why? password-managers enter values but do not blur
+    async ({ email: emailPassed, password: passwordPassed }) => {
+      // need to fetch values from ref
+      // why? password-managers enter values but do not blur/change
       // if password-manager enters values and user clicks "Anmelden"
       // it will not work without previous blurring
-      emailInput.current.blur()
-      passwordInput.current.blur()
+      const emailToUse = emailPassed || email || emailInput.current.value
+      const passwordToUse =
+        passwordPassed || password || passwordInput.current.value
+      // do everything to clean up so no data is left
+      await firebase.auth().signOut()
+      localForage.clear()
+      window.localStorage.removeItem('token')
+      flushData()
       setTimeout(async () => {
-        const emailToUse = emailPassed || email
-        const passwordToUse = passwordPassed || password
-        // do everything to clean up so no data is left
-        await firebase.auth().signOut()
-        localForage.clear()
-        window.localStorage.removeItem('token')
-        flushData()
-        setTimeout(async () => {
-          try {
-            await firebase
-              .auth()
-              .signInWithEmailAndPassword(emailToUse, passwordToUse)
-          } catch (error) {
-            setEmailErrorText(error.message)
-            return setPasswordErrorText(error.message)
-          }
-          setTimeout(() => window.location.reload(true))
-        })
+        try {
+          await firebase
+            .auth()
+            .signInWithEmailAndPassword(emailToUse, passwordToUse)
+        } catch (error) {
+          setEmailErrorText(error.message)
+          return setPasswordErrorText(error.message)
+        }
+        setTimeout(() => window.location.reload(true))
       })
     },
     [email, firebase, flushData, password],
@@ -159,7 +156,7 @@ const Login = () => {
               onBlur={onBlurEmail}
               autoFocus
               onKeyPress={onKeyPressEmail}
-              ref={emailInput}
+              inputRef={emailInput}
             />
             <FormHelperText id="emailHelper">{emailErrorText}</FormHelperText>
           </FormControl>
@@ -179,7 +176,7 @@ const Login = () => {
               autoComplete="current-password"
               autoCorrect="off"
               spellCheck="false"
-              ref={passwordInput}
+              inputRef={passwordInput}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
