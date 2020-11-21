@@ -4,6 +4,7 @@ import { ae_artModelPrimitives } from '../models/ae_artModel.base'
 import { artModelPrimitives } from '../models/artModel.base'
 import { gartenModelPrimitives } from '../models/gartenModel.base'
 import { herkunftModelPrimitives } from '../models/herkunftModel.base'
+import { kulturModelPrimitives } from '../models/kulturModel.base'
 import { lieferungModelPrimitives } from '../models/lieferungModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
 
@@ -26,7 +27,12 @@ const onData = async ({ data, table, db }) => {
   const collection = db.collections.get(table)
 
   const incomingIds = data.map((d) => d.id)
-
+  /*console.log('initializeSubscriptions', {
+    table,
+    data,
+    incomingIds,
+    collections: db.collections,
+  })*/
   db.action(async () => {
     const objectsOfIncoming = await db.collections
       .get(table)
@@ -115,7 +121,12 @@ const initializeSubscriptions = ({ store, db }) => {
     (error) => onError({ error }),
   )
   unsubscribe.herkunft_file = store.subscribeHerkunft_file()
-  unsubscribe.kultur = store.subscribeKultur()
+  unsubscribe.kultur = store.subscribeKultur(
+    undefined,
+    kulturModelPrimitives.toString(),
+    async (data) => onData({ data, table: 'kultur', db }),
+    (error) => onError({ error }),
+  )
   unsubscribe.kultur_file = store.subscribeKultur_file()
   unsubscribe.kultur_option = store.subscribeKultur_option()
   unsubscribe.kultur_qk = store.subscribeKultur_qk()

@@ -4,8 +4,10 @@ import {
   children,
   field,
   json,
+  lazy,
   relation,
 } from '@nozbe/watermelondb/decorators'
+import { Q } from '@nozbe/watermelondb'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
@@ -546,6 +548,135 @@ export class Garten extends Model {
     if (field === '_deleted' && value) {
       const kulturs = await this.kulturs.fetch()
       console.log('garten model, kulturs:', kulturs)
+      // TODO: edit to set _deleted true
+    }
+  }
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
+}
+
+export class Kultur extends Model {
+  static table = 'kultur'
+  static associations = {
+    garten: { type: 'belongs_to', key: 'garten_id' },
+    anlieferung: { type: 'has_many', key: 'von_kultur_id' },
+    auslieferung: { type: 'has_many', key: 'nach_kultur_id' },
+    //teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
+    //zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
+    //event: { type: 'has_many', foreignKey: 'kultur_id' },
+    //kultur_option: { type: 'has_many', foreignKey: 'kultur_id' },
+  }
+
+  @field('id') id
+  @field('art_id') art_id
+  @field('herkunft_id') herkunft_id
+  @field('garten_id') garten_id
+  @field('zwischenlager') zwischenlager
+  @field('erhaltungskultur') erhaltungskultur
+  @field('von_anzahl_individuen') von_anzahl_individuen
+  @field('bemerkungen') bemerkungen
+  @field('aktiv') aktiv
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  //@children('teilkultur') teilkulturs
+  //@children('zaehlung') zaehlungs
+  //@children('event') events
+  //@relation('kultur_option) kultur_option
+  @lazy anlieferungs = this.collections
+    .get('lieferung')
+    .query(Q.where('nach_kultur_id', this.id))
+  @lazy auslieferungs = this.collections
+    .get('lieferung')
+    .query(Q.where('von_kultur_id', this.id))
+
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    // TODO: do this in all models?
+    unsetError(`kultur.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      kultur_id: this.id,
+      art_id: field === 'art_id' ? value : this.art_id,
+      herkunft_id: field === 'herkunft_id' ? value : this.herkunft_id,
+      garten_id: field === 'garten_id' ? value : this.garten_id,
+      zwischenlager: field === 'zwischenlager' ? value : this.zwischenlager,
+      erhaltungskultur:
+        field === 'erhaltungskultur' ? value : this.erhaltungskultur,
+      von_anzahl_individuen:
+        field === 'von_anzahl_individuen' ? value : this.von_anzahl_individuen,
+      bemerkungen:
+        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
+      aktiv: field === 'aktiv' ? value : this.aktiv,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    const newObjectForStore = { ...newObject }
+    addQueuedQuery({
+      name: 'mutateInsert_kultur_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'kultur_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'kultur',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.kultur_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    if (field === '_deleted' && value) {
+      const teilkulturs = await this.teilkulturs.fetch()
+      console.log('kultur model, teilkulturs:', teilkulturs)
+      // TODO: edit to set _deleted true
+      const zaehlungs = await this.zaehlungs.fetch()
+      console.log('kultur model, zaehlungs:', zaehlungs)
+      // TODO: edit to set _deleted true
+      const events = await this.events.fetch()
+      console.log('kultur model, events:', events)
+      // TODO: edit to set _deleted true
+      const anlieferungs = await this.anlieferungs.fetch()
+      console.log('kultur model, anlieferungs:', anlieferungs)
+      // TODO: edit to set _deleted true
+      const auslieferungs = await this.auslieferungs.fetch()
+      console.log('kultur model, auslieferungs:', auslieferungs)
       // TODO: edit to set _deleted true
     }
   }

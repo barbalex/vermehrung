@@ -1,7 +1,7 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const kultur = {
-  name: 'kultur',
+const teilkultur = {
+  name: 'teilkultur',
   columns: [
     // can not add id here
     // see: https://github.com/Nozbe/WatermelonDB/issues/7#issuecomment-419248401
@@ -33,4 +33,4 @@ const kultur = {
   ],
 }
 
-export default tableSchema(kultur)
+export default tableSchema(teilkultur)

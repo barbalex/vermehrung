@@ -84,12 +84,12 @@ const GartenForm = ({
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
       if (field === 'person_id') {
         insertGvRev({ values: { garten_id: row.id, person_id: value } })
       }
     },
-    [filter, insertGvRev, row, showFilter],
+    [filter, insertGvRev, row, showFilter, store],
   )
 
   const showDeleted =

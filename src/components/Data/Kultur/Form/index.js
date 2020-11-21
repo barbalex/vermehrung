@@ -240,9 +240,9 @@ const KulturForm = ({
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
   const openGenVielfaldDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
@@ -270,6 +270,8 @@ const KulturForm = ({
 
   const showDeleted =
     showFilter || filter.kultur._deleted !== false || row._deleted
+
+  console.log('Kultur, row:', row)
 
   return (
     <ErrorBoundary>
