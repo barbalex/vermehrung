@@ -2,7 +2,15 @@ import { Database } from '@nozbe/watermelondb'
 import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
 
 import schema from '../dbSchema/schema'
-import { AeArt, Art, Garten, Herkunft, Lieferung, Sammlung } from '../dbModel'
+import {
+  AeArt,
+  Art,
+  Garten,
+  Herkunft,
+  Kultur,
+  Lieferung,
+  Sammlung,
+} from '../dbModel'
 
 const initiateDb = () => {
   const adapter = new LokiJSAdapter({
@@ -25,7 +33,7 @@ const initiateDb = () => {
 
   const database = new Database({
     adapter,
-    modelClasses: [AeArt, Art, Garten, Herkunft, Lieferung, Sammlung],
+    modelClasses: [AeArt, Art, Garten, Herkunft, Kultur, Lieferung, Sammlung],
     actionsEnabled: true,
   })
 

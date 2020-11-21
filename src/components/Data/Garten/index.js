@@ -64,7 +64,7 @@ const Garten = ({
   const db = useDatabase()
   // useObservable reduces recomputation
   const herkunftCollection = useObservable(() =>
-    db.collections.get('herkunft').query().observe(),
+    db.collections.get('garten').query().observe(),
   )
   const gartens = useObservableState(herkunftCollection, [])
   const ga = gartens ? gartens.find((ga) => ga.id === id) : undefined

@@ -4,10 +4,11 @@ import ae_art from './ae_art'
 import art from './art'
 import garten from './garten'
 import herkunft from './herkunft'
+import kultur from './kultur'
 import lieferung from './lieferung'
 import sammlung from './sammlung'
 
 export default appSchema({
   version: 1,
-  tables: [ae_art, art, garten, herkunft, lieferung, sammlung],
+  tables: [ae_art, art, garten, herkunft, kultur, lieferung, sammlung],
 })
