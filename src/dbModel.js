@@ -779,7 +779,7 @@ export class Zaehlung extends Model {
   static table = 'zaehlung'
   static associations = {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
-    //teilzaehlung: { type: 'has_many', key: 'zaehlung_id' },
+    teilzaehlung: { type: 'has_many', key: 'zaehlung_id' },
   }
 
   @field('id') id
@@ -796,7 +796,7 @@ export class Zaehlung extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
-  //@children('teilzaehlung') teilzaehlungs
+  @children('teilzaehlung') teilzaehlungs
 
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
@@ -859,6 +859,113 @@ export class Zaehlung extends Model {
       console.log('kultur model, zaehlungs:', zaehlungs)
       // TODO: edit to set _deleted true
     }
+  }
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
+}
+
+export class Teilzaehlung extends Model {
+  static table = 'teilzaehlung'
+  static associations = {
+    zaehlung: { type: 'belongs_to', key: 'zaehlung_id' },
+  }
+
+  @field('id') id
+  @field('zaehlung_id') zaehlung_id
+  @field('teilkultur_id') teilkultur_id
+  @field('anzahl_pflanzen') anzahl_pflanzen
+  @field('anzahl_auspflanzbereit') anzahl_auspflanzbereit
+  @field('anzahl_mutterpflanzen') anzahl_mutterpflanzen
+  @field('andere_menge') andere_menge
+  @field('auspflanzbereit_beschreibung') auspflanzbereit_beschreibung
+  @field('bemerkungen') bemerkungen
+  @field('prognose_von_tz') prognose_von_tz
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @action
+  async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`teilzaehlung.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      teilzaehlung_id: this.id,
+      zaehlung_id: field === 'zaehlung_id' ? value : this.zaehlung_id,
+      teilkultur_id: field === 'teilkultur_id' ? value : this.teilkultur_id,
+      anzahl_pflanzen:
+        field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
+      anzahl_auspflanzbereit:
+        field === 'anzahl_auspflanzbereit'
+          ? value
+          : this.anzahl_auspflanzbereit,
+      anzahl_mutterpflanzen:
+        field === 'anzahl_mutterpflanzen' ? value : this.anzahl_mutterpflanzen,
+      andere_menge:
+        field === 'andere_menge'
+          ? toStringIfPossible(value)
+          : this.andere_menge,
+      auspflanzbereit_beschreibung:
+        field === 'auspflanzbereit_beschreibung'
+          ? toStringIfPossible(value)
+          : this.auspflanzbereit_beschreibung,
+      bemerkungen:
+        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
+      prognose_von_tz:
+        field === 'prognose_von_tz' ? value : this.prognose_von_tz,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_teilzaehlung_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'teilzaehlung_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'teilzaehlung',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.teilzaehlung_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
   }
   @action async delete({ store }) {
     await this.subAction(() =>

@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
@@ -14,6 +20,7 @@ import HistoryButton from '../../../../../../shared/HistoryButton'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
 import PrognoseMenu from './PrognoseMenu'
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
+import exists from '../../../../../../../utils/exists'
 
 const FieldContainer = styled.div`
   display: flex;
@@ -143,6 +150,25 @@ const TeilzaehlungForm = ({
 
   const showDeleted = row._deleted || filter.teilzaehlung._deleted !== false
 
+  const anzahl_jungpflanzen = useMemo(() => {
+    if (
+      exists(row.anzahl_pflanzen) &&
+      exists(row.anzahl_auspflanzbereit) &&
+      exists(row.anzahl_mutterpflanzen)
+    ) {
+      return (
+        row.anzahl_pflanzen -
+        row.anzahl_auspflanzbereit -
+        row.anzahl_mutterpflanzen
+      )
+    }
+    return null
+  }, [
+    row.anzahl_auspflanzbereit,
+    row.anzahl_mutterpflanzen,
+    row.anzahl_pflanzen,
+  ])
+
   return (
     <ErrorBoundary>
       <FieldContainer>
@@ -217,7 +243,7 @@ const TeilzaehlungForm = ({
             key={`${row.id}anzahl_jungpflanzen`}
             label="Anzahl Jungpflanzen"
             schrinkLabel={true}
-            value={row.anzahl_jungpflanzen}
+            value={anzahl_jungpflanzen}
             type="number"
             message="Wird berechnet aus: Anzahl Pflanzen - auspflanzbereit - Mutterpflanzen"
           />

@@ -8,6 +8,7 @@ import kultur from './kultur'
 import lieferung from './lieferung'
 import sammlung from './sammlung'
 import teilkultur from './teilkultur'
+import teilzaehlung from './teilzaehlung'
 import zaehlung from './zaehlung'
 
 export default appSchema({
@@ -21,6 +22,7 @@ export default appSchema({
     lieferung,
     sammlung,
     teilkultur,
+    teilzaehlung,
     zaehlung,
   ],
 })
