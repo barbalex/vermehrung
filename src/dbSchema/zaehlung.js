@@ -1,15 +1,12 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const teilkultur = {
-  name: 'teilkultur',
+const zaehlung = {
+  name: 'zaehlung',
   columns: [
     // can not add id here
-    // see: https://github.com/Nozbe/WatermelonDB/issues/7#issuecomment-419248401
     { name: 'kultur_id', type: 'string', isOptional: true, isIndexed: true },
-    { name: 'name', type: 'string', isOptional: true, isIndexed: true },
-    { name: 'ort1', type: 'string', isOptional: true },
-    { name: 'ort2', type: 'string', isOptional: true },
-    { name: 'ort3', type: 'string', isOptional: true },
+    { name: 'datum', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'prognose', type: 'boolean', isOptional: true },
     { name: 'bemerkungen', type: 'string', isOptional: true },
     { name: 'changed', type: 'string', isOptional: true, isIndexed: true },
     { name: 'changed_by', type: 'string', isOptional: true },
@@ -22,4 +19,4 @@ const teilkultur = {
   ],
 }
 
-export default tableSchema(teilkultur)
+export default tableSchema(zaehlung)

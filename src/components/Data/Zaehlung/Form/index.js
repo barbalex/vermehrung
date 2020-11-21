@@ -87,9 +87,9 @@ const ZaehlungForm = ({
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Planen`

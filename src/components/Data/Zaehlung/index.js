@@ -8,6 +8,8 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -56,13 +58,22 @@ const Zaehlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, zaehlungs } = store
+  const { filter, online } = store
+
+  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
+  const db = useDatabase()
+  // useObservable reduces recomputation
+  const zaehlungCollection = useObservable(() =>
+    db.collections.get('zaehlung').query().observe(),
+  )
+  const zaehlungs = useObservableState(zaehlungCollection, [])
+  const za = zaehlungs ? zaehlungs.find((za) => za.id === id) : undefined
 
   const row = useMemo(
-    () => (showFilter ? filter.zaehlung : zaehlungs.get(id) || null),
-    // need zaehlungs.size for when row arrives after first login
+    () => (showFilter ? filter.zaehlung : za),
+    // need zaehlungs.length for when row arrives after first login
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.zaehlung, id, showFilter, zaehlungs, zaehlungs.size],
+    [filter.zaehlung, id, showFilter, za, zaehlungs.length],
   )
 
   const [activeConflict, setActiveConflict] = useState(null)
