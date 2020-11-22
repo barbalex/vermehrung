@@ -59,8 +59,8 @@ const queryFromStore = ({ store, table }) => {
 
   if (!filterValues.length) return values
 
-  const test = (val) => {
-    const testArray = filterValues.map(([key, filterValue]) => {
+  const test = (val) =>
+    filterValues.every(([key, filterValue]) => {
       if (filterValue === null) return true
       const type = types[table][key] || 'string'
       const value = val[key]
@@ -78,9 +78,6 @@ const queryFromStore = ({ store, table }) => {
       }
       return value === filterValue
     })
-
-    return !testArray.includes(false)
-  }
 
   const filteredValues = values.filter(test)
 

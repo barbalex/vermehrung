@@ -5,7 +5,6 @@ import 'firebase/auth'
 import persist from 'mst-persist'
 
 import getAuthToken from './getAuthToken'
-import queryAllData from './queryAllData'
 
 // Configure Firebase
 const firebaseConfig = {
@@ -53,7 +52,6 @@ const recreatePersistedStore = async ({ store }) => {
     setTimeout(async () => {
       if (store.online) {
         await getAuthToken({ store })
-        queryAllData({ store })
       }
       setGettingAuthUser(false)
     })
