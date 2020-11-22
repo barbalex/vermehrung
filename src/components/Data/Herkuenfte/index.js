@@ -8,7 +8,6 @@ import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { useObservableState, useObservable } from 'observable-hooks'
-import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
