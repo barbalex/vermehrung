@@ -1,5 +1,3 @@
-import { Q } from '@nozbe/watermelondb'
-
 import { ae_artModelPrimitives } from '../models/ae_artModel.base'
 import { artModelPrimitives } from '../models/artModel.base'
 import { gartenModelPrimitives } from '../models/gartenModel.base'
@@ -11,97 +9,28 @@ import { teilkulturModelPrimitives } from '../models/teilkulturModel.base'
 import { teilzaehlungModelPrimitives } from '../models/teilzaehlungModel.base'
 import { zaehlungModelPrimitives } from '../models/zaehlungModel.base'
 
-const stripTypename = (object) => {
-  // eslint-disable-next-line no-unused-vars
-  const { __typename, ...rest } = object
-  return rest
-}
-const parseComplexFields = (object) =>
-  stripTypename({
-    ...object,
-    ...(object.geom_point
-      ? { geom_point: JSON.stringify(object.geom_point) }
-      : {}),
-    _conflicts: JSON.stringify(object._conflicts),
-    _revisions: JSON.stringify(object._revisions),
-  })
-
-const onData = async ({ data, table, db }) => {
-  const collection = db.collections.get(table)
-
-  const incomingIds = data.map((d) => d.id)
-  /*console.log('initializeSubscriptions', {
-    table,
-    data,
-    incomingIds,
-    collections: db.collections,
-  })*/
-  db.action(async () => {
-    const objectsOfIncoming = await db.collections
-      .get(table)
-      .query(Q.where('id', Q.oneOf(incomingIds)))
-      .fetch()
-    const existingIds = objectsOfIncoming.map((d) => d.id)
-    const missingIds = incomingIds.filter((d) => !existingIds.includes(d))
-    const dataToCreateObjectsFrom = data.filter((d) =>
-      missingIds.includes(d.id),
-    )
-    // only if remote changed after local
-    const objectsToUpdate = objectsOfIncoming.filter((o) => {
-      const dat = data.find((d) => d.id === o.id)
-      if (!dat?.changed) return true
-      return o.changed < dat.changed
-    })
-    console.log('subscribe, onData:', {
-      data: data.length,
-      table,
-      toUpdate: objectsToUpdate.length,
-      toCreate: missingIds.length,
-    })
-    if (objectsToUpdate.length || dataToCreateObjectsFrom.length) {
-      await db.batch(
-        ...objectsToUpdate.map((object) => {
-          const thisObjectsData = data.find((d) => d.id === object.id)
-          /*object.id === 'ff78614e-b554-11ea-b3de-0242ac130004' &&
-            console.log('initializeSubscriptions, preparing update', {
-              object,
-              thisObjectsData,
-            })*/
-
-          return object.prepareUpdate((ob) => {
-            Object.keys(thisObjectsData)
-              .filter((key) => !['id', '__typename'].includes(key))
-              .forEach((key) => {
-                if (ob[key] !== thisObjectsData[key]) {
-                  ob[key] = thisObjectsData[key]
-                }
-              })
-          })
-        }),
-        ...dataToCreateObjectsFrom.map((d) =>
-          collection.prepareCreateFromDirtyRaw(parseComplexFields(d)),
-        ),
-      )
-    }
-  })
-}
+import updateWmFromData from './updateWmFromData'
 
 const onError = ({ error }) => {
   console.log('subscribeHerkunft, onError:', error)
 }
 
-const initializeSubscriptions = ({ store, db }) => {
+const initializeSubscriptions = ({ store }) => {
   const unsubscribe = {}
   unsubscribe.ae_art = store.subscribeAe_art(
     undefined,
     ae_artModelPrimitives.toString(),
-    async (data) => onData({ data, table: 'ae_art', db }),
+    (data) => {
+      updateWmFromData({ data, table: 'ae_art', db: store.db })
+    },
     (error) => onError({ error }),
   )
   unsubscribe.art = store.subscribeArt(
     undefined,
     artModelPrimitives.toString(),
-    async (data) => onData({ data, table: 'art', db }),
+    (data) => {
+      updateWmFromData({ data, table: 'art', db: store.db })
+    },
     (error) => onError({ error }),
   )
   unsubscribe.art_file = store.subscribeArt_file()
@@ -112,7 +41,9 @@ const initializeSubscriptions = ({ store, db }) => {
   unsubscribe.garten = store.subscribeGarten(
     undefined,
     gartenModelPrimitives.toString(),
-    async (data) => onData({ data, table: 'garten', db }),
+    (data) => {
+      updateWmFromData({ data, table: 'garten', db: store.db })
+    },
     (error) => onError({ error }),
   )
   unsubscribe.garten_file = store.subscribeGarten_file()
@@ -120,14 +51,18 @@ const initializeSubscriptions = ({ store, db }) => {
   unsubscribe.herkunft = store.subscribeHerkunft(
     undefined,
     herkunftModelPrimitives.toString(),
-    async (data) => onData({ data, table: 'herkunft', db }),
+    (data) => {
+      updateWmFromData({ data, table: 'herkunft', db: store.db })
+    },
     (error) => onError({ error }),
   )
   unsubscribe.herkunft_file = store.subscribeHerkunft_file()
   unsubscribe.kultur = store.subscribeKultur(
     undefined,
     kulturModelPrimitives.toString(),
-    async (data) => onData({ data, table: 'kultur', db }),
+    (data) => {
+      updateWmFromData({ data, table: 'kultur', db: store.db })
+    },
     (error) => onError({ error }),
   )
   unsubscribe.kultur_file = store.subscribeKultur_file()
@@ -137,7 +72,9 @@ const initializeSubscriptions = ({ store, db }) => {
   unsubscribe.lieferung = store.subscribeLieferung(
     undefined,
     lieferungModelPrimitives.toString(),
-    async (data) => onData({ data, table: 'lieferung', db }),
+    (data) => {
+      updateWmFromData({ data, table: 'lieferung', db: store.db })
+    },
     (error) => onError({ error }),
   )
   unsubscribe.lieferung_file = store.subscribeLieferung_file()
@@ -148,27 +85,35 @@ const initializeSubscriptions = ({ store, db }) => {
   unsubscribe.sammlung = store.subscribeSammlung(
     undefined,
     sammlungModelPrimitives.toString(),
-    async (data) => onData({ data, table: 'sammlung', db }),
+    (data) => {
+      updateWmFromData({ data, table: 'sammlung', db: store.db })
+    },
     (error) => onError({ error }),
   )
   unsubscribe.sammlung_file = store.subscribeSammlung_file()
   unsubscribe.teilkultur = store.subscribeTeilkultur(
     undefined,
     teilkulturModelPrimitives.toString(),
-    async (data) => onData({ data, table: 'teilkultur', db }),
+    (data) => {
+      updateWmFromData({ data, table: 'teilkultur', db: store.db })
+    },
     (error) => onError({ error }),
   )
   unsubscribe.teilzaehlung = store.subscribeTeilzaehlung(
     undefined,
     teilzaehlungModelPrimitives.toString(),
-    async (data) => onData({ data, table: 'teilzaehlung', db }),
+    (data) => {
+      updateWmFromData({ data, table: 'teilzaehlung', db: store.db })
+    },
     (error) => onError({ error }),
   )
   unsubscribe.user_role = store.subscribeUser_role()
   unsubscribe.zaehlung = store.subscribeZaehlung(
     undefined,
     zaehlungModelPrimitives.toString(),
-    async (data) => onData({ data, table: 'zaehlung', db }),
+    (data) => {
+      updateWmFromData({ data, table: 'zaehlung', db: store.db })
+    },
     (error) => onError({ error }),
   )
   return unsubscribe

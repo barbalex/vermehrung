@@ -94,6 +94,21 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
     setWgs84LongState(wgs84_long || '')
   }, [wgs84_lat, wgs84_long])
 
+  const saveToDbLv95 = useCallback(
+    (x, y) => {
+      let geomPoint = null
+      if (x && y) {
+        geomPoint = {
+          type: 'Point',
+          coordinates: epsg2056to4326(x, y),
+          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+        }
+      }
+      saveToDb(geomPoint, 'lv95')
+    },
+    [saveToDb],
+  )
+
   const onChangeX = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95XState(value)
@@ -128,6 +143,21 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
         saveToDbLv95(lv95XState, value)
     },
     [lv95XState, lv95_y, saveToDbLv95],
+  )
+
+  const saveToDbWgs84 = useCallback(
+    (lat, long) => {
+      let geomPoint = null
+      if (lat && long) {
+        geomPoint = {
+          type: 'Point',
+          coordinates: [long, lat],
+          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+        }
+      }
+      saveToDb(geomPoint, 'wgs84')
+    },
+    [saveToDb],
   )
 
   const onChangeWgs84Lat = useCallback((event) => {
@@ -165,35 +195,6 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
       }
     },
     [saveToDbWgs84, wgs84LatState, wgs84_long],
-  )
-
-  const saveToDbLv95 = useCallback(
-    (x, y) => {
-      let geomPoint = null
-      if (x && y) {
-        geomPoint = {
-          type: 'Point',
-          coordinates: epsg2056to4326(x, y),
-          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
-        }
-      }
-      saveToDb(geomPoint, 'lv95')
-    },
-    [saveToDb],
-  )
-  const saveToDbWgs84 = useCallback(
-    (lat, long) => {
-      let geomPoint = null
-      if (lat && long) {
-        geomPoint = {
-          type: 'Point',
-          coordinates: [long, lat],
-          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
-        }
-      }
-      saveToDb(geomPoint, 'wgs84')
-    },
-    [saveToDb],
   )
 
   const saveToDb = useCallback(

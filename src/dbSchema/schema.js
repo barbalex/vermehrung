@@ -11,18 +11,20 @@ import teilkultur from './teilkultur'
 import teilzaehlung from './teilzaehlung'
 import zaehlung from './zaehlung'
 
+export const tables = [
+  ae_art,
+  art,
+  garten,
+  herkunft,
+  kultur,
+  lieferung,
+  sammlung,
+  teilkultur,
+  teilzaehlung,
+  zaehlung,
+]
+
 export default appSchema({
   version: 1,
-  tables: [
-    ae_art,
-    art,
-    garten,
-    herkunft,
-    kultur,
-    lieferung,
-    sammlung,
-    teilkultur,
-    teilzaehlung,
-    zaehlung,
-  ],
+  tables,
 })

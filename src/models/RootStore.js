@@ -46,7 +46,6 @@ import kulturIdOfAnLieferungInUrl from '../utils/kulturIdOfAnLieferungInUrl'
 import kulturIdOfAusLieferungInUrl from '../utils/kulturIdOfAusLieferungInUrl'
 import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
 import getAuthToken from '../utils/getAuthToken'
-import queryAllData from '../utils/queryAllData'
 import Errors, { defaultValue as defaultErrors } from './Errors'
 
 export const RootStore = RootStoreBase.props({
@@ -73,7 +72,7 @@ export const RootStore = RootStoreBase.props({
   // this is _after_ user is set so need another variable
   gettingAuthUser: types.optional(types.boolean, true),
   authorizing: types.optional(types.boolean, true),
-  initialDataQueried: types.optional(types.boolean, false),
+  initialDataQueried: types.optional(types.boolean, true),
   errors: types.optional(Errors, defaultErrors),
   diffConflict: types.optional(types.boolean, true),
 })
@@ -83,115 +82,107 @@ export const RootStore = RootStoreBase.props({
     gqlHttpClient: null,
     gqlWsClient: null,
     db: null,
+    rawQglClient: null,
   }))
   .actions((self) => {
     reaction(
-      () => `${self.initialDataQueried}/${self.online}`,
-      () => {
-        const { initialDataQueried, online } = self
-        if (!initialDataQueried && online) {
-          console.log('store reaction querying initial data')
-          queryAllData({ store: self })
-        }
-      },
-    ),
-      reaction(
-        () => `${self.queuedQueries}/${self.online}`,
-        flow(function* () {
-          /**
-           * TODO:
-           * When new query is added
-           * check if same exists already
-           * then combine them into one
-           * Goal: reduce network traffic and revision numbers when many fields were updated
-           * Build new reaction for this that only depends on self.queuedQueries.length? (but must run first...)
-           * Also big problem: How to combine when online?
-           */
-          if (self.online) {
-            // execute operation
-            const query = self.queuedQueriesSorted[0]
-            if (!query) return
-            const {
-              name,
-              variables,
-              revertTable,
-              revertField,
-              revertId,
-              revertValue,
-            } = query
-            try {
-              if (variables) {
-                yield self[name](JSON.parse(variables))
-              } else {
-                yield self[name]()
+      () => `${self.queuedQueries}/${self.online}`,
+      flow(function* () {
+        /**
+         * TODO:
+         * When new query is added
+         * check if same exists already
+         * then combine them into one
+         * Goal: reduce network traffic and revision numbers when many fields were updated
+         * Build new reaction for this that only depends on self.queuedQueries.length? (but must run first...)
+         * Also big problem: How to combine when online?
+         */
+        if (self.online) {
+          // execute operation
+          const query = self.queuedQueriesSorted[0]
+          if (!query) return
+          const {
+            name,
+            variables,
+            revertTable,
+            revertField,
+            revertId,
+            revertValue,
+          } = query
+          try {
+            if (variables) {
+              yield self[name](JSON.parse(variables))
+            } else {
+              yield self[name]()
+            }
+          } catch (error) {
+            const lcMessage = error.message.toLowerCase()
+            console.log('store, error:', { error, query })
+            // In case a conflict was caused by two EXACT SAME changes,
+            // this will bounce because of the same rev. We want to ignore this:
+            if (error.message.includes('JWT')) {
+              return getAuthToken({ store: self })
+            } else if (
+              lcMessage.includes('uniqueness violation') &&
+              lcMessage.includes('_rev_id__rev_key')
+            ) {
+              console.log(
+                'There is a conflict with exact same changes - ingoring the error thrown',
+              )
+            } else if (lcMessage.includes('unique-constraint')) {
+              let { message } = error
+              if (lcMessage.includes('single_art_herkunft_garden_active_idx')) {
+                message =
+                  'Pro Art, Herkunft und Garten darf nur eine Kultur aktiv sein (plus ein Zwischenlager). Offenbar gibt es schon eine aktive Kultur'
               }
-            } catch (error) {
-              const lcMessage = error.message.toLowerCase()
-              console.log('store, error:', { error, query })
-              // In case a conflict was caused by two EXACT SAME changes,
-              // this will bounce because of the same rev. We want to ignore this:
-              if (error.message.includes('JWT')) {
-                return getAuthToken({ store: self })
-              } else if (
-                lcMessage.includes('uniqueness violation') &&
-                lcMessage.includes('_rev_id__rev_key')
-              ) {
-                console.log(
-                  'There is a conflict with exact same changes - ingoring the error thrown',
-                )
-              } else if (lcMessage.includes('unique-constraint')) {
-                let { message } = error
-                if (
-                  lcMessage.includes('single_art_herkunft_garden_active_idx')
-                ) {
-                  message =
-                    'Pro Art, Herkunft und Garten darf nur eine Kultur aktiv sein (plus ein Zwischenlager). Offenbar gibt es schon eine aktive Kultur'
-                }
-                // do not add a notification: show this error below the field
-                self.setError({
-                  path: `${revertTable}.${revertField}`,
-                  value: message,
-                })
-                console.log('a unique constraint was violated')
-              } else if (error.message.includes('Failed to fetch')) {
-                console.log('ignore fetch failing')
-              } else {
-                self.setError({
-                  path: `${revertTable}.${revertField}`,
-                  value: error.message,
-                })
-                return self.addNotification({
-                  title:
-                    'Eine Operation kann nicht in die Datenbank geschrieben werden',
-                  message: error.message,
-                  actionLabel: 'Operation löschen',
-                  actionName: 'removeQueuedQueryById',
-                  actionArgument: query.id,
-                })
-              }
-              // revert change
-              self.updateModelValue({
-                table: revertTable,
-                id: revertId,
-                field: revertField,
-                value: revertValue,
+              // do not add a notification: show this error below the field
+              self.setError({
+                path: `${revertTable}.${revertField}`,
+                value: message,
+              })
+              console.log('a unique constraint was violated')
+            } else if (error.message.includes('Failed to fetch')) {
+              console.log('ignore fetch failing')
+            } else {
+              self.setError({
+                path: `${revertTable}.${revertField}`,
+                value: error.message,
+              })
+              return self.addNotification({
+                title:
+                  'Eine Operation kann nicht in die Datenbank geschrieben werden',
+                message: error.message,
+                actionLabel: 'Operation löschen',
+                actionName: 'removeQueuedQueryById',
+                actionArgument: query.id,
               })
             }
-            // remove operation from queue
-            // use action because this is async
-            self.removeQueuedQueryById(query.id)
+            // revert change
+            self.updateModelValue({
+              table: revertTable,
+              id: revertId,
+              field: revertField,
+              value: revertValue,
+            })
           }
-        }),
-        {
-          // make sure retried in a minute
-          // https://github.com/mobxjs/mst-gql/issues/198#issuecomment-628083160
-          scheduler: (run) => {
-            run() // ensure it runs immediately if online
-            setInterval(run, 30000) // 30000 = thirty seconds
-          },
+          // remove operation from queue
+          // use action because this is async
+          self.removeQueuedQueryById(query.id)
+        }
+      }),
+      {
+        // make sure retried in a minute
+        // https://github.com/mobxjs/mst-gql/issues/198#issuecomment-628083160
+        scheduler: (run) => {
+          run() // ensure it runs immediately if online
+          setInterval(run, 30000) // 30000 = thirty seconds
         },
-      )
+      },
+    )
     return {
+      setRawQglClient(val) {
+        self.rawQglClient = val
+      },
       setDb(val) {
         self.db = val
       },
