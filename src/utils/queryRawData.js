@@ -33,13 +33,12 @@ import {
   zaehlung,
 } from './fragments'
 import getAuthToken from './getAuthToken'
-import removeSurplusNotRevModels from './removeSurplusNotRevModels'
 import checkForOnlineError from './checkForOnlineError'
 import updateWmFromData from './updateWmFromData'
 import { tables } from '../dbSchema/schema'
 
 const allDataQuery = gql`
-  subscription AllDataQueryForTreeContainer($changed: timestamp) {
+  query AllDataQueryForTreeContainer($changed: timestamp) {
     ae_art(where: { changed: { _gt: $changed } }) {
       ...AeArtFields
     }
@@ -159,27 +158,27 @@ const allDataQuery = gql`
   ${zaehlung}
 `
 
-const queryAllData = async ({ store }) => {
-  const { online, db, setInitialDataQueried, lastUpdatedAt } = store
+const queryRawData = async ({ store }) => {
+  const {
+    online,
+    db,
+    setInitialDataQueried,
+    lastUpdatedAt,
+    rawQglClient,
+  } = store
   if (!online) {
     return
   }
   // query only newer than store.lastUpdatedAt
   let data
   const changed = DateTime.fromMillis(0).toSQL()
-  //console.log('queryAllData', { changed, lastUpdatedAt })
+  //console.log('queryRawData', { changed, lastUpdatedAt })
   const now = Date.now()
   try {
-    data = await store.query(
-      allDataQuery,
-      { changed },
-      {
-        fetchPolicy: 'network-only',
-      },
-    )
+    data = await rawQglClient.request(allDataQuery, { changed })
   } catch (error) {
     if (error && error.message.includes('JWT')) {
-      console.log('queryAllData, will get new auth token')
+      console.log('queryRawData, will get new auth token')
       await getAuthToken({ store })
     } else {
       checkForOnlineError(error)
@@ -187,10 +186,21 @@ const queryAllData = async ({ store }) => {
     setInitialDataQueried(true)
     return
   }
-  removeSurplusNotRevModels({ store, data })
+  console.log('queryRawData', { data, lastUpdatedAt, changed })
+  store.setLastUpdatedAt(now)
+  tables
+    .map((t) => t.name)
+    .forEach((table) => {
+      console.log('queryRawData', {
+        table,
+        dataTable: data[table],
+        dataTableLengthExists: !!data[table].length,
+      })
+      !!data[table].length && updateWmFromData({ data: data[table], table, db })
+    })
   setInitialDataQueried(true)
   // TODO:
   // remove data with _deleted flag?
 }
 
-export default queryAllData
+export default queryRawData
