@@ -80,13 +80,13 @@ export class Herkunft extends Model {
     newObject._revisions = this._revisions
       ? toPgArray([rev, ...this._revisions])
       : toPgArray([rev])
-    /*console.log('Herkunft Model', {
+    console.log('Herkunft Model', {
       newObject,
       newObjectForStore,
       rev,
       newDepth,
       this: this._raw,
-    })*/
+    })
     addQueuedQuery({
       name: 'mutateInsert_herkunft_rev_one',
       variables: JSON.stringify({
@@ -110,9 +110,14 @@ export class Herkunft extends Model {
     newObjectForStore._conflicts = this._conflicts
     // for store: convert herkuft_rev to herkunft
     newObjectForStore.id = this.id
+    newObjectForStore.wgs84_lat = this.wgs84_lat
+    newObjectForStore.wgs84_long = this.wgs84_long
+    newObjectForStore.lv95_x = this.lv95_x
+    newObjectForStore.lv95_y = this.lv95_y
     delete newObjectForStore.herkunft_id
     // optimistically update store
     await this.update((row) => ({ ...row, ...newObjectForStore }))
+    console.log('Herkunft model', { newObject, newObjectForStore })
     // NOOOOO: this leads to conflicts due to multiple identical id's!
     //if (field === '_deleted' && value) await this.markAsDeleted()
     if (field === '_deleted' && value) {
