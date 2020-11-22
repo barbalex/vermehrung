@@ -1,5 +1,6 @@
 import { createHttpClient } from 'mst-gql'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { GraphQLClient } from 'graphql-request'
 
 import { RootStore } from '../models'
 import getConstants from './constants'
@@ -33,10 +34,11 @@ const initiateApp = async () => {
     gqlHttpClient,
   }
   let store
+  let token
   if (typeof window !== 'undefined') {
     // https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
     gqlWsClient = (() => {
-      let token = getToken()
+      token = getToken()
 
       //console.log('initiateApp, wsClient setting token:', token)
 
@@ -78,6 +80,11 @@ const initiateApp = async () => {
   store.setGqlHttpClient(gqlHttpClient)
   store.setGqlWsClient(gqlWsClient)
   store.setGettingAuthUser(true)
+
+  const rawGqlClient = new GraphQLClient(constants?.graphQlUri, {
+    headers: { authorization: `Bearer ${token}` },
+  })
+  store.setRawQglClient(rawGqlClient)
 
   if (typeof window === 'undefined') return store
 

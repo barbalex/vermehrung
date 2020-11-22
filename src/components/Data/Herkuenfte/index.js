@@ -6,6 +6,9 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { useObservableState, useObservable } from 'observable-hooks'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -13,6 +16,8 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
+import herkunftSort from '../../../utils/herkunftSort'
 
 const Container = styled.div`
   height: 100%;
@@ -66,12 +71,22 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
     insertHerkunftRev,
-    herkunftsSorted,
     herkunftsFiltered,
     sammlungIdInActiveNodeArray,
   } = store
   const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
   const activeNodeArray = anaRaw.toJSON()
+
+  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
+  const db = useDatabase()
+  // useObservable reduces recomputation
+  const herkunftCollection = useObservable(() =>
+    db.collections
+      .get('herkunft')
+      .query(notDeletedOrHasConflictQuery)
+      .observe(),
+  )
+  const herkunfts = useObservableState(herkunftCollection, [])
 
   const hierarchyFilter = (h) => {
     if (sammlungIdInActiveNodeArray) {
@@ -82,6 +97,13 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     }
     return true
   }
+  const herkunftsSorted = herkunfts.filter(hierarchyFilter).sort(herkunftSort)
+
+  console.log('Herkuenfte', {
+    herkunfts,
+    herkunftsSorted,
+    herkunftsFiltered,
+  })
 
   const storeRowsFiltered = herkunftsFiltered.filter(hierarchyFilter)
 
