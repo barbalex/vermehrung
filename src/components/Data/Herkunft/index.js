@@ -67,7 +67,13 @@ const Herkunft = ({
     db.collections.get('herkunft').query().observe(),
   )
   const herkunfts = useObservableState(herkunftCollection, [])
-  const hk = herkunfts ? herkunfts.find((hk) => hk.id === id) : undefined
+  /*const hk = herkunfts
+    ? db.collections.get('herkunft').findAndObserve(id)
+    : undefined*/
+  const hk = useObservableState(
+    db.collections.get('herkunft').findAndObserve(id),
+    null,
+  )
 
   const row = useMemo(
     () => (showFilter ? filter.herkunft : hk),

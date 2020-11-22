@@ -92,11 +92,6 @@ const Herkunft = ({
     }
   }, [nrCount, setError])
 
-  console.log('Herkunft, filter', {
-    filter,
-    _deleted: filter.herkunft._deleted,
-  })
-
   const showDeleted =
     showFilter || filter.herkunft._deleted !== false || row._deleted
 

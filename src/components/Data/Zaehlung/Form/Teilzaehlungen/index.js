@@ -9,11 +9,15 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { useObservableState, useObservable } from 'observable-hooks'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import teilzaehlungSort from '../../../../../utils/teilzaehlungSort'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -48,6 +52,24 @@ const Teilzaehlungen = ({ zaehlungId }) => {
   const hierarchyFilter = (r) => r.zaehlung_id === zaehlungId
 
   const storeRowsFiltered = teilzaehlungsSorted.filter(hierarchyFilter)
+
+  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
+  const db = useDatabase()
+  // useObservable reduces recomputation
+  const teilzaehlungCollection = useObservable(() =>
+    db.collections
+      .get('teilzaehlung')
+      .query(Q.where('zaehlung_id', zaehlungId))
+      .observe(),
+  )
+  const teilzaehlungs = useObservableState(teilzaehlungCollection, []).sort(
+    teilzaehlungSort,
+  )
+  console.log('Teilzaehlungen', {
+    storeRowsFiltered,
+    teilzaehlungs,
+    zaehlungId,
+  })
 
   const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const { tk } = kulturOption
