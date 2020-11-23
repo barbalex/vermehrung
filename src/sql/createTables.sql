@@ -9,8 +9,12 @@ create table user_role (
   label text default null,
   sort integer,
   comment text,
-  changed timestamp default now()
+  changed timestamp default now(),
+  _rev_at decimal default extract(epoch from now())
 );
+alter table user_role add column _rev_at decimal default extract(epoch from now());
+update user_role set _rev_at = extract(epoch from changed);
+
 create index on user_role using btree (id);
 create index on user_role using btree (name);
 create index on user_role using btree (sort);
@@ -44,12 +48,16 @@ create table person (
   info boolean default false,
   aktiv boolean default true,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table person add column _rev_at decimal default extract(epoch from now());
+update person set _rev_at = extract(epoch from changed);
+
 create index on person using btree (id);
 create index on person using btree (name);
 create index on person using btree (vorname);
@@ -85,11 +93,15 @@ create table person_rev (
   info boolean default false,
   aktiv boolean default true,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table person_rev add column _rev_at decimal default extract(epoch from now());
+update person_rev set _rev_at = extract(epoch from changed);
+
 create index on person_rev using btree (id);
 create index on person_rev using btree (person_id);
 create index on person_rev using btree (_rev);
@@ -105,8 +117,12 @@ create table person_file (
   file_mime_type text default null,
   name text default null,
   beschreibung text default null,
-  changed timestamp default now()
+  changed timestamp default now(),
+  _rev_at decimal default extract(epoch from now())
 );
+alter table person_file add column _rev_at decimal default extract(epoch from now());
+update person_file set _rev_at = extract(epoch from changed);
+
 create index on person_file using btree (id);
 create index on person_file using btree (person_id);
 create index on person_file using btree (file_id);
@@ -120,12 +136,16 @@ create table art (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table art add column _rev_at decimal default extract(epoch from now());
+update art set _rev_at = extract(epoch from changed);
+
 create index on art using btree (id);
 create index on art using btree (ae_id);
 create index on art using btree (_deleted);
@@ -139,11 +159,15 @@ create table art_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table art_rev add column _rev_at decimal default extract(epoch from now());
+update art_rev set _rev_at = extract(epoch from changed);
+
 create index on art_rev using btree (id);
 create index on art_rev using btree (art_id);
 create index on art_rev using btree (_rev);
