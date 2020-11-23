@@ -14,6 +14,7 @@ create table user_role (
 );
 alter table user_role add column _rev_at decimal default extract(epoch from now());
 update user_role set _rev_at = extract(epoch from changed);
+create index on user_role using btree (_rev_at);
 
 create index on user_role using btree (id);
 create index on user_role using btree (name);
@@ -57,6 +58,7 @@ create table person (
 );
 alter table person add column _rev_at decimal default extract(epoch from now());
 update person set _rev_at = extract(epoch from changed);
+create index on person using btree (_rev_at);
 
 create index on person using btree (id);
 create index on person using btree (name);
@@ -101,6 +103,7 @@ create table person_rev (
 );
 alter table person_rev add column _rev_at decimal default extract(epoch from now());
 update person_rev set _rev_at = extract(epoch from changed);
+create index on person_rev using btree (_rev_at);
 
 create index on person_rev using btree (id);
 create index on person_rev using btree (person_id);
@@ -122,6 +125,7 @@ create table person_file (
 );
 alter table person_file add column _rev_at decimal default extract(epoch from now());
 update person_file set _rev_at = extract(epoch from changed);
+create index on person_file using btree (_rev_at);
 
 create index on person_file using btree (id);
 create index on person_file using btree (person_id);
@@ -145,6 +149,7 @@ create table art (
 );
 alter table art add column _rev_at decimal default extract(epoch from now());
 update art set _rev_at = extract(epoch from changed);
+create index on art using btree (_rev_at);
 
 create index on art using btree (id);
 create index on art using btree (ae_id);
@@ -167,6 +172,7 @@ create table art_rev (
 );
 alter table art_rev add column _rev_at decimal default extract(epoch from now());
 update art_rev set _rev_at = extract(epoch from changed);
+create index on art_rev using btree (_rev_at);
 
 create index on art_rev using btree (id);
 create index on art_rev using btree (art_id);
@@ -185,12 +191,17 @@ create table art_qk (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table art_qk add column _rev_at decimal default extract(epoch from now());
+update art_qk set _rev_at = extract(epoch from changed);
+create index on art_qk using btree (_rev_at);
+
 create index on art_qk using btree (name);
 create index on art_qk using btree (titel);
 create index on art_qk using btree (sort);
@@ -209,11 +220,16 @@ create table art_qk_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table art_qk_rev add column _rev_at decimal default extract(epoch from now());
+update art_qk_rev set _rev_at = extract(epoch from changed);
+create index on art_qk_rev using btree (_rev_at);
+
 create index on art_qk_rev using btree (id);
 create index on art_qk_rev using btree (_rev);
 create index on art_qk_rev using btree (_parent_rev);
@@ -229,6 +245,7 @@ create table art_qk_choosen (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -236,6 +253,10 @@ create table art_qk_choosen (
   _conflicts text[] default null
   unique(art_id, qk_name)
 );
+alter table art_qk_choosen add column _rev_at decimal default extract(epoch from now());
+update art_qk_choosen set _rev_at = extract(epoch from changed);
+create index on art_qk_choosen using btree (_rev_at);
+
 create index on art_qk_choosen using btree (id);
 create index on art_qk_choosen using btree (art_id);
 create index on art_qk_choosen using btree (qk_name);
@@ -258,11 +279,16 @@ create table art_qk_choosen_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table art_qk_choosen_rev add column _rev_at decimal default extract(epoch from now());
+update art_qk_choosen_rev set _rev_at = extract(epoch from changed);
+create index on art_qk_choosen_rev using btree (_rev_at);
+
 create index on art_qk_choosen_rev using btree (id);
 create index on art_qk_choosen_rev using btree (_rev);
 create index on art_qk_choosen_rev using btree (_parent_rev);
@@ -277,8 +303,13 @@ create table art_file (
   file_mime_type text default null,
   name text default null,
   beschreibung text default null,
-  changed timestamp default now()
+  changed timestamp default now(),
+  _rev_at decimal default extract(epoch from now())
 );
+alter table art_file add column _rev_at decimal default extract(epoch from now());
+update art_file set _rev_at = extract(epoch from changed);
+create index on art_file using btree (_rev_at);
+
 create index on art_file using btree (id);
 create index on art_file using btree (art_id);
 create index on art_file using btree (file_id);
@@ -302,12 +333,17 @@ create table herkunft (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table herkunft add column _rev_at decimal default extract(epoch from now());
+update herkunft set _rev_at = extract(epoch from changed);
+create index on herkunft using btree (_rev_at);
+
 create index on herkunft using btree (id);
 create index on herkunft using btree (nr);
 create index on herkunft using btree (gemeinde);
@@ -329,11 +365,16 @@ create table herkunft_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table herkunft_rev add column _rev_at decimal default extract(epoch from now());
+update herkunft_rev set _rev_at = extract(epoch from changed);
+create index on herkunft_rev using btree (_rev_at);
+
 create index on herkunft_rev using btree (id);
 create index on herkunft_rev using btree (herkunft_id);
 create index on herkunft_rev using btree (_rev);
@@ -349,8 +390,13 @@ create table herkunft_file (
   file_mime_type text default null,
   name text default null,
   beschreibung text default null,
-  changed timestamp default now()
+  changed timestamp default now(),
+  _rev_at decimal default extract(epoch from now())
 );
+alter table herkunft_file add column _rev_at decimal default extract(epoch from now());
+update herkunft_file set _rev_at = extract(epoch from changed);
+create index on herkunft_file using btree (_rev_at);
+
 create index on herkunft_file using btree (id);
 create index on herkunft_file using btree (herkunft_id);
 create index on herkunft_file using btree (file_id);
@@ -379,12 +425,17 @@ create table sammlung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table sammlung add column _rev_at decimal default extract(epoch from now());
+update sammlung set _rev_at = extract(epoch from changed);
+create index on sammlung using btree (_rev_at);
+
 create index on sammlung using btree (id);
 create index on sammlung using btree (art_id);
 create index on sammlung using btree (person_id);
