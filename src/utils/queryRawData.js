@@ -188,16 +188,16 @@ const queryRawData = async ({ store }) => {
   }
   console.log('queryRawData', { data, lastUpdatedAt, changed })
   store.setLastUpdatedAt(now)
-  tables
-    .map((t) => t.name)
-    .forEach((table) => {
-      console.log('queryRawData', {
-        table,
-        dataTable: data[table],
-        dataTableLengthExists: !!data[table].length,
-      })
-      !!data[table].length && updateWmFromData({ data: data[table], table, db })
+  const tableNames = tables.map((t) => t.name)
+  for (const table of tableNames) {
+    console.log('queryRawData', {
+      table,
+      dataTable: data[table],
+      dataTableLengthExists: !!data[table].length,
     })
+    !!data[table].length &&
+      (await updateWmFromData({ data: data[table], table, db }))
+  }
   setInitialDataQueried(true)
   // TODO:
   // remove data with _deleted flag?

@@ -1,5 +1,4 @@
 import { Q } from '@nozbe/watermelondb'
-import isEqual from 'lodash/isEqual'
 
 const stripTypename = (object) => {
   // eslint-disable-next-line no-unused-vars
@@ -37,21 +36,7 @@ const updateWm = async ({ data, table, db }) => {
       missingIds.includes(d.id),
     )
     // only if remote changed after local
-    const objectsToUpdate = objectsOfIncoming.filter((o) => {
-      const dat = stripTypename(data.find((d) => d.id === o.id))
-      //if (!dat?.changed) return true
-      //return o.changed < dat.changed
-      return !Object.entries(dat).every(([key, value]) =>
-        isEqual(value, o[key]),
-      )
-    })
-    console.log('updateWmFromData:', {
-      data: data.length,
-      table,
-      toUpdate: objectsToUpdate.length,
-      toCreate: missingIds.length,
-      objectsToUpdate,
-    })
+    const objectsToUpdate = objectsOfIncoming
     if (objectsToUpdate.length || dataToCreateObjectsFrom.length) {
       await db.batch(
         ...objectsToUpdate.map((object) => {
@@ -61,9 +46,7 @@ const updateWm = async ({ data, table, db }) => {
             Object.keys(thisObjectsData)
               .filter((key) => !['id', '__typename'].includes(key))
               .forEach((key) => {
-                if (!isEqual(ob[key], thisObjectsData[key])) {
-                  ob[key] = thisObjectsData[key]
-                }
+                ob[key] = thisObjectsData[key]
               })
           })
         }),

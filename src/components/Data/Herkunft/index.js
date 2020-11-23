@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState, useObservable } from 'observable-hooks'
+import { useObservableState } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -62,24 +62,16 @@ const Herkunft = ({
 
   // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
   const db = useDatabase()
-  // useObservable reduces recomputation
-  const herkunftCollection = useObservable(() =>
-    db.collections.get('herkunft').query().observe(),
-  )
-  const herkunfts = useObservableState(herkunftCollection, [])
-  /*const hk = herkunfts
-    ? db.collections.get('herkunft').findAndObserve(id)
-    : undefined*/
-  const hk = useObservableState(
+  const herkunft = useObservableState(
     db.collections.get('herkunft').findAndObserve(id),
     null,
   )
 
   const row = useMemo(
-    () => (showFilter ? filter.herkunft : hk),
+    () => (showFilter ? filter.herkunft : herkunft),
     // need herkunfts.size for when row arrives after first login
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.herkunft, showFilter, hk, herkunfts.length],
+    [filter.herkunft, showFilter, herkunft],
   )
   console.log('Herkunft, row:', row)
 

@@ -35,8 +35,6 @@ import {
 import getAuthToken from './getAuthToken'
 import removeSurplusNotRevModels from './removeSurplusNotRevModels'
 import checkForOnlineError from './checkForOnlineError'
-import updateWmFromData from './updateWmFromData'
-import { tables } from '../dbSchema/schema'
 
 const allDataQuery = gql`
   subscription AllDataQueryForTreeContainer($changed: timestamp) {
