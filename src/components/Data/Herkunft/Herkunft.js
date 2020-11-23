@@ -70,8 +70,6 @@ const Herkunft = ({ filter: showFilter, id, row: rowPassed }) => {
   const [showHistory, setShowHistory] = useState(null)
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
-  console.log('Herkunft', { showFilter, id, row })
-
   if (!row) return <Spinner />
   if (!showFilter && filter.show) return null
 

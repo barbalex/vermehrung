@@ -73,7 +73,7 @@ export class Herkunft extends Model {
     newObject.id = uuidv1()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
+    newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
     const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet

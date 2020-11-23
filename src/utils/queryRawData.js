@@ -173,7 +173,7 @@ const queryRawData = async ({ store }) => {
   let data
   const changed = DateTime.fromMillis(0).toSQL()
   //console.log('queryRawData', { changed, lastUpdatedAt })
-  const now = Date.now()
+  const now = new Date().toISOString()
   try {
     data = await rawQglClient.request(allDataQuery, { changed })
   } catch (error) {

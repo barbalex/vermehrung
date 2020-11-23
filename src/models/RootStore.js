@@ -58,7 +58,7 @@ export const RootStore = RootStoreBase.props({
   singleColumnView: types.optional(types.boolean, false),
   showTreeInSingleColumnView: types.optional(types.boolean, false),
   online: types.optional(types.boolean, true),
-  lastUpdatedAt: types.optional(types.number, 0),
+  lastUpdatedAt: types.optional(types.string, '1970-01-01T00:00:00.000'),
   /**
    * This is a queue of all queries
    * When online they they are immediatly executed by the reaction
@@ -72,7 +72,7 @@ export const RootStore = RootStoreBase.props({
   // this is _after_ user is set so need another variable
   gettingAuthUser: types.optional(types.boolean, true),
   authorizing: types.optional(types.boolean, true),
-  initialDataQueried: types.optional(types.boolean, true),
+  initialDataQueried: types.optional(types.boolean, false),
   errors: types.optional(Errors, defaultErrors),
   diffConflict: types.optional(types.boolean, true),
 })
@@ -1608,7 +1608,7 @@ export const RootStore = RootStoreBase.props({
         self.docFilter = val
       },
       flushData() {
-        self.lastUpdatedAt = 0
+        self.lastUpdatedAt = '1970-01-01T00:00:00.000'
         self.ae_arts.clear()
         self.arts.clear()
         self.art_files.clear()
