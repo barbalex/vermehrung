@@ -10,6 +10,7 @@ import {
 import { Q } from '@nozbe/watermelondb'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import isEqual from 'lodash/isEqual'
 
 import toStringIfPossible from './utils/toStringIfPossible'
 import toPgArray from './utils/toPgArray'
@@ -116,8 +117,13 @@ export class Herkunft extends Model {
     newObjectForStore.lv95_y = this.lv95_y
     delete newObjectForStore.herkunft_id
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
-    console.log('Herkunft model', { newObject, newObjectForStore })
+    await this.update((row) => {
+      Object.keys(newObjectForStore).forEach((key) => {
+        if (!isEqual(row[key], newObjectForStore[key])) {
+          row[key] = newObjectForStore[key]
+        }
+      })
+    })
     // NOOOOO: this leads to conflicts due to multiple identical id's!
     //if (field === '_deleted' && value) await this.markAsDeleted()
     if (field === '_deleted' && value) {

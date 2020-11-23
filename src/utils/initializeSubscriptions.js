@@ -9,7 +9,7 @@ import { teilkulturModelPrimitives } from '../models/teilkulturModel.base'
 import { teilzaehlungModelPrimitives } from '../models/teilzaehlungModel.base'
 import { zaehlungModelPrimitives } from '../models/zaehlungModel.base'
 
-import updateWmFromData from './updateWmFromData'
+import updateWmFromData from './updateWmFromDataAll'
 
 const onError = ({ error }) => {
   console.log('subscribeHerkunft, onError:', error)

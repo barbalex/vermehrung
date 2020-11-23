@@ -73,7 +73,7 @@ const Herkunft = ({
       const previousValue = row._raw[field]
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value, store })
+      await row.edit({ field, value, store })
     },
     [filter, row, showFilter, store],
   )
