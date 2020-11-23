@@ -87,12 +87,12 @@ const initiateApp = async () => {
   store.setRawQglClient(rawGqlClient)
 
   if (typeof window === 'undefined') return store
-
   const module = await import('./recreatePersistedStore')
   const recreatePersistedStore = module.default
   const unregisterAuthObserver = await recreatePersistedStore({ store })
+  store.setLastUpdatedAt(new Date().toISOString())
   const unregister = () => {
-    store.setLastUpdatedAt(Date.now())
+    store.setLastUpdatedAt(new Date().toISOString())
     unregisterAuthObserver()
   }
 

@@ -15,7 +15,8 @@ const parseComplexFields = (object) =>
     _revisions: JSON.stringify(object._revisions),
   })
 
-const updateWm = async ({ data, table, db }) => {
+const updateWm = async ({ data, table, store }) => {
+  const { db, initialDataQueried, setInitialDataQueried, lastUpdatedAt } = store
   console.log('updateWmFromData:', {
     data,
     table,

@@ -16,17 +16,28 @@ const parseComplexFields = (object) =>
     _revisions: JSON.stringify(object._revisions),
   })
 
-const updateWm = async ({ data, table, db }) => {
+const updateWmFromData = ({ data, table, store }) => {
+  const { db, initialDataQueried, setInitialDataQueried, lastUpdatedAt } = store
   console.log('updateWmFromData:', {
     data,
     table,
-    db,
+    lastUpdatedAt,
   })
   const collection = db.collections.get(table)
 
   const incomingIds = data.map((d) => d.id)
 
-  await db.action(async () => {
+  // TODO: filter by lastUpdatedAt
+  db.action(async () => {
+    const objectsOfToUpdate = await db.collections
+      .get(table)
+      .query(
+        Q.and(
+          Q.where('id', Q.oneOf(incomingIds)),
+          Q.where('changed', Q.gt(lastUpdatedAt)),
+        ),
+      )
+      .fetch()
     const objectsOfIncoming = await db.collections
       .get(table)
       .query(Q.where('id', Q.oneOf(incomingIds)))
@@ -37,7 +48,7 @@ const updateWm = async ({ data, table, db }) => {
       missingIds.includes(d.id),
     )
     // only if remote changed after local
-    const objectsToUpdate = objectsOfIncoming.filter((o) => {
+    const objectsToUpdate = objectsOfToUpdate.filter((o) => {
       const dat = stripTypename(data.find((d) => d.id === o.id))
       //if (!dat?.changed) return true
       //return o.changed < dat.changed
@@ -51,6 +62,9 @@ const updateWm = async ({ data, table, db }) => {
       toUpdate: objectsToUpdate.length,
       toCreate: missingIds.length,
       objectsToUpdate,
+      objectsOfToUpdate,
+      objectsOfToUpdateLength: objectsOfToUpdate.length,
+      lastUpdatedAt,
     })
     if (objectsToUpdate.length || dataToCreateObjectsFrom.length) {
       await db.batch(
@@ -73,6 +87,7 @@ const updateWm = async ({ data, table, db }) => {
       )
     }
   })
+  !initialDataQueried && setInitialDataQueried(true)
 }
 
-export default updateWm
+export default updateWmFromData

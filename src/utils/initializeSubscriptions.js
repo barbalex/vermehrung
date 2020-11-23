@@ -9,7 +9,7 @@ import { teilkulturModelPrimitives } from '../models/teilkulturModel.base'
 import { teilzaehlungModelPrimitives } from '../models/teilzaehlungModel.base'
 import { zaehlungModelPrimitives } from '../models/zaehlungModel.base'
 
-import updateWmFromData from './updateWmFromDataAll'
+import updateWmFromData from './updateWmFromData'
 
 const onError = ({ error }) => {
   console.log('subscribeHerkunft, onError:', error)
@@ -20,13 +20,13 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.ae_art = store.subscribeAe_art(
     undefined,
     ae_artModelPrimitives.toString(),
-    (data) => updateWmFromData({ data, table: 'ae_art', db: store.db }),
+    (data) => updateWmFromData({ data, table: 'ae_art', store }),
     (error) => onError({ error }),
   )
   unsubscribe.art = store.subscribeArt(
     undefined,
     artModelPrimitives.toString(),
-    (data) => updateWmFromData({ data, table: 'art', db: store.db }),
+    (data) => updateWmFromData({ data, table: 'art', store }),
     (error) => onError({ error }),
   )
   unsubscribe.art_file = store.subscribeArt_file()
@@ -37,7 +37,7 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.garten = store.subscribeGarten(
     undefined,
     gartenModelPrimitives.toString(),
-    (data) => updateWmFromData({ data, table: 'garten', db: store.db }),
+    (data) => updateWmFromData({ data, table: 'garten', store }),
     (error) => onError({ error }),
   )
   unsubscribe.garten_file = store.subscribeGarten_file()
@@ -45,14 +45,14 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.herkunft = store.subscribeHerkunft(
     undefined,
     herkunftModelPrimitives.toString(),
-    (data) => updateWmFromData({ data, table: 'herkunft', db: store.db }),
+    (data) => updateWmFromData({ data, table: 'herkunft', store }),
     (error) => onError({ error }),
   )
   unsubscribe.herkunft_file = store.subscribeHerkunft_file()
   unsubscribe.kultur = store.subscribeKultur(
     undefined,
     kulturModelPrimitives.toString(),
-    (data) => updateWmFromData({ data, table: 'kultur', db: store.db }),
+    (data) => updateWmFromData({ data, table: 'kultur', store }),
     (error) => onError({ error }),
   )
   unsubscribe.kultur_file = store.subscribeKultur_file()
@@ -62,7 +62,7 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.lieferung = store.subscribeLieferung(
     undefined,
     lieferungModelPrimitives.toString(),
-    (data) => updateWmFromData({ data, table: 'lieferung', db: store.db }),
+    (data) => updateWmFromData({ data, table: 'lieferung', store }),
     (error) => onError({ error }),
   )
   unsubscribe.lieferung_file = store.subscribeLieferung_file()
@@ -73,27 +73,27 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.sammlung = store.subscribeSammlung(
     undefined,
     sammlungModelPrimitives.toString(),
-    (data) => updateWmFromData({ data, table: 'sammlung', db: store.db }),
+    (data) => updateWmFromData({ data, table: 'sammlung', store }),
     (error) => onError({ error }),
   )
   unsubscribe.sammlung_file = store.subscribeSammlung_file()
   unsubscribe.teilkultur = store.subscribeTeilkultur(
     undefined,
     teilkulturModelPrimitives.toString(),
-    (data) => updateWmFromData({ data, table: 'teilkultur', db: store.db }),
+    (data) => updateWmFromData({ data, table: 'teilkultur', store }),
     (error) => onError({ error }),
   )
   unsubscribe.teilzaehlung = store.subscribeTeilzaehlung(
     undefined,
     teilzaehlungModelPrimitives.toString(),
-    (data) => updateWmFromData({ data, table: 'teilzaehlung', db: store.db }),
+    (data) => updateWmFromData({ data, table: 'teilzaehlung', store }),
     (error) => onError({ error }),
   )
   unsubscribe.user_role = store.subscribeUser_role()
   unsubscribe.zaehlung = store.subscribeZaehlung(
     undefined,
     zaehlungModelPrimitives.toString(),
-    (data) => updateWmFromData({ data, table: 'zaehlung', db: store.db }),
+    (data) => updateWmFromData({ data, table: 'zaehlung', store }),
     (error) => onError({ error }),
   )
   return unsubscribe

@@ -70,7 +70,7 @@ const Vermehrung = ({ location }) => {
   const {
     activeForm,
     gettingAuthUser,
-    initialDataQueried,
+    //initialDataQueried,
     isPrint,
     showQueuedQueries,
     singleColumnView,
@@ -81,7 +81,6 @@ const Vermehrung = ({ location }) => {
   const [isIOS, setIsIOS] = useState(false)
   useEffect(() => {
     setIsIOS(isThisIOS())
-    //setIsIOS(true)
   }, [])
 
   useEffect(() => {
@@ -125,8 +124,12 @@ const Vermehrung = ({ location }) => {
 
   useEffect(() => {
     let unsubscribe
-    if (existsUser && initialDataQueried) {
+    if (existsUser) {
       //console.log('Vermehrung initializing subsctiptions')
+      // TODO:
+      // if no data exists yet
+      // set initial data queried false
+      // then true on first data event
       unsubscribe = initializeSubscriptions({ store, db })
     }
     return function cleanup() {
@@ -135,7 +138,7 @@ const Vermehrung = ({ location }) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [existsUser, initialDataQueried])
+  }, [existsUser])
 
   if (gettingAuthUser || isIOS) {
     return (
