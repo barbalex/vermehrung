@@ -2,12 +2,9 @@ import React from 'react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { useObservableState } from 'observable-hooks'
 
-import Herkunft from './index'
+import Herkunft from './Herkunft'
 
-const HerkunftDataProvider = ({
-  id = '99999999-9999-9999-9999-999999999999',
-  filter,
-}) => {
+const HerkunftDataProvider = ({ id, filter }) => {
   // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
   const db = useDatabase()
   const herkunft = useObservableState(
@@ -15,7 +12,7 @@ const HerkunftDataProvider = ({
     null,
   )
 
-  return <Herkunft id={id} filter={filter} herkunft={herkunft} />
+  return <Herkunft id={id} filter={filter} row={herkunft} />
 }
 
 export default HerkunftDataProvider
