@@ -524,12 +524,17 @@ create table garten (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table garten add column _rev_at decimal default extract(epoch from now());
+update garten set _rev_at = extract(epoch from changed);
+create index on garten using btree (_rev_at);
+
 create index on garten using btree (id);
 create index on garten using btree (name);
 create index on garten using btree (person_id);
@@ -555,11 +560,16 @@ create table garten_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table garten_rev add column _rev_at decimal default extract(epoch from now());
+update garten_rev set _rev_at = extract(epoch from changed);
+create index on garten_rev using btree (_rev_at);
+
 create index on garten_rev using btree (rev_id);
 create index on garten_rev using btree (id);
 create index on garten_rev using btree (_rev);
@@ -575,8 +585,14 @@ create table garten_file (
   file_mime_type text default null,
   name text default null,
   beschreibung text default null,
-  changed timestamp default now()
+  changed timestamp default now(),
+  _rev_at decimal default extract(epoch from now())
 );
+);
+alter table garten_file add column _rev_at decimal default extract(epoch from now());
+update garten_file set _rev_at = extract(epoch from changed);
+create index on garten_file using btree (_rev_at);
+
 create index on garten_file using btree (id);
 create index on garten_file using btree (garten_id);
 create index on garten_file using btree (file_id);
