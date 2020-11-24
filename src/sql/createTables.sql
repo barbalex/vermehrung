@@ -10,7 +10,7 @@ create table user_role (
   sort integer,
   comment text,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on user_role using btree (id);
 create index on user_role using btree (name);
@@ -45,7 +45,7 @@ create table person (
   info boolean default false,
   aktiv boolean default true,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -87,7 +87,7 @@ create table person_rev (
   info boolean default false,
   aktiv boolean default true,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -110,7 +110,7 @@ create table person_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on person_file using btree (id);
 create index on person_file using btree (person_id);
@@ -125,7 +125,7 @@ create table art (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -145,7 +145,7 @@ create table art_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -169,7 +169,7 @@ create table art_qk (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -194,7 +194,7 @@ create table art_qk_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -216,7 +216,7 @@ create table art_qk_choosen (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -246,7 +246,7 @@ create table art_qk_choosen_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -268,7 +268,7 @@ create table art_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on art_file using btree (id);
 create index on art_file using btree (art_id);
@@ -293,7 +293,7 @@ create table herkunft (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -321,7 +321,7 @@ create table herkunft_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -344,7 +344,7 @@ create table herkunft_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on herkunft_file using btree (id);
 create index on herkunft_file using btree (herkunft_id);
@@ -374,7 +374,7 @@ create table sammlung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -412,7 +412,7 @@ create table sammlung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -435,7 +435,7 @@ create table sammlung_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on sammlung_file using btree (id);
 create index on sammlung_file using btree (sammlung_id);
@@ -462,7 +462,7 @@ create table garten (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -494,7 +494,7 @@ create table garten_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -517,7 +517,7 @@ create table garten_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on garten_file using btree (id);
 create index on garten_file using btree (garten_id);
@@ -539,7 +539,7 @@ create table kultur (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -576,7 +576,7 @@ create table kultur_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -600,7 +600,7 @@ create table kultur_qk (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -625,7 +625,7 @@ create table kultur_qk_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -648,7 +648,7 @@ create table kultur_qk_choosen (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -677,7 +677,7 @@ create table kultur_qk_choosen_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -699,7 +699,7 @@ create table kultur_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on kultur_file using btree (id);
 create index on kultur_file using btree (kultur_id);
@@ -719,7 +719,7 @@ create table teilkultur (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -745,7 +745,7 @@ create table teilkultur_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -771,7 +771,7 @@ create table event (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -801,7 +801,7 @@ create table event_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -825,7 +825,7 @@ create table zaehlung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -850,7 +850,7 @@ create table zaehlung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -879,7 +879,7 @@ create table teilzaehlung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -913,7 +913,7 @@ create table teilzaehlung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -945,7 +945,7 @@ create table kultur_option (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -976,7 +976,7 @@ create table kultur_option_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1019,7 +1019,7 @@ create table person_option (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1066,7 +1066,7 @@ create table person_option_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1103,7 +1103,7 @@ create table lieferung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1150,7 +1150,7 @@ create table lieferung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1184,7 +1184,7 @@ create table sammel_lieferung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1218,7 +1218,7 @@ create table sammel_lieferung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1241,7 +1241,7 @@ create table lieferung_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on lieferung_file using btree (id);
 create index on lieferung_file using btree (lieferung_id);
@@ -1257,7 +1257,7 @@ create table av (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1280,7 +1280,7 @@ create table av_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1301,7 +1301,7 @@ create table gv (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1324,7 +1324,7 @@ create table gv_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,

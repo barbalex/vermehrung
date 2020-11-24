@@ -38,6 +38,7 @@ export class Herkunft extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
+  @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -115,6 +116,8 @@ export class Herkunft extends Model {
     newObjectForStore.wgs84_long = this.wgs84_long
     newObjectForStore.lv95_x = this.lv95_x
     newObjectForStore.lv95_y = this.lv95_y
+    // give past _rev_at to ensure server overwrites this
+    newObjectForStore._rev_at = Date.now() / 1000
     delete newObjectForStore.herkunft_id
     // optimistically update store
     await this.update((row) => {
@@ -165,6 +168,7 @@ export class Sammlung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
+  @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -282,6 +286,7 @@ export class Lieferung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
+  @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -384,6 +389,7 @@ export class Art extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
+  @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -488,6 +494,7 @@ export class Garten extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
+  @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -593,6 +600,7 @@ export class Kultur extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
+  @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -714,6 +722,7 @@ export class Teilkultur extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
+  @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -801,6 +810,7 @@ export class Zaehlung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
+  @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -897,6 +907,7 @@ export class Teilzaehlung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
+  @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth

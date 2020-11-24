@@ -58,7 +58,35 @@ export const RootStore = RootStoreBase.props({
   singleColumnView: types.optional(types.boolean, false),
   showTreeInSingleColumnView: types.optional(types.boolean, false),
   online: types.optional(types.boolean, true),
-  lastUpdatedAt: types.optional(types.number, 0),
+  lastUpdated_ae_art: types.optional(types.number, 0),
+  lastUpdated_art: types.optional(types.number, 0),
+  lastUpdated_art_file: types.optional(types.number, 0),
+  lastUpdated_art_qk: types.optional(types.number, 0),
+  lastUpdated_art_qk_choosen: types.optional(types.number, 0),
+  lastUpdated_av: types.optional(types.number, 0),
+  lastUpdated_event: types.optional(types.number, 0),
+  lastUpdated_garten: types.optional(types.number, 0),
+  lastUpdated_garten_file: types.optional(types.number, 0),
+  lastUpdated_gv: types.optional(types.number, 0),
+  lastUpdated_herkunft: types.optional(types.number, 0),
+  lastUpdated_herkunft_file: types.optional(types.number, 0),
+  lastUpdated_kultur: types.optional(types.number, 0),
+  lastUpdated_kultur_file: types.optional(types.number, 0),
+  lastUpdated_kultur_option: types.optional(types.number, 0),
+  lastUpdated_kultur_qk: types.optional(types.number, 0),
+  lastUpdated_kultur_qk_choosen: types.optional(types.number, 0),
+  lastUpdated_lieferung: types.optional(types.number, 0),
+  lastUpdated_lieferung_file: types.optional(types.number, 0),
+  lastUpdated_person: types.optional(types.number, 0),
+  lastUpdated_person_file: types.optional(types.number, 0),
+  lastUpdated_person_option: types.optional(types.number, 0),
+  lastUpdated_sammel_lieferung: types.optional(types.number, 0),
+  lastUpdated_sammlung: types.optional(types.number, 0),
+  lastUpdated_sammlung_file: types.optional(types.number, 0),
+  lastUpdated_teilkultur: types.optional(types.number, 0),
+  lastUpdated_teilzaehlung: types.optional(types.number, 0),
+  lastUpdated_user_role: types.optional(types.number, 0),
+  lastUpdated_zaehlung: types.optional(types.number, 0),
   /**
    * This is a queue of all queries
    * When online they they are immediatly executed by the reaction
@@ -186,9 +214,20 @@ export const RootStore = RootStoreBase.props({
       setDb(val) {
         self.db = val
       },
-      setLastUpdatedAt(val) {
-        //console.log('store, setLastUpdatedAt:', val)
-        self.lastUpdatedAt = val
+      setLastUpdated({ table, val: valPassed }) {
+        // 1. enable not having to pass val
+        //    thus set standard value
+        // 2. substract some time to account for:
+        //    - server inserting winner
+        //    - live query fetching the data
+        //    too small value is bad (some data is never updated)
+        //    too large value not so (too much data is updated)
+        // 3. server sets seconds since 1.1.1970
+        //    Date.now is MILLIseconds since 1.1.1970
+        //    thus need to correct!
+        const standardVal = Date.now() / 1000 - 50
+        const val = valPassed ?? standardVal
+        self[`lastUpdated_${table}`] = val
       },
       setDiffConflict(val) {
         self.diffConflict = val
@@ -1608,7 +1647,35 @@ export const RootStore = RootStoreBase.props({
         self.docFilter = val
       },
       flushData() {
-        self.lastUpdatedAt = 0
+        self.lastUpdated_ae_art = 0
+        self.lastUpdated_art = 0
+        self.lastUpdated_art_file = 0
+        self.lastUpdated_art_qk = 0
+        self.lastUpdated_art_qk_choosen = 0
+        self.lastUpdated_av = 0
+        self.lastUpdated_event = 0
+        self.lastUpdated_garten = 0
+        self.lastUpdated_garten_file = 0
+        self.lastUpdated_gv = 0
+        self.lastUpdated_herkunft = 0
+        self.lastUpdated_herkunft_file = 0
+        self.lastUpdated_kultur = 0
+        self.lastUpdated_kultur_file = 0
+        self.lastUpdated_kultur_option = 0
+        self.lastUpdated_kultur_qk = 0
+        self.lastUpdated_kultur_qk_choosen = 0
+        self.lastUpdated_lieferung = 0
+        self.lastUpdated_lieferung_file = 0
+        self.lastUpdated_person = 0
+        self.lastUpdated_person_file = 0
+        self.lastUpdated_person_option = 0
+        self.lastUpdated_sammel_lieferung = 0
+        self.lastUpdated_sammlung = 0
+        self.lastUpdated_sammlung_file = 0
+        self.lastUpdated_teilkultur = 0
+        self.lastUpdated_teilzaehlung = 0
+        self.lastUpdated_user_role = 0
+        self.lastUpdated_zaehlung = 0
         self.ae_arts.clear()
         self.arts.clear()
         self.art_files.clear()
