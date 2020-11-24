@@ -876,12 +876,17 @@ create table event (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table event add column _rev_at decimal default extract(epoch from now());
+update event set _rev_at = extract(epoch from changed);
+create index on event using btree (_rev_at);
+
 create index on event using btree (id);
 create index on event using btree (kultur_id);
 create index on event using btree (teilkultur_id);
@@ -905,11 +910,16 @@ create table event_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table event_rev add column _rev_at decimal default extract(epoch from now());
+update event_rev set _rev_at = extract(epoch from changed);
+create index on event_rev using btree (_rev_at);
+
 create index on event_rev using btree (rev_id);
 create index on event_rev using btree (id);
 create index on event_rev using btree (_rev);
@@ -927,12 +937,17 @@ create table zaehlung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table zaehlung add column _rev_at decimal default extract(epoch from now());
+update zaehlung set _rev_at = extract(epoch from changed);
+create index on zaehlung using btree (_rev_at);
+
 create index on zaehlung using btree (id);
 create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
@@ -951,11 +966,16 @@ create table zaehlung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table zaehlung_rev add column _rev_at decimal default extract(epoch from now());
+update zaehlung_rev set _rev_at = extract(epoch from changed);
+create index on zaehlung_rev using btree (_rev_at);
+
 create index on zaehlung_rev using btree (rev_id);
 create index on zaehlung_rev using btree (id);
 create index on zaehlung_rev using btree (_rev);
@@ -978,12 +998,17 @@ create table teilzaehlung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table teilzaehlung add column _rev_at decimal default extract(epoch from now());
+update teilzaehlung set _rev_at = extract(epoch from changed);
+create index on teilzaehlung using btree (_rev_at);
+
 create index on teilzaehlung using btree (id);
 create index on teilzaehlung using btree (prognose_von_tz);
 create index on teilzaehlung using btree (zaehlung_id);
@@ -1011,11 +1036,16 @@ create table teilzaehlung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table teilzaehlung_rev add column _rev_at decimal default extract(epoch from now());
+update teilzaehlung_rev set _rev_at = extract(epoch from changed);
+create index on teilzaehlung_rev using btree (_rev_at);
+
 create index on teilzaehlung_rev using btree (rev_id);
 create index on teilzaehlung_rev using btree (id);
 create index on teilzaehlung_rev using btree (_rev);
