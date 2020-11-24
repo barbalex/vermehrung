@@ -68,7 +68,6 @@ const buildExceljsWorksheets = ({
   // 2. Get Zählungen
   const zaehlungs = zaehlungsSorted.filter((z) => z.kultur_id === kultur_id)
   const zaehlungen = zaehlungs.map((z) => {
-    //const tknodes = z?.teilzaehlungs_aggregate?.nodes ?? []
     const newZ = {
       id: z.id,
       kultur_id: z.kultur_id,
