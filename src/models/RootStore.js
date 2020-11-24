@@ -221,7 +221,7 @@ export const RootStore = RootStoreBase.props({
         //    - server inserting winner
         //    - live query fetching the data
         //    too small value is bad (some data is never updated)
-        //    too large value not so (too much data is updated)
+        //    too large value not so (too much data is checked for update)
         // 3. server sets seconds since 1.1.1970
         //    Date.now is MILLIseconds since 1.1.1970
         //    thus need to correct!
