@@ -12,14 +12,11 @@ create table user_role (
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
-alter table user_role add column _rev_at decimal default extract(epoch from now());
-update user_role set _rev_at = extract(epoch from changed);
-create index on user_role using btree (_rev_at);
-
 create index on user_role using btree (id);
 create index on user_role using btree (name);
 create index on user_role using btree (sort);
 create index on user_role using btree (changed);
+create index on user_role using btree (_rev_at);
 INSERT INTO user_role (name, sort, comment) VALUES
   ('gaertner', 1, 'liest und editiert Daten des eigenen Garten'),
   ('artverantwortlich', 2, 'liest und editiert Daten für bestimmte Arten'),
@@ -56,10 +53,6 @@ create table person (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table person add column _rev_at decimal default extract(epoch from now());
-update person set _rev_at = extract(epoch from changed);
-create index on person using btree (_rev_at);
-
 create index on person using btree (id);
 create index on person using btree (name);
 create index on person using btree (vorname);
@@ -69,6 +62,7 @@ create index on person using btree (kommerziell);
 create index on person using btree (info);
 create index on person using btree (_deleted);
 create index on person using btree (changed);
+create index on person using btree (_rev_at);
 
 drop table if exists person_rev cascade;
 create table person_rev (
@@ -101,16 +95,13 @@ create table person_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table person_rev add column _rev_at decimal default extract(epoch from now());
-update person_rev set _rev_at = extract(epoch from changed);
-create index on person_rev using btree (_rev_at);
-
 create index on person_rev using btree (id);
 create index on person_rev using btree (person_id);
 create index on person_rev using btree (_rev);
 create index on person_rev using btree (_parent_rev);
 create index on person_rev using btree (_depth);
 create index on person_rev using btree (_deleted);
+create index on person_rev using btree (_rev_at);
 
 drop table if exists person_file cascade;
 create table person_file (
@@ -123,15 +114,12 @@ create table person_file (
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
-alter table person_file add column _rev_at decimal default extract(epoch from now());
-update person_file set _rev_at = extract(epoch from changed);
-create index on person_file using btree (_rev_at);
-
 create index on person_file using btree (id);
 create index on person_file using btree (person_id);
 create index on person_file using btree (file_id);
 create index on person_file using btree (file_mime_type);
 create index on person_file using btree (changed);
+create index on person_file using btree (_rev_at);
 
 drop table if exists art cascade;
 create table art (
@@ -147,14 +135,11 @@ create table art (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table art add column _rev_at decimal default extract(epoch from now());
-update art set _rev_at = extract(epoch from changed);
-create index on art using btree (_rev_at);
-
 create index on art using btree (id);
 create index on art using btree (ae_id);
 create index on art using btree (_deleted);
 create index on art using btree (changed);
+create index on art using btree (_rev_at);
 
 drop table if exists art_rev cascade;
 create table art_rev (
@@ -170,16 +155,13 @@ create table art_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table art_rev add column _rev_at decimal default extract(epoch from now());
-update art_rev set _rev_at = extract(epoch from changed);
-create index on art_rev using btree (_rev_at);
-
 create index on art_rev using btree (id);
 create index on art_rev using btree (art_id);
 create index on art_rev using btree (_rev);
 create index on art_rev using btree (_parent_rev);
 create index on art_rev using btree (_depth);
 create index on art_rev using btree (_deleted);
+create index on art_rev using btree (_rev_at);
 
 drop table if exists art_qk cascade;
 create table art_qk (
@@ -198,15 +180,12 @@ create table art_qk (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table art_qk add column _rev_at decimal default extract(epoch from now());
-update art_qk set _rev_at = extract(epoch from changed);
-create index on art_qk using btree (_rev_at);
-
 create index on art_qk using btree (name);
 create index on art_qk using btree (titel);
 create index on art_qk using btree (sort);
 create index on art_qk using btree (_deleted);
 create index on art_qk using btree (changed);
+create index on art_qk using btree (_rev_at);
 comment on column art_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
 drop table if exists art_qk_rev cascade;
@@ -226,15 +205,12 @@ create table art_qk_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table art_qk_rev add column _rev_at decimal default extract(epoch from now());
-update art_qk_rev set _rev_at = extract(epoch from changed);
-create index on art_qk_rev using btree (_rev_at);
-
 create index on art_qk_rev using btree (id);
 create index on art_qk_rev using btree (_rev);
 create index on art_qk_rev using btree (_parent_rev);
 create index on art_qk_rev using btree (_depth);
 create index on art_qk_rev using btree (_deleted);
+create index on art_qk_rev using btree (_rev_at);
 
 drop table if exists art_qk_choosen cascade;
 create table art_qk_choosen (
@@ -253,16 +229,13 @@ create table art_qk_choosen (
   _conflicts text[] default null
   unique(art_id, qk_name)
 );
-alter table art_qk_choosen add column _rev_at decimal default extract(epoch from now());
-update art_qk_choosen set _rev_at = extract(epoch from changed);
-create index on art_qk_choosen using btree (_rev_at);
-
 create index on art_qk_choosen using btree (id);
 create index on art_qk_choosen using btree (art_id);
 create index on art_qk_choosen using btree (qk_name);
 create index on art_qk_choosen using btree (choosen);
 create index on art_qk_choosen using btree (_deleted);
 create index on art_qk_choosen using btree (changed);
+create index on art_qk_choosen using btree (_rev_at);
 
 insert into art_qk_choosen (art_id, qk_name)
 select art.id, art_qk.name
@@ -285,15 +258,12 @@ create table art_qk_choosen_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table art_qk_choosen_rev add column _rev_at decimal default extract(epoch from now());
-update art_qk_choosen_rev set _rev_at = extract(epoch from changed);
-create index on art_qk_choosen_rev using btree (_rev_at);
-
 create index on art_qk_choosen_rev using btree (id);
 create index on art_qk_choosen_rev using btree (_rev);
 create index on art_qk_choosen_rev using btree (_parent_rev);
 create index on art_qk_choosen_rev using btree (_depth);
 create index on art_qk_choosen_rev using btree (_deleted);
+create index on art_qk_choosen_rev using btree (_rev_at);
 
 drop table if exists art_file cascade;
 create table art_file (
@@ -306,15 +276,12 @@ create table art_file (
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
-alter table art_file add column _rev_at decimal default extract(epoch from now());
-update art_file set _rev_at = extract(epoch from changed);
-create index on art_file using btree (_rev_at);
-
 create index on art_file using btree (id);
 create index on art_file using btree (art_id);
 create index on art_file using btree (file_id);
 create index on art_file using btree (file_mime_type);
 create index on art_file using btree (changed);
+create index on art_file using btree (_rev_at);
 
 drop table if exists herkunft cascade;
 create table herkunft (
@@ -340,16 +307,13 @@ create table herkunft (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table herkunft add column _rev_at decimal default extract(epoch from now());
-update herkunft set _rev_at = extract(epoch from changed);
-create index on herkunft using btree (_rev_at);
-
 create index on herkunft using btree (id);
 create index on herkunft using btree (nr);
 create index on herkunft using btree (gemeinde);
 create index on herkunft using btree (lokalname);
 create index on herkunft using btree (_deleted);
 create index on herkunft using btree (changed);
+create index on herkunft using btree (_rev_at);
 
 drop table if exists herkunft_rev cascade;
 create table herkunft_rev (
@@ -371,16 +335,13 @@ create table herkunft_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table herkunft_rev add column _rev_at decimal default extract(epoch from now());
-update herkunft_rev set _rev_at = extract(epoch from changed);
-create index on herkunft_rev using btree (_rev_at);
-
 create index on herkunft_rev using btree (id);
 create index on herkunft_rev using btree (herkunft_id);
 create index on herkunft_rev using btree (_rev);
 create index on herkunft_rev using btree (_parent_rev);
 create index on herkunft_rev using btree (_depth);
 create index on herkunft_rev using btree (_deleted);
+create index on herkunft_rev using btree (_rev_at);
 
 drop table if exists herkunft_file cascade;
 create table herkunft_file (
@@ -393,15 +354,12 @@ create table herkunft_file (
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
-alter table herkunft_file add column _rev_at decimal default extract(epoch from now());
-update herkunft_file set _rev_at = extract(epoch from changed);
-create index on herkunft_file using btree (_rev_at);
-
 create index on herkunft_file using btree (id);
 create index on herkunft_file using btree (herkunft_id);
 create index on herkunft_file using btree (file_id);
 create index on herkunft_file using btree (file_mime_type);
 create index on herkunft_file using btree (changed);
+create index on herkunft_file using btree (_rev_at);
 
 drop table if exists sammlung cascade;
 create table sammlung (
@@ -432,10 +390,6 @@ create table sammlung (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table sammlung add column _rev_at decimal default extract(epoch from now());
-update sammlung set _rev_at = extract(epoch from changed);
-create index on sammlung using btree (_rev_at);
-
 create index on sammlung using btree (id);
 create index on sammlung using btree (art_id);
 create index on sammlung using btree (person_id);
@@ -447,6 +401,7 @@ create index on sammlung using btree (gramm_samen);
 create index on sammlung using btree (geplant);
 create index on sammlung using btree (_deleted);
 create index on sammlung using btree (changed);
+create index on sammlung using btree (_rev_at);
 
 drop table if exists sammlung_rev cascade;
 create table sammlung_rev (
@@ -473,16 +428,13 @@ create table sammlung_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table sammlung_rev add column _rev_at decimal default extract(epoch from now());
-update sammlung_rev set _rev_at = extract(epoch from changed);
-create index on sammlung_rev using btree (_rev_at);
-
 create index on sammlung_rev using btree (rev_id);
 create index on sammlung_rev using btree (id);
 create index on sammlung_rev using btree (_rev);
 create index on sammlung_rev using btree (_parent_rev);
 create index on sammlung_rev using btree (_depth);
 create index on sammlung_rev using btree (_deleted);
+create index on sammlung_rev using btree (_rev_at);
 
 drop table if exists sammlung_file cascade;
 create table sammlung_file (
@@ -495,15 +447,12 @@ create table sammlung_file (
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
-alter table sammlung_file add column _rev_at decimal default extract(epoch from now());
-update sammlung_file set _rev_at = extract(epoch from changed);
-create index on sammlung_file using btree (_rev_at);
-
 create index on sammlung_file using btree (id);
 create index on sammlung_file using btree (sammlung_id);
 create index on sammlung_file using btree (file_id);
 create index on sammlung_file using btree (file_mime_type);
 create index on sammlung_file using btree (changed);
+create index on sammlung_file using btree (_rev_at);
 
 
 drop table if exists garten cascade;
@@ -531,10 +480,6 @@ create table garten (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table garten add column _rev_at decimal default extract(epoch from now());
-update garten set _rev_at = extract(epoch from changed);
-create index on garten using btree (_rev_at);
-
 create index on garten using btree (id);
 create index on garten using btree (name);
 create index on garten using btree (person_id);
@@ -544,6 +489,7 @@ create index on garten using btree (ort);
 create index on garten using btree (aktiv);
 create index on garten using btree (_deleted);
 create index on garten using btree (changed);
+create index on garten using btree (_rev_at);
 
 drop table if exists garten_rev cascade;
 create table garten_rev (
@@ -566,16 +512,13 @@ create table garten_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table garten_rev add column _rev_at decimal default extract(epoch from now());
-update garten_rev set _rev_at = extract(epoch from changed);
-create index on garten_rev using btree (_rev_at);
-
 create index on garten_rev using btree (rev_id);
 create index on garten_rev using btree (id);
 create index on garten_rev using btree (_rev);
 create index on garten_rev using btree (_parent_rev);
 create index on garten_rev using btree (_depth);
 create index on garten_rev using btree (_deleted);
+create index on garten_rev using btree (_rev_at);
 
 drop table if exists garten_file cascade;
 create table garten_file (
@@ -588,15 +531,12 @@ create table garten_file (
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
-alter table garten_file add column _rev_at decimal default extract(epoch from now());
-update garten_file set _rev_at = extract(epoch from changed);
-create index on garten_file using btree (_rev_at);
-
 create index on garten_file using btree (id);
 create index on garten_file using btree (garten_id);
 create index on garten_file using btree (file_id);
 create index on garten_file using btree (file_mime_type);
 create index on garten_file using btree (changed);
+create index on garten_file using btree (_rev_at);
 
 drop table if exists kultur cascade;
 create table kultur (
@@ -619,10 +559,6 @@ create table kultur (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table kultur add column _rev_at decimal default extract(epoch from now());
-update kultur set _rev_at = extract(epoch from changed);
-create index on kultur using btree (_rev_at);
-
 create unique index single_art_herkunft_garden_active_idx on kultur (art_id, herkunft_id, garten_id) 
 where aktiv is true and zwischenlager is false and art_id is not null and herkunft_id is not null and _deleted is false;
 create unique index single_art_herkunft_garden_zwischenlager_active_idx on kultur (art_id, herkunft_id, garten_id, zwischenlager) 
@@ -637,6 +573,7 @@ create index on kultur using btree (von_anzahl_individuen);
 create index on kultur using btree (aktiv);
 create index on kultur using btree (_deleted);
 create index on kultur using btree (changed);
+create index on kultur using btree (_rev_at);
 
 drop table if exists kultur_rev cascade;
 create table kultur_rev (
@@ -659,16 +596,13 @@ create table kultur_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table kultur_rev add column _rev_at decimal default extract(epoch from now());
-update kultur_rev set _rev_at = extract(epoch from changed);
-create index on kultur_rev using btree (_rev_at);
-
 create index on kultur_rev using btree (rev_id);
 create index on kultur_rev using btree (id);
 create index on kultur_rev using btree (_rev);
 create index on kultur_rev using btree (_parent_rev);
 create index on kultur_rev using btree (_depth);
 create index on kultur_rev using btree (_deleted);
+create index on kultur_rev using btree (_rev_at);
 
 drop table if exists kultur_qk cascade;
 create table kultur_qk (
@@ -686,16 +620,13 @@ create table kultur_qk (
   _depth integer default 1,
   _deleted boolean default false,
 );
-alter table kultur_qk add column _rev_at decimal default extract(epoch from now());
-update kultur_qk set _rev_at = extract(epoch from changed);
-create index on kultur_qk using btree (_rev_at);
-
 create index on kultur_qk using btree (id);
 create index on kultur_qk using btree (name);
 create index on kultur_qk using btree (titel);
 create index on kultur_qk using btree (sort);
 create index on kultur_qk using btree (_deleted);
 create index on kultur_qk using btree (changed);
+create index on kultur_qk using btree (_rev_at);
 comment on column kultur_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
 drop table if exists kultur_qk_rev cascade;
@@ -715,16 +646,13 @@ create table kultur_qk_rev (
   _depth integer default 1,
   _deleted boolean default false,
 );
-alter table kultur_qk_rev add column _rev_at decimal default extract(epoch from now());
-update kultur_qk_rev set _rev_at = extract(epoch from changed);
-create index on kultur_qk_rev using btree (_rev_at);
-
 alter table kultur_qk_rev drop column 
 create index on kultur_qk_rev using btree (id);
 create index on kultur_qk_rev using btree (_rev);
 create index on kultur_qk_rev using btree (_parent_rev);
 create index on kultur_qk_rev using btree (_depth);
 create index on kultur_qk_rev using btree (_deleted);
+create index on kultur_qk_rev using btree (_rev_at);
 
 drop table if exists kultur_qk_choosen cascade;
 create table kultur_qk_choosen (
@@ -743,15 +671,12 @@ create table kultur_qk_choosen (
   _conflicts text[] default null
   unique(id, qk_name)
 );
-alter table kultur_qk_choosen add column _rev_at decimal default extract(epoch from now());
-update kultur_qk_choosen set _rev_at = extract(epoch from changed);
-create index on kultur_qk_choosen using btree (_rev_at);
-
 create index on kultur_qk_choosen using btree (id);
 create index on kultur_qk using btree (kultur_id);
 create index on kultur_qk_choosen using btree (qk_name);
 create index on kultur_qk_choosen using btree (_deleted);
 create index on kultur_qk_choosen using btree (changed);
+create index on kultur_qk_choosen using btree (_rev_at);
 
 insert into kultur_qk_choosen (kultur_id, qk_name)
 select kultur.id, kultur_qk.name
@@ -774,15 +699,12 @@ create table kultur_qk_choosen_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table kultur_qk_choosen_rev add column _rev_at decimal default extract(epoch from now());
-update kultur_qk_choosen_rev set _rev_at = extract(epoch from changed);
-create index on kultur_qk_choosen_rev using btree (_rev_at);
-
 create index on kultur_qk_choosen_rev using btree (id);
 create index on kultur_qk_choosen_rev using btree (_rev);
 create index on kultur_qk_choosen_rev using btree (_parent_rev);
 create index on kultur_qk_choosen_rev using btree (_depth);
 create index on kultur_qk_choosen_rev using btree (_deleted);
+create index on kultur_qk_choosen_rev using btree (_rev_at);
 
 drop table if exists kultur_file cascade;
 create table kultur_file (
@@ -795,15 +717,12 @@ create table kultur_file (
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
-alter table kultur_file add column _rev_at decimal default extract(epoch from now());
-update kultur_file set _rev_at = extract(epoch from changed);
-create index on kultur_file using btree (_rev_at);
-
 create index on kultur_file using btree (id);
 create index on kultur_file using btree (kultur_id);
 create index on kultur_file using btree (file_id);
 create index on kultur_file using btree (file_mime_type);
 create index on kultur_file using btree (changed);
+create index on kultur_file using btree (_rev_at);
 
 drop table if exists teilkultur cascade;
 create table teilkultur (
@@ -824,15 +743,12 @@ create table teilkultur (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table teilkultur add column _rev_at decimal default extract(epoch from now());
-update teilkultur set _rev_at = extract(epoch from changed);
-create index on teilkultur using btree (_rev_at);
-
 create index on teilkultur using btree (id);
 create index on teilkultur using btree (kultur_id);
 create index on teilkultur using btree (name);
 create index on teilkultur using btree (_deleted);
 create index on teilkultur using btree (changed);
+create index on teilkultur using btree (_rev_at);
 
 drop table if exists teilkultur_rev cascade;
 create table teilkultur_rev (
@@ -853,16 +769,13 @@ create table teilkultur_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table teilkultur_rev add column _rev_at decimal default extract(epoch from now());
-update teilkultur_rev set _rev_at = extract(epoch from changed);
-create index on teilkultur_rev using btree (_rev_at);
-
 create index on teilkultur_rev using btree (rev_id);
 create index on teilkultur_rev using btree (id);
 create index on teilkultur_rev using btree (_rev);
 create index on teilkultur_rev using btree (_parent_rev);
 create index on teilkultur_rev using btree (_depth);
 create index on teilkultur_rev using btree (_deleted);
+create index on teilkultur_rev using btree (_rev_at);
 
 drop table if exists event cascade;
 create table event (
@@ -883,10 +796,6 @@ create table event (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table event add column _rev_at decimal default extract(epoch from now());
-update event set _rev_at = extract(epoch from changed);
-create index on event using btree (_rev_at);
-
 create index on event using btree (id);
 create index on event using btree (kultur_id);
 create index on event using btree (teilkultur_id);
@@ -896,6 +805,7 @@ create index on event using btree (geplant);
 create index on event using btree (datum);
 create index on event using btree (_deleted);
 create index on event using btree (changed);
+create index on event using btree (_rev_at);
 
 drop table if exists event_rev cascade;
 create table event_rev (
@@ -916,16 +826,13 @@ create table event_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table event_rev add column _rev_at decimal default extract(epoch from now());
-update event_rev set _rev_at = extract(epoch from changed);
-create index on event_rev using btree (_rev_at);
-
 create index on event_rev using btree (rev_id);
 create index on event_rev using btree (id);
 create index on event_rev using btree (_rev);
 create index on event_rev using btree (_parent_rev);
 create index on event_rev using btree (_depth);
 create index on event_rev using btree (_deleted);
+create index on event_rev using btree (_rev_at);
 
 drop table if exists zaehlung cascade;
 create table zaehlung (
@@ -944,16 +851,13 @@ create table zaehlung (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table zaehlung add column _rev_at decimal default extract(epoch from now());
-update zaehlung set _rev_at = extract(epoch from changed);
-create index on zaehlung using btree (_rev_at);
-
 create index on zaehlung using btree (id);
 create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
 create index on zaehlung using btree (prognose);
 create index on zaehlung using btree (_deleted);
 create index on zaehlung using btree (changed);
+create index on zaehlung using btree (_rev_at);
 
 drop table if exists zaehlung_rev cascade;
 create table zaehlung_rev (
@@ -972,16 +876,13 @@ create table zaehlung_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table zaehlung_rev add column _rev_at decimal default extract(epoch from now());
-update zaehlung_rev set _rev_at = extract(epoch from changed);
-create index on zaehlung_rev using btree (_rev_at);
-
 create index on zaehlung_rev using btree (rev_id);
 create index on zaehlung_rev using btree (id);
 create index on zaehlung_rev using btree (_rev);
 create index on zaehlung_rev using btree (_parent_rev);
 create index on zaehlung_rev using btree (_depth);
 create index on zaehlung_rev using btree (_deleted);
+create index on zaehlung_rev using btree (_rev_at);
 
 drop table if exists teilzaehlung cascade;
 create table teilzaehlung (
@@ -1005,10 +906,6 @@ create table teilzaehlung (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table teilzaehlung add column _rev_at decimal default extract(epoch from now());
-update teilzaehlung set _rev_at = extract(epoch from changed);
-create index on teilzaehlung using btree (_rev_at);
-
 create index on teilzaehlung using btree (id);
 create index on teilzaehlung using btree (prognose_von_tz);
 create index on teilzaehlung using btree (zaehlung_id);
@@ -1019,6 +916,7 @@ create index on teilzaehlung using btree (anzahl_mutterpflanzen);
 create index on teilzaehlung using btree (andere_menge);
 create index on teilzaehlung using btree (_deleted);
 create index on teilzaehlung using btree (changed);
+create index on teilzaehlung using btree (_rev_at);
 
 drop table if exists teilzaehlung_rev cascade;
 create table teilzaehlung_rev (
@@ -1042,16 +940,13 @@ create table teilzaehlung_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table teilzaehlung_rev add column _rev_at decimal default extract(epoch from now());
-update teilzaehlung_rev set _rev_at = extract(epoch from changed);
-create index on teilzaehlung_rev using btree (_rev_at);
-
 create index on teilzaehlung_rev using btree (rev_id);
 create index on teilzaehlung_rev using btree (id);
 create index on teilzaehlung_rev using btree (_rev);
 create index on teilzaehlung_rev using btree (_parent_rev);
 create index on teilzaehlung_rev using btree (_depth);
 create index on teilzaehlung_rev using btree (_deleted);
+create index on teilzaehlung_rev using btree (_rev_at);
 
 drop table if exists kultur_option cascade;
 create table kultur_option (
@@ -1078,13 +973,10 @@ create table kultur_option (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table kultur_option add column _rev_at decimal default extract(epoch from now());
-update kultur_option set _rev_at = extract(epoch from changed);
-create index on kultur_option using btree (_rev_at);
-
 create index on kultur_option using btree (id);
 create index on kultur_option using btree (_deleted);
 create index on kultur_option using btree (changed);
+create index on kultur_option using btree (_rev_at);
 COMMENT ON COLUMN kultur_option.tk IS 'opt-in Option für Teilkulturen';
 
 drop table if exists kultur_option_rev cascade;
@@ -1112,16 +1004,13 @@ create table kultur_option_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table kultur_option_rev add column _rev_at decimal default extract(epoch from now());
-update kultur_option_rev set _rev_at = extract(epoch from changed);
-create index on kultur_option_rev using btree (_rev_at);
-
 create index on kultur_option_rev using btree (id);
 create index on kultur_option_rev using btree (kultur_id);
 create index on kultur_option_rev using btree (_rev);
 create index on kultur_option_rev using btree (_parent_rev);
 create index on kultur_option_rev using btree (_depth);
 create index on kultur_option_rev using btree (_deleted);
+create index on kultur_option_rev using btree (_rev_at);
 
 drop table if exists person_option cascade;
 create table person_option (
@@ -1159,15 +1048,12 @@ create table person_option (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table person_option add column _rev_at decimal default extract(epoch from now());
-update person_option set _rev_at = extract(epoch from changed);
-create index on person_option using btree (_rev_at);
-
 alter table person_option add column ku_zwischenlager boolean default false;
 alter table person_option add column ku_erhaltungskultur boolean default false;
 create index on person_option using btree (id);
 create index on person_option using btree (_deleted);
 create index on person_option using btree (changed);
+create index on person_option using btree (_rev_at);
 comment on column person_option.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';
 comment on column person_option.li_show_sl is 'Ob die Sammel-Lieferung neben der Lieferung angezeigt wird';
 comment on column person_option.li_show_sl_felder is 'Ob Felder, deren Werte aus der Sammel-Lieferung stammen, sichtbar sind';
@@ -1209,10 +1095,6 @@ create table person_option_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table person_option_rev add column _rev_at decimal default extract(epoch from now());
-update person_option_rev set _rev_at = extract(epoch from changed);
-create index on person_option_rev using btree (_rev_at);
-
 alter table person_option_rev add column ku_zwischenlager boolean default false;
 alter table person_option_rev add column ku_erhaltungskultur boolean default false;
 create index on person_option_rev using btree (rev_id);
@@ -1221,6 +1103,7 @@ create index on person_option_rev using btree (_rev);
 create index on person_option_rev using btree (_parent_rev);
 create index on person_option_rev using btree (_depth);
 create index on person_option_rev using btree (_deleted);
+create index on person_option_rev using btree (_rev_at);
 
 drop table if exists lieferung cascade;
 create table lieferung (
@@ -1250,10 +1133,6 @@ create table lieferung (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table lieferung add column _rev_at decimal default extract(epoch from now());
-update lieferung set _rev_at = extract(epoch from changed);
-create index on lieferung using btree (_rev_at);
-
 create index on lieferung using btree (id);
 create index on lieferung using btree (sammel_lieferung_id);
 create index on lieferung using btree (art_id);
@@ -1271,6 +1150,7 @@ create index on lieferung using btree (andere_menge);
 create index on lieferung using btree (geplant);
 create index on lieferung using btree (_deleted);
 create index on lieferung using btree (changed);
+create index on lieferung using btree (_rev_at);
 
 drop table if exists lieferung_rev cascade;
 create table lieferung_rev (
@@ -1300,16 +1180,13 @@ create table lieferung_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table lieferung_rev add column _rev_at decimal default extract(epoch from now());
-update lieferung_rev set _rev_at = extract(epoch from changed);
-create index on lieferung_rev using btree (_rev_at);
-
 create index on lieferung_rev using btree (rev_id);
 create index on lieferung_rev using btree (id);
 create index on lieferung_rev using btree (_rev);
 create index on lieferung_rev using btree (_parent_rev);
 create index on lieferung_rev using btree (_depth);
 create index on lieferung_rev using btree (_deleted);
+create index on lieferung_rev using btree (_rev_at);
 
 drop table if exists sammel_lieferung cascade;
 create table sammel_lieferung (
@@ -1338,13 +1215,10 @@ create table sammel_lieferung (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table sammel_lieferung add column _rev_at decimal default extract(epoch from now());
-update sammel_lieferung set _rev_at = extract(epoch from changed);
-create index on sammel_lieferung using btree (_rev_at);
-
 create index on sammel_lieferung using btree (id);
 create index on sammel_lieferung using btree (_deleted);
 create index on sammel_lieferung using btree (changed);
+create index on sammel_lieferung using btree (_rev_at);
 -- need to wait with adding this reference until sammel_lieferung was created
 alter table lieferung add constraint sammel_lieferung_fk foreign key (sammel_lieferung_id) references sammel_lieferung (id) on delete set null on update cascade;
 
@@ -1375,16 +1249,13 @@ create table sammel_lieferung_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table sammel_lieferung_rev add column _rev_at decimal default extract(epoch from now());
-update sammel_lieferung_rev set _rev_at = extract(epoch from changed);
-create index on sammel_lieferung_rev using btree (_rev_at);
-
 create index on sammel_lieferung_rev using btree (rev_id);
 create index on sammel_lieferung_rev using btree (id);
 create index on sammel_lieferung_rev using btree (_rev);
 create index on sammel_lieferung_rev using btree (_parent_rev);
 create index on sammel_lieferung_rev using btree (_depth);
 create index on sammel_lieferung_rev using btree (_deleted);
+create index on sammel_lieferung_rev using btree (_rev_at);
 
 drop table if exists lieferung_file cascade;
 create table lieferung_file (
@@ -1397,15 +1268,12 @@ create table lieferung_file (
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
-alter table lieferung_file add column _rev_at decimal default extract(epoch from now());
-update lieferung_file set _rev_at = extract(epoch from changed);
-create index on lieferung_file using btree (_rev_at);
-
 create index on lieferung_file using btree (id);
 create index on lieferung_file using btree (lieferung_id);
 create index on lieferung_file using btree (file_id);
 create index on lieferung_file using btree (file_mime_type);
 create index on lieferung_file using btree (changed);
+create index on lieferung_file using btree (_rev_at);
 
 drop table if exists av cascade;
 create table av (
@@ -1423,15 +1291,12 @@ create table av (
   _conflicts text[] default null
   unique (person_id, art_id)
 );
-alter table av add column _rev_at decimal default extract(epoch from now());
-update av set _rev_at = extract(epoch from changed);
-create index on av using btree (_rev_at);
-
 create index on av using btree (id);
 create index on av using btree (art_id);
 create index on av using btree (person_id);
 create index on av using btree (_deleted);
 create index on av using btree (changed);
+create index on av using btree (_rev_at);
 
 drop table if exists av_rev cascade;
 create table av_rev (
@@ -1448,15 +1313,12 @@ create table av_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table av_rev add column _rev_at decimal default extract(epoch from now());
-update av_rev set _rev_at = extract(epoch from changed);
-create index on av_rev using btree (_rev_at);
-
 create index on av_rev using btree (id);
 create index on av_rev using btree (_rev);
 create index on av_rev using btree (_parent_rev);
 create index on av_rev using btree (_depth);
 create index on av_rev using btree (_deleted);
+create index on av_rev using btree (_rev_at);
 
 drop table if exists gv cascade;
 create table gv (
@@ -1474,15 +1336,12 @@ create table gv (
   _conflicts text[] default null
   unique (person_id, garten_id)
 );
-alter table gv add column _rev_at decimal default extract(epoch from now());
-update gv set _rev_at = extract(epoch from changed);
-create index on gv using btree (_rev_at);
-
 create index on gv using btree (id);
 create index on gv using btree (garten_id);
 create index on gv using btree (person_id);
 create index on gv using btree (_deleted);
 create index on gv using btree (changed);
+create index on gv using btree (_rev_at);
 
 drop table if exists gv_rev cascade;
 create table gv_rev (
@@ -1499,12 +1358,9 @@ create table gv_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
-alter table gv_rev add column _rev_at decimal default extract(epoch from now());
-update gv_rev set _rev_at = extract(epoch from changed);
-create index on gv_rev using btree (_rev_at);
-
 create index on gv_rev using btree (id);
 create index on gv_rev using btree (_rev);
 create index on gv_rev using btree (_parent_rev);
 create index on gv_rev using btree (_depth);
 create index on gv_rev using btree (_deleted);
+create index on gv_rev using btree (_rev_at);
