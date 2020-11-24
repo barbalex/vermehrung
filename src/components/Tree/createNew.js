@@ -82,7 +82,6 @@ const createNew = async ({ node, store }) => {
           !key.startsWith('_') &&
           ![
             'lieferungs',
-            'lieferungs_aggregate',
             'kulturByNachKulturId',
             'kulturByVonKulturId',
             'person',
