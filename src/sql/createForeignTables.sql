@@ -31,11 +31,12 @@ OPTIONS (user 'fdw_user', password 'secret');
 create table ae_art (
   id uuid primary key,
   name text,
-  changed timestamp default now()
+  changed timestamp default now(),
+  _rev_at decimal default extract(epoch from now())
 );
 create index on ae_art using btree (id);
 create index on ae_art using btree (name);
-create index on ae_art using btree (changed);
+create index on ae_art using btree (_rev_at);
 
 insert into ae_art (id,name)
 select id, name
