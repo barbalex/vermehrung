@@ -1,4 +1,6 @@
 module.exports = {
+  force: false,
+  format: 'js',
   dontRenameModels: true,
   input: 'schema.graphql',
   outDir: 'src/models',
