@@ -1415,6 +1415,7 @@ create table av (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1422,6 +1423,10 @@ create table av (
   _conflicts text[] default null
   unique (person_id, art_id)
 );
+alter table av add column _rev_at decimal default extract(epoch from now());
+update av set _rev_at = extract(epoch from changed);
+create index on av using btree (_rev_at);
+
 create index on av using btree (id);
 create index on av using btree (art_id);
 create index on av using btree (person_id);
@@ -1437,11 +1442,16 @@ create table av_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table av_rev add column _rev_at decimal default extract(epoch from now());
+update av_rev set _rev_at = extract(epoch from changed);
+create index on av_rev using btree (_rev_at);
+
 create index on av_rev using btree (id);
 create index on av_rev using btree (_rev);
 create index on av_rev using btree (_parent_rev);
@@ -1456,6 +1466,7 @@ create table gv (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1463,6 +1474,10 @@ create table gv (
   _conflicts text[] default null
   unique (person_id, garten_id)
 );
+alter table gv add column _rev_at decimal default extract(epoch from now());
+update gv set _rev_at = extract(epoch from changed);
+create index on gv using btree (_rev_at);
+
 create index on gv using btree (id);
 create index on gv using btree (garten_id);
 create index on gv using btree (person_id);
@@ -1478,11 +1493,16 @@ create table gv_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table gv_rev add column _rev_at decimal default extract(epoch from now());
+update gv_rev set _rev_at = extract(epoch from changed);
+create index on gv_rev using btree (_rev_at);
+
 create index on gv_rev using btree (id);
 create index on gv_rev using btree (_rev);
 create index on gv_rev using btree (_parent_rev);
