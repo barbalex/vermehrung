@@ -1243,12 +1243,17 @@ create table lieferung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table lieferung add column _rev_at decimal default extract(epoch from now());
+update lieferung set _rev_at = extract(epoch from changed);
+create index on lieferung using btree (_rev_at);
+
 create index on lieferung using btree (id);
 create index on lieferung using btree (sammel_lieferung_id);
 create index on lieferung using btree (art_id);
@@ -1289,11 +1294,16 @@ create table lieferung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table lieferung_rev add column _rev_at decimal default extract(epoch from now());
+update lieferung_rev set _rev_at = extract(epoch from changed);
+create index on lieferung_rev using btree (_rev_at);
+
 create index on lieferung_rev using btree (rev_id);
 create index on lieferung_rev using btree (id);
 create index on lieferung_rev using btree (_rev);
