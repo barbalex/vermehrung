@@ -1,0 +1,16 @@
+import { kultur_max_fieldsModelBase } from "./kultur_max_fieldsModel.base"
+
+
+/* A graphql query fragment builders for kultur_max_fieldsModel */
+export { selectFromkultur_max_fields, kultur_max_fieldsModelPrimitives, kultur_max_fieldsModelSelector } from "./kultur_max_fieldsModel.base"
+
+/**
+ * kultur_max_fieldsModel
+ */
+export const kultur_max_fieldsModel = kultur_max_fieldsModelBase
+  .actions(self => ({
+    // This is an auto-generated example action.
+    log() {
+      console.log(JSON.stringify(self))
+    }
+  }))

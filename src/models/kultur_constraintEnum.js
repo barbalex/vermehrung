@@ -1,0 +1,14 @@
+/* This is a mst-gql generated file, don't modify it manually */
+/* eslint-disable */
+import { types } from "mobx-state-tree"
+
+
+
+/**
+* kultur_constraint
+*/
+export const kultur_constraintEnumType = types.enumeration("kultur_constraint", [
+        "kultur_pkey",
+  "single_art_herkunft_garden_active_idx",
+  "single_art_herkunft_garden_zwischenlager_active_idx",
+      ])

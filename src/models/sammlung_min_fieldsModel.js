@@ -1,0 +1,16 @@
+import { sammlung_min_fieldsModelBase } from "./sammlung_min_fieldsModel.base"
+
+
+/* A graphql query fragment builders for sammlung_min_fieldsModel */
+export { selectFromsammlung_min_fields, sammlung_min_fieldsModelPrimitives, sammlung_min_fieldsModelSelector } from "./sammlung_min_fieldsModel.base"
+
+/**
+ * sammlung_min_fieldsModel
+ */
+export const sammlung_min_fieldsModel = sammlung_min_fieldsModelBase
+  .actions(self => ({
+    // This is an auto-generated example action.
+    log() {
+      console.log(JSON.stringify(self))
+    }
+  }))
