@@ -15,7 +15,6 @@ create table user_role (
 create index on user_role using btree (id);
 create index on user_role using btree (name);
 create index on user_role using btree (sort);
-create index on user_role using btree (changed);
 create index on user_role using btree (_rev_at);
 INSERT INTO user_role (name, sort, comment) VALUES
   ('gaertner', 1, 'liest und editiert Daten des eigenen Garten'),
@@ -61,7 +60,6 @@ create index on person using btree (aktiv);
 create index on person using btree (kommerziell);
 create index on person using btree (info);
 create index on person using btree (_deleted);
-create index on person using btree (changed);
 create index on person using btree (_rev_at);
 
 drop table if exists person_rev cascade;
@@ -118,7 +116,6 @@ create index on person_file using btree (id);
 create index on person_file using btree (person_id);
 create index on person_file using btree (file_id);
 create index on person_file using btree (file_mime_type);
-create index on person_file using btree (changed);
 create index on person_file using btree (_rev_at);
 
 drop table if exists art cascade;
@@ -138,7 +135,6 @@ create table art (
 create index on art using btree (id);
 create index on art using btree (ae_id);
 create index on art using btree (_deleted);
-create index on art using btree (changed);
 create index on art using btree (_rev_at);
 
 drop table if exists art_rev cascade;
@@ -184,7 +180,6 @@ create index on art_qk using btree (name);
 create index on art_qk using btree (titel);
 create index on art_qk using btree (sort);
 create index on art_qk using btree (_deleted);
-create index on art_qk using btree (changed);
 create index on art_qk using btree (_rev_at);
 comment on column art_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
@@ -234,7 +229,6 @@ create index on art_qk_choosen using btree (art_id);
 create index on art_qk_choosen using btree (qk_name);
 create index on art_qk_choosen using btree (choosen);
 create index on art_qk_choosen using btree (_deleted);
-create index on art_qk_choosen using btree (changed);
 create index on art_qk_choosen using btree (_rev_at);
 
 insert into art_qk_choosen (art_id, qk_name)
@@ -280,7 +274,6 @@ create index on art_file using btree (id);
 create index on art_file using btree (art_id);
 create index on art_file using btree (file_id);
 create index on art_file using btree (file_mime_type);
-create index on art_file using btree (changed);
 create index on art_file using btree (_rev_at);
 
 drop table if exists herkunft cascade;
@@ -312,7 +305,6 @@ create index on herkunft using btree (nr);
 create index on herkunft using btree (gemeinde);
 create index on herkunft using btree (lokalname);
 create index on herkunft using btree (_deleted);
-create index on herkunft using btree (changed);
 create index on herkunft using btree (_rev_at);
 
 drop table if exists herkunft_rev cascade;
@@ -358,7 +350,6 @@ create index on herkunft_file using btree (id);
 create index on herkunft_file using btree (herkunft_id);
 create index on herkunft_file using btree (file_id);
 create index on herkunft_file using btree (file_mime_type);
-create index on herkunft_file using btree (changed);
 create index on herkunft_file using btree (_rev_at);
 
 drop table if exists sammlung cascade;
@@ -400,7 +391,6 @@ create index on sammlung using btree (anzahl_pflanzen);
 create index on sammlung using btree (gramm_samen);
 create index on sammlung using btree (geplant);
 create index on sammlung using btree (_deleted);
-create index on sammlung using btree (changed);
 create index on sammlung using btree (_rev_at);
 
 drop table if exists sammlung_rev cascade;
@@ -451,7 +441,6 @@ create index on sammlung_file using btree (id);
 create index on sammlung_file using btree (sammlung_id);
 create index on sammlung_file using btree (file_id);
 create index on sammlung_file using btree (file_mime_type);
-create index on sammlung_file using btree (changed);
 create index on sammlung_file using btree (_rev_at);
 
 
@@ -488,7 +477,6 @@ create index on garten using btree (plz);
 create index on garten using btree (ort);
 create index on garten using btree (aktiv);
 create index on garten using btree (_deleted);
-create index on garten using btree (changed);
 create index on garten using btree (_rev_at);
 
 drop table if exists garten_rev cascade;
@@ -535,7 +523,6 @@ create index on garten_file using btree (id);
 create index on garten_file using btree (garten_id);
 create index on garten_file using btree (file_id);
 create index on garten_file using btree (file_mime_type);
-create index on garten_file using btree (changed);
 create index on garten_file using btree (_rev_at);
 
 drop table if exists kultur cascade;
@@ -572,7 +559,6 @@ create index on kultur using btree (erhaltungskultur);
 create index on kultur using btree (von_anzahl_individuen);
 create index on kultur using btree (aktiv);
 create index on kultur using btree (_deleted);
-create index on kultur using btree (changed);
 create index on kultur using btree (_rev_at);
 
 drop table if exists kultur_rev cascade;
@@ -625,7 +611,6 @@ create index on kultur_qk using btree (name);
 create index on kultur_qk using btree (titel);
 create index on kultur_qk using btree (sort);
 create index on kultur_qk using btree (_deleted);
-create index on kultur_qk using btree (changed);
 create index on kultur_qk using btree (_rev_at);
 comment on column kultur_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
@@ -675,7 +660,6 @@ create index on kultur_qk_choosen using btree (id);
 create index on kultur_qk using btree (kultur_id);
 create index on kultur_qk_choosen using btree (qk_name);
 create index on kultur_qk_choosen using btree (_deleted);
-create index on kultur_qk_choosen using btree (changed);
 create index on kultur_qk_choosen using btree (_rev_at);
 
 insert into kultur_qk_choosen (kultur_id, qk_name)
@@ -721,7 +705,6 @@ create index on kultur_file using btree (id);
 create index on kultur_file using btree (kultur_id);
 create index on kultur_file using btree (file_id);
 create index on kultur_file using btree (file_mime_type);
-create index on kultur_file using btree (changed);
 create index on kultur_file using btree (_rev_at);
 
 drop table if exists teilkultur cascade;
@@ -747,7 +730,6 @@ create index on teilkultur using btree (id);
 create index on teilkultur using btree (kultur_id);
 create index on teilkultur using btree (name);
 create index on teilkultur using btree (_deleted);
-create index on teilkultur using btree (changed);
 create index on teilkultur using btree (_rev_at);
 
 drop table if exists teilkultur_rev cascade;
@@ -804,7 +786,6 @@ create index on event using btree (beschreibung);
 create index on event using btree (geplant);
 create index on event using btree (datum);
 create index on event using btree (_deleted);
-create index on event using btree (changed);
 create index on event using btree (_rev_at);
 
 drop table if exists event_rev cascade;
@@ -856,7 +837,6 @@ create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
 create index on zaehlung using btree (prognose);
 create index on zaehlung using btree (_deleted);
-create index on zaehlung using btree (changed);
 create index on zaehlung using btree (_rev_at);
 
 drop table if exists zaehlung_rev cascade;
@@ -915,7 +895,6 @@ create index on teilzaehlung using btree (anzahl_auspflanzbereit);
 create index on teilzaehlung using btree (anzahl_mutterpflanzen);
 create index on teilzaehlung using btree (andere_menge);
 create index on teilzaehlung using btree (_deleted);
-create index on teilzaehlung using btree (changed);
 create index on teilzaehlung using btree (_rev_at);
 
 drop table if exists teilzaehlung_rev cascade;
@@ -975,7 +954,6 @@ create table kultur_option (
 );
 create index on kultur_option using btree (id);
 create index on kultur_option using btree (_deleted);
-create index on kultur_option using btree (changed);
 create index on kultur_option using btree (_rev_at);
 COMMENT ON COLUMN kultur_option.tk IS 'opt-in Option für Teilkulturen';
 
@@ -1052,7 +1030,6 @@ alter table person_option add column ku_zwischenlager boolean default false;
 alter table person_option add column ku_erhaltungskultur boolean default false;
 create index on person_option using btree (id);
 create index on person_option using btree (_deleted);
-create index on person_option using btree (changed);
 create index on person_option using btree (_rev_at);
 comment on column person_option.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';
 comment on column person_option.li_show_sl is 'Ob die Sammel-Lieferung neben der Lieferung angezeigt wird';
@@ -1149,7 +1126,6 @@ create index on lieferung using btree (gramm_samen);
 create index on lieferung using btree (andere_menge);
 create index on lieferung using btree (geplant);
 create index on lieferung using btree (_deleted);
-create index on lieferung using btree (changed);
 create index on lieferung using btree (_rev_at);
 
 drop table if exists lieferung_rev cascade;
@@ -1217,7 +1193,6 @@ create table sammel_lieferung (
 );
 create index on sammel_lieferung using btree (id);
 create index on sammel_lieferung using btree (_deleted);
-create index on sammel_lieferung using btree (changed);
 create index on sammel_lieferung using btree (_rev_at);
 -- need to wait with adding this reference until sammel_lieferung was created
 alter table lieferung add constraint sammel_lieferung_fk foreign key (sammel_lieferung_id) references sammel_lieferung (id) on delete set null on update cascade;
@@ -1272,7 +1247,6 @@ create index on lieferung_file using btree (id);
 create index on lieferung_file using btree (lieferung_id);
 create index on lieferung_file using btree (file_id);
 create index on lieferung_file using btree (file_mime_type);
-create index on lieferung_file using btree (changed);
 create index on lieferung_file using btree (_rev_at);
 
 drop table if exists av cascade;
@@ -1295,7 +1269,6 @@ create index on av using btree (id);
 create index on av using btree (art_id);
 create index on av using btree (person_id);
 create index on av using btree (_deleted);
-create index on av using btree (changed);
 create index on av using btree (_rev_at);
 
 drop table if exists av_rev cascade;
@@ -1340,7 +1313,6 @@ create index on gv using btree (id);
 create index on gv using btree (garten_id);
 create index on gv using btree (person_id);
 create index on gv using btree (_deleted);
-create index on gv using btree (changed);
 create index on gv using btree (_rev_at);
 
 drop table if exists gv_rev cascade;
