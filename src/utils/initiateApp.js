@@ -90,9 +90,9 @@ const initiateApp = async () => {
   const module = await import('./recreatePersistedStore')
   const recreatePersistedStore = module.default
   const unregisterAuthObserver = await recreatePersistedStore({ store })
-  store.setLastUpdatedAt(new Date().toISOString())
+  store.setLastUpdatedAt(Date.now())
   const unregister = () => {
-    store.setLastUpdatedAt(new Date().toISOString())
+    store.setLastUpdatedAt(Date.now())
     unregisterAuthObserver()
   }
 
