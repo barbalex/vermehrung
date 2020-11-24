@@ -31,7 +31,8 @@
               "name",
               "name_deutsch",
               "name_latein",
-              "changed"
+              "changed",
+              "_rev_at"
             ],
             "filter": {
               "_or": [
@@ -79,6 +80,7 @@
           "role": "gaertner",
           "permission": {
             "columns": [
+              "_rev_at",
               "name",
               "name_deutsch",
               "name_latein",
@@ -105,6 +107,7 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "_rev_at",
               "name",
               "name_deutsch",
               "name_latein",
@@ -1952,7 +1955,8 @@
               "_revisions",
               "_depth",
               "_deleted",
-              "_conflicts"
+              "_conflicts",
+              "_rev_at"
             ]
           }
         }
@@ -1964,6 +1968,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -1988,6 +1993,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -2032,6 +2038,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -2054,6 +2061,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -2103,27 +2111,6 @@
           "permission": {
             "check": {},
             "columns": [
-              "_deleted",
-              "_depth",
-              "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "_rev",
-              "changed",
-              "art_id",
-              "av_id",
-              "id",
-              "person_id"
-            ],
-            "backend_only": false
-          }
-        }
-      ],
-      "select_permissions": [
-        {
-          "role": "artverantwortlich",
-          "permission": {
-            "columns": [
               "id",
               "av_id",
               "art_id",
@@ -2134,7 +2121,30 @@
               "_parent_rev",
               "_revisions",
               "_depth",
-              "_deleted"
+              "_deleted",
+              "_rev_at"
+            ],
+            "backend_only": false
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_rev_at",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "art_id",
+              "av_id",
+              "id",
+              "person_id"
             ],
             "filter": {
               "person_id": {
@@ -2148,7 +2158,18 @@
           "role": "gaertner",
           "permission": {
             "columns": [
-              "id"
+              "id",
+              "av_id",
+              "art_id",
+              "person_id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_rev_at"
             ],
             "filter": {}
           }
@@ -2159,6 +2180,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -2181,6 +2203,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -2280,7 +2303,8 @@
               "_revisions",
               "_depth",
               "_conflicts",
-              "_deleted"
+              "_deleted",
+              "_rev_at"
             ]
           }
         },
@@ -2312,6 +2336,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -2335,6 +2360,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -2359,6 +2385,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -2413,6 +2440,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -2456,6 +2484,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -2482,6 +2511,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -2536,6 +2566,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -2579,6 +2610,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -2741,7 +2773,8 @@
               "_revisions",
               "_depth",
               "_deleted",
-              "id"
+              "id",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -2774,6 +2807,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -2781,9 +2815,9 @@
               "_rev",
               "changed",
               "event_id",
+              "id",
               "kultur_id",
               "person_id",
-              "id",
               "teilkultur_id"
             ],
             "backend_only": false
@@ -2798,6 +2832,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -2805,9 +2840,9 @@
               "_rev",
               "changed",
               "event_id",
+              "id",
               "kultur_id",
               "person_id",
-              "id",
               "teilkultur_id"
             ],
             "backend_only": false
@@ -2823,6 +2858,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -2830,9 +2866,9 @@
               "_rev",
               "changed",
               "event_id",
+              "id",
               "kultur_id",
               "person_id",
-              "id",
               "teilkultur_id"
             ],
             "filter": {
@@ -2877,6 +2913,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -2884,9 +2921,9 @@
               "_rev",
               "changed",
               "event_id",
+              "id",
               "kultur_id",
               "person_id",
-              "id",
               "teilkultur_id"
             ],
             "filter": {
@@ -2920,6 +2957,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -2927,9 +2965,9 @@
               "_rev",
               "changed",
               "event_id",
+              "id",
               "kultur_id",
               "person_id",
-              "id",
               "teilkultur_id"
             ],
             "filter": {},
@@ -2946,6 +2984,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -2953,9 +2992,9 @@
               "_rev",
               "changed",
               "event_id",
+              "id",
               "kultur_id",
               "person_id",
-              "id",
               "teilkultur_id"
             ],
             "filter": {
@@ -3000,6 +3039,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -3007,9 +3047,9 @@
               "_rev",
               "changed",
               "event_id",
+              "id",
               "kultur_id",
               "person_id",
-              "id",
               "teilkultur_id"
             ],
             "filter": {
@@ -3043,6 +3083,7 @@
               "geplant",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -3050,9 +3091,9 @@
               "_rev",
               "changed",
               "event_id",
+              "id",
               "kultur_id",
               "person_id",
-              "id",
               "teilkultur_id"
             ],
             "filter": {},
@@ -4143,7 +4184,8 @@
               "_revisions",
               "_depth",
               "_deleted",
-              "_conflicts"
+              "_conflicts",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -4156,6 +4198,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -4179,6 +4222,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -4200,17 +4244,18 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "_deleted",
-              "_depth",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "_rev",
-              "changed",
-              "garten_id",
               "id",
-              "person_id"
+              "garten_id",
+              "person_id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts",
+              "_rev_at"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -4222,17 +4267,18 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "id",
-              "garten_id",
-              "person_id",
-              "changed",
-              "changed_by",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
               "_deleted",
-              "_conflicts"
+              "_depth",
+              "_rev_at",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "garten_id",
+              "id",
+              "person_id"
             ],
             "filter": {},
             "check": null
@@ -4273,27 +4319,6 @@
           "permission": {
             "check": {},
             "columns": [
-              "_deleted",
-              "_depth",
-              "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "_rev",
-              "changed",
-              "garten_id",
-              "gv_id",
-              "id",
-              "person_id"
-            ],
-            "backend_only": false
-          }
-        }
-      ],
-      "select_permissions": [
-        {
-          "role": "artverantwortlich",
-          "permission": {
-            "columns": [
               "id",
               "gv_id",
               "garten_id",
@@ -4304,7 +4329,30 @@
               "_parent_rev",
               "_revisions",
               "_depth",
-              "_deleted"
+              "_deleted",
+              "_rev_at"
+            ],
+            "backend_only": false
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_rev_at",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "garten_id",
+              "gv_id",
+              "id",
+              "person_id"
             ],
             "filter": {
               "person_id": {
@@ -4320,6 +4368,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -4344,6 +4393,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -4366,6 +4416,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -5869,15 +5920,36 @@
               "file_mime_type",
               "name",
               "beschreibung",
-              "changed"
+              "changed",
+              "_rev_at"
             ]
           }
         },
         {
           "role": "gaertner",
           "permission": {
-            "check": {},
+            "check": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -5893,6 +5965,7 @@
           "permission": {
             "check": {},
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -5909,6 +5982,7 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -5955,13 +6029,14 @@
           "role": "gaertner",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
+              "file_mime_type",
+              "name",
               "changed",
               "file_id",
-              "file_mime_type",
               "id",
-              "kultur_id",
-              "name"
+              "kultur_id"
             ],
             "filter": {
               "_or": [
@@ -5990,6 +6065,7 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -6007,13 +6083,14 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
+              "file_mime_type",
+              "name",
               "changed",
               "file_id",
-              "file_mime_type",
               "id",
-              "kultur_id",
-              "name"
+              "kultur_id"
             ],
             "filter": {
               "_or": [
@@ -6053,6 +6130,7 @@
           "role": "gaertner",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -6088,6 +6166,7 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -6240,7 +6319,8 @@
               "_conflicts",
               "changed",
               "changed_by",
-              "_deleted"
+              "_deleted",
+              "_rev_at"
             ]
           }
         },
@@ -6281,6 +6361,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -6310,6 +6391,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -6340,6 +6422,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -6400,6 +6483,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -6448,6 +6532,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -6479,6 +6564,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -6539,6 +6625,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -6588,6 +6675,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -6741,7 +6829,8 @@
               "_deleted",
               "id",
               "changed",
-              "changed_by"
+              "changed_by",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -6784,6 +6873,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -6814,6 +6904,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -6845,6 +6936,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -6905,6 +6997,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -6953,6 +7046,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -6985,6 +7079,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -7045,6 +7140,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -7094,6 +7190,7 @@
               "tz_teilkultur_id",
               "z_bemerkungen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -7133,19 +7230,20 @@
           "permission": {
             "check": {},
             "columns": [
-              "_deleted",
-              "sort",
-              "_depth",
-              "_conflicts",
-              "_revisions",
-              "beschreibung",
-              "changed_by",
-              "_parent_rev",
-              "_rev",
+              "name",
               "titel",
-              "changed",
+              "beschreibung",
+              "sort",
               "id",
-              "name"
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts",
+              "_rev_at"
             ]
           }
         }
@@ -7158,6 +7256,7 @@
               "_deleted",
               "sort",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -7180,6 +7279,7 @@
               "_deleted",
               "sort",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -7202,6 +7302,7 @@
               "_deleted",
               "sort",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -7226,6 +7327,7 @@
               "_deleted",
               "sort",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "beschreibung",
@@ -7317,7 +7419,8 @@
               "_depth",
               "_deleted",
               "_conflicts",
-              "choosen"
+              "choosen",
+              "_rev_at"
             ]
           }
         },
@@ -7348,6 +7451,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -7368,6 +7472,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -7386,18 +7491,19 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "kultur_id",
-              "qk_name",
-              "id",
-              "changed",
-              "changed_by",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
+              "choosen",
               "_deleted",
+              "_depth",
+              "_rev_at",
               "_conflicts",
-              "choosen"
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id"
             ],
             "filter": {
               "_or": [
@@ -7440,6 +7546,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -7480,6 +7587,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -7503,6 +7611,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -7554,6 +7663,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -7594,6 +7704,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -7745,7 +7856,8 @@
               "_revisions",
               "_depth",
               "_deleted",
-              "choosen"
+              "choosen",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -7777,6 +7889,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -7798,6 +7911,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -7820,6 +7934,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -7871,6 +7986,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -7911,6 +8027,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -7934,6 +8051,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -7985,6 +8103,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -8025,6 +8144,7 @@
               "choosen",
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -8133,7 +8253,8 @@
               "_parent_rev",
               "_revisions",
               "_depth",
-              "_deleted"
+              "_deleted",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -8147,6 +8268,7 @@
               "_deleted",
               "sort",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -8169,6 +8291,7 @@
               "_deleted",
               "sort",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -8191,6 +8314,7 @@
               "_deleted",
               "sort",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -8215,6 +8339,7 @@
               "_deleted",
               "sort",
               "_depth",
+              "_rev_at",
               "_revisions",
               "beschreibung",
               "changed_by",
@@ -8891,7 +9016,8 @@
               "_revisions",
               "_depth",
               "_conflicts",
-              "_deleted"
+              "_deleted",
+              "_rev_at"
             ]
           }
         },
@@ -8939,30 +9065,31 @@
               ]
             },
             "columns": [
-              "id",
-              "sammel_lieferung_id",
-              "art_id",
-              "person_id",
-              "von_sammlung_id",
-              "von_kultur_id",
-              "datum",
-              "nach_kultur_id",
-              "nach_ausgepflanzt",
-              "von_anzahl_individuen",
-              "anzahl_pflanzen",
-              "anzahl_auspflanzbereit",
-              "gramm_samen",
-              "andere_menge",
+              "_deleted",
               "geplant",
-              "bemerkungen",
-              "changed",
-              "changed_by",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
+              "nach_ausgepflanzt",
+              "datum",
+              "anzahl_auspflanzbereit",
+              "anzahl_pflanzen",
               "_depth",
+              "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
-              "_deleted"
+              "_revisions",
+              "andere_menge",
+              "bemerkungen",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "art_id",
+              "id",
+              "nach_kultur_id",
+              "person_id",
+              "sammel_lieferung_id",
+              "von_kultur_id",
+              "von_sammlung_id"
             ]
           }
         },
@@ -8978,8 +9105,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -9011,8 +9139,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -9105,8 +9234,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -9177,8 +9307,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -9212,8 +9343,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -9306,8 +9438,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -9378,8 +9511,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -9625,15 +9759,69 @@
               "file_mime_type",
               "name",
               "beschreibung",
-              "changed"
+              "changed",
+              "_rev_at"
             ]
           }
         },
         {
           "role": "gaertner",
           "permission": {
-            "check": {},
+            "check": {
+              "_or": [
+                {
+                  "lieferung_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "_and": [
+                    {
+                      "lieferung": {
+                        "von_kultur_id": {
+                          "_is_null": true
+                        }
+                      }
+                    },
+                    {
+                      "lieferung": {
+                        "nach_kultur_id": {
+                          "_is_null": true
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "lieferung": {
+                    "kulturByNachKulturId": {
+                      "garten": {
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "lieferung": {
+                    "kulturByVonKulturId": {
+                      "garten": {
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -9649,6 +9837,7 @@
           "permission": {
             "check": {},
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -9665,6 +9854,7 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -9759,6 +9949,7 @@
           "role": "gaertner",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -9826,13 +10017,14 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "id",
-              "lieferung_id",
-              "file_id",
+              "_rev_at",
+              "beschreibung",
               "file_mime_type",
               "name",
-              "beschreibung",
-              "changed"
+              "changed",
+              "file_id",
+              "id",
+              "lieferung_id"
             ],
             "filter": {}
           }
@@ -9843,6 +10035,7 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -9937,6 +10130,7 @@
           "role": "gaertner",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -10005,6 +10199,7 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "_rev_at",
               "beschreibung",
               "file_mime_type",
               "name",
@@ -10287,30 +10482,31 @@
               ]
             },
             "columns": [
-              "_deleted",
-              "_depth",
-              "_parent_rev",
-              "_rev",
-              "_revisions",
-              "andere_menge",
-              "anzahl_auspflanzbereit",
-              "anzahl_pflanzen",
+              "lieferung_id",
+              "sammel_lieferung_id",
               "art_id",
+              "person_id",
+              "von_sammlung_id",
+              "von_kultur_id",
+              "datum",
+              "nach_kultur_id",
+              "nach_ausgepflanzt",
+              "von_anzahl_individuen",
+              "anzahl_pflanzen",
+              "anzahl_auspflanzbereit",
+              "gramm_samen",
+              "andere_menge",
+              "geplant",
               "bemerkungen",
               "changed",
               "changed_by",
-              "datum",
-              "geplant",
-              "gramm_samen",
-              "lieferung_id",
-              "nach_ausgepflanzt",
-              "nach_kultur_id",
-              "person_id",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
               "id",
-              "sammel_lieferung_id",
-              "von_anzahl_individuen",
-              "von_kultur_id",
-              "von_sammlung_id"
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -10366,8 +10562,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -10376,10 +10573,10 @@
               "_rev",
               "changed",
               "art_id",
+              "id",
               "lieferung_id",
               "nach_kultur_id",
               "person_id",
-              "id",
               "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
@@ -10399,8 +10596,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -10409,10 +10607,10 @@
               "_rev",
               "changed",
               "art_id",
+              "id",
               "lieferung_id",
               "nach_kultur_id",
               "person_id",
-              "id",
               "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
@@ -10433,8 +10631,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -10443,10 +10642,10 @@
               "_rev",
               "changed",
               "art_id",
+              "id",
               "lieferung_id",
               "nach_kultur_id",
               "person_id",
-              "id",
               "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
@@ -10527,8 +10726,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -10537,10 +10737,10 @@
               "_rev",
               "changed",
               "art_id",
+              "id",
               "lieferung_id",
               "nach_kultur_id",
               "person_id",
-              "id",
               "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
@@ -10599,8 +10799,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -10609,10 +10810,10 @@
               "_rev",
               "changed",
               "art_id",
+              "id",
               "lieferung_id",
               "nach_kultur_id",
               "person_id",
-              "id",
               "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
@@ -10634,8 +10835,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -10644,10 +10846,10 @@
               "_rev",
               "changed",
               "art_id",
+              "id",
               "lieferung_id",
               "nach_kultur_id",
               "person_id",
-              "id",
               "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
@@ -10728,8 +10930,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -10738,10 +10941,10 @@
               "_rev",
               "changed",
               "art_id",
+              "id",
               "lieferung_id",
               "nach_kultur_id",
               "person_id",
-              "id",
               "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
@@ -10800,8 +11003,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -10810,10 +11014,10 @@
               "_rev",
               "changed",
               "art_id",
+              "id",
               "lieferung_id",
               "nach_kultur_id",
               "person_id",
-              "id",
               "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
@@ -11760,50 +11964,6 @@
               }
             },
             "columns": [
-              "_conflicts",
-              "_deleted",
-              "_depth",
-              "_parent_rev",
-              "_rev",
-              "_revisions",
-              "ar_name_deutsch",
-              "changed",
-              "changed_by",
-              "ga_aktiv",
-              "ga_bemerkungen",
-              "ga_geom_point",
-              "ga_lat_lng",
-              "ga_ort",
-              "ga_plz",
-              "ga_strasse",
-              "hk_bemerkungen",
-              "hk_geom_point",
-              "hk_kanton",
-              "hk_land",
-              "id",
-              "ku_erhaltungskultur",
-              "ku_zwischenlager",
-              "li_show_sl",
-              "li_show_sl_felder",
-              "sl_auto_copy_edits",
-              "sl_show_empty_when_next_to_li",
-              "tree_event",
-              "tree_kultur",
-              "tree_lieferung",
-              "tree_teilkultur",
-              "tree_zaehlung"
-            ]
-          }
-        },
-        {
-          "role": "gaertner",
-          "permission": {
-            "check": {
-              "id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
-            "columns": [
               "id",
               "ar_name_deutsch",
               "ga_strasse",
@@ -11835,7 +11995,53 @@
               "changed_by",
               "_deleted",
               "ku_zwischenlager",
-              "ku_erhaltungskultur"
+              "ku_erhaltungskultur",
+              "_rev_at"
+            ]
+          }
+        },
+        {
+          "role": "gaertner",
+          "permission": {
+            "check": {
+              "id": {
+                "_eq": "X-Hasura-User-Id"
+              }
+            },
+            "columns": [
+              "_deleted",
+              "ga_aktiv",
+              "ga_bemerkungen",
+              "ga_geom_point",
+              "ga_lat_lng",
+              "ga_ort",
+              "ga_plz",
+              "ga_strasse",
+              "hk_bemerkungen",
+              "hk_geom_point",
+              "hk_kanton",
+              "hk_land",
+              "ku_erhaltungskultur",
+              "ku_zwischenlager",
+              "sl_auto_copy_edits",
+              "tree_event",
+              "tree_kultur",
+              "tree_lieferung",
+              "tree_teilkultur",
+              "tree_zaehlung",
+              "_depth",
+              "_rev_at",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "id",
+              "ar_name_deutsch",
+              "li_show_sl",
+              "li_show_sl_felder",
+              "sl_show_empty_when_next_to_li"
             ]
           }
         },
@@ -11865,6 +12071,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -11906,6 +12113,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -11951,6 +12159,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -11996,6 +12205,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -12039,6 +12249,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -12084,6 +12295,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -12129,6 +12341,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "changed_by",
@@ -12229,7 +12442,8 @@
               "changed",
               "changed_by",
               "ku_zwischenlager",
-              "ku_erhaltungskultur"
+              "ku_erhaltungskultur",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -12268,6 +12482,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -12309,6 +12524,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -12351,6 +12567,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -12396,6 +12613,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -12441,6 +12659,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -12484,6 +12703,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -12529,6 +12749,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -12574,6 +12795,7 @@
               "tree_teilkultur",
               "tree_zaehlung",
               "_depth",
+              "_rev_at",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -13271,7 +13493,8 @@
               "_conflicts",
               "changed",
               "changed_by",
-              "_deleted"
+              "_deleted",
+              "_rev_at"
             ]
           }
         },
@@ -13326,8 +13549,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -13357,8 +13581,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -13389,8 +13614,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -13482,8 +13708,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -13553,8 +13780,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -13587,8 +13815,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -13680,8 +13909,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -13751,8 +13981,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -14036,7 +14267,8 @@
               "_deleted",
               "changed",
               "changed_by",
-              "id"
+              "id",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -14092,8 +14324,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -14102,10 +14335,10 @@
               "_rev",
               "changed",
               "art_id",
-              "sammel_lieferung_id",
+              "id",
               "nach_kultur_id",
               "person_id",
-              "id",
+              "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
             ],
@@ -14124,8 +14357,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -14134,10 +14368,10 @@
               "_rev",
               "changed",
               "art_id",
-              "sammel_lieferung_id",
+              "id",
               "nach_kultur_id",
               "person_id",
-              "id",
+              "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
             ],
@@ -14157,8 +14391,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -14167,10 +14402,10 @@
               "_rev",
               "changed",
               "art_id",
-              "sammel_lieferung_id",
+              "id",
               "nach_kultur_id",
               "person_id",
-              "id",
+              "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
             ],
@@ -14250,8 +14485,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -14260,10 +14496,10 @@
               "_rev",
               "changed",
               "art_id",
-              "sammel_lieferung_id",
+              "id",
               "nach_kultur_id",
               "person_id",
-              "id",
+              "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
             ],
@@ -14321,8 +14557,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -14331,10 +14568,10 @@
               "_rev",
               "changed",
               "art_id",
-              "sammel_lieferung_id",
+              "id",
               "nach_kultur_id",
               "person_id",
-              "id",
+              "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
             ],
@@ -14355,8 +14592,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -14365,10 +14603,10 @@
               "_rev",
               "changed",
               "art_id",
-              "sammel_lieferung_id",
+              "id",
               "nach_kultur_id",
               "person_id",
-              "id",
+              "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
             ],
@@ -14448,8 +14686,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -14458,10 +14697,10 @@
               "_rev",
               "changed",
               "art_id",
-              "sammel_lieferung_id",
+              "id",
               "nach_kultur_id",
               "person_id",
-              "id",
+              "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
             ],
@@ -14519,8 +14758,9 @@
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
               "_depth",
-              "gramm_samen",
               "von_anzahl_individuen",
+              "gramm_samen",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "bemerkungen",
@@ -14529,10 +14769,10 @@
               "_rev",
               "changed",
               "art_id",
-              "sammel_lieferung_id",
+              "id",
               "nach_kultur_id",
               "person_id",
-              "id",
+              "sammel_lieferung_id",
               "von_kultur_id",
               "von_sammlung_id"
             ],
@@ -16130,17 +16370,38 @@
               "_revisions",
               "_depth",
               "_conflicts",
-              "_deleted"
+              "_deleted",
+              "_rev_at"
             ]
           }
         },
         {
           "role": "gaertner",
           "permission": {
-            "check": {},
+            "check": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -16164,6 +16425,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -16188,6 +16450,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -16246,6 +16509,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -16289,6 +16553,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -16315,6 +16580,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -16373,6 +16639,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -16416,6 +16683,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -16606,7 +16874,8 @@
               "_revisions",
               "_depth",
               "_deleted",
-              "id"
+              "id",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -16637,6 +16906,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
@@ -16647,9 +16917,9 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilkultur_id",
+              "id",
               "kultur_id",
-              "id"
+              "teilkultur_id"
             ],
             "backend_only": false
           }
@@ -16661,6 +16931,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
@@ -16671,9 +16942,9 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilkultur_id",
+              "id",
               "kultur_id",
-              "id"
+              "teilkultur_id"
             ],
             "backend_only": false
           }
@@ -16686,6 +16957,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
@@ -16696,9 +16968,9 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilkultur_id",
+              "id",
               "kultur_id",
-              "id"
+              "teilkultur_id"
             ],
             "filter": {
               "_or": [
@@ -16744,6 +17016,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
@@ -16754,9 +17027,9 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilkultur_id",
+              "id",
               "kultur_id",
-              "id"
+              "teilkultur_id"
             ],
             "filter": {
               "_or": [
@@ -16787,6 +17060,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
@@ -16797,9 +17071,9 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilkultur_id",
+              "id",
               "kultur_id",
-              "id"
+              "teilkultur_id"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -16813,6 +17087,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
@@ -16823,9 +17098,9 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilkultur_id",
+              "id",
               "kultur_id",
-              "id"
+              "teilkultur_id"
             ],
             "filter": {
               "_or": [
@@ -16871,6 +17146,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
@@ -16881,9 +17157,9 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilkultur_id",
+              "id",
               "kultur_id",
-              "id"
+              "teilkultur_id"
             ],
             "filter": {
               "_or": [
@@ -16914,6 +17190,7 @@
             "columns": [
               "_deleted",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
@@ -16924,9 +17201,9 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilkultur_id",
+              "id",
               "kultur_id",
-              "id"
+              "teilkultur_id"
             ],
             "filter": {},
             "check": null
@@ -17029,24 +17306,25 @@
               ]
             },
             "columns": [
-              "_deleted",
+              "id",
+              "zaehlung_id",
+              "teilkultur_id",
+              "anzahl_pflanzen",
               "anzahl_auspflanzbereit",
               "anzahl_mutterpflanzen",
-              "anzahl_pflanzen",
-              "_depth",
-              "_conflicts",
-              "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
               "bemerkungen",
-              "changed_by",
-              "_parent_rev",
-              "_rev",
-              "changed",
-              "id",
               "prognose_von_tz",
-              "teilkultur_id",
-              "zaehlung_id"
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_conflicts",
+              "_deleted",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -17082,6 +17360,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -17109,6 +17388,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -17137,6 +17417,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -17202,6 +17483,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -17250,6 +17532,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -17274,24 +17557,25 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "id",
-              "zaehlung_id",
-              "teilkultur_id",
-              "anzahl_pflanzen",
+              "_deleted",
               "anzahl_auspflanzbereit",
               "anzahl_mutterpflanzen",
+              "anzahl_pflanzen",
+              "_depth",
+              "_rev_at",
+              "_conflicts",
+              "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
               "bemerkungen",
-              "prognose_von_tz",
-              "changed",
               "changed_by",
-              "_rev",
               "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_conflicts",
-              "_deleted"
+              "_rev",
+              "changed",
+              "id",
+              "prognose_von_tz",
+              "teilkultur_id",
+              "zaehlung_id"
             ],
             "filter": {
               "_or": [
@@ -17344,6 +17628,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -17392,6 +17677,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "andere_menge",
@@ -17593,7 +17879,8 @@
               "_revisions",
               "_depth",
               "_deleted",
-              "id"
+              "id",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -17629,6 +17916,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
@@ -17637,10 +17925,10 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilzaehlung_id",
-              "prognose_von_tz",
               "id",
+              "prognose_von_tz",
               "teilkultur_id",
+              "teilzaehlung_id",
               "zaehlung_id"
             ],
             "backend_only": false
@@ -17656,6 +17944,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
@@ -17664,10 +17953,10 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilzaehlung_id",
-              "prognose_von_tz",
               "id",
+              "prognose_von_tz",
               "teilkultur_id",
+              "teilzaehlung_id",
               "zaehlung_id"
             ],
             "backend_only": false
@@ -17684,6 +17973,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
@@ -17692,10 +17982,10 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilzaehlung_id",
-              "prognose_von_tz",
               "id",
+              "prognose_von_tz",
               "teilkultur_id",
+              "teilzaehlung_id",
               "zaehlung_id"
             ],
             "filter": {
@@ -17749,6 +18039,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
@@ -17757,10 +18048,10 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilzaehlung_id",
-              "prognose_von_tz",
               "id",
+              "prognose_von_tz",
               "teilkultur_id",
+              "teilzaehlung_id",
               "zaehlung_id"
             ],
             "filter": {
@@ -17797,6 +18088,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
@@ -17805,10 +18097,10 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilzaehlung_id",
-              "prognose_von_tz",
               "id",
+              "prognose_von_tz",
               "teilkultur_id",
+              "teilzaehlung_id",
               "zaehlung_id"
             ],
             "filter": {},
@@ -17826,6 +18118,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
@@ -17834,10 +18127,10 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilzaehlung_id",
-              "prognose_von_tz",
               "id",
+              "prognose_von_tz",
               "teilkultur_id",
+              "teilzaehlung_id",
               "zaehlung_id"
             ],
             "filter": {
@@ -17891,6 +18184,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
@@ -17899,10 +18193,10 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilzaehlung_id",
-              "prognose_von_tz",
               "id",
+              "prognose_von_tz",
               "teilkultur_id",
+              "teilzaehlung_id",
               "zaehlung_id"
             ],
             "filter": {
@@ -17939,6 +18233,7 @@
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
               "_depth",
+              "_rev_at",
               "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
@@ -17947,10 +18242,10 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "teilzaehlung_id",
-              "prognose_von_tz",
               "id",
+              "prognose_von_tz",
               "teilkultur_id",
+              "teilzaehlung_id",
               "zaehlung_id"
             ],
             "filter": {},
@@ -18132,7 +18427,8 @@
               "_revisions",
               "_depth",
               "_conflicts",
-              "_deleted"
+              "_deleted",
+              "_rev_at"
             ]
           }
         },
@@ -18164,6 +18460,7 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -18185,6 +18482,7 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -18207,6 +18505,7 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -18263,6 +18562,7 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -18304,6 +18604,7 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -18328,6 +18629,7 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -18384,6 +18686,7 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_conflicts",
               "_revisions",
               "bemerkungen",
@@ -18421,19 +18724,20 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "_deleted",
-              "prognose",
-              "datum",
-              "_depth",
               "_conflicts",
-              "_revisions",
-              "bemerkungen",
-              "changed_by",
+              "_deleted",
+              "_depth",
               "_parent_rev",
               "_rev",
+              "_rev_at",
+              "_revisions",
+              "bemerkungen",
               "changed",
+              "changed_by",
+              "datum",
               "id",
-              "kultur_id"
+              "kultur_id",
+              "prognose"
             ],
             "filter": {},
             "check": null
@@ -18595,7 +18899,8 @@
               "_revisions",
               "_depth",
               "_deleted",
-              "id"
+              "id",
+              "_rev_at"
             ],
             "backend_only": false
           }
@@ -18628,15 +18933,16 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
               "_parent_rev",
               "_rev",
               "changed",
-              "zaehlung_id",
+              "id",
               "kultur_id",
-              "id"
+              "zaehlung_id"
             ],
             "backend_only": false
           }
@@ -18650,15 +18956,16 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
               "_parent_rev",
               "_rev",
               "changed",
-              "zaehlung_id",
+              "id",
               "kultur_id",
-              "id"
+              "zaehlung_id"
             ],
             "backend_only": false
           }
@@ -18673,15 +18980,16 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
               "_parent_rev",
               "_rev",
               "changed",
-              "zaehlung_id",
+              "id",
               "kultur_id",
-              "id"
+              "zaehlung_id"
             ],
             "filter": {
               "_or": [
@@ -18729,15 +19037,16 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
               "_parent_rev",
               "_rev",
               "changed",
-              "zaehlung_id",
+              "id",
               "kultur_id",
-              "id"
+              "zaehlung_id"
             ],
             "filter": {
               "_or": [
@@ -18770,15 +19079,16 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
               "_parent_rev",
               "_rev",
               "changed",
-              "zaehlung_id",
+              "id",
               "kultur_id",
-              "id"
+              "zaehlung_id"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -18794,15 +19104,16 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
               "_parent_rev",
               "_rev",
               "changed",
-              "zaehlung_id",
+              "id",
               "kultur_id",
-              "id"
+              "zaehlung_id"
             ],
             "filter": {
               "_or": [
@@ -18850,15 +19161,16 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
               "_parent_rev",
               "_rev",
               "changed",
-              "zaehlung_id",
+              "id",
               "kultur_id",
-              "id"
+              "zaehlung_id"
             ],
             "filter": {
               "_or": [
@@ -18891,15 +19203,16 @@
               "prognose",
               "datum",
               "_depth",
+              "_rev_at",
               "_revisions",
               "bemerkungen",
               "changed_by",
               "_parent_rev",
               "_rev",
               "changed",
-              "zaehlung_id",
+              "id",
               "kultur_id",
-              "id"
+              "zaehlung_id"
             ],
             "filter": {},
             "check": null
