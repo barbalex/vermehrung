@@ -171,7 +171,7 @@ const queryRawData = async ({ store }) => {
   // query only newer than store.lastUpdatedAt
   let data
   //console.log('queryRawData', { changed, lastUpdatedAt })
-  const now = new Date().toISOString()
+  const now = Date.now()
   try {
     data = await rawQglClient.request(allDataQuery, { revAt })
   } catch (error) {
