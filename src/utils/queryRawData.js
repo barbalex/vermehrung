@@ -171,7 +171,7 @@ const queryRawData = async ({ store }) => {
   // query only newer than store.lastUpdatedAt
   let data
   //console.log('queryRawData', { changed, lastUpdatedAt })
-  const now = Date.now()
+  //const now = Date.now()/1000
   try {
     data = await rawQglClient.request(allDataQuery, { revAt })
   } catch (error) {
@@ -185,7 +185,7 @@ const queryRawData = async ({ store }) => {
     return
   }
   console.log('queryRawData', { data, revAt })
-  store.setLastUpdatedAt(now)
+  //store.setLastUpdatedAt(now)
   const tableNames = tables.map((t) => t.name)
   for (const table of tableNames) {
     console.log('queryRawData', {

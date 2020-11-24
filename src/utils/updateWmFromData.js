@@ -16,27 +16,24 @@ const parseComplexFields = (object) =>
     _revisions: JSON.stringify(object._revisions),
   })
 
-const updateWmFromData = ({ data, table, store }) => {
-  const { db, initialDataQueried, setInitialDataQueried, lastUpdatedAt } = store
-  /*console.log('updateWmFromData:', {
-    data,
-    table,
-    lastUpdatedAt,
-  })*/
+const updateWmFromData = async ({ data: dataPassed, table, store }) => {
+  const {
+    db,
+    initialDataQueried,
+    setInitialDataQueried,
+    setLastUpdated,
+  } = store
+  const lastUpdatedAt = store[`lastUpdated_${table}`]
+  const data = dataPassed.filter((d) => d._rev_at > lastUpdatedAt)
   const collection = db.collections.get(table)
 
   const incomingIds = data.map((d) => d.id)
 
   // TODO: filter by lastUpdatedAt
-  db.action(async () => {
+  await db.action(async () => {
     const objectsOfToUpdate = await db.collections
       .get(table)
-      .query(
-        Q.and(
-          Q.where('id', Q.oneOf(incomingIds)),
-          Q.where('_rev_at', Q.gt(lastUpdatedAt)),
-        ),
-      )
+      .query(Q.where('id', Q.oneOf(incomingIds)))
       .fetch()
     const objectsOfIncoming = await db.collections
       .get(table)
@@ -58,6 +55,10 @@ const updateWmFromData = ({ data, table, store }) => {
     })
     console.log('updateWmFromData:', {
       data: data.length,
+      dataPassed: dataPassed.length,
+      herkunftRevAt: dataPassed?.find(
+        (d) => d.id === 'ff78614e-b554-11ea-b3de-0242ac130004',
+      )?._rev_at,
       table,
       toUpdate: objectsToUpdate.length,
       toCreate: missingIds.length,
@@ -88,6 +89,7 @@ const updateWmFromData = ({ data, table, store }) => {
     }
   })
   !initialDataQueried && setInitialDataQueried(true)
+  setLastUpdated({ table })
 }
 
 export default updateWmFromData

@@ -16,7 +16,7 @@ const parseComplexFields = (object) =>
   })
 
 const updateWm = async ({ data, table, store }) => {
-  const { db, initialDataQueried, setInitialDataQueried, lastUpdatedAt } = store
+  const { db, initialDataQueried, setInitialDataQueried } = store
   console.log('updateWmFromData:', {
     data,
     table,
