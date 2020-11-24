@@ -58,6 +58,9 @@ export const RootStore = RootStoreBase.props({
   singleColumnView: types.optional(types.boolean, false),
   showTreeInSingleColumnView: types.optional(types.boolean, false),
   online: types.optional(types.boolean, true),
+  // every table saves last updated timestamp in seconds since 1.1.1970
+  // why? so data to be updated can be efficiently extracted
+  // from the live queries
   lastUpdated_ae_art: types.optional(types.number, 0),
   lastUpdated_art: types.optional(types.number, 0),
   lastUpdated_art_file: types.optional(types.number, 0),
