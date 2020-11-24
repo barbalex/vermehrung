@@ -2,7 +2,7 @@ import { getParent } from 'mobx-state-tree'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
-import { zaehlung_revModelBase } from './Zaehlung_revModel.base'
+import { zaehlung_revModelBase } from './zaehlung_revModel.base'
 import toPgArray from '../utils/toPgArray'
 
 /* A graphql query fragment builders for zaehlung_revModel */
@@ -10,7 +10,7 @@ export {
   selectFromzaehlung_rev,
   zaehlung_revModelPrimitives,
   zaehlung_revModelSelector,
-} from './Zaehlung_revModel.base'
+} from './zaehlung_revModel.base'
 
 /**
  * zaehlung_revModel

@@ -1,0 +1,63 @@
+/* This is a mst-gql generated file, don't modify it manually */
+/* eslint-disable */
+
+import { types } from 'mobx-state-tree'
+import { MSTGQLRef, QueryBuilder } from 'mst-gql'
+import { ModelBase } from './ModelBase'
+import { personModel } from './personModel'
+import { personModelSelector } from './personModel.base'
+
+/**
+ * person_fileBase
+ * auto generated base class for the model person_fileModel.
+ */
+export const person_fileModelBase = ModelBase.named('person_file')
+  .props({
+    __typename: types.optional(types.literal('person_file'), 'person_file'),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
+    beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    file_id: types.union(types.undefined, types.null, types.frozen()),
+    file_mime_type: types.union(types.undefined, types.null, types.string),
+    id: types.identifier,
+    name: types.union(types.undefined, types.null, types.string),
+    person_id: types.union(types.undefined, types.null, types.frozen()),
+  })
+  .views((self) => ({
+    get store() {
+      return self.__getStore()
+    },
+  }))
+
+export class person_fileModelSelector extends QueryBuilder {
+  get _rev_at() {
+    return this.__attr(`_rev_at`)
+  }
+  get beschreibung() {
+    return this.__attr(`beschreibung`)
+  }
+  get changed() {
+    return this.__attr(`changed`)
+  }
+  get file_id() {
+    return this.__attr(`file_id`)
+  }
+  get file_mime_type() {
+    return this.__attr(`file_mime_type`)
+  }
+  get id() {
+    return this.__attr(`id`)
+  }
+  get name() {
+    return this.__attr(`name`)
+  }
+  get person_id() {
+    return this.__attr(`person_id`)
+  }
+}
+export function selectFromperson_file() {
+  return new person_fileModelSelector()
+}
+
+export const person_fileModelPrimitives = selectFromperson_file()._rev_at
+  .beschreibung.changed.file_id.file_mime_type.name.person_id
