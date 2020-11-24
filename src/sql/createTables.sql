@@ -1071,12 +1071,17 @@ create table kultur_option (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table kultur_option add column _rev_at decimal default extract(epoch from now());
+update kultur_option set _rev_at = extract(epoch from changed);
+create index on kultur_option using btree (_rev_at);
+
 create index on kultur_option using btree (id);
 create index on kultur_option using btree (_deleted);
 create index on kultur_option using btree (changed);
@@ -1101,11 +1106,16 @@ create table kultur_option_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table kultur_option_rev add column _rev_at decimal default extract(epoch from now());
+update kultur_option_rev set _rev_at = extract(epoch from changed);
+create index on kultur_option_rev using btree (_rev_at);
+
 create index on kultur_option_rev using btree (id);
 create index on kultur_option_rev using btree (kultur_id);
 create index on kultur_option_rev using btree (_rev);
@@ -1142,12 +1152,17 @@ create table person_option (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table person_option add column _rev_at decimal default extract(epoch from now());
+update person_option set _rev_at = extract(epoch from changed);
+create index on person_option using btree (_rev_at);
+
 alter table person_option add column ku_zwischenlager boolean default false;
 alter table person_option add column ku_erhaltungskultur boolean default false;
 create index on person_option using btree (id);
@@ -1188,11 +1203,16 @@ create table person_option_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table person_option_rev add column _rev_at decimal default extract(epoch from now());
+update person_option_rev set _rev_at = extract(epoch from changed);
+create index on person_option_rev using btree (_rev_at);
+
 alter table person_option_rev add column ku_zwischenlager boolean default false;
 alter table person_option_rev add column ku_erhaltungskultur boolean default false;
 create index on person_option_rev using btree (rev_id);
