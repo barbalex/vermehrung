@@ -18,11 +18,11 @@ const parseComplexFields = (object) =>
 
 const updateWmFromData = ({ data, table, store }) => {
   const { db, initialDataQueried, setInitialDataQueried, lastUpdatedAt } = store
-  console.log('updateWmFromData:', {
+  /*console.log('updateWmFromData:', {
     data,
     table,
     lastUpdatedAt,
-  })
+  })*/
   const collection = db.collections.get(table)
 
   const incomingIds = data.map((d) => d.id)
@@ -34,7 +34,7 @@ const updateWmFromData = ({ data, table, store }) => {
       .query(
         Q.and(
           Q.where('id', Q.oneOf(incomingIds)),
-          Q.where('changed', Q.gt(lastUpdatedAt)),
+          Q.where('_rev_at', Q.gt(lastUpdatedAt)),
         ),
       )
       .fetch()
