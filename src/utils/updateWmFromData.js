@@ -24,10 +24,10 @@ const updateWmFromData = async ({ data: dataPassed, table, store }) => {
     setLastUpdated,
   } = store
   const lastUpdatedAt = store[`lastUpdated_${table}`]
-  const data = dataPassed.filter((d) => d._rev_at > lastUpdatedAt)
+  const dataToCheck = dataPassed.filter((d) => d._rev_at > lastUpdatedAt)
   const collection = db.collections.get(table)
 
-  const incomingIds = data.map((d) => d.id)
+  const incomingIds = dataToCheck.map((d) => d.id)
 
   // TODO: filter by lastUpdatedAt
   await db.action(async () => {
@@ -41,12 +41,12 @@ const updateWmFromData = async ({ data: dataPassed, table, store }) => {
       .fetch()
     const existingIds = objectsOfIncoming.map((d) => d.id)
     const missingIds = incomingIds.filter((d) => !existingIds.includes(d))
-    const dataToCreateObjectsFrom = data.filter((d) =>
+    const dataToCreateObjectsFrom = dataToCheck.filter((d) =>
       missingIds.includes(d.id),
     )
     // only if remote changed after local
     const objectsToUpdate = objectsOfToUpdate.filter((o) => {
-      const dat = stripTypename(data.find((d) => d.id === o.id))
+      const dat = stripTypename(dataToCheck.find((d) => d.id === o.id))
       //if (!dat?.changed) return true
       //return o.changed < dat.changed
       return !Object.entries(dat).every(([key, value]) =>
@@ -54,23 +54,23 @@ const updateWmFromData = async ({ data: dataPassed, table, store }) => {
       )
     })
     console.log('updateWmFromData:', {
-      data: data.length,
+      dataToCheck: dataToCheck.length,
       dataPassed: dataPassed.length,
-      herkunftRevAt: dataPassed?.find(
+      /*herkunftRevAt: dataPassed?.find(
         (d) => d.id === 'ff78614e-b554-11ea-b3de-0242ac130004',
-      )?._rev_at,
+      )?._rev_at,*/
       table,
       toUpdate: objectsToUpdate.length,
       toCreate: missingIds.length,
-      objectsToUpdate,
-      objectsOfToUpdate,
+      //objectsToUpdate,
+      //objectsOfToUpdate,
       objectsOfToUpdateLength: objectsOfToUpdate.length,
-      lastUpdatedAt,
+      //lastUpdatedAt,
     })
     if (objectsToUpdate.length || dataToCreateObjectsFrom.length) {
       await db.batch(
         ...objectsToUpdate.map((object) => {
-          const thisObjectsData = data.find((d) => d.id === object.id)
+          const thisObjectsData = dataToCheck.find((d) => d.id === object.id)
 
           return object.prepareUpdate((ob) => {
             Object.keys(thisObjectsData)
