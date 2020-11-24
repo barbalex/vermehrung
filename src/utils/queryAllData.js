@@ -163,7 +163,7 @@ const queryAllData = async ({ store }) => {
   // query only newer than store.lastUpdatedAt
   const { setInitialDataQueried, lastUpdatedAt: revAt } = store
   let data
-  console.log('queryAllData, revAt:', revAt)
+  //console.log('queryAllData, revAt:', revAt)
   try {
     data = await store.query(
       allDataQuery,
