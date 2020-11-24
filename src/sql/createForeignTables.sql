@@ -35,16 +35,12 @@ create table ae_art (
   name text,
   name_deutsch text,
   name_latein text,
-  changed timestamp default now()
+  changed timestamp default now(),
+  _rev_at decimal default extract(epoch from now())
 );
-alter table ae_art add column _rev_at decimal default extract(epoch from now());
-update ae_art set _rev_at = extract(epoch from changed);
-create index on ae_art using btree (_rev_at); 
-
-
 create index on ae_art using btree (id);
 create index on ae_art using btree (name);
-create index on ae_art using btree (changed); 
+create index on ae_art using btree (_rev_at);
 
 insert into ae_art (id,name,name_deutsch,name_latein)
 select id, name, name_deutsch, name_latein
