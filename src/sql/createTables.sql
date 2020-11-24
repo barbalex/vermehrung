@@ -588,7 +588,6 @@ create table garten_file (
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
-);
 alter table garten_file add column _rev_at decimal default extract(epoch from now());
 update garten_file set _rev_at = extract(epoch from changed);
 create index on garten_file using btree (_rev_at);
@@ -613,12 +612,17 @@ create table kultur (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
+alter table kultur add column _rev_at decimal default extract(epoch from now());
+update kultur set _rev_at = extract(epoch from changed);
+create index on kultur using btree (_rev_at);
+
 create unique index single_art_herkunft_garden_active_idx on kultur (art_id, herkunft_id, garten_id) 
 where aktiv is true and zwischenlager is false and art_id is not null and herkunft_id is not null and _deleted is false;
 create unique index single_art_herkunft_garden_zwischenlager_active_idx on kultur (art_id, herkunft_id, garten_id, zwischenlager) 
@@ -649,11 +653,16 @@ create table kultur_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
+  _rev_at decimal default extract(epoch from now()),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+alter table kultur_rev add column _rev_at decimal default extract(epoch from now());
+update kultur_rev set _rev_at = extract(epoch from changed);
+create index on kultur_rev using btree (_rev_at);
+
 create index on kultur_rev using btree (rev_id);
 create index on kultur_rev using btree (id);
 create index on kultur_rev using btree (_rev);
