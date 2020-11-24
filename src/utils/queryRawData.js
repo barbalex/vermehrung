@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import { DateTime } from 'luxon'
 
 import {
   aeArt,
@@ -38,92 +37,92 @@ import updateWmFromData from './updateWmFromData'
 import { tables } from '../dbSchema/schema'
 
 const allDataQuery = gql`
-  query AllDataQueryForTreeContainer($changed: timestamp) {
-    ae_art(where: { changed: { _gt: $changed } }) {
+  query AllDataQueryForTreeContainer($revAt: numeric) {
+    ae_art(where: { _rev_at: { _gt: $revAt } }) {
       ...AeArtFields
     }
-    art(where: { changed: { _gt: $changed } }) {
+    art(where: { _rev_at: { _gt: $revAt } }) {
       ...ArtFields
     }
-    art_file(where: { changed: { _gt: $changed } }) {
+    art_file(where: { _rev_at: { _gt: $revAt } }) {
       ...ArtFileFields
     }
-    art_qk(where: { changed: { _gt: $changed } }) {
+    art_qk(where: { _rev_at: { _gt: $revAt } }) {
       ...ArtQkFields
     }
-    art_qk_choosen(where: { changed: { _gt: $changed } }) {
+    art_qk_choosen(where: { _rev_at: { _gt: $revAt } }) {
       ...ArtQkChoosenFields
     }
-    av(where: { changed: { _gt: $changed } }) {
+    av(where: { _rev_at: { _gt: $revAt } }) {
       ...AvFields
     }
-    event(where: { changed: { _gt: $changed } }) {
+    event(where: { _rev_at: { _gt: $revAt } }) {
       ...EventFields
     }
-    garten(where: { changed: { _gt: $changed } }) {
+    garten(where: { _rev_at: { _gt: $revAt } }) {
       ...GartenFields
     }
-    garten_file(where: { changed: { _gt: $changed } }) {
+    garten_file(where: { _rev_at: { _gt: $revAt } }) {
       ...GartenFileFields
     }
-    gv(where: { changed: { _gt: $changed } }) {
+    gv(where: { _rev_at: { _gt: $revAt } }) {
       ...GvFields
     }
-    herkunft(where: { changed: { _gt: $changed } }) {
+    herkunft(where: { _rev_at: { _gt: $revAt } }) {
       ...HerkunftFields
     }
-    herkunft_file(where: { changed: { _gt: $changed } }) {
+    herkunft_file(where: { _rev_at: { _gt: $revAt } }) {
       ...HerkunftFileFields
     }
-    kultur(where: { changed: { _gt: $changed } }) {
+    kultur(where: { _rev_at: { _gt: $revAt } }) {
       ...KulturFields
     }
-    kultur_file(where: { changed: { _gt: $changed } }) {
+    kultur_file(where: { _rev_at: { _gt: $revAt } }) {
       ...KulturFileFields
     }
-    kultur_option(where: { changed: { _gt: $changed } }) {
+    kultur_option(where: { _rev_at: { _gt: $revAt } }) {
       ...KulturOptionFields
     }
-    kultur_qk(where: { changed: { _gt: $changed } }) {
+    kultur_qk(where: { _rev_at: { _gt: $revAt } }) {
       ...KulturQkFields
     }
-    kultur_qk_choosen(where: { changed: { _gt: $changed } }) {
+    kultur_qk_choosen(where: { _rev_at: { _gt: $revAt } }) {
       ...KulturQkChoosenFields
     }
-    lieferung(where: { changed: { _gt: $changed } }) {
+    lieferung(where: { _rev_at: { _gt: $revAt } }) {
       ...LieferungFields
     }
-    lieferung_file(where: { changed: { _gt: $changed } }) {
+    lieferung_file(where: { _rev_at: { _gt: $revAt } }) {
       ...LieferungFileFields
     }
-    person(where: { changed: { _gt: $changed } }) {
+    person(where: { _rev_at: { _gt: $revAt } }) {
       ...PersonFields
     }
-    person_file(where: { changed: { _gt: $changed } }) {
+    person_file(where: { _rev_at: { _gt: $revAt } }) {
       ...PersonFileFields
     }
-    person_option(where: { changed: { _gt: $changed } }) {
+    person_option(where: { _rev_at: { _gt: $revAt } }) {
       ...PersonOptionFields
     }
-    sammel_lieferung(where: { changed: { _gt: $changed } }) {
+    sammel_lieferung(where: { _rev_at: { _gt: $revAt } }) {
       ...SammelLieferungFields
     }
-    sammlung(where: { changed: { _gt: $changed } }) {
+    sammlung(where: { _rev_at: { _gt: $revAt } }) {
       ...SammlungFields
     }
-    sammlung_file(where: { changed: { _gt: $changed } }) {
+    sammlung_file(where: { _rev_at: { _gt: $revAt } }) {
       ...SammlungFileFields
     }
-    teilkultur(where: { changed: { _gt: $changed } }) {
+    teilkultur(where: { _rev_at: { _gt: $revAt } }) {
       ...TeilkulturFields
     }
-    teilzaehlung(where: { changed: { _gt: $changed } }) {
+    teilzaehlung(where: { _rev_at: { _gt: $revAt } }) {
       ...TeilzaehlungFields
     }
-    user_role(where: { changed: { _gt: $changed } }) {
+    user_role(where: { _rev_at: { _gt: $revAt } }) {
       ...UserRoleFields
     }
-    zaehlung(where: { changed: { _gt: $changed } }) {
+    zaehlung(where: { _rev_at: { _gt: $revAt } }) {
       ...ZaehlungFields
     }
   }
@@ -163,7 +162,7 @@ const queryRawData = async ({ store }) => {
     online,
     db,
     setInitialDataQueried,
-    lastUpdatedAt,
+    lastUpdatedAt: revAt,
     rawQglClient,
   } = store
   if (!online) {
@@ -171,11 +170,10 @@ const queryRawData = async ({ store }) => {
   }
   // query only newer than store.lastUpdatedAt
   let data
-  const changed = DateTime.fromMillis(0).toSQL()
   //console.log('queryRawData', { changed, lastUpdatedAt })
   const now = new Date().toISOString()
   try {
-    data = await rawQglClient.request(allDataQuery, { changed })
+    data = await rawQglClient.request(allDataQuery, { revAt })
   } catch (error) {
     if (error && error.message.includes('JWT')) {
       console.log('queryRawData, will get new auth token')
@@ -186,7 +184,7 @@ const queryRawData = async ({ store }) => {
     setInitialDataQueried(true)
     return
   }
-  console.log('queryRawData', { data, lastUpdatedAt, changed })
+  console.log('queryRawData', { data, revAt })
   store.setLastUpdatedAt(now)
   const tableNames = tables.map((t) => t.name)
   for (const table of tableNames) {

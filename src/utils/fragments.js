@@ -13,6 +13,7 @@ export const art = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -31,6 +32,7 @@ export const artQk = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -48,6 +50,7 @@ export const artQkChoosen = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -65,6 +68,7 @@ export const artFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const aeArt = gql`
@@ -73,6 +77,7 @@ export const aeArt = gql`
     __typename
     name
     changed
+    _rev_at
   }
 `
 export const av = gql`
@@ -84,6 +89,7 @@ export const av = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -104,6 +110,7 @@ export const event = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -135,6 +142,7 @@ export const garten = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -163,6 +171,7 @@ export const garten_rev = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -242,6 +251,7 @@ export const gartenFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const gv = gql`
@@ -253,6 +263,7 @@ export const gv = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -277,6 +288,7 @@ export const herkunft = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -294,6 +306,7 @@ export const herkunftFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const kultur = gql`
@@ -311,6 +324,7 @@ export const kultur = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -329,6 +343,7 @@ export const kulturQk = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -346,6 +361,7 @@ export const kulturQkChoosen = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -363,6 +379,7 @@ export const kulturFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const kulturOption = gql`
@@ -382,6 +399,7 @@ export const kulturOption = gql`
     tz_bemerkungen
     z_bemerkungen
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -411,6 +429,7 @@ export const lieferung = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -440,6 +459,7 @@ export const lieferung_rev = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -456,6 +476,7 @@ export const lieferungFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const person = gql`
@@ -483,6 +504,7 @@ export const person = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -518,6 +540,7 @@ export const personOption = gql`
     tree_lieferung
     tree_event
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -535,6 +558,7 @@ export const personFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const sammelLieferung = gql`
@@ -556,6 +580,7 @@ export const sammelLieferung = gql`
     geplant
     bemerkungen
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -585,6 +610,7 @@ export const sammlung = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -602,6 +628,7 @@ export const sammlungFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const teilkultur = gql`
@@ -617,6 +644,7 @@ export const teilkultur = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -639,6 +667,7 @@ export const teilzaehlung = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -668,6 +697,7 @@ export const zaehlung = gql`
     changed
     changed_by
     _rev
+    _rev_at
     _parent_rev
     _revisions
     _depth

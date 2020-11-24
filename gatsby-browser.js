@@ -23,6 +23,8 @@ export const onServiceWorkerUpdateFound = () => {
       'vermehrung.ch neu laden, um die neuste Version zu installieren?',
     )
   ) {
+    // TODO: empty everything but the login?
+    // seems that is what is happening
     localForage.clear()
     window.location.reload(true)
   }
