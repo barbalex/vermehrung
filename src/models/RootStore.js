@@ -58,7 +58,7 @@ export const RootStore = RootStoreBase.props({
   singleColumnView: types.optional(types.boolean, false),
   showTreeInSingleColumnView: types.optional(types.boolean, false),
   online: types.optional(types.boolean, true),
-  lastUpdatedAt: types.optional(types.string, '1970-01-01T00:00:00.000'),
+  lastUpdatedAt: types.optional(types.number, 0),
   /**
    * This is a queue of all queries
    * When online they they are immediatly executed by the reaction
@@ -1608,7 +1608,7 @@ export const RootStore = RootStoreBase.props({
         self.docFilter = val
       },
       flushData() {
-        self.lastUpdatedAt = '1970-01-01T00:00:00.000'
+        self.lastUpdatedAt = 0
         self.ae_arts.clear()
         self.arts.clear()
         self.art_files.clear()
