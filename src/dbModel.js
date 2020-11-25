@@ -146,6 +146,7 @@ export class Sammlung extends Model {
   static table = 'sammlung'
   static associations = {
     herkunft: { type: 'belongs_to', key: 'herkunft_id' },
+    lieferung: { type: 'has_many', foreignKey: 'von_sammlung_id' },
   }
 
   @field('id') id
@@ -392,6 +393,14 @@ export class Lieferung extends Model {
 }
 export class Art extends Model {
   static table = 'art'
+  static associations = {
+    ae_art: { type: 'belongs_to', key: 'ae_id' },
+    sammlung: { type: 'has_many', foreignKey: 'art_id' },
+    sammel_lieferung: { type: 'has_many', foreignKey: 'art_id' },
+    lieferung: { type: 'has_many', foreignKey: 'art_id' },
+    kultur: { type: 'has_many', foreignKey: 'art_id' },
+    av: { type: 'has_many', foreignKey: 'art_id' },
+  }
 
   @field('id') id
   @field('ae_id') ae_id
@@ -405,7 +414,13 @@ export class Art extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
+  @relation('ae_art', 'ae_id') ae_art
+
   @children('sammlung') sammlungs
+  @children('sammel_lieferung') sammel_lieferungs
+  @children('lieferung') lieferungs
+  @children('kultur') kulturs
+  @children('av') avs
 
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
@@ -479,11 +494,14 @@ export class AeArt extends Model {
   @field('id') id
   @field('name') name
   @field('changed') changed
+
+  @children('art') arts
 }
 
 export class Garten extends Model {
   static table = 'garten'
   static associations = {
+    person: { type: 'belongs_to', key: 'person_id' },
     kultur: { type: 'has_many', foreignKey: 'garten_id' },
   }
 
@@ -511,6 +529,7 @@ export class Garten extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @children('kultur') kulturs
+  @relation('person', 'person_id') person
 
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
@@ -589,12 +608,12 @@ export class Kultur extends Model {
   static table = 'kultur'
   static associations = {
     garten: { type: 'belongs_to', key: 'garten_id' },
-    anlieferung: { type: 'has_many', key: 'von_kultur_id' },
-    auslieferung: { type: 'has_many', key: 'nach_kultur_id' },
+    anlieferung: { type: 'has_many', foreignKey: 'von_kultur_id' },
+    auslieferung: { type: 'has_many', foreignKey: 'nach_kultur_id' },
     teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
     zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
-    //event: { type: 'has_many', foreignKey: 'kultur_id' },
-    //kultur_option: { type: 'has_many', foreignKey: 'kultur_id' },
+    event: { type: 'has_many', foreignKey: 'kultur_id' },
+    kultur_option: { type: 'has_many', foreignKey: 'kultur_id' },
   }
 
   @field('id') id
@@ -618,8 +637,8 @@ export class Kultur extends Model {
 
   @children('teilkultur') teilkulturs
   @children('zaehlung') zaehlungs
-  //@children('event') events
-  //@relation('kultur_option) kultur_option
+  @children('event') events
+  @children('kultur_option') kultur_options
   @lazy anlieferungs = this.collections
     .get('lieferung')
     .query(Q.where('nach_kultur_id', this.id))
@@ -808,7 +827,7 @@ export class Zaehlung extends Model {
   static table = 'zaehlung'
   static associations = {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
-    teilzaehlung: { type: 'has_many', key: 'zaehlung_id' },
+    teilzaehlung: { type: 'has_many', foreignKey: 'zaehlung_id' },
   }
 
   @field('id') id
@@ -922,6 +941,8 @@ export class Teilzaehlung extends Model {
   @field('_depth') _depth
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
+
+  @relation('zaehlung', 'zaehlung_id') zaehlung
 
   @action
   async edit({ field, value, store }) {

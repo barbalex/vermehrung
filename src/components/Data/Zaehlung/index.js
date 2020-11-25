@@ -1,15 +1,7 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -56,25 +48,13 @@ const StyledSplitPane = styled(SplitPane)`
 const Zaehlung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
+  row: rowPassed,
+  rawRow,
 }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
 
-  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
-  const db = useDatabase()
-  // useObservable reduces recomputation
-  const zaehlungCollection = useObservable(() =>
-    db.collections.get('zaehlung').query().observe(),
-  )
-  const zaehlungs = useObservableState(zaehlungCollection, [])
-  const za = zaehlungs ? zaehlungs.find((za) => za.id === id) : undefined
-
-  const row = useMemo(
-    () => (showFilter ? filter.zaehlung : za),
-    // need zaehlungs.length for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.zaehlung, id, showFilter, za, zaehlungs.length],
-  )
+  const row = showFilter ? filter.zaehlung : rowPassed
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -103,6 +83,8 @@ const Zaehlung = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
+  console.log('Zaehlung rendering', { row, rawRow })
+
   return (
     <ErrorBoundary>
       <>
@@ -124,6 +106,7 @@ const Zaehlung = ({
                 showFilter={showFilter}
                 id={id}
                 row={row}
+                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormLabel from '@material-ui/core/FormLabel'
@@ -29,7 +29,7 @@ const StyledRadio = styled(Radio)`
 `
 
 const RadioButtonGroup = ({
-  value,
+  value: valuePassed,
   label,
   name,
   error,
@@ -37,6 +37,11 @@ const RadioButtonGroup = ({
   dataSource = [],
   saveToDb,
 }) => {
+  const [stateValue, setStateValue] = useState(valuePassed)
+  useEffect(() => {
+    setStateValue(valuePassed)
+  }, [valuePassed])
+
   const onClickButton = useCallback(
     (event) => {
       /**
@@ -47,9 +52,10 @@ const RadioButtonGroup = ({
        */
       const targetValue = event.target.value
       // eslint-disable-next-line eqeqeq
-      if (targetValue !== undefined && targetValue == value) {
+      if (targetValue !== undefined && targetValue == stateValue) {
         // an already active option was clicked
         // set value null
+        setStateValue(null)
         const fakeEvent = {
           target: {
             value: null,
@@ -59,14 +65,14 @@ const RadioButtonGroup = ({
         return saveToDb(fakeEvent)
       }
     },
-    [value, name, saveToDb],
+    [stateValue, name, saveToDb],
   )
   const onChangeGroup = useCallback(
     (event) => {
       // group only changes if value changes
       const targetValue = event.target.value
       // values are passed as strings > need to convert
-      const valueToUse =
+      const newValue =
         targetValue === 'true'
           ? true
           : targetValue === 'false'
@@ -74,9 +80,10 @@ const RadioButtonGroup = ({
           : isNaN(targetValue)
           ? targetValue
           : +targetValue
+      setStateValue(newValue)
       const fakeEvent = {
         target: {
-          value: valueToUse,
+          value: newValue,
           name,
         },
       }
@@ -86,7 +93,9 @@ const RadioButtonGroup = ({
   )
 
   const valueSelected =
-    value !== null && value !== undefined ? toStringIfPossible(value) : ''
+    stateValue !== null && stateValue !== undefined
+      ? toStringIfPossible(stateValue)
+      : ''
 
   return (
     <StyledFormControl
@@ -118,10 +127,6 @@ const RadioButtonGroup = ({
       )}
     </StyledFormControl>
   )
-}
-
-RadioButtonGroup.defaultProps = {
-  value: null,
 }
 
 export default observer(RadioButtonGroup)

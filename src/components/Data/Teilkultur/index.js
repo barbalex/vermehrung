@@ -1,15 +1,7 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -56,25 +48,12 @@ const StyledSplitPane = styled(SplitPane)`
 const Teilkultur = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
+  row: rowPassed,
 }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
 
-  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
-  const db = useDatabase()
-  // useObservable reduces recomputation
-  const teilkulturCollection = useObservable(() =>
-    db.collections.get('teilkultur').query().observe(),
-  )
-  const teilkulturs = useObservableState(teilkulturCollection, [])
-  const tk = teilkulturs ? teilkulturs.find((tk) => tk.id === id) : undefined
-
-  const row = useMemo(
-    () => (showFilter ? filter.teilkultur : tk),
-    // need teilkulturs.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.teilkultur, id, showFilter, tk, teilkulturs.length],
-  )
+  const row = showFilter ? filter.teilkultur : rowPassed
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(

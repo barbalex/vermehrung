@@ -1,15 +1,7 @@
-import React, {
-  useContext,
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-} from 'react'
+import React, { useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -56,25 +48,12 @@ const StyledSplitPane = styled(SplitPane)`
 const Garten = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
+  row: rowPassed,
 }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
 
-  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
-  const db = useDatabase()
-  // useObservable reduces recomputation
-  const herkunftCollection = useObservable(() =>
-    db.collections.get('garten').query().observe(),
-  )
-  const gartens = useObservableState(herkunftCollection, [])
-  const ga = gartens ? gartens.find((ga) => ga.id === id) : undefined
-
-  const row = useMemo(
-    () => (showFilter ? filter.garten : ga),
-    // need gartens.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [showFilter, filter.garten, ga, gartens.length],
-  )
+  const row = showFilter ? filter.garten : rowPassed
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
