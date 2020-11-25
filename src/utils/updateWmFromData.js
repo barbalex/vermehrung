@@ -16,6 +16,7 @@ const parseComplexFields = (object) =>
     _revisions: JSON.stringify(object._revisions),
   })
 
+// TODO: do this in worker?
 const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
   const {
     db,

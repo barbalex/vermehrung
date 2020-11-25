@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import Select from 'react-select/creatable'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -88,7 +88,11 @@ const SharedSelect = ({
   onCreateNew,
   callback = () => {},
 }) => {
-  const value = row[field]
+  const [stateValue, setStateValue] = useState(row[field])
+  useEffect(() => {
+    setStateValue(row[field])
+  }, [])
+
   const onChange = useCallback((option, actionMeta) => {
     // if action is create-option
     // need to create new dataset
@@ -97,14 +101,17 @@ const SharedSelect = ({
       onCreateNew({ name: option.label })
       return
     }
-    row.edit({ field, value: option ? option.value : null })
+    const newValue = option ? option.value : null
+    setStateValue(newValue)
+    row.edit({ field, value: newValue })
     callback()
   }, [])
 
   // show ... whyle options are loading
-  const loadingOptions = [{ value, label: '...' }]
-  const optionsToUse = loading && value ? loadingOptions : options
-  const selectValue = optionsToUse.find((o) => o.value === value) || emptyValue
+  const loadingOptions = [{ value: stateValue, label: '...' }]
+  const optionsToUse = loading && stateValue ? loadingOptions : options
+  const selectValue =
+    optionsToUse.find((o) => o.value === stateValue) || emptyValue
 
   return (
     <Container>
