@@ -82,6 +82,7 @@ const updateWmFromData = async ({ data: dataPassed, table, store }) => {
               })
           })
         }),
+        // prepareCreateFromDirtyRaw replaces watermelon's id with vermehrung's
         ...dataToCreateObjectsFrom.map((d) =>
           collection.prepareCreateFromDirtyRaw(parseComplexFields(d)),
         ),
