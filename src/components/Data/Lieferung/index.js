@@ -37,7 +37,12 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const LieferungContainer = ({ filter: showFilter, id: idPassed, row }) => {
+const LieferungContainer = ({
+  filter: showFilter,
+  id: idPassed,
+  row,
+  rawRow,
+}) => {
   const store = useContext(StoreContext)
   const { userPersonOption } = store
   const { activeNodeArray } = store.tree
@@ -69,6 +74,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed, row }) => {
         <Lieferung
           showFilter={showFilter}
           row={row}
+          rawRow={rawRow}
           sammelLieferung={sammelLieferung}
           id={id}
         />
@@ -84,6 +90,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed, row }) => {
     <Lieferung
       id={id}
       row={row}
+      rawRow={rawRow}
       showFilter={showFilter}
       sammelLieferung={sammelLieferung}
     />
