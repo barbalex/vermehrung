@@ -1,15 +1,7 @@
-import React, {
-  useContext,
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-} from 'react'
+import React, { useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -56,25 +48,12 @@ const StyledSplitPane = styled(SplitPane)`
 const Kultur = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
+  row: rowPassed,
 }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
 
-  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
-  const db = useDatabase()
-  // useObservable reduces recomputation
-  const kulturCollection = useObservable(() =>
-    db.collections.get('kultur').query().observe(),
-  )
-  const kulturs = useObservableState(kulturCollection, [])
-  const ku = kulturs ? kulturs.find((ku) => ku.id === id) : undefined
-
-  const row = useMemo(
-    () => (showFilter ? filter.kultur : ku),
-    // need kulturs.length for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.kultur, id, showFilter, ku, kulturs.length],
-  )
+  const row = showFilter ? filter.kultur : rowPassed
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(

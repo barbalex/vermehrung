@@ -16,15 +16,37 @@ const onError = ({ error }) => {
 }
 
 const initializeSubscriptions = ({ store }) => {
+  const {
+    lastUpdated_ae_art,
+    subscribeAe_art,
+    lastUpdated_art,
+    subscribeArt,
+    lastUpdated_garten,
+    subscribeGarten,
+    lastUpdated_herkunft,
+    subscribeHerkunft,
+    lastUpdated_kultur,
+    subscribeKultur,
+    lastUpdated_lieferung,
+    subscribeLieferung,
+    lastUpdated_sammlung,
+    subscribeSammlung,
+    lastUpdated_teilkultur,
+    subscribeTeilkultur,
+    lastUpdated_teilzaehlung,
+    subscribeTeilzaehlung,
+    lastUpdated_zaehlung,
+    subscribeZaehlung,
+  } = store
   const unsubscribe = {}
-  unsubscribe.ae_art = store.subscribeAe_art(
-    undefined,
+  unsubscribe.ae_art = subscribeAe_art(
+    { where: { _rev_at: { _gt: lastUpdated_ae_art } } },
     ae_artModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'ae_art', store }),
     (error) => onError({ error }),
   )
-  unsubscribe.art = store.subscribeArt(
-    undefined,
+  unsubscribe.art = subscribeArt(
+    { where: { _rev_at: { _gt: lastUpdated_art } } },
     artModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'art', store }),
     (error) => onError({ error }),
@@ -34,23 +56,23 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen()
   unsubscribe.av = store.subscribeAv()
   unsubscribe.event = store.subscribeEvent()
-  unsubscribe.garten = store.subscribeGarten(
-    undefined,
+  unsubscribe.garten = subscribeGarten(
+    { where: { _rev_at: { _gt: lastUpdated_garten } } },
     gartenModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'garten', store }),
     (error) => onError({ error }),
   )
   unsubscribe.garten_file = store.subscribeGarten_file()
   unsubscribe.gv = store.subscribeGv()
-  unsubscribe.herkunft = store.subscribeHerkunft(
-    undefined,
+  unsubscribe.herkunft = subscribeHerkunft(
+    { where: { _rev_at: { _gt: lastUpdated_herkunft } } },
     herkunftModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'herkunft', store }),
     (error) => onError({ error }),
   )
   unsubscribe.herkunft_file = store.subscribeHerkunft_file()
-  unsubscribe.kultur = store.subscribeKultur(
-    undefined,
+  unsubscribe.kultur = subscribeKultur(
+    { where: { _rev_at: { _gt: lastUpdated_kultur } } },
     kulturModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'kultur', store }),
     (error) => onError({ error }),
@@ -59,8 +81,8 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.kultur_option = store.subscribeKultur_option()
   unsubscribe.kultur_qk = store.subscribeKultur_qk()
   unsubscribe.kultur_qk_choosen = store.subscribeKultur_qk_choosen()
-  unsubscribe.lieferung = store.subscribeLieferung(
-    undefined,
+  unsubscribe.lieferung = subscribeLieferung(
+    { where: { _rev_at: { _gt: lastUpdated_lieferung } } },
     lieferungModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'lieferung', store }),
     (error) => onError({ error }),
@@ -70,28 +92,28 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.person_file = store.subscribePerson_file()
   unsubscribe.person_option = store.subscribePerson_option()
   unsubscribe.sammel_lieferung = store.subscribeSammel_lieferung()
-  unsubscribe.sammlung = store.subscribeSammlung(
-    undefined,
+  unsubscribe.sammlung = subscribeSammlung(
+    { where: { _rev_at: { _gt: lastUpdated_sammlung } } },
     sammlungModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'sammlung', store }),
     (error) => onError({ error }),
   )
   unsubscribe.sammlung_file = store.subscribeSammlung_file()
-  unsubscribe.teilkultur = store.subscribeTeilkultur(
-    undefined,
+  unsubscribe.teilkultur = subscribeTeilkultur(
+    { where: { _rev_at: { _gt: lastUpdated_teilkultur } } },
     teilkulturModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'teilkultur', store }),
     (error) => onError({ error }),
   )
-  unsubscribe.teilzaehlung = store.subscribeTeilzaehlung(
-    undefined,
+  unsubscribe.teilzaehlung = subscribeTeilzaehlung(
+    { where: { _rev_at: { _gt: lastUpdated_teilzaehlung } } },
     teilzaehlungModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'teilzaehlung', store }),
     (error) => onError({ error }),
   )
   unsubscribe.user_role = store.subscribeUser_role()
-  unsubscribe.zaehlung = store.subscribeZaehlung(
-    undefined,
+  unsubscribe.zaehlung = subscribeZaehlung(
+    { where: { _rev_at: { _gt: lastUpdated_zaehlung } } },
     zaehlungModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'zaehlung', store }),
     (error) => onError({ error }),

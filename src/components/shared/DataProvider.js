@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState } from 'observable-hooks'
+import { useObservableState, useSubscription } from 'observable-hooks'
 
 import ErrorBoundary from './ErrorBoundaryForDataProvider'
 
@@ -17,12 +17,31 @@ const HerkunftDataProvider = ({ id, table, children }) => {
     null,
   )
 
+  const [rawRow, setRawRow] = useState(null)
+  useSubscription(
+    db.collections.get(table).findAndObserve(id),
+    (val) => {
+      // TODO:
+      // this is a trick to get react components to rerender
+      // when the observable changes
+      // NEED TO GET RID OF THIS HACK
+      setRawRow(JSON.stringify(val._raw))
+    },
+    (val) => console.log('DataProvider error:', val),
+    (val) => console.log('DataProvider complete, val:', val),
+  )
+
   // TODO:
   // findAndObserve can throw error
   // if url points to dataset but it's data was not yet loaded
   // can't catch the error above because inside hook
   // need to catch it with ErrorBoundary
-  return <ErrorBoundary>{React.cloneElement(children, { row })}</ErrorBoundary>
+  //console.log('DataProvider', { table, id, row })
+  return (
+    <ErrorBoundary>
+      {React.cloneElement(children, { row, rawRow })}
+    </ErrorBoundary>
+  )
 }
 
 export default HerkunftDataProvider

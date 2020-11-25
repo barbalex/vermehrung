@@ -4,8 +4,6 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import isUuid from 'is-uuid'
 import last from 'lodash/last'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState, useObservable } from 'observable-hooks'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
@@ -57,6 +55,8 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed, row }) => {
   const sammelLieferung = store.sammel_lieferungs.get(sammelLieferungId) || {}
 
   const { li_show_sl } = userPersonOption
+
+  //console.log('Lieferung, row:', row)
 
   if (
     sammelLieferungId !== '99999999-9999-9999-9999-999999999999' &&

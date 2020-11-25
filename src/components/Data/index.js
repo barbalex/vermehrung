@@ -41,7 +41,11 @@ const Data = () => {
       return <Root />
     }
     case 'art': {
-      return <Art id={id} />
+      return (
+        <DataProvider id={id} table={activeForm}>
+          <Art id={id} />
+        </DataProvider>
+      )
     }
     case 'arten': {
       return <Arten />
@@ -53,14 +57,18 @@ const Data = () => {
       return <Events />
     }
     case 'garten': {
-      return <Garten id={id} />
+      return (
+        <DataProvider id={id} table={activeForm}>
+          <Garten id={id} />
+        </DataProvider>
+      )
     }
     case 'gaerten': {
       return <Gaerten />
     }
     case 'herkunft': {
       return (
-        <DataProvider id={id} table={'herkunft'}>
+        <DataProvider id={id} table={activeForm}>
           <Herkunft id={id} />
         </DataProvider>
       )
@@ -69,7 +77,11 @@ const Data = () => {
       return <Herkuenfte />
     }
     case 'kultur': {
-      return <Kultur id={id} />
+      return (
+        <DataProvider id={id} table={activeForm}>
+          <Kultur id={id} />
+        </DataProvider>
+      )
     }
     case 'kulturen': {
       return <Kulturen />
@@ -82,7 +94,7 @@ const Data = () => {
     }
     case 'lieferung': {
       return (
-        <DataProvider id={id} table={'lieferung'}>
+        <DataProvider id={id} table={activeForm}>
           <Lieferung id={id} />
         </DataProvider>
       )
@@ -98,7 +110,7 @@ const Data = () => {
     }
     case 'sammlung': {
       return (
-        <DataProvider id={id} table={'sammlung'}>
+        <DataProvider id={id} table={activeForm}>
           <Sammlung id={id} />
         </DataProvider>
       )
@@ -107,13 +119,21 @@ const Data = () => {
       return <Sammlungen />
     }
     case 'teilkultur': {
-      return <Teilkultur id={id} />
+      return (
+        <DataProvider id={id} table={activeForm}>
+          <Teilkultur id={id} />
+        </DataProvider>
+      )
     }
     case 'teilkulturen': {
       return <Teilkulturen />
     }
     case 'zaehlung': {
-      return <Zaehlung id={id} />
+      return (
+        <DataProvider id={id} table={activeForm}>
+          <Zaehlung id={id} />
+        </DataProvider>
+      )
     }
     case 'zaehlungen': {
       return <Zaehlungen />

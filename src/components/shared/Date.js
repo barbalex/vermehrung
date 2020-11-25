@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
@@ -69,36 +69,35 @@ const dateFormat = [
 ]
 
 const DateField = ({
-  value,
+  value: valuePassed,
   name,
   label,
   saveToDb,
   error,
   popperPlacement = 'auto',
 }) => {
+  const [stateValue, setStateValue] = useState(valuePassed)
+  useEffect(() => {
+    setStateValue(valuePassed)
+  }, [valuePassed])
+
   const onChangeDatePicker = useCallback(
     (date) => {
-      if (date === null) {
-        saveToDb({
-          target: {
-            value: null,
-            name,
-          },
-        })
-      } else {
-        saveToDb({
-          target: {
-            value: DateTime.fromJSDate(date).toFormat('yyyy-LL-dd'),
-            name,
-          },
-        })
-      }
+      const newValue =
+        date === null ? null : DateTime.fromJSDate(date).toFormat('yyyy-LL-dd')
+      setStateValue(newValue)
+      saveToDb({
+        target: {
+          value: newValue,
+          name,
+        },
+      })
     },
     [name, saveToDb],
   )
 
-  const isValid = DateTime.fromSQL(value).isValid
-  const selected = isValid ? new Date(DateTime.fromSQL(value)) : null
+  const isValid = DateTime.fromSQL(stateValue).isValid
+  const selected = isValid ? new Date(DateTime.fromSQL(stateValue)) : null
 
   // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
   return (

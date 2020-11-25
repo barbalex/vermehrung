@@ -33,10 +33,10 @@ const MyTextField = ({
   const [stateValue, setStateValue] = useState(
     value || value === 0 ? value : '',
   )
-  const onChange = useCallback((event) => setStateValue(event.target.value), [])
   useEffect(() => {
     setStateValue(value || value === 0 ? value : '')
   }, [value])
+  const onChange = useCallback((event) => setStateValue(event.target.value), [])
 
   const onKeyPress = useCallback(
     (event) => {

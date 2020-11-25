@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -27,18 +27,31 @@ const StyledCheckbox = styled(Checkbox)`
   width: 24px;
 `
 
-const Checkbox2States = ({ label, name, value, error, saveToDb }) => {
+const Checkbox2States = ({
+  label,
+  name,
+  value: valuePassed,
+  error,
+  saveToDb,
+}) => {
+  const [stateValue, setStateValue] = useState(valuePassed)
+  useEffect(() => {
+    setStateValue(valuePassed)
+  }, [valuePassed])
+
   const onClickButton = useCallback(() => {
+    const newValue = !stateValue
+    setStateValue(newValue)
     const fakeEvent = {
       target: {
-        value: !value,
+        value: newValue,
         name,
       },
     }
     saveToDb(fakeEvent)
-  }, [value, name, saveToDb])
+  }, [stateValue, name, saveToDb])
 
-  const checked = value === true
+  const checked = stateValue === true
 
   return (
     <Container>
