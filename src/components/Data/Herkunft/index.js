@@ -49,6 +49,7 @@ const Herkunft = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
   row: rowPassed,
+  rawRow,
 }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
@@ -103,6 +104,7 @@ const Herkunft = ({
               showFilter={showFilter}
               id={id}
               row={row}
+              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
