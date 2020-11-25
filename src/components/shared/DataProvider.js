@@ -2,10 +2,9 @@ import React from 'react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { useObservableState } from 'observable-hooks'
 
-import Herkunft from './Herkunft'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from './ErrorBoundaryForDataProvider'
 
-const HerkunftDataProvider = ({ id, filter }) => {
+const HerkunftDataProvider = ({ id, table, children }) => {
   // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
   // TODO:
   // when being updated from live queries
@@ -13,8 +12,8 @@ const HerkunftDataProvider = ({ id, filter }) => {
   // maybe due to observables not being "hot"
   // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661790668
   const db = useDatabase()
-  const herkunft = useObservableState(
-    db.collections.get('herkunft').findAndObserve(id),
+  const row = useObservableState(
+    db.collections.get(table).findAndObserve(id),
     null,
   )
 
@@ -23,11 +22,7 @@ const HerkunftDataProvider = ({ id, filter }) => {
   // if url points to dataset but it's data was not yet loaded
   // can't catch the error above because inside hook
   // need to catch it with ErrorBoundary
-  return (
-    <ErrorBoundary>
-      <Herkunft id={id} filter={filter} row={herkunft} />
-    </ErrorBoundary>
-  )
+  return <ErrorBoundary>{React.cloneElement(children, { row })}</ErrorBoundary>
 }
 
 export default HerkunftDataProvider

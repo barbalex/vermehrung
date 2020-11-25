@@ -1,15 +1,7 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FormTitle from './FormTitle'
@@ -56,26 +48,12 @@ const StyledSplitPane = styled(SplitPane)`
 const Sammlung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
+  row: rowPassed,
 }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
 
-  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
-  const db = useDatabase()
-  // useObservable reduces recomputation
-  const sammlungCollection = useObservable(() =>
-    db.collections.get('sammlung').query().observe(),
-  )
-  const sammlungs = useObservableState(sammlungCollection, [])
-  //const sammlungCollection = db.collections.get('sammlung')
-  const sa = sammlungs ? sammlungs.find((sa) => sa.id === id) : undefined
-
-  const row = useMemo(
-    () => (showFilter ? filter.sammlung : sa),
-    // need sammlungs.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.sammlung, id, showFilter, sammlungs.length],
-  )
+  const row = showFilter ? filter.sammlung : rowPassed
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
