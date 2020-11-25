@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/Async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -83,6 +83,11 @@ const SelectLoadingOptions = ({
 }) => {
   const store = useContext(StoreContext)
 
+  const [stateValue, setStateValue] = useState(row[field] || '')
+  useEffect(() => {
+    setStateValue(row[field] || '')
+  }, [field, row])
+
   const loadOptions = useCallback(
     (inputValue, cb) => {
       const data = modelFilter(inputValue).slice(0, 7)
@@ -98,6 +103,7 @@ const SelectLoadingOptions = ({
   const onChange = useCallback(
     (option) => {
       const value = option && option.value ? option.value : null
+      setStateValue(value ?? '')
       const fakeEvent = {
         target: {
           name: field,
@@ -110,7 +116,7 @@ const SelectLoadingOptions = ({
   )
 
   const value = {
-    value: row[field] || '',
+    value: stateValue,
     label: valueLabelFunction({ [valueLabelKey]: row, store }),
   }
 
