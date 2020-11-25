@@ -42,14 +42,13 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const Teilzaehlungen = ({ zaehlungId }) => {
+const Teilzaehlungen = ({ zaehlung }) => {
   const store = useContext(StoreContext)
   const { insertTeilzaehlungRev, teilzaehlungsSorted } = store
 
-  const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
   const kulturId = zaehlung.kultur_id
 
-  const hierarchyFilter = (r) => r.zaehlung_id === zaehlungId
+  const hierarchyFilter = (r) => r.zaehlung_id === zaehlung.id
 
   const storeRowsFiltered = teilzaehlungsSorted.filter(hierarchyFilter)
 
@@ -59,7 +58,7 @@ const Teilzaehlungen = ({ zaehlungId }) => {
   const teilzaehlungCollection = useObservable(() =>
     db.collections
       .get('teilzaehlung')
-      .query(Q.where('zaehlung_id', zaehlungId))
+      .query(Q.where('zaehlung_id', zaehlung.id))
       .observe(),
   )
   const teilzaehlungs = useObservableState(teilzaehlungCollection, []).sort(
@@ -68,7 +67,7 @@ const Teilzaehlungen = ({ zaehlungId }) => {
   console.log('Teilzaehlungen', {
     storeRowsFiltered,
     teilzaehlungs,
-    zaehlungId,
+    zaehlung,
   })
 
   const kulturOption = store.kultur_options.get(kulturId) ?? {}
@@ -112,7 +111,7 @@ const Teilzaehlungen = ({ zaehlungId }) => {
           )}
         </div>
       </TitleRow>
-      <TeilzaehlungenRows zaehlungId={zaehlungId} kulturId={kulturId} />
+      <TeilzaehlungenRows zaehlung={zaehlung} kulturId={kulturId} />
     </ErrorBoundary>
   )
 }

@@ -121,9 +121,9 @@ const TeilzaehlungForm = ({
           kultur_id: kulturId,
         },
       })
-      row.edit({ field: 'teilkultur_id', value: teilkultur_id })
+      row.edit({ field: 'teilkultur_id', value: teilkultur_id, store })
     },
-    [insertTeilkulturRev, kulturId, row],
+    [insertTeilkulturRev, kulturId, row, store],
   )
 
   useEffect(() => {
@@ -140,9 +140,9 @@ const TeilzaehlungForm = ({
       // only update if value has changed
       if (value === previousValue) return
 
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [row],
+    [row, store],
   )
   const onClickDelete = useCallback(() => {
     row.delete()
