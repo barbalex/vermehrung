@@ -39,7 +39,7 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
+const LieferungContainer = ({ filter: showFilter, id: idPassed, row }) => {
   const store = useContext(StoreContext)
   const { userPersonOption } = store
   const { activeNodeArray } = store.tree
@@ -50,19 +50,9 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   }
 
-  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
-  const db = useDatabase()
-  // useObservable reduces recomputation
-  const lieferungCollection = useObservable(() =>
-    db.collections.get('lieferung').query().observe(),
-  )
-  const lieferungs = useObservableState(lieferungCollection, [])
-  const lieferung = lieferungs
-    ? lieferungs.find((li) => li.id === id)
-    : undefined
-
+  // TODO:
   const sammelLieferungId =
-    lieferung?.sammel_lieferung_id ?? '99999999-9999-9999-9999-999999999999'
+    row?.sammel_lieferung_id ?? '99999999-9999-9999-9999-999999999999'
   // TODO: convert once sammel_lieferung is built
   const sammelLieferung = store.sammel_lieferungs.get(sammelLieferungId) || {}
 
@@ -78,7 +68,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       <StyledSplitPane split="vertical" size="50%" minSize={200}>
         <Lieferung
           showFilter={showFilter}
-          lieferung={lieferung}
+          row={row}
           sammelLieferung={sammelLieferung}
           id={id}
         />
@@ -93,7 +83,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
   return (
     <Lieferung
       id={id}
-      lieferung={lieferung}
+      row={row}
       showFilter={showFilter}
       sammelLieferung={sammelLieferung}
     />

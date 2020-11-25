@@ -117,7 +117,7 @@ export class Herkunft extends Model {
     newObjectForStore.lv95_x = this.lv95_x
     newObjectForStore.lv95_y = this.lv95_y
     // give past _rev_at to ensure server overwrites this
-    newObjectForStore._rev_at = Date.now() / 1000
+    newObjectForStore._rev_at = this._rev_at
     delete newObjectForStore.herkunft_id
     // optimistically update store
     await this.update((row) => {
@@ -266,6 +266,12 @@ export class Sammlung extends Model {
 
 export class Lieferung extends Model {
   static table = 'lieferung'
+  static associations = {
+    sammlung: { type: 'belongs_to', key: 'von_sammlung_id' },
+    sammel_lieferung: { type: 'belongs_to', key: 'sammel_lieferung_id' },
+    von_kultur: { type: 'belongs_to', key: 'von_kultur_id' },
+    nach_kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
+  }
 
   @field('id') id
   @field('sammel_lieferung_id') sammel_lieferung_id
@@ -293,7 +299,10 @@ export class Lieferung extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
-  @relation('lieferung', 'von_sammlung_id') lieferung
+  @relation('sammlung', 'von_sammlung_id') sammlung
+  @relation('sammel_lieferung', 'sammel_lieferung_id') sammel_lieferung
+  @relation('sammlung', 'von_kultur_id') von_kultur
+  @relation('sammlung', 'nach_kultur_id') nach_kultur
 
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store

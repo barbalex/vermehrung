@@ -27,6 +27,7 @@ import Teilkultur from './Teilkultur'
 import Teilkulturen from './Teilkulturen'
 import Root from './Root'
 import { StoreContext } from '../../models/reactUtils'
+import DataProvider from '../shared/DataProvider'
 
 const Data = () => {
   const store = useContext(StoreContext)
@@ -58,7 +59,11 @@ const Data = () => {
       return <Gaerten />
     }
     case 'herkunft': {
-      return <Herkunft id={id} />
+      return (
+        <DataProvider id={id} table={'herkunft'}>
+          <Herkunft id={id} />
+        </DataProvider>
+      )
     }
     case 'herkuenfte': {
       return <Herkuenfte />
@@ -76,7 +81,11 @@ const Data = () => {
       return <SammelLieferungen />
     }
     case 'lieferung': {
-      return <Lieferung id={id} />
+      return (
+        <DataProvider id={id} table={'lieferung'}>
+          <Lieferung id={id} />
+        </DataProvider>
+      )
     }
     case 'lieferungen': {
       return <Lieferungen />
@@ -88,7 +97,11 @@ const Data = () => {
       return <Personen />
     }
     case 'sammlung': {
-      return <Sammlung id={id} />
+      return (
+        <DataProvider id={id} table={'sammlung'}>
+          <Sammlung id={id} />
+        </DataProvider>
+      )
     }
     case 'sammlungen': {
       return <Sammlungen />

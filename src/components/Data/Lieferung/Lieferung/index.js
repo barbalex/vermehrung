@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
@@ -51,15 +45,16 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const Lieferung = ({ id, showFilter, sammelLieferung = {}, lieferung }) => {
+const Lieferung = ({
+  id,
+  showFilter,
+  sammelLieferung = {},
+  row: rowPassed,
+}) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
 
-  const row = useMemo(() => (showFilter ? filter.lieferung : lieferung), [
-    filter.lieferung,
-    lieferung,
-    showFilter,
-  ])
+  const row = showFilter ? filter.lieferung : rowPassed
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
