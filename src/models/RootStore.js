@@ -317,8 +317,8 @@ export const RootStore = RootStoreBase.props({
       upsertArtModel(val) {
         self.arts.set(val.id, val)
       },
-      insertArtRev(args) {
-        const { user, addQueuedQuery, upsertArtModel } = self
+      async insertArtRev(args) {
+        const { user, addQueuedQuery } = self
         const { activeNodeArray, setActiveNodeArray } = self.tree
         const valuesPassed = args?.values ?? {}
 
@@ -359,7 +359,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertArtModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('art')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         setTimeout(() => {
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
@@ -384,8 +392,8 @@ export const RootStore = RootStoreBase.props({
       upsertArtQkChoosenModel(val) {
         self.art_qk_choosens.set(val.id, val)
       },
-      insertArtQkChoosenRev(args) {
-        const { user, addQueuedQuery, upsertArtQkChoosenModel } = self
+      async insertArtQkChoosenRev(args) {
+        const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
 
         const id = uuidv1()
@@ -427,7 +435,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertArtQkChoosenModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('art_qk_choosen')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
       },
       deleteArtQkChoosenRevModel(val) {
         // 1. update model: remove this conflict
@@ -500,11 +516,11 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         const { db } = self
         await db.action(async () => {
-          const avCollection = db.get('av')
+          const collection = db.get('av')
           // using batch because can create from raw
           // which enables overriding watermelons own id
           await db.batch([
-            avCollection.prepareCreateFromDirtyRaw(newObjectForStore),
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
           ])
         })
       },
@@ -523,11 +539,10 @@ export const RootStore = RootStoreBase.props({
       upsertEventModel(val) {
         self.events.set(val.id, val)
       },
-      insertEventRev(args) {
+      async insertEventRev(args) {
         const {
           user,
           addQueuedQuery,
-          upsertEventModel,
           kulturIdInActiveNodeArray,
           teilkulturIdInActiveNodeArray,
         } = self
@@ -579,7 +594,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertEventModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('event')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         setTimeout(() => {
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
@@ -604,13 +627,8 @@ export const RootStore = RootStoreBase.props({
       upsertGartenModel(val) {
         self.gartens.set(val.id, val)
       },
-      insertGartenRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          upsertGartenModel,
-          personIdInActiveNodeArray,
-        } = self
+      async insertGartenRev(args) {
+        const { user, addQueuedQuery, personIdInActiveNodeArray } = self
 
         const valuesPassed = args?.values ?? {}
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
@@ -660,7 +678,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertGartenModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('garten')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         setTimeout(() => {
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
@@ -691,8 +717,8 @@ export const RootStore = RootStoreBase.props({
       upsertGvModel(val) {
         self.gvs.set(val.id, val)
       },
-      insertGvRev(args) {
-        const { user, addQueuedQuery, upsertGvModel } = self
+      async insertGvRev(args) {
+        const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
 
         const id = uuidv1()
@@ -733,7 +759,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertGvModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('gv')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
       },
       deleteGvRevModel(val) {
         // 1. update model: remove this conflict
@@ -750,8 +784,8 @@ export const RootStore = RootStoreBase.props({
       upsertHerkunftModel(val) {
         self.herkunfts.set(val.id, val)
       },
-      insertHerkunftRev(args) {
-        const { user, addQueuedQuery, upsertHerkunftModel } = self
+      async insertHerkunftRev(args) {
+        const { user, addQueuedQuery } = self
 
         const valuesPassed = args?.values ?? {}
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
@@ -800,7 +834,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertHerkunftModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('herkunft')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         setTimeout(() => {
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
@@ -831,11 +873,10 @@ export const RootStore = RootStoreBase.props({
       upsertKulturModel(val) {
         self.kulturs.set(val.id, val)
       },
-      insertKulturRev(args) {
+      async insertKulturRev(args) {
         const {
           user,
           addQueuedQuery,
-          upsertKulturModel,
           artIdInActiveNodeArray,
           herkunftIdInActiveNodeArray,
           gartenIdInActiveNodeArray,
@@ -888,7 +929,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertKulturModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('kultur')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         setTimeout(() => {
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
@@ -940,8 +989,8 @@ export const RootStore = RootStoreBase.props({
       upsertKulturQkChoosenModel(val) {
         self.kultur_qk_choosens.set(val.id, val)
       },
-      insertKulturQkChoosenRev(args) {
-        const { user, addQueuedQuery, upsertKulturQkChoosenModel } = self
+      async insertKulturQkChoosenRev(args) {
+        const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
 
         const id = uuidv1()
@@ -983,7 +1032,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertKulturQkChoosenModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('kultur_qk_choosen')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
       },
       deleteKulturQkChoosenRevModel(val) {
         // 1. update model: remove this conflict
@@ -1000,11 +1057,10 @@ export const RootStore = RootStoreBase.props({
       upsertLieferungModel(val) {
         self.lieferungs.set(val.id, val)
       },
-      insertLieferungRev(args) {
+      async insertLieferungRev(args) {
         const {
           user,
           addQueuedQuery,
-          upsertLieferungModel,
           artIdInActiveNodeArray,
           personIdInActiveNodeArray,
           sammelLieferungIdInActiveNodeArray,
@@ -1075,7 +1131,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertLieferungModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('lieferung')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         setTimeout(() => {
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
@@ -1106,8 +1170,8 @@ export const RootStore = RootStoreBase.props({
       upsertPersonModel(val) {
         self.persons.set(val.id, val)
       },
-      insertPersonRev(args) {
-        const { user, addQueuedQuery, upsertPersonModel } = self
+      async insertPersonRev(args) {
+        const { user, addQueuedQuery } = self
         const { activeNodeArray, setActiveNodeArray } = self.tree
 
         const valuesPassed = args?.values ?? {}
@@ -1165,7 +1229,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertPersonModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('person')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         setTimeout(() => {
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
@@ -1211,11 +1283,10 @@ export const RootStore = RootStoreBase.props({
       upsertSammelLieferungModel(val) {
         self.sammel_lieferungs.set(val.id, val)
       },
-      insertSammelLieferungRev(args) {
+      async insertSammelLieferungRev(args) {
         const {
           user,
           addQueuedQuery,
-          upsertSammelLieferungModel,
           artIdInActiveNodeArray,
           personIdInActiveNodeArray,
           sammlungIdInActiveNodeArray,
@@ -1276,7 +1347,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertSammelLieferungModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('sammel_lieferung')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         setTimeout(() => {
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
@@ -1301,11 +1380,10 @@ export const RootStore = RootStoreBase.props({
       upsertSammlungModel(val) {
         self.sammlungs.set(val.id, val)
       },
-      insertSammlungRev(args) {
+      async insertSammlungRev(args) {
         const {
           user,
           addQueuedQuery,
-          upsertSammlungModel,
           artIdInActiveNodeArray,
           herkunftIdInActiveNodeArray,
           personIdInActiveNodeArray,
@@ -1362,7 +1440,15 @@ export const RootStore = RootStoreBase.props({
           revertValue: true,
         })
         // optimistically update store
-        upsertSammlungModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('sammlung')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         setTimeout(() => {
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
@@ -1393,13 +1479,8 @@ export const RootStore = RootStoreBase.props({
       upsertTeilkulturModel(val) {
         self.teilkulturs.set(val.id, val)
       },
-      insertTeilkulturRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          upsertTeilkulturModel,
-          kulturIdInActiveNodeArray,
-        } = self
+      async insertTeilkulturRev(args) {
+        const { user, addQueuedQuery, kulturIdInActiveNodeArray } = self
 
         const noNavigateInTree = args?.noNavigateInTree ?? false
         const valuesPassed = args?.values ?? {}
@@ -1449,7 +1530,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertTeilkulturModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('teilkultur')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         if (!noNavigateInTree) {
           setTimeout(() => {
             const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
@@ -1477,11 +1566,10 @@ export const RootStore = RootStoreBase.props({
       upsertTeilzaehlungModel(val) {
         self.teilzaehlungs.set(val.id, val)
       },
-      insertTeilzaehlungRev(args) {
+      async insertTeilzaehlungRev(args) {
         const {
           user,
           addQueuedQuery,
-          upsertTeilzaehlungModel,
           zaehlungIdInActiveNodeArray,
           teilkulturIdInActiveNodeArray,
         } = self
@@ -1532,7 +1620,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertTeilzaehlungModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('teilzaehlung')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
       },
       deleteTeilzaehlungRevModel(val) {
         // 1. update model: remove this conflict
@@ -1555,13 +1651,8 @@ export const RootStore = RootStoreBase.props({
       upsertZaehlungModel(val) {
         self.zaehlungs.set(val.id, val)
       },
-      insertZaehlungRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          upsertZaehlungModel,
-          kulturIdInActiveNodeArray,
-        } = self
+      async insertZaehlungRev(args) {
+        const { user, addQueuedQuery, kulturIdInActiveNodeArray } = self
         const valuesPassed = args?.values ?? {}
 
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
@@ -1607,7 +1698,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertZaehlungModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const collection = db.get('zaehlung')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
         setTimeout(() => {
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
