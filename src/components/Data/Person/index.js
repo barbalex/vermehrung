@@ -2,7 +2,6 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useObservableGetState } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -83,8 +82,6 @@ const Person = ({
   const firstPaneWidth = paneIsSplit ? '50%' : '100%'
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
-
-  console.log('Person', { row, rowFullname: row?.fullname })
 
   return (
     <ErrorBoundary>

@@ -11,9 +11,8 @@ import {
 import { Q } from '@nozbe/watermelondb'
 import {
   distinctUntilChanged,
-  distinctUntilKeyChanged,
+  //distinctUntilKeyChanged,
   map as map$,
-  of as of$,
 } from 'rxjs/operators'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
@@ -22,8 +21,11 @@ import isEqual from 'lodash/isEqual'
 import toStringIfPossible from './utils/toStringIfPossible'
 import toPgArray from './utils/toPgArray'
 import deleteAccount from './utils/deleteAccount'
+import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
 
 const dontSanitize = (val) => val
+/*const sanitizeArrayOfStrings = (val) =>
+  Array.isArray(val) ? val.map(String) : []*/
 
 export class Herkunft extends Model {
   static table = 'herkunft'
@@ -1078,15 +1080,15 @@ export class Person extends Model {
 
   // https://github.com/Nozbe/WatermelonDB/issues/313#issuecomment-483293806
   @lazy fullname = this.observe().pipe(
-    /*distinctUntilChanged(
+    distinctUntilChanged(
       (p, q) => p.name === q.name && p.vorname === q.vorname,
-    ),*/
-    map$((person) => {
-      if (person.vorname && person.name) {
-        return of$(`${person.vorname} ${person.name}`)
+    ),
+    map$((p) => {
+      if (p.vorname && p.name) {
+        return `${p.vorname} ${p.name}`
       }
-      if (person.name) return person.name
-      if (person.vorname) return person.vorname
+      if (p.name) return p.name
+      if (p.vorname) return p.vorname
       return undefined
     }),
   )
@@ -1192,5 +1194,146 @@ export class Person extends Model {
     )
     // delete firebase user
     deleteAccount({ store, person: this })
+  }
+}
+
+export class SammelLieferung extends Model {
+  static table = 'sammel_lieferung'
+  static associations = {
+    sammlung: { type: 'belongs_to', key: 'von_sammlung_id' },
+    von_kultur: { type: 'belongs_to', key: 'von_kultur_id' },
+    nach_kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
+    person: { type: 'belongs_to', key: 'person_id' },
+    lieferung: { type: 'has_many', foreignKey: 'sammel_lieferung_id' },
+  }
+
+  @field('id') id
+  @field('art_id') art_id
+  @field('person_id') person_id
+  @field('von_sammlung_id') von_sammlung_id
+  @field('von_kultur_id') von_kultur_id
+  @field('datum') datum
+  @field('nach_kultur_id') nach_kultur_id
+  @field('nach_ausgepflanzt') nach_ausgepflanzt
+  @field('von_anzahl_individuen') von_anzahl_individuen
+  @field('anzahl_pflanzen') anzahl_pflanzen
+  @field('anzahl_auspflanzbereit') anzahl_auspflanzbereit
+  @field('gramm_samen') gramm_samen
+  @field('andere_menge') andere_menge
+  @field('geplant') geplant
+  @field('bemerkungen') bemerkungen
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @readonly @field('_rev_at') _rev_at
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @relation('sammlung', 'von_sammlung_id') sammlung
+  @relation('sammlung', 'von_kultur_id') von_kultur
+  @relation('sammlung', 'nach_kultur_id') nach_kultur
+  @children('lieferung') lieferungs
+
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError, userPersonOption } = store
+
+    unsetError(`sammel_lieferung.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      sammel_lieferung_id: this.id,
+      art_id: field === 'art_id' ? value : this.art_id,
+      person_id: field === 'person_id' ? value : this.person_id,
+      von_sammlung_id:
+        field === 'von_sammlung_id' ? value : this.von_sammlung_id,
+      von_kultur_id: field === 'von_kultur_id' ? value : this.von_kultur_id,
+      datum: field === 'datum' ? value : this.datum,
+      nach_kultur_id: field === 'nach_kultur_id' ? value : this.nach_kultur_id,
+      nach_ausgepflanzt:
+        field === 'nach_ausgepflanzt' ? value : this.nach_ausgepflanzt,
+      von_anzahl_individuen:
+        field === 'von_anzahl_individuen' ? value : this.von_anzahl_individuen,
+      anzahl_pflanzen:
+        field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
+      anzahl_auspflanzbereit:
+        field === 'anzahl_auspflanzbereit'
+          ? value
+          : this.anzahl_auspflanzbereit,
+      gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
+      andere_menge:
+        field === 'andere_menge'
+          ? toStringIfPossible(value)
+          : this.andere_menge,
+      geplant: field === 'geplant' ? value : this.geplant,
+      bemerkungen:
+        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_sammel_lieferung_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'sammel_lieferung_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'sammel_lieferung',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.sammel_lieferung_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    const { sl_auto_copy_edits } = userPersonOption
+    setTimeout(() => {
+      // copy to all lieferungen
+      if (sl_auto_copy_edits) {
+        const newSammelLieferung = {
+          ...newObject,
+          id: newObject.sammel_lieferung_id,
+        }
+        delete newSammelLieferung.sammel_lieferung_id
+        updateAllLieferungen({
+          sammelLieferung: newSammelLieferung,
+          store,
+          field,
+        })
+      }
+    }, 50)
+  }
+
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
   }
 }

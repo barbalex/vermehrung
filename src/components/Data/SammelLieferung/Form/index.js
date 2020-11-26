@@ -70,9 +70,9 @@ const SammelLieferungForm = ({
 
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
   const shownAsSammelLieferung =
     activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'

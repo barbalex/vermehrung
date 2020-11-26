@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
@@ -56,24 +50,14 @@ const SammelLieferung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
   lieferungId,
+  row: rowPassed,
+  renderEnforcer,
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, isPrint, online, sammel_lieferungs } = store
+  const { filter, isPrint, online } = store
 
-  const row = useMemo(
-    () =>
-      showFilter ? filter.sammel_lieferung : sammel_lieferungs.get(id) || null,
-    // need sammel_lieferungs.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      filter.sammel_lieferung,
-      id,
-      showFilter,
-      sammel_lieferungs,
-      sammel_lieferungs.size,
-    ],
-  )
+  const row = showFilter ? filter.sammel_lieferung : rowPassed
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -132,6 +116,7 @@ const SammelLieferung = ({
                 showFilter={showFilter}
                 id={id}
                 row={row}
+                renderEnforcer={renderEnforcer}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}

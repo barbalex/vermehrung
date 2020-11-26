@@ -87,7 +87,11 @@ const Data = () => {
       return <Kulturen />
     }
     case 'sammel_lieferung': {
-      return <SammelLieferung id={id} />
+      return (
+        <DataProvider id={id} table={activeForm}>
+          <SammelLieferung id={id} />
+        </DataProvider>
+      )
     }
     case 'sammelLieferungen': {
       return <SammelLieferungen />
