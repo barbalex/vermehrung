@@ -41,7 +41,7 @@ const LieferungContainer = ({
   filter: showFilter,
   id: idPassed,
   row,
-  rawRow,
+  renderEnforcer,
 }) => {
   const store = useContext(StoreContext)
   const { userPersonOption } = store
@@ -74,7 +74,7 @@ const LieferungContainer = ({
         <Lieferung
           showFilter={showFilter}
           row={row}
-          rawRow={rawRow}
+          renderEnforcer={renderEnforcer}
           sammelLieferung={sammelLieferung}
           id={id}
         />
@@ -90,7 +90,7 @@ const LieferungContainer = ({
     <Lieferung
       id={id}
       row={row}
-      rawRow={rawRow}
+      renderEnforcer={renderEnforcer}
       showFilter={showFilter}
       sammelLieferung={sammelLieferung}
     />
