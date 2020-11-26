@@ -1,13 +1,8 @@
-import React, {
-  useContext,
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-} from 'react'
+import React, { useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { useObservableGetState } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -54,16 +49,13 @@ const StyledSplitPane = styled(SplitPane)`
 const Person = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
+  row: rowPassed,
+  rawRow,
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, persons } = store
+  const { filter, online } = store
 
-  const row = useMemo(
-    () => (showFilter ? filter.person : persons.get(id) ?? null),
-    // need persons.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.person, id, showFilter, persons, persons.size],
-  )
+  const row = showFilter ? filter.person : rowPassed
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -92,6 +84,8 @@ const Person = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
+  console.log('Person', { row, rowFullname: row?.fullname })
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -112,6 +106,7 @@ const Person = ({
               showFilter={showFilter}
               id={id}
               row={row}
+              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}

@@ -103,7 +103,11 @@ const Data = () => {
       return <Lieferungen />
     }
     case 'person': {
-      return <Person id={id} />
+      return (
+        <DataProvider id={id} table={activeForm}>
+          <Person id={id} />
+        </DataProvider>
+      )
     }
     case 'personen': {
       return <Personen />

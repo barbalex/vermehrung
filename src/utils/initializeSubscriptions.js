@@ -4,6 +4,7 @@ import { gartenModelPrimitives } from '../models/gartenModel.base'
 import { herkunftModelPrimitives } from '../models/herkunftModel.base'
 import { kulturModelPrimitives } from '../models/kulturModel.base'
 import { lieferungModelPrimitives } from '../models/lieferungModel.base'
+import { personModelPrimitives } from '../models/personModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
 import { teilkulturModelPrimitives } from '../models/teilkulturModel.base'
 import { teilzaehlungModelPrimitives } from '../models/teilzaehlungModel.base'
@@ -29,6 +30,8 @@ const initializeSubscriptions = ({ store }) => {
     subscribeKultur,
     lastUpdated_lieferung,
     subscribeLieferung,
+    lastUpdated_person,
+    subscribePerson,
     lastUpdated_sammlung,
     subscribeSammlung,
     lastUpdated_teilkultur,
@@ -88,7 +91,12 @@ const initializeSubscriptions = ({ store }) => {
     (error) => onError({ error }),
   )
   unsubscribe.lieferung_file = store.subscribeLieferung_file()
-  unsubscribe.person = store.subscribePerson()
+  unsubscribe.person = subscribePerson(
+    { where: { _rev_at: { _gt: lastUpdated_person } } },
+    personModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'person', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.person_file = store.subscribePerson_file()
   unsubscribe.person_option = store.subscribePerson_option()
   unsubscribe.sammel_lieferung = store.subscribeSammel_lieferung()
