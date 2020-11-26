@@ -339,7 +339,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.art_id
         delete newObjectForStore.art_id
@@ -407,7 +407,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.art_qk_choosen_id
         delete newObjectForStore.art_qk_choosen_id
@@ -456,7 +456,7 @@ export const RootStore = RootStoreBase.props({
       upsertAvModel(val) {
         self.avs.set(val.id, val)
       },
-      insertAvRev(args) {
+      async insertAvRev(args) {
         const { user, addQueuedQuery, upsertAvModel } = self
         const valuesPassed = args?.values ?? {}
 
@@ -478,7 +478,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.av_id
         delete newObjectForStore.av_id
@@ -498,7 +498,15 @@ export const RootStore = RootStoreBase.props({
           isInsert: true,
         })
         // optimistically update store
-        upsertAvModel(newObjectForStore)
+        const { db } = self
+        await db.action(async () => {
+          const avCollection = db.get('av')
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([
+            avCollection.prepareCreateFromDirtyRaw(newObjectForStore),
+          ])
+        })
       },
       deleteAvRevModel(val) {
         // 1. update model: remove this conflict
@@ -551,7 +559,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.event_id
         delete newObjectForStore.event_id
@@ -632,7 +640,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.garten_id
         delete newObjectForStore.garten_id
@@ -705,7 +713,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.gv_id
         delete newObjectForStore.gv_id
@@ -772,7 +780,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert herkuft_rev to herkunft
         newObjectForStore.id = newObjectForStore.herkunft_id
         delete newObjectForStore.herkunft_id
@@ -860,7 +868,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.kultur_id
         delete newObjectForStore.kultur_id
@@ -955,7 +963,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.kultur_qk_choosen_id
         delete newObjectForStore.kultur_qk_choosen_id
@@ -1047,7 +1055,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.lieferung_id
         delete newObjectForStore.lieferung_id
@@ -1137,7 +1145,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.person_id
         delete newObjectForStore.person_id
@@ -1248,7 +1256,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.sammel_lieferung_id
         delete newObjectForStore.sammel_lieferung_id
@@ -1335,7 +1343,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.sammlung_id
         delete newObjectForStore.sammlung_id
@@ -1421,7 +1429,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = id
         delete newObjectForStore.teilkultur_id
@@ -1504,7 +1512,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.teilzaehlung_id
         delete newObjectForStore.teilzaehlung_id
@@ -1579,7 +1587,7 @@ export const RootStore = RootStoreBase.props({
         newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = [rev]
+        newObjectForStore._revisions = JSON.stringify([rev])
         // for store: convert rev to winner
         newObjectForStore.id = newObjectForStore.zaehlung_id
         delete newObjectForStore.zaehlung_id

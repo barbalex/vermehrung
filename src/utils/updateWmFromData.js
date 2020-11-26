@@ -1,20 +1,13 @@
 import { Q } from '@nozbe/watermelondb'
 import isEqual from 'lodash/isEqual'
 
+import parseComplexFieldsForWm from './parseComplexFieldsForWm'
+
 const stripTypename = (object) => {
   // eslint-disable-next-line no-unused-vars
   const { __typename, ...rest } = object
   return rest
 }
-const parseComplexFields = (object) =>
-  stripTypename({
-    ...object,
-    ...(object.geom_point
-      ? { geom_point: JSON.stringify(object.geom_point) }
-      : {}),
-    _conflicts: JSON.stringify(object._conflicts),
-    _revisions: JSON.stringify(object._revisions),
-  })
 
 // TODO: do this in worker?
 const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
@@ -84,7 +77,7 @@ const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
         }),
         // prepareCreateFromDirtyRaw replaces watermelon's id with vermehrung's
         ...dataToCreateObjectsFrom.map((d) =>
-          collection.prepareCreateFromDirtyRaw(parseComplexFields(d)),
+          collection.prepareCreateFromDirtyRaw(parseComplexFieldsForWm(d)),
         ),
       )
     }
