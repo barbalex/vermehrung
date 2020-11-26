@@ -145,7 +145,7 @@ const ArtForm = ({
           )}
           {!showFilter && (
             <>
-              <Personen artId={id} />
+              <Personen art={row} />
               <Timeline artId={id} />
               <HerkunftTimeline artId={id} />
               <QK artId={id} />
