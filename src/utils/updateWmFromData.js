@@ -24,11 +24,11 @@ const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
     setInitialDataQueried,
     setLastUpdated,
   } = store
-  console.log('updateWmFromData:', {
+  /*console.log('updateWmFromData:', {
     dataToCheck: dataToCheck.length,
     table,
     lastUpdatedAt: store[`lastUpdated_${table}`],
-  })
+  })*/
   if (!dataToCheck.length) return
 
   const collection = db.collections.get(table)

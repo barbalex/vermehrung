@@ -30,6 +30,10 @@ const HerkunftDataProvider = ({ id, table, children }) => {
     setRenderEnforcer(JSON.stringify(val._raw))
   })
 
+  // need to ensure a row consisting of an observable is returned
+  // if not, for instance calling useObservableState will error in child
+  if (!row) return null
+
   // TODO:
   // findAndObserve can throw error
   // if url points to dataset but it's data was not yet loaded
