@@ -11,11 +11,15 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { useObservableState, useObservable } from 'observable-hooks'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Person from './Person'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import avSort from '../../../../../utils/avSort'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -47,11 +51,11 @@ const Aven = styled.div`
   padding-bottom: 8px;
 `
 
-const ArtPersonen = ({ artId }) => {
+const ArtPersonen = ({ art }) => {
   const store = useContext(StoreContext)
   const { avsSorted, personsSorted, insertAvRev, errors, unsetError } = store
 
-  useEffect(() => unsetError('av'), [artId, unsetError])
+  useEffect(() => unsetError('av'), [art.id, unsetError])
 
   const [open, setOpen] = useState(false)
   let anim = useAnimation()
@@ -74,8 +78,17 @@ const ArtPersonen = ({ artId }) => {
     [anim, open],
   )
 
-  const avs = avsSorted.filter((a) => a.art_id === artId)
+  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
+  const db = useDatabase()
+  // useObservable reduces recomputation
+  const avCollection = useObservable(() =>
+    db.collections.get('av').query(Q.where('art_id', art.id)).observe(),
+  )
+  const avs = useObservableState(avCollection, []).sort(avSort)
+
+  const avs_old = avsSorted.filter((a) => a.art_id === art.id)
   const avPersonIds = avs.map((v) => v.person_id)
+  console.log('ArtPersonen', { avs, avs_old, art })
 
   const personWerte = useMemo(
     () =>
@@ -90,9 +103,9 @@ const ArtPersonen = ({ artId }) => {
 
   const saveToDb = useCallback(
     async (event) => {
-      insertAvRev({ values: { art_id: artId, person_id: event.target.value } })
+      insertAvRev({ values: { art_id: art.id, person_id: event.target.value } })
     },
-    [artId, insertAvRev],
+    [art.id, insertAvRev],
   )
 
   const titleRowRef = useRef(null)
