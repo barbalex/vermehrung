@@ -79,7 +79,7 @@ const ArtPersonen = ({ art }) => {
 
   // useObservable reduces recomputation
   const avCollection = useObservable(() => art.avs.observe())
-  const avs = useObservableState(avCollection, []).sort(avSort)
+  const avs = useObservableState(avCollection, [])
 
   const avPersonIds = avs.map((v) => v.person_id)
 
@@ -139,7 +139,7 @@ const ArtPersonen = ({ art }) => {
         {open && (
           <>
             <Aven>
-              {avs.map((av) => (
+              {avs.sort(avSort).map((av) => (
                 <Person key={`${av.art_id}/${av.person_id}`} av={av} />
               ))}
             </Aven>
