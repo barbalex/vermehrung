@@ -186,7 +186,7 @@ export class Sammlung extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @relation('herkunft', 'herkunft_id') herkunft
-
+  @relation('person', 'person_id') person
   @children('lieferung') lieferungs
 
   @action async edit({ field, value, store }) {
@@ -314,6 +314,7 @@ export class Lieferung extends Model {
   @relation('sammel_lieferung', 'sammel_lieferung_id') sammel_lieferung
   @relation('sammlung', 'von_kultur_id') von_kultur
   @relation('sammlung', 'nach_kultur_id') nach_kultur
+  @relation('person', 'person_id') person
 
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
@@ -766,6 +767,8 @@ export class Teilkultur extends Model {
   @field('_depth') _depth
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
+
+  @relation('kultur', 'kultur_id') kultur
 
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
@@ -1235,6 +1238,7 @@ export class SammelLieferung extends Model {
   @relation('sammlung', 'von_sammlung_id') sammlung
   @relation('sammlung', 'von_kultur_id') von_kultur
   @relation('sammlung', 'nach_kultur_id') nach_kultur
+  @relation('person', 'person_id') person
   @children('lieferung') lieferungs
 
   @action async edit({ field, value, store }) {
@@ -1331,6 +1335,101 @@ export class SammelLieferung extends Model {
     }, 50)
   }
 
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
+}
+
+export class Event extends Model {
+  static table = 'event'
+  static associations = {
+    kultur: { type: 'belongs_to', key: 'kultur_id' },
+    person: { type: 'belongs_to', key: 'person_id' },
+  }
+
+  @field('id') id
+  @field('kultur_id') kultur_id
+  @field('teilkultur_id') teilkultur_id
+  @field('person_id') person_id
+  @field('beschreibung') beschreibung
+  @field('geplant') geplant
+  @field('datum') datum
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @readonly @field('_rev_at') _rev_at
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @relation('kultur', 'kultur_id') kultur
+  @relation('person', 'person_id') person
+
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`event.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      event_id: this.id,
+      kultur_id: field === 'kultur_id' ? value : this.kultur_id,
+      teilkultur_id: field === 'teilkultur_id' ? value : this.teilkultur_id,
+      person_id: field === 'person_id' ? value : this.person_id,
+      beschreibung:
+        field === 'beschreibung'
+          ? toStringIfPossible(value)
+          : this.beschreibung,
+      geplant: field === 'geplant' ? value : this.geplant,
+      datum: field === 'datum' ? value : this.datum,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_event_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'event_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'event',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.event_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+  }
   @action async delete({ store }) {
     await this.subAction(() =>
       this.edit({ field: '_deleted', value: true, store }),
