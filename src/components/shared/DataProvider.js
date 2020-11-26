@@ -17,15 +17,17 @@ const HerkunftDataProvider = ({ id, table, children }) => {
     null,
   )
 
-  const [rawRow, setRawRow] = useState(null)
+  const [renderEnforcer, setRenderEnforcer] = useState(null)
   useSubscription(db.collections.get(table).findAndObserve(id), (val) => {
     // TODO:
     // this is a trick to get react components to rerender
     // when the observable changes
     // NEED TO GET RID OF THIS HACK
+    // used to be: JSON.stringify(val._raw)
     // maybe using a running counter would be more efficient?
     // no need to stringify...
-    setRawRow(JSON.stringify(val._raw))
+    // BUT: starts an endless cycle
+    setRenderEnforcer(JSON.stringify(val._raw))
   })
 
   // TODO:
@@ -36,7 +38,7 @@ const HerkunftDataProvider = ({ id, table, children }) => {
   //console.log('DataProvider', { table, id, row })
   return (
     <ErrorBoundary>
-      {React.cloneElement(children, { row, rawRow })}
+      {React.cloneElement(children, { row, renderEnforcer })}
     </ErrorBoundary>
   )
 }

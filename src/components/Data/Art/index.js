@@ -49,7 +49,7 @@ const Art = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
   row: rowPassed,
-  rawRow,
+  renderEnforcer,
 }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
@@ -105,7 +105,7 @@ const Art = ({
               showFilter={showFilter}
               id={id}
               row={row}
-              rawRow={rawRow}
+              renderEnforcer={renderEnforcer}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
