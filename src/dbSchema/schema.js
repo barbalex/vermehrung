@@ -6,6 +6,7 @@ import garten from './garten'
 import herkunft from './herkunft'
 import kultur from './kultur'
 import lieferung from './lieferung'
+import person from './person'
 import sammlung from './sammlung'
 import teilkultur from './teilkultur'
 import teilzaehlung from './teilzaehlung'
@@ -18,6 +19,7 @@ export const tables = [
   herkunft,
   kultur,
   lieferung,
+  person,
   sammlung,
   teilkultur,
   teilzaehlung,

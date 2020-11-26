@@ -6,14 +6,22 @@ import {
   json,
   lazy,
   relation,
+  readonly,
 } from '@nozbe/watermelondb/decorators'
 import { Q } from '@nozbe/watermelondb'
+import {
+  distinctUntilChanged,
+  distinctUntilKeyChanged,
+  map as map$,
+  of as of$,
+} from 'rxjs/operators'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
 
 import toStringIfPossible from './utils/toStringIfPossible'
 import toPgArray from './utils/toPgArray'
+import deleteAccount from './utils/deleteAccount'
 
 const dontSanitize = (val) => val
 
@@ -38,7 +46,7 @@ export class Herkunft extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @field('_rev_at') _rev_at
+  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -116,8 +124,6 @@ export class Herkunft extends Model {
     newObjectForStore.wgs84_long = this.wgs84_long
     newObjectForStore.lv95_x = this.lv95_x
     newObjectForStore.lv95_y = this.lv95_y
-    // give past _rev_at to ensure server overwrites this
-    newObjectForStore._rev_at = this._rev_at
     delete newObjectForStore.herkunft_id
     // optimistically update store
     await this.update((row) => {
@@ -146,6 +152,7 @@ export class Sammlung extends Model {
   static table = 'sammlung'
   static associations = {
     herkunft: { type: 'belongs_to', key: 'herkunft_id' },
+    person: { type: 'belongs_to', key: 'person_id' },
     lieferung: { type: 'has_many', foreignKey: 'von_sammlung_id' },
   }
 
@@ -169,7 +176,7 @@ export class Sammlung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @field('_rev_at') _rev_at
+  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -272,6 +279,7 @@ export class Lieferung extends Model {
     sammel_lieferung: { type: 'belongs_to', key: 'sammel_lieferung_id' },
     von_kultur: { type: 'belongs_to', key: 'von_kultur_id' },
     nach_kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
+    person: { type: 'belongs_to', key: 'person_id' },
   }
 
   @field('id') id
@@ -293,7 +301,7 @@ export class Lieferung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @field('_rev_at') _rev_at
+  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -407,7 +415,7 @@ export class Art extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @field('_rev_at') _rev_at
+  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -521,7 +529,7 @@ export class Garten extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @field('_rev_at') _rev_at
+  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -628,7 +636,7 @@ export class Kultur extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @field('_rev_at') _rev_at
+  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -750,7 +758,7 @@ export class Teilkultur extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @field('_rev_at') _rev_at
+  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -838,7 +846,7 @@ export class Zaehlung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @field('_rev_at') _rev_at
+  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -935,7 +943,7 @@ export class Teilzaehlung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @field('_rev_at') _rev_at
+  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -1023,5 +1031,166 @@ export class Teilzaehlung extends Model {
     await this.subAction(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
+  }
+}
+
+export class Person extends Model {
+  static table = 'person'
+  static associations = {
+    person_option: { type: 'has_many', foreignKey: 'person_id' },
+    sammel_lieferung: { type: 'has_many', foreignKey: 'person_id' },
+    av: { type: 'has_many', foreignKey: 'person_id' },
+    gv: { type: 'has_many', foreignKey: 'person_id' },
+    sammlung: { type: 'has_many', foreignKey: 'person_id' },
+    lieferung: { type: 'has_many', foreignKey: 'person_id' },
+    garten: { type: 'has_many', foreignKey: 'person_id' },
+    event: { type: 'has_many', foreignKey: 'person_id' },
+  }
+
+  @field('id') id
+  @field('nr') nr
+  @field('vorname') vorname
+  @field('name') name
+  @field('adresszusatz') adresszusatz
+  @field('strasse') strasse
+  @field('plz') plz
+  @field('ort') ort
+  @field('telefon_privat') telefon_privat
+  @field('telefon_geschaeft') telefon_geschaeft
+  @field('telefon_mobile') telefon_mobile
+  @field('email') email
+  @field('kein_email') kein_email
+  @field('bemerkungen') bemerkungen
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('account_id') account_id
+  @field('user_role') user_role
+  @field('kommerziell') kommerziell
+  @field('info') info
+  @field('aktiv') aktiv
+  @field('_rev') _rev
+  @readonly @field('_rev_at') _rev_at
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  // https://github.com/Nozbe/WatermelonDB/issues/313#issuecomment-483293806
+  @lazy fullname = this.observe().pipe(
+    /*distinctUntilChanged(
+      (p, q) => p.name === q.name && p.vorname === q.vorname,
+    ),*/
+    map$((person) => {
+      if (person.vorname && person.name) {
+        return of$(`${person.vorname} ${person.name}`)
+      }
+      if (person.name) return person.name
+      if (person.vorname) return person.vorname
+      return undefined
+    }),
+  )
+
+  @children('person_option') person_options
+  @children('sammel_lieferung') sammel_lieferungs
+  @children('av') avs
+  @children('gv') gvs
+  @children('sammlung') sammlungs
+  @children('lieferung') lieferungs
+  @children('garten') gartens
+  @children('event') events
+
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`person.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      person_id: this.id,
+      nr: field === 'nr' ? toStringIfPossible(value) : this.nr,
+      vorname: field === 'vorname' ? toStringIfPossible(value) : this.vorname,
+      name: field === 'name' ? toStringIfPossible(value) : this.name,
+      adresszusatz:
+        field === 'adresszusatz'
+          ? toStringIfPossible(value)
+          : this.adresszusatz,
+      strasse: field === 'strasse' ? toStringIfPossible(value) : this.strasse,
+      plz: field === 'plz' ? value : this.plz,
+      ort: field === 'ort' ? toStringIfPossible(value) : this.ort,
+      telefon_privat:
+        field === 'telefon_privat'
+          ? toStringIfPossible(value)
+          : this.telefon_privat,
+      telefon_geschaeft:
+        field === 'telefon_geschaeft'
+          ? toStringIfPossible(value)
+          : this.telefon_geschaeft,
+      telefon_mobile:
+        field === 'telefon_mobile'
+          ? toStringIfPossible(value)
+          : this.telefon_mobile,
+      email: field === 'email' ? toStringIfPossible(value) : this.email,
+      kein_email: field === 'kein_email' ? value : this.kein_email,
+      bemerkungen:
+        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
+      account_id:
+        field === 'account_id' ? toStringIfPossible(value) : this.account_id,
+      user_role:
+        field === 'user_role' ? toStringIfPossible(value) : this.user_role,
+      kommerziell: field === 'kommerziell' ? value : this.kommerziell,
+      info: field === 'info' ? value : this.info,
+      aktiv: field === 'aktiv' ? value : this.aktiv,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_person_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'person_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'person',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.person_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+  }
+
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+    // delete firebase user
+    deleteAccount({ store, person: this })
   }
 }

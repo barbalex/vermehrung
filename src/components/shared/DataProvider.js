@@ -18,18 +18,15 @@ const HerkunftDataProvider = ({ id, table, children }) => {
   )
 
   const [rawRow, setRawRow] = useState(null)
-  useSubscription(
-    db.collections.get(table).findAndObserve(id),
-    (val) => {
-      // TODO:
-      // this is a trick to get react components to rerender
-      // when the observable changes
-      // NEED TO GET RID OF THIS HACK
-      setRawRow(JSON.stringify(val._raw))
-    },
-    (val) => console.log('DataProvider error:', val),
-    (val) => console.log('DataProvider complete, val:', val),
-  )
+  useSubscription(db.collections.get(table).findAndObserve(id), (val) => {
+    // TODO:
+    // this is a trick to get react components to rerender
+    // when the observable changes
+    // NEED TO GET RID OF THIS HACK
+    // maybe using a running counter would be more efficient?
+    // no need to stringify...
+    setRawRow(JSON.stringify(val._raw))
+  })
 
   // TODO:
   // findAndObserve can throw error

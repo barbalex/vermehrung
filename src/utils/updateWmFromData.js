@@ -74,7 +74,7 @@ const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
 
           return object.prepareUpdate((ob) => {
             Object.keys(thisObjectsData)
-              .filter((key) => !['id', '__typename'].includes(key))
+              .filter((key) => !['id', '__typename', '_rev_at'].includes(key))
               .forEach((key) => {
                 if (!isEqual(ob[key], thisObjectsData[key])) {
                   ob[key] = thisObjectsData[key]
