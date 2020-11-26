@@ -27,7 +27,7 @@ const herkunftSammlungNodes = ({ store }) => {
           ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
           : 'Kein Datum'
         const artLabel = artLabelFromSammlung({ sammlung: el, store })
-        const geplantLabel = el.geplant ? ' (geplant)' : ''
+        const geplantLabel = el.geplant ? ' geplant' : ''
         const person = el.person_id ? store.persons.get(el.person_id) : {}
         const personLabel = person?.fullname
           ? person.fullname ?? '(Person ohne Name)'
