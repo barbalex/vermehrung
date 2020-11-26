@@ -1,10 +1,4 @@
-import { getParent } from 'mobx-state-tree'
-import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
-
 import { eventModelBase } from './eventModel.base'
-import toPgArray from '../utils/toPgArray'
-import toStringIfPossible from '../utils/toStringIfPossible'
 
 /* A graphql query fragment builders for eventModel */
 export {
@@ -16,70 +10,4 @@ export {
 /**
  * eventModel
  */
-export const eventModel = eventModelBase.actions((self) => ({
-  edit({ field, value }) {
-    const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertEventModel, unsetError } = store
-
-    unsetError(`event.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = self._depth + 1
-    const newObject = {
-      event_id: self.id,
-      kultur_id: field === 'kultur_id' ? value : self.kultur_id,
-      teilkultur_id: field === 'teilkultur_id' ? value : self.teilkultur_id,
-      person_id: field === 'person_id' ? value : self.person_id,
-      beschreibung:
-        field === 'beschreibung'
-          ? toStringIfPossible(value)
-          : self.beschreibung,
-      geplant: field === 'geplant' ? value : self.geplant,
-      datum: field === 'datum' ? value : self.datum,
-      _parent_rev: self._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : self._deleted,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = self._revisions
-      ? toPgArray([rev, ...self._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_event_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'event_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'event',
-      revertId: self.id,
-      revertField: field,
-      revertValue: self[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    newObjectForStore._conflicts = self._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = self.id
-    delete newObjectForStore.event_id
-    // optimistically update store
-    upsertEventModel(newObjectForStore)
-  },
-  delete() {
-    self.edit({ field: '_deleted', value: true })
-  },
-}))
+export const eventModel = eventModelBase

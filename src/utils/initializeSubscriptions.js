@@ -1,5 +1,6 @@
 import { ae_artModelPrimitives } from '../models/ae_artModel.base'
 import { artModelPrimitives } from '../models/artModel.base'
+import { eventModelPrimitives } from '../models/eventModel.base'
 import { gartenModelPrimitives } from '../models/gartenModel.base'
 import { herkunftModelPrimitives } from '../models/herkunftModel.base'
 import { kulturModelPrimitives } from '../models/kulturModel.base'
@@ -23,6 +24,8 @@ const initializeSubscriptions = ({ store }) => {
     subscribeAe_art,
     lastUpdated_art,
     subscribeArt,
+    lastUpdated_event,
+    subscribeEvent,
     lastUpdated_garten,
     subscribeGarten,
     lastUpdated_herkunft,
@@ -61,7 +64,12 @@ const initializeSubscriptions = ({ store }) => {
   unsubscribe.art_qk = store.subscribeArt_qk()
   unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen()
   unsubscribe.av = store.subscribeAv()
-  unsubscribe.event = store.subscribeEvent()
+  unsubscribe.event = subscribeEvent(
+    { where: { _rev_at: { _gt: lastUpdated_event } } },
+    eventModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'event', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.garten = subscribeGarten(
     { where: { _rev_at: { _gt: lastUpdated_garten } } },
     gartenModelPrimitives.toString(),

@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
@@ -54,16 +48,13 @@ const StyledSplitPane = styled(SplitPane)`
 const Event = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
+  row: rowPassed,
+  renderEnforcer,
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, events } = store
+  const { filter, online } = store
 
-  const row = useMemo(
-    () => (showFilter ? filter.event : store.events.get(id) || null),
-    // need events.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.event, id, showFilter, events, events.size],
-  )
+  const row = showFilter ? filter.event : rowPassed
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -112,6 +103,7 @@ const Event = ({
               showFilter={showFilter}
               id={id}
               row={row}
+              renderEnforcer={renderEnforcer}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}

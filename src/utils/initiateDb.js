@@ -5,6 +5,7 @@ import schema from '../dbSchema/schema'
 import {
   AeArt,
   Art,
+  Event,
   Garten,
   Herkunft,
   Kultur,
@@ -41,6 +42,7 @@ const initiateDb = () => {
     modelClasses: [
       AeArt,
       Art,
+      Event,
       Garten,
       Herkunft,
       Kultur,

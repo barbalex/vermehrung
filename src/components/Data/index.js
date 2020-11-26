@@ -51,7 +51,11 @@ const Data = () => {
       return <Arten />
     }
     case 'event': {
-      return <Event id={id} />
+      return (
+        <DataProvider id={id} table={activeForm}>
+          <Event id={id} />
+        </DataProvider>
+      )
     }
     case 'events': {
       return <Events />
