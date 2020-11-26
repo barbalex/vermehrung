@@ -11,7 +11,6 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { useObservableState, useObservable } from 'observable-hooks'
 import { Q } from '@nozbe/watermelondb'
 
@@ -53,7 +52,7 @@ const Aven = styled.div`
 
 const ArtPersonen = ({ art }) => {
   const store = useContext(StoreContext)
-  const { avsSorted, personsSorted, insertAvRev, errors, unsetError } = store
+  const { personsSorted, insertAvRev, errors, unsetError } = store
 
   useEffect(() => unsetError('av'), [art.id, unsetError])
 
@@ -78,17 +77,11 @@ const ArtPersonen = ({ art }) => {
     [anim, open],
   )
 
-  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
-  const db = useDatabase()
   // useObservable reduces recomputation
-  const avCollection = useObservable(() =>
-    db.collections.get('av').query(Q.where('art_id', art.id)).observe(),
-  )
+  const avCollection = useObservable(() => art.avs.observe())
   const avs = useObservableState(avCollection, []).sort(avSort)
 
-  const avs_old = avsSorted.filter((a) => a.art_id === art.id)
   const avPersonIds = avs.map((v) => v.person_id)
-  console.log('ArtPersonen', { avs, avs_old, art })
 
   const personWerte = useMemo(
     () =>
