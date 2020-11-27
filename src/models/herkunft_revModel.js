@@ -1,4 +1,4 @@
-import { getParent, destroy } from 'mobx-state-tree'
+import { getParent } from 'mobx-state-tree'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 

@@ -11,6 +11,7 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
+import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Garten from './Garten'
@@ -48,12 +49,12 @@ const Gvs = styled.div`
   padding-bottom: 8px;
 `
 
-const PersonArten = ({ personId }) => {
+const PersonArten = ({ person }) => {
   const store = useContext(StoreContext)
   const { gvsSorted, gartensSorted, insertGvRev } = store
 
   const [errors, setErrors] = useState({})
-  useEffect(() => setErrors({}), [personId])
+  useEffect(() => setErrors({}), [person.id])
 
   const [open, setOpen] = useState(false)
   let anim = useAnimation()
@@ -76,7 +77,7 @@ const PersonArten = ({ personId }) => {
     [anim, open],
   )
 
-  const gvs = gvsSorted.filter((a) => a.person_id === personId)
+  const gvs = gvsSorted.filter((a) => a.person_id === person.id)
   const gvArtIds = gvs.map((v) => v.garten_id)
 
   const gartenWerte = useMemo(
@@ -93,11 +94,11 @@ const PersonArten = ({ personId }) => {
   const saveToDb = useCallback(
     async (event) => {
       insertGvRev({
-        values: { garten_id: event.target.value, person_id: personId },
+        values: { garten_id: event.target.value, person_id: person.id },
       })
       setErrors({})
     },
-    [insertGvRev, personId],
+    [insertGvRev, person.id],
   )
 
   const titleRowRef = useRef(null)

@@ -12,13 +12,13 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 import { useObservableState, useObservable } from 'observable-hooks'
-import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Person from './Person'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import avSort from '../../../../../utils/avSort'
+import avsSortByPerson from '../../../../../utils/avsSortByPerson'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -77,13 +77,20 @@ const ArtPersonen = ({ art }) => {
     [anim, open],
   )
 
-  // useObservable reduces recomputation
   const avCollection = useObservable(() => art.avs.observe())
-  const avs = useObservableState(avCollection, []).sort((a, b) =>
-    avSort({ a, b, store }),
-  )
+  // TODO: sort
+  const avs = useObservableState(avCollection, [])
 
-  const avPersonIds = avs.map((v) => v.person_id)
+  const [avsSorted, setAvsSorted] = useState(avs)
+  useEffect(() => {
+    async function getAvsSorted() {
+      const _avsSorted = await avsSortByPerson(avs)
+      setAvsSorted(_avsSorted)
+    }
+    getAvsSorted()
+  }, [avs, store])
+
+  const avPersonIds = avsSorted.map((v) => v.person_id)
 
   const personWerte = useMemo(
     () =>
@@ -126,7 +133,7 @@ const ArtPersonen = ({ art }) => {
         ref={titleRowRef}
         data-sticky={isSticky}
       >
-        <Title>{`Mitarbeitende Personen (${avs.length})`}</Title>
+        <Title>{`Mitarbeitende Personen (${avsSorted.length})`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -141,7 +148,7 @@ const ArtPersonen = ({ art }) => {
         {open && (
           <>
             <Aven>
-              {avs.map((av) => (
+              {avsSorted.map((av) => (
                 <Person key={`${av.art_id}/${av.person_id}`} av={av} />
               ))}
             </Aven>

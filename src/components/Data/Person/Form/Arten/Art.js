@@ -5,6 +5,7 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
@@ -53,8 +54,15 @@ const Av = ({ av }) => {
 
   const onClickDelete = useCallback(() => av.delete(), [av])
 
+  console.log('Person Arten Art', { av })
+  //const artObservable = useObservable(() => av.art.observe())
+  //console.log('Person Arten Art', { artObservable })
+  //const art_new = useObservableState(av.art, null)
+
   const art = artsSorted.find((a) => a.id === av.art_id)
   const artname = artLabelFromArt({ art, store })
+
+  //console.log('Person Arten Art', { art_new, art, artname })
 
   if (!av) return null
 

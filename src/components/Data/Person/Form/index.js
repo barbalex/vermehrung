@@ -328,9 +328,9 @@ const Person = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {row.user_role === 'artverantwortlich' && <Arten personId={row.id} />}
+        {row.user_role === 'artverantwortlich' && <Arten person={row} />}
         {['gaertner', 'artverantwortlich'].includes(row.user_role) && (
-          <Gaerten personId={row.id} />
+          <Gaerten person={row} />
         )}
         {!showFilter && row.id && <Files parentId={row.id} parent="person" />}
       </Container>
