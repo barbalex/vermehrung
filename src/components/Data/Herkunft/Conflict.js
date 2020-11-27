@@ -34,6 +34,7 @@ const HerkunftConflict = ({
       ) || {},
     [rev, row.id, store.herkunft_revs],
   )
+  console.log('Herkunft Conflict', { revRow, row, rev })
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -41,7 +42,8 @@ const HerkunftConflict = ({
   )
 
   const onClickVerwerfen = useCallback(() => {
-    revRow.setDeleted()
+    // somehow revRow sometimes is {}
+    revRow.setDeleted && revRow.setDeleted()
     setTimeout(() => conflictDisposalCallback())
   }, [conflictDisposalCallback, revRow])
   const onClickUebernehmen = useCallback(async () => {
