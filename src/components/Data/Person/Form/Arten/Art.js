@@ -52,13 +52,11 @@ const Av = ({ av }) => {
   const db = useDatabase()
   const [artLabel, setArtLabel] = useState(null)
   useEffect(() => {
-    const fetchArt = async () => {
-      //const art = await db.collections.get('art').find(av.art_id)
-      const art = await av.art.fetch()
+    const artSubscription = av.art.observe().subscribe(async (art) => {
       const ae_art = await db.collections.get('ae_art').find(art.ae_id)
       setArtLabel(artLabelFromAeArt({ ae_art }))
-    }
-    fetchArt()
+    })
+    return () => artSubscription.unsubscribe()
   }, [av.art, db.collections])
 
   if (!av) return null

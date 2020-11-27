@@ -11,8 +11,6 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Garten from './Garten'
@@ -52,7 +50,6 @@ const Gvs = styled.div`
 `
 
 const PersonArten = ({ person }) => {
-  const db = useDatabase()
   const store = useContext(StoreContext)
   const { gartensSorted, insertGvRev } = store
 
@@ -82,31 +79,12 @@ const PersonArten = ({ person }) => {
 
   const [gvsSorted, setGvsSorted] = useState([])
   useEffect(() => {
-    async function getAvsSorted() {
-      //const gvs = await person.gvs.fetch()
-      const collection = db.collections.get('gv')
-      const query = collection.query(Q.where('person_id', person.id))
-      const gvs = await query.fetch()
+    const subscription = person.gvs.observe().subscribe(async (gvs) => {
       const _gvsSorted = await gvsSortByGarten(gvs)
       setGvsSorted(_gvsSorted)
-      const observedQuery = query.observe()
-      const subscription = observedQuery.subscribe(async (gvs) => {
-        const _gvsSorted = await gvsSortByGarten(gvs)
-        setGvsSorted(_gvsSorted)
-        console.log('subscription gvs:', { gvs, _gvsSorted })
-      })
-      console.log('Gaerten, getAvsSorted:', {
-        collection,
-        gvs,
-        query,
-        observedQuery,
-        subscription,
-      })
-    }
-    getAvsSorted()
-  }, [db.collections, person.id])
-
-  console.log('Gaerten, gvs:', person.gvs)
+    })
+    return () => subscription.unsubscribe()
+  }, [person.gvs])
 
   const gvArtIds = gvsSorted.map((v) => v.garten_id)
 

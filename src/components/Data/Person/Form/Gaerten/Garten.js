@@ -55,12 +55,11 @@ const Garten = ({ gv }) => {
 
   const [gartenLabel, setGartenLabel] = useState(null)
   useEffect(() => {
-    const fetchGarten = async () => {
-      const garten = await gv.garten.fetch()
+    const gartenSubscription = gv.garten.observe().subscribe(async (garten) => {
       const person = await garten.person.fetch()
       setGartenLabel(gartenLabelFromGarten({ garten, person }))
-    }
-    fetchGarten()
+    })
+    return () => gartenSubscription.unsubscribe()
   }, [gv.garten])
 
   if (!gv) return null
