@@ -29,7 +29,6 @@ const HerkunftDataProvider = ({ id, table, children }) => {
   // if url points to dataset but it's data was not yet loaded
   // can't catch the error above because inside hook
   // need to catch it with ErrorBoundary
-  //console.log('DataProvider', { table, id, row })
   return (
     <ErrorBoundary>
       {React.cloneElement(children, { row, renderEnforcer })}
