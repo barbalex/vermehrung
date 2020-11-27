@@ -126,7 +126,8 @@ export const RootStore = RootStoreBase.props({
          * then combine them into one
          * Goal: reduce network traffic and revision numbers when many fields were updated
          * Build new reaction for this that only depends on self.queuedQueries.length? (but must run first...)
-         * Also big problem: How to combine when online?
+         * Also important: How to combine when online?
+         * as long as same id is active?
          */
         if (self.online) {
           // execute operation
