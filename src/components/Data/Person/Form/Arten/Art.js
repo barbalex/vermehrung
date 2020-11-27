@@ -1,15 +1,14 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import { useObservableState, useObservable } from 'observable-hooks'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
 
-import { StoreContext } from '../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import artLabelFromArt from '../../../../../utils/artLabelFromArt'
+import artLabelFromAeArt from '../../../../../utils/artLabelFromAeArt'
 
 const Container = styled.div`
   display: flex;
@@ -46,31 +45,30 @@ const MenuTitle = styled.h3`
 `
 
 const Av = ({ av }) => {
-  const store = useContext(StoreContext)
-  const { artsSorted } = store
-
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
+  const onClickNein = useCallback(() => setDelMenuAnchorEl(null), [])
 
-  const onClickDelete = useCallback(() => av.delete(), [av])
-
-  console.log('Person Arten Art', { av })
-  //const artObservable = useObservable(() => av.art.observe())
-  //console.log('Person Arten Art', { artObservable })
-  //const art_new = useObservableState(av.art, null)
-
-  const art = artsSorted.find((a) => a.id === av.art_id)
-  const artname = artLabelFromArt({ art, store })
-
-  //console.log('Person Arten Art', { art_new, art, artname })
+  const db = useDatabase()
+  const [artLabel, setArtLabel] = useState(null)
+  useEffect(() => {
+    const fetchArt = async () => {
+      //const art = await db.collections.get('art').find(av.art_id)
+      const art = await av.art.fetch()
+      const ae_art = await db.collections.get('ae_art').find(art.ae_id)
+      setArtLabel(artLabelFromAeArt({ ae_art }))
+    }
+    fetchArt()
+  }, [av.art, db.collections])
 
   if (!av) return null
+  if (!artLabel) return null
 
   return (
     <ErrorBoundary>
       <Container>
         <Text>
-          <div>{artname}</div>
+          <div>{artLabel}</div>
         </Text>
         <DelIcon
           title="löschen"
@@ -94,8 +92,8 @@ const Av = ({ av }) => {
           }}
         >
           <MenuTitle>löschen?</MenuTitle>
-          <MenuItem onClick={onClickDelete}>ja</MenuItem>
-          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+          <MenuItem onClick={av.delete}>ja</MenuItem>
+          <MenuItem onClick={onClickNein}>nein</MenuItem>
         </Menu>
       </Container>
     </ErrorBoundary>

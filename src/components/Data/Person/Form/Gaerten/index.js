@@ -11,13 +11,15 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
-import { useObservableState, useObservable } from 'observable-hooks'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Garten from './Garten'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
+import gvsSortByGarten from '../../../../../utils/gvsSortByGarten'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -50,8 +52,9 @@ const Gvs = styled.div`
 `
 
 const PersonArten = ({ person }) => {
+  const db = useDatabase()
   const store = useContext(StoreContext)
-  const { gvsSorted, gartensSorted, insertGvRev } = store
+  const { gartensSorted, insertGvRev } = store
 
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [person.id])
@@ -77,8 +80,23 @@ const PersonArten = ({ person }) => {
     [anim, open],
   )
 
-  const gvs = gvsSorted.filter((a) => a.person_id === person.id)
-  const gvArtIds = gvs.map((v) => v.garten_id)
+  const [gvsSorted, setGvsSorted] = useState([])
+  useEffect(() => {
+    async function getAvsSorted() {
+      //const gvs = await person.gvs.fetch()
+      const collection = db.collections.get('gv')
+      const query = collection.query(Q.where('person_id', person.id))
+      const gvs = await query.fetch()
+      const _gvsSorted = await gvsSortByGarten(gvs)
+      setGvsSorted(_gvsSorted)
+      console.log('Gaerten, getAvsSorted:', { collection, gvs, query })
+    }
+    getAvsSorted()
+  }, [db.collections, person.id])
+
+  console.log('Gaerten, gvs:', person.gvs)
+
+  const gvArtIds = gvsSorted.map((v) => v.garten_id)
 
   const gartenWerte = useMemo(
     () =>
@@ -124,7 +142,7 @@ const PersonArten = ({ person }) => {
         ref={titleRowRef}
         data-sticky={isSticky}
       >
-        <Title>{`Mitarbeitend bei ${gvs.length} Gärten`}</Title>
+        <Title>{`Mitarbeitend bei ${gvsSorted.length} Gärten`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -139,7 +157,7 @@ const PersonArten = ({ person }) => {
         {open && (
           <>
             <Gvs>
-              {gvs.map((gv) => (
+              {gvsSorted.map((gv) => (
                 <Garten key={`${gv.person_id}/${gv.garten_id}`} gv={gv} />
               ))}
             </Gvs>
