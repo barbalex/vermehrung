@@ -79,12 +79,11 @@ const PersonArten = ({ person }) => {
 
   const [avsSorted, setAvsSorted] = useState([])
   useEffect(() => {
-    async function getAvsSorted() {
-      const avs = await person.avs.fetch()
+    const subscription = person.avs.observe().subscribe(async (avs) => {
       const _avsSorted = await avsSortByArt(avs)
       setAvsSorted(_avsSorted)
-    }
-    getAvsSorted()
+    })
+    return () => subscription.unsubscribe()
   }, [person.avs])
 
   const avArtIds = avsSorted.map((v) => v.art_id)
