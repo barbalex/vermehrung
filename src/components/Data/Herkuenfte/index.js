@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -76,9 +76,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
   const activeNodeArray = anaRaw.toJSON()
 
-  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
   const db = useDatabase()
-  // useObservable reduces recomputation
   const herkunftCollection = useObservable(() =>
     db.collections
       .get('herkunft')
