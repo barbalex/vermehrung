@@ -531,6 +531,7 @@ export class Garten extends Model {
   static associations = {
     person: { type: 'belongs_to', key: 'person_id' },
     kultur: { type: 'has_many', foreignKey: 'garten_id' },
+    gv: { type: 'has_many', foreignKey: 'garten_id' },
   }
 
   @field('id') id
@@ -557,6 +558,7 @@ export class Garten extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @children('kultur') kulturs
+  @children('gv') gvs
   @relation('person', 'person_id') person
 
   @action async removeConflict(_rev) {

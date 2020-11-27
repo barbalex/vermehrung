@@ -16,6 +16,7 @@ import { StoreContext } from '../../../../../models/reactUtils'
 import Person from './Person'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import gvsSortByPerson from '../../../../../utils/gvsSortByPerson'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -47,12 +48,12 @@ const Aven = styled.div`
   padding-bottom: 8px;
 `
 
-const GartenPersonen = ({ gartenId }) => {
+const GartenPersonen = ({ garten }) => {
   const store = useContext(StoreContext)
-  const { gvsSorted, personsSorted, insertGvRev } = store
+  const { personsSorted, insertGvRev } = store
 
   const [errors, setErrors] = useState({})
-  useEffect(() => setErrors({}), [gartenId])
+  useEffect(() => setErrors({}), [garten.id])
 
   const [open, setOpen] = useState(false)
   let anim = useAnimation()
@@ -75,8 +76,16 @@ const GartenPersonen = ({ gartenId }) => {
     [anim, open],
   )
 
-  const gvs = gvsSorted.filter((a) => a.garten_id === gartenId)
-  const gvPersonIds = gvs.map((v) => v.person_id)
+  const [gvsSorted, setGvsSorted] = useState([])
+  useEffect(() => {
+    const subscription = garten.gvs.observe().subscribe(async (gvs) => {
+      const _gvsSorted = await gvsSortByPerson(gvs)
+      setGvsSorted(_gvsSorted)
+    })
+    return () => subscription.unsubscribe()
+  }, [garten.gvs])
+
+  const gvPersonIds = gvsSorted.map((v) => v.person_id)
 
   const personWerte = useMemo(
     () =>
@@ -92,11 +101,11 @@ const GartenPersonen = ({ gartenId }) => {
   const saveToDb = useCallback(
     async (event) => {
       insertGvRev({
-        values: { person_id: event.target.value, garten_id: gartenId },
+        values: { person_id: event.target.value, garten_id: garten.id },
       })
       setErrors({})
     },
-    [gartenId, insertGvRev],
+    [garten.id, insertGvRev],
   )
 
   const titleRowRef = useRef(null)
@@ -122,7 +131,7 @@ const GartenPersonen = ({ gartenId }) => {
         ref={titleRowRef}
         data-sticky={isSticky}
       >
-        <Title>{`Mitarbeitende Personen (${gvs.length})`}</Title>
+        <Title>{`Mitarbeitende Personen (${gvsSorted.length})`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -137,7 +146,7 @@ const GartenPersonen = ({ gartenId }) => {
         {open && (
           <>
             <Aven>
-              {gvs.map((gv) => (
+              {gvsSorted.map((gv) => (
                 <Person key={`${gv.garten_id}/${gv.person_id}`} gv={gv} />
               ))}
             </Aven>

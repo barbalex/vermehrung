@@ -219,7 +219,7 @@ const GartenForm = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        <Personen gartenId={row.id} />
+        <Personen gartenId={row.id} garten={row} />
         {!showFilter && <Files parentId={row.id} parent="garten" />}
       </FieldsContainer>
     </SimpleBar>
