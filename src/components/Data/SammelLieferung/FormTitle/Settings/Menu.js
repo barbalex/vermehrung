@@ -31,9 +31,9 @@ const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      userPersonOption.edit({ field, value })
+      userPersonOption.edit({ field, value, store })
     },
-    [userPersonOption],
+    [store, userPersonOption],
   )
 
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])

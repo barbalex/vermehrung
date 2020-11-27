@@ -9,15 +9,12 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState, useObservable } from 'observable-hooks'
-import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import teilzaehlungSort from '../../../../../utils/teilzaehlungSort'
+import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -44,28 +41,22 @@ const Title = styled.div`
 
 const Teilzaehlungen = ({ zaehlung }) => {
   const store = useContext(StoreContext)
-  const { insertTeilzaehlungRev, teilzaehlungsSorted } = store
+  const { insertTeilzaehlungRev } = store
 
   const kulturId = zaehlung.kultur_id
 
-  const hierarchyFilter = (r) => r.zaehlung_id === zaehlung.id
+  const [teilzaehlungs, setTeilzaehlungs] = useState([])
+  useEffect(() => {
+    const subscription = zaehlung.teilzaehlungs
+      .observe()
+      .subscribe(async (tzs) => {
+        const tzsSorted = await teilzaehlungsSortByTk(tzs)
+        setTeilzaehlungs(tzsSorted)
+      })
+    return () => subscription.unsubscribe()
+  }, [zaehlung.teilzaehlungs])
 
-  const storeRowsFiltered = teilzaehlungsSorted.filter(hierarchyFilter)
-
-  // see: https://github.com/Nozbe/withObservables/issues/16#issuecomment-661444478
-  const db = useDatabase()
-  // useObservable reduces recomputation
-  const teilzaehlungCollection = useObservable(() =>
-    db.collections
-      .get('teilzaehlung')
-      .query(Q.where('zaehlung_id', zaehlung.id))
-      .observe(),
-  )
-  const teilzaehlungs = useObservableState(teilzaehlungCollection, []).sort(
-    teilzaehlungSort,
-  )
   console.log('Teilzaehlungen', {
-    storeRowsFiltered,
     teilzaehlungs,
     zaehlung,
   })
@@ -77,7 +68,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
     insertTeilzaehlungRev()
   }, [insertTeilzaehlungRev])
 
-  const showNew = storeRowsFiltered.length === 0 || tk
+  const showNew = teilzaehlungs.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'
 
   const titleRowRef = useRef(null)
@@ -111,7 +102,11 @@ const Teilzaehlungen = ({ zaehlung }) => {
           )}
         </div>
       </TitleRow>
-      <TeilzaehlungenRows zaehlung={zaehlung} kulturId={kulturId} />
+      <TeilzaehlungenRows
+        zaehlung={zaehlung}
+        kulturId={kulturId}
+        teilzaehlungs={teilzaehlungs}
+      />
     </ErrorBoundary>
   )
 }

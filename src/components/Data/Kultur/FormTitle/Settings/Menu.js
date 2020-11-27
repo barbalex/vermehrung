@@ -36,18 +36,18 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      kulturOption.edit({ field, value })
+      kulturOption.edit({ field, value, store })
     },
-    [kulturOption],
+    [kulturOption, store],
   )
 
   const saveToDbPersonOption = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      userPersonOption.edit({ field, value })
+      userPersonOption.edit({ field, value, store })
     },
-    [userPersonOption],
+    [store, userPersonOption],
   )
 
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])

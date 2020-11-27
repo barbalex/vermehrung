@@ -36,9 +36,13 @@ const ChooseArtQkRow = ({ artId, qk }) => {
 
   const onChange = useCallback(
     (event) => {
-      artQkChoosen.edit({ field: 'choosen', value: event.target.checked })
+      artQkChoosen.edit({
+        field: 'choosen',
+        value: event.target.checked,
+        store,
+      })
     },
-    [artQkChoosen],
+    [artQkChoosen, store],
   )
 
   return (

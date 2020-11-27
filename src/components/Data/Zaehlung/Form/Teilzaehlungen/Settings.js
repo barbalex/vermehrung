@@ -52,9 +52,9 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      kulturOption.edit({ field, value })
+      kulturOption.edit({ field, value, store })
     },
-    [kulturOption],
+    [kulturOption, store],
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
