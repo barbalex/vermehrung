@@ -51,6 +51,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
       .observe()
       .subscribe(async (tzs) => {
         const tzsSorted = await teilzaehlungsSortByTk(tzs)
+        console.log('Teilzaehlungen, useEffect, tzsSorted:', tzsSorted)
         setTeilzaehlungs(tzsSorted)
       })
     return () => subscription.unsubscribe()

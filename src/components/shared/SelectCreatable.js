@@ -109,7 +109,6 @@ const SharedSelect = ({
       const newValue = option ? option.value : null
       setStateValue(newValue)
 
-      console.log('SelectCreatable, onChange', { field, newValue, store })
       row.edit({ field, value: newValue, store })
       callback()
     },
@@ -121,7 +120,6 @@ const SharedSelect = ({
   const optionsToUse = loading && stateValue ? loadingOptions : options
   const selectValue =
     optionsToUse.find((o) => o.value === stateValue) || emptyValue
-  console.log('SelectCreatable, rendering, store:', store)
 
   return (
     <Container>
