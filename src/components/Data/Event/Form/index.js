@@ -141,9 +141,9 @@ const EventForm = ({
           kultur_id: row.kultur_id,
         },
       })
-      row.edit({ field: 'teilkultur_id', value: teilkultur_id })
+      row.edit({ field: 'teilkultur_id', value: teilkultur_id, store })
     },
-    [insertTeilkulturRev, row],
+    [insertTeilkulturRev, row, store],
   )
 
   const showDeleted =

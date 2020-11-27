@@ -22,6 +22,7 @@ import toStringIfPossible from './utils/toStringIfPossible'
 import personLabelFromPerson from './utils/personLabelFromPerson'
 import gartenLabelFromGarten from './utils/gartenLabelFromGarten'
 import artLabelFromAeArt from './utils/artLabelFromAeArt'
+import teilkulturLabelFromTeilkultur from './utils/teilkulturLabelFromTeilkultur'
 import toPgArray from './utils/toPgArray'
 import deleteAccount from './utils/deleteAccount'
 import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
@@ -969,6 +970,7 @@ export class Teilzaehlung extends Model {
   static table = 'teilzaehlung'
   static associations = {
     zaehlung: { type: 'belongs_to', key: 'zaehlung_id' },
+    teilkultur: { type: 'belongs_to', key: 'teilkultur_id' },
   }
 
   @field('id') id
@@ -992,6 +994,15 @@ export class Teilzaehlung extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @relation('zaehlung', 'zaehlung_id') zaehlung
+  @relation('teilkultur', 'teilkultur_id') teilkultur
+  @lazy tzLabel = this.teilkultur.observe().pipe(
+    distinctUntilKeyChanged('teilkultur_id'),
+    map$(async (teilkultur) => {
+      if (!teilkultur) return ''
+      const tzLabel = teilkulturLabelFromTeilkultur({ teilkultur })
+      return tzLabel
+    }),
+  )
 
   @action
   async edit({ field, value, store }) {

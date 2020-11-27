@@ -42,8 +42,12 @@ const ChooseKulturQkRow = ({ kulturId, qk }) => {
       qkName: qk.name,
       value: event.target.checked,
     })
-    kulturQkChoosen.edit({ field: 'choosen', value: event.target.checked })
-  }, [checked, kulturId, kulturQkChoosen, qk])
+    kulturQkChoosen.edit({
+      field: 'choosen',
+      value: event.target.checked,
+      store,
+    })
+  }, [checked, kulturId, kulturQkChoosen, qk, store])
 
   return (
     <Row>

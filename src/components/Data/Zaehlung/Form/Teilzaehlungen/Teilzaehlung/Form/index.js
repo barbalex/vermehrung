@@ -131,7 +131,7 @@ const TeilzaehlungForm = ({
   }, [id, unsetError])
 
   const saveToDb = useCallback(
-    async (event) => {
+    (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
@@ -140,6 +140,7 @@ const TeilzaehlungForm = ({
       // only update if value has changed
       if (value === previousValue) return
 
+      console.log('Teilzaehlung', { field, value, store })
       row.edit({ field, value, store })
     },
     [row, store],

@@ -31,7 +31,7 @@ const deleteAccount = async ({ store, person }) => {
   // remove users account_id
   // but only if it exists
   if (person?.account_id) {
-    person.edit({ field: 'account_id', value: null })
+    person.edit({ field: 'account_id', value: null, store })
     return addNotification({
       message: `Das Benutzerkonto wurde entfernt`,
       type: 'info',

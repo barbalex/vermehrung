@@ -1,21 +1,13 @@
-import React, { useMemo, useContext, useEffect, useState } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Teilzaehlung from './Teilzaehlung'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import teilzaehlungSort from '../../../../../utils/teilzaehlungSort'
 
-const TeilzaehlungenRows = ({ kulturId, zaehlung }) => {
+const TeilzaehlungenRows = ({ kulturId, zaehlung, teilzaehlungs }) => {
   const store = useContext(StoreContext)
   const { teilkultursSorted } = store
-
-  const [rows, setRows] = useState([])
-  useEffect(() => {
-    zaehlung?.teilzaehlungs
-      ?.fetch()
-      .then((val) => setRows(val.sort(teilzaehlungSort)))
-  }, [zaehlung.teilzaehlungs])
 
   const teilkulturenWerte = useMemo(
     () =>
@@ -30,7 +22,7 @@ const TeilzaehlungenRows = ({ kulturId, zaehlung }) => {
 
   return (
     <ErrorBoundary>
-      {rows.map((r, index) => (
+      {teilzaehlungs.map((r, index) => (
         <Teilzaehlung
           key={r.id}
           index={index}

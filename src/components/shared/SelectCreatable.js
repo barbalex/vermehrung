@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useContext } from 'react'
 import Select from 'react-select/creatable'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+
+import { StoreContext } from '../../models/reactUtils'
 
 const Container = styled.div`
   display: flex;
@@ -88,30 +90,38 @@ const SharedSelect = ({
   onCreateNew,
   callback = () => {},
 }) => {
+  const store = useContext(StoreContext)
+
   const [stateValue, setStateValue] = useState(row[field])
   useEffect(() => {
     setStateValue(row[field])
   }, [])
 
-  const onChange = useCallback((option, actionMeta) => {
-    // if action is create-option
-    // need to create new dataset
-    if (actionMeta.action === 'create-option') {
-      // 1. create new dataset
-      onCreateNew({ name: option.label })
-      return
-    }
-    const newValue = option ? option.value : null
-    setStateValue(newValue)
-    row.edit({ field, value: newValue })
-    callback()
-  }, [])
+  const onChange = useCallback(
+    (option, actionMeta) => {
+      // if action is create-option
+      // need to create new dataset
+      if (actionMeta.action === 'create-option') {
+        // 1. create new dataset
+        onCreateNew({ name: option.label })
+        return
+      }
+      const newValue = option ? option.value : null
+      setStateValue(newValue)
+
+      console.log('SelectCreatable, onChange', { field, newValue, store })
+      row.edit({ field, value: newValue, store })
+      callback()
+    },
+    [store],
+  )
 
   // show ... whyle options are loading
   const loadingOptions = [{ value: stateValue, label: '...' }]
   const optionsToUse = loading && stateValue ? loadingOptions : options
   const selectValue =
     optionsToUse.find((o) => o.value === stateValue) || emptyValue
+  console.log('SelectCreatable, rendering, store:', store)
 
   return (
     <Container>
