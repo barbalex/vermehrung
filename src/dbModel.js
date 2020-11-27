@@ -11,7 +11,7 @@ import {
 import { Q } from '@nozbe/watermelondb'
 import {
   distinctUntilChanged,
-  //distinctUntilKeyChanged,
+  distinctUntilKeyChanged,
   map as map$,
 } from 'rxjs/operators'
 import md5 from 'blueimp-md5'
@@ -19,6 +19,9 @@ import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
 
 import toStringIfPossible from './utils/toStringIfPossible'
+import personLabelFromPerson from './utils/personLabelFromPerson'
+import gartenLabelFromGarten from './utils/gartenLabelFromGarten'
+import artLabelFromAeArt from './utils/artLabelFromAeArt'
 import toPgArray from './utils/toPgArray'
 import deleteAccount from './utils/deleteAccount'
 import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
@@ -1508,6 +1511,23 @@ export class Av extends Model {
   @relation('art', 'art_id') art
   @relation('person', 'person_id') person
 
+  @lazy personLabel = this.person.observe().pipe(
+    distinctUntilChanged(
+      (a, b) =>
+        personLabelFromPerson({ person: a }) ===
+        personLabelFromPerson({ person: b }),
+    ),
+    map$((p) => personLabelFromPerson({ person: p })),
+  )
+  @lazy artLabel = this.art.observe().pipe(
+    distinctUntilKeyChanged('ae_id'),
+    map$(async (art) => {
+      const ae_art = await this.collections.get('ae_art').find(art.ae_id)
+      const artLabel = artLabelFromAeArt({ ae_art })
+      return artLabel
+    }),
+  )
+
   @action async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
@@ -1564,6 +1584,112 @@ export class Av extends Model {
     // for store: convert rev to winner
     newObjectForStore.id = this.id
     delete newObjectForStore.av_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+  }
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
+}
+
+export class Gv extends Model {
+  static table = 'gv'
+  static associations = {
+    garten: { type: 'belongs_to', key: 'garten_id' },
+    person: { type: 'belongs_to', key: 'person_id' },
+  }
+
+  @field('id') id
+  @field('garten_id') garten_id
+  @field('person_id') person_id
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @readonly @field('_rev_at') _rev_at
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @relation('garten', 'garten_id') garten
+  @relation('person', 'person_id') person
+
+  @lazy personLabel = this.person.observe().pipe(
+    distinctUntilChanged(
+      (a, b) =>
+        personLabelFromPerson({ person: a }) ===
+        personLabelFromPerson({ person: b }),
+    ),
+    map$((p) => personLabelFromPerson({ person: p })),
+  )
+  @lazy gartenLabel = this.garten.observe().pipe(
+    distinctUntilChanged(
+      (a, b) =>
+        gartenLabelFromGarten({ garten: a }) ===
+        gartenLabelFromGarten({ garten: b }),
+    ),
+    map$((p) => gartenLabelFromGarten({ garten: p })),
+  )
+
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`gv.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      gv_id: this.id,
+      garten_id: field === 'garten_id' ? value : this.garten_id,
+      person_id: field === 'person_id' ? value : this.person_id,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_gv_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'gv_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'gv',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.gv_id
     // optimistically update store
     await this.update((row) => ({ ...row, ...newObjectForStore }))
   }

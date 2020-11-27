@@ -3,6 +3,7 @@ import { artModelPrimitives } from '../models/artModel.base'
 import { avModelPrimitives } from '../models/avModel.base'
 import { eventModelPrimitives } from '../models/eventModel.base'
 import { gartenModelPrimitives } from '../models/gartenModel.base'
+import { gvModelPrimitives } from '../models/gvModel.base'
 import { herkunftModelPrimitives } from '../models/herkunftModel.base'
 import { kulturModelPrimitives } from '../models/kulturModel.base'
 import { lieferungModelPrimitives } from '../models/lieferungModel.base'
@@ -31,6 +32,8 @@ const initializeSubscriptions = ({ store }) => {
     subscribeEvent,
     lastUpdated_garten,
     subscribeGarten,
+    subscribeGv,
+    lastUpdated_gv,
     lastUpdated_herkunft,
     subscribeHerkunft,
     lastUpdated_kultur,
@@ -85,7 +88,12 @@ const initializeSubscriptions = ({ store }) => {
     (error) => onError({ error }),
   )
   unsubscribe.garten_file = store.subscribeGarten_file()
-  unsubscribe.gv = store.subscribeGv()
+  unsubscribe.gv = subscribeGv(
+    { where: { _rev_at: { _gt: lastUpdated_gv } } },
+    gvModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'gv', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.herkunft = subscribeHerkunft(
     { where: { _rev_at: { _gt: lastUpdated_herkunft } } },
     herkunftModelPrimitives.toString(),

@@ -11,12 +11,14 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
+import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Art from './Art'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import artLabelFromArt from '../../../../../utils/artLabelFromArt'
+import avsSortByArt from '../../../../../utils/avsSortByArt'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -48,12 +50,12 @@ const Avs = styled.div`
   padding-bottom: 8px;
 `
 
-const PersonArten = ({ personId }) => {
+const PersonArten = ({ person }) => {
   const store = useContext(StoreContext)
-  const { avsSorted, artsSorted, insertAvRev } = store
+  const { artsSorted, insertAvRev } = store
 
   const [errors, setErrors] = useState({})
-  useEffect(() => setErrors({}), [personId])
+  useEffect(() => setErrors({}), [person])
 
   const [open, setOpen] = useState(false)
   let anim = useAnimation()
@@ -76,8 +78,19 @@ const PersonArten = ({ personId }) => {
     [anim, open],
   )
 
-  const avs = avsSorted.filter((a) => a.person_id === personId)
-  const avArtIds = avs.map((v) => v.art_id)
+  const avCollection = useObservable(() => person.avs.observe())
+  const avs = useObservableState(avCollection, [])
+
+  const [avsSorted, setAvsSorted] = useState(avs)
+  useEffect(() => {
+    async function getAvsSorted() {
+      const _avsSorted = await avsSortByArt(avs)
+      setAvsSorted(_avsSorted)
+    }
+    getAvsSorted()
+  }, [avs, store])
+
+  const avArtIds = avsSorted.map((v) => v.art_id)
 
   const artWerte = useMemo(
     () =>
@@ -93,11 +106,11 @@ const PersonArten = ({ personId }) => {
   const saveToDb = useCallback(
     async (event) => {
       insertAvRev({
-        values: { person_id: personId, art_id: event.target.value },
+        values: { person_id: person.id, art_id: event.target.value },
       })
       setErrors({})
     },
-    [insertAvRev, personId],
+    [insertAvRev, person.id],
   )
 
   const titleRowRef = useRef(null)
@@ -123,7 +136,7 @@ const PersonArten = ({ personId }) => {
         ref={titleRowRef}
         data-sticky={isSticky}
       >
-        <Title>{`Mitarbeitend bei ${avs.length} Arten`}</Title>
+        <Title>{`Mitarbeitend bei ${avsSorted.length} Arten`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -138,7 +151,7 @@ const PersonArten = ({ personId }) => {
         {open && (
           <>
             <Avs>
-              {avs.map((av) => (
+              {avsSorted.map((av) => (
                 <Art key={`${av.person_id}/${av.art_id}`} av={av} />
               ))}
             </Avs>

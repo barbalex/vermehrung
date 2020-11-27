@@ -5,6 +5,7 @@ import art from './art'
 import av from './av'
 import event from './event'
 import garten from './garten'
+import gv from './gv'
 import herkunft from './herkunft'
 import kultur from './kultur'
 import lieferung from './lieferung'
@@ -21,6 +22,7 @@ export const tables = [
   av,
   event,
   garten,
+  gv,
   herkunft,
   kultur,
   lieferung,
