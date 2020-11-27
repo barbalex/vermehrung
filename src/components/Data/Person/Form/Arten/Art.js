@@ -47,16 +47,21 @@ const MenuTitle = styled.h3`
 const Av = ({ av }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
-  const onClickNein = useCallback(() => setDelMenuAnchorEl(null), [])
+
+  const onClose = useCallback(() => setDelMenuAnchorEl(null), [])
+  const onClickIcon = useCallback(
+    (event) => setDelMenuAnchorEl(event.currentTarget),
+    [],
+  )
 
   const db = useDatabase()
   const [artLabel, setArtLabel] = useState(null)
   useEffect(() => {
-    const artSubscription = av.art.observe().subscribe(async (art) => {
+    const subscription = av.art.observe().subscribe(async (art) => {
       const ae_art = await db.collections.get('ae_art').find(art.ae_id)
       setArtLabel(artLabelFromAeArt({ ae_art }))
     })
-    return () => artSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [av.art, db.collections])
 
   if (!av) return null
@@ -73,7 +78,7 @@ const Av = ({ av }) => {
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+          onClick={onClickIcon}
         >
           <FaTimes />
         </DelIcon>
@@ -81,7 +86,7 @@ const Av = ({ av }) => {
           id="delMenu"
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
-          onClose={() => setDelMenuAnchorEl(null)}
+          onClose={onClose}
           PaperProps={{
             style: {
               maxHeight: 48 * 4.5,
@@ -91,7 +96,7 @@ const Av = ({ av }) => {
         >
           <MenuTitle>löschen?</MenuTitle>
           <MenuItem onClick={av.delete}>ja</MenuItem>
-          <MenuItem onClick={onClickNein}>nein</MenuItem>
+          <MenuItem onClick={onClose}>nein</MenuItem>
         </Menu>
       </Container>
     </ErrorBoundary>
