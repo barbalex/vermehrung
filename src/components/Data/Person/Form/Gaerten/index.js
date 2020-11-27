@@ -89,7 +89,19 @@ const PersonArten = ({ person }) => {
       const gvs = await query.fetch()
       const _gvsSorted = await gvsSortByGarten(gvs)
       setGvsSorted(_gvsSorted)
-      console.log('Gaerten, getAvsSorted:', { collection, gvs, query })
+      const observedQuery = query.observe()
+      const subscription = observedQuery.subscribe(async (gvs) => {
+        const _gvsSorted = await gvsSortByGarten(gvs)
+        setGvsSorted(_gvsSorted)
+        console.log('subscription gvs:', { gvs, _gvsSorted })
+      })
+      console.log('Gaerten, getAvsSorted:', {
+        collection,
+        gvs,
+        query,
+        observedQuery,
+        subscription,
+      })
     }
     getAvsSorted()
   }, [db.collections, person.id])
