@@ -1626,12 +1626,11 @@ export class Gv extends Model {
     map$((p) => personLabelFromPerson({ person: p })),
   )
   @lazy gartenLabel = this.garten.observe().pipe(
-    distinctUntilChanged(
-      (a, b) =>
-        gartenLabelFromGarten({ garten: a }) ===
-        gartenLabelFromGarten({ garten: b }),
-    ),
-    map$((p) => gartenLabelFromGarten({ garten: p })),
+    distinctUntilChanged(),
+    map$(async (garten) => {
+      const person = await garten.person.fetch()
+      return gartenLabelFromGarten({ garten, person })
+    }),
   )
 
   @action async removeConflict(_rev) {

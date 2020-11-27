@@ -11,7 +11,6 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
-import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Art from './Art'
@@ -78,17 +77,15 @@ const PersonArten = ({ person }) => {
     [anim, open],
   )
 
-  const avCollection = useObservable(() => person.avs.observe())
-  const avs = useObservableState(avCollection, [])
-
-  const [avsSorted, setAvsSorted] = useState(avs)
+  const [avsSorted, setAvsSorted] = useState([])
   useEffect(() => {
     async function getAvsSorted() {
+      const avs = await person.avs.fetch()
       const _avsSorted = await avsSortByArt(avs)
       setAvsSorted(_avsSorted)
     }
     getAvsSorted()
-  }, [avs, store])
+  }, [person.avs])
 
   const avArtIds = avsSorted.map((v) => v.art_id)
 
