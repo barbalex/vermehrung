@@ -95,8 +95,8 @@ const KulturConflict = ({
   )
 
   const onClickVerwerfen = useCallback(() => {
-    console.log('Kultur Conflict, onClickVerwerfen, revRow:', revRow)
-    revRow.setDeleted()
+    // somehow revRow sometimes is {}
+    revRow.setDeleted && revRow.setDeleted()
     conflictDisposalCallback()
   }, [conflictDisposalCallback, revRow])
   const onClickUebernehmen = useCallback(async () => {

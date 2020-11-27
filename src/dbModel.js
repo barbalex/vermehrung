@@ -57,6 +57,11 @@ export class Herkunft extends Model {
 
   @children('sammlung') sammlungs
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -92,13 +97,6 @@ export class Herkunft extends Model {
     newObject._revisions = this._revisions
       ? toPgArray([rev, ...this._revisions])
       : toPgArray([rev])
-    console.log('Herkunft Model', {
-      newObject,
-      newObjectForStore,
-      rev,
-      newDepth,
-      this: this._raw,
-    })
     addQueuedQuery({
       name: 'mutateInsert_herkunft_rev_one',
       variables: JSON.stringify({
@@ -189,6 +187,11 @@ export class Sammlung extends Model {
   @relation('person', 'person_id') person
   @children('lieferung') lieferungs
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -316,6 +319,11 @@ export class Lieferung extends Model {
   @relation('sammlung', 'nach_kultur_id') nach_kultur
   @relation('person', 'person_id') person
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -433,6 +441,11 @@ export class Art extends Model {
   @children('kultur') kulturs
   @children('av') avs
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -542,6 +555,11 @@ export class Garten extends Model {
   @children('kultur') kulturs
   @relation('person', 'person_id') person
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -657,6 +675,11 @@ export class Kultur extends Model {
     .get('lieferung')
     .query(Q.where('von_kultur_id', this.id))
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -770,6 +793,11 @@ export class Teilkultur extends Model {
 
   @relation('kultur', 'kultur_id') kultur
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -860,6 +888,11 @@ export class Zaehlung extends Model {
 
   @children('teilzaehlung') teilzaehlungs
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -1105,6 +1138,11 @@ export class Person extends Model {
   @children('garten') gartens
   @children('event') events
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -1241,6 +1279,11 @@ export class SammelLieferung extends Model {
   @relation('person', 'person_id') person
   @children('lieferung') lieferungs
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError, userPersonOption } = store
 
@@ -1369,6 +1412,11 @@ export class Event extends Model {
   @relation('kultur', 'kultur_id') kultur
   @relation('person', 'person_id') person
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -1460,6 +1508,11 @@ export class Av extends Model {
   @relation('art', 'art_id') art
   @relation('person', 'person_id') person
 
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 

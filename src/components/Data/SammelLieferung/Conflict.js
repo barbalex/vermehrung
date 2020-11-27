@@ -134,7 +134,8 @@ const SammelLieferungConflict = ({
   )
 
   const onClickVerwerfen = useCallback(() => {
-    revRow.setDeleted()
+    // somehow revRow sometimes is {}
+    revRow.setDeleted && revRow.setDeleted()
     conflictDisposalCallback()
   }, [conflictDisposalCallback, revRow])
   const onClickUebernehmen = useCallback(async () => {
