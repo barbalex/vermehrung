@@ -2,6 +2,7 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -48,13 +49,26 @@ const StyledSplitPane = styled(SplitPane)`
 const Person = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
-  row: rowPassed,
-  renderEnforcer,
 }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
 
-  const row = showFilter ? filter.person : rowPassed
+  const db = useDatabase()
+  const [row, setRow] = useState(null)
+  useEffect(() => {
+    let subscription
+    if (showFilter) {
+      setRow(filter.person)
+    } else {
+      subscription = db.collections
+        .get('person')
+        .findAndObserve(id)
+        .subscribe(setRow)
+    }
+    return () => {
+      if (subscription) subscription.unsubscribe()
+    }
+  }, [db.collections, filter.person, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -103,7 +117,6 @@ const Person = ({
               showFilter={showFilter}
               id={id}
               row={row}
-              renderEnforcer={renderEnforcer}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}

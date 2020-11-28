@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -48,13 +49,26 @@ const StyledSplitPane = styled(SplitPane)`
 const Zaehlung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
-  row: rowPassed,
-  renderEnforcer,
 }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
 
-  const row = showFilter ? filter.zaehlung : rowPassed
+  const db = useDatabase()
+  const [row, setRow] = useState(null)
+  useEffect(() => {
+    let subscription
+    if (showFilter) {
+      setRow(filter.zaehlung)
+    } else {
+      subscription = db.collections
+        .get('zaehlung')
+        .findAndObserve(id)
+        .subscribe(setRow)
+    }
+    return () => {
+      if (subscription) subscription.unsubscribe()
+    }
+  }, [db.collections, filter.zaehlung, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -83,8 +97,6 @@ const Zaehlung = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
-  console.log('Zaehlung rendering', { row, renderEnforcer })
-
   return (
     <ErrorBoundary>
       <>
@@ -106,7 +118,6 @@ const Zaehlung = ({
                 showFilter={showFilter}
                 id={id}
                 row={row}
-                renderEnforcer={renderEnforcer}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}

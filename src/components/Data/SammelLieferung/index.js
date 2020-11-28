@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import Lieferschein from './Lieferschein'
@@ -50,14 +51,27 @@ const SammelLieferung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
   lieferungId,
-  row: rowPassed,
-  renderEnforcer,
 }) => {
   const store = useContext(StoreContext)
 
   const { filter, isPrint, online } = store
 
-  const row = showFilter ? filter.sammel_lieferung : rowPassed
+  const db = useDatabase()
+  const [row, setRow] = useState(null)
+  useEffect(() => {
+    let subscription
+    if (showFilter) {
+      setRow(filter.sammel_lieferung)
+    } else {
+      subscription = db.collections
+        .get('sammel_lieferung')
+        .findAndObserve(id)
+        .subscribe(setRow)
+    }
+    return () => {
+      if (subscription) subscription.unsubscribe()
+    }
+  }, [db.collections, filter.sammel_lieferung, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -116,7 +130,6 @@ const SammelLieferung = ({
                 showFilter={showFilter}
                 id={id}
                 row={row}
-                renderEnforcer={renderEnforcer}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}

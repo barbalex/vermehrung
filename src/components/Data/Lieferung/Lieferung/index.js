@@ -45,16 +45,9 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const Lieferung = ({
-  id,
-  showFilter,
-  sammelLieferung = {},
-  row: rowPassed,
-}) => {
+const Lieferung = ({ id, showFilter, sammelLieferung = {}, row }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
-
-  const row = showFilter ? filter.lieferung : rowPassed
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
