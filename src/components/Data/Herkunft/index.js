@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -48,13 +49,28 @@ const StyledSplitPane = styled(SplitPane)`
 const Herkunft = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
-  row: rowPassed,
-  renderEnforcer,
 }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
 
-  const row = showFilter ? filter.herkunft : rowPassed
+  const db = useDatabase()
+  const [row, setRow] = useState(null)
+  useEffect(() => {
+    let subscription
+    if (showFilter) {
+      setRow(filter.herkunft)
+    } else {
+      subscription = db.collections
+        .get('herkunft')
+        .findAndObserve(id)
+        .subscribe(setRow)
+    }
+    return () => {
+      if (subscription) subscription.unsubscribe()
+    }
+  }, [db.collections, filter.herkunft, id, showFilter])
+
+  console.log('Herkunft', { showFilter, row })
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -83,6 +99,8 @@ const Herkunft = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
+  if (!row) return null
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -104,7 +122,6 @@ const Herkunft = ({
               showFilter={showFilter}
               id={id}
               row={row}
-              renderEnforcer={renderEnforcer}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}

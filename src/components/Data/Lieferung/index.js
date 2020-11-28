@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import isUuid from 'is-uuid'
 import last from 'lodash/last'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
@@ -37,14 +38,9 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const LieferungContainer = ({
-  filter: showFilter,
-  id: idPassed,
-  row,
-  renderEnforcer,
-}) => {
+const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
+  const { userPersonOption, filter } = store
   const { activeNodeArray } = store.tree
   let id = idPassed
   if (!idPassed) {
@@ -52,6 +48,23 @@ const LieferungContainer = ({
       ? '99999999-9999-9999-9999-999999999999'
       : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   }
+
+  const db = useDatabase()
+  const [row, setRow] = useState(null)
+  useEffect(() => {
+    let subscription
+    if (showFilter) {
+      setRow(filter.lieferung)
+    } else {
+      subscription = db.collections
+        .get('lieferung')
+        .findAndObserve(id)
+        .subscribe(setRow)
+    }
+    return () => {
+      if (subscription) subscription.unsubscribe()
+    }
+  }, [db.collections, filter.lieferung, id, showFilter])
 
   // TODO:
   const sammelLieferungId =
@@ -74,7 +87,6 @@ const LieferungContainer = ({
         <Lieferung
           showFilter={showFilter}
           row={row}
-          renderEnforcer={renderEnforcer}
           sammelLieferung={sammelLieferung}
           id={id}
         />
@@ -90,7 +102,6 @@ const LieferungContainer = ({
     <Lieferung
       id={id}
       row={row}
-      renderEnforcer={renderEnforcer}
       showFilter={showFilter}
       sammelLieferung={sammelLieferung}
     />

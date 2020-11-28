@@ -27,7 +27,6 @@ import Teilkultur from './Teilkultur'
 import Teilkulturen from './Teilkulturen'
 import Root from './Root'
 import { StoreContext } from '../../models/reactUtils'
-import DataProvider from '../shared/DataProvider'
 
 const Data = () => {
   const store = useContext(StoreContext)
@@ -41,111 +40,67 @@ const Data = () => {
       return <Root />
     }
     case 'art': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <Art id={id} />
-        </DataProvider>
-      )
+      return <Art id={id} />
     }
     case 'arten': {
       return <Arten />
     }
     case 'event': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <Event id={id} />
-        </DataProvider>
-      )
+      return <Event id={id} />
     }
     case 'events': {
       return <Events />
     }
     case 'garten': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <Garten id={id} />
-        </DataProvider>
-      )
+      return <Garten id={id} />
     }
     case 'gaerten': {
       return <Gaerten />
     }
     case 'herkunft': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <Herkunft id={id} />
-        </DataProvider>
-      )
+      return <Herkunft id={id} />
     }
     case 'herkuenfte': {
       return <Herkuenfte />
     }
     case 'kultur': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <Kultur id={id} />
-        </DataProvider>
-      )
+      return <Kultur id={id} />
     }
     case 'kulturen': {
       return <Kulturen />
     }
     case 'sammel_lieferung': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <SammelLieferung id={id} />
-        </DataProvider>
-      )
+      return <SammelLieferung id={id} />
     }
     case 'sammelLieferungen': {
       return <SammelLieferungen />
     }
     case 'lieferung': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <Lieferung id={id} />
-        </DataProvider>
-      )
+      return <Lieferung id={id} />
     }
     case 'lieferungen': {
       return <Lieferungen />
     }
     case 'person': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <Person id={id} />
-        </DataProvider>
-      )
+      return <Person id={id} />
     }
     case 'personen': {
       return <Personen />
     }
     case 'sammlung': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <Sammlung id={id} />
-        </DataProvider>
-      )
+      return <Sammlung id={id} />
     }
     case 'sammlungen': {
       return <Sammlungen />
     }
     case 'teilkultur': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <Teilkultur id={id} />
-        </DataProvider>
-      )
+      return <Teilkultur id={id} />
     }
     case 'teilkulturen': {
       return <Teilkulturen />
     }
     case 'zaehlung': {
-      return (
-        <DataProvider id={id} table={activeForm}>
-          <Zaehlung id={id} />
-        </DataProvider>
-      )
+      return <Zaehlung id={id} />
     }
     case 'zaehlungen': {
       return <Zaehlungen />
