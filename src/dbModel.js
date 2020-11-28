@@ -23,6 +23,7 @@ import personLabelFromPerson from './utils/personLabelFromPerson'
 import gartenLabelFromGarten from './utils/gartenLabelFromGarten'
 import artLabelFromAeArt from './utils/artLabelFromAeArt'
 import teilkulturLabelFromTeilkultur from './utils/teilkulturLabelFromTeilkultur'
+import kulturLabelFromKultur from './utils/kulturLabelFromKultur'
 import toPgArray from './utils/toPgArray'
 import deleteAccount from './utils/deleteAccount'
 import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
@@ -650,6 +651,8 @@ export class Kultur extends Model {
   static table = 'kultur'
   static associations = {
     garten: { type: 'belongs_to', key: 'garten_id' },
+    art: { type: 'belongs_to', key: 'art_id' },
+    herkunft: { type: 'belongs_to', key: 'herkunft_id' },
     anlieferung: { type: 'has_many', foreignKey: 'von_kultur_id' },
     auslieferung: { type: 'has_many', foreignKey: 'nach_kultur_id' },
     teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
@@ -681,17 +684,32 @@ export class Kultur extends Model {
   @children('zaehlung') zaehlungs
   @children('event') events
   @children('kultur_option') kultur_options
+  @relation('garten', 'garten_id') garten
+  @relation('art', 'art_id') art
+  @relation('herkunft', 'herkunft_id') herkunft
   @lazy anlieferungs = this.collections
     .get('lieferung')
     .query(Q.where('nach_kultur_id', this.id))
   @lazy auslieferungs = this.collections
     .get('lieferung')
     .query(Q.where('von_kultur_id', this.id))
-  @lazy label = this.teilkultur.observe().pipe(
-    distinctUntilKeyChanged('teilkultur_id'),
-    map$(async (teilkultur) => {
-      if (!teilkultur) return ''
-      return teilkulturLabelFromTeilkultur({ teilkultur })
+  @lazy label = this.observe().pipe(
+    distinctUntilChanged(),
+    map$(async (kultur) => {
+      const garten = await kultur.garten.fetch()
+      const gartenPerson = garten ? await garten.person.fetch() : undefined
+      const art = await kultur.art.fetch()
+      const aeArt = art ? await art.ae_art.fetch() : undefined
+      const herkunft = await kultur.herkunft.fetch()
+
+      return kulturLabelFromKultur({
+        kultur,
+        garten,
+        gartenPerson,
+        art,
+        aeArt,
+        herkunft,
+      })
     }),
   )
 
@@ -1548,7 +1566,7 @@ export class Av extends Model {
   @lazy artLabel = this.art.observe().pipe(
     distinctUntilKeyChanged('ae_id'),
     map$(async (art) => {
-      const ae_art = await this.collections.get('ae_art').find(art.ae_id)
+      const ae_art = await art.ae_art.fetch()
       const artLabel = artLabelFromAeArt({ ae_art })
       return artLabel
     }),
