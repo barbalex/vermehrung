@@ -22,6 +22,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import applyStoreFilter from '../../../utils/applyStoreFilter'
+import storeFilter from '../../../utils/storeFilter'
 import herkunftSort from '../../../utils/herkunftSort'
 
 const Container = styled.div`
@@ -107,11 +108,11 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
 
   const herkunftsFiltered = useMemo(
     () =>
-      applyStoreFilter({
-        filter: herkunftFilter,
-        table: 'herkunft',
-        values: herkunfts,
-      }).sort(herkunftSort),
+      herkunfts
+        .filter((value) =>
+          storeFilter({ value, filter: herkunftFilter, table: 'herkunft' }),
+        )
+        .sort(herkunftSort),
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [herkunfts, ...Object.values(herkunftFilter)],
