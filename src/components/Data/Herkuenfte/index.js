@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, useEffect, useState } from 'react'
+import React, {
+  useContext,
+  useCallback,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -7,7 +13,6 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { useObservableState, useObservable } from 'observable-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -16,7 +21,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import herkunftSort from '../../../utils/herkunftSort'
+import applyStoreFilter from '../../../utils/applyStoreFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -70,11 +75,24 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
     insertHerkunftRev,
-    herkunftsFiltered,
+    herkunftsFiltered: herkunftsFilteredStore,
     sammlungIdInActiveNodeArray,
   } = store
   const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
   const activeNodeArray = anaRaw.toJSON()
+
+  const hierarchyFilter = useCallback(
+    (h) => {
+      if (sammlungIdInActiveNodeArray) {
+        return [...store.sammlungs.values()]
+          .filter((s) => s.herkunft_id === h.id)
+          .map((s) => s.id)
+          .includes(sammlungIdInActiveNodeArray)
+      }
+      return true
+    },
+    [sammlungIdInActiveNodeArray, store.sammlungs],
+  )
 
   const db = useDatabase()
   const [herkunfts, setHerkunfts] = useState([])
@@ -83,31 +101,20 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
       .get('herkunft')
       .query(notDeletedOrHasConflictQuery)
       .observe()
-      .subscribe(setHerkunfts)
+      .subscribe((_herkunfts) => {
+        setHerkunfts(_herkunfts.filter(hierarchyFilter))
+      })
     return () => subscription.unsubscribe()
-  }, [db.collections])
+  }, [db.collections, hierarchyFilter])
 
-  const hierarchyFilter = (h) => {
-    if (sammlungIdInActiveNodeArray) {
-      return [...store.sammlungs.values()]
-        .filter((s) => s.herkunft_id === h.id)
-        .map((s) => s.id)
-        .includes(sammlungIdInActiveNodeArray)
-    }
-    return true
-  }
-  const herkunftsSorted = herkunfts.filter(hierarchyFilter).sort(herkunftSort)
-
-  console.log('Herkuenfte', {
-    herkunfts,
-    herkunftsSorted,
-    herkunftsFiltered,
+  const herkunftsFiltered = applyStoreFilter({
+    store,
+    table: 'herkunft',
+    values: herkunfts,
   })
 
-  const storeRowsFiltered = herkunftsFiltered.filter(hierarchyFilter)
-
-  const totalNr = herkunftsSorted.filter(hierarchyFilter).length
-  const filteredNr = storeRowsFiltered.length
+  const totalNr = herkunfts.length
+  const filteredNr = herkunftsFiltered.length
 
   const add = useCallback(async () => {
     insertHerkunftRev()
@@ -162,7 +169,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={herkunftsFiltered.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -173,8 +180,8 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={herkunftsFiltered[index]}
+                      last={index === herkunftsFiltered.length - 1}
                     />
                   )}
                 </StyledList>
