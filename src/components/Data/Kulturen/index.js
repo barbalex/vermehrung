@@ -19,7 +19,6 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
-import kulturSort from '../../../utils/kulturSort'
 
 const Container = styled.div`
   height: 100%;
@@ -106,17 +105,18 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
       const kultursFiltered = kulturs.filter((value) =>
         storeFilter({ value, filter: kulturFilter, table: 'kultur' }),
       )
-      /*const kulturSorters = await Promise.all(
+      const kulturSorters = await Promise.all(
         kultursFiltered.map(async (kultur) => {
-          const label = await kultur.kulturLabel.pipe(first$()).toPromise()
+          const label = await kultur.label.pipe(first$()).toPromise()
           return { id: kultur.id, label }
         }),
       )
+      // TODO: use kulturSort?
       const kultursSorted = sortBy(
         kultursFiltered,
         (kultur) => kulturSorters.find((s) => s.id === kultur.id).label,
-      )*/
-      setKulturState({ kulturs, kultursFiltered })
+      )
+      setKulturState({ kulturs, kultursFiltered: kultursSorted })
     })
     return () => subscription.unsubscribe()
     // need to rerender if any of the values of kulturFilter changes
