@@ -77,13 +77,15 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const activeNodeArray = anaRaw.toJSON()
 
   const db = useDatabase()
-  const herkunftCollection = useObservable(() =>
-    db.collections
+  const [herkunfts, setHerkunfts] = useState([])
+  useEffect(() => {
+    const subscription = db.collections
       .get('herkunft')
       .query(notDeletedOrHasConflictQuery)
-      .observe(),
-  )
-  const herkunfts = useObservableState(herkunftCollection, [])
+      .observe()
+      .subscribe(setHerkunfts)
+    return () => subscription.unsubscribe()
+  }, [db.collections])
 
   const hierarchyFilter = (h) => {
     if (sammlungIdInActiveNodeArray) {
