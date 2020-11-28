@@ -13,6 +13,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -79,31 +80,24 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const { herkunft: herkunftFilter } = store.filter
   const activeNodeArray = anaRaw.toJSON()
 
-  const hierarchyFilter = useCallback(
-    (h) => {
-      if (sammlungIdInActiveNodeArray) {
-        return [...store.sammlungs.values()]
-          .filter((s) => s.herkunft_id === h.id)
-          .map((s) => s.id)
-          .includes(sammlungIdInActiveNodeArray)
-      }
-      return true
-    },
-    [sammlungIdInActiveNodeArray, store.sammlungs],
-  )
-
   const db = useDatabase()
   const [herkunfts, setHerkunfts] = useState([])
   useEffect(() => {
-    const subscription = db.collections
-      .get('herkunft')
-      .query(notDeletedOrHasConflictQuery)
-      .observe()
-      .subscribe((_herkunfts) =>
-        setHerkunfts(_herkunfts.filter(hierarchyFilter)),
-      )
+    const collection = db.collections.get('herkunft')
+    const query = sammlungIdInActiveNodeArray
+      ? collection.query(
+          Q.experimentalJoinTables(['sammlung']),
+          Q.and(
+            notDeletedOrHasConflictQuery,
+            Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
+          ),
+        )
+      : collection.query(notDeletedOrHasConflictQuery)
+    const subscription = query
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+      .subscribe(setHerkunfts)
     return () => subscription.unsubscribe()
-  }, [db.collections, hierarchyFilter])
+  }, [db.collections, sammlungIdInActiveNodeArray])
 
   const herkunftsFiltered = useMemo(
     () =>
