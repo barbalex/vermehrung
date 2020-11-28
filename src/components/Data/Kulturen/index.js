@@ -111,7 +111,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
           return { id: kultur.id, label }
         }),
       )
-      // TODO: use kulturSort?
+      // TODO: use kulturSort
       const kultursSorted = sortBy(
         kultursFiltered,
         (kultur) => kulturSorters.find((s) => s.id === kultur.id).label,
