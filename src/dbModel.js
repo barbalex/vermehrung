@@ -21,7 +21,9 @@ import isEqual from 'lodash/isEqual'
 import toStringIfPossible from './utils/toStringIfPossible'
 import personLabelFromPerson from './utils/personLabelFromPerson'
 import gartenLabelFromGarten from './utils/gartenLabelFromGarten'
+import eventLabelFromEvent from './utils/eventLabelFromEvent'
 import artLabelFromAeArt from './utils/artLabelFromAeArt'
+import lieferungLabelFromLieferung from './utils/lieferungLabelFromLieferung'
 import teilkulturLabelFromTeilkultur from './utils/teilkulturLabelFromTeilkultur'
 import kulturLabelFromKultur from './utils/kulturLabelFromKultur'
 import toPgArray from './utils/toPgArray'
@@ -324,6 +326,17 @@ export class Lieferung extends Model {
   @relation('sammlung', 'nach_kultur_id') nach_kultur
   @relation('person', 'person_id') person
 
+  @lazy label = this.observe().pipe(
+    distinctUntilChanged(
+      (a, b) =>
+        a.datum === b.datum &&
+        a.anzahl_pflanzen === b.anzahl_pflanzen &&
+        a.anzahl_auspflanzbereit === b.anzahl_auspflanzbereit &&
+        a.geplant === b.geplant,
+    ),
+    map$((lieferung) => lieferungLabelFromLieferung({ lieferung })),
+  )
+
   @action async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
@@ -447,10 +460,7 @@ export class Art extends Model {
   @children('av') avs
   @lazy label = this.ae_art.observe().pipe(
     distinctUntilKeyChanged('ae_id'),
-    map$(async (ae_art) => {
-      if (!ae_art) return ''
-      return artLabelFromAeArt({ ae_art })
-    }),
+    map$((ae_art) => artLabelFromAeArt({ ae_art })),
   )
 
   @action async removeConflict(_rev) {
@@ -1031,10 +1041,7 @@ export class Teilzaehlung extends Model {
   @relation('teilkultur', 'teilkultur_id') teilkultur
   @lazy label = this.teilkultur.observe().pipe(
     distinctUntilKeyChanged('teilkultur_id'),
-    map$(async (teilkultur) => {
-      if (!teilkultur) return ''
-      return teilkulturLabelFromTeilkultur({ teilkultur })
-    }),
+    map$((teilkultur) => teilkulturLabelFromTeilkultur({ teilkultur })),
   )
 
   @action
@@ -1458,6 +1465,20 @@ export class Event extends Model {
 
   @relation('kultur', 'kultur_id') kultur
   @relation('person', 'person_id') person
+
+  @lazy label = this.observe().pipe(
+    distinctUntilChanged(
+      (a, b) =>
+        a.datum === b.datum &&
+        a.geplant === b.geplant &&
+        a.beschreibung === b.beschreibung,
+    ),
+    map$((event) =>
+      eventLabelFromEvent({
+        event,
+      }),
+    ),
+  )
 
   @action async removeConflict(_rev) {
     await this.update((row) => {
