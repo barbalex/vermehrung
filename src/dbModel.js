@@ -444,6 +444,13 @@ export class Art extends Model {
   @children('lieferung') lieferungs
   @children('kultur') kulturs
   @children('av') avs
+  @lazy artLabel = this.ae_art.observe().pipe(
+    distinctUntilKeyChanged('ae_id'),
+    map$(async (ae_art) => {
+      if (!ae_art) return ''
+      return artLabelFromAeArt({ ae_art })
+    }),
+  )
 
   @action async removeConflict(_rev) {
     await this.update((row) => {

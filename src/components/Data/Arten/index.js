@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -7,12 +7,17 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import SimpleBar from 'simplebar-react'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import sortBy from 'lodash/sortBy'
+import { first as first$ } from 'rxjs/operators'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
+import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
+import storeFilter from '../../../utils/storeFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -60,13 +65,45 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
+const initialArtState = { arts: [], artsFiltered: [] }
 
 const Arten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertArtRev, artsFiltered, artsSorted } = store
+  const { insertArtRev } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { art: artFilter } = store.filter
 
-  const totalNr = artsSorted.length
+  const db = useDatabase()
+  // use object with two keys to only render once on setting
+  const [artsState, setArtState] = useState(initialArtState)
+  useEffect(() => {
+    const subscription = db.collections
+      .get('art')
+      .query(notDeletedOrHasConflictQuery)
+      .observe()
+      .subscribe(async (arts) => {
+        const artsFiltered = arts.filter((value) =>
+          storeFilter({ value, filter: artFilter, table: 'art' }),
+        )
+        const artSorters = await Promise.all(
+          artsFiltered.map(async (art) => {
+            const label = await art.artLabel.pipe(first$()).toPromise()
+            return { id: art.id, label }
+          }),
+        )
+        const artsSorted = sortBy(
+          artsFiltered,
+          (art) => artSorters.find((s) => s.id === art.id).label,
+        )
+        setArtState({ arts, artsFiltered: artsSorted })
+      })
+    return () => subscription.unsubscribe()
+    // need to rerender if any of the values of herkunftFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db.collections, ...Object.values(artFilter)])
+
+  const { arts, artsFiltered } = artsState
+  const totalNr = arts.length
   const filteredNr = artsFiltered.length
 
   const add = useCallback(() => {
