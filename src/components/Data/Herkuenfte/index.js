@@ -72,6 +72,7 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
+const initialHerkunftState = { herkunfts: [], herkunftsFiltered: [] }
 
 const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -81,7 +82,8 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const activeNodeArray = anaRaw.toJSON()
 
   const db = useDatabase()
-  const [herkunfts, setHerkunfts] = useState([])
+  // use object with two keys to only render once on setting
+  const [herkunftsState, setHerkunftState] = useState(initialHerkunftState)
   useEffect(() => {
     const collection = db.collections.get('herkunft')
     const query = sammlungIdInActiveNodeArray
@@ -95,22 +97,25 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
       : collection.query(notDeletedOrHasConflictQuery)
     const subscription = query
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-      .subscribe(setHerkunfts)
+      .subscribe((herkunfts) => {
+        const herkunftsFiltered = herkunfts
+          .filter((value) =>
+            storeFilter({ value, filter: herkunftFilter, table: 'herkunft' }),
+          )
+          .sort(herkunftSort)
+        setHerkunftState({ herkunfts, herkunftsFiltered })
+      })
     return () => subscription.unsubscribe()
-  }, [db.collections, sammlungIdInActiveNodeArray])
-
-  const herkunftsFiltered = useMemo(
-    () =>
-      herkunfts
-        .filter((value) =>
-          storeFilter({ value, filter: herkunftFilter, table: 'herkunft' }),
-        )
-        .sort(herkunftSort),
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [herkunfts, ...Object.values(herkunftFilter)],
-  )
+  }, [
+    db.collections,
+    sammlungIdInActiveNodeArray,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(herkunftFilter),
+  ])
 
+  const { herkunfts, herkunftsFiltered } = herkunftsState
   const totalNr = herkunfts.length
   const filteredNr = herkunftsFiltered.length
 
