@@ -21,7 +21,6 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import applyStoreFilter from '../../../utils/applyStoreFilter'
 import storeFilter from '../../../utils/storeFilter'
 import herkunftSort from '../../../utils/herkunftSort'
 
@@ -100,9 +99,9 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
       .get('herkunft')
       .query(notDeletedOrHasConflictQuery)
       .observe()
-      .subscribe((_herkunfts) => {
-        setHerkunfts(_herkunfts.filter(hierarchyFilter))
-      })
+      .subscribe((_herkunfts) =>
+        setHerkunfts(_herkunfts.filter(hierarchyFilter)),
+      )
     return () => subscription.unsubscribe()
   }, [db.collections, hierarchyFilter])
 
