@@ -4,7 +4,7 @@ import sortBy from 'lodash/sortBy'
 const tzsSortByTk = async (tzs) => {
   const tzsIdLabel = await Promise.all(
     tzs.map(async (tz) => {
-      const label = await tz.tzLabel.pipe(first$()).toPromise()
+      const label = await tz.label.pipe(first$()).toPromise()
       return {
         id: tz.id,
         label,

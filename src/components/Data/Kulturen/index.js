@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -6,6 +6,10 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
+import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -13,6 +17,9 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
+import storeFilter from '../../../utils/storeFilter'
+import kulturSort from '../../../utils/kulturSort'
 
 const Container = styled.div`
   height: 100%;
@@ -61,27 +68,64 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
+const initialKulturState = { kulturs: [], kultursFiltered: [] }
 
 const Kulturen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
     insertKulturRev,
-    kultursSorted,
-    kultursFiltered,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { kultur: kulturFilter } = store.filter
 
-  const hierarchyFilter = (e) => {
-    if (gartenIdInActiveNodeArray) {
-      return e.garten_id === gartenIdInActiveNodeArray
-    }
-    if (artIdInActiveNodeArray) {
-      return e.art_id === artIdInActiveNodeArray
-    }
-    return true
-  }
+  const db = useDatabase()
+  // use object with two keys to only render once on setting
+  const [kultursState, setKulturState] = useState(initialKulturState)
+  useEffect(() => {
+    const collection = db.collections.get('kultur')
+    const query = gartenIdInActiveNodeArray
+      ? collection.query(
+          Q.experimentalJoinTables(['garten']),
+          Q.and(
+            notDeletedOrHasConflictQuery,
+            Q.on('garten', 'id', gartenIdInActiveNodeArray),
+          ),
+        )
+      : artIdInActiveNodeArray
+      ? collection.query(
+          Q.experimentalJoinTables(['art']),
+          Q.and(
+            notDeletedOrHasConflictQuery,
+            Q.on('art', 'id', artIdInActiveNodeArray),
+          ),
+        )
+      : collection.query(notDeletedOrHasConflictQuery)
+    const subscription = query.observe().subscribe(async (kulturs) => {
+      const kultursFiltered = kulturs.filter((value) =>
+        storeFilter({ value, filter: kulturFilter, table: 'kultur' }),
+      )
+      /*const kulturSorters = await Promise.all(
+        kultursFiltered.map(async (kultur) => {
+          const label = await kultur.kulturLabel.pipe(first$()).toPromise()
+          return { id: kultur.id, label }
+        }),
+      )
+      const kultursSorted = sortBy(
+        kultursFiltered,
+        (kultur) => kulturSorters.find((s) => s.id === kultur.id).label,
+      )*/
+      setKulturState({ kulturs, kultursFiltered })
+    })
+    return () => subscription.unsubscribe()
+    // need to rerender if any of the values of kulturFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db.collections, ...Object.values(kulturFilter)])
+
+  const { kulturs, kultursFiltered } = kultursState
+  const totalNr = kulturs.length
+  const filteredNr = kultursFiltered.length
 
   const onClickUp = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
@@ -97,12 +141,6 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
   if (activeNodeArray[activeNodeArray.length - 3] === 'Gaerten') {
     upTitle = 'Zum Garten'
   }
-
-  const storeRowsFiltered = kultursFiltered.filter(hierarchyFilter)
-
-  const totalNr = kultursSorted.filter(hierarchyFilter).length
-  const filteredNr = storeRowsFiltered.length
-
   const add = useCallback(() => {
     insertKulturRev()
   }, [insertKulturRev])
@@ -141,7 +179,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={kultursFiltered.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -152,8 +190,8 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={kultursFiltered[index]}
+                      last={index === kultursFiltered.length - 1}
                     />
                   )}
                 </StyledList>
