@@ -22,6 +22,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import applyStoreFilter from '../../../utils/applyStoreFilter'
+import herkunftSort from '../../../utils/herkunftSort'
 
 const Container = styled.div`
   height: 100%;
@@ -73,12 +74,9 @@ const singleRowHeight = 48
 
 const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const {
-    insertHerkunftRev,
-    herkunftsFiltered: herkunftsFilteredStore,
-    sammlungIdInActiveNodeArray,
-  } = store
+  const { insertHerkunftRev, sammlungIdInActiveNodeArray } = store
   const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
+  const { herkunft: herkunftFilter } = store.filter
   const activeNodeArray = anaRaw.toJSON()
 
   const hierarchyFilter = useCallback(
@@ -107,11 +105,17 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     return () => subscription.unsubscribe()
   }, [db.collections, hierarchyFilter])
 
-  const herkunftsFiltered = applyStoreFilter({
-    store,
-    table: 'herkunft',
-    values: herkunfts,
-  })
+  const herkunftsFiltered = useMemo(
+    () =>
+      applyStoreFilter({
+        filter: herkunftFilter,
+        table: 'herkunft',
+        values: herkunfts,
+      }).sort(herkunftSort),
+    // need to rerender if any of the values of herkunftFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [herkunfts, ...Object.values(herkunftFilter)],
+  )
 
   const totalNr = herkunfts.length
   const filteredNr = herkunftsFiltered.length

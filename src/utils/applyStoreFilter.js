@@ -2,10 +2,8 @@ import types from '../models/Filter/simpleTypes'
 // filter is a passed filter for cases like:
 // list of teilkulturs of a kultur
 // > kultur_id is passed as filter
-const applyStoreFilter = ({ store, values, table }) => {
-  const { filter: storeFilter } = store
-
-  const filterValues = Object.entries(storeFilter[table]).filter(
+const applyStoreFilter = ({ filter, values, table }) => {
+  const filterValues = Object.entries(filter).filter(
     (e) => !!e?.[1] || e?.[1] === false,
   )
 
