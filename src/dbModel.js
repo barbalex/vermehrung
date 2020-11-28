@@ -444,7 +444,7 @@ export class Art extends Model {
   @children('lieferung') lieferungs
   @children('kultur') kulturs
   @children('av') avs
-  @lazy artLabel = this.ae_art.observe().pipe(
+  @lazy label = this.ae_art.observe().pipe(
     distinctUntilKeyChanged('ae_id'),
     map$(async (ae_art) => {
       if (!ae_art) return ''
@@ -687,6 +687,13 @@ export class Kultur extends Model {
   @lazy auslieferungs = this.collections
     .get('lieferung')
     .query(Q.where('von_kultur_id', this.id))
+  @lazy label = this.teilkultur.observe().pipe(
+    distinctUntilKeyChanged('teilkultur_id'),
+    map$(async (teilkultur) => {
+      if (!teilkultur) return ''
+      return teilkulturLabelFromTeilkultur({ teilkultur })
+    }),
+  )
 
   @action async removeConflict(_rev) {
     await this.update((row) => {
@@ -1004,12 +1011,11 @@ export class Teilzaehlung extends Model {
 
   @relation('zaehlung', 'zaehlung_id') zaehlung
   @relation('teilkultur', 'teilkultur_id') teilkultur
-  @lazy tzLabel = this.teilkultur.observe().pipe(
+  @lazy label = this.teilkultur.observe().pipe(
     distinctUntilKeyChanged('teilkultur_id'),
     map$(async (teilkultur) => {
       if (!teilkultur) return ''
-      const tzLabel = teilkulturLabelFromTeilkultur({ teilkultur })
-      return tzLabel
+      return teilkulturLabelFromTeilkultur({ teilkultur })
     }),
   )
 

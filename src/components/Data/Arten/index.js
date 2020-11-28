@@ -87,7 +87,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
         )
         const artSorters = await Promise.all(
           artsFiltered.map(async (art) => {
-            const label = await art.artLabel.pipe(first$()).toPromise()
+            const label = await art.label.pipe(first$()).toPromise()
             return { id: art.id, label }
           }),
         )

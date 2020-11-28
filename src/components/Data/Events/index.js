@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -15,6 +15,9 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
+import storeFilter from '../../../utils/storeFilter'
+import eventSort from '../../../utils/eventSort'
 
 const Container = styled.div`
   height: 100%;
@@ -63,31 +66,52 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
+const initialEventState = { events: [], eventsFiltered: [] }
 
 const Events = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const {
-    insertEventRev,
-    eventsSorted,
-    eventsFiltered,
-    kulturIdInActiveNodeArray,
-  } = store
+  const { insertEventRev, kulturIdInActiveNodeArray } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { event: eventFilter } = store.filter
 
-  const hierarchyFilter = (e) => {
-    if (kulturIdInActiveNodeArray)
-      return e.kultur_id === kulturIdInActiveNodeArray
-    return true
-  }
+  const db = useDatabase()
+  // use object with two keys to only render once on setting
+  const [eventsState, setEventState] = useState(initialEventState)
+  useEffect(() => {
+    const collection = db.collections.get('event')
+    const query = kulturIdInActiveNodeArray
+      ? collection.query(
+          Q.experimentalJoinTables(['kultur']),
+          Q.and(
+            notDeletedOrHasConflictQuery,
+            Q.on('kultur', 'id', kulturIdInActiveNodeArray),
+          ),
+        )
+      : collection.query(notDeletedOrHasConflictQuery)
+    const subscription = query
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+      .subscribe((events) => {
+        const eventsFiltered = events
+          .filter((value) =>
+            storeFilter({ value, filter: eventFilter, table: 'event' }),
+          )
+          .sort((a, b) => eventSort({ a, b }))
+        setEventState({ events, eventsFiltered })
+      })
+    return () => subscription.unsubscribe()
+    // need to rerender if any of the values of eventFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    db.collections,
+    kulturIdInActiveNodeArray,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(eventFilter),
+  ])
 
-  const storeRowsFiltered = eventsFiltered.filter((e) => {
-    if (kulturIdInActiveNodeArray) {
-      return e.kultur_id === kulturIdInActiveNodeArray
-    }
-    return true
-  })
-  const totalNr = eventsSorted.filter(hierarchyFilter).length
-  const filteredNr = eventsFiltered.filter(hierarchyFilter).length
+  const { events, eventsFiltered } = eventsState
+
+  const totalNr = events.length
+  const filteredNr = eventsFiltered.length
 
   const add = useCallback(() => {
     insertEventRev()
@@ -139,7 +163,7 @@ const Events = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={eventsFiltered.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -150,8 +174,8 @@ const Events = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={eventsFiltered[index]}
+                      last={index === eventsFiltered.length - 1}
                     />
                   )}
                 </StyledList>
