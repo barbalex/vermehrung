@@ -5,30 +5,11 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import axios from 'redaxios'
 
 import { StoreContext } from '../models/reactUtils'
-import getConstants from '../utils/constants'
+import isOnline from '../utils/isOnline'
 
-const constants = getConstants()
-
-const config = {
-  url: constants?.healthUri,
-  timeout: 5000,
-  interval: 5000,
-}
-
-const ping = async () => {
-  let res
-  try {
-    res = await axios.get(config.url, { timeout: config.timeout })
-  } catch (error) {
-    // error can also be caused by timeout
-    return false
-  }
-  if (res.status === 200) return true
-  return false
-}
+const pollInterval = 5000
 
 const ApiDetector = () => {
   const store = useContext(StoreContext)
@@ -36,12 +17,12 @@ const ApiDetector = () => {
 
   useEffect(() => {
     const pollingId = setInterval(() => {
-      ping().then((nowOnline) => {
+      isOnline().then((nowOnline) => {
         if (online !== nowOnline) {
           setOnline(nowOnline)
         }
       })
-    }, config.interval)
+    }, pollInterval)
     return () => {
       clearInterval(pollingId)
     }
