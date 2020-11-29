@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -6,6 +6,9 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { Q } from '@nozbe/watermelondb'
+import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -13,6 +16,8 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
+import storeFilter from '../../../utils/storeFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -61,33 +66,62 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
+const initialTeilkulturState = { teilkulturs: [], teilkultursFiltered: [] }
 
 const Teilkulturen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const {
-    insertTeilkulturRev,
-    kulturIdInActiveNodeArray,
-    teilkultursSorted,
-    teilkultursFiltered,
-  } = store
+  const { insertTeilkulturRev, kulturIdInActiveNodeArray } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { teilkultur: teilkulturFilter } = store.filter
 
-  const hierarchyFilter = (r) => {
-    if (kulturIdInActiveNodeArray) {
-      return r.kultur_id === kulturIdInActiveNodeArray
-    }
-    return true
-  }
+  const db = useDatabase()
+  // use object with two keys to only render once on setting
+  const [teilkultursState, setTeilkulturState] = useState(
+    initialTeilkulturState,
+  )
+  useEffect(() => {
+    const collection = db.collections.get('teilkultur')
+    const query = kulturIdInActiveNodeArray
+      ? collection.query(
+          Q.experimentalJoinTables(['kultur']),
+          Q.and(
+            notDeletedOrHasConflictQuery,
+            Q.on('kultur', 'id', kulturIdInActiveNodeArray),
+          ),
+        )
+      : collection.query(notDeletedOrHasConflictQuery)
+    const subscription = query.observe().subscribe(async (teilkulturs) => {
+      const teilkultursFiltered = teilkulturs.filter((value) =>
+        storeFilter({ value, filter: teilkulturFilter, table: 'teilkultur' }),
+      )
+      const teilkulturSorters = await Promise.all(
+        teilkultursFiltered.map(async (tk) => {
+          const name = tk.name?.toString()?.toLowerCase() ?? ''
+          const ort1 = tk.ort1?.toString()?.toLowerCase() ?? ''
+          const ort2 = tk.ort2?.toString()?.toLowerCase() ?? ''
+          const ort3 = tk.ort3?.toString()?.toLowerCase() ?? ''
+          const sort = [name, ort1, ort2, ort3]
+          return { id: tk.id, sort }
+        }),
+      )
+      const teilkultursSorted = sortBy(
+        teilkultursFiltered,
+        (teilkultur) =>
+          teilkulturSorters.find((s) => s.id === teilkultur.id).sort,
+      )
+      setTeilkulturState({
+        teilkulturs,
+        teilkultursFiltered: teilkultursSorted,
+      })
+    })
+    return () => subscription.unsubscribe()
+    // need to rerender if any of the values of teilkulturFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db.collections, ...Object.values(teilkulturFilter)])
 
-  const storeRowsFiltered = teilkultursFiltered.filter((r) => {
-    if (kulturIdInActiveNodeArray) {
-      return r.kultur_id === kulturIdInActiveNodeArray
-    }
-    return true
-  })
-
-  const totalNr = teilkultursSorted.filter(hierarchyFilter).length
-  const filteredNr = teilkultursFiltered.filter(hierarchyFilter).length
+  const { teilkulturs, teilkultursFiltered } = teilkultursState
+  const totalNr = teilkulturs.length
+  const filteredNr = teilkultursFiltered.length
 
   const add = useCallback(() => {
     insertTeilkulturRev()
@@ -139,7 +173,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={teilkultursFiltered.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -150,8 +184,8 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={teilkultursFiltered[index]}
+                      last={index === teilkultursFiltered.length - 1}
                     />
                   )}
                 </StyledList>
