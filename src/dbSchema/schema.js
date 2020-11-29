@@ -4,6 +4,7 @@ import ae_art from './ae_art'
 import art from './art'
 import art_file from './art_file'
 import art_qk from './art_qk'
+import art_qk_choosen from './art_qk_choosen'
 import av from './av'
 import event from './event'
 import garten from './garten'
@@ -29,6 +30,7 @@ export const tables = [
   art,
   art_file,
   art_qk,
+  art_qk_choosen,
   av,
   event,
   garten,
