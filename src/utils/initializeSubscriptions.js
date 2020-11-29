@@ -12,6 +12,7 @@ import { herkunftModelPrimitives } from '../models/herkunftModel.base'
 import { herkunft_fileModelPrimitives } from '../models/herkunft_fileModel.base'
 import { kulturModelPrimitives } from '../models/kulturModel.base'
 import { kultur_fileModelPrimitives } from '../models/kultur_fileModel.base'
+import { kultur_optionModelPrimitives } from '../models/kultur_optionModel.base'
 import { lieferungModelPrimitives } from '../models/lieferungModel.base'
 import { lieferung_fileModelPrimitives } from '../models/lieferung_fileModel.base'
 import { personModelPrimitives } from '../models/personModel.base'
@@ -59,6 +60,8 @@ const initializeSubscriptions = ({ store }) => {
     subscribeKultur,
     lastUpdated_kultur_file,
     subscribeKultur_file,
+    lastUpdated_kultur_option,
+    subscribeKultur_option,
     lastUpdated_lieferung,
     subscribeLieferung,
     lastUpdated_lieferung_file,
@@ -165,7 +168,12 @@ const initializeSubscriptions = ({ store }) => {
     (data) => updateWmFromData({ data, table: 'kultur_file', store }),
     (error) => onError({ error }),
   )
-  unsubscribe.kultur_option = store.subscribeKultur_option()
+  unsubscribe.kultur_option = subscribeKultur_option(
+    { where: { _rev_at: { _gt: lastUpdated_kultur_option } } },
+    kultur_optionModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'kultur_option', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.kultur_qk = store.subscribeKultur_qk()
   unsubscribe.kultur_qk_choosen = store.subscribeKultur_qk_choosen()
   unsubscribe.lieferung = subscribeLieferung(

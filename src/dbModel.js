@@ -2025,3 +2025,121 @@ export class ArtQkChoosen extends Model {
   @relation('art', 'art_id') art
   @relation('art_qk', 'name') art_qk
 }
+
+export class KulturOption extends Model {
+  static table = 'kultur_option'
+  static associations = {
+    kultur: { type: 'belongs_to', key: 'id' },
+  }
+
+  @field('id') id
+  @field('z_bemerkungen') z_bemerkungen
+  @field('tz_teilkultur_id') titel
+  @field('tz_anzahl_mutterpflanzen') beschreibung
+  @field('tz_andere_menge') tz_andere_menge
+  @field('tz_auspflanzbereit_beschreibung') tz_auspflanzbereit_beschreibung
+  @field('tz_bemerkungen') tz_bemerkungen
+  @field('tk') tk
+  @field('tk_bemerkungen') tk_bemerkungen
+  @field('ev_teilkultur_id') ev_teilkultur_id
+  @field('ev_geplant') ev_geplant
+  @field('ev_person_id') ev_person_id
+  @field('ev_datum') ev_datum
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @readonly @field('_rev_at') _rev_at
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @relation('kultur', 'id') kultur
+
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    //console.log('store, kultur_optionModel:', { this, field, value })
+
+    unsetError(`kultur_option.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      kultur_id: this.id,
+      z_bemerkungen: field === 'z_bemerkungen' ? value : this.z_bemerkungen,
+      tz_teilkultur_id:
+        field === 'tz_teilkultur_id' ? value : this.tz_teilkultur_id,
+      tz_anzahl_mutterpflanzen:
+        field === 'tz_anzahl_mutterpflanzen'
+          ? value
+          : this.tz_anzahl_mutterpflanzen,
+      tz_andere_menge:
+        field === 'tz_andere_menge' ? value : this.tz_andere_menge,
+      tz_auspflanzbereit_beschreibung:
+        field === 'tz_auspflanzbereit_beschreibung'
+          ? value
+          : this.tz_auspflanzbereit_beschreibung,
+      tz_bemerkungen: field === 'tz_bemerkungen' ? value : this.tz_bemerkungen,
+      tk: field === 'tk' ? value : this.tk,
+      tk_bemerkungen: field === 'tk_bemerkungen' ? value : this.tk_bemerkungen,
+      ev_teilkultur_id:
+        field === 'ev_teilkultur_id' ? value : this.ev_teilkultur_id,
+      ev_geplant: field === 'ev_geplant' ? value : this.ev_geplant,
+      ev_person_id: field === 'ev_person_id' ? value : this.ev_person_id,
+      ev_datum: field === 'ev_datum' ? value : this.ev_datum,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_kultur_option_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'kultur_option_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'kultur_option',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert herkuft_rev to kultur_option
+    newObjectForStore.id = this.id
+    delete newObjectForStore.kultur_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+  }
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
+}
