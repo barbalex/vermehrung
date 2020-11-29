@@ -438,7 +438,7 @@ const KulturForm = ({
             <>
               <Timeline row={row} />
               <QK kultur={row} />
-              <Files parentId={row.id} parent="kultur" />
+              <Files parentTable="kultur" parent={row} />
             </>
           )}
         </Container>

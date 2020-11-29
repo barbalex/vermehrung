@@ -124,7 +124,7 @@ const LieferungWer = ({
           setActiveConflict={setActiveConflict}
         />
       )}
-      {!showFilter && <Files parentId={row.id} parent="lieferung" />}
+      {!showFilter && <Files parentTable="lieferung" parent={row} />}
     </>
   )
 }

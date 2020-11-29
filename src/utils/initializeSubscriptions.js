@@ -1,15 +1,22 @@
 import { ae_artModelPrimitives } from '../models/ae_artModel.base'
 import { artModelPrimitives } from '../models/artModel.base'
+import { art_fileModelPrimitives } from '../models/art_fileModel.base'
 import { avModelPrimitives } from '../models/avModel.base'
 import { eventModelPrimitives } from '../models/eventModel.base'
 import { gartenModelPrimitives } from '../models/gartenModel.base'
+import { garten_fileModelPrimitives } from '../models/garten_fileModel.base'
 import { gvModelPrimitives } from '../models/gvModel.base'
 import { herkunftModelPrimitives } from '../models/herkunftModel.base'
+import { herkunft_fileModelPrimitives } from '../models/herkunft_fileModel.base'
 import { kulturModelPrimitives } from '../models/kulturModel.base'
+import { kultur_fileModelPrimitives } from '../models/kultur_fileModel.base'
 import { lieferungModelPrimitives } from '../models/lieferungModel.base'
+import { lieferung_fileModelPrimitives } from '../models/lieferung_fileModel.base'
 import { personModelPrimitives } from '../models/personModel.base'
+import { person_fileModelPrimitives } from '../models/person_fileModel.base'
 import { sammel_lieferungModelPrimitives } from '../models/sammel_lieferungModel.base'
 import { sammlungModelPrimitives } from '../models/sammlungModel.base'
+import { sammlung_fileModelPrimitives } from '../models/sammlung_fileModel.base'
 import { teilkulturModelPrimitives } from '../models/teilkulturModel.base'
 import { teilzaehlungModelPrimitives } from '../models/teilzaehlungModel.base'
 import { zaehlungModelPrimitives } from '../models/zaehlungModel.base'
@@ -25,6 +32,8 @@ const initializeSubscriptions = ({ store }) => {
     lastUpdated_ae_art,
     subscribeAe_art,
     lastUpdated_art,
+    lastUpdated_art_file,
+    subscribeArt_file,
     subscribeAv,
     lastUpdated_av,
     subscribeArt,
@@ -32,20 +41,32 @@ const initializeSubscriptions = ({ store }) => {
     subscribeEvent,
     lastUpdated_garten,
     subscribeGarten,
+    lastUpdated_garten_file,
+    subscribeGarten_file,
     subscribeGv,
     lastUpdated_gv,
     lastUpdated_herkunft,
     subscribeHerkunft,
+    lastUpdated_herkunft_file,
+    subscribeHerkunft_file,
     lastUpdated_kultur,
     subscribeKultur,
+    lastUpdated_kultur_file,
+    subscribeKultur_file,
     lastUpdated_lieferung,
     subscribeLieferung,
+    lastUpdated_lieferung_file,
+    subscribeLieferung_file,
     lastUpdated_person,
     subscribePerson,
+    lastUpdated_person_file,
+    subscribePerson_file,
     lastUpdated_sammel_lieferung,
     subscribeSammel_lieferung,
     lastUpdated_sammlung,
     subscribeSammlung,
+    lastUpdated_sammlung_file,
+    subscribeSammlung_file,
     lastUpdated_teilkultur,
     subscribeTeilkultur,
     lastUpdated_teilzaehlung,
@@ -66,7 +87,12 @@ const initializeSubscriptions = ({ store }) => {
     (data) => updateWmFromData({ data, table: 'art', store }),
     (error) => onError({ error }),
   )
-  unsubscribe.art_file = store.subscribeArt_file()
+  unsubscribe.art_file = subscribeArt_file(
+    { where: { _rev_at: { _gt: lastUpdated_art_file } } },
+    art_fileModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'art_file', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.art_qk = store.subscribeArt_qk()
   unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen()
   unsubscribe.av = subscribeAv(
@@ -87,7 +113,12 @@ const initializeSubscriptions = ({ store }) => {
     (data) => updateWmFromData({ data, table: 'garten', store }),
     (error) => onError({ error }),
   )
-  unsubscribe.garten_file = store.subscribeGarten_file()
+  unsubscribe.garten_file = subscribeGarten_file(
+    { where: { _rev_at: { _gt: lastUpdated_garten_file } } },
+    garten_fileModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'garten_file', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.gv = subscribeGv(
     { where: { _rev_at: { _gt: lastUpdated_gv } } },
     gvModelPrimitives.toString(),
@@ -100,14 +131,24 @@ const initializeSubscriptions = ({ store }) => {
     (data) => updateWmFromData({ data, table: 'herkunft', store }),
     (error) => onError({ error }),
   )
-  unsubscribe.herkunft_file = store.subscribeHerkunft_file()
+  unsubscribe.herkunft_file = subscribeHerkunft_file(
+    { where: { _rev_at: { _gt: lastUpdated_herkunft_file } } },
+    herkunft_fileModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'herkunft_file', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.kultur = subscribeKultur(
     { where: { _rev_at: { _gt: lastUpdated_kultur } } },
     kulturModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'kultur', store }),
     (error) => onError({ error }),
   )
-  unsubscribe.kultur_file = store.subscribeKultur_file()
+  unsubscribe.kultur_file = subscribeKultur_file(
+    { where: { _rev_at: { _gt: lastUpdated_kultur_file } } },
+    kultur_fileModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'kultur_file', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.kultur_option = store.subscribeKultur_option()
   unsubscribe.kultur_qk = store.subscribeKultur_qk()
   unsubscribe.kultur_qk_choosen = store.subscribeKultur_qk_choosen()
@@ -117,14 +158,24 @@ const initializeSubscriptions = ({ store }) => {
     (data) => updateWmFromData({ data, table: 'lieferung', store }),
     (error) => onError({ error }),
   )
-  unsubscribe.lieferung_file = store.subscribeLieferung_file()
+  unsubscribe.lieferung_file = subscribeLieferung_file(
+    { where: { _rev_at: { _gt: lastUpdated_lieferung_file } } },
+    lieferung_fileModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'lieferung_file', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.person = subscribePerson(
     { where: { _rev_at: { _gt: lastUpdated_person } } },
     personModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'person', store }),
     (error) => onError({ error }),
   )
-  unsubscribe.person_file = store.subscribePerson_file()
+  unsubscribe.person_file = subscribePerson_file(
+    { where: { _rev_at: { _gt: lastUpdated_person_file } } },
+    person_fileModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'person_file', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.person_option = store.subscribePerson_option()
   unsubscribe.sammel_lieferung = subscribeSammel_lieferung(
     { where: { _rev_at: { _gt: lastUpdated_sammel_lieferung } } },
@@ -138,7 +189,12 @@ const initializeSubscriptions = ({ store }) => {
     (data) => updateWmFromData({ data, table: 'sammlung', store }),
     (error) => onError({ error }),
   )
-  unsubscribe.sammlung_file = store.subscribeSammlung_file()
+  unsubscribe.sammlung_file = subscribeSammlung_file(
+    { where: { _rev_at: { _gt: lastUpdated_sammlung_file } } },
+    sammlung_fileModelPrimitives.toString(),
+    (data) => updateWmFromData({ data, table: 'sammlung_file', store }),
+    (error) => onError({ error }),
+  )
   unsubscribe.teilkultur = subscribeTeilkultur(
     { where: { _rev_at: { _gt: lastUpdated_teilkultur } } },
     teilkulturModelPrimitives.toString(),

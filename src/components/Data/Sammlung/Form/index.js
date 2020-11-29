@@ -334,7 +334,7 @@ const SammlungForm = ({
               setActiveConflict={setActiveConflict}
             />
           )}
-          {!showFilter && <Files parentId={row.id} parent="sammlung" />}
+          {!showFilter && <Files parentTable="sammlung" parent={row} />}
         </FieldsContainer>
       </SimpleBar>
     </ErrorBoundary>

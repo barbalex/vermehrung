@@ -38,6 +38,7 @@ export class Herkunft extends Model {
   static table = 'herkunft'
   static associations = {
     sammlung: { type: 'has_many', foreignKey: 'herkunft_id' },
+    herkunft_file: { type: 'has_many', foreignKey: 'herkunft_id' },
   }
 
   @field('id') id
@@ -63,6 +64,7 @@ export class Herkunft extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @children('sammlung') sammlungs
+  @children('herkunft_file') files
 
   @action async removeConflict(_rev) {
     await this.update((row) => {
@@ -162,6 +164,7 @@ export class Sammlung extends Model {
     herkunft: { type: 'belongs_to', key: 'herkunft_id' },
     person: { type: 'belongs_to', key: 'person_id' },
     lieferung: { type: 'has_many', foreignKey: 'von_sammlung_id' },
+    sammlung_file: { type: 'has_many', foreignKey: 'sammlung_id' },
   }
 
   @field('id') id
@@ -195,6 +198,7 @@ export class Sammlung extends Model {
   @relation('herkunft', 'herkunft_id') herkunft
   @relation('person', 'person_id') person
   @children('lieferung') lieferungs
+  @children('sammlung_file') files
 
   @action async removeConflict(_rev) {
     await this.update((row) => {
@@ -294,6 +298,7 @@ export class Lieferung extends Model {
     von_kultur: { type: 'belongs_to', key: 'von_kultur_id' },
     nach_kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
     person: { type: 'belongs_to', key: 'person_id' },
+    lieferung_file: { type: 'has_many', foreignKey: 'lieferung_id' },
   }
 
   @field('id') id
@@ -327,6 +332,7 @@ export class Lieferung extends Model {
   @relation('sammlung', 'von_kultur_id') von_kultur
   @relation('sammlung', 'nach_kultur_id') nach_kultur
   @relation('person', 'person_id') person
+  @children('lieferung_file') files
 
   @lazy label = this.observe().pipe(
     distinctUntilChanged(
@@ -439,6 +445,7 @@ export class Art extends Model {
     lieferung: { type: 'has_many', foreignKey: 'art_id' },
     kultur: { type: 'has_many', foreignKey: 'art_id' },
     av: { type: 'has_many', foreignKey: 'art_id' },
+    art_file: { type: 'has_many', foreignKey: 'art_id' },
   }
 
   @field('id') id
@@ -460,6 +467,7 @@ export class Art extends Model {
   @children('lieferung') lieferungs
   @children('kultur') kulturs
   @children('av') avs
+  @children('art_file') files
   @lazy label = this.ae_art.observe().pipe(
     distinctUntilKeyChanged('ae_id'),
     map$((ae_art) => artLabelFromAeArt({ ae_art })),
@@ -552,6 +560,7 @@ export class Garten extends Model {
     person: { type: 'belongs_to', key: 'person_id' },
     kultur: { type: 'has_many', foreignKey: 'garten_id' },
     gv: { type: 'has_many', foreignKey: 'garten_id' },
+    garten_file: { type: 'has_many', foreignKey: 'garten_id' },
   }
 
   @field('id') id
@@ -579,6 +588,7 @@ export class Garten extends Model {
 
   @children('kultur') kulturs
   @children('gv') gvs
+  @children('garten_file') files
   @relation('person', 'person_id') person
 
   @action async removeConflict(_rev) {
@@ -671,6 +681,7 @@ export class Kultur extends Model {
     zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
     event: { type: 'has_many', foreignKey: 'kultur_id' },
     kultur_option: { type: 'has_many', foreignKey: 'kultur_id' },
+    kultur_file: { type: 'has_many', foreignKey: 'kultur_id' },
   }
 
   @field('id') id
@@ -696,6 +707,7 @@ export class Kultur extends Model {
   @children('zaehlung') zaehlungs
   @children('event') events
   @children('kultur_option') kultur_options
+  @children('kultur_file') files
   @relation('garten', 'garten_id') garten
   @relation('art', 'art_id') art
   @relation('herkunft', 'herkunft_id') herkunft
@@ -1139,6 +1151,7 @@ export class Person extends Model {
     lieferung: { type: 'has_many', foreignKey: 'person_id' },
     garten: { type: 'has_many', foreignKey: 'person_id' },
     event: { type: 'has_many', foreignKey: 'person_id' },
+    person_file: { type: 'has_many', foreignKey: 'person_id' },
   }
 
   @field('id') id
@@ -1193,6 +1206,7 @@ export class Person extends Model {
   @children('lieferung') lieferungs
   @children('garten') gartens
   @children('event') events
+  @children('person_file') files
 
   @action async removeConflict(_rev) {
     await this.update((row) => {
@@ -1764,4 +1778,130 @@ export class Gv extends Model {
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
+}
+
+export class ArtFile extends Model {
+  static table = 'art_file'
+  static associations = {
+    art: { type: 'belongs_to', key: 'art_id' },
+  }
+
+  @field('id') id
+  @field('art_id') art_id
+  @field('file_id') file_id
+  @field('file_mime_type') file_mime_type
+  @field('name') name
+  @field('beschreibung') beschreibung
+  @field('changed') changed
+  @readonly @field('_rev_at') _rev_at
+
+  @relation('art', 'art_id') art
+}
+
+export class GartenFile extends Model {
+  static table = 'garten_file'
+  static associations = {
+    garten: { type: 'belongs_to', key: 'garten_id' },
+  }
+
+  @field('id') id
+  @field('garten_id') garten_id
+  @field('file_id') file_id
+  @field('file_mime_type') file_mime_type
+  @field('name') name
+  @field('beschreibung') beschreibung
+  @field('changed') changed
+  @readonly @field('_rev_at') _rev_at
+
+  @relation('garten', 'garten_id') garten
+}
+
+export class HerkunftFile extends Model {
+  static table = 'herkunft_file'
+  static associations = {
+    herkunft: { type: 'belongs_to', key: 'herkunft_id' },
+  }
+
+  @field('id') id
+  @field('herkunft_id') herkunft_id
+  @field('file_id') file_id
+  @field('file_mime_type') file_mime_type
+  @field('name') name
+  @field('beschreibung') beschreibung
+  @field('changed') changed
+  @readonly @field('_rev_at') _rev_at
+
+  @relation('herkunft', 'herkunft_id') herkunft
+}
+
+export class KulturFile extends Model {
+  static table = 'kultur_file'
+  static associations = {
+    kultur: { type: 'belongs_to', key: 'kultur_id' },
+  }
+
+  @field('id') id
+  @field('kultur_id') kultur_id
+  @field('file_id') file_id
+  @field('file_mime_type') file_mime_type
+  @field('name') name
+  @field('beschreibung') beschreibung
+  @field('changed') changed
+  @readonly @field('_rev_at') _rev_at
+
+  @relation('kultur', 'kultur_id') kultur
+}
+
+export class LieferungFile extends Model {
+  static table = 'lieferung_file'
+  static associations = {
+    lieferung: { type: 'belongs_to', key: 'lieferung_id' },
+  }
+
+  @field('id') id
+  @field('lieferung_id') lieferung_id
+  @field('file_id') file_id
+  @field('file_mime_type') file_mime_type
+  @field('name') name
+  @field('beschreibung') beschreibung
+  @field('changed') changed
+  @readonly @field('_rev_at') _rev_at
+
+  @relation('lieferung', 'lieferung_id') lieferung
+}
+
+export class PersonFile extends Model {
+  static table = 'person_file'
+  static associations = {
+    person: { type: 'belongs_to', key: 'person_id' },
+  }
+
+  @field('id') id
+  @field('person_id') person_id
+  @field('file_id') file_id
+  @field('file_mime_type') file_mime_type
+  @field('name') name
+  @field('beschreibung') beschreibung
+  @field('changed') changed
+  @readonly @field('_rev_at') _rev_at
+
+  @relation('person', 'person_id') person
+}
+
+export class SammlungFile extends Model {
+  static table = 'sammlung_file'
+  static associations = {
+    sammlung: { type: 'belongs_to', key: 'sammlung_id' },
+  }
+
+  @field('id') id
+  @field('sammlung_id') sammlung_id
+  @field('file_id') file_id
+  @field('file_mime_type') file_mime_type
+  @field('name') name
+  @field('beschreibung') beschreibung
+  @field('changed') changed
+  @readonly @field('_rev_at') _rev_at
+
+  @relation('sammlung', 'sammlung_id') sammlung
 }

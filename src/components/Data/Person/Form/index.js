@@ -332,7 +332,7 @@ const Person = ({
         {['gaertner', 'artverantwortlich'].includes(row.user_role) && (
           <Gaerten person={row} />
         )}
-        {!showFilter && row.id && <Files parentId={row.id} parent="person" />}
+        {!showFilter && row.id && <Files parentTable="person" parent={row} />}
       </Container>
     </SimpleBar>
   )
