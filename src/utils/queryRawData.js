@@ -158,13 +158,7 @@ const allDataQuery = gql`
 `
 
 const queryRawData = async ({ store }) => {
-  const {
-    online,
-    db,
-    setInitialDataQueried,
-    lastUpdatedAt: revAt,
-    rawQglClient,
-  } = store
+  const { online, db, lastUpdatedAt: revAt, rawQglClient } = store
   if (!online) {
     return
   }
@@ -181,7 +175,6 @@ const queryRawData = async ({ store }) => {
     } else {
       checkForOnlineError(error)
     }
-    setInitialDataQueried(true)
     return
   }
   console.log('queryRawData', { data, revAt })
@@ -196,7 +189,6 @@ const queryRawData = async ({ store }) => {
     !!data[table].length &&
       (await updateWmFromData({ data: data[table], table, db }))
   }
-  setInitialDataQueried(true)
   // TODO:
   // remove data with _deleted flag?
 }

@@ -70,7 +70,7 @@ const Vermehrung = ({ location }) => {
   const {
     activeForm,
     gettingAuthUser,
-    //initialDataQueried,
+    initialDataQueried,
     isPrint,
     showQueuedQueries,
     singleColumnView,
@@ -140,6 +140,8 @@ const Vermehrung = ({ location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existsUser])
 
+  console.log('Vermehrung', { gettingAuthUser, isIOS, initialDataQueried })
+
   if (gettingAuthUser || isIOS) {
     return (
       <ErrorBoundary>
@@ -158,10 +160,19 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  // uncommented this because:
-  // quite often there will already exist data
-  // so show it ealier instead of waiting for loading to be finished
-  /*if (!initialDataQueried) {
+  if (!existsUser) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <LoginContainer>
+            <Login />
+          </LoginContainer>
+        </Layout>
+      </ErrorBoundary>
+    )
+  }
+
+  if (!initialDataQueried) {
     return (
       <ErrorBoundary>
         <Layout>
@@ -172,20 +183,10 @@ const Vermehrung = ({ location }) => {
               backColor="#4a148c1a"
               loading={true}
             />
-            <SpinnerText>lade Daten</SpinnerText>
+            <SpinnerText>
+              lade alle Daten für offline - das kann dauern
+            </SpinnerText>
           </SpinnerContainer>
-        </Layout>
-      </ErrorBoundary>
-    )
-  }*/
-
-  if (!existsUser) {
-    return (
-      <ErrorBoundary>
-        <Layout>
-          <LoginContainer>
-            <Login />
-          </LoginContainer>
         </Layout>
       </ErrorBoundary>
     )

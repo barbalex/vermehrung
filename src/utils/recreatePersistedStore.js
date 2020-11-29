@@ -25,10 +25,38 @@ const recreatePersistedStore = async ({ store }) => {
     'user',
     'gqlHttpClient',
     'gqlWsClient',
-    'initialDataQueried',
     'gettingAuthUser',
     'online',
     'errors',
+    'ae_art_initially_queried',
+    'art_initially_queried',
+    'art_file_initially_queried',
+    'art_qk_initially_queried',
+    'art_qk_choosen_initially_queried',
+    'av_initially_queried',
+    'event_initially_queried',
+    'garten_initially_queried',
+    'garten_file_initially_queried',
+    'gv_initially_queried',
+    'herkunft_initially_queried',
+    'herkunft_file_initially_queried',
+    'kultur_initially_queried',
+    'kultur_file_initially_queried',
+    'kultur_option_initially_queried',
+    'kultur_qk_initially_queried',
+    'kultur_qk_choosen_initially_queried',
+    'lieferung_initially_queried',
+    'lieferung_file_initially_queried',
+    'person_initially_queried',
+    'person_file_initially_queried',
+    'person_option_initially_queried',
+    'sammel_lieferung_initially_queried',
+    'sammlung_initially_queried',
+    'sammlung_file_initially_queried',
+    'teilkultur_initially_queried',
+    'teilzaehlung_initially_queried',
+    'user_role_initially_queried',
+    'zaehlung_initially_queried',
   ]
   await persist('store', store, {
     storage: localForage,
@@ -49,12 +77,12 @@ const recreatePersistedStore = async ({ store }) => {
         navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
       }, 200)
     }
-    setTimeout(async () => {
-      if (store.online) {
-        await getAuthToken({ store })
-      }
-      setGettingAuthUser(false)
-    })
+    //setTimeout(async () => {
+    if (store.online) {
+      await getAuthToken({ store })
+    }
+    setGettingAuthUser(false)
+    //})
   })
   return unregisterAuthObserver
 }

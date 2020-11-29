@@ -11,13 +11,9 @@ const stripTypename = (object) => {
 
 // TODO: do this in worker?
 const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
-  const {
-    db,
-    initialDataQueried,
-    setInitialDataQueried,
-    setLastUpdated,
-  } = store
+  const { db, setInitiallyQueried, setLastUpdated } = store
   if (!dataToCheck.length) {
+    setInitiallyQueried({ table })
     return
   }
 
@@ -77,12 +73,10 @@ const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
         )
       }
       setLastUpdated({ table })
+      setInitiallyQueried({ table })
     })
   } catch (error) {
     console.log('Error in updateWmFromData > db.action:', error)
-  }
-  if (!initialDataQueried) {
-    setInitialDataQueried(true)
   }
 }
 

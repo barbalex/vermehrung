@@ -79,7 +79,6 @@ const initiateApp = async () => {
   store = RootStore.create(undefined, storeOptions)
   store.setGqlHttpClient(gqlHttpClient)
   store.setGqlWsClient(gqlWsClient)
-  store.setGettingAuthUser(true)
 
   const rawGqlClient = new GraphQLClient(constants?.graphQlUri, {
     headers: { authorization: `Bearer ${token}` },
