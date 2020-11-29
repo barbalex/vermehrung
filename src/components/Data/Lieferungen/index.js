@@ -126,15 +126,16 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
       )
       const lieferungSorters = await Promise.all(
         lieferungsFiltered.map(async (lieferung) => {
-          const label = await lieferung.label.pipe(first$()).toPromise()
-          return { id: lieferung.id, label }
+          const datum = lieferung.datum ? new Date(lieferung.datum) : ''
+          const anzahlPflanzen = lieferung.anzahl_pflanzen ?? ''
+          const sort = [datum, anzahlPflanzen]
+
+          return { id: lieferung.id, sort }
         }),
       )
-      // TODO: use lieferungSort
       const lieferungsSorted = sortBy(
         lieferungsFiltered,
-        (lieferung) =>
-          lieferungSorters.find((s) => s.id === lieferung.id).label,
+        (lieferung) => lieferungSorters.find((s) => s.id === lieferung.id).sort,
       )
       setLieferungState({ lieferungs, lieferungsFiltered: lieferungsSorted })
     })

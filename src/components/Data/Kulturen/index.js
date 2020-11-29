@@ -8,7 +8,6 @@ import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
-import { first as first$ } from 'rxjs/operators'
 import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -19,6 +18,8 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
+import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
+import personFullname from '../../../utils/personFullname'
 
 const Container = styled.div`
   height: 100%;
@@ -107,14 +108,37 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
       )
       const kulturSorters = await Promise.all(
         kultursFiltered.map(async (kultur) => {
-          const label = await kultur.label.pipe(first$()).toPromise()
-          return { id: kultur.id, label }
+          const art = await kultur.art.fetch()
+          const ae_art = art ? await art.ae_art.fetch() : undefined
+          const aeArtLabel = aeArtLabelFromAeArt({ ae_art })
+            ?.toString()
+            ?.toLowerCase()
+          const herkunft = await kultur.herkunft.fetch()
+          const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
+          const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
+          const herkunftLokalname = herkunft?.lokalname
+            ?.toString()
+            ?.toLowerCase()
+          const garten = await kultur.garten.fetch()
+          const gartenName = garten?.name?.toString()?.toLowerCase()
+          const gartenPerson = garten ? await garten.person.fetch() : undefined
+          const gartenPersonFullname = personFullname(gartenPerson)
+            ?.toString()
+            ?.toLowerCase()
+          const sort = [
+            aeArtLabel,
+            herkunftNr,
+            herkunftGemeinde,
+            herkunftLokalname,
+            gartenName,
+            gartenPersonFullname,
+          ]
+          return { id: kultur.id, sort }
         }),
       )
-      // TODO: use kulturSort
       const kultursSorted = sortBy(
         kultursFiltered,
-        (kultur) => kulturSorters.find((s) => s.id === kultur.id).label,
+        (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
       )
       setKulturState({ kulturs, kultursFiltered: kultursSorted })
     })
