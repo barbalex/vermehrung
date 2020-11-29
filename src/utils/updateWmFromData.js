@@ -17,35 +17,23 @@ const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
     setInitialDataQueried,
     setLastUpdated,
   } = store
-  /*console.log('updateWmFromData:', {
-    dataToCheck: dataToCheck.length,
-    table,
-    lastUpdatedAt: store[`lastUpdated_${table}`],
-  })*/
-  if (!dataToCheck.length) return
+  if (!dataToCheck.length) {
+    return
+  }
 
   const collection = db.collections.get(table)
   const incomingIds = dataToCheck.map((d) => d.id)
 
   try {
     await db.action(async () => {
-      console.log('updateWmFromData 1', {
-        dataToCheck,
-        table,
-        store,
-        incomingIds,
-        collections: db.collections,
-      })
       const objectsOfToUpdate = await db.collections
         .get(table)
         .query(Q.where('id', Q.oneOf(incomingIds)))
         .fetch()
-      console.log('updateWmFromData 2')
       const objectsOfIncoming = await db.collections
         .get(table)
         .query(Q.where('id', Q.oneOf(incomingIds)))
         .fetch()
-      console.log('updateWmFromData 3')
       const existingIds = objectsOfIncoming.map((d) => d.id)
       const missingIds = incomingIds.filter((d) => !existingIds.includes(d))
       const dataToCreateObjectsFrom = dataToCheck.filter((d) =>
@@ -62,9 +50,6 @@ const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
       })
       console.log('updateWmFromData:', {
         dataToCheck: dataToCheck.length,
-        /*herkunftRevAt: dataToCheck?.find(
-          (d) => d.id === 'ff78614e-b554-11ea-b3de-0242ac130004',
-        )?._rev_at,*/
         table,
         toUpdate: objectsToUpdate.length,
         toCreate: missingIds.length,
@@ -96,7 +81,9 @@ const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
   } catch (error) {
     console.log('Error in updateWmFromData > db.action:', error)
   }
-  !initialDataQueried && setInitialDataQueried(true)
+  if (!initialDataQueried) {
+    setInitialDataQueried(true)
+  }
 }
 
 export default updateWmFromData

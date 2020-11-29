@@ -90,7 +90,7 @@ const initializeSubscriptions = ({ store }) => {
     subscribeZaehlung,
   } = store
   const unsubscribe = {}
-  /*unsubscribe.ae_art = subscribeAe_art(
+  unsubscribe.ae_art = subscribeAe_art(
     { where: { _rev_at: { _gt: lastUpdated_ae_art } } },
     ae_artModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'ae_art', store }),
@@ -185,14 +185,14 @@ const initializeSubscriptions = ({ store }) => {
     kultur_qkModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'kultur_qk', store }),
     (error) => console.log('Error in subscribeKultur_qk:', error),
-  )*/
+  )
   unsubscribe.kultur_qk_choosen = subscribeKultur_qk_choosen(
     { where: { _rev_at: { _gt: lastUpdated_kultur_qk_choosen } } },
     kultur_qk_choosenModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'kultur_qk_choosen', store }),
     (error) => console.log('Error in subscribeKultur_qk_choosen:', error),
   )
-  /*unsubscribe.lieferung = subscribeLieferung(
+  unsubscribe.lieferung = subscribeLieferung(
     { where: { _rev_at: { _gt: lastUpdated_lieferung } } },
     lieferungModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'lieferung', store }),
@@ -253,7 +253,7 @@ const initializeSubscriptions = ({ store }) => {
     zaehlungModelPrimitives.toString(),
     (data) => updateWmFromData({ data, table: 'zaehlung', store }),
     (error) => onError({ error }),
-  )*/
+  )
   return unsubscribe
 }
 
