@@ -61,36 +61,64 @@ export const RootStore = RootStoreBase.props({
   // every table saves last updated timestamp in seconds since 1.1.1970
   // why? so data to be updated can be efficiently extracted
   // from the live queries
-  lastUpdated_ae_art: types.optional(types.number, 0),
-  lastUpdated_art: types.optional(types.number, 0),
-  lastUpdated_art_file: types.optional(types.number, 0),
-  lastUpdated_art_qk: types.optional(types.number, 0),
-  lastUpdated_art_qk_choosen: types.optional(types.number, 0),
-  lastUpdated_av: types.optional(types.number, 0),
-  lastUpdated_event: types.optional(types.number, 0),
-  lastUpdated_garten: types.optional(types.number, 0),
-  lastUpdated_garten_file: types.optional(types.number, 0),
-  lastUpdated_gv: types.optional(types.number, 0),
-  lastUpdated_herkunft: types.optional(types.number, 0),
-  lastUpdated_herkunft_file: types.optional(types.number, 0),
-  lastUpdated_kultur: types.optional(types.number, 0),
-  lastUpdated_kultur_file: types.optional(types.number, 0),
-  lastUpdated_kultur_option: types.optional(types.number, 0),
-  lastUpdated_kultur_qk: types.optional(types.number, 0),
-  lastUpdated_kultur_qk_choosen: types.optional(types.number, 0),
-  lastUpdated_lieferung: types.optional(types.number, 0),
-  lastUpdated_lieferung_file: types.optional(types.number, 0),
-  lastUpdated_person: types.optional(types.number, 0),
-  lastUpdated_person_file: types.optional(types.number, 0),
-  lastUpdated_person_option: types.optional(types.number, 0),
-  lastUpdated_sammel_lieferung: types.optional(types.number, 0),
-  lastUpdated_sammlung: types.optional(types.number, 0),
-  lastUpdated_sammlung_file: types.optional(types.number, 0),
-  lastUpdated_teilkultur: types.optional(types.number, 0),
-  lastUpdated_teilzaehlung: types.optional(types.number, 0),
-  lastUpdated_user_role: types.optional(types.number, 0),
-  lastUpdated_zaehlung: types.optional(types.number, 0),
-  ae_art_initially_queried: types.optional(types.boolean, false)
+  ae_art_lastUpdated: types.optional(types.number, 0),
+  art_lastUpdated: types.optional(types.number, 0),
+  art_file_lastUpdated: types.optional(types.number, 0),
+  art_qk_lastUpdated: types.optional(types.number, 0),
+  art_qk_choosen_lastUpdated: types.optional(types.number, 0),
+  av_lastUpdated: types.optional(types.number, 0),
+  event_lastUpdated: types.optional(types.number, 0),
+  garten_lastUpdated: types.optional(types.number, 0),
+  garten_file_lastUpdated: types.optional(types.number, 0),
+  gv_lastUpdated: types.optional(types.number, 0),
+  herkunft_lastUpdated: types.optional(types.number, 0),
+  herkunft_file_lastUpdated: types.optional(types.number, 0),
+  kultur_lastUpdated: types.optional(types.number, 0),
+  kultur_file_lastUpdated: types.optional(types.number, 0),
+  kultur_option_lastUpdated: types.optional(types.number, 0),
+  kultur_qk_lastUpdated: types.optional(types.number, 0),
+  kultur_qk_choosen_lastUpdated: types.optional(types.number, 0),
+  lieferung_lastUpdated: types.optional(types.number, 0),
+  lieferung_file_lastUpdated: types.optional(types.number, 0),
+  person_lastUpdated: types.optional(types.number, 0),
+  person_file_lastUpdated: types.optional(types.number, 0),
+  person_option_lastUpdated: types.optional(types.number, 0),
+  sammel_lieferung_lastUpdated: types.optional(types.number, 0),
+  sammlung_lastUpdated: types.optional(types.number, 0),
+  sammlung_file_lastUpdated: types.optional(types.number, 0),
+  teilkultur_lastUpdated: types.optional(types.number, 0),
+  teilzaehlung_lastUpdated: types.optional(types.number, 0),
+  user_role_lastUpdated: types.optional(types.number, 0),
+  zaehlung_lastUpdated: types.optional(types.number, 0),
+  ae_art_initially_queried: types.optional(types.boolean, false),
+  art_initially_queried: types.optional(types.boolean, false),
+  art_file_initially_queried: types.optional(types.boolean, false),
+  art_qk_initially_queried: types.optional(types.boolean, false),
+  art_qk_choosen_initially_queried: types.optional(types.boolean, false),
+  av_initially_queried: types.optional(types.boolean, false),
+  event_initially_queried: types.optional(types.boolean, false),
+  garten_initially_queried: types.optional(types.boolean, false),
+  garten_file_initially_queried: types.optional(types.boolean, false),
+  gv_initially_queried: types.optional(types.boolean, false),
+  herkunft_initially_queried: types.optional(types.boolean, false),
+  herkunft_file_initially_queried: types.optional(types.boolean, false),
+  kultur_initially_queried: types.optional(types.boolean, false),
+  kultur_file_initially_queried: types.optional(types.boolean, false),
+  kultur_option_initially_queried: types.optional(types.boolean, false),
+  kultur_qk_initially_queried: types.optional(types.boolean, false),
+  kultur_qk_choosen_initially_queried: types.optional(types.boolean, false),
+  lieferung_initially_queried: types.optional(types.boolean, false),
+  lieferung_file_initially_queried: types.optional(types.boolean, false),
+  person_initially_queried: types.optional(types.boolean, false),
+  person_file_initially_queried: types.optional(types.boolean, false),
+  person_option_initially_queried: types.optional(types.boolean, false),
+  sammel_lieferung_initially_queried: types.optional(types.boolean, false),
+  sammlung_initially_queried: types.optional(types.boolean, false),
+  sammlung_file_initially_queried: types.optional(types.boolean, false),
+  teilkultur_initially_queried: types.optional(types.boolean, false),
+  teilzaehlung_initially_queried: types.optional(types.boolean, false),
+  user_role_initially_queried: types.optional(types.boolean, false),
+  zaehlung_initially_queried: types.optional(types.boolean, false),
   /**
    * This is a queue of all queries
    * When online they they are immediatly executed by the reaction
@@ -104,7 +132,6 @@ export const RootStore = RootStoreBase.props({
   // this is _after_ user is set so need another variable
   gettingAuthUser: types.optional(types.boolean, true),
   authorizing: types.optional(types.boolean, true),
-  initialDataQueried: types.optional(types.boolean, false),
   errors: types.optional(Errors, defaultErrors),
   diffConflict: types.optional(types.boolean, true),
 })
@@ -232,7 +259,14 @@ export const RootStore = RootStoreBase.props({
         //    thus need to correct!
         const standardVal = Date.now() / 1000 - 50
         const val = valPassed ?? standardVal
-        self[`lastUpdated_${table}`] = val
+        self[`${table}_lastUpdated`] = val
+      },
+      setInitiallyQueried({ table }) {
+        self[`${table}_initially_queried`] = true
+        console.log(
+          `${table} initially queried. InitialDataQueried:`,
+          self.initialDataQueried,
+        )
       },
       setDiffConflict(val) {
         self.diffConflict = val
@@ -257,10 +291,6 @@ export const RootStore = RootStoreBase.props({
       },
       unsetError(path) {
         unset(self.errors, path)
-      },
-      setInitialDataQueried(val) {
-        self.initialDataQueried = val
-        val && console.log('initialDataQueried set true')
       },
       setGqlHttpClient(val) {
         self.gqlHttpClient = val
@@ -1724,35 +1754,35 @@ export const RootStore = RootStoreBase.props({
         self.docFilter = val
       },
       flushData() {
-        self.lastUpdated_ae_art = 0
-        self.lastUpdated_art = 0
-        self.lastUpdated_art_file = 0
-        self.lastUpdated_art_qk = 0
-        self.lastUpdated_art_qk_choosen = 0
-        self.lastUpdated_av = 0
-        self.lastUpdated_event = 0
-        self.lastUpdated_garten = 0
-        self.lastUpdated_garten_file = 0
-        self.lastUpdated_gv = 0
-        self.lastUpdated_herkunft = 0
-        self.lastUpdated_herkunft_file = 0
-        self.lastUpdated_kultur = 0
-        self.lastUpdated_kultur_file = 0
-        self.lastUpdated_kultur_option = 0
-        self.lastUpdated_kultur_qk = 0
-        self.lastUpdated_kultur_qk_choosen = 0
-        self.lastUpdated_lieferung = 0
-        self.lastUpdated_lieferung_file = 0
-        self.lastUpdated_person = 0
-        self.lastUpdated_person_file = 0
-        self.lastUpdated_person_option = 0
-        self.lastUpdated_sammel_lieferung = 0
-        self.lastUpdated_sammlung = 0
-        self.lastUpdated_sammlung_file = 0
-        self.lastUpdated_teilkultur = 0
-        self.lastUpdated_teilzaehlung = 0
-        self.lastUpdated_user_role = 0
-        self.lastUpdated_zaehlung = 0
+        self.ae_art_lastUpdated = 0
+        self.art_lastUpdated = 0
+        self.art_file_lastUpdated = 0
+        self.art_qk_lastUpdated = 0
+        self.art_qk_choosen_lastUpdated = 0
+        self.av_lastUpdated = 0
+        self.event_lastUpdated = 0
+        self.garten_lastUpdated = 0
+        self.garten_file_lastUpdated = 0
+        self.gv_lastUpdated = 0
+        self.herkunft_lastUpdated = 0
+        self.herkunft_file_lastUpdated = 0
+        self.kultur_lastUpdated = 0
+        self.kultur_file_lastUpdated = 0
+        self.kultur_option_lastUpdated = 0
+        self.kultur_qk_lastUpdated = 0
+        self.kultur_qk_choosen_lastUpdated = 0
+        self.lieferung_lastUpdated = 0
+        self.lieferung_file_lastUpdated = 0
+        self.person_lastUpdated = 0
+        self.person_file_lastUpdated = 0
+        self.person_option_lastUpdated = 0
+        self.sammel_lieferung_lastUpdated = 0
+        self.sammlung_lastUpdated = 0
+        self.sammlung_file_lastUpdated = 0
+        self.teilkultur_lastUpdated = 0
+        self.teilzaehlung_lastUpdated = 0
+        self.user_role_lastUpdated = 0
+        self.zaehlung_lastUpdated = 0
         self.ae_arts.clear()
         self.arts.clear()
         self.art_files.clear()
@@ -1785,6 +1815,39 @@ export const RootStore = RootStoreBase.props({
     }
   })
   .views((self) => ({
+    get initialDataQueried() {
+      return (
+        self.ae_art_initially_queried &&
+        self.art_initially_queried &&
+        self.art_file_initially_queried &&
+        self.art_qk_initially_queried &&
+        self.art_qk_choosen_initially_queried &&
+        self.av_initially_queried &&
+        self.event_initially_queried &&
+        self.garten_initially_queried &&
+        self.garten_file_initially_queried &&
+        self.gv_initially_queried &&
+        self.herkunft_initially_queried &&
+        self.herkunft_file_initially_queried &&
+        self.kultur_initially_queried &&
+        self.kultur_file_initially_queried &&
+        self.kultur_option_initially_queried &&
+        self.kultur_qk_initially_queried &&
+        self.kultur_qk_choosen_initially_queried &&
+        self.lieferung_initially_queried &&
+        self.lieferung_file_initially_queried &&
+        self.person_initially_queried &&
+        self.person_file_initially_queried &&
+        self.person_option_initially_queried &&
+        self.sammel_lieferung_initially_queried &&
+        self.sammlung_initially_queried &&
+        self.sammlung_file_initially_queried &&
+        self.teilkultur_initially_queried &&
+        self.teilzaehlung_initially_queried &&
+        self.user_role_initially_queried &&
+        self.zaehlung_initially_queried
+      )
+    },
     get activeForm() {
       return activeFormFromActiveNodeArray(self.tree.activeNodeArray)
     },

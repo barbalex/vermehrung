@@ -21,11 +21,13 @@ import lieferung from './lieferung'
 import lieferung_file from './lieferung_file'
 import person from './person'
 import person_file from './person_file'
+import person_option from './person_option'
 import sammel_lieferung from './sammel_lieferung'
 import sammlung from './sammlung'
 import sammlung_file from './sammlung_file'
 import teilkultur from './teilkultur'
 import teilzaehlung from './teilzaehlung'
+import user_role from './user_role'
 import zaehlung from './zaehlung'
 
 export const tables = [
@@ -51,10 +53,12 @@ export const tables = [
   person,
   person_file,
   sammel_lieferung,
+  person_option,
   sammlung,
   sammlung_file,
   teilkultur,
   teilzaehlung,
+  user_role,
   zaehlung,
 ]
 

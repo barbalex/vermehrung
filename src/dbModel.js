@@ -2327,3 +2327,158 @@ export class KulturQkChoosen extends Model {
     )
   }
 }
+
+export class PersonOption extends Model {
+  static table = 'person_option'
+  static associations = {
+    person: { type: 'belongs_to', key: 'id' },
+  }
+
+  @field('id') id
+  @field('ar_name_deutsch') ar_name_deutsch
+  @field('ga_strasse') ga_strasse
+  @field('ga_plz') ga_plz
+  @field('ga_ort') ga_ort
+  @field('ga_geom_point') ga_geom_point
+  @field('ga_lat_lng') ga_lat_lng
+  @field('ga_aktiv') ga_aktiv
+  @field('ga_bemerkungen') ga_bemerkungen
+  @field('hk_kanton') hk_kanton
+  @field('hk_land') hk_land
+  @field('hk_bemerkungen') hk_bemerkungen
+  @field('hk_geom_point') hk_geom_point
+  @field('ku_zwischenlager') ku_zwischenlager
+  @field('ku_erhaltungskultur') ku_erhaltungskultur
+  @field('li_show_sl_felder') li_show_sl_felder
+  @field('li_show_sl') li_show_sl
+  @field('sl_show_empty_when_next_to_li') sl_show_empty_when_next_to_li
+  @field('sl_auto_copy_edits') sl_auto_copy_edits
+  @field('tree_kultur') tree_kultur
+  @field('tree_teilkultur') xtree_teilkulturxx
+  @field('tree_zaehlung') tree_zaehlung
+  @field('tree_lieferung') tree_lieferung
+  @field('tree_event') tree_event
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @readonly @field('_rev_at') _rev_at
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @relation('person', 'id') person
+
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`person_option.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      person_id: this.id,
+      ar_name_deutsch:
+        field === 'ar_name_deutsch' ? value : this.ar_name_deutsch,
+      ga_strasse: field === 'ga_strasse' ? value : this.ga_strasse,
+      ga_plz: field === 'ga_plz' ? value : this.ga_plz,
+      ga_ort: field === 'ga_ort' ? value : this.ga_ort,
+      ga_geom_point: field === 'ga_geom_point' ? value : this.ga_geom_point,
+      ga_lat_lng: field === 'ga_lat_lng' ? value : this.ga_lat_lng,
+      ga_aktiv: field === 'ga_aktiv' ? value : this.ga_aktiv,
+      ga_bemerkungen: field === 'ga_bemerkungen' ? value : this.ga_bemerkungen,
+      hk_kanton: field === 'hk_kanton' ? value : this.hk_kanton,
+      hk_land: field === 'hk_land' ? value : this.hk_land,
+      hk_bemerkungen: field === 'hk_bemerkungen' ? value : this.hk_bemerkungen,
+      hk_geom_point: field === 'hk_geom_point' ? value : this.hk_geom_point,
+      ku_zwischenlager:
+        field === 'ku_zwischenlager' ? value : this.ku_zwischenlager,
+      ku_erhaltungskultur:
+        field === 'ku_erhaltungskultur' ? value : this.ku_erhaltungskultur,
+      li_show_sl_felder:
+        field === 'li_show_sl_felder' ? value : this.li_show_sl_felder,
+      li_show_sl: field === 'li_show_sl' ? value : this.li_show_sl,
+      sl_show_empty_when_next_to_li:
+        field === 'sl_show_empty_when_next_to_li'
+          ? value
+          : this.sl_show_empty_when_next_to_li,
+      sl_auto_copy_edits:
+        field === 'sl_auto_copy_edits' ? value : this.sl_auto_copy_edits,
+      tree_kultur: field === 'tree_kultur' ? value : this.tree_kultur,
+      tree_teilkultur:
+        field === 'tree_teilkultur' ? value : this.tree_teilkultur,
+      tree_zaehlung: field === 'tree_zaehlung' ? value : this.tree_zaehlung,
+      tree_lieferung: field === 'tree_lieferung' ? value : this.tree_lieferung,
+      tree_event: field === 'tree_event' ? value : this.tree_event,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_person_option_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'person_option_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'person_option',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert herkuft_rev to person_option
+    newObjectForStore.id = this.id
+    delete newObjectForStore.person_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+  }
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
+}
+
+export class UserRole extends Model {
+  static table = 'user_role'
+  static associations = {
+    person: { type: 'has_many', foreignKey: 'user_role' },
+  }
+
+  @field('id') id
+  @field('name') name
+  @field('label') label
+  @field('sort') sort
+  @field('comment') comment
+  @field('changed') changed
+  @readonly @field('_rev_at') _rev_at
+
+  @relation('person', 'user_role') person
+}
