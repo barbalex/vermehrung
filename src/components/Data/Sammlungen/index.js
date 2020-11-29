@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -6,6 +6,9 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { Q } from '@nozbe/watermelondb'
+import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -13,6 +16,10 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
+import storeFilter from '../../../utils/storeFilter'
+import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
+import personFullname from '../../../utils/personFullname'
 
 const Container = styled.div`
   height: 100%;
@@ -61,36 +68,95 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
+const initialSammlungState = { sammlungs: [], sammlungsFiltered: [] }
 
 const Sammlungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
     insertSammlungRev,
-    sammlungsFiltered,
-    sammlungsSorted,
     artIdInActiveNodeArray,
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { sammlung: sammlungFilter } = store.filter
 
-  const hierarchyFilter = (s) => {
-    if (artIdInActiveNodeArray) {
-      return s.art_id === artIdInActiveNodeArray
-    }
-    if (herkunftIdInActiveNodeArray) {
-      return s.herkunft_id === herkunftIdInActiveNodeArray
-    }
-    if (personIdInActiveNodeArray) {
-      return s.person_id === personIdInActiveNodeArray
-    }
-    return true
-  }
+  const db = useDatabase()
+  // use object with two keys to only render once on setting
+  const [sammlungsState, setSammlungState] = useState(initialSammlungState)
+  useEffect(() => {
+    const collection = db.collections.get('sammlung')
+    const query = artIdInActiveNodeArray
+      ? collection.query(
+          Q.experimentalJoinTables(['art']),
+          Q.and(
+            notDeletedOrHasConflictQuery,
+            Q.on('art', 'id', artIdInActiveNodeArray),
+          ),
+        )
+      : herkunftIdInActiveNodeArray
+      ? collection.query(
+          Q.experimentalJoinTables(['herkunft']),
+          Q.and(
+            notDeletedOrHasConflictQuery,
+            Q.on('herkunft', 'id', herkunftIdInActiveNodeArray),
+          ),
+        )
+      : personIdInActiveNodeArray
+      ? collection.query(
+          Q.experimentalJoinTables(['person']),
+          Q.and(
+            notDeletedOrHasConflictQuery,
+            Q.on('person', 'id', personIdInActiveNodeArray),
+          ),
+        )
+      : collection.query(notDeletedOrHasConflictQuery)
+    const subscription = query.observe().subscribe(async (sammlungs) => {
+      const sammlungsFiltered = sammlungs.filter((value) =>
+        storeFilter({ value, filter: sammlungFilter, table: 'sammlung' }),
+      )
+      const sammlungSorters = await Promise.all(
+        sammlungsFiltered.map(async (sammlung) => {
+          const datum = sammlung.datum ?? ''
+          const herkunft = await sammlung.herkunft.fetch()
+          const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
+          const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
+          const herkunftLokalname = herkunft?.lokalname
+            ?.toString()
+            ?.toLowerCase()
+          const person = await sammlung.person.fetch()
+          const fullname = personFullname(person)?.toString()?.toLowerCase()
+          const art = await sammlung.art.fetch()
+          const ae_art = art ? await art.ae_art.fetch() : undefined
+          const aeArtLabel = aeArtLabelFromAeArt({ ae_art })
+            ?.toString()
+            ?.toLowerCase()
+          const sort = [
+            datum,
+            herkunftNr,
+            herkunftGemeinde,
+            herkunftLokalname,
+            fullname,
+            aeArtLabel,
+          ]
 
-  const storeRowsFiltered = sammlungsFiltered.filter(hierarchyFilter)
+          return { id: sammlung.id, sort }
+        }),
+      )
+      const sammlungsSorted = sortBy(
+        sammlungsFiltered,
+        (sammlung) => sammlungSorters.find((s) => s.id === sammlung.id).sort,
+      )
+      setSammlungState({ sammlungs, sammlungsFiltered: sammlungsSorted })
+    })
+    return () => subscription.unsubscribe()
+    // need to rerender if any of the values of sammlungFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db.collections, ...Object.values(sammlungFilter)])
 
-  const totalNr = sammlungsSorted.filter(hierarchyFilter).length
-  const filteredNr = sammlungsFiltered.filter(hierarchyFilter).length
+  const { sammlungs, sammlungsFiltered } = sammlungsState
+  const totalNr = sammlungs.length
+  const filteredNr = sammlungsFiltered.length
 
   const add = useCallback(() => {
     insertSammlungRev()
@@ -145,7 +211,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={sammlungsFiltered.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -156,8 +222,8 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={sammlungsFiltered[index]}
+                      last={index === sammlungsFiltered.length - 1}
                     />
                   )}
                 </StyledList>
