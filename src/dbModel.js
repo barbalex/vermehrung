@@ -1999,3 +1999,29 @@ export class ArtQk extends Model {
     )
   }
 }
+
+export class ArtQkChoosen extends Model {
+  static table = 'art_qk_choosen'
+  static associations = {
+    art: { type: 'belongs_to', key: 'art_id' },
+    art_qk: { type: 'belongs_to', key: 'name' },
+  }
+
+  @field('id') id
+  @field('name') name
+  @field('titel') titel
+  @field('beschreibung') beschreibung
+  @field('sort') sort
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @readonly @field('_rev_at') _rev_at
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @relation('art', 'art_id') art
+  @relation('art_qk', 'name') art_qk
+}
