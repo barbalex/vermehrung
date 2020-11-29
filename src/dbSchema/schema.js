@@ -15,6 +15,8 @@ import herkunft_file from './herkunft_file'
 import kultur from './kultur'
 import kultur_file from './kultur_file'
 import kultur_option from './kultur_option'
+import kultur_qk from './kultur_qk'
+import kultur_qk_choosen from './kultur_qk_choosen'
 import lieferung from './lieferung'
 import lieferung_file from './lieferung_file'
 import person from './person'
@@ -42,6 +44,8 @@ export const tables = [
   kultur,
   kultur_file,
   kultur_option,
+  kultur_qk,
+  kultur_qk_choosen,
   lieferung,
   lieferung_file,
   person,
