@@ -3,6 +3,7 @@ import { appSchema } from '@nozbe/watermelondb'
 import ae_art from './ae_art'
 import art from './art'
 import art_file from './art_file'
+import art_qk from './art_qk'
 import av from './av'
 import event from './event'
 import garten from './garten'
@@ -27,6 +28,7 @@ export const tables = [
   ae_art,
   art,
   art_file,
+  art_qk,
   av,
   event,
   garten,
