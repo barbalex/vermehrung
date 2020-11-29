@@ -5,6 +5,7 @@ import 'firebase/auth'
 import persist from 'mst-persist'
 
 import getAuthToken from './getAuthToken'
+import isOnline from './isOnline'
 
 // Configure Firebase
 const firebaseConfig = {
@@ -16,7 +17,7 @@ const firebaseConfig = {
 
 const recreatePersistedStore = async ({ store }) => {
   let unregisterAuthObserver = () => {}
-  const { setUser, setGettingAuthUser, setFirebase } = store
+  const { setUser, setGettingAuthUser, setFirebase, online, setOnline } = store
   window.store = store
   // need to blacklist authorizing or mst-persist will set it to false
   // and login form appears for a short moment until auth state changed
@@ -77,8 +78,11 @@ const recreatePersistedStore = async ({ store }) => {
         navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
       }, 200)
     }
+    // 2020.11.29: used to need the timeout here. removed as changed startup
     //setTimeout(async () => {
-    if (store.online) {
+    const nowOnline = await isOnline()
+    if (nowOnline !== online) setOnline(nowOnline)
+    if (nowOnline) {
       await getAuthToken({ store })
     }
     setGettingAuthUser(false)

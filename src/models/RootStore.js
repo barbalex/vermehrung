@@ -1740,9 +1740,7 @@ export const RootStore = RootStoreBase.props({
         }
       },
       setGettingAuthUser(val) {
-        if (val !== self.gettingAuthUser) {
-          self.gettingAuthUser = val
-        }
+        self.gettingAuthUser = val
       },
       setUser(val) {
         self.user = val || {}

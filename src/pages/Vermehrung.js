@@ -76,6 +76,7 @@ const Vermehrung = ({ location }) => {
     singleColumnView,
     showTreeInSingleColumnView,
     user,
+    online,
   } = store
 
   const [isIOS, setIsIOS] = useState(false)
@@ -140,7 +141,12 @@ const Vermehrung = ({ location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existsUser])
 
-  console.log('Vermehrung', { gettingAuthUser, isIOS, initialDataQueried })
+  /*console.log('Vermehrung', {
+    gettingAuthUser,
+    isIOS,
+    initialDataQueried,
+    online,
+  })*/
 
   if (gettingAuthUser || isIOS) {
     return (
@@ -172,7 +178,7 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  if (!initialDataQueried) {
+  if (online && !initialDataQueried) {
     return (
       <ErrorBoundary>
         <Layout>

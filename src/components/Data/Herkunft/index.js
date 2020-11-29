@@ -70,8 +70,6 @@ const Herkunft = ({
     }
   }, [db.collections, filter.herkunft, id, showFilter])
 
-  console.log('Herkunft', { showFilter, row })
-
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
     () => setActiveConflict(null),
