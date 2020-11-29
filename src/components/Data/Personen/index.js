@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -6,6 +6,9 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import sortBy from 'lodash/sortBy'
+import { first as first$ } from 'rxjs/operators'
 
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
@@ -13,6 +16,8 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import { StoreContext } from '../../../models/reactUtils'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
+import storeFilter from '../../../utils/storeFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -61,20 +66,48 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
+const initialPersonState = { persons: [], personsFiltered: [] }
 
 const Personen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertPersonRev, personsFiltered, personsSorted, userPerson } = store
+  const { insertPersonRev, userPerson } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { person: personFilter } = store.filter
 
-  const hierarchyFilter = () => {
-    return true
-  }
+  const db = useDatabase()
+  // use object with two keys to only render once on setting
+  const [personsState, setPersonState] = useState(initialPersonState)
+  useEffect(() => {
+    const subscription = db.collections
+      .get('person')
+      .query(notDeletedOrHasConflictQuery)
+      .observe()
+      .subscribe(async (persons) => {
+        const personsFiltered = persons.filter((value) =>
+          storeFilter({ value, filter: personFilter, table: 'person' }),
+        )
+        const personSorters = await Promise.all(
+          personsFiltered.map(async (person) => {
+            const fullname = await person.fullname.pipe(first$()).toPromise()
+            const sort = fullname
 
-  const storeRowsFiltered = personsFiltered
+            return { id: person.id, sort }
+          }),
+        )
+        const personsSorted = sortBy(
+          personsFiltered,
+          (person) => personSorters.find((s) => s.id === person.id).sort,
+        )
+        setPersonState({ persons, personsFiltered: personsSorted })
+      })
+    return () => subscription.unsubscribe()
+    // need to rerender if any of the values of personFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db.collections, ...Object.values(personFilter)])
 
-  const totalNr = personsSorted.filter(hierarchyFilter).length
-  const filteredNr = personsFiltered.filter(hierarchyFilter).length
+  const { persons, personsFiltered } = personsState
+  const totalNr = persons.length
+  const filteredNr = personsFiltered.length
 
   const { user_role } = userPerson
 
@@ -127,7 +160,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={personsFiltered.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -138,8 +171,8 @@ const Personen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={personsFiltered[index]}
+                      last={index === personsFiltered.length - 1}
                     />
                   )}
                 </StyledList>

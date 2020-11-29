@@ -8,7 +8,6 @@ import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
-import { first as first$ } from 'rxjs/operators'
 import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -126,7 +125,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
       )
       const lieferungSorters = await Promise.all(
         lieferungsFiltered.map(async (lieferung) => {
-          const datum = lieferung.datum ? new Date(lieferung.datum) : ''
+          const datum = lieferung.datum ?? ''
           const anzahlPflanzen = lieferung.anzahl_pflanzen ?? ''
           const sort = [datum, anzahlPflanzen]
 
@@ -145,7 +144,6 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
   }, [db.collections, ...Object.values(lieferungFilter)])
 
   const { lieferungs, lieferungsFiltered } = lieferungsState
-
   const totalNr = lieferungs.length
   const filteredNr = lieferungsFiltered.length
 
