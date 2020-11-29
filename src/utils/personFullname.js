@@ -1,4 +1,5 @@
 const personFullname = (p) => {
+  if (!p) return undefined
   if (p.vorname && p.name) {
     return `${p.vorname} ${p.name}`
   }
