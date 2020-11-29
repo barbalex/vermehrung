@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
 import { v1 as uuidv1 } from 'uuid'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import Uploader from '../../Uploader'
@@ -17,6 +18,7 @@ import File from './File'
 import 'react-image-lightbox/style.css'
 import isImageFile from './isImageFile'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import fileSort from '../../../utils/fileSort'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -63,41 +65,46 @@ const Content = styled.div`
   justify-content: center;
 `
 
-const Files = ({ parentId, parent }) => {
+const Files = ({ parentTable, parent }) => {
   const store = useContext(StoreContext)
-  const { upsertArtFileModel, fileSort, online } = store
+  const { upsertArtFileModel, online } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
-  const files = [...store[`${parent}_files`].values()]
-    .sort((a, b) => fileSort({ a, b }))
-    .filter((f) => f[`${parent}_id`] === parentId)
+  const db = useDatabase()
+  // use object with two keys to only render once on setting
+  const [files, setEvent] = useState([])
+  useEffect(() => {
+    const subscription = parent.files
+      .observeWithColumns(['name'])
+      .subscribe((files) => setEvent(files.sort(fileSort)))
+    return () => subscription.unsubscribe()
+  }, [db.collections, parent.files])
 
   const onChangeUploader = useCallback(
     (file) => {
       if (file) {
         file.done(async (info) => {
-          //console.log({ info })
           const newObject = {
             id: uuidv1(),
             file_id: info.uuid,
             file_mime_type: info.mimeType,
-            [`${parent}_id`]: parentId,
+            [`${parentTable}_id`]: parent.id,
             name: info.name,
           }
           upsertArtFileModel(newObject)
-          await store[`mutateInsert_${parent}_file_one`]({
+          await store[`mutateInsert_${parentTable}_file_one`]({
             object: newObject,
             on_conflict: {
-              constraint: `${parent}_file_pkey`,
+              constraint: `${parentTable}_file_pkey`,
               update_columns: ['id'],
             },
           })
         })
       }
     },
-    [parent, parentId, store, upsertArtFileModel],
+    [parent.id, parentTable, store, upsertArtFileModel],
   )
 
   const images = files.filter((f) => isImageFile(f))

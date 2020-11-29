@@ -151,7 +151,7 @@ const ArtForm = ({
               <Timeline artId={id} />
               <HerkunftTimeline artId={id} />
               <QK artId={id} />
-              <Files parentId={id} parent="art" />
+              <Files parent={row} parentTable="art" />
             </>
           )}
         </FieldsContainer>

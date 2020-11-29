@@ -190,7 +190,7 @@ const Herkunft = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {!showFilter && row.id && <Files parentId={row.id} parent="herkunft" />}
+        {!showFilter && row.id && <Files parentTable="herkunft" parent={row} />}
       </Container>
     </SimpleBar>
   )

@@ -220,7 +220,7 @@ const GartenForm = ({
           />
         )}
         <Personen gartenId={row.id} garten={row} />
-        {!showFilter && <Files parentId={row.id} parent="garten" />}
+        {!showFilter && <Files parentTable="garten" parent={row} />}
       </FieldsContainer>
     </SimpleBar>
   )
