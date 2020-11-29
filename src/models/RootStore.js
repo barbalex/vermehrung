@@ -90,6 +90,7 @@ export const RootStore = RootStoreBase.props({
   lastUpdated_teilzaehlung: types.optional(types.number, 0),
   lastUpdated_user_role: types.optional(types.number, 0),
   lastUpdated_zaehlung: types.optional(types.number, 0),
+  ae_art_initially_queried: types.optional(types.boolean, false)
   /**
    * This is a queue of all queries
    * When online they they are immediatly executed by the reaction
@@ -259,6 +260,7 @@ export const RootStore = RootStoreBase.props({
       },
       setInitialDataQueried(val) {
         self.initialDataQueried = val
+        val && console.log('initialDataQueried set true')
       },
       setGqlHttpClient(val) {
         self.gqlHttpClient = val

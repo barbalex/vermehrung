@@ -2240,8 +2240,8 @@ export class KulturQk extends Model {
 export class KulturQkChoosen extends Model {
   static table = 'kultur_qk_choosen'
   static associations = {
-    //kultur: { type: 'belongs_to', key: 'kultur_id' },
-    //kultur_qk: { type: 'belongs_to', key: 'qk_name' },
+    kultur: { type: 'belongs_to', key: 'kultur_id' },
+    kultur_qk: { type: 'belongs_to', key: 'qk_name' },
   }
 
   @field('id') id
@@ -2258,8 +2258,8 @@ export class KulturQkChoosen extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
-  //@relation('kultur', 'kultur_id') kultur
-  //@relation('kultur_qk', 'qk_name') kultur_qk
+  @relation('kultur', 'kultur_id') kultur
+  @relation('kultur_qk', 'qk_name') kultur_qk
 
   @action async removeConflict(_rev) {
     await this.update((row) => {
