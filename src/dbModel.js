@@ -158,6 +158,7 @@ export class Herkunft extends Model {
 export class Sammlung extends Model {
   static table = 'sammlung'
   static associations = {
+    art: { type: 'belongs_to', key: 'art_id' },
     herkunft: { type: 'belongs_to', key: 'herkunft_id' },
     person: { type: 'belongs_to', key: 'person_id' },
     lieferung: { type: 'has_many', foreignKey: 'von_sammlung_id' },
@@ -190,6 +191,7 @@ export class Sammlung extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
+  @relation('art', 'art_id') art
   @relation('herkunft', 'herkunft_id') herkunft
   @relation('person', 'person_id') person
   @children('lieferung') lieferungs
