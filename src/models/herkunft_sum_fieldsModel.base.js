@@ -15,6 +15,7 @@ export const herkunft_sum_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("herkunft_sum_fields"), "herkunft_sum_fields"),
     _depth: types.union(types.undefined, types.null, types.integer),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
     lv95_y: types.union(types.undefined, types.null, types.frozen()),
     wgs84_lat: types.union(types.undefined, types.null, types.frozen()),
@@ -28,6 +29,7 @@ export const herkunft_sum_fieldsModelBase = ModelBase
 
 export class herkunft_sum_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get lv95_x() { return this.__attr(`lv95_x`) }
   get lv95_y() { return this.__attr(`lv95_y`) }
   get wgs84_lat() { return this.__attr(`wgs84_lat`) }
@@ -37,4 +39,4 @@ export function selectFromherkunft_sum_fields() {
   return new herkunft_sum_fieldsModelSelector()
 }
 
-export const herkunft_sum_fieldsModelPrimitives = selectFromherkunft_sum_fields()._depth.lv95_x.lv95_y.wgs84_lat.wgs84_long
+export const herkunft_sum_fieldsModelPrimitives = selectFromherkunft_sum_fields()._depth._rev_at.lv95_x.lv95_y.wgs84_lat.wgs84_long

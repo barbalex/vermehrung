@@ -17,6 +17,7 @@ export const kultur_qk_min_fieldsModelBase = ModelBase
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     beschreibung: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
@@ -35,6 +36,7 @@ export class kultur_qk_min_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get beschreibung() { return this.__attr(`beschreibung`) }
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
@@ -47,4 +49,4 @@ export function selectFromkultur_qk_min_fields() {
   return new kultur_qk_min_fieldsModelSelector()
 }
 
-export const kultur_qk_min_fieldsModelPrimitives = selectFromkultur_qk_min_fields()._depth._parent_rev._rev.beschreibung.changed.changed_by.name.sort.titel
+export const kultur_qk_min_fieldsModelPrimitives = selectFromkultur_qk_min_fields()._depth._parent_rev._rev._rev_at.beschreibung.changed.changed_by.name.sort.titel

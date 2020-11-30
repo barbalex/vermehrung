@@ -215,6 +215,7 @@ export const mutation_rootModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("mutation_root"), "mutation_root"),
     delete_ae_art: types.union(types.undefined, types.null, types.late(() => ae_art_mutation_responseModel)),
+    delete_ae_art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => ae_artModel))),
     delete_art: types.union(types.undefined, types.null, types.late(() => art_mutation_responseModel)),
     delete_art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     delete_art_file: types.union(types.undefined, types.null, types.late(() => art_file_mutation_responseModel)),
@@ -412,6 +413,7 @@ export const mutation_rootModelBase = ModelBase
     insert_zaehlung_rev: types.union(types.undefined, types.null, types.late(() => zaehlung_rev_mutation_responseModel)),
     insert_zaehlung_rev_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlung_revModel))),
     update_ae_art: types.union(types.undefined, types.null, types.late(() => ae_art_mutation_responseModel)),
+    update_ae_art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => ae_artModel))),
     update_art: types.union(types.undefined, types.null, types.late(() => art_mutation_responseModel)),
     update_art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     update_art_file: types.union(types.undefined, types.null, types.late(() => art_file_mutation_responseModel)),
@@ -517,6 +519,7 @@ export const mutation_rootModelBase = ModelBase
 
 export class mutation_rootModelSelector extends QueryBuilder {
   delete_ae_art(builder) { return this.__child(`delete_ae_art`, ae_art_mutation_responseModelSelector, builder) }
+  delete_ae_art_by_pk(builder) { return this.__child(`delete_ae_art_by_pk`, ae_artModelSelector, builder) }
   delete_art(builder) { return this.__child(`delete_art`, art_mutation_responseModelSelector, builder) }
   delete_art_by_pk(builder) { return this.__child(`delete_art_by_pk`, artModelSelector, builder) }
   delete_art_file(builder) { return this.__child(`delete_art_file`, art_file_mutation_responseModelSelector, builder) }
@@ -714,6 +717,7 @@ export class mutation_rootModelSelector extends QueryBuilder {
   insert_zaehlung_rev(builder) { return this.__child(`insert_zaehlung_rev`, zaehlung_rev_mutation_responseModelSelector, builder) }
   insert_zaehlung_rev_one(builder) { return this.__child(`insert_zaehlung_rev_one`, zaehlung_revModelSelector, builder) }
   update_ae_art(builder) { return this.__child(`update_ae_art`, ae_art_mutation_responseModelSelector, builder) }
+  update_ae_art_by_pk(builder) { return this.__child(`update_ae_art_by_pk`, ae_artModelSelector, builder) }
   update_art(builder) { return this.__child(`update_art`, art_mutation_responseModelSelector, builder) }
   update_art_by_pk(builder) { return this.__child(`update_art_by_pk`, artModelSelector, builder) }
   update_art_file(builder) { return this.__child(`update_art_file`, art_file_mutation_responseModelSelector, builder) }

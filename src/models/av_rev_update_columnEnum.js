@@ -12,6 +12,7 @@ export const av_rev_update_columnEnumType = types.enumeration("av_rev_update_col
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "art_id",
   "av_id",

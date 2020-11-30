@@ -12,6 +12,7 @@ export const person_rev_update_columnEnumType = types.enumeration("person_rev_up
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "account_id",
   "adresszusatz",
@@ -34,5 +35,6 @@ export const person_rev_update_columnEnumType = types.enumeration("person_rev_up
   "telefon_mobile",
   "telefon_privat",
   "user_role",
+  "user_role_id",
   "vorname",
       ])

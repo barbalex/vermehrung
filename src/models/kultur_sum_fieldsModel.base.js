@@ -15,6 +15,7 @@ export const kultur_sum_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("kultur_sum_fields"), "kultur_sum_fields"),
     _depth: types.union(types.undefined, types.null, types.integer),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
   })
   .views(self => ({
@@ -25,10 +26,11 @@ export const kultur_sum_fieldsModelBase = ModelBase
 
 export class kultur_sum_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
 }
 export function selectFromkultur_sum_fields() {
   return new kultur_sum_fieldsModelSelector()
 }
 
-export const kultur_sum_fieldsModelPrimitives = selectFromkultur_sum_fields()._depth.von_anzahl_individuen
+export const kultur_sum_fieldsModelPrimitives = selectFromkultur_sum_fields()._depth._rev_at.von_anzahl_individuen

@@ -15,6 +15,7 @@ export const person_sum_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("person_sum_fields"), "person_sum_fields"),
     _depth: types.union(types.undefined, types.null, types.integer),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     plz: types.union(types.undefined, types.null, types.integer),
   })
   .views(self => ({
@@ -25,10 +26,11 @@ export const person_sum_fieldsModelBase = ModelBase
 
 export class person_sum_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get plz() { return this.__attr(`plz`) }
 }
 export function selectFromperson_sum_fields() {
   return new person_sum_fieldsModelSelector()
 }
 
-export const person_sum_fieldsModelPrimitives = selectFromperson_sum_fields()._depth.plz
+export const person_sum_fieldsModelPrimitives = selectFromperson_sum_fields()._depth._rev_at.plz

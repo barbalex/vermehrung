@@ -13,6 +13,7 @@ export const teilkultur_update_columnEnumType = types.enumeration("teilkultur_up
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "bemerkungen",
   "changed",

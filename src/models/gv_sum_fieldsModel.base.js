@@ -15,6 +15,7 @@ export const gv_sum_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("gv_sum_fields"), "gv_sum_fields"),
     _depth: types.union(types.undefined, types.null, types.integer),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
     get store() {
@@ -24,9 +25,10 @@ export const gv_sum_fieldsModelBase = ModelBase
 
 export class gv_sum_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
 }
 export function selectFromgv_sum_fields() {
   return new gv_sum_fieldsModelSelector()
 }
 
-export const gv_sum_fieldsModelPrimitives = selectFromgv_sum_fields()._depth
+export const gv_sum_fieldsModelPrimitives = selectFromgv_sum_fields()._depth._rev_at

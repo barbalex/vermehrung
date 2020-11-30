@@ -17,6 +17,7 @@ export const teilzaehlung_rev_min_fieldsModelBase = ModelBase
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     andere_menge: types.union(types.undefined, types.null, types.string),
     anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.integer),
     anzahl_mutterpflanzen: types.union(types.undefined, types.null, types.integer),
@@ -41,6 +42,7 @@ export class teilzaehlung_rev_min_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get andere_menge() { return this.__attr(`andere_menge`) }
   get anzahl_auspflanzbereit() { return this.__attr(`anzahl_auspflanzbereit`) }
   get anzahl_mutterpflanzen() { return this.__attr(`anzahl_mutterpflanzen`) }
@@ -59,4 +61,4 @@ export function selectFromteilzaehlung_rev_min_fields() {
   return new teilzaehlung_rev_min_fieldsModelSelector()
 }
 
-export const teilzaehlung_rev_min_fieldsModelPrimitives = selectFromteilzaehlung_rev_min_fields()._depth._parent_rev._rev.andere_menge.anzahl_auspflanzbereit.anzahl_mutterpflanzen.anzahl_pflanzen.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by.prognose_von_tz.teilkultur_id.teilzaehlung_id.zaehlung_id
+export const teilzaehlung_rev_min_fieldsModelPrimitives = selectFromteilzaehlung_rev_min_fields()._depth._parent_rev._rev._rev_at.andere_menge.anzahl_auspflanzbereit.anzahl_mutterpflanzen.anzahl_pflanzen.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by.prognose_von_tz.teilkultur_id.teilzaehlung_id.zaehlung_id

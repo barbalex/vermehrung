@@ -15,6 +15,7 @@ export const kultur_stddev_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("kultur_stddev_fields"), "kultur_stddev_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
@@ -25,10 +26,11 @@ export const kultur_stddev_fieldsModelBase = ModelBase
 
 export class kultur_stddev_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
 }
 export function selectFromkultur_stddev_fields() {
   return new kultur_stddev_fieldsModelSelector()
 }
 
-export const kultur_stddev_fieldsModelPrimitives = selectFromkultur_stddev_fields()._depth.von_anzahl_individuen
+export const kultur_stddev_fieldsModelPrimitives = selectFromkultur_stddev_fields()._depth._rev_at.von_anzahl_individuen

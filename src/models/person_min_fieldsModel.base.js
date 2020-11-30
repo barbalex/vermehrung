@@ -17,6 +17,7 @@ export const person_min_fieldsModelBase = ModelBase
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     account_id: types.union(types.undefined, types.null, types.string),
     adresszusatz: types.union(types.undefined, types.null, types.string),
     bemerkungen: types.union(types.undefined, types.null, types.string),
@@ -33,6 +34,7 @@ export const person_min_fieldsModelBase = ModelBase
     telefon_mobile: types.union(types.undefined, types.null, types.string),
     telefon_privat: types.union(types.undefined, types.null, types.string),
     user_role: types.union(types.undefined, types.null, types.string),
+    user_role_id: types.union(types.undefined, types.null, types.frozen()),
     vorname: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({
@@ -45,6 +47,7 @@ export class person_min_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get account_id() { return this.__attr(`account_id`) }
   get adresszusatz() { return this.__attr(`adresszusatz`) }
   get bemerkungen() { return this.__attr(`bemerkungen`) }
@@ -61,10 +64,11 @@ export class person_min_fieldsModelSelector extends QueryBuilder {
   get telefon_mobile() { return this.__attr(`telefon_mobile`) }
   get telefon_privat() { return this.__attr(`telefon_privat`) }
   get user_role() { return this.__attr(`user_role`) }
+  get user_role_id() { return this.__attr(`user_role_id`) }
   get vorname() { return this.__attr(`vorname`) }
 }
 export function selectFromperson_min_fields() {
   return new person_min_fieldsModelSelector()
 }
 
-export const person_min_fieldsModelPrimitives = selectFromperson_min_fields()._depth._parent_rev._rev.account_id.adresszusatz.bemerkungen.changed.changed_by.email.name.nr.ort.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role.vorname
+export const person_min_fieldsModelPrimitives = selectFromperson_min_fields()._depth._parent_rev._rev._rev_at.account_id.adresszusatz.bemerkungen.changed.changed_by.email.name.nr.ort.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role.user_role_id.vorname

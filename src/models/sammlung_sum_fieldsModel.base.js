@@ -15,6 +15,7 @@ export const sammlung_sum_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("sammlung_sum_fields"), "sammlung_sum_fields"),
     _depth: types.union(types.undefined, types.null, types.integer),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
@@ -31,6 +32,7 @@ export const sammlung_sum_fieldsModelBase = ModelBase
 
 export class sammlung_sum_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get anzahl_pflanzen() { return this.__attr(`anzahl_pflanzen`) }
   get gramm_samen() { return this.__attr(`gramm_samen`) }
   get lv95_x() { return this.__attr(`lv95_x`) }
@@ -43,4 +45,4 @@ export function selectFromsammlung_sum_fields() {
   return new sammlung_sum_fieldsModelSelector()
 }
 
-export const sammlung_sum_fieldsModelPrimitives = selectFromsammlung_sum_fields()._depth.anzahl_pflanzen.gramm_samen.lv95_x.lv95_y.von_anzahl_individuen.wgs84_lat.wgs84_long
+export const sammlung_sum_fieldsModelPrimitives = selectFromsammlung_sum_fields()._depth._rev_at.anzahl_pflanzen.gramm_samen.lv95_x.lv95_y.von_anzahl_individuen.wgs84_lat.wgs84_long

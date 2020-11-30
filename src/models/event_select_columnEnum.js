@@ -13,6 +13,7 @@ export const event_select_columnEnumType = types.enumeration("event_select_colum
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "beschreibung",
   "changed",

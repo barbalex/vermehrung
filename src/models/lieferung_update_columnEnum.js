@@ -13,6 +13,7 @@ export const lieferung_update_columnEnumType = types.enumeration("lieferung_upda
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "andere_menge",
   "anzahl_auspflanzbereit",

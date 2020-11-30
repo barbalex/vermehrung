@@ -12,6 +12,7 @@ export const herkunft_rev_update_columnEnumType = types.enumeration("herkunft_re
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "bemerkungen",
   "changed",

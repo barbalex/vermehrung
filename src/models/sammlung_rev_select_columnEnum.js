@@ -12,6 +12,7 @@ export const sammlung_rev_select_columnEnumType = types.enumeration("sammlung_re
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "andere_menge",
   "anzahl_pflanzen",

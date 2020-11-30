@@ -13,6 +13,7 @@ export const gv_update_columnEnumType = types.enumeration("gv_update_column", [
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "changed",
   "changed_by",

@@ -13,6 +13,7 @@ export const zaehlung_update_columnEnumType = types.enumeration("zaehlung_update
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "bemerkungen",
   "changed",

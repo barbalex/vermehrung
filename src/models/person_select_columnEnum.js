@@ -13,6 +13,7 @@ export const person_select_columnEnumType = types.enumeration("person_select_col
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "account_id",
   "adresszusatz",
@@ -34,5 +35,6 @@ export const person_select_columnEnumType = types.enumeration("person_select_col
   "telefon_mobile",
   "telefon_privat",
   "user_role",
+  "user_role_id",
   "vorname",
       ])

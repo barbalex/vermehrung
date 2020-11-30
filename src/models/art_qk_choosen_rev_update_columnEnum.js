@@ -12,6 +12,7 @@ export const art_qk_choosen_rev_update_columnEnumType = types.enumeration("art_q
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "art_id",
   "art_qk_choosen_id",
@@ -19,5 +20,6 @@ export const art_qk_choosen_rev_update_columnEnumType = types.enumeration("art_q
   "changed_by",
   "choosen",
   "id",
+  "qk_id",
   "qk_name",
       ])

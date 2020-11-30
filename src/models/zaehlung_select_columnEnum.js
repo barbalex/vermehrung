@@ -13,6 +13,7 @@ export const zaehlung_select_columnEnumType = types.enumeration("zaehlung_select
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "bemerkungen",
   "changed",

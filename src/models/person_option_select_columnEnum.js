@@ -13,6 +13,7 @@ export const person_option_select_columnEnumType = types.enumeration("person_opt
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "ar_name_deutsch",
   "changed",

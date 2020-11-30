@@ -12,6 +12,7 @@ export const kultur_rev_update_columnEnumType = types.enumeration("kultur_rev_up
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "aktiv",
   "art_id",

@@ -15,6 +15,7 @@ export const gv_stddev_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("gv_stddev_fields"), "gv_stddev_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
     get store() {
@@ -24,9 +25,10 @@ export const gv_stddev_fieldsModelBase = ModelBase
 
 export class gv_stddev_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
 }
 export function selectFromgv_stddev_fields() {
   return new gv_stddev_fieldsModelSelector()
 }
 
-export const gv_stddev_fieldsModelPrimitives = selectFromgv_stddev_fields()._depth
+export const gv_stddev_fieldsModelPrimitives = selectFromgv_stddev_fields()._depth._rev_at

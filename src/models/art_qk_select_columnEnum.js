@@ -13,6 +13,7 @@ export const art_qk_select_columnEnumType = types.enumeration("art_qk_select_col
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "beschreibung",
   "changed",

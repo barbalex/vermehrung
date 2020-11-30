@@ -17,6 +17,7 @@ export const sammel_lieferung_max_fieldsModelBase = ModelBase
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     andere_menge: types.union(types.undefined, types.null, types.string),
     anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.integer),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
@@ -43,6 +44,7 @@ export class sammel_lieferung_max_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get andere_menge() { return this.__attr(`andere_menge`) }
   get anzahl_auspflanzbereit() { return this.__attr(`anzahl_auspflanzbereit`) }
   get anzahl_pflanzen() { return this.__attr(`anzahl_pflanzen`) }
@@ -63,4 +65,4 @@ export function selectFromsammel_lieferung_max_fields() {
   return new sammel_lieferung_max_fieldsModelSelector()
 }
 
-export const sammel_lieferung_max_fieldsModelPrimitives = selectFromsammel_lieferung_max_fields()._depth._parent_rev._rev.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.gramm_samen.nach_kultur_id.person_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id
+export const sammel_lieferung_max_fieldsModelPrimitives = selectFromsammel_lieferung_max_fields()._depth._parent_rev._rev._rev_at.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.gramm_samen.nach_kultur_id.person_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id

@@ -12,6 +12,7 @@ export const teilzaehlung_rev_update_columnEnumType = types.enumeration("teilzae
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "andere_menge",
   "anzahl_auspflanzbereit",

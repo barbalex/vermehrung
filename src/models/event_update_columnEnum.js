@@ -13,6 +13,7 @@ export const event_update_columnEnumType = types.enumeration("event_update_colum
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "beschreibung",
   "changed",

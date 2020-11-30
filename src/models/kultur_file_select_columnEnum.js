@@ -8,7 +8,9 @@ import { types } from "mobx-state-tree"
 * kultur_file_select_column
 */
 export const kultur_file_select_columnEnumType = types.enumeration("kultur_file_select_column", [
-        "beschreibung",
+        "_rev_at",
+  "beschreibung",
+  "changed",
   "file_id",
   "file_mime_type",
   "id",

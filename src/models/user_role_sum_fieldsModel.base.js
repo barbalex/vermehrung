@@ -14,6 +14,7 @@ export const user_role_sum_fieldsModelBase = ModelBase
   .named('user_role_sum_fields')
   .props({
     __typename: types.optional(types.literal("user_role_sum_fields"), "user_role_sum_fields"),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     sort: types.union(types.undefined, types.null, types.integer),
   })
   .views(self => ({
@@ -23,10 +24,11 @@ export const user_role_sum_fieldsModelBase = ModelBase
   }))
 
 export class user_role_sum_fieldsModelSelector extends QueryBuilder {
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get sort() { return this.__attr(`sort`) }
 }
 export function selectFromuser_role_sum_fields() {
   return new user_role_sum_fieldsModelSelector()
 }
 
-export const user_role_sum_fieldsModelPrimitives = selectFromuser_role_sum_fields().sort
+export const user_role_sum_fieldsModelPrimitives = selectFromuser_role_sum_fields()._rev_at.sort

@@ -8,7 +8,9 @@ import { types } from "mobx-state-tree"
 * person_file_update_column
 */
 export const person_file_update_columnEnumType = types.enumeration("person_file_update_column", [
-        "beschreibung",
+        "_rev_at",
+  "beschreibung",
+  "changed",
   "file_id",
   "file_mime_type",
   "id",

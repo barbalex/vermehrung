@@ -17,6 +17,7 @@ export const sammlung_rev_min_fieldsModelBase = ModelBase
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     andere_menge: types.union(types.undefined, types.null, types.string),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
     art_id: types.union(types.undefined, types.null, types.frozen()),
@@ -42,6 +43,7 @@ export class sammlung_rev_min_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get andere_menge() { return this.__attr(`andere_menge`) }
   get anzahl_pflanzen() { return this.__attr(`anzahl_pflanzen`) }
   get art_id() { return this.__attr(`art_id`) }
@@ -61,4 +63,4 @@ export function selectFromsammlung_rev_min_fields() {
   return new sammlung_rev_min_fieldsModelSelector()
 }
 
-export const sammlung_rev_min_fieldsModelPrimitives = selectFromsammlung_rev_min_fields()._depth._parent_rev._rev.andere_menge.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.gramm_samen.herkunft_id.nr.person_id.sammlung_id.von_anzahl_individuen
+export const sammlung_rev_min_fieldsModelPrimitives = selectFromsammlung_rev_min_fields()._depth._parent_rev._rev._rev_at.andere_menge.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.gramm_samen.herkunft_id.nr.person_id.sammlung_id.von_anzahl_individuen

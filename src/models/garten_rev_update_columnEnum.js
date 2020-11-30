@@ -12,6 +12,7 @@ export const garten_rev_update_columnEnumType = types.enumeration("garten_rev_up
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "aktiv",
   "bemerkungen",

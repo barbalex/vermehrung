@@ -15,6 +15,7 @@ export const kultur_option_rev_stddev_samp_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("kultur_option_rev_stddev_samp_fields"), "kultur_option_rev_stddev_samp_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
     get store() {
@@ -24,9 +25,10 @@ export const kultur_option_rev_stddev_samp_fieldsModelBase = ModelBase
 
 export class kultur_option_rev_stddev_samp_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
 }
 export function selectFromkultur_option_rev_stddev_samp_fields() {
   return new kultur_option_rev_stddev_samp_fieldsModelSelector()
 }
 
-export const kultur_option_rev_stddev_samp_fieldsModelPrimitives = selectFromkultur_option_rev_stddev_samp_fields()._depth
+export const kultur_option_rev_stddev_samp_fieldsModelPrimitives = selectFromkultur_option_rev_stddev_samp_fields()._depth._rev_at

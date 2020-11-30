@@ -118,6 +118,7 @@ export const query_rootModelBase = ModelBase
     __typename: types.optional(types.literal("query_root"), "query_root"),
     ae_art: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => ae_artModel)))),
     ae_art_aggregate: types.union(types.undefined, types.frozen()),
+    ae_art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => ae_artModel))),
     art: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => artModel)))),
     art_aggregate: types.union(types.undefined, types.frozen()),
     art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
@@ -273,6 +274,7 @@ export const query_rootModelBase = ModelBase
 export class query_rootModelSelector extends QueryBuilder {
   ae_art(builder) { return this.__child(`ae_art`, ae_artModelSelector, builder) }
   ae_art_aggregate(builder) { return this.__child(`ae_art_aggregate`, ae_art_aggregateModelSelector, builder) }
+  ae_art_by_pk(builder) { return this.__child(`ae_art_by_pk`, ae_artModelSelector, builder) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
   art_aggregate(builder) { return this.__child(`art_aggregate`, art_aggregateModelSelector, builder) }
   art_by_pk(builder) { return this.__child(`art_by_pk`, artModelSelector, builder) }
