@@ -100,9 +100,17 @@ const Person = ({
 
   const showDeleted = showFilter || row._deleted
 
-  const userRole = row.user_role_id
-    ? [...store.user_roles.values()].find((r) => r.id === row.user_role_id)
+  const userRole = row?.user_role_id
+    ? store.user_roles.get(row.user_role_id)
     : {}
+
+  console.log('Person Form', {
+    row,
+    rowUserRoleId: row.user_role_id,
+    userRole,
+    userRoles: [...store.user_roles.values()],
+    userRoleWerte,
+  })
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
@@ -327,8 +335,8 @@ const Person = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {userRole === 'artverantwortlich' && <Arten personId={row.id} />}
-        {['gaertner', 'artverantwortlich'].includes(userRole) && (
+        {userRole?.name === 'artverantwortlich' && <Arten personId={row.id} />}
+        {['gaertner', 'artverantwortlich'].includes(userRole?.name) && (
           <Gaerten personId={row.id} />
         )}
         {!showFilter && row.id && <Files parentId={row.id} parent="person" />}

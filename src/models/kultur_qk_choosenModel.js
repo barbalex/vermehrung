@@ -4,7 +4,6 @@ import { v1 as uuidv1 } from 'uuid'
 
 import { kultur_qk_choosenModelBase } from './kultur_qk_choosenModel.base'
 import toPgArray from '../utils/toPgArray'
-import toStringIfPossible from '../utils/toStringIfPossible'
 
 /* A graphql query fragment builders for kultur_qk_choosenModel */
 export {
