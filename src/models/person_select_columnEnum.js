@@ -34,7 +34,6 @@ export const person_select_columnEnumType = types.enumeration("person_select_col
   "telefon_geschaeft",
   "telefon_mobile",
   "telefon_privat",
-  "user_role",
   "user_role_id",
   "vorname",
       ])
