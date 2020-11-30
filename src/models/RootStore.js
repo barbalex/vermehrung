@@ -1084,7 +1084,7 @@ export const RootStore = RootStoreBase.props({
           kein_email: undefined,
           bemerkungen: undefined,
           account_id: undefined,
-          user_role: undefined,
+          user_role_id: undefined,
           kommerziell: undefined,
           info: undefined,
           aktiv: undefined,

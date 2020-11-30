@@ -30,7 +30,7 @@ const personRevQuery = gql`
       kein_email
       bemerkungen
       aktiv
-      user_role
+      user_role_id
       kommerziell
       info
       changed
