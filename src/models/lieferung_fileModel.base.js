@@ -23,11 +23,6 @@ export const lieferung_fileModelBase = ModelBase.named('lieferung_file')
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
-    lieferung: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => lieferungModel)),
-    ),
     lieferung_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
   })

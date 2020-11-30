@@ -23,7 +23,6 @@ export const art_qk_choosen_revModelBase = ModelBase.named('art_qk_choosen_rev')
     _rev: types.union(types.undefined, types.null, types.string),
     _rev_at: types.union(types.undefined, types.null, types.frozen()),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
-    art: types.union(types.undefined, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.frozen()),
     art_qk_choosen_id: types.union(types.undefined, types.null, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),

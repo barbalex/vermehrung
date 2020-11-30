@@ -37,11 +37,6 @@ export const sammlungModelBase = ModelBase.named('sammlung')
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     andere_menge: types.union(types.undefined, types.null, types.string),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
-    art: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => artModel)),
-    ),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
@@ -50,50 +45,12 @@ export const sammlungModelBase = ModelBase.named('sammlung')
     geom_point: types.union(types.undefined, types.null, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
-    herkunft: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => herkunftModel)),
-    ),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
-    lieferung_revs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => lieferung_revModel))),
-    ),
-    lieferung_revs_aggregate: types.union(types.undefined, types.frozen()),
-    lieferungs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => lieferungModel))),
-    ),
-    lieferungs_aggregate: types.union(types.undefined, types.frozen()),
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
     lv95_y: types.union(types.undefined, types.null, types.frozen()),
     nr: types.union(types.undefined, types.null, types.string),
-    person: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => personModel)),
-    ),
     person_id: types.union(types.undefined, types.null, types.frozen()),
-    sammel_lieferung_revs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => sammel_lieferung_revModel))),
-    ),
-    sammel_lieferung_revs_aggregate: types.union(
-      types.undefined,
-      types.frozen(),
-    ),
-    sammel_lieferungs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => sammel_lieferungModel))),
-    ),
-    sammel_lieferungs_aggregate: types.union(types.undefined, types.frozen()),
-    sammlung_files: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => sammlung_fileModel))),
-    ),
-    sammlung_files_aggregate: types.union(types.undefined, types.frozen()),
     von_anzahl_individuen: types.union(
       types.undefined,
       types.null,

@@ -28,10 +28,6 @@ export const kultur_qk_choosenModelBase = ModelBase.named('kultur_qk_choosen')
     changed_by: types.union(types.undefined, types.null, types.string),
     choosen: types.union(types.undefined, types.null, types.boolean),
     id: types.identifier,
-    kultur: types.union(
-      types.undefined,
-      MSTGQLRef(types.late(() => kulturModel)),
-    ),
     kultur_id: types.union(types.undefined, types.frozen()),
     qk_id: types.union(types.undefined, types.frozen()),
   })

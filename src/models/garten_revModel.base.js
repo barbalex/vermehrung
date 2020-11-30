@@ -29,18 +29,8 @@ export const garten_revModelBase = ModelBase.named('garten_rev')
     garten_id: types.union(types.undefined, types.frozen()),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
-    kulturs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => kulturModel))),
-    ),
-    kulturs_aggregate: types.union(types.undefined, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),
-    person: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => personModel)),
-    ),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     plz: types.union(types.undefined, types.null, types.integer),
     strasse: types.union(types.undefined, types.null, types.string),
