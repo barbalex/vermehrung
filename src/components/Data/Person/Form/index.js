@@ -104,14 +104,6 @@ const Person = ({
     ? store.user_roles.get(row.user_role_id)
     : {}
 
-  console.log('Person Form', {
-    row,
-    rowUserRoleId: row.user_role_id,
-    userRole,
-    userRoles: [...store.user_roles.values()],
-    userRoleWerte,
-  })
-
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
       <Container>
