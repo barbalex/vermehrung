@@ -121,7 +121,7 @@ async function start() {
       }
 
       // fetch id and user_role
-      return sql`select * from person where account_id = ${uid}`
+      return sql`select p.id, u.name as user_role from person p inner join user_role u on u.id = p.user_role_id where account_id = ${uid}`
         .then((persons) => {
           if (!persons) {
             return h.response('Got no persons when querying db').code(500)
