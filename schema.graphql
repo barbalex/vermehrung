@@ -15231,36 +15231,6 @@ input lieferung_file_variance_order_by {
   _rev_at: order_by
 }
 
-# aggregate var_pop on columns
-type lieferung_file_var_pop_fields {
-  _rev_at: Float
-}
-
-# order by var_pop() on columns of table "lieferung_file"
-input lieferung_file_var_pop_order_by {
-  _rev_at: order_by
-}
-
-# aggregate var_samp on columns
-type lieferung_file_var_samp_fields {
-  _rev_at: Float
-}
-
-# order by var_samp() on columns of table "lieferung_file"
-input lieferung_file_var_samp_order_by {
-  _rev_at: order_by
-}
-
-# aggregate variance on columns
-type lieferung_file_variance_fields {
-  _rev_at: Float
-}
-
-# order by variance() on columns of table "lieferung_file"
-input lieferung_file_variance_order_by {
-  _rev_at: order_by
-}
-
 # input type for incrementing integer column in table "lieferung"
 input lieferung_inc_input {
   _depth: Int

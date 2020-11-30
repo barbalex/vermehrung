@@ -21,6 +21,11 @@ export const sammlung_fileModelBase = ModelBase.named('sammlung_file')
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
+    sammlung: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => sammlungModel)),
+    ),
     sammlung_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views((self) => ({

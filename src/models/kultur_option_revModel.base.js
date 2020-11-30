@@ -30,6 +30,10 @@ export const kultur_option_revModelBase = ModelBase.named('kultur_option_rev')
     ev_person_id: types.union(types.undefined, types.null, types.boolean),
     ev_teilkultur_id: types.union(types.undefined, types.null, types.boolean),
     id: types.identifier,
+    kultur: types.union(
+      types.undefined,
+      MSTGQLRef(types.late(() => kulturModel)),
+    ),
     kultur_id: types.union(types.undefined, types.frozen()),
     tk: types.union(types.undefined, types.null, types.boolean),
     tk_bemerkungen: types.union(types.undefined, types.null, types.boolean),

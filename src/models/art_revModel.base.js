@@ -32,9 +32,44 @@ export const art_revModelBase = ModelBase.named('art_rev')
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     ae_id: types.union(types.undefined, types.null, types.frozen()),
     art_id: types.union(types.undefined, types.frozen()),
+    art_rev_ae_art: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => ae_artModel)),
+    ),
+    av: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => avModel)),
+    ),
+    avs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => avModel))),
+    ),
+    avs_aggregate: types.union(types.undefined, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
+    kulturs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => kulturModel))),
+    ),
+    kulturs_aggregate: types.union(types.undefined, types.frozen()),
+    lieferungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => lieferungModel))),
+    ),
+    lieferungs_aggregate: types.union(types.undefined, types.frozen()),
+    sammel_lieferungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammel_lieferungModel))),
+    ),
+    sammel_lieferungs_aggregate: types.union(types.undefined, types.frozen()),
+    sammlungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammlungModel))),
+    ),
+    sammlungs_aggregate: types.union(types.undefined, types.frozen()),
   })
   .views((self) => ({
     get store() {

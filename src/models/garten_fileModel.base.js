@@ -19,6 +19,11 @@ export const garten_fileModelBase = ModelBase.named('garten_file')
     changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
+    garten: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => gartenModel)),
+    ),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),

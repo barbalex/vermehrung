@@ -23,7 +23,7 @@ export const art_qk_choosen_rev_max_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
-    qk_name: types.union(types.undefined, types.null, types.string),
+    qk_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
     get store() {
@@ -41,10 +41,10 @@ export class art_qk_choosen_rev_max_fieldsModelSelector extends QueryBuilder {
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
-  get qk_name() { return this.__attr(`qk_name`) }
+  get qk_id() { return this.__attr(`qk_id`) }
 }
 export function selectFromart_qk_choosen_rev_max_fields() {
   return new art_qk_choosen_rev_max_fieldsModelSelector()
 }
 
-export const art_qk_choosen_rev_max_fieldsModelPrimitives = selectFromart_qk_choosen_rev_max_fields()._depth._parent_rev._rev._rev_at.art_id.art_qk_choosen_id.changed.changed_by.qk_name
+export const art_qk_choosen_rev_max_fieldsModelPrimitives = selectFromart_qk_choosen_rev_max_fields()._depth._parent_rev._rev._rev_at.art_id.art_qk_choosen_id.changed.changed_by.qk_id

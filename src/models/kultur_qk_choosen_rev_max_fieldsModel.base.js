@@ -23,7 +23,7 @@ export const kultur_qk_choosen_rev_max_fieldsModelBase = ModelBase
     id: types.identifier,
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     kultur_qk_choosen_id: types.union(types.undefined, types.null, types.frozen()),
-    qk_name: types.union(types.undefined, types.null, types.string),
+    qk_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
     get store() {
@@ -41,10 +41,10 @@ export class kultur_qk_choosen_rev_max_fieldsModelSelector extends QueryBuilder 
   get id() { return this.__attr(`id`) }
   get kultur_id() { return this.__attr(`kultur_id`) }
   get kultur_qk_choosen_id() { return this.__attr(`kultur_qk_choosen_id`) }
-  get qk_name() { return this.__attr(`qk_name`) }
+  get qk_id() { return this.__attr(`qk_id`) }
 }
 export function selectFromkultur_qk_choosen_rev_max_fields() {
   return new kultur_qk_choosen_rev_max_fieldsModelSelector()
 }
 
-export const kultur_qk_choosen_rev_max_fieldsModelPrimitives = selectFromkultur_qk_choosen_rev_max_fields()._depth._parent_rev._rev._rev_at.changed.changed_by.kultur_id.kultur_qk_choosen_id.qk_name
+export const kultur_qk_choosen_rev_max_fieldsModelPrimitives = selectFromkultur_qk_choosen_rev_max_fields()._depth._parent_rev._rev._rev_at.changed.changed_by.kultur_id.kultur_qk_choosen_id.qk_id

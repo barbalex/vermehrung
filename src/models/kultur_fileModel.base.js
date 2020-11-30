@@ -20,6 +20,11 @@ export const kultur_fileModelBase = ModelBase.named('kultur_file')
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
+    kultur: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => kulturModel)),
+    ),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
   })

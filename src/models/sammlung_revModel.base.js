@@ -30,6 +30,11 @@ export const sammlung_revModelBase = ModelBase.named('sammlung_rev')
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     andere_menge: types.union(types.undefined, types.null, types.string),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
+    art: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => artModel)),
+    ),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
@@ -38,10 +43,30 @@ export const sammlung_revModelBase = ModelBase.named('sammlung_rev')
     geom_point: types.union(types.undefined, types.null, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
+    herkunft: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => herkunftModel)),
+    ),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
+    lieferungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => lieferungModel))),
+    ),
+    lieferungs_aggregate: types.union(types.undefined, types.frozen()),
     nr: types.union(types.undefined, types.null, types.string),
+    person: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => personModel)),
+    ),
     person_id: types.union(types.undefined, types.null, types.frozen()),
+    sammel_lieferungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammel_lieferungModel))),
+    ),
+    sammel_lieferungs_aggregate: types.union(types.undefined, types.frozen()),
     sammlung_id: types.union(types.undefined, types.frozen()),
     von_anzahl_individuen: types.union(
       types.undefined,

@@ -32,8 +32,26 @@ export const zaehlungModelBase = ModelBase.named('zaehlung')
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
+    kultur: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => kulturModel)),
+    ),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     prognose: types.union(types.undefined, types.null, types.boolean),
+    teilzaehlung_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => teilzaehlung_revModel))),
+    ),
+    teilzaehlung_revs_aggregate: types.union(types.undefined, types.frozen()),
+    teilzaehlungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => teilzaehlungModel))),
+    ),
+    teilzaehlungs_aggregate: types.union(
+      types.undefined,
+      types.late(() => teilzaehlung_aggregateModel),
+    ),
   })
   .views((self) => ({
     get store() {

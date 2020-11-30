@@ -19,6 +19,11 @@ export const herkunft_fileModelBase = ModelBase.named('herkunft_file')
     changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
+    herkunft: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => herkunftModel)),
+    ),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
