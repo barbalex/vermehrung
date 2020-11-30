@@ -8,8 +8,8 @@ const createDataArrayForRevComparison = ({ row, revRow, store }) => {
 
   return [
     {
-      valueInRow: rowUserRole?.name,
-      valueInRev: revRowUserRole?.name,
+      valueInRow: rowUserRole?.label,
+      valueInRev: revRowUserRole?.label,
       label: 'Rolle',
     },
     {

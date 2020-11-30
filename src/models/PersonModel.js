@@ -58,10 +58,7 @@ export const personModel = personModelBase
             : self.bemerkungen,
         account_id:
           field === 'account_id' ? toStringIfPossible(value) : self.account_id,
-        user_role_id:
-          field === 'user_role_id'
-            ? toStringIfPossible(value)
-            : self.user_role_id,
+        user_role_id: field === 'user_role_id' ? value : self.user_role_id,
         kommerziell: field === 'kommerziell' ? value : self.kommerziell,
         info: field === 'info' ? value : self.info,
         aktiv: field === 'aktiv' ? value : self.aktiv,
