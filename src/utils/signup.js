@@ -15,8 +15,7 @@ const signup = async ({ person, store }) => {
       type: 'warning',
     })
   }
-  const userRole = person?.user_role
-  if (!userRole) {
+  if (!person?.user_role_id) {
     return addNotification({
       message: 'Eine Rolle muss erfasst sein',
       type: 'warning',

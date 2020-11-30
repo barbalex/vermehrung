@@ -41,7 +41,7 @@ export const person_revModel = person_revModelBase
         kein_email: self.kein_email,
         bemerkungen: self.bemerkungen,
         account_id: self.account_id,
-        user_role: self.user_role,
+        user_role_id: self.user_role_id,
         kommerziell: self.kommerziell,
         info: self.info,
         aktiv: self.aktiv,

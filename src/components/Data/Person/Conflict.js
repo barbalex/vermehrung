@@ -30,7 +30,7 @@ const personRevQuery = gql`
       kein_email
       bemerkungen
       aktiv
-      user_role
+      user_role_id
       kommerziell
       info
       changed
@@ -102,7 +102,7 @@ const PersonConflict = ({
       kein_email: revRow.kein_email,
       bemerkungen: revRow.bemerkungen,
       account_id: revRow.account_id,
-      user_role: revRow.user_role,
+      user_role_id: revRow.user_role_id,
       kommerziell: revRow.kommerziell,
       info: revRow.info,
       aktiv: revRow.aktiv,
@@ -154,7 +154,7 @@ const PersonConflict = ({
     revRow.telefon_geschaeft,
     revRow.telefon_mobile,
     revRow.telefon_privat,
-    revRow.user_role,
+    revRow.user_role_id,
     revRow.vorname,
     row._depth,
     row._rev,

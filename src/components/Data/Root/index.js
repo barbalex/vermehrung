@@ -21,7 +21,7 @@ const FieldsContainer = styled.div`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { userPerson, initialDataQueried } = store
+  const { initialDataQueried } = store
   const {
     showArt,
     showEvent,
@@ -37,7 +37,7 @@ const Root = ({ filter: showFilter }) => {
   } = store.tree
 
   // eslint-disable-next-line no-unused-vars
-  const { user_role } = userPerson
+  //const { user_role } = userPerson
 
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value

@@ -40,7 +40,8 @@ create table person (
   changed timestamp default now(),
   changed_by text default null,
   account_id text default null,
-  user_role text default null references user_role (name) on delete set null on update cascade,
+  --user_role text default null references user_role (name) on delete set null on update cascade,
+  user_role_id uuid default null REFERENCES user_role (id) ON DELETE CASCADE ON UPDATE CASCADE,
   kommerziell boolean default false,
   info boolean default false,
   aktiv boolean default true,
@@ -52,10 +53,22 @@ create table person (
   _deleted boolean default false,
   _conflicts text[] default null
 );
+-- TODO:
+alter table person add column user_role_id uuid default null REFERENCES user_role (id) ON DELETE CASCADE ON UPDATE CASCADE;
+update person 
+set user_role_id = subquery.id
+from (select id, name from user_role) as subquery
+where person.user_role = subquery.name;
+create index on person using btree (user_role_id);
+-- TODO: after updating app:
+-- remove rights in hasura console
+alter table person drop column user_role;
+
 create index on person using btree (id);
 create index on person using btree (name);
 create index on person using btree (vorname);
 create index on person using btree (account_id);
+create index on person using btree (user_role_id);
 create index on person using btree (aktiv);
 create index on person using btree (kommerziell);
 create index on person using btree (info);
@@ -82,7 +95,8 @@ create table person_rev (
   changed timestamp default now(),
   changed_by text default null,
   account_id text default null,
-  user_role text default null references user_role (name) on delete no action on update cascade,
+  --user_role text default null references user_role (name) on delete no action on update cascade,
+  user_role_id uuid,
   kommerziell boolean default false,
   info boolean default false,
   aktiv boolean default true,
@@ -93,6 +107,16 @@ create table person_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+-- TODO:
+alter table person_rev add column user_role_id uuid;
+update person_rev 
+set user_role_id = subquery.id
+from (select id, name from user_role) as subquery
+where person_rev.user_role = subquery.name;
+-- TODO: after updating app:
+-- remove rights in hasura console
+alter table person_rev drop column user_role;
+
 create index on person_rev using btree (id);
 create index on person_rev using btree (person_id);
 create index on person_rev using btree (_rev);
@@ -211,7 +235,8 @@ drop table if exists art_qk_choosen cascade;
 create table art_qk_choosen (
   id uuid primary key default uuid_generate_v1mc(),
   art_id uuid NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_name text NOT NULL REFERENCES art_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  --qk_name text NOT NULL REFERENCES art_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  qk_id uuid NOT NULL REFERENCES art_qk (id) ON DELETE CASCADE ON UPDATE CASCADE,
   choosen boolean default true,
   changed timestamp default now(),
   changed_by text default null,
@@ -224,9 +249,21 @@ create table art_qk_choosen (
   _conflicts text[] default null
   unique(art_id, qk_name)
 );
+-- TODO:
+alter table art_qk_choosen add column qk_id uuid NOT NULL REFERENCES art_qk (id) ON DELETE CASCADE ON UPDATE CASCADE;
+update art_qk_choosen 
+set qk_id = subquery.id
+from (select id, name from art_qk) as subquery
+where art_qk_choosen.qk_name = subquery.name;
+create index on art_qk_choosen using btree (qk_id);
+drop index public.art_qk_choosen_qk_name_idx;
+-- TODO: after updating app:
+-- remove rights in hasura console
+alter table art_qk_choosen drop column qk_name;
+
 create index on art_qk_choosen using btree (id);
 create index on art_qk_choosen using btree (art_id);
-create index on art_qk_choosen using btree (qk_name);
+create index on art_qk_choosen using btree (qk_id);
 create index on art_qk_choosen using btree (choosen);
 create index on art_qk_choosen using btree (_deleted);
 create index on art_qk_choosen using btree (_rev_at);
@@ -241,7 +278,8 @@ create table art_qk_choosen_rev (
   id uuid primary key default uuid_generate_v1mc(),
   art_qk_choosen_id uuid default null,
   art_id uuid NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_name text NOT NULL REFERENCES art_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  --qk_name text NOT NULL REFERENCES art_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  qk_id uuid,
   choosen boolean default true,
   changed timestamp default now(),
   changed_by text default null,
@@ -252,6 +290,16 @@ create table art_qk_choosen_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+-- TODO:
+alter table art_qk_choosen_rev add column qk_id uuid;
+update art_qk_choosen_rev 
+set qk_id = subquery.id
+from (select id, name from art_qk) as subquery
+where art_qk_choosen_rev.qk_name = subquery.name;
+-- TODO: after updating app:
+-- remove rights in hasura console
+alter table art_qk_choosen_rev drop column qk_name;
+
 create index on art_qk_choosen_rev using btree (id);
 create index on art_qk_choosen_rev using btree (_rev);
 create index on art_qk_choosen_rev using btree (_parent_rev);
@@ -606,6 +654,10 @@ create table kultur_qk (
   _depth integer default 1,
   _deleted boolean default false,
 );
+ALTER TABLE kultur_qk DROP CONSTRAINT kultur_qk_pkey;
+alter table kultur_qk add primary key (id);
+alter table kultur_qk add unique (name);
+
 create index on kultur_qk using btree (id);
 create index on kultur_qk using btree (name);
 create index on kultur_qk using btree (titel);
@@ -631,7 +683,6 @@ create table kultur_qk_rev (
   _depth integer default 1,
   _deleted boolean default false,
 );
-alter table kultur_qk_rev drop column 
 create index on kultur_qk_rev using btree (id);
 create index on kultur_qk_rev using btree (_rev);
 create index on kultur_qk_rev using btree (_parent_rev);
@@ -643,7 +694,8 @@ drop table if exists kultur_qk_choosen cascade;
 create table kultur_qk_choosen (
   id uuid primary key default uuid_generate_v1mc(),
   kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  --qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  qk_id uuid NOT NULL REFERENCES kultur_qk (id) ON DELETE CASCADE ON UPDATE CASCADE,
   choosen boolean default true,
   changed timestamp default now(),
   changed_by text default null,
@@ -656,9 +708,21 @@ create table kultur_qk_choosen (
   _conflicts text[] default null
   unique(id, qk_name)
 );
+-- TODO:
+alter table kultur_qk_choosen add column qk_id uuid NOT NULL REFERENCES kultur_qk (id) ON DELETE CASCADE ON UPDATE CASCADE;
+update kultur_qk_choosen 
+set qk_id = subquery.id
+from (select id, name from kultur_qk) as subquery
+where kultur_qk_choosen.qk_name = subquery.name;
+create index on kultur_qk_choosen using btree (qk_id);
+drop index public.kultur_qk_choosen_qk_name_idx;
+-- TODO: after updating app:
+-- remove rights in hasura console
+alter table kultur_qk_choosen drop column qk_name;
+
 create index on kultur_qk_choosen using btree (id);
-create index on kultur_qk using btree (kultur_id);
-create index on kultur_qk_choosen using btree (qk_name);
+create index on kultur_qk_choosen using btree (kultur_id);
+create index on kultur_qk_choosen using btree (qk_id);
 create index on kultur_qk_choosen using btree (_deleted);
 create index on kultur_qk_choosen using btree (_rev_at);
 
@@ -672,7 +736,8 @@ create table kultur_qk_choosen_rev (
   id uuid primary key default uuid_generate_v1mc(),
   kultur_qk_choosen_id uuid default null,
   kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  --qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  qk_id uuid,
   choosen boolean default true,
   changed timestamp default now(),
   changed_by text default null,
@@ -683,6 +748,16 @@ create table kultur_qk_choosen_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+-- TODO:
+alter table kultur_qk_choosen_rev add column qk_id uuid;
+update kultur_qk_choosen_rev 
+set qk_id = subquery.id
+from (select id, name from kultur_qk) as subquery
+where kultur_qk_choosen_rev.qk_name = subquery.name;
+-- TODO: after updating app:
+-- remove rights in hasura console
+alter table kultur_qk_choosen_rev drop column qk_name;
+
 create index on kultur_qk_choosen_rev using btree (id);
 create index on kultur_qk_choosen_rev using btree (_rev);
 create index on kultur_qk_choosen_rev using btree (_parent_rev);
