@@ -63,7 +63,7 @@ const ApQkQk = ({ artId, qkChoosens }) => {
   const messageGroups = qkChoosens
     .map((qkChoosen) => {
       const artQk = [...store.art_qks.values()].find(
-        (qk) => qk.name === qkChoosen.qk_name,
+        (qk) => qk.id === qkChoosen.qk_id,
       )
       return {
         title: artQk?.titel,

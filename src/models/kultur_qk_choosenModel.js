@@ -35,7 +35,7 @@ export const kultur_qk_choosenModel = kultur_qk_choosenModelBase.actions(
       const newObject = {
         kultur_qk_choosen_id: self.id,
         kultur_id: field === 'kultur_id' ? value : self.kultur_id,
-        qk_name: field === 'qk_name' ? toStringIfPossible(value) : self.qk_name,
+        qk_id: field === 'qk_id' ? value : self.qk_id,
         choosen: field === 'choosen' ? value : self.choosen,
         _parent_rev: self._rev,
         _depth: newDepth,

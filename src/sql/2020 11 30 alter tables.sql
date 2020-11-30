@@ -1007,6 +1007,22 @@ end;
 $body$
 language plpgsql;
 
+CREATE or replace FUNCTION kultur_has_qk_choosen() RETURNS trigger AS $kultur_has_qk_choosen$
+BEGIN
+  insert into kultur_qk_choosen(kultur_id, qk_id)
+  select distinct kultur.id, kultur_qk.id from kultur, kultur_qk where kultur.id = NEW.id;
+  RETURN NEW;
+END;
+$kultur_has_qk_choosen$ LANGUAGE plpgsql;
+
+CREATE or replace FUNCTION art_has_qk_choosen() RETURNS trigger AS $art_has_qk_choosen$
+BEGIN
+  insert into art_qk_choosen(art_id, qk_id)
+  select distinct art.id, art_qk.id from art, art_qk where art.id = NEW.id;
+  RETURN NEW;
+END;
+$art_has_qk_choosen$ LANGUAGE plpgsql;
+
 -- 6. remove no more used fields
 alter table person drop column user_role;
 alter table person_rev drop column user_role;

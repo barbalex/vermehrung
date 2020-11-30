@@ -45,7 +45,7 @@ export const artQkChoosen = gql`
     id
     __typename
     art_id
-    qk_name
+    qk_id
     choosen
     changed
     changed_by
@@ -358,7 +358,7 @@ export const kulturQkChoosen = gql`
     id
     __typename
     kultur_id
-    qk_name
+    qk_id
     choosen
     changed
     changed_by

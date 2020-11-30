@@ -29,7 +29,7 @@ export const art_qk_choosenModel = art_qk_choosenModelBase.actions((self) => ({
     const newObject = {
       art_qk_choosen_id: self.id,
       art_id: field === 'art_id' ? value : self.art_id,
-      qk_name: field === 'qk_name' ? toStringIfPossible(value) : self.qk_name,
+      qk_id: field === 'qk_id' ? value : self.qk_id,
       choosen: field === 'choosen' ? value : self.choosen,
       _parent_rev: self._rev,
       _depth: newDepth,

@@ -356,7 +356,7 @@ export const RootStore = RootStoreBase.props({
         const newObject = {
           art_qk_choosen_id: id,
           art_id: undefined,
-          qk_name: undefined,
+          qk_id: undefined,
           choosen: undefined,
           changed: new window.Date().toISOString(),
           changed_by: user.email,
@@ -904,7 +904,7 @@ export const RootStore = RootStoreBase.props({
         const newObject = {
           kultur_qk_choosen_id: id,
           kultur_id: undefined,
-          qk_name: undefined,
+          qk_id: undefined,
           choosen: undefined,
           changed: new window.Date().toISOString(),
           changed_by: user.email,
