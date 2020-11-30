@@ -17,7 +17,7 @@ export const type = types.model({
   changed: types.union(types.string, types.undefined, types.null),
   changed_by: types.union(types.string, types.undefined, types.null),
   account_id: types.union(types.string, types.undefined, types.null),
-  user_role: types.union(types.string, types.undefined, types.null),
+  user_role_id: types.union(types.string, types.undefined, types.null),
   kommerziell: types.union(types.string, types.undefined, types.null),
   info: types.union(types.string, types.undefined, types.null),
   aktiv: types.union(types.string, types.undefined, types.null),
