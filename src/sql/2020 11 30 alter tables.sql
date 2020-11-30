@@ -27,7 +27,6 @@ set qk_id = subquery.id
 from (select id, name from art_qk) as subquery
 where art_qk_choosen_rev.qk_name = subquery.name;
 
--- TODO: on here:
 ALTER TABLE kultur_qk DROP CONSTRAINT kultur_qk_pkey cascade;
 alter table kultur_qk add primary key (id);
 alter table kultur_qk add unique (name);
