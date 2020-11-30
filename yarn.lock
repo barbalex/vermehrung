@@ -1518,12 +1518,12 @@
     "@graphql-tools/utils" "^7.0.0"
     tslib "~2.0.1"
 
-"@graphql-tools/schema@^7.0.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/schema/-/schema-7.1.0.tgz#ddf6ede376164ff4d9d768a1b6a6dc4cb4ce9ce3"
-  integrity sha512-1TwaRfWOfxtTqk8ckBrLi3283Sl0tQmUleAnelID1mql4YgYyArrKRkHfWZs9DbydngTxj/uV10aLYioJMR6tQ==
+"@graphql-tools/schema@^7.0.0", "@graphql-tools/schema@^7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/schema/-/schema-7.1.2.tgz#5084eaef893719ad01329f77673d102e7710542e"
+  integrity sha512-GabNT51ErVHE2riDH4EQdRusUsI+nMElT8LdFHyuP53v8gwtleAj+LePQ9jif4NYUe/JQVqO8V28vPcHrA7gfQ==
   dependencies:
-    "@graphql-tools/utils" "^7.1.0"
+    "@graphql-tools/utils" "^7.1.2"
     tslib "~2.0.1"
 
 "@graphql-tools/url-loader@^6.0.0":
@@ -1551,23 +1551,23 @@
     camel-case "4.1.1"
     tslib "~2.0.1"
 
-"@graphql-tools/utils@^7.0.0", "@graphql-tools/utils@^7.0.1", "@graphql-tools/utils@^7.0.2", "@graphql-tools/utils@^7.1.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-7.1.0.tgz#0cbcfa7b6e7741650f78e8bde4823780ed9e8c57"
-  integrity sha512-lMTgy08BdqQ31zyyCRrxcKZ6gAKQB9amGKJGg0mb3b4I3iJQKeaw9a7T96yGe1frGak1UK9y7OoYqx8RG7KitA==
+"@graphql-tools/utils@^7.0.0", "@graphql-tools/utils@^7.0.1", "@graphql-tools/utils@^7.0.2", "@graphql-tools/utils@^7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-7.1.2.tgz#48eafce9d118f73e39710c65426ecce98e374afa"
+  integrity sha512-xFuhDyGMhaXTQpq48vjjCLA1VWc3fEo4n+zBcvQnbBSqhVPwAVa0ANcpb0NHmU9c3ypch26kK85TmC/HoK3YRg==
   dependencies:
     "@ardatan/aggregate-error" "0.0.6"
     camel-case "4.1.1"
     tslib "~2.0.1"
 
 "@graphql-tools/wrap@^7.0.0":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/wrap/-/wrap-7.0.2.tgz#f7ab04b8cb7db2191af3ef69dfb770e6bcad4d0c"
-  integrity sha512-+JUPbCtqIuAWTPk5cpCxOGiC6+hNCn9r+AWPdkuxDdJlrC1yGg9TOgps1LIhuScSnPeVVrk+/vwgPA/pV0aq9w==
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/wrap/-/wrap-7.0.3.tgz#626a0477aa1d7ff4253b3d4b352e9c4333555522"
+  integrity sha512-co+ELAwZwMut7qGZow8ATMQlYOU2G3/gsEqz/SUAt7XizXWOOguSFjQKk1/OwHzgCFBbEjvwfoERcv6QC1EUxA==
   dependencies:
     "@graphql-tools/delegate" "^7.0.7"
-    "@graphql-tools/schema" "^7.0.0"
-    "@graphql-tools/utils" "^7.0.0"
+    "@graphql-tools/schema" "^7.1.2"
+    "@graphql-tools/utils" "^7.1.2"
     is-promise "4.0.0"
     tslib "~2.0.1"
 
@@ -2559,14 +2559,14 @@
   integrity sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==
 
 "@types/node@^12.12.47":
-  version "12.19.7"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.19.7.tgz#cf8b6ac088dd9182ac9a1d765f787a8d12490c04"
-  integrity sha512-zvjOU1g4CpPilbTDUATnZCUb/6lARMRAqzT7ILwl1P3YvU2leEcZ2+fw9+Jrw/paXB1CgQyXTrN4hWDtqT9O2A==
+  version "12.19.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.19.8.tgz#efd6d1a90525519fc608c9db16c8a78f7693a978"
+  integrity sha512-D4k2kNi0URNBxIRCb1khTnkWNHv8KSL1owPmS/K5e5t8B2GzMReY7AsJIY1BnP5KdlgC4rj9jk2IkDMasIE7xg==
 
 "@types/node@^13.7.0":
-  version "13.13.33"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.33.tgz#300e65e0b465bda102b9845d172d8d45726a2dd8"
-  integrity sha512-1B3GM1yuYsFyEvBb+ljBqWBOylsWDYioZ5wpu8AhXdIhq20neXS7eaSC8GkwHE0yQYGiOIV43lMsgRYTgKZefQ==
+  version "13.13.34"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.34.tgz#c9300a1b6560d90817fb2bba650e250116a575f9"
+  integrity sha512-g8D1HF2dMDKYSDl5+79izRwRgNPsSynmWMbj50mj7GZ0b7Lv4p8EmZjbo3h0h+6iLr6YmVz9VnF6XVZ3O6V1Ug==
 
 "@types/node@^8.5.7":
   version "8.10.66"
@@ -4543,9 +4543,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001157:
-  version "1.0.30001162"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001162.tgz#9f83aad1f42539ce9aab58bb177598f2f8e22ec6"
-  integrity sha512-E9FktFxaNnp4ky3ucIGzEXLM+Knzlpuq1oN1sFAU0KeayygabGTmOsndpo8QrL4D9pcThlf4D2pUKaDxPCUmVw==
+  version "1.0.30001163"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001163.tgz#7595ae1b430fb4ad6adcd4f0a3d705efad9dc379"
+  integrity sha512-QQbOGkHWnvhn3Dlf4scPlXTZVhGOK+2qCOP5gPxqzXHhtn3tZHwNdH9qNcQRWN0f3tDYrsyXFJCFiP/GLzI5Vg==
 
 capital-case@^1.0.3:
   version "1.0.3"
@@ -6504,9 +6504,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.591:
-  version "1.3.610"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.610.tgz#1254eb394acd220a836ea1f203f8cded4e487052"
-  integrity sha512-eFDC+yVQpEhtlapk4CYDPfV9ajF9cEof5TBcO49L1ETO+aYogrKWDmYpZyxBScMNe8Bo/gJamH4amQ4yyvXg4g==
+  version "1.3.611"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.611.tgz#43a25c07ae05f9555335908abc46c89898f5afb7"
+  integrity sha512-YhqTzCXtEO2h0foGLGS60ortd6yY/yUQhqDEp1VWG3DIyHvckFFyaRwR41M0/M3m7Yb8Exqh+nzyb2TuxaoMTw==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
