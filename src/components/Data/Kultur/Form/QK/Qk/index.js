@@ -62,7 +62,7 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
   const messageGroups = qkChoosens
     .map((qkChoosen) => {
       const qk = [...store.kultur_qks.values()].find(
-        (qk) => qk.name === qkChoosen.qk_name,
+        (qk) => qk.id === qkChoosen.qk_id,
       )
       return {
         title: qk?.titel,

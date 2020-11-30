@@ -45,7 +45,7 @@ export const artQkChoosen = gql`
     id
     __typename
     art_id
-    qk_name
+    qk_id
     choosen
     changed
     changed_by
@@ -356,7 +356,7 @@ export const kulturQkChoosen = gql`
     id
     __typename
     kultur_id
-    qk_name
+    qk_id
     choosen
     changed
     changed_by
@@ -497,7 +497,7 @@ export const person = gql`
     kein_email
     bemerkungen
     account_id
-    user_role
+    user_role_id
     kommerziell
     info
     aktiv

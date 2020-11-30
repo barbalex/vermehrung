@@ -54,7 +54,7 @@ const Person = ({
       [...user_roles.values()]
         .sort((a, b) => userRoleSort({ a, b }))
         .map((el) => ({
-          value: el.name,
+          value: el.id,
           label: el.label,
         })),
     [user_roles],
@@ -101,8 +101,8 @@ const Person = ({
   const showDeleted =
     showFilter || filter.person._deleted !== false || row._deleted
 
-  const userRole = row.user_role
-    ? [...store.user_roles.values()].find((r) => r.name === row.user_role)
+  const userRole = row?.user_role_id
+    ? store.user_roles.get(row.user_role_id)
     : {}
 
   return (
@@ -137,15 +137,15 @@ const Person = ({
           </>
         )}
         <Select
-          key={`${row.id}${row.user_role}user_role`}
-          name="user_role"
-          value={row.user_role}
-          field="user_role"
+          key={`${row.id}${row.user_role_id}user_role_id`}
+          name="user_role_id"
+          value={row.user_role_id}
+          field="user_role_id"
           label="Rolle"
           helperText={userRole?.comment || ' '}
           options={userRoleWerte}
           saveToDb={saveToDb}
-          error={errors?.person?.user_role}
+          error={errors?.person?.user_role_id}
         />
         <TextField
           key={`${row.id}nr`}
@@ -328,8 +328,8 @@ const Person = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {row.user_role === 'artverantwortlich' && <Arten person={row} />}
-        {['gaertner', 'artverantwortlich'].includes(row.user_role) && (
+        {userRole?.name === 'artverantwortlich' && <Arten person={row} />}
+        {['gaertner', 'artverantwortlich'].includes(userRole?.name) && (
           <Gaerten person={row} />
         )}
         {!showFilter && row.id && <Files parentTable="person" parent={row} />}

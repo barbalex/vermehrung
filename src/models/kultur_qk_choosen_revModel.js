@@ -26,7 +26,7 @@ export const kultur_qk_choosen_revModel = kultur_qk_choosen_revModelBase.actions
       const newObject = {
         kultur_qk_choosen_id: self.kultur_qk_choosen_id,
         kultur_id: self.kultur_id,
-        qk_name: self.qk_name,
+        qk_id: self.qk_id,
         choosen: self.choosen,
         _parent_rev: self._rev,
         _depth: newDepth,
