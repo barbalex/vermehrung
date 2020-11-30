@@ -4,7 +4,7 @@ const art_qk_choosen = {
   name: 'art_qk_choosen',
   columns: [
     { name: 'art_id', type: 'string', isOptional: true, isIndexed: true },
-    { name: 'qk_name', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'qk_id', type: 'string', isOptional: true, isIndexed: true },
     { name: 'choosen', type: 'boolean', isOptional: true, isIndexed: true },
     { name: 'changed', type: 'string', isOptional: true },
     { name: 'changed_by', type: 'string', isOptional: true },

@@ -1909,7 +1909,7 @@ export class SammlungFile extends Model {
 export class ArtQk extends Model {
   static table = 'art_qk'
   static associations = {
-    art_qk_choosen: { type: 'has_many', foreignKey: 'qk_name' },
+    art_qk_choosen: { type: 'has_many', foreignKey: 'qk_id' },
   }
 
   @field('id') id
@@ -2004,12 +2004,12 @@ export class ArtQkChoosen extends Model {
   static table = 'art_qk_choosen'
   static associations = {
     art: { type: 'belongs_to', key: 'art_id' },
-    art_qk: { type: 'belongs_to', key: 'qk_name' },
+    art_qk: { type: 'belongs_to', key: 'qk_id' },
   }
 
   @field('id') id
   @field('art_id') art_id
-  @field('qk_name') qk_name
+  @field('qk_id') qk_id
   @field('choosen') choosen
   @field('changed') changed
   @field('changed_by') changed_by
@@ -2022,7 +2022,7 @@ export class ArtQkChoosen extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @relation('art', 'art_id') art
-  @relation('art_qk', 'qk_name') art_qk
+  @relation('art_qk', 'qk_id') art_qk
 }
 
 export class KulturOption extends Model {
@@ -2146,7 +2146,7 @@ export class KulturOption extends Model {
 export class KulturQk extends Model {
   static table = 'kultur_qk'
   static associations = {
-    kultur_qk_choosen: { type: 'has_many', foreignKey: 'qk_name' },
+    kultur_qk_choosen: { type: 'has_many', foreignKey: 'qk_id' },
   }
 
   @field('id') id
@@ -2241,12 +2241,12 @@ export class KulturQkChoosen extends Model {
   static table = 'kultur_qk_choosen'
   static associations = {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
-    kultur_qk: { type: 'belongs_to', key: 'qk_name' },
+    kultur_qk: { type: 'belongs_to', key: 'qk_id' },
   }
 
   @field('id') id
   @field('kultur_id') kultur_id
-  @field('qk_name') qk_name
+  @field('qk_id') qk_id
   @field('choosen') choosen
   @field('changed') changed
   @field('changed_by') changed_by
@@ -2259,7 +2259,7 @@ export class KulturQkChoosen extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @relation('kultur', 'kultur_id') kultur
-  @relation('kultur_qk', 'qk_name') kultur_qk
+  @relation('kultur_qk', 'qk_id') kultur_qk
 
   @action async removeConflict(_rev) {
     await this.update((row) => {
@@ -2275,7 +2275,7 @@ export class KulturQkChoosen extends Model {
     const newObject = {
       kultur_qk_choosen_id: this.id,
       kultur_id: field === 'kultur_id' ? value : this.kultur_id,
-      qk_name: field === 'qk_name' ? toStringIfPossible(value) : this.qk_name,
+      qk_id: field === 'qk_id' ? value : this.qk_id,
       choosen: field === 'choosen' ? value : this.choosen,
       _parent_rev: this._rev,
       _depth: newDepth,
