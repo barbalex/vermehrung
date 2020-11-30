@@ -54,19 +54,142 @@ export const kulturModelBase = ModelBase.named('kultur')
     _rev_at: types.union(types.undefined, types.null, types.frozen()),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     aktiv: types.union(types.undefined, types.null, types.boolean),
+    art: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => artModel)),
+    ),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     erhaltungskultur: types.union(types.undefined, types.null, types.boolean),
+    event_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => event_revModel))),
+    ),
+    event_revs_aggregate: types.union(types.undefined, types.frozen()),
+    events: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => eventModel))),
+    ),
+    events_aggregate: types.union(types.undefined, types.frozen()),
+    garten: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => gartenModel)),
+    ),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
+    herkunft: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => herkunftModel)),
+    ),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
+    kultur_files: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => kultur_fileModel))),
+    ),
+    kultur_files_aggregate: types.union(types.undefined, types.frozen()),
+    kultur_option: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => kultur_optionModel)),
+    ),
+    kultur_option_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => kultur_option_revModel))),
+    ),
+    kultur_option_revs_aggregate: types.union(types.undefined, types.frozen()),
+    kultur_qk_choosens: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel))),
+    ),
+    kultur_qk_choosens_aggregate: types.union(types.undefined, types.frozen()),
+    lieferungRevsByNachKulturId: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => lieferung_revModel))),
+    ),
+    lieferungRevsByNachKulturId_aggregate: types.union(
+      types.undefined,
+      types.frozen(),
+    ),
+    lieferung_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => lieferung_revModel))),
+    ),
+    lieferung_revs_aggregate: types.union(types.undefined, types.frozen()),
+    lieferungsByNachKulturId: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => lieferungModel))),
+    ),
+    lieferungsByNachKulturId_aggregate: types.union(
+      types.undefined,
+      types.frozen(),
+    ),
+    lieferungsByVonKulturId: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => lieferungModel))),
+    ),
+    lieferungsByVonKulturId_aggregate: types.union(
+      types.undefined,
+      types.frozen(),
+    ),
+    sammelLieferungRevsByVonKulturId: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammel_lieferung_revModel))),
+    ),
+    sammelLieferungRevsByVonKulturId_aggregate: types.union(
+      types.undefined,
+      types.frozen(),
+    ),
+    sammelLieferungsByNachKulturId: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammel_lieferungModel))),
+    ),
+    sammelLieferungsByNachKulturId_aggregate: types.union(
+      types.undefined,
+      types.frozen(),
+    ),
+    sammel_lieferung_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammel_lieferung_revModel))),
+    ),
+    sammel_lieferung_revs_aggregate: types.union(
+      types.undefined,
+      types.frozen(),
+    ),
+    sammel_lieferungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammel_lieferungModel))),
+    ),
+    sammel_lieferungs_aggregate: types.union(types.undefined, types.frozen()),
+    teilkultur_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => teilkultur_revModel))),
+    ),
+    teilkultur_revs_aggregate: types.union(types.undefined, types.frozen()),
+    teilkulturs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => teilkulturModel))),
+    ),
+    teilkulturs_aggregate: types.union(types.undefined, types.frozen()),
     von_anzahl_individuen: types.union(
       types.undefined,
       types.null,
       types.integer,
     ),
+    zaehlung_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => zaehlung_revModel))),
+    ),
+    zaehlung_revs_aggregate: types.union(types.undefined, types.frozen()),
+    zaehlungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => zaehlungModel))),
+    ),
+    zaehlungs_aggregate: types.union(types.undefined, types.frozen()),
     zwischenlager: types.union(types.undefined, types.null, types.boolean),
   })
   .views((self) => ({

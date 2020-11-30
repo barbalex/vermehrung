@@ -35,6 +35,11 @@ export const lieferung_revModelBase = ModelBase.named('lieferung_rev')
       types.integer,
     ),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
+    art: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => artModel)),
+    ),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
@@ -43,14 +48,39 @@ export const lieferung_revModelBase = ModelBase.named('lieferung_rev')
     geplant: types.union(types.undefined, types.null, types.boolean),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
+    kulturByNachKulturId: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => kulturModel)),
+    ),
+    kulturByVonKulturId: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => kulturModel)),
+    ),
     lieferung_id: types.union(types.undefined, types.frozen()),
     nach_ausgepflanzt: types.union(types.undefined, types.null, types.boolean),
     nach_kultur_id: types.union(types.undefined, types.null, types.frozen()),
+    person: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => personModel)),
+    ),
     person_id: types.union(types.undefined, types.null, types.frozen()),
+    sammel_lieferung: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => sammel_lieferungModel)),
+    ),
     sammel_lieferung_id: types.union(
       types.undefined,
       types.null,
       types.frozen(),
+    ),
+    sammlung: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => sammlungModel)),
     ),
     von_anzahl_individuen: types.union(
       types.undefined,

@@ -15,6 +15,11 @@ export const art_fileModelBase = ModelBase.named('art_file')
   .props({
     __typename: types.optional(types.literal('art_file'), 'art_file'),
     _rev_at: types.union(types.undefined, types.null, types.frozen()),
+    art: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => artModel)),
+    ),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     beschreibung: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),

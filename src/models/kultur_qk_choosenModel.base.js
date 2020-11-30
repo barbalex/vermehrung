@@ -6,8 +6,6 @@ import { MSTGQLRef, QueryBuilder } from 'mst-gql'
 import { ModelBase } from './ModelBase'
 import { kulturModel } from './kulturModel'
 import { kulturModelSelector } from './kulturModel.base'
-import { kultur_qkModel } from './kultur_qkModel'
-import { kultur_qkModelSelector } from './kultur_qkModel.base'
 
 /**
  * kultur_qk_choosenBase
@@ -30,8 +28,12 @@ export const kultur_qk_choosenModelBase = ModelBase.named('kultur_qk_choosen')
     changed_by: types.union(types.undefined, types.null, types.string),
     choosen: types.union(types.undefined, types.null, types.boolean),
     id: types.identifier,
+    kultur: types.union(
+      types.undefined,
+      MSTGQLRef(types.late(() => kulturModel)),
+    ),
     kultur_id: types.union(types.undefined, types.frozen()),
-    qk_name: types.union(types.undefined, types.string),
+    qk_id: types.union(types.undefined, types.frozen()),
   })
   .views((self) => ({
     get store() {
@@ -76,8 +78,8 @@ export class kultur_qk_choosenModelSelector extends QueryBuilder {
   get kultur_id() {
     return this.__attr(`kultur_id`)
   }
-  get qk_name() {
-    return this.__attr(`qk_name`)
+  get qk_id() {
+    return this.__attr(`qk_id`)
   }
 }
 export function selectFromkultur_qk_choosen() {
@@ -86,4 +88,4 @@ export function selectFromkultur_qk_choosen() {
 
 export const kultur_qk_choosenModelPrimitives = selectFromkultur_qk_choosen()
   ._conflicts._deleted._depth._parent_rev._rev._rev_at._revisions.changed
-  .changed_by.choosen.kultur_id.qk_name
+  .changed_by.choosen.kultur_id.qk_id

@@ -6,8 +6,6 @@ import { MSTGQLRef, QueryBuilder } from 'mst-gql'
 import { ModelBase } from './ModelBase'
 import { artModel } from './artModel'
 import { artModelSelector } from './artModel.base'
-import { art_qkModel } from './art_qkModel'
-import { art_qkModelSelector } from './art_qkModel.base'
 
 /**
  * art_qk_choosenBase
@@ -26,12 +24,13 @@ export const art_qk_choosenModelBase = ModelBase.named('art_qk_choosen')
     _rev: types.union(types.undefined, types.null, types.string),
     _rev_at: types.union(types.undefined, types.null, types.frozen()),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
+    art: types.union(types.undefined, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     choosen: types.union(types.undefined, types.null, types.boolean),
     id: types.identifier,
-    qk_name: types.union(types.undefined, types.string),
+    qk_id: types.union(types.undefined, types.frozen()),
   })
   .views((self) => ({
     get store() {
@@ -76,8 +75,8 @@ export class art_qk_choosenModelSelector extends QueryBuilder {
   get id() {
     return this.__attr(`id`)
   }
-  get qk_name() {
-    return this.__attr(`qk_name`)
+  get qk_id() {
+    return this.__attr(`qk_id`)
   }
 }
 export function selectFromart_qk_choosen() {
@@ -86,4 +85,4 @@ export function selectFromart_qk_choosen() {
 
 export const art_qk_choosenModelPrimitives = selectFromart_qk_choosen()
   ._conflicts._deleted._depth._parent_rev._rev._rev_at._revisions.art_id.changed
-  .changed_by.choosen.qk_name
+  .changed_by.choosen.qk_id

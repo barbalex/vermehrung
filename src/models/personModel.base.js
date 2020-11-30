@@ -34,8 +34,6 @@ import { sammlungModel } from './sammlungModel'
 import { sammlungModelSelector } from './sammlungModel.base'
 import { sammlung_revModel } from './sammlung_revModel'
 import { sammlung_revModelSelector } from './sammlung_revModel.base'
-import { user_roleModel } from './user_roleModel'
-import { user_roleModelSelector } from './user_roleModel.base'
 
 /**
  * personBase
@@ -54,23 +52,101 @@ export const personModelBase = ModelBase.named('person')
     account_id: types.union(types.undefined, types.null, types.string),
     adresszusatz: types.union(types.undefined, types.null, types.string),
     aktiv: types.union(types.undefined, types.null, types.boolean),
+    avs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => avModel))),
+    ),
+    avs_aggregate: types.union(types.undefined, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     email: types.union(types.undefined, types.null, types.string),
+    event_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => event_revModel))),
+    ),
+    event_revs_aggregate: types.union(types.undefined, types.frozen()),
+    events: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => eventModel))),
+    ),
+    events_aggregate: types.union(types.undefined, types.frozen()),
+    garten_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => garten_revModel))),
+    ),
+    garten_revs_aggregate: types.union(types.undefined, types.frozen()),
+    gartens: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => gartenModel))),
+    ),
+    gartens_aggregate: types.union(types.undefined, types.frozen()),
+    gvs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => gvModel))),
+    ),
+    gvs_aggregate: types.union(types.undefined, types.frozen()),
     id: types.identifier,
     info: types.union(types.undefined, types.null, types.boolean),
     kein_email: types.union(types.undefined, types.null, types.boolean),
     kommerziell: types.union(types.undefined, types.null, types.boolean),
+    lieferung_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => lieferung_revModel))),
+    ),
+    lieferung_revs_aggregate: types.union(types.undefined, types.frozen()),
+    lieferungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => lieferungModel))),
+    ),
+    lieferungs_aggregate: types.union(types.undefined, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),
+    person_files: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => person_fileModel))),
+    ),
+    person_files_aggregate: types.union(types.undefined, types.frozen()),
+    person_option: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => person_optionModel)),
+    ),
+    person_option_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => person_option_revModel))),
+    ),
+    person_option_revs_aggregate: types.union(types.undefined, types.frozen()),
     plz: types.union(types.undefined, types.null, types.integer),
+    sammel_lieferung_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammel_lieferung_revModel))),
+    ),
+    sammel_lieferung_revs_aggregate: types.union(
+      types.undefined,
+      types.frozen(),
+    ),
+    sammel_lieferungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammel_lieferungModel))),
+    ),
+    sammel_lieferungs_aggregate: types.union(types.undefined, types.frozen()),
+    sammlung_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammlung_revModel))),
+    ),
+    sammlung_revs_aggregate: types.union(types.undefined, types.frozen()),
+    sammlungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammlungModel))),
+    ),
+    sammlungs_aggregate: types.union(types.undefined, types.frozen()),
     strasse: types.union(types.undefined, types.null, types.string),
     telefon_geschaeft: types.union(types.undefined, types.null, types.string),
     telefon_mobile: types.union(types.undefined, types.null, types.string),
     telefon_privat: types.union(types.undefined, types.null, types.string),
-    user_role: types.union(types.undefined, types.null, types.string),
+    user_role_id: types.union(types.undefined, types.null, types.frozen()),
     vorname: types.union(types.undefined, types.null, types.string),
   })
   .views((self) => ({
@@ -158,8 +234,8 @@ export class personModelSelector extends QueryBuilder {
   get telefon_privat() {
     return this.__attr(`telefon_privat`)
   }
-  get user_role() {
-    return this.__attr(`user_role`)
+  get user_role_id() {
+    return this.__attr(`user_role_id`)
   }
   get vorname() {
     return this.__attr(`vorname`)
@@ -172,4 +248,5 @@ export function selectFromperson() {
 export const personModelPrimitives = selectFromperson()._conflicts._deleted
   ._depth._parent_rev._rev._rev_at._revisions.account_id.adresszusatz.aktiv
   .bemerkungen.changed.changed_by.email.info.kein_email.kommerziell.name.nr.ort
-  .plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role.vorname
+  .plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role_id
+  .vorname

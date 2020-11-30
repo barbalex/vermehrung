@@ -33,7 +33,7 @@ export const person_min_fieldsModelBase = ModelBase
     telefon_geschaeft: types.union(types.undefined, types.null, types.string),
     telefon_mobile: types.union(types.undefined, types.null, types.string),
     telefon_privat: types.union(types.undefined, types.null, types.string),
-    user_role: types.union(types.undefined, types.null, types.string),
+    user_role_id: types.union(types.undefined, types.null, types.frozen()),
     vorname: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({
@@ -62,11 +62,11 @@ export class person_min_fieldsModelSelector extends QueryBuilder {
   get telefon_geschaeft() { return this.__attr(`telefon_geschaeft`) }
   get telefon_mobile() { return this.__attr(`telefon_mobile`) }
   get telefon_privat() { return this.__attr(`telefon_privat`) }
-  get user_role() { return this.__attr(`user_role`) }
+  get user_role_id() { return this.__attr(`user_role_id`) }
   get vorname() { return this.__attr(`vorname`) }
 }
 export function selectFromperson_min_fields() {
   return new person_min_fieldsModelSelector()
 }
 
-export const person_min_fieldsModelPrimitives = selectFromperson_min_fields()._depth._parent_rev._rev._rev_at.account_id.adresszusatz.bemerkungen.changed.changed_by.email.name.nr.ort.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role.vorname
+export const person_min_fieldsModelPrimitives = selectFromperson_min_fields()._depth._parent_rev._rev._rev_at.account_id.adresszusatz.bemerkungen.changed.changed_by.email.name.nr.ort.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role_id.vorname

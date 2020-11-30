@@ -34,13 +34,38 @@ export const herkunftModelBase = ModelBase.named('herkunft')
     changed_by: types.union(types.undefined, types.null, types.string),
     gemeinde: types.union(types.undefined, types.null, types.string),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
+    herkunft_files: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => herkunft_fileModel))),
+    ),
+    herkunft_files_aggregate: types.union(types.undefined, types.frozen()),
     id: types.identifier,
     kanton: types.union(types.undefined, types.null, types.string),
+    kultur_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => kultur_revModel))),
+    ),
+    kultur_revs_aggregate: types.union(types.undefined, types.frozen()),
+    kulturs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => kulturModel))),
+    ),
+    kulturs_aggregate: types.union(types.undefined, types.frozen()),
     land: types.union(types.undefined, types.null, types.string),
     lokalname: types.union(types.undefined, types.null, types.string),
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
     lv95_y: types.union(types.undefined, types.null, types.frozen()),
     nr: types.union(types.undefined, types.null, types.string),
+    sammlung_revs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammlung_revModel))),
+    ),
+    sammlung_revs_aggregate: types.union(types.undefined, types.frozen()),
+    sammlungs: types.union(
+      types.undefined,
+      types.array(MSTGQLRef(types.late(() => sammlungModel))),
+    ),
+    sammlungs_aggregate: types.union(types.undefined, types.frozen()),
     wgs84_lat: types.union(types.undefined, types.null, types.frozen()),
     wgs84_long: types.union(types.undefined, types.null, types.frozen()),
   })

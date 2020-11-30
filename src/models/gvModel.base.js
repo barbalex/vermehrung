@@ -25,8 +25,18 @@ export const gvModelBase = ModelBase.named('gv')
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
+    garten: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => gartenModel)),
+    ),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
+    person: types.union(
+      types.undefined,
+      types.null,
+      MSTGQLRef(types.late(() => personModel)),
+    ),
     person_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views((self) => ({
