@@ -43,7 +43,7 @@ begin
     insert into art_qk_choosen (
       id,
       art_id,
-      qk_name,
+      qk_id,
       choosen,
       changed,
       changed_by,
@@ -117,7 +117,7 @@ begin
     select
       art_qk_choosen_rev.art_qk_choosen_id,
       art_qk_choosen_rev.art_id,
-      art_qk_choosen_rev.qk_name,
+      art_qk_choosen_rev.qk_id,
       art_qk_choosen_rev.choosen,
       art_qk_choosen_rev.changed,
       art_qk_choosen_rev.changed_by,
@@ -140,7 +140,7 @@ begin
     on conflict on constraint art_qk_choosen_pkey do update set
       -- do not update the id = pkey
       art_id = excluded.art_id,
-      qk_name = excluded.qk_name,
+      qk_id = excluded.qk_id,
       choosen = excluded.choosen,
       changed = excluded.changed,
       changed_by = excluded.changed_by,
@@ -156,7 +156,7 @@ begin
     insert into art_qk_choosen (
         id,
         art_id,
-        qk_name,
+        qk_id,
         choosen,
         changed,
         changed_by,
@@ -250,7 +250,7 @@ begin
       select
         art_qk_choosen_rev.art_qk_choosen_id,
         art_qk_choosen_rev.art_id,
-        art_qk_choosen_rev.qk_name,
+        art_qk_choosen_rev.qk_id,
         art_qk_choosen_rev.choosen,
         art_qk_choosen_rev.changed,
         art_qk_choosen_rev.changed_by,
@@ -273,7 +273,7 @@ begin
       on conflict on constraint art_qk_choosen_pkey do update set
         -- do not update the id = pkey
         art_id = excluded.art_id,
-        qk_name = excluded.qk_name,
+        qk_id = excluded.qk_id,
         choosen = excluded.choosen,
         changed = excluded.changed,
         changed_by = excluded.changed_by,

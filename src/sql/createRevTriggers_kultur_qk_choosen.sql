@@ -43,7 +43,7 @@ begin
     insert into kultur_qk_choosen (
       id,
       kultur_id,
-      qk_name,
+      qk_id,
       choosen,
       changed,
       changed_by,
@@ -117,7 +117,7 @@ begin
     select
       kultur_qk_choosen_rev.kultur_qk_choosen_id,
       kultur_qk_choosen_rev.kultur_id,
-      kultur_qk_choosen_rev.qk_name,
+      kultur_qk_choosen_rev.qk_id,
       kultur_qk_choosen_rev.choosen,
       kultur_qk_choosen_rev.changed,
       kultur_qk_choosen_rev.changed_by,
@@ -140,7 +140,7 @@ begin
     on conflict on constraint kultur_qk_choosen_pkey do update set
       -- do not update the id = pkey
       kultur_id = excluded.kultur_id,
-      qk_name = excluded.qk_name,
+      qk_id = excluded.qk_id,
       choosen = excluded.choosen,
       changed = excluded.changed,
       changed_by = excluded.changed_by,
@@ -156,7 +156,7 @@ begin
     insert into kultur_qk_choosen (
         id,
         kultur_id,
-        qk_name,
+        qk_id,
         choosen,
         changed,
         changed_by,
@@ -250,7 +250,7 @@ begin
       select
         kultur_qk_choosen_rev.kultur_qk_choosen_id,
         kultur_qk_choosen_rev.kultur_id,
-        kultur_qk_choosen_rev.qk_name,
+        kultur_qk_choosen_rev.qk_id,
         kultur_qk_choosen_rev.choosen,
         kultur_qk_choosen_rev.changed,
         kultur_qk_choosen_rev.changed_by,
@@ -273,7 +273,7 @@ begin
       on conflict on constraint kultur_qk_choosen_pkey do update set
         -- do not update the id = pkey
         kultur_id = excluded.kultur_id,
-        qk_name = excluded.qk_name,
+        qk_id = excluded.qk_id,
         choosen = excluded.choosen,
         changed = excluded.changed,
         changed_by = excluded.changed_by,
