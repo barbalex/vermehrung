@@ -1,5 +1,5 @@
 -- 1. alter tables
-alter table person add column user_role_id uuid NOT NULL REFERENCES user_role (id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table person add column user_role_id uuid default null REFERENCES user_role (id) ON DELETE CASCADE ON UPDATE CASCADE;
 update person 
 set user_role_id = subquery.id
 from (select id, name from user_role) as subquery
@@ -12,25 +12,31 @@ set user_role_id = subquery.id
 from (select id, name from user_role) as subquery
 where person_rev.user_role = subquery.name;
 
-alter table art_qk_choosen add column qk_name uuid NOT NULL REFERENCES art_qk (id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table art_qk_choosen add column qk_id uuid REFERENCES art_qk (id) ON DELETE CASCADE ON UPDATE CASCADE;
 update art_qk_choosen 
 set qk_id = subquery.id
 from (select id, name from art_qk) as subquery
 where art_qk_choosen.qk_name = subquery.name;
+alter table art_qk_choosen alter column qk_id set not null;
 create index on art_qk_choosen using btree (qk_id);
 drop index public.art_qk_choosen_qk_name_idx;
 
-alter table art_qk_choosen_rev add column qk_name uuid;
+alter table art_qk_choosen_rev add column qk_id uuid;
 update art_qk_choosen_rev 
 set qk_id = subquery.id
 from (select id, name from art_qk) as subquery
 where art_qk_choosen_rev.qk_name = subquery.name;
 
-alter table kultur_qk_choosen add column qk_id uuid NOT NULL REFERENCES kultur_qk (id) ON DELETE CASCADE ON UPDATE CASCADE;
+-- TODO: on here:
+ALTER TABLE kultur_qk DROP CONSTRAINT kultur_qk_pkey cascade;
+alter table kultur_qk add primary key (id);
+alter table kultur_qk add unique (name);
+alter table kultur_qk_choosen add column qk_id uuid REFERENCES kultur_qk (id) ON DELETE CASCADE ON UPDATE CASCADE;
 update kultur_qk_choosen 
 set qk_id = subquery.id
 from (select id, name from kultur_qk) as subquery
 where kultur_qk_choosen.qk_name = subquery.name;
+alter table kultur_qk_choosen alter column qk_id set not null;
 create index on kultur_qk_choosen using btree (qk_id);
 drop index public.kultur_qk_choosen_qk_name_idx;
 

@@ -41,7 +41,7 @@ create table person (
   changed_by text default null,
   account_id text default null,
   --user_role text default null references user_role (name) on delete set null on update cascade,
-  user_role_id uuid NOT NULL REFERENCES user_role (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  user_role_id uuid default null REFERENCES user_role (id) ON DELETE CASCADE ON UPDATE CASCADE,
   kommerziell boolean default false,
   info boolean default false,
   aktiv boolean default true,
@@ -54,7 +54,7 @@ create table person (
   _conflicts text[] default null
 );
 -- TODO:
-alter table person add column user_role_id uuid NOT NULL REFERENCES user_role (id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table person add column user_role_id uuid default null REFERENCES user_role (id) ON DELETE CASCADE ON UPDATE CASCADE;
 update person 
 set user_role_id = subquery.id
 from (select id, name from user_role) as subquery
@@ -250,7 +250,7 @@ create table art_qk_choosen (
   unique(art_id, qk_name)
 );
 -- TODO:
-alter table art_qk_choosen add column qk_name uuid NOT NULL REFERENCES art_qk (id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table art_qk_choosen add column qk_id uuid NOT NULL REFERENCES art_qk (id) ON DELETE CASCADE ON UPDATE CASCADE;
 update art_qk_choosen 
 set qk_id = subquery.id
 from (select id, name from art_qk) as subquery
@@ -291,7 +291,7 @@ create table art_qk_choosen_rev (
   _deleted boolean default false
 );
 -- TODO:
-alter table art_qk_choosen_rev add column qk_name uuid;
+alter table art_qk_choosen_rev add column qk_id uuid;
 update art_qk_choosen_rev 
 set qk_id = subquery.id
 from (select id, name from art_qk) as subquery
@@ -654,6 +654,10 @@ create table kultur_qk (
   _depth integer default 1,
   _deleted boolean default false,
 );
+ALTER TABLE kultur_qk DROP CONSTRAINT kultur_qk_pkey;
+alter table kultur_qk add primary key (id);
+alter table kultur_qk add unique (name);
+
 create index on kultur_qk using btree (id);
 create index on kultur_qk using btree (name);
 create index on kultur_qk using btree (titel);
