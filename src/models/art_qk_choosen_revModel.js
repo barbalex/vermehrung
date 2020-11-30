@@ -26,7 +26,7 @@ export const art_qk_choosen_revModel = art_qk_choosen_revModelBase.actions(
       const newObject = {
         art_qk_choosen_id: self.art_qk_choosen_id,
         art_id: self.art_id,
-        qk_name: self.qk_name,
+        qk_id: self.qk_id,
         choosen: self.choosen,
         _parent_rev: self._rev,
         _depth: newDepth,

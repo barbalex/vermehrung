@@ -29,7 +29,7 @@ const ChooseKulturQkRow = ({ kulturId, qk }) => {
   const store = useContext(StoreContext)
 
   const kulturQkChoosen = [...store.kultur_qk_choosens.values()].find(
-    (v) => v.kultur_id === kulturId && v.qk_name === qk.name,
+    (v) => v.kultur_id === kulturId && v.qk_id === qk.id,
   )
   const checked = kulturQkChoosen?.choosen
 
