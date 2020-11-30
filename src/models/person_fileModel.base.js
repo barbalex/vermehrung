@@ -21,11 +21,6 @@ export const person_fileModelBase = ModelBase.named('person_file')
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
-    person: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => personModel)),
-    ),
     person_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views((self) => ({

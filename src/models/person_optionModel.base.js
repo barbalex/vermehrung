@@ -44,10 +44,6 @@ export const person_optionModelBase = ModelBase.named('person_option')
     ku_zwischenlager: types.union(types.undefined, types.null, types.boolean),
     li_show_sl: types.union(types.undefined, types.null, types.boolean),
     li_show_sl_felder: types.union(types.undefined, types.null, types.boolean),
-    person: types.union(
-      types.undefined,
-      MSTGQLRef(types.late(() => personModel)),
-    ),
     sl_auto_copy_edits: types.union(types.undefined, types.null, types.boolean),
     sl_show_empty_when_next_to_li: types.union(
       types.undefined,

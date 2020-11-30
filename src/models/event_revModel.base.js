@@ -31,23 +31,8 @@ export const event_revModelBase = ModelBase.named('event_rev')
     event_id: types.union(types.undefined, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
     id: types.identifier,
-    kultur: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => kulturModel)),
-    ),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
-    person: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => personModel)),
-    ),
     person_id: types.union(types.undefined, types.null, types.frozen()),
-    teilkultur: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => teilkulturModel)),
-    ),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views((self) => ({

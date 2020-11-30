@@ -30,19 +30,9 @@ export const herkunft_revModelBase = ModelBase.named('herkunft_rev')
     herkunft_id: types.union(types.undefined, types.frozen()),
     id: types.identifier,
     kanton: types.union(types.undefined, types.null, types.string),
-    kulturs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => kulturModel))),
-    ),
-    kulturs_aggregate: types.union(types.undefined, types.frozen()),
     land: types.union(types.undefined, types.null, types.string),
     lokalname: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
-    sammlungs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => sammlungModel))),
-    ),
-    sammlungs_aggregate: types.union(types.undefined, types.frozen()),
   })
   .views((self) => ({
     get store() {

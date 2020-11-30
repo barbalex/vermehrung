@@ -22,21 +22,11 @@ export const av_revModelBase = ModelBase.named('av_rev')
     _rev: types.union(types.undefined, types.null, types.string),
     _rev_at: types.union(types.undefined, types.null, types.frozen()),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
-    art: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => artModel)),
-    ),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     av_id: types.union(types.undefined, types.null, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
-    person: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => personModel)),
-    ),
     person_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views((self) => ({

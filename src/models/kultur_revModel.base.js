@@ -35,79 +35,20 @@ export const kultur_revModelBase = ModelBase.named('kultur_rev')
     _rev_at: types.union(types.undefined, types.null, types.frozen()),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     aktiv: types.union(types.undefined, types.null, types.boolean),
-    art: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => artModel)),
-    ),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     erhaltungskultur: types.union(types.undefined, types.null, types.boolean),
-    events: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => eventModel))),
-    ),
-    events_aggregate: types.union(types.undefined, types.frozen()),
-    garten: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => gartenModel)),
-    ),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
-    herkunft: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => herkunftModel)),
-    ),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     kultur_id: types.union(types.undefined, types.frozen()),
-    lieferungsByNachKulturId: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => lieferungModel))),
-    ),
-    lieferungsByNachKulturId_aggregate: types.union(
-      types.undefined,
-      types.frozen(),
-    ),
-    lieferungsByVonKulturId: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => lieferungModel))),
-    ),
-    lieferungsByVonKulturId_aggregate: types.union(
-      types.undefined,
-      types.frozen(),
-    ),
-    sammelLieferungsByNachKulturId: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => sammel_lieferungModel))),
-    ),
-    sammelLieferungsByNachKulturId_aggregate: types.union(
-      types.undefined,
-      types.frozen(),
-    ),
-    sammel_lieferungs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => sammel_lieferungModel))),
-    ),
-    sammel_lieferungs_aggregate: types.union(types.undefined, types.frozen()),
-    teilkulturs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => teilkulturModel))),
-    ),
-    teilkulturs_aggregate: types.union(types.undefined, types.frozen()),
     von_anzahl_individuen: types.union(
       types.undefined,
       types.null,
       types.integer,
     ),
-    zaehlungs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => zaehlungModel))),
-    ),
-    zaehlungs_aggregate: types.union(types.undefined, types.frozen()),
     zwischenlager: types.union(types.undefined, types.null, types.boolean),
   })
   .views((self) => ({

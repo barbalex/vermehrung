@@ -34,40 +34,12 @@ export const teilkulturModelBase = ModelBase.named('teilkultur')
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    event_revs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => event_revModel))),
-    ),
-    event_revs_aggregate: types.union(types.undefined, types.frozen()),
-    events: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => eventModel))),
-    ),
-    events_aggregate: types.union(types.undefined, types.frozen()),
     id: types.identifier,
-    kultur: types.union(
-      types.undefined,
-      types.null,
-      MSTGQLRef(types.late(() => kulturModel)),
-    ),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     ort1: types.union(types.undefined, types.null, types.string),
     ort2: types.union(types.undefined, types.null, types.string),
     ort3: types.union(types.undefined, types.null, types.string),
-    teilzaehlung_revs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => teilzaehlung_revModel))),
-    ),
-    teilzaehlung_revs_aggregate: types.union(types.undefined, types.frozen()),
-    teilzaehlungs: types.union(
-      types.undefined,
-      types.array(MSTGQLRef(types.late(() => teilzaehlungModel))),
-    ),
-    teilzaehlungs_aggregate: types.union(
-      types.undefined,
-      types.late(() => teilzaehlung_aggregateModel),
-    ),
   })
   .views((self) => ({
     get store() {
