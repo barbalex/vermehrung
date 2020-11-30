@@ -24,7 +24,6 @@ export const kultur_qk_choosen_rev_min_fieldsModelBase = ModelBase
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     kultur_qk_choosen_id: types.union(types.undefined, types.null, types.frozen()),
     qk_id: types.union(types.undefined, types.null, types.frozen()),
-    qk_name: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({
     get store() {
@@ -43,10 +42,9 @@ export class kultur_qk_choosen_rev_min_fieldsModelSelector extends QueryBuilder 
   get kultur_id() { return this.__attr(`kultur_id`) }
   get kultur_qk_choosen_id() { return this.__attr(`kultur_qk_choosen_id`) }
   get qk_id() { return this.__attr(`qk_id`) }
-  get qk_name() { return this.__attr(`qk_name`) }
 }
 export function selectFromkultur_qk_choosen_rev_min_fields() {
   return new kultur_qk_choosen_rev_min_fieldsModelSelector()
 }
 
-export const kultur_qk_choosen_rev_min_fieldsModelPrimitives = selectFromkultur_qk_choosen_rev_min_fields()._depth._parent_rev._rev._rev_at.changed.changed_by.kultur_id.kultur_qk_choosen_id.qk_id.qk_name
+export const kultur_qk_choosen_rev_min_fieldsModelPrimitives = selectFromkultur_qk_choosen_rev_min_fields()._depth._parent_rev._rev._rev_at.changed.changed_by.kultur_id.kultur_qk_choosen_id.qk_id

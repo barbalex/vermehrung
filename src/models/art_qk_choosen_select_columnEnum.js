@@ -21,5 +21,4 @@ export const art_qk_choosen_select_columnEnumType = types.enumeration("art_qk_ch
   "choosen",
   "id",
   "qk_id",
-  "qk_name",
       ])

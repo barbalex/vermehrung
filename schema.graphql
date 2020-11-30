@@ -1299,78 +1299,6 @@ type art_qk {
   _rev: String
   _rev_at: numeric
   _revisions: _text
-
-  # An array relationship
-  art_qk_choosen(
-    # distinct select on columns
-    distinct_on: [art_qk_choosen_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [art_qk_choosen_order_by!]
-
-    # filter the rows returned
-    where: art_qk_choosen_bool_exp
-  ): [art_qk_choosen!]!
-
-  # An aggregated array relationship
-  art_qk_choosen_aggregate(
-    # distinct select on columns
-    distinct_on: [art_qk_choosen_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [art_qk_choosen_order_by!]
-
-    # filter the rows returned
-    where: art_qk_choosen_bool_exp
-  ): art_qk_choosen_aggregate!
-
-  # An array relationship
-  art_qk_choosen_revs(
-    # distinct select on columns
-    distinct_on: [art_qk_choosen_rev_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [art_qk_choosen_rev_order_by!]
-
-    # filter the rows returned
-    where: art_qk_choosen_rev_bool_exp
-  ): [art_qk_choosen_rev!]!
-
-  # An aggregated array relationship
-  art_qk_choosen_revs_aggregate(
-    # distinct select on columns
-    distinct_on: [art_qk_choosen_rev_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [art_qk_choosen_rev_order_by!]
-
-    # filter the rows returned
-    where: art_qk_choosen_rev_bool_exp
-  ): art_qk_choosen_rev_aggregate!
   beschreibung: String
   changed: timestamp
   changed_by: String
@@ -1450,8 +1378,6 @@ input art_qk_bool_exp {
   _rev: String_comparison_exp
   _rev_at: numeric_comparison_exp
   _revisions: _text_comparison_exp
-  art_qk_choosen: art_qk_choosen_bool_exp
-  art_qk_choosen_revs: art_qk_choosen_rev_bool_exp
   beschreibung: String_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
@@ -1474,15 +1400,11 @@ type art_qk_choosen {
   # An object relationship
   art: art!
   art_id: uuid!
-
-  # An object relationship
-  art_qk: art_qk
   changed: timestamp
   changed_by: String
   choosen: Boolean
   id: ID!
   qk_id: uuid!
-  qk_name: String!
 }
 
 # aggregated selection of "art_qk_choosen"
@@ -1553,20 +1475,15 @@ input art_qk_choosen_bool_exp {
   _revisions: _text_comparison_exp
   art: art_bool_exp
   art_id: uuid_comparison_exp
-  art_qk: art_qk_bool_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   choosen: Boolean_comparison_exp
   id: uuid_comparison_exp
   qk_id: uuid_comparison_exp
-  qk_name: String_comparison_exp
 }
 
 # unique or primary key constraints on table "art_qk_choosen"
 enum art_qk_choosen_constraint {
-  # unique or primary key constraint
-  art_qk_choosen_art_id_qk_name_key
-
   # unique or primary key constraint
   art_qk_choosen_pkey
 }
@@ -1588,13 +1505,11 @@ input art_qk_choosen_insert_input {
   _revisions: _text
   art: art_obj_rel_insert_input
   art_id: uuid
-  art_qk: art_qk_obj_rel_insert_input
   changed: timestamp
   changed_by: String
   choosen: Boolean
   id: ID
   qk_id: uuid
-  qk_name: String
 }
 
 # aggregate max on columns
@@ -1608,7 +1523,6 @@ type art_qk_choosen_max_fields {
   changed_by: String
   id: ID
   qk_id: uuid
-  qk_name: String
 }
 
 # order by max() on columns of table "art_qk_choosen"
@@ -1622,7 +1536,6 @@ input art_qk_choosen_max_order_by {
   changed_by: order_by
   id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # aggregate min on columns
@@ -1636,7 +1549,6 @@ type art_qk_choosen_min_fields {
   changed_by: String
   id: ID
   qk_id: uuid
-  qk_name: String
 }
 
 # order by min() on columns of table "art_qk_choosen"
@@ -1650,7 +1562,6 @@ input art_qk_choosen_min_order_by {
   changed_by: order_by
   id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # response of any mutation on the table "art_qk_choosen"
@@ -1686,13 +1597,11 @@ input art_qk_choosen_order_by {
   _revisions: order_by
   art: art_order_by
   art_id: order_by
-  art_qk: art_qk_order_by
   changed: order_by
   changed_by: order_by
   choosen: order_by
   id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # primary key columns input for table: "art_qk_choosen"
@@ -1712,16 +1621,12 @@ type art_qk_choosen_rev {
   # An object relationship
   art: art!
   art_id: uuid!
-
-  # An object relationship
-  art_qk: art_qk!
   art_qk_choosen_id: uuid
   changed: timestamp
   changed_by: String
   choosen: Boolean
   id: ID!
   qk_id: uuid
-  qk_name: String!
 }
 
 # aggregated selection of "art_qk_choosen_rev"
@@ -1791,14 +1696,12 @@ input art_qk_choosen_rev_bool_exp {
   _revisions: _text_comparison_exp
   art: art_bool_exp
   art_id: uuid_comparison_exp
-  art_qk: art_qk_bool_exp
   art_qk_choosen_id: uuid_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   choosen: Boolean_comparison_exp
   id: uuid_comparison_exp
   qk_id: uuid_comparison_exp
-  qk_name: String_comparison_exp
 }
 
 # unique or primary key constraints on table "art_qk_choosen_rev"
@@ -1823,14 +1726,12 @@ input art_qk_choosen_rev_insert_input {
   _revisions: _text
   art: art_obj_rel_insert_input
   art_id: uuid
-  art_qk: art_qk_obj_rel_insert_input
   art_qk_choosen_id: uuid
   changed: timestamp
   changed_by: String
   choosen: Boolean
   id: ID
   qk_id: uuid
-  qk_name: String
 }
 
 # aggregate max on columns
@@ -1845,7 +1746,6 @@ type art_qk_choosen_rev_max_fields {
   changed_by: String
   id: ID
   qk_id: uuid
-  qk_name: String
 }
 
 # order by max() on columns of table "art_qk_choosen_rev"
@@ -1860,7 +1760,6 @@ input art_qk_choosen_rev_max_order_by {
   changed_by: order_by
   id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # aggregate min on columns
@@ -1875,7 +1774,6 @@ type art_qk_choosen_rev_min_fields {
   changed_by: String
   id: ID
   qk_id: uuid
-  qk_name: String
 }
 
 # order by min() on columns of table "art_qk_choosen_rev"
@@ -1890,7 +1788,6 @@ input art_qk_choosen_rev_min_order_by {
   changed_by: order_by
   id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # response of any mutation on the table "art_qk_choosen_rev"
@@ -1925,14 +1822,12 @@ input art_qk_choosen_rev_order_by {
   _revisions: order_by
   art: art_order_by
   art_id: order_by
-  art_qk: art_qk_order_by
   art_qk_choosen_id: order_by
   changed: order_by
   changed_by: order_by
   choosen: order_by
   id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # primary key columns input for table: "art_qk_choosen_rev"
@@ -1980,9 +1875,6 @@ enum art_qk_choosen_rev_select_column {
 
   # column name
   qk_id
-
-  # column name
-  qk_name
 }
 
 # input type for updating data in table "art_qk_choosen_rev"
@@ -2000,7 +1892,6 @@ input art_qk_choosen_rev_set_input {
   choosen: Boolean
   id: ID
   qk_id: uuid
-  qk_name: String
 }
 
 # aggregate stddev on columns
@@ -2091,9 +1982,6 @@ enum art_qk_choosen_rev_update_column {
 
   # column name
   qk_id
-
-  # column name
-  qk_name
 }
 
 # aggregate var_pop on columns
@@ -2172,9 +2060,6 @@ enum art_qk_choosen_select_column {
 
   # column name
   qk_id
-
-  # column name
-  qk_name
 }
 
 # input type for updating data in table "art_qk_choosen"
@@ -2192,7 +2077,6 @@ input art_qk_choosen_set_input {
   choosen: Boolean
   id: ID
   qk_id: uuid
-  qk_name: String
 }
 
 # aggregate stddev on columns
@@ -2283,9 +2167,6 @@ enum art_qk_choosen_update_column {
 
   # column name
   qk_id
-
-  # column name
-  qk_name
 }
 
 # aggregate var_pop on columns
@@ -2349,8 +2230,6 @@ input art_qk_insert_input {
   _rev: String
   _rev_at: numeric
   _revisions: _text
-  art_qk_choosen: art_qk_choosen_arr_rel_insert_input
-  art_qk_choosen_revs: art_qk_choosen_rev_arr_rel_insert_input
   beschreibung: String
   changed: timestamp
   changed_by: String
@@ -2451,8 +2330,6 @@ input art_qk_order_by {
   _rev: order_by
   _rev_at: order_by
   _revisions: order_by
-  art_qk_choosen_aggregate: art_qk_choosen_aggregate_order_by
-  art_qk_choosen_revs_aggregate: art_qk_choosen_rev_aggregate_order_by
   beschreibung: order_by
   changed: order_by
   changed_by: order_by
@@ -12233,7 +12110,6 @@ type kultur_qk_choosen {
   kultur: kultur!
   kultur_id: uuid!
   qk_id: uuid!
-  qk_name: String!
 }
 
 # aggregated selection of "kultur_qk_choosen"
@@ -12309,14 +12185,10 @@ input kultur_qk_choosen_bool_exp {
   kultur: kultur_bool_exp
   kultur_id: uuid_comparison_exp
   qk_id: uuid_comparison_exp
-  qk_name: String_comparison_exp
 }
 
 # unique or primary key constraints on table "kultur_qk_choosen"
 enum kultur_qk_choosen_constraint {
-  # unique or primary key constraint
-  kultur_qk_choosen_kultur_id_qk_name_key
-
   # unique or primary key constraint
   kultur_qk_choosen_pkey
 }
@@ -12343,7 +12215,6 @@ input kultur_qk_choosen_insert_input {
   kultur: kultur_obj_rel_insert_input
   kultur_id: uuid
   qk_id: uuid
-  qk_name: String
 }
 
 # aggregate max on columns
@@ -12357,7 +12228,6 @@ type kultur_qk_choosen_max_fields {
   id: ID
   kultur_id: uuid
   qk_id: uuid
-  qk_name: String
 }
 
 # order by max() on columns of table "kultur_qk_choosen"
@@ -12371,7 +12241,6 @@ input kultur_qk_choosen_max_order_by {
   id: order_by
   kultur_id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # aggregate min on columns
@@ -12385,7 +12254,6 @@ type kultur_qk_choosen_min_fields {
   id: ID
   kultur_id: uuid
   qk_id: uuid
-  qk_name: String
 }
 
 # order by min() on columns of table "kultur_qk_choosen"
@@ -12399,7 +12267,6 @@ input kultur_qk_choosen_min_order_by {
   id: order_by
   kultur_id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # response of any mutation on the table "kultur_qk_choosen"
@@ -12440,7 +12307,6 @@ input kultur_qk_choosen_order_by {
   kultur: kultur_order_by
   kultur_id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # primary key columns input for table: "kultur_qk_choosen"
@@ -12466,7 +12332,6 @@ type kultur_qk_choosen_rev {
   kultur_id: uuid!
   kultur_qk_choosen_id: uuid
   qk_id: uuid
-  qk_name: String!
 }
 
 # aggregated selection of "kultur_qk_choosen_rev"
@@ -12542,7 +12407,6 @@ input kultur_qk_choosen_rev_bool_exp {
   kultur_id: uuid_comparison_exp
   kultur_qk_choosen_id: uuid_comparison_exp
   qk_id: uuid_comparison_exp
-  qk_name: String_comparison_exp
 }
 
 # unique or primary key constraints on table "kultur_qk_choosen_rev"
@@ -12573,7 +12437,6 @@ input kultur_qk_choosen_rev_insert_input {
   kultur_id: uuid
   kultur_qk_choosen_id: uuid
   qk_id: uuid
-  qk_name: String
 }
 
 # aggregate max on columns
@@ -12588,7 +12451,6 @@ type kultur_qk_choosen_rev_max_fields {
   kultur_id: uuid
   kultur_qk_choosen_id: uuid
   qk_id: uuid
-  qk_name: String
 }
 
 # order by max() on columns of table "kultur_qk_choosen_rev"
@@ -12603,7 +12465,6 @@ input kultur_qk_choosen_rev_max_order_by {
   kultur_id: order_by
   kultur_qk_choosen_id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # aggregate min on columns
@@ -12618,7 +12479,6 @@ type kultur_qk_choosen_rev_min_fields {
   kultur_id: uuid
   kultur_qk_choosen_id: uuid
   qk_id: uuid
-  qk_name: String
 }
 
 # order by min() on columns of table "kultur_qk_choosen_rev"
@@ -12633,7 +12493,6 @@ input kultur_qk_choosen_rev_min_order_by {
   kultur_id: order_by
   kultur_qk_choosen_id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # response of any mutation on the table "kultur_qk_choosen_rev"
@@ -12674,7 +12533,6 @@ input kultur_qk_choosen_rev_order_by {
   kultur_id: order_by
   kultur_qk_choosen_id: order_by
   qk_id: order_by
-  qk_name: order_by
 }
 
 # primary key columns input for table: "kultur_qk_choosen_rev"
@@ -12722,9 +12580,6 @@ enum kultur_qk_choosen_rev_select_column {
 
   # column name
   qk_id
-
-  # column name
-  qk_name
 }
 
 # input type for updating data in table "kultur_qk_choosen_rev"
@@ -12742,7 +12597,6 @@ input kultur_qk_choosen_rev_set_input {
   kultur_id: uuid
   kultur_qk_choosen_id: uuid
   qk_id: uuid
-  qk_name: String
 }
 
 # aggregate stddev on columns
@@ -12833,9 +12687,6 @@ enum kultur_qk_choosen_rev_update_column {
 
   # column name
   qk_id
-
-  # column name
-  qk_name
 }
 
 # aggregate var_pop on columns
@@ -12914,9 +12765,6 @@ enum kultur_qk_choosen_select_column {
 
   # column name
   qk_id
-
-  # column name
-  qk_name
 }
 
 # input type for updating data in table "kultur_qk_choosen"
@@ -12934,7 +12782,6 @@ input kultur_qk_choosen_set_input {
   id: ID
   kultur_id: uuid
   qk_id: uuid
-  qk_name: String
 }
 
 # aggregate stddev on columns
@@ -13025,9 +12872,6 @@ enum kultur_qk_choosen_update_column {
 
   # column name
   qk_id
-
-  # column name
-  qk_name
 }
 
 # aggregate var_pop on columns
@@ -19600,10 +19444,6 @@ type person {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-
-  # An object relationship
-  userRoleByUserRole: user_role
-  user_role: String
   user_role_id: uuid
   vorname: String
 }
@@ -19710,8 +19550,6 @@ input person_bool_exp {
   telefon_geschaeft: String_comparison_exp
   telefon_mobile: String_comparison_exp
   telefon_privat: String_comparison_exp
-  userRoleByUserRole: user_role_bool_exp
-  user_role: String_comparison_exp
   user_role_id: uuid_comparison_exp
   vorname: String_comparison_exp
 }
@@ -20103,8 +19941,6 @@ input person_insert_input {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  userRoleByUserRole: user_role_obj_rel_insert_input
-  user_role: String
   user_role_id: uuid
   vorname: String
 }
@@ -20130,7 +19966,6 @@ type person_max_fields {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  user_role: String
   user_role_id: uuid
   vorname: String
 }
@@ -20156,7 +19991,6 @@ input person_max_order_by {
   telefon_geschaeft: order_by
   telefon_mobile: order_by
   telefon_privat: order_by
-  user_role: order_by
   user_role_id: order_by
   vorname: order_by
 }
@@ -20182,7 +20016,6 @@ type person_min_fields {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  user_role: String
   user_role_id: uuid
   vorname: String
 }
@@ -20208,7 +20041,6 @@ input person_min_order_by {
   telefon_geschaeft: order_by
   telefon_mobile: order_by
   telefon_privat: order_by
-  user_role: order_by
   user_role_id: order_by
   vorname: order_by
 }
@@ -21524,8 +21356,6 @@ input person_order_by {
   telefon_geschaeft: order_by
   telefon_mobile: order_by
   telefon_privat: order_by
-  userRoleByUserRole: user_role_order_by
-  user_role: order_by
   user_role_id: order_by
   vorname: order_by
 }
@@ -21782,10 +21612,6 @@ type person_rev {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-
-  # An object relationship
-  userRoleByUserRole: user_role
-  user_role: String
   user_role_id: uuid
   vorname: String
 }
@@ -21884,8 +21710,6 @@ input person_rev_bool_exp {
   telefon_geschaeft: String_comparison_exp
   telefon_mobile: String_comparison_exp
   telefon_privat: String_comparison_exp
-  userRoleByUserRole: user_role_bool_exp
-  user_role: String_comparison_exp
   user_role_id: uuid_comparison_exp
   vorname: String_comparison_exp
 }
@@ -21938,8 +21762,6 @@ input person_rev_insert_input {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  userRoleByUserRole: user_role_obj_rel_insert_input
-  user_role: String
   user_role_id: uuid
   vorname: String
 }
@@ -21966,7 +21788,6 @@ type person_rev_max_fields {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  user_role: String
   user_role_id: uuid
   vorname: String
 }
@@ -21993,7 +21814,6 @@ input person_rev_max_order_by {
   telefon_geschaeft: order_by
   telefon_mobile: order_by
   telefon_privat: order_by
-  user_role: order_by
   user_role_id: order_by
   vorname: order_by
 }
@@ -22020,7 +21840,6 @@ type person_rev_min_fields {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  user_role: String
   user_role_id: uuid
   vorname: String
 }
@@ -22047,7 +21866,6 @@ input person_rev_min_order_by {
   telefon_geschaeft: order_by
   telefon_mobile: order_by
   telefon_privat: order_by
-  user_role: order_by
   user_role_id: order_by
   vorname: order_by
 }
@@ -22109,8 +21927,6 @@ input person_rev_order_by {
   telefon_geschaeft: order_by
   telefon_mobile: order_by
   telefon_privat: order_by
-  userRoleByUserRole: user_role_order_by
-  user_role: order_by
   user_role_id: order_by
   vorname: order_by
 }
@@ -22201,9 +22017,6 @@ enum person_rev_select_column {
   telefon_privat
 
   # column name
-  user_role
-
-  # column name
   user_role_id
 
   # column name
@@ -22238,7 +22051,6 @@ input person_rev_set_input {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  user_role: String
   user_role_id: uuid
   vorname: String
 }
@@ -22380,9 +22192,6 @@ enum person_rev_update_column {
   telefon_privat
 
   # column name
-  user_role
-
-  # column name
   user_role_id
 
   # column name
@@ -22512,9 +22321,6 @@ enum person_select_column {
   telefon_privat
 
   # column name
-  user_role
-
-  # column name
   user_role_id
 
   # column name
@@ -22549,7 +22355,6 @@ input person_set_input {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  user_role: String
   user_role_id: uuid
   vorname: String
 }
@@ -22689,9 +22494,6 @@ enum person_update_column {
 
   # column name
   telefon_privat
-
-  # column name
-  user_role
 
   # column name
   user_role_id
@@ -32740,78 +32542,6 @@ type user_role {
   id: ID!
   label: String
   name: String!
-
-  # An array relationship
-  person_revs(
-    # distinct select on columns
-    distinct_on: [person_rev_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [person_rev_order_by!]
-
-    # filter the rows returned
-    where: person_rev_bool_exp
-  ): [person_rev!]!
-
-  # An aggregated array relationship
-  person_revs_aggregate(
-    # distinct select on columns
-    distinct_on: [person_rev_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [person_rev_order_by!]
-
-    # filter the rows returned
-    where: person_rev_bool_exp
-  ): person_rev_aggregate!
-
-  # An array relationship
-  persons(
-    # distinct select on columns
-    distinct_on: [person_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [person_order_by!]
-
-    # filter the rows returned
-    where: person_bool_exp
-  ): [person!]!
-
-  # An aggregated array relationship
-  persons_aggregate(
-    # distinct select on columns
-    distinct_on: [person_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [person_order_by!]
-
-    # filter the rows returned
-    where: person_bool_exp
-  ): person_aggregate!
   sort: Int
 }
 
@@ -32880,8 +32610,6 @@ input user_role_bool_exp {
   id: uuid_comparison_exp
   label: String_comparison_exp
   name: String_comparison_exp
-  person_revs: person_rev_bool_exp
-  persons: person_bool_exp
   sort: Int_comparison_exp
 }
 
@@ -32908,8 +32636,6 @@ input user_role_insert_input {
   id: ID
   label: String
   name: String
-  person_revs: person_rev_arr_rel_insert_input
-  persons: person_arr_rel_insert_input
   sort: Int
 }
 
@@ -32987,8 +32713,6 @@ input user_role_order_by {
   id: order_by
   label: order_by
   name: order_by
-  person_revs_aggregate: person_rev_aggregate_order_by
-  persons_aggregate: person_aggregate_order_by
   sort: order_by
 }
 

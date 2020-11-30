@@ -2,12 +2,8 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { MSTGQLRef, QueryBuilder } from "mst-gql"
+import { QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
-import { art_qk_choosenModel } from "./art_qk_choosenModel"
-import { art_qk_choosenModelSelector } from "./art_qk_choosenModel.base"
-import { art_qk_choosen_revModel } from "./art_qk_choosen_revModel"
-import { art_qk_choosen_revModelSelector } from "./art_qk_choosen_revModel.base"
 
 
 /**
@@ -25,10 +21,6 @@ export const art_qkModelBase = ModelBase
     _rev: types.union(types.undefined, types.null, types.string),
     _rev_at: types.union(types.undefined, types.null, types.frozen()),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
-    art_qk_choosen: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosenModel)))),
-    art_qk_choosen_aggregate: types.union(types.undefined, types.frozen()),
-    art_qk_choosen_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosen_revModel)))),
-    art_qk_choosen_revs_aggregate: types.union(types.undefined, types.frozen()),
     beschreibung: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
@@ -58,10 +50,6 @@ export class art_qkModelSelector extends QueryBuilder {
   get name() { return this.__attr(`name`) }
   get sort() { return this.__attr(`sort`) }
   get titel() { return this.__attr(`titel`) }
-  art_qk_choosen(builder) { return this.__child(`art_qk_choosen`, art_qk_choosenModelSelector, builder) }
-  art_qk_choosen_aggregate(builder) { return this.__child(`art_qk_choosen_aggregate`, art_qk_choosen_aggregateModelSelector, builder) }
-  art_qk_choosen_revs(builder) { return this.__child(`art_qk_choosen_revs`, art_qk_choosen_revModelSelector, builder) }
-  art_qk_choosen_revs_aggregate(builder) { return this.__child(`art_qk_choosen_revs_aggregate`, art_qk_choosen_rev_aggregateModelSelector, builder) }
 }
 export function selectFromart_qk() {
   return new art_qkModelSelector()

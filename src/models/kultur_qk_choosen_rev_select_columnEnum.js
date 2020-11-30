@@ -21,5 +21,4 @@ export const kultur_qk_choosen_rev_select_columnEnumType = types.enumeration("ku
   "kultur_id",
   "kultur_qk_choosen_id",
   "qk_id",
-  "qk_name",
       ])
