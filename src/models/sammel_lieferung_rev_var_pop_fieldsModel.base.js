@@ -15,6 +15,7 @@ export const sammel_lieferung_rev_var_pop_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("sammel_lieferung_rev_var_pop_fields"), "sammel_lieferung_rev_var_pop_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
     anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.number),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.number),
     gramm_samen: types.union(types.undefined, types.null, types.number),
@@ -28,6 +29,7 @@ export const sammel_lieferung_rev_var_pop_fieldsModelBase = ModelBase
 
 export class sammel_lieferung_rev_var_pop_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get anzahl_auspflanzbereit() { return this.__attr(`anzahl_auspflanzbereit`) }
   get anzahl_pflanzen() { return this.__attr(`anzahl_pflanzen`) }
   get gramm_samen() { return this.__attr(`gramm_samen`) }
@@ -37,4 +39,4 @@ export function selectFromsammel_lieferung_rev_var_pop_fields() {
   return new sammel_lieferung_rev_var_pop_fieldsModelSelector()
 }
 
-export const sammel_lieferung_rev_var_pop_fieldsModelPrimitives = selectFromsammel_lieferung_rev_var_pop_fields()._depth.anzahl_auspflanzbereit.anzahl_pflanzen.gramm_samen.von_anzahl_individuen
+export const sammel_lieferung_rev_var_pop_fieldsModelPrimitives = selectFromsammel_lieferung_rev_var_pop_fields()._depth._rev_at.anzahl_auspflanzbereit.anzahl_pflanzen.gramm_samen.von_anzahl_individuen

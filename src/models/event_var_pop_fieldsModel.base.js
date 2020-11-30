@@ -15,6 +15,7 @@ export const event_var_pop_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("event_var_pop_fields"), "event_var_pop_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
     get store() {
@@ -24,9 +25,10 @@ export const event_var_pop_fieldsModelBase = ModelBase
 
 export class event_var_pop_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
 }
 export function selectFromevent_var_pop_fields() {
   return new event_var_pop_fieldsModelSelector()
 }
 
-export const event_var_pop_fieldsModelPrimitives = selectFromevent_var_pop_fields()._depth
+export const event_var_pop_fieldsModelPrimitives = selectFromevent_var_pop_fields()._depth._rev_at

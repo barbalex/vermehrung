@@ -13,6 +13,7 @@ export const sammel_lieferung_select_columnEnumType = types.enumeration("sammel_
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "andere_menge",
   "anzahl_auspflanzbereit",

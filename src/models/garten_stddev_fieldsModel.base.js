@@ -15,6 +15,7 @@ export const garten_stddev_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("garten_stddev_fields"), "garten_stddev_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
     lv95_x: types.union(types.undefined, types.null, types.number),
     lv95_y: types.union(types.undefined, types.null, types.number),
     plz: types.union(types.undefined, types.null, types.number),
@@ -29,6 +30,7 @@ export const garten_stddev_fieldsModelBase = ModelBase
 
 export class garten_stddev_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get lv95_x() { return this.__attr(`lv95_x`) }
   get lv95_y() { return this.__attr(`lv95_y`) }
   get plz() { return this.__attr(`plz`) }
@@ -39,4 +41,4 @@ export function selectFromgarten_stddev_fields() {
   return new garten_stddev_fieldsModelSelector()
 }
 
-export const garten_stddev_fieldsModelPrimitives = selectFromgarten_stddev_fields()._depth.lv95_x.lv95_y.plz.wgs84_lat.wgs84_long
+export const garten_stddev_fieldsModelPrimitives = selectFromgarten_stddev_fields()._depth._rev_at.lv95_x.lv95_y.plz.wgs84_lat.wgs84_long

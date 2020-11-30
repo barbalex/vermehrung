@@ -17,6 +17,7 @@ export const av_rev_min_fieldsModelBase = ModelBase
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     av_id: types.union(types.undefined, types.null, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
@@ -34,6 +35,7 @@ export class av_rev_min_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get art_id() { return this.__attr(`art_id`) }
   get av_id() { return this.__attr(`av_id`) }
   get changed() { return this.__attr(`changed`) }
@@ -45,4 +47,4 @@ export function selectFromav_rev_min_fields() {
   return new av_rev_min_fieldsModelSelector()
 }
 
-export const av_rev_min_fieldsModelPrimitives = selectFromav_rev_min_fields()._depth._parent_rev._rev.art_id.av_id.changed.changed_by.person_id
+export const av_rev_min_fieldsModelPrimitives = selectFromav_rev_min_fields()._depth._parent_rev._rev._rev_at.art_id.av_id.changed.changed_by.person_id

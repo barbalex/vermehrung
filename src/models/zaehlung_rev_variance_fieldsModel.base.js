@@ -15,6 +15,7 @@ export const zaehlung_rev_variance_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("zaehlung_rev_variance_fields"), "zaehlung_rev_variance_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
     get store() {
@@ -24,9 +25,10 @@ export const zaehlung_rev_variance_fieldsModelBase = ModelBase
 
 export class zaehlung_rev_variance_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
 }
 export function selectFromzaehlung_rev_variance_fields() {
   return new zaehlung_rev_variance_fieldsModelSelector()
 }
 
-export const zaehlung_rev_variance_fieldsModelPrimitives = selectFromzaehlung_rev_variance_fields()._depth
+export const zaehlung_rev_variance_fieldsModelPrimitives = selectFromzaehlung_rev_variance_fields()._depth._rev_at

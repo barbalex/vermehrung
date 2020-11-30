@@ -15,6 +15,7 @@ export const kultur_rev_var_samp_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("kultur_rev_var_samp_fields"), "kultur_rev_var_samp_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
@@ -25,10 +26,11 @@ export const kultur_rev_var_samp_fieldsModelBase = ModelBase
 
 export class kultur_rev_var_samp_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
 }
 export function selectFromkultur_rev_var_samp_fields() {
   return new kultur_rev_var_samp_fieldsModelSelector()
 }
 
-export const kultur_rev_var_samp_fieldsModelPrimitives = selectFromkultur_rev_var_samp_fields()._depth.von_anzahl_individuen
+export const kultur_rev_var_samp_fieldsModelPrimitives = selectFromkultur_rev_var_samp_fields()._depth._rev_at.von_anzahl_individuen

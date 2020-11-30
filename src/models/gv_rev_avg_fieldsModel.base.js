@@ -15,6 +15,7 @@ export const gv_rev_avg_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("gv_rev_avg_fields"), "gv_rev_avg_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
     get store() {
@@ -24,9 +25,10 @@ export const gv_rev_avg_fieldsModelBase = ModelBase
 
 export class gv_rev_avg_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
 }
 export function selectFromgv_rev_avg_fields() {
   return new gv_rev_avg_fieldsModelSelector()
 }
 
-export const gv_rev_avg_fieldsModelPrimitives = selectFromgv_rev_avg_fields()._depth
+export const gv_rev_avg_fieldsModelPrimitives = selectFromgv_rev_avg_fields()._depth._rev_at

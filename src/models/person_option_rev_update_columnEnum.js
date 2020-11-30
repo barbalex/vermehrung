@@ -12,6 +12,7 @@ export const person_option_rev_update_columnEnumType = types.enumeration("person
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "ar_name_deutsch",
   "changed",

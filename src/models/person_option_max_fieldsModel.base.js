@@ -17,6 +17,7 @@ export const person_option_max_fieldsModelBase = ModelBase
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
@@ -31,6 +32,7 @@ export class person_option_max_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
@@ -39,4 +41,4 @@ export function selectFromperson_option_max_fields() {
   return new person_option_max_fieldsModelSelector()
 }
 
-export const person_option_max_fieldsModelPrimitives = selectFromperson_option_max_fields()._depth._parent_rev._rev.changed.changed_by
+export const person_option_max_fieldsModelPrimitives = selectFromperson_option_max_fields()._depth._parent_rev._rev._rev_at.changed.changed_by

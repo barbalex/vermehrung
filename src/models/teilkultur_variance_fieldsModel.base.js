@@ -15,6 +15,7 @@ export const teilkultur_variance_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("teilkultur_variance_fields"), "teilkultur_variance_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
     get store() {
@@ -24,9 +25,10 @@ export const teilkultur_variance_fieldsModelBase = ModelBase
 
 export class teilkultur_variance_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
 }
 export function selectFromteilkultur_variance_fields() {
   return new teilkultur_variance_fieldsModelSelector()
 }
 
-export const teilkultur_variance_fieldsModelPrimitives = selectFromteilkultur_variance_fields()._depth
+export const teilkultur_variance_fieldsModelPrimitives = selectFromteilkultur_variance_fields()._depth._rev_at

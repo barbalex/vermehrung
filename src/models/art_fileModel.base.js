@@ -1,55 +1,50 @@
 /* This is a mst-gql generated file, don't modify it manually */
 /* eslint-disable */
 
-import { types } from 'mobx-state-tree'
-import { MSTGQLRef, QueryBuilder } from 'mst-gql'
-import { ModelBase } from './ModelBase'
-import { artModel } from './artModel'
-import { artModelSelector } from './artModel.base'
+import { types } from "mobx-state-tree"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
+import { ModelBase } from "./ModelBase"
+import { artModel } from "./artModel"
+import { artModelSelector } from "./artModel.base"
+
 
 /**
  * art_fileBase
  * auto generated base class for the model art_fileModel.
  */
-export const art_fileModelBase = ModelBase.named('art_file')
+export const art_fileModelBase = ModelBase
+  .named('art_file')
   .props({
-    __typename: types.optional(types.literal('art_file'), 'art_file'),
+    __typename: types.optional(types.literal("art_file"), "art_file"),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
+    art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
   })
-  .views((self) => ({
+  .views(self => ({
     get store() {
       return self.__getStore()
-    },
+    }
   }))
 
 export class art_fileModelSelector extends QueryBuilder {
-  get art_id() {
-    return this.__attr(`art_id`)
-  }
-  get beschreibung() {
-    return this.__attr(`beschreibung`)
-  }
-  get file_id() {
-    return this.__attr(`file_id`)
-  }
-  get file_mime_type() {
-    return this.__attr(`file_mime_type`)
-  }
-  get id() {
-    return this.__attr(`id`)
-  }
-  get name() {
-    return this.__attr(`name`)
-  }
+  get _rev_at() { return this.__attr(`_rev_at`) }
+  get art_id() { return this.__attr(`art_id`) }
+  get beschreibung() { return this.__attr(`beschreibung`) }
+  get changed() { return this.__attr(`changed`) }
+  get file_id() { return this.__attr(`file_id`) }
+  get file_mime_type() { return this.__attr(`file_mime_type`) }
+  get id() { return this.__attr(`id`) }
+  get name() { return this.__attr(`name`) }
+  art(builder) { return this.__child(`art`, artModelSelector, builder) }
 }
 export function selectFromart_file() {
   return new art_fileModelSelector()
 }
 
-export const art_fileModelPrimitives = selectFromart_file().art_id.beschreibung
-  .file_id.file_mime_type.name
+export const art_fileModelPrimitives = selectFromart_file()._rev_at.art_id.beschreibung.changed.file_id.file_mime_type.name

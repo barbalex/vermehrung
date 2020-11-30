@@ -14,6 +14,8 @@ export const ae_art_min_fieldsModelBase = ModelBase
   .named('ae_art_min_fields')
   .props({
     __typename: types.optional(types.literal("ae_art_min_fields"), "ae_art_min_fields"),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
+    changed: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
     name_deutsch: types.union(types.undefined, types.null, types.string),
@@ -26,6 +28,8 @@ export const ae_art_min_fieldsModelBase = ModelBase
   }))
 
 export class ae_art_min_fieldsModelSelector extends QueryBuilder {
+  get _rev_at() { return this.__attr(`_rev_at`) }
+  get changed() { return this.__attr(`changed`) }
   get id() { return this.__attr(`id`) }
   get name() { return this.__attr(`name`) }
   get name_deutsch() { return this.__attr(`name_deutsch`) }
@@ -35,4 +39,4 @@ export function selectFromae_art_min_fields() {
   return new ae_art_min_fieldsModelSelector()
 }
 
-export const ae_art_min_fieldsModelPrimitives = selectFromae_art_min_fields().name.name_deutsch.name_latein
+export const ae_art_min_fieldsModelPrimitives = selectFromae_art_min_fields()._rev_at.changed.name.name_deutsch.name_latein

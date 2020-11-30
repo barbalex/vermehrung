@@ -13,6 +13,7 @@ export const kultur_option_update_columnEnumType = types.enumeration("kultur_opt
   "_depth",
   "_parent_rev",
   "_rev",
+  "_rev_at",
   "_revisions",
   "changed",
   "changed_by",

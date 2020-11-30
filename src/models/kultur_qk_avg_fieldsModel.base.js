@@ -15,6 +15,7 @@ export const kultur_qk_avg_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("kultur_qk_avg_fields"), "kultur_qk_avg_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
     sort: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
@@ -25,10 +26,11 @@ export const kultur_qk_avg_fieldsModelBase = ModelBase
 
 export class kultur_qk_avg_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get sort() { return this.__attr(`sort`) }
 }
 export function selectFromkultur_qk_avg_fields() {
   return new kultur_qk_avg_fieldsModelSelector()
 }
 
-export const kultur_qk_avg_fieldsModelPrimitives = selectFromkultur_qk_avg_fields()._depth.sort
+export const kultur_qk_avg_fieldsModelPrimitives = selectFromkultur_qk_avg_fields()._depth._rev_at.sort

@@ -15,6 +15,7 @@ export const art_stddev_samp_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("art_stddev_samp_fields"), "art_stddev_samp_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
     get store() {
@@ -24,9 +25,10 @@ export const art_stddev_samp_fieldsModelBase = ModelBase
 
 export class art_stddev_samp_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
 }
 export function selectFromart_stddev_samp_fields() {
   return new art_stddev_samp_fieldsModelSelector()
 }
 
-export const art_stddev_samp_fieldsModelPrimitives = selectFromart_stddev_samp_fields()._depth
+export const art_stddev_samp_fieldsModelPrimitives = selectFromart_stddev_samp_fields()._depth._rev_at

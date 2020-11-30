@@ -17,6 +17,7 @@ export const av_max_fieldsModelBase = ModelBase
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
+    _rev_at: types.union(types.undefined, types.null, types.frozen()),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
@@ -33,6 +34,7 @@ export class av_max_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
   get art_id() { return this.__attr(`art_id`) }
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
@@ -43,4 +45,4 @@ export function selectFromav_max_fields() {
   return new av_max_fieldsModelSelector()
 }
 
-export const av_max_fieldsModelPrimitives = selectFromav_max_fields()._depth._parent_rev._rev.art_id.changed.changed_by.person_id
+export const av_max_fieldsModelPrimitives = selectFromav_max_fields()._depth._parent_rev._rev._rev_at.art_id.changed.changed_by.person_id

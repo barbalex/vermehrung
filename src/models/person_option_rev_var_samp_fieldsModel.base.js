@@ -15,6 +15,7 @@ export const person_option_rev_var_samp_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("person_option_rev_var_samp_fields"), "person_option_rev_var_samp_fields"),
     _depth: types.union(types.undefined, types.null, types.number),
+    _rev_at: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
     get store() {
@@ -24,9 +25,10 @@ export const person_option_rev_var_samp_fieldsModelBase = ModelBase
 
 export class person_option_rev_var_samp_fieldsModelSelector extends QueryBuilder {
   get _depth() { return this.__attr(`_depth`) }
+  get _rev_at() { return this.__attr(`_rev_at`) }
 }
 export function selectFromperson_option_rev_var_samp_fields() {
   return new person_option_rev_var_samp_fieldsModelSelector()
 }
 
-export const person_option_rev_var_samp_fieldsModelPrimitives = selectFromperson_option_rev_var_samp_fields()._depth
+export const person_option_rev_var_samp_fieldsModelPrimitives = selectFromperson_option_rev_var_samp_fields()._depth._rev_at
