@@ -8,6 +8,7 @@ import FormTitle from './FormTitle'
 const PersonFormTitleChooser = ({
   showFilter,
   row,
+  rawRow,
   showHistory,
   setShowHistory,
 }) => {
@@ -34,6 +35,7 @@ const PersonFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
+      rawRow={rawRow}
       totalNr={totalNr}
       filteredNr={filteredNr}
       showHistory={showHistory}

@@ -52,6 +52,7 @@ const KulturForm = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -436,7 +437,7 @@ const KulturForm = ({
           )}
           {!showFilter && row.id && (
             <>
-              <Timeline row={row} />
+              <Timeline row={row} rawRow={rawRow} />
               <QK kultur={row} />
               <Files parentTable="kultur" parent={row} />
             </>

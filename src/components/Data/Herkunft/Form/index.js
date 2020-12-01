@@ -31,6 +31,7 @@ const Herkunft = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -170,7 +171,7 @@ const Herkunft = ({
           />
         )}
         {!showFilter && hk_geom_point && (
-          <Coordinates row={row} saveToDb={saveToDb} />
+          <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
         )}
         {hk_bemerkungen && (
           <TextField

@@ -34,6 +34,7 @@ const LierferungForm = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -157,6 +158,7 @@ const LierferungForm = ({
             <Was
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               saveToDb={saveToDb}
               ifNeeded={ifNeeded}
             />
@@ -164,6 +166,7 @@ const LierferungForm = ({
           <Von
             showFilter={showFilter}
             row={row}
+            rawRow={rawRow}
             saveToDb={saveToDb}
             ifNeeded={ifNeeded}
             herkunft={herkunft}
@@ -172,6 +175,7 @@ const LierferungForm = ({
           <Nach
             showFilter={showFilter}
             row={row}
+            rawRow={rawRow}
             saveToDb={saveToDb}
             ifNeeded={ifNeeded}
             herkunft={herkunft}
@@ -180,6 +184,7 @@ const LierferungForm = ({
             <Wann
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               saveToDb={saveToDb}
               ifNeeded={ifNeeded}
             />
@@ -188,6 +193,7 @@ const LierferungForm = ({
             <Wer
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               saveToDb={saveToDb}
               ifNeeded={ifNeeded}
               activeConflict={activeConflict}

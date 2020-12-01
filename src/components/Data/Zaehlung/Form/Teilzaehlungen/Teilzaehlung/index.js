@@ -58,12 +58,29 @@ const Teilzaehlung = ({
   id,
   zaehlungId,
   kulturId,
-  teilzaehlung: row,
   teilkulturenWerte,
   index,
 }) => {
   const store = useContext(StoreContext)
-  const { online } = store
+  const { online, db } = store
+
+  // TODO: should I subscribe to this row to rerender on updates of history?
+
+  const [row, setRow] = useState(null)
+  // need raw row because observable does not provoke rerendering of components
+  const [rawRow, setRawRow] = useState(null)
+  useEffect(() => {
+    const subscription = db.collections
+      .get('teilzaehlung')
+      .findAndObserve(id)
+      .subscribe((newRow) => {
+        setRow(newRow)
+        setRawRow(JSON.stringify(newRow._raw))
+      })
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [db.collections, id])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -106,6 +123,7 @@ const Teilzaehlung = ({
                 zaehlungId={zaehlungId}
                 kulturId={kulturId}
                 row={row}
+                rawRow={rawRow}
                 teilkulturenWerte={teilkulturenWerte}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
@@ -120,6 +138,7 @@ const Teilzaehlung = ({
                         rev={activeConflict}
                         id={id}
                         row={row}
+                        rawRow={rawRow}
                         conflictDisposalCallback={conflictDisposalCallback}
                         conflictSelectionCallback={conflictSelectionCallback}
                         setActiveConflict={setActiveConflict}
@@ -127,6 +146,7 @@ const Teilzaehlung = ({
                     ) : showHistory ? (
                       <History
                         row={row}
+                        rawRow={rawRow}
                         historyTakeoverCallback={historyTakeoverCallback}
                       />
                     ) : null}
@@ -150,6 +170,7 @@ const Teilzaehlung = ({
             zaehlungId={zaehlungId}
             kulturId={kulturId}
             row={row}
+            rawRow={rawRow}
             teilkulturenWerte={teilkulturenWerte}
             activeConflict={activeConflict}
             setActiveConflict={setActiveConflict}

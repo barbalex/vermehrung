@@ -51,16 +51,10 @@ const Teilzaehlungen = ({ zaehlung }) => {
       .observe()
       .subscribe(async (tzs) => {
         const tzsSorted = await teilzaehlungsSortByTk(tzs)
-        console.log('Teilzaehlungen, useEffect, tzsSorted:', tzsSorted)
         setTeilzaehlungs(tzsSorted)
       })
     return () => subscription.unsubscribe()
   }, [zaehlung.teilzaehlungs])
-
-  console.log('Teilzaehlungen', {
-    teilzaehlungs,
-    zaehlung,
-  })
 
   const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const { tk } = kulturOption
@@ -104,7 +98,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
         </div>
       </TitleRow>
       <TeilzaehlungenRows
-        zaehlung={zaehlung}
+        zaehlungId={zaehlung.id}
         kulturId={kulturId}
         teilzaehlungs={teilzaehlungs}
       />

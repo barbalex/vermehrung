@@ -4,7 +4,6 @@ import teilkulturLabelFromTeilkultur from './teilkulturLabelFromTeilkultur'
 const createDataArrayForRevComparison = ({ row, revRow, store }) => {
   const zaehlung = row.zaehlung_id ? store.zaehlungs.get(row.zaehlung_id) : {}
   const kulturOption = store.kultur_options.get(zaehlung?.kultur_id) ?? {}
-  console.log('createDataArrayForRevComparison', { row, kulturOption })
   const {
     tk,
     tz_teilkultur_id,

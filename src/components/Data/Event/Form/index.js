@@ -45,6 +45,7 @@ const EventForm = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -195,6 +196,7 @@ const EventForm = ({
             <SelectCreatable
               key={`${row.id}${row.teilkultur_id}teilkultur_id`}
               row={row}
+              rawRow={rawRow}
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturWerte}

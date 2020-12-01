@@ -36,6 +36,7 @@ const ArtForm = ({
   activeConflict,
   id,
   row,
+  rawRow,
   setActiveConflict,
   showFilter,
   showHistory,
@@ -133,6 +134,7 @@ const ArtForm = ({
             valueLabelKey="art"
             label="Art"
             row={row}
+            rawRow={rawRow}
             saveToDb={saveToDb}
             error={errors?.art?.ae_id}
             modelKey="name"

@@ -7,6 +7,7 @@ import FormTitle from './FormTitle'
 
 const SammlungFormTitleChooser = ({
   row,
+  rawRow,
   showFilter,
   showHistory,
   setShowHistory,
@@ -50,6 +51,7 @@ const SammlungFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
+      rawRow={rawRow}
       totalNr={totalNr}
       filteredNr={filteredNr}
       showHistory={showHistory}

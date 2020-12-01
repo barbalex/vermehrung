@@ -7,6 +7,7 @@ import FormTitle from './FormTitle'
 
 const KulturFormTitleChooser = ({
   row,
+  rawRow,
   showFilter,
   showHistory,
   setShowHistory,
@@ -46,6 +47,7 @@ const KulturFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
+      rawRow={rawRow}
       totalNr={totalNr}
       filteredNr={filteredNr}
       showHistory={showHistory}

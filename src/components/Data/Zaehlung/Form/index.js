@@ -45,6 +45,7 @@ const ZaehlungForm = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -205,7 +206,9 @@ const ZaehlungForm = ({
               setActiveConflict={setActiveConflict}
             />
           )}
-          {!showFilter && <Teilzaehlungen zaehlungId={id} zaehlung={row} />}
+          {!showFilter && (
+            <Teilzaehlungen zaehlungId={id} zaehlung={row} rawRow={rawRow} />
+          )}
         </FieldsContainer>
       </SimpleBar>
     </ErrorBoundary>

@@ -5,7 +5,13 @@ import { StoreContext } from '../../../../models/reactUtils'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
 
-const EventFormTitle = ({ row, showFilter, showHistory, setShowHistory }) => {
+const EventFormTitle = ({
+  row,
+  rawRow,
+  showFilter,
+  showHistory,
+  setShowHistory,
+}) => {
   const store = useContext(StoreContext)
   const { kulturIdInActiveNodeArray, eventsSorted, eventsFiltered } = store
 
@@ -31,6 +37,7 @@ const EventFormTitle = ({ row, showFilter, showHistory, setShowHistory }) => {
   return (
     <FormTitle
       row={row}
+      rawRow={rawRow}
       totalNr={totalNr}
       filteredNr={filteredNr}
       showHistory={showHistory}

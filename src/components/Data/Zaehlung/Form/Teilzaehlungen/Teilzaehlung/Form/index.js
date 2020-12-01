@@ -81,6 +81,7 @@ const TeilzaehlungForm = ({
   zaehlungId,
   kulturId,
   row,
+  rawRow,
   teilkulturenWerte,
   activeConflict,
   setActiveConflict,
@@ -149,26 +150,28 @@ const TeilzaehlungForm = ({
     row.delete()
   }, [row])
 
-  const showDeleted = row._deleted || filter.teilzaehlung._deleted !== false
+  const showDeleted = row?._deleted || filter.teilzaehlung._deleted !== false
 
   const anzahl_jungpflanzen = useMemo(() => {
     if (
-      exists(row.anzahl_pflanzen) &&
-      exists(row.anzahl_auspflanzbereit) &&
-      exists(row.anzahl_mutterpflanzen)
+      exists(row?.anzahl_pflanzen) &&
+      exists(row?.anzahl_auspflanzbereit) &&
+      exists(row?.anzahl_mutterpflanzen)
     ) {
       return (
-        row.anzahl_pflanzen -
-        row.anzahl_auspflanzbereit -
-        row.anzahl_mutterpflanzen
+        row?.anzahl_pflanzen -
+        row?.anzahl_auspflanzbereit -
+        row?.anzahl_mutterpflanzen
       )
     }
     return null
   }, [
-    row.anzahl_auspflanzbereit,
-    row.anzahl_mutterpflanzen,
-    row.anzahl_pflanzen,
+    row?.anzahl_auspflanzbereit,
+    row?.anzahl_mutterpflanzen,
+    row?.anzahl_pflanzen,
   ])
+
+  if (!row) return null
 
   return (
     <ErrorBoundary>
@@ -195,6 +198,7 @@ const TeilzaehlungForm = ({
             <Select
               key={`${row.id}teilkultur_id`}
               row={row}
+              rawRow={rawRow}
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturenWerte}

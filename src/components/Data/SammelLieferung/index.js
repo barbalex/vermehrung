@@ -58,6 +58,8 @@ const SammelLieferung = ({
 
   const db = useDatabase()
   const [row, setRow] = useState(null)
+  // need raw row because observable does not provoke rerendering of components
+  const [rawRow, setRawRow] = useState(null)
   useEffect(() => {
     let subscription
     if (showFilter) {
@@ -66,7 +68,10 @@ const SammelLieferung = ({
       subscription = db.collections
         .get('sammel_lieferung')
         .findAndObserve(id)
-        .subscribe(setRow)
+        .subscribe((newRow) => {
+          setRow(newRow)
+          setRawRow(JSON.stringify(newRow._raw))
+        })
     }
     return () => {
       if (subscription) subscription.unsubscribe()
@@ -110,6 +115,7 @@ const SammelLieferung = ({
         <FormTitle
           showFilter={showFilter}
           row={row}
+          rawRow={rawRow}
           lieferungId={lieferungId}
           printPreview={printPreview}
           setPrintPreview={setPrintPreview}
@@ -117,7 +123,7 @@ const SammelLieferung = ({
           setShowHistory={setShowHistory}
         />
         {printPreview ? (
-          <Lieferschein row={row} />
+          <Lieferschein row={row} rawRow={rawRow} />
         ) : (
           <Container>
             <StyledSplitPane
@@ -130,6 +136,7 @@ const SammelLieferung = ({
                 showFilter={showFilter}
                 id={id}
                 row={row}
+                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -140,6 +147,7 @@ const SammelLieferung = ({
                     rev={activeConflict}
                     id={id}
                     row={row}
+                    rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
@@ -147,6 +155,7 @@ const SammelLieferung = ({
                 ) : showHistory ? (
                   <History
                     row={row}
+                    rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
                 ) : null}
