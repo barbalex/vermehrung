@@ -146,13 +146,6 @@ const Vermehrung = ({ location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existsUser])
 
-  /*console.log('Vermehrung', {
-    gettingAuthUser,
-    isIOS,
-    initialDataQueried,
-    online,
-  })*/
-
   if (gettingAuthUser || isIOS) {
     return (
       <ErrorBoundary>
@@ -195,7 +188,7 @@ const Vermehrung = ({ location }) => {
               loading={true}
             />
             <SpinnerText>
-              {`lade alle Daten für offline - das kann dauern`}
+              lade alle Daten für offline-Nutzung - das kann dauern
             </SpinnerText>
             <SpinnerText2>{tableNames(initiallyQuerying)}</SpinnerText2>
           </SpinnerContainer>
