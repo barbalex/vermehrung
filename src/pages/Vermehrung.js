@@ -19,6 +19,7 @@ import ErrorBoundary from '../components/shared/ErrorBoundary'
 import ApiDetector from '../components/ApiDetector'
 import QueuedQueries from '../components/QueuedQueries'
 import isThisIOS from '../utils/isIOS'
+import tableNames from '../utils/tableNames'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);
@@ -34,7 +35,10 @@ const LoginContainer = styled.div`
   margin: 20px;
 `
 const SpinnerText = styled.div`
-  padding: 10px;
+  padding-top: 10px;
+`
+const SpinnerText2 = styled.div`
+  padding: 0;
 `
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;
@@ -71,6 +75,7 @@ const Vermehrung = ({ location }) => {
     activeForm,
     gettingAuthUser,
     initialDataQueried,
+    initiallyQuerying,
     isPrint,
     showQueuedQueries,
     singleColumnView,
@@ -190,8 +195,9 @@ const Vermehrung = ({ location }) => {
               loading={true}
             />
             <SpinnerText>
-              lade alle Daten für offline - das kann dauern
+              {`lade alle Daten für offline - das kann dauern`}
             </SpinnerText>
+            <SpinnerText2>{tableNames(initiallyQuerying)}</SpinnerText2>
           </SpinnerContainer>
         </Layout>
       </ErrorBoundary>

@@ -119,6 +119,7 @@ export const RootStore = RootStoreBase.props({
   teilzaehlung_initially_queried: types.optional(types.boolean, false),
   user_role_initially_queried: types.optional(types.boolean, false),
   zaehlung_initially_queried: types.optional(types.boolean, false),
+  initiallyQuerying: types.optional(types.string, ''),
   /**
    * This is a queue of all queries
    * When online they they are immediatly executed by the reaction
@@ -240,6 +241,9 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
+      setInitiallyQuerying(val) {
+        self.initiallyQuerying = val
+      },
       setRawQglClient(val) {
         self.rawQglClient = val
       },
@@ -263,10 +267,6 @@ export const RootStore = RootStoreBase.props({
       },
       setInitiallyQueried({ table }) {
         self[`${table}_initially_queried`] = true
-        console.log(
-          `${table} initially queried. InitialDataQueried:`,
-          self.initialDataQueried,
-        )
       },
       setDiffConflict(val) {
         self.diffConflict = val
@@ -346,9 +346,6 @@ export const RootStore = RootStoreBase.props({
       },
       removeAllNotifications() {
         self.notifications.clear()
-      },
-      upsertArtModel(val) {
-        self.arts.set(val.id, val)
       },
       async insertArtRev(args) {
         const { user, addQueuedQuery } = self
