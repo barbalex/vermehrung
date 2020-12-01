@@ -483,9 +483,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.art_qk_choosen_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertArtFileModel(val) {
-        self.art_files.set(val.id, val)
-      },
       deleteArtFileModel(val) {
         self.art_files.delete(val.id)
       },

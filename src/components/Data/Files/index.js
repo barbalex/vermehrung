@@ -53,11 +53,6 @@ const LightboxButton = styled(Button)`
   margin-left: 10px !important;
   text-transform: none !important;
   border: none !important;
-  /*&:active,
-  &:hover,
-  &:focus {
-    border: 1px solid rgba(74, 20, 140, 0.5) !important;
-  }*/
 `
 const Content = styled.div`
   display: flex;
@@ -67,7 +62,7 @@ const Content = styled.div`
 
 const Files = ({ parentTable, parent }) => {
   const store = useContext(StoreContext)
-  const { upsertArtFileModel, online } = store
+  const { online } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
@@ -93,7 +88,12 @@ const Files = ({ parentTable, parent }) => {
             [`${parentTable}_id`]: parent.id,
             name: info.name,
           }
-          upsertArtFileModel(newObject)
+          await db.action(async () => {
+            const collection = db.get(`${parentTable}_file`)
+            // using batch because can create from raw
+            // which enables overriding watermelons own id
+            await db.batch([collection.prepareCreateFromDirtyRaw(newObject)])
+          })
           await store[`mutateInsert_${parentTable}_file_one`]({
             object: newObject,
             on_conflict: {
@@ -104,7 +104,7 @@ const Files = ({ parentTable, parent }) => {
         })
       }
     },
-    [parent.id, parentTable, store, upsertArtFileModel],
+    [db, parent.id, parentTable, store],
   )
 
   const images = files.filter((f) => isImageFile(f))
