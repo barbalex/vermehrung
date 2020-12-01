@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
@@ -37,6 +31,8 @@ const Rev = styled.span`
 const GartenForm = ({
   showFilter,
   id,
+  row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -50,7 +46,6 @@ const GartenForm = ({
     errors,
     unsetError,
     insertGvRev,
-    db,
   } = store
 
   const {
@@ -61,28 +56,6 @@ const GartenForm = ({
     ga_aktiv,
     ga_bemerkungen,
   } = userPersonOption
-
-  const [row, setRow] = useState(null)
-  // eslint-disable-next-line no-unused-vars
-  const [rawRow, setRawRow] = useState(null)
-  useEffect(() => {
-    let subscription
-    if (showFilter) {
-      setRow(filter.garten)
-    } else {
-      subscription = db.collections
-        .get('garten')
-        .findAndObserve(id)
-        .subscribe((newRow) => {
-          console.log('Garten Form, useEffect, setting new row:', newRow)
-          setRow(newRow)
-          setRawRow(JSON.stringify(newRow._raw))
-        })
-    }
-    return () => {
-      if (subscription) subscription.unsubscribe()
-    }
-  }, [db.collections, filter.garten, id, showFilter])
 
   useEffect(() => {
     unsetError('garten')
@@ -121,8 +94,6 @@ const GartenForm = ({
 
   const showDeleted =
     showFilter || filter.garten._deleted !== false || row?._deleted
-
-  if (!row) return null
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
@@ -205,7 +176,7 @@ const GartenForm = ({
           />
         )}
         {!showFilter && ga_geom_point && (
-          <Coordinates row={row} saveToDb={saveToDb} />
+          <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
         )}
         {ga_aktiv && (
           <>

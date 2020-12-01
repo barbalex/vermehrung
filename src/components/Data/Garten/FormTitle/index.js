@@ -5,7 +5,13 @@ import { StoreContext } from '../../../../models/reactUtils'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
 
-const GartenFormTitle = ({ showFilter, row, showHistory, setShowHistory }) => {
+const GartenFormTitle = ({
+  showFilter,
+  row,
+  rawRow,
+  showHistory,
+  setShowHistory,
+}) => {
   const store = useContext(StoreContext)
   const { gartensSorted, gartensFiltered, personIdInActiveNodeArray } = store
 
@@ -32,6 +38,7 @@ const GartenFormTitle = ({ showFilter, row, showHistory, setShowHistory }) => {
   return (
     <FormTitle
       row={row}
+      rawRow={rawRow}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
       totalNr={totalNr}
