@@ -51,6 +51,8 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
 
   const db = useDatabase()
   const [row, setRow] = useState(null)
+  // need raw row because observable does not provoke rerendering of components
+  const [rawRow, setRawRow] = useState(null)
   useEffect(() => {
     let subscription
     if (showFilter) {
@@ -59,7 +61,10 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       subscription = db.collections
         .get('lieferung')
         .findAndObserve(id)
-        .subscribe(setRow)
+        .subscribe((newRow) => {
+          setRow(newRow)
+          setRawRow(JSON.stringify(newRow._raw))
+        })
     }
     return () => {
       if (subscription) subscription.unsubscribe()
@@ -87,6 +92,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
         <Lieferung
           showFilter={showFilter}
           row={row}
+          rawRow={rawRow}
           sammelLieferung={sammelLieferung}
           id={id}
         />
@@ -102,6 +108,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
     <Lieferung
       id={id}
       row={row}
+      rawRow={rawRow}
       showFilter={showFilter}
       sammelLieferung={sammelLieferung}
     />

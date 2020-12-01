@@ -51,6 +51,7 @@ const SammlungForm = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -287,7 +288,9 @@ const SammlungForm = ({
               </IconButton>
             </div>
           </FieldRow>
-          {!showFilter && <Coordinates row={row} saveToDb={saveToDb} />}
+          {!showFilter && (
+            <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
+          )}
           <FieldRow>
             {showFilter ? (
               <Checkbox3States

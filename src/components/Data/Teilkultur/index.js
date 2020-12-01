@@ -55,6 +55,8 @@ const Teilkultur = ({
 
   const db = useDatabase()
   const [row, setRow] = useState(null)
+  // need raw row because observable does not provoke rerendering of components
+  const [rawRow, setRawRow] = useState(null)
   useEffect(() => {
     let subscription
     if (showFilter) {
@@ -63,7 +65,10 @@ const Teilkultur = ({
       subscription = db.collections
         .get('teilkultur')
         .findAndObserve(id)
-        .subscribe(setRow)
+        .subscribe((newRow) => {
+          setRow(newRow)
+          setRawRow(JSON.stringify(newRow._raw))
+        })
     }
     return () => {
       if (subscription) subscription.unsubscribe()
@@ -102,6 +107,7 @@ const Teilkultur = ({
       <Container showfilter={showFilter}>
         <FormTitle
           row={row}
+          rawRow={rawRow}
           showFilter={showFilter}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
@@ -117,6 +123,7 @@ const Teilkultur = ({
               showFilter={showFilter}
               id={id}
               row={row}
+              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
@@ -127,6 +134,7 @@ const Teilkultur = ({
                   rev={activeConflict}
                   id={id}
                   row={row}
+                  rawRow={rawRow}
                   conflictDisposalCallback={conflictDisposalCallback}
                   conflictSelectionCallback={conflictSelectionCallback}
                   setActiveConflict={setActiveConflict}
@@ -134,6 +142,7 @@ const Teilkultur = ({
               ) : showHistory ? (
                 <History
                   row={row}
+                  rawRow={rawRow}
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
               ) : null}

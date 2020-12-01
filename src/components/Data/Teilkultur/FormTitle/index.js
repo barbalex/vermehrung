@@ -7,6 +7,7 @@ import FormTitle from './FormTitle'
 
 const TeilkulturFormTitleChooser = ({
   row,
+  rawRow,
   showFilter,
   showHistory,
   setShowHistory,
@@ -42,6 +43,7 @@ const TeilkulturFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
+      rawRow={rawRow}
       totalNr={totalNr}
       filteredNr={filteredNr}
       showHistory={showHistory}

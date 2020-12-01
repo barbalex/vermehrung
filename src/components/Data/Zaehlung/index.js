@@ -55,6 +55,8 @@ const Zaehlung = ({
 
   const db = useDatabase()
   const [row, setRow] = useState(null)
+  // need raw row because observable does not provoke rerendering of components
+  const [rawRow, setRawRow] = useState(null)
   useEffect(() => {
     let subscription
     if (showFilter) {
@@ -63,7 +65,10 @@ const Zaehlung = ({
       subscription = db.collections
         .get('zaehlung')
         .findAndObserve(id)
-        .subscribe(setRow)
+        .subscribe((newRow) => {
+          setRow(newRow)
+          setRawRow(JSON.stringify(newRow._raw))
+        })
     }
     return () => {
       if (subscription) subscription.unsubscribe()
@@ -103,6 +108,7 @@ const Zaehlung = ({
         <Container showfilter={showFilter}>
           <FormTitle
             row={row}
+            rawRow={rawRow}
             showFilter={showFilter}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
@@ -118,6 +124,7 @@ const Zaehlung = ({
                 showFilter={showFilter}
                 id={id}
                 row={row}
+                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -130,6 +137,7 @@ const Zaehlung = ({
                         rev={activeConflict}
                         id={id}
                         row={row}
+                        rawRow={rawRow}
                         conflictDisposalCallback={conflictDisposalCallback}
                         conflictSelectionCallback={conflictSelectionCallback}
                         setActiveConflict={setActiveConflict}
@@ -137,6 +145,7 @@ const Zaehlung = ({
                     ) : showHistory ? (
                       <History
                         row={row}
+                        rawRow={rawRow}
                         historyTakeoverCallback={historyTakeoverCallback}
                       />
                     ) : null}

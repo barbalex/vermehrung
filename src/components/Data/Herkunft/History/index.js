@@ -36,7 +36,7 @@ const sliderSettings = {
   infinite: false,
 }
 
-const HerkunftHistory = ({ row, historyTakeoverCallback }) => {
+const HerkunftHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
 
   const { error, loading } = useQuery((store) =>
@@ -73,6 +73,7 @@ const HerkunftHistory = ({ row, historyTakeoverCallback }) => {
               key={row._rev}
               revRow={r}
               row={row}
+              rawRow={rawRow}
               historyTakeoverCallback={historyTakeoverCallback}
             />
           ))}

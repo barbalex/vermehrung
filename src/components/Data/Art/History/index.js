@@ -58,7 +58,7 @@ const sliderSettings = {
   infinite: false,
 }
 
-const ArtHistory = ({ row, historyTakeoverCallback }) => {
+const ArtHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
 
   // need to use this query to ensure that the person's name is queried
@@ -96,6 +96,7 @@ const ArtHistory = ({ row, historyTakeoverCallback }) => {
               key={row._rev}
               revRow={r}
               row={row}
+              rawRow={rawRow}
               historyTakeoverCallback={historyTakeoverCallback}
             />
           ))}

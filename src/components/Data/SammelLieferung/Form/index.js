@@ -34,6 +34,7 @@ const SammelLieferungForm = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -163,6 +164,7 @@ const SammelLieferungForm = ({
             <Was
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
             />
@@ -171,6 +173,7 @@ const SammelLieferungForm = ({
             <Von
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
               herkunft={herkunft}
@@ -182,6 +185,7 @@ const SammelLieferungForm = ({
             <Nach
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
               herkunft={herkunft}
@@ -191,6 +195,7 @@ const SammelLieferungForm = ({
             <Wann
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
             />
@@ -199,6 +204,7 @@ const SammelLieferungForm = ({
             <Wer
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
             />

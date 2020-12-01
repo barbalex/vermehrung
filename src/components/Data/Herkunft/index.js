@@ -55,6 +55,8 @@ const Herkunft = ({
 
   const db = useDatabase()
   const [row, setRow] = useState(null)
+  // need raw row because observable does not provoke rerendering of components
+  const [rawRow, setRawRow] = useState(null)
   useEffect(() => {
     let subscription
     if (showFilter) {
@@ -63,7 +65,10 @@ const Herkunft = ({
       subscription = db.collections
         .get('herkunft')
         .findAndObserve(id)
-        .subscribe(setRow)
+        .subscribe((newRow) => {
+          setRow(newRow)
+          setRawRow(JSON.stringify(newRow._raw))
+        })
     }
     return () => {
       if (subscription) subscription.unsubscribe()
@@ -104,6 +109,7 @@ const Herkunft = ({
       <Container showfilter={showFilter}>
         <FormTitle
           row={row}
+          rawRow={rawRow}
           showFilter={showFilter}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
@@ -120,6 +126,7 @@ const Herkunft = ({
               showFilter={showFilter}
               id={id}
               row={row}
+              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
@@ -132,6 +139,7 @@ const Herkunft = ({
                       rev={activeConflict}
                       id={id}
                       row={row}
+                      rawRow={rawRow}
                       conflictDisposalCallback={conflictDisposalCallback}
                       conflictSelectionCallback={conflictSelectionCallback}
                       setActiveConflict={setActiveConflict}
@@ -139,6 +147,7 @@ const Herkunft = ({
                   ) : showHistory ? (
                     <History
                       row={row}
+                      rawRow={rawRow}
                       historyTakeoverCallback={historyTakeoverCallback}
                     />
                   ) : null}
