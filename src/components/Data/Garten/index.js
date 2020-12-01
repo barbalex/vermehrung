@@ -53,6 +53,8 @@ const Garten = ({
   const { filter, online, db } = store
 
   const [row, setRow] = useState(null)
+  // need raw row because observable does not provoke rerendering of components
+  const [rawRow, setRawRow] = useState(null)
   useEffect(() => {
     let subscription
     if (showFilter) {
@@ -61,7 +63,10 @@ const Garten = ({
       subscription = db.collections
         .get('garten')
         .findAndObserve(id)
-        .subscribe(setRow)
+        .subscribe((newRow) => {
+          setRow(newRow)
+          setRawRow(JSON.stringify(newRow._raw))
+        })
     }
     return () => {
       if (subscription) subscription.unsubscribe()
@@ -100,6 +105,7 @@ const Garten = ({
       <Container showfilter={showFilter}>
         <FormTitle
           row={row}
+          rawRow={rawRow}
           showFilter={showFilter}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
@@ -114,6 +120,8 @@ const Garten = ({
             <Form
               showFilter={showFilter}
               id={id}
+              row={row}
+              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
@@ -126,6 +134,7 @@ const Garten = ({
                       rev={activeConflict}
                       id={id}
                       row={row}
+                      rawRow={rawRow}
                       conflictDisposalCallback={conflictDisposalCallback}
                       conflictSelectionCallback={conflictSelectionCallback}
                       setActiveConflict={setActiveConflict}
@@ -133,6 +142,7 @@ const Garten = ({
                   ) : showHistory ? (
                     <History
                       row={row}
+                      rawRow={rawRow}
                       historyTakeoverCallback={historyTakeoverCallback}
                     />
                   ) : null}
