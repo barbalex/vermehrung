@@ -1704,6 +1704,14 @@ export const RootStore = RootStoreBase.props({
       )
       return userPerson ?? {}
     },
+    get userRole() {
+      const { userPerson, user_roles } = self
+      const { user_role_id } = userPerson
+      const userRole = [...user_roles.values()].find(
+        (r) => r.id === user_role_id,
+      )
+      return userRole?.name
+    },
     get userPersonOption() {
       const { userPerson, person_options } = self
       const userPersonOption = person_options.get(userPerson.id)

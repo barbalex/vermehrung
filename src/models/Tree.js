@@ -270,7 +270,7 @@ export default types
     },
     get showArt() {
       const store = getParent(self, 1)
-      return store?.userPerson?.user_role !== 'gaertner'
+      return store?.userRole !== 'gaertner'
     },
     get showEvent() {
       const store = getParent(self, 1)
@@ -281,7 +281,7 @@ export default types
     },
     get showHerkunft() {
       const store = getParent(self, 1)
-      return store?.userPerson?.user_role !== 'gaertner'
+      return store?.userRole !== 'gaertner'
     },
     get showKultur() {
       const store = getParent(self, 1)
@@ -301,7 +301,7 @@ export default types
     },
     get showSammlung() {
       const store = getParent(self, 1)
-      return store?.userPerson?.user_role !== 'gaertner'
+      return store?.userRole !== 'gaertner'
     },
     get showTeilkultur() {
       const store = getParent(self, 1)

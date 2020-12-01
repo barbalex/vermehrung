@@ -205,12 +205,7 @@ const MenuSubtitle = styled.div`
 const Row = ({ style, node, nodes }) => {
   const store = useContext(StoreContext)
 
-  const {
-    showTreeInSingleColumnView,
-    singleColumnView,
-    tree,
-    userPerson,
-  } = store
+  const { showTreeInSingleColumnView, singleColumnView, tree, userRole } = store
   const { activeNodeArray, singleRowHeight } = tree
 
   const isMobile = showTreeInSingleColumnView && singleColumnView
@@ -243,7 +238,6 @@ const Row = ({ style, node, nodes }) => {
     useSymbolIcon = false
   }
 
-  const { user_role: role } = userPerson
   const person =
     node?.nodeType === 'table' && node.table === 'person'
       ? store.persons.get(last(node?.url))
@@ -367,7 +361,7 @@ const Row = ({ style, node, nodes }) => {
             )}
           {node?.nodeType === 'table' &&
             node?.menuTitle === 'Person' &&
-            role === 'manager' &&
+            userRole === 'manager' &&
             !accountId && (
               <>
                 <MenuSubtitle className="react-contextmenu-title">
@@ -378,7 +372,7 @@ const Row = ({ style, node, nodes }) => {
             )}
           {node?.nodeType === 'table' &&
             node?.menuTitle === 'Person' &&
-            role === 'manager' &&
+            userRole === 'manager' &&
             accountId && (
               <>
                 <MenuSubtitle className="react-contextmenu-title">
