@@ -557,9 +557,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.av_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertEventModel(val) {
-        self.events.set(val.id, val)
-      },
       async insertEventRev(args) {
         const {
           user,

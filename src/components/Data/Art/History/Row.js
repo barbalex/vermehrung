@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import isEqual from 'lodash/isEqual'
 
 import History from '../../../shared/History'
 import { StoreContext } from '../../../../models/reactUtils'
@@ -11,7 +12,7 @@ import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const { user, addNotification, db } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -62,9 +63,13 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObjectForStore.id = row.id
     delete newObjectForStore.kultur_id
     // optimistically update store
-    await row.update((row) => {
-      Object.keys(newObjectForStore).forEach((key) => {
-        row[key] = newObjectForStore[key]
+    await db.action(async () => {
+      await row.update((row) => {
+        Object.entries(newObjectForStore).forEach(([key, value]) => {
+          if (!isEqual(value, row[key])) {
+            row[key] = value
+          }
+        })
       })
     })
   }, [
