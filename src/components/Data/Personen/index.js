@@ -64,7 +64,7 @@ const singleRowHeight = 48
 
 const Personen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertPersonRev, personsFiltered, personsSorted, userPerson } = store
+  const { insertPersonRev, personsFiltered, personsSorted, userRole } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const hierarchyFilter = () => {
@@ -75,8 +75,6 @@ const Personen = ({ filter: showFilter, width, height }) => {
 
   const totalNr = personsSorted.filter(hierarchyFilter).length
   const filteredNr = personsFiltered.filter(hierarchyFilter).length
-
-  const { user_role } = userPerson
 
   const add = useCallback(() => {
     insertPersonRev()
@@ -108,7 +106,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
               <IconButton title={upTitle} onClick={onClickUp}>
                 <UpSvg />
               </IconButton>
-              {user_role === 'manager' && (
+              {userRole === 'manager' && (
                 <IconButton
                   aria-label="neue Person"
                   title="neue Person"

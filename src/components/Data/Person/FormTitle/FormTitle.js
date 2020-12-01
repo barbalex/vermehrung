@@ -43,8 +43,7 @@ const PersonFormTitle = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { userPerson } = store
-  const { user_role } = userPerson
+  const { userRole } = store
 
   if (width < 568) {
     return (
@@ -52,7 +51,7 @@ const PersonFormTitle = ({
         <Title>Person</Title>
         <TitleSymbols>
           <NavButtons />
-          {user_role === 'manager' && (
+          {userRole === 'manager' && (
             <>
               <AddButton />
               <DeleteButton row={row} />
@@ -78,7 +77,7 @@ const PersonFormTitle = ({
       <Title>Person</Title>
       <TitleSymbols>
         <NavButtons />
-        {user_role === 'manager' && (
+        {userRole === 'manager' && (
           <>
             <AddButton />
             <DeleteButton row={row} />

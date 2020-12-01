@@ -36,9 +36,6 @@ const Root = ({ filter: showFilter }) => {
     showZaehlung,
   } = store.tree
 
-  // eslint-disable-next-line no-unused-vars
-  //const { user_role } = userPerson
-
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value
   const rows = [
