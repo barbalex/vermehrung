@@ -74,6 +74,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     })
   }, [
     addNotification,
+    db,
     historyTakeoverCallback,
     revRow._deleted,
     revRow.ae_id,

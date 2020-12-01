@@ -147,7 +147,7 @@ const EventForm = ({
   )
 
   const showDeleted =
-    showFilter || filter.event._deleted !== false || row._deleted
+    showFilter || filter.event._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>

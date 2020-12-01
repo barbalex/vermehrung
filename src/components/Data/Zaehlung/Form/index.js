@@ -102,7 +102,7 @@ const ZaehlungForm = ({
   }, [])
 
   const showDeleted =
-    showFilter || filter.zaehlung._deleted !== false || row._deleted
+    showFilter || filter.zaehlung._deleted !== false || row?._deleted
 
   //console.log('Zaehlung Form rendering, row:', { row, renderEnforcer })
 

@@ -82,7 +82,7 @@ const ErrorContainer = styled.div`
 `
 
 const sliderSettings = {
-  dots: true,
+  dots: false,
   infinite: false,
 }
 

@@ -118,7 +118,7 @@ const SammelLieferungForm = ({
     nachKulturHerkunft ?? vonKulturHerkunft ?? vonSammlungHerkunft
 
   const showDeleted =
-    showFilter || filter.sammel_lieferung._deleted !== false || row._deleted
+    showFilter || filter.sammel_lieferung._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>

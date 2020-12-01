@@ -637,9 +637,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.event_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertGartenModel(val) {
-        self.gartens.set(val.id, val)
-      },
       async insertGartenRev(args) {
         const { user, addQueuedQuery, personIdInActiveNodeArray } = self
 
