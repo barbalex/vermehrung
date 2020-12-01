@@ -157,7 +157,7 @@ const SammlungForm = ({
   }, [nrCount, setError])
 
   const showDeleted =
-    showFilter || filter.sammlung._deleted !== false || row._deleted
+    showFilter || filter.sammlung._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>

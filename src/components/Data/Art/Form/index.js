@@ -90,7 +90,7 @@ const ArtForm = ({
   }
 
   const showDeleted =
-    showFilter || filter.art._deleted !== false || row._deleted
+    showFilter || filter.art._deleted !== false || row?._deleted
 
   console.log('Art, row:', row)
 

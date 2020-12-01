@@ -112,7 +112,7 @@ const LierferungForm = ({
   const herkunft = herkunftByKultur || vonSammlungHerkunft
 
   const showDeleted =
-    showFilter || filter.lieferung._deleted !== false || row._deleted
+    showFilter || filter.lieferung._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>

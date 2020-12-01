@@ -2,7 +2,6 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -51,9 +50,8 @@ const Garten = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter, online, db } = store
 
-  const db = useDatabase()
   const [row, setRow] = useState(null)
   useEffect(() => {
     let subscription
@@ -116,7 +114,6 @@ const Garten = ({
             <Form
               showFilter={showFilter}
               id={id}
-              row={row}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}

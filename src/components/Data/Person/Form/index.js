@@ -99,7 +99,7 @@ const Person = ({
   }, [nrCount, setError])
 
   const showDeleted =
-    showFilter || filter.person._deleted !== false || row._deleted
+    showFilter || filter.person._deleted !== false || row?._deleted
 
   const userRole = row?.user_role_id
     ? store.user_roles.get(row.user_role_id)

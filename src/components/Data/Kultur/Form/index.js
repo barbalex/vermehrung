@@ -269,7 +269,7 @@ const KulturForm = ({
     : errors.kultur?.herkunft_id
 
   const showDeleted =
-    showFilter || filter.kultur._deleted !== false || row._deleted
+    showFilter || filter.kultur._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>
