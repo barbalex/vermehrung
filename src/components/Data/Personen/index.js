@@ -70,7 +70,7 @@ const initialPersonState = { persons: [], personsFiltered: [] }
 
 const Personen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertPersonRev, userPerson } = store
+  const { insertPersonRev, userRole } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { person: personFilter } = store.filter
 
@@ -109,8 +109,6 @@ const Personen = ({ filter: showFilter, width, height }) => {
   const totalNr = persons.length
   const filteredNr = personsFiltered.length
 
-  const { user_role } = userPerson
-
   const add = useCallback(() => {
     insertPersonRev()
   }, [insertPersonRev])
@@ -141,7 +139,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
               <IconButton title={upTitle} onClick={onClickUp}>
                 <UpSvg />
               </IconButton>
-              {user_role === 'manager' && (
+              {userRole === 'manager' && (
                 <IconButton
                   aria-label="neue Person"
                   title="neue Person"
