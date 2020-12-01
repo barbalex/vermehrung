@@ -11,11 +11,17 @@ const stripTypename = (object) => {
 
 // TODO: do this in worker?
 const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
-  const { db, setInitiallyQueried, setLastUpdated } = store
+  const {
+    db,
+    setInitiallyQueried,
+    setLastUpdated,
+    setInitiallyQuerying,
+  } = store
   if (!dataToCheck.length) {
     setInitiallyQueried({ table })
     return
   }
+  setInitiallyQuerying(table)
 
   const collection = db.collections.get(table)
   const incomingIds = dataToCheck.map((d) => d.id)
