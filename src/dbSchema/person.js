@@ -20,7 +20,7 @@ const person = {
     { name: 'changed', type: 'string', isOptional: true },
     { name: 'changed_by', type: 'string', isOptional: true },
     { name: 'account_id', type: 'string', isOptional: true },
-    { name: 'user_role', type: 'string', isOptional: true },
+    { name: 'user_role_id', type: 'string', isOptional: true, isIndexed: true },
     { name: 'kommerziell', type: 'boolean', isOptional: true },
     { name: 'info', type: 'boolean', isOptional: true },
     { name: 'aktiv', type: 'boolean', isOptional: true, isIndexed: true },
