@@ -42,10 +42,8 @@ const ConflictData = ({ dataArray, loading }) => {
     let inputB = toStringIfPossible(d.valueInRev)
     // explicitly show when only one of the values is empty
     if (inputA !== inputB) {
-      inputA =
-        !!inputA || inputA === 0 || inputA === false ? inputA : '(nichts)'
-      inputB =
-        !!inputB || inputB === 0 || inputB === false ? inputB : '(nichts)'
+      inputA = inputA ?? '(nichts)'
+      inputB = inputB ?? '(nichts)'
     }
 
     const showDiff =

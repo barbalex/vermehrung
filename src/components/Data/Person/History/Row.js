@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import isEqual from 'lodash/isEqual'
 
 import History from '../../../shared/History'
 import { StoreContext } from '../../../../models/reactUtils'
@@ -11,8 +12,9 @@ import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, upsertPersonModel } = store
+  const { user, addNotification, db } = store
 
+  // need to extract raw value?
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
     [revRow, row, store],
@@ -79,9 +81,18 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObjectForStore.id = row.id
     delete newObjectForStore.person_id
     // optimistically update store
-    upsertPersonModel(newObjectForStore)
+    await db.action(async () => {
+      await row.update((row) => {
+        Object.entries(newObjectForStore).forEach(([key, value]) => {
+          if (!isEqual(value, row[key])) {
+            row[key] = value
+          }
+        })
+      })
+    })
   }, [
     addNotification,
+    db,
     historyTakeoverCallback,
     revRow._deleted,
     revRow.account_id,
@@ -103,13 +114,8 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     revRow.telefon_privat,
     revRow.user_role_id,
     revRow.vorname,
-    row._conflicts,
-    row._depth,
-    row._rev,
-    row._revisions,
-    row.id,
+    row,
     store,
-    upsertPersonModel,
     user.email,
   ])
 
