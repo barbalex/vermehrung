@@ -6,7 +6,7 @@ import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
 
 const SammelLieferungFormTitleChooser = ({
-  lieferungId,
+  lieferung,
   printPreview,
   row,
   rawRow,
@@ -46,7 +46,7 @@ const SammelLieferungFormTitleChooser = ({
       totalNr={totalNr}
       filteredNr={filteredNr}
       showFilter={showFilter}
-      lieferungId={lieferungId}
+      lieferung={lieferung}
       printPreview={printPreview}
       setPrintPreview={setPrintPreview}
       showHistory={showHistory}

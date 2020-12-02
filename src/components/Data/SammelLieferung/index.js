@@ -50,7 +50,7 @@ const StyledSplitPane = styled(SplitPane)`
 const SammelLieferung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
-  lieferungId,
+  lieferung,
 }) => {
   const store = useContext(StoreContext)
 
@@ -116,7 +116,7 @@ const SammelLieferung = ({
           showFilter={showFilter}
           row={row}
           rawRow={rawRow}
-          lieferungId={lieferungId}
+          lieferung={lieferung}
           printPreview={printPreview}
           setPrintPreview={setPrintPreview}
           showHistory={showHistory}

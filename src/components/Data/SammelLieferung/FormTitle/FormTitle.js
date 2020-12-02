@@ -42,7 +42,7 @@ const SammelLieferungFormTitle = ({
   row,
   totalNr,
   filteredNr,
-  lieferungId,
+  lieferung,
   printPreview,
   setPrintPreview,
   width,
@@ -73,7 +73,7 @@ const SammelLieferungFormTitle = ({
             </>
           )}
           {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferungId={lieferungId} asMenu />
+            <Copy sammelLieferung={row} lieferung={lieferung} asMenu />
           )}
           <>
             <Menu white={false}>
@@ -117,7 +117,7 @@ const SammelLieferungFormTitle = ({
             </>
           )}
           {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferungId={lieferungId} asMenu />
+            <Copy sammelLieferung={row} lieferung={lieferung} asMenu />
           )}
           <>
             <PrintButtons
@@ -160,7 +160,7 @@ const SammelLieferungFormTitle = ({
             </>
           )}
           {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferungId={lieferungId} asMenu />
+            <Copy sammelLieferung={row} lieferung={lieferung} asMenu />
           )}
           <PrintButtons
             printPreview={printPreview}
@@ -206,7 +206,7 @@ const SammelLieferungFormTitle = ({
             </>
           )}
           {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferungId={lieferungId} />
+            <Copy sammelLieferung={row} lieferung={lieferung} />
           )}
           <HistoryButton
             row={row}
@@ -247,7 +247,7 @@ const SammelLieferungFormTitle = ({
           </>
         )}
         {!sl_auto_copy_edits && (
-          <Copy sammelLieferung={row} lieferungId={lieferungId} />
+          <Copy sammelLieferung={row} lieferung={lieferung} />
         )}
         <>
           <HistoryButton
