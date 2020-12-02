@@ -5,7 +5,6 @@ ALTER TABLE public.art_qk_choosen_rev DROP CONSTRAINT art_qk_choosen_rev_art_id_
 ALTER TABLE public.sammlung_rev DROP CONSTRAINT sammlung_rev_art_id_fkey;
 ALTER TABLE public.sammlung_rev DROP CONSTRAINT sammlung_rev_person_id_fkey;
 ALTER TABLE public.sammlung_rev DROP CONSTRAINT sammlung_rev_herkunft_id_fkey;
-
 ALTER TABLE public.garten_rev DROP CONSTRAINT garten_rev_person_id_fkey;
 ALTER TABLE public.kultur_rev DROP CONSTRAINT kultur_rev_art_id_fkey;
 ALTER TABLE public.kultur_rev DROP CONSTRAINT kultur_rev_herkunft_id_fkey;
@@ -29,8 +28,6 @@ ALTER TABLE public.sammel_lieferung_rev DROP CONSTRAINT sammel_lieferung_rev_von
 ALTER TABLE public.sammel_lieferung_rev DROP CONSTRAINT sammel_lieferung_rev_nach_kultur_id_fkey;
 ALTER TABLE public.av_rev DROP CONSTRAINT av_rev_art_id_fkey;
 ALTER TABLE public.av_rev DROP CONSTRAINT av_rev_person_id_fkey;
-
 ALTER TABLE public.gv_rev DROP CONSTRAINT gv_rev_garten_id_fkey;
 ALTER TABLE public.gv_rev DROP CONSTRAINT gv_rev_person_id_fkey;
-
--- ALTER TABLE public.kultur_qk_choosen_rev DROP CONSTRAINT kultur_qk_choosen_rev_kultur_id_fkey; TODO: can not be removed
+ALTER TABLE public.kultur_qk_choosen_rev DROP CONSTRAINT kultur_qk_choosen_rev_kultur_id_fkey;
