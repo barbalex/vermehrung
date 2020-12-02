@@ -417,9 +417,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.art_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertArtQkChoosenModel(val) {
-        self.art_qk_choosens.set(val.id, val)
-      },
       async insertArtQkChoosenRev(args) {
         const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
@@ -485,9 +482,6 @@ export const RootStore = RootStoreBase.props({
       },
       deleteArtFileModel(val) {
         self.art_files.delete(val.id)
-      },
-      upsertArtQkModel(val) {
-        self.art_qks.set(val.id, val)
       },
       deleteArtQkModel(val) {
         self.art_qks.delete(val.id)
@@ -716,14 +710,8 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.garten_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertGartenFileModel(val) {
-        self.garten_files.set(val.id, val)
-      },
       deleteGartenFileModel(val) {
         self.garten_files.delete(val.id)
-      },
-      upsertGvModel(val) {
-        self.gvs.set(val.id, val)
       },
       async insertGvRev(args) {
         const { user, addQueuedQuery } = self
@@ -786,9 +774,6 @@ export const RootStore = RootStoreBase.props({
         // 2. delete rev model
         const rev_model = self.gv_revs.get(val.id)
         destroy(rev_model)
-      },
-      upsertHerkunftModel(val) {
-        self.herkunfts.set(val.id, val)
       },
       async insertHerkunftRev(args) {
         const { user, addQueuedQuery } = self
@@ -871,14 +856,8 @@ export const RootStore = RootStoreBase.props({
       destroy(model) {
         destroy(model)
       },
-      upsertHerkunftFileModel(val) {
-        self.herkunft_files.set(val.id, val)
-      },
       deleteHerkunftFileModel(val) {
         self.herkunft_files.delete(val.id)
-      },
-      upsertKulturModel(val) {
-        self.kulturs.set(val.id, val)
       },
       async insertKulturRev(args) {
         const {
@@ -964,14 +943,8 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.kultur_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertKulturFileModel(val) {
-        self.kultur_files.set(val.id, val)
-      },
       deleteKulturFileModel(val) {
         self.kultur_files.delete(val.id)
-      },
-      upsertKulturOptionModel(val) {
-        self.kultur_options.set(val.id, val)
       },
       async deleteKulturOptionRevModel(val) {
         // 1. update model: remove this conflict
@@ -983,14 +956,8 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.kultur_option_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertKulturQkModel(val) {
-        self.kultur_qks.set(val.id, val)
-      },
       deleteKulturQkModel(val) {
         self.kultur_qks.delete(val.id)
-      },
-      upsertKulturQkChoosenModel(val) {
-        self.kultur_qk_choosens.set(val.id, val)
       },
       async insertKulturQkChoosenRev(args) {
         const { user, addQueuedQuery } = self
@@ -1054,9 +1021,6 @@ export const RootStore = RootStoreBase.props({
         // 2. delete rev model
         const rev_model = self.kultur_qk_choosen_revs.get(val.id)
         destroy(rev_model)
-      },
-      upsertLieferungModel(val) {
-        self.lieferungs.set(val.id, val)
       },
       async insertLieferungRev(args) {
         const {
@@ -1160,14 +1124,8 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.lieferung_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertLieferungFileModel(val) {
-        self.lieferung_files.set(val.id, val)
-      },
       deleteLieferungFileModel(val) {
         self.lieferung_files.delete(val.id)
-      },
-      upsertPersonModel(val) {
-        self.persons.set(val.id, val)
       },
       async insertPersonRev(args) {
         const { user, addQueuedQuery } = self
@@ -1256,14 +1214,8 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.person_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertPersonFileModel(val) {
-        self.person_files.set(val.id, val)
-      },
       deletePersonFileModel(val) {
         self.person_files.delete(val.id)
-      },
-      upsertPersonOptionModel(val) {
-        self.person_options.set(val.id, val)
       },
       async deletePersonOptionRevModel(val) {
         // 1. update model: remove this conflict
@@ -1274,9 +1226,6 @@ export const RootStore = RootStoreBase.props({
         // 2. delete rev model
         const rev_model = self.person_option_revs.get(val.id)
         destroy(rev_model)
-      },
-      upsertSammelLieferungModel(val) {
-        self.sammel_lieferungs.set(val.id, val)
       },
       async insertSammelLieferungRev(args) {
         const {
@@ -1370,9 +1319,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.sammel_lieferung_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertSammlungModel(val) {
-        self.sammlungs.set(val.id, val)
-      },
       async insertSammlungRev(args) {
         const {
           user,
@@ -1461,14 +1407,8 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.sammlung_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertSammlungFileModel(val) {
-        self.sammlung_files.set(val.id, val)
-      },
       deleteSammlungFileModel(val) {
         self.sammlung_files.delete(val.id)
-      },
-      upsertTeilkulturModel(val) {
-        self.teilkulturs.set(val.id, val)
       },
       async insertTeilkulturRev(args) {
         const { user, addQueuedQuery, kulturIdInActiveNodeArray } = self
@@ -1552,9 +1492,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.teilkultur_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertTeilzaehlungModel(val) {
-        self.teilzaehlungs.set(val.id, val)
-      },
       async insertTeilzaehlungRev(args) {
         const {
           user,
@@ -1629,14 +1566,8 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.teilzaehlung_revs.get(val.id)
         destroy(rev_model)
       },
-      upsertUserRoleModel(val) {
-        self.user_roles.set(val.id, val)
-      },
       deleteUserRoleModel(val) {
         self.user_roles.delete(val.id)
-      },
-      upsertZaehlungModel(val) {
-        self.zaehlungs.set(val.id, val)
       },
       async insertZaehlungRev(args) {
         const { user, addQueuedQuery, kulturIdInActiveNodeArray } = self
