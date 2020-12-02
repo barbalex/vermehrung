@@ -96,6 +96,27 @@ const initializeSubscriptions = ({ store }) => {
     subscribeZaehlung,
   } = store
   const unsubscribe = {}
+  console.log('initializeSubscriptions', {
+    aeArtQuery: ae_artModelPrimitives.toString(),
+  })
+  // the uncommented code uses the gqlWsClient directly, circumventing mst-gql
+  // TODO:
+  // switch to this method when data is queried everywhere from watermelondb
+  // then ditch mst-gql
+  /*unsubscribe.ae_art = store.gqlWsClient
+    .request({
+      query: `subscription Mine($where: ae_art_bool_exp) { ae_art(where: $where) {
+        ${ae_artModelPrimitives.toString()}
+      } }`,
+      variables: { where: { _rev_at: { _gt: ae_art_lastUpdated } } },
+    })
+    .subscribe({
+      next(data) {
+        console.log('initializeSubscriptions, next, data:', data)
+        updateWmFromData({ data: data.data.ae_art, table: 'ae_art', store })
+      },
+      error: (error) => console.log('subscribeAeArt, onError:', error),
+    })*/
   unsubscribe.ae_art = subscribeAe_art(
     { where: { _rev_at: { _gt: ae_art_lastUpdated } } },
     ae_artModelPrimitives.toString(),
