@@ -41,7 +41,7 @@ const GartenDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    row.delete()
+    row.delete({ store })
     setAnchorEl(null)
     if (filter.garten._deleted === false) {
       // need to remove openNode from openNodes
@@ -50,6 +50,7 @@ const GartenDeleteButton = ({ row }) => {
     }
   }, [
     row,
+    store,
     filter.garten._deleted,
     removeOpenNodeWithChildren,
     activeNodeArray,

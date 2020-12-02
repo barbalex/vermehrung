@@ -41,7 +41,7 @@ const LieferungDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    row.delete()
+    row.delete({ store })
     setAnchorEl(null)
     if (filter.lieferung._deleted === false) {
       // need to remove openNode from openNodes
@@ -50,6 +50,7 @@ const LieferungDeleteButton = ({ row }) => {
     }
   }, [
     row,
+    store,
     filter.lieferung._deleted,
     removeOpenNodeWithChildren,
     activeNodeArray,

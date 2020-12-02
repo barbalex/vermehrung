@@ -41,7 +41,7 @@ const SammelLieferungDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    row.delete()
+    row.delete({ store })
     setAnchorEl(null)
     if (filter.sammel_lieferung._deleted === false) {
       // need to remove openNode from openNodes
@@ -50,6 +50,7 @@ const SammelLieferungDeleteButton = ({ row }) => {
     }
   }, [
     row,
+    store,
     filter.sammel_lieferung._deleted,
     removeOpenNodeWithChildren,
     activeNodeArray,

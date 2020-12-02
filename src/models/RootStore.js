@@ -480,12 +480,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.art_qk_choosen_revs.get(val.id)
         destroy(rev_model)
       },
-      deleteArtFileModel(val) {
-        self.art_files.delete(val.id)
-      },
-      deleteArtQkModel(val) {
-        self.art_qks.delete(val.id)
-      },
       async insertAvRev(args) {
         const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
@@ -710,9 +704,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.garten_revs.get(val.id)
         destroy(rev_model)
       },
-      deleteGartenFileModel(val) {
-        self.garten_files.delete(val.id)
-      },
       async insertGvRev(args) {
         const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
@@ -856,9 +847,6 @@ export const RootStore = RootStoreBase.props({
       destroy(model) {
         destroy(model)
       },
-      deleteHerkunftFileModel(val) {
-        self.herkunft_files.delete(val.id)
-      },
       async insertKulturRev(args) {
         const {
           user,
@@ -943,9 +931,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.kultur_revs.get(val.id)
         destroy(rev_model)
       },
-      deleteKulturFileModel(val) {
-        self.kultur_files.delete(val.id)
-      },
       async deleteKulturOptionRevModel(val) {
         // 1. update model: remove this conflict
         const { db, destroy } = self
@@ -955,9 +940,6 @@ export const RootStore = RootStoreBase.props({
         // 2. delete rev model
         const rev_model = self.kultur_option_revs.get(val.id)
         destroy(rev_model)
-      },
-      deleteKulturQkModel(val) {
-        self.kultur_qks.delete(val.id)
       },
       async insertKulturQkChoosenRev(args) {
         const { user, addQueuedQuery } = self
@@ -1124,9 +1106,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.lieferung_revs.get(val.id)
         destroy(rev_model)
       },
-      deleteLieferungFileModel(val) {
-        self.lieferung_files.delete(val.id)
-      },
       async insertPersonRev(args) {
         const { user, addQueuedQuery } = self
         const { activeNodeArray, setActiveNodeArray } = self.tree
@@ -1213,9 +1192,6 @@ export const RootStore = RootStoreBase.props({
         // 2. delete rev model
         const rev_model = self.person_revs.get(val.id)
         destroy(rev_model)
-      },
-      deletePersonFileModel(val) {
-        self.person_files.delete(val.id)
       },
       async deletePersonOptionRevModel(val) {
         // 1. update model: remove this conflict
@@ -1407,9 +1383,6 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.sammlung_revs.get(val.id)
         destroy(rev_model)
       },
-      deleteSammlungFileModel(val) {
-        self.sammlung_files.delete(val.id)
-      },
       async insertTeilkulturRev(args) {
         const { user, addQueuedQuery, kulturIdInActiveNodeArray } = self
 
@@ -1565,9 +1538,6 @@ export const RootStore = RootStoreBase.props({
         // 2. delete rev model
         const rev_model = self.teilzaehlung_revs.get(val.id)
         destroy(rev_model)
-      },
-      deleteUserRoleModel(val) {
-        self.user_roles.delete(val.id)
       },
       async insertZaehlungRev(args) {
         const { user, addQueuedQuery, kulturIdInActiveNodeArray } = self

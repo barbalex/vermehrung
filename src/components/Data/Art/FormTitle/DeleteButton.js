@@ -41,7 +41,7 @@ const ArtDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    row.delete()
+    row.delete({ store })
     setAnchorEl(null)
     if (filter.art._deleted === false) {
       // need to remove openNode from openNodes
@@ -54,6 +54,7 @@ const ArtDeleteButton = ({ row }) => {
     removeOpenNodeWithChildren,
     row,
     setActiveNodeArray,
+    store,
   ])
 
   return (

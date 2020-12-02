@@ -41,7 +41,7 @@ const TeilkulturDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    row.delete()
+    row.delete({ store })
     setAnchorEl(null)
     if (filter.teilkultur._deleted === false) {
       // need to remove openNode from openNodes
@@ -50,6 +50,7 @@ const TeilkulturDeleteButton = ({ row }) => {
     }
   }, [
     row,
+    store,
     filter.teilkultur._deleted,
     removeOpenNodeWithChildren,
     activeNodeArray,

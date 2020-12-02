@@ -41,7 +41,7 @@ const ZaehlungDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    row.delete()
+    row.delete({ store })
     setAnchorEl(null)
     if (filter.zaehlung._deleted === false) {
       // need to remove openNode from openNodes
@@ -50,6 +50,7 @@ const ZaehlungDeleteButton = ({ row }) => {
     }
   }, [
     row,
+    store,
     filter.zaehlung._deleted,
     removeOpenNodeWithChildren,
     activeNodeArray,

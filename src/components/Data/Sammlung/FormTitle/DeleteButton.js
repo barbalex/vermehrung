@@ -41,7 +41,7 @@ const SammlungDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    row.delete()
+    row.delete({ store })
     setAnchorEl(null)
     if (filter.sammlung._deleted === false) {
       // need to remove openNode from openNodes
@@ -50,6 +50,7 @@ const SammlungDeleteButton = ({ row }) => {
     }
   }, [
     row,
+    store,
     filter.sammlung._deleted,
     removeOpenNodeWithChildren,
     activeNodeArray,
