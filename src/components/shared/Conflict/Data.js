@@ -57,7 +57,7 @@ const ConflictData = ({ dataArray, loading }) => {
         {showDiff ? (
           <Diff inputA={inputA} inputB={inputB} type="sentences" />
         ) : (
-          <div>{inputA}</div>
+          <div>{inputB}</div>
         )}
       </Row>
     )

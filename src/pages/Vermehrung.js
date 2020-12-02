@@ -187,9 +187,7 @@ const Vermehrung = ({ location }) => {
               backColor="#4a148c1a"
               loading={true}
             />
-            <SpinnerText>
-              lade alle Daten für offline-Nutzung - das kann dauern
-            </SpinnerText>
+            <SpinnerText>lade Daten für offline-Nutzung</SpinnerText>
             <SpinnerText2>{tableNames(initiallyQuerying)}</SpinnerText2>
           </SpinnerContainer>
         </Layout>

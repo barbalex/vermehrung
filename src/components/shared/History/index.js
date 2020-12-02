@@ -87,7 +87,7 @@ const History = ({ rev, dataArray, onClickUebernehmen }) => {
           title="Diese Version wiederherstellen"
           startIcon={<FaUndoAlt />}
         >
-          wiederherstellen
+          {diffConflict ? 'grüne Werte wiederherstellen' : 'wiederherstellen'}
         </StyledButton>
         <StyledButton
           onClick={onClickToggleDiff}
