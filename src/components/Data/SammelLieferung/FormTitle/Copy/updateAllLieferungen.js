@@ -3,14 +3,13 @@ import updateLieferung from './updateLieferung'
 const updateAllLieferungen = async ({ sammelLieferung, store, field }) => {
   // pass field to mark which field should be updated
   // even if it has value null
-  const lieferungs = [...store.lieferungs.values()].filter(
-    (l) => l.sammel_lieferung_id === sammelLieferung.id,
-  )
+  const lieferungs = sammelLieferung.lieferungs
+  console.log('updateAllLieferungen', { sammelLieferung, lieferungs })
   let error = null
-  for (const l of lieferungs) {
+  for (const lieferung of lieferungs) {
     try {
       updateLieferung({
-        lieferungId: l.id,
+        lieferung,
         sammelLieferung,
         store,
         field,

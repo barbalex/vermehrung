@@ -29,7 +29,8 @@ const Title = styled.div`
 
 const sammelLieferungFields = fieldsFromFragment(sammelLieferungFragment)
 
-const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
+const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
+  console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })
   const store = useContext(StoreContext)
   const { addNotification } = store
 
@@ -57,7 +58,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
     setAnchorEl(null)
     try {
       await updateLieferung({
-        lieferungId,
+        lieferung,
         sammelLieferung,
         store,
       })
@@ -68,7 +69,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
       message: 'Lieferung aktualisiert',
       type: 'info',
     })
-  }, [addNotification, lieferungId, sammelLieferung, store])
+  }, [addNotification, lieferung, sammelLieferung, store])
   const onClickAllLieferung = useCallback(async () => {
     setAnchorEl(null)
     updateAllLieferungen({
@@ -98,7 +99,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
         <TitleRow>
           <Title>Die Daten der Sammel-Lieferung kopieren:</Title>
         </TitleRow>
-        {lieferungId && (
+        {lieferung && (
           <MenuItem onClick={onClickActiveLieferung}>
             in die links angezeigte Lieferung
           </MenuItem>

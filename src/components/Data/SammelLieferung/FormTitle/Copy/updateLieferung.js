@@ -13,7 +13,8 @@ import exists from '../../../../../utils/exists'
 const lieferungRevFields = fieldsFromFragment(lieferungRevFragment)
 const lieferungFields = fieldsFromFragment(lieferungFragment)
 
-const updateLieferung = ({ lieferungId, sammelLieferung, store, field }) => {
+const updateLieferung = ({ lieferung, sammelLieferung, store, field }) => {
+  console.log('updateLieferung, lieferung:', lieferung)
   // pass field to mark which field should be updated
   // even if it has value null
   const newValuesFromSl = Object.fromEntries(
@@ -31,7 +32,7 @@ const updateLieferung = ({ lieferungId, sammelLieferung, store, field }) => {
       }),
   )
   // need to query existing object to get revisions
-  const lfLastVersion = store.lieferungs.get(lieferungId)
+  const lfLastVersion = lieferung
   const oldValuesFromL = Object.fromEntries(
     Object.entries(lfLastVersion).filter(
       // only accept lieferung's fields
@@ -43,7 +44,7 @@ const updateLieferung = ({ lieferungId, sammelLieferung, store, field }) => {
     ...oldValuesFromL,
     ...newValuesFromSl,
     id: uuidv1(),
-    lieferung_id: lieferungId,
+    lieferung_id: lieferung.id,
     sammel_lieferung_id: sammelLieferung.id,
   }
   delete newObject._conflicts
@@ -71,7 +72,7 @@ const updateLieferung = ({ lieferungId, sammelLieferung, store, field }) => {
       },
     }),
     revertTable: 'lieferung',
-    revertId: lieferungId,
+    revertId: lieferung.id,
     revertValues: JSON.stringify(newObject),
   })
   // optimistically update store
