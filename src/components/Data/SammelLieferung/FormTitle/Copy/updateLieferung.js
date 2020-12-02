@@ -1,6 +1,7 @@
 import md5 from 'blueimp-md5'
 import { DateTime } from 'luxon'
 import { v1 as uuidv1 } from 'uuid'
+import isEqual from 'lodash/isEqual'
 
 import {
   lieferung_rev as lieferungRevFragment,
@@ -13,7 +14,13 @@ import exists from '../../../../../utils/exists'
 const lieferungRevFields = fieldsFromFragment(lieferungRevFragment)
 const lieferungFields = fieldsFromFragment(lieferungFragment)
 
-const updateLieferung = ({ lieferung, sammelLieferung, store, field }) => {
+const updateLieferung = async ({
+  lieferung,
+  sammelLieferung,
+  store,
+  field,
+}) => {
+  const { addQueuedQuery, db, user } = store
   console.log('updateLieferung, lieferung:', lieferung)
   // pass field to mark which field should be updated
   // even if it has value null
@@ -51,7 +58,7 @@ const updateLieferung = ({ lieferung, sammelLieferung, store, field }) => {
   delete newObject.__typename
   const depth = lfLastVersion._depth + 1
   newObject.changed = DateTime.local().toFormat('yyyy.LL.dd')
-  newObject.changed_by = store.user.email
+  newObject.changed_by = user.email
   newObject._parent_rev = lfLastVersion._rev
   newObject._depth = depth
   const rev = `${depth}-${md5(JSON.stringify(newObject))}`
@@ -62,7 +69,7 @@ const updateLieferung = ({ lieferung, sammelLieferung, store, field }) => {
   newObject._revisions = lfLastVersion._revisions
     ? toPgArray([rev, ...lfLastVersion._revisions])
     : toPgArray([rev])
-  store.addQueuedQuery({
+  addQueuedQuery({
     name: 'mutateInsert_lieferung_rev_one',
     variables: JSON.stringify({
       object: newObject,
@@ -82,7 +89,15 @@ const updateLieferung = ({ lieferung, sammelLieferung, store, field }) => {
   newObjectForStore._conflicts = lfLastVersion._conflicts
   newObjectForStore.id = lfLastVersion.id
   delete newObjectForStore.lieferung_id
-  store.upsertLieferungModel(newObjectForStore)
+  await db.action(async () => {
+    await lieferung.update((row) => {
+      Object.entries(newObjectForStore).forEach(([key, value]) => {
+        if (!isEqual(value, row[key])) {
+          row[key] = value
+        }
+      })
+    })
+  })
 }
 
 export default updateLieferung
