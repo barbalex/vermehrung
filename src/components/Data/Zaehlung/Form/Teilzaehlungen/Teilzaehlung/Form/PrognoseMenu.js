@@ -131,7 +131,7 @@ const PrognoseMenu = ({
       const emptyTeilzaehlung = emptyTeilzaehlungenData?.teilzaehlung?.[0]
       if (emptyTeilzaehlung) {
         const emptyTzModel = store.teilzaehlungs.get(emptyTeilzaehlung.id)
-        emptyTzModel.delete()
+        emptyTzModel.delete({ store })
       }
       addNotification({
         message: 'Die Prognose wurde gespeichert',
@@ -148,7 +148,7 @@ const PrognoseMenu = ({
       jahr,
       kulturId,
       setAnchorEl,
-      store.teilzaehlungs,
+      store,
       teilzaehlung,
       teilzaehlungsSorted,
       zaehlungsSorted,

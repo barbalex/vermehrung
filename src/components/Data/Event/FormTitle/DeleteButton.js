@@ -41,7 +41,7 @@ const EventDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    row.delete()
+    row.delete({ store })
     setAnchorEl(null)
     if (filter.event._deleted === false) {
       // need to remove openNode from openNodes
@@ -50,6 +50,7 @@ const EventDeleteButton = ({ row }) => {
     }
   }, [
     row,
+    store,
     filter.event._deleted,
     removeOpenNodeWithChildren,
     activeNodeArray,

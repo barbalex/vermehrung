@@ -147,8 +147,8 @@ const TeilzaehlungForm = ({
     [row, store],
   )
   const onClickDelete = useCallback(() => {
-    row.delete()
-  }, [row])
+    row.delete({ store })
+  }, [row, store])
 
   const showDeleted = row?._deleted || filter.teilzaehlung._deleted !== false
 

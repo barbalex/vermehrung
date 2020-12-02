@@ -41,7 +41,7 @@ const PersonDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(async () => {
-    row.delete()
+    row.delete({ store })
     setAnchorEl(null)
     if (filter.person._deleted === false) {
       // need to remove openNode from openNodes
@@ -54,6 +54,7 @@ const PersonDeleteButton = ({ row }) => {
     removeOpenNodeWithChildren,
     row,
     setActiveNodeArray,
+    store,
   ])
 
   return (
