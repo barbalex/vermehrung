@@ -779,34 +779,6 @@
         "schema": "public",
         "name": "art_qk"
       },
-      "array_relationships": [
-        {
-          "name": "art_qk_choosen",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "art_qk_choosen"
-              },
-              "column_mapping": {
-                "name": "qk_name"
-              }
-            }
-          }
-        },
-        {
-          "name": "art_qk_choosen_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "qk_name",
-              "table": {
-                "schema": "public",
-                "name": "art_qk_choosen_rev"
-              }
-            }
-          }
-        }
-      ],
       "insert_permissions": [
         {
           "role": "manager",
@@ -947,20 +919,6 @@
           "using": {
             "foreign_key_constraint_on": "art_id"
           }
-        },
-        {
-          "name": "art_qk",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "art_qk"
-              },
-              "column_mapping": {
-                "qk_name": "name"
-              }
-            }
-          }
         }
       ],
       "insert_permissions": [
@@ -986,19 +944,19 @@
               ]
             },
             "columns": [
+              "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
+              "_revisions",
               "art_id",
-              "qk_name",
-              "id",
               "changed",
               "changed_by",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_deleted",
-              "_conflicts",
               "choosen",
-              "_rev_at"
+              "id",
+              "qk_id"
             ]
           }
         },
@@ -1007,19 +965,19 @@
           "permission": {
             "check": {},
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
-              "changed",
+              "_rev_at",
+              "_revisions",
               "art_id",
-              "id"
+              "changed",
+              "changed_by",
+              "choosen",
+              "id",
+              "qk_id"
             ]
           }
         }
@@ -1029,19 +987,19 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
-              "changed",
+              "_rev_at",
+              "_revisions",
               "art_id",
-              "id"
+              "changed",
+              "changed_by",
+              "choosen",
+              "id",
+              "qk_id"
             ],
             "filter": {
               "_or": [
@@ -1068,19 +1026,19 @@
           "role": "gaertner",
           "permission": {
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
-              "changed",
+              "_rev_at",
+              "_revisions",
               "art_id",
-              "id"
+              "changed",
+              "changed_by",
+              "choosen",
+              "id",
+              "qk_id"
             ],
             "filter": {
               "art": {
@@ -1114,19 +1072,19 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
-              "changed",
+              "_rev_at",
+              "_revisions",
               "art_id",
-              "id"
+              "changed",
+              "changed_by",
+              "choosen",
+              "id",
+              "qk_id"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -1138,19 +1096,19 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
-              "changed",
+              "_rev_at",
+              "_revisions",
               "art_id",
-              "id"
+              "changed",
+              "changed_by",
+              "choosen",
+              "id",
+              "qk_id"
             ],
             "filter": {
               "_or": [
@@ -1177,19 +1135,19 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
+              "_revisions",
               "art_id",
-              "qk_name",
-              "id",
               "changed",
               "changed_by",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_deleted",
-              "_conflicts",
               "choosen",
-              "_rev_at"
+              "id",
+              "qk_id"
             ],
             "filter": {},
             "check": null
@@ -1239,50 +1197,27 @@
           "using": {
             "foreign_key_constraint_on": "art_id"
           }
-        },
-        {
-          "name": "art_qk",
-          "using": {
-            "foreign_key_constraint_on": "qk_name"
-          }
         }
       ],
       "insert_permissions": [
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "art_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "art": {
-                    "avs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
-              "id",
-              "art_qk_choosen_id",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
+              "_revisions",
               "art_id",
-              "qk_name",
+              "art_qk_choosen_id",
               "changed",
               "changed_by",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_deleted",
               "choosen",
-              "_rev_at"
+              "id",
+              "qk_id"
             ],
             "backend_only": false
           }
@@ -1292,19 +1227,19 @@
           "permission": {
             "check": {},
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
-              "changed",
               "art_id",
               "art_qk_choosen_id",
-              "id"
+              "changed",
+              "changed_by",
+              "choosen",
+              "id",
+              "qk_id"
             ],
             "backend_only": false
           }
@@ -1315,47 +1250,28 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
-              "changed",
               "art_id",
               "art_qk_choosen_id",
-              "id"
+              "changed",
+              "changed_by",
+              "choosen",
+              "id",
+              "qk_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "art_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "art": {
-                    "avs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
         {
           "role": "gaertner",
           "permission": {
-            "columns": [
-              "id"
-            ],
+            "columns": ["id"],
             "filter": {}
           }
         },
@@ -1363,19 +1279,19 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
-              "changed",
               "art_id",
               "art_qk_choosen_id",
-              "id"
+              "changed",
+              "changed_by",
+              "choosen",
+              "id",
+              "qk_id"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -1387,38 +1303,21 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
-              "changed",
               "art_id",
               "art_qk_choosen_id",
-              "id"
+              "changed",
+              "changed_by",
+              "choosen",
+              "id",
+              "qk_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "art_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "art": {
-                    "avs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -1426,19 +1325,19 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
-              "changed",
               "art_id",
               "art_qk_choosen_id",
-              "id"
+              "changed",
+              "changed_by",
+              "choosen",
+              "id",
+              "qk_id"
             ],
             "filter": {},
             "check": null
@@ -1583,17 +1482,20 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "_deleted",
-              "sort",
-              "_depth",
-              "_revisions",
-              "beschreibung",
-              "name",
-              "_parent_rev",
-              "_rev",
-              "titel",
+              "id",
               "art_qk_id",
-              "id"
+              "name",
+              "titel",
+              "beschreibung",
+              "sort",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "changed",
+              "changed_by",
+              "_rev_at"
             ],
             "filter": {},
             "check": null
@@ -1720,13 +1622,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "avs": {
-                "person_id": {
-                  "_eq": "X-Hasura-User-Id"
-                }
-              }
-            },
+            "check": {},
             "columns": [
               "art_id",
               "ae_id",
@@ -1781,13 +1677,7 @@
               "art_id",
               "id"
             ],
-            "filter": {
-              "avs": {
-                "person_id": {
-                  "_eq": "X-Hasura-User-Id"
-                }
-              }
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -7210,20 +7100,6 @@
         "schema": "public",
         "name": "kultur_qk"
       },
-      "array_relationships": [
-        {
-          "name": "kultur_qk_choosens",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "qk_name",
-              "table": {
-                "schema": "public",
-                "name": "kultur_qk_choosen"
-              }
-            }
-          }
-        }
-      ],
       "insert_permissions": [
         {
           "role": "manager",
@@ -7364,12 +7240,6 @@
           "using": {
             "foreign_key_constraint_on": "kultur_id"
           }
-        },
-        {
-          "name": "kultur_qk",
-          "using": {
-            "foreign_key_constraint_on": "qk_name"
-          }
         }
       ],
       "insert_permissions": [
@@ -7408,19 +7278,19 @@
               ]
             },
             "columns": [
-              "kultur_id",
-              "qk_name",
-              "id",
+              "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
+              "_revisions",
               "changed",
               "changed_by",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_deleted",
-              "_conflicts",
               "choosen",
-              "_rev_at"
+              "id",
+              "kultur_id",
+              "qk_id"
             ]
           }
         },
@@ -7448,19 +7318,19 @@
               ]
             },
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
+              "_rev_at",
+              "_revisions",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
-              "kultur_id"
+              "kultur_id",
+              "qk_id"
             ]
           }
         },
@@ -7469,19 +7339,19 @@
           "permission": {
             "check": {},
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
+              "_rev_at",
+              "_revisions",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
-              "kultur_id"
+              "kultur_id",
+              "qk_id"
             ]
           }
         }
@@ -7491,19 +7361,19 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
+              "_rev_at",
+              "_revisions",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
-              "kultur_id"
+              "kultur_id",
+              "qk_id"
             ],
             "filter": {
               "_or": [
@@ -7543,19 +7413,19 @@
           "role": "gaertner",
           "permission": {
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
+              "_rev_at",
+              "_revisions",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
-              "kultur_id"
+              "kultur_id",
+              "qk_id"
             ],
             "filter": {
               "_or": [
@@ -7584,19 +7454,19 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
+              "_rev_at",
+              "_revisions",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
-              "kultur_id"
+              "kultur_id",
+              "qk_id"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -7608,19 +7478,19 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
+              "_rev_at",
+              "_revisions",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
-              "kultur_id"
+              "kultur_id",
+              "qk_id"
             ],
             "filter": {
               "_or": [
@@ -7660,19 +7530,19 @@
           "role": "gaertner",
           "permission": {
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
+              "_rev_at",
+              "_revisions",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
-              "kultur_id"
+              "kultur_id",
+              "qk_id"
             ],
             "filter": {
               "_or": [
@@ -7701,19 +7571,19 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "choosen",
+              "_conflicts",
               "_deleted",
               "_depth",
-              "_rev_at",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
               "_parent_rev",
-              "qk_name",
               "_rev",
+              "_rev_at",
+              "_revisions",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
-              "kultur_id"
+              "kultur_id",
+              "qk_id"
             ],
             "filter": {},
             "check": null
@@ -7801,12 +7671,6 @@
           "using": {
             "foreign_key_constraint_on": "kultur_id"
           }
-        },
-        {
-          "name": "kultur_qk",
-          "using": {
-            "foreign_key_constraint_on": "qk_name"
-          }
         }
       ],
       "insert_permissions": [
@@ -7845,19 +7709,19 @@
               ]
             },
             "columns": [
-              "id",
-              "kultur_qk_choosen_id",
-              "kultur_id",
-              "qk_name",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
+              "_revisions",
               "changed",
               "changed_by",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_deleted",
               "choosen",
-              "_rev_at"
+              "id",
+              "kultur_id",
+              "kultur_qk_choosen_id",
+              "qk_id"
             ],
             "backend_only": false
           }
@@ -7886,19 +7750,19 @@
               ]
             },
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
               "kultur_id",
-              "kultur_qk_choosen_id"
+              "kultur_qk_choosen_id",
+              "qk_id"
             ],
             "backend_only": false
           }
@@ -7908,19 +7772,19 @@
           "permission": {
             "check": {},
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
               "kultur_id",
-              "kultur_qk_choosen_id"
+              "kultur_qk_choosen_id",
+              "qk_id"
             ],
             "backend_only": false
           }
@@ -7931,19 +7795,19 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
               "kultur_id",
-              "kultur_qk_choosen_id"
+              "kultur_qk_choosen_id",
+              "qk_id"
             ],
             "filter": {
               "_or": [
@@ -7983,19 +7847,19 @@
           "role": "gaertner",
           "permission": {
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
               "kultur_id",
-              "kultur_qk_choosen_id"
+              "kultur_qk_choosen_id",
+              "qk_id"
             ],
             "filter": {
               "_or": [
@@ -8024,19 +7888,19 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
               "kultur_id",
-              "kultur_qk_choosen_id"
+              "kultur_qk_choosen_id",
+              "qk_id"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -8048,19 +7912,19 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
               "kultur_id",
-              "kultur_qk_choosen_id"
+              "kultur_qk_choosen_id",
+              "qk_id"
             ],
             "filter": {
               "_or": [
@@ -8100,19 +7964,19 @@
           "role": "gaertner",
           "permission": {
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
               "kultur_id",
-              "kultur_qk_choosen_id"
+              "kultur_qk_choosen_id",
+              "qk_id"
             ],
             "filter": {
               "_or": [
@@ -8141,19 +8005,19 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "choosen",
               "_deleted",
               "_depth",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
               "changed",
+              "changed_by",
+              "choosen",
               "id",
               "kultur_id",
-              "kultur_qk_choosen_id"
+              "kultur_qk_choosen_id",
+              "qk_id"
             ],
             "filter": {},
             "check": null
@@ -11047,12 +10911,6 @@
               }
             }
           }
-        },
-        {
-          "name": "userRoleByUserRole",
-          "using": {
-            "foreign_key_constraint_on": "user_role"
-          }
         }
       ],
       "array_relationships": [
@@ -11252,34 +11110,33 @@
               ]
             },
             "columns": [
-              "id",
-              "nr",
-              "name",
+              "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
+              "_revisions",
+              "account_id",
               "adresszusatz",
-              "strasse",
-              "plz",
-              "ort",
-              "telefon_privat",
-              "telefon_geschaeft",
-              "telefon_mobile",
-              "email",
-              "kein_email",
+              "aktiv",
               "bemerkungen",
               "changed",
               "changed_by",
-              "account_id",
-              "user_role",
-              "kommerziell",
+              "email",
+              "id",
               "info",
-              "aktiv",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_conflicts",
-              "_deleted",
-              "vorname",
-              "_rev_at"
+              "kein_email",
+              "kommerziell",
+              "name",
+              "nr",
+              "ort",
+              "plz",
+              "strasse",
+              "telefon_geschaeft",
+              "telefon_mobile",
+              "telefon_privat",
+              "vorname"
             ]
           }
         },
@@ -11292,34 +11149,33 @@
               }
             },
             "columns": [
-              "aktiv",
-              "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
-              "_depth",
-              "plz",
-              "_rev_at",
               "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id"
+              "vorname"
             ],
             "backend_only": false
           }
@@ -11329,34 +11185,34 @@
           "permission": {
             "check": {},
             "columns": [
-              "aktiv",
-              "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
-              "_depth",
-              "plz",
-              "_rev_at",
               "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id"
+              "user_role_id",
+              "vorname"
             ]
           }
         }
@@ -11366,34 +11222,34 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "aktiv",
-              "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
-              "_depth",
-              "plz",
-              "_rev_at",
               "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id"
+              "user_role_id",
+              "vorname"
             ],
             "filter": {
               "_or": [
@@ -11424,34 +11280,34 @@
           "role": "gaertner",
           "permission": {
             "columns": [
-              "aktiv",
-              "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
-              "_depth",
-              "plz",
-              "_rev_at",
               "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id"
+              "user_role_id",
+              "vorname"
             ],
             "filter": {
               "id": {
@@ -11464,34 +11320,34 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "aktiv",
-              "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
-              "_depth",
-              "plz",
-              "_rev_at",
               "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id"
+              "user_role_id",
+              "vorname"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -11503,34 +11359,33 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "id",
-              "nr",
-              "name",
+              "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
+              "_revisions",
+              "account_id",
               "adresszusatz",
-              "strasse",
-              "plz",
-              "ort",
-              "telefon_privat",
-              "telefon_geschaeft",
-              "telefon_mobile",
-              "email",
-              "kein_email",
+              "aktiv",
               "bemerkungen",
               "changed",
               "changed_by",
-              "account_id",
-              "user_role",
-              "kommerziell",
+              "email",
+              "id",
               "info",
-              "aktiv",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_conflicts",
-              "_deleted",
-              "vorname",
-              "_rev_at"
+              "kein_email",
+              "kommerziell",
+              "name",
+              "nr",
+              "ort",
+              "plz",
+              "strasse",
+              "telefon_geschaeft",
+              "telefon_mobile",
+              "telefon_privat",
+              "vorname"
             ],
             "filter": {
               "_or": [
@@ -11561,34 +11416,33 @@
           "role": "gaertner",
           "permission": {
             "columns": [
-              "aktiv",
-              "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
-              "_depth",
-              "plz",
-              "_rev_at",
               "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id"
+              "vorname"
             ],
             "filter": {
               "id": {
@@ -11602,34 +11456,34 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "aktiv",
-              "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
-              "_depth",
-              "plz",
-              "_rev_at",
               "_conflicts",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id"
+              "user_role_id",
+              "vorname"
             ],
             "filter": {},
             "check": null
@@ -12829,12 +12683,6 @@
               }
             }
           }
-        },
-        {
-          "name": "userRoleByUserRole",
-          "using": {
-            "foreign_key_constraint_on": "user_role"
-          }
         }
       ],
       "array_relationships": [
@@ -12950,34 +12798,34 @@
               ]
             },
             "columns": [
-              "person_id",
-              "nr",
-              "name",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
+              "_revisions",
+              "account_id",
               "adresszusatz",
-              "strasse",
-              "plz",
-              "ort",
-              "telefon_privat",
-              "telefon_geschaeft",
-              "telefon_mobile",
-              "email",
-              "kein_email",
+              "aktiv",
               "bemerkungen",
               "changed",
               "changed_by",
-              "account_id",
-              "user_role",
-              "kommerziell",
-              "info",
-              "aktiv",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_deleted",
+              "email",
               "id",
-              "vorname",
-              "_rev_at"
+              "info",
+              "kein_email",
+              "kommerziell",
+              "name",
+              "nr",
+              "ort",
+              "person_id",
+              "plz",
+              "strasse",
+              "telefon_geschaeft",
+              "telefon_mobile",
+              "telefon_privat",
+              "user_role_id",
+              "vorname"
             ],
             "backend_only": false
           }
@@ -12991,34 +12839,34 @@
               }
             },
             "columns": [
-              "aktiv",
               "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
               "_depth",
-              "plz",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "person_id",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id",
-              "person_id"
+              "user_role_id",
+              "vorname"
             ],
             "backend_only": false
           }
@@ -13028,34 +12876,34 @@
           "permission": {
             "check": {},
             "columns": [
-              "aktiv",
               "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
               "_depth",
-              "plz",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "person_id",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id",
-              "person_id"
+              "user_role_id",
+              "vorname"
             ],
             "backend_only": false
           }
@@ -13066,34 +12914,34 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "person_id",
-              "nr",
-              "name",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_rev_at",
+              "_revisions",
+              "account_id",
               "adresszusatz",
-              "strasse",
-              "plz",
-              "ort",
-              "telefon_privat",
-              "telefon_geschaeft",
-              "telefon_mobile",
-              "email",
-              "kein_email",
+              "aktiv",
               "bemerkungen",
               "changed",
               "changed_by",
-              "account_id",
-              "user_role",
-              "kommerziell",
-              "info",
-              "aktiv",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_deleted",
+              "email",
               "id",
-              "vorname",
-              "_rev_at"
+              "info",
+              "kein_email",
+              "kommerziell",
+              "name",
+              "nr",
+              "ort",
+              "person_id",
+              "plz",
+              "strasse",
+              "telefon_geschaeft",
+              "telefon_mobile",
+              "telefon_privat",
+              "user_role_id",
+              "vorname"
             ],
             "filter": {
               "_or": [
@@ -13124,34 +12972,34 @@
           "role": "gaertner",
           "permission": {
             "columns": [
-              "aktiv",
               "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
               "_depth",
-              "plz",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "person_id",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id",
-              "person_id"
+              "user_role_id",
+              "vorname"
             ],
             "filter": {
               "person_id": {
@@ -13164,34 +13012,34 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "aktiv",
               "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
               "_depth",
-              "plz",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "person_id",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id",
-              "person_id"
+              "user_role_id",
+              "vorname"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -13203,34 +13051,34 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "aktiv",
               "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
               "_depth",
-              "plz",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "person_id",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id",
-              "person_id"
+              "user_role_id",
+              "vorname"
             ],
             "filter": {
               "_or": [
@@ -13261,34 +13109,34 @@
           "role": "gaertner",
           "permission": {
             "columns": [
-              "aktiv",
               "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
               "_depth",
-              "plz",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "person_id",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id",
-              "person_id"
+              "user_role_id",
+              "vorname"
             ],
             "filter": {
               "person_id": {
@@ -13302,34 +13150,34 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "aktiv",
               "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
               "_depth",
-              "plz",
+              "_parent_rev",
+              "_rev",
               "_rev_at",
               "_revisions",
               "account_id",
               "adresszusatz",
+              "aktiv",
               "bemerkungen",
+              "changed",
               "changed_by",
               "email",
+              "id",
+              "info",
+              "kein_email",
+              "kommerziell",
               "name",
               "nr",
               "ort",
-              "_parent_rev",
-              "_rev",
+              "person_id",
+              "plz",
               "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
               "telefon_privat",
-              "user_role",
-              "vorname",
-              "changed",
-              "id",
-              "person_id"
+              "user_role_id",
+              "vorname"
             ],
             "filter": {},
             "check": null
@@ -17802,22 +17650,6 @@
           }
         }
       ],
-      "array_relationships": [
-        {
-          "name": "teilzaehlungs",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "teilzaehlung"
-              },
-              "column_mapping": {
-                "teilzaehlung_id": "prognose_von_tz"
-              }
-            }
-          }
-        }
-      ],
       "insert_permissions": [
         {
           "role": "artverantwortlich",
@@ -18259,32 +18091,6 @@
         "schema": "public",
         "name": "user_role"
       },
-      "array_relationships": [
-        {
-          "name": "person_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "user_role",
-              "table": {
-                "schema": "public",
-                "name": "person_rev"
-              }
-            }
-          }
-        },
-        {
-          "name": "persons",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "user_role",
-              "table": {
-                "schema": "public",
-                "name": "person"
-              }
-            }
-          }
-        }
-      ],
       "select_permissions": [
         {
           "role": "artverantwortlich",
