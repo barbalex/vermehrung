@@ -2617,37 +2617,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "event_id",
               "kultur_id",
@@ -2672,26 +2642,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "geplant",
@@ -3724,26 +3675,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "person_id": {
-                    "_eq": "X-Hasura-User-Id"
-                  }
-                },
-                {
-                  "kulturs": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "aktiv",
               "_deleted",
@@ -3770,11 +3702,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "check": {},
             "columns": [
               "aktiv",
               "_deleted",
@@ -6667,37 +6595,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "kultur_id",
               "z_bemerkungen",
@@ -6728,26 +6626,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "ev_datum",
@@ -7677,37 +7556,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "_depth",
@@ -7729,26 +7578,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "_depth",
@@ -8350,33 +8180,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "art_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "art": {
-                    "avs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                },
-                {
-                  "garten": {
-                    "gvs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "kultur_id",
               "art_id",
@@ -8403,24 +8207,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "garten_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "garten": {
-                    "gvs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "aktiv",
               "_deleted",
@@ -10283,68 +10070,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "_or": [
-                    {
-                      "art_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "_or": [
-                    {
-                      "_and": [
-                        {
-                          "nach_kultur_id": {
-                            "_is_null": true
-                          }
-                        },
-                        {
-                          "von_kultur_id": {
-                            "_is_null": true
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kulturByNachKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kulturByVonKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "lieferung_id",
               "sammel_lieferung_id",
@@ -10378,46 +10104,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kulturByNachKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kulturByVonKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "_and": [
-                    {
-                      "von_kultur_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "nach_kultur_id": {
-                        "_is_null": true
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "geplant",
@@ -12259,11 +11946,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "check": {},
             "columns": [
               "person_id",
               "ar_name_deutsch",
@@ -12305,11 +11988,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "check": {},
             "columns": [
               "ar_name_deutsch",
               "_deleted",
@@ -12775,28 +12454,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "person_id": {
-                    "_eq": "X-Hasura-User-Id"
-                  }
-                },
-                {
-                  "gartens": {
-                    "kulturs": {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "_depth",
@@ -12833,11 +12491,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "_depth",
@@ -14030,68 +13684,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "_or": [
-                    {
-                      "art_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "_or": [
-                    {
-                      "_and": [
-                        {
-                          "nach_kultur_id": {
-                            "_is_null": true
-                          }
-                        },
-                        {
-                          "von_kultur_id": {
-                            "_is_null": true
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kulturByNachKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kulturByVonKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "sammel_lieferung_id",
               "art_id",
@@ -14124,46 +13717,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kulturByNachKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kulturByVonKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "_and": [
-                    {
-                      "von_kultur_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "nach_kultur_id": {
-                        "_is_null": true
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "geplant",
@@ -15653,63 +15207,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "_or": [
-                    {
-                      "art_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "_or": [
-                    {
-                      "_and": [
-                        {
-                          "lieferungs": {
-                            "nach_ausgepflanzt": {
-                              "_is_null": true
-                            }
-                          }
-                        },
-                        {
-                          "lieferungs": {
-                            "nach_kultur_id": {
-                              "_is_null": true
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "lieferungs": {
-                        "kulturByNachKulturId": {
-                          "garten": {
-                            "gvs": {
-                              "person_id": {
-                                "_eq": "X-Hasura-User-Id"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "sammlung_id",
               "art_id",
@@ -16672,41 +16170,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "_or": [
-                    {
-                      "kultur": {
-                        "art": {
-                          "avs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kultur": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "teilkultur_id",
               "kultur_id",
@@ -16731,26 +16195,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "_depth",
@@ -17654,45 +17099,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "zaehlung_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "_or": [
-                    {
-                      "zaehlung": {
-                        "kultur": {
-                          "art": {
-                            "avs": {
-                              "person_id": {
-                                "_eq": "X-Hasura-User-Id"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "zaehlung": {
-                        "kultur": {
-                          "garten": {
-                            "gvs": {
-                              "person_id": {
-                                "_eq": "X-Hasura-User-Id"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "teilzaehlung_id",
               "zaehlung_id",
@@ -17720,28 +17127,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "zaehlung_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "teilkultur": {
-                    "kultur": {
-                      "garten": {
-                        "gvs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "anzahl_auspflanzbereit",
@@ -18657,41 +18043,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "_or": [
-                    {
-                      "kultur": {
-                        "art": {
-                          "avs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kultur": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "zaehlung_id",
               "kultur_id",
@@ -18714,26 +18066,7 @@
         {
           "role": "gaertner",
           "permission": {
-            "check": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "check": {},
             "columns": [
               "_deleted",
               "prognose",
