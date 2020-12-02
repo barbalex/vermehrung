@@ -241,7 +241,7 @@ drop table if exists art_qk_choosen_rev cascade;
 create table art_qk_choosen_rev (
   id uuid primary key default uuid_generate_v1mc(),
   art_qk_choosen_id uuid default null,
-  art_id uuid NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  art_id uuid NOT NULL,
   qk_id uuid,
   choosen boolean default true,
   changed timestamp default now(),
@@ -398,9 +398,9 @@ drop table if exists sammlung_rev cascade;
 create table sammlung_rev (
   id uuid primary key default uuid_generate_v1mc(),
   sammlung_id uuid default null,
-  art_id uuid default null references art (id) on update no action on delete set null,
-  person_id uuid default null references person (id) on update no action on delete set null,
-  herkunft_id uuid default null references herkunft (id) on update no action on delete set null,
+  art_id uuid default null,
+  person_id uuid default null,
+  herkunft_id uuid default null,
   nr text default null,  -- DO NOT set unique - does not work for offline edits
   datum date default null,
   von_anzahl_individuen integer default null,
@@ -485,7 +485,7 @@ create table garten_rev (
   id uuid primary key default uuid_generate_v1mc(),
   garten_id uuid default null,
   name text default null,
-  person_id uuid default null references person (id) on update no action on delete set null,
+  person_id uuid default null,
   strasse text default null,
   plz integer default null,
   ort text default null,
@@ -566,9 +566,9 @@ drop table if exists kultur_rev cascade;
 create table kultur_rev (
   id uuid primary key default uuid_generate_v1mc(),
   kultur_id uuid default null,
-  art_id uuid default null references art (id) on update no action on delete set null,
-  herkunft_id uuid default null references herkunft (id) on update no action on delete set null,
-  garten_id uuid default null references garten (id) on update no action on delete set null,
+  art_id uuid default null,
+  herkunft_id uuid default null,
+  garten_id uuid default null,
   zwischenlager boolean default false,
   erhaltungskultur boolean default false,
   von_anzahl_individuen integer default null,
