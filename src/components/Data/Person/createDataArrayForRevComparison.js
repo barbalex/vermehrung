@@ -1,4 +1,6 @@
-const createDataArrayForRevComparison = ({ row, revRow, store }) => {
+const createDataArrayForRevComparison = ({ row: rowPassed, revRow, store }) => {
+  // need to use raw values here
+  const row = rowPassed._raw
   const rowUserRole = row?.user_role_id
     ? store.user_roles.get(row.user_role_id)
     : {}
