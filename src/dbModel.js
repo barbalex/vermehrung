@@ -145,7 +145,7 @@ export class Herkunft extends Model {
     // NOOOOO: this leads to conflicts due to multiple identical id's!
     //if (field === '_deleted' && value) await this.markAsDeleted()
     if (field === '_deleted' && value) {
-      const sammlungs = await this.sammlungs.fetch()
+      const sammlungs = await this?.sammlungs?.fetch()
       console.log('herkunft model, sammlungs:', sammlungs)
       // TODO: edit to set _deleted true
     }
@@ -275,11 +275,9 @@ export class Sammlung extends Model {
     // optimistically update store
     await this.update((row) => ({ ...row, ...newObjectForStore }))
     if (field === '_deleted' && value) {
-      if (field === '_deleted' && value) {
-        const lieferungs = await this.lieferungs.fetch()
-        console.log('sammlung model, lieferungs:', lieferungs)
-        // TODO: edit to set _deleted true
-      }
+      const lieferungs = await this?.lieferungs?.fetch()
+      console.log('sammlung model, lieferungs:', lieferungs)
+      // TODO: edit to set _deleted true
     }
   }
 
@@ -531,7 +529,7 @@ export class Art extends Model {
     // optimistically update store
     await this.update((row) => ({ ...row, ...newObjectForStore }))
     if (field === '_deleted' && value) {
-      const sammlungs = await this.sammlungs.fetch()
+      const sammlungs = await this?.sammlungs?.fetch()
       console.log('art model, sammlungs:', sammlungs)
       // TODO: edit to set _deleted true
     }
@@ -657,7 +655,7 @@ export class Garten extends Model {
     // optimistically update store
     await this.update((row) => ({ ...row, ...newObjectForStore }))
     if (field === '_deleted' && value) {
-      const kulturs = await this.kulturs.fetch()
+      const kulturs = await this?.kulturs?.fetch()
       console.log('garten model, kulturs:', kulturs)
       // TODO: edit to set _deleted true
     }
@@ -806,19 +804,19 @@ export class Kultur extends Model {
     // optimistically update store
     await this.update((row) => ({ ...row, ...newObjectForStore }))
     if (field === '_deleted' && value) {
-      const teilkulturs = await this.teilkulturs.fetch()
+      const teilkulturs = await this?.teilkulturs?.fetch()
       console.log('kultur model, teilkulturs:', teilkulturs)
       // TODO: edit to set _deleted true
-      const zaehlungs = await this.zaehlungs.fetch()
+      const zaehlungs = await this?.zaehlungs?.fetch()
       console.log('kultur model, zaehlungs:', zaehlungs)
       // TODO: edit to set _deleted true
-      const events = await this.events.fetch()
+      const events = await this?.events?.fetch()
       console.log('kultur model, events:', events)
       // TODO: edit to set _deleted true
-      const anlieferungs = await this.anlieferungs.fetch()
+      const anlieferungs = await this?.anlieferungs?.fetch()
       console.log('kultur model, anlieferungs:', anlieferungs)
       // TODO: edit to set _deleted true
-      const auslieferungs = await this.auslieferungs.fetch()
+      const auslieferungs = await this?.auslieferungs?.fetch()
       console.log('kultur model, auslieferungs:', auslieferungs)
       // TODO: edit to set _deleted true
     }
@@ -1012,7 +1010,7 @@ export class Zaehlung extends Model {
     // optimistically update store
     await this.update((row) => ({ ...row, ...newObjectForStore }))
     if (field === '_deleted' && value) {
-      const zaehlungs = await this.zaehlungs.fetch()
+      const zaehlungs = await this?.zaehlungs?.fetch()
       console.log('kultur model, zaehlungs:', zaehlungs)
       // TODO: edit to set _deleted true
     }
@@ -1171,7 +1169,7 @@ export class Person extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('account_id') account_id
-  @field('user_role') user_role
+  @field('user_role_id') user_role_id
   @field('kommerziell') kommerziell
   @field('info') info
   @field('aktiv') aktiv
@@ -1249,8 +1247,7 @@ export class Person extends Model {
         field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
       account_id:
         field === 'account_id' ? toStringIfPossible(value) : this.account_id,
-      user_role:
-        field === 'user_role' ? toStringIfPossible(value) : this.user_role,
+      user_role_id: field === 'user_role_id' ? value : this.user_role_id,
       kommerziell: field === 'kommerziell' ? value : this.kommerziell,
       info: field === 'info' ? value : this.info,
       aktiv: field === 'aktiv' ? value : this.aktiv,
@@ -2469,7 +2466,7 @@ export class PersonOption extends Model {
 export class UserRole extends Model {
   static table = 'user_role'
   static associations = {
-    person: { type: 'has_many', foreignKey: 'user_role' },
+    person: { type: 'has_many', foreignKey: 'user_role_id' },
   }
 
   @field('id') id
@@ -2480,5 +2477,5 @@ export class UserRole extends Model {
   @field('changed') changed
   @readonly @field('_rev_at') _rev_at
 
-  @relation('person', 'user_role') person
+  @relation('person', 'user_role_id') person
 }

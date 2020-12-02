@@ -3,8 +3,8 @@ import updateLieferung from './updateLieferung'
 const updateAllLieferungen = async ({ sammelLieferung, store, field }) => {
   // pass field to mark which field should be updated
   // even if it has value null
-  const lieferungs = sammelLieferung.lieferungs
-  console.log('updateAllLieferungen', { sammelLieferung, lieferungs })
+  const lieferungs = sammelLieferung.lieferungs ?? []
+  //console.log('updateAllLieferungen', { sammelLieferung, lieferungs })
   let error = null
   for (const lieferung of lieferungs) {
     try {
