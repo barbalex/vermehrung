@@ -6955,14 +6955,6 @@
         "schema": "public",
         "name": "kultur_qk_choosen_rev"
       },
-      "object_relationships": [
-        {
-          "name": "kultur",
-          "using": {
-            "foreign_key_constraint_on": "kultur_id"
-          }
-        }
-      ],
       "insert_permissions": [
         {
           "role": "artverantwortlich",
@@ -7164,75 +7156,6 @@
             ],
             "filter": {},
             "check": null
-          }
-        }
-      ],
-      "delete_permissions": [
-        {
-          "role": "artverantwortlich",
-          "permission": {
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "role": "gaertner",
-          "permission": {
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "role": "manager",
-          "permission": {
-            "filter": {}
           }
         }
       ]
