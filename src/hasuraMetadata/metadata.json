@@ -1348,24 +1348,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "filter": {
-              "_or": [
-                {
-                  "art_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "art": {
-                    "avs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              ]
-            }
+            "filter": {}
           }
         },
         {
@@ -1697,17 +1680,7 @@
               "art_id",
               "id"
             ],
-            "filter": {
-              "kulturs": {
-                "garten": {
-                  "gvs": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
-                    }
-                  }
-                }
-              }
-            }
+            "filter": {}
           }
         },
         {
@@ -1748,13 +1721,7 @@
               "art_id",
               "id"
             ],
-            "filter": {
-              "avs": {
-                "person_id": {
-                  "_eq": "X-Hasura-User-Id"
-                }
-              }
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -1774,17 +1741,7 @@
               "art_id",
               "id"
             ],
-            "filter": {
-              "kulturs": {
-                "garten": {
-                  "gvs": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
-                    }
-                  }
-                }
-              }
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -2036,11 +1993,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -2712,37 +2665,7 @@
               "person_id",
               "teilkultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -2767,26 +2690,7 @@
               "person_id",
               "teilkultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -2838,37 +2742,7 @@
               "person_id",
               "teilkultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -2893,26 +2767,7 @@
               "person_id",
               "teilkultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -3778,26 +3633,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "person_id": {
-                    "_eq": "X-Hasura-User-Id"
-                  }
-                },
-                {
-                  "kulturs": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -3824,11 +3660,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -3884,26 +3716,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "person_id": {
-                    "_eq": "X-Hasura-User-Id"
-                  }
-                },
-                {
-                  "kulturs": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -3930,11 +3743,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -4172,11 +3981,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -4197,11 +4002,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -4885,33 +4686,7 @@
               "herkunft_id",
               "id"
             ],
-            "filter": {
-              "_exists": {
-                "_where": {
-                  "_exists": {
-                    "_where": {
-                      "kulturByNachKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "_table": {
-                      "schema": "public",
-                      "name": "lieferung"
-                    }
-                  }
-                },
-                "_table": {
-                  "schema": "public",
-                  "name": "sammlung"
-                }
-              }
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -6714,37 +6489,7 @@
               "id",
               "kultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -6775,26 +6520,7 @@
               "id",
               "kultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            }
+            "filter": {}
           }
         },
         {
@@ -6857,37 +6583,7 @@
               "id",
               "kultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -6918,26 +6614,7 @@
               "id",
               "kultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -7639,37 +7316,7 @@
               "kultur_qk_choosen_id",
               "qk_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -7691,26 +7338,7 @@
               "kultur_qk_choosen_id",
               "qk_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -7756,37 +7384,7 @@
               "kultur_qk_choosen_id",
               "qk_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kultur": {
-                    "art": {
-                      "avs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -7808,26 +7406,7 @@
               "kultur_qk_choosen_id",
               "qk_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -8283,33 +7862,7 @@
               "id",
               "kultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "art_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "art": {
-                    "avs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                },
-                {
-                  "garten": {
-                    "gvs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -8336,24 +7889,7 @@
               "id",
               "kultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "garten_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "garten": {
-                    "gvs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -8409,33 +7945,7 @@
               "id",
               "kultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "art_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "art": {
-                    "avs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                },
-                {
-                  "garten": {
-                    "gvs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -8462,24 +7972,7 @@
               "id",
               "kultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "garten_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "garten": {
-                    "gvs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -10201,68 +9694,7 @@
               "von_kultur_id",
               "von_sammlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "_or": [
-                    {
-                      "art_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "_or": [
-                    {
-                      "_and": [
-                        {
-                          "nach_kultur_id": {
-                            "_is_null": true
-                          }
-                        },
-                        {
-                          "von_kultur_id": {
-                            "_is_null": true
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kulturByNachKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kulturByVonKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -10296,46 +9728,7 @@
               "von_kultur_id",
               "von_sammlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kulturByNachKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kulturByVonKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "_and": [
-                    {
-                      "von_kultur_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "nach_kultur_id": {
-                        "_is_null": true
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -10405,68 +9798,7 @@
               "von_kultur_id",
               "von_sammlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "_or": [
-                    {
-                      "art_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "_or": [
-                    {
-                      "_and": [
-                        {
-                          "nach_kultur_id": {
-                            "_is_null": true
-                          }
-                        },
-                        {
-                          "von_kultur_id": {
-                            "_is_null": true
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kulturByNachKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kulturByVonKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -10500,46 +9832,7 @@
               "von_kultur_id",
               "von_sammlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kulturByNachKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kulturByVonKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "_and": [
-                    {
-                      "von_kultur_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "nach_kultur_id": {
-                        "_is_null": true
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -12109,11 +11402,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -12155,11 +11444,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -12245,11 +11530,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -12291,11 +11572,7 @@
               "id",
               "person_id"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -12597,28 +11874,7 @@
               "user_role_id",
               "vorname"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "person_id": {
-                    "_eq": "X-Hasura-User-Id"
-                  }
-                },
-                {
-                  "gartens": {
-                    "kulturs": {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -12655,11 +11911,7 @@
               "user_role_id",
               "vorname"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            }
+            "filter": {}
           }
         },
         {
@@ -12734,28 +11986,7 @@
               "user_role_id",
               "vorname"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "person_id": {
-                    "_eq": "X-Hasura-User-Id"
-                  }
-                },
-                {
-                  "gartens": {
-                    "kulturs": {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -12792,11 +12023,7 @@
               "user_role_id",
               "vorname"
             ],
-            "filter": {
-              "person_id": {
-                "_eq": "X-Hasura-User-Id"
-              }
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -13811,68 +13038,7 @@
               "von_kultur_id",
               "von_sammlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "_or": [
-                    {
-                      "art_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "_or": [
-                    {
-                      "_and": [
-                        {
-                          "nach_kultur_id": {
-                            "_is_null": true
-                          }
-                        },
-                        {
-                          "von_kultur_id": {
-                            "_is_null": true
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kulturByNachKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kulturByVonKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -13905,46 +13071,7 @@
               "von_kultur_id",
               "von_sammlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kulturByNachKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kulturByVonKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "_and": [
-                    {
-                      "von_kultur_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "nach_kultur_id": {
-                        "_is_null": true
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -14012,68 +13139,7 @@
               "von_kultur_id",
               "von_sammlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "_or": [
-                    {
-                      "art_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "_or": [
-                    {
-                      "_and": [
-                        {
-                          "nach_kultur_id": {
-                            "_is_null": true
-                          }
-                        },
-                        {
-                          "von_kultur_id": {
-                            "_is_null": true
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "kulturByNachKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kulturByVonKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -14106,46 +13172,7 @@
               "von_kultur_id",
               "von_sammlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kulturByNachKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "kulturByVonKulturId": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "_and": [
-                    {
-                      "von_kultur_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "nach_kultur_id": {
-                        "_is_null": true
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -15295,63 +14322,7 @@
               "person_id",
               "sammlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "_or": [
-                    {
-                      "art_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "_or": [
-                    {
-                      "_and": [
-                        {
-                          "lieferungs": {
-                            "nach_ausgepflanzt": {
-                              "_is_null": true
-                            }
-                          }
-                        },
-                        {
-                          "lieferungs": {
-                            "nach_kultur_id": {
-                              "_is_null": true
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "lieferungs": {
-                        "kulturByNachKulturId": {
-                          "garten": {
-                            "gvs": {
-                              "person_id": {
-                                "_eq": "X-Hasura-User-Id"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -15382,19 +14353,7 @@
               "person_id",
               "sammlung_id"
             ],
-            "filter": {
-              "lieferungs": {
-                "kulturByNachKulturId": {
-                  "garten": {
-                    "gvs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              }
-            }
+            "filter": {}
           }
         },
         {
@@ -15457,63 +14416,7 @@
               "person_id",
               "sammlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "_or": [
-                    {
-                      "art_id": {
-                        "_is_null": true
-                      }
-                    },
-                    {
-                      "art": {
-                        "avs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "_or": [
-                    {
-                      "_and": [
-                        {
-                          "lieferungs": {
-                            "nach_ausgepflanzt": {
-                              "_is_null": true
-                            }
-                          }
-                        },
-                        {
-                          "lieferungs": {
-                            "nach_kultur_id": {
-                              "_is_null": true
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "lieferungs": {
-                        "kulturByNachKulturId": {
-                          "garten": {
-                            "gvs": {
-                              "person_id": {
-                                "_eq": "X-Hasura-User-Id"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -15544,19 +14447,7 @@
               "person_id",
               "sammlung_id"
             ],
-            "filter": {
-              "lieferungs": {
-                "kulturByNachKulturId": {
-                  "garten": {
-                    "gvs": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
-                      }
-                    }
-                  }
-                }
-              }
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -16265,41 +15156,7 @@
               "kultur_id",
               "teilkultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "_or": [
-                    {
-                      "kultur": {
-                        "art": {
-                          "avs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kultur": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -16324,26 +15181,7 @@
               "kultur_id",
               "teilkultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -16395,41 +15233,7 @@
               "kultur_id",
               "teilkultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "_or": [
-                    {
-                      "kultur": {
-                        "art": {
-                          "avs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kultur": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -16454,26 +15258,7 @@
               "kultur_id",
               "teilkultur_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -17206,45 +15991,7 @@
               "teilzaehlung_id",
               "zaehlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "zaehlung_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "_or": [
-                    {
-                      "zaehlung": {
-                        "kultur": {
-                          "art": {
-                            "avs": {
-                              "person_id": {
-                                "_eq": "X-Hasura-User-Id"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "zaehlung": {
-                        "kultur": {
-                          "garten": {
-                            "gvs": {
-                              "person_id": {
-                                "_eq": "X-Hasura-User-Id"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -17272,28 +16019,7 @@
               "teilzaehlung_id",
               "zaehlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "zaehlung_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "teilkultur": {
-                    "kultur": {
-                      "garten": {
-                        "gvs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -17351,45 +16077,7 @@
               "teilzaehlung_id",
               "zaehlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "zaehlung_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "_or": [
-                    {
-                      "zaehlung": {
-                        "kultur": {
-                          "art": {
-                            "avs": {
-                              "person_id": {
-                                "_eq": "X-Hasura-User-Id"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "zaehlung": {
-                        "kultur": {
-                          "garten": {
-                            "gvs": {
-                              "person_id": {
-                                "_eq": "X-Hasura-User-Id"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -17417,28 +16105,7 @@
               "teilzaehlung_id",
               "zaehlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "zaehlung_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "teilkultur": {
-                    "kultur": {
-                      "garten": {
-                        "gvs": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -18130,41 +16797,7 @@
               "kultur_id",
               "zaehlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "_or": [
-                    {
-                      "kultur": {
-                        "art": {
-                          "avs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kultur": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -18187,26 +16820,7 @@
               "kultur_id",
               "zaehlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "allow_aggregations": true
           }
         },
@@ -18254,41 +16868,7 @@
               "kultur_id",
               "zaehlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "_or": [
-                    {
-                      "kultur": {
-                        "art": {
-                          "avs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "kultur": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
@@ -18311,26 +16891,7 @@
               "kultur_id",
               "zaehlung_id"
             ],
-            "filter": {
-              "_or": [
-                {
-                  "kultur_id": {
-                    "_is_null": true
-                  }
-                },
-                {
-                  "kultur": {
-                    "garten": {
-                      "gvs": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            },
+            "filter": {},
             "check": null
           }
         },
