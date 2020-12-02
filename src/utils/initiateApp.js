@@ -20,11 +20,8 @@ const initiateApp = async () => {
   const gqlHttpClient = (() => {
     const client = createHttpClient(constants?.graphQlUri)
     client.setHeaders({ authorization: `Bearer ${getToken()}` })
-    //console.log('initiateApp set token:', getToken())
     return client
   })()
-
-  //gqlHttpClient.setHeaders({ authorization: `Bearer ${getToken()}` })
 
   // ws client only works in the browser
   // need to prevent gatsby from executing it server side
