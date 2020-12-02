@@ -179,18 +179,6 @@
           }
         },
         {
-          "name": "kultur_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "art_id",
-              "table": {
-                "schema": "public",
-                "name": "kultur_rev"
-              }
-            }
-          }
-        },
-        {
           "name": "kulturs",
           "using": {
             "foreign_key_constraint_on": {
@@ -246,18 +234,6 @@
               "table": {
                 "schema": "public",
                 "name": "sammel_lieferung"
-              }
-            }
-          }
-        },
-        {
-          "name": "sammlung_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "art_id",
-              "table": {
-                "schema": "public",
-                "name": "sammlung_rev"
               }
             }
           }
@@ -1191,14 +1167,6 @@
         "schema": "public",
         "name": "art_qk_choosen_rev"
       },
-      "object_relationships": [
-        {
-          "name": "art",
-          "using": {
-            "foreign_key_constraint_on": "art_id"
-          }
-        }
-      ],
       "insert_permissions": [
         {
           "role": "artverantwortlich",
@@ -1271,7 +1239,9 @@
         {
           "role": "gaertner",
           "permission": {
-            "columns": ["id"],
+            "columns": [
+              "id"
+            ],
             "filter": {}
           }
         },
@@ -2837,18 +2807,6 @@
           }
         },
         {
-          "name": "kultur_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "garten_id",
-              "table": {
-                "schema": "public",
-                "name": "kultur_rev"
-              }
-            }
-          }
-        },
-        {
           "name": "kulturs",
           "using": {
             "foreign_key_constraint_on": {
@@ -3502,30 +3460,6 @@
         "schema": "public",
         "name": "garten_rev"
       },
-      "object_relationships": [
-        {
-          "name": "person",
-          "using": {
-            "foreign_key_constraint_on": "person_id"
-          }
-        }
-      ],
-      "array_relationships": [
-        {
-          "name": "kulturs",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "kultur"
-              },
-              "column_mapping": {
-                "garten_id": "garten_id"
-              }
-            }
-          }
-        }
-      ],
       "insert_permissions": [
         {
           "role": "artverantwortlich",
@@ -4079,18 +4013,6 @@
           }
         },
         {
-          "name": "kultur_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "herkunft_id",
-              "table": {
-                "schema": "public",
-                "name": "kultur_rev"
-              }
-            }
-          }
-        },
-        {
           "name": "kulturs",
           "using": {
             "foreign_key_constraint_on": {
@@ -4098,18 +4020,6 @@
               "table": {
                 "schema": "public",
                 "name": "kultur"
-              }
-            }
-          }
-        },
-        {
-          "name": "sammlung_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "herkunft_id",
-              "table": {
-                "schema": "public",
-                "name": "sammlung_rev"
               }
             }
           }
@@ -7635,126 +7545,6 @@
         "schema": "public",
         "name": "kultur_rev"
       },
-      "object_relationships": [
-        {
-          "name": "art",
-          "using": {
-            "foreign_key_constraint_on": "art_id"
-          }
-        },
-        {
-          "name": "garten",
-          "using": {
-            "foreign_key_constraint_on": "garten_id"
-          }
-        },
-        {
-          "name": "herkunft",
-          "using": {
-            "foreign_key_constraint_on": "herkunft_id"
-          }
-        }
-      ],
-      "array_relationships": [
-        {
-          "name": "events",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "event"
-              },
-              "column_mapping": {
-                "kultur_id": "kultur_id"
-              }
-            }
-          }
-        },
-        {
-          "name": "lieferungsByNachKulturId",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "lieferung"
-              },
-              "column_mapping": {
-                "kultur_id": "nach_kultur_id"
-              }
-            }
-          }
-        },
-        {
-          "name": "lieferungsByVonKulturId",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "lieferung"
-              },
-              "column_mapping": {
-                "kultur_id": "von_kultur_id"
-              }
-            }
-          }
-        },
-        {
-          "name": "sammel_lieferungs",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "sammel_lieferung"
-              },
-              "column_mapping": {
-                "kultur_id": "von_kultur_id"
-              }
-            }
-          }
-        },
-        {
-          "name": "sammelLieferungsByNachKulturId",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "sammel_lieferung"
-              },
-              "column_mapping": {
-                "kultur_id": "nach_kultur_id"
-              }
-            }
-          }
-        },
-        {
-          "name": "teilkulturs",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "teilkultur"
-              },
-              "column_mapping": {
-                "kultur_id": "kultur_id"
-              }
-            }
-          }
-        },
-        {
-          "name": "zaehlungs",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "zaehlung"
-              },
-              "column_mapping": {
-                "kultur_id": "kultur_id"
-              }
-            }
-          }
-        }
-      ],
       "insert_permissions": [
         {
           "role": "artverantwortlich",
@@ -9931,18 +9721,6 @@
           }
         },
         {
-          "name": "garten_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "person_id",
-              "table": {
-                "schema": "public",
-                "name": "garten_rev"
-              }
-            }
-          }
-        },
-        {
           "name": "gartens",
           "using": {
             "foreign_key_constraint_on": {
@@ -10034,18 +9812,6 @@
               "table": {
                 "schema": "public",
                 "name": "sammel_lieferung"
-              }
-            }
-          }
-        },
-        {
-          "name": "sammlung_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "person_id",
-              "table": {
-                "schema": "public",
-                "name": "sammlung_rev"
               }
             }
           }
@@ -14180,56 +13946,6 @@
         "schema": "public",
         "name": "sammlung_rev"
       },
-      "object_relationships": [
-        {
-          "name": "art",
-          "using": {
-            "foreign_key_constraint_on": "art_id"
-          }
-        },
-        {
-          "name": "herkunft",
-          "using": {
-            "foreign_key_constraint_on": "herkunft_id"
-          }
-        },
-        {
-          "name": "person",
-          "using": {
-            "foreign_key_constraint_on": "person_id"
-          }
-        }
-      ],
-      "array_relationships": [
-        {
-          "name": "lieferungs",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "lieferung"
-              },
-              "column_mapping": {
-                "sammlung_id": "von_sammlung_id"
-              }
-            }
-          }
-        },
-        {
-          "name": "sammel_lieferungs",
-          "using": {
-            "manual_configuration": {
-              "remote_table": {
-                "schema": "public",
-                "name": "sammel_lieferung"
-              },
-              "column_mapping": {
-                "sammlung_id": "von_sammlung_id"
-              }
-            }
-          }
-        }
-      ],
       "insert_permissions": [
         {
           "role": "artverantwortlich",
@@ -14524,18 +14240,6 @@
               "table": {
                 "schema": "public",
                 "name": "event"
-              }
-            }
-          }
-        },
-        {
-          "name": "teilzaehlung_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "teilkultur_id",
-              "table": {
-                "schema": "public",
-                "name": "teilzaehlung_rev"
               }
             }
           }
@@ -15316,18 +15020,6 @@
       ],
       "array_relationships": [
         {
-          "name": "teilzaehlung_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "prognose_von_tz",
-              "table": {
-                "schema": "public",
-                "name": "teilzaehlung_rev"
-              }
-            }
-          }
-        },
-        {
           "name": "teilzaehlungs",
           "using": {
             "foreign_key_constraint_on": {
@@ -15860,26 +15552,6 @@
         "schema": "public",
         "name": "teilzaehlung_rev"
       },
-      "object_relationships": [
-        {
-          "name": "teilkultur",
-          "using": {
-            "foreign_key_constraint_on": "teilkultur_id"
-          }
-        },
-        {
-          "name": "teilzaehlung",
-          "using": {
-            "foreign_key_constraint_on": "prognose_von_tz"
-          }
-        },
-        {
-          "name": "zaehlung",
-          "using": {
-            "foreign_key_constraint_on": "zaehlung_id"
-          }
-        }
-      ],
       "insert_permissions": [
         {
           "role": "artverantwortlich",
@@ -16209,18 +15881,6 @@
         }
       ],
       "array_relationships": [
-        {
-          "name": "teilzaehlung_revs",
-          "using": {
-            "foreign_key_constraint_on": {
-              "column": "zaehlung_id",
-              "table": {
-                "schema": "public",
-                "name": "teilzaehlung_rev"
-              }
-            }
-          }
-        },
         {
           "name": "teilzaehlungs",
           "using": {
