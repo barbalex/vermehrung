@@ -50,7 +50,7 @@ const Gv = ({ gv }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = useCallback(() => gv.delete({ store }), [gv])
+  const onClickDelete = useCallback(() => gv.delete({ store }), [gv, store])
 
   const person = personsSorted.find((p) => p.id === gv.person_id)
   const personname = person?.fullname ?? '(kein Name)'
