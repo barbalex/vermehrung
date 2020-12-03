@@ -9,11 +9,14 @@ import buildGartenFolder from './garten/folder'
 import buildGarten from './garten'
 import buildKulturFolder from './kultur/folder'
 import buildKultur from './kultur'
+import buildTeilkulturFolder from './teilkultur/folder'
+import buildTeilkultur from './teilkultur'
 import buildSammlungFolder from './sammlung/folder'
 import buildSammlung from './sammlung'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
 import herkunftSort from '../../../utils/herkunftSort'
+import teilkulturSort from '../../../utils/teilkulturSort'
 import personFullname from '../../../utils/personFullname'
 import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 
@@ -178,6 +181,26 @@ const buildNodes = async ({ store }) => {
   )
   const kultur = await buildKultur({ store, kulturs: kultursSorted })
 
+  // teilkultur
+  const teilkulturFolder = buildTeilkulturFolder({ store })
+  const teilkulturs = await db.collections
+    .get('teilkultur')
+    .query(notDeletedOrHasConflictQuery)
+    .fetch()
+  const teilkultursSorted = teilkulturs
+    .filter((value) =>
+      storeFilter({
+        value,
+        filter: store.filter.teilkultur,
+        table: 'teilkultur',
+      }),
+    )
+    .sort(teilkulturSort)
+  const teilkultur = buildTeilkultur({
+    store,
+    teilkulturs: teilkultursSorted,
+  })
+
   /*console.log('buildNodesWm', {
     nodes,
     herkunft,
@@ -195,6 +218,8 @@ const buildNodes = async ({ store }) => {
     ...garten,
     ...kulturFolder,
     ...kultur,
+    ...teilkulturFolder,
+    ...teilkultur,
   ]
 
   const nodesSorted = nodes.sort(
