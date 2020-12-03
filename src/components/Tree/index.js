@@ -30,6 +30,7 @@ const Tree = ({ width, height }) => {
     zaehlung: zaehlungFilter,
     lieferung: lieferungFilter,
     sammel_lieferung: sammelLieferungFilter,
+    event: eventFilter,
   } = store.filter
   const {
     activeNodeArray: aNAProxy,
@@ -105,6 +106,11 @@ const Tree = ({ width, height }) => {
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
       .subscribe(buildMyNodes)
+    subscriptions.event = db.collections
+      .get('event')
+      .query(notDeletedOrHasConflictQuery)
+      .observeWithColumns(['datum', 'beschreibung'])
+      .subscribe(buildMyNodes)
 
     return () => {
       //console.log('Tree, useEffect, subscriptions:', subscriptions)
@@ -138,6 +144,8 @@ const Tree = ({ width, height }) => {
     ...Object.values(lieferungFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(sammelLieferungFilter),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(eventFilter),
     // need to rebuild tree on activeNodeArray changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     aNA,
