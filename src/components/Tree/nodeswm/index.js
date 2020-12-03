@@ -1,0 +1,85 @@
+import sortBy from 'lodash/sortBy'
+import { first as first$ } from 'rxjs/operators'
+
+import buildArtFolder from './art/folder'
+import buildArt from './art'
+import buildHerkunftFolder from './herkunft/folder'
+import buildHerkunft from './herkunft'
+import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
+import storeFilter from '../../../utils/storeFilter'
+import herkunftSort from '../../../utils/herkunftSort'
+
+const compare = (a, b) => {
+  // sort a before, if it has no value at this index
+  if (a !== 0 && !a) return -1
+  // sort a after if b has no value at this index
+  if (b !== 0 && !b) return 1
+  // sort a before if its value is smaller
+  return a - b
+}
+
+const buildNodes = async ({ store }) => {
+  const { db } = store
+
+  // art
+  const artFolder = buildArtFolder({ store })
+  const arts = await db.collections
+    .get('art')
+    .query(notDeletedOrHasConflictQuery)
+    .fetch()
+  const artsFiltered = arts.filter((value) =>
+    storeFilter({ value, filter: store.filter.art, table: 'art' }),
+  )
+  const artSorters = await Promise.all(
+    artsFiltered.map(async (art) => {
+      const label = await art.label.pipe(first$()).toPromise()
+      return { id: art.id, label }
+    }),
+  )
+  const artsSorted = sortBy(
+    artsFiltered,
+    (art) => artSorters.find((s) => s.id === art.id).label,
+  )
+  const art = await buildArt({ store, arts: artsSorted })
+
+  // herkunft
+  const herkunftFolder = buildHerkunftFolder({ store })
+  const herkunfts = await db.collections
+    .get('herkunft')
+    .query(notDeletedOrHasConflictQuery)
+    .fetch()
+  const herkunftsSorted = herkunfts
+    .filter((value) =>
+      storeFilter({ value, filter: store.filter.herkunft, table: 'herkunft' }),
+    )
+    .sort(herkunftSort)
+  const herkunft = buildHerkunft({ store, herkunfts: herkunftsSorted })
+
+  const nodes = [...artFolder, ...art, ...herkunftFolder, ...herkunft]
+  console.log('buildNodesWm', {
+    nodes,
+    herkunft,
+    art,
+    artFolder,
+    herkunftFolder,
+  })
+
+  const nodesSorted = nodes.sort(
+    (a, b) =>
+      compare(a.sort[0], b.sort[0]) ||
+      compare(a.sort[1], b.sort[1]) ||
+      compare(a.sort[2], b.sort[2]) ||
+      compare(a.sort[3], b.sort[3]) ||
+      compare(a.sort[4], b.sort[4]) ||
+      compare(a.sort[5], b.sort[5]) ||
+      compare(a.sort[6], b.sort[6]) ||
+      compare(a.sort[7], b.sort[7]) ||
+      compare(a.sort[8], b.sort[8]) ||
+      compare(a.sort[9], b.sort[9]) ||
+      compare(a.sort[10], b.sort[10]),
+  )
+  console.log('buildNodesWm', { nodesSorted })
+  return nodesSorted
+}
+
+export default buildNodes

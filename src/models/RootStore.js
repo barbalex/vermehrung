@@ -1809,6 +1809,9 @@ export const RootStore = RootStoreBase.props({
     get artsFiltered() {
       return queryFromStore({ store: self, table: 'art' })
     },
+    get artsFilteredWm() {
+      return queryFromStore({ store: self, table: 'art' })
+    },
     get artsSorted() {
       return [...self.arts.values()]
         .filter((a) => {
