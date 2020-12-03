@@ -18,7 +18,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
-import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
+import artLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 import personFullname from '../../../utils/personFullname'
 
 const Container = styled.div`
@@ -128,7 +128,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
           const fullname = personFullname(person)?.toString()?.toLowerCase()
           const art = await sammlung.art.fetch()
           const ae_art = art ? await art.ae_art.fetch() : undefined
-          const aeArtLabel = aeArtLabelFromAeArt({ ae_art })
+          const aeArtLabel = artLabelFromAeArt({ ae_art })
             ?.toString()
             ?.toLowerCase()
           const sort = [

@@ -138,7 +138,7 @@ const Vermehrung = ({ location }) => {
     }
     return function cleanup() {
       if (unsubscribe && Object.keys(unsubscribe)) {
-        Object.keys(unsubscribe).forEach((key) => unsubscribe[key]())
+        Object.keys(unsubscribe).forEach((table) => unsubscribe[table]())
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
