@@ -79,7 +79,7 @@ begin
     from
       art_rev
     where
-      -- ignore revisions with child
+      -- leaves
       not exists (
         select
           art_id
@@ -89,9 +89,9 @@ begin
           t.art_id = new.art_id
           and t._parent_rev = art_rev._rev
       )
-      -- ignore deleted revisions
+      -- undeleted
       and _deleted = false
-      -- only consider revisions of this record
+      -- of this record
       and art_id = new.art_id
     ),
     -- the deletion itself could be a conflict
@@ -104,7 +104,7 @@ begin
       from
         art_rev
       where
-        -- ignore revisions with child
+        -- leaves
         not exists (
           select
             art_id
@@ -114,11 +114,11 @@ begin
             t.art_id = new.art_id
             and t._parent_rev = art_rev._rev
         )
-        -- consider deleted revisions
+        -- deleted
         and _deleted is true
-        -- only consider revisions of this record
+        -- of this record
         and art_id = new.art_id
-        -- only consider siblings
+        -- siblings
         and exists (
           select art_id from leaves l
           where 
