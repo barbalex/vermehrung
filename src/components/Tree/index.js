@@ -51,18 +51,15 @@ const Tree = ({ width, height }) => {
 
   useEffect(() => {
     // need subscription to all tables that provokes treeBuild on next
-    const subscription = db.collections
+    const artObservable = db.collections
       .get('art')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['name'])
-      .subscribe(buildMyNodes)
-    const herkunftSubscription = db.collections
+    const herkunftObservable = db.collections
       .get('herkunft')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-      .subscribe(buildMyNodes)
-    subscription.add(herkunftSubscription)
-    const sammlungSubscription = db.collections
+    const sammlungObservable = db.collections
       .get('sammlung')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns([
@@ -72,15 +69,11 @@ const Tree = ({ width, height }) => {
         'datum',
         'geplant',
       ])
-      .subscribe(buildMyNodes)
-    subscription.add(sammlungSubscription)
-    const gartenSubscription = db.collections
+    const gartenObservable = db.collections
       .get('garten')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['name', 'person_id'])
-      .subscribe(buildMyNodes)
-    subscription.add(gartenSubscription)
-    const kulturSubscription = db.collections
+    const kulturObservable = db.collections
       .get('kultur')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns([
@@ -89,44 +82,44 @@ const Tree = ({ width, height }) => {
         'garten_id',
         'zwischenlager',
       ])
-      .subscribe(buildMyNodes)
-    subscription.add(kulturSubscription)
-    const teilkulturSubscription = db.collections
+    const teilkulturObservable = db.collections
       .get('teilkultur')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
-      .subscribe(buildMyNodes)
-    subscription.add(teilkulturSubscription)
-    const zaehlungSubscription = db.collections
+    const zaehlungObservable = db.collections
       .get('zaehlung')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
-      .subscribe(buildMyNodes)
-    subscription.add(zaehlungSubscription)
-    const lieferungSubscription = db.collections
+    const lieferungObservable = db.collections
       .get('lieferung')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
-      .subscribe(buildMyNodes)
-    subscription.add(lieferungSubscription)
-    const sammel_lieferungSubscription = db.collections
+    const sammel_lieferungObservable = db.collections
       .get('sammel_lieferung')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
-      .subscribe(buildMyNodes)
-    subscription.add(sammel_lieferungSubscription)
-    const eventSubscription = db.collections
+    const eventObservable = db.collections
       .get('event')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['datum', 'beschreibung'])
-      .subscribe(buildMyNodes)
-    subscription.add(eventSubscription)
-    const personSubscription = db.collections
+    const personObservable = db.collections
       .get('person')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['vorname', 'name'])
-      .subscribe(buildMyNodes)
-    subscription.add(personSubscription)
+    const observable = forkJoin([
+      artObservable,
+      herkunftObservable,
+      sammlungObservable,
+      gartenObservable,
+      kulturObservable,
+      teilkulturObservable,
+      zaehlungObservable,
+      lieferungObservable,
+      sammel_lieferungObservable,
+      eventObservable,
+      personObservable,
+    ])
+    const subscription = observable.subscribe(buildMyNodes)
 
     return () => subscription.unsubscribe()
   }, [buildMyNodes, db.collections])
