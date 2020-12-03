@@ -7,12 +7,15 @@ import buildHerkunftFolder from './herkunft/folder'
 import buildHerkunft from './herkunft'
 import buildGartenFolder from './garten/folder'
 import buildGarten from './garten'
+import buildKulturFolder from './kultur/folder'
+import buildKultur from './kultur'
 import buildSammlungFolder from './sammlung/folder'
 import buildSammlung from './sammlung'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
 import herkunftSort from '../../../utils/herkunftSort'
 import personFullname from '../../../utils/personFullname'
+import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -126,6 +129,55 @@ const buildNodes = async ({ store }) => {
   )
   const garten = await buildGarten({ store, gartens: gartensSorted })
 
+  // kultur
+  const kulturFolder = buildKulturFolder({ store })
+  const kulturs = await db.collections
+    .get('kultur')
+    .query(notDeletedOrHasConflictQuery)
+    .fetch()
+  const kultursFiltered = kulturs.filter((value) =>
+    storeFilter({ value, filter: store.filter.kultur, table: 'kultur' }),
+  )
+  const kulturSorters = await Promise.all(
+    kultursFiltered.map(async (kultur) => {
+      const art = await kultur?.art.fetch()
+      const ae_art = art?.ae_art?.fetch()
+      const artLabel = aeArtLabelFromAeArt({ ae_art })
+
+      const herkunft = await kultur?.herkunft?.fetch()
+      const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
+      const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
+      const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
+
+      const garten = await kultur?.garten.fetch()
+      const gartenName = garten?.name?.toString()?.toLowerCase()
+
+      const gartenPerson = garten ? await garten?.person.fetch() : undefined
+      const gartenPersonLabel = await gartenPerson?.fullname
+        ?.pipe(first$())
+        .toPromise()
+
+      const zwiLa = kultur.zwischenlager
+
+      const sort = [
+        artLabel,
+        herkunftNr,
+        herkunftGemeinde,
+        herkunftLokalname,
+        gartenName,
+        gartenPersonLabel,
+        zwiLa,
+      ]
+
+      return { id: kultur.id, sort }
+    }),
+  )
+  const kultursSorted = sortBy(
+    kultursFiltered,
+    (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
+  )
+  const kultur = await buildKultur({ store, kulturs: kultursSorted })
+
   /*console.log('buildNodesWm', {
     nodes,
     herkunft,
@@ -141,6 +193,8 @@ const buildNodes = async ({ store }) => {
     ...sammlung,
     ...gartenFolder,
     ...garten,
+    ...kulturFolder,
+    ...kultur,
   ]
 
   const nodesSorted = nodes.sort(
