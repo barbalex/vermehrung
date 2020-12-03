@@ -28,6 +28,7 @@ const Tree = ({ width, height }) => {
     kultur: kulturFilter,
     teilkultur: teilkulturFilter,
     zaehlung: zaehlungFilter,
+    lieferung: lieferungFilter,
   } = store.filter
   const {
     activeNodeArray: aNAProxy,
@@ -93,7 +94,11 @@ const Tree = ({ width, height }) => {
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
       .subscribe(buildMyNodes)
-
+    subscriptions.lieferung = db.collections
+      .get('lieferung')
+      .query(notDeletedOrHasConflictQuery)
+      .observeWithColumns(['datum', 'anzahl_pflanzen'])
+      .subscribe(buildMyNodes)
     return () => {
       //console.log('Tree, useEffect, subscriptions:', subscriptions)
       Object.values(subscriptions).forEach((subscription) => {
@@ -122,6 +127,8 @@ const Tree = ({ width, height }) => {
     ...Object.values(teilkulturFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(zaehlungFilter),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(lieferungFilter),
     // need to rebuild tree on activeNodeArray changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     aNA,

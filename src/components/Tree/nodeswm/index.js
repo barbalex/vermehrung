@@ -15,11 +15,14 @@ import buildSammlungFolder from './sammlung/folder'
 import buildSammlung from './sammlung'
 import buildZaehlungFolder from './zaehlung/folder'
 import buildZaehlung from './zaehlung'
+import buildLieferungFolder from './lieferung/folder'
+import buildLieferung from './lieferung'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
 import herkunftSort from '../../../utils/herkunftSort'
 import teilkulturSort from '../../../utils/teilkulturSort'
 import zaehlungSort from '../../../utils/zaehlungSort'
+import lieferungSort from '../../../utils/lieferungSort'
 import personFullname from '../../../utils/personFullname'
 import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 
@@ -224,6 +227,26 @@ const buildNodes = async ({ store }) => {
     zaehlungs: zaehlungsSorted,
   })
 
+  // lieferung
+  const lieferungFolder = buildLieferungFolder({ store })
+  const lieferungs = await db.collections
+    .get('lieferung')
+    .query(notDeletedOrHasConflictQuery)
+    .fetch()
+  const lieferungsSorted = lieferungs
+    .filter((value) =>
+      storeFilter({
+        value,
+        filter: store.filter.lieferung,
+        table: 'lieferung',
+      }),
+    )
+    .sort(lieferungSort)
+  const lieferung = buildLieferung({
+    store,
+    lieferungs: lieferungsSorted,
+  })
+
   /*console.log('buildNodesWm', {
     nodes,
     herkunft,
@@ -245,6 +268,8 @@ const buildNodes = async ({ store }) => {
     ...teilkultur,
     ...zaehlungFolder,
     ...zaehlung,
+    ...lieferungFolder,
+    ...lieferung,
   ]
 
   const nodesSorted = nodes.sort(
