@@ -25,6 +25,7 @@ const Tree = ({ width, height }) => {
     herkunft: herkunftFilter,
     sammlung: sammlungFilter,
     garten: gartenFilter,
+    kultur: kulturFilter,
   } = store.filter
   const {
     activeNodeArray: aNAProxy,
@@ -93,6 +94,8 @@ const Tree = ({ width, height }) => {
     ...Object.values(sammlungFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(gartenFilter),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(kulturFilter),
     // need to rebuild tree on activeNodeArray changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     aNA,

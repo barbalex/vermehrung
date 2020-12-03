@@ -750,6 +750,7 @@ export class Kultur extends Model {
   @lazy auslieferungs = this.collections
     .get('lieferung')
     .query(Q.where('von_kultur_id', this.id))
+
   @lazy label = this.observe().pipe(
     distinctUntilChanged(),
     map$(async (kultur) => {

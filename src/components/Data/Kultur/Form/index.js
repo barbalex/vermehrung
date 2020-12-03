@@ -192,8 +192,8 @@ const KulturForm = ({
           let aeArt
           if (a.ae_id) {
             aeArt = store.ae_arts.get(a.ae_id)
-            if (aeArt.name) {
-              label = aeArt.name
+            if (aeArt?.name) {
+              label = aeArt?.name
             }
           }
           return {
