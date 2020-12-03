@@ -7,8 +7,9 @@ const teilkulturNodes = ({ store, teilkulturs }) => {
 
   if (!showTeilkultur) return []
   // only show if parent node exists
-  if (!visibleOpenNodes.some((node) => isEqual(['Teilkulturen'], node)))
+  if (!visibleOpenNodes.some((node) => isEqual(['Teilkulturen'], node))) {
     return []
+  }
 
   return teilkulturs
     .map((n) => ({
