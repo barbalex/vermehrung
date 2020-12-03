@@ -609,6 +609,21 @@ export class Garten extends Model {
   @children('garten_file') files
   @relation('person', 'person_id') person
 
+  @lazy label = this.observe().pipe(
+    // TODO: optimize untilChanged
+    distinctUntilChanged(
+      (p, q) => p.name === q.name && p.person_id === q.person_id,
+    ),
+    map$(async (garten) => {
+      const person = await garten.person.fetch()
+
+      return gartenLabelFromGarten({
+        garten,
+        person,
+      })
+    }),
+  )
+
   @action async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)

@@ -1,29 +1,32 @@
 import isEqual from 'lodash/isEqual'
+import { first as first$ } from 'rxjs/operators'
 
-import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
-
-const gartenNodes = ({ store }) => {
+const gartenNodes = async ({ store, gartens }) => {
   const { showGarten, visibleOpenNodes } = store.tree
   if (!showGarten) return []
+  // only show if parent node exists
+  if (!visibleOpenNodes.some((node) => isEqual(['Gaerten'], node))) return []
 
-  return (
-    store.gartensFiltered
-      // only show if parent node exists
-      .filter(() => visibleOpenNodes.some((node) => isEqual(['Gaerten'], node)))
-      .map((el) => ({
+  const nodes = await Promise.all(
+    gartens.map(async (n) => {
+      const label = await n.label.pipe(first$()).toPromise()
+
+      return {
         nodeType: 'table',
         menuTitle: 'Garten',
         table: 'garten',
-        id: el.id,
-        label: gartenLabelFromGarten({ garten: el, store }),
-        url: ['Gaerten', el.id],
+        id: n.id,
+        label,
+        url: ['Gaerten', n.id],
         hasChildren: true,
-      }))
-      .map((el, index) => {
-        el.sort = [4, index]
-        return el
-      })
+      }
+    }),
   )
+
+  return nodes.map((n, index) => {
+    n.sort = [4, index]
+    return n
+  })
 }
 
 export default gartenNodes

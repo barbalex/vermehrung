@@ -1,15 +1,7 @@
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useCallback,
-  useState,
-} from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import findIndex from 'lodash/findIndex'
-import isEqual from 'lodash/isEqual'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
@@ -32,23 +24,21 @@ const Tree = ({ width, height }) => {
     art: artFilter,
     herkunft: herkunftFilter,
     sammlung: sammlungFilter,
+    garten: gartenFilter,
   } = store.filter
   const {
     activeNodeArray: aNAProxy,
     openNodes: openNodesProxy,
-    activeNode,
     //nodes: storeNodes,
   } = store.tree
   const aNA = getSnapshot(aNAProxy)
   const openNodes = getSnapshot(openNodesProxy)
 
-  const listRef = useRef(null)
   const [nodes, setNodes] = useState([])
 
   const buildMyNodes = useCallback(async () => {
     const nodes = await buildNodes({ store })
     setNodes(nodes)
-    // TODO: need to provoke scrollToItem
   }, [store])
 
   useEffect(() => {
@@ -75,11 +65,16 @@ const Tree = ({ width, height }) => {
         'geplant',
       ])
       .subscribe(buildMyNodes)
+    subscriptions.garten = db.collections
+      .get('garten')
+      .query(notDeletedOrHasConflictQuery)
+      .observeWithColumns(['name', 'person_id'])
+      .subscribe(buildMyNodes)
 
     return () => {
-      console.log('Tree, useEffect, subscriptions:', subscriptions)
+      //console.log('Tree, useEffect, subscriptions:', subscriptions)
       Object.values(subscriptions).forEach((subscription) => {
-        console.log('Tree, useEffect, unsubscribe, subscription:', subscription)
+        //console.log('Tree, useEffect, unsubscribe, subscription:', subscription)
         subscription.unsubscribe()
       })
     }
@@ -96,6 +91,8 @@ const Tree = ({ width, height }) => {
     ...Object.values(herkunftFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(sammlungFilter),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(gartenFilter),
     // need to rebuild tree on activeNodeArray changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     aNA,
@@ -106,34 +103,6 @@ const Tree = ({ width, height }) => {
 
   // what else to rerender on?
 
-  // TODO:
-  // need to scroll when any of the label-relevant fields of the active form change
-  const nodeIndex = findIndex(nodes, (node) => isEqual(node.url, aNA))
-  useEffect(() => {
-    if (nodeIndex > -1 && listRef.current) {
-      listRef.current.scrollToItem(nodeIndex)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listRef, activeNode?.label, aNA, nodes, nodeIndex])
-  useEffect(() => {
-    console.log('Tree, scrolling to item effect', {
-      nodeIndex,
-      currentRef: listRef.current,
-    })
-    if (nodeIndex > -1) {
-      listRef.current?.scrollToItem(nodeIndex)
-      console.log('Tree, scrolling to item')
-    }
-  }, [])
-
-  console.log('Tree', {
-    activeNode,
-    currentRef: listRef.current,
-    nodes,
-    nodesLength: nodes.length,
-    noNodesLength: !nodes.length,
-    width,
-  })
   console.log('Tree rendering')
 
   return (
