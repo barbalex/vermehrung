@@ -8,6 +8,7 @@ import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
+import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -17,7 +18,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
-import gartenSort from '../../../utils/gartenSort'
+import personFullname from '../../../utils/personFullname'
 
 const Container = styled.div`
   height: 100%;
@@ -90,13 +91,26 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
       : collection.query(notDeletedOrHasConflictQuery)
     const subscription = query
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-      .subscribe((gartens) => {
-        const gartensFiltered = gartens
-          .filter((value) =>
-            storeFilter({ value, filter: gartenFilter, table: 'garten' }),
-          )
-          .sort(gartenSort)
-        setGartenState({ gartens, gartensFiltered })
+      .subscribe(async (gartens) => {
+        const gartensFiltered = gartens.filter((value) =>
+          storeFilter({ value, filter: gartenFilter, table: 'garten' }),
+        )
+        const gartenSorters = await Promise.all(
+          gartensFiltered.map(async (garten) => {
+            const name = garten?.name?.toString()?.toLowerCase() ?? ''
+            const person = await garten.person.fetch()
+            const personName = personFullname(person)?.toString()?.toLowerCase()
+            const sort = [name, personName]
+
+            return { id: garten.id, sort }
+          }),
+        )
+        const gartensSorted = sortBy(
+          gartensFiltered,
+          (garten) => gartenSorters.find((s) => s.id === garten.id).sort,
+        )
+
+        setGartenState({ gartens, gartensFiltered: gartensSorted })
       })
     return () => subscription.unsubscribe()
     // need to rerender if any of the values of gartenFilter changes

@@ -78,11 +78,13 @@ const GartenPersonen = ({ garten }) => {
 
   const [gvsSorted, setGvsSorted] = useState([])
   useEffect(() => {
-    const subscription = garten.gvs.observe().subscribe(async (gvs) => {
+    const subscription = garten?.gvs?.observe().subscribe(async (gvs) => {
       const _gvsSorted = await gvsSortByPerson(gvs)
       setGvsSorted(_gvsSorted)
     })
-    return () => subscription.unsubscribe()
+    return () => {
+      if (subscription) subscription.unsubscribe()
+    }
   }, [garten.gvs])
 
   const gvPersonIds = gvsSorted.map((v) => v.person_id)

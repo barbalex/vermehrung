@@ -5,6 +5,8 @@ import buildArtFolder from './art/folder'
 import buildArt from './art'
 import buildHerkunftFolder from './herkunft/folder'
 import buildHerkunft from './herkunft'
+import buildGartenFolder from './garten/folder'
+import buildGarten from './garten'
 import buildSammlungFolder from './sammlung/folder'
 import buildSammlung from './sammlung'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
@@ -99,14 +101,36 @@ const buildNodes = async ({ store }) => {
   )
   const sammlung = await buildSammlung({ store, sammlungs: sammlungsSorted })
 
+  // garten
+  const gartenFolder = buildGartenFolder({ store })
+  const gartens = await db.collections
+    .get('garten')
+    .query(notDeletedOrHasConflictQuery)
+    .fetch()
+  const gartensFiltered = gartens.filter((value) =>
+    storeFilter({ value, filter: store.filter.garten, table: 'garten' }),
+  )
+  const gartenSorters = await Promise.all(
+    gartensFiltered.map(async (garten) => {
+      const name = garten?.name?.toString()?.toLowerCase()
+      const person = await garten?.person.fetch()
+      const personName = personFullname(person)?.toString()?.toLowerCase()
+      const sort = [name, personName]
+
+      return { id: garten.id, sort }
+    }),
+  )
+  const gartensSorted = sortBy(
+    gartensFiltered,
+    (garten) => gartenSorters.find((s) => s.id === garten.id).sort,
+  )
+  const garten = await buildGarten({ store, gartens: gartensSorted })
+
   /*console.log('buildNodesWm', {
     nodes,
     herkunft,
     art,
     artFolder,
-    herkunftFolder,
-    sammlungFolder,
-    sammlung,
   })*/
   const nodes = [
     ...artFolder,
@@ -115,6 +139,8 @@ const buildNodes = async ({ store }) => {
     ...herkunft,
     ...sammlungFolder,
     ...sammlung,
+    ...gartenFolder,
+    ...garten,
   ]
 
   const nodesSorted = nodes.sort(
