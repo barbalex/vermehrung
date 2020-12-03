@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { first as first$ } from 'rxjs/operators'
 
 import { StoreContext } from '../../../models/reactUtils'
-import artLabelFromArt from '../../../utils/artLabelFromArt'
 
 const singleRowHeight = 48
 const Row = styled.div`

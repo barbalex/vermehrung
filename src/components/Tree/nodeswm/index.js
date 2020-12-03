@@ -56,13 +56,13 @@ const buildNodes = async ({ store }) => {
   const herkunft = buildHerkunft({ store, herkunfts: herkunftsSorted })
 
   const nodes = [...artFolder, ...art, ...herkunftFolder, ...herkunft]
-  console.log('buildNodesWm', {
+  /*console.log('buildNodesWm', {
     nodes,
     herkunft,
     art,
     artFolder,
     herkunftFolder,
-  })
+  })*/
 
   const nodesSorted = nodes.sort(
     (a, b) =>
@@ -78,7 +78,6 @@ const buildNodes = async ({ store }) => {
       compare(a.sort[9], b.sort[9]) ||
       compare(a.sort[10], b.sort[10]),
   )
-  console.log('buildNodesWm', { nodesSorted })
   return nodesSorted
 }
 

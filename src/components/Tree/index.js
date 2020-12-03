@@ -81,7 +81,7 @@ const Tree = ({ width, height }) => {
       .observe()
       .subscribe(buildMyNodes)
     return () => {
-      Object.values(unsubscribe).forEach((v) => v.unsubscribe())
+      Object.keys(unsubscribe).forEach((key) => unsubscribe[key]())
     }
   }, [buildMyNodes, db.collections])
 
