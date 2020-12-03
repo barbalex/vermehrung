@@ -5,9 +5,12 @@ import buildArtFolder from './art/folder'
 import buildArt from './art'
 import buildHerkunftFolder from './herkunft/folder'
 import buildHerkunft from './herkunft'
+import buildSammlungFolder from './sammlung/folder'
+import buildSammlung from './sammlung'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
 import herkunftSort from '../../../utils/herkunftSort'
+import personFullname from '../../../utils/personFullname'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -55,14 +58,64 @@ const buildNodes = async ({ store }) => {
     .sort(herkunftSort)
   const herkunft = buildHerkunft({ store, herkunfts: herkunftsSorted })
 
-  const nodes = [...artFolder, ...art, ...herkunftFolder, ...herkunft]
+  // sammlung
+  const sammlungFolder = buildSammlungFolder({ store })
+  const sammlungs = await db.collections
+    .get('sammlung')
+    .query(notDeletedOrHasConflictQuery)
+    .fetch()
+  const sammlungsFiltered = sammlungs.filter((value) =>
+    storeFilter({ value, filter: store.filter.sammlung, table: 'sammlung' }),
+  )
+  const sammlungSorters = await Promise.all(
+    sammlungsFiltered.map(async (sammlung) => {
+      const datum = sammlung.datum ?? ''
+      const herkunft = await sammlung.herkunft.fetch()
+      const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
+      const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
+      const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
+      const person = await sammlung.person.fetch()
+      const fullname = personFullname(person)?.toString()?.toLowerCase()
+      const art = await sammlung.art.fetch()
+      const artLabel = art
+        ? await art.label.pipe(first$()).toPromise()
+        : undefined
+      const aeArtLabelLowerCase = artLabel?.toString()?.toLowerCase()
+      const sort = [
+        datum,
+        herkunftNr,
+        herkunftGemeinde,
+        herkunftLokalname,
+        fullname,
+        aeArtLabelLowerCase,
+      ]
+
+      return { id: sammlung.id, sort }
+    }),
+  )
+  const sammlungsSorted = sortBy(
+    sammlungsFiltered,
+    (sammlung) => sammlungSorters.find((s) => s.id === sammlung.id).sort,
+  )
+  const sammlung = await buildSammlung({ store, sammlungs: sammlungsSorted })
+
   /*console.log('buildNodesWm', {
     nodes,
     herkunft,
     art,
     artFolder,
     herkunftFolder,
+    sammlungFolder,
+    sammlung,
   })*/
+  const nodes = [
+    ...artFolder,
+    ...art,
+    ...herkunftFolder,
+    ...herkunft,
+    ...sammlungFolder,
+    ...sammlung,
+  ]
 
   const nodesSorted = nodes.sort(
     (a, b) =>

@@ -108,9 +108,9 @@ const Tree = ({ width, height }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openNodes])
 
-  // what else?
+  // what else to rerender on?
 
-  console.log('Tree', { nodes, aNA, openNodes })
+  //console.log('Tree', { nodes, aNA, openNodes })
 
   return (
     <ErrorBoundary>

@@ -26,6 +26,7 @@ import artLabelFromAeArt from './utils/artLabelFromAeArt'
 import lieferungLabelFromLieferung from './utils/lieferungLabelFromLieferung'
 import teilkulturLabelFromTeilkultur from './utils/teilkulturLabelFromTeilkultur'
 import kulturLabelFromKultur from './utils/kulturLabelFromKultur'
+import sammlungLabelFromSammlung from './utils/sammlungLabelFromSammlung'
 import toPgArray from './utils/toPgArray'
 import deleteAccount from './utils/deleteAccount'
 import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
@@ -199,6 +200,25 @@ export class Sammlung extends Model {
   @relation('person', 'person_id') person
   @children('lieferung') lieferungs
   @children('sammlung_file') files
+
+  @lazy label = this.observe().pipe(
+    // TODO: optimize untilChanged
+    distinctUntilChanged(),
+    map$(async (sammlung) => {
+      const art = await sammlung.art.fetch()
+      const ae_art = art ? await art.ae_art.fetch() : undefined
+      const person = await sammlung.person.fetch()
+      const herkunft = await sammlung.herkunft.fetch()
+
+      return sammlungLabelFromSammlung({
+        sammlung,
+        art,
+        ae_art,
+        person,
+        herkunft,
+      })
+    }),
+  )
 
   @action async removeConflict(_rev) {
     await this.update((row) => {

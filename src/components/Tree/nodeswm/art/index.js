@@ -3,7 +3,6 @@ import { first as first$ } from 'rxjs/operators'
 
 const artNodes = async ({ store, arts }) => {
   const { showArt, visibleOpenNodes } = store.tree
-  console.log('artNodes', { showArt, visibleOpenNodes })
   if (!showArt) return []
   // only show if parent node exists
   if (!visibleOpenNodes.some((node) => isEqual(['Arten'], node))) return []

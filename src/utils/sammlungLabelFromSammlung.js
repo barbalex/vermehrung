@@ -1,17 +1,38 @@
 import { DateTime } from 'luxon'
 
-const sammlungLabelFromSammlung = ({ sammlung, store }) => {
-  const art = sammlung?.art_id ? store.arts.get(sammlung.art_id) : {}
-  const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
-  const person = sammlung.person_id ? store.persons.get(sammlung.person_id) : {}
-  const herkunft = sammlung.herkunft_id
-    ? store.herkunfts.get(sammlung.herkunft_id)
-    : {}
+import personLabelFromPerson from './personLabelFromPerson'
+
+const sammlungLabelFromSammlung = ({
+  sammlung,
+  store,
+  art: artPassed,
+  ae_art: aeArtPassed,
+  person: personPassed,
+  herkunft: herkunftPassed,
+}) => {
+  const art = store
+    ? sammlung?.art_id
+      ? store.arts.get(sammlung.art_id)
+      : undefined
+    : artPassed
+  const aeArt = store
+    ? art?.ae_id
+      ? store.ae_arts.get(art.ae_id)
+      : undefined
+    : aeArtPassed
+  const person = store
+    ? sammlung.person_id
+      ? store.persons.get(sammlung.person_id)
+      : undefined
+    : personPassed
+  const herkunft = store
+    ? sammlung.herkunft_id
+      ? store.herkunfts.get(sammlung.herkunft_id)
+      : undefined
+    : herkunftPassed
 
   const artLabel = art ? aeArt?.name ?? '(Art ohne Name)' : '(keine Art)'
-  const personLabel = person?.fullname
-    ? person.fullname ?? '(Person ohne Name)'
-    : ''
+  const personLabel = personLabelFromPerson({ person })
   const herkunftLabel = herkunft?.id
     ? `von ${herkunft?.nr}` ?? '(Herkunft ohne Nr)'
     : '(keine Herkunft)'
