@@ -106,7 +106,7 @@ const Tree = ({ width, height }) => {
       .get('person')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['vorname', 'name'])
-    const observable = forkJoin([
+    const allCollectionsObservable = forkJoin([
       artObservable,
       herkunftObservable,
       sammlungObservable,
@@ -119,7 +119,7 @@ const Tree = ({ width, height }) => {
       eventObservable,
       personObservable,
     ])
-    const subscription = observable.subscribe(buildMyNodes)
+    const subscription = allCollectionsObservable.subscribe(buildMyNodes)
 
     return () => subscription.unsubscribe()
   }, [buildMyNodes, db.collections])
