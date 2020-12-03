@@ -14,7 +14,7 @@ begin
     from
       art_rev
     where
-      -- ignore revisions with child
+      -- leaves
       not exists (
         select
           art_id
@@ -24,9 +24,9 @@ begin
           t.art_id = new.art_id
           and t._parent_rev = art_rev._rev
       )
-      -- ignore deleted revisions
+      -- on undeleted
       and _deleted = false
-      -- only consider revisions of this record
+      -- of this record
       and art_id = new.art_id
     ),
     -- find max depth, as only revisions with max depth can win
