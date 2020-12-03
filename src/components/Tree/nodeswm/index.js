@@ -17,6 +17,8 @@ import buildZaehlungFolder from './zaehlung/folder'
 import buildZaehlung from './zaehlung'
 import buildLieferungFolder from './lieferung/folder'
 import buildLieferung from './lieferung'
+import buildSammelLieferungFolder from './sammelLieferung/folder'
+import buildSammelLieferung from './sammelLieferung'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
 import herkunftSort from '../../../utils/herkunftSort'
@@ -247,6 +249,26 @@ const buildNodes = async ({ store }) => {
     lieferungs: lieferungsSorted,
   })
 
+  // sammelLieferung
+  const sammelLieferungFolder = buildSammelLieferungFolder({ store })
+  const sammelLieferungs = await db.collections
+    .get('sammel_lieferung')
+    .query(notDeletedOrHasConflictQuery)
+    .fetch()
+  const sammelLieferungsSorted = sammelLieferungs
+    .filter((value) =>
+      storeFilter({
+        value,
+        filter: store.filter.sammel_lieferung,
+        table: 'sammel_lieferung',
+      }),
+    )
+    .sort(lieferungSort)
+  const sammelLieferung = buildSammelLieferung({
+    store,
+    sammelLieferungs: sammelLieferungsSorted,
+  })
+
   /*console.log('buildNodesWm', {
     nodes,
     herkunft,
@@ -270,6 +292,8 @@ const buildNodes = async ({ store }) => {
     ...zaehlung,
     ...lieferungFolder,
     ...lieferung,
+    ...sammelLieferungFolder,
+    ...sammelLieferung,
   ]
 
   const nodesSorted = nodes.sort(
