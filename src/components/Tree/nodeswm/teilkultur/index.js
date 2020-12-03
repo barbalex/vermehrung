@@ -2,33 +2,28 @@ import isEqual from 'lodash/isEqual'
 
 import teilkulturLabelFromTeilkultur from '../../../../utils/teilkulturLabelFromTeilkultur'
 
-const teilkulturNodes = ({ store }) => {
+const teilkulturNodes = ({ store, teilkulturs }) => {
   const { showTeilkultur, visibleOpenNodes } = store.tree
 
   if (!showTeilkultur) return []
+  // only show if parent node exists
+  if (!visibleOpenNodes.some((node) => isEqual(['Teilkulturen'], node)))
+    return []
 
-  return (
-    store.teilkultursFiltered
-      // only show if parent node exists
-      .filter(() =>
-        visibleOpenNodes.some((node) => isEqual(['Teilkulturen'], node)),
-      )
-      .map((el) => {
-        return {
-          nodeType: 'table',
-          menuTitle: 'Teilkultur',
-          table: 'teilkultur',
-          id: el.id,
-          label: teilkulturLabelFromTeilkultur({ teilkultur: el }),
-          url: ['Teilkulturen', el.id],
-          hasChildren: false,
-        }
-      })
-      .map((el, index) => {
-        el.sort = [6, index]
-        return el
-      })
-  )
+  return teilkulturs
+    .map((n) => ({
+      nodeType: 'table',
+      menuTitle: 'Teilkultur',
+      table: 'teilkultur',
+      id: n.id,
+      label: teilkulturLabelFromTeilkultur({ teilkultur: n }),
+      url: ['Teilkulturen', n.id],
+      hasChildren: false,
+    }))
+    .map((n, index) => {
+      n.sort = [6, index]
+      return n
+    })
 }
 
 export default teilkulturNodes
