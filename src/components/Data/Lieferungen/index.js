@@ -8,7 +8,6 @@ import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
-import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -19,6 +18,7 @@ import exists from '../../../utils/exists'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
+import lieferungSort from '../../../utils/lieferungSort'
 
 const Container = styled.div`
   height: 100%;
@@ -120,22 +120,11 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
         )
       : collection.query(notDeletedOrHasConflictQuery)
     const subscription = query.observe().subscribe(async (lieferungs) => {
-      const lieferungsFiltered = lieferungs.filter((value) =>
-        storeFilter({ value, filter: lieferungFilter, table: 'lieferung' }),
-      )
-      const lieferungSorters = await Promise.all(
-        lieferungsFiltered.map(async (lieferung) => {
-          const datum = lieferung.datum ?? ''
-          const anzahlPflanzen = lieferung.anzahl_pflanzen ?? ''
-          const sort = [datum, anzahlPflanzen]
-
-          return { id: lieferung.id, sort }
-        }),
-      )
-      const lieferungsSorted = sortBy(
-        lieferungsFiltered,
-        (lieferung) => lieferungSorters.find((s) => s.id === lieferung.id).sort,
-      )
+      const lieferungsSorted = lieferungs
+        .filter((value) =>
+          storeFilter({ value, filter: lieferungFilter, table: 'lieferung' }),
+        )
+        .sort(lieferungSort)
       setLieferungState({ lieferungs, lieferungsFiltered: lieferungsSorted })
     })
     return () => subscription.unsubscribe()
