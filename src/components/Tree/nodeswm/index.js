@@ -17,6 +17,8 @@ import buildZaehlungFolder from './zaehlung/folder'
 import buildZaehlung from './zaehlung'
 import buildLieferungFolder from './lieferung/folder'
 import buildLieferung from './lieferung'
+import buildEventFolder from './event/folder'
+import buildEvent from './event'
 import buildSammelLieferungFolder from './sammelLieferung/folder'
 import buildSammelLieferung from './sammelLieferung'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
@@ -25,6 +27,7 @@ import herkunftSort from '../../../utils/herkunftSort'
 import teilkulturSort from '../../../utils/teilkulturSort'
 import zaehlungSort from '../../../utils/zaehlungSort'
 import lieferungSort from '../../../utils/lieferungSort'
+import eventSort from '../../../utils/eventSort'
 import personFullname from '../../../utils/personFullname'
 import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 
@@ -269,6 +272,26 @@ const buildNodes = async ({ store }) => {
     sammelLieferungs: sammelLieferungsSorted,
   })
 
+  // event
+  const eventFolder = buildEventFolder({ store })
+  const events = await db.collections
+    .get('event')
+    .query(notDeletedOrHasConflictQuery)
+    .fetch()
+  const eventsSorted = events
+    .filter((value) =>
+      storeFilter({
+        value,
+        filter: store.filter.event,
+        table: 'event',
+      }),
+    )
+    .sort((a, b) => eventSort({ a, b }))
+  const event = buildEvent({
+    store,
+    events: eventsSorted,
+  })
+
   /*console.log('buildNodesWm', {
     nodes,
     herkunft,
@@ -292,6 +315,8 @@ const buildNodes = async ({ store }) => {
     ...zaehlung,
     ...lieferungFolder,
     ...lieferung,
+    ...eventFolder,
+    ...event,
     ...sammelLieferungFolder,
     ...sammelLieferung,
   ]
