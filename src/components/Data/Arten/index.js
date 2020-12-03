@@ -104,6 +104,8 @@ const Arten = ({ filter: showFilter, width, height }) => {
   const totalNr = arts.length
   const filteredNr = artsFiltered.length
 
+  console.log('Arten', { artsFiltered, arts })
+
   const add = useCallback(() => {
     insertArtRev()
   }, [insertArtRev])
