@@ -4,7 +4,6 @@ import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 import { navigate } from 'gatsby'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 import { StoreContext } from '../models/reactUtils'
 import Layout from '../components/Layout'
@@ -69,7 +68,6 @@ const StyledSplitPane = styled(SplitPane)`
 `
 
 const Vermehrung = ({ location }) => {
-  const db = useDatabase()
   const store = useContext(StoreContext)
   const {
     activeForm,
@@ -136,7 +134,7 @@ const Vermehrung = ({ location }) => {
       // if no data exists yet
       // set initial data queried false
       // then true on first data event
-      unsubscribe = initializeSubscriptions({ store, db })
+      unsubscribe = initializeSubscriptions({ store })
     }
     return function cleanup() {
       if (unsubscribe && Object.keys(unsubscribe)) {

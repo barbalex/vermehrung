@@ -33,7 +33,7 @@ import {
 } from './fragments'
 import getAuthToken from './getAuthToken'
 import checkForOnlineError from './checkForOnlineError'
-import updateWmFromData from './updateWmFromData'
+import processSubscriptionResult from './processSubscriptionResult'
 import { tables } from '../dbSchema/schema'
 
 const allDataQuery = gql`
@@ -187,7 +187,7 @@ const queryRawData = async ({ store }) => {
       dataTableLengthExists: !!data[table].length,
     })
     !!data[table].length &&
-      (await updateWmFromData({ data: data[table], table, db }))
+      (await processSubscriptionResult({ data: data[table], table, db }))
   }
   // TODO:
   // remove data with _deleted flag?

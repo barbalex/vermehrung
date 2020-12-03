@@ -10,7 +10,11 @@ const stripTypename = (object) => {
 }
 
 // TODO: do this in worker?
-const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
+const processSubscriptionResult = async ({
+  data: dataToCheck,
+  table,
+  store,
+}) => {
   const {
     db,
     setInitiallyQueried,
@@ -50,7 +54,7 @@ const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
           isEqual(value, o[key]),
         )
       })
-      console.log('updateWmFromData:', {
+      console.log('processSubscriptionResult:', {
         dataToCheck: dataToCheck.length,
         table,
         toUpdate: objectsToUpdate.length,
@@ -82,8 +86,8 @@ const updateWmFromData = async ({ data: dataToCheck, table, store }) => {
       setInitiallyQueried({ table })
     })
   } catch (error) {
-    console.log('Error in updateWmFromData > db.action:', error)
+    console.log('Error in processSubscriptionResult > db.action:', error)
   }
 }
 
-export default updateWmFromData
+export default processSubscriptionResult

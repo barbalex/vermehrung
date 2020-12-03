@@ -7,7 +7,6 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import SimpleBar from 'simplebar-react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import sortBy from 'lodash/sortBy'
 import { first as first$ } from 'rxjs/operators'
 
@@ -69,11 +68,10 @@ const initialArtState = { arts: [], artsFiltered: [] }
 
 const Arten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertArtRev } = store
+  const { insertArtRev, db } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { art: artFilter } = store.filter
 
-  const db = useDatabase()
   // use object with two keys to only render once on setting
   const [artsState, setArtState] = useState(initialArtState)
   useEffect(() => {
