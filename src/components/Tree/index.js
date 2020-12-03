@@ -10,13 +10,12 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
-import { FixedSizeList as List } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import { StoreContext } from '../../models/reactUtils'
-import Row from './Row'
 import Settings from './Settings'
+import List from './List'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import notDeletedOrHasConflictQuery from '../../utils/notDeletedOrHasConflictQuery'
 import buildNodes from './nodeswm'
@@ -25,63 +24,64 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
 `
-const StyledList = styled(List)`
-  margin-top: 5px;
-
-  /* hide native scrollbar */
-  &::-webkit-scrollbar {
-    width: 0;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-    box-shadow: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    box-shadow: none;
-  }
-
-  @media print {
-    display: none !important;
-  }
-`
 
 const Tree = ({ width, height }) => {
   const store = useContext(StoreContext)
   const { db } = store
-  const { art: artFilter, herkunft: herkunftFilter } = store.filter
   const {
-    singleRowHeight,
+    art: artFilter,
+    herkunft: herkunftFilter,
+    sammlung: sammlungFilter,
+  } = store.filter
+  const {
     activeNodeArray: aNAProxy,
     openNodes: openNodesProxy,
+    activeNode,
     //nodes: storeNodes,
   } = store.tree
   const aNA = getSnapshot(aNAProxy)
   const openNodes = getSnapshot(openNodesProxy)
 
   const listRef = useRef(null)
-
-  useEffect(() => {
-    const index = findIndex(nodes, (node) => isEqual(node.url, aNA))
-    if (index > -1 && listRef.current) listRef.current.scrollToItem(index)
-  }, [aNA, listRef, nodes])
-
   const [nodes, setNodes] = useState([])
+
   const buildMyNodes = useCallback(async () => {
     const nodes = await buildNodes({ store })
     setNodes(nodes)
+    // TODO: need to provoke scrollToItem
   }, [store])
 
   useEffect(() => {
     // need subscription to all tables that provokes treeBuild on next
-    let unsubscribe = {}
-    unsubscribe.art = db.collections
+    let subscriptions = {}
+    subscriptions.art = db.collections
       .get('art')
       .query(notDeletedOrHasConflictQuery)
-      .observe()
+      .observeWithColumns(['name'])
       .subscribe(buildMyNodes)
+    subscriptions.herkunft = db.collections
+      .get('herkunft')
+      .query(notDeletedOrHasConflictQuery)
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+      .subscribe(buildMyNodes)
+    subscriptions.sammlung = db.collections
+      .get('sammlung')
+      .query(notDeletedOrHasConflictQuery)
+      .observeWithColumns([
+        'art_id',
+        'person_id',
+        'herkunft_id',
+        'datum',
+        'geplant',
+      ])
+      .subscribe(buildMyNodes)
+
     return () => {
-      Object.keys(unsubscribe).forEach((key) => unsubscribe[key]())
+      console.log('Tree, useEffect, subscriptions:', subscriptions)
+      Object.values(subscriptions).forEach((subscription) => {
+        console.log('Tree, useEffect, unsubscribe, subscription:', subscription)
+        subscription.unsubscribe()
+      })
     }
   }, [buildMyNodes, db.collections])
 
@@ -94,23 +94,47 @@ const Tree = ({ width, height }) => {
     ...Object.values(artFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(herkunftFilter),
-  ])
-
-  useEffect(() => {
-    buildMyNodes()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(sammlungFilter),
     // need to rebuild tree on activeNodeArray changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [aNA])
-
-  useEffect(() => {
-    buildMyNodes()
+    aNA,
     // need to rebuild tree on openNodes changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openNodes])
+    openNodes,
+  ])
 
   // what else to rerender on?
 
-  //console.log('Tree', { nodes, aNA, openNodes })
+  // TODO:
+  // need to scroll when any of the label-relevant fields of the active form change
+  const nodeIndex = findIndex(nodes, (node) => isEqual(node.url, aNA))
+  useEffect(() => {
+    if (nodeIndex > -1 && listRef.current) {
+      listRef.current.scrollToItem(nodeIndex)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listRef, activeNode?.label, aNA, nodes, nodeIndex])
+  useEffect(() => {
+    console.log('Tree, scrolling to item effect', {
+      nodeIndex,
+      currentRef: listRef.current,
+    })
+    if (nodeIndex > -1) {
+      listRef.current?.scrollToItem(nodeIndex)
+      console.log('Tree, scrolling to item')
+    }
+  }, [])
+
+  console.log('Tree', {
+    activeNode,
+    currentRef: listRef.current,
+    nodes,
+    nodesLength: nodes.length,
+    noNodesLength: !nodes.length,
+    width,
+  })
+  console.log('Tree rendering')
 
   return (
     <ErrorBoundary>
@@ -119,25 +143,13 @@ const Tree = ({ width, height }) => {
         {!!width && (
           <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
             {({ scrollableNodeRef, contentNodeRef }) => (
-              <StyledList
-                height={height - 5}
-                itemCount={nodes.length}
-                itemSize={singleRowHeight}
+              <List
+                nodes={nodes}
+                scrollableNodeRef={scrollableNodeRef}
+                contentNodeRef={contentNodeRef}
                 width={width}
-                ref={listRef}
-                innerRef={contentNodeRef}
-                outerRef={scrollableNodeRef}
-              >
-                {({ index, style }) => (
-                  <Row
-                    key={index}
-                    style={style}
-                    index={index}
-                    node={nodes[index]}
-                    nodes={nodes}
-                  />
-                )}
-              </StyledList>
+                height={height}
+              />
             )}
           </SimpleBar>
         )}
