@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { forkJoin } from 'rxjs'
 
 import { StoreContext } from '../../models/reactUtils'
 import Settings from './Settings'
@@ -31,6 +32,7 @@ const Tree = ({ width, height }) => {
     lieferung: lieferungFilter,
     sammel_lieferung: sammelLieferungFilter,
     event: eventFilter,
+    person: personFilter,
   } = store.filter
   const {
     activeNodeArray: aNAProxy,
@@ -49,18 +51,18 @@ const Tree = ({ width, height }) => {
 
   useEffect(() => {
     // need subscription to all tables that provokes treeBuild on next
-    let subscriptions = {}
-    subscriptions.art = db.collections
+    const subscription = db.collections
       .get('art')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['name'])
       .subscribe(buildMyNodes)
-    subscriptions.herkunft = db.collections
+    const herkunftSubscription = db.collections
       .get('herkunft')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
       .subscribe(buildMyNodes)
-    subscriptions.sammlung = db.collections
+    subscription.add(herkunftSubscription)
+    const sammlungSubscription = db.collections
       .get('sammlung')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns([
@@ -71,12 +73,14 @@ const Tree = ({ width, height }) => {
         'geplant',
       ])
       .subscribe(buildMyNodes)
-    subscriptions.garten = db.collections
+    subscription.add(sammlungSubscription)
+    const gartenSubscription = db.collections
       .get('garten')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['name', 'person_id'])
       .subscribe(buildMyNodes)
-    subscriptions.kultur = db.collections
+    subscription.add(gartenSubscription)
+    const kulturSubscription = db.collections
       .get('kultur')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns([
@@ -86,39 +90,45 @@ const Tree = ({ width, height }) => {
         'zwischenlager',
       ])
       .subscribe(buildMyNodes)
-    subscriptions.teilkultur = db.collections
+    subscription.add(kulturSubscription)
+    const teilkulturSubscription = db.collections
       .get('teilkultur')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
       .subscribe(buildMyNodes)
-    subscriptions.zaehlung = db.collections
+    subscription.add(teilkulturSubscription)
+    const zaehlungSubscription = db.collections
       .get('zaehlung')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
       .subscribe(buildMyNodes)
-    subscriptions.lieferung = db.collections
+    subscription.add(zaehlungSubscription)
+    const lieferungSubscription = db.collections
       .get('lieferung')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
       .subscribe(buildMyNodes)
-    subscriptions.sammel_lieferung = db.collections
+    subscription.add(lieferungSubscription)
+    const sammel_lieferungSubscription = db.collections
       .get('sammel_lieferung')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
       .subscribe(buildMyNodes)
-    subscriptions.event = db.collections
+    subscription.add(sammel_lieferungSubscription)
+    const eventSubscription = db.collections
       .get('event')
       .query(notDeletedOrHasConflictQuery)
       .observeWithColumns(['datum', 'beschreibung'])
       .subscribe(buildMyNodes)
+    subscription.add(eventSubscription)
+    const personSubscription = db.collections
+      .get('person')
+      .query(notDeletedOrHasConflictQuery)
+      .observeWithColumns(['vorname', 'name'])
+      .subscribe(buildMyNodes)
+    subscription.add(personSubscription)
 
-    return () => {
-      //console.log('Tree, useEffect, subscriptions:', subscriptions)
-      Object.values(subscriptions).forEach((subscription) => {
-        //console.log('Tree, useEffect, unsubscribe, subscription:', subscription)
-        subscription.unsubscribe()
-      })
-    }
+    return () => subscription.unsubscribe()
   }, [buildMyNodes, db.collections])
 
   useEffect(() => {
@@ -146,6 +156,8 @@ const Tree = ({ width, height }) => {
     ...Object.values(sammelLieferungFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(eventFilter),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(personFilter),
     // need to rebuild tree on activeNodeArray changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     aNA,

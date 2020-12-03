@@ -19,6 +19,8 @@ import buildLieferungFolder from './lieferung/folder'
 import buildLieferung from './lieferung'
 import buildEventFolder from './event/folder'
 import buildEvent from './event'
+import buildPersonFolder from './person/folder'
+import buildPerson from './person'
 import buildSammelLieferungFolder from './sammelLieferung/folder'
 import buildSammelLieferung from './sammelLieferung'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
@@ -28,6 +30,7 @@ import teilkulturSort from '../../../utils/teilkulturSort'
 import zaehlungSort from '../../../utils/zaehlungSort'
 import lieferungSort from '../../../utils/lieferungSort'
 import eventSort from '../../../utils/eventSort'
+import personSort from '../../../utils/personSort'
 import personFullname from '../../../utils/personFullname'
 import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 
@@ -292,6 +295,26 @@ const buildNodes = async ({ store }) => {
     events: eventsSorted,
   })
 
+  // person
+  const personFolder = buildPersonFolder({ store })
+  const persons = await db.collections
+    .get('person')
+    .query(notDeletedOrHasConflictQuery)
+    .fetch()
+  const personsSorted = persons
+    .filter((value) =>
+      storeFilter({
+        value,
+        filter: store.filter.person,
+        table: 'person',
+      }),
+    )
+    .sort((a, b) => personSort({ a, b }))
+  const person = buildPerson({
+    store,
+    persons: personsSorted,
+  })
+
   /*console.log('buildNodesWm', {
     nodes,
     herkunft,
@@ -317,6 +340,8 @@ const buildNodes = async ({ store }) => {
     ...lieferung,
     ...eventFolder,
     ...event,
+    ...personFolder,
+    ...person,
     ...sammelLieferungFolder,
     ...sammelLieferung,
   ]
