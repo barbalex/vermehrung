@@ -14,15 +14,16 @@ begin
     from
       art_rev
     where
-      -- leaves
+      -- leaves = does not have children
       not exists (
         select
           art_id
         from
-          art_rev as t
+          art_rev as art_rev_inner
         where
-          t.art_id = new.art_id
-          and t._parent_rev = art_rev._rev
+          art_rev_inner.art_id = new.art_id
+          -- has children
+          and art_rev_inner._parent_rev = art_rev._rev
       )
       -- on undeleted
       and _deleted = false
@@ -84,10 +85,10 @@ begin
         select
           art_id
         from
-          art_rev as t
+          art_rev as art_rev_inner
         where
-          t.art_id = new.art_id
-          and t._parent_rev = art_rev._rev
+          art_rev_inner.art_id = new.art_id
+          and art_rev_inner._parent_rev = art_rev._rev
       )
       -- undeleted
       and _deleted = false
@@ -109,10 +110,10 @@ begin
           select
             art_id
           from
-            art_rev as t
+            art_rev as art_rev_inner
           where
-            t.art_id = new.art_id
-            and t._parent_rev = art_rev._rev
+            art_rev_inner.art_id = new.art_id
+            and art_rev_inner._parent_rev = art_rev._rev
         )
         -- deleted
         and _deleted is true
@@ -219,10 +220,10 @@ begin
           select
             art_id
           from
-            art_rev as t
+            art_rev as art_rev_inner
           where
-            t.art_id = new.art_id
-            and t._parent_rev = art_rev._rev
+            art_rev_inner.art_id = new.art_id
+            and art_rev_inner._parent_rev = art_rev._rev
         )
         and _deleted is false
         and art_id = new.art_id
