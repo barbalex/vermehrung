@@ -55,7 +55,7 @@ const processSubscriptionResult = async ({
         )
       })
       console.log('processSubscriptionResult:', {
-        dataToCheck: dataToCheck.length,
+        //dataToCheck: dataToCheck.length,
         table,
         toUpdate: objectsToUpdate.length,
         toCreate: missingIds.length,
