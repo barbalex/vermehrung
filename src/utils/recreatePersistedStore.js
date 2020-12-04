@@ -78,15 +78,12 @@ const recreatePersistedStore = async ({ store }) => {
         navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
       }, 200)
     }
-    // 2020.11.29: used to need the timeout here. removed as changed startup
-    //setTimeout(async () => {
     const nowOnline = await isOnline()
     if (nowOnline !== online) setOnline(nowOnline)
     if (nowOnline) {
       await getAuthToken({ store })
     }
     setGettingAuthUser(false)
-    //})
   })
   return unregisterAuthObserver
 }
