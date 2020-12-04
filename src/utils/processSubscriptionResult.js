@@ -59,7 +59,6 @@ const processSubscriptionResult = async ({
         table,
         toUpdate: objectsToUpdate.length,
         toCreate: missingIds.length,
-        objectsOfToUpdateLength: objectsOfToUpdate.length,
       })
       if (objectsToUpdate.length || dataToCreateObjectsFrom.length) {
         await db.batch(
