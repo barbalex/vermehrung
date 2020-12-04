@@ -66,6 +66,8 @@ begin
 if exists (
   select 1 from herkunft_rev_winner(new.herkunft_id, false)
 )
+-- 1. if a winning undeleted leaf exists, use this
+--    (else pick a winner from the deleted leaves)
 then
   insert into herkunft (
     id,
@@ -125,10 +127,10 @@ then
     _deleted = excluded._deleted,
     _conflicts = excluded._conflicts;
 else
-    -- 2. so there is no undeleted winning leaf exists
-    --    choose winner from deleted leaves
-    --    is necessary to set the winner deleted
-    --    so the client can pick this up
+  -- 2. so there is no undeleted winning leaf
+  --    choose winner from deleted leaves
+  --    is necessary to set the winner deleted
+  --    so the client can pick this up
   insert into herkunft (
     id,
     nr,
@@ -187,7 +189,7 @@ else
     _deleted = excluded._deleted,
     _conflicts = excluded._conflicts;
 end if;
-  return new;
+return new;
 end;
 $$ language plpgsql;
 
