@@ -4,18 +4,12 @@ create or replace function herkunft_rev_set_winning_revision ()
 begin
   -- 1. check if non deleted winner exists
   if exists(
-    with max_depths as (
-      select
-        max(_depth) as max_depth
-      from
-        leaves_of_herkunft(new.herkunft_id)
-    ),
-    winning_revisions as (
+    with winning_revisions as (
       select
         max(leaves._rev) as _rev
       from
         leaves_of_herkunft(new.herkunft_id) as leaves
-        join max_depths on leaves._depth = max_depths.max_depth
+      where max_rev_depth(new.herkunft_id) = leaves._depth
     )
     select * from herkunft_rev
     join winning_revisions on herkunft_rev._rev = winning_revisions._rev
@@ -66,18 +60,12 @@ begin
             and l._depth = herkunft_rev._depth
         )
     ),
-    max_depths as (
-      select
-        max(_depth) as max_depth
-      from
-        leaves_of_herkunft(new.herkunft_id)
-    ),
     winning_revisions as (
       select
         max(leaves._rev) as _rev
       from
         leaves_of_herkunft(new.herkunft_id) as leaves
-        join max_depths on leaves._depth = max_depths.max_depth
+      where max_rev_depth(new.herkunft_id) = leaves._depth
     )
     select
       herkunft_rev.herkunft_id,
@@ -191,18 +179,12 @@ begin
         --and _deleted = false
         and herkunft_id = new.herkunft_id
       ),
-      max_depths as (
-        select
-          max(_depth) as max_depth
-        from
-          leaves_deleted
-      ),
       winning_revisions as (
         select
           max(leaves_deleted._rev) as _rev
         from
           leaves_deleted
-          join max_depths on leaves_deleted._depth = max_depths.max_depth
+        where max_rev_depth(new.herkunft_id) = leaves_deleted._depth
       )
       select
         herkunft_rev.herkunft_id,
