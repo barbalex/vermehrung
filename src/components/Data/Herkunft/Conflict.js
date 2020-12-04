@@ -34,7 +34,6 @@ const HerkunftConflict = ({
       ) || {},
     [rev, row.id, store.herkunft_revs],
   )
-  console.log('Herkunft Conflict', { revRow, row, rev })
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
