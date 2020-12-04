@@ -126,8 +126,8 @@ const QueuedQueries = () => {
             <QueriesContainer>
               <Heading>Zeit</Heading>
               <Heading>Tabelle</Heading>
-              <Heading>Feld / Operation</Heading>
               <Heading>ID</Heading>
+              <Heading>Feld / Operation</Heading>
               <Heading>vorher</Heading>
               <Heading>nachher</Heading>
               <RevertHeading>widerrufen</RevertHeading>
