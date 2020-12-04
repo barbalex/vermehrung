@@ -83,7 +83,7 @@ const Conflict = ({
           title="Die widersprüchliche Version wird zur aktuellen. Die bisher aktuelle wird zur widersprüchlichen"
           startIcon={<FaExchangeAlt />}
         >
-          übernehmen
+          {diffConflict ? 'grüne Version übernehmen' : 'übernehmen'}
         </StyledButton>
         <StyledButton
           onClick={onClickToggleDiff}
