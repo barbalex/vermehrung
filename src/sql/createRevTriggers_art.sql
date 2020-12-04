@@ -5,37 +5,13 @@ begin
   -- 1.a: check if non deleted winner exists
   --      (if not: choose a deleted one)
   if exists(
-    -- consider only undeleted leaf revisions of this record
-    with leaves as (
-    select
-      art_id,
-      _rev,
-      _depth
-    from
-      art_rev
-    where
-      -- leaves = does not have children
-      not exists (
-        select
-          art_id
-        from
-          art_rev as art_rev_inner
-        where
-          art_rev_inner.art_id = new.art_id
-          -- has children
-          and art_rev_inner._parent_rev = art_rev._rev
-      )
-      -- on undeleted
-      and _deleted = false
-      -- of this record
-      and art_id = new.art_id
-    ),
     -- find max depth, as only revisions with max depth can win
-    max_depths as (
+    with max_depths as (
       select
         max(_depth) as max_depth
       from
-        leaves
+        --leaves
+        leaves_of_art(new.art_id)
     ),
     -- the revision with max depth and max rev wins
     winning_revisions as (
@@ -47,7 +23,7 @@ begin
         -- for instance: last writer wins
         max(leaves._rev) as _rev
       from
-        leaves
+        leaves_of_art(new.art_id) as leaves
         -- only consider revisions with max depth
         join max_depths on leaves._depth = max_depths.max_depth
     )
@@ -71,30 +47,7 @@ begin
   )
   -- recalculating the winner here 
   -- as I did not know how to re-use the exact same calculation from above :-(
-  with leaves as (
-    select
-      art_id,
-      _rev,
-      _depth,
-      _parent_rev
-    from
-      art_rev
-    where
-      -- leaves
-      not exists (
-        select
-          art_id
-        from
-          art_rev as art_rev_inner
-        where
-          art_rev_inner.art_id = new.art_id
-          and art_rev_inner._parent_rev = art_rev._rev
-      )
-      -- undeleted
-      and _deleted = false
-      -- of this record
-      and art_id = new.art_id
-    ),
+  with 
     -- the deletion itself could be a conflict
     -- so to list conflicts, need to get a list of deleted siblings
     deleted_conflicts_of_leaves as (
@@ -121,7 +74,7 @@ begin
         and art_id = new.art_id
         -- siblings
         and exists (
-          select art_id from leaves l
+          select art_id from leaves_of_art(new.art_id) l
           where 
             l._parent_rev = art_rev._parent_rev
             and l._depth = art_rev._depth
@@ -132,7 +85,7 @@ begin
       select
         max(_depth) as max_depth
       from
-        leaves
+        leaves_of_art(new.art_id)
     ),
     -- the revision with max depth and max rev wins
     winning_revisions as (
@@ -144,7 +97,7 @@ begin
         -- for instance: last writer wins
         max(leaves._rev) as _rev
       from
-        leaves
+        leaves_of_art(new.art_id) as leaves
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
@@ -159,7 +112,7 @@ begin
       art_rev._depth,
       art_rev._deleted,
       (select array(
-        select _rev from leaves
+        select _rev from leaves_of_art(new.art_id)
         where 
           -- whose data is different from this record
           _rev <> art_rev._rev
@@ -207,53 +160,7 @@ begin
         _conflicts
     )
     -- again re-calculating the same as I do not know better :-(
-    with leaves as (
-      select
-        art_id,
-        _rev,
-        _depth,
-        _parent_rev
-      from
-        art_rev
-      where
-        not exists (
-          select
-            art_id
-          from
-            art_rev as art_rev_inner
-          where
-            art_rev_inner.art_id = new.art_id
-            and art_rev_inner._parent_rev = art_rev._rev
-        )
-        and _deleted is false
-        and art_id = new.art_id
-      ),
-      deleted_conflicts_of_leaves as (
-        select
-          art_id,
-          _rev,
-          _depth
-        from
-          art_rev
-        where
-          not exists (
-            select
-              art_id
-            from
-              art_rev as t
-            where
-              t.art_id = new.art_id
-              and t._parent_rev = art_rev._rev
-          )
-          and _deleted is true
-          and art_id = new.art_id
-          and exists (
-            select art_id from leaves l
-            where 
-              l._parent_rev = art_rev._parent_rev
-              and l._depth = art_rev._depth
-          )
-      ),
+    with 
       leaves_deleted as (
       select
         art_id,
@@ -298,7 +205,7 @@ begin
         art_rev._depth,
         art_rev._deleted,
         (select array(
-          select _rev from leaves
+          select _rev from leaves_of_art(new.art_id)
           where 
             _rev <> art_rev._rev
             and _rev <> ANY(art_rev._revisions)
