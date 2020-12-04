@@ -1,6 +1,6 @@
 /**
- * inspired by:
- * https://github.com/chrisbolin/react-detect-offline/blob/master/src/index.js
+ * based on:
+ * https://hasura.io/docs/1.0/graphql/core/api-reference/health.html
  */
 // eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect } from 'react'
@@ -23,6 +23,7 @@ const ApiDetector = () => {
         }
       })
     }, pollInterval)
+
     return () => {
       clearInterval(pollingId)
     }
