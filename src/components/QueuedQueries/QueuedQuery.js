@@ -105,10 +105,10 @@ const QueuedQuery = ({ qq, index }) => {
         'yyyy.LL.dd HH.mm.ss',
       )}`}</Value>
       <Value bt={index === 0}>{revertTable}</Value>
+      <Value bt={index === 0}>{revertId}</Value>
       <Value bt={index === 0}>
         {isInsert ? 'neuer Datensatz' : revertField}
       </Value>
-      <Value bt={index === 0}>{revertId}</Value>
       <Value bt={index === 0}>
         {isInsert
           ? ''
