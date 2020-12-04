@@ -9,7 +9,7 @@ create or replace function herkunft_rev_children(herkunft_id uuid, parent_rev te
     and herkunft_rev._parent_rev = $2
 $$ LANGUAGE sql;
 
-create or replace function herkunft_rev_leaves(herkunft_id uuid) returns setof herkunft_rev as $$
+create or replace function herkunft_rev_leaves(herkunft_id uuid, deleted boolean default false) returns setof herkunft_rev as $$
   select
     *
   from
@@ -18,103 +18,53 @@ create or replace function herkunft_rev_leaves(herkunft_id uuid) returns setof h
     -- of this record
     herkunft_id = $1
     -- undeleted
-    and _deleted = false
+    and _deleted = $2
     -- leaves
     and not exists (
       select 1 from herkunft_rev_children($1, herkunft_rev._rev)
     );
 $$ LANGUAGE sql;
 
-create or replace function herkunft_rev_leaves_including_deleted(herkunft_id uuid) returns setof herkunft_rev as $$
-  select
-    *
-  from
-    herkunft_rev
-  where
-    -- of this record
-    herkunft_id = $1
-    -- leaves
-    and not exists (
-      select 1 from herkunft_rev_children($1, herkunft_rev._rev)
-    );
-$$ LANGUAGE sql;
-
-create or replace function herkunft_rev_max_depth(herkunft_id uuid) returns int as $$
+create or replace function herkunft_rev_max_depth(herkunft_id uuid, deleted boolean default false) returns int as $$
   select
     max(_depth)
   from
-    herkunft_rev_leaves($1);
+    herkunft_rev_leaves($1, $2);
 $$ LANGUAGE sql;
 
-create or replace function herkunft_rev_max_depth_including_deleted(herkunft_id uuid) returns int as $$
-  select
-    max(_depth)
-  from
-    herkunft_rev_leaves_including_deleted($1);
-$$ LANGUAGE sql;
-
-create or replace function herkunft_rev_winner_rev_value (herkunft_id uuid) returns text as $$
+create or replace function herkunft_rev_winner_rev_value(herkunft_id uuid, deleted boolean default false) returns text as $$
   select
    -- here we choose the winning revision
     max(leaves._rev) as _rev
   from
-    herkunft_rev_leaves($1) as leaves
+    herkunft_rev_leaves($1, $2) as leaves
   where 
-    herkunft_rev_max_depth($1) = leaves._depth
+    herkunft_rev_max_depth($1, $2) = leaves._depth
 $$ LANGUAGE sql;
 
-create or replace function herkunft_rev_winner_rev_value_including_deleted (herkunft_id uuid) returns text as $$
-  select
-   -- here we choose the winning revision
-    max(leaves._rev) as _rev
-  from
-    herkunft_rev_leaves_including_deleted($1) as leaves
-  where 
-    herkunft_rev_max_depth_including_deleted($1) = leaves._depth
-$$ LANGUAGE sql;
-
-create or replace function herkunft_rev_winner (herkunft_id uuid) returns setof herkunft_rev as $$
+create or replace function herkunft_rev_winner(herkunft_id uuid, deleted boolean default false) returns setof herkunft_rev as $$
   select
     *
   from
-    herkunft_rev_leaves($1) as leaves
+    herkunft_rev_leaves($1, $2) as leaves
   where 
-    leaves._rev = herkunft_rev_winner_rev_value($1)
+    leaves._rev = herkunft_rev_winner_rev_value($1, $2)
 $$ LANGUAGE sql;
 
-create or replace function herkunft_rev_winner_including_deleted (herkunft_id uuid) returns setof herkunft_rev as $$
-  select
-    *
-  from
-    herkunft_rev_leaves_including_deleted($1) as leaves
-  where 
-    leaves._rev = herkunft_rev_winner_rev_value_including_deleted($1)
-$$ LANGUAGE sql;
-
-create or replace function herkunft_conflicts_of_winner(herkunft_id uuid) returns text[] as $$
+create or replace function herkunft_conflicts_of_winner(herkunft_id uuid, deleted boolean default false) returns text[] as $$
   select 
     array(
-      select _rev from herkunft_rev_leaves($1)
+      select _rev from herkunft_rev_leaves($1, $2)
       where 
         _rev <> herkunft_rev._rev
     )
-  from herkunft_rev_winner($1) as herkunft_rev
-$$ LANGUAGE sql;
-
-create or replace function herkunft_conflicts_of_winner_including_deleted(herkunft_id uuid) returns text[] as $$
-  select 
-    array(
-      select _rev from herkunft_rev_leaves_including_deleted($1)
-      where 
-        _rev <> herkunft_rev._rev
-    )
-  from herkunft_rev_winner($1) as herkunft_rev
+  from herkunft_rev_winner($1, $2) as herkunft_rev
 $$ LANGUAGE sql;
 
 create or replace function herkunft_rev_set_winning_revision() returns trigger as $$
 begin
 if exists (
-  select 1 from herkunft_rev_winner(new.herkunft_id)
+  select 1 from herkunft_rev_winner(new.herkunft_id, false)
 )
 then
   insert into herkunft (
@@ -153,9 +103,9 @@ then
     winner._parent_rev,
     winner._depth,
     winner._deleted,
-    herkunft_conflicts_of_winner(new.herkunft_id) as _conflicts
+    herkunft_conflicts_of_winner(new.herkunft_id, false) as _conflicts
   from
-    herkunft_rev_winner(new.herkunft_id) as winner
+    herkunft_rev_winner(new.herkunft_id, false) as winner
   on conflict on constraint herkunft_pkey do update set
     -- do not update the id = pkey
     nr = excluded.nr,
@@ -175,12 +125,10 @@ then
     _deleted = excluded._deleted,
     _conflicts = excluded._conflicts;
 else
-    -- 2. so there is no non deleted winner
-    --    choose winner of deleted datasets
-    --    this is probably not very important
-    --    as the only important part is that
-    --    the winning revision gets _deleted = true
-    --    so the client can delete the record
+    -- 2. so there is no undeleted winning leaf exists
+    --    choose winner from deleted leaves
+    --    is necessary to set the winner deleted
+    --    so the client can pick this up
   insert into herkunft (
     id,
     nr,
@@ -217,9 +165,9 @@ else
     winner._parent_rev,
     winner._depth,
     winner._deleted,
-    herkunft_conflicts_of_winner_including_deleted(new.herkunft_id) as _conflicts
+    herkunft_conflicts_of_winner(new.herkunft_id, true) as _conflicts
   from
-    herkunft_rev_winner_including_deleted(new.herkunft_id) as winner
+    herkunft_rev_winner(new.herkunft_id, true) as winner
   on conflict on constraint herkunft_pkey do update set
     -- do not update the id = pkey
     nr = excluded.nr,
