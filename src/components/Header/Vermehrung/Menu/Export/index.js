@@ -4,11 +4,16 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
+import styled from 'styled-components'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import buildExceljsWorksheets from './buildExceljsWorksheets'
 import buildExceljsWorksheetsForKulturBedarfsplanung from './buildExceljsWorksheetsForKulturBedarfsplanung'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'
+
+const FirstMenuItem = styled(MenuItem)`
+  margin-top: -5px !important;
+`
 
 const SettingsOverallMenu = ({
   anchorEl: parentAnchorEl,
@@ -54,12 +59,12 @@ const SettingsOverallMenu = ({
       open={Boolean(parentAnchorEl)}
       onClose={onClose}
     >
-      <MenuItem>
+      <FirstMenuItem>
         <TextField
           label="Lieferungen des Jahrs:"
           onChange={onClickLieferungenDesJahrs}
         />
-      </MenuItem>
+      </FirstMenuItem>
       <MenuItem onClick={onClickKulturenFuerBedarfsplanung}>
         aktueller Stand Kulturen für die Bedarfsplanung
       </MenuItem>
