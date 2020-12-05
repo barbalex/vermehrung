@@ -25,6 +25,7 @@ import buildSammelLieferungFolder from './sammelLieferung/folder'
 import buildSammelLieferung from './sammelLieferung'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
+import queryFromFilter from '../../../utils/queryFromFilter'
 import herkunftSort from '../../../utils/herkunftSort'
 import teilkulturSort from '../../../utils/teilkulturSort'
 import zaehlungSort from '../../../utils/zaehlungSort'
@@ -197,42 +198,32 @@ const buildNodes = async ({ store }) => {
 
   // teilkultur
   const teilkulturFolder = buildTeilkulturFolder({ store })
+  const teilkulturFilterQuery = queryFromFilter({
+    table: 'teilkultur',
+    filter: store.filter.teilkultur.toJSON(),
+  })
   const teilkulturs = await db.collections
     .get('teilkultur')
-    .query(notDeletedOrHasConflictQuery)
+    .query(...teilkulturFilterQuery)
     .fetch()
-  const teilkultursSorted = teilkulturs
-    .filter((value) =>
-      storeFilter({
-        value,
-        filter: store.filter.teilkultur,
-        table: 'teilkultur',
-      }),
-    )
-    .sort(teilkulturSort)
   const teilkultur = buildTeilkultur({
     store,
-    teilkulturs: teilkultursSorted,
+    teilkulturs: teilkulturs.sort((a, b) => teilkulturSort({ a, b })),
   })
 
   // zaehlung
   const zaehlungFolder = buildZaehlungFolder({ store })
+  const zaehlungFilterQuery = queryFromFilter({
+    table: 'zaehlung',
+    filter: store.filter.zaehlung.toJSON(),
+  })
   const zaehlungs = await db.collections
     .get('zaehlung')
-    .query(notDeletedOrHasConflictQuery)
+    .query(...zaehlungFilterQuery)
     .fetch()
-  const zaehlungsSorted = zaehlungs
-    .filter((value) =>
-      storeFilter({
-        value,
-        filter: store.filter.zaehlung,
-        table: 'zaehlung',
-      }),
-    )
-    .sort(zaehlungSort)
   const zaehlung = buildZaehlung({
     store,
-    zaehlungs: zaehlungsSorted,
+    zaehlungs: zaehlungs.sort((a, b) => zaehlungSort({ a, b })),
   })
 
   // lieferung

@@ -6,8 +6,8 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
+import { merge } from 'rxjs'
 import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -16,8 +16,8 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
+import notDeletedQuery from '../../../utils/notDeletedQuery'
+import queryFromFilter from '../../../utils/queryFromFilter'
 import artLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 import personFullname from '../../../utils/personFullname'
 
@@ -68,7 +68,6 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-const initialSammlungState = { sammlungs: [], sammlungsFiltered: [] }
 
 const Sammlungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -77,86 +76,104 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     artIdInActiveNodeArray,
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
+    db,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { sammlung: sammlungFilter } = store.filter
 
-  const db = useDatabase()
-  // use object with two keys to only render once on setting
-  const [sammlungsState, setSammlungState] = useState(initialSammlungState)
+  const [sammlungs, setSammlungs] = useState([])
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const collection = db.collections.get('sammlung')
-    const query = artIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['art']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('art', 'id', artIdInActiveNodeArray),
-          ),
-        )
-      : herkunftIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['herkunft']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('herkunft', 'id', herkunftIdInActiveNodeArray),
-          ),
-        )
-      : personIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['person']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('person', 'id', personIdInActiveNodeArray),
-          ),
-        )
-      : collection.query(notDeletedOrHasConflictQuery)
-    const subscription = query.observe().subscribe(async (sammlungs) => {
-      const sammlungsFiltered = sammlungs.filter((value) =>
-        storeFilter({ value, filter: sammlungFilter, table: 'sammlung' }),
-      )
-      const sammlungSorters = await Promise.all(
-        sammlungsFiltered.map(async (sammlung) => {
-          const datum = sammlung.datum ?? ''
-          const herkunft = await sammlung.herkunft.fetch()
-          const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
-          const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
-          const herkunftLokalname = herkunft?.lokalname
-            ?.toString()
-            ?.toLowerCase()
-          const person = await sammlung.person.fetch()
-          const fullname = personFullname(person)?.toString()?.toLowerCase()
-          const art = await sammlung.art.fetch()
-          const ae_art = art ? await art.ae_art.fetch() : undefined
-          const aeArtLabel = artLabelFromAeArt({ ae_art })
-            ?.toString()
-            ?.toLowerCase()
-          const sort = [
-            datum,
-            herkunftNr,
-            herkunftGemeinde,
-            herkunftLokalname,
-            fullname,
-            aeArtLabel,
-          ]
-
-          return { id: sammlung.id, sort }
-        }),
-      )
-      const sammlungsSorted = sortBy(
-        sammlungsFiltered,
-        (sammlung) => sammlungSorters.find((s) => s.id === sammlung.id).sort,
-      )
-      setSammlungState({ sammlungs, sammlungsFiltered: sammlungsSorted })
+    const filterQuery = queryFromFilter({
+      table: 'sammlung',
+      filter: sammlungFilter.toJSON(),
     })
-    return () => subscription.unsubscribe()
+    const hierarchyQuery = artIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['art']),
+          Q.on('art', 'id', artIdInActiveNodeArray),
+        ]
+      : herkunftIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['herkunft']),
+          Q.on('herkunft', 'id', herkunftIdInActiveNodeArray),
+        ]
+      : personIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['person']),
+          Q.on('person', 'id', personIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.collections.get('sammlung')
+    const countObservable = collection
+      .query(notDeletedQuery)
+      .observeCount(false)
+    const dataObservable = collection
+      .query(...filterQuery, ...hierarchyQuery)
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+
+    // so need to hackily use merge
+    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allSubscription = allCollectionsObservable.subscribe(
+      async (result) => {
+        if (Array.isArray(result)) {
+          const sammlungSorters = await Promise.all(
+            result.map(async (sammlung) => {
+              const datum = sammlung.datum ?? ''
+              const herkunft = await sammlung.herkunft.fetch()
+              const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
+              const herkunftGemeinde = herkunft?.gemeinde
+                ?.toString()
+                ?.toLowerCase()
+              const herkunftLokalname = herkunft?.lokalname
+                ?.toString()
+                ?.toLowerCase()
+              const person = await sammlung.person.fetch()
+              const fullname = personFullname(person)?.toString()?.toLowerCase()
+              const art = await sammlung.art.fetch()
+              const ae_art = art ? await art.ae_art.fetch() : undefined
+              const aeArtLabel = artLabelFromAeArt({ ae_art })
+                ?.toString()
+                ?.toLowerCase()
+              const sort = [
+                datum,
+                herkunftNr,
+                herkunftGemeinde,
+                herkunftLokalname,
+                fullname,
+                aeArtLabel,
+              ]
+
+              return { id: sammlung.id, sort }
+            }),
+          )
+          const sammlungsSorted = sortBy(
+            result,
+            (sammlung) =>
+              sammlungSorters.find((s) => s.id === sammlung.id).sort,
+          )
+          setSammlungs(sammlungsSorted)
+        } else if (!isNaN(result)) {
+          setCount(result)
+        }
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [
+    db.collections,
     // need to rerender if any of the values of sammlungFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(sammlungFilter)])
+    ...Object.values(sammlungFilter),
 
-  const { sammlungs, sammlungsFiltered } = sammlungsState
-  const totalNr = sammlungs.length
-  const filteredNr = sammlungsFiltered.length
+    sammlungFilter,
+    artIdInActiveNodeArray,
+    herkunftIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+  ])
+
+  const totalNr = count
+  const filteredNr = sammlungs.length
 
   const add = useCallback(() => {
     insertSammlungRev()
@@ -211,7 +228,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={sammlungsFiltered.length}
+                  itemCount={sammlungs.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -222,8 +239,8 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={sammlungsFiltered[index]}
-                      last={index === sammlungsFiltered.length - 1}
+                      row={sammlungs[index]}
+                      last={index === sammlungs.length - 1}
                     />
                   )}
                 </StyledList>

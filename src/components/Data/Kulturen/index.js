@@ -6,8 +6,8 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
+import { merge } from 'rxjs'
 import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -18,6 +18,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
+import queryFromFilter from '../../../utils/queryFromFilter'
 import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 import personFullname from '../../../utils/personFullname'
 
@@ -73,14 +74,14 @@ const initialKulturState = { kulturs: [], kultursFiltered: [] }
 const Kulturen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
-    insertKulturRev,
-    gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
+    db,
+    gartenIdInActiveNodeArray,
+    insertKulturRev,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { kultur: kulturFilter } = store.filter
 
-  const db = useDatabase()
   // use object with two keys to only render once on setting
   const [kultursState, setKulturState] = useState(initialKulturState)
   useEffect(() => {
