@@ -6,9 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { Q } from '@nozbe/watermelondb'
 import { merge } from 'rxjs'
-import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -16,9 +14,9 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
+import notDeletedQuery from '../../../utils/notDeletedQuery'
 import queryFromFilter from '../../../utils/queryFromFilter'
+import lieferungSort from '../../../utils/lieferungSort'
 
 const Container = styled.div`
   height: 100%;
@@ -67,10 +65,6 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-const initialSammelLieferungState = {
-  sammelLieferungs: [],
-  sammelLieferungsFiltered: [],
-}
 
 const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -78,51 +72,42 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { sammel_lieferung: sammelLieferungFilter } = store.filter
 
-  // use object with two keys to only render once on setting
-  const [sammelLieferungsState, setSammelLieferungState] = useState(
-    initialSammelLieferungState,
-  )
+  const [sammelLieferungs, setSammelLieferungs] = useState([])
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const subscription = db.collections
-      .get('sammel_lieferung')
-      .query(notDeletedOrHasConflictQuery)
-      .observe()
-      .subscribe(async (sammelLieferungs) => {
-        const sammelLieferungsFiltered = sammelLieferungs.filter((value) =>
-          storeFilter({
-            value,
-            filter: sammelLieferungFilter,
-            table: 'sammel_lieferung',
-          }),
-        )
-        const sammelLieferungSorters = await Promise.all(
-          sammelLieferungsFiltered.map(async (sammelLieferung) => {
-            const datum = sammelLieferung.datum ?? ''
-            const anzahlPflanzen = sammelLieferung.anzahl_pflanzen ?? ''
-            const sort = [datum, anzahlPflanzen]
+    const filterQuery = queryFromFilter({
+      table: 'sammel_lieferung',
+      filter: sammelLieferungFilter.toJSON(),
+    })
+    const collection = db.collections.get('sammel_lieferung')
+    const countObservable = collection
+      .query(notDeletedQuery)
+      .observeCount(false)
+    const dataObservable = collection
+      .query(...filterQuery)
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allSubscription = allCollectionsObservable.subscribe(
+      async (result) => {
+        if (Array.isArray(result)) {
+          setSammelLieferungs(result.sort((a, b) => lieferungSort({ a, b })))
+        } else if (!isNaN(result)) {
+          setCount(result)
+        }
+      },
+    )
 
-            return { id: sammelLieferung.id, sort }
-          }),
-        )
-        const sammelLieferungsSorted = sortBy(
-          sammelLieferungsFiltered,
-          (sammelLieferung) =>
-            sammelLieferungSorters.find((s) => s.id === sammelLieferung.id)
-              .sort,
-        )
-        setSammelLieferungState({
-          sammelLieferungs,
-          sammelLieferungsFiltered: sammelLieferungsSorted,
-        })
-      })
-    return () => subscription.unsubscribe()
+    return () => allSubscription.unsubscribe()
+  }, [
+    db.collections,
     // need to rerender if any of the values of sammelLieferungFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(sammelLieferungFilter)])
+    ...Object.values(sammelLieferungFilter),
+    sammelLieferungFilter,
+  ])
 
-  const { sammelLieferungs, sammelLieferungsFiltered } = sammelLieferungsState
-  const totalNr = sammelLieferungs.length
-  const filteredNr = sammelLieferungsFiltered.length
+  const totalNr = count
+  const filteredNr = sammelLieferungs.length
 
   const add = useCallback(() => {
     insertSammelLieferungRev()
@@ -171,7 +156,7 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={sammelLieferungsFiltered.length}
+                  itemCount={sammelLieferungs.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -182,8 +167,8 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={sammelLieferungsFiltered[index]}
-                      last={index === sammelLieferungsFiltered.length - 1}
+                      row={sammelLieferungs[index]}
+                      last={index === sammelLieferungs.length - 1}
                     />
                   )}
                 </StyledList>

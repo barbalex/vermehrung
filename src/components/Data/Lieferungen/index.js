@@ -16,8 +16,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import exists from '../../../utils/exists'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
+import notDeletedQuery from '../../../utils/notDeletedQuery'
 import queryFromFilter from '../../../utils/queryFromFilter'
 import lieferungSort from '../../../utils/lieferungSort'
 
@@ -68,7 +67,6 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-const initialLieferungState = { lieferungs: [], lieferungsFiltered: [] }
 
 const Lieferungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -83,59 +81,65 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { lieferung: lieferungFilter } = store.filter
 
-  // use object with two keys to only render once on setting
-  const [lieferungsState, setLieferungState] = useState(initialLieferungState)
+  const [lieferungs, setLieferungs] = useState([])
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const collection = db.collections.get('lieferung')
-    const query = kulturIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['kultur']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('kultur', 'id', kulturIdInActiveNodeArray),
-          ),
-        )
-      : sammelLieferungIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['sammel_lieferung']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
-          ),
-        )
-      : personIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['person']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('person', 'id', personIdInActiveNodeArray),
-          ),
-        )
-      : sammlungIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['sammlung']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
-          ),
-        )
-      : collection.query(notDeletedOrHasConflictQuery)
-    const subscription = query.observe().subscribe(async (lieferungs) => {
-      const lieferungsSorted = lieferungs
-        .filter((value) =>
-          storeFilter({ value, filter: lieferungFilter, table: 'lieferung' }),
-        )
-        .sort(lieferungSort)
-      setLieferungState({ lieferungs, lieferungsFiltered: lieferungsSorted })
+    const filterQuery = queryFromFilter({
+      table: 'lieferung',
+      filter: lieferungFilter.toJSON(),
     })
-    return () => subscription.unsubscribe()
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['kultur']),
+          Q.on('kultur', 'id', kulturIdInActiveNodeArray),
+        ]
+      : sammelLieferungIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['sammel_lieferung']),
+          Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
+        ]
+      : personIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['person']),
+          Q.on('person', 'id', personIdInActiveNodeArray),
+        ]
+      : sammlungIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['sammlung']),
+          Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.collections.get('lieferung')
+    const countObservable = collection
+      .query(notDeletedQuery)
+      .observeCount(false)
+    const dataObservable = collection
+      .query(...filterQuery, ...hierarchyQuery)
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allSubscription = allCollectionsObservable.subscribe((result) => {
+      if (Array.isArray(result)) {
+        setLieferungs(result.sort((a, b) => lieferungSort({ a, b })))
+      } else if (!isNaN(result)) {
+        setCount(result)
+      }
+    })
+
+    return () => allSubscription.unsubscribe()
+  }, [
+    db.collections,
     // need to rerender if any of the values of lieferungFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(lieferungFilter)])
+    ...Object.values(lieferungFilter),
+    lieferungFilter,
+    kulturIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+    sammelLieferungIdInActiveNodeArray,
+    sammlungIdInActiveNodeArray,
+  ])
 
-  const { lieferungs, lieferungsFiltered } = lieferungsState
-  const totalNr = lieferungs.length
-  const filteredNr = lieferungsFiltered.length
+  const totalNr = count
+  const filteredNr = lieferungs.length
 
   const add = useCallback(() => {
     const isSammelLieferung =
@@ -224,7 +228,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={lieferungsFiltered.length}
+                  itemCount={lieferungs.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -235,8 +239,8 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={lieferungsFiltered[index]}
-                      last={index === lieferungsFiltered.length - 1}
+                      row={lieferungs[index]}
+                      last={index === lieferungs.length - 1}
                     />
                   )}
                 </StyledList>
