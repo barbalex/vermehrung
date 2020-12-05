@@ -9,6 +9,8 @@ import UpSvg from '../../../svg/to_up.inline.svg'
 import SimpleBar from 'simplebar-react'
 import sortBy from 'lodash/sortBy'
 import { first as first$ } from 'rxjs/operators'
+import { Q } from '@nozbe/watermelondb'
+import { merge } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'

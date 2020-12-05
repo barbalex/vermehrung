@@ -6,8 +6,8 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
+import { merge } from 'rxjs'
 import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -16,8 +16,8 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
+import notDeletedQuery from '../../../utils/notDeletedQuery'
+import queryFromFilter from '../../../utils/queryFromFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -66,55 +66,70 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-const initialZaehlungState = { zaehlungs: [], zaehlungsFiltered: [] }
 
 const Zaehlungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertZaehlungRev, kulturIdInActiveNodeArray } = store
+  const { insertZaehlungRev, kulturIdInActiveNodeArray, db } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { zaehlung: zaehlungFilter } = store.filter
 
-  const db = useDatabase()
-  // use object with two keys to only render once on setting
-  const [zaehlungsState, setZaehlungState] = useState(initialZaehlungState)
+  const [zaehlungs, setZaehlungs] = useState([])
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const collection = db.collections.get('zaehlung')
-    const query = kulturIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['kultur']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('kultur', 'id', kulturIdInActiveNodeArray),
-          ),
-        )
-      : collection.query(notDeletedOrHasConflictQuery)
-    const subscription = query.observe().subscribe(async (zaehlungs) => {
-      const zaehlungsFiltered = zaehlungs.filter((value) =>
-        storeFilter({ value, filter: zaehlungFilter, table: 'zaehlung' }),
-      )
-      const zaehlungSorters = await Promise.all(
-        zaehlungsFiltered.map(async (zaehlung) => {
-          const datum = zaehlung.datum ?? ''
-          const anzahlPflanzen = zaehlung.anzahl_pflanzen ?? ''
-          const sort = [datum, anzahlPflanzen]
-
-          return { id: zaehlung.id, sort }
-        }),
-      )
-      const zaehlungsSorted = sortBy(
-        zaehlungsFiltered,
-        (zaehlung) => zaehlungSorters.find((s) => s.id === zaehlung.id).sort,
-      )
-      setZaehlungState({ zaehlungs, zaehlungsFiltered: zaehlungsSorted })
+    const filterQuery = queryFromFilter({
+      table: 'zaehlung',
+      filter: zaehlungFilter.toJSON(),
     })
-    return () => subscription.unsubscribe()
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['kultur']),
+          Q.on('kultur', 'id', kulturIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.collections.get('zaehlung')
+    const countObservable = collection
+      .query(notDeletedQuery)
+      .observeCount(false)
+    const dataObservable = collection
+      .query(...filterQuery, ...hierarchyQuery)
+      .observeWithColumns(['datum', 'anzahl_pflanzen'])
+
+    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allSubscription = allCollectionsObservable.subscribe(
+      async (result) => {
+        if (Array.isArray(result)) {
+          const zaehlungSorters = await Promise.all(
+            result.map(async (zaehlung) => {
+              const datum = zaehlung.datum ?? ''
+              const anzahlPflanzen = zaehlung.anzahl_pflanzen ?? ''
+              const sort = [datum, anzahlPflanzen]
+
+              return { id: zaehlung.id, sort }
+            }),
+          )
+          const zaehlungsSorted = sortBy(
+            result,
+            (zaehlung) =>
+              zaehlungSorters.find((s) => s.id === zaehlung.id).sort,
+          )
+          setZaehlungs(zaehlungsSorted)
+        } else if (!isNaN(result)) {
+          setCount(result)
+        }
+      },
+    )
+    return () => allSubscription.unsubscribe()
+  }, [
+    db.collections,
     // need to rerender if any of the values of zaehlungFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(zaehlungFilter)])
+    ...Object.values(zaehlungFilter),
+    zaehlungFilter,
+    kulturIdInActiveNodeArray,
+  ])
 
-  const { zaehlungs, zaehlungsFiltered } = zaehlungsState
-  const totalNr = zaehlungs.length
-  const filteredNr = zaehlungsFiltered.length
+  const totalNr = count
+  const filteredNr = zaehlungs.length
 
   const add = useCallback(() => {
     insertZaehlungRev()
@@ -166,7 +181,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={zaehlungsFiltered.length}
+                  itemCount={zaehlungs.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -177,8 +192,8 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={zaehlungsFiltered[index]}
-                      last={index === zaehlungsFiltered.length - 1}
+                      row={zaehlungs[index]}
+                      last={index === zaehlungs.length - 1}
                     />
                   )}
                 </StyledList>

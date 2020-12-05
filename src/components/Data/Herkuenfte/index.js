@@ -6,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
 import { merge } from 'rxjs'
 
@@ -67,18 +66,14 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-//const initialHerkunftState = { count: 0, herkunfts: [] }
 
 const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertHerkunftRev, sammlungIdInActiveNodeArray } = store
+  const { insertHerkunftRev, sammlungIdInActiveNodeArray, db } = store
   const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
   const { herkunft: herkunftFilter } = store.filter
   const activeNodeArray = anaRaw.toJSON()
 
-  const db = useDatabase()
-  // use object with two keys to only render once on setting
-  //const [herkunftsState, setHerkunftState] = useState(initialHerkunftState)
   const [herkunfts, setHerkunfts] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
@@ -130,7 +125,6 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     herkunftFilter,
   ])
 
-  //const { count, herkunfts } = herkunftsState
   const totalNr = count
   const filteredNr = herkunfts.length
 

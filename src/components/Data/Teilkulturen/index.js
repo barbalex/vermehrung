@@ -6,8 +6,8 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
+import { merge } from 'rxjs'
 import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -16,8 +16,9 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
+import notDeletedQuery from '../../../utils/notDeletedQuery'
+import queryFromFilter from '../../../utils/queryFromFilter'
+import teilkulturSort from '../../../utils/teilkulturSort'
 
 const Container = styled.div`
   height: 100%;
@@ -66,62 +67,53 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-const initialTeilkulturState = { teilkulturs: [], teilkultursFiltered: [] }
 
 const Teilkulturen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertTeilkulturRev, kulturIdInActiveNodeArray } = store
+  const { insertTeilkulturRev, kulturIdInActiveNodeArray, db } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { teilkultur: teilkulturFilter } = store.filter
 
-  const db = useDatabase()
-  // use object with two keys to only render once on setting
-  const [teilkultursState, setTeilkulturState] = useState(
-    initialTeilkulturState,
-  )
+  const [teilkulturs, setTeilkulturs] = useState([])
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const collection = db.collections.get('teilkultur')
-    const query = kulturIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['kultur']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('kultur', 'id', kulturIdInActiveNodeArray),
-          ),
-        )
-      : collection.query(notDeletedOrHasConflictQuery)
-    const subscription = query.observe().subscribe(async (teilkulturs) => {
-      const teilkultursFiltered = teilkulturs.filter((value) =>
-        storeFilter({ value, filter: teilkulturFilter, table: 'teilkultur' }),
-      )
-      const teilkulturSorters = await Promise.all(
-        teilkultursFiltered.map(async (tk) => {
-          const name = tk.name?.toString()?.toLowerCase() ?? ''
-          const ort1 = tk.ort1?.toString()?.toLowerCase() ?? ''
-          const ort2 = tk.ort2?.toString()?.toLowerCase() ?? ''
-          const ort3 = tk.ort3?.toString()?.toLowerCase() ?? ''
-          const sort = [name, ort1, ort2, ort3]
-          return { id: tk.id, sort }
-        }),
-      )
-      const teilkultursSorted = sortBy(
-        teilkultursFiltered,
-        (teilkultur) =>
-          teilkulturSorters.find((s) => s.id === teilkultur.id).sort,
-      )
-      setTeilkulturState({
-        teilkulturs,
-        teilkultursFiltered: teilkultursSorted,
-      })
+    const filterQuery = queryFromFilter({
+      table: 'teilkultur',
+      filter: teilkulturFilter.toJSON(),
     })
-    return () => subscription.unsubscribe()
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['kultur']),
+          Q.on('kultur', 'id', kulturIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.collections.get('teilkultur')
+    const countObservable = collection
+      .query(notDeletedQuery)
+      .observeCount(false)
+    const dataObservable = collection
+      .query(...filterQuery, ...hierarchyQuery)
+      .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
+    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allSubscription = allCollectionsObservable.subscribe((result) => {
+      if (Array.isArray(result)) {
+        setTeilkulturs(result.sort((a, b) => teilkulturSort({ a, b })))
+      } else if (!isNaN(result)) {
+        setCount(result)
+      }
+    })
+    return () => allSubscription.unsubscribe()
+  }, [
+    db.collections,
     // need to rerender if any of the values of teilkulturFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(teilkulturFilter)])
+    ...Object.values(teilkulturFilter),
+    teilkulturFilter,
+    kulturIdInActiveNodeArray,
+  ])
 
-  const { teilkulturs, teilkultursFiltered } = teilkultursState
-  const totalNr = teilkulturs.length
-  const filteredNr = teilkultursFiltered.length
+  const totalNr = count
+  const filteredNr = teilkulturs.length
 
   const add = useCallback(() => {
     insertTeilkulturRev()
@@ -173,7 +165,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={teilkultursFiltered.length}
+                  itemCount={teilkulturs.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -184,8 +176,8 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={teilkultursFiltered[index]}
-                      last={index === teilkultursFiltered.length - 1}
+                      row={teilkulturs[index]}
+                      last={index === teilkulturs.length - 1}
                     />
                   )}
                 </StyledList>

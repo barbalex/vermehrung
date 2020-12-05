@@ -6,8 +6,8 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
+import { merge } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -18,6 +18,7 @@ import exists from '../../../utils/exists'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
+import queryFromFilter from '../../../utils/queryFromFilter'
 import lieferungSort from '../../../utils/lieferungSort'
 
 const Container = styled.div`
@@ -72,16 +73,16 @@ const initialLieferungState = { lieferungs: [], lieferungsFiltered: [] }
 const Lieferungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
+    db,
     insertLieferungRev,
     kulturIdInActiveNodeArray,
-    sammelLieferungIdInActiveNodeArray,
     personIdInActiveNodeArray,
+    sammelLieferungIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { lieferung: lieferungFilter } = store.filter
 
-  const db = useDatabase()
   // use object with two keys to only render once on setting
   const [lieferungsState, setLieferungState] = useState(initialLieferungState)
   useEffect(() => {

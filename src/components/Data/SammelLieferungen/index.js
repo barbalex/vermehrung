@@ -6,7 +6,8 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { Q } from '@nozbe/watermelondb'
+import { merge } from 'rxjs'
 import sortBy from 'lodash/sortBy'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -17,6 +18,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
+import queryFromFilter from '../../../utils/queryFromFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -72,11 +74,10 @@ const initialSammelLieferungState = {
 
 const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertSammelLieferungRev } = store
+  const { insertSammelLieferungRev, db } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { sammel_lieferung: sammelLieferungFilter } = store.filter
 
-  const db = useDatabase()
   // use object with two keys to only render once on setting
   const [sammelLieferungsState, setSammelLieferungState] = useState(
     initialSammelLieferungState,

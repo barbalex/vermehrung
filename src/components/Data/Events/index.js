@@ -6,8 +6,8 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
+import { merge } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -18,6 +18,7 @@ import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
 import eventSort from '../../../utils/eventSort'
+import queryFromFilter from '../../../utils/queryFromFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -70,11 +71,10 @@ const initialEventState = { events: [], eventsFiltered: [] }
 
 const Events = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertEventRev, kulturIdInActiveNodeArray } = store
+  const { insertEventRev, kulturIdInActiveNodeArray, db } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { event: eventFilter } = store.filter
 
-  const db = useDatabase()
   // use object with two keys to only render once on setting
   const [eventsState, setEventState] = useState(initialEventState)
   useEffect(() => {
