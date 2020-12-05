@@ -17,6 +17,7 @@ import File from './File'
 import 'react-image-lightbox/style.css'
 import isImageFile from './isImageFile'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import fileSort from '../../../utils/fileSort'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -65,7 +66,7 @@ const Content = styled.div`
 
 const Files = ({ parentId, parent }) => {
   const store = useContext(StoreContext)
-  const { upsertArtFileModel, fileSort, online } = store
+  const { upsertArtFileModel, online } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
