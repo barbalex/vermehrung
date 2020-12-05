@@ -133,6 +133,40 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (auslSinceAnzahlMutterpflanzen ?? 0)
           : ''
 
+      const ownAnLieferungen = lieferungsSorted
+        .filter((l) => l.nach_kultur_id === kultur.id)
+        .filter((l) => !!l.datum)
+        .filter((l) => exists(l.anzahl_pflanzen))
+
+      const anlSinceLastZaehlung = ownAnLieferungen
+        .filter(
+          (l) => l.datum && l.datum > (lastZaehlung?.datum ?? '1970-01-01'),
+        )
+        .filter((l) => exists(l.anzahl_pflanzen))
+      const anlSinceAnzahlPflanzen = anlSinceLastZaehlung.length
+        ? sumBy(anlSinceLastZaehlung, 'anzahl_pflanzen')
+        : ''
+      const anlSinceWithAnzahlAuspflanzungsbereit = anlSinceLastZaehlung.filter(
+        (l) => exists(l.anzahl_auspflanzbereit),
+      )
+      const anlSinceAnzahlAuspflanzbereit = anlSinceWithAnzahlAuspflanzungsbereit.length
+        ? sumBy(anlSinceWithAnzahlAuspflanzungsbereit, 'anzahl_auspflanzbereit')
+        : ''
+      const anlSinceWithAnzahlMutterpflanzen = lZTeilzaehlungs.filter((l) =>
+        exists(l.anzahl_mutterpflanzen),
+      )
+      const anlSinceAnzahlMutterpflanzen = anlSinceWithAnzahlMutterpflanzen.length
+        ? sumBy(anlSinceWithAnzahlMutterpflanzen, 'anzahl_mutterpflanzen')
+        : ''
+      const anlSinceAnzahlJungpflanzen =
+        exists(anlSinceAnzahlPflanzen) &&
+        (exists(anlSinceAnzahlAuspflanzbereit) ||
+          exists(anlSinceAnzahlMutterpflanzen))
+          ? anlSinceAnzahlPflanzen -
+            (anlSinceAnzahlAuspflanzbereit ?? 0) -
+            (anlSinceAnzahlMutterpflanzen ?? 0)
+          : ''
+
       const row = {
         id: kultur.id,
         label: kulturLabelFromKultur({ kultur, store }),
@@ -167,24 +201,39 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         letzte_lieferung_anzahl_auspflanzbereit,
         letzte_lieferung_anzahl_mutterpflanzen,
         letzte_lieferung_anzahl_jungpflanzen,
-        lieferungen_seit_letzter_zaehlung_daten: auslSinceLastZaehlung
+        auslieferungen_seit_letzter_zaehlung_daten: auslSinceLastZaehlung
           .map((l) => format(new Date(l.datum), 'yyyy.MM.dd'))
           .join(', '),
-        lieferungen_seit_letzter_zaehlung_anzahl_pflanzen: auslSinceAnzahlPflanzen,
-        lieferungen_seit_letzter_zaehlung_anzahl_auspflanzbereit: auslSinceAnzahlAuspflanzbereit,
-        lieferungen_seit_letzter_zaehlung_anzahl_mutterpflanzen: auslSinceAnzahlMutterpflanzen,
-        lieferungen_seit_letzter_zaehlung_anzahl_jungpflanzen: auslSinceAnzahlJungpflanzen,
+        auslieferungen_seit_letzter_zaehlung_anzahl_pflanzen: auslSinceAnzahlPflanzen,
+        auslieferungen_seit_letzter_zaehlung_anzahl_auspflanzbereit: auslSinceAnzahlAuspflanzbereit,
+        auslieferungen_seit_letzter_zaehlung_anzahl_mutterpflanzen: auslSinceAnzahlMutterpflanzen,
+        auslieferungen_seit_letzter_zaehlung_anzahl_jungpflanzen: auslSinceAnzahlJungpflanzen,
+        anlieferungen_seit_letzter_zaehlung_daten: anlSinceLastZaehlung
+          .map((l) => format(new Date(l.datum), 'yyyy.MM.dd'))
+          .join(', '),
+        anlieferungen_seit_letzter_zaehlung_anzahl_pflanzen: anlSinceAnzahlPflanzen,
+        anlieferungen_seit_letzter_zaehlung_anzahl_auspflanzbereit: anlSinceAnzahlAuspflanzbereit,
+        anlieferungen_seit_letzter_zaehlung_anzahl_mutterpflanzen: anlSinceAnzahlMutterpflanzen,
+        anlieferungen_seit_letzter_zaehlung_anzahl_jungpflanzen: anlSinceAnzahlJungpflanzen,
         bilanz_anzahl_pflanzen: exists(anzahl_pflanzen)
-          ? anzahl_pflanzen - (auslSinceAnzahlPflanzen || 0)
+          ? anzahl_pflanzen -
+            (auslSinceAnzahlPflanzen || 0) +
+            (anlSinceAnzahlPflanzen || 0)
           : '',
         bilanz_anzahl_auspflanzbereit: exists(anzahl_auspflanzbereit)
-          ? anzahl_auspflanzbereit - (auslSinceAnzahlAuspflanzbereit || 0)
+          ? anzahl_auspflanzbereit -
+            (auslSinceAnzahlAuspflanzbereit || 0) +
+            (anlSinceAnzahlAuspflanzbereit || 0)
           : '',
         bilanz_anzahl_mutterpflanzen: exists(anzahl_mutterpflanzen)
-          ? anzahl_mutterpflanzen - (auslSinceAnzahlMutterpflanzen || 0)
+          ? anzahl_mutterpflanzen -
+            (auslSinceAnzahlMutterpflanzen || 0) +
+            (anlSinceAnzahlMutterpflanzen || 0)
           : '',
         bilanz_anzahl_jungpflanzen: exists(anzahl_jungpflanzen)
-          ? anzahl_jungpflanzen - (auslSinceAnzahlJungpflanzen || 0)
+          ? anzahl_jungpflanzen -
+            (auslSinceAnzahlJungpflanzen || 0) +
+            (anlSinceAnzahlJungpflanzen || 0)
           : '',
       }
 
