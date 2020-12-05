@@ -101,7 +101,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
       next: (result) => {
         console.log('Herkuenfte, useEffect, result:', result)
         //const [count, herkunfts] = result
-        //const herkunftsSorted = herkunfts.sort(herkunftSort)
+        //const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
         //setHerkunftState({ count, herkunfts: herkunftsSorted })
       },
     })*/
@@ -109,7 +109,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     const allCollectionsObservable = merge(countObservable, dataObservable)
     const allSubscription = allCollectionsObservable.subscribe((result) => {
       if (Array.isArray(result)) {
-        setHerkunfts(result.sort(herkunftSort))
+        setHerkunfts(result.sort((a, b) => herkunftSort({ a, b })))
       } else if (!isNaN(result)) {
         setCount(result)
       }

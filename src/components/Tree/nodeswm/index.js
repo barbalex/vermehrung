@@ -229,42 +229,32 @@ const buildNodes = async ({ store }) => {
 
   // lieferung
   const lieferungFolder = buildLieferungFolder({ store })
+  const lieferungFilterQuery = queryFromFilter({
+    table: 'lieferung',
+    filter: store.filter.lieferung.toJSON(),
+  })
   const lieferungs = await db.collections
     .get('lieferung')
-    .query(notDeletedOrHasConflictQuery)
+    .query(...lieferungFilterQuery)
     .fetch()
-  const lieferungsSorted = lieferungs
-    .filter((value) =>
-      storeFilter({
-        value,
-        filter: store.filter.lieferung,
-        table: 'lieferung',
-      }),
-    )
-    .sort(lieferungSort)
   const lieferung = buildLieferung({
     store,
-    lieferungs: lieferungsSorted,
+    lieferungs: lieferungs.sort((a, b) => lieferungSort({ a, b })),
   })
 
   // sammelLieferung
   const sammelLieferungFolder = buildSammelLieferungFolder({ store })
+  const sammelLieferungFilterQuery = queryFromFilter({
+    table: 'sammel_lieferung',
+    filter: store.filter.sammel_lieferung.toJSON(),
+  })
   const sammelLieferungs = await db.collections
     .get('sammel_lieferung')
-    .query(notDeletedOrHasConflictQuery)
+    .query(...sammelLieferungFilterQuery)
     .fetch()
-  const sammelLieferungsSorted = sammelLieferungs
-    .filter((value) =>
-      storeFilter({
-        value,
-        filter: store.filter.sammel_lieferung,
-        table: 'sammel_lieferung',
-      }),
-    )
-    .sort(lieferungSort)
   const sammelLieferung = buildSammelLieferung({
     store,
-    sammelLieferungs: sammelLieferungsSorted,
+    sammelLieferungs: sammelLieferungs.sort((a, b) => lieferungSort({ a, b })),
   })
 
   // event
