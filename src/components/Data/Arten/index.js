@@ -15,8 +15,7 @@ import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
+import queryFromFilter from '../../../utils/queryFromFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -75,22 +74,20 @@ const Arten = ({ filter: showFilter, width, height }) => {
   // use object with two keys to only render once on setting
   const [artsState, setArtState] = useState(initialArtState)
   useEffect(() => {
-    const subscription = db.collections
-      .get('art')
-      .query(notDeletedOrHasConflictQuery)
+    const artCollection = db.collections.get('art')
+    const subscription = artCollection
+      .query(...queryFromFilter({ table: 'art', filter: artFilter.toJSON() }))
       .observe()
       .subscribe(async (arts) => {
-        const artsFiltered = arts.filter((value) =>
-          storeFilter({ value, filter: artFilter, table: 'art' }),
-        )
+        console.log('Arten, useEffect, subscription', { arts })
         const artSorters = await Promise.all(
-          artsFiltered.map(async (art) => {
+          arts.map(async (art) => {
             const label = await art.label.pipe(first$()).toPromise()
             return { id: art.id, label }
           }),
         )
         const artsSorted = sortBy(
-          artsFiltered,
+          arts,
           (art) => artSorters.find((s) => s.id === art.id).label,
         )
         setArtState({ arts, artsFiltered: artsSorted })
@@ -104,7 +101,11 @@ const Arten = ({ filter: showFilter, width, height }) => {
   const totalNr = arts.length
   const filteredNr = artsFiltered.length
 
-  console.log('Arten', { artsFiltered, arts })
+  console.log('Arten', {
+    artsFiltered,
+    arts,
+    artFilter: artFilter.toJSON(),
+  })
 
   const add = useCallback(() => {
     insertArtRev()

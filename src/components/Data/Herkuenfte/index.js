@@ -8,6 +8,7 @@ import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb'
+import { merge } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -15,9 +16,9 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
+import notDeletedQuery from '../../../utils/notDeletedQuery'
 import herkunftSort from '../../../utils/herkunftSort'
+import queryFromFilter from '../../../utils/queryFromFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -66,7 +67,7 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-const initialHerkunftState = { herkunfts: [], herkunftsFiltered: [] }
+//const initialHerkunftState = { count: 0, herkunfts: [] }
 
 const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -77,45 +78,63 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
 
   const db = useDatabase()
   // use object with two keys to only render once on setting
-  const [herkunftsState, setHerkunftState] = useState(initialHerkunftState)
+  //const [herkunftsState, setHerkunftState] = useState(initialHerkunftState)
+  const [herkunfts, setHerkunfts] = useState([])
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const collection = db.collections.get('herkunft')
-    const query = sammlungIdInActiveNodeArray
-      ? collection.query(
+    const filterQuery = queryFromFilter({
+      table: 'herkunft',
+      filter: herkunftFilter.toJSON(),
+    })
+    const hierarchyQuery = sammlungIdInActiveNodeArray
+      ? [
           Q.experimentalJoinTables(['sammlung']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
-          ),
-        )
-      : collection.query(notDeletedOrHasConflictQuery)
-    const subscription = query
+          Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.collections.get('herkunft')
+    const countObservable = collection
+      .query(notDeletedQuery)
+      .observeCount(false)
+    const dataObservable = collection
+      .query(...filterQuery, ...hierarchyQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-      .subscribe((herkunfts) => {
-        const herkunftsFiltered = herkunfts
-          .filter((value) =>
-            storeFilter({ value, filter: herkunftFilter, table: 'herkunft' }),
-          )
-          .sort(herkunftSort)
-        setHerkunftState({ herkunfts, herkunftsFiltered })
-      })
-    return () => subscription.unsubscribe()
-    // need to rerender if any of the values of herkunftFilter changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // for unknown reason forkJoin did not work here
+    /*const allCollectionsObservable = forkJoin([countObservable, dataObservable])
+    const allSubscription = allCollectionsObservable.subscribe({
+      next: (result) => {
+        console.log('Herkuenfte, useEffect, result:', result)
+        //const [count, herkunfts] = result
+        //const herkunftsSorted = herkunfts.sort(herkunftSort)
+        //setHerkunftState({ count, herkunfts: herkunftsSorted })
+      },
+    })*/
+    // so need to hackily use merge
+    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allSubscription = allCollectionsObservable.subscribe((result) => {
+      if (Array.isArray(result)) {
+        setHerkunfts(result.sort(herkunftSort))
+      } else if (!isNaN(result)) {
+        setCount(result)
+      }
+    })
+
+    return () => allSubscription.unsubscribe()
   }, [
     db.collections,
     sammlungIdInActiveNodeArray,
+    // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(herkunftFilter),
+    herkunftFilter,
   ])
 
-  const { herkunfts, herkunftsFiltered } = herkunftsState
-  const totalNr = herkunfts.length
-  const filteredNr = herkunftsFiltered.length
+  //const { count, herkunfts } = herkunftsState
+  const totalNr = count
+  const filteredNr = herkunfts.length
 
-  const add = useCallback(async () => {
-    insertHerkunftRev()
-  }, [insertHerkunftRev])
+  const add = useCallback(() => insertHerkunftRev(), [insertHerkunftRev])
 
   const onClickUp = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
@@ -166,7 +185,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={herkunftsFiltered.length}
+                  itemCount={herkunfts.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -177,8 +196,8 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={herkunftsFiltered[index]}
-                      last={index === herkunftsFiltered.length - 1}
+                      row={herkunfts[index]}
+                      last={index === herkunfts.length - 1}
                     />
                   )}
                 </StyledList>
