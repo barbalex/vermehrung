@@ -83,15 +83,16 @@ const buildNodes = async ({ store }) => {
 
   // sammlung
   const sammlungFolder = buildSammlungFolder({ store })
+  const sammlungFilterQuery = queryFromFilter({
+    table: 'sammlung',
+    filter: store.filter.sammlung.toJSON(),
+  })
   const sammlungs = await db.collections
     .get('sammlung')
-    .query(notDeletedOrHasConflictQuery)
+    .query(...sammlungFilterQuery)
     .fetch()
-  const sammlungsFiltered = sammlungs.filter((value) =>
-    storeFilter({ value, filter: store.filter.sammlung, table: 'sammlung' }),
-  )
   const sammlungSorters = await Promise.all(
-    sammlungsFiltered.map(async (sammlung) => {
+    sammlungs.map(async (sammlung) => {
       const datum = sammlung.datum ?? ''
       const herkunft = await sammlung.herkunft.fetch()
       const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
@@ -117,7 +118,7 @@ const buildNodes = async ({ store }) => {
     }),
   )
   const sammlungsSorted = sortBy(
-    sammlungsFiltered,
+    sammlungs,
     (sammlung) => sammlungSorters.find((s) => s.id === sammlung.id).sort,
   )
   const sammlung = await buildSammlung({ store, sammlungs: sammlungsSorted })
