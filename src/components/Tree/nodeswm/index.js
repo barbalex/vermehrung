@@ -1,5 +1,3 @@
-import sortBy from 'lodash/sortBy'
-import { first as first$ } from 'rxjs/operators'
 import { getSnapshot } from 'mobx-state-tree'
 
 import buildArtSammlungFolder from './art/sammlung/folder'
@@ -37,7 +35,6 @@ import zaehlungSort from '../../../utils/zaehlungSort'
 import lieferungSort from '../../../utils/lieferungSort'
 import eventSort from '../../../utils/eventSort'
 import personSort from '../../../utils/personSort'
-import personFullname from '../../../utils/personFullname'
 import artsSortedFromArts from '../../../utils/artsSortedFromArts'
 import kultursSortedFromKulturs from '../../../utils/kultursSortedFromKulturs'
 import gartensSortedFromGartens from '../../../utils/gartensSortedFromGartens'
@@ -112,6 +109,8 @@ const buildNodes = async ({ store }) => {
         const artId = artNode[1]
         const parentArt = artsSorted.find((a) => a.id === artId)
         const artIndex = art.findIndex((a) => a.id === artId)
+
+        // art > kultur
         const kulturFilterQuery = queryFromFilter({
           table: 'kultur',
           filter: store.filter.kultur.toJSON(),
@@ -120,7 +119,6 @@ const buildNodes = async ({ store }) => {
           .extend(...kulturFilterQuery)
           .fetch()
         const kultursSorted = await kultursSortedFromKulturs(kulturs)
-
         artKulturFolder.push(
           buildArtKulturFolder({
             children: kultursSorted,
@@ -140,10 +138,19 @@ const buildNodes = async ({ store }) => {
           )
           artKultur.push(...kulturNodes)
         }
-        const sammlungs = await parentArt.sammlungs.fetch()
+
+        // art > sammlung
+        const sammlungFilterQuery = queryFromFilter({
+          table: 'sammlung',
+          filter: store.filter.sammlung.toJSON(),
+        })
+        const sammlungs = await parentArt.sammlungs
+          .extend(...sammlungFilterQuery)
+          .fetch()
+        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
         artSammlungFolder.push(
           buildArtSammlungFolder({
-            children: sammlungs,
+            children: sammlungsSorted,
             artIndex,
             artId,
           }),
@@ -152,7 +159,18 @@ const buildNodes = async ({ store }) => {
           (n) => n.length === 3 && n[1] === artId && n[2] === 'Sammlungen',
         )
         if (artSammlungFolderIsOpen) {
-          // TODO:
+          const sammlungNodes = await Promise.all(
+            sammlungsSorted.map(
+              async (sammlung, sammlungIndex) =>
+                await buildArtSammlung({
+                  sammlung,
+                  sammlungIndex,
+                  artId,
+                  artIndex,
+                }),
+            ),
+          )
+          artSammlung.push(...sammlungNodes)
         }
       }
     }
