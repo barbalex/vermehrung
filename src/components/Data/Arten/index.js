@@ -18,6 +18,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import queryFromFilter from '../../../utils/queryFromFilter'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
+import artsSortedFromArts from '../../../utils/artsSortedFromArts'
 
 const Container = styled.div`
   height: 100%;
@@ -90,16 +91,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
     const allSubscription = allCollectionsObservable.subscribe(
       async (result) => {
         if (Array.isArray(result)) {
-          const artSorters = await Promise.all(
-            result.map(async (art) => {
-              const label = await art.label.pipe(first$()).toPromise() // labelUnderArt
-              return { id: art.id, label }
-            }),
-          )
-          const artsSorted = sortBy(
-            result,
-            (art) => artSorters.find((s) => s.id === art.id).label,
-          )
+          const artsSorted = await artsSortedFromArts(result)
           setArts(artsSorted)
         } else if (!isNaN(result)) {
           setCount(result)
