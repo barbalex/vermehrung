@@ -16,8 +16,7 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
+import notDeletedQuery from '../../../utils/notDeletedQuery'
 import queryFromFilter from '../../../utils/queryFromFilter'
 import personFullname from '../../../utils/personFullname'
 
@@ -68,7 +67,6 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-const initialGartenState = { gartens: [], gartensFiltered: [] }
 
 const Gaerten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -76,55 +74,65 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { garten: gartenFilter } = store.filter
 
-  // use object with two keys to only render once on setting
-  const [gartensState, setGartenState] = useState(initialGartenState)
+  const [gartens, setGartens] = useState([])
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const collection = db.collections.get('garten')
-    const query = personIdInActiveNodeArray
-      ? collection.query(
+    const filterQuery = queryFromFilter({
+      table: 'garten',
+      filter: gartenFilter.toJSON(),
+    })
+    const hierarchyQuery = personIdInActiveNodeArray
+      ? [
           Q.experimentalJoinTables(['person']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('person', 'id', personIdInActiveNodeArray),
-          ),
-        )
-      : collection.query(notDeletedOrHasConflictQuery)
-    const subscription = query
-      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-      .subscribe(async (gartens) => {
-        const gartensFiltered = gartens.filter((value) =>
-          storeFilter({ value, filter: gartenFilter, table: 'garten' }),
-        )
-        const gartenSorters = await Promise.all(
-          gartensFiltered.map(async (garten) => {
-            const name = garten?.name?.toString()?.toLowerCase() ?? ''
-            const person = await garten.person.fetch()
-            const personName = personFullname(person)?.toString()?.toLowerCase()
-            const sort = [name, personName]
+          Q.on('person', 'id', personIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.collections.get('garten')
+    const countObservable = collection
+      .query(notDeletedQuery)
+      .observeCount(false)
+    const dataObservable = collection
+      .query(...filterQuery, ...hierarchyQuery)
+      .observeWithColumns(['name', 'person_id'])
+    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allSubscription = allCollectionsObservable.subscribe(
+      async (result) => {
+        if (Array.isArray(result)) {
+          const gartenSorters = await Promise.all(
+            result.map(async (garten) => {
+              const name = garten?.name?.toString()?.toLowerCase() ?? ''
+              const person = await garten.person.fetch()
+              const personName = personFullname(person)
+                ?.toString()
+                ?.toLowerCase()
+              const sort = [name, personName]
 
-            return { id: garten.id, sort }
-          }),
-        )
-        const gartensSorted = sortBy(
-          gartensFiltered,
-          (garten) => gartenSorters.find((s) => s.id === garten.id).sort,
-        )
+              return { id: garten.id, sort }
+            }),
+          )
+          const gartensSorted = sortBy(
+            result,
+            (garten) => gartenSorters.find((s) => s.id === garten.id).sort,
+          )
+          setGartens(gartensSorted)
+        } else if (!isNaN(result)) {
+          setCount(result)
+        }
+      },
+    )
 
-        setGartenState({ gartens, gartensFiltered: gartensSorted })
-      })
-    return () => subscription.unsubscribe()
-    // need to rerender if any of the values of gartenFilter changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => allSubscription.unsubscribe()
   }, [
     db.collections,
     personIdInActiveNodeArray,
+    // need to rerender if any of the values of gartenFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(gartenFilter),
+    gartenFilter,
   ])
 
-  const { gartens, gartensFiltered } = gartensState
-  const totalNr = gartens.length
-  const filteredNr = gartensFiltered.length
+  const totalNr = count
+  const filteredNr = gartens.length
 
   const add = useCallback(() => {
     insertGartenRev()
@@ -176,7 +184,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={gartensFiltered.length}
+                  itemCount={gartens.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -187,8 +195,8 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={gartensFiltered[index]}
-                      last={index === gartensFiltered.length - 1}
+                      row={gartens[index]}
+                      last={index === gartens.length - 1}
                     />
                   )}
                 </StyledList>
