@@ -20,6 +20,7 @@ import notDeletedQuery from '../../../utils/notDeletedQuery'
 import queryFromFilter from '../../../utils/queryFromFilter'
 import artLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 import personFullname from '../../../utils/personFullname'
+import sammlungsSortedFromSammlungs from '../../../utils/sammlungsSortedFromSammlungs'
 
 const Container = styled.div`
   height: 100%;
@@ -117,41 +118,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     const allSubscription = allCollectionsObservable.subscribe(
       async (result) => {
         if (Array.isArray(result)) {
-          const sammlungSorters = await Promise.all(
-            result.map(async (sammlung) => {
-              const datum = sammlung.datum ?? ''
-              const herkunft = await sammlung.herkunft.fetch()
-              const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
-              const herkunftGemeinde = herkunft?.gemeinde
-                ?.toString()
-                ?.toLowerCase()
-              const herkunftLokalname = herkunft?.lokalname
-                ?.toString()
-                ?.toLowerCase()
-              const person = await sammlung.person.fetch()
-              const fullname = personFullname(person)?.toString()?.toLowerCase()
-              const art = await sammlung.art.fetch()
-              const ae_art = art ? await art.ae_art.fetch() : undefined
-              const aeArtLabel = artLabelFromAeArt({ ae_art })
-                ?.toString()
-                ?.toLowerCase()
-              const sort = [
-                datum,
-                herkunftNr,
-                herkunftGemeinde,
-                herkunftLokalname,
-                fullname,
-                aeArtLabel,
-              ]
-
-              return { id: sammlung.id, sort }
-            }),
-          )
-          const sammlungsSorted = sortBy(
-            result,
-            (sammlung) =>
-              sammlungSorters.find((s) => s.id === sammlung.id).sort,
-          )
+          const sammlungsSorted = await sammlungsSortedFromSammlungs(result)
           setSammlungs(sammlungsSorted)
         } else if (!isNaN(result)) {
           setCount(result)

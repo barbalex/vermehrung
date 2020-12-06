@@ -18,6 +18,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
 import queryFromFilter from '../../../utils/queryFromFilter'
+import zaehlungSort from '../../../utils/zaehlungSort'
 
 const Container = styled.div`
   height: 100%;
@@ -98,20 +99,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
     const allSubscription = allCollectionsObservable.subscribe(
       async (result) => {
         if (Array.isArray(result)) {
-          const zaehlungSorters = await Promise.all(
-            result.map(async (zaehlung) => {
-              const datum = zaehlung.datum ?? ''
-              const anzahlPflanzen = zaehlung.anzahl_pflanzen ?? ''
-              const sort = [datum, anzahlPflanzen]
-
-              return { id: zaehlung.id, sort }
-            }),
-          )
-          const zaehlungsSorted = sortBy(
-            result,
-            (zaehlung) =>
-              zaehlungSorters.find((s) => s.id === zaehlung.id).sort,
-          )
+          const zaehlungsSorted = result.sort((a, b) => zaehlungSort({ a, b }))
           setZaehlungs(zaehlungsSorted)
         } else if (!isNaN(result)) {
           setCount(result)

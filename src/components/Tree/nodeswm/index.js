@@ -38,8 +38,10 @@ import lieferungSort from '../../../utils/lieferungSort'
 import eventSort from '../../../utils/eventSort'
 import personSort from '../../../utils/personSort'
 import personFullname from '../../../utils/personFullname'
-import artLabelFromAeArt from '../../../utils/artLabelFromAeArt'
+import artsSortedFromArts from '../../../utils/artsSortedFromArts'
 import kultursSortedFromKulturs from '../../../utils/kultursSortedFromKulturs'
+import gartensSortedFromGartens from '../../../utils/gartensSortedFromGartens'
+import sammlungsSortedFromSammlungs from '../../../utils/sammlungsSortedFromSammlungs'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -101,16 +103,7 @@ const buildNodes = async ({ store }) => {
         .get('art')
         .query(...artFilterQuery)
         .fetch()
-      const artSorters = await Promise.all(
-        arts.map(async (art) => {
-          const label = await art.label.pipe(first$()).toPromise()
-          return { id: art.id, label }
-        }),
-      )
-      const artsSorted = sortBy(
-        arts,
-        (art) => artSorters.find((s) => s.id === art.id).label,
-      )
+      const artsSorted = await artsSortedFromArts(arts)
       art = await buildArt({ store, arts: artsSorted })
       const openArtNodes = openNodes.filter(
         (n) => n[0] === 'Arten' && n.length === 2,
@@ -193,36 +186,7 @@ const buildNodes = async ({ store }) => {
       .get('sammlung')
       .query(...sammlungFilterQuery)
       .fetch()
-    const sammlungSorters = await Promise.all(
-      sammlungs.map(async (sammlung) => {
-        const datum = sammlung.datum ?? ''
-        const herkunft = await sammlung.herkunft.fetch()
-        const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
-        const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
-        const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
-        const person = await sammlung.person.fetch()
-        const fullname = personFullname(person)?.toString()?.toLowerCase()
-        const art = await sammlung.art.fetch()
-        const artLabel = art
-          ? await art.label.pipe(first$()).toPromise()
-          : undefined
-        const aeArtLabelLowerCase = artLabel?.toString()?.toLowerCase()
-        const sort = [
-          datum,
-          herkunftNr,
-          herkunftGemeinde,
-          herkunftLokalname,
-          fullname,
-          aeArtLabelLowerCase,
-        ]
-
-        return { id: sammlung.id, sort }
-      }),
-    )
-    const sammlungsSorted = sortBy(
-      sammlungs,
-      (sammlung) => sammlungSorters.find((s) => s.id === sammlung.id).sort,
-    )
+    const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
     sammlung = await buildSammlung({ store, sammlungs: sammlungsSorted })
   }
 
@@ -236,20 +200,7 @@ const buildNodes = async ({ store }) => {
       .get('garten')
       .query(...gartenFilterQuery)
       .fetch()
-    const gartenSorters = await Promise.all(
-      gartens.map(async (garten) => {
-        const name = garten?.name?.toString()?.toLowerCase()
-        const person = await garten?.person.fetch()
-        const personName = personFullname(person)?.toString()?.toLowerCase()
-        const sort = [name, personName]
-
-        return { id: garten.id, sort }
-      }),
-    )
-    const gartensSorted = sortBy(
-      gartens,
-      (garten) => gartenSorters.find((s) => s.id === garten.id).sort,
-    )
+    const gartensSorted = await gartensSortedFromGartens(gartens)
     garten = await buildGarten({ store, gartens: gartensSorted })
   }
 

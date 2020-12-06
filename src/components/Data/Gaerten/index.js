@@ -19,6 +19,7 @@ import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
 import queryFromFilter from '../../../utils/queryFromFilter'
 import personFullname from '../../../utils/personFullname'
+import gartensSortedFromGartens from '../../../utils/gartensSortedFromGartens'
 
 const Container = styled.div`
   height: 100%;
@@ -98,22 +99,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
     const allSubscription = allCollectionsObservable.subscribe(
       async (result) => {
         if (Array.isArray(result)) {
-          const gartenSorters = await Promise.all(
-            result.map(async (garten) => {
-              const name = garten?.name?.toString()?.toLowerCase() ?? ''
-              const person = await garten.person.fetch()
-              const personName = personFullname(person)
-                ?.toString()
-                ?.toLowerCase()
-              const sort = [name, personName]
-
-              return { id: garten.id, sort }
-            }),
-          )
-          const gartensSorted = sortBy(
-            result,
-            (garten) => gartenSorters.find((s) => s.id === garten.id).sort,
-          )
+          const gartensSorted = await gartensSortedFromGartens(result)
           setGartens(gartensSorted)
         } else if (!isNaN(result)) {
           setCount(result)
