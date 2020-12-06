@@ -126,15 +126,16 @@ const buildNodes = async ({ store }) => {
 
   // garten
   const gartenFolder = buildGartenFolder({ store })
+  const gartenFilterQuery = queryFromFilter({
+    table: 'garten',
+    filter: store.filter.garten.toJSON(),
+  })
   const gartens = await db.collections
     .get('garten')
-    .query(notDeletedOrHasConflictQuery)
+    .query(...gartenFilterQuery)
     .fetch()
-  const gartensFiltered = gartens.filter((value) =>
-    storeFilter({ value, filter: store.filter.garten, table: 'garten' }),
-  )
   const gartenSorters = await Promise.all(
-    gartensFiltered.map(async (garten) => {
+    gartens.map(async (garten) => {
       const name = garten?.name?.toString()?.toLowerCase()
       const person = await garten?.person.fetch()
       const personName = personFullname(person)?.toString()?.toLowerCase()
@@ -144,7 +145,7 @@ const buildNodes = async ({ store }) => {
     }),
   )
   const gartensSorted = sortBy(
-    gartensFiltered,
+    gartens,
     (garten) => gartenSorters.find((s) => s.id === garten.id).sort,
   )
   const garten = await buildGarten({ store, gartens: gartensSorted })
