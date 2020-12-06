@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Paper from '@material-ui/core/Paper'
@@ -55,10 +55,14 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
     [],
   )
 
-  const messageFunctions = createMessageFunctions({
-    kulturId: kultur.id,
-    store,
-  })
+  const [messageFunctions, setMessageFunctions] = useState([])
+  useEffect(() => {
+    createMessageFunctions({
+      kulturId: kultur.id,
+      store,
+    }).then((mf) => setMessageFunctions(mf))
+  }, [kultur.id, store])
+
   const messageGroups = qkChoosens
     .map((qkChoosen) => {
       const qk = [...store.kultur_qks.values()].find(

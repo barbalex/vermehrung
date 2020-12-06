@@ -15,8 +15,7 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
+import notDeletedQuery from '../../../utils/notDeletedQuery'
 import eventSort from '../../../utils/eventSort'
 import queryFromFilter from '../../../utils/queryFromFilter'
 
@@ -67,7 +66,6 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-const initialEventState = { events: [], eventsFiltered: [] }
 
 const Events = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -75,30 +73,36 @@ const Events = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { event: eventFilter } = store.filter
 
-  // use object with two keys to only render once on setting
-  const [eventsState, setEventState] = useState(initialEventState)
+  const [events, setEvents] = useState([])
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const collection = db.collections.get('event')
-    const query = kulturIdInActiveNodeArray
-      ? collection.query(
+    const filterQuery = queryFromFilter({
+      table: 'event',
+      filter: eventFilter.toJSON(),
+    })
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
           Q.experimentalJoinTables(['kultur']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('kultur', 'id', kulturIdInActiveNodeArray),
-          ),
-        )
-      : collection.query(notDeletedOrHasConflictQuery)
-    const subscription = query
-      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-      .subscribe((events) => {
-        const eventsFiltered = events
-          .filter((value) =>
-            storeFilter({ value, filter: eventFilter, table: 'event' }),
-          )
-          .sort((a, b) => eventSort({ a, b }))
-        setEventState({ events, eventsFiltered })
-      })
-    return () => subscription.unsubscribe()
+          Q.on('kultur', 'id', kulturIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.collections.get('event')
+    const countObservable = collection
+      .query(notDeletedQuery)
+      .observeCount(false)
+    const dataObservable = collection
+      .query(...filterQuery, ...hierarchyQuery)
+      .observeWithColumns(['datum', 'beschreibung'])
+    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allSubscription = allCollectionsObservable.subscribe((result) => {
+      if (Array.isArray(result)) {
+        setEvents(result.sort((a, b) => eventSort({ a, b })))
+      } else if (!isNaN(result)) {
+        setCount(result)
+      }
+    })
+
+    return () => allSubscription.unsubscribe()
     // need to rerender if any of the values of eventFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -106,12 +110,11 @@ const Events = ({ filter: showFilter, width, height }) => {
     kulturIdInActiveNodeArray,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(eventFilter),
+    eventFilter,
   ])
 
-  const { events, eventsFiltered } = eventsState
-
-  const totalNr = events.length
-  const filteredNr = eventsFiltered.length
+  const totalNr = count
+  const filteredNr = events.length
 
   const add = useCallback(() => {
     insertEventRev()
@@ -163,7 +166,7 @@ const Events = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={eventsFiltered.length}
+                  itemCount={events.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -174,8 +177,8 @@ const Events = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={eventsFiltered[index]}
-                      last={index === eventsFiltered.length - 1}
+                      row={events[index]}
+                      last={index === events.length - 1}
                     />
                   )}
                 </StyledList>
