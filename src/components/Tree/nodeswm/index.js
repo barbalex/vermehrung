@@ -271,19 +271,15 @@ const buildNodes = async ({ store }) => {
 
   // person
   const personFolder = buildPersonFolder({ store })
+  const personFilterQuery = queryFromFilter({
+    table: 'person',
+    filter: store.filter.person.toJSON(),
+  })
   const persons = await db.collections
     .get('person')
-    .query(notDeletedOrHasConflictQuery)
+    .query(...personFilterQuery)
     .fetch()
-  const personsSorted = persons
-    .filter((value) =>
-      storeFilter({
-        value,
-        filter: store.filter.person,
-        table: 'person',
-      }),
-    )
-    .sort((a, b) => personSort({ a, b }))
+  const personsSorted = persons.sort((a, b) => personSort({ a, b }))
   const person = buildPerson({
     store,
     persons: personsSorted,
