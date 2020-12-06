@@ -10,7 +10,7 @@ import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
 import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'
 
-const buildExceljsWorksheets = ({ store, year }) => {
+const buildExceljsWorksheetsForLieferungenOfYear = ({ store, year }) => {
   const workbook = new ExcelJs.Workbook()
   const { lieferungsSorted } = store
 
@@ -31,7 +31,9 @@ const buildExceljsWorksheets = ({ store, year }) => {
       const vonSammlungHerkunft = vonSammlung?.herkunft_id
         ? store.herkunfts.get(vonSammlung?.herkunft_id)
         : {}
-      const vonKultur = l?.kultur_id ? store.kulturs.get(l.kultur_id) : {}
+      const vonKultur = l?.von_kultur_id
+        ? store.kulturs.get(l.von_kultur_id)
+        : {}
       const vonKulturGarten = vonKultur?.garten_id
         ? store.gartens.get(vonKultur.garten_id)
         : {}
@@ -110,4 +112,4 @@ const buildExceljsWorksheets = ({ store, year }) => {
   downloadExceljsWorkbook({ store, fileName: `Lieferungen_${year}`, workbook })
 }
 
-export default buildExceljsWorksheets
+export default buildExceljsWorksheetsForLieferungenOfYear

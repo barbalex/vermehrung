@@ -7,7 +7,7 @@ import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../../../models/reactUtils'
-import buildExceljsWorksheets from './buildExceljsWorksheets'
+import buildExceljsWorksheetsForLieferungenOfYear from './buildExceljsWorksheetsForLieferungenOfYear'
 import buildExceljsWorksheetsForKulturBedarfsplanung from './buildExceljsWorksheetsForKulturBedarfsplanung'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'
 
@@ -26,7 +26,7 @@ const SettingsOverallMenu = ({
     (event) => {
       const year = event.target.value
       if (year.length === 4) {
-        buildExceljsWorksheets({ year, store })
+        buildExceljsWorksheetsForLieferungenOfYear({ year, store })
         setParentAnchorEl(null)
         setGrandParentAnchorEl(null)
       }
