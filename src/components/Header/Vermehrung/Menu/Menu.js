@@ -4,9 +4,20 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
+import { FaChevronRight } from 'react-icons/fa'
+import styled from 'styled-components'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import ExportMenu from './Export'
+
+const StyledMenuItem = styled(MenuItem)`
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  svg {
+    color: #4a148c;
+  }
+`
 
 const SettingsOverallMenu = ({
   anchorEl: parentAnchorEl,
@@ -77,13 +88,14 @@ const SettingsOverallMenu = ({
       open={Boolean(parentAnchorEl)}
       onClose={onClose}
     >
-      <MenuItem
+      <StyledMenuItem
         aria-owns={anchorEl ? 'menu' : null}
         aria-haspopup="true"
         onClick={onClickExporte}
       >
         Exporte
-      </MenuItem>
+        <FaChevronRight />
+      </StyledMenuItem>
       <ExportMenu
         anchorEl={anchorEl}
         setAnchorEl={setAnchorEl}
