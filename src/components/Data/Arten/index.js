@@ -9,7 +9,6 @@ import UpSvg from '../../../svg/to_up.inline.svg'
 import SimpleBar from 'simplebar-react'
 import sortBy from 'lodash/sortBy'
 import { first as first$ } from 'rxjs/operators'
-import { Q } from '@nozbe/watermelondb'
 import { merge } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -18,6 +17,7 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import queryFromFilter from '../../../utils/queryFromFilter'
+import notDeletedQuery from '../../../utils/notDeletedQuery'
 
 const Container = styled.div`
   height: 100%;
@@ -65,7 +65,6 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-const initialArtState = { arts: [], artsFiltered: [] }
 
 const Arten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -73,41 +72,48 @@ const Arten = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { art: artFilter } = store.filter
 
-  // use object with two keys to only render once on setting
-  const [artsState, setArtState] = useState(initialArtState)
+  const [arts, setArts] = useState([])
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const artCollection = db.collections.get('art')
-    const subscription = artCollection
-      .query(...queryFromFilter({ table: 'art', filter: artFilter.toJSON() }))
-      .observe()
-      .subscribe(async (arts) => {
-        console.log('Arten, useEffect, subscription', { arts })
-        const artSorters = await Promise.all(
-          arts.map(async (art) => {
-            const label = await art.label.pipe(first$()).toPromise()
-            return { id: art.id, label }
-          }),
-        )
-        const artsSorted = sortBy(
-          arts,
-          (art) => artSorters.find((s) => s.id === art.id).label,
-        )
-        setArtState({ arts, artsFiltered: artsSorted })
-      })
-    return () => subscription.unsubscribe()
+    const filterQuery = queryFromFilter({
+      table: 'art',
+      filter: artFilter.toJSON(),
+    })
+    const collection = db.collections.get('art')
+    const countObservable = collection
+      .query(notDeletedQuery)
+      .observeCount(false)
+    const dataObservable = collection
+      .query(...filterQuery)
+      .observeWithColumns(['ae_id'])
+    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allSubscription = allCollectionsObservable.subscribe(
+      async (result) => {
+        if (Array.isArray(result)) {
+          const artSorters = await Promise.all(
+            result.map(async (art) => {
+              const label = await art.label.pipe(first$()).toPromise()
+              return { id: art.id, label }
+            }),
+          )
+          const artsSorted = sortBy(
+            result,
+            (art) => artSorters.find((s) => s.id === art.id).label,
+          )
+          setArts(artsSorted)
+        } else if (!isNaN(result)) {
+          setCount(result)
+        }
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(artFilter)])
+  }, [db.collections, ...Object.values(artFilter), artFilter])
 
-  const { arts, artsFiltered } = artsState
-  const totalNr = arts.length
-  const filteredNr = artsFiltered.length
-
-  console.log('Arten', {
-    artsFiltered,
-    arts,
-    artFilter: artFilter.toJSON(),
-  })
+  const totalNr = count
+  const filteredNr = arts.length
 
   const add = useCallback(() => {
     insertArtRev()
@@ -152,7 +158,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={artsFiltered.length}
+                  itemCount={arts.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -163,8 +169,8 @@ const Arten = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={artsFiltered[index]}
-                      last={index === artsFiltered.length - 1}
+                      row={arts[index]}
+                      last={index === arts.length - 1}
                     />
                   )}
                 </StyledList>

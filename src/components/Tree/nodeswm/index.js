@@ -49,21 +49,22 @@ const buildNodes = async ({ store }) => {
 
   // art
   const artFolder = buildArtFolder({ store })
+  const artFilterQuery = queryFromFilter({
+    table: 'art',
+    filter: store.filter.art.toJSON(),
+  })
   const arts = await db.collections
     .get('art')
-    .query(notDeletedOrHasConflictQuery)
+    .query(...artFilterQuery)
     .fetch()
-  const artsFiltered = arts.filter((value) =>
-    storeFilter({ value, filter: store.filter.art, table: 'art' }),
-  )
   const artSorters = await Promise.all(
-    artsFiltered.map(async (art) => {
+    arts.map(async (art) => {
       const label = await art.label.pipe(first$()).toPromise()
       return { id: art.id, label }
     }),
   )
   const artsSorted = sortBy(
-    artsFiltered,
+    arts,
     (art) => artSorters.find((s) => s.id === art.id).label,
   )
   const art = await buildArt({ store, arts: artsSorted })
@@ -259,22 +260,17 @@ const buildNodes = async ({ store }) => {
 
   // event
   const eventFolder = buildEventFolder({ store })
+  const eventFilterQuery = queryFromFilter({
+    table: 'event',
+    filter: store.filter.event.toJSON(),
+  })
   const events = await db.collections
     .get('event')
-    .query(notDeletedOrHasConflictQuery)
+    .query(...eventFilterQuery)
     .fetch()
-  const eventsSorted = events
-    .filter((value) =>
-      storeFilter({
-        value,
-        filter: store.filter.event,
-        table: 'event',
-      }),
-    )
-    .sort((a, b) => eventSort({ a, b }))
   const event = buildEvent({
     store,
-    events: eventsSorted,
+    events: events.sort((a, b) => eventSort({ a, b })),
   })
 
   // person
