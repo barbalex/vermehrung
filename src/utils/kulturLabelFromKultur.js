@@ -1,3 +1,5 @@
+import personFullname from './personFullname'
+
 const kulturLabelFromKultur = ({
   kultur,
   store,
@@ -21,8 +23,9 @@ const kulturLabelFromKultur = ({
   }
   if (!garten?.name && garten?.person_id) {
     const person = store ? persons.get(garten.person_id) : gartenPersonPassed
-    if (person && person.fullname) {
-      gartenLabel = `in: ${person.fullname}'s Garten`
+    const fullname = personFullname(person)
+    if (person && fullname) {
+      gartenLabel = `in: ${fullname}'s Garten`
     }
   }
 
@@ -42,7 +45,7 @@ const kulturLabelFromKultur = ({
   let herkunftLabel = 'von: keine Herkunft'
   if (kultur.herkunft_id) {
     const herkunft = store ? herkunfts.get(kultur.herkunft_id) : herkunftPassed
-    if (herkunft.nr) {
+    if (herkunft?.nr) {
       herkunftLabel = `von: ${herkunft.nr}`
     } else {
       herkunftLabel = 'von: (Herkunft ohne Nr)'

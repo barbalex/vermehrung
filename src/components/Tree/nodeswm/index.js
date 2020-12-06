@@ -152,49 +152,44 @@ const buildNodes = async ({ store }) => {
 
   // kultur
   const kulturFolder = buildKulturFolder({ store })
+  const kulturFilterQuery = queryFromFilter({
+    table: 'kultur',
+    filter: store.filter.kultur.toJSON(),
+  })
   const kulturs = await db.collections
     .get('kultur')
-    .query(notDeletedOrHasConflictQuery)
+    .query(...kulturFilterQuery)
     .fetch()
-  const kultursFiltered = kulturs.filter((value) =>
-    storeFilter({ value, filter: store.filter.kultur, table: 'kultur' }),
-  )
   const kulturSorters = await Promise.all(
-    kultursFiltered.map(async (kultur) => {
-      const art = await kultur?.art.fetch()
-      const ae_art = art?.ae_art?.fetch()
-      const artLabel = aeArtLabelFromAeArt({ ae_art })
-
-      const herkunft = await kultur?.herkunft?.fetch()
+    kulturs.map(async (kultur) => {
+      const art = await kultur.art.fetch()
+      const ae_art = art ? await art.ae_art.fetch() : undefined
+      const aeArtLabel = aeArtLabelFromAeArt({ ae_art })
+        ?.toString()
+        ?.toLowerCase()
+      const herkunft = await kultur.herkunft.fetch()
       const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
       const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
       const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
-
-      const garten = await kultur?.garten.fetch()
+      const garten = await kultur.garten.fetch()
       const gartenName = garten?.name?.toString()?.toLowerCase()
-
-      const gartenPerson = garten ? await garten?.person.fetch() : undefined
-      const gartenPersonLabel = await gartenPerson?.fullname
-        ?.pipe(first$())
-        .toPromise()
-
-      const zwiLa = kultur.zwischenlager
-
+      const gartenPerson = garten ? await garten.person.fetch() : undefined
+      const gartenPersonFullname = personFullname(gartenPerson)
+        ?.toString()
+        ?.toLowerCase()
       const sort = [
-        artLabel,
+        aeArtLabel,
         herkunftNr,
         herkunftGemeinde,
         herkunftLokalname,
         gartenName,
-        gartenPersonLabel,
-        zwiLa,
+        gartenPersonFullname,
       ]
-
       return { id: kultur.id, sort }
     }),
   )
   const kultursSorted = sortBy(
-    kultursFiltered,
+    kulturs,
     (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
   )
   const kultur = await buildKultur({ store, kulturs: kultursSorted })
