@@ -92,7 +92,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
         if (Array.isArray(result)) {
           const artSorters = await Promise.all(
             result.map(async (art) => {
-              const label = await art.label.pipe(first$()).toPromise()
+              const label = await art.label.pipe(first$()).toPromise() // labelUnderArt
               return { id: art.id, label }
             }),
           )

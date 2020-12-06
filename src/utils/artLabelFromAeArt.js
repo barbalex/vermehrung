@@ -1,4 +1,4 @@
-const aeArtLabelFromAeArt = ({ ae_art }) => {
+const artLabelFromAeArt = ({ ae_art }) => {
   if (!ae_art) return '(kein Name)'
 
   if (!ae_art?.name) return '(kein Name)'
@@ -6,4 +6,4 @@ const aeArtLabelFromAeArt = ({ ae_art }) => {
   return ae_art.name
 }
 
-export default aeArtLabelFromAeArt
+export default artLabelFromAeArt

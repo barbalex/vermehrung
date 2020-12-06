@@ -30,15 +30,21 @@ const Row = styled.div`
 
 const Kulturen = ({ row, style, last }) => {
   const store = useContext(StoreContext)
+  const { artIdInActiveNodeArray } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const [label, setLabel] = useState('')
   useEffect(() => {
-    row.label
-      .pipe(first$())
-      .toPromise()
-      .then((label) => setLabel(label))
-  }, [row])
+    artIdInActiveNodeArray
+      ? row.labelUnderArt
+          .pipe(first$())
+          .toPromise()
+          .then((label) => setLabel(label))
+      : row.label
+          .pipe(first$())
+          .toPromise()
+          .then((label) => setLabel(label))
+  }, [artIdInActiveNodeArray, row])
 
   const onClickRow = useCallback(
     () => setActiveNodeArray([...activeNodeArray, row.id]),
