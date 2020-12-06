@@ -1,5 +1,6 @@
 import sortBy from 'lodash/sortBy'
 import { first as first$ } from 'rxjs/operators'
+import { getSnapshot } from 'mobx-state-tree'
 
 import buildArtFolder from './art/folder'
 import buildArt from './art'
@@ -46,244 +47,290 @@ const compare = (a, b) => {
 
 const buildNodes = async ({ store }) => {
   const { db } = store
+  const { activeNodeArray, openNodes: openNodesRaw } = store.tree
+  const openNodes = getSnapshot(openNodesRaw)
+  console.log('nodeswm', {
+    activeNodeArray: activeNodeArray.slice(),
+    openNodes,
+  })
+
+  const artFolder = buildArtFolder({ store })
+  let art = []
+  const herkunftFolder = buildHerkunftFolder({ store })
+  let herkunft = []
+  const sammlungFolder = buildSammlungFolder({ store })
+  let sammlung = []
+  const gartenFolder = buildGartenFolder({ store })
+  let garten = []
+  const kulturFolder = buildKulturFolder({ store })
+  let kultur = []
+  const teilkulturFolder = buildTeilkulturFolder({ store })
+  let teilkultur = []
+  const zaehlungFolder = buildZaehlungFolder({ store })
+  let zaehlung = []
+  const lieferungFolder = buildLieferungFolder({ store })
+  let lieferung = []
+  const eventFolder = buildEventFolder({ store })
+  let event = []
+  const personFolder = buildPersonFolder({ store })
+  let person = []
+  const sammelLieferungFolder = buildSammelLieferungFolder({ store })
+  let sammelLieferung = []
 
   // art
-  const artFolder = buildArtFolder({ store })
-  const artFilterQuery = queryFromFilter({
-    table: 'art',
-    filter: store.filter.art.toJSON(),
-  })
-  const arts = await db.collections
-    .get('art')
-    .query(...artFilterQuery)
-    .fetch()
-  const artSorters = await Promise.all(
-    arts.map(async (art) => {
-      const label = await art.label.pipe(first$()).toPromise()
-      return { id: art.id, label }
-    }),
-  )
-  const artsSorted = sortBy(
-    arts,
-    (art) => artSorters.find((s) => s.id === art.id).label,
-  )
-  const art = await buildArt({ store, arts: artsSorted })
+  if (openNodes.some((n) => n[0] === 'Arten')) {
+    const artFilterQuery = queryFromFilter({
+      table: 'art',
+      filter: store.filter.art.toJSON(),
+    })
+    const arts = await db.collections
+      .get('art')
+      .query(...artFilterQuery)
+      .fetch()
+    const artSorters = await Promise.all(
+      arts.map(async (art) => {
+        const label = await art.label.pipe(first$()).toPromise()
+        return { id: art.id, label }
+      }),
+    )
+    const artsSorted = sortBy(
+      arts,
+      (art) => artSorters.find((s) => s.id === art.id).label,
+    )
+    art = await buildArt({ store, arts: artsSorted })
+  }
 
   // herkunft
-  const herkunftFolder = buildHerkunftFolder({ store })
-  const herkunfts = await db.collections
-    .get('herkunft')
-    .query(notDeletedOrHasConflictQuery)
-    .fetch()
-  const herkunftsSorted = herkunfts
-    .filter((value) =>
-      storeFilter({ value, filter: store.filter.herkunft, table: 'herkunft' }),
-    )
-    .sort(herkunftSort)
-  const herkunft = buildHerkunft({ store, herkunfts: herkunftsSorted })
+  if (openNodes.some((n) => n[0] === 'Herkuenfte')) {
+    const herkunfts = await db.collections
+      .get('herkunft')
+      .query(notDeletedOrHasConflictQuery)
+      .fetch()
+    const herkunftsSorted = herkunfts
+      .filter((value) =>
+        storeFilter({
+          value,
+          filter: store.filter.herkunft,
+          table: 'herkunft',
+        }),
+      )
+      .sort(herkunftSort)
+    herkunft = buildHerkunft({ store, herkunfts: herkunftsSorted })
+  }
 
   // sammlung
-  const sammlungFolder = buildSammlungFolder({ store })
-  const sammlungFilterQuery = queryFromFilter({
-    table: 'sammlung',
-    filter: store.filter.sammlung.toJSON(),
-  })
-  const sammlungs = await db.collections
-    .get('sammlung')
-    .query(...sammlungFilterQuery)
-    .fetch()
-  const sammlungSorters = await Promise.all(
-    sammlungs.map(async (sammlung) => {
-      const datum = sammlung.datum ?? ''
-      const herkunft = await sammlung.herkunft.fetch()
-      const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
-      const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
-      const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
-      const person = await sammlung.person.fetch()
-      const fullname = personFullname(person)?.toString()?.toLowerCase()
-      const art = await sammlung.art.fetch()
-      const artLabel = art
-        ? await art.label.pipe(first$()).toPromise()
-        : undefined
-      const aeArtLabelLowerCase = artLabel?.toString()?.toLowerCase()
-      const sort = [
-        datum,
-        herkunftNr,
-        herkunftGemeinde,
-        herkunftLokalname,
-        fullname,
-        aeArtLabelLowerCase,
-      ]
+  if (openNodes.some((n) => n[0] === 'Sammlungen')) {
+    const sammlungFilterQuery = queryFromFilter({
+      table: 'sammlung',
+      filter: store.filter.sammlung.toJSON(),
+    })
+    const sammlungs = await db.collections
+      .get('sammlung')
+      .query(...sammlungFilterQuery)
+      .fetch()
+    const sammlungSorters = await Promise.all(
+      sammlungs.map(async (sammlung) => {
+        const datum = sammlung.datum ?? ''
+        const herkunft = await sammlung.herkunft.fetch()
+        const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
+        const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
+        const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
+        const person = await sammlung.person.fetch()
+        const fullname = personFullname(person)?.toString()?.toLowerCase()
+        const art = await sammlung.art.fetch()
+        const artLabel = art
+          ? await art.label.pipe(first$()).toPromise()
+          : undefined
+        const aeArtLabelLowerCase = artLabel?.toString()?.toLowerCase()
+        const sort = [
+          datum,
+          herkunftNr,
+          herkunftGemeinde,
+          herkunftLokalname,
+          fullname,
+          aeArtLabelLowerCase,
+        ]
 
-      return { id: sammlung.id, sort }
-    }),
-  )
-  const sammlungsSorted = sortBy(
-    sammlungs,
-    (sammlung) => sammlungSorters.find((s) => s.id === sammlung.id).sort,
-  )
-  const sammlung = await buildSammlung({ store, sammlungs: sammlungsSorted })
+        return { id: sammlung.id, sort }
+      }),
+    )
+    const sammlungsSorted = sortBy(
+      sammlungs,
+      (sammlung) => sammlungSorters.find((s) => s.id === sammlung.id).sort,
+    )
+    sammlung = await buildSammlung({ store, sammlungs: sammlungsSorted })
+  }
 
   // garten
-  const gartenFolder = buildGartenFolder({ store })
-  const gartenFilterQuery = queryFromFilter({
-    table: 'garten',
-    filter: store.filter.garten.toJSON(),
-  })
-  const gartens = await db.collections
-    .get('garten')
-    .query(...gartenFilterQuery)
-    .fetch()
-  const gartenSorters = await Promise.all(
-    gartens.map(async (garten) => {
-      const name = garten?.name?.toString()?.toLowerCase()
-      const person = await garten?.person.fetch()
-      const personName = personFullname(person)?.toString()?.toLowerCase()
-      const sort = [name, personName]
+  if (openNodes.some((n) => n[0] === 'Gaerten')) {
+    const gartenFilterQuery = queryFromFilter({
+      table: 'garten',
+      filter: store.filter.garten.toJSON(),
+    })
+    const gartens = await db.collections
+      .get('garten')
+      .query(...gartenFilterQuery)
+      .fetch()
+    const gartenSorters = await Promise.all(
+      gartens.map(async (garten) => {
+        const name = garten?.name?.toString()?.toLowerCase()
+        const person = await garten?.person.fetch()
+        const personName = personFullname(person)?.toString()?.toLowerCase()
+        const sort = [name, personName]
 
-      return { id: garten.id, sort }
-    }),
-  )
-  const gartensSorted = sortBy(
-    gartens,
-    (garten) => gartenSorters.find((s) => s.id === garten.id).sort,
-  )
-  const garten = await buildGarten({ store, gartens: gartensSorted })
+        return { id: garten.id, sort }
+      }),
+    )
+    const gartensSorted = sortBy(
+      gartens,
+      (garten) => gartenSorters.find((s) => s.id === garten.id).sort,
+    )
+    garten = await buildGarten({ store, gartens: gartensSorted })
+  }
 
   // kultur
-  const kulturFolder = buildKulturFolder({ store })
-  const kulturFilterQuery = queryFromFilter({
-    table: 'kultur',
-    filter: store.filter.kultur.toJSON(),
-  })
-  const kulturs = await db.collections
-    .get('kultur')
-    .query(...kulturFilterQuery)
-    .fetch()
-  const kulturSorters = await Promise.all(
-    kulturs.map(async (kultur) => {
-      const art = await kultur.art.fetch()
-      const ae_art = art ? await art.ae_art.fetch() : undefined
-      const aeArtLabel = aeArtLabelFromAeArt({ ae_art })
-        ?.toString()
-        ?.toLowerCase()
-      const herkunft = await kultur.herkunft.fetch()
-      const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
-      const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
-      const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
-      const garten = await kultur.garten.fetch()
-      const gartenName = garten?.name?.toString()?.toLowerCase()
-      const gartenPerson = garten ? await garten.person.fetch() : undefined
-      const gartenPersonFullname = personFullname(gartenPerson)
-        ?.toString()
-        ?.toLowerCase()
-      const sort = [
-        aeArtLabel,
-        herkunftNr,
-        herkunftGemeinde,
-        herkunftLokalname,
-        gartenName,
-        gartenPersonFullname,
-      ]
-      return { id: kultur.id, sort }
-    }),
-  )
-  const kultursSorted = sortBy(
-    kulturs,
-    (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
-  )
-  const kultur = await buildKultur({ store, kulturs: kultursSorted })
+  if (openNodes.some((n) => n[0] === 'Kulturen')) {
+    const kulturFilterQuery = queryFromFilter({
+      table: 'kultur',
+      filter: store.filter.kultur.toJSON(),
+    })
+    const kulturs = await db.collections
+      .get('kultur')
+      .query(...kulturFilterQuery)
+      .fetch()
+    const kulturSorters = await Promise.all(
+      kulturs.map(async (kultur) => {
+        const art = await kultur.art.fetch()
+        const ae_art = art ? await art.ae_art.fetch() : undefined
+        const aeArtLabel = aeArtLabelFromAeArt({ ae_art })
+          ?.toString()
+          ?.toLowerCase()
+        const herkunft = await kultur.herkunft.fetch()
+        const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
+        const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
+        const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
+        const garten = await kultur.garten.fetch()
+        const gartenName = garten?.name?.toString()?.toLowerCase()
+        const gartenPerson = garten ? await garten.person.fetch() : undefined
+        const gartenPersonFullname = personFullname(gartenPerson)
+          ?.toString()
+          ?.toLowerCase()
+        const sort = [
+          aeArtLabel,
+          herkunftNr,
+          herkunftGemeinde,
+          herkunftLokalname,
+          gartenName,
+          gartenPersonFullname,
+        ]
+        return { id: kultur.id, sort }
+      }),
+    )
+    const kultursSorted = sortBy(
+      kulturs,
+      (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
+    )
+    kultur = await buildKultur({ store, kulturs: kultursSorted })
+  }
 
   // teilkultur
-  const teilkulturFolder = buildTeilkulturFolder({ store })
-  const teilkulturFilterQuery = queryFromFilter({
-    table: 'teilkultur',
-    filter: store.filter.teilkultur.toJSON(),
-  })
-  const teilkulturs = await db.collections
-    .get('teilkultur')
-    .query(...teilkulturFilterQuery)
-    .fetch()
-  const teilkultur = buildTeilkultur({
-    store,
-    teilkulturs: teilkulturs.sort((a, b) => teilkulturSort({ a, b })),
-  })
+  if (openNodes.some((n) => n[0] === 'Teilkulturen')) {
+    const teilkulturFilterQuery = queryFromFilter({
+      table: 'teilkultur',
+      filter: store.filter.teilkultur.toJSON(),
+    })
+    const teilkulturs = await db.collections
+      .get('teilkultur')
+      .query(...teilkulturFilterQuery)
+      .fetch()
+    teilkultur = buildTeilkultur({
+      store,
+      teilkulturs: teilkulturs.sort((a, b) => teilkulturSort({ a, b })),
+    })
+  }
 
   // zaehlung
-  const zaehlungFolder = buildZaehlungFolder({ store })
-  const zaehlungFilterQuery = queryFromFilter({
-    table: 'zaehlung',
-    filter: store.filter.zaehlung.toJSON(),
-  })
-  const zaehlungs = await db.collections
-    .get('zaehlung')
-    .query(...zaehlungFilterQuery)
-    .fetch()
-  const zaehlung = buildZaehlung({
-    store,
-    zaehlungs: zaehlungs.sort((a, b) => zaehlungSort({ a, b })),
-  })
+  if (openNodes.some((n) => n[0] === 'Zaehlungen')) {
+    const zaehlungFilterQuery = queryFromFilter({
+      table: 'zaehlung',
+      filter: store.filter.zaehlung.toJSON(),
+    })
+    const zaehlungs = await db.collections
+      .get('zaehlung')
+      .query(...zaehlungFilterQuery)
+      .fetch()
+    zaehlung = buildZaehlung({
+      store,
+      zaehlungs: zaehlungs.sort((a, b) => zaehlungSort({ a, b })),
+    })
+  }
 
   // lieferung
-  const lieferungFolder = buildLieferungFolder({ store })
-  const lieferungFilterQuery = queryFromFilter({
-    table: 'lieferung',
-    filter: store.filter.lieferung.toJSON(),
-  })
-  const lieferungs = await db.collections
-    .get('lieferung')
-    .query(...lieferungFilterQuery)
-    .fetch()
-  const lieferung = buildLieferung({
-    store,
-    lieferungs: lieferungs.sort((a, b) => lieferungSort({ a, b })),
-  })
+  if (openNodes.some((n) => n[0] === 'Lieferungen')) {
+    const lieferungFilterQuery = queryFromFilter({
+      table: 'lieferung',
+      filter: store.filter.lieferung.toJSON(),
+    })
+    const lieferungs = await db.collections
+      .get('lieferung')
+      .query(...lieferungFilterQuery)
+      .fetch()
+    lieferung = buildLieferung({
+      store,
+      lieferungs: lieferungs.sort((a, b) => lieferungSort({ a, b })),
+    })
+  }
 
   // sammelLieferung
-  const sammelLieferungFolder = buildSammelLieferungFolder({ store })
-  const sammelLieferungFilterQuery = queryFromFilter({
-    table: 'sammel_lieferung',
-    filter: store.filter.sammel_lieferung.toJSON(),
-  })
-  const sammelLieferungs = await db.collections
-    .get('sammel_lieferung')
-    .query(...sammelLieferungFilterQuery)
-    .fetch()
-  const sammelLieferung = buildSammelLieferung({
-    store,
-    sammelLieferungs: sammelLieferungs.sort((a, b) => lieferungSort({ a, b })),
-  })
+  if (openNodes.some((n) => n[0] === 'Sammel-Lieferungen')) {
+    const sammelLieferungFilterQuery = queryFromFilter({
+      table: 'sammel_lieferung',
+      filter: store.filter.sammel_lieferung.toJSON(),
+    })
+    const sammelLieferungs = await db.collections
+      .get('sammel_lieferung')
+      .query(...sammelLieferungFilterQuery)
+      .fetch()
+    sammelLieferung = buildSammelLieferung({
+      store,
+      sammelLieferungs: sammelLieferungs.sort((a, b) =>
+        lieferungSort({ a, b }),
+      ),
+    })
+  }
 
   // event
-  const eventFolder = buildEventFolder({ store })
-  const eventFilterQuery = queryFromFilter({
-    table: 'event',
-    filter: store.filter.event.toJSON(),
-  })
-  const events = await db.collections
-    .get('event')
-    .query(...eventFilterQuery)
-    .fetch()
-  const event = buildEvent({
-    store,
-    events: events.sort((a, b) => eventSort({ a, b })),
-  })
+  if (openNodes.some((n) => n[0] === 'Events')) {
+    const eventFilterQuery = queryFromFilter({
+      table: 'event',
+      filter: store.filter.event.toJSON(),
+    })
+    const events = await db.collections
+      .get('event')
+      .query(...eventFilterQuery)
+      .fetch()
+    event = buildEvent({
+      store,
+      events: events.sort((a, b) => eventSort({ a, b })),
+    })
+  }
 
   // person
-  const personFolder = buildPersonFolder({ store })
-  const personFilterQuery = queryFromFilter({
-    table: 'person',
-    filter: store.filter.person.toJSON(),
-  })
-  const persons = await db.collections
-    .get('person')
-    .query(...personFilterQuery)
-    .fetch()
-  const personsSorted = persons.sort((a, b) => personSort({ a, b }))
-  const person = buildPerson({
-    store,
-    persons: personsSorted,
-  })
+  if (openNodes.some((n) => n[0] === 'Personen')) {
+    const personFilterQuery = queryFromFilter({
+      table: 'person',
+      filter: store.filter.person.toJSON(),
+    })
+    const persons = await db.collections
+      .get('person')
+      .query(...personFilterQuery)
+      .fetch()
+    const personsSorted = persons.sort((a, b) => personSort({ a, b }))
+    person = buildPerson({
+      store,
+      persons: personsSorted,
+    })
+  }
 
   /*console.log('buildNodesWm', {
     nodes,
