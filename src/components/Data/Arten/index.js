@@ -7,8 +7,6 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import SimpleBar from 'simplebar-react'
-import sortBy from 'lodash/sortBy'
-import { first as first$ } from 'rxjs/operators'
 import { merge } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
