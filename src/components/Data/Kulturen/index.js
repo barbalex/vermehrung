@@ -16,8 +16,7 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
+import notDeletedQuery from '../../../utils/notDeletedQuery'
 import queryFromFilter from '../../../utils/queryFromFilter'
 import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 import personFullname from '../../../utils/personFullname'
@@ -69,7 +68,6 @@ const StyledList = styled(FixedSizeList)`
 `
 
 const singleRowHeight = 48
-const initialKulturState = { kulturs: [], kultursFiltered: [] }
 
 const Kulturen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -82,75 +80,98 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { kultur: kulturFilter } = store.filter
 
-  // use object with two keys to only render once on setting
-  const [kultursState, setKulturState] = useState(initialKulturState)
+  const [kulturs, setKulturs] = useState([])
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const collection = db.collections.get('kultur')
-    const query = gartenIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['garten']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('garten', 'id', gartenIdInActiveNodeArray),
-          ),
-        )
-      : artIdInActiveNodeArray
-      ? collection.query(
-          Q.experimentalJoinTables(['art']),
-          Q.and(
-            notDeletedOrHasConflictQuery,
-            Q.on('art', 'id', artIdInActiveNodeArray),
-          ),
-        )
-      : collection.query(notDeletedOrHasConflictQuery)
-    const subscription = query.observe().subscribe(async (kulturs) => {
-      const kultursFiltered = kulturs.filter((value) =>
-        storeFilter({ value, filter: kulturFilter, table: 'kultur' }),
-      )
-      const kulturSorters = await Promise.all(
-        kultursFiltered.map(async (kultur) => {
-          const art = await kultur.art.fetch()
-          const ae_art = art ? await art.ae_art.fetch() : undefined
-          const aeArtLabel = aeArtLabelFromAeArt({ ae_art })
-            ?.toString()
-            ?.toLowerCase()
-          const herkunft = await kultur.herkunft.fetch()
-          const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
-          const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
-          const herkunftLokalname = herkunft?.lokalname
-            ?.toString()
-            ?.toLowerCase()
-          const garten = await kultur.garten.fetch()
-          const gartenName = garten?.name?.toString()?.toLowerCase()
-          const gartenPerson = garten ? await garten.person.fetch() : undefined
-          const gartenPersonFullname = personFullname(gartenPerson)
-            ?.toString()
-            ?.toLowerCase()
-          const sort = [
-            aeArtLabel,
-            herkunftNr,
-            herkunftGemeinde,
-            herkunftLokalname,
-            gartenName,
-            gartenPersonFullname,
-          ]
-          return { id: kultur.id, sort }
-        }),
-      )
-      const kultursSorted = sortBy(
-        kultursFiltered,
-        (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
-      )
-      setKulturState({ kulturs, kultursFiltered: kultursSorted })
+    const filterQuery = queryFromFilter({
+      table: 'kultur',
+      filter: kulturFilter.toJSON(),
     })
-    return () => subscription.unsubscribe()
+    const hierarchyQuery = gartenIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['garten']),
+          Q.on('garten', 'id', gartenIdInActiveNodeArray),
+        ]
+      : artIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['art']),
+          Q.on('art', 'id', artIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.collections.get('kultur')
+    const countObservable = collection
+      .query(notDeletedQuery)
+      .observeCount(false)
+    const dataObservable = collection
+      .query(...filterQuery, ...hierarchyQuery)
+      .observeWithColumns([
+        'art_id',
+        'herkunft_id',
+        'garten_id',
+        'zwischenlager',
+      ])
+    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allSubscription = allCollectionsObservable.subscribe(
+      async (result) => {
+        if (Array.isArray(result)) {
+          const kulturSorters = await Promise.all(
+            result.map(async (kultur) => {
+              const art = await kultur.art.fetch()
+              const ae_art = art ? await art.ae_art.fetch() : undefined
+              const aeArtLabel = aeArtLabelFromAeArt({ ae_art })
+                ?.toString()
+                ?.toLowerCase()
+              const herkunft = await kultur.herkunft.fetch()
+              const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
+              const herkunftGemeinde = herkunft?.gemeinde
+                ?.toString()
+                ?.toLowerCase()
+              const herkunftLokalname = herkunft?.lokalname
+                ?.toString()
+                ?.toLowerCase()
+              const garten = await kultur.garten.fetch()
+              const gartenName = garten?.name?.toString()?.toLowerCase()
+              const gartenPerson = garten
+                ? await garten.person.fetch()
+                : undefined
+              const gartenPersonFullname = personFullname(gartenPerson)
+                ?.toString()
+                ?.toLowerCase()
+              const sort = [
+                aeArtLabel,
+                herkunftNr,
+                herkunftGemeinde,
+                herkunftLokalname,
+                gartenName,
+                gartenPersonFullname,
+              ]
+              return { id: kultur.id, sort }
+            }),
+          )
+          const kultursSorted = sortBy(
+            result,
+            (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
+          )
+          setKulturs(kultursSorted)
+        } else if (!isNaN(result)) {
+          setCount(result)
+        }
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [
+    db.collections,
     // need to rerender if any of the values of kulturFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(kulturFilter)])
+    ...Object.values(kulturFilter),
+    kulturFilter,
+    gartenIdInActiveNodeArray,
+    artIdInActiveNodeArray,
+  ])
 
-  const { kulturs, kultursFiltered } = kultursState
-  const totalNr = kulturs.length
-  const filteredNr = kultursFiltered.length
+  const totalNr = count
+  const filteredNr = kulturs.length
 
   const onClickUp = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
@@ -204,7 +225,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={kultursFiltered.length}
+                  itemCount={kulturs.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -215,8 +236,8 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={kultursFiltered[index]}
-                      last={index === kultursFiltered.length - 1}
+                      row={kulturs[index]}
+                      last={index === kulturs.length - 1}
                     />
                   )}
                 </StyledList>
