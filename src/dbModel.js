@@ -26,6 +26,7 @@ import artLabelFromAeArt from './utils/artLabelFromAeArt'
 import lieferungLabelFromLieferung from './utils/lieferungLabelFromLieferung'
 import teilkulturLabelFromTeilkultur from './utils/teilkulturLabelFromTeilkultur'
 import kulturLabelFromKultur from './utils/kulturLabelFromKultur'
+import kulturLabelFromKulturUnderArt from './utils/kulturLabelFromKulturUnderArt'
 import sammlungLabelFromSammlung from './utils/sammlungLabelFromSammlung'
 import sammelLieferungLabelFromSammelLieferung from './utils/sammelLieferungLabelFromSammelLieferung'
 import toPgArray from './utils/toPgArray'
@@ -767,6 +768,22 @@ export class Kultur extends Model {
         gartenPerson,
         art,
         aeArt,
+        herkunft,
+      })
+    }),
+  )
+
+  @lazy labelUnderArt = this.observe().pipe(
+    distinctUntilChanged(),
+    map$(async (kultur) => {
+      const garten = await kultur.garten.fetch()
+      const gartenPerson = garten ? await garten.person.fetch() : undefined
+      let herkunft = await kultur.herkunft.fetch()
+
+      return kulturLabelFromKulturUnderArt({
+        kultur,
+        garten,
+        gartenPerson,
         herkunft,
       })
     }),

@@ -2,6 +2,10 @@ import sortBy from 'lodash/sortBy'
 import { first as first$ } from 'rxjs/operators'
 import { getSnapshot } from 'mobx-state-tree'
 
+import buildArtSammlungFolder from './art/sammlung/folder'
+import buildArtSammlung from './art/sammlung'
+import buildArtKulturFolder from './art/kultur/folder'
+import buildArtKultur from './art/kultur'
 import buildArtFolder from './art/folder'
 import buildArt from './art'
 import buildHerkunftFolder from './herkunft/folder'
@@ -34,7 +38,8 @@ import lieferungSort from '../../../utils/lieferungSort'
 import eventSort from '../../../utils/eventSort'
 import personSort from '../../../utils/personSort'
 import personFullname from '../../../utils/personFullname'
-import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
+import artLabelFromAeArt from '../../../utils/artLabelFromAeArt'
+import kultursSortedFromKulturs from '../../../utils/kultursSortedFromKulturs'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -47,15 +52,19 @@ const compare = (a, b) => {
 
 const buildNodes = async ({ store }) => {
   const { db } = store
-  const { activeNodeArray, openNodes: openNodesRaw } = store.tree
+  const { activeNodeArray, openNodes: openNodesRaw, showArt } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
-  console.log('nodeswm', {
+  console.log('buildNodes', {
     activeNodeArray: activeNodeArray.slice(),
     openNodes,
   })
 
-  const artFolder = buildArtFolder({ store })
+  let artFolder = []
   let art = []
+  let artKulturFolder = []
+  let artKultur = []
+  let artSammlung = []
+  let artSammlungFolder = []
   const herkunftFolder = buildHerkunftFolder({ store })
   let herkunft = []
   const sammlungFolder = buildSammlungFolder({ store })
@@ -78,26 +87,82 @@ const buildNodes = async ({ store }) => {
   let sammelLieferung = []
 
   // art
-  if (openNodes.some((n) => n[0] === 'Arten')) {
-    const artFilterQuery = queryFromFilter({
-      table: 'art',
-      filter: store.filter.art.toJSON(),
-    })
-    const arts = await db.collections
-      .get('art')
-      .query(...artFilterQuery)
-      .fetch()
-    const artSorters = await Promise.all(
-      arts.map(async (art) => {
-        const label = await art.label.pipe(first$()).toPromise()
-        return { id: art.id, label }
-      }),
+  if (showArt) {
+    artFolder = buildArtFolder({ store })
+    const artFolderIsOpen = openNodes.some(
+      (n) => n[0] === 'Arten' && n.length === 1,
     )
-    const artsSorted = sortBy(
-      arts,
-      (art) => artSorters.find((s) => s.id === art.id).label,
-    )
-    art = await buildArt({ store, arts: artsSorted })
+    if (artFolderIsOpen) {
+      const artFilterQuery = queryFromFilter({
+        table: 'art',
+        filter: store.filter.art.toJSON(),
+      })
+      const arts = await db.collections
+        .get('art')
+        .query(...artFilterQuery)
+        .fetch()
+      const artSorters = await Promise.all(
+        arts.map(async (art) => {
+          const label = await art.label.pipe(first$()).toPromise()
+          return { id: art.id, label }
+        }),
+      )
+      const artsSorted = sortBy(
+        arts,
+        (art) => artSorters.find((s) => s.id === art.id).label,
+      )
+      art = await buildArt({ store, arts: artsSorted })
+      const openArtNodes = openNodes.filter(
+        (n) => n[0] === 'Arten' && n.length === 2,
+      )
+      for (const artNode of openArtNodes) {
+        const artId = artNode[1]
+        const parentArt = artsSorted.find((a) => a.id === artId)
+        const artIndex = art.findIndex((a) => a.id === artId)
+        const kulturFilterQuery = queryFromFilter({
+          table: 'kultur',
+          filter: store.filter.kultur.toJSON(),
+        })
+        const kulturs = await parentArt.kulturs
+          .extend(...kulturFilterQuery)
+          .fetch()
+        const kultursSorted = await kultursSortedFromKulturs(kulturs)
+
+        artKulturFolder.push(
+          buildArtKulturFolder({
+            children: kultursSorted,
+            artIndex,
+            artId,
+          }),
+        )
+        const artKulturFolderIsOpen = openNodes.some(
+          (n) => n[0] === 'Arten' && n[1] === artId && n[2] === 'Kulturen',
+        )
+        if (artKulturFolderIsOpen) {
+          const kulturNodes = await Promise.all(
+            kultursSorted.map(
+              async (kultur, kulturIndex) =>
+                await buildArtKultur({ kultur, kulturIndex, artId, artIndex }),
+            ),
+          )
+          artKultur.push(...kulturNodes)
+        }
+        const sammlungs = await parentArt.sammlungs.fetch()
+        artSammlungFolder.push(
+          buildArtSammlungFolder({
+            children: sammlungs,
+            artIndex,
+            artId,
+          }),
+        )
+        const artSammlungFolderIsOpen = !!openNodes.find(
+          (n) => n.length === 3 && n[1] === artId && n[2] === 'Sammlungen',
+        )
+        if (artSammlungFolderIsOpen) {
+          // TODO:
+        }
+      }
+    }
   }
 
   // herkunft
@@ -198,38 +263,7 @@ const buildNodes = async ({ store }) => {
       .get('kultur')
       .query(...kulturFilterQuery)
       .fetch()
-    const kulturSorters = await Promise.all(
-      kulturs.map(async (kultur) => {
-        const art = await kultur.art.fetch()
-        const ae_art = art ? await art.ae_art.fetch() : undefined
-        const aeArtLabel = aeArtLabelFromAeArt({ ae_art })
-          ?.toString()
-          ?.toLowerCase()
-        const herkunft = await kultur.herkunft.fetch()
-        const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
-        const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
-        const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
-        const garten = await kultur.garten.fetch()
-        const gartenName = garten?.name?.toString()?.toLowerCase()
-        const gartenPerson = garten ? await garten.person.fetch() : undefined
-        const gartenPersonFullname = personFullname(gartenPerson)
-          ?.toString()
-          ?.toLowerCase()
-        const sort = [
-          aeArtLabel,
-          herkunftNr,
-          herkunftGemeinde,
-          herkunftLokalname,
-          gartenName,
-          gartenPersonFullname,
-        ]
-        return { id: kultur.id, sort }
-      }),
-    )
-    const kultursSorted = sortBy(
-      kulturs,
-      (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
-    )
+    const kultursSorted = await kultursSortedFromKulturs(kulturs)
     kultur = await buildKultur({ store, kulturs: kultursSorted })
   }
 
@@ -333,14 +367,17 @@ const buildNodes = async ({ store }) => {
   }
 
   /*console.log('buildNodesWm', {
-    nodes,
-    herkunft,
     art,
     artFolder,
+    artKulturFolder,
   })*/
   const nodes = [
     ...artFolder,
     ...art,
+    ...artSammlungFolder,
+    ...artSammlung,
+    ...artKulturFolder,
+    ...artKultur,
     ...herkunftFolder,
     ...herkunft,
     ...sammlungFolder,

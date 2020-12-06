@@ -18,8 +18,9 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
 import queryFromFilter from '../../../utils/queryFromFilter'
-import aeArtLabelFromAeArt from '../../../utils/artLabelFromAeArt'
+import artLabelFromAeArt from '../../../utils/artLabelFromAeArt'
 import personFullname from '../../../utils/personFullname'
+import kultursSortedFromKulturs from '../../../utils/kultursSortedFromKulturs'
 
 const Container = styled.div`
   height: 100%;
@@ -114,44 +115,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
     const allSubscription = allCollectionsObservable.subscribe(
       async (result) => {
         if (Array.isArray(result)) {
-          const kulturSorters = await Promise.all(
-            result.map(async (kultur) => {
-              const art = await kultur.art.fetch()
-              const ae_art = art ? await art.ae_art.fetch() : undefined
-              const aeArtLabel = aeArtLabelFromAeArt({ ae_art })
-                ?.toString()
-                ?.toLowerCase()
-              const herkunft = await kultur.herkunft.fetch()
-              const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
-              const herkunftGemeinde = herkunft?.gemeinde
-                ?.toString()
-                ?.toLowerCase()
-              const herkunftLokalname = herkunft?.lokalname
-                ?.toString()
-                ?.toLowerCase()
-              const garten = await kultur.garten.fetch()
-              const gartenName = garten?.name?.toString()?.toLowerCase()
-              const gartenPerson = garten
-                ? await garten.person.fetch()
-                : undefined
-              const gartenPersonFullname = personFullname(gartenPerson)
-                ?.toString()
-                ?.toLowerCase()
-              const sort = [
-                aeArtLabel,
-                herkunftNr,
-                herkunftGemeinde,
-                herkunftLokalname,
-                gartenName,
-                gartenPersonFullname,
-              ]
-              return { id: kultur.id, sort }
-            }),
-          )
-          const kultursSorted = sortBy(
-            result,
-            (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
-          )
+          const kultursSorted = await kultursSortedFromKulturs(result)
           setKulturs(kultursSorted)
         } else if (!isNaN(result)) {
           setCount(result)
