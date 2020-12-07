@@ -315,7 +315,10 @@ export class Lieferung extends Model {
   static associations = {
     sammlung: { type: 'belongs_to', key: 'von_sammlung_id' },
     sammel_lieferung: { type: 'belongs_to', key: 'sammel_lieferung_id' },
-    von_kultur: { type: 'belongs_to', key: 'von_kultur_id' },
+    // not possible to build two associations to one table, see:
+    // https://github.com/Nozbe/WatermelonDB/issues/885
+    kultur: { type: 'belongs_to', key: 'von_kultur_id' },
+    // this association will not do anything becaus no table with this name exists
     nach_kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
     person: { type: 'belongs_to', key: 'person_id' },
     lieferung_file: { type: 'has_many', foreignKey: 'lieferung_id' },
@@ -349,8 +352,8 @@ export class Lieferung extends Model {
 
   @relation('sammlung', 'von_sammlung_id') sammlung
   @relation('sammel_lieferung', 'sammel_lieferung_id') sammel_lieferung
-  @relation('sammlung', 'von_kultur_id') von_kultur
-  @relation('sammlung', 'nach_kultur_id') nach_kultur
+  @relation('kultur', 'von_kultur_id') von_kultur
+  @relation('kultur', 'nach_kultur_id') nach_kultur
   @relation('person', 'person_id') person
   @children('lieferung_file') files
 
@@ -710,7 +713,10 @@ export class Kultur extends Model {
     garten: { type: 'belongs_to', key: 'garten_id' },
     art: { type: 'belongs_to', key: 'art_id' },
     herkunft: { type: 'belongs_to', key: 'herkunft_id' },
-    anlieferung: { type: 'has_many', foreignKey: 'von_kultur_id' },
+    // not possible to build two associations to one table, see:
+    // https://github.com/Nozbe/WatermelonDB/issues/885
+    lieferung: { type: 'has_many', foreignKey: 'von_kultur_id' },
+    // this association will not do anything becaus no table with this name exists
     auslieferung: { type: 'has_many', foreignKey: 'nach_kultur_id' },
     teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
     zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
