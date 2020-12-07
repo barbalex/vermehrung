@@ -2,6 +2,8 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import buildArtSammlungFolder from './art/sammlung/folder'
 import buildArtSammlung from './art/sammlung'
+import buildArtSammlungAuslieferungFolder from './art/sammlung/auslieferung/folder'
+import buildArtSammlungAuslieferung from './art/sammlung/auslieferung'
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtFolder from './art/folder'
@@ -58,16 +60,18 @@ const buildNodes = async ({ store }) => {
     openNodes,
   })
 
-  let artFolder = []
-  let art = []
-  let artKulturFolder = []
-  let artKultur = []
-  let artSammlung = []
-  let artSammlungFolder = []
-  const herkunftFolder = buildHerkunftFolder({ store })
-  let herkunft = []
-  const sammlungFolder = buildSammlungFolder({ store })
-  let sammlung = []
+  let artFolderNodes = []
+  let artNodes = []
+  let artKulturFolderNodes = []
+  let artKulturNodes = []
+  let artSammlungFolderNodes = []
+  let artSammlungNodes = []
+  let artSammlungAuslieferungFolderNodes = []
+  let artSammlungAuslieferungNodes = []
+  const herkunftFolderNodes = buildHerkunftFolder({ store })
+  let herkunftNodes = []
+  const sammlungFolderNodes = buildSammlungFolder({ store })
+  let sammlungNodes = []
   const gartenFolder = buildGartenFolder({ store })
   let garten = []
   const kulturFolder = buildKulturFolder({ store })
@@ -87,11 +91,12 @@ const buildNodes = async ({ store }) => {
 
   // 1 art
   if (showArt) {
-    artFolder = buildArtFolder({ store })
+    artFolderNodes = buildArtFolder({ store })
     const artFolderIsOpen = openNodes.some(
-      (n) => n[0] === 'Arten' && n.length === 1,
+      (n) => n.length === 1 && n[0] === 'Arten',
     )
     if (artFolderIsOpen) {
+      // build art nodes
       const artFilterQuery = queryFromFilter({
         table: 'art',
         filter: store.filter.art.toJSON(),
@@ -101,14 +106,16 @@ const buildNodes = async ({ store }) => {
         .query(...artFilterQuery)
         .fetch()
       const artsSorted = await artsSortedFromArts(arts)
-      art = await buildArt({ store, arts: artsSorted })
+      artNodes = await buildArt({ store, arts: artsSorted })
+
+      // on to child nodes
       const openArtNodes = openNodes.filter(
         (n) => n[0] === 'Arten' && n.length === 2,
       )
       for (const artNode of openArtNodes) {
         const artId = artNode[1]
         const parentArt = artsSorted.find((a) => a.id === artId)
-        const artIndex = art.findIndex((a) => a.id === artId)
+        const artIndex = artNodes.findIndex((a) => a.id === artId)
 
         // 1.1 art > sammlung
         const sammlungFilterQuery = queryFromFilter({
@@ -119,18 +126,22 @@ const buildNodes = async ({ store }) => {
           .extend(...sammlungFilterQuery)
           .fetch()
         const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-        artSammlungFolder.push(
+        artSammlungFolderNodes.push(
           buildArtSammlungFolder({
             children: sammlungsSorted,
             artIndex,
             artId,
           }),
         )
-        const artSammlungFolderIsOpen = !!openNodes.find(
-          (n) => n.length === 3 && n[1] === artId && n[2] === 'Sammlungen',
+        const artSammlungFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Arten' &&
+            n[1] === artId &&
+            n[2] === 'Sammlungen',
         )
         if (artSammlungFolderIsOpen) {
-          const sammlungNodes = await Promise.all(
+          const myArtSammlungNodes = await Promise.all(
             sammlungsSorted.map(
               async (sammlung, sammlungIndex) =>
                 await buildArtSammlung({
@@ -141,7 +152,62 @@ const buildNodes = async ({ store }) => {
                 }),
             ),
           )
-          artSammlung.push(...sammlungNodes)
+          artSammlungNodes.push(...myArtSammlungNodes)
+          const openArtSammlungNodes = openNodes.filter(
+            (n) => n[0] === 'Arten' && n[2] === 'Sammlungen' && n.length === 4,
+          )
+          for (const artSammlungNode of openArtSammlungNodes) {
+            const sammlungId = artSammlungNode[3]
+            const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
+            const sammlungIndex = myArtSammlungNodes.findIndex(
+              (s) => s.id === `${artId}${sammlungId}`,
+            )
+            const lieferungFilterQuery = queryFromFilter({
+              table: 'lieferung',
+              filter: store.filter.lieferung.toJSON(),
+            })
+            const lieferungs = await sammlung.lieferungs
+              .extend(...lieferungFilterQuery)
+              .fetch()
+            const artSammlungAuslieferungFolderNode = await buildArtSammlungAuslieferungFolder(
+              {
+                sammlungId,
+                sammlungIndex,
+                artId,
+                artIndex,
+                children: lieferungs,
+              },
+            )
+            artSammlungAuslieferungFolderNodes.push(
+              artSammlungAuslieferungFolderNode,
+            )
+            const artSammlungAuslieferungFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Arten' &&
+                n[1] === artId &&
+                n[2] === 'Sammlungen' &&
+                n[3] === sammlungId &&
+                n[4] === 'Aus-Lieferungen',
+            )
+            if (artSammlungAuslieferungFolderIsOpen) {
+              const lieferungsSorted = lieferungs.sort((a, b) =>
+                lieferungSort({ a, b }),
+              )
+              const artSammlungLieferungNodes = lieferungsSorted.map(
+                (lieferung, lieferungIndex) =>
+                  buildArtSammlungAuslieferung({
+                    lieferung,
+                    lieferungIndex,
+                    sammlungId,
+                    sammlungIndex,
+                    artId,
+                    artIndex,
+                  }),
+              )
+              artSammlungAuslieferungNodes.push(...artSammlungLieferungNodes)
+            }
+          }
         }
 
         // 1.2 art > kultur
@@ -153,7 +219,7 @@ const buildNodes = async ({ store }) => {
           .extend(...kulturFilterQuery)
           .fetch()
         const kultursSorted = await kultursSortedFromKulturs(kulturs)
-        artKulturFolder.push(
+        artKulturFolderNodes.push(
           buildArtKulturFolder({
             children: kultursSorted,
             artIndex,
@@ -170,7 +236,7 @@ const buildNodes = async ({ store }) => {
                 await buildArtKultur({ kultur, kulturIndex, artId, artIndex }),
             ),
           )
-          artKultur.push(...kulturNodes)
+          artKulturNodes.push(...kulturNodes)
         }
       }
     }
@@ -191,7 +257,7 @@ const buildNodes = async ({ store }) => {
         }),
       )
       .sort(herkunftSort)
-    herkunft = buildHerkunft({ store, herkunfts: herkunftsSorted })
+    herkunftNodes = buildHerkunft({ store, herkunfts: herkunftsSorted })
   }
 
   // 3 sammlung
@@ -205,7 +271,7 @@ const buildNodes = async ({ store }) => {
       .query(...sammlungFilterQuery)
       .fetch()
     const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-    sammlung = await buildSammlung({ store, sammlungs: sammlungsSorted })
+    sammlungNodes = await buildSammlung({ store, sammlungs: sammlungsSorted })
   }
 
   // 4 garten
@@ -335,22 +401,23 @@ const buildNodes = async ({ store }) => {
     })
   }
 
-  /*console.log('buildNodesWm', {
-    art,
-    artFolder,
-    artKulturFolder,
-  })*/
+  console.log('buildNodesWm', {
+    artSammlungAuslieferungNodes,
+    artSammlungAuslieferungFolderNodes,
+  })
   const nodes = [
-    ...artFolder,
-    ...art,
-    ...artSammlungFolder,
-    ...artSammlung,
-    ...artKulturFolder,
-    ...artKultur,
-    ...herkunftFolder,
-    ...herkunft,
-    ...sammlungFolder,
-    ...sammlung,
+    ...artFolderNodes,
+    ...artNodes,
+    ...artSammlungFolderNodes,
+    ...artSammlungNodes,
+    ...artSammlungAuslieferungFolderNodes,
+    ...artSammlungAuslieferungNodes,
+    ...artKulturFolderNodes,
+    ...artKulturNodes,
+    ...herkunftFolderNodes,
+    ...herkunftNodes,
+    ...sammlungFolderNodes,
+    ...sammlungNodes,
     ...gartenFolder,
     ...garten,
     ...kulturFolder,
