@@ -85,7 +85,7 @@ const buildNodes = async ({ store }) => {
   const sammelLieferungFolder = buildSammelLieferungFolder({ store })
   let sammelLieferung = []
 
-  // art
+  // 1 art
   if (showArt) {
     artFolder = buildArtFolder({ store })
     const artFolderIsOpen = openNodes.some(
@@ -110,36 +110,7 @@ const buildNodes = async ({ store }) => {
         const parentArt = artsSorted.find((a) => a.id === artId)
         const artIndex = art.findIndex((a) => a.id === artId)
 
-        // art > kultur
-        const kulturFilterQuery = queryFromFilter({
-          table: 'kultur',
-          filter: store.filter.kultur.toJSON(),
-        })
-        const kulturs = await parentArt.kulturs
-          .extend(...kulturFilterQuery)
-          .fetch()
-        const kultursSorted = await kultursSortedFromKulturs(kulturs)
-        artKulturFolder.push(
-          buildArtKulturFolder({
-            children: kultursSorted,
-            artIndex,
-            artId,
-          }),
-        )
-        const artKulturFolderIsOpen = openNodes.some(
-          (n) => n[0] === 'Arten' && n[1] === artId && n[2] === 'Kulturen',
-        )
-        if (artKulturFolderIsOpen) {
-          const kulturNodes = await Promise.all(
-            kultursSorted.map(
-              async (kultur, kulturIndex) =>
-                await buildArtKultur({ kultur, kulturIndex, artId, artIndex }),
-            ),
-          )
-          artKultur.push(...kulturNodes)
-        }
-
-        // art > sammlung
+        // 1.1 art > sammlung
         const sammlungFilterQuery = queryFromFilter({
           table: 'sammlung',
           filter: store.filter.sammlung.toJSON(),
@@ -172,11 +143,40 @@ const buildNodes = async ({ store }) => {
           )
           artSammlung.push(...sammlungNodes)
         }
+
+        // 1.2 art > kultur
+        const kulturFilterQuery = queryFromFilter({
+          table: 'kultur',
+          filter: store.filter.kultur.toJSON(),
+        })
+        const kulturs = await parentArt.kulturs
+          .extend(...kulturFilterQuery)
+          .fetch()
+        const kultursSorted = await kultursSortedFromKulturs(kulturs)
+        artKulturFolder.push(
+          buildArtKulturFolder({
+            children: kultursSorted,
+            artIndex,
+            artId,
+          }),
+        )
+        const artKulturFolderIsOpen = openNodes.some(
+          (n) => n[0] === 'Arten' && n[1] === artId && n[2] === 'Kulturen',
+        )
+        if (artKulturFolderIsOpen) {
+          const kulturNodes = await Promise.all(
+            kultursSorted.map(
+              async (kultur, kulturIndex) =>
+                await buildArtKultur({ kultur, kulturIndex, artId, artIndex }),
+            ),
+          )
+          artKultur.push(...kulturNodes)
+        }
       }
     }
   }
 
-  // herkunft
+  // 2 herkunft
   if (openNodes.some((n) => n[0] === 'Herkuenfte')) {
     const herkunfts = await db.collections
       .get('herkunft')
@@ -194,7 +194,7 @@ const buildNodes = async ({ store }) => {
     herkunft = buildHerkunft({ store, herkunfts: herkunftsSorted })
   }
 
-  // sammlung
+  // 3 sammlung
   if (openNodes.some((n) => n[0] === 'Sammlungen')) {
     const sammlungFilterQuery = queryFromFilter({
       table: 'sammlung',
@@ -208,7 +208,7 @@ const buildNodes = async ({ store }) => {
     sammlung = await buildSammlung({ store, sammlungs: sammlungsSorted })
   }
 
-  // garten
+  // 4 garten
   if (openNodes.some((n) => n[0] === 'Gaerten')) {
     const gartenFilterQuery = queryFromFilter({
       table: 'garten',
@@ -222,7 +222,7 @@ const buildNodes = async ({ store }) => {
     garten = await buildGarten({ store, gartens: gartensSorted })
   }
 
-  // kultur
+  // 5 kultur
   if (openNodes.some((n) => n[0] === 'Kulturen')) {
     const kulturFilterQuery = queryFromFilter({
       table: 'kultur',
@@ -236,7 +236,7 @@ const buildNodes = async ({ store }) => {
     kultur = await buildKultur({ store, kulturs: kultursSorted })
   }
 
-  // teilkultur
+  // 6 teilkultur
   if (openNodes.some((n) => n[0] === 'Teilkulturen')) {
     const teilkulturFilterQuery = queryFromFilter({
       table: 'teilkultur',
@@ -252,7 +252,7 @@ const buildNodes = async ({ store }) => {
     })
   }
 
-  // zaehlung
+  // 7 zaehlung
   if (openNodes.some((n) => n[0] === 'Zaehlungen')) {
     const zaehlungFilterQuery = queryFromFilter({
       table: 'zaehlung',
@@ -268,7 +268,7 @@ const buildNodes = async ({ store }) => {
     })
   }
 
-  // lieferung
+  // 8 lieferung
   if (openNodes.some((n) => n[0] === 'Lieferungen')) {
     const lieferungFilterQuery = queryFromFilter({
       table: 'lieferung',
@@ -284,7 +284,7 @@ const buildNodes = async ({ store }) => {
     })
   }
 
-  // sammelLieferung
+  // 9 sammelLieferung
   if (openNodes.some((n) => n[0] === 'Sammel-Lieferungen')) {
     const sammelLieferungFilterQuery = queryFromFilter({
       table: 'sammel_lieferung',
@@ -302,7 +302,7 @@ const buildNodes = async ({ store }) => {
     })
   }
 
-  // event
+  // 10 event
   if (openNodes.some((n) => n[0] === 'Events')) {
     const eventFilterQuery = queryFromFilter({
       table: 'event',
@@ -318,7 +318,7 @@ const buildNodes = async ({ store }) => {
     })
   }
 
-  // person
+  // 11 person
   if (openNodes.some((n) => n[0] === 'Personen')) {
     const personFilterQuery = queryFromFilter({
       table: 'person',
