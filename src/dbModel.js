@@ -29,6 +29,7 @@ import kulturLabelFromKultur from './utils/kulturLabelFromKultur'
 import kulturLabelFromKulturUnderArt from './utils/kulturLabelFromKulturUnderArt'
 import sammlungLabelFromSammlung from './utils/sammlungLabelFromSammlung'
 import sammelLieferungLabelFromSammelLieferung from './utils/sammelLieferungLabelFromSammelLieferung'
+import zaehlungLabelFromZaehlung from './utils/zaehlungLabelFromZaehlung'
 import toPgArray from './utils/toPgArray'
 import deleteAccount from './utils/deleteAccount'
 import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
@@ -1007,6 +1008,18 @@ export class Zaehlung extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @children('teilzaehlung') teilzaehlungs
+
+  @lazy label = this.observe().pipe(
+    distinctUntilChanged(),
+    map$(async (zaehlung) => {
+      const teilzaehlungs = await zaehlung.teilzaehlungs.fetch()
+
+      return await zaehlungLabelFromZaehlung({
+        zaehlung,
+        teilzaehlungs,
+      })
+    }),
+  )
 
   @action async removeConflict(_rev) {
     await this.update((row) => {
