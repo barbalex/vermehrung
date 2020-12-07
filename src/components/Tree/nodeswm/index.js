@@ -134,7 +134,7 @@ const buildNodes = async ({ store }) => {
       )
       for (const artNode of openArtNodes) {
         const artId = artNode[1]
-        const parentArt = artsSorted.find((a) => a.id === artId)
+        const art = artsSorted.find((a) => a.id === artId)
         const artIndex = artNodes.findIndex((a) => a.id === artId)
 
         // 1.1 art > sammlung
@@ -142,7 +142,7 @@ const buildNodes = async ({ store }) => {
           table: 'sammlung',
           filter: store.filter.sammlung.toJSON(),
         })
-        const sammlungs = await parentArt.sammlungs
+        const sammlungs = await art.sammlungs
           .extend(...sammlungFilterQuery)
           .fetch()
         const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
@@ -237,9 +237,7 @@ const buildNodes = async ({ store }) => {
           table: 'kultur',
           filter: store.filter.kultur.toJSON(),
         })
-        const kulturs = await parentArt.kulturs
-          .extend(...kulturFilterQuery)
-          .fetch()
+        const kulturs = await art.kulturs.extend(...kulturFilterQuery).fetch()
         const kultursSorted = await kultursSortedFromKulturs(kulturs)
         artKulturFolderNodes.push(
           buildArtKulturFolder({
@@ -263,7 +261,7 @@ const buildNodes = async ({ store }) => {
             ),
           )
           artKulturNodes.push(...kulturNodes)
-          // auslieferung folder node
+
           const openArtKulturNodes = openNodes.filter(
             (n) => n[0] === 'Arten' && n[2] === 'Kulturen' && n.length === 4,
           )
@@ -522,6 +520,17 @@ const buildNodes = async ({ store }) => {
       )
       .sort(herkunftSort)
     herkunftNodes = buildHerkunft({ store, herkunfts: herkunftsSorted })
+
+    // on to child nodes
+    const openHerkunftNodes = openNodes.filter(
+      (n) => n[0] === 'Herkuenfte' && n.length === 2,
+    )
+    for (const herkunftNode of openHerkunftNodes) {
+      const herkunftId = herkunftNode[1]
+      const herkunft = herkunftsSorted.find((a) => a.id === herkunftId)
+      const herkunftIndex = herkunftNodes.findIndex((a) => a.id === herkunftId)
+      // TODO:
+    }
   }
 
   // 3 sammlung
