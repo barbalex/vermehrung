@@ -5,9 +5,9 @@ const sammlung = {
   columns: [
     // can not add id here
     // see: https://github.com/Nozbe/WatermelonDB/issues/7#issuecomment-419248401
-    { name: 'art_id', type: 'string', isOptional: true },
-    { name: 'person_id', type: 'string', isOptional: true },
-    { name: 'herkunft_id', type: 'string', isOptional: true },
+    { name: 'art_id', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'person_id', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'herkunft_id', type: 'string', isOptional: true, isIndexed: true },
     { name: 'nr', type: 'string', isOptional: true },
     { name: 'datum', type: 'string', isOptional: true, isIndexed: true },
     { name: 'von_anzahl_individuen', type: 'number', isOptional: true },

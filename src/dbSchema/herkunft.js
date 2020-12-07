@@ -5,9 +5,9 @@ const herkunft = {
   columns: [
     // can not add id here
     // see: https://github.com/Nozbe/WatermelonDB/issues/7#issuecomment-419248401
-    { name: 'nr', type: 'string', isOptional: true },
-    { name: 'lokalname', type: 'string', isOptional: true },
-    { name: 'gemeinde', type: 'string', isOptional: true },
+    { name: 'nr', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'lokalname', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'gemeinde', type: 'string', isOptional: true, isIndexed: true },
     { name: 'kanton', type: 'string', isOptional: true },
     { name: 'land', type: 'string', isOptional: true },
     { name: 'geom_point', type: 'string', isOptional: true },

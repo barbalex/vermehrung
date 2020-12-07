@@ -5,7 +5,7 @@ const garten = {
   columns: [
     // can not add id here
     // see: https://github.com/Nozbe/WatermelonDB/issues/7#issuecomment-419248401
-    { name: 'name', type: 'string', isOptional: true },
+    { name: 'name', type: 'string', isOptional: true, isIndexed: true },
     { name: 'person_id', type: 'string', isOptional: true, isIndexed: true },
     { name: 'strasse', type: 'string', isOptional: true },
     { name: 'plz', type: 'number', isOptional: true },

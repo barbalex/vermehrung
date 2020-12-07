@@ -13,7 +13,12 @@ const lieferung = {
     { name: 'nach_kultur_id', type: 'string', isOptional: true },
     { name: 'nach_ausgepflanzt', type: 'boolean', isOptional: true },
     { name: 'von_anzahl_individuen', type: 'number', isOptional: true },
-    { name: 'anzahl_pflanzen', type: 'number', isOptional: true },
+    {
+      name: 'anzahl_pflanzen',
+      type: 'number',
+      isOptional: true,
+      isIndexed: true,
+    },
     { name: 'anzahl_auspflanzbereit', type: 'number', isOptional: true },
     { name: 'gramm_samen', type: 'number', isOptional: true },
     { name: 'andere_menge', type: 'string', isOptional: true },

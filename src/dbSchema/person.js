@@ -5,8 +5,8 @@ const person = {
   columns: [
     // can not add id here
     { name: 'nr', type: 'string', isOptional: true },
-    { name: 'vorname', type: 'string', isOptional: true },
-    { name: 'name', type: 'string', isOptional: true },
+    { name: 'vorname', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'name', type: 'string', isOptional: true, isIndexed: true },
     { name: 'adresszusatz', type: 'string', isOptional: true },
     { name: 'strasse', type: 'string', isOptional: true },
     { name: 'plz', type: 'number', isOptional: true },
