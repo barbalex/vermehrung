@@ -194,7 +194,7 @@ const buildNodes = async ({ store }) => {
               const lieferungsSorted = lieferungs.sort((a, b) =>
                 lieferungSort({ a, b }),
               )
-              const artSammlungLieferungNodes = lieferungsSorted.map(
+              const myArtSammlungAuslieferungNodes = lieferungsSorted.map(
                 (lieferung, lieferungIndex) =>
                   buildArtSammlungAuslieferung({
                     lieferung,
@@ -205,7 +205,9 @@ const buildNodes = async ({ store }) => {
                     artIndex,
                   }),
               )
-              artSammlungAuslieferungNodes.push(...artSammlungLieferungNodes)
+              artSammlungAuslieferungNodes.push(
+                ...myArtSammlungAuslieferungNodes,
+              )
             }
           }
         }
