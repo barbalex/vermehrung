@@ -318,7 +318,7 @@ export class Lieferung extends Model {
     sammel_lieferung: { type: 'belongs_to', key: 'sammel_lieferung_id' },
     // not possible to build two associations to one table, see:
     // https://github.com/Nozbe/WatermelonDB/issues/885
-    kultur: { type: 'belongs_to', key: 'von_kultur_id' },
+    kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
     // this association will not do anything becaus no table with this name exists
     nach_kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
     person: { type: 'belongs_to', key: 'person_id' },
@@ -716,7 +716,7 @@ export class Kultur extends Model {
     herkunft: { type: 'belongs_to', key: 'herkunft_id' },
     // not possible to build two associations to one table, see:
     // https://github.com/Nozbe/WatermelonDB/issues/885
-    lieferung: { type: 'has_many', foreignKey: 'von_kultur_id' },
+    lieferung: { type: 'has_many', foreignKey: 'nach_kultur_id' },
     // this association will not do anything becaus no table with this name exists
     auslieferung: { type: 'has_many', foreignKey: 'nach_kultur_id' },
     teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },

@@ -8,6 +8,8 @@ import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
 import buildArtKulturZaehlung from './art/kultur/zaehlung'
+import buildArtKulturAnlieferungFolder from './art/kultur/anlieferung/folder'
+import buildArtKulturAnlieferung from './art/kultur/anlieferung'
 import buildArtKulturAuslieferungFolder from './art/kultur/auslieferung/folder'
 import buildArtKulturAuslieferung from './art/kultur/auslieferung'
 import buildArtFolder from './art/folder'
@@ -70,6 +72,8 @@ const buildNodes = async ({ store }) => {
   let artKulturNodes = []
   let artKulturZaehlungFolderNodes = []
   let artKulturZaehlungNodes = []
+  let artKulturAnlieferungFolderNodes = []
+  let artKulturAnlieferungNodes = []
   let artKulturAuslieferungFolderNodes = []
   let artKulturAuslieferungNodes = []
   let artSammlungFolderNodes = []
@@ -309,13 +313,58 @@ const buildNodes = async ({ store }) => {
               artKulturZaehlungNodes.push(...myArtKulturZaehlungNodes)
             }
 
-            // auslieferung nodes
+            // anlieferung nodes
             const lieferungFilterQuery = queryFromFilter({
               table: 'lieferung',
               filter: store.filter.lieferung.toJSON(),
             })
-            const auslieferungs = await kultur.auslieferungs
+            const anlieferungs = await kultur.anlieferungs
               .extend(...lieferungFilterQuery)
+              .fetch()
+            const artKulturAnlieferungFolderNode = await buildArtKulturAnlieferungFolder(
+              {
+                kulturId,
+                kulturIndex,
+                artId,
+                artIndex,
+                children: anlieferungs,
+              },
+            )
+            artKulturAnlieferungFolderNodes.push(artKulturAnlieferungFolderNode)
+            const artKulturAnlieferungFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Arten' &&
+                n[1] === artId &&
+                n[2] === 'Kulturen' &&
+                n[3] === kulturId &&
+                n[4] === 'An-Lieferungen',
+            )
+            if (artKulturAnlieferungFolderIsOpen) {
+              const anlieferungsSorted = anlieferungs.sort((a, b) =>
+                lieferungSort({ a, b }),
+              )
+              const myArtKulturAnlieferungNodes = anlieferungsSorted.map(
+                (lieferung, lieferungIndex) =>
+                  buildArtKulturAnlieferung({
+                    lieferung,
+                    lieferungIndex,
+                    kulturId,
+                    kulturIndex,
+                    artId,
+                    artIndex,
+                  }),
+              )
+              artKulturAnlieferungNodes.push(...myArtKulturAnlieferungNodes)
+            }
+
+            // auslieferung nodes
+            const ausLieferungFilterQuery = queryFromFilter({
+              table: 'lieferung',
+              filter: store.filter.lieferung.toJSON(),
+            })
+            const auslieferungs = await kultur.auslieferungs
+              .extend(...ausLieferungFilterQuery)
               .fetch()
             const artKulturAuslieferungFolderNode = await buildArtKulturAuslieferungFolder(
               {
@@ -535,6 +584,8 @@ const buildNodes = async ({ store }) => {
     ...artKulturNodes,
     ...artKulturZaehlungFolderNodes,
     ...artKulturZaehlungNodes,
+    ...artKulturAnlieferungFolderNodes,
+    ...artKulturAnlieferungNodes,
     ...artKulturAuslieferungFolderNodes,
     ...artKulturAuslieferungNodes,
     ...herkunftFolderNodes,
