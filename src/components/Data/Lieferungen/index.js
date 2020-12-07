@@ -88,11 +88,16 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
       table: 'lieferung',
       filter: lieferungFilter.toJSON(),
     })
+    let kulturOnField = 'von_kultur_id'
+    if (kulturIdInActiveNodeArray) {
+      const lastAnAElement = activeNodeArray[activeNodeArray.length - 1]
+      if (lastAnAElement === 'An-Lieferungen') kulturOnField = 'nach_kultur_id'
+    }
     const hierarchyQuery = kulturIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['kultur']),
-          Q.on('kultur', 'id', kulturIdInActiveNodeArray),
-        ]
+      ? // this should get kulturen connected by von_kultur_id or nach_kultur_id
+        // depending on activeNodeArray[last] being 'An-Lieferung' or 'Aus-Lieferung'
+        // Q.on did not work because only one association can be declared per table
+        [Q.where(kulturOnField, kulturIdInActiveNodeArray)]
       : sammelLieferungIdInActiveNodeArray
       ? [
           Q.experimentalJoinTables(['sammel_lieferung']),
@@ -136,6 +141,10 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
     personIdInActiveNodeArray,
     sammelLieferungIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
+    activeNodeArray,
+    // need to rerender if last element of activeNodeArray changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    activeNodeArray[activeNodeArray.length - 1],
   ])
 
   const totalNr = count
