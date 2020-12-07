@@ -22,6 +22,8 @@ import buildHerkunftFolder from './herkunft/folder'
 import buildHerkunft from './herkunft'
 import buildHerkunftSammlungFolder from './herkunft/sammlung/folder'
 import buildHerkunftSammlung from './herkunft/sammlung'
+import buildHerkunftSammlungAuslieferungFolder from './herkunft/sammlung/auslieferung/folder'
+import buildHerkunftSammlungAuslieferung from './herkunft/sammlung/auslieferung'
 import buildGartenFolder from './garten/folder'
 import buildGarten from './garten'
 import buildKulturFolder from './kultur/folder'
@@ -94,6 +96,8 @@ const buildNodes = async ({ store }) => {
   let herkunftNodes = []
   let herkunftSammlungFolderNodes = []
   let herkunftSammlungNodes = []
+  let herkunftSammlungAuslieferungFolderNodes = []
+  let herkunftSammlungAuslieferungNodes = []
   const sammlungFolderNodes = buildSammlungFolder({ store })
   let sammlungNodes = []
   const gartenFolder = buildGartenFolder({ store })
@@ -571,6 +575,64 @@ const buildNodes = async ({ store }) => {
           ),
         )
         herkunftSammlungNodes.push(...myHerkunftSammlungNodes)
+        const openHerkunftSammlungNodes = openNodes.filter(
+          (n) =>
+            n[0] === 'Herkuenfte' && n[2] === 'Sammlungen' && n.length === 4,
+        )
+        for (const herkunftSammlungNode of openHerkunftSammlungNodes) {
+          const sammlungId = herkunftSammlungNode[3]
+          const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
+          const sammlungIndex = myHerkunftSammlungNodes.findIndex(
+            (s) => s.id === `${herkunftId}${sammlungId}`,
+          )
+          const lieferungFilterQuery = queryFromFilter({
+            table: 'lieferung',
+            filter: store.filter.lieferung.toJSON(),
+          })
+          const lieferungs = await sammlung.lieferungs
+            .extend(...lieferungFilterQuery)
+            .fetch()
+          const herkunftSammlungAuslieferungFolderNode = await buildHerkunftSammlungAuslieferungFolder(
+            {
+              sammlungId,
+              sammlungIndex,
+              herkunftId,
+              herkunftIndex,
+              children: lieferungs,
+            },
+          )
+          herkunftSammlungAuslieferungFolderNodes.push(
+            herkunftSammlungAuslieferungFolderNode,
+          )
+          const herkunftSammlungAuslieferungFolderIsOpen = openNodes.some(
+            (n) =>
+              n.length === 5 &&
+              n[0] === 'Herkuenfte' &&
+              n[1] === herkunftId &&
+              n[2] === 'Sammlungen' &&
+              n[3] === sammlungId &&
+              n[4] === 'Aus-Lieferungen',
+          )
+          if (herkunftSammlungAuslieferungFolderIsOpen) {
+            const lieferungsSorted = lieferungs.sort((a, b) =>
+              lieferungSort({ a, b }),
+            )
+            const myHerkunftSammlungAuslieferungNodes = lieferungsSorted.map(
+              (lieferung, lieferungIndex) =>
+                buildHerkunftSammlungAuslieferung({
+                  lieferung,
+                  lieferungIndex,
+                  sammlungId,
+                  sammlungIndex,
+                  herkunftId,
+                  herkunftIndex,
+                }),
+            )
+            herkunftSammlungAuslieferungNodes.push(
+              ...myHerkunftSammlungAuslieferungNodes,
+            )
+          }
+        }
       }
     }
   }
@@ -743,6 +805,8 @@ const buildNodes = async ({ store }) => {
     ...herkunftNodes,
     ...herkunftSammlungFolderNodes,
     ...herkunftSammlungNodes,
+    ...herkunftSammlungAuslieferungFolderNodes,
+    ...herkunftSammlungAuslieferungNodes,
     ...sammlungFolderNodes,
     ...sammlungNodes,
     ...gartenFolder,
