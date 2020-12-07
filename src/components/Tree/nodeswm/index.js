@@ -20,6 +20,8 @@ import buildArtFolder from './art/folder'
 import buildArt from './art'
 import buildHerkunftFolder from './herkunft/folder'
 import buildHerkunft from './herkunft'
+import buildHerkunftSammlungFolder from './herkunft/sammlung/folder'
+import buildHerkunftSammlung from './herkunft/sammlung'
 import buildGartenFolder from './garten/folder'
 import buildGarten from './garten'
 import buildKulturFolder from './kultur/folder'
@@ -88,8 +90,10 @@ const buildNodes = async ({ store }) => {
   let artSammlungNodes = []
   let artSammlungAuslieferungFolderNodes = []
   let artSammlungAuslieferungNodes = []
-  const herkunftFolderNodes = buildHerkunftFolder({ store })
+  let herkunftFolderNodes = []
   let herkunftNodes = []
+  let herkunftSammlungFolderNodes = []
+  let herkunftSammlungNodes = []
   const sammlungFolderNodes = buildSammlungFolder({ store })
   let sammlungNodes = []
   const gartenFolder = buildGartenFolder({ store })
@@ -505,6 +509,7 @@ const buildNodes = async ({ store }) => {
   }
 
   // 2 herkunft
+  herkunftFolderNodes = buildHerkunftFolder({ store })
   if (openNodes.some((n) => n[0] === 'Herkuenfte')) {
     const herkunfts = await db.collections
       .get('herkunft')
@@ -529,7 +534,44 @@ const buildNodes = async ({ store }) => {
       const herkunftId = herkunftNode[1]
       const herkunft = herkunftsSorted.find((a) => a.id === herkunftId)
       const herkunftIndex = herkunftNodes.findIndex((a) => a.id === herkunftId)
-      // TODO:
+
+      // 2.1 herkunft > sammlung
+      const sammlungFilterQuery = queryFromFilter({
+        table: 'sammlung',
+        filter: store.filter.sammlung.toJSON(),
+      })
+      const sammlungs = await herkunft.sammlungs
+        .extend(...sammlungFilterQuery)
+        .fetch()
+      const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+      herkunftSammlungFolderNodes.push(
+        buildHerkunftSammlungFolder({
+          children: sammlungsSorted,
+          herkunftIndex,
+          herkunftId,
+        }),
+      )
+      const herkunftSammlungFolderIsOpen = openNodes.some(
+        (n) =>
+          n.length === 3 &&
+          n[0] === 'Herkuenfte' &&
+          n[1] === herkunftId &&
+          n[2] === 'Sammlungen',
+      )
+      if (herkunftSammlungFolderIsOpen) {
+        const myHerkunftSammlungNodes = await Promise.all(
+          sammlungsSorted.map(
+            async (sammlung, sammlungIndex) =>
+              await buildHerkunftSammlung({
+                sammlung,
+                sammlungIndex,
+                herkunftId,
+                herkunftIndex,
+              }),
+          ),
+        )
+        herkunftSammlungNodes.push(...myHerkunftSammlungNodes)
+      }
     }
   }
 
@@ -699,6 +741,8 @@ const buildNodes = async ({ store }) => {
     ...artKulturEventNodes,
     ...herkunftFolderNodes,
     ...herkunftNodes,
+    ...herkunftSammlungFolderNodes,
+    ...herkunftSammlungNodes,
     ...sammlungFolderNodes,
     ...sammlungNodes,
     ...gartenFolder,

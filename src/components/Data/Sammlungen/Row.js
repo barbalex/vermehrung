@@ -30,15 +30,21 @@ const Row = styled.div`
 
 const Arten = ({ row, style, last }) => {
   const store = useContext(StoreContext)
+  const { herkunftIdInActiveNodeArray } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const [label, setLabel] = useState('')
   useEffect(() => {
-    row.label
-      .pipe(first$())
-      .toPromise()
-      .then((label) => setLabel(label))
-  }, [row])
+    herkunftIdInActiveNodeArray
+      ? row.labelUnderHerkunft
+          .pipe(first$())
+          .toPromise()
+          .then((label) => setLabel(label))
+      : row.label
+          .pipe(first$())
+          .toPromise()
+          .then((label) => setLabel(label))
+  }, [herkunftIdInActiveNodeArray, row])
 
   const onClickRow = useCallback(
     () => setActiveNodeArray([...activeNodeArray, row.id]),
