@@ -6,6 +6,8 @@ import buildArtSammlungAuslieferungFolder from './art/sammlung/auslieferung/fold
 import buildArtSammlungAuslieferung from './art/sammlung/auslieferung'
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
+import buildArtKulturTeilkulturFolder from './art/kultur/teilkultur/folder'
+import buildArtKulturTeilkultur from './art/kultur/teilkultur'
 import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
 import buildArtKulturZaehlung from './art/kultur/zaehlung'
 import buildArtKulturAnlieferungFolder from './art/kultur/anlieferung/folder'
@@ -72,6 +74,8 @@ const buildNodes = async ({ store }) => {
   let artNodes = []
   let artKulturFolderNodes = []
   let artKulturNodes = []
+  let artKulturTeilkulturFolderNodes = []
+  let artKulturTeilkulturNodes = []
   let artKulturZaehlungFolderNodes = []
   let artKulturZaehlungNodes = []
   let artKulturAnlieferungFolderNodes = []
@@ -269,6 +273,53 @@ const buildNodes = async ({ store }) => {
             const kulturIndex = kulturNodes.findIndex(
               (s) => s.id === `${artId}${kulturId}`,
             )
+
+            // teilkultur nodes
+            const teilkulturFilterQuery = queryFromFilter({
+              table: 'teilkultur',
+              filter: store.filter.teilkultur.toJSON(),
+            })
+            const teilkulturs = await kultur.teilkulturs
+              .extend(...teilkulturFilterQuery)
+              .fetch()
+            const artKulturTeilkulturFolderNode = await buildArtKulturTeilkulturFolder(
+              {
+                kulturId,
+                kulturIndex,
+                artId,
+                artIndex,
+                children: teilkulturs,
+              },
+            )
+            artKulturTeilkulturFolderNodes.push(artKulturTeilkulturFolderNode)
+            const artKulturTeilkulturFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Arten' &&
+                n[1] === artId &&
+                n[2] === 'Kulturen' &&
+                n[3] === kulturId &&
+                n[4] === 'Teilkulturen',
+            )
+            if (artKulturTeilkulturFolderIsOpen) {
+              const teilkultursSorted = teilkulturs.sort((a, b) =>
+                teilkulturSort({ a, b }),
+              )
+              const myArtKulturTeilkulturNodes = await Promise.all(
+                teilkultursSorted.map(
+                  async (teilkultur, teilkulturIndex) =>
+                    await buildArtKulturTeilkultur({
+                      teilkultur,
+                      teilkulturIndex,
+                      kulturId,
+                      kulturIndex,
+                      artId,
+                      artIndex,
+                    }),
+                ),
+              )
+              artKulturTeilkulturNodes.push(...myArtKulturTeilkulturNodes)
+            }
 
             // zaehlung nodes
             const zaehlungFilterQuery = queryFromFilter({
@@ -627,6 +678,8 @@ const buildNodes = async ({ store }) => {
     ...artSammlungAuslieferungNodes,
     ...artKulturFolderNodes,
     ...artKulturNodes,
+    ...artKulturTeilkulturFolderNodes,
+    ...artKulturTeilkulturNodes,
     ...artKulturZaehlungFolderNodes,
     ...artKulturZaehlungNodes,
     ...artKulturAnlieferungFolderNodes,
