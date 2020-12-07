@@ -67,12 +67,25 @@ const compare = (a, b) => {
 
 const buildNodes = async ({ store }) => {
   const { db } = store
-  const { activeNodeArray, openNodes: openNodesRaw, showArt } = store.tree
+  const {
+    openNodes: openNodesRaw,
+    showArt,
+    showHerkunft,
+    showSammlung,
+    showGarten,
+    showKultur,
+    showTeilkultur,
+    showZaehlung,
+    showLieferung,
+    showSammelLieferung,
+    showEvent,
+    showPerson,
+  } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
-  console.log('buildNodes', {
+  /*console.log('buildNodes', {
     activeNodeArray: activeNodeArray.slice(),
     openNodes,
-  })
+  })*/
 
   let artFolderNodes = []
   let artNodes = []
@@ -513,124 +526,128 @@ const buildNodes = async ({ store }) => {
   }
 
   // 2 herkunft
-  herkunftFolderNodes = buildHerkunftFolder({ store })
-  if (openNodes.some((n) => n[0] === 'Herkuenfte')) {
-    const herkunfts = await db.collections
-      .get('herkunft')
-      .query(notDeletedOrHasConflictQuery)
-      .fetch()
-    const herkunftsSorted = herkunfts
-      .filter((value) =>
-        storeFilter({
-          value,
-          filter: store.filter.herkunft,
-          table: 'herkunft',
-        }),
-      )
-      .sort(herkunftSort)
-    herkunftNodes = buildHerkunft({ store, herkunfts: herkunftsSorted })
-
-    // on to child nodes
-    const openHerkunftNodes = openNodes.filter(
-      (n) => n[0] === 'Herkuenfte' && n.length === 2,
-    )
-    for (const herkunftNode of openHerkunftNodes) {
-      const herkunftId = herkunftNode[1]
-      const herkunft = herkunftsSorted.find((a) => a.id === herkunftId)
-      const herkunftIndex = herkunftNodes.findIndex((a) => a.id === herkunftId)
-
-      // 2.1 herkunft > sammlung
-      const sammlungFilterQuery = queryFromFilter({
-        table: 'sammlung',
-        filter: store.filter.sammlung.toJSON(),
-      })
-      const sammlungs = await herkunft.sammlungs
-        .extend(...sammlungFilterQuery)
+  if (showHerkunft) {
+    herkunftFolderNodes = buildHerkunftFolder({ store })
+    if (openNodes.some((n) => n.length === 1 && n[0] === 'Herkuenfte')) {
+      const herkunfts = await db.collections
+        .get('herkunft')
+        .query(notDeletedOrHasConflictQuery)
         .fetch()
-      const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-      herkunftSammlungFolderNodes.push(
-        buildHerkunftSammlungFolder({
-          children: sammlungsSorted,
-          herkunftIndex,
-          herkunftId,
-        }),
-      )
-      const herkunftSammlungFolderIsOpen = openNodes.some(
-        (n) =>
-          n.length === 3 &&
-          n[0] === 'Herkuenfte' &&
-          n[1] === herkunftId &&
-          n[2] === 'Sammlungen',
-      )
-      if (herkunftSammlungFolderIsOpen) {
-        const myHerkunftSammlungNodes = await Promise.all(
-          sammlungsSorted.map(
-            async (sammlung, sammlungIndex) =>
-              await buildHerkunftSammlung({
-                sammlung,
-                sammlungIndex,
-                herkunftId,
-                herkunftIndex,
-              }),
-          ),
+      const herkunftsSorted = herkunfts
+        .filter((value) =>
+          storeFilter({
+            value,
+            filter: store.filter.herkunft,
+            table: 'herkunft',
+          }),
         )
-        herkunftSammlungNodes.push(...myHerkunftSammlungNodes)
-        const openHerkunftSammlungNodes = openNodes.filter(
+        .sort(herkunftSort)
+      herkunftNodes = buildHerkunft({ store, herkunfts: herkunftsSorted })
+
+      // on to child nodes
+      const openHerkunftNodes = openNodes.filter(
+        (n) => n[0] === 'Herkuenfte' && n.length === 2,
+      )
+      for (const herkunftNode of openHerkunftNodes) {
+        const herkunftId = herkunftNode[1]
+        const herkunft = herkunftsSorted.find((a) => a.id === herkunftId)
+        const herkunftIndex = herkunftNodes.findIndex(
+          (a) => a.id === herkunftId,
+        )
+
+        // 2.1 herkunft > sammlung
+        const sammlungFilterQuery = queryFromFilter({
+          table: 'sammlung',
+          filter: store.filter.sammlung.toJSON(),
+        })
+        const sammlungs = await herkunft.sammlungs
+          .extend(...sammlungFilterQuery)
+          .fetch()
+        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+        herkunftSammlungFolderNodes.push(
+          buildHerkunftSammlungFolder({
+            children: sammlungsSorted,
+            herkunftIndex,
+            herkunftId,
+          }),
+        )
+        const herkunftSammlungFolderIsOpen = openNodes.some(
           (n) =>
-            n[0] === 'Herkuenfte' && n[2] === 'Sammlungen' && n.length === 4,
+            n.length === 3 &&
+            n[0] === 'Herkuenfte' &&
+            n[1] === herkunftId &&
+            n[2] === 'Sammlungen',
         )
-        for (const herkunftSammlungNode of openHerkunftSammlungNodes) {
-          const sammlungId = herkunftSammlungNode[3]
-          const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
-          const sammlungIndex = myHerkunftSammlungNodes.findIndex(
-            (s) => s.id === `${herkunftId}${sammlungId}`,
-          )
-          const lieferungFilterQuery = queryFromFilter({
-            table: 'lieferung',
-            filter: store.filter.lieferung.toJSON(),
-          })
-          const lieferungs = await sammlung.lieferungs
-            .extend(...lieferungFilterQuery)
-            .fetch()
-          const herkunftSammlungAuslieferungFolderNode = await buildHerkunftSammlungAuslieferungFolder(
-            {
-              sammlungId,
-              sammlungIndex,
-              herkunftId,
-              herkunftIndex,
-              children: lieferungs,
-            },
-          )
-          herkunftSammlungAuslieferungFolderNodes.push(
-            herkunftSammlungAuslieferungFolderNode,
-          )
-          const herkunftSammlungAuslieferungFolderIsOpen = openNodes.some(
-            (n) =>
-              n.length === 5 &&
-              n[0] === 'Herkuenfte' &&
-              n[1] === herkunftId &&
-              n[2] === 'Sammlungen' &&
-              n[3] === sammlungId &&
-              n[4] === 'Aus-Lieferungen',
-          )
-          if (herkunftSammlungAuslieferungFolderIsOpen) {
-            const lieferungsSorted = lieferungs.sort((a, b) =>
-              lieferungSort({ a, b }),
-            )
-            const myHerkunftSammlungAuslieferungNodes = lieferungsSorted.map(
-              (lieferung, lieferungIndex) =>
-                buildHerkunftSammlungAuslieferung({
-                  lieferung,
-                  lieferungIndex,
-                  sammlungId,
+        if (herkunftSammlungFolderIsOpen) {
+          const myHerkunftSammlungNodes = await Promise.all(
+            sammlungsSorted.map(
+              async (sammlung, sammlungIndex) =>
+                await buildHerkunftSammlung({
+                  sammlung,
                   sammlungIndex,
                   herkunftId,
                   herkunftIndex,
                 }),
+            ),
+          )
+          herkunftSammlungNodes.push(...myHerkunftSammlungNodes)
+          const openHerkunftSammlungNodes = openNodes.filter(
+            (n) =>
+              n[0] === 'Herkuenfte' && n[2] === 'Sammlungen' && n.length === 4,
+          )
+          for (const herkunftSammlungNode of openHerkunftSammlungNodes) {
+            const sammlungId = herkunftSammlungNode[3]
+            const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
+            const sammlungIndex = myHerkunftSammlungNodes.findIndex(
+              (s) => s.id === `${herkunftId}${sammlungId}`,
             )
-            herkunftSammlungAuslieferungNodes.push(
-              ...myHerkunftSammlungAuslieferungNodes,
+            const lieferungFilterQuery = queryFromFilter({
+              table: 'lieferung',
+              filter: store.filter.lieferung.toJSON(),
+            })
+            const lieferungs = await sammlung.lieferungs
+              .extend(...lieferungFilterQuery)
+              .fetch()
+            const herkunftSammlungAuslieferungFolderNode = await buildHerkunftSammlungAuslieferungFolder(
+              {
+                sammlungId,
+                sammlungIndex,
+                herkunftId,
+                herkunftIndex,
+                children: lieferungs,
+              },
             )
+            herkunftSammlungAuslieferungFolderNodes.push(
+              herkunftSammlungAuslieferungFolderNode,
+            )
+            const herkunftSammlungAuslieferungFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Herkuenfte' &&
+                n[1] === herkunftId &&
+                n[2] === 'Sammlungen' &&
+                n[3] === sammlungId &&
+                n[4] === 'Aus-Lieferungen',
+            )
+            if (herkunftSammlungAuslieferungFolderIsOpen) {
+              const lieferungsSorted = lieferungs.sort((a, b) =>
+                lieferungSort({ a, b }),
+              )
+              const myHerkunftSammlungAuslieferungNodes = lieferungsSorted.map(
+                (lieferung, lieferungIndex) =>
+                  buildHerkunftSammlungAuslieferung({
+                    lieferung,
+                    lieferungIndex,
+                    sammlungId,
+                    sammlungIndex,
+                    herkunftId,
+                    herkunftIndex,
+                  }),
+              )
+              herkunftSammlungAuslieferungNodes.push(
+                ...myHerkunftSammlungAuslieferungNodes,
+              )
+            }
           }
         }
       }
@@ -638,144 +655,164 @@ const buildNodes = async ({ store }) => {
   }
 
   // 3 sammlung
-  if (openNodes.some((n) => n[0] === 'Sammlungen')) {
-    const sammlungFilterQuery = queryFromFilter({
-      table: 'sammlung',
-      filter: store.filter.sammlung.toJSON(),
-    })
-    const sammlungs = await db.collections
-      .get('sammlung')
-      .query(...sammlungFilterQuery)
-      .fetch()
-    const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-    sammlungNodes = await buildSammlung({ store, sammlungs: sammlungsSorted })
+  if (showSammlung) {
+    if (openNodes.some((n) => n.length === 1 && n[0] === 'Sammlungen')) {
+      const sammlungFilterQuery = queryFromFilter({
+        table: 'sammlung',
+        filter: store.filter.sammlung.toJSON(),
+      })
+      const sammlungs = await db.collections
+        .get('sammlung')
+        .query(...sammlungFilterQuery)
+        .fetch()
+      const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+      sammlungNodes = await buildSammlung({ store, sammlungs: sammlungsSorted })
+    }
   }
 
   // 4 garten
-  if (openNodes.some((n) => n[0] === 'Gaerten')) {
-    const gartenFilterQuery = queryFromFilter({
-      table: 'garten',
-      filter: store.filter.garten.toJSON(),
-    })
-    const gartens = await db.collections
-      .get('garten')
-      .query(...gartenFilterQuery)
-      .fetch()
-    const gartensSorted = await gartensSortedFromGartens(gartens)
-    garten = await buildGarten({ store, gartens: gartensSorted })
+  if (showGarten) {
+    if (openNodes.some((n) => n.length === 1 && n[0] === 'Gaerten')) {
+      const gartenFilterQuery = queryFromFilter({
+        table: 'garten',
+        filter: store.filter.garten.toJSON(),
+      })
+      const gartens = await db.collections
+        .get('garten')
+        .query(...gartenFilterQuery)
+        .fetch()
+      const gartensSorted = await gartensSortedFromGartens(gartens)
+      garten = await buildGarten({ store, gartens: gartensSorted })
+    }
   }
 
   // 5 kultur
-  if (openNodes.some((n) => n[0] === 'Kulturen')) {
-    const kulturFilterQuery = queryFromFilter({
-      table: 'kultur',
-      filter: store.filter.kultur.toJSON(),
-    })
-    const kulturs = await db.collections
-      .get('kultur')
-      .query(...kulturFilterQuery)
-      .fetch()
-    const kultursSorted = await kultursSortedFromKulturs(kulturs)
-    kultur = await buildKultur({ store, kulturs: kultursSorted })
+  if (showKultur) {
+    if (openNodes.some((n) => n.length === 1 && n[0] === 'Kulturen')) {
+      const kulturFilterQuery = queryFromFilter({
+        table: 'kultur',
+        filter: store.filter.kultur.toJSON(),
+      })
+      const kulturs = await db.collections
+        .get('kultur')
+        .query(...kulturFilterQuery)
+        .fetch()
+      const kultursSorted = await kultursSortedFromKulturs(kulturs)
+      kultur = await buildKultur({ store, kulturs: kultursSorted })
+    }
   }
 
   // 6 teilkultur
-  if (openNodes.some((n) => n[0] === 'Teilkulturen')) {
-    const teilkulturFilterQuery = queryFromFilter({
-      table: 'teilkultur',
-      filter: store.filter.teilkultur.toJSON(),
-    })
-    const teilkulturs = await db.collections
-      .get('teilkultur')
-      .query(...teilkulturFilterQuery)
-      .fetch()
-    teilkultur = buildTeilkultur({
-      store,
-      teilkulturs: teilkulturs.sort((a, b) => teilkulturSort({ a, b })),
-    })
+  if (showTeilkultur) {
+    if (openNodes.some((n) => n.length === 1 && n[0] === 'Teilkulturen')) {
+      const teilkulturFilterQuery = queryFromFilter({
+        table: 'teilkultur',
+        filter: store.filter.teilkultur.toJSON(),
+      })
+      const teilkulturs = await db.collections
+        .get('teilkultur')
+        .query(...teilkulturFilterQuery)
+        .fetch()
+      teilkultur = buildTeilkultur({
+        store,
+        teilkulturs: teilkulturs.sort((a, b) => teilkulturSort({ a, b })),
+      })
+    }
   }
 
   // 7 zaehlung
-  if (openNodes.some((n) => n[0] === 'Zaehlungen')) {
-    const zaehlungFilterQuery = queryFromFilter({
-      table: 'zaehlung',
-      filter: store.filter.zaehlung.toJSON(),
-    })
-    const zaehlungs = await db.collections
-      .get('zaehlung')
-      .query(...zaehlungFilterQuery)
-      .fetch()
-    zaehlung = buildZaehlung({
-      store,
-      zaehlungs: zaehlungs.sort((a, b) => zaehlungSort({ a, b })),
-    })
+  if (showZaehlung) {
+    if (openNodes.some((n) => n.length === 1 && n[0] === 'Zaehlungen')) {
+      const zaehlungFilterQuery = queryFromFilter({
+        table: 'zaehlung',
+        filter: store.filter.zaehlung.toJSON(),
+      })
+      const zaehlungs = await db.collections
+        .get('zaehlung')
+        .query(...zaehlungFilterQuery)
+        .fetch()
+      zaehlung = buildZaehlung({
+        store,
+        zaehlungs: zaehlungs.sort((a, b) => zaehlungSort({ a, b })),
+      })
+    }
   }
 
   // 8 lieferung
-  if (openNodes.some((n) => n[0] === 'Lieferungen')) {
-    const lieferungFilterQuery = queryFromFilter({
-      table: 'lieferung',
-      filter: store.filter.lieferung.toJSON(),
-    })
-    const lieferungs = await db.collections
-      .get('lieferung')
-      .query(...lieferungFilterQuery)
-      .fetch()
-    lieferung = buildLieferung({
-      store,
-      lieferungs: lieferungs.sort((a, b) => lieferungSort({ a, b })),
-    })
+  if (showLieferung) {
+    if (openNodes.some((n) => n.length === 1 && n[0] === 'Lieferungen')) {
+      const lieferungFilterQuery = queryFromFilter({
+        table: 'lieferung',
+        filter: store.filter.lieferung.toJSON(),
+      })
+      const lieferungs = await db.collections
+        .get('lieferung')
+        .query(...lieferungFilterQuery)
+        .fetch()
+      lieferung = buildLieferung({
+        store,
+        lieferungs: lieferungs.sort((a, b) => lieferungSort({ a, b })),
+      })
+    }
   }
 
   // 9 sammelLieferung
-  if (openNodes.some((n) => n[0] === 'Sammel-Lieferungen')) {
-    const sammelLieferungFilterQuery = queryFromFilter({
-      table: 'sammel_lieferung',
-      filter: store.filter.sammel_lieferung.toJSON(),
-    })
-    const sammelLieferungs = await db.collections
-      .get('sammel_lieferung')
-      .query(...sammelLieferungFilterQuery)
-      .fetch()
-    sammelLieferung = buildSammelLieferung({
-      store,
-      sammelLieferungs: sammelLieferungs.sort((a, b) =>
-        lieferungSort({ a, b }),
-      ),
-    })
+  if (showSammelLieferung) {
+    if (
+      openNodes.some((n) => n.length === 1 && n[0] === 'Sammel-Lieferungen')
+    ) {
+      const sammelLieferungFilterQuery = queryFromFilter({
+        table: 'sammel_lieferung',
+        filter: store.filter.sammel_lieferung.toJSON(),
+      })
+      const sammelLieferungs = await db.collections
+        .get('sammel_lieferung')
+        .query(...sammelLieferungFilterQuery)
+        .fetch()
+      sammelLieferung = buildSammelLieferung({
+        store,
+        sammelLieferungs: sammelLieferungs.sort((a, b) =>
+          lieferungSort({ a, b }),
+        ),
+      })
+    }
   }
 
   // 10 event
-  if (openNodes.some((n) => n[0] === 'Events')) {
-    const eventFilterQuery = queryFromFilter({
-      table: 'event',
-      filter: store.filter.event.toJSON(),
-    })
-    const events = await db.collections
-      .get('event')
-      .query(...eventFilterQuery)
-      .fetch()
-    event = buildEvent({
-      store,
-      events: events.sort((a, b) => eventSort({ a, b })),
-    })
+  if (showEvent) {
+    if (openNodes.some((n) => n.length === 1 && n[0] === 'Events')) {
+      const eventFilterQuery = queryFromFilter({
+        table: 'event',
+        filter: store.filter.event.toJSON(),
+      })
+      const events = await db.collections
+        .get('event')
+        .query(...eventFilterQuery)
+        .fetch()
+      event = buildEvent({
+        store,
+        events: events.sort((a, b) => eventSort({ a, b })),
+      })
+    }
   }
 
   // 11 person
-  if (openNodes.some((n) => n[0] === 'Personen')) {
-    const personFilterQuery = queryFromFilter({
-      table: 'person',
-      filter: store.filter.person.toJSON(),
-    })
-    const persons = await db.collections
-      .get('person')
-      .query(...personFilterQuery)
-      .fetch()
-    const personsSorted = persons.sort((a, b) => personSort({ a, b }))
-    person = buildPerson({
-      store,
-      persons: personsSorted,
-    })
+  if (showPerson) {
+    if (openNodes.some((n) => n.length === 1 && n[0] === 'Personen')) {
+      const personFilterQuery = queryFromFilter({
+        table: 'person',
+        filter: store.filter.person.toJSON(),
+      })
+      const persons = await db.collections
+        .get('person')
+        .query(...personFilterQuery)
+        .fetch()
+      const personsSorted = persons.sort((a, b) => personSort({ a, b }))
+      person = buildPerson({
+        store,
+        persons: personsSorted,
+      })
+    }
   }
 
   /*console.log('buildNodesWm', {
