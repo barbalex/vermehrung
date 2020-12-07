@@ -227,7 +227,11 @@ const buildNodes = async ({ store }) => {
           }),
         )
         const artKulturFolderIsOpen = openNodes.some(
-          (n) => n[0] === 'Arten' && n[1] === artId && n[2] === 'Kulturen',
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Arten' &&
+            n[1] === artId &&
+            n[2] === 'Kulturen',
         )
         if (artKulturFolderIsOpen) {
           const kulturNodes = await Promise.all(
