@@ -161,7 +161,7 @@ const Tree = ({ width, height }) => {
 
   // what else to rerender on?
 
-  console.log('Tree rendering:', { nodes, openNodes })
+  //console.log('Tree rendering:', { nodes, openNodes })
 
   return (
     <ErrorBoundary>

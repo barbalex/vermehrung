@@ -293,16 +293,18 @@ const buildNodes = async ({ store }) => {
               const zaehlungsSorted = zaehlungs.sort((a, b) =>
                 zaehlungSort({ a, b }),
               )
-              const myArtKulturZaehlungNodes = zaehlungsSorted.map(
-                (zaehlung, zaehlungIndex) =>
-                  buildArtKulturZaehlung({
-                    zaehlung,
-                    zaehlungIndex,
-                    kulturId,
-                    kulturIndex,
-                    artId,
-                    artIndex,
-                  }),
+              const myArtKulturZaehlungNodes = await Promise.all(
+                zaehlungsSorted.map(
+                  async (zaehlung, zaehlungIndex) =>
+                    await buildArtKulturZaehlung({
+                      zaehlung,
+                      zaehlungIndex,
+                      kulturId,
+                      kulturIndex,
+                      artId,
+                      artIndex,
+                    }),
+                ),
               )
               artKulturZaehlungNodes.push(...myArtKulturZaehlungNodes)
             }
@@ -518,10 +520,10 @@ const buildNodes = async ({ store }) => {
     })
   }
 
-  console.log('buildNodesWm', {
+  /*console.log('buildNodesWm', {
     artSammlungAuslieferungNodes,
     artSammlungAuslieferungFolderNodes,
-  })
+  })*/
   const nodes = [
     ...artFolderNodes,
     ...artNodes,
