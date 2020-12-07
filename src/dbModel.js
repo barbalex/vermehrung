@@ -28,6 +28,7 @@ import teilkulturLabelFromTeilkultur from './utils/teilkulturLabelFromTeilkultur
 import kulturLabelFromKultur from './utils/kulturLabelFromKultur'
 import kulturLabelFromKulturUnderArt from './utils/kulturLabelFromKulturUnderArt'
 import sammlungLabelFromSammlung from './utils/sammlungLabelFromSammlung'
+import sammlungLabelFromSammlungUnderHerkunft from './utils/sammlungLabelFromSammlungUnderHerkunft'
 import sammelLieferungLabelFromSammelLieferung from './utils/sammelLieferungLabelFromSammelLieferung'
 import zaehlungLabelFromZaehlung from './utils/zaehlungLabelFromZaehlung'
 import toPgArray from './utils/toPgArray'
@@ -219,6 +220,22 @@ export class Sammlung extends Model {
         ae_art,
         person,
         herkunft,
+      })
+    }),
+  )
+  @lazy labelUnderHerkunft = this.observe().pipe(
+    // TODO: optimize untilChanged
+    distinctUntilChanged(),
+    map$(async (sammlung) => {
+      const art = await sammlung.art.fetch()
+      const ae_art = art ? await art.ae_art.fetch() : undefined
+      const person = await sammlung.person.fetch()
+
+      return sammlungLabelFromSammlungUnderHerkunft({
+        sammlung,
+        art,
+        ae_art,
+        person,
       })
     }),
   )
