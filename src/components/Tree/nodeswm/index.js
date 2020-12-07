@@ -12,6 +12,8 @@ import buildArtKulturAnlieferungFolder from './art/kultur/anlieferung/folder'
 import buildArtKulturAnlieferung from './art/kultur/anlieferung'
 import buildArtKulturAuslieferungFolder from './art/kultur/auslieferung/folder'
 import buildArtKulturAuslieferung from './art/kultur/auslieferung'
+import buildArtKulturEventFolder from './art/kultur/event/folder'
+import buildArtKulturEvent from './art/kultur/event'
 import buildArtFolder from './art/folder'
 import buildArt from './art'
 import buildHerkunftFolder from './herkunft/folder'
@@ -76,6 +78,8 @@ const buildNodes = async ({ store }) => {
   let artKulturAnlieferungNodes = []
   let artKulturAuslieferungFolderNodes = []
   let artKulturAuslieferungNodes = []
+  let artKulturEventFolderNodes = []
+  let artKulturEventNodes = []
   let artSammlungFolderNodes = []
   let artSammlungNodes = []
   let artSammlungAuslieferungFolderNodes = []
@@ -404,6 +408,47 @@ const buildNodes = async ({ store }) => {
               )
               artKulturAuslieferungNodes.push(...myArtKulturAuslieferungNodes)
             }
+
+            // event nodes
+            const eventFilterQuery = queryFromFilter({
+              table: 'lieferung',
+              filter: store.filter.lieferung.toJSON(),
+            })
+            const events = await kultur.events
+              .extend(...eventFilterQuery)
+              .fetch()
+            const artKulturEventFolderNode = await buildArtKulturEventFolder({
+              kulturId,
+              kulturIndex,
+              artId,
+              artIndex,
+              children: events,
+            })
+            artKulturEventFolderNodes.push(artKulturEventFolderNode)
+            const artKulturEventFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Arten' &&
+                n[1] === artId &&
+                n[2] === 'Kulturen' &&
+                n[3] === kulturId &&
+                n[4] === 'Events',
+            )
+            if (artKulturEventFolderIsOpen) {
+              const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+              const myArtKulturEventNodes = eventsSorted.map(
+                (event, eventIndex) =>
+                  buildArtKulturEvent({
+                    event,
+                    eventIndex,
+                    kulturId,
+                    kulturIndex,
+                    artId,
+                    artIndex,
+                  }),
+              )
+              artKulturEventNodes.push(...myArtKulturEventNodes)
+            }
           }
         }
       }
@@ -588,6 +633,8 @@ const buildNodes = async ({ store }) => {
     ...artKulturAnlieferungNodes,
     ...artKulturAuslieferungFolderNodes,
     ...artKulturAuslieferungNodes,
+    ...artKulturEventFolderNodes,
+    ...artKulturEventNodes,
     ...herkunftFolderNodes,
     ...herkunftNodes,
     ...sammlungFolderNodes,
