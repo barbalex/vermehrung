@@ -4,8 +4,8 @@ const av = {
   name: 'av',
   columns: [
     // can not add id here
-    { name: 'art_id', type: 'string', isOptional: true },
-    { name: 'person_id', type: 'string', isOptional: true },
+    { name: 'art_id', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'person_id', type: 'string', isOptional: true, isIndexed: true },
     { name: 'changed', type: 'string', isOptional: true },
     { name: 'changed_by', type: 'string', isOptional: true },
     { name: '_rev', type: 'string', isOptional: true },

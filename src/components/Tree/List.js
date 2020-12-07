@@ -1,6 +1,7 @@
 /**
  * needed to place list in own component
- * because ref did not work - listRef.current was always null
+ * because ref did not work when this was included in it's parent
+ * listRef.current was always null
  */
 import React, { useContext, useEffect, useRef } from 'react'
 import styled from 'styled-components'
@@ -46,10 +47,6 @@ const Tree = ({ scrollableNodeRef, contentNodeRef, width, height, nodes }) => {
 
   const listRef = useRef(null)
 
-  // what else to rerender on?
-
-  // TODO:
-  // need to scroll when any of the label-relevant fields of the active form change
   const nodeIndex = findIndex(nodes, (node) => isEqual(node.url, aNA))
   useEffect(() => {
     if (nodeIndex > -1) {

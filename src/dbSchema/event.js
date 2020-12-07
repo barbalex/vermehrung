@@ -4,10 +4,15 @@ const event = {
   name: 'event',
   columns: [
     // can not add id here
-    { name: 'kultur_id', type: 'string', isOptional: true },
-    { name: 'teilkultur_id', type: 'string', isOptional: true },
-    { name: 'person_id', type: 'string', isOptional: true },
-    { name: 'beschreibung', type: 'string', isOptional: true },
+    { name: 'kultur_id', type: 'string', isOptional: true, isIndexed: true },
+    {
+      name: 'teilkultur_id',
+      type: 'string',
+      isOptional: true,
+      isIndexed: true,
+    },
+    { name: 'person_id', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'beschreibung', type: 'string', isOptional: true, isIndexed: true },
     { name: 'geplant', type: 'boolean', isOptional: true },
     { name: 'datum', type: 'string', isOptional: true, isIndexed: true },
     { name: 'changed', type: 'string', isOptional: true },

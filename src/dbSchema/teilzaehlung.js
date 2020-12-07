@@ -5,8 +5,18 @@ const teilzaehlung = {
   columns: [
     // can not add id here
     { name: 'zaehlung_id', type: 'string', isOptional: true, isIndexed: true },
-    { name: 'teilkultur_id', type: 'string', isOptional: true },
-    { name: 'anzahl_pflanzen', type: 'number', isOptional: true },
+    {
+      name: 'teilkultur_id',
+      type: 'string',
+      isOptional: true,
+      isIndexed: true,
+    },
+    {
+      name: 'anzahl_pflanzen',
+      type: 'number',
+      isOptional: true,
+      isIndexed: true,
+    },
     { name: 'anzahl_auspflanzbereit', type: 'number', isOptional: true },
     { name: 'anzahl_mutterpflanzen', type: 'number', isOptional: true },
     { name: 'andere_menge', type: 'string', isOptional: true },
