@@ -32,6 +32,8 @@ import buildTeilkulturFolder from './teilkultur/folder'
 import buildTeilkultur from './teilkultur'
 import buildSammlungFolder from './sammlung/folder'
 import buildSammlung from './sammlung'
+import buildSammlungHerkunftFolder from './sammlung/herkunft/folder'
+import buildSammlungHerkunft from './sammlung/herkunft'
 import buildZaehlungFolder from './zaehlung/folder'
 import buildZaehlung from './zaehlung'
 import buildLieferungFolder from './lieferung/folder'
@@ -111,8 +113,10 @@ const buildNodes = async ({ store }) => {
   let herkunftSammlungNodes = []
   let herkunftSammlungAuslieferungFolderNodes = []
   let herkunftSammlungAuslieferungNodes = []
-  const sammlungFolderNodes = buildSammlungFolder({ store })
+  let sammlungFolderNodes = []
   let sammlungNodes = []
+  let sammlungHerkunftFolderNodes = []
+  let sammlungHerkunftNodes = []
   const gartenFolder = buildGartenFolder({ store })
   let garten = []
   const kulturFolder = buildKulturFolder({ store })
@@ -656,6 +660,7 @@ const buildNodes = async ({ store }) => {
 
   // 3 sammlung
   if (showSammlung) {
+    sammlungFolderNodes = buildSammlungFolder({ store })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Sammlungen')) {
       const sammlungFilterQuery = queryFromFilter({
         table: 'sammlung',
@@ -667,6 +672,47 @@ const buildNodes = async ({ store }) => {
         .fetch()
       const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
       sammlungNodes = await buildSammlung({ store, sammlungs: sammlungsSorted })
+
+      // on to child nodes
+      const openSammlungNodes = openNodes.filter(
+        (n) => n.length === 2 && n[0] === 'Sammlungen',
+      )
+      for (const sammlungNode of openSammlungNodes) {
+        const sammlungId = sammlungNode[1]
+        const sammlung = sammlungsSorted.find((a) => a.id === sammlungId)
+        const sammlungIndex = sammlungNodes.findIndex(
+          (a) => a.id === sammlungId,
+        )
+
+        // 2.1 sammlung > herkunft
+        const herkunft = await sammlung.herkunft.fetch()
+        sammlungHerkunftFolderNodes.push(
+          buildSammlungHerkunftFolder({
+            children: [herkunft],
+            sammlungIndex,
+            sammlungId,
+          }),
+        )
+        const sammlungHerkunftFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Sammlungen' &&
+            n[1] === sammlungId &&
+            n[2] === 'Herkuenfte',
+        )
+        if (sammlungHerkunftFolderIsOpen) {
+          const mySammlungHerkunftNodes = [herkunft].map(
+            (herkunft, herkunftIndex) =>
+              buildSammlungHerkunft({
+                herkunft,
+                herkunftIndex,
+                sammlungId,
+                sammlungIndex,
+              }),
+          )
+          sammlungHerkunftNodes.push(...mySammlungHerkunftNodes)
+        }
+      }
     }
   }
 
@@ -846,6 +892,8 @@ const buildNodes = async ({ store }) => {
     ...herkunftSammlungAuslieferungNodes,
     ...sammlungFolderNodes,
     ...sammlungNodes,
+    ...sammlungHerkunftFolderNodes,
+    ...sammlungHerkunftNodes,
     ...gartenFolder,
     ...garten,
     ...kulturFolder,
