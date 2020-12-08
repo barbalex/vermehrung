@@ -853,6 +853,53 @@ const buildNodes = async ({ store }) => {
               (s) => s.id === `${gartenId}${kulturId}`,
             )
 
+            // garten > kultur > zaehlung
+            const zaehlungFilterQuery = queryFromFilter({
+              table: 'zaehlung',
+              filter: store.filter.zaehlung.toJSON(),
+            })
+            const zaehlungs = await kultur.zaehlungs
+              .extend(...zaehlungFilterQuery)
+              .fetch()
+            const gartenKulturZaehlungFolderNode = await buildGartenKulturZaehlungFolder(
+              {
+                kulturId,
+                kulturIndex,
+                gartenId,
+                gartenIndex,
+                children: zaehlungs,
+              },
+            )
+            gartenKulturZaehlungFolderNodes.push(gartenKulturZaehlungFolderNode)
+            const gartenKulturZaehlungFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Gaerten' &&
+                n[1] === gartenId &&
+                n[2] === 'Kulturen' &&
+                n[3] === kulturId &&
+                n[4] === 'Zaehlungen',
+            )
+            if (gartenKulturZaehlungFolderIsOpen) {
+              const zaehlungsSorted = zaehlungs.sort((a, b) =>
+                zaehlungSort({ a, b }),
+              )
+              const myGartenKulturZaehlungNodes = await Promise.all(
+                zaehlungsSorted.map(
+                  async (zaehlung, zaehlungIndex) =>
+                    await buildGartenKulturZaehlung({
+                      zaehlung,
+                      zaehlungIndex,
+                      kulturId,
+                      kulturIndex,
+                      gartenId,
+                      gartenIndex,
+                    }),
+                ),
+              )
+              gartenKulturZaehlungNodes.push(...myGartenKulturZaehlungNodes)
+            }
+
             // garten > kultur > anlieferung
             const lieferungFilterQuery = queryFromFilter({
               table: 'lieferung',
