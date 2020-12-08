@@ -853,6 +853,53 @@ const buildNodes = async ({ store }) => {
               (s) => s.id === `${gartenId}${kulturId}`,
             )
 
+            // garten > kultur > teilkultur
+            const teilkulturFilterQuery = queryFromFilter({
+              table: 'teilkultur',
+              filter: store.filter.teilkultur.toJSON(),
+            })
+            const teilkulturs = await kultur.teilkulturs
+              .extend(...teilkulturFilterQuery)
+              .fetch()
+            const gartenKulturTeilkulturFolderNode = await buildGartenKulturTeilkulturFolder(
+              {
+                kulturId,
+                kulturIndex,
+                gartenId,
+                gartenIndex,
+                children: teilkulturs,
+              },
+            )
+            gartenKulturTeilkulturFolderNodes.push(
+              gartenKulturTeilkulturFolderNode,
+            )
+            const gartenKulturTeilkulturFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Gaerten' &&
+                n[1] === gartenId &&
+                n[2] === 'Kulturen' &&
+                n[3] === kulturId &&
+                n[4] === 'Teilkulturen',
+            )
+            if (gartenKulturTeilkulturFolderIsOpen) {
+              const teilkultursSorted = teilkulturs.sort((a, b) =>
+                teilkulturSort({ a, b }),
+              )
+              const myGartenKulturTeilkulturNodes = teilkultursSorted.map(
+                (teilkultur, teilkulturIndex) =>
+                  buildGartenKulturTeilkultur({
+                    teilkultur,
+                    teilkulturIndex,
+                    kulturId,
+                    kulturIndex,
+                    gartenId,
+                    gartenIndex,
+                  }),
+              )
+              gartenKulturTeilkulturNodes.push(...myGartenKulturTeilkulturNodes)
+            }
+
             // garten > kultur > zaehlung
             const zaehlungFilterQuery = queryFromFilter({
               table: 'zaehlung',
