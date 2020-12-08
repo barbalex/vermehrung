@@ -1089,8 +1089,6 @@ const buildNodes = async ({ store }) => {
     }
   }
 
-  // WORK IN PROGRESS
-
   // 5 kultur
   if (showKultur) {
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Kulturen')) {
