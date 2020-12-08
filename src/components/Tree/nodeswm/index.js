@@ -1149,43 +1149,71 @@ const buildNodes = async ({ store }) => {
           )
         }
 
-        // 2.1 kultur > auslieferung
-        /*const lieferungFilterQuery = queryFromFilter({
-          table: 'teilkultur',
-          filter: store.filter.teilkultur.toJSON(),
+        // kultur > anlieferung
+        const lieferungFilterQuery = queryFromFilter({
+          table: 'lieferung',
+          filter: store.filter.lieferung.toJSON(),
         })
-        const teilkulturs = await kultur.teilkulturs
-          .extend(...teilkulturFilterQuery)
+        const anlieferungs = await kultur.anlieferungs
+          .extend(...lieferungFilterQuery)
           .fetch()
-        const teilkultursSorted = await teilkultursSortedFromTeilkulturs(teilkulturs)
-        kulturTeilkulturFolderNodes.push(
-          buildKulturTeilkulturFolder({
-            children: teilkultursSorted,
-            kulturIndex,
-            kulturId,
-          }),
+        const anlieferungsSorted = anlieferungs.sort((a, b) =>
+          lieferungSort({ a, b }),
         )
-        const kulturTeilkulturFolderIsOpen = openNodes.some(
+        kulturAnlieferungFolderNodes = buildKulturAnlieferungFolder({
+          children: anlieferungsSorted,
+          kulturIndex,
+          kulturId,
+        })
+        const kulturAnlieferungFolderIsOpen = openNodes.some(
           (n) =>
             n.length === 3 &&
             n[0] === 'Kulturen' &&
             n[1] === kulturId &&
-            n[2] === 'Teilkulturen',
+            n[2] === 'An-Lieferungen',
         )
-        if (kulturTeilkulturFolderIsOpen) {
-          const myKulturTeilkulturNodes = await Promise.all(
-            teilkultursSorted.map(
-              async (teilkultur, teilkulturIndex) =>
-                await buildKulturTeilkultur({
-                  teilkultur,
-                  teilkulturIndex,
-                  kulturId,
-                  kulturIndex,
-                }),
-            ),
+        if (kulturAnlieferungFolderIsOpen) {
+          kulturAnlieferungNodes = anlieferungsSorted.map(
+            (lieferung, lieferungIndex) =>
+              buildKulturAnlieferung({
+                lieferung,
+                lieferungIndex,
+                kulturId,
+                kulturIndex,
+              }),
           )
-          kulturTeilkulturNodes.push(...myKulturTeilkulturNodes)
-              }*/
+        }
+
+        // kultur > auslieferung
+        const auslieferungs = await kultur.auslieferungs
+          .extend(...lieferungFilterQuery)
+          .fetch()
+        const auslieferungsSorted = auslieferungs.sort((a, b) =>
+          lieferungSort({ a, b }),
+        )
+        kulturAuslieferungFolderNodes = buildKulturAuslieferungFolder({
+          children: auslieferungsSorted,
+          kulturIndex,
+          kulturId,
+        })
+        const kulturAuslieferungFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Kulturen' &&
+            n[1] === kulturId &&
+            n[2] === 'Aus-Lieferungen',
+        )
+        if (kulturAuslieferungFolderIsOpen) {
+          kulturAuslieferungNodes = auslieferungsSorted.map(
+            (lieferung, lieferungIndex) =>
+              buildKulturAuslieferung({
+                lieferung,
+                lieferungIndex,
+                kulturId,
+                kulturIndex,
+              }),
+          )
+        }
       }
     }
   }
