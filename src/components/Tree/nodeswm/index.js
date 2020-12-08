@@ -28,6 +28,16 @@ import buildGartenFolder from './garten/folder'
 import buildGarten from './garten'
 import buildGartenKulturFolder from './garten/kultur/folder'
 import buildGartenKultur from './garten/kultur'
+import buildGartenKulturTeilkulturFolder from './garten/kultur/teilkultur/folder'
+import buildGartenKulturTeilkultur from './garten/kultur/teilkultur'
+import buildGartenKulturZaehlungFolder from './garten/kultur/zaehlung/folder'
+import buildGartenKulturZaehlung from './garten/kultur/zaehlung'
+import buildGartenKulturAnlieferungFolder from './garten/kultur/anlieferung/folder'
+import buildGartenKulturAnlieferung from './garten/kultur/anlieferung'
+import buildGartenKulturAuslieferungFolder from './garten/kultur/auslieferung/folder'
+import buildGartenKulturAuslieferung from './garten/kultur/auslieferung'
+import buildGartenKulturEventFolder from './garten/kultur/event/folder'
+import buildGartenKulturEvent from './garten/kultur/event'
 import buildKulturFolder from './kultur/folder'
 import buildKultur from './kultur'
 import buildTeilkulturFolder from './teilkultur/folder'
@@ -127,6 +137,16 @@ const buildNodes = async ({ store }) => {
   let gartenNodes = []
   let gartenKulturFolderNodes = []
   let gartenKulturNodes = []
+  let gartenKulturTeilkulturFolderNodes = []
+  let gartenKulturTeilkulturNodes = []
+  let gartenKulturZaehlungFolderNodes = []
+  let gartenKulturZaehlungNodes = []
+  let gartenKulturAnlieferungFolderNodes = []
+  let gartenKulturAnlieferungNodes = []
+  let gartenKulturAuslieferungFolderNodes = []
+  let gartenKulturAuslieferungNodes = []
+  let gartenKulturEventFolderNodes = []
+  let gartenKulturEventNodes = []
   const kulturFolderNodes = buildKulturFolder({ store })
   let kulturNodes = []
   const teilkulturFolderNodes = buildTeilkulturFolder({ store })
@@ -822,7 +842,7 @@ const buildNodes = async ({ store }) => {
             ),
           )
           gartenKulturNodes.push(...myGartenKulturNodes)
-          /*
+
           const openGartenKulturNodes = openNodes.filter(
             (n) => n[0] === 'Gaerten' && n[2] === 'Kulturen' && n.length === 4,
           )
@@ -832,11 +852,13 @@ const buildNodes = async ({ store }) => {
             const kulturIndex = myGartenKulturNodes.findIndex(
               (s) => s.id === `${gartenId}${kulturId}`,
             )
+
+            // garten > kultur > auslieferung
             const lieferungFilterQuery = queryFromFilter({
               table: 'lieferung',
               filter: store.filter.lieferung.toJSON(),
             })
-            const lieferungs = await kultur.lieferungs
+            const auslieferungs = await kultur.auslieferungs
               .extend(...lieferungFilterQuery)
               .fetch()
             const gartenKulturAuslieferungFolderNode = await buildGartenKulturAuslieferungFolder(
@@ -845,7 +867,7 @@ const buildNodes = async ({ store }) => {
                 kulturIndex,
                 gartenId,
                 gartenIndex,
-                children: lieferungs,
+                children: auslieferungs,
               },
             )
             gartenKulturAuslieferungFolderNodes.push(
@@ -861,10 +883,10 @@ const buildNodes = async ({ store }) => {
                 n[4] === 'Aus-Lieferungen',
             )
             if (gartenKulturAuslieferungFolderIsOpen) {
-              const lieferungsSorted = lieferungs.sort((a, b) =>
+              const auslieferungsSorted = auslieferungs.sort((a, b) =>
                 lieferungSort({ a, b }),
               )
-              const myGartenKulturAuslieferungNodes = lieferungsSorted.map(
+              const myGartenKulturAuslieferungNodes = auslieferungsSorted.map(
                 (lieferung, lieferungIndex) =>
                   buildGartenKulturAuslieferung({
                     lieferung,
@@ -879,7 +901,7 @@ const buildNodes = async ({ store }) => {
                 ...myGartenKulturAuslieferungNodes,
               )
             }
-          }*/
+          }
         }
       }
     }
@@ -1055,6 +1077,16 @@ const buildNodes = async ({ store }) => {
     ...gartenNodes,
     ...gartenKulturFolderNodes,
     ...gartenKulturNodes,
+    ...gartenKulturTeilkulturFolderNodes,
+    ...gartenKulturTeilkulturNodes,
+    ...gartenKulturZaehlungFolderNodes,
+    ...gartenKulturZaehlungNodes,
+    ...gartenKulturAnlieferungFolderNodes,
+    ...gartenKulturAnlieferungNodes,
+    ...gartenKulturAuslieferungFolderNodes,
+    ...gartenKulturAuslieferungNodes,
+    ...gartenKulturEventFolderNodes,
+    ...gartenKulturEventNodes,
     ...kulturFolderNodes,
     ...kulturNodes,
     ...teilkulturFolderNodes,

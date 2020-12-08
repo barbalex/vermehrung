@@ -698,9 +698,9 @@ const KulturTimeline = ({ row, width }) => {
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)
   const scrollHandler = useCallback(() => {
-    const { top } = titleRowRef?.current?.getBoundingClientRect()
-    if (top < 112 && !isSticky) return setIsSticky(true)
-    if (top > 112 && isSticky) setIsSticky(false)
+    const top = titleRowRef?.current?.getBoundingClientRect()?.top
+    if (top && top < 112 && !isSticky) return setIsSticky(true)
+    if (top && top > 112 && isSticky) setIsSticky(false)
   }, [isSticky])
   useEffect(() => {
     window.addEventListener('scroll', scrollHandler, true)
