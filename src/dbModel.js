@@ -740,7 +740,7 @@ export class Kultur extends Model {
     teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
     zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
     event: { type: 'has_many', foreignKey: 'kultur_id' },
-    kultur_option: { type: 'has_many', foreignKey: 'kultur_id' },
+    kultur_option: { type: 'belongs_to', key: 'kultur_id' },
     kultur_file: { type: 'has_many', foreignKey: 'kultur_id' },
   }
 
@@ -766,8 +766,8 @@ export class Kultur extends Model {
   @children('teilkultur') teilkulturs
   @children('zaehlung') zaehlungs
   @children('event') events
-  @children('kultur_option') kultur_options
   @children('kultur_file') files
+  @relation('kultur_option', 'id') kultur_option
   @relation('garten', 'garten_id') garten
   @relation('art', 'art_id') art
   @relation('herkunft', 'herkunft_id') herkunft
@@ -1246,7 +1246,7 @@ export class Teilzaehlung extends Model {
 export class Person extends Model {
   static table = 'person'
   static associations = {
-    person_option: { type: 'has_many', foreignKey: 'person_id' },
+    person_option: { type: 'belongs_to', key: 'person_id' },
     sammel_lieferung: { type: 'has_many', foreignKey: 'person_id' },
     av: { type: 'has_many', foreignKey: 'person_id' },
     gv: { type: 'has_many', foreignKey: 'person_id' },
@@ -1301,7 +1301,7 @@ export class Person extends Model {
     }),
   )
 
-  @children('person_option') person_options
+  @relation('person_option', 'id') person_option
   @children('sammel_lieferung') sammel_lieferungs
   @children('av') avs
   @children('gv') gvs

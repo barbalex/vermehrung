@@ -4,15 +4,17 @@ const artSammlungAuslieferungFolder = ({
   artId,
   artIndex,
   children,
-}) => ({
-  nodeType: 'folder',
-  menuTitle: 'Lieferungen',
-  id: `${artId}${sammlungId}LieferungFolder`,
-  label: `Aus-Lieferungen (${children.length})`,
-  url: ['Arten', artId, 'Sammlungen', sammlungId, 'Aus-Lieferungen'],
-  sort: [1, artIndex, 1, sammlungIndex, 1],
-  hasChildren: true,
-  childrenCount: children.length,
-})
+}) => [
+  {
+    nodeType: 'folder',
+    menuTitle: 'Lieferungen',
+    id: `${artId}${sammlungId}LieferungFolder`,
+    label: `Aus-Lieferungen (${children.length})`,
+    url: ['Arten', artId, 'Sammlungen', sammlungId, 'Aus-Lieferungen'],
+    sort: [1, artIndex, 1, sammlungIndex, 1],
+    hasChildren: true,
+    childrenCount: children.length,
+  },
+]
 
 export default artSammlungAuslieferungFolder
