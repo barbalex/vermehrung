@@ -1040,6 +1040,49 @@ const buildNodes = async ({ store }) => {
                 ...myGartenKulturAuslieferungNodes,
               )
             }
+
+            // garten > kultur > event
+            const eventFilterQuery = queryFromFilter({
+              table: 'event',
+              filter: store.filter.event.toJSON(),
+            })
+            const events = await kultur.events
+              .extend(...eventFilterQuery)
+              .fetch()
+            const gartenKulturEventFolderNode = await buildGartenKulturEventFolder(
+              {
+                kulturId,
+                kulturIndex,
+                gartenId,
+                gartenIndex,
+                children: events,
+              },
+            )
+            gartenKulturEventFolderNodes.push(gartenKulturEventFolderNode)
+            const gartenKulturEventFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Gaerten' &&
+                n[1] === gartenId &&
+                n[2] === 'Kulturen' &&
+                n[3] === kulturId &&
+                n[4] === 'Events',
+            )
+            if (gartenKulturEventFolderIsOpen) {
+              const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+              const myGartenKulturEventNodes = eventsSorted.map(
+                (event, eventIndex) =>
+                  buildGartenKulturEvent({
+                    event,
+                    eventIndex,
+                    kulturId,
+                    kulturIndex,
+                    gartenId,
+                    gartenIndex,
+                  }),
+              )
+              gartenKulturEventNodes.push(...myGartenKulturEventNodes)
+            }
           }
         }
       }
