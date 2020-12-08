@@ -34,6 +34,8 @@ import buildSammlungFolder from './sammlung/folder'
 import buildSammlung from './sammlung'
 import buildSammlungHerkunftFolder from './sammlung/herkunft/folder'
 import buildSammlungHerkunft from './sammlung/herkunft'
+import buildSammlungAuslieferungFolder from './sammlung/auslieferung/folder'
+import buildSammlungAuslieferung from './sammlung/auslieferung'
 import buildZaehlungFolder from './zaehlung/folder'
 import buildZaehlung from './zaehlung'
 import buildLieferungFolder from './lieferung/folder'
@@ -117,6 +119,8 @@ const buildNodes = async ({ store }) => {
   let sammlungNodes = []
   let sammlungHerkunftFolderNodes = []
   let sammlungHerkunftNodes = []
+  let sammlungAuslieferungFolderNodes = []
+  let sammlungAuslieferungNodes = []
   const gartenFolder = buildGartenFolder({ store })
   let garten = []
   const kulturFolder = buildKulturFolder({ store })
@@ -712,6 +716,44 @@ const buildNodes = async ({ store }) => {
           )
           sammlungHerkunftNodes.push(...mySammlungHerkunftNodes)
         }
+
+        // 2.1 sammlung > auslieferung
+        const lieferungFilterQuery = queryFromFilter({
+          table: 'lieferung',
+          filter: store.filter.lieferung.toJSON(),
+        })
+        const lieferungs = await sammlung.lieferungs
+          .extend(...lieferungFilterQuery)
+          .fetch()
+        const lieferungsSorted = lieferungs.sort((a, b) =>
+          lieferungSort({ a, b }),
+        )
+        sammlungAuslieferungFolderNodes.push(
+          buildSammlungAuslieferungFolder({
+            children: lieferungsSorted,
+            sammlungIndex,
+            sammlungId,
+          }),
+        )
+        const sammlungAuslieferungFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Sammlungen' &&
+            n[1] === sammlungId &&
+            n[2] === 'Aus-Lieferungen',
+        )
+        if (sammlungAuslieferungFolderIsOpen) {
+          const mySammlungAuslieferungNodes = lieferungsSorted.map(
+            (lieferung, lieferungIndex) =>
+              buildSammlungAuslieferung({
+                lieferung,
+                lieferungIndex,
+                sammlungId,
+                sammlungIndex,
+              }),
+          )
+          sammlungAuslieferungNodes.push(...mySammlungAuslieferungNodes)
+        }
       }
     }
   }
@@ -894,6 +936,8 @@ const buildNodes = async ({ store }) => {
     ...sammlungNodes,
     ...sammlungHerkunftFolderNodes,
     ...sammlungHerkunftNodes,
+    ...sammlungAuslieferungFolderNodes,
+    ...sammlungAuslieferungNodes,
     ...gartenFolder,
     ...garten,
     ...kulturFolder,
