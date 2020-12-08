@@ -1111,9 +1111,46 @@ const buildNodes = async ({ store }) => {
                 }),
             )
           }
+        }
 
-          // 2.1 kultur > auslieferung
-          /*const lieferungFilterQuery = queryFromFilter({
+        // 2.1 kultur > zaehlung
+        const zaehlungFilterQuery = queryFromFilter({
+          table: 'zaehlung',
+          filter: store.filter.zaehlung.toJSON(),
+        })
+        const zaehlungs = await kultur.zaehlungs
+          .extend(...zaehlungFilterQuery)
+          .fetch()
+        const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
+        kulturZaehlungFolderNodes = buildKulturZaehlungFolder({
+          children: zaehlungsSorted,
+          kulturIndex,
+          kulturId,
+        })
+
+        const kulturZaehlungFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Kulturen' &&
+            n[1] === kulturId &&
+            n[2] === 'Zaehlungen',
+        )
+        if (kulturZaehlungFolderIsOpen) {
+          kulturZaehlungNodes = await Promise.all(
+            zaehlungsSorted.map(
+              async (zaehlung, zaehlungIndex) =>
+                await buildKulturZaehlung({
+                  zaehlung,
+                  zaehlungIndex,
+                  kulturId,
+                  kulturIndex,
+                }),
+            ),
+          )
+        }
+
+        // 2.1 kultur > auslieferung
+        /*const lieferungFilterQuery = queryFromFilter({
           table: 'teilkultur',
           filter: store.filter.teilkultur.toJSON(),
         })
@@ -1147,8 +1184,8 @@ const buildNodes = async ({ store }) => {
                 }),
             ),
           )
-          kulturTeilkulturNodes.push(...myKulturTeilkulturNodes)*/
-        }
+          kulturTeilkulturNodes.push(...myKulturTeilkulturNodes)
+              }*/
       }
     }
   }
