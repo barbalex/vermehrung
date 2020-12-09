@@ -1448,6 +1448,109 @@ const buildNodes = async ({ store }) => {
       personNodes = personsSorted.map((person, index) =>
         buildPerson({ person, index }),
       )
+
+      // on to child nodes
+      const openPersonNodes = openNodes.filter(
+        (n) => n[0] === 'Personen' && n.length === 2,
+      )
+      for (const personNode of openPersonNodes) {
+        const personId = personNode[1]
+        const person = personsSorted.find((a) => a.id === personId)
+        const personIndex = personNodes.findIndex((a) => a.id === personId)
+
+        // person > sammlung
+        const sammlungs = await person.sammlungs
+          .extend(...tableFilter({ store, table: 'sammlung' }))
+          .fetch()
+        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+        personSammlungFolderNodes = buildPersonSammlungFolder({
+          children: sammlungsSorted,
+          personIndex,
+          personId,
+        })
+
+        const personSammlungFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Personen' &&
+            n[1] === personId &&
+            n[2] === 'Sammlungen',
+        )
+        if (personSammlungFolderIsOpen) {
+          personSammlungNodes = await Promise.all(
+            sammlungsSorted.map(
+              async (sammlung, index) =>
+                await buildPersonSammlung({
+                  sammlung,
+                  index,
+                  personId,
+                  personIndex,
+                }),
+            ),
+          )
+        }
+
+        // person > garten
+        const gartens = await person.gartens
+          .extend(...tableFilter({ store, table: 'garten' }))
+          .fetch()
+        const gartensSorted = await gartensSortedFromGartens(gartens)
+        personGartenFolderNodes = buildPersonGartenFolder({
+          children: gartensSorted,
+          personIndex,
+          personId,
+        })
+        const personGartenFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Personen' &&
+            n[1] === personId &&
+            n[2] === 'Gaerten',
+        )
+        if (personGartenFolderIsOpen) {
+          personGartenNodes = await Promise.all(
+            gartensSorted.map(
+              async (garten, index) =>
+                await buildPersonGarten({
+                  garten,
+                  index,
+                  personId,
+                  personIndex,
+                }),
+            ),
+          )
+        }
+
+        // person > lieferung
+        const lieferungs = await person.lieferungs
+          .extend(...tableFilter({ store, table: 'lieferung' }))
+          .fetch()
+        const lieferungsSorted = lieferungs.sort((a, b) =>
+          lieferungSort({ a, b }),
+        )
+        personLieferungFolderNodes = buildPersonLieferungFolder({
+          children: lieferungsSorted,
+          personIndex,
+          personId,
+        })
+        const personLieferungFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Personen' &&
+            n[1] === personId &&
+            n[2] === 'Lieferungen',
+        )
+        if (personLieferungFolderIsOpen) {
+          personLieferungNodes = lieferungsSorted.map((lieferung, index) =>
+            buildPersonLieferung({
+              lieferung,
+              index,
+              personId,
+              personIndex,
+            }),
+          )
+        }
+      }
     }
   }
 
