@@ -1308,27 +1308,26 @@ const buildNodes = async ({ store }) => {
 
   // 9 sammelLieferung
   if (showSammelLieferung) {
-    sammelLieferungFolderNodes = buildSammelLieferungFolder({ store })
+    const sammelLieferungQuery = db.collections
+      .get('sammel_lieferung')
+      .query(...tableFilter({ store, table: 'sammel_lieferung' }))
+    const sammelLieferungCount = await sammelLieferungQuery.fetchCount()
+    sammelLieferungFolderNodes = buildSammelLieferungFolder({
+      count: sammelLieferungCount,
+    })
     if (
       openNodes.some((n) => n.length === 1 && n[0] === 'Sammel-Lieferungen')
     ) {
-      const sammelLieferungFilterQuery = queryFromFilter({
-        table: 'sammel_lieferung',
-        filter: store.filter.sammel_lieferung.toJSON(),
-      })
-      const sammelLieferungs = await db.collections
-        .get('sammel_lieferung')
-        .query(...sammelLieferungFilterQuery)
-        .fetch()
+      const sammelLieferungs = await sammelLieferungQuery.fetch()
       const sammelLieferungsSorted = sammelLieferungs.sort((a, b) =>
         lieferungSort({ a, b }),
       )
       sammelLieferungNodes = await Promise.all(
         sammelLieferungsSorted.map(
-          async (sammelLieferung, sammelLieferungIndex) =>
+          async (sammelLieferung, index) =>
             await buildSammelLieferung({
               sammelLieferung,
-              sammelLieferungIndex,
+              index,
             }),
         ),
       )
@@ -1388,20 +1387,17 @@ const buildNodes = async ({ store }) => {
 
   // 10 event
   if (showEvent) {
-    eventFolderNodes = buildEventFolder({ store })
+    const eventQuery = db.collections
+      .get('event')
+      .query(...tableFilter({ store, table: 'event' }))
+    const eventCount = await eventQuery.fetchCount()
+    eventFolderNodes = buildEventFolder({ count: eventCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Events')) {
-      const eventFilterQuery = queryFromFilter({
-        table: 'event',
-        filter: store.filter.event.toJSON(),
-      })
-      const events = await db.collections
-        .get('event')
-        .query(...eventFilterQuery)
-        .fetch()
-      eventNodes = buildEvent({
-        store,
-        events: events.sort((a, b) => eventSort({ a, b })),
-      })
+      const events = await eventQuery.fetch()
+      const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+      eventNodes = eventsSorted.map((event, index) =>
+        buildEvent({ event, index }),
+      )
     }
   }
 
