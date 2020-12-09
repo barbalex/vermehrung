@@ -1056,18 +1056,19 @@ const buildNodes = async ({ store }) => {
 
   // 5 kultur
   if (showKultur) {
-    kulturFolderNodes = buildKulturFolder({ store })
+    const kulturQuery = db.collections
+      .get('kultur')
+      .query(...tableFilter({ store, table: 'kultur' }))
+    const kulturCount = await kulturQuery.fetchCount()
+    kulturFolderNodes = buildKulturFolder({ count: kulturCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Kulturen')) {
-      const kulturFilterQuery = queryFromFilter({
-        table: 'kultur',
-        filter: store.filter.kultur.toJSON(),
-      })
-      const kulturs = await db.collections
-        .get('kultur')
-        .query(...kulturFilterQuery)
-        .fetch()
+      const kulturs = await kulturQuery.fetch()
       const kultursSorted = await kultursSortedFromKulturs(kulturs)
-      kulturNodes = await buildKultur({ store, kulturs: kultursSorted })
+      kulturNodes = await Promise.all(
+        kultursSorted.map(async (kultur, index) =>
+          buildKultur({ kultur, index }),
+        ),
+      )
 
       // on to child nodes
       const openKulturNodes = openNodes.filter(
