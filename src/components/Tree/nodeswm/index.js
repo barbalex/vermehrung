@@ -83,6 +83,7 @@ import artsSortedFromArts from '../../../utils/artsSortedFromArts'
 import kultursSortedFromKulturs from '../../../utils/kultursSortedFromKulturs'
 import gartensSortedFromGartens from '../../../utils/gartensSortedFromGartens'
 import sammlungsSortedFromSammlungs from '../../../utils/sammlungsSortedFromSammlungs'
+import tableFilter from '../../../utils/tableFilter'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -188,33 +189,17 @@ const buildNodes = async ({ store }) => {
 
   // 1 art
   if (showArt) {
-    const artFilterQuery = queryFromFilter({
-      table: 'art',
-      filter: store.filter.art.toJSON(),
-    })
-    //const artQuery = db.collections.get('art').query(...artFilterQuery)
-    const artCount = await db.collections
+    const artQuery = db.collections
       .get('art')
-      .query(...artFilterQuery)
-      .fetchCount()
+      .query(...tableFilter({ store, table: 'art' }))
+    const artCount = await artQuery.fetchCount()
     artFolderNodes = buildArtFolder({ count: artCount })
     const artFolderIsOpen = openNodes.some(
       (n) => n.length === 1 && n[0] === 'Arten',
     )
-    console.log('buildNodes', {
-      artCount,
-      artFolderNodes,
-      artFolderIsOpen,
-    })
     if (artFolderIsOpen) {
       // build art nodes
-      const arts = await db.collections
-        .get('art')
-        .query(...artFilterQuery)
-        .fetch()
-      console.log('buildNodes', {
-        arts,
-      })
+      const arts = await artQuery.fetch()
       const artsSorted = await artsSortedFromArts(arts)
       artNodes = await buildArt({ store, arts: artsSorted })
 
