@@ -68,6 +68,8 @@ import buildPersonFolder from './person/folder'
 import buildPerson from './person'
 import buildSammelLieferungFolder from './sammelLieferung/folder'
 import buildSammelLieferung from './sammelLieferung'
+import buildSammelLieferungLieferungFolder from './sammelLieferung/lieferung/folder'
+import buildSammelLieferungLieferung from './sammelLieferung/lieferung'
 import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
 import storeFilter from '../../../utils/storeFilter'
 import queryFromFilter from '../../../utils/queryFromFilter'
@@ -181,6 +183,8 @@ const buildNodes = async ({ store }) => {
   let personNodes = []
   let sammelLieferungFolderNodes = []
   let sammelLieferungNodes = []
+  let sammelLieferungLieferungFolderNodes = []
+  let sammelLieferungLieferungNodes = []
 
   // 1 art
   if (showArt) {
@@ -1214,11 +1218,39 @@ const buildNodes = async ({ store }) => {
               }),
           )
         }
+
+        // kultur > event
+        const eventFilterQuery = queryFromFilter({
+          table: 'event',
+          filter: store.filter.event.toJSON(),
+        })
+        const events = await kultur.events.extend(...eventFilterQuery).fetch()
+        const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+        kulturEventFolderNodes = buildKulturEventFolder({
+          children: eventsSorted,
+          kulturIndex,
+          kulturId,
+        })
+        const kulturEventFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Kulturen' &&
+            n[1] === kulturId &&
+            n[2] === 'Events',
+        )
+        if (kulturEventFolderIsOpen) {
+          kulturEventNodes = eventsSorted.map((event, eventIndex) =>
+            buildKulturEvent({
+              event,
+              eventIndex,
+              kulturId,
+              kulturIndex,
+            }),
+          )
+        }
       }
     }
   }
-
-  // IN DEV
 
   // 6 teilkultur
   if (showTeilkultur) {
@@ -1291,12 +1323,69 @@ const buildNodes = async ({ store }) => {
         .get('sammel_lieferung')
         .query(...sammelLieferungFilterQuery)
         .fetch()
-      sammelLieferungNodes = buildSammelLieferung({
-        store,
-        sammelLieferungs: sammelLieferungs.sort((a, b) =>
-          lieferungSort({ a, b }),
+      const sammelLieferungsSorted = sammelLieferungs.sort((a, b) =>
+        lieferungSort({ a, b }),
+      )
+      sammelLieferungNodes = await Promise.all(
+        sammelLieferungsSorted.map(
+          async (sammelLieferung, sammelLieferungIndex) =>
+            await buildSammelLieferung({
+              sammelLieferung,
+              sammelLieferungIndex,
+            }),
         ),
-      })
+      )
+
+      // on to child nodes
+      const openSammelLieferungNodes = openNodes.filter(
+        (n) => n.length === 2 && n[0] === 'Sammel-Lieferungen',
+      )
+      for (const sammelLieferungNode of openSammelLieferungNodes) {
+        const sammelLieferungId = sammelLieferungNode[1]
+        const sammelLieferung = sammelLieferungsSorted.find(
+          (a) => a.id === sammelLieferungId,
+        )
+        const sammelLieferungIndex = sammelLieferungNodes.findIndex(
+          (a) => a.id === sammelLieferungId,
+        )
+
+        // 2.1 sammelLieferung > lieferung
+        const lieferungFilterQuery = queryFromFilter({
+          table: 'lieferung',
+          filter: store.filter.lieferung.toJSON(),
+        })
+        const lieferungs = await sammelLieferung.lieferungs
+          .extend(...lieferungFilterQuery)
+          .fetch()
+        const lieferungsSorted = lieferungs.sort((a, b) =>
+          lieferungSort({ a, b }),
+        )
+        sammelLieferungLieferungFolderNodes = buildSammelLieferungLieferungFolder(
+          {
+            children: lieferungsSorted,
+            sammelLieferungIndex,
+            sammelLieferungId,
+          },
+        )
+        const sammelLieferungLieferungFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Sammel-Lieferungen' &&
+            n[1] === sammelLieferungId &&
+            n[2] === 'Lieferungen',
+        )
+        if (sammelLieferungLieferungFolderIsOpen) {
+          sammelLieferungLieferungNodes = lieferungsSorted.map(
+            (lieferung, lieferungIndex) =>
+              buildSammelLieferungLieferung({
+                lieferung,
+                lieferungIndex,
+                sammelLieferungId,
+                sammelLieferungIndex,
+              }),
+          )
+        }
+      }
     }
   }
 
@@ -1318,6 +1407,14 @@ const buildNodes = async ({ store }) => {
       })
     }
   }
+
+  // IN DEV
+  // IN DEV
+  // IN DEV
+  // IN DEV
+  // IN DEV
+  // IN DEV
+  // IN DEV
 
   // 11 person
   if (showPerson) {
@@ -1412,6 +1509,8 @@ const buildNodes = async ({ store }) => {
     ...personNodes,
     ...sammelLieferungFolderNodes,
     ...sammelLieferungNodes,
+    ...sammelLieferungLieferungFolderNodes,
+    ...sammelLieferungLieferungNodes,
   ]
 
   const nodesSorted = nodes.sort(
