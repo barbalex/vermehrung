@@ -1,9 +1,12 @@
 import queryFromFilter from './queryFromFilter'
 
-const tableFilter = ({ store, table }) =>
-  queryFromFilter({
+const tableFilter = ({ store, table }) => {
+  const filter = store.filter[table]
+  if (!filter) throw `no filter found for table ${table}`
+  return queryFromFilter({
     table,
-    filter: store.filter[table]?.toJSON(),
+    filter: filter.toJSON(),
   })
+}
 
 export default tableFilter

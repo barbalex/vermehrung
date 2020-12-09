@@ -201,7 +201,11 @@ const buildNodes = async ({ store }) => {
       // build art nodes
       const arts = await artQuery.fetch()
       const artsSorted = await artsSortedFromArts(arts)
-      artNodes = await buildArt({ store, arts: artsSorted })
+      artNodes = await Promise.all(
+        artsSorted.map(
+          async (art, index) => await buildArt({ store, art, index }),
+        ),
+      )
 
       // on to child nodes
       const openArtNodes = openNodes.filter(
@@ -559,22 +563,19 @@ const buildNodes = async ({ store }) => {
 
   // 2 herkunft
   if (showHerkunft) {
-    herkunftFolderNodes = buildHerkunftFolder({ store })
+    const herkunftQuery = db.collections
+      .get('herkunft')
+      .query(...tableFilter({ store, table: 'herkunft' }))
+    const herkunftCount = await herkunftQuery.fetchCount()
+    herkunftFolderNodes = buildHerkunftFolder({ count: herkunftCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Herkuenfte')) {
-      const herkunfts = await db.collections
-        .get('herkunft')
-        .query(notDeletedOrHasConflictQuery)
-        .fetch()
-      const herkunftsSorted = herkunfts
-        .filter((value) =>
-          storeFilter({
-            value,
-            filter: store.filter.herkunft,
-            table: 'herkunft',
-          }),
-        )
-        .sort(herkunftSort)
-      herkunftNodes = buildHerkunft({ store, herkunfts: herkunftsSorted })
+      const herkunfts = await herkunftQuery.fetch()
+      const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
+      herkunftNodes = await Promise.all(
+        herkunftsSorted.map(async (herkunft, index) =>
+          buildHerkunft({ herkunft, index }),
+        ),
+      )
 
       // on to child nodes
       const openHerkunftNodes = openNodes.filter(
@@ -679,18 +680,19 @@ const buildNodes = async ({ store }) => {
 
   // 3 sammlung
   if (showSammlung) {
-    sammlungFolderNodes = buildSammlungFolder({ store })
+    const sammlungQuery = db.collections
+      .get('sammlung')
+      .query(...tableFilter({ store, table: 'sammlung' }))
+    const sammlungCount = await sammlungQuery.fetchCount()
+    sammlungFolderNodes = buildSammlungFolder({ count: sammlungCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Sammlungen')) {
-      const sammlungFilterQuery = queryFromFilter({
-        table: 'sammlung',
-        filter: store.filter.sammlung.toJSON(),
-      })
-      const sammlungs = await db.collections
-        .get('sammlung')
-        .query(...sammlungFilterQuery)
-        .fetch()
+      const sammlungs = await sammlungQuery.fetch()
       const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-      sammlungNodes = await buildSammlung({ store, sammlungs: sammlungsSorted })
+      sammlungNodes = await Promise.all(
+        sammlungsSorted.map(async (sammlung, index) =>
+          buildSammlung({ sammlung, index }),
+        ),
+      )
 
       // on to child nodes
       const openSammlungNodes = openNodes.filter(
