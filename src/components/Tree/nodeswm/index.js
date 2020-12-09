@@ -188,20 +188,33 @@ const buildNodes = async ({ store }) => {
 
   // 1 art
   if (showArt) {
-    artFolderNodes = buildArtFolder({ store })
+    const artFilterQuery = queryFromFilter({
+      table: 'art',
+      filter: store.filter.art.toJSON(),
+    })
+    //const artQuery = db.collections.get('art').query(...artFilterQuery)
+    const artCount = await db.collections
+      .get('art')
+      .query(...artFilterQuery)
+      .fetchCount()
+    artFolderNodes = buildArtFolder({ count: artCount })
     const artFolderIsOpen = openNodes.some(
       (n) => n.length === 1 && n[0] === 'Arten',
     )
+    console.log('buildNodes', {
+      artCount,
+      artFolderNodes,
+      artFolderIsOpen,
+    })
     if (artFolderIsOpen) {
       // build art nodes
-      const artFilterQuery = queryFromFilter({
-        table: 'art',
-        filter: store.filter.art.toJSON(),
-      })
       const arts = await db.collections
         .get('art')
         .query(...artFilterQuery)
         .fetch()
+      console.log('buildNodes', {
+        arts,
+      })
       const artsSorted = await artsSortedFromArts(arts)
       artNodes = await buildArt({ store, arts: artsSorted })
 
