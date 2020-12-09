@@ -770,18 +770,19 @@ const buildNodes = async ({ store }) => {
 
   // 4 garten
   if (showGarten) {
-    gartenFolderNodes = buildGartenFolder({ store })
+    const gartenQuery = db.collections
+      .get('garten')
+      .query(...tableFilter({ store, table: 'garten' }))
+    const gartenCount = await gartenQuery.fetchCount()
+    gartenFolderNodes = buildGartenFolder({ count: gartenCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Gaerten')) {
-      const gartenFilterQuery = queryFromFilter({
-        table: 'garten',
-        filter: store.filter.garten.toJSON(),
-      })
-      const gartens = await db.collections
-        .get('garten')
-        .query(...gartenFilterQuery)
-        .fetch()
+      const gartens = await gartenQuery.fetch()
       const gartensSorted = await gartensSortedFromGartens(gartens)
-      gartenNodes = await buildGarten({ store, gartens: gartensSorted })
+      gartenNodes = await Promise.all(
+        gartensSorted.map(async (garten, index) =>
+          buildGarten({ garten, index }),
+        ),
+      )
 
       // on to child nodes
       const openGartenNodes = openNodes.filter(
