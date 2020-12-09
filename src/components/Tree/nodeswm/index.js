@@ -571,10 +571,8 @@ const buildNodes = async ({ store }) => {
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Herkuenfte')) {
       const herkunfts = await herkunftQuery.fetch()
       const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
-      herkunftNodes = await Promise.all(
-        herkunftsSorted.map(async (herkunft, index) =>
-          buildHerkunft({ herkunft, index }),
-        ),
+      herkunftNodes = herkunftsSorted.map((herkunft, index) =>
+        buildHerkunft({ herkunft, index }),
       )
 
       // on to child nodes
@@ -689,8 +687,8 @@ const buildNodes = async ({ store }) => {
       const sammlungs = await sammlungQuery.fetch()
       const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
       sammlungNodes = await Promise.all(
-        sammlungsSorted.map(async (sammlung, index) =>
-          buildSammlung({ sammlung, index }),
+        sammlungsSorted.map(
+          async (sammlung, index) => await buildSammlung({ sammlung, index }),
         ),
       )
 
@@ -779,8 +777,8 @@ const buildNodes = async ({ store }) => {
       const gartens = await gartenQuery.fetch()
       const gartensSorted = await gartensSortedFromGartens(gartens)
       gartenNodes = await Promise.all(
-        gartensSorted.map(async (garten, index) =>
-          buildGarten({ garten, index }),
+        gartensSorted.map(
+          async (garten, index) => await buildGarten({ garten, index }),
         ),
       )
 
@@ -1065,8 +1063,8 @@ const buildNodes = async ({ store }) => {
       const kulturs = await kulturQuery.fetch()
       const kultursSorted = await kultursSortedFromKulturs(kulturs)
       kulturNodes = await Promise.all(
-        kultursSorted.map(async (kultur, index) =>
-          buildKultur({ kultur, index }),
+        kultursSorted.map(
+          async (kultur, index) => await buildKultur({ kultur, index }),
         ),
       )
 
@@ -1256,58 +1254,55 @@ const buildNodes = async ({ store }) => {
 
   // 6 teilkultur
   if (showTeilkultur) {
-    teilkulturFolderNodes = buildTeilkulturFolder({ store })
+    const teilkulturQuery = db.collections
+      .get('teilkultur')
+      .query(...tableFilter({ store, table: 'teilkultur' }))
+    const teilkulturCount = await teilkulturQuery.fetchCount()
+    teilkulturFolderNodes = buildTeilkulturFolder({ count: teilkulturCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Teilkulturen')) {
-      const teilkulturFilterQuery = queryFromFilter({
-        table: 'teilkultur',
-        filter: store.filter.teilkultur.toJSON(),
-      })
-      const teilkulturs = await db.collections
-        .get('teilkultur')
-        .query(...teilkulturFilterQuery)
-        .fetch()
-      teilkulturNodes = buildTeilkultur({
-        store,
-        teilkulturs: teilkulturs.sort((a, b) => teilkulturSort({ a, b })),
-      })
+      const teilkulturs = await teilkulturQuery.fetch()
+      const teilkultursSorted = teilkulturs.sort((a, b) =>
+        teilkulturSort({ a, b }),
+      )
+      teilkulturNodes = teilkultursSorted.map((teilkultur, index) =>
+        buildTeilkultur({ teilkultur, index }),
+      )
     }
   }
 
   // 7 zaehlung
   if (showZaehlung) {
-    zaehlungFolderNodes = buildZaehlungFolder({ store })
+    const zaehlungQuery = db.collections
+      .get('zaehlung')
+      .query(...tableFilter({ store, table: 'zaehlung' }))
+    const zaehlungCount = await zaehlungQuery.fetchCount()
+    zaehlungFolderNodes = buildZaehlungFolder({ count: zaehlungCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Zaehlungen')) {
-      const zaehlungFilterQuery = queryFromFilter({
-        table: 'zaehlung',
-        filter: store.filter.zaehlung.toJSON(),
-      })
-      const zaehlungs = await db.collections
-        .get('zaehlung')
-        .query(...zaehlungFilterQuery)
-        .fetch()
-      zaehlungNodes = buildZaehlung({
-        store,
-        zaehlungs: zaehlungs.sort((a, b) => zaehlungSort({ a, b })),
-      })
+      const zaehlungs = await zaehlungQuery.fetch()
+      const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
+      zaehlungNodes = await Promise.all(
+        zaehlungsSorted.map(async (zaehlung, index) =>
+          buildZaehlung({ zaehlung, index }),
+        ),
+      )
     }
   }
 
   // 8 lieferung
   if (showLieferung) {
-    lieferungFolderNodes = buildLieferungFolder({ store })
+    const lieferungQuery = db.collections
+      .get('lieferung')
+      .query(...tableFilter({ store, table: 'lieferung' }))
+    const lieferungCount = await lieferungQuery.fetchCount()
+    lieferungFolderNodes = buildLieferungFolder({ count: lieferungCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Lieferungen')) {
-      const lieferungFilterQuery = queryFromFilter({
-        table: 'lieferung',
-        filter: store.filter.lieferung.toJSON(),
-      })
-      const lieferungs = await db.collections
-        .get('lieferung')
-        .query(...lieferungFilterQuery)
-        .fetch()
-      lieferungNodes = buildLieferung({
-        store,
-        lieferungs: lieferungs.sort((a, b) => lieferungSort({ a, b })),
-      })
+      const lieferungs = await lieferungQuery.fetch()
+      const lieferungsSorted = lieferungs.sort((a, b) =>
+        lieferungSort({ a, b }),
+      )
+      lieferungNodes = lieferungsSorted.map((lieferung, index) =>
+        buildLieferung({ lieferung, index }),
+      )
     }
   }
 
