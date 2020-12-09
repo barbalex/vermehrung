@@ -1403,21 +1403,17 @@ const buildNodes = async ({ store }) => {
 
   // 11 person
   if (showPerson) {
-    personFolderNodes = buildPersonFolder({ store })
+    const personQuery = db.collections
+      .get('person')
+      .query(...tableFilter({ store, table: 'person' }))
+    const personCount = await personQuery.fetchCount()
+    personFolderNodes = buildPersonFolder({ count: personCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Personen')) {
-      const personFilterQuery = queryFromFilter({
-        table: 'person',
-        filter: store.filter.person.toJSON(),
-      })
-      const persons = await db.collections
-        .get('person')
-        .query(...personFilterQuery)
-        .fetch()
+      const persons = await personQuery.fetch()
       const personsSorted = persons.sort((a, b) => personSort({ a, b }))
-      personNodes = buildPerson({
-        store,
-        persons: personsSorted,
-      })
+      personNodes = personsSorted.map((person, index) =>
+        buildPerson({ person, index }),
+      )
     }
   }
 
