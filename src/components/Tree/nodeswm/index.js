@@ -1519,7 +1519,67 @@ const buildNodes = async ({ store }) => {
                 }),
             ),
           )
+
+          const openPersonGartenNodes = openNodes.filter(
+            (n) => n[0] === 'Personen' && n[2] === 'Gaerten' && n.length === 4,
+          )
+          for (const personGartenNode of openPersonGartenNodes) {
+            const gartenId = personGartenNode[3]
+            const garten = gartensSorted.find((s) => s.id === gartenId)
+            if (!garten) break
+            const gartenIndex = personGartenNodes.findIndex(
+              (s) => s.id === `${personId}${gartenId}`,
+            )
+
+            // kultur nodes
+            const kulturs = await garten.kulturs
+              .extend(...tableFilter({ store, table: 'kultur' }))
+              .fetch()
+            personGartenKulturFolderNodes = buildPersonGartenKulturFolder({
+              gartenId,
+              gartenIndex,
+              personId,
+              personIndex,
+              children: kulturs,
+            })
+            const personGartenKulturFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Personen' &&
+                n[1] === personId &&
+                n[2] === 'Gaerten' &&
+                n[3] === gartenId &&
+                n[4] === 'Kulturen',
+            )
+            if (personGartenKulturFolderIsOpen) {
+              const kultursSorted = await kultursSortedFromKulturs(kulturs)
+              personGartenKulturNodes = await Promise.all(
+                kultursSorted.map(
+                  async (kultur, kulturIndex) =>
+                    await buildPersonGartenKultur({
+                      kultur,
+                      kulturIndex,
+                      gartenId,
+                      gartenIndex,
+                      personId,
+                      personIndex,
+                    }),
+                ),
+              )
+
+              // BEGIN DEV
+              // BEGIN DEV
+            }
+          }
         }
+
+        // IN DEV
+        // IN DEV
+        // IN DEV
+        // IN DEV
+        // IN DEV
+        // IN DEV
+        // IN DEV
 
         // person > lieferung
         const lieferungs = await person.lieferungs
@@ -1553,14 +1613,6 @@ const buildNodes = async ({ store }) => {
       }
     }
   }
-
-  // IN DEV
-  // IN DEV
-  // IN DEV
-  // IN DEV
-  // IN DEV
-  // IN DEV
-  // IN DEV
 
   /*console.log('buildNodesWm', {
     artSammlungAuslieferungNodes,
