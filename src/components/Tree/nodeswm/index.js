@@ -1408,14 +1408,6 @@ const buildNodes = async ({ store }) => {
     }
   }
 
-  // IN DEV
-  // IN DEV
-  // IN DEV
-  // IN DEV
-  // IN DEV
-  // IN DEV
-  // IN DEV
-
   // 11 person
   if (showPerson) {
     personFolderNodes = buildPersonFolder({ store })
@@ -1435,6 +1427,14 @@ const buildNodes = async ({ store }) => {
       })
     }
   }
+
+  // IN DEV
+  // IN DEV
+  // IN DEV
+  // IN DEV
+  // IN DEV
+  // IN DEV
+  // IN DEV
 
   /*console.log('buildNodesWm', {
     artSammlungAuslieferungNodes,
