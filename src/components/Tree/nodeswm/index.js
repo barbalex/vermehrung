@@ -66,12 +66,28 @@ import buildEventFolder from './event/folder'
 import buildEvent from './event'
 import buildPersonFolder from './person/folder'
 import buildPerson from './person'
+import buildPersonGartenFolder from './person/garten/folder'
+import buildPersonGarten from './person/garten'
+import buildPersonGartenKulturFolder from './person/garten/kultur/folder'
+import buildPersonGartenKultur from './person/garten/kultur'
+import buildPersonGartenKulturAnlieferungFolder from './person/garten/kultur/anlieferung/folder'
+import buildPersonGartenKulturAnlieferung from './person/garten/kultur/anlieferung'
+import buildPersonGartenKulturAuslieferungFolder from './person/garten/kultur/auslieferung/folder'
+import buildPersonGartenKulturAuslieferung from './person/garten/kultur/auslieferung'
+import buildPersonGartenKulturEventFolder from './person/garten/kultur/event/folder'
+import buildPersonGartenKulturEvent from './person/garten/kultur/event'
+import buildPersonGartenKulturTeilkulturFolder from './person/garten/kultur/teilkultur/folder'
+import buildPersonGartenKulturTeilkultur from './person/garten/kultur/teilkultur'
+import buildPersonGartenKulturZaehlungFolder from './person/garten/kultur/zaehlung/folder'
+import buildPersonGartenKulturZaehlung from './person/garten/kultur/zaehlung'
+import buildPersonLieferungFolder from './person/lieferung/folder'
+import buildPersonLieferung from './person/lieferung'
+import buildPersonSammlungFolder from './person/sammlung/folder'
+import buildPersonSammlung from './person/sammlung'
 import buildSammelLieferungFolder from './sammelLieferung/folder'
 import buildSammelLieferung from './sammelLieferung'
 import buildSammelLieferungLieferungFolder from './sammelLieferung/lieferung/folder'
 import buildSammelLieferungLieferung from './sammelLieferung/lieferung'
-import notDeletedOrHasConflictQuery from '../../../utils/notDeletedOrHasConflictQuery'
-import storeFilter from '../../../utils/storeFilter'
 import queryFromFilter from '../../../utils/queryFromFilter'
 import herkunftSort from '../../../utils/herkunftSort'
 import teilkulturSort from '../../../utils/teilkulturSort'
@@ -182,6 +198,24 @@ const buildNodes = async ({ store }) => {
   let eventNodes = []
   let personFolderNodes = []
   let personNodes = []
+  let personGartenFolderNodes = []
+  let personGartenNodes = []
+  let personGartenKulturFolderNodes = []
+  let personGartenKulturNodes = []
+  let personGartenKulturAnlieferungFolderNodes = []
+  let personGartenKulturAnlieferungNodes = []
+  let personGartenKulturAuslieferungFolderNodes = []
+  let personGartenKulturAuslieferungNodes = []
+  let personGartenKulturEventFolderNodes = []
+  let personGartenKulturEventNodes = []
+  let personGartenKulturTeilkulturFolderNodes = []
+  let personGartenKulturTeilkulturNodes = []
+  let personGartenKulturZaehlungFolderNodes = []
+  let personGartenKulturZaehlungNodes = []
+  let personLieferungFolderNodes = []
+  let personLieferungNodes = []
+  let personSammlungFolderNodes = []
+  let personSammlungNodes = []
   let sammelLieferungFolderNodes = []
   let sammelLieferungNodes = []
   let sammelLieferungLieferungFolderNodes = []
@@ -1496,6 +1530,24 @@ const buildNodes = async ({ store }) => {
     ...eventNodes,
     ...personFolderNodes,
     ...personNodes,
+    ...personGartenFolderNodes,
+    ...personGartenNodes,
+    ...personGartenKulturFolderNodes,
+    ...personGartenKulturNodes,
+    ...personGartenKulturAnlieferungFolderNodes,
+    ...personGartenKulturAnlieferungNodes,
+    ...personGartenKulturAuslieferungFolderNodes,
+    ...personGartenKulturAuslieferungNodes,
+    ...personGartenKulturEventFolderNodes,
+    ...personGartenKulturEventNodes,
+    ...personGartenKulturTeilkulturFolderNodes,
+    ...personGartenKulturTeilkulturNodes,
+    ...personGartenKulturZaehlungFolderNodes,
+    ...personGartenKulturZaehlungNodes,
+    ...personLieferungFolderNodes,
+    ...personLieferungNodes,
+    ...personSammlungFolderNodes,
+    ...personSammlungNodes,
     ...sammelLieferungFolderNodes,
     ...sammelLieferungNodes,
     ...sammelLieferungLieferungFolderNodes,
