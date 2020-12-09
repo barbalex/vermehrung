@@ -1,34 +1,22 @@
-import isEqual from 'lodash/isEqual'
+import { first as first$ } from 'rxjs/operators'
 
-import sammelLieferungLabelFromSammelLieferung from '../../../../utils/sammelLieferungLabelFromSammelLieferung'
+const sammelLieferungNodes = async ({
+  sammelLieferung,
+  sammelLieferungIndex,
+}) => {
+  const label = await sammelLieferung.label.pipe(first$()).toPromise()
 
-const sammelLieferungNodes = ({ store, sammelLieferungs }) => {
-  const { showSammelLieferung, visibleOpenNodes } = store.tree
-
-  if (!showSammelLieferung) return []
-  // only show if parent node exists
-  if (!visibleOpenNodes.some((node) => isEqual(['Sammel-Lieferungen'], node))) {
-    return []
+  return {
+    nodeType: 'table',
+    menuTitle: 'Sammel-Lieferung',
+    table: 'sammel_lieferung',
+    id: sammelLieferung.id,
+    label,
+    url: ['Sammel-Lieferungen', sammelLieferung.id],
+    sort: [9, sammelLieferungIndex],
+    hasChildren: true,
+    mono: true,
   }
-
-  return sammelLieferungs
-    .map((el) => ({
-      nodeType: 'table',
-      menuTitle: 'Sammel-Lieferung',
-      table: 'sammel_lieferung',
-      id: el.id,
-      label: sammelLieferungLabelFromSammelLieferung({
-        lieferung: el,
-        store,
-      }),
-      url: ['Sammel-Lieferungen', el.id],
-      hasChildren: true,
-      mono: true,
-    }))
-    .map((el, index) => {
-      el.sort = [9, index]
-      return el
-    })
 }
 
 export default sammelLieferungNodes
