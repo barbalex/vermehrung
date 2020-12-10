@@ -1567,6 +1567,25 @@ const buildNodes = async ({ store }) => {
                 ),
               )
 
+              const openPersonGartenKulturNodes = openNodes.filter(
+                (n) =>
+                  n.length === 6 &&
+                  n[0] === 'Personen' &&
+                  n[1] === personId &&
+                  n[2] === 'Gaerten' &&
+                  n[3] === gartenId &&
+                  n[4] === 'Kulturen',
+              )
+
+              for (const personGartenKulturNode of openPersonGartenKulturNodes) {
+                const kulturId = personGartenKulturNode[3]
+                const kultur = kultursSorted.find((s) => s.id === kulturId)
+                if (!kultur) break
+                const kulturIndex = personGartenKulturNodes.findIndex(
+                  (s) => s.id === `${personId}${gartenId}${kulturId}`,
+                )
+              }
+
               // BEGIN DEV
               // BEGIN DEV
             }
