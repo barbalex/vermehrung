@@ -1,13 +1,13 @@
-const personGartenFolder = ({ children, personIndex, personId }) => [
+const personGartenFolder = ({ count, personIndex, personId }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Gärten',
     id: `${personId}GartenFolder`,
-    label: `Gärten (${children.length})`,
+    label: `Gärten (${count})`,
     url: ['Personen', personId, 'Gaerten'],
     sort: [11, personIndex, 2],
     hasChildren: true,
-    childrenCount: children.length,
+    childrenCount: count,
   },
 ]
 
