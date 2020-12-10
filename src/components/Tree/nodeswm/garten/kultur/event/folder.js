@@ -3,17 +3,17 @@ const gartenKulturEventFolder = ({
   kulturIndex,
   gartenId,
   gartenIndex,
-  children,
+  count,
 }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Events',
     id: `${gartenId}${kulturId}EventFolder`,
-    label: `Events (${children.length})`,
+    label: `Events (${count})`,
     url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Events'],
     sort: [4, gartenIndex, 1, kulturIndex, 5],
     hasChildren: true,
-    childrenCount: children.length,
+    childrenCount: count,
   },
 ]
 

@@ -1,9 +1,9 @@
-const sammlungHerkunftFolder = ({ children, sammlungIndex, sammlungId }) => [
+const sammlungHerkunftFolder = ({ count, sammlungIndex, sammlungId }) => [
   {
     nodeType: 'folder_no_menu',
     menuTitle: 'Herkünfte',
     id: `${sammlungId}HerkunftFolder`,
-    label: `Herkünfte (${children.length})`,
+    label: `Herkünfte (${count})`,
     url: ['Sammlungen', sammlungId, 'Herkuenfte'],
     sort: [3, sammlungIndex, 1],
     hasChildren: true,
