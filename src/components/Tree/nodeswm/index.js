@@ -255,12 +255,10 @@ const buildNodes = async ({ store }) => {
           table: 'sammlung',
           filter: store.filter.sammlung.toJSON(),
         })
-        const sammlungs = await art.sammlungs
-          .extend(...sammlungFilterQuery)
-          .fetch()
-        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+        const sammlungsQuery = art.sammlungs.extend(...sammlungFilterQuery)
+        const sammlungCount = await sammlungsQuery.fetchCount()
         artSammlungFolderNodes = buildArtSammlungFolder({
-          children: sammlungsSorted,
+          count: sammlungCount,
           artIndex,
           artId,
         })
@@ -273,6 +271,8 @@ const buildNodes = async ({ store }) => {
             n[2] === 'Sammlungen',
         )
         if (artSammlungFolderIsOpen) {
+          const sammlungs = await sammlungsQuery.fetch()
+          const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
           artSammlungNodes = await Promise.all(
             sammlungsSorted.map(
               async (sammlung, sammlungIndex) =>
@@ -342,10 +342,10 @@ const buildNodes = async ({ store }) => {
           table: 'kultur',
           filter: store.filter.kultur.toJSON(),
         })
-        const kulturs = await art.kulturs.extend(...kulturFilterQuery).fetch()
-        const kultursSorted = await kultursSortedFromKulturs(kulturs)
+        const artKulturQuery = art.kulturs.extend(...kulturFilterQuery)
+        const kulturCount = await artKulturQuery.fetchCount()
         artKulturFolderNodes = buildArtKulturFolder({
-          children: kultursSorted,
+          count: kulturCount,
           artIndex,
           artId,
         })
@@ -357,6 +357,8 @@ const buildNodes = async ({ store }) => {
             n[2] === 'Kulturen',
         )
         if (artKulturFolderIsOpen) {
+          const kulturs = await artKulturQuery.fetch()
+          const kultursSorted = await kultursSortedFromKulturs(kulturs)
           artKulturNodes = await Promise.all(
             kultursSorted.map(
               async (kultur, kulturIndex) =>
@@ -424,19 +426,16 @@ const buildNodes = async ({ store }) => {
             }
 
             // zaehlung nodes
-            const zaehlungFilterQuery = queryFromFilter({
-              table: 'zaehlung',
-              filter: store.filter.zaehlung.toJSON(),
-            })
-            const zaehlungs = await kultur.zaehlungs
-              .extend(...zaehlungFilterQuery)
-              .fetch()
+            const artKulturZaehlungQuery = kultur.zaehlungs.extend(
+              ...tableFilter({ store, table: 'zaehlung' }),
+            )
+            const zaehlungsCount = await artKulturZaehlungQuery.fetchCount()
             artKulturZaehlungFolderNodes = await buildArtKulturZaehlungFolder({
               kulturId,
               kulturIndex,
               artId,
               artIndex,
-              children: zaehlungs,
+              count: zaehlungsCount,
             })
             const artKulturZaehlungFolderIsOpen = openNodes.some(
               (n) =>
@@ -448,6 +447,7 @@ const buildNodes = async ({ store }) => {
                 n[4] === 'Zaehlungen',
             )
             if (artKulturZaehlungFolderIsOpen) {
+              const zaehlungs = await artKulturZaehlungQuery.fetch()
               const zaehlungsSorted = zaehlungs.sort((a, b) =>
                 zaehlungSort({ a, b }),
               )
@@ -553,19 +553,16 @@ const buildNodes = async ({ store }) => {
             }
 
             // event nodes
-            const eventFilterQuery = queryFromFilter({
-              table: 'lieferung',
-              filter: store.filter.lieferung.toJSON(),
-            })
-            const events = await kultur.events
-              .extend(...eventFilterQuery)
-              .fetch()
+            const eventsQuery = kultur.events.extend(
+              ...tableFilter({ store, table: 'event' }),
+            )
+            const eventsCount = await eventsQuery.fetchCount()
             artKulturEventFolderNodes = await buildArtKulturEventFolder({
               kulturId,
               kulturIndex,
               artId,
               artIndex,
-              children: events,
+              count: eventsCount,
             })
             const artKulturEventFolderIsOpen = openNodes.some(
               (n) =>
@@ -577,6 +574,7 @@ const buildNodes = async ({ store }) => {
                 n[4] === 'Events',
             )
             if (artKulturEventFolderIsOpen) {
+              const events = await eventsQuery.fetch()
               const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
               artKulturEventNodes = eventsSorted.map((event, eventIndex) =>
                 buildArtKulturEvent({
@@ -621,16 +619,12 @@ const buildNodes = async ({ store }) => {
         )
 
         // 2.1 herkunft > sammlung
-        const sammlungFilterQuery = queryFromFilter({
-          table: 'sammlung',
-          filter: store.filter.sammlung.toJSON(),
-        })
-        const sammlungs = await herkunft.sammlungs
-          .extend(...sammlungFilterQuery)
-          .fetch()
-        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+        const herkunftSammlungQuery = herkunft.sammlungs.extend(
+          ...tableFilter({ store, table: 'sammlung' }),
+        )
+        const sammlungsCount = await herkunftSammlungQuery.fetchCount()
         herkunftSammlungFolderNodes = buildHerkunftSammlungFolder({
-          children: sammlungsSorted,
+          count: sammlungsCount,
           herkunftIndex,
           herkunftId,
         })
@@ -642,6 +636,8 @@ const buildNodes = async ({ store }) => {
             n[2] === 'Sammlungen',
         )
         if (herkunftSammlungFolderIsOpen) {
+          const sammlungs = await herkunftSammlungQuery.fetch()
+          const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
           herkunftSammlungNodes = await Promise.all(
             sammlungsSorted.map(
               async (sammlung, sammlungIndex) =>

@@ -3,17 +3,17 @@ const artKulturZaehlungFolder = ({
   kulturIndex,
   artId,
   artIndex,
-  children,
+  count,
 }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Zählungen',
     id: `${artId}${kulturId}ZaehlungFolder`,
-    label: `Zählungen (${children.length})`,
+    label: `Zählungen (${count})`,
     url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen'],
     sort: [1, artIndex, 2, kulturIndex, 2],
     hasChildren: true,
-    childrenCount: children.length,
+    childrenCount: count,
   },
 ]
 
