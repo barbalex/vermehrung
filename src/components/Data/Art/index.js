@@ -102,7 +102,7 @@ const Art = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
-  console.log('Art, row:', row)
+  //console.log('Art, row:', row)
 
   return (
     <ErrorBoundary>
