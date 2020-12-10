@@ -37,7 +37,10 @@ const ArtTimeline = ({ artId, herkunft, width }) => {
   const store = useContext(StoreContext)
   const herkunftId = herkunft.id
 
-  const data = useMemo(() => buildData({ store, artId, herkunftId }), [])
+  const data = useMemo(
+    async () => await buildData({ store, artId, herkunftId }),
+    [],
+  )
 
   const [narrow, setNarrow] = useState(false)
   useEffect(() => {

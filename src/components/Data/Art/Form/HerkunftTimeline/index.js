@@ -43,7 +43,10 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
+const TimelineArea = ({
+  artId = '99999999-9999-9999-9999-999999999999',
+  art,
+}) => {
   const store = useContext(StoreContext)
 
   const herkunftIds = uniq(
@@ -114,7 +117,12 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
       <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
         {open &&
           herkunftsSorted.map((herkunft) => (
-            <Pflanzen key={herkunft.id} artId={artId} herkunft={herkunft} />
+            <Pflanzen
+              key={herkunft.id}
+              artId={artId}
+              art={art}
+              herkunft={herkunft}
+            />
           ))}
       </motion.div>
     </ErrorBoundary>
