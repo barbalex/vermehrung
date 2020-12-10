@@ -1,10 +1,18 @@
-import React, { useContext, useEffect, useCallback, useState } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useCallback,
+  useState,
+  useRef,
+} from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { merge } from 'rxjs'
+import { merge, interval } from 'rxjs'
+import { throttle } from 'rxjs/operators'
+import debounce from 'lodash/debounce'
 
 import { StoreContext } from '../../models/reactUtils'
 import Settings from './Settings'
@@ -120,13 +128,17 @@ const Tree = ({ width, height }) => {
         eventObservable,
         personObservable,
       ],
-    )
-    const subscription = allCollectionsObservable.subscribe(buildMyNodes)
+    ).pipe(throttle(() => interval(100)))
+    const subscription = allCollectionsObservable.subscribe(() => {
+      console.log('Tree re-building nodes from data-subscription')
+      buildMyNodes()
+    })
 
     return () => subscription.unsubscribe()
-  }, [buildMyNodes, db.collections])
+  }, [buildMyNodes, db.collections, store])
 
   useEffect(() => {
+    console.log('Tree re-building nodes from filters')
     buildMyNodes()
   }, [
     buildMyNodes,
@@ -163,7 +175,7 @@ const Tree = ({ width, height }) => {
 
   // what else to rerender on?
 
-  //console.log('Tree rendering:', { nodes, openNodes })
+  console.log('Tree rendering')
 
   return (
     <ErrorBoundary>
