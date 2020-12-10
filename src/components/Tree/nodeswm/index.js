@@ -1161,14 +1161,12 @@ const buildNodes = async ({ store }) => {
         }
 
         // kultur > anlieferung
-        const anlieferungs = await kultur.anlieferungs
-          .extend(...tableFilter({ store, table: 'lieferung' }))
-          .fetch()
-        const anlieferungsSorted = anlieferungs.sort((a, b) =>
-          lieferungSort({ a, b }),
+        const kulturAnlieferungQuery = kultur.anlieferungs.extend(
+          ...tableFilter({ store, table: 'lieferung' }),
         )
+        const kulturAnlieferungCount = kulturAnlieferungQuery.fetchCount()
         kulturAnlieferungFolderNodes = buildKulturAnlieferungFolder({
-          children: anlieferungsSorted,
+          count: kulturAnlieferungCount,
           kulturIndex,
           kulturId,
         })
@@ -1180,6 +1178,10 @@ const buildNodes = async ({ store }) => {
             n[2] === 'An-Lieferungen',
         )
         if (kulturAnlieferungFolderIsOpen) {
+          const anlieferungs = kulturAnlieferungQuery.fetch()
+          const anlieferungsSorted = anlieferungs.sort((a, b) =>
+            lieferungSort({ a, b }),
+          )
           kulturAnlieferungNodes = anlieferungsSorted.map(
             (lieferung, lieferungIndex) =>
               buildKulturAnlieferung({
@@ -1192,14 +1194,12 @@ const buildNodes = async ({ store }) => {
         }
 
         // kultur > auslieferung
-        const auslieferungs = await kultur.auslieferungs
-          .extend(...tableFilter({ store, table: 'lieferung' }))
-          .fetch()
-        const auslieferungsSorted = auslieferungs.sort((a, b) =>
-          lieferungSort({ a, b }),
+        const kulturAuslieferungQuery = kultur.auslieferungs.extend(
+          ...tableFilter({ store, table: 'lieferung' }),
         )
+        const kulturAuslieferungCount = await kulturAuslieferungQuery.fetchCount()
         kulturAuslieferungFolderNodes = buildKulturAuslieferungFolder({
-          children: auslieferungsSorted,
+          count: kulturAuslieferungCount,
           kulturIndex,
           kulturId,
         })
@@ -1211,6 +1211,10 @@ const buildNodes = async ({ store }) => {
             n[2] === 'Aus-Lieferungen',
         )
         if (kulturAuslieferungFolderIsOpen) {
+          const auslieferungs = await kulturAuslieferungQuery.fetch()
+          const auslieferungsSorted = auslieferungs.sort((a, b) =>
+            lieferungSort({ a, b }),
+          )
           kulturAuslieferungNodes = auslieferungsSorted.map(
             (lieferung, lieferungIndex) =>
               buildKulturAuslieferung({
@@ -1223,14 +1227,12 @@ const buildNodes = async ({ store }) => {
         }
 
         // kultur > event
-        const eventFilterQuery = queryFromFilter({
-          table: 'event',
-          filter: store.filter.event.toJSON(),
-        })
-        const events = await kultur.events.extend(...eventFilterQuery).fetch()
-        const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+        const kulturEventQuery = kultur.events.extend(
+          ...tableFilter({ store, table: 'event' }),
+        )
+        const kulturEventCount = await kulturEventQuery.fetchCount()
         kulturEventFolderNodes = buildKulturEventFolder({
-          children: eventsSorted,
+          count: kulturEventCount,
           kulturIndex,
           kulturId,
         })
@@ -1242,6 +1244,8 @@ const buildNodes = async ({ store }) => {
             n[2] === 'Events',
         )
         if (kulturEventFolderIsOpen) {
+          const events = await kulturEventQuery.fetch()
+          const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
           kulturEventNodes = eventsSorted.map((event, eventIndex) =>
             buildKulturEvent({
               event,
@@ -1424,12 +1428,12 @@ const buildNodes = async ({ store }) => {
         const personIndex = personNodes.findIndex((a) => a.id === personId)
 
         // person > sammlung
-        const sammlungs = await person.sammlungs
-          .extend(...tableFilter({ store, table: 'sammlung' }))
-          .fetch()
-        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+        const personSammlungQuery = person.sammlungs.extend(
+          ...tableFilter({ store, table: 'sammlung' }),
+        )
+        const personSammlungCount = await personSammlungQuery.fetchCount()
         personSammlungFolderNodes = buildPersonSammlungFolder({
-          children: sammlungsSorted,
+          count: personSammlungCount,
           personIndex,
           personId,
         })
@@ -1442,6 +1446,8 @@ const buildNodes = async ({ store }) => {
             n[2] === 'Sammlungen',
         )
         if (personSammlungFolderIsOpen) {
+          const sammlungs = await personSammlungQuery.fetch()
+          const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
           personSammlungNodes = await Promise.all(
             sammlungsSorted.map(
               async (sammlung, index) =>
