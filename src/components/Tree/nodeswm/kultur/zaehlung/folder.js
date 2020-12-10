@@ -1,13 +1,13 @@
-const kulturZaehlungFolder = ({ children, kulturIndex, kulturId }) => [
+const kulturZaehlungFolder = ({ count, kulturIndex, kulturId }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Zählungen',
     id: `${kulturId}ZaehlungFolder`,
-    label: `Zählungen (${children.length})`,
+    label: `Zählungen (${count})`,
     url: ['Kulturen', kulturId, 'Zaehlungen'],
     sort: [5, kulturIndex, 2],
     hasChildren: true,
-    childrenCount: children.length,
+    childrenCount: count,
   },
 ]
 

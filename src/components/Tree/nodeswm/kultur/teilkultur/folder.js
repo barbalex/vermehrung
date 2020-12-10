@@ -1,13 +1,13 @@
-const kulturTeilkulturFolder = ({ children, kulturIndex, kulturId }) => [
+const kulturTeilkulturFolder = ({ count, kulturIndex, kulturId }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Teilkulturen',
     id: `${kulturId}TeilkulturFolder`,
-    label: `Teilkulturen (${children.length})`,
+    label: `Teilkulturen (${count})`,
     url: ['Kulturen', kulturId, 'Teilkulturen'],
     sort: [5, kulturIndex, 1],
     hasChildren: true,
-    childrenCount: children.length,
+    childrenCount: count,
   },
 ]
 

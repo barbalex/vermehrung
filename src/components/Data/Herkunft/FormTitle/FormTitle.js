@@ -47,7 +47,8 @@ const Herkunft = ({
   activeConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
+  const activeNodeArray = anaRaw.toJSON()
 
   const onClickUp = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
@@ -58,6 +59,10 @@ const Herkunft = ({
     [activeNodeArray, setActiveNodeArray],
   )
   const showToSa = activeNodeArray[0] === 'Herkuenfte'
+
+  // herkunft is top node
+  // never enable adding below that
+  const editingAllowed = activeNodeArray.length < 2
 
   if (width < 520) {
     return (
@@ -72,8 +77,12 @@ const Herkunft = ({
               <SaDownSvg />
             </IconButton>
           )}
-          <AddButton />
-          <DeleteButton row={row} />
+          {editingAllowed && (
+            <>
+              <AddButton />
+              <DeleteButton row={row} />
+            </>
+          )}
           <Menu white={false}>
             <HistoryButton
               row={row}
@@ -102,8 +111,12 @@ const Herkunft = ({
             <SaDownSvg />
           </IconButton>
         )}
-        <AddButton />
-        <DeleteButton row={row} />
+        {editingAllowed && (
+          <>
+            <AddButton />
+            <DeleteButton row={row} />
+          </>
+        )}
         <HistoryButton
           row={row}
           showHistory={showHistory}
