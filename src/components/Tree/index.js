@@ -90,11 +90,20 @@ const Tree = ({ width, height }) => {
     const zaehlungObservable = db.collections
       .get('zaehlung')
       .query(...tableFilter({ store, table: 'zaehlung' }))
-      .observeWithColumns(['datum', 'anzahl_pflanzen'])
+      .observeWithColumns([
+        'datum',
+        //'anzahl_pflanzen',
+        //'anzahl_auspflanzbereit',
+        //'anzahl_mutterpflanzen',
+      ])
     const lieferungObservable = db.collections
       .get('lieferung')
       .query(...tableFilter({ store, table: 'lieferung' }))
-      .observeWithColumns(['datum', 'anzahl_pflanzen'])
+      .observeWithColumns([
+        'datum',
+        'anzahl_pflanzen',
+        'anzahl_auspflanzbereit',
+      ])
     const sammel_lieferungObservable = db.collections
       .get('sammel_lieferung')
       .query(...tableFilter({ store, table: 'sammel_lieferung' }))
