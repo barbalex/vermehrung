@@ -740,7 +740,7 @@ export class Kultur extends Model {
     teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
     zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
     event: { type: 'has_many', foreignKey: 'kultur_id' },
-    kultur_option: { type: 'belongs_to', key: 'kultur_id' },
+    kultur_option: { type: 'belongs_to', key: 'id' },
     kultur_file: { type: 'has_many', foreignKey: 'kultur_id' },
   }
 
