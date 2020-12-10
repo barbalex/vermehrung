@@ -37,10 +37,10 @@ const ArtTimeline = ({ artId, herkunft, width }) => {
   const store = useContext(StoreContext)
   const herkunftId = herkunft.id
 
-  const data = useMemo(
-    async () => await buildData({ store, artId, herkunftId }),
-    [],
-  )
+  const [data, setData] = useState(null)
+  useEffect(() => {
+    buildData({ store, artId, herkunftId }).then((data) => setData(data))
+  }, [artId, herkunftId])
 
   const [narrow, setNarrow] = useState(false)
   useEffect(() => {
@@ -54,7 +54,7 @@ const ArtTimeline = ({ artId, herkunft, width }) => {
 
   const herkunftLabel = herkunftLabelFromHerkunft({ herkunft })
 
-  if (!data.length) {
+  if (data && !data.length) {
     return (
       <>
         <H4>{herkunftLabel}</H4>
