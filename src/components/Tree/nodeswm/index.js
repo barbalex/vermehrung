@@ -1584,9 +1584,6 @@ const buildNodes = async ({ store }) => {
                 const kultur = kultursSorted.find((s) => s.id === kulturId)
                 if (!kultur) break
 
-                // BEGIN DEV
-                // BEGIN DEV
-
                 // zaehlung nodes
                 const zaehlungQuery = kultur.zaehlungs.extend(
                   ...tableFilter({ store, table: 'zaehlung' }),
@@ -1634,6 +1631,59 @@ const buildNodes = async ({ store }) => {
                           personIndex,
                         }),
                     ),
+                  )
+                }
+
+                // BEGIN DEV
+                // BEGIN DEV
+
+                // anlieferung nodes
+                const anlieferungQuery = kultur.anlieferungs.extend(
+                  ...tableFilter({ store, table: 'lieferung' }),
+                )
+                const anlieferungCount = await anlieferungQuery.fetchCount()
+                personGartenKulturAnlieferungFolderNodes = buildPersonGartenKulturAnlieferungFolder(
+                  {
+                    kulturId,
+                    kulturIndex,
+                    gartenId,
+                    gartenIndex,
+                    personId,
+                    personIndex,
+                    count: anlieferungCount,
+                  },
+                )
+                const personGartenKulturAnlieferungFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 7 &&
+                    n[0] === 'Personen' &&
+                    n[1] === personId &&
+                    n[2] === 'Gaerten' &&
+                    n[3] === gartenId &&
+                    n[4] === 'Kulturen' &&
+                    n[5] === kulturId &&
+                    n[6] === 'An-Lieferungen',
+                )
+
+                if (personGartenKulturAnlieferungFolderIsOpen) {
+                  const anlieferungs = await anlieferungQuery.fetch()
+                  //.observeWithColums(['datum', 'anzahl_pflanzen'])
+                  console.log('buildNodes, anlieferungs:', kultur.anlieferungs)
+                  const anlieferungsSorted = anlieferungs.sort((a, b) =>
+                    lieferungSort({ a, b }),
+                  )
+                  personGartenKulturAnlieferungNodes = anlieferungsSorted.map(
+                    (lieferung, lieferungIndex) =>
+                      buildPersonGartenKulturAnlieferung({
+                        lieferung,
+                        lieferungIndex,
+                        kulturId,
+                        kulturIndex,
+                        gartenId,
+                        gartenIndex,
+                        personId,
+                        personIndex,
+                      }),
                   )
                 }
 
