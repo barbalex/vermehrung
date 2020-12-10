@@ -1584,10 +1584,35 @@ const buildNodes = async ({ store }) => {
                 const kulturIndex = personGartenKulturNodes.findIndex(
                   (s) => s.id === `${personId}${gartenId}${kulturId}`,
                 )
-              }
 
-              // BEGIN DEV
-              // BEGIN DEV
+                // BEGIN DEV
+                // BEGIN DEV
+
+                // event nodes
+                const events = await kultur.events
+                  .extend(...tableFilter({ store, table: 'event' }))
+                  .fetch()
+                personGartenKulturEventFolderNodes = buildPersonGartenKulturEventFolder(
+                  {
+                    kulturId,
+                    kulturIndex,
+                    personId,
+                    personIndex,
+                    children: events,
+                  },
+                )
+                const personGartenKulturEventFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 7 &&
+                    n[0] === 'Personen' &&
+                    n[1] === personId &&
+                    n[2] === 'Gaerten' &&
+                    n[3] === gartenId &&
+                    n[4] === 'Kulturen' &&
+                    n[5] === kulturId &&
+                    n[6] === 'Events',
+                )
+              }
             }
           }
         }
