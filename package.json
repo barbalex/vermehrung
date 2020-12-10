@@ -101,6 +101,7 @@
     "typography": "0.16.19",
     "uploadcare-widget": "3.10.2",
     "use-debounce": "5.1.0",
+    "use-throttled-effect": "^0.0.7",
     "uuid": "8.3.1"
   },
   "devDependencies": {

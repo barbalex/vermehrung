@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useCallback,
-  useState,
-  useRef,
-} from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -12,7 +6,9 @@ import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { merge, interval } from 'rxjs'
 import { throttle } from 'rxjs/operators'
-import debounce from 'lodash/debounce'
+import useThrottledEffect from 'use-throttled-effect'
+import { useDebounce } from 'use-debounce'
+import isEqual from 'lodash/isEqual'
 
 import { StoreContext } from '../../models/reactUtils'
 import Settings from './Settings'
@@ -137,11 +133,7 @@ const Tree = ({ width, height }) => {
     return () => subscription.unsubscribe()
   }, [buildMyNodes, db.collections, store])
 
-  useEffect(() => {
-    console.log('Tree re-building nodes from filters')
-    buildMyNodes()
-  }, [
-    buildMyNodes,
+  const secondEffectArgs = [
     // need to rebuild tree if any filter value changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(artFilter),
@@ -171,7 +163,27 @@ const Tree = ({ width, height }) => {
     // need to rebuild tree on openNodes changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     openNodes,
-  ])
+  ]
+  const [throttledArgs, setThrottledArgs] = useState(null)
+  useThrottledEffect(
+    () => {
+      const newVal = secondEffectArgs.filter((a) => {
+        if (Array.isArray(a)) return !!a.length
+        return a !== null
+      })
+      if (!isEqual(throttledArgs, newVal)) {
+        setThrottledArgs(newVal)
+      }
+    },
+    50,
+    [secondEffectArgs],
+  )
+  //console.log('buildNodes', { throttledArgs, secondEffectArgs })
+
+  useEffect(() => {
+    console.log('Tree re-building nodes from second useEffect')
+    buildMyNodes()
+  }, [buildMyNodes, throttledArgs])
 
   // what else to rerender on?
 
