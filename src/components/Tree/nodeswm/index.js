@@ -1285,7 +1285,6 @@ const buildNodes = async ({ store }) => {
     const zaehlungCount = await zaehlungQuery.fetchCount()
     zaehlungFolderNodes = buildZaehlungFolder({ count: zaehlungCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Zaehlungen')) {
-      console.log('buildNodes, fetching zaehlungen')
       const zaehlungs = await zaehlungQuery.fetch()
       const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
       zaehlungNodes = await Promise.all(
@@ -1293,7 +1292,6 @@ const buildNodes = async ({ store }) => {
           buildZaehlung({ zaehlung, index }),
         ),
       )
-      console.log('buildNodes, zaehlungen fetched')
     }
   }
 

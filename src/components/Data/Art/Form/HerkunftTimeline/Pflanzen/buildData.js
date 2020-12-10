@@ -1,47 +1,45 @@
 import uniq from 'lodash/uniq'
 import sum from 'lodash/sum'
 import max from 'lodash/max'
+import { Q } from '@nozbe/watermelondb'
 
 import exists from '../../../../../../utils/exists'
 
-const buildData = ({ artId, herkunftId, store }) => {
-  const {
-    zaehlungsSorted,
-    sammlungsSorted,
-    lieferungsSorted,
-    teilzaehlungsSorted,
-  } = store
+const buildData = async ({ artId, herkunftId, store }) => {
+  const { teilzaehlungsSorted, db } = store
 
-  const zaehlungsDone = zaehlungsSorted
-    .filter((z) => {
-      const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-      return kultur?.art_id === artId && kultur?.herkunft_id === herkunftId
-    })
-    .filter((z) => z.prognose === false)
-    .filter((z) => !!z.datum)
-    .filter((z) => {
-      const anzs = teilzaehlungsSorted
-        .filter((tz) => tz.zaehlung_id === z.id)
-        .map((tz) => tz.anzahl_pflanzen)
-        .filter((a) => exists(a))
-
-      return anzs.length > 0
-    })
-  const zaehlungsPlannedAll = zaehlungsSorted
-    .filter((z) => {
-      const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-      return kultur?.art_id === artId && kultur?.herkunft_id === herkunftId
-    })
-    .filter((z) => z.prognose === true)
-    .filter((z) => !!z.datum)
-    .filter((z) => {
-      const anzs = teilzaehlungsSorted
-        .filter((tz) => tz.zaehlung_id === z.id)
-        .map((tz) => tz.anzahl_pflanzen)
-        .filter((a) => exists(a))
-
-      return anzs.length > 0
-    })
+  const zaehlungsDone = await db.collections
+    .get('zaehlung')
+    .query(
+      Q.experimentalJoinTables(['kultur']),
+      Q.experimentalJoinTables(['teilzaehlung']),
+      Q.and(
+        Q.on('kultur', [
+          Q.where('art_id', artId),
+          Q.where('herkunft_id', herkunftId),
+        ]),
+        Q.where('prognose', false),
+        Q.where('datum', Q.notEq(null)),
+        Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+      ),
+    )
+    .fetch()
+  const zaehlungsPlannedAll = await db.collections
+    .get('zaehlung')
+    .query(
+      Q.experimentalJoinTables(['kultur']),
+      Q.experimentalJoinTables(['teilzaehlung']),
+      Q.and(
+        Q.on('kultur', [
+          Q.where('art_id', artId),
+          Q.where('herkunft_id', herkunftId),
+        ]),
+        Q.where('prognose', true),
+        Q.where('datum', Q.notEq(null)),
+        Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+      ),
+    )
+    .fetch()
   const zaehlungsPlannedIgnored = zaehlungsPlannedAll.filter((zg) =>
     // check if more recent zaehlungsDone exists
     zaehlungsDone.some((z) => z.datum >= zg.datum),
@@ -50,18 +48,26 @@ const buildData = ({ artId, herkunftId, store }) => {
     (lg) => !zaehlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
-  const sammlungsDone = sammlungsSorted
-    .filter((z) => z.art_id === artId)
-    .filter((z) => z.herkunft_id === herkunftId)
-    .filter((z) => !z.geplant)
-    .filter((z) => !!z.datum)
-    .filter((z) => exists(z.anzahl_pflanzen))
-  const sammlungsPlannedAll = sammlungsSorted
-    .filter((z) => z.art_id === artId)
-    .filter((z) => z.herkunft_id === herkunftId)
-    .filter((z) => z.geplant)
-    .filter((z) => !!z.datum)
-    .filter((z) => exists(z.anzahl_pflanzen))
+  const sammlungsDone = await db.collections
+    .get('sammlung')
+    .query(
+      Q.where('art_id', artId),
+      Q.where('herkunft_id', herkunftId),
+      Q.where('geplant', false),
+      Q.where('datum', Q.notEq(null)),
+      Q.where('anzahl_pflanzen', Q.notEq(null)),
+    )
+    .fetch()
+  const sammlungsPlannedAll = await db.collections
+    .get('sammlung')
+    .query(
+      Q.where('art_id', artId),
+      Q.where('herkunft_id', herkunftId),
+      Q.where('geplant', true),
+      Q.where('datum', Q.notEq(null)),
+      Q.where('anzahl_pflanzen', Q.notEq(null)),
+    )
+    .fetch()
   const sammlungsPlannedIgnored = sammlungsPlannedAll.filter((zg) =>
     // check if more recent zaehlungsDone exists
     sammlungsDone.some((z) => z.datum >= zg.datum),
@@ -70,30 +76,42 @@ const buildData = ({ artId, herkunftId, store }) => {
     (lg) => !sammlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
-  const lieferungsDone = lieferungsSorted
-    .filter((z) => z.art_id === artId)
-    .filter((z) => {
-      const vonKultur = z?.von_kultur_id
-        ? store.kulturs.get(z.von_kultur_id)
-        : {}
+  const lieferungsDone1 = await db.collections
+    .get('lieferung')
+    .query(
+      Q.where('art_id', artId),
+      Q.where('nach_ausgepflanzt', true),
+      Q.where('geplant', false),
+      Q.where('datum', Q.notEq(null)),
+      Q.where('anzahl_pflanzen', Q.notEq(null)),
+    )
+    .fetch()
+  const lieferungsDone = await Promise.all(
+    lieferungsDone1.filter(async (l) => {
+      const vonKultur = await db.collections.get('kultur').find(l.von_kultur_id)
       return vonKultur?.herkunft_id === herkunftId
-    })
-    .filter((z) => z.nach_ausgepflanzt)
-    .filter((z) => !z.geplant)
-    .filter((z) => !!z.anzahl_pflanzen)
-    .filter((z) => !!z.datum)
-  const lieferungsPlannedAll = lieferungsSorted
-    .filter((z) => z.art_id === artId)
-    .filter((z) => {
-      const nachKultur = z?.nach_kultur_id
-        ? store.kulturs.get(z.nach_kultur_id)
-        : {}
-      return nachKultur?.herkunft_id === herkunftId
-    })
-    .filter((z) => z.nach_ausgepflanzt)
-    .filter((z) => z.geplant)
-    .filter((z) => !!z.anzahl_pflanzen)
-    .filter((z) => !!z.datum)
+    }),
+  )
+  const lieferungsPlanned1 = await db.collections
+    .get('lieferung')
+    .query(
+      Q.where('art_id', artId),
+      Q.where('nach_ausgepflanzt', true),
+      Q.where('geplant', true),
+      Q.where('datum', Q.notEq(null)),
+      Q.where('anzahl_pflanzen', Q.notEq(null)),
+    )
+    .fetch()
+  const lieferungsPlannedAll = await Promise.all(
+    lieferungsPlanned1.filter(async (l) => {
+      const vonKultur = await db.collections.get('kultur').find(l.von_kultur_id)
+      return vonKultur?.herkunft_id === herkunftId
+    }),
+  )
+  /*console.log('HerkunftTimeline, buildData', {
+    lieferungsPlannedAll,
+    lieferungsPlannedAllNew,
+  })*/
   const lieferungsPlannedIgnored = lieferungsPlannedAll.filter((zg) =>
     // check if more recent zaehlungsDone exists
     lieferungsDone.some((z) => z.datum >= zg.datum),
