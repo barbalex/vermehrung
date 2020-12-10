@@ -1052,6 +1052,37 @@ export class Zaehlung extends Model {
       })
     }),
   )
+  // tried to use these fields in observeWithColumns - but does not work
+  /*@lazy anzahl_pflanzen = this.observe().pipe(
+    distinctUntilChanged(),
+    map$(async (zaehlung) => {
+      const tzs = await zaehlung.teilzaehlungs.fetch()
+      const anzs = tzs.filter((t) => exists(t.anzahl_pflanzen))
+      const anzahl_pflanzen = anzs.length ? sum(anzs) : null
+
+      return anzahl_pflanzen
+    }),
+  )
+  @lazy anzahl_auspflanzbereit = this.observe().pipe(
+    distinctUntilChanged(),
+    map$(async (zaehlung) => {
+      const tzs = await zaehlung.teilzaehlungs.fetch()
+      const anzs = tzs.filter((t) => exists(t.anzahl_auspflanzbereit))
+      const anzahl_auspflanzbereit = anzs.length ? sum(anzs) : null
+
+      return anzahl_auspflanzbereit
+    }),
+  )
+  @lazy anzahl_mutterpflanzen = this.observe().pipe(
+    distinctUntilChanged(),
+    map$(async (zaehlung) => {
+      const tzs = await zaehlung.teilzaehlungs.fetch()
+      const anzs = tzs.filter((t) => exists(t.anzahl_mutterpflanzen))
+      const anzahl_mutterpflanzen = anzs.length ? sum(anzs) : null
+
+      return anzahl_mutterpflanzen
+    }),
+  )*/
 
   @action async removeConflict(_rev) {
     await this.update((row) => {
