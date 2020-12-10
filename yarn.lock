@@ -17350,11 +17350,6 @@ use-debounce@5.1.0:
   resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-5.1.0.tgz#3df34bd7449da7dd2dbb10a6513efe701fc79d02"
   integrity sha512-fU7O7iel2bA19fxSiPfRkieVGxrow503phSUAGZ/EqiJtCPrU9AdUdrKOAdgh803IrjdIzhj+8eDsDGn4OPy8g==
 
-use-throttled-effect@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/use-throttled-effect/-/use-throttled-effect-0.0.7.tgz#ada6893f1a8b444155a546baf8a017750b75fa2d"
-  integrity sha512-YkXWg7x/3aRYeTk1rVwPlvdFf6zWaJMFJZL/TD7OJ+y73jNorMFHlEtiZBZ45aE1RRVLyzdt1CO/o6m9yOykcg==
-
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"

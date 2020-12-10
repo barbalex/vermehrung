@@ -6,9 +6,7 @@ import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { merge, interval } from 'rxjs'
 import { throttle } from 'rxjs/operators'
-import useThrottledEffect from 'use-throttled-effect'
-import { useDebounce } from 'use-debounce'
-import isEqual from 'lodash/isEqual'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { StoreContext } from '../../models/reactUtils'
 import Settings from './Settings'
@@ -38,20 +36,19 @@ const Tree = ({ width, height }) => {
     event: eventFilter,
     person: personFilter,
   } = store.filter
-  const {
-    activeNodeArray: aNAProxy,
-    openNodes: openNodesProxy,
-    //nodes: storeNodes,
-  } = store.tree
+  const { activeNodeArray: aNAProxy, openNodes: openNodesProxy } = store.tree
   const aNA = getSnapshot(aNAProxy)
   const openNodes = getSnapshot(openNodesProxy)
 
   const [nodes, setNodes] = useState([])
 
   const buildMyNodes = useCallback(async () => {
+    console.log('buildNodes building tree nodes')
     const nodes = await buildNodes({ store })
     setNodes(nodes)
   }, [store])
+
+  const buildMyNodesDebounced = useDebouncedCallback(buildMyNodes, 100)
 
   useEffect(() => {
     // need subscription to all tables that provokes treeBuild on next
@@ -126,14 +123,18 @@ const Tree = ({ width, height }) => {
       ],
     ).pipe(throttle(() => interval(100)))
     const subscription = allCollectionsObservable.subscribe(() => {
-      console.log('Tree re-building nodes from data-subscription')
-      buildMyNodes()
+      console.log('Tree data-subscription ordering rebuild')
+      buildMyNodesDebounced.callback()
     })
 
     return () => subscription.unsubscribe()
-  }, [buildMyNodes, db.collections, store])
+  }, [buildMyNodesDebounced, db.collections, store])
 
-  const secondEffectArgs = [
+  useEffect(() => {
+    console.log('Tree second useEffect ordering rebuild')
+    buildMyNodesDebounced.callback()
+  }, [
+    buildMyNodesDebounced,
     // need to rebuild tree if any filter value changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(artFilter),
@@ -163,27 +164,7 @@ const Tree = ({ width, height }) => {
     // need to rebuild tree on openNodes changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     openNodes,
-  ]
-  const [throttledArgs, setThrottledArgs] = useState(null)
-  useThrottledEffect(
-    () => {
-      const newVal = secondEffectArgs.filter((a) => {
-        if (Array.isArray(a)) return !!a.length
-        return a !== null
-      })
-      if (!isEqual(throttledArgs, newVal)) {
-        setThrottledArgs(newVal)
-      }
-    },
-    50,
-    [secondEffectArgs],
-  )
-  //console.log('buildNodes', { throttledArgs, secondEffectArgs })
-
-  useEffect(() => {
-    console.log('Tree re-building nodes from second useEffect')
-    buildMyNodes()
-  }, [buildMyNodes, throttledArgs])
+  ])
 
   // what else to rerender on?
 
