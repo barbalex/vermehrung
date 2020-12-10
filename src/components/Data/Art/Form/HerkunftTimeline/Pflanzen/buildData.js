@@ -30,12 +30,12 @@ const buildData = async ({ artId, herkunftId, store }) => {
       Q.experimentalJoinTables(['kultur']),
       Q.experimentalJoinTables(['teilzaehlung']),
       Q.and(
+        Q.where('prognose', true),
+        Q.where('datum', Q.notEq(null)),
         Q.on('kultur', [
           Q.where('art_id', artId),
           Q.where('herkunft_id', herkunftId),
         ]),
-        Q.where('prognose', true),
-        Q.where('datum', Q.notEq(null)),
         Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
       ),
     )
@@ -86,6 +86,7 @@ const buildData = async ({ artId, herkunftId, store }) => {
       Q.where('anzahl_pflanzen', Q.notEq(null)),
     )
     .fetch()
+  // can't use Q.on here because there are two associations to kultur
   const lieferungsDone = await Promise.all(
     lieferungsDone1.filter(async (l) => {
       const vonKultur = await db.collections.get('kultur').find(l.von_kultur_id)
@@ -102,16 +103,13 @@ const buildData = async ({ artId, herkunftId, store }) => {
       Q.where('anzahl_pflanzen', Q.notEq(null)),
     )
     .fetch()
+  // can't use Q.on here because there are two associations to kultur
   const lieferungsPlannedAll = await Promise.all(
     lieferungsPlanned1.filter(async (l) => {
       const vonKultur = await db.collections.get('kultur').find(l.von_kultur_id)
       return vonKultur?.herkunft_id === herkunftId
     }),
   )
-  /*console.log('HerkunftTimeline, buildData', {
-    lieferungsPlannedAll,
-    lieferungsPlannedAllNew,
-  })*/
   const lieferungsPlannedIgnored = lieferungsPlannedAll.filter((zg) =>
     // check if more recent zaehlungsDone exists
     lieferungsDone.some((z) => z.datum >= zg.datum),
@@ -134,13 +132,17 @@ const buildData = async ({ artId, herkunftId, store }) => {
   // 2. get list of all non deleted kulturs
   //    these are the basis for counting:
   //    at every date the last count is used
-  const kultursOfArt = [...store.kulturs.values()]
-    .filter((a) => !a._deleted)
-    .filter((z) => z.art_id === artId)
+  const kultursOfArt = await db.collections
+    .get('kultur')
+    .query(
+      Q.where('_deleted', false),
+      Q.where('herkunft_id', herkunftId),
+      Q.where('art_id', artId),
+    )
+    .fetch()
   // 3. for every date get:
   //    - sum of last zaehlung
   //    - whether last zahlung includes prognose
-
   return dates.map((date) => {
     const sammlungNow = sum(
       sammlungsDone
@@ -164,47 +166,45 @@ const buildData = async ({ artId, herkunftId, store }) => {
         .map((s) => s.anzahl_pflanzen),
     )
 
-    const lastZaehlungsByKultur = kultursOfArt
-      .filter((z) => z?.herkunft_id === herkunftId)
-      .map((k) => {
-        // for every kultur return
-        // last zaehlung and whether it is prognose
-        const zaehlungs = [...store.zaehlungs.values()]
-          .filter((z) => z.kultur_id === k.id)
-          .filter((z) => !z._deleted)
+    const lastZaehlungsByKultur = kultursOfArt.map((k) => {
+      // for every kultur return
+      // last zaehlung and whether it is prognose
+      const zaehlungs = [...store.zaehlungs.values()]
+        .filter((z) => z.kultur_id === k.id)
+        .filter((z) => !z._deleted)
 
-        const lastZaehlungDatum = max(
-          zaehlungs
-            .map((z) => z.datum)
-            .filter((d) => !!d)
-            .filter((d) => d <= date),
-        )
-        const lastZaehlungsOfKultur = zaehlungs
-          .filter((z) => !!z.datum)
-          .filter((z) => z.datum === lastZaehlungDatum)
-          .filter((z) => {
-            const anzs = teilzaehlungsSorted
-              .filter((tz) => tz.zaehlung_id === z.id)
-              .map((tz) => tz.anzahl_pflanzen)
-              .filter((a) => exists(a))
+      const lastZaehlungDatum = max(
+        zaehlungs
+          .map((z) => z.datum)
+          .filter((d) => !!d)
+          .filter((d) => d <= date),
+      )
+      const lastZaehlungsOfKultur = zaehlungs
+        .filter((z) => !!z.datum)
+        .filter((z) => z.datum === lastZaehlungDatum)
+        .filter((z) => {
+          const anzs = teilzaehlungsSorted
+            .filter((tz) => tz.zaehlung_id === z.id)
+            .map((tz) => tz.anzahl_pflanzen)
+            .filter((a) => exists(a))
 
-            return anzs.length > 0
-          })
+          return anzs.length > 0
+        })
 
-        return {
-          anzahl_pflanzen: sum(
-            lastZaehlungsOfKultur.map((z) =>
-              sum(
-                teilzaehlungsSorted
-                  .filter((tz) => tz.zaehlung_id === z.id)
-                  .map((tz) => tz.anzahl_pflanzen)
-                  .filter((a) => exists(a)),
-              ),
+      return {
+        anzahl_pflanzen: sum(
+          lastZaehlungsOfKultur.map((z) =>
+            sum(
+              teilzaehlungsSorted
+                .filter((tz) => tz.zaehlung_id === z.id)
+                .map((tz) => tz.anzahl_pflanzen)
+                .filter((a) => exists(a)),
             ),
           ),
-          prognose: lastZaehlungsOfKultur.some((z) => z.prognose),
-        }
-      })
+        ),
+        prognose: lastZaehlungsOfKultur.some((z) => z.prognose),
+      }
+    })
     const lastZaehlungs = {
       anzahl_pflanzen: sum(lastZaehlungsByKultur.map((z) => z.anzahl_pflanzen)),
       prognose: lastZaehlungsByKultur.some((z) => z.prognose),

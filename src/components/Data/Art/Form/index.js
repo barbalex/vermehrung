@@ -149,7 +149,7 @@ const ArtForm = ({
             <>
               <Personen art={row} />
               <Timeline artId={id} />
-              <HerkunftTimeline art={row} artId={id} />
+              <HerkunftTimeline artId={id} />
               <QK artId={id} />
               <Files parent={row} parentTable="art" />
             </>
