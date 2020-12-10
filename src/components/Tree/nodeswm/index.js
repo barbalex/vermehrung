@@ -1576,23 +1576,13 @@ const buildNodes = async ({ store }) => {
                   n[3] === gartenId &&
                   n[4] === 'Kulturen',
               )
-
-              for (const [
-                kulturIndex,
-                personGartenKulturNode,
-              ] of openPersonGartenKulturNodes.entries()) {
+              for (const personGartenKulturNode of openPersonGartenKulturNodes) {
                 const kulturId = personGartenKulturNode[5]
+                const kulturIndex = personGartenKulturNodes.findIndex(
+                  (s) => s.id === `${personId}${gartenId}${kulturId}`,
+                )
                 const kultur = kultursSorted.find((s) => s.id === kulturId)
-                console.log('bildNodes', {
-                  kulturIndex,
-                  personGartenKulturNode,
-                  kulturId,
-                  kultur,
-                })
                 if (!kultur) break
-
-                // BEGIN DEV
-                // BEGIN DEV
 
                 // event nodes
                 const eventQuery = kultur.events.extend(
@@ -1621,6 +1611,29 @@ const buildNodes = async ({ store }) => {
                     n[5] === kulturId &&
                     n[6] === 'Events',
                 )
+
+                // BEGIN DEV
+                // BEGIN DEV
+
+                if (personGartenKulturEventFolderIsOpen) {
+                  const events = await eventQuery.fetch()
+                  const eventsSorted = events.sort((a, b) =>
+                    eventSort({ a, b }),
+                  )
+                  personGartenKulturEventNodes = eventsSorted.map(
+                    (event, eventIndex) =>
+                      buildPersonGartenKulturEvent({
+                        event,
+                        eventIndex,
+                        kulturId,
+                        kulturIndex,
+                        gartenId,
+                        gartenIndex,
+                        personId,
+                        personIndex,
+                      }),
+                  )
+                }
               }
             }
           }
