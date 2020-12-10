@@ -4,13 +4,13 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { forkJoin } from 'rxjs'
+import { merge } from 'rxjs'
 
 import { StoreContext } from '../../models/reactUtils'
 import Settings from './Settings'
 import List from './List'
 import ErrorBoundary from '../shared/ErrorBoundary'
-import notDeletedOrHasConflictQuery from '../../utils/notDeletedOrHasConflictQuery'
+import tableFilter from '../../utils/tableFilter'
 import buildNodes from './nodeswm'
 
 const Container = styled.div`
@@ -53,15 +53,15 @@ const Tree = ({ width, height }) => {
     // need subscription to all tables that provokes treeBuild on next
     const artObservable = db.collections
       .get('art')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'art' }))
       .observeWithColumns(['name'])
     const herkunftObservable = db.collections
       .get('herkunft')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'herkunft' }))
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
     const sammlungObservable = db.collections
       .get('sammlung')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'sammlung' }))
       .observeWithColumns([
         'art_id',
         'person_id',
@@ -71,11 +71,11 @@ const Tree = ({ width, height }) => {
       ])
     const gartenObservable = db.collections
       .get('garten')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'garten' }))
       .observeWithColumns(['name', 'person_id'])
     const kulturObservable = db.collections
       .get('kultur')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'kultur' }))
       .observeWithColumns([
         'art_id',
         'herkunft_id',
@@ -84,41 +84,43 @@ const Tree = ({ width, height }) => {
       ])
     const teilkulturObservable = db.collections
       .get('teilkultur')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'teilkultur' }))
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
     const zaehlungObservable = db.collections
       .get('zaehlung')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'zaehlung' }))
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
     const lieferungObservable = db.collections
       .get('lieferung')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'lieferung' }))
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
     const sammel_lieferungObservable = db.collections
       .get('sammel_lieferung')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'sammel_lieferung' }))
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
     const eventObservable = db.collections
       .get('event')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'event' }))
       .observeWithColumns(['datum', 'beschreibung'])
     const personObservable = db.collections
       .get('person')
-      .query(notDeletedOrHasConflictQuery)
+      .query(...tableFilter({ store, table: 'person' }))
       .observeWithColumns(['vorname', 'name'])
-    const allCollectionsObservable = forkJoin([
-      artObservable,
-      herkunftObservable,
-      sammlungObservable,
-      gartenObservable,
-      kulturObservable,
-      teilkulturObservable,
-      zaehlungObservable,
-      lieferungObservable,
-      sammel_lieferungObservable,
-      eventObservable,
-      personObservable,
-    ])
+    const allCollectionsObservable = merge(
+      ...[
+        artObservable,
+        herkunftObservable,
+        sammlungObservable,
+        gartenObservable,
+        kulturObservable,
+        teilkulturObservable,
+        zaehlungObservable,
+        lieferungObservable,
+        sammel_lieferungObservable,
+        eventObservable,
+        personObservable,
+      ],
+    )
     const subscription = allCollectionsObservable.subscribe(buildMyNodes)
 
     return () => subscription.unsubscribe()
