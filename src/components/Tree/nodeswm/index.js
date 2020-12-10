@@ -1584,6 +1584,67 @@ const buildNodes = async ({ store }) => {
                 const kultur = kultursSorted.find((s) => s.id === kulturId)
                 if (!kultur) break
 
+                // BEGIN DEV
+                // BEGIN DEV
+
+                // zaehlung nodes
+                const zaehlungQuery = kultur.zaehlungs.extend(
+                  ...tableFilter({ store, table: 'zaehlung' }),
+                )
+                const zaehlungCount = await zaehlungQuery.fetchCount()
+                personGartenKulturZaehlungFolderNodes = buildPersonGartenKulturZaehlungFolder(
+                  {
+                    kulturId,
+                    kulturIndex,
+                    gartenId,
+                    gartenIndex,
+                    personId,
+                    personIndex,
+                    count: zaehlungCount,
+                  },
+                )
+                const personGartenKulturZaehlungFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 7 &&
+                    n[0] === 'Personen' &&
+                    n[1] === personId &&
+                    n[2] === 'Gaerten' &&
+                    n[3] === gartenId &&
+                    n[4] === 'Kulturen' &&
+                    n[5] === kulturId &&
+                    n[6] === 'Zaehlungen',
+                )
+
+                if (personGartenKulturZaehlungFolderIsOpen) {
+                  const zaehlungs = await zaehlungQuery.fetch()
+                  const zaehlungsSorted = zaehlungs.sort((a, b) =>
+                    zaehlungSort({ a, b }),
+                  )
+                  personGartenKulturZaehlungNodes = await Promise.all(
+                    zaehlungsSorted.map(
+                      async (zaehlung, zaehlungIndex) =>
+                        await buildPersonGartenKulturZaehlung({
+                          zaehlung,
+                          zaehlungIndex,
+                          kulturId,
+                          kulturIndex,
+                          gartenId,
+                          gartenIndex,
+                          personId,
+                          personIndex,
+                        }),
+                    ),
+                  )
+                }
+
+                // IN DEV
+                // IN DEV
+                // IN DEV
+                // IN DEV
+                // IN DEV
+                // IN DEV
+                // IN DEV
+
                 // event nodes
                 const eventQuery = kultur.events.extend(
                   ...tableFilter({ store, table: 'event' }),
@@ -1612,9 +1673,6 @@ const buildNodes = async ({ store }) => {
                     n[6] === 'Events',
                 )
 
-                // BEGIN DEV
-                // BEGIN DEV
-
                 if (personGartenKulturEventFolderIsOpen) {
                   const events = await eventQuery.fetch()
                   const eventsSorted = events.sort((a, b) =>
@@ -1638,14 +1696,6 @@ const buildNodes = async ({ store }) => {
             }
           }
         }
-
-        // IN DEV
-        // IN DEV
-        // IN DEV
-        // IN DEV
-        // IN DEV
-        // IN DEV
-        // IN DEV
 
         // person > lieferung
         const lieferungs = await person.lieferungs
