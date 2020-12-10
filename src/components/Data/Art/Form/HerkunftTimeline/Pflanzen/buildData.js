@@ -13,15 +13,13 @@ const buildData = async ({ artId, herkunftId, store }) => {
     .query(
       Q.experimentalJoinTables(['kultur']),
       Q.experimentalJoinTables(['teilzaehlung']),
-      Q.and(
-        Q.on('kultur', [
-          Q.where('art_id', artId),
-          Q.where('herkunft_id', herkunftId),
-        ]),
-        Q.where('prognose', false),
-        Q.where('datum', Q.notEq(null)),
-        Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
-      ),
+      Q.on('kultur', [
+        Q.where('art_id', artId),
+        Q.where('herkunft_id', herkunftId),
+      ]),
+      Q.where('prognose', false),
+      Q.where('datum', Q.notEq(null)),
+      Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
     )
     .fetch()
   const zaehlungsPlannedAll = await db.collections
@@ -29,15 +27,13 @@ const buildData = async ({ artId, herkunftId, store }) => {
     .query(
       Q.experimentalJoinTables(['kultur']),
       Q.experimentalJoinTables(['teilzaehlung']),
-      Q.and(
-        Q.where('prognose', true),
-        Q.where('datum', Q.notEq(null)),
-        Q.on('kultur', [
-          Q.where('art_id', artId),
-          Q.where('herkunft_id', herkunftId),
-        ]),
-        Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
-      ),
+      Q.where('prognose', true),
+      Q.where('datum', Q.notEq(null)),
+      Q.on('kultur', [
+        Q.where('art_id', artId),
+        Q.where('herkunft_id', herkunftId),
+      ]),
+      Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
     )
     .fetch()
   const zaehlungsPlannedIgnored = zaehlungsPlannedAll.filter((zg) =>
