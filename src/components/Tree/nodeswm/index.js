@@ -1577,28 +1577,37 @@ const buildNodes = async ({ store }) => {
                   n[4] === 'Kulturen',
               )
 
-              for (const personGartenKulturNode of openPersonGartenKulturNodes) {
-                const kulturId = personGartenKulturNode[3]
+              for (const [
+                kulturIndex,
+                personGartenKulturNode,
+              ] of openPersonGartenKulturNodes.entries()) {
+                const kulturId = personGartenKulturNode[5]
                 const kultur = kultursSorted.find((s) => s.id === kulturId)
+                console.log('bildNodes', {
+                  kulturIndex,
+                  personGartenKulturNode,
+                  kulturId,
+                  kultur,
+                })
                 if (!kultur) break
-                const kulturIndex = personGartenKulturNodes.findIndex(
-                  (s) => s.id === `${personId}${gartenId}${kulturId}`,
-                )
 
                 // BEGIN DEV
                 // BEGIN DEV
 
                 // event nodes
-                const events = await kultur.events
-                  .extend(...tableFilter({ store, table: 'event' }))
-                  .fetch()
+                const eventQuery = kultur.events.extend(
+                  ...tableFilter({ store, table: 'event' }),
+                )
+                const eventCount = await eventQuery.fetchCount()
                 personGartenKulturEventFolderNodes = buildPersonGartenKulturEventFolder(
                   {
                     kulturId,
                     kulturIndex,
+                    gartenId,
+                    gartenIndex,
                     personId,
                     personIndex,
-                    children: events,
+                    count: eventCount,
                   },
                 )
                 const personGartenKulturEventFolderIsOpen = openNodes.some(
