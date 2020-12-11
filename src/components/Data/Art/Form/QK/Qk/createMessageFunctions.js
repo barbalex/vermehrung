@@ -7,7 +7,7 @@ import gartenLabelFromGarten from '../../../../../../utils/gartenLabelFromGarten
 import kulturLabelFromKultur from '../../../../../../utils/kulturLabelFromKultur'
 import sammlungLabelFromSammlung from '../../../../../../utils/sammlungLabelFromSammlung'
 
-const createMessageFunctions = ({ artId, store }) => {
+const createMessageFunctions = async ({ artId, store }) => {
   const {
     artsSorted,
     eventsSorted,

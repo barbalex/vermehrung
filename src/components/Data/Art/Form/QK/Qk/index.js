@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Paper from '@material-ui/core/Paper'
@@ -56,10 +56,14 @@ const ApQkQk = ({ artId, qkChoosens }) => {
     [],
   )
 
-  const messageFunctions = createMessageFunctions({
-    artId,
-    store,
-  })
+  const [messageFunctions, setMessageFunctions] = useState(null)
+  useEffect(() => {
+    createMessageFunctions({
+      artId,
+      store,
+    }).then((mf) => setMessageFunctions(mf))
+  }, [artId, store])
+
   const messageGroups = qkChoosens
     .map((qkChoosen) => {
       const artQk = [...store.art_qks.values()].find(
@@ -67,7 +71,7 @@ const ApQkQk = ({ artId, qkChoosens }) => {
       )
       return {
         title: artQk?.titel,
-        messages: messageFunctions[artQk?.name](),
+        messages: messageFunctions ? messageFunctions[artQk?.name]() : [],
       }
     })
     .filter((q) => !!q?.messages?.length)
