@@ -3,12 +3,7 @@ import sum from 'lodash/sum'
 import max from 'lodash/max'
 import { Q } from '@nozbe/watermelondb'
 
-import exists from '../../../../../../utils/exists'
-import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
-
-const buildData = async ({ artId, store }) => {
-  const { teilzaehlungsSorted, db } = store
-
+const buildData = async ({ artId, db }) => {
   const zaehlungsDone = await db.collections
     .get('zaehlung')
     .query(
@@ -142,38 +137,26 @@ const buildData = async ({ artId, store }) => {
         kultursOfArt.map(async (k) => {
           // for every kultur return
           // last zaehlung and whether it is prognose
-          const zaehlungs = await k.zaehlungs.fetch(notDeletedQuery)
+          const zaehlungs = await k.zaehlungs.fetch(
+            Q.experimentalJoinTables(['teilzaehlung']),
+            Q.where('_deleted', false),
+            Q.where('datum', Q.notEq(null)),
+            Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+          )
           const lastZaehlungDatum = max(
-            zaehlungs
-              .map((z) => z.datum)
-              .filter((d) => !!d)
-              .filter((d) => d <= date),
+            zaehlungs.map((z) => z.datum).filter((d) => d <= date),
           )
           const lastZaehlungsOfKultur = await Promise.all(
-            zaehlungs
-              .filter((z) => !!z.datum)
-              .filter((z) => z.datum === lastZaehlungDatum)
-              .filter(async (z) => {
-                const tzs = await z.teilzaehlungs.fetch()
-                const anzs = tzs
-                  .filter((tz) => tz.zaehlung_id === z.id)
-                  .map((tz) => tz.anzahl_pflanzen)
-                  .filter((a) => exists(a))
-
-                return anzs.length > 0
-              }),
+            zaehlungs.filter((z) => z.datum === lastZaehlungDatum),
+          )
+          const lastTzAnzahls = await Promise.all(
+            lastZaehlungsOfKultur.map(async (z) => {
+              const tzs = await z.teilzaehlungs.fetch()
+              return sum(tzs.map((tz) => tz.anzahl_pflanzen))
+            }),
           )
           return {
-            anzahl_pflanzen: sum(
-              lastZaehlungsOfKultur.map((z) =>
-                sum(
-                  teilzaehlungsSorted
-                    .filter((tz) => tz.zaehlung_id === z.id)
-                    .map((tz) => tz.anzahl_pflanzen)
-                    .filter((a) => exists(a)),
-                ),
-              ),
-            ),
+            anzahl_pflanzen: sum(lastTzAnzahls),
             prognose: lastZaehlungsOfKultur.some((z) => z.prognose),
           }
         }),
@@ -276,11 +259,7 @@ const buildData = async ({ artId, store }) => {
           .filter((e) => !!e)
           .join(', '),
       }
-      /*console.log('buildData, date', {
-      date,
-      data,
-      lastZaehlungs,
-    })*/
+
       return data
     }),
   )

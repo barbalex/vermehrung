@@ -31,12 +31,13 @@ const NoData = styled.div`
 
 const ArtTimeline = ({ artId, width }) => {
   const store = useContext(StoreContext)
+  const { db } = store
   const [narrow, setNarrow] = useState(false)
 
   const [data, setData] = useState(null)
   useEffect(() => {
-    buildData({ store, artId }).then((data) => setData(data))
-  }, [artId])
+    buildData({ db, artId }).then((data) => setData(data))
+  }, [artId, db])
 
   useEffect(() => {
     if (width < 1100 && !narrow) {
