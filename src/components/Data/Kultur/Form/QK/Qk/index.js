@@ -60,7 +60,7 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
   useEffect(() => {
     createMessageFunctions({
       kulturId: kultur.id,
-      store,
+      db,
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
         qkChoosens.map(async (qkChoosen) => {
