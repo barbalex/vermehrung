@@ -371,12 +371,10 @@ const buildNodes = async ({ store }) => {
 
             // teilkultur nodes
             const kulturOption = await kultur.kultur_option.fetch()
-            console.log('buildNodes, kulturOption:', kulturOption)
             if (kulturOption?.tk) {
               const teilkulturs = await kultur.teilkulturs
                 .extend(...tableFilter({ store, table: 'teilkultur' }))
                 .fetch()
-              console.log('buildNodes, teilkulturs:', teilkulturs)
               artKulturTeilkulturFolderNodes = buildArtKulturTeilkulturFolder({
                 kulturId,
                 kulturIndex,
@@ -384,10 +382,6 @@ const buildNodes = async ({ store }) => {
                 artIndex,
                 children: teilkulturs,
               })
-              console.log(
-                'buildNodes, artKulturTeilkulturFolderNodes:',
-                artKulturTeilkulturFolderNodes,
-              )
               const artKulturTeilkulturFolderIsOpen = openNodes.some(
                 (n) =>
                   n.length === 5 &&
@@ -1555,11 +1549,6 @@ const buildNodes = async ({ store }) => {
 
                 // teilkultur nodes
                 const kulturOption = await kultur.kultur_option.fetch()
-                console.log('buildNodes', {
-                  kulturOption,
-                  kultur,
-                  tk: kulturOption?.tk,
-                })
                 if (kulturOption?.tk) {
                   const teilkulturQuery = kultur.teilkulturs.extend(
                     ...tableFilter({ store, table: 'teilkultur' }),
