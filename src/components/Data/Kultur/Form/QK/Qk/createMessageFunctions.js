@@ -3,9 +3,6 @@ import { first as first$ } from 'rxjs/operators'
 //import { Q } from '@nozbe/watermelondb'
 
 import exists from '../../../../../../utils/exists'
-import herkunftLabelFromKultur from '../../../../../../utils/herkunftLabelFromKultur'
-import gartenLabelFromKultur from '../../../../../../utils/gartenLabelFromKultur'
-
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
 import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromKulturs'
 import eventSort from '../../../../../../utils/eventSort'
@@ -14,8 +11,7 @@ import teilkulturSort from '../../../../../../utils/teilkulturSort'
 import teilzaehlungsSortByTk from '../../../../../../utils/teilzaehlungsSortByTk'
 import zaehlungSort from '../../../../../../utils/zaehlungSort'
 
-const createMessageFunctions = async ({ kulturId, store }) => {
-  const { db } = store
+const createMessageFunctions = async ({ kulturId, db }) => {
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
@@ -550,33 +546,35 @@ const createMessageFunctions = async ({ kulturId, store }) => {
           }
         }),
     eventsWithoutBeschreibung: async () =>
-      eventsSorted
-        .filter((e) => e.kultur_id === kulturId)
-        .filter((e) => !e.beschreibung)
-        .map((ev) => {
-          const kultur = ev?.kultur_id ? store.kulturs.get(ev.kultur_id) : {}
-          const gartenLabel = gartenLabelFromKultur({ kultur, store })
-          const herkunftLabel = herkunftLabelFromKultur({ kultur, store })
+      await Promise.all(
+        eventsSorted
+          .filter((e) => e.kultur_id === kulturId)
+          .filter((e) => !e.beschreibung)
+          .map(async (ev) => {
+            const kultur = await ev.kultur.fetch()
+            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
 
-          return {
-            url: ['Kulturen', kulturId, 'Events', ev.id],
-            text: `von: ${herkunftLabel}, in: ${gartenLabel}, Event-ID: ${ev.id}`,
-          }
-        }),
+            return {
+              url: ['Kulturen', kulturId, 'Events', ev.id],
+              text: `${kulturLabel}, Event-ID: ${ev.id}`,
+            }
+          }),
+      ),
     eventsWithoutDatum: async () =>
-      eventsSorted
-        .filter((e) => e.kultur_id === kulturId)
-        .filter((e) => !e.datum)
-        .map((ev) => {
-          const kultur = ev?.kultur_id ? store.kulturs.get(ev.kultur_id) : {}
-          const gartenLabel = gartenLabelFromKultur({ kultur, store })
-          const herkunftLabel = herkunftLabelFromKultur({ kultur, store })
+      await Promise.all(
+        eventsSorted
+          .filter((e) => e.kultur_id === kulturId)
+          .filter((e) => !e.datum)
+          .map(async (ev) => {
+            const kultur = await ev.kultur.fetch()
+            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
 
-          return {
-            url: ['Kulturen', kulturId, 'Events', ev.id],
-            text: `von: ${herkunftLabel}, in: ${gartenLabel}, Event-ID: ${ev.id}`,
-          }
-        }),
+            return {
+              url: ['Kulturen', kulturId, 'Events', ev.id],
+              text: `${kulturLabel}, Event-ID: ${ev.id}`,
+            }
+          }),
+      ),
   }
 }
 
