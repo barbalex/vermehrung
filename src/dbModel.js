@@ -1039,6 +1039,7 @@ export class Zaehlung extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
+  @relation('kultur', 'kultur_id') kultur
   @children('teilzaehlung') teilzaehlungs
 
   @lazy label = this.observe().pipe(
