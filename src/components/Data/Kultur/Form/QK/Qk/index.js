@@ -49,37 +49,43 @@ const StyledFormControl = styled(FormControl)`
 
 const KulturQkQk = ({ kultur, qkChoosens }) => {
   const store = useContext(StoreContext)
+  const { db } = store
   const [filter, setFilter] = useState('')
   const onChangeFilter = useCallback(
     (event) => setFilter(event.target.value),
     [],
   )
 
-  const [messageFunctions, setMessageFunctions] = useState([])
+  const [messageGroups, setMessageGroups] = useState(null)
   useEffect(() => {
     createMessageFunctions({
       kulturId: kultur.id,
       store,
-    }).then((mf) => setMessageFunctions(mf))
-  }, [kultur.id, store])
+    }).then(async (messageFunctions) => {
+      const msgGroups = await Promise.all(
+        qkChoosens.map(async (qkChoosen) => {
+          const qk = await db.collections.get('kultur_qk').find(qkChoosen.qk_id)
 
-  const messageGroups = qkChoosens
-    .map((qkChoosen) => {
-      const qk = [...store.kultur_qks.values()].find(
-        (qk) => qk.id === qkChoosen.qk_id,
+          return {
+            title: qk?.titel,
+            messages: messageFunctions
+              ? await messageFunctions[qk?.name]()
+              : [],
+          }
+        }),
       )
-      return {
-        title: qk?.titel,
-        messages: messageFunctions[qk?.name](),
-      }
+      setMessageGroups(msgGroups.filter((qk) => qk.messages.length))
     })
-    .filter((qk) => qk.messages.length)
-  const messageGroupsFiltered = messageGroups.filter((messageGroup) => {
-    if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
-      return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
-    }
-    return true
-  })
+  }, [kultur.id, qkChoosens, db, store])
+
+  const messageGroupsFiltered = messageGroups
+    ? messageGroups.filter((messageGroup) => {
+        if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
+          return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
+        }
+        return true
+      })
+    : []
 
   return (
     <Container>
@@ -94,9 +100,13 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
           spellCheck={false}
         />
       </StyledFormControl>
-      <ResultTitle>{`${messageGroupsFiltered.length} ${
-        messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
-      }:`}</ResultTitle>
+      <ResultTitle>
+        {messageGroups
+          ? `${messageGroupsFiltered.length} ${
+              messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
+            }:`
+          : 'rechne...'}
+      </ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
           <Title>{`${messageGroup.messages.length} ${messageGroup.title}`}</Title>
@@ -117,7 +127,7 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
           ))}
         </StyledPaper>
       ))}
-      {messageGroups.length === 0 && (
+      {messageGroups?.length === 0 && (
         <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
       )}
     </Container>

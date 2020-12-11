@@ -1,5 +1,6 @@
 import format from 'date-fns/format'
 import groupBy from 'lodash/groupBy'
+//import { Q } from '@nozbe/watermelondb'
 
 import exists from '../../../../../../utils/exists'
 import artLabelFromArt from '../../../../../../utils/artLabelFromArt'
@@ -7,24 +8,74 @@ import gartenLabelFromGarten from '../../../../../../utils/gartenLabelFromGarten
 import kulturLabelFromKultur from '../../../../../../utils/kulturLabelFromKultur'
 import sammlungLabelFromSammlung from '../../../../../../utils/sammlungLabelFromSammlung'
 
+import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
+import artsSortedFromArts from '../../../../../../utils/artsSortedFromArts'
+import gartensSortedFromGartens from '../../../../../../utils/gartensSortedFromGartens'
+import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromKulturs'
+import sammlungsSortedFromSammlungs from '../../../../../../utils/sammlungsSortedFromSammlungs'
+import eventSort from '../../../../../../utils/eventSort'
+import herkunftSort from '../../../../../../utils/herkunftSort'
+import lieferungSort from '../../../../../../utils/lieferungSort'
+import personSort from '../../../../../../utils/personSort'
+import teilkulturSort from '../../../../../../utils/teilkulturSort'
+import zaehlungSort from '../../../../../../utils/zaehlungSort'
+
 const createMessageFunctions = async ({ artId, store }) => {
-  const {
-    artsSorted,
-    eventsSorted,
-    gartensSorted,
-    herkunftsSorted,
-    kultursSorted,
-    lieferungsSorted,
-    personsSorted,
-    sammlungsSorted,
-    teilkultursSorted,
-    zaehlungsSorted,
-  } = store
+  const { db } = store
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
   const now = new Date()
 
+  const arts = await db.collections.get('art').query(notDeletedQuery).fetch()
+  const artsSorted = await artsSortedFromArts(arts)
+  const events = await db.collections
+    .get('event')
+    .query(notDeletedQuery)
+    .fetch()
+  const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+  const gartens = await db.collections
+    .get('garten')
+    .query(notDeletedQuery)
+    .fetch()
+  const gartensSorted = await gartensSortedFromGartens(gartens)
+  const herkunfts = await db.collections
+    .get('herkunft')
+    .query(notDeletedQuery)
+    .fetch()
+  const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
+  const kulturs = await db.collections
+    .get('kultur')
+    .query(notDeletedQuery)
+    .fetch()
+  const kultursSorted = await kultursSortedFromKulturs(kulturs)
+  const lieferungs = await db.collections
+    .get('lieferung')
+    .query(notDeletedQuery)
+    .fetch()
+  const lieferungsSorted = lieferungs.sort((a, b) => lieferungSort({ a, b }))
+  const persons = await db.collections
+    .get('person')
+    .query(notDeletedQuery)
+    .fetch()
+  const personsSorted = persons.sort((a, b) => personSort({ a, b }))
+  const sammlungs = await db.collections
+    .get('sammlung')
+    .query(notDeletedQuery)
+    .fetch()
+  const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+  const teilkulturs = await db.collections
+    .get('teilkultur')
+    .query(notDeletedQuery)
+    .fetch()
+  const teilkultursSorted = teilkulturs.sort((a, b) => teilkulturSort({ a, b }))
+  const zaehlungs = await db.collections
+    .get('zaehlung')
+    .query(notDeletedQuery)
+    .fetch()
+  const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
+
+  // TODO: check if some of this could be optimized using watermelon queries
   return {
     personsWithNonUniqueNr: () => {
       const pGroupedByNr = groupBy(personsSorted, (h) => h.nr)
