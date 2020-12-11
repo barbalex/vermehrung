@@ -40,7 +40,7 @@ const ArtTimeline = ({ artId, herkunft, width }) => {
   const [data, setData] = useState(null)
   useEffect(() => {
     buildData({ store, artId, herkunftId }).then((data) => setData(data))
-  }, [artId, herkunftId])
+  }, [artId, herkunftId, store])
 
   const [narrow, setNarrow] = useState(false)
   useEffect(() => {
