@@ -35,12 +35,13 @@ const NoData = styled.div`
 
 const ArtTimeline = ({ artId, herkunft, width }) => {
   const store = useContext(StoreContext)
+  const { db } = store
   const herkunftId = herkunft.id
 
   const [data, setData] = useState(null)
   useEffect(() => {
-    buildData({ store, artId, herkunftId }).then((data) => setData(data))
-  }, [artId, herkunftId, store])
+    buildData({ db, artId, herkunftId }).then((data) => setData(data))
+  }, [artId, herkunftId, db])
 
   const [narrow, setNarrow] = useState(false)
   useEffect(() => {
