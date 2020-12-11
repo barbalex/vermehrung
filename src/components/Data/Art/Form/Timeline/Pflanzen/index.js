@@ -33,7 +33,10 @@ const ArtTimeline = ({ artId, width }) => {
   const store = useContext(StoreContext)
   const [narrow, setNarrow] = useState(false)
 
-  const data = useMemo(() => buildData({ store, artId }), [])
+  const [data, setData] = useState(null)
+  useEffect(() => {
+    buildData({ store, artId }).then((data) => setData(data))
+  }, [artId])
 
   useEffect(() => {
     if (width < 1100 && !narrow) {
@@ -44,7 +47,7 @@ const ArtTimeline = ({ artId, width }) => {
     }
   }, [narrow, width])
 
-  if (!data.length) {
+  if (data && !data.length) {
     return <NoData>Keine Daten verfügbar für Anzahl Pflanzen</NoData>
   }
 
