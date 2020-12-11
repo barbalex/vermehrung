@@ -13,6 +13,7 @@ const buildData = async ({ artId, db }) => {
       Q.where('prognose', false),
       Q.where('datum', Q.notEq(null)),
       Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+      Q.where('_deleted', false),
     )
     .fetch()
   const zaehlungsPlannedAll = await db.collections
@@ -24,6 +25,7 @@ const buildData = async ({ artId, db }) => {
       Q.where('datum', Q.notEq(null)),
       Q.on('kultur', Q.where('art_id', artId)),
       Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+      Q.where('_deleted', false),
     )
     .fetch()
   const zaehlungsPlannedIgnored = zaehlungsPlannedAll.filter((zg) =>
@@ -41,6 +43,7 @@ const buildData = async ({ artId, db }) => {
       Q.where('geplant', false),
       Q.where('datum', Q.notEq(null)),
       Q.where('anzahl_pflanzen', Q.notEq(null)),
+      Q.where('_deleted', false),
     )
     .fetch()
   const sammlungsPlannedAll = await db.collections
@@ -50,6 +53,7 @@ const buildData = async ({ artId, db }) => {
       Q.where('geplant', true),
       Q.where('datum', Q.notEq(null)),
       Q.where('anzahl_pflanzen', Q.notEq(null)),
+      Q.where('_deleted', false),
     )
     .fetch()
   const sammlungsPlannedIgnored = sammlungsPlannedAll.filter((zg) =>
@@ -68,6 +72,7 @@ const buildData = async ({ artId, db }) => {
       Q.where('geplant', false),
       Q.where('datum', Q.notEq(null)),
       Q.where('anzahl_pflanzen', Q.notEq(null)),
+      Q.where('_deleted', false),
     )
     .fetch()
   const lieferungsPlannedAll = await db.collections
@@ -78,6 +83,7 @@ const buildData = async ({ artId, db }) => {
       Q.where('geplant', true),
       Q.where('datum', Q.notEq(null)),
       Q.where('anzahl_pflanzen', Q.notEq(null)),
+      Q.where('_deleted', false),
     )
     .fetch()
   const lieferungsPlannedIgnored = lieferungsPlannedAll.filter((zg) =>

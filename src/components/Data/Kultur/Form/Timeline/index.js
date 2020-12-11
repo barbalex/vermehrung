@@ -1,15 +1,5 @@
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-  useContext,
-  useEffect,
-  useRef,
-} from 'react'
+import React, { useCallback, useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import sortBy from 'lodash/sortBy'
-import groupBy from 'lodash/groupBy'
-import sumBy from 'lodash/sumBy'
 import {
   ComposedChart,
   Bar,
@@ -27,7 +17,6 @@ import IconButton from '@material-ui/core/IconButton'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import { withResizeDetector } from 'react-resize-detector'
-import format from 'date-fns/format'
 import { motion, useAnimation } from 'framer-motion'
 
 import CustomTooltip from './Tooltip'
@@ -37,7 +26,6 @@ import CustomAxisTick from './CustomAxisTick'
 import getConstants from '../../../../../utils/constants'
 import exists from '../../../../../utils/exists'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import { StoreContext } from '../../../../../models/reactUtils'
 import buildData from './buildData'
 
 const constants = getConstants()
@@ -75,14 +63,14 @@ const Content = styled.div`
 `
 
 const KulturTimeline = ({ row, width }) => {
-  const store = useContext(StoreContext)
-  const { db } = store
   const [narrow, setNarrow] = useState(false)
 
+  // TODO: calc runs on every render of kultur
+  // need to only run when open
   const [allData, setAllData] = useState([])
   useEffect(() => {
-    buildData({ store, row }).then((data) => setAllData(data))
-  }, [row, store])
+    buildData({ row }).then((data) => setAllData(data))
+  }, [row])
 
   const openDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Zeitachse-Kultur`

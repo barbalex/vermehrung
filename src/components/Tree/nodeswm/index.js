@@ -127,10 +127,6 @@ const buildNodes = async ({ store }) => {
     showPerson,
   } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
-  /*console.log('buildNodes', {
-    activeNodeArray: activeNodeArray.slice(),
-    openNodes,
-  })*/
 
   let artFolderNodes = []
   let artNodes = []
@@ -375,22 +371,22 @@ const buildNodes = async ({ store }) => {
 
             // teilkultur nodes
             const kulturOption = await kultur.kultur_option.fetch()
+            console.log('buildNodes, kulturOption:', kulturOption)
             if (kulturOption?.tk) {
-              const teilkulturFilterQuery = queryFromFilter({
-                table: 'teilkultur',
-                filter: store.filter.teilkultur.toJSON(),
-              })
               const teilkulturs = await kultur.teilkulturs
-                .extend(...teilkulturFilterQuery)
+                .extend(...tableFilter({ store, table: 'teilkultur' }))
                 .fetch()
-              artKulturTeilkulturFolderNodes = await buildArtKulturTeilkulturFolder(
-                {
-                  kulturId,
-                  kulturIndex,
-                  artId,
-                  artIndex,
-                  children: teilkulturs,
-                },
+              console.log('buildNodes, teilkulturs:', teilkulturs)
+              artKulturTeilkulturFolderNodes = buildArtKulturTeilkulturFolder({
+                kulturId,
+                kulturIndex,
+                artId,
+                artIndex,
+                children: teilkulturs,
+              })
+              console.log(
+                'buildNodes, artKulturTeilkulturFolderNodes:',
+                artKulturTeilkulturFolderNodes,
               )
               const artKulturTeilkulturFolderIsOpen = openNodes.some(
                 (n) =>
@@ -405,18 +401,16 @@ const buildNodes = async ({ store }) => {
                 const teilkultursSorted = teilkulturs.sort((a, b) =>
                   teilkulturSort({ a, b }),
                 )
-                artKulturTeilkulturNodes = await Promise.all(
-                  teilkultursSorted.map(
-                    async (teilkultur, teilkulturIndex) =>
-                      await buildArtKulturTeilkultur({
-                        teilkultur,
-                        teilkulturIndex,
-                        kulturId,
-                        kulturIndex,
-                        artId,
-                        artIndex,
-                      }),
-                  ),
+                artKulturTeilkulturNodes = teilkultursSorted.map(
+                  (teilkultur, teilkulturIndex) =>
+                    buildArtKulturTeilkultur({
+                      teilkultur,
+                      teilkulturIndex,
+                      kulturId,
+                      kulturIndex,
+                      artId,
+                      artIndex,
+                    }),
                 )
               }
             }
@@ -1178,7 +1172,7 @@ const buildNodes = async ({ store }) => {
             n[2] === 'An-Lieferungen',
         )
         if (kulturAnlieferungFolderIsOpen) {
-          const anlieferungs = kulturAnlieferungQuery.fetch()
+          const anlieferungs = await kulturAnlieferungQuery.fetch()
           const anlieferungsSorted = anlieferungs.sort((a, b) =>
             lieferungSort({ a, b }),
           )
@@ -1288,8 +1282,8 @@ const buildNodes = async ({ store }) => {
       const zaehlungs = await zaehlungQuery.fetch()
       const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
       zaehlungNodes = await Promise.all(
-        zaehlungsSorted.map(async (zaehlung, index) =>
-          buildZaehlung({ zaehlung, index }),
+        zaehlungsSorted.map(
+          async (zaehlung, index) => await buildZaehlung({ zaehlung, index }),
         ),
       )
     }
@@ -1465,7 +1459,7 @@ const buildNodes = async ({ store }) => {
         const personGartenQuery = person.gartens.extend(
           ...tableFilter({ store, table: 'garten' }),
         )
-        const personGartenCount = personGartenQuery.fetchCount()
+        const personGartenCount = await personGartenQuery.fetchCount()
         personGartenFolderNodes = buildPersonGartenFolder({
           count: personGartenCount,
           personIndex,
@@ -1479,7 +1473,7 @@ const buildNodes = async ({ store }) => {
             n[2] === 'Gaerten',
         )
         if (personGartenFolderIsOpen) {
-          const gartens = personGartenQuery.fetch()
+          const gartens = await personGartenQuery.fetch()
           const gartensSorted = await gartensSortedFromGartens(gartens)
           personGartenNodes = await Promise.all(
             gartensSorted.map(
@@ -1957,6 +1951,7 @@ const buildNodes = async ({ store }) => {
       compare(a.sort[9], b.sort[9]) ||
       compare(a.sort[10], b.sort[10]),
   )
+
   return nodesSorted
 }
 
