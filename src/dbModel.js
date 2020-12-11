@@ -1021,6 +1021,7 @@ export class Zaehlung extends Model {
   static table = 'zaehlung'
   static associations = {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
+    kultur_option: { type: 'belongs_to', key: 'kultur_id' },
     teilzaehlung: { type: 'has_many', foreignKey: 'zaehlung_id' },
   }
 
@@ -1040,6 +1041,7 @@ export class Zaehlung extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @relation('kultur', 'kultur_id') kultur
+  @relation('kultur_option', 'kultur_id') kultur_option
   @children('teilzaehlung') teilzaehlungs
 
   @lazy label = this.observe().pipe(
