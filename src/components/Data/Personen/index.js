@@ -77,25 +77,18 @@ const Personen = ({ filter: showFilter, width, height }) => {
     const collection = db.collections.get('person')
     const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
-      .query(
-        ...tableFilter({
-          table: 'person',
-          store,
-        }),
-      )
+      .query(...tableFilter({ table: 'person', store }))
       .observeWithColumns(['vorname', 'name'])
     const allCollectionsObservable = combineLatest([
       countObservable,
       dataObservable,
     ])
     const allSubscription = allCollectionsObservable.subscribe(
-      async (result) => {
-        if (Array.isArray(result)) {
-          const personsSorted = result.sort((a, b) => personSort({ a, b }))
-          setPersons(personsSorted)
-        } else if (!isNaN(result)) {
-          setCount(result)
-        }
+      ([totalCount, persons]) => {
+        setDataState({
+          persons: persons.sort((a, b) => personSort({ a, b })),
+          totalCount,
+        })
       },
     )
 

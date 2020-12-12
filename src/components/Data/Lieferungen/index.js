@@ -124,13 +124,14 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
       countObservable,
       dataObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe((result) => {
-      if (Array.isArray(result)) {
-        setLieferungs(result.sort((a, b) => lieferungSort({ a, b })))
-      } else if (!isNaN(result)) {
-        setCount(result)
-      }
-    })
+    const allSubscription = allCollectionsObservable.subscribe(
+      ([totalCount, lieferungs]) => {
+        setDataState({
+          lieferungs: lieferungs.sort((a, b) => lieferungSort({ a, b })),
+          totalCount,
+        })
+      },
+    )
 
     return () => allSubscription.unsubscribe()
   }, [

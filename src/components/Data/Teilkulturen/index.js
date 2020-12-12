@@ -96,13 +96,14 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
       countObservable,
       dataObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe((result) => {
-      if (Array.isArray(result)) {
-        setTeilkulturs(result.sort((a, b) => teilkulturSort({ a, b })))
-      } else if (!isNaN(result)) {
-        setCount(result)
-      }
-    })
+    const allSubscription = allCollectionsObservable.subscribe(
+      ([totalCount, teilkulturs]) => {
+        setDataState({
+          teilkulturs: teilkulturs.sort((a, b) => teilkulturSort({ a, b })),
+          totalCount,
+        })
+      },
+    )
     return () => allSubscription.unsubscribe()
   }, [
     db.collections,

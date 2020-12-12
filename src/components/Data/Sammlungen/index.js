@@ -115,13 +115,12 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
       dataObservable,
     ])
     const allSubscription = allCollectionsObservable.subscribe(
-      async (result) => {
-        if (Array.isArray(result)) {
-          const sammlungsSorted = await sammlungsSortedFromSammlungs(result)
-          setSammlungs(sammlungsSorted)
-        } else if (!isNaN(result)) {
-          setCount(result)
-        }
+      async ([totalCount, sammlungs]) => {
+        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+        setDataState({
+          sammlungs: sammlungsSorted,
+          totalCount,
+        })
       },
     )
 
