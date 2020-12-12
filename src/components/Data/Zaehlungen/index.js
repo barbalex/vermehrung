@@ -98,13 +98,11 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
       dataObservable,
     ])
     const allSubscription = allCollectionsObservable.subscribe(
-      async (result) => {
-        if (Array.isArray(result)) {
-          const zaehlungsSorted = result.sort((a, b) => zaehlungSort({ a, b }))
-          setZaehlungs(zaehlungsSorted)
-        } else if (!isNaN(result)) {
-          setCount(result)
-        }
+      ([totalCount, zaehlungs]) => {
+        setDataState({
+          zaehlungs: zaehlungs.sort((a, b) => zaehlungSort({ a, b })),
+          totalCount,
+        })
       },
     )
     return () => allSubscription.unsubscribe()

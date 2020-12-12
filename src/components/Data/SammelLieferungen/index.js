@@ -92,12 +92,13 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
       dataObservable,
     ])
     const allSubscription = allCollectionsObservable.subscribe(
-      async (result) => {
-        if (Array.isArray(result)) {
-          setSammelLieferungs(result.sort((a, b) => lieferungSort({ a, b })))
-        } else if (!isNaN(result)) {
-          setCount(result)
-        }
+      ([totalCount, sammelLieferungs]) => {
+        setDataState({
+          sammelLieferungs: sammelLieferungs.sort((a, b) =>
+            lieferungSort({ a, b }),
+          ),
+          totalCount,
+        })
       },
     )
 

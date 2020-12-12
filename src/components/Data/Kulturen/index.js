@@ -106,13 +106,12 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
       dataObservable,
     ])
     const allSubscription = allCollectionsObservable.subscribe(
-      async (result) => {
-        if (Array.isArray(result)) {
-          const kultursSorted = await kultursSortedFromKulturs(result)
-          setKulturs(kultursSorted)
-        } else if (!isNaN(result)) {
-          setCount(result)
-        }
+      async ([totalCount, kulturs]) => {
+        const kultursSorted = await kultursSortedFromKulturs(kulturs)
+        setDataState({
+          kulturs: kultursSorted,
+          totalCount,
+        })
       },
     )
 
