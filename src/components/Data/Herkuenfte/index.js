@@ -7,7 +7,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -16,7 +16,6 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
-import herkunftSort from '../../../utils/herkunftSort'
 import tableFilter from '../../../utils/tableFilter'
 
 const Container = styled.div`
@@ -74,8 +73,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const { herkunft: herkunftFilter } = store.filter
   const activeNodeArray = anaRaw.toJSON()
 
-  const [herkunfts, setHerkunfts] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({ herkunfts: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = sammlungIdInActiveNodeArray
       ? [
@@ -84,20 +82,17 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.collections.get('herkunft')
-    const countObservable = collection
-      .query(notDeletedQuery)
-      .observeCount(false)
-    const dataObservable = collection
+    const countObservable = collection.query(notDeletedQuery).observeCount()
+    const herkunftsObservable = collection
       .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-    const allCollectionsObservable = merge(countObservable, dataObservable)
-    const allSubscription = allCollectionsObservable.subscribe((result) => {
-      if (Array.isArray(result)) {
-        setHerkunfts(result.sort((a, b) => herkunftSort({ a, b })))
-      } else if (!isNaN(result)) {
-        setCount(result)
-      }
-    })
+    const allCollectionsObservable = combineLatest([
+      countObservable,
+      herkunftsObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      ([totalCount, herkunfts]) => setDataState({ herkunfts, totalCount }),
+    )
 
     return () => allSubscription.unsubscribe()
   }, [
@@ -109,8 +104,8 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     store,
   ])
 
-  const totalNr = count
-  const filteredNr = herkunfts.length
+  const { herkunfts, totalCount } = dataState
+  const filteredCount = herkunfts.length
 
   const add = useCallback(() => insertHerkunftRev(), [insertHerkunftRev])
 
@@ -134,8 +129,8 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Herkunft"
             table="herkunft"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -153,7 +148,10 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
                   <FaPlus />
                 </IconButton>
               )}
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

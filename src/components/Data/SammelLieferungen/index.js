@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -72,13 +72,13 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { sammel_lieferung: sammelLieferungFilter } = store.filter
 
-  const [sammelLieferungs, setSammelLieferungs] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({
+    sammelLieferungs: [],
+    totalCount: 0,
+  })
   useEffect(() => {
     const collection = db.collections.get('sammel_lieferung')
-    const countObservable = collection
-      .query(notDeletedQuery)
-      .observeCount(false)
+    const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -87,7 +87,10 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
         }),
       )
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allCollectionsObservable = combineLatest([
+      countObservable,
+      dataObservable,
+    ])
     const allSubscription = allCollectionsObservable.subscribe(
       async (result) => {
         if (Array.isArray(result)) {
@@ -108,8 +111,8 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
     store,
   ])
 
-  const totalNr = count
-  const filteredNr = sammelLieferungs.length
+  const { sammelLieferungs, totalCount } = dataState
+  const filteredCount = sammelLieferungs.length
 
   const add = useCallback(() => {
     insertSammelLieferungRev()
@@ -131,8 +134,8 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Sammel-Lieferung"
             table="sammel_lieferung"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -148,7 +151,10 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

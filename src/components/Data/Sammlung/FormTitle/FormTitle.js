@@ -39,8 +39,8 @@ const TitleSymbols = styled.div`
 
 const SammlungFormTitle = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
@@ -97,7 +97,11 @@ const SammlungFormTitle = ({
               asMenu
             />
             <Anleitung asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -135,7 +139,7 @@ const SammlungFormTitle = ({
           setShowHistory={setShowHistory}
         />
         <Anleitung />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

@@ -21,16 +21,16 @@ const GartenFormTitle = ({
     return true
   }
 
-  const totalNr = gartensSorted.filter(hierarchyFilter).length
-  const filteredNr = gartensFiltered.filter(hierarchyFilter).length
+  const totalCount = gartensSorted.filter(hierarchyFilter).length
+  const filteredCount = gartensFiltered.filter(hierarchyFilter).length
 
   if (showFilter) {
     return (
       <FilterTitle
         title="Garten"
         table="garten"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -41,8 +41,8 @@ const GartenFormTitle = ({
       rawRow={rawRow}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
     />
   )
 }

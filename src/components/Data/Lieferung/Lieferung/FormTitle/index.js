@@ -45,16 +45,16 @@ const LieferungTitleChooser = ({
     return true
   }
 
-  const totalNr = lieferungsSorted.filter(hierarchyFilter).length
-  const filteredNr = lieferungsFiltered.filter(hierarchyFilter).length
+  const totalCount = lieferungsSorted.filter(hierarchyFilter).length
+  const filteredCount = lieferungsFiltered.filter(hierarchyFilter).length
 
   if (showFilter) {
     return (
       <FilterTitle
         title="Lieferung"
         table="lieferung"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -63,8 +63,8 @@ const LieferungTitleChooser = ({
     <FormTitle
       row={row}
       rawRow={rawRow}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
     />

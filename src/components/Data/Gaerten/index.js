@@ -7,7 +7,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -73,8 +73,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { garten: gartenFilter } = store.filter
 
-  const [gartens, setGartens] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({ gartens: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = personIdInActiveNodeArray
       ? [
@@ -83,21 +82,23 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.collections.get('garten')
-    const countObservable = collection
+    const totalCountObservable = collection
       .query(notDeletedQuery)
-      .observeCount(false)
-    const dataObservable = collection
+      .observeCount()
+    const gartenObservable = collection
       .query(...tableFilter({ store, table: 'garten' }), ...hierarchyQuery)
       .observeWithColumns(['name', 'person_id'])
-    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allCollectionsObservable = combineLatest([
+      totalCountObservable,
+      gartenObservable,
+    ])
     const allSubscription = allCollectionsObservable.subscribe(
-      async (result) => {
-        if (Array.isArray(result)) {
-          const gartensSorted = await gartensSortedFromGartens(result)
-          setGartens(gartensSorted)
-        } else if (!isNaN(result)) {
-          setCount(result)
-        }
+      async ([totalCount, gartens]) => {
+        const gartensSorted = await gartensSortedFromGartens(gartens)
+        setDataState({
+          gartens: gartensSorted,
+          totalCount,
+        })
       },
     )
 
@@ -112,8 +113,8 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
     store,
   ])
 
-  const totalNr = count
-  const filteredNr = gartens.length
+  const { gartens, totalCount } = dataState
+  const filteredCount = gartens.length
 
   const add = useCallback(() => {
     insertGartenRev()
@@ -138,8 +139,8 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Garten"
             table="garten"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -155,7 +156,10 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

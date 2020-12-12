@@ -7,7 +7,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -73,8 +73,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { zaehlung: zaehlungFilter } = store.filter
 
-  const [zaehlungs, setZaehlungs] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({ zaehlungs: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = kulturIdInActiveNodeArray
       ? [
@@ -83,9 +82,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.collections.get('zaehlung')
-    const countObservable = collection
-      .query(notDeletedQuery)
-      .observeCount(false)
+    const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -96,7 +93,10 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
       )
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
 
-    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allCollectionsObservable = combineLatest([
+      countObservable,
+      dataObservable,
+    ])
     const allSubscription = allCollectionsObservable.subscribe(
       async (result) => {
         if (Array.isArray(result)) {
@@ -118,8 +118,8 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
     store,
   ])
 
-  const totalNr = count
-  const filteredNr = zaehlungs.length
+  const { zaehlungs, totalCount } = dataState
+  const filteredCount = zaehlungs.length
 
   const add = useCallback(() => {
     insertZaehlungRev()
@@ -144,8 +144,8 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Zählung"
             table="zaehlung"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -161,7 +161,10 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

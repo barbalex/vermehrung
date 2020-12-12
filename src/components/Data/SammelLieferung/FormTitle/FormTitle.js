@@ -40,8 +40,8 @@ const TitleSymbols = styled.div`
 const SammelLieferungFormTitle = ({
   showFilter,
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   lieferung,
   printPreview,
   setPrintPreview,
@@ -92,8 +92,8 @@ const SammelLieferungFormTitle = ({
               {row.id && <Settings asMenu />}
               {shownAsSammelLieferung && (
                 <FilterNumbers
-                  filteredNr={filteredNr}
-                  totalNr={totalNr}
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
                   asMenu
                 />
               )}
@@ -135,8 +135,8 @@ const SammelLieferungFormTitle = ({
               <Anleitung asMenu />
               {shownAsSammelLieferung && (
                 <FilterNumbers
-                  filteredNr={filteredNr}
-                  totalNr={totalNr}
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
                   asMenu
                 />
               )}
@@ -177,8 +177,8 @@ const SammelLieferungFormTitle = ({
               <Anleitung asMenu />
               {shownAsSammelLieferung && (
                 <FilterNumbers
-                  filteredNr={filteredNr}
-                  totalNr={totalNr}
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
                   asMenu
                 />
               )}
@@ -219,8 +219,8 @@ const SammelLieferungFormTitle = ({
               <Anleitung asMenu />
               {shownAsSammelLieferung && (
                 <FilterNumbers
-                  filteredNr={filteredNr}
-                  totalNr={totalNr}
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
                   asMenu
                 />
               )}
@@ -258,7 +258,10 @@ const SammelLieferungFormTitle = ({
           {row.id && <Settings />}
           <Anleitung />
           {shownAsSammelLieferung && (
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+            />
           )}
         </>
       </TitleSymbols>

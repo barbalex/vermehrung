@@ -36,8 +36,8 @@ const TitleSymbols = styled.div`
 
 const PersonFormTitle = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
@@ -65,7 +65,11 @@ const PersonFormTitle = ({
               asMenu
             />
             <KontoMenu row={row} asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -89,7 +93,7 @@ const PersonFormTitle = ({
           setShowHistory={setShowHistory}
         />
         <KontoMenu row={row} />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

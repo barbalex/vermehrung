@@ -7,7 +7,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -73,8 +73,7 @@ const Events = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { event: eventFilter } = store.filter
 
-  const [events, setEvents] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({ events: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = kulturIdInActiveNodeArray
       ? [
@@ -83,20 +82,22 @@ const Events = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.collections.get('event')
-    const countObservable = collection
-      .query(notDeletedQuery)
-      .observeCount(false)
+    const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)
       .observeWithColumns(['datum', 'beschreibung'])
-    const allCollectionsObservable = merge(countObservable, dataObservable)
-    const allSubscription = allCollectionsObservable.subscribe((result) => {
-      if (Array.isArray(result)) {
-        setEvents(result.sort((a, b) => eventSort({ a, b })))
-      } else if (!isNaN(result)) {
-        setCount(result)
-      }
-    })
+    const allCollectionsObservable = combineLatest([
+      countObservable,
+      dataObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      ([totalCount, events]) => {
+        setDataState({
+          events: events.sort((a, b) => eventSort({ a, b })),
+          totalCount,
+        })
+      },
+    )
 
     return () => allSubscription.unsubscribe()
     // need to rerender if any of the values of eventFilter changes
@@ -109,8 +110,8 @@ const Events = ({ filter: showFilter, width, height }) => {
     eventFilter,
   ])
 
-  const totalNr = count
-  const filteredNr = events.length
+  const { events, totalCount } = dataState
+  const filteredCount = events.length
 
   const add = useCallback(() => {
     insertEventRev()
@@ -135,8 +136,8 @@ const Events = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Event"
             table="event"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -152,7 +153,10 @@ const Events = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

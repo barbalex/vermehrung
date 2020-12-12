@@ -7,7 +7,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -73,8 +73,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { teilkultur: teilkulturFilter } = store.filter
 
-  const [teilkulturs, setTeilkulturs] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({ teilkulturs: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = kulturIdInActiveNodeArray
       ? [
@@ -83,9 +82,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.collections.get('teilkultur')
-    const countObservable = collection
-      .query(notDeletedQuery)
-      .observeCount(false)
+    const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -95,7 +92,10 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
         ...hierarchyQuery,
       )
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
-    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allCollectionsObservable = combineLatest([
+      countObservable,
+      dataObservable,
+    ])
     const allSubscription = allCollectionsObservable.subscribe((result) => {
       if (Array.isArray(result)) {
         setTeilkulturs(result.sort((a, b) => teilkulturSort({ a, b })))
@@ -114,8 +114,8 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
     store,
   ])
 
-  const totalNr = count
-  const filteredNr = teilkulturs.length
+  const { teilkulturs, totalCount } = dataState
+  const filteredCount = teilkulturs.length
 
   const add = useCallback(() => {
     insertTeilkulturRev()
@@ -140,8 +140,8 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Teilkultur"
             table="teilkultur"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -157,7 +157,10 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

@@ -7,7 +7,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -78,8 +78,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { kultur: kulturFilter } = store.filter
 
-  const [kulturs, setKulturs] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({ kulturs: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = gartenIdInActiveNodeArray
       ? [
@@ -93,9 +92,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.collections.get('kultur')
-    const countObservable = collection
-      .query(notDeletedQuery)
-      .observeCount(false)
+    const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(...tableFilter({ table: 'kultur', store }), ...hierarchyQuery)
       .observeWithColumns([
@@ -104,7 +101,10 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
         'garten_id',
         'zwischenlager',
       ])
-    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allCollectionsObservable = combineLatest([
+      countObservable,
+      dataObservable,
+    ])
     const allSubscription = allCollectionsObservable.subscribe(
       async (result) => {
         if (Array.isArray(result)) {
@@ -128,8 +128,8 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
     store,
   ])
 
-  const totalNr = count
-  const filteredNr = kulturs.length
+  const { kulturs, totalCount } = dataState
+  const filteredCount = kulturs.length
 
   const onClickUp = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
@@ -156,8 +156,8 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Kultur"
             table="kultur"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -173,7 +173,10 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

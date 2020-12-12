@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
@@ -72,13 +72,10 @@ const Personen = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { person: personFilter } = store.filter
 
-  const [persons, setPersons] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({ persons: [], totalCount: 0 })
   useEffect(() => {
     const collection = db.collections.get('person')
-    const countObservable = collection
-      .query(notDeletedQuery)
-      .observeCount(false)
+    const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -87,7 +84,10 @@ const Personen = ({ filter: showFilter, width, height }) => {
         }),
       )
       .observeWithColumns(['vorname', 'name'])
-    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allCollectionsObservable = combineLatest([
+      countObservable,
+      dataObservable,
+    ])
     const allSubscription = allCollectionsObservable.subscribe(
       async (result) => {
         if (Array.isArray(result)) {
@@ -104,8 +104,8 @@ const Personen = ({ filter: showFilter, width, height }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db.collections, ...Object.values(personFilter), personFilter, store])
 
-  const totalNr = count
-  const filteredNr = persons.length
+  const { persons, totalCount } = dataState
+  const filteredCount = persons.length
 
   const add = useCallback(() => {
     insertPersonRev()
@@ -127,8 +127,8 @@ const Personen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Person"
             table="person"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -146,7 +146,10 @@ const Personen = ({ filter: showFilter, width, height }) => {
                   <FaPlus />
                 </IconButton>
               )}
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

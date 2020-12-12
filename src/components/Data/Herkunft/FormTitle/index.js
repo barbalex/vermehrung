@@ -34,19 +34,17 @@ const HerkunftFormTitleChooser = ({
     const collection = db.collections.get('herkunft')
     const totalCountObservable = collection
       .query(notDeletedQuery, ...hierarchyQuery)
-      .observeCount(false)
+      .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
-      .observeCount(false)
+      .observeCount()
     const allCollectionsObservable = combineLatest([
       totalCountObservable,
       filteredCountObservable,
     ])
     const allSubscription = allCollectionsObservable.subscribe(
-      ([totalCount, filteredCount]) => {
-        console.log('Herkunft, FormTitle', { totalCount, filteredCount })
-        setCountState({ totalCount, filteredCount })
-      },
+      ([totalCount, filteredCount]) =>
+        setCountState({ totalCount, filteredCount }),
     )
 
     return () => allSubscription.unsubscribe()
@@ -66,8 +64,8 @@ const HerkunftFormTitleChooser = ({
       <FilterTitle
         title="Herkunft"
         table="herkunft"
-        totalNr={totalCount}
-        filteredNr={filteredCount}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -76,8 +74,8 @@ const HerkunftFormTitleChooser = ({
     <FormTitle
       row={row}
       rawRow={rawRow}
-      totalNr={totalCount}
-      filteredNr={filteredCount}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
       activeConflict={activeConflict}
