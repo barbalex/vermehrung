@@ -17,7 +17,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import exists from '../../../utils/exists'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 import lieferungSort from '../../../utils/lieferungSort'
 
 const Container = styled.div`
@@ -84,10 +84,6 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
   const [lieferungs, setLieferungs] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'lieferung',
-      filter: lieferungFilter.toJSON(),
-    })
     let kulturOnField = 'von_kultur_id'
     if (kulturIdInActiveNodeArray) {
       const lastAnAElement = activeNodeArray[activeNodeArray.length - 1]
@@ -119,7 +115,13 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery, ...hierarchyQuery)
+      .query(
+        ...tableFilter({
+          table: 'lieferung',
+          store,
+        }),
+        ...hierarchyQuery,
+      )
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
     const allCollectionsObservable = merge(countObservable, dataObservable)
     const allSubscription = allCollectionsObservable.subscribe((result) => {
@@ -145,6 +147,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
     // need to rerender if last element of activeNodeArray changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     activeNodeArray[activeNodeArray.length - 1],
+    store,
   ])
 
   const totalNr = count

@@ -15,7 +15,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import { StoreContext } from '../../../models/reactUtils'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 import personSort from '../../../utils/personSort'
 
 const Container = styled.div`
@@ -75,16 +75,17 @@ const Personen = ({ filter: showFilter, width, height }) => {
   const [persons, setPersons] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'person',
-      filter: personFilter.toJSON(),
-    })
     const collection = db.collections.get('person')
     const countObservable = collection
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery)
+      .query(
+        ...tableFilter({
+          table: 'person',
+          store,
+        }),
+      )
       .observeWithColumns(['vorname', 'name'])
     const allCollectionsObservable = merge(countObservable, dataObservable)
     const allSubscription = allCollectionsObservable.subscribe(
@@ -101,7 +102,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
     return () => allSubscription.unsubscribe()
     // need to rerender if any of the values of personFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(personFilter), personFilter])
+  }, [db.collections, ...Object.values(personFilter), personFilter, store])
 
   const totalNr = count
   const filteredNr = persons.length
