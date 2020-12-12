@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import last from 'lodash/last'
@@ -8,7 +8,7 @@ import RowComponent from './Row'
 import { StoreContext } from '../../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
 import qkSort from '../../../../../../utils/qkSort'
-import notDeletedOrHasConflict from '../../../../../../utils/notDeletedOrHasConflict'
+import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
 
 const Container = styled.div`
   display: flex;
@@ -20,22 +20,24 @@ const FieldsContainer = styled.div`
 
 const ChooseQk = () => {
   const store = useContext(StoreContext)
-  const { art_qks } = store
+  const { db } = store
   const { activeNodeArray } = store.tree
   const artId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
-  const artQksSorted = useMemo(
-    () =>
-      [...art_qks.values()]
-        .filter((a) => notDeletedOrHasConflict(a))
-        .sort((a, b) => qkSort({ a, b })),
-    [art_qks],
-  )
+
+  const [artQks, setArtQks] = useState([])
+  useEffect(() => {
+    db.collections
+      .get('art_qk')
+      .query(notDeletedQuery)
+      .fetch()
+      .then((artQks) => setArtQks(artQks.sort((a, b) => qkSort({ a, b }))))
+  }, [db.collections])
 
   return (
     <ErrorBoundary>
       <Container>
         <FieldsContainer>
-          {artQksSorted.map((row) => (
+          {artQks.map((row) => (
             <RowComponent key={row.name} artId={artId} qk={row} />
           ))}
         </FieldsContainer>

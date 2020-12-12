@@ -19,6 +19,7 @@ import Choose from './Choose'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import { StoreContext } from '../../../../../models/reactUtils'
 import getConstants from '../../../../../utils/constants'
+import notDeletedQuery from '../../../../../utils/notDeletedQuery'
 
 const constants = getConstants()
 
@@ -57,13 +58,20 @@ const Body = styled.div`
 
 const ApQk = ({ artId }) => {
   const store = useContext(StoreContext)
+  const { db } = store
 
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const allQkChoosens = [...store.art_qk_choosens.values()].filter(
-    (q) => q.art_id === artId,
-  )
+  const [artQkChoosen, setArtQkChoosen] = useState([])
+  useEffect(() => {
+    db.collections
+      .get('art_qk_choosen')
+      .query(notDeletedQuery)
+      .fetch()
+      .then((artQkChoosen) => setArtQkChoosen(artQkChoosen))
+  }, [db.collections])
+  const allQkChoosens = artQkChoosen.filter((q) => q.art_id === artId)
   const qkChoosens = allQkChoosens.filter((qk) => qk.choosen)
 
   const qkCount = allQkChoosens.length
