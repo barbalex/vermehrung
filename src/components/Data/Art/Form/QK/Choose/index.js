@@ -2,12 +2,12 @@ import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import last from 'lodash/last'
+import sortBy from 'lodash/sortBy'
 import isUuid from 'is-uuid'
 
 import RowComponent from './Row'
 import { StoreContext } from '../../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
-import qkSort from '../../../../../../utils/qkSort'
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
 
 const Container = styled.div`
@@ -30,7 +30,7 @@ const ChooseQk = () => {
       .get('art_qk')
       .query(notDeletedQuery)
       .fetch()
-      .then((artQks) => setArtQks(artQks.sort((a, b) => qkSort({ a, b }))))
+      .then((artQks) => setArtQks(sortBy(artQks, 'name')))
   }, [db.collections])
 
   return (

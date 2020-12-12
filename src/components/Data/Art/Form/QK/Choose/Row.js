@@ -5,7 +5,6 @@ import Checkbox from '@material-ui/core/Checkbox'
 import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../../models/reactUtils'
-import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
 
 const Row = styled.div`
   display: flex;
