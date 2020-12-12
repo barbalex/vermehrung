@@ -1157,7 +1157,7 @@ const buildNodes = async ({ store }) => {
         const kulturAnlieferungQuery = kultur.anlieferungs.extend(
           ...tableFilter({ store, table: 'lieferung' }),
         )
-        const kulturAnlieferungCount = kulturAnlieferungQuery.fetchCount()
+        const kulturAnlieferungCount = await kulturAnlieferungQuery.fetchCount()
         kulturAnlieferungFolderNodes = buildKulturAnlieferungFolder({
           count: kulturAnlieferungCount,
           kulturIndex,

@@ -1,9 +1,12 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
+import notDeletedQuery from '../../../../utils/notDeletedQuery'
+import tableFilter from '../../../../utils/tableFilter'
 
 const SammelLieferungFormTitleChooser = ({
   lieferung,
@@ -17,14 +20,39 @@ const SammelLieferungFormTitleChooser = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, sammelLieferungsFiltered, sammelLieferungsSorted } = store
+  const { filter, db } = store
 
-  const hierarchyFilter = () => {
-    return true
-  }
+  const [countState, setCountState] = useState({
+    totalCount: 0,
+    filteredCount: 0,
+  })
+  useEffect(() => {
+    const collection = db.collections.get('sammel_lieferung')
+    const totalCountObservable = collection
+      .query(notDeletedQuery)
+      .observeCount()
+    const filteredCountObservable = collection
+      .query(...tableFilter({ store, table: 'sammel_lieferung' }))
+      .observeCount()
+    const allCollectionsObservable = combineLatest([
+      totalCountObservable,
+      filteredCountObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      ([totalCount, filteredCount]) =>
+        setCountState({ totalCount, filteredCount }),
+    )
 
-  const totalCount = sammelLieferungsSorted.filter(hierarchyFilter).length
-  const filteredCount = sammelLieferungsFiltered.filter(hierarchyFilter).length
+    return () => allSubscription.unsubscribe()
+  }, [
+    db.collections,
+    // need to rerender if any of the values of sammel_lieferungFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(store.filter.sammel_lieferung),
+    store,
+  ])
+
+  const { totalCount, filteredCount } = countState
 
   if (!row || (!showFilter && filter.show)) return null
 

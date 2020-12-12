@@ -1,9 +1,12 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
+import notDeletedQuery from '../../../../utils/notDeletedQuery'
+import tableFilter from '../../../../utils/tableFilter'
 
 const ArtFormTitleChooser = ({
   row,
@@ -13,10 +16,39 @@ const ArtFormTitleChooser = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { artsSorted, artsFiltered } = store
+  const { db } = store
 
-  const totalCount = artsSorted.length
-  const filteredCount = artsFiltered.length
+  const [countState, setCountState] = useState({
+    totalCount: 0,
+    filteredCount: 0,
+  })
+  useEffect(() => {
+    const collection = db.collections.get('art')
+    const totalCountObservable = collection
+      .query(notDeletedQuery)
+      .observeCount()
+    const filteredCountObservable = collection
+      .query(...tableFilter({ store, table: 'art' }))
+      .observeCount()
+    const allCollectionsObservable = combineLatest([
+      totalCountObservable,
+      filteredCountObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      ([totalCount, filteredCount]) =>
+        setCountState({ totalCount, filteredCount }),
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [
+    db.collections,
+    // need to rerender if any of the values of artFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(store.filter.art),
+    store,
+  ])
+
+  const { totalCount, filteredCount } = countState
 
   if (showFilter) {
     return (
