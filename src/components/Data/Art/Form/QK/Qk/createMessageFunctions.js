@@ -456,7 +456,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
         })
         .filter(
           (z) =>
-            [...store.teilzaehlungs.values()]
+            teilzaehlungs
               .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_auspflanzbereit)).length,
@@ -470,7 +470,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = [...store.teilzaehlungs.values()]
+          const anzTz = teilzaehlungs
             .filter((tz) => tz.zaehlung_id === z.id)
             .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
@@ -489,7 +489,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
         })
         .filter(
           (z) =>
-            [...store.teilzaehlungs.values()]
+            teilzaehlungs
               .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_mutterpflanzen)).length,
@@ -503,7 +503,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = [...store.teilzaehlungs.values()]
+          const anzTz = teilzaehlungs
             .filter((tz) => tz.zaehlung_id === z.id)
             .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
@@ -524,7 +524,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
           return kultur?.art_id === artId && !!kulturOption?.tk
         })
         .filter((z) => {
-          const tz = [...store.teilzaehlungs.values()]
+          const tz = teilzaehlungs
             .filter((tz) => tz.zaehlung_id === z.id)
             .filter((tz) => !tz._deleted)
           return tz.length && tz.filter((tz) => !tz.teilkultur_id).length
@@ -538,7 +538,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = [...store.teilzaehlungs.values()]
+          const anzTz = teilzaehlungs
             .filter((tz) => tz.zaehlung_id === z.id)
             .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
