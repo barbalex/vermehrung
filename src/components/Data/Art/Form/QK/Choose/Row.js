@@ -1,9 +1,11 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../../models/reactUtils'
+import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
 
 const Row = styled.div`
   display: flex;
@@ -28,11 +30,17 @@ const Beschreibung = styled.div`
 const ChooseArtQkRow = ({ artId, qk }) => {
   const store = useContext(StoreContext)
 
-  const artQkChoosen = [...store.art_qk_choosens.values()].find(
-    (v) => v.art_id === artId && v.qk_id === qk.id,
-  )
+  const [artQkChoosen, setArtQkChoosen] = useState()
+  useEffect(() => {
+    qk.art_qk_choosens
+      .extend(Q.where('art_id', artId), Q.where('qk_id', qk.id))
+      .fetch()
+      .then((artQkChoosen) => {
+        setArtQkChoosen(artQkChoosen[0])
+      })
+  }, [artId, qk.art_qk_choosens, qk.id])
 
-  const checked = artQkChoosen.choosen
+  const checked = artQkChoosen?.choosen
 
   const onChange = useCallback(
     (event) => {
@@ -44,6 +52,8 @@ const ChooseArtQkRow = ({ artId, qk }) => {
     },
     [artQkChoosen, store],
   )
+
+  if (!artQkChoosen) return null
 
   return (
     <Row>
