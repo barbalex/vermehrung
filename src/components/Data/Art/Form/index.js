@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
@@ -42,12 +42,16 @@ const ArtForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { artsSorted, filter, online, errors, unsetError, ae_arts } = store
+  const { artsSorted, filter, online, errors, unsetError, db } = store
 
-  const aeArtsSorted = useMemo(
-    () => [...ae_arts.values()].sort((a, b) => aeArtSort({ a, b })),
-    [ae_arts],
-  )
+  const [aeArts, setAeArts] = useState([])
+  useEffect(() => {
+    db.collections
+      .get('ae_art')
+      .query()
+      .fetch()
+      .then((aeArts) => setAeArts(aeArts.sort((a, b) => aeArtSort({ a, b }))))
+  }, [db])
 
   useEffect(() => {
     unsetError('art')
@@ -78,16 +82,16 @@ const ArtForm = ({
 
   const aeArtsFilter = (val) => {
     if (showFilter) {
-      return aeArtsSorted
+      return aeArts
         .filter((a) => artsSorted.map((ar) => ar.ae_id).includes(a.id))
         .filter((a) => a.name.toLowerCase().includes(val))
     }
     if (val) {
-      return aeArtsSorted
+      return aeArts
         .filter((a) => !aeArtIdsNotToShow.includes(a.id))
         .filter((a) => a.name.toLowerCase().includes(val))
     }
-    return aeArtsSorted.filter((a) => !aeArtIdsNotToShow.includes(a.id))
+    return aeArts.filter((a) => !aeArtIdsNotToShow.includes(a.id))
   }
 
   const showDeleted =

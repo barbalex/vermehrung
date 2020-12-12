@@ -55,7 +55,7 @@ const Tree = ({ width, height }) => {
     const artObservable = db.collections
       .get('art')
       .query(...tableFilter({ store, table: 'art' }))
-      .observeWithColumns(['name'])
+      .observeWithColumns(['ae_id'])
     const herkunftObservable = db.collections
       .get('herkunft')
       .query(...tableFilter({ store, table: 'herkunft' }))
