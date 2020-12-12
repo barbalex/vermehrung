@@ -58,17 +58,13 @@ const createMessageFunctions = async ({ artId, store, db }) => {
     .fetch()
   const personsSorted = persons.sort((a, b) => personSort({ a, b }))
 
-  /*const sammlungsOfArt = await db.collections
+  const sammlungsOfArt = await db.collections
     .get('sammlung')
-    .query(
-      Q.experimentalNestedJoin('art'),
-      Q.where('_deleted', false),
-      Q.on('art', 'id', artId),
-    )
+    .query(Q.where('_deleted', false), Q.on('art', 'id', artId))
     .fetch()
   const sammlungsOfArtSorted = await sammlungsSortedFromSammlungs(
     sammlungsOfArt,
-  )*/
+  )
   const zaehlungsOfArt = await db.collections
     .get('zaehlung')
     .query(
@@ -100,20 +96,6 @@ const createMessageFunctions = async ({ artId, store, db }) => {
     teilkulturSort({ a, b }),
   )
 
-  const sammlungs = await db.collections
-    .get('sammlung')
-    .query(notDeletedQuery)
-    .fetch()
-  /*const teilkulturs = await db.collections
-    .get('teilkultur')
-    .query(notDeletedQuery)
-    .fetch()
-  const teilkultursSorted = teilkulturs.sort((a, b) => teilkulturSort({ a, b }))
-  const zaehlungs = await db.collections
-    .get('zaehlung')
-    .query(notDeletedQuery)
-    .fetch()
-  const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))*/
   const teilzaehlungs = await db.collections
     .get('teilzaehlung')
     .query(notDeletedQuery)
@@ -166,7 +148,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
       ),
     sammlungsWithoutLieferung: async () =>
       await Promise.all(
-        sammlungs
+        sammlungsOfArtSorted
           .filter((s) => s.art_id === artId)
           .filter(
             (s) => !lieferungsSorted.find((l) => l.von_sammlung_id === s.id),
@@ -182,7 +164,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
       ),
     sammlungsWithNonUniqueNr: async () => {
       const sGroupedByNr = groupBy(
-        sammlungs.filter((s) => s.art_id === artId),
+        sammlungsOfArtSorted.filter((s) => s.art_id === artId),
         (h) => h.nr,
       )
       return await Promise.all(
@@ -202,7 +184,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
     },
     sammlungsWithoutNr: async () =>
       await Promise.all(
-        sammlungs
+        sammlungsOfArtSorted
           .filter((s) => s.art_id === artId)
           .filter((s) => !exists(s.nr))
           .map(async (s) => {
@@ -216,7 +198,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
       ),
     sammlungsWithoutHerkunft: async () =>
       await Promise.all(
-        sammlungs
+        sammlungsOfArtSorted
           .filter((s) => s.art_id === artId)
           .filter((s) => !s.herkunft_id)
           .map(async (s) => {
@@ -230,7 +212,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
       ),
     sammlungsWithoutPerson: async () =>
       await Promise.all(
-        sammlungs
+        sammlungsOfArtSorted
           .filter((s) => s.art_id === artId)
           .filter((s) => !s.person_id)
           .map(async (s) => {
@@ -244,7 +226,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
       ),
     sammlungsWithoutDatum: async () =>
       await Promise.all(
-        sammlungs
+        sammlungsOfArtSorted
           .filter((s) => s.art_id === artId)
           .filter((s) => !s.datum)
           .map(async (s) => {
@@ -258,7 +240,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
       ),
     sammlungsWithoutAnzahlPflanzen: async () =>
       await Promise.all(
-        sammlungs
+        sammlungsOfArtSorted
           .filter((s) => s.art_id === artId)
           .filter((s) => !exists(s.anzahl_pflanzen))
           .map(async (s) => {
@@ -272,7 +254,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
       ),
     sammlungsWithoutVonAnzahlIdividuen: async () =>
       await Promise.all(
-        sammlungs
+        sammlungsOfArtSorted
           .filter((s) => s.art_id === artId)
           .filter((s) => !exists(s.von_anzahl_individuen))
           .map(async (s) => {
