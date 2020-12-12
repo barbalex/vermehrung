@@ -1,12 +1,10 @@
 import format from 'date-fns/format'
 import groupBy from 'lodash/groupBy'
-//import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
+import { Q } from '@nozbe/watermelondb'
 
 import exists from '../../../../../../utils/exists'
-import artLabelFromArt from '../../../../../../utils/artLabelFromArt'
-import gartenLabelFromGarten from '../../../../../../utils/gartenLabelFromGarten'
 import kulturLabelFromKultur from '../../../../../../utils/kulturLabelFromKultur'
-import sammlungLabelFromSammlung from '../../../../../../utils/sammlungLabelFromSammlung'
 
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
 import artsSortedFromArts from '../../../../../../utils/artsSortedFromArts'
@@ -20,8 +18,7 @@ import personSort from '../../../../../../utils/personSort'
 import teilkulturSort from '../../../../../../utils/teilkulturSort'
 import zaehlungSort from '../../../../../../utils/zaehlungSort'
 
-const createMessageFunctions = async ({ artId, store }) => {
-  const { db } = store
+const createMessageFunctions = async ({ artId, store, db }) => {
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
@@ -29,6 +26,7 @@ const createMessageFunctions = async ({ artId, store }) => {
 
   const arts = await db.collections.get('art').query(notDeletedQuery).fetch()
   const artsSorted = await artsSortedFromArts(arts)
+  const avs = await db.collections.get('av').query(notDeletedQuery).fetch()
   const events = await db.collections
     .get('event')
     .query(notDeletedQuery)
@@ -59,12 +57,54 @@ const createMessageFunctions = async ({ artId, store }) => {
     .query(notDeletedQuery)
     .fetch()
   const personsSorted = persons.sort((a, b) => personSort({ a, b }))
+
+  /*const sammlungsOfArt = await db.collections
+    .get('sammlung')
+    .query(
+      Q.experimentalNestedJoin('art'),
+      Q.where('_deleted', false),
+      Q.on('art', 'id', artId),
+    )
+    .fetch()
+  const sammlungsOfArtSorted = await sammlungsSortedFromSammlungs(
+    sammlungsOfArt,
+  )*/
+  const zaehlungsOfArt = await db.collections
+    .get('zaehlung')
+    .query(
+      Q.experimentalNestedJoin('kultur', 'art'),
+      Q.on('kultur', Q.on('art', 'id', artId)),
+      Q.where('_deleted', false),
+    )
+    .fetch()
+  const zaehlungsOfArtSorted = zaehlungsOfArt.sort((a, b) =>
+    zaehlungSort({ a, b }),
+  )
+  /*const teilzaehlungsOfArt = await db.collections
+    .get('teilzaehlung')
+    .query(
+      Q.experimentalNestedJoin('zaehlung', 'kultur', 'art'),
+      Q.on('zaehlung', Q.on('kultur', Q.on('art', 'id', artId))),
+      Q.where('_deleted', false),
+    )
+    .fetch()*/
+  const teilkultursOfArt = await db.collections
+    .get('teilkultur')
+    .query(
+      Q.experimentalNestedJoin('kultur', 'art'),
+      Q.on('kultur', Q.on('art', 'id', artId)),
+      Q.where('_deleted', false),
+    )
+    .fetch()
+  const teilkultursOfArtSorted = teilkultursOfArt.sort((a, b) =>
+    teilkulturSort({ a, b }),
+  )
+
   const sammlungs = await db.collections
     .get('sammlung')
     .query(notDeletedQuery)
     .fetch()
-  const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-  const teilkulturs = await db.collections
+  /*const teilkulturs = await db.collections
     .get('teilkultur')
     .query(notDeletedQuery)
     .fetch()
@@ -73,11 +113,15 @@ const createMessageFunctions = async ({ artId, store }) => {
     .get('zaehlung')
     .query(notDeletedQuery)
     .fetch()
-  const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
+  const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))*/
+  const teilzaehlungs = await db.collections
+    .get('teilzaehlung')
+    .query(notDeletedQuery)
+    .fetch()
 
   // TODO: check if some of this could be optimized using watermelon queries
   return {
-    personsWithNonUniqueNr: () => {
+    personsWithNonUniqueNr: async () => {
       const pGroupedByNr = groupBy(personsSorted, (h) => h.nr)
       return Object.values(pGroupedByNr)
         .filter((v) => v.length > 1)
@@ -88,7 +132,7 @@ const createMessageFunctions = async ({ artId, store }) => {
           })),
         )
     },
-    herkunftsWithNonUniqueNr: () => {
+    herkunftsWithNonUniqueNr: async () => {
       const hkGroupedByNr = groupBy(herkunftsSorted, (h) => h.nr)
       return Object.values(hkGroupedByNr)
         .filter((v) => v.length > 1)
@@ -101,250 +145,311 @@ const createMessageFunctions = async ({ artId, store }) => {
           })),
         )
     },
-    artsOhneAv: () =>
-      artsSorted
-        .filter((a) => a.id === artId)
-        .filter(
-          (a) =>
-            ![...store.avs.values()]
-              .filter((av) => av.art_id === a.id)
-              .filter((av) => !av._deleted).length,
-        )
-        .map((a) => ({
-          url: ['Arten', a.id],
-          text: artLabelFromArt({ art: a, store }),
-        })),
-    sammlungsWithoutLieferung: () =>
-      sammlungsSorted
-        .filter((s) => s.art_id === artId)
-        .filter(
-          (s) => !lieferungsSorted.find((l) => l.von_sammlung_id === s.id),
-        )
-        .map((s) => ({
-          url: ['Sammlungen', s.id],
-          text: sammlungLabelFromSammlung({ sammlung: s, store }),
-        })),
-    sammlungsWithNonUniqueNr: () => {
+    artsOhneAv: async () =>
+      await Promise.all(
+        artsSorted
+          .filter((a) => a.id === artId)
+          .filter(
+            (a) =>
+              !avs
+                .filter((av) => av.art_id === a.id)
+                .filter((av) => !av._deleted).length,
+          )
+          .map(async (a) => {
+            const text = await a.label.pipe(first$()).toPromise()
+
+            return {
+              url: ['Arten', a.id],
+              text,
+            }
+          }),
+      ),
+    sammlungsWithoutLieferung: async () =>
+      await Promise.all(
+        sammlungs
+          .filter((s) => s.art_id === artId)
+          .filter(
+            (s) => !lieferungsSorted.find((l) => l.von_sammlung_id === s.id),
+          )
+          .map(async (s) => {
+            const text = await s.label.pipe(first$()).toPromise()
+
+            return {
+              url: ['Sammlungen', s.id],
+              text,
+            }
+          }),
+      ),
+    sammlungsWithNonUniqueNr: async () => {
       const sGroupedByNr = groupBy(
-        sammlungsSorted.filter((s) => s.art_id === artId),
+        sammlungs.filter((s) => s.art_id === artId),
         (h) => h.nr,
       )
-      return Object.values(sGroupedByNr)
-        .filter((s) => s.length > 1)
-        .flatMap((vs) =>
-          vs.map((s) => ({
-            url: ['Sammlungen', s.id],
-            text: sammlungLabelFromSammlung({ sammlung: s, store }),
-          })),
-        )
+      return await Promise.all(
+        Object.values(sGroupedByNr)
+          .filter((s) => s.length > 1)
+          .flatMap((vs) =>
+            vs.map(async (s) => {
+              const text = await s.label.pipe(first$()).toPromise()
+
+              return {
+                url: ['Sammlungen', s.id],
+                text,
+              }
+            }),
+          ),
+      )
     },
-    sammlungsWithoutNr: () =>
-      sammlungsSorted
-        .filter((s) => s.art_id === artId)
-        .filter((s) => !exists(s.nr))
-        .map((s) => ({
-          url: ['Arten', artId, 'Sammlungen', s.id],
-          text: sammlungLabelFromSammlung({ sammlung: s, store }),
-        })),
-    sammlungsWithoutHerkunft: () =>
-      sammlungsSorted
-        .filter((s) => s.art_id === artId)
-        .filter((s) => !s.herkunft_id)
-        .map((s) => ({
-          url: ['Arten', artId, 'Sammlungen', s.id],
-          text: sammlungLabelFromSammlung({ sammlung: s, store }),
-        })),
-    sammlungsWithoutPerson: () =>
-      sammlungsSorted
-        .filter((s) => s.art_id === artId)
-        .filter((s) => !s.person_id)
-        .map((s) => ({
-          url: ['Arten', artId, 'Sammlungen', s.id],
-          text: sammlungLabelFromSammlung({ sammlung: s, store }),
-        })),
-    sammlungsWithoutDatum: () =>
-      sammlungsSorted
-        .filter((s) => s.art_id === artId)
-        .filter((s) => !s.datum)
-        .map((s) => ({
-          url: ['Arten', artId, 'Sammlungen', s.id],
-          text: sammlungLabelFromSammlung({ sammlung: s, store }),
-        })),
-    sammlungsWithoutAnzahlPflanzen: () =>
-      sammlungsSorted
-        .filter((s) => s.art_id === artId)
-        .filter((s) => !exists(s.anzahl_pflanzen))
-        .map((s) => ({
-          url: ['Arten', artId, 'Sammlungen', s.id],
-          text: sammlungLabelFromSammlung({ sammlung: s, store }),
-        })),
-    sammlungsWithoutVonAnzahlIdividuen: () =>
-      sammlungsSorted
-        .filter((s) => s.art_id === artId)
-        .filter((s) => !exists(s.von_anzahl_individuen))
-        .map((s) => ({
-          url: ['Arten', artId, 'Sammlungen', s.id],
-          text: sammlungLabelFromSammlung({ sammlung: s, store }),
-        })),
-    gartensAllKultursInactive: () =>
-      gartensSorted
-        .filter((g) => {
-          const kulturs = [...store.kulturs.values()]
-            .filter((k) => k.garten_id === g.id)
-            .filter((k) => !k._deleted)
-          const kultursCount = kulturs.length
-          const activeKultursCount = kulturs.filter((k) => k.aktiv).length
-          return !!kultursCount && !activeKultursCount
-        })
-        .map((g) => ({
-          url: ['Gaerten', g.id],
-          text: gartenLabelFromGarten({ garten: g, store }),
-        })),
-    kultursWithoutVonAnzahlIndividuen: () =>
-      kultursSorted
-        .filter((s) => s.art_id === artId)
-        .filter((s) => !exists(s.von_anzahl_individuen))
-        .map((k) => ({
-          url: ['Arten', artId, 'Kulturen', k.id],
-          text: kulturLabelFromKultur({ kultur: k, store }),
-        })),
-    kultursWithoutGarten: () =>
-      kultursSorted
-        .filter((s) => s.art_id === artId)
-        .filter((s) => !s.garten_id)
-        .map((k) => ({
-          url: ['Arten', artId, 'Kulturen', k.id],
-          text: kulturLabelFromKultur({ kultur: k, store }),
-        })),
-    kultursWithoutHerkunft: () =>
-      kultursSorted
-        .filter((s) => s.art_id === artId)
-        .filter((s) => !s.herkunft_id)
-        .map((k) => ({
-          url: ['Arten', artId, 'Kulturen', k.id],
-          text: kulturLabelFromKultur({ kultur: k, store }),
-        })),
-    kultursWithoutZaehlungThisYear: () =>
-      kultursSorted
-        .filter((s) => s.art_id === artId)
-        .filter(
-          (k) =>
-            [...store.zaehlungs.values()]
-              .filter((z) => z.id === k.zaehlung_id)
-              .filter((z) => !z._deleted)
-              .filter(
-                (z) =>
-                  z.datum && z.datum > startYear && z.datum < startNextYear,
-              ).length === 0,
-        )
-        .map((k) => ({
-          url: ['Arten', artId, 'Kulturen', k.id],
-          text: kulturLabelFromKultur({ kultur: k, store }),
-        })),
-    teilkultursWithoutName: () =>
-      teilkultursSorted
-        .filter((tk) => {
-          const kultur = tk.kultur_id ? store.kulturs.get(tk.kultur_id) : {}
+    sammlungsWithoutNr: async () =>
+      await Promise.all(
+        sammlungs
+          .filter((s) => s.art_id === artId)
+          .filter((s) => !exists(s.nr))
+          .map(async (s) => {
+            const text = await s.label.pipe(first$()).toPromise()
 
-          return kultur?.art_id === artId
-        })
-        .filter((tk) => !tk.name)
-        .map((tk) => {
-          const kultur = tk.kultur_id ? store.kulturs.get(tk.kultur_id) : {}
-          const kulturLabel = kulturLabelFromKultur({
-            kultur,
-            store,
+            return {
+              url: ['Arten', artId, 'Sammlungen', s.id],
+              text,
+            }
+          }),
+      ),
+    sammlungsWithoutHerkunft: async () =>
+      await Promise.all(
+        sammlungs
+          .filter((s) => s.art_id === artId)
+          .filter((s) => !s.herkunft_id)
+          .map(async (s) => {
+            const text = await s.label.pipe(first$()).toPromise()
+
+            return {
+              url: ['Arten', artId, 'Sammlungen', s.id],
+              text,
+            }
+          }),
+      ),
+    sammlungsWithoutPerson: async () =>
+      await Promise.all(
+        sammlungs
+          .filter((s) => s.art_id === artId)
+          .filter((s) => !s.person_id)
+          .map(async (s) => {
+            const text = await s.label.pipe(first$()).toPromise()
+
+            return {
+              url: ['Arten', artId, 'Sammlungen', s.id],
+              text,
+            }
+          }),
+      ),
+    sammlungsWithoutDatum: async () =>
+      await Promise.all(
+        sammlungs
+          .filter((s) => s.art_id === artId)
+          .filter((s) => !s.datum)
+          .map(async (s) => {
+            const text = await s.label.pipe(first$()).toPromise()
+
+            return {
+              url: ['Arten', artId, 'Sammlungen', s.id],
+              text,
+            }
+          }),
+      ),
+    sammlungsWithoutAnzahlPflanzen: async () =>
+      await Promise.all(
+        sammlungs
+          .filter((s) => s.art_id === artId)
+          .filter((s) => !exists(s.anzahl_pflanzen))
+          .map(async (s) => {
+            const text = await s.label.pipe(first$()).toPromise()
+
+            return {
+              url: ['Arten', artId, 'Sammlungen', s.id],
+              text,
+            }
+          }),
+      ),
+    sammlungsWithoutVonAnzahlIdividuen: async () =>
+      await Promise.all(
+        sammlungs
+          .filter((s) => s.art_id === artId)
+          .filter((s) => !exists(s.von_anzahl_individuen))
+          .map(async (s) => {
+            const text = await s.label.pipe(first$()).toPromise()
+
+            return {
+              url: ['Arten', artId, 'Sammlungen', s.id],
+              text,
+            }
+          }),
+      ),
+    gartensAllKultursInactive: async () =>
+      await Promise.all(
+        gartensSorted
+          .filter(async (g) => {
+            const kulturs = await g.kulturs.extend(notDeletedQuery).fetch()
+            const kultursCount = kulturs.length
+            const activeKultursCount = kulturs.filter((k) => k.aktiv).length
+            return !!kultursCount && !activeKultursCount
           })
-          const text = `${kulturLabel}, Teilkultur-ID: ${tk.id}`
+          .map(async (g) => {
+            const text = await g.label.pipe(first$()).toPromise()
 
-          return {
-            url: [
-              'Arten',
-              artId,
-              'Kulturen',
-              kultur?.id,
-              'Teilkulturen',
-              tk.id,
-            ],
-            text,
-          }
-        }),
-    zaehlungsInFutureNotPrognose: () =>
-      zaehlungsSorted
-        .filter((z) => {
-          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          return kultur?.art_id === artId
-        })
-        .filter((z) => !!z.datum)
-        .filter((z) => new Date(z.datum).getTime() > now)
-        .map((z) => {
-          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          const kulturLabel = kulturLabelFromKultur({
-            kultur,
-            store,
-          })
-          const text = `${kulturLabel}, Zählung-ID: ${z.id}`
+            return {
+              url: ['Gaerten', g.id],
+              text,
+            }
+          }),
+      ),
+    kultursWithoutVonAnzahlIndividuen: async () =>
+      await Promise.all(
+        kultursSorted
+          .filter((s) => s.art_id === artId)
+          .filter((s) => !exists(s.von_anzahl_individuen))
+          .map(async (k) => {
+            const text = await k.label.pipe(first$()).toPromise()
 
-          return {
-            url: ['Arten', artId, 'Kulturen', z.id, 'Zaehlungen', z.id],
-            text,
-          }
-        }),
-    zaehlungsWithoutDatum: () =>
-      zaehlungsSorted
-        .filter((z) => {
-          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          return kultur?.art_id === artId
-        })
-        .filter((z) => !z.datum)
-        .map((z) => {
-          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          const kulturLabel = kulturLabelFromKultur({
-            kultur,
-            store,
-          })
-          const text = `${kulturLabel}, Zählung-ID: ${z.id}`
+            return {
+              url: ['Arten', artId, 'Kulturen', k.id],
+              text,
+            }
+          }),
+      ),
+    kultursWithoutGarten: async () =>
+      await Promise.all(
+        kultursSorted
+          .filter((s) => s.art_id === artId)
+          .filter((s) => !s.garten_id)
+          .map(async (k) => {
+            const text = await k.label.pipe(first$()).toPromise()
 
-          return {
-            url: ['Arten', artId, 'Kulturen', z.id, 'Zaehlungen', z.id],
-            text,
-          }
-        }),
-    zaehlungsWithoutAnzahlPflanzen: () =>
-      zaehlungsSorted
-        .filter((z) => {
-          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          return kultur?.art_id === artId
-        })
-        .filter(
-          (z) =>
-            [...store.teilzaehlungs.values()]
+            return {
+              url: ['Arten', artId, 'Kulturen', k.id],
+              text,
+            }
+          }),
+      ),
+    kultursWithoutHerkunft: async () =>
+      await Promise.all(
+        kultursSorted
+          .filter((s) => s.art_id === artId)
+          .filter((s) => !s.herkunft_id)
+          .map(async (k) => {
+            const text = await k.label.pipe(first$()).toPromise()
+
+            return {
+              url: ['Arten', artId, 'Kulturen', k.id],
+              text,
+            }
+          }),
+      ),
+    kultursWithoutZaehlungThisYear: async () =>
+      await Promise.all(
+        kultursSorted
+          .filter((s) => s.art_id === artId)
+          .filter(
+            (k) =>
+              zaehlungsOfArt
+                .filter((z) => z.id === k.zaehlung_id)
+                .filter((z) => !z._deleted)
+                .filter(
+                  (z) =>
+                    z.datum && z.datum > startYear && z.datum < startNextYear,
+                ).length === 0,
+          )
+          .map(async (k) => {
+            const text = await k.label.pipe(first$()).toPromise()
+
+            return {
+              url: ['Arten', artId, 'Kulturen', k.id],
+              text,
+            }
+          }),
+      ),
+    teilkultursWithoutName: async () =>
+      await Promise.all(
+        teilkultursOfArtSorted
+          .filter((tk) => !tk.name)
+          .map(async (tk) => {
+            const kultur = await tk.kultur.fetch()
+            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            const text = `${kulturLabel}, Teilkultur-ID: ${tk.id}`
+
+            return {
+              url: [
+                'Arten',
+                artId,
+                'Kulturen',
+                kultur?.id,
+                'Teilkulturen',
+                tk.id,
+              ],
+              text,
+            }
+          }),
+      ),
+    zaehlungsInFutureNotPrognose: async () =>
+      await Promise.all(
+        zaehlungsOfArtSorted
+          .filter((z) => !!z.datum)
+          .filter((z) => new Date(z.datum).getTime() > now)
+          .map(async (z) => {
+            const kultur = await z.kultur.fetch()
+            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            const text = `${kulturLabel}, Zählung-ID: ${z.id}`
+
+            return {
+              url: ['Arten', artId, 'Kulturen', z.id, 'Zaehlungen', z.id],
+              text,
+            }
+          }),
+      ),
+    zaehlungsWithoutDatum: async () =>
+      await Promise.all(
+        zaehlungsOfArtSorted
+          .filter((z) => !z.datum)
+          .map(async (z) => {
+            const kultur = await z.kultur.fetch()
+            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            const text = `${kulturLabel}, Zählung-ID: ${z.id}`
+
+            return {
+              url: ['Arten', artId, 'Kulturen', z.id, 'Zaehlungen', z.id],
+              text,
+            }
+          }),
+      ),
+    zaehlungsWithoutAnzahlPflanzen: async () =>
+      await Promise.all(
+        zaehlungsOfArtSorted
+          .filter(
+            (z) =>
+              teilzaehlungs
+                .filter((tz) => tz.zaehlung_id === z.id)
+                .filter((tz) => !tz._deleted)
+                .filter((tz) => !exists(tz.anzahl_pflanzen)).length,
+          )
+          .map(async (z) => {
+            const kultur = await z.kultur.fetch()
+            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            const zaehlung = z.datum
+              ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+              : `Zählung-ID: ${z.id}`
+            const anzTz = teilzaehlungs
               .filter((tz) => tz.zaehlung_id === z.id)
-              .filter((tz) => !tz._deleted)
-              .filter((tz) => !exists(tz.anzahl_pflanzen)).length,
-        )
-        .map((z) => {
-          const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
-          const kulturLabel = kulturLabelFromKultur({
-            kultur,
-            store,
-          })
-          const zaehlung = z.datum
-            ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
-            : `Zählung-ID: ${z.id}`
-          const anzTz = [...store.teilzaehlungs.values()]
-            .filter((tz) => tz.zaehlung_id === z.id)
-            .filter((tz) => !tz._deleted).length
-          const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-          const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
+              .filter((tz) => !tz._deleted).length
+            const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
+            const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
 
-          return {
-            url: ['Arten', artId, 'Kulturen', kultur.id, 'Zaehlungen', z.id],
-            text,
-          }
-        }),
-    zaehlungsWithoutAnzahlAuspflanzbereit: () =>
-      zaehlungsSorted
+            return {
+              url: ['Arten', artId, 'Kulturen', kultur.id, 'Zaehlungen', z.id],
+              text,
+            }
+          }),
+      ),
+    zaehlungsWithoutAnzahlAuspflanzbereit: async () =>
+      zaehlungsOfArtSorted
         .filter((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
           return kultur?.art_id === artId
@@ -376,8 +481,8 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    zaehlungsWithoutAnzahlMutterpflanzen: () =>
-      zaehlungsSorted
+    zaehlungsWithoutAnzahlMutterpflanzen: async () =>
+      zaehlungsOfArtSorted
         .filter((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
           return kultur?.art_id === artId
@@ -409,8 +514,8 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen: () =>
-      zaehlungsSorted
+    zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen: async () =>
+      zaehlungsOfArtSorted
         .filter((z) => {
           const kultur = z.kultur_id ? store.kulturs.get(z.kultur_id) : {}
           const kulturOption = z.kultur_id
@@ -444,7 +549,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    lieferungsWithMultipleVon: () =>
+    lieferungsWithMultipleVon: async () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
         .filter((l) => !!l.von_sammlung_id)
@@ -461,7 +566,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    lieferungsWithMultipleNach: () =>
+    lieferungsWithMultipleNach: async () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
         .filter((l) => l.nach_ausgepflanzt)
@@ -478,7 +583,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    lieferungsWithoutAnzahlPflanzen: () =>
+    lieferungsWithoutAnzahlPflanzen: async () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
         .filter((l) => !exists(l.anzahl_pflanzen))
@@ -494,7 +599,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    lieferungsWithoutAnzahlAuspflanzbereit: () =>
+    lieferungsWithoutAnzahlAuspflanzbereit: async () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
         .filter((l) => !exists(l.anzahl_auspflanzbereit))
@@ -510,7 +615,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    lieferungsWithoutVonAnzahlIndividuen: () =>
+    lieferungsWithoutVonAnzahlIndividuen: async () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
         .filter((l) => !exists(l.von_anzahl_individuen))
@@ -526,7 +631,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    lieferungsWithoutVon: () =>
+    lieferungsWithoutVon: async () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
         .filter((l) => !l.von_kultur_id)
@@ -543,7 +648,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    lieferungsWithoutNach: () =>
+    lieferungsWithoutNach: async () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
         .filter((l) => !!l.von_kultur_id || !!l.von_sammlung_id)
@@ -561,7 +666,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    lieferungsWithoutDatum: () =>
+    lieferungsWithoutDatum: async () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
         .filter((l) => !l.datum)
@@ -577,7 +682,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    lieferungsWithoutPerson: () =>
+    lieferungsWithoutPerson: async () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
         .filter((l) => !l.person_id)
@@ -593,7 +698,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    eventsWithoutBeschreibung: () =>
+    eventsWithoutBeschreibung: async () =>
       eventsSorted
         .filter((e) => {
           const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
@@ -613,7 +718,7 @@ const createMessageFunctions = async ({ artId, store }) => {
             text,
           }
         }),
-    eventsWithoutDatum: () =>
+    eventsWithoutDatum: async () =>
       eventsSorted
         .filter((e) => {
           const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
