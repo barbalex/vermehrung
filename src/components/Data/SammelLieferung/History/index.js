@@ -1,11 +1,11 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
 import SimpleBar from 'simplebar-react'
 
-import { useQuery, StoreContext } from '../../../../models/reactUtils'
+import { useQuery } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
 import Row from './Row'
@@ -17,68 +17,11 @@ const sammelLieferungRevQuery = gql`
       __typename
       sammel_lieferung_id
       art_id
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
       person_id
-      person {
-        id
-        __typename
-        name
-      }
       von_sammlung_id
-      sammlung {
-        id
-        __typename
-        datum
-        herkunft {
-          id
-          __typename
-          nr
-        }
-        person {
-          id
-          __typename
-          name
-        }
-      }
       von_kultur_id
-      kulturByVonKulturId {
-        id
-        __typename
-        garten {
-          id
-          __typename
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
       datum
       nach_kultur_id
-      kulturByNachKulturId {
-        id
-        __typename
-        garten {
-          id
-          __typename
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
       nach_ausgepflanzt
       von_anzahl_individuen
       anzahl_pflanzen
@@ -125,25 +68,18 @@ const sliderSettings = {
 }
 
 const SammelLieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
-  const store = useContext(StoreContext)
-
-  // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(sammelLieferungRevQuery, {
+  const priorRevisions = row._revisions.slice(1)
+  const { error, data, loading } = useQuery(sammelLieferungRevQuery, {
     variables: {
-      rev: row._revisions,
+      rev: priorRevisions,
     },
   })
   error && checkForOnlineError(error)
 
-  // need to grab store object to ensure this remains up to date
-  const revRows = useMemo(
-    () =>
-      [...store.sammel_lieferung_revs.values()]
-        .filter((v) => row?._revisions?.includes(v._rev) ?? true)
-        .filter((r) => r._rev !== row._rev)
-        .sort((a, b) => b._depth - a._depth) || {},
-    [row._rev, row._revisions, store.sammel_lieferung_revs],
-  )
+  const revRowsUnsorted = useMemo(() => data?.sammel_lieferung_rev ?? [], [
+    data?.sammel_lieferung_rev,
+  ])
+  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
   if (loading) {
     return <Spinner message="lade Versionen" />

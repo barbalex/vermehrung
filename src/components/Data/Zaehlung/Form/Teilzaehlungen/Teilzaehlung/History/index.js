@@ -1,10 +1,10 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
 
-import { useQuery, StoreContext } from '../../../../../../../models/reactUtils'
+import { useQuery } from '../../../../../../../models/reactUtils'
 import checkForOnlineError from '../../../../../../../utils/checkForOnlineError'
 import Spinner from '../../../../../../shared/Spinner'
 import Row from './Row'
@@ -17,14 +17,6 @@ const teilzaehlungRevQuery = gql`
       teilzaehlung_id
       zaehlung_id
       teilkultur_id
-      teilkultur {
-        id
-        __typename
-        name
-        ort1
-        ort2
-        ort3
-      }
       anzahl_pflanzen
       anzahl_auspflanzbereit
       anzahl_mutterpflanzen
@@ -69,26 +61,19 @@ const sliderSettings = {
   infinite: false,
 }
 
-const KulturHistory = ({ row, rawRow, historyTakeoverCallback }) => {
-  const store = useContext(StoreContext)
-
-  // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(teilzaehlungRevQuery, {
+const TeilzaehlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
+  const priorRevisions = row._revisions.slice(1)
+  const { error, data, loading } = useQuery(teilzaehlungRevQuery, {
     variables: {
-      rev: row._revisions,
+      rev: priorRevisions,
     },
   })
   error && checkForOnlineError(error)
 
-  // need to grab store object to ensure this remains up to date
-  const revRows = useMemo(
-    () =>
-      [...store.teilzaehlung_revs.values()]
-        .filter((v) => row?._revisions?.includes(v._rev) ?? true)
-        .filter((r) => r._rev !== row._rev)
-        .sort((a, b) => b._depth - a._depth) || {},
-    [row._rev, row._revisions, store.teilzaehlung_revs],
-  )
+  const revRowsUnsorted = useMemo(() => data?.teilzaehlung_rev ?? [], [
+    data?.teilzaehlung_rev,
+  ])
+  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
   if (loading) {
     return <Spinner message="lade Versionen" />
@@ -115,4 +100,4 @@ const KulturHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   )
 }
 
-export default observer(KulturHistory)
+export default observer(TeilzaehlungHistory)

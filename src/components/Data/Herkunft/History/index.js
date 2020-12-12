@@ -1,10 +1,10 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Slider from 'react-slick'
 import SimpleBar from 'simplebar-react'
 
-import { useQuery, StoreContext } from '../../../../models/reactUtils'
+import { useQuery } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
 import Row from './Row'
@@ -37,24 +37,18 @@ const sliderSettings = {
 }
 
 const HerkunftHistory = ({ row, rawRow, historyTakeoverCallback }) => {
-  const store = useContext(StoreContext)
-
-  const { error, loading } = useQuery((store) =>
+  const priorRevisions = row._revisions.slice(1)
+  const { error, data, loading } = useQuery((store) =>
     store.queryHerkunft_rev({
-      where: { _rev: { _in: row._revisions } },
+      where: { _rev: { _in: priorRevisions } },
     }),
   )
   error && checkForOnlineError(error)
 
-  // need to grab store object to ensure this remains up to date
-  const revRows = useMemo(
-    () =>
-      [...store.herkunft_revs.values()]
-        .filter((v) => row?._revisions?.includes(v._rev) ?? true)
-        .filter((r) => r._rev !== row._rev)
-        .sort((a, b) => b._depth - a._depth) || {},
-    [row._rev, row._revisions, store.herkunft_revs],
-  )
+  const revRowsUnsorted = useMemo(() => data?.herkunft_rev ?? [], [
+    data?.herkunft_rev,
+  ])
+  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
   if (loading) {
     return <Spinner message="lade Versionen" />
