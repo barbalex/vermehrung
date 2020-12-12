@@ -38,8 +38,8 @@ const TitleSymbols = styled.div`
 
 const ZaehlungFormTitle = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
@@ -70,7 +70,11 @@ const ZaehlungFormTitle = ({
             />
             {row.kultur_id && <Settings kulturId={row.kultur_id} asMenu />}
             <Anleitung asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -93,7 +97,7 @@ const ZaehlungFormTitle = ({
         />
         {row.kultur_id && <Settings kulturId={row.kultur_id} />}
         <Anleitung />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

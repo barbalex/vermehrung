@@ -26,16 +26,16 @@ const TeilkulturFormTitleChooser = ({
     return true
   }
 
-  const totalNr = teilkultursSorted.filter(hierarchyFilter).length
-  const filteredNr = teilkultursFiltered.filter(hierarchyFilter).length
+  const totalCount = teilkultursSorted.filter(hierarchyFilter).length
+  const filteredCount = teilkultursFiltered.filter(hierarchyFilter).length
 
   if (showFilter) {
     return (
       <FilterTitle
         title="Teilkultur"
         table="teilkultur"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -44,8 +44,8 @@ const TeilkulturFormTitleChooser = ({
     <FormTitle
       row={row}
       rawRow={rawRow}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
     />

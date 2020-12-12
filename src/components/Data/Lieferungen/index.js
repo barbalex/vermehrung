@@ -7,7 +7,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -81,8 +81,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { lieferung: lieferungFilter } = store.filter
 
-  const [lieferungs, setLieferungs] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({ lieferungs: [], totalCount: 0 })
   useEffect(() => {
     let kulturOnField = 'von_kultur_id'
     if (kulturIdInActiveNodeArray) {
@@ -111,9 +110,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.collections.get('lieferung')
-    const countObservable = collection
-      .query(notDeletedQuery)
-      .observeCount(false)
+    const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -123,7 +120,10 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
         ...hierarchyQuery,
       )
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allCollectionsObservable = combineLatest([
+      countObservable,
+      dataObservable,
+    ])
     const allSubscription = allCollectionsObservable.subscribe((result) => {
       if (Array.isArray(result)) {
         setLieferungs(result.sort((a, b) => lieferungSort({ a, b })))
@@ -150,8 +150,8 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
     store,
   ])
 
-  const totalNr = count
-  const filteredNr = lieferungs.length
+  const { lieferungs, totalCount } = dataState
+  const filteredCount = lieferungs.length
 
   const add = useCallback(() => {
     const isSammelLieferung =
@@ -213,8 +213,8 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Lieferung"
             table="lieferung"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -230,7 +230,10 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

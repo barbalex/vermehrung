@@ -70,7 +70,7 @@ const Filter = () => {
           </InputAdornment>
         }
       />
-      <Numbers totalNr={docsCount} filteredNr={docsFilteredCount} />
+      <Numbers totalCount={docsCount} filteredCount={docsFilteredCount} />
     </Container>
   )
 }

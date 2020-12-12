@@ -7,7 +7,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import SimpleBar from 'simplebar-react'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -71,25 +71,23 @@ const Arten = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { art: artFilter } = store.filter
 
-  const [arts, setArts] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
     const collection = db.collections.get('art')
-    const countObservable = collection
+    const totalCountObservable = collection
       .query(notDeletedQuery)
-      .observeCount(false)
-    const dataObservable = collection
+      .observeCount()
+    const artsObservable = collection
       .query(...tableFilter({ store, table: 'art' }))
       .observeWithColumns(['ae_id'])
-    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allCollectionsObservable = combineLatest([
+      totalCountObservable,
+      artsObservable,
+    ])
     const allSubscription = allCollectionsObservable.subscribe(
-      async (result) => {
-        if (Array.isArray(result)) {
-          const artsSorted = await artsSortedFromArts(result)
-          setArts(artsSorted)
-        } else if (!isNaN(result)) {
-          setCount(result)
-        }
+      async ([totalCount, arts]) => {
+        const artsSorted = await artsSortedFromArts(arts)
+        setDataState({ arts: artsSorted, totalCount })
       },
     )
 
@@ -98,8 +96,8 @@ const Arten = ({ filter: showFilter, width, height }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db.collections, ...Object.values(artFilter), artFilter, store])
 
-  const totalNr = count
-  const filteredNr = arts.length
+  const { arts, totalCount } = dataState
+  const filteredCount = arts.length
 
   const add = useCallback(() => {
     insertArtRev()
@@ -121,8 +119,8 @@ const Arten = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Art"
             table="art"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -134,7 +132,10 @@ const Arten = ({ filter: showFilter, width, height }) => {
               <IconButton aria-label="neue Art" title="neue Art" onClick={add}>
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

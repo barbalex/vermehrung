@@ -7,7 +7,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
-import { merge } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -79,8 +79,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { sammlung: sammlungFilter } = store.filter
 
-  const [sammlungs, setSammlungs] = useState([])
-  const [count, setCount] = useState(0)
+  const [dataState, setDataState] = useState({ sammlungs: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = artIdInActiveNodeArray
       ? [
@@ -99,9 +98,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.collections.get('sammlung')
-    const countObservable = collection
-      .query(notDeletedQuery)
-      .observeCount(false)
+    const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -113,7 +110,10 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
 
     // so need to hackily use merge
-    const allCollectionsObservable = merge(countObservable, dataObservable)
+    const allCollectionsObservable = combineLatest([
+      countObservable,
+      dataObservable,
+    ])
     const allSubscription = allCollectionsObservable.subscribe(
       async (result) => {
         if (Array.isArray(result)) {
@@ -136,11 +136,11 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     artIdInActiveNodeArray,
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
-    store
+    store,
   ])
 
-  const totalNr = count
-  const filteredNr = sammlungs.length
+  const { sammlungs, totalCount } = dataState
+  const filteredCount = sammlungs.length
 
   const add = useCallback(() => {
     insertSammlungRev()
@@ -168,8 +168,8 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Sammlung"
             table="sammlung"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -185,7 +185,10 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}

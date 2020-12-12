@@ -34,16 +34,16 @@ const SammlungFormTitleChooser = ({
     return true
   }
 
-  const totalNr = sammlungsSorted.filter(hierarchyFilter).length
-  const filteredNr = sammlungsFiltered.filter(hierarchyFilter).length
+  const totalCount = sammlungsSorted.filter(hierarchyFilter).length
+  const filteredCount = sammlungsFiltered.filter(hierarchyFilter).length
 
   if (showFilter) {
     return (
       <FilterTitle
         title="Sammlung"
         table="sammlung"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -52,8 +52,8 @@ const SammlungFormTitleChooser = ({
     <FormTitle
       row={row}
       rawRow={rawRow}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
     />

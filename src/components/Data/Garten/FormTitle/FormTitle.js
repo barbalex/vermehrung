@@ -43,8 +43,8 @@ const GartenFormTitle = ({
   showHistory,
   setShowHistory,
   width,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
 }) => {
   const store = useContext(StoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
@@ -81,7 +81,11 @@ const GartenFormTitle = ({
               asMenu
             />
             <Settings asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </Container>
@@ -107,7 +111,7 @@ const GartenFormTitle = ({
           setShowHistory={setShowHistory}
         />
         <Settings />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </Container>
   )

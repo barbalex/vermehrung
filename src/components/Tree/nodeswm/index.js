@@ -599,6 +599,7 @@ const buildNodes = async ({ store }) => {
         const herkunftIndex = herkunftNodes.findIndex(
           (a) => a.id === herkunftId,
         )
+        if (!herkunft) break
 
         // 2.1 herkunft > sammlung
         const herkunftSammlungQuery = herkunft.sammlungs.extend(

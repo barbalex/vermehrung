@@ -30,16 +30,16 @@ const KulturFormTitleChooser = ({
     return true
   }
 
-  const totalNr = kultursSorted.filter(hierarchyFilter).length
-  const filteredNr = kultursFiltered.filter(hierarchyFilter).length
+  const totalCount = kultursSorted.filter(hierarchyFilter).length
+  const filteredCount = kultursFiltered.filter(hierarchyFilter).length
 
   if (showFilter) {
     return (
       <FilterTitle
         title="Kultur"
         table="kultur"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -48,8 +48,8 @@ const KulturFormTitleChooser = ({
     <FormTitle
       row={row}
       rawRow={rawRow}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
     />

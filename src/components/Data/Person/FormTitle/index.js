@@ -18,16 +18,16 @@ const PersonFormTitleChooser = ({
   const hierarchyFilter = () => {
     return true
   }
-  const totalNr = personsSorted.filter(hierarchyFilter).length
-  const filteredNr = personsFiltered.filter(hierarchyFilter).length
+  const totalCount = personsSorted.filter(hierarchyFilter).length
+  const filteredCount = personsFiltered.filter(hierarchyFilter).length
 
   if (showFilter) {
     return (
       <FilterTitle
         title="PersonFormTitleChooser"
         table="person"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -36,8 +36,8 @@ const PersonFormTitleChooser = ({
     <FormTitle
       row={row}
       rawRow={rawRow}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
     />

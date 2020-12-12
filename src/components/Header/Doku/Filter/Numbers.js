@@ -23,11 +23,11 @@ const Total = styled.div`
   border-top: 1px solid white;
   text-align: center;
 `
-const FilterNumbers = ({ filteredNr, totalNr }) => (
+const FilterNumbers = ({ filteredCount, totalCount }) => (
   <OuterContainer>
     <Container>
-      <Filtered title="gefilterte Anzahl">{filteredNr}</Filtered>
-      <Total title="totale Anzahl">{totalNr}</Total>
+      <Filtered title="gefilterte Anzahl">{filteredCount}</Filtered>
+      <Total title="totale Anzahl">{totalCount}</Total>
     </Container>
   </OuterContainer>
 )

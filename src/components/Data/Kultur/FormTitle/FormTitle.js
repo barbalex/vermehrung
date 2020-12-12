@@ -37,8 +37,8 @@ const TitleSymbols = styled.div`
 
 const KulturFormTitle = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
@@ -61,7 +61,11 @@ const KulturFormTitle = ({
             />
             <Anleitung asMenu />
             <Settings kulturId={row.id} asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -86,7 +90,11 @@ const KulturFormTitle = ({
             />
             <Anleitung asMenu />
             <Settings kulturId={row.id} asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -111,7 +119,11 @@ const KulturFormTitle = ({
               asMenu
             />
             <Anleitung asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -127,7 +139,10 @@ const KulturFormTitle = ({
           <Add />
           <Delete row={row} />
           <Settings kulturId={row.id} />
-          <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+          <FilterNumbers
+            filteredCount={filteredCount}
+            totalCount={totalCount}
+          />
           <Menu white={false}>
             <Download row={row} asMenu />
             <HistoryButton
@@ -153,7 +168,10 @@ const KulturFormTitle = ({
           <Delete row={row} />
           <Download row={row} />
           <Settings kulturId={row.id} />
-          <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+          <FilterNumbers
+            filteredCount={filteredCount}
+            totalCount={totalCount}
+          />
           <Menu white={false}>
             <HistoryButton
               row={row}
@@ -183,7 +201,7 @@ const KulturFormTitle = ({
         />
         <Anleitung />
         <Settings kulturId={row.id} />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

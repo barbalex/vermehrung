@@ -36,7 +36,7 @@ const StyledDeleteFilterIcon2 = styled(DeleteFilterIcon2)`
   pointer-events: auto;
 `
 
-const FilterTitle = ({ title, table, totalNr, filteredNr }) => {
+const FilterTitle = ({ title, table, totalCount, filteredCount }) => {
   const store = useContext(StoreContext)
   const { tableIsFiltered, filtered, emptyTable, empty } = store.filter
 
@@ -52,8 +52,8 @@ const FilterTitle = ({ title, table, totalNr, filteredNr }) => {
     <Container>
       <TitleRow>
         <FilterNumbers>
-          <span title="gefilterte Anzahl">{filteredNr}</span>/
-          <span title="ungefilterte Anzahl">{totalNr}</span>
+          <span title="gefilterte Anzahl">{filteredCount}</span>/
+          <span title="ungefilterte Anzahl">{totalCount}</span>
         </FilterNumbers>
         {existsTableFilter && (
           <IconButton

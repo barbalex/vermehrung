@@ -23,8 +23,8 @@ const SammelLieferungFormTitleChooser = ({
     return true
   }
 
-  const totalNr = sammelLieferungsSorted.filter(hierarchyFilter).length
-  const filteredNr = sammelLieferungsFiltered.filter(hierarchyFilter).length
+  const totalCount = sammelLieferungsSorted.filter(hierarchyFilter).length
+  const filteredCount = sammelLieferungsFiltered.filter(hierarchyFilter).length
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -33,8 +33,8 @@ const SammelLieferungFormTitleChooser = ({
       <FilterTitle
         title="Sammel-Lieferung"
         table="sammel_lieferung"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -43,8 +43,8 @@ const SammelLieferungFormTitleChooser = ({
     <FormTitle
       row={row}
       rawRow={rawRow}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showFilter={showFilter}
       lieferung={lieferung}
       printPreview={printPreview}

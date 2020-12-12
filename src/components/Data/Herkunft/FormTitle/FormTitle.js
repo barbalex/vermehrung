@@ -39,8 +39,8 @@ const TitleSymbols = styled.div`
 
 const Herkunft = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
@@ -92,7 +92,11 @@ const Herkunft = ({
             />
             <Anleitung asMenu />
             <Settings asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -124,7 +128,7 @@ const Herkunft = ({
         />
         <Anleitung />
         <Settings />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

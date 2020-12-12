@@ -15,16 +15,16 @@ const ArtFormTitleChooser = ({
   const store = useContext(StoreContext)
   const { artsSorted, artsFiltered } = store
 
-  const totalNr = artsSorted.length
-  const filteredNr = artsFiltered.length
+  const totalCount = artsSorted.length
+  const filteredCount = artsFiltered.length
 
   if (showFilter) {
     return (
       <FilterTitle
         title="Art"
         table="art"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -33,8 +33,8 @@ const ArtFormTitleChooser = ({
     <FormTitle
       row={row}
       rawRow={rawRow}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
     />

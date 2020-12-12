@@ -26,16 +26,16 @@ const ZaehlungFormTitleChooser = ({
     return true
   }
 
-  const totalNr = zaehlungsSorted.filter(hierarchyFilter).length
-  const filteredNr = zaehlungsFiltered.filter(hierarchyFilter).length
+  const totalCount = zaehlungsSorted.filter(hierarchyFilter).length
+  const filteredCount = zaehlungsFiltered.filter(hierarchyFilter).length
 
   if (showFilter) {
     return (
       <FilterTitle
         title="Zählung"
         table="zaehlung"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -44,8 +44,8 @@ const ZaehlungFormTitleChooser = ({
     <FormTitle
       row={row}
       rawRow={rawRow}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
     />
