@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { merge, interval, combineLatest } from 'rxjs'
+import { interval, combineLatest } from 'rxjs'
 import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
 
