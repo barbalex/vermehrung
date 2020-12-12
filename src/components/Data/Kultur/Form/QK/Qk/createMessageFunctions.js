@@ -8,7 +8,6 @@ import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromK
 import eventSort from '../../../../../../utils/eventSort'
 import lieferungSort from '../../../../../../utils/lieferungSort'
 import teilkulturSort from '../../../../../../utils/teilkulturSort'
-import teilzaehlungsSortByTk from '../../../../../../utils/teilzaehlungsSortByTk'
 import zaehlungSort from '../../../../../../utils/zaehlungSort'
 
 const createMessageFunctions = async ({ kulturId, db }) => {
@@ -46,7 +45,6 @@ const createMessageFunctions = async ({ kulturId, db }) => {
     .get('teilzaehlung')
     .query(notDeletedQuery)
     .fetch()
-  const teilzaehlungsSorted = await teilzaehlungsSortByTk(teilzaehlungs)
 
   return {
     kultursWithoutVonAnzahlIndividuen: async () =>

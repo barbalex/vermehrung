@@ -54,10 +54,15 @@ const TeilzaehlungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const {
+    user,
+    addNotification,
+    addQueuedQuery,
+    deleteTeilzaehlungRevModel,
+  } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(teilzaehlungRevQuery, {
+  const { error, data, loading } = useQuery(teilzaehlungRevQuery, {
     variables: {
       rev,
       id,
@@ -65,14 +70,9 @@ const TeilzaehlungConflict = ({
   })
   error && checkForOnlineError(error)
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.teilzaehlung_revs.values()].find(
-        (v) => v._rev === rev && v.teilzaehlung_id === id,
-      ) || {},
-    [id, rev, store.teilzaehlung_revs],
-  )
+  const revRow = useMemo(() => data?.teilzaehlung_rev?.[0] ?? {}, [
+    data?.teilzaehlung_rev,
+  ])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -80,10 +80,55 @@ const TeilzaehlungConflict = ({
   )
 
   const onClickVerwerfen = useCallback(() => {
-    // somehow revRow sometimes is {}
-    revRow.setDeleted && revRow.setDeleted()
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      teilzaehlung_id: revRow.teilzaehlung_id,
+      zaehlung_id: revRow.zaehlung_id,
+      teilkultur_id: revRow.teilkultur_id,
+      anzahl_pflanzen: revRow.anzahl_pflanzen,
+      anzahl_auspflanzbereit: revRow.anzahl_auspflanzbereit,
+      anzahl_mutterpflanzen: revRow.anzahl_mutterpflanzen,
+      andere_menge: revRow.andere_menge,
+      auspflanzbereit_beschreibung: revRow.auspflanzbereit_beschreibung,
+      bemerkungen: revRow.bemerkungen,
+      prognose_von_tz: revRow.prognose_von_tz,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_teilzaehlung_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'teilzaehlung_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'teilzaehlung',
+      revertId: revRow.teilzaehlung_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    deleteTeilzaehlungRevModel(revRow)
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    deleteTeilzaehlungRevModel,
+    revRow,
+    user.email,
+  ])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing

@@ -68,10 +68,15 @@ const SammlungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const {
+    user,
+    addNotification,
+    addQueuedQuery,
+    deleteSammlungRevModel,
+  } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(sammlungRevQuery, {
+  const { error, data, loading } = useQuery(sammlungRevQuery, {
     variables: {
       rev,
       id,
@@ -79,14 +84,9 @@ const SammlungConflict = ({
   })
   error && checkForOnlineError(error)
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.sammlung_revs.values()].find(
-        (v) => v._rev === rev && v.sammlung_id === id,
-      ) || {},
-    [id, rev, store.sammlung_revs],
-  )
+  const revRow = useMemo(() => data?.sammlung_rev?.[0] ?? {}, [
+    data?.sammlung_rev,
+  ])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -94,10 +94,58 @@ const SammlungConflict = ({
   )
 
   const onClickVerwerfen = useCallback(() => {
-    // somehow revRow sometimes is {}
-    revRow.setDeleted && revRow.setDeleted()
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      sammlung_id: revRow.sammlung_id,
+      art_id: revRow.art_id,
+      person_id: revRow.person_id,
+      herkunft_id: revRow.herkunft_id,
+      nr: revRow.nr,
+      datum: revRow.datum,
+      von_anzahl_individuen: revRow.von_anzahl_individuen,
+      anzahl_pflanzen: revRow.anzahl_pflanzen,
+      gramm_samen: revRow.gramm_samen,
+      andere_menge: revRow.andere_menge,
+      geom_point: revRow.geom_point,
+      geplant: revRow.geplant,
+      bemerkungen: revRow.bemerkungen,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_sammlung_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'sammlung_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'sammlung',
+      revertId: revRow.sammlung_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    deleteSammlungRevModel(revRow)
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    deleteSammlungRevModel,
+    revRow,
+    user.email,
+  ])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing

@@ -75,10 +75,10 @@ const EventConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const { user, addNotification, addQueuedQuery, deleteEventRevModel } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(eventRevQuery, {
+  const { error, data, loading } = useQuery(eventRevQuery, {
     variables: {
       rev,
       id,
@@ -86,14 +86,7 @@ const EventConflict = ({
   })
   error && checkForOnlineError(error)
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.event_revs.values()].find(
-        (v) => v._rev === rev && v.event_id === id,
-      ) || {},
-    [id, rev, store.event_revs],
-  )
+  const revRow = useMemo(() => data?.event_rev?.[0] ?? {}, [data?.event_rev])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -101,10 +94,52 @@ const EventConflict = ({
   )
 
   const onClickVerwerfen = useCallback(() => {
-    // somehow revRow sometimes is {}
-    revRow.setDeleted && revRow.setDeleted()
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      event_id: revRow.event_id,
+      kultur_id: revRow.kultur_id,
+      teilkultur_id: revRow.teilkultur_id,
+      person_id: revRow.person_id,
+      beschreibung: revRow.beschreibung,
+      geplant: revRow.geplant,
+      datum: revRow.datum,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_event_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'event_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'event',
+      revertId: revRow.event_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    deleteEventRevModel(revRow)
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    deleteEventRevModel,
+    revRow,
+    user.email,
+  ])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing

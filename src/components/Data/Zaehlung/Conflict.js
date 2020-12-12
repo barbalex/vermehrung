@@ -62,10 +62,15 @@ const ZaehlungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const {
+    user,
+    addNotification,
+    addQueuedQuery,
+    deleteZaehlungRevModel,
+  } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(zaehlungRevQuery, {
+  const { error, data, loading } = useQuery(zaehlungRevQuery, {
     variables: {
       rev,
       id,
@@ -73,14 +78,9 @@ const ZaehlungConflict = ({
   })
   error && checkForOnlineError(error)
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.zaehlung_revs.values()].find(
-        (v) => v._rev === rev && v.zaehlung_id === id,
-      ) || {},
-    [id, rev, store.zaehlung_revs],
-  )
+  const revRow = useMemo(() => data?.zaehlung_rev?.[0] ?? {}, [
+    data?.zaehlung_rev,
+  ])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -88,10 +88,50 @@ const ZaehlungConflict = ({
   )
 
   const onClickVerwerfen = useCallback(() => {
-    // somehow revRow sometimes is {}
-    revRow.setDeleted && revRow.setDeleted()
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      zaehlung_id: revRow.zaehlung_id,
+      kultur_id: revRow.kultur_id,
+      datum: revRow.datum,
+      prognose: revRow.prognose,
+      bemerkungen: revRow.bemerkungen,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_zaehlung_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'zaehlung_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'zaehlung',
+      revertId: revRow.zaehlung_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    deleteZaehlungRevModel(revRow)
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    deleteZaehlungRevModel,
+    revRow,
+    user.email,
+  ])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing

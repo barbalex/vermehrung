@@ -107,10 +107,15 @@ const LieferungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const {
+    user,
+    addNotification,
+    addQueuedQuery,
+    deleteLieferungRevModel,
+  } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(lieferungRevQuery, {
+  const { error, data, loading } = useQuery(lieferungRevQuery, {
     variables: {
       rev,
       id,
@@ -118,14 +123,9 @@ const LieferungConflict = ({
   })
   error && checkForOnlineError(error)
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.lieferung_revs.values()].find(
-        (v) => v._rev === rev && v.lieferung_id === id,
-      ) || {},
-    [id, rev, store.lieferung_revs],
-  )
+  const revRow = useMemo(() => data?.lieferung_rev?.[0] ?? {}, [
+    data?.lieferung_rev,
+  ])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -133,10 +133,61 @@ const LieferungConflict = ({
   )
 
   const onClickVerwerfen = useCallback(() => {
-    // somehow revRow sometimes is {}
-    revRow.setDeleted && revRow.setDeleted()
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      lieferung_id: revRow.lieferung_id,
+      sammel_lieferung_id: revRow.sammel_lieferung_id,
+      art_id: revRow.art_id,
+      person_id: revRow.person_id,
+      von_sammlung_id: revRow.von_sammlung_id,
+      von_kultur_id: revRow.von_kultur_id,
+      datum: revRow.datum,
+      nach_kultur_id: revRow.nach_kultur_id,
+      nach_ausgepflanzt: revRow.nach_ausgepflanzt,
+      von_anzahl_individuen: revRow.von_anzahl_individuen,
+      anzahl_pflanzen: revRow.anzahl_pflanzen,
+      anzahl_auspflanzbereit: revRow.anzahl_auspflanzbereit,
+      gramm_samen: revRow.gramm_samen,
+      andere_menge: revRow.andere_menge,
+      geplant: revRow.geplant,
+      bemerkungen: revRow.bemerkungen,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_lieferung_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'lieferung_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'lieferung',
+      revertId: revRow.lieferung_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    deleteLieferungRevModel(revRow)
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    deleteLieferungRevModel,
+    revRow,
+    user.email,
+  ])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
