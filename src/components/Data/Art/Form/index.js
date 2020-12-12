@@ -17,6 +17,7 @@ import QK from './QK'
 import Personen from './Personen'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
+import notDeletedQuery from '../../../../utils/notDeletedQuery'
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -48,7 +49,7 @@ const ArtForm = ({
   useEffect(() => {
     db.collections
       .get('ae_art')
-      .query()
+      .query(notDeletedQuery)
       .fetch()
       .then((aeArts) => setAeArts(aeArts.sort((a, b) => aeArtSort({ a, b }))))
   }, [db])

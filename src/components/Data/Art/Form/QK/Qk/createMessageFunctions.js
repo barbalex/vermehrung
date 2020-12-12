@@ -17,6 +17,7 @@ import lieferungSort from '../../../../../../utils/lieferungSort'
 import personSort from '../../../../../../utils/personSort'
 import teilkulturSort from '../../../../../../utils/teilkulturSort'
 import zaehlungSort from '../../../../../../utils/zaehlungSort'
+import personFullname from '../../../../../../utils/personFullname'
 
 const createMessageFunctions = async ({ artId, store, db }) => {
   const year = +format(new Date(), 'yyyy')
@@ -104,14 +105,18 @@ const createMessageFunctions = async ({ artId, store, db }) => {
   // TODO: check if some of this could be optimized using watermelon queries
   return {
     personsWithNonUniqueNr: async () => {
-      const pGroupedByNr = groupBy(personsSorted, (h) => h.nr)
+      const pGroupedByNr = groupBy(personsSorted.filter(p=>exists(p.nr)), (h) => h.nr)
       return Object.values(pGroupedByNr)
         .filter((v) => v.length > 1)
         .flatMap((vs) =>
-          vs.map((v) => ({
-            url: ['Personen', v.id],
-            text: `${v.nr}${v.fullname ? `, ${v.fullname}` : ''}`,
-          })),
+          vs.map((v) => {
+            const fullname = personFullname(v)
+
+            return {
+              url: ['Personen', v.id],
+              text: `${v.nr}${fullname ? `, ${fullname}` : ''}`,
+            }
+          }),
         )
     },
     herkunftsWithNonUniqueNr: async () => {
