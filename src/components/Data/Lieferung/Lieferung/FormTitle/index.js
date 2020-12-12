@@ -1,9 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import FilterTitle from '../../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
+import notDeletedQuery from '../../../../../utils/notDeletedQuery'
+import tableFilter from '../../../../../utils/tableFilter'
 
 const LieferungTitleChooser = ({
   row,
@@ -16,15 +20,73 @@ const LieferungTitleChooser = ({
 
   const {
     kulturIdInActiveNodeArray,
-    lieferungsFiltered,
-    lieferungsSorted,
     personIdInActiveNodeArray,
     sammelLieferungIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
+    db,
   } = store
   const { activeNodeArray } = store.tree
 
-  const hierarchyFilter = (e) => {
+  const [countState, setCountState] = useState({
+    totalCount: 0,
+    filteredCount: 0,
+  })
+  useEffect(() => {
+    const hierarchyQuery =
+      kulturIdInActiveNodeArray && activeNodeArray.includes('Aus-Lieferungen')
+        ? [Q.where('von_kultur_id', kulturIdInActiveNodeArray)]
+        : kulturIdInActiveNodeArray &&
+          activeNodeArray.includes('An-Lieferungen')
+        ? [Q.where('nach_kultur_id', kulturIdInActiveNodeArray)]
+        : sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray
+        ? [
+            Q.experimentalJoinTables(['sammel_lieferung']),
+            Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
+          ]
+        : personIdInActiveNodeArray && !kulturIdInActiveNodeArray
+        ? [
+            Q.experimentalJoinTables(['person']),
+            Q.on('person', 'id', personIdInActiveNodeArray),
+          ]
+        : sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray
+        ? [
+            Q.experimentalJoinTables(['sammlung']),
+            Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
+          ]
+        : []
+    const collection = db.collections.get('lieferung')
+    const totalCountObservable = collection
+      .query(notDeletedQuery, ...hierarchyQuery)
+      .observeCount()
+    const filteredCountObservable = collection
+      .query(...tableFilter({ store, table: 'lieferung' }), ...hierarchyQuery)
+      .observeCount()
+    const allCollectionsObservable = combineLatest([
+      totalCountObservable,
+      filteredCountObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      ([totalCount, filteredCount]) =>
+        setCountState({ totalCount, filteredCount }),
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [
+    db.collections,
+    kulturIdInActiveNodeArray,
+    sammelLieferungIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+    sammlungIdInActiveNodeArray,
+    // need to rerender if any of the values of lieferungFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(store.filter.lieferung),
+    store,
+    activeNodeArray,
+  ])
+
+  const { totalCount, filteredCount } = countState
+
+  /*const hierarchyFilter = (e) => {
     if (kulturIdInActiveNodeArray) {
       if (activeNodeArray.includes('Aus-Lieferungen')) {
         return e.von_kultur_id === kulturIdInActiveNodeArray
@@ -43,10 +105,7 @@ const LieferungTitleChooser = ({
       return e.von_sammlung_id === sammlungIdInActiveNodeArray
     }
     return true
-  }
-
-  const totalCount = lieferungsSorted.filter(hierarchyFilter).length
-  const filteredCount = lieferungsFiltered.filter(hierarchyFilter).length
+  }*/
 
   if (showFilter) {
     return (
