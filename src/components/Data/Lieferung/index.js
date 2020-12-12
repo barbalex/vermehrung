@@ -79,7 +79,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
 
   const { li_show_sl } = userPersonOption
 
-  console.log('Lieferung, row:', row)
+  //console.log('Lieferung, row:', row)
 
   if (
     sammelLieferungId !== '99999999-9999-9999-9999-999999999999' &&
