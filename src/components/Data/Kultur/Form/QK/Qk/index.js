@@ -109,7 +109,7 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
       </ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
-          <Title>{`${messageGroup.messages.length} ${messageGroup.title}`}</Title>
+          <Title>{`${messageGroup.title} (${messageGroup.messages.length})`}</Title>
           {messageGroup.messages.map((m, i) => (
             <Row key={`${m.text}Index${i}`}>
               <StyledA

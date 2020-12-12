@@ -1,14 +1,14 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import last from 'lodash/last'
+import sortBy from 'lodash/sortBy'
 import isUuid from 'is-uuid'
 
 import Row from './Row'
 import { StoreContext } from '../../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
-import notDeletedOrHasConflict from '../../../../../../utils/notDeletedOrHasConflict'
-import qkSort from '../../../../../../utils/qkSort'
+import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
 
 const Container = styled.div`
   display: flex;
@@ -20,23 +20,24 @@ const FieldsContainer = styled.div`
 
 const ChooseQk = () => {
   const store = useContext(StoreContext)
-  const { kultur_qks } = store
+  const { db } = store
   const { activeNodeArray } = store.tree
   const kulturId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
-  const rows = useMemo(
-    () =>
-      [...kultur_qks.values()]
-        .filter((a) => notDeletedOrHasConflict(a))
-        .sort((a, b) => qkSort({ a, b })),
-    [kultur_qks],
-  )
+  const [kulturQks, setKulturQks] = useState([])
+  useEffect(() => {
+    db.collections
+      .get('kultur_qk')
+      .query(notDeletedQuery)
+      .fetch()
+      .then((kulturQks) => setKulturQks(sortBy(kulturQks, 'name')))
+  }, [db.collections])
 
   return (
     <ErrorBoundary>
       <Container>
         <FieldsContainer>
-          {rows.map((row) => (
+          {kulturQks.map((row) => (
             <Row key={row.name} kulturId={kulturId} qk={row} />
           ))}
         </FieldsContainer>

@@ -1,7 +1,8 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../../models/reactUtils'
 
@@ -28,9 +29,16 @@ const Beschreibung = styled.div`
 const ChooseKulturQkRow = ({ kulturId, qk }) => {
   const store = useContext(StoreContext)
 
-  const kulturQkChoosen = [...store.kultur_qk_choosens.values()].find(
-    (v) => v.kultur_id === kulturId && v.qk_id === qk.id,
-  )
+  const [kulturQkChoosen, setKulturQkChoosen] = useState()
+  useEffect(() => {
+    qk.kultur_qk_choosens
+      .extend(Q.where('kultur_id', kulturId), Q.where('qk_id', qk.id))
+      .fetch()
+      .then((kulturQkChoosen) => {
+        setKulturQkChoosen(kulturQkChoosen[0])
+      })
+  }, [kulturId, qk.kultur_qk_choosens, qk.id])
+
   const checked = kulturQkChoosen?.choosen
 
   const onChange = useCallback(() => {
@@ -48,6 +56,8 @@ const ChooseKulturQkRow = ({ kulturId, qk }) => {
       store,
     })
   }, [checked, kulturId, kulturQkChoosen, qk, store])
+
+  if (!kulturQkChoosen) return null
 
   return (
     <Row>
