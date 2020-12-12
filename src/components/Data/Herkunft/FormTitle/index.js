@@ -1,9 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
+import notDeletedQuery from '../../../../utils/notDeletedQuery'
+import tableFilter from '../../../../utils/tableFilter'
 
 const HerkunftFormTitleChooser = ({
   row,
@@ -14,32 +18,56 @@ const HerkunftFormTitleChooser = ({
   activeConflict,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    herkunftsSorted,
-    herkunftsFiltered,
+  const { sammlungIdInActiveNodeArray, db } = store
+
+  const [countState, setCountState] = useState({
+    totalCount: 0,
+    filteredCount: 0,
+  })
+  useEffect(() => {
+    const hierarchyQuery = sammlungIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['sammlung']),
+          Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.collections.get('herkunft')
+    const totalCountObservable = collection
+      .query(notDeletedQuery, ...hierarchyQuery)
+      .observeCount(false)
+    const filteredCountObservable = collection
+      .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
+      .observeCount(false)
+    const allCollectionsObservable = combineLatest([
+      totalCountObservable,
+      filteredCountObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      ([totalCount, filteredCount]) => {
+        console.log('Herkunft, FormTitle', { totalCount, filteredCount })
+        setCountState({ totalCount, filteredCount })
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [
+    db.collections,
     sammlungIdInActiveNodeArray,
-  } = store
+    // need to rerender if any of the values of herkunftFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(store.filter.herkunft),
+    store,
+  ])
 
-  const hierarchyFilter = (h) => {
-    if (sammlungIdInActiveNodeArray) {
-      return [...store.sammlungs.values()]
-        .filter((s) => s.herkunft_id === h.id)
-        .map((s) => s.id)
-        .includes(sammlungIdInActiveNodeArray)
-    }
-    return true
-  }
-
-  const totalNr = herkunftsSorted.filter(hierarchyFilter).length
-  const filteredNr = herkunftsFiltered.filter(hierarchyFilter).length
+  const { totalCount, filteredCount } = countState
 
   if (showFilter) {
     return (
       <FilterTitle
         title="Herkunft"
         table="herkunft"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalNr={totalCount}
+        filteredNr={filteredCount}
       />
     )
   }
@@ -48,8 +76,8 @@ const HerkunftFormTitleChooser = ({
     <FormTitle
       row={row}
       rawRow={rawRow}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      totalNr={totalCount}
+      filteredNr={filteredCount}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
       activeConflict={activeConflict}

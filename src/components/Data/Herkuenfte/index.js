@@ -90,18 +90,6 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     const dataObservable = collection
       .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-
-    // for unknown reason forkJoin did not work here
-    /*const allCollectionsObservable = forkJoin([countObservable, dataObservable])
-    const allSubscription = allCollectionsObservable.subscribe({
-      next: (result) => {
-        console.log('Herkuenfte, useEffect, result:', result)
-        //const [count, herkunfts] = result
-        //const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
-        //setHerkunftState({ count, herkunfts: herkunftsSorted })
-      },
-    })*/
-    // so need to hackily use merge
     const allCollectionsObservable = merge(countObservable, dataObservable)
     const allSubscription = allCollectionsObservable.subscribe((result) => {
       if (Array.isArray(result)) {
