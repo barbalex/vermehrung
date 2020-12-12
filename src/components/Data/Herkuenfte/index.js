@@ -17,7 +17,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
 import herkunftSort from '../../../utils/herkunftSort'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -77,10 +77,6 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const [herkunfts, setHerkunfts] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'herkunft',
-      filter: herkunftFilter.toJSON(),
-    })
     const hierarchyQuery = sammlungIdInActiveNodeArray
       ? [
           Q.experimentalJoinTables(['sammlung']),
@@ -92,7 +88,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery, ...hierarchyQuery)
+      .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
 
     // for unknown reason forkJoin did not work here
@@ -122,7 +118,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(herkunftFilter),
-    herkunftFilter,
+    store,
   ])
 
   const totalNr = count

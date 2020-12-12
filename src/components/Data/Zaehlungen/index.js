@@ -16,7 +16,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 import zaehlungSort from '../../../utils/zaehlungSort'
 
 const Container = styled.div`
@@ -76,10 +76,6 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
   const [zaehlungs, setZaehlungs] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'zaehlung',
-      filter: zaehlungFilter.toJSON(),
-    })
     const hierarchyQuery = kulturIdInActiveNodeArray
       ? [
           Q.experimentalJoinTables(['kultur']),
@@ -91,7 +87,13 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery, ...hierarchyQuery)
+      .query(
+        ...tableFilter({
+          table: 'zaehlung',
+          store,
+        }),
+        ...hierarchyQuery,
+      )
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
 
     const allCollectionsObservable = merge(countObservable, dataObservable)
@@ -113,6 +115,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
     ...Object.values(zaehlungFilter),
     zaehlungFilter,
     kulturIdInActiveNodeArray,
+    store,
   ])
 
   const totalNr = count

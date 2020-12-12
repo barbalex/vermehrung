@@ -17,7 +17,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
 import eventSort from '../../../utils/eventSort'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -76,10 +76,6 @@ const Events = ({ filter: showFilter, width, height }) => {
   const [events, setEvents] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'event',
-      filter: eventFilter.toJSON(),
-    })
     const hierarchyQuery = kulturIdInActiveNodeArray
       ? [
           Q.experimentalJoinTables(['kultur']),
@@ -91,7 +87,7 @@ const Events = ({ filter: showFilter, width, height }) => {
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery, ...hierarchyQuery)
+      .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)
       .observeWithColumns(['datum', 'beschreibung'])
     const allCollectionsObservable = merge(countObservable, dataObservable)
     const allSubscription = allCollectionsObservable.subscribe((result) => {

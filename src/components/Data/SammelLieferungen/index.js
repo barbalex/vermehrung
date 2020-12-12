@@ -15,7 +15,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 import lieferungSort from '../../../utils/lieferungSort'
 
 const Container = styled.div`
@@ -75,16 +75,17 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   const [sammelLieferungs, setSammelLieferungs] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'sammel_lieferung',
-      filter: sammelLieferungFilter.toJSON(),
-    })
     const collection = db.collections.get('sammel_lieferung')
     const countObservable = collection
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery)
+      .query(
+        ...tableFilter({
+          table: 'sammel_lieferung',
+          store,
+        }),
+      )
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
     const allCollectionsObservable = merge(countObservable, dataObservable)
     const allSubscription = allCollectionsObservable.subscribe(
@@ -104,6 +105,7 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(sammelLieferungFilter),
     sammelLieferungFilter,
+    store,
   ])
 
   const totalNr = count

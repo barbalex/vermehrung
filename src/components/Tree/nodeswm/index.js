@@ -88,7 +88,6 @@ import buildSammelLieferungFolder from './sammelLieferung/folder'
 import buildSammelLieferung from './sammelLieferung'
 import buildSammelLieferungLieferungFolder from './sammelLieferung/lieferung/folder'
 import buildSammelLieferungLieferung from './sammelLieferung/lieferung'
-import queryFromFilter from '../../../utils/queryFromFilter'
 import herkunftSort from '../../../utils/herkunftSort'
 import teilkulturSort from '../../../utils/teilkulturSort'
 import zaehlungSort from '../../../utils/zaehlungSort'
@@ -247,11 +246,12 @@ const buildNodes = async ({ store }) => {
         const artIndex = artNodes.findIndex((a) => a.id === artId)
 
         // 1.1 art > sammlung
-        const sammlungFilterQuery = queryFromFilter({
-          table: 'sammlung',
-          filter: store.filter.sammlung.toJSON(),
-        })
-        const sammlungsQuery = art.sammlungs.extend(...sammlungFilterQuery)
+        const sammlungsQuery = art.sammlungs.extend(
+          ...tableFilter({
+            table: 'sammlung',
+            store,
+          }),
+        )
         const sammlungCount = await sammlungsQuery.fetchCount()
         artSammlungFolderNodes = buildArtSammlungFolder({
           count: sammlungCount,
@@ -330,11 +330,12 @@ const buildNodes = async ({ store }) => {
         }
 
         // 1.2 art > kultur
-        const kulturFilterQuery = queryFromFilter({
-          table: 'kultur',
-          filter: store.filter.kultur.toJSON(),
-        })
-        const artKulturQuery = art.kulturs.extend(...kulturFilterQuery)
+        const artKulturQuery = art.kulturs.extend(
+          ...tableFilter({
+            table: 'kultur',
+            store,
+          }),
+        )
         const kulturCount = await artKulturQuery.fetchCount()
         artKulturFolderNodes = buildArtKulturFolder({
           count: kulturCount,
@@ -490,12 +491,13 @@ const buildNodes = async ({ store }) => {
             }
 
             // auslieferung nodes
-            const ausLieferungFilterQuery = queryFromFilter({
-              table: 'lieferung',
-              filter: store.filter.lieferung.toJSON(),
-            })
             const auslieferungs = await kultur.auslieferungs
-              .extend(...ausLieferungFilterQuery)
+              .extend(
+                ...tableFilter({
+                  table: 'lieferung',
+                  store,
+                }),
+              )
               .fetch()
             artKulturAuslieferungFolderNodes = await buildArtKulturAuslieferungFolder(
               {
@@ -842,12 +844,13 @@ const buildNodes = async ({ store }) => {
             // garten > kultur > teilkultur
             const kulturOption = await kultur.kultur_option.fetch()
             if (kulturOption?.tk) {
-              const teilkulturFilterQuery = queryFromFilter({
-                table: 'teilkultur',
-                filter: store.filter.teilkultur.toJSON(),
-              })
               const teilkulturs = await kultur.teilkulturs
-                .extend(...teilkulturFilterQuery)
+                .extend(
+                  ...tableFilter({
+                    table: 'teilkultur',
+                    store,
+                  }),
+                )
                 .fetch()
               gartenKulturTeilkulturFolderNodes = await buildGartenKulturTeilkulturFolder(
                 {
@@ -886,12 +889,13 @@ const buildNodes = async ({ store }) => {
             }
 
             // garten > kultur > zaehlung
-            const zaehlungFilterQuery = queryFromFilter({
-              table: 'zaehlung',
-              filter: store.filter.zaehlung.toJSON(),
-            })
             const zaehlungs = await kultur.zaehlungs
-              .extend(...zaehlungFilterQuery)
+              .extend(
+                ...tableFilter({
+                  table: 'zaehlung',
+                  store,
+                }),
+              )
               .fetch()
             gartenKulturZaehlungFolderNodes = await buildGartenKulturZaehlungFolder(
               {

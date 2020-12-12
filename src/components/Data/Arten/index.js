@@ -14,7 +14,7 @@ import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
 import artsSortedFromArts from '../../../utils/artsSortedFromArts'
 
@@ -74,16 +74,12 @@ const Arten = ({ filter: showFilter, width, height }) => {
   const [arts, setArts] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'art',
-      filter: artFilter.toJSON(),
-    })
     const collection = db.collections.get('art')
     const countObservable = collection
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery)
+      .query(...tableFilter({ store, table: 'art' }))
       .observeWithColumns(['ae_id'])
     const allCollectionsObservable = merge(countObservable, dataObservable)
     const allSubscription = allCollectionsObservable.subscribe(
@@ -100,7 +96,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
     return () => allSubscription.unsubscribe()
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(artFilter), artFilter])
+  }, [db.collections, ...Object.values(artFilter), artFilter, store])
 
   const totalNr = count
   const filteredNr = arts.length

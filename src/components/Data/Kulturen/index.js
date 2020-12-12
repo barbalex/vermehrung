@@ -16,7 +16,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 import kultursSortedFromKulturs from '../../../utils/kultursSortedFromKulturs'
 
 const Container = styled.div`
@@ -81,10 +81,6 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
   const [kulturs, setKulturs] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'kultur',
-      filter: kulturFilter.toJSON(),
-    })
     const hierarchyQuery = gartenIdInActiveNodeArray
       ? [
           Q.experimentalJoinTables(['garten']),
@@ -101,7 +97,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery, ...hierarchyQuery)
+      .query(...tableFilter({ table: 'kultur', store }), ...hierarchyQuery)
       .observeWithColumns([
         'art_id',
         'herkunft_id',
@@ -129,6 +125,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
     kulturFilter,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
+    store,
   ])
 
   const totalNr = count

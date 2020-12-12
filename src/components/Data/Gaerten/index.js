@@ -16,7 +16,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 import gartensSortedFromGartens from '../../../utils/gartensSortedFromGartens'
 
 const Container = styled.div`
@@ -76,10 +76,6 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
   const [gartens, setGartens] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'garten',
-      filter: gartenFilter.toJSON(),
-    })
     const hierarchyQuery = personIdInActiveNodeArray
       ? [
           Q.experimentalJoinTables(['person']),
@@ -91,7 +87,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery, ...hierarchyQuery)
+      .query(...tableFilter({ store, table: 'garten' }), ...hierarchyQuery)
       .observeWithColumns(['name', 'person_id'])
     const allCollectionsObservable = merge(countObservable, dataObservable)
     const allSubscription = allCollectionsObservable.subscribe(
@@ -113,6 +109,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(gartenFilter),
     gartenFilter,
+    store,
   ])
 
   const totalNr = count

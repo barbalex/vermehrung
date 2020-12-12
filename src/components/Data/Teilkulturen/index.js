@@ -16,7 +16,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 import teilkulturSort from '../../../utils/teilkulturSort'
 
 const Container = styled.div`
@@ -76,10 +76,6 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
   const [teilkulturs, setTeilkulturs] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'teilkultur',
-      filter: teilkulturFilter.toJSON(),
-    })
     const hierarchyQuery = kulturIdInActiveNodeArray
       ? [
           Q.experimentalJoinTables(['kultur']),
@@ -91,7 +87,13 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery, ...hierarchyQuery)
+      .query(
+        ...tableFilter({
+          table: 'teilkultur',
+          store,
+        }),
+        ...hierarchyQuery,
+      )
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
     const allCollectionsObservable = merge(countObservable, dataObservable)
     const allSubscription = allCollectionsObservable.subscribe((result) => {
@@ -109,6 +111,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
     ...Object.values(teilkulturFilter),
     teilkulturFilter,
     kulturIdInActiveNodeArray,
+    store,
   ])
 
   const totalNr = count

@@ -16,7 +16,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
-import queryFromFilter from '../../../utils/queryFromFilter'
+import tableFilter from '../../../utils/tableFilter'
 import sammlungsSortedFromSammlungs from '../../../utils/sammlungsSortedFromSammlungs'
 
 const Container = styled.div`
@@ -82,10 +82,6 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
   const [sammlungs, setSammlungs] = useState([])
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const filterQuery = queryFromFilter({
-      table: 'sammlung',
-      filter: sammlungFilter.toJSON(),
-    })
     const hierarchyQuery = artIdInActiveNodeArray
       ? [
           Q.experimentalJoinTables(['art']),
@@ -107,7 +103,13 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
       .query(notDeletedQuery)
       .observeCount(false)
     const dataObservable = collection
-      .query(...filterQuery, ...hierarchyQuery)
+      .query(
+        ...tableFilter({
+          table: 'sammlung',
+          store,
+        }),
+        ...hierarchyQuery,
+      )
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
 
     // so need to hackily use merge
@@ -134,6 +136,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     artIdInActiveNodeArray,
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
+    store
   ])
 
   const totalNr = count
