@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { merge, interval } from 'rxjs'
+import { merge, interval, combineLatest } from 'rxjs'
 import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -92,6 +92,7 @@ const Tree = ({ width, height }) => {
       .query(...tableFilter({ store, table: 'zaehlung' }))
       .observeWithColumns([
         'datum',
+        'prognose',
         //'anzahl_pflanzen',
         //'anzahl_auspflanzbereit',
         //'anzahl_mutterpflanzen',
@@ -116,21 +117,19 @@ const Tree = ({ width, height }) => {
       .get('person')
       .query(...tableFilter({ store, table: 'person' }))
       .observeWithColumns(['vorname', 'name'])
-    const allCollectionsObservable = merge(
-      ...[
-        artObservable,
-        herkunftObservable,
-        sammlungObservable,
-        gartenObservable,
-        kulturObservable,
-        teilkulturObservable,
-        zaehlungObservable,
-        lieferungObservable,
-        sammel_lieferungObservable,
-        eventObservable,
-        personObservable,
-      ],
-    ).pipe(throttle(() => interval(100)))
+    const allCollectionsObservable = combineLatest([
+      artObservable,
+      eventObservable,
+      gartenObservable,
+      herkunftObservable,
+      kulturObservable,
+      lieferungObservable,
+      personObservable,
+      sammel_lieferungObservable,
+      sammlungObservable,
+      teilkulturObservable,
+      zaehlungObservable,
+    ]).pipe(throttle(() => interval(100)))
     const subscription = allCollectionsObservable.subscribe(() => {
       console.log('Tree data-subscription ordering rebuild')
       buildMyNodesDebounced.callback()
