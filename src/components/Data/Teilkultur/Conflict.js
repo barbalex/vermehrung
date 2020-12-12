@@ -66,10 +66,15 @@ const TeilkulturConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const {
+    user,
+    addNotification,
+    addQueuedQuery,
+    deleteTeilkulturRevModel,
+  } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(teilkulturRevQuery, {
+  const { error, data, loading } = useQuery(teilkulturRevQuery, {
     variables: {
       rev,
       id,
@@ -77,14 +82,9 @@ const TeilkulturConflict = ({
   })
   error && checkForOnlineError(error)
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.teilkultur_revs.values()].find(
-        (v) => v._rev === rev && v.teilkultur_id === id,
-      ) || {},
-    [id, rev, store.teilkultur_revs],
-  )
+  const revRow = useMemo(() => data?.teilkultur_rev?.[0] ?? {}, [
+    data?.teilkultur_rev,
+  ])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -92,10 +92,52 @@ const TeilkulturConflict = ({
   )
 
   const onClickVerwerfen = useCallback(() => {
-    // somehow revRow sometimes is {}
-    revRow.setDeleted && revRow.setDeleted()
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      teilkultur_id: revRow.teilkultur_id,
+      kultur_id: revRow.kultur_id,
+      name: revRow.name,
+      ort1: revRow.ort1,
+      ort2: revRow.ort2,
+      ort3: revRow.ort3,
+      bemerkungen: revRow.bemerkungen,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_teilkultur_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'teilkultur_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'teilkultur',
+      revertId: revRow.teilkultur_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    deleteTeilkulturRevModel(revRow)
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    deleteTeilkulturRevModel,
+    revRow,
+    user.email,
+  ])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing

@@ -40,10 +40,10 @@ const ArtConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const { user, addNotification, addQueuedQuery, deleteArtRevModel } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(artRevQuery, {
+  const { error, data, loading } = useQuery(artRevQuery, {
     variables: {
       rev,
       id,
@@ -51,27 +51,56 @@ const ArtConflict = ({
   })
   error && checkForOnlineError(error)
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.art_revs.values()].find(
-        (v) => v._rev === rev && v.art_id === id,
-      ) || {},
-    [id, rev, store.art_revs],
-  )
+  const revRow = useMemo(() => data?.art_rev?.[0] ?? {}, [data?.art_rev])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
     [revRow, row, store],
   )
 
-  //console.log('Art Conflict', { dataArray, row, revRow, id, rev })
-
   const onClickVerwerfen = useCallback(() => {
-    // somehow revRow sometimes is {}
-    revRow.setDeleted && revRow.setDeleted()
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      art_id: revRow.art_id,
+      ae_id: revRow.ae_id,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    console.log('Conflict, onclickVerwerfen, newObject:', newObject)
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_art_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'art_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'art',
+      revertId: revRow.art_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    deleteArtRevModel(revRow)
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    deleteArtRevModel,
+    revRow,
+    user.email,
+  ])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing

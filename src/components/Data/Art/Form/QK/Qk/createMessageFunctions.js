@@ -27,11 +27,6 @@ const createMessageFunctions = async ({ artId, store, db }) => {
   const arts = await db.collections.get('art').query(notDeletedQuery).fetch()
   const artsSorted = await artsSortedFromArts(arts)
   const avs = await db.collections.get('av').query(notDeletedQuery).fetch()
-  const events = await db.collections
-    .get('event')
-    .query(notDeletedQuery)
-    .fetch()
-  const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
   const gartens = await db.collections
     .get('garten')
     .query(notDeletedQuery)
@@ -76,14 +71,15 @@ const createMessageFunctions = async ({ artId, store, db }) => {
   const zaehlungsOfArtSorted = zaehlungsOfArt.sort((a, b) =>
     zaehlungSort({ a, b }),
   )
-  /*const teilzaehlungsOfArt = await db.collections
+  const teilzaehlungsOfArt = await db.collections
     .get('teilzaehlung')
     .query(
-      Q.experimentalNestedJoin('zaehlung', 'kultur', 'art'),
+      Q.experimentalNestedJoin('zaehlung', 'kultur'),
+      Q.experimentalNestedJoin('kultur', 'art'),
       Q.on('zaehlung', Q.on('kultur', Q.on('art', 'id', artId))),
       Q.where('_deleted', false),
     )
-    .fetch()*/
+    .fetch()
   const teilkultursOfArt = await db.collections
     .get('teilkultur')
     .query(
@@ -95,11 +91,15 @@ const createMessageFunctions = async ({ artId, store, db }) => {
   const teilkultursOfArtSorted = teilkultursOfArt.sort((a, b) =>
     teilkulturSort({ a, b }),
   )
-
-  const teilzaehlungs = await db.collections
-    .get('teilzaehlung')
-    .query(notDeletedQuery)
+  const eventsOfArt = await db.collections
+    .get('event')
+    .query(
+      Q.experimentalNestedJoin('kultur', 'art'),
+      Q.on('kultur', Q.on('art', 'id', artId)),
+      Q.where('_deleted', false),
+    )
     .fetch()
+  const eventsOfArtSorted = eventsOfArt.sort((a, b) => eventSort({ a, b }))
 
   // TODO: check if some of this could be optimized using watermelon queries
   return {
@@ -407,7 +407,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
         zaehlungsOfArtSorted
           .filter(
             (z) =>
-              teilzaehlungs
+              teilzaehlungsOfArt
                 .filter((tz) => tz.zaehlung_id === z.id)
                 .filter((tz) => !tz._deleted)
                 .filter((tz) => !exists(tz.anzahl_pflanzen)).length,
@@ -418,7 +418,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
             const zaehlung = z.datum
               ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
-            const anzTz = teilzaehlungs
+            const anzTz = teilzaehlungsOfArt
               .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted).length
             const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
@@ -438,7 +438,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
         })
         .filter(
           (z) =>
-            teilzaehlungs
+            teilzaehlungsOfArt
               .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_auspflanzbereit)).length,
@@ -452,7 +452,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = teilzaehlungs
+          const anzTz = teilzaehlungsOfArt
             .filter((tz) => tz.zaehlung_id === z.id)
             .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
@@ -471,7 +471,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
         })
         .filter(
           (z) =>
-            teilzaehlungs
+            teilzaehlungsOfArt
               .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_mutterpflanzen)).length,
@@ -485,7 +485,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = teilzaehlungs
+          const anzTz = teilzaehlungsOfArt
             .filter((tz) => tz.zaehlung_id === z.id)
             .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
@@ -506,7 +506,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
           return kultur?.art_id === artId && !!kulturOption?.tk
         })
         .filter((z) => {
-          const tz = teilzaehlungs
+          const tz = teilzaehlungsOfArt
             .filter((tz) => tz.zaehlung_id === z.id)
             .filter((tz) => !tz._deleted)
           return tz.length && tz.filter((tz) => !tz.teilkultur_id).length
@@ -520,7 +520,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = teilzaehlungs
+          const anzTz = teilzaehlungsOfArt
             .filter((tz) => tz.zaehlung_id === z.id)
             .filter((tz) => !tz._deleted).length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
@@ -681,7 +681,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
           }
         }),
     eventsWithoutBeschreibung: async () =>
-      eventsSorted
+      eventsOfArtSorted
         .filter((e) => {
           const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
           return kultur?.art_id === artId
@@ -701,7 +701,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
           }
         }),
     eventsWithoutDatum: async () =>
-      eventsSorted
+      eventsOfArtSorted
         .filter((e) => {
           const kultur = e.kultur_id ? store.kulturs.get(e.kultur_id) : {}
           return kultur?.art_id === artId
