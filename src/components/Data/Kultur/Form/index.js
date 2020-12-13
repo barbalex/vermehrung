@@ -13,6 +13,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import SimpleBar from 'simplebar-react'
 import { first as first$ } from 'rxjs/operators'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -26,10 +27,10 @@ import QK from './QK'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
 import getConstants from '../../../../utils/constants'
 import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens'
+import herkunftSort from '../../../../utils/herkunftSort'
 
 const constants = getConstants()
 
@@ -71,7 +72,6 @@ const KulturForm = ({
     artsSorted,
     errors,
     filter,
-    herkunftsSorted,
     online,
     sammlungsSorted,
     unsetError,
@@ -111,7 +111,7 @@ const KulturForm = ({
         .get('garten')
         .query(notDeletedQuery)
         .fetch()
-      const gartensSorted = gartensSortedFromGartens(gartens)
+      const gartensSorted = await gartensSortedFromGartens(gartens)
       const gartenWerte = await Promise.all(
         gartensSorted.map(async (garten) => {
           const label = await garten.label.pipe(first$()).toPromise()
@@ -182,10 +182,10 @@ const KulturForm = ({
   if (art_id && !artenToChoose.includes(art_id)) {
     artenToChoose.push(art_id)
   }
-  const herkunftToChoose = useMemo(
+  const herkunftsToChoose = useMemo(
     () =>
-      uniq(
-        artHerkuenfte
+      uniq([
+        ...artHerkuenfte
           .filter((s) => (art_id ? s.art_id === art_id : true))
           .filter((s) => {
             // do not filter if no garten choosen
@@ -201,19 +201,18 @@ const KulturForm = ({
             )
           })
           .map((a) => a.herkunft_id),
-      ),
+        // do show own herkunft
+        ...(herkunft_id ? [herkunft_id] : []),
+      ]),
     [
       artHerkuenfte,
       artHerkunftInGartenNichtZl,
       artHerkunftZwischenlagerInGarten,
       art_id,
       row.garten_id,
+      herkunft_id,
     ],
   )
-  // do show own herkunft
-  if (herkunft_id && !herkunftToChoose.includes(herkunft_id)) {
-    herkunftToChoose.push(herkunft_id)
-  }
 
   useEffect(() => {
     unsetError('kultur')
@@ -244,16 +243,27 @@ const KulturForm = ({
     [artenToChoose, artsSorted, store.ae_arts],
   )
 
-  const herkunftWerte = useMemo(
-    () =>
-      herkunftsSorted
-        .filter((h) => herkunftToChoose.includes(h.id))
-        .map((el) => ({
-          value: el.id,
-          label: herkunftLabelFromHerkunft({ herkunft: el }),
-        })),
-    [herkunftToChoose, herkunftsSorted],
-  )
+  const [herkunftWerte, setHerkunftWerte] = useState([])
+  useEffect(() => {
+    const run = async () => {
+      const herkunfts = await db.collections
+        .get('herkunft')
+        .query(
+          Q.where('_deleted', false),
+          Q.where('id', Q.oneOf(herkunftsToChoose)),
+        )
+        .fetch()
+      const herkunftWerte = herkunfts
+        .sort((a, b) => herkunftSort({ a, b }))
+        .map((herkunft) => ({
+          value: herkunft.id,
+          label: herkunftLabelFromHerkunft({ herkunft }),
+        }))
+      setHerkunftWerte(herkunftWerte)
+    }
+    run()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db.collections, herkunftsToChoose.length])
 
   const saveToDb = useCallback(
     async (event) => {
