@@ -1,18 +1,21 @@
 import Fuse from 'fuse.js'
 import { DateTime } from 'luxon'
+import { first as first$ } from 'rxjs/operators'
 
-import sammlungLabelFromSammlung from '../../../../utils/sammlungLabelFromSammlung'
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
 import lieferungLabelFromLieferung from '../../../../utils/lieferungLabelFromLieferung'
-import artLabelFromLieferung from '../../../../utils/artLabelFromLieferung'
-import eventLabelFromEvent from '../../../../utils/eventLabelFromEvent'
-import artLabelFromEvent from '../../../../utils/artLabelFromEvent'
-import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
-import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
-import artLabelFromArt from '../../../../utils/artLabelFromArt'
 import tableFilter from '../../../../utils/tableFilter'
 import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens'
+import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
+import sammlungsSortedFromSammlungs from '../../../../utils/sammlungsSortedFromSammlungs'
+import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
+import personFullname from '../../../../utils/personFullname'
+import eventSort from '../../../../utils/eventSort'
+import herkunftSort from '../../../../utils/herkunftSort'
+import lieferungSort from '../../../../utils/lieferungSort'
+import personSort from '../../../../utils/personSort'
+import zaehlungSort from '../../../../utils/zaehlungSort'
+import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 
 const threshold = 0.2
 const distance = 1000 // ensure text in long labels is found
@@ -21,34 +24,67 @@ const formatDateForSearch = (datum) =>
   datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
 const buildOptions = async ({ store, cb, val }) => {
-  const {
-    artsFiltered,
-    eventsFiltered,
-    herkunfts,
-    herkunftsFiltered,
-    kulturs,
-    kultursFiltered,
-    lieferungsFiltered,
-    persons,
-    personsFiltered,
-    sammlungs,
-    sammlungsFiltered,
-    zaehlungsFiltered,
-    db,
-  } = store
+  const { db } = store
 
+  const arts = await db.collections
+    .get('art')
+    .query(...tableFilter({ store, table: 'art' }))
+    .fetch()
+  const artsSorted = await artsSortedFromArts(arts)
+  const events = await db.collections
+    .get('event')
+    .query(...tableFilter({ store, table: 'event' }))
+    .fetch()
+  const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
   const gartens = await db.collections
     .get('garten')
     .query(...tableFilter({ store, table: 'garten' }))
     .fetch()
   const gartensSorted = await gartensSortedFromGartens(gartens)
+  const herkunfts = await db.collections
+    .get('herkunft')
+    .query(...tableFilter({ store, table: 'herkunft' }))
+    .fetch()
+  const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
+  const kulturs = await db.collections
+    .get('kultur')
+    .query(...tableFilter({ store, table: 'kultur' }))
+    .fetch()
+  const kultursSorted = await kultursSortedFromKulturs(kulturs)
+  const lieferungs = await db.collections
+    .get('lieferung')
+    .query(...tableFilter({ store, table: 'lieferung' }))
+    .fetch()
+  const lieferungsSorted = lieferungs.sort((a, b) => lieferungSort({ a, b }))
+  const persons = await db.collections
+    .get('person')
+    .query(...tableFilter({ store, table: 'person' }))
+    .fetch()
+  const personsSorted = persons.sort((a, b) => personSort({ a, b }))
+  const sammlungs = await db.collections
+    .get('sammlung')
+    .query(...tableFilter({ store, table: 'sammlung' }))
+    .fetch()
+  const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+
+  const zaehlungs = await db.collections
+    .get('zaehlung')
+    .query(...tableFilter({ store, table: 'zaehlung' }))
+    .fetch()
+  const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
 
   const options = []
-  const searchArtSuggestions = artsFiltered.map((a) => ({
-    value: a.id,
-    label: artLabelFromArt({ art: a, store }),
-    type: 'Arten',
-  }))
+  const searchArtSuggestions = await Promise.all(
+    artsSorted.map(async (a) => {
+      const label = await a.label.pipe(first$()).toPromise()
+
+      return {
+        value: a.id,
+        label,
+        type: 'Arten',
+      }
+    }),
+  )
   const artSuggestionsFuse = new Fuse(searchArtSuggestions, {
     keys: [{ name: 'label', weight: 1 }],
     threshold,
@@ -61,22 +97,25 @@ const buildOptions = async ({ store, cb, val }) => {
       options: artSuggestions,
     })
   }
-  const searchGartenSuggestions = gartensSorted.map((g) => {
-    const person = g.person_id ? persons.get(g.person_id) : {}
+  const searchGartenSuggestions = await Promise.all(
+    gartensSorted.map(async (g) => {
+      const label = await g.label.pipe(first$()).toPromise()
+      const person = await g.person.fetch()
 
-    return {
-      value: g.id,
-      label: gartenLabelFromGarten({ garten: g, store }),
-      name: g.name,
-      personname: person?.fullname,
-      strasse: g.strasse,
-      plz: g.plz,
-      ort: g.ort,
-      bemerkungen: g.bemerkungen,
-      aktiv: g.aktiv ? 'aktiv' : 'historisch',
-      type: 'Gaerten',
-    }
-  })
+      return {
+        value: g.id,
+        label,
+        name: g.name ?? '',
+        personname: personFullname(person) ?? '',
+        strasse: g.strasse ?? '',
+        plz: g.plz,
+        ort: g.ort ?? '',
+        bemerkungen: g.bemerkungen ?? '',
+        aktiv: g.aktiv ? 'aktiv' : 'historisch',
+        type: 'Gaerten',
+      }
+    }),
+  )
   const gartenSuggestionsFuse = new Fuse(searchGartenSuggestions, {
     keys: [
       { name: 'name', weight: 1 },
@@ -97,7 +136,7 @@ const buildOptions = async ({ store, cb, val }) => {
       options: gartenSuggestions,
     })
   }
-  const searchHerkunftSuggestions = herkunftsFiltered.map((h) => ({
+  const searchHerkunftSuggestions = herkunftsSorted.map((h) => ({
     value: h.id,
     label: herkunftLabelFromHerkunft({ herkunft: h }),
     ...h,
@@ -124,21 +163,24 @@ const buildOptions = async ({ store, cb, val }) => {
       options: herkunftSuggestions,
     })
   }
-  const searchKulturSuggestions = kultursFiltered.map((k) => {
-    const garten = k.garten_id ? gartensSorted.get(k.garten_id) : {}
-    const gartenPerson = garten.person_id ? persons.get(garten.person_id) : {}
-    const herkunft = k.herkunft_id ? herkunfts.get(k.herkunft_id) : {}
+  const searchKulturSuggestions = await Promise.all(
+    kultursSorted.map(async (k) => {
+      const label = await k.label.pipe(first$()).toPromise()
+      const garten = await k.garten.fetch()
+      const gartenPerson = garten ? await garten.person.fetch() : undefined
+      const herkunft = await k.herkunft.fetch()
 
-    return {
-      value: k.id,
-      label: kulturLabelFromKultur({ kultur: k, store }),
-      personname: gartenPerson?.fullname,
-      herkunftlokalname: herkunft?.lokalname,
-      herkunftgemeinde: herkunft?.gemeinde,
-      bemerkungen: k.bemerkungen,
-      type: 'Kulturen',
-    }
-  })
+      return {
+        value: k.id,
+        label,
+        personname: personFullname(gartenPerson) ?? '',
+        herkunftlokalname: herkunft?.lokalname ?? '',
+        herkunftgemeinde: herkunft?.gemeinde ?? '',
+        bemerkungen: k.bemerkungen ?? '',
+        type: 'Kulturen',
+      }
+    }),
+  )
   const kulturSuggestionsFuse = new Fuse(searchKulturSuggestions, {
     keys: [
       { name: 'label', weight: 1 },
@@ -157,17 +199,20 @@ const buildOptions = async ({ store, cb, val }) => {
       options: kulturSuggestions,
     })
   }
-  const searchEventSuggestions = eventsFiltered.map((e) => {
-    const kultur = e.kultur_id ? kulturs.get(e.kultur_id) : {}
-    const garten = kultur.garten_id ? gartensSorted.get(kultur.garten_id) : {}
-    const gartenPerson = garten.person_id ? persons.get(garten.person_id) : {}
+  const searchEventSuggestions = eventsSorted.map(async (e) => {
+    const label = await e.label.pipe(first$()).toPromise()
+    const kultur = await e.kultur?.fetch()
+    const art = await kultur?.art?.fetch()
+    const artname = (await art?.label?.pipe(first$()).toPromise()) ?? ''
+    const garten = await kultur?.garten?.fetch()
+    const gartenPerson = await garten?.person?.fetch()
 
     return {
       value: e.id,
-      label: eventLabelFromEvent({ event: e }),
-      artname: artLabelFromEvent({ event: e, store }),
-      gartenname: garten?.name,
-      personname: gartenPerson?.fullname,
+      label,
+      artname,
+      gartenname: garten?.name ?? '',
+      personname: personFullname(gartenPerson) ?? '',
       geplant: e.geplant ? 'geplant' : 'ausgeführt',
       parent: e.kultur_id,
       type: 'Events',
@@ -191,49 +236,45 @@ const buildOptions = async ({ store, cb, val }) => {
       options: eventSuggestions,
     })
   }
-  const searchLieferungSuggestions = lieferungsFiltered.map((l) => {
-    const person = l.person_id ? persons.get(l.person_id) : {}
-    const sammlung = l.sammlung_id ? sammlungs.get(l.sammlung_id) : {}
-    const sammlungPerson = sammlung.person_id
-      ? persons.get(sammlung.person_id)
-      : {}
-    const sammlungHerkunft = sammlung.herkunft_id
-      ? herkunfts.get(sammlung.herkunft_id)
-      : {}
-    const vonKultur = l.von_kultur_id ? kulturs.get(l.von_kultur_id) : {}
-    const vonKulturGarten = vonKultur.garten_id
-      ? gartensSorted.get(vonKultur.garten_id)
-      : {}
-    const vonKulturGartenPerson = vonKulturGarten.person_id
-      ? persons.get(vonKulturGarten.person_id)
-      : {}
-    const nachKultur = l.nach_kultur_id ? kulturs.get(l.nach_kultur_id) : {}
-    const nachKulturGarten = nachKultur.garten_id
-      ? gartensSorted.get(nachKultur.garten_id)
-      : {}
-    const nachKulturGartenPerson = nachKulturGarten.person_id
-      ? persons.get(nachKulturGarten.person_id)
-      : {}
+  const searchLieferungSuggestions = await Promise.all(
+    lieferungsSorted.map(async (l) => {
+      const person = await l?.person?.fetch()
+      const sammlung = await l?.sammlung?.fetch()
+      const sammlungPerson = await sammlung?.person?.fetch()
+      const sammlungHerkunft = await sammlung?.herkunft?.fetch()
+      const vonKultur = l.von_kultur_id
+        ? kulturs.find((k) => k.id === l.von_kultur_id)
+        : undefined
+      const vonKulturGarten = await vonKultur?.garten?.fetch()
+      const vonKulturGartenPerson = await vonKulturGarten?.person?.fetch()
+      const nachKultur = l.nach_kultur_id
+        ? kulturs.find((k) => k.id === l.nach_kultur_id)
+        : undefined
+      const nachKulturGarten = await nachKultur?.garten?.fetch()
+      const nachKulturGartenPerson = await nachKulturGarten?.person?.fetch()
+      const art = await l?.art?.fetch()
+      const artname = (await art?.label?.pipe(first$()).toPromise()) ?? ''
 
-    return {
-      value: l.id,
-      label: lieferungLabelFromLieferung({ lieferung: l, store }),
-      artname: artLabelFromLieferung({ lieferung: l, store }),
-      personname: person?.fullname,
-      sammlungNr: sammlung?.nr,
-      sammlungDatum: formatDateForSearch(sammlung?.datum),
-      sammlungPerson: sammlungPerson?.fullname,
-      sammlungHerkunftNr: sammlungHerkunft?.nr,
-      sammlungHerkunftLokalname: sammlungHerkunft?.lokalname,
-      sammlungHerkunftGemeinde: sammlungHerkunft?.gemeinde,
-      vonKulturPersonName: vonKulturGartenPerson?.fullname,
-      nachKulturPersonName: nachKulturGartenPerson?.fullname,
-      ausgepflanzt: l.nach_ausgepflanzt ? 'ausgepflanzt' : '',
-      geplant: l.geplant ? 'geplant' : 'ausgeführt',
-      bemerkungen: l.bemerkungen,
-      type: 'Lieferungen',
-    }
-  })
+      return {
+        value: l.id,
+        label: lieferungLabelFromLieferung({ lieferung: l }),
+        artname,
+        personname: personFullname(person) ?? '',
+        sammlungNr: sammlung?.nr ?? '',
+        sammlungDatum: formatDateForSearch(sammlung?.datum),
+        sammlungPerson: personFullname(sammlungPerson) ?? '',
+        sammlungHerkunftNr: sammlungHerkunft?.nr ?? '',
+        sammlungHerkunftLokalname: sammlungHerkunft?.lokalname ?? '',
+        sammlungHerkunftGemeinde: sammlungHerkunft?.gemeinde ?? '',
+        vonKulturPersonName: personFullname(vonKulturGartenPerson) ?? '',
+        nachKulturPersonName: personFullname(nachKulturGartenPerson) ?? '',
+        ausgepflanzt: l.nach_ausgepflanzt ? 'ausgepflanzt' : '',
+        geplant: l.geplant ? 'geplant' : 'ausgeführt',
+        bemerkungen: l.bemerkungen,
+        type: 'Lieferungen',
+      }
+    }),
+  )
   const lieferungSuggestionsFuse = new Fuse(searchLieferungSuggestions, {
     keys: [
       { name: 'artname', weight: 1 },
@@ -263,18 +304,18 @@ const buildOptions = async ({ store, cb, val }) => {
       options: lieferungSuggestions,
     })
   }
-  const searchPersonSuggestions = personsFiltered.map((p) => ({
+  const searchPersonSuggestions = personsSorted.map((p) => ({
     value: p.id,
-    label: personLabelFromPerson({ person: p, store }),
+    label: personLabelFromPerson({ person: p }),
     nr: p.nr,
-    adresszusatz: p.adresszusatz,
-    strasse: p.strasse,
+    adresszusatz: p.adresszusatz ?? '',
+    strasse: p.strasse ?? '',
     plz: p.plz,
-    telefon_privat: p.telefon_privat,
-    telefon_geschaeft: p.telefon_geschaeft,
-    telefon_mobile: p.telefon_mobile,
-    email: p.email,
-    bemerkungen: p.bemerkungen,
+    telefon_privat: p.telefon_privat ?? '',
+    telefon_geschaeft: p.telefon_geschaeft ?? '',
+    telefon_mobile: p.telefon_mobile ?? '',
+    email: p.email ?? '',
+    bemerkungen: p.bemerkungen ?? '',
     type: 'Personen',
   }))
   const personSuggestionsFuse = new Fuse(searchPersonSuggestions, {
@@ -300,21 +341,24 @@ const buildOptions = async ({ store, cb, val }) => {
       options: personSuggestions,
     })
   }
-  const searchSammlungSuggestions = sammlungsFiltered.map((s) => {
-    const herkunft = s.herkunft_id ? herkunfts.get(s.herkunft_id) : {}
+  const searchSammlungSuggestions = await Promise.all(
+    sammlungsSorted.map(async (s) => {
+      const label = await s.label.pipe(first$()).toPromise()
+      const herkunft = await s.herkunft.fetch()
 
-    return {
-      value: s.id,
-      label: sammlungLabelFromSammlung({ sammlung: s, store }),
-      herkunftlokalname: herkunft?.lokalname,
-      herkunftgemeinde: herkunft?.gemeinde,
-      nr: s.nr,
-      bemerkungen: s.bemerkungen,
-      datum: formatDateForSearch(s.datum),
-      geplant: s.geplant ? 'geplant' : 'ausgeführt',
-      type: 'Sammlungen',
-    }
-  })
+      return {
+        value: s.id,
+        label,
+        herkunftlokalname: herkunft?.lokalname ?? '',
+        herkunftgemeinde: herkunft?.gemeinde ?? '',
+        nr: s.nr,
+        bemerkungen: s.bemerkungen ?? '',
+        datum: formatDateForSearch(s.datum),
+        geplant: s.geplant ? 'geplant' : 'ausgeführt',
+        type: 'Sammlungen',
+      }
+    }),
+  )
   const sammlungSuggestionsFuse = new Fuse(searchSammlungSuggestions, {
     keys: [
       { name: 'label', weight: 1 },
@@ -337,7 +381,7 @@ const buildOptions = async ({ store, cb, val }) => {
       options: sammlungSuggestions,
     })
   }
-  const searchZaehlungSuggestions = zaehlungsFiltered.map((z) => ({
+  const searchZaehlungSuggestions = zaehlungsSorted.map((z) => ({
     value: z.id,
     label: formatDateForSearch(z.datum),
     parent: z.kultur_id,
