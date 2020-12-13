@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import uniq from 'lodash/uniq'
@@ -21,6 +27,7 @@ import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
 import getConstants from '../../../../utils/constants'
+import notDeletedQuery from '../../../../utils/notDeletedQuery'
 
 const constants = getConstants()
 
@@ -80,13 +87,17 @@ const KulturForm = ({
 
   const art_id = row?.art_id
   const herkunft_id = row?.herkunft_id
-  const thisGartenKulturs = useMemo(
-    () =>
-      [...store.kulturs.values()]
-        .filter((k) => !k._deleted)
-        .filter((k) => k.garten_id === row.garten_id),
-    [row.garten_id, store.kulturs],
-  )
+
+  const [thisGartenKulturs, setThisGartenKulturs] = useState([])
+  useEffect(() => {
+    const run = async () => {
+      const garten = await row.garten.fetch()
+      if (!garten) return setThisGartenKulturs([])
+      const kulturs = await garten.kulturs.extend(notDeletedQuery).fetch()
+      setThisGartenKulturs(kulturs)
+    }
+    run()
+  }, [row.garten])
   const artHerkunftInGartenNichtZl = thisGartenKulturs
     .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
     // only consider kulturen with both art and herkunft chosen

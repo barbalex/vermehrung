@@ -17,42 +17,8 @@ const eventRevQuery = gql`
       __typename
       event_id
       kultur_id
-      kultur {
-        id
-        __typename
-        art {
-          id
-          __typename
-          art_ae_art {
-            id
-            __typename
-            name
-          }
-        }
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
       teilkultur_id
-      teilkultur {
-        id
-        __typename
-        name
-      }
       person_id
-      person {
-        id
-        __typename
-        name
-      }
       beschreibung
       geplant
       datum

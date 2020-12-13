@@ -35,12 +35,12 @@ const KulturFormTitleChooser = ({
           Q.on('art', 'id', artIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('garten')
+    const collection = db.collections.get('kultur')
     const totalCountObservable = collection
       .query(notDeletedQuery, ...hierarchyQuery)
       .observeCount()
     const filteredCountObservable = collection
-      .query(...tableFilter({ store, table: 'garten' }), ...hierarchyQuery)
+      .query(...tableFilter({ store, table: 'kultur' }), ...hierarchyQuery)
       .observeCount()
     const allCollectionsObservable = combineLatest([
       totalCountObservable,
@@ -56,9 +56,9 @@ const KulturFormTitleChooser = ({
     db.collections,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
-    // need to rerender if any of the values of gartenFilter changes
+    // need to rerender if any of the values of kulturFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(store.filter.garten),
+    ...Object.values(store.filter.kultur),
     store,
   ])
 

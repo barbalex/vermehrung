@@ -1,13 +1,11 @@
 import sortBy from 'lodash/sortBy'
-import personFullname from './personFullname'
+import { first as first$ } from 'rxjs/operators'
 
 const gartensSortedFromGartens = async (gartens) => {
   const gartenSorters = await Promise.all(
     gartens.map(async (garten) => {
-      const name = garten?.name?.toString()?.toLowerCase() ?? ''
-      const person = await garten.person.fetch()
-      const personName = personFullname(person)?.toString()?.toLowerCase()
-      const sort = [name, personName]
+      const label = await garten.label.pipe(first$()).toPromise()
+      const sort = label
 
       return { id: garten.id, sort }
     }),

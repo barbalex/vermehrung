@@ -25,11 +25,7 @@ const gartenRevQuery = gql`
       bemerkungen
       changed
       changed_by
-      person {
-        id
-        __typename
-        name
-      }
+      person_id
       _rev
       _parent_rev
       _depth

@@ -17,11 +17,6 @@ const artRevQuery = gql`
       __typename
       art_id
       ae_id
-      art_rev_ae_art {
-        id
-        __typename
-        name
-      }
       changed
       changed_by
       _rev

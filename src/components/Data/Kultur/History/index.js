@@ -17,34 +17,8 @@ const kulturRevQuery = gql`
       __typename
       kultur_id
       art_id
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
       herkunft_id
-      herkunft {
-        id
-        __typename
-        gemeinde
-        lokalname
-        nr
-      }
       garten_id
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-        }
-      }
       zwischenlager
       erhaltungskultur
       von_anzahl_individuen
