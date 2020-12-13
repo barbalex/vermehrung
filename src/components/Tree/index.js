@@ -13,7 +13,7 @@ import Settings from './Settings'
 import List from './List'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import tableFilter from '../../utils/tableFilter'
-import buildNodes from './nodeswm'
+import buildNodes from './nodes'
 
 const Container = styled.div`
   width: 100%;

@@ -16,11 +16,13 @@ const kultursSortedFromKulturs = async (kulturs) => {
       const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
       const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
       const garten = await kultur.garten.fetch()
-      const gartenLabel = await garten.label
-        .pipe(first$())
-        .toPromise()
-        ?.toString()
-        ?.toLowerCase()
+      const gartenLabel = garten
+        ? await garten.label
+            .pipe(first$())
+            .toPromise()
+            ?.toString()
+            ?.toLowerCase()
+        : 'kein Garten'
       const sort = [
         aeArtLabel,
         herkunftNr,

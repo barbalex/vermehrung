@@ -1,11 +1,6 @@
-import { types, getParent, getSnapshot } from 'mobx-state-tree'
+import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 import { navigate } from '@reach/router'
-
-import allParentNodesAreOpen from '../../components/Tree/allParentNodesAreOpen'
-
-import buildNodes from '../../components/Tree/nodes'
-import sortNodes from '../../utils/sortNodes'
 
 import buildArtFolder from '../../components/Tree/nodes/art/folder'
 import buildArt from '../../components/Tree/nodes/art'
@@ -94,18 +89,6 @@ import buildSammlungHerkunftFolder from '../../components/Tree/nodes/sammlung/he
 import buildSammlungHerkunft from '../../components/Tree/nodes/sammlung/herkunft'
 import buildSammlungAusLieferungFolder from '../../components/Tree/nodes/sammlung/auslieferung/folder'
 import buildSammlungAusLieferung from '../../components/Tree/nodes/sammlung/auslieferung'
-import buildSammlungAusLieferungKulturFolder from '../../components/Tree/nodes/sammlung/auslieferung/kultur/folder'
-import buildSammlungAusLieferungKultur from '../../components/Tree/nodes/sammlung/auslieferung/kultur'
-import buildSammlungAusLieferungKulturZaehlungFolder from '../../components/Tree/nodes/sammlung/auslieferung/kultur/zaehlung/folder'
-import buildSammlungAusLieferungKulturZaehlung from '../../components/Tree/nodes/sammlung/auslieferung/kultur/zaehlung'
-import buildSammlungAusLieferungKulturEventFolder from '../../components/Tree/nodes/sammlung/auslieferung/kultur/event/folder'
-import buildSammlungAusLieferungKulturEvent from '../../components/Tree/nodes/sammlung/auslieferung/kultur/event'
-import buildSammlungAusLieferungKulturAusLieferungFolder from '../../components/Tree/nodes/sammlung/auslieferung/kultur/auslieferung/folder'
-import buildSammlungAusLieferungKulturAusLieferung from '../../components/Tree/nodes/sammlung/auslieferung/kultur/auslieferung'
-import buildSammlungAusLieferungKulturAnLieferungFolder from '../../components/Tree/nodes/sammlung/auslieferung/kultur/anlieferung/folder'
-import buildSammlungAusLieferungKulturAnLieferung from '../../components/Tree/nodes/sammlung/auslieferung/kultur/anlieferung'
-import buildSammlungAusLieferungKulturTeilkulturFolder from '../../components/Tree/nodes/sammlung/auslieferung/kultur/teilkultur/folder'
-import buildSammlungAusLieferungKulturTeilkultur from '../../components/Tree/nodes/sammlung/auslieferung/kultur/teilkultur'
 
 import buildKulturFolder from '../../components/Tree/nodes/kultur/folder'
 import buildKultur from '../../components/Tree/nodes/kultur'
@@ -119,19 +102,6 @@ import buildKulturAusLieferungFolder from '../../components/Tree/nodes/kultur/au
 import buildKulturAusLieferung from '../../components/Tree/nodes/kultur/auslieferung'
 import buildKulturEventFolder from '../../components/Tree/nodes/kultur/event/folder'
 import buildKulturEvent from '../../components/Tree/nodes/kultur/event'
-
-import artIdInUrl from '../../utils/artIdInUrl'
-import eventIdInUrl from '../../utils/eventIdInUrl'
-import herkunftIdInUrl from '../../utils/herkunftIdInUrl'
-import gartenIdInUrl from '../../utils/gartenIdInUrl'
-import kulturIdInUrl from '../../utils/kulturIdInUrl'
-import anLieferungIdInUrl from '../../utils/anLieferungIdInUrl'
-import ausLieferungIdInUrl from '../../utils/ausLieferungIdInUrl'
-import lieferungIdInUrl from '../../utils/lieferungIdInUrl'
-import teilkulturIdInUrl from '../../utils/teilkulturIdInUrl'
-import personIdInUrl from '../../utils/personIdInUrl'
-import sammlungIdInUrl from '../../utils/sammlungIdInUrl'
-import zaehlungIdInUrl from '../../utils/zaehlungIdInUrl'
 
 import Node from './nodeModel'
 
@@ -193,86 +163,6 @@ export default types
       const isMobile = showTreeInSingleColumnView && singleColumnView
       const singleRowHeight = isMobile ? 30 : 23
       return singleRowHeight
-    },
-    get activeNode() {
-      return self.nodes.find((n) => isEqual(n.url, self.activeNodeArray))
-    },
-    get nodes() {
-      const store = getParent(self, 1)
-      //console.log('store tree building nodes')
-      return sortNodes(
-        buildNodes({
-          store,
-        }),
-      )
-    },
-    get openNodesNotFiltered() {
-      const store = getParent(self, 1)
-      const {
-        artsFiltered,
-        eventsFiltered,
-        gartensFiltered,
-        herkunftsFiltered,
-        kultursFiltered,
-        lieferungsFiltered,
-        personsFiltered,
-        sammlungsFiltered,
-        teilkultursFiltered,
-        zaehlungsFiltered,
-      } = store
-
-      // if id is in url check if it is also in tablesFiltered
-      return getSnapshot(self.openNodes).filter((n) => {
-        const anLieferungId = anLieferungIdInUrl(n)
-        const ausLieferungId = ausLieferungIdInUrl(n)
-        const lieferungId = lieferungIdInUrl(n)
-        const artId = artIdInUrl(n)
-        const eventId = eventIdInUrl(n)
-        const gartenId = gartenIdInUrl(n)
-        const herkunftId = herkunftIdInUrl(n)
-        const kulturId = kulturIdInUrl(n)
-        const personId = personIdInUrl(n)
-        const sammlungId = sammlungIdInUrl(n)
-        const teilkulturId = teilkulturIdInUrl(n)
-        const zaehlungId = zaehlungIdInUrl(n)
-
-        const criteria = [
-          anLieferungId
-            ? lieferungsFiltered.map((l) => l.id).includes(anLieferungId)
-            : true,
-          ausLieferungId
-            ? lieferungsFiltered.map((l) => l.id).includes(ausLieferungId)
-            : true,
-          lieferungId
-            ? lieferungsFiltered.map((l) => l.id).includes(lieferungId)
-            : true,
-          artId ? artsFiltered.map((l) => l.id).includes(artId) : true,
-          eventId ? eventsFiltered.map((l) => l.id).includes(eventId) : true,
-          gartenId ? gartensFiltered.map((l) => l.id).includes(gartenId) : true,
-          herkunftId
-            ? herkunftsFiltered.map((l) => l.id).includes(herkunftId)
-            : true,
-          kulturId ? kultursFiltered.map((l) => l.id).includes(kulturId) : true,
-          personId ? personsFiltered.map((l) => l.id).includes(personId) : true,
-          sammlungId
-            ? sammlungsFiltered.map((l) => l.id).includes(sammlungId)
-            : true,
-          teilkulturId
-            ? teilkultursFiltered.map((l) => l.id).includes(teilkulturId)
-            : true,
-          zaehlungId
-            ? zaehlungsFiltered.map((l) => l.id).includes(zaehlungId)
-            : true,
-        ]
-
-        return !criteria.includes(false)
-      })
-    },
-    get visibleOpenNodes() {
-      const store = getParent(self, 1)
-      return self.openNodesNotFiltered.filter((url) =>
-        allParentNodesAreOpen({ store, url }),
-      )
     },
     get showArt() {
       const store = getParent(self, 1)
@@ -677,54 +567,6 @@ export default types
     get sammlungAusLieferung() {
       const store = getParent(self, 1)
       return buildSammlungAusLieferung({ store })
-    },
-    get sammlungAusLieferungKulturFolder() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturFolder({ store })
-    },
-    get sammlungAusLieferungKultur() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKultur({ store })
-    },
-    get sammlungAusLieferungKulturEventFolder() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturEventFolder({ store })
-    },
-    get sammlungAusLieferungKulturEvent() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturEvent({ store })
-    },
-    get sammlungAusLieferungKulturAnLieferungFolder() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturAnLieferungFolder({ store })
-    },
-    get sammlungAusLieferungKulturAnLieferung() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturAnLieferung({ store })
-    },
-    get sammlungAusLieferungKulturAusLieferungFolder() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturAusLieferungFolder({ store })
-    },
-    get sammlungAusLieferungKulturAusLieferung() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturAusLieferung({ store })
-    },
-    get sammlungAusLieferungKulturTeilkulturFolder() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturTeilkulturFolder({ store })
-    },
-    get sammlungAusLieferungKulturTeilkultur() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturTeilkultur({ store })
-    },
-    get sammlungAusLieferungKulturZaehlungFolder() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturZaehlungFolder({ store })
-    },
-    get sammlungAusLieferungKulturZaehlung() {
-      const store = getParent(self, 1)
-      return buildSammlungAusLieferungKulturZaehlung({ store })
     },
   }))
 

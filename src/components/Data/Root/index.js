@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import camelCase from 'lodash/camelCase'
 import SimpleBar from 'simplebar-react'
 
 import Row from './Row'
@@ -21,7 +20,6 @@ const FieldsContainer = styled.div`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { initialDataQueried } = store
   const {
     showArt,
     showEvent,
@@ -108,15 +106,7 @@ const Root = ({ filter: showFilter }) => {
         <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
           <FieldsContainer>
             {rows.map((row) => (
-              <Row
-                key={row.name}
-                row={row}
-                length={
-                  !initialDataQueried
-                    ? '...'
-                    : store[`${camelCase(row.table)}sFiltered`].length
-                }
-              />
+              <Row key={row.name} row={row} />
             ))}
           </FieldsContainer>
         </SimpleBar>

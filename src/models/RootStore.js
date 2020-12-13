@@ -1845,22 +1845,6 @@ export const RootStore = RootStoreBase.props({
         })
         .sort((a, b) => eventSort({ a, b }))
     },
-    get gartensFiltered() {
-      return queryFromStore({ store: self, table: 'garten' })
-    },
-    get gartensSorted() {
-      return [...self.gartens.values()]
-        .filter((a) => {
-          if (self.filter.garten._deleted === false) {
-            return notDeletedOrHasConflict(a)
-          }
-          return true
-        })
-        .filter((a) =>
-          self.filter.garten.aktiv === true ? a.aktiv === true : true,
-        )
-        .sort((a, b) => gartenSort({ a, b, store: self }))
-    },
     get herkunftsFiltered() {
       return queryFromStore({ store: self, table: 'herkunft' })
     },
