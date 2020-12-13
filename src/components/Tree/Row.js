@@ -247,10 +247,11 @@ const Row = ({ style, node, nodes }) => {
   const onClickNode = useCallback(
     () =>
       toggleNode({
+        nodes,
         node,
         store,
       }),
-    [node, store],
+    [node, nodes, store],
   )
   const onClickNodeSymbol = useCallback(
     () => toggleNodeSymbol({ node, store }),

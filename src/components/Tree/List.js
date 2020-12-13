@@ -37,13 +37,9 @@ const StyledList = styled(List)`
 
 const Tree = ({ scrollableNodeRef, contentNodeRef, width, height, nodes }) => {
   const store = useContext(StoreContext)
-  const {
-    singleRowHeight,
-    activeNodeArray: aNAProxy,
-    activeNode,
-    //nodes: storeNodes,
-  } = store.tree
+  const { singleRowHeight, activeNodeArray: aNAProxy } = store.tree
   const aNA = getSnapshot(aNAProxy)
+  const activeNode = nodes.find((n) => isEqual(n.url, aNA))
 
   const listRef = useRef(null)
 

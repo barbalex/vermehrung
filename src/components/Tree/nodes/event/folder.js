@@ -1,22 +1,14 @@
-const eventFolder = ({ store }) => {
-  const { initialDataQueried } = store
-  if (!store.tree.showEvent) return []
-
-  const events = store.eventsFiltered
-  const nr = !initialDataQueried && !events.length ? '...' : events.length
-
-  return [
-    {
-      nodeType: 'folder',
-      menuTitle: 'Events',
-      id: 'eventFolder',
-      label: `Events (${nr})`,
-      url: ['Events'],
-      sort: [10],
-      hasChildren: true,
-      childrenCount: nr,
-    },
-  ]
-}
+const eventFolder = ({ count }) => [
+  {
+    nodeType: 'folder',
+    menuTitle: 'Events',
+    id: 'eventFolder',
+    label: `Events (${count})`,
+    url: ['Events'],
+    sort: [10],
+    hasChildren: true,
+    childrenCount: count,
+  },
+]
 
 export default eventFolder

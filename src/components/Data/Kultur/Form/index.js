@@ -68,16 +68,7 @@ const KulturForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    artsSorted,
-    errors,
-    filter,
-    online,
-    sammlungsSorted,
-    unsetError,
-    userPersonOption,
-    db,
-  } = store
+  const { errors, filter, online, unsetError, userPersonOption, db } = store
 
   const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption
 
@@ -93,7 +84,7 @@ const KulturForm = ({
   const [thisGartenKulturs, setThisGartenKulturs] = useState([])
   useEffect(() => {
     const run = async () => {
-      const garten = await row.garten.fetch()
+      const garten = await row?.garten?.fetch()
       if (!garten) return setThisGartenKulturs([])
       const kulturs = await garten.kulturs.extend(notDeletedQuery).fetch()
       setThisGartenKulturs(kulturs)
@@ -137,21 +128,32 @@ const KulturForm = ({
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => !!o.art_id && !!o.herkunft_id)
     .filter((k) => k.zwischenlager)
-  const artHerkuenfte = useMemo(
-    () =>
-      uniqBy(
-        sammlungsSorted.map((a) => ({
-          art_id: a.art_id,
-          herkunft_id: a.herkunft_id,
-        })),
-        (ah) => `${ah.art_id}/${ah.herkunft_id}`,
-      ),
-    [sammlungsSorted],
-  )
+
+  const [artHerkuenfte, setArtHerkuenfte] = useState([])
+  useEffect(() => {
+    const run = async () => {
+      const sammlungs = await db.collections
+        .get('sammlung')
+        .query(notDeletedQuery)
+        .fetch()
+
+      setArtHerkuenfte(
+        uniqBy(
+          sammlungs.map((a) => ({
+            art_id: a.art_id,
+            herkunft_id: a.herkunft_id,
+          })),
+          (ah) => `${ah.art_id}/${ah.herkunft_id}`,
+        ),
+      )
+    }
+    run()
+  }, [db.collections])
+
   const artenToChoose = useMemo(
     () =>
-      uniq(
-        artHerkuenfte
+      uniq([
+        ...artHerkuenfte
           // only arten with herkunft
           .filter((ah) => (herkunft_id ? ah.herkunft_id === herkunft_id : true))
           .filter((s) => {
@@ -166,22 +168,21 @@ const KulturForm = ({
                 (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
               )
             )
-          }),
-      )
-        // only arten
-        .map((a) => a.art_id),
+          })
+          // only arten
+          .map((a) => a.art_id),
+        // do show own art
+        ...(art_id ? [art_id] : []),
+      ]),
     [
       artHerkuenfte,
       artHerkunftInGartenNichtZl,
       artHerkunftZwischenlagerInGarten,
       herkunft_id,
       row.garten_id,
+      art_id,
     ],
   )
-  // do show own art
-  if (art_id && !artenToChoose.includes(art_id)) {
-    artenToChoose.push(art_id)
-  }
   const herkunftsToChoose = useMemo(
     () =>
       uniq([
@@ -222,26 +223,31 @@ const KulturForm = ({
   /*const artForArtWerte = artsSorted.filter(
     (a) => !!a.ae_id && artenToChoose.includes(a.id),
   )*/
-  const artWerte = useMemo(
-    () =>
-      artsSorted
-        .filter((a) => !!a.ae_id && artenToChoose.includes(a.id))
-        .map((a) => {
-          let label = '...'
-          let aeArt
-          if (a.ae_id) {
-            aeArt = store.ae_arts.get(a.ae_id)
-            if (aeArt?.name) {
-              label = aeArt?.name
-            }
-          }
+  const [artWerte, setArtWerte] = useState([])
+  useEffect(() => {
+    const run = async () => {
+      const arts = await db.collections
+        .get('art')
+        .query(
+          Q.where('_deleted', false),
+          Q.where('ae_id', Q.notEq(null)),
+          Q.where('id', Q.oneOf(artenToChoose)),
+        )
+        .fetch()
+      const artWerte = await Promise.all(
+        arts.map(async (art) => {
+          const label = await art.label.pipe(first$()).toPromise()
           return {
-            value: a.id,
+            value: art.id,
             label,
           }
         }),
-    [artenToChoose, artsSorted, store.ae_arts],
-  )
+      )
+      setArtWerte(artWerte)
+    }
+    run()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [artenToChoose.length, db.collections])
 
   const [herkunftWerte, setHerkunftWerte] = useState([])
   useEffect(() => {
@@ -309,6 +315,8 @@ const KulturForm = ({
 
   const showDeleted =
     showFilter || filter.kultur._deleted !== false || row?._deleted
+
+  console.log('Kultur rendering')
 
   return (
     <ErrorBoundary>

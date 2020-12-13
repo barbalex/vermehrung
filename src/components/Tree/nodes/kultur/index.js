@@ -1,35 +1,18 @@
-import isEqual from 'lodash/isEqual'
+import { first as first$ } from 'rxjs/operators'
 
-import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
+const kulturNodes = async ({ kultur, index }) => {
+  const label = await kultur.label.pipe(first$()).toPromise()
 
-const kulturNodes = ({ store }) => {
-  const { showKultur, visibleOpenNodes } = store.tree
-  if (!showKultur) return []
-
-  return (
-    store.kultursFiltered
-      // only show if parent node exists
-      .filter(() =>
-        visibleOpenNodes.some((node) => isEqual(['Kulturen'], node)),
-      )
-      .map((el) => {
-        const label = kulturLabelFromKultur({ kultur: el, store })
-
-        return {
-          nodeType: 'table',
-          menuTitle: 'Kultur',
-          table: 'kultur',
-          id: el.id,
-          label,
-          url: ['Kulturen', el.id],
-          hasChildren: true,
-        }
-      })
-      .map((el, index) => {
-        el.sort = [5, index]
-        return el
-      })
-  )
+  return {
+    nodeType: 'table',
+    menuTitle: 'Kultur',
+    table: 'kultur',
+    id: kultur.id,
+    label,
+    url: ['Kulturen', kultur.id],
+    sort: [5, index],
+    hasChildren: true,
+  }
 }
 
 export default kulturNodes

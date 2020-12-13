@@ -1,8 +1,9 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
+import tableFilter from '../../../utils/tableFilter'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -27,9 +28,25 @@ const Row = styled.div`
   }
 `
 
-const RootRow = ({ row, style, last, length }) => {
+const RootRow = ({ row, style, last }) => {
   const store = useContext(StoreContext)
+  const { db } = store
   const { setActiveNodeArray } = store.tree
+
+  const filter = store.filter?.[row.table] ?? {}
+
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    const run = async () => {
+      const count = await db.collections
+        .get(row.table)
+        .query(...tableFilter({ store, table: row.table }))
+        .fetchCount()
+      setCount(count)
+    }
+    run()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db.collections, row.table, store, ...Object.values(filter)])
 
   const onClickRow = useCallback(() => setActiveNodeArray(row.url), [
     row.url,
@@ -38,7 +55,7 @@ const RootRow = ({ row, style, last, length }) => {
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{`${row.name} (${length})`}</div>
+      <div>{`${row.name} (${count})`}</div>
     </Row>
   )
 }

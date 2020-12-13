@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useState,
-  useMemo,
   useEffect,
   useContext,
   useRef,
@@ -11,12 +10,14 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Garten from './Garten'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
+import gartensSortedFromGartens from '../../../../../utils/gartensSortedFromGartens'
 import gvsSortByGarten from '../../../../../utils/gvsSortByGarten'
 
 const TitleRow = styled.div`
@@ -51,7 +52,7 @@ const Gvs = styled.div`
 
 const PersonArten = ({ person }) => {
   const store = useContext(StoreContext)
-  const { gartensSorted, insertGvRev } = store
+  const { insertGvRev, db } = store
 
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [person.id])
@@ -88,16 +89,29 @@ const PersonArten = ({ person }) => {
 
   const gvArtIds = gvsSorted.map((v) => v.garten_id)
 
-  const gartenWerte = useMemo(
-    () =>
-      gartensSorted
-        .filter((a) => !gvArtIds.includes(a.id))
-        .map((el) => ({
-          value: el.id,
-          label: gartenLabelFromGarten({ garten: el, store }),
-        })),
-    [gartensSorted, gvArtIds, store],
-  )
+  const [gartenWerte, setGartenWerte] = useState([])
+  useEffect(() => {
+    const run = async () => {
+      const gartens = await db.collections
+        .get('garten')
+        .query(Q.where('_deleted', true), Q.where('id', Q.notIn(gvArtIds)))
+        .fetch()
+      const gartensSorted = await gartensSortedFromGartens(gartens)
+      const gartenWerte = await Promise.all(
+        gartensSorted.map(async (garten) => {
+          const label = await garten.label.pipe(first$()).toPromise()
+
+          return {
+            value: garten.id,
+            label,
+          }
+        }),
+      )
+      setGartenWerte(gartenWerte)
+    }
+    run()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db.collections, gvArtIds.length])
 
   const saveToDb = useCallback(
     async (event) => {

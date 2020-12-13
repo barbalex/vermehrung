@@ -11,6 +11,8 @@ import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
 import artLabelFromArt from '../../../../utils/artLabelFromArt'
+import tableFilter from '../../../../utils/tableFilter'
+import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens'
 
 const threshold = 0.2
 const distance = 1000 // ensure text in long labels is found
@@ -18,12 +20,10 @@ const distance = 1000 // ensure text in long labels is found
 const formatDateForSearch = (datum) =>
   datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
-const buildOptions = ({ store, cb, val }) => {
+const buildOptions = async ({ store, cb, val }) => {
   const {
     artsFiltered,
     eventsFiltered,
-    gartens,
-    gartensFiltered,
     herkunfts,
     herkunftsFiltered,
     kulturs,
@@ -34,7 +34,14 @@ const buildOptions = ({ store, cb, val }) => {
     sammlungs,
     sammlungsFiltered,
     zaehlungsFiltered,
+    db,
   } = store
+
+  const gartens = await db.collections
+    .get('garten')
+    .query(...tableFilter({ store, table: 'garten' }))
+    .fetch()
+  const gartensSorted = await gartensSortedFromGartens(gartens)
 
   const options = []
   const searchArtSuggestions = artsFiltered.map((a) => ({
@@ -54,7 +61,7 @@ const buildOptions = ({ store, cb, val }) => {
       options: artSuggestions,
     })
   }
-  const searchGartenSuggestions = gartensFiltered.map((g) => {
+  const searchGartenSuggestions = gartensSorted.map((g) => {
     const person = g.person_id ? persons.get(g.person_id) : {}
 
     return {
@@ -118,7 +125,7 @@ const buildOptions = ({ store, cb, val }) => {
     })
   }
   const searchKulturSuggestions = kultursFiltered.map((k) => {
-    const garten = k.garten_id ? gartens.get(k.garten_id) : {}
+    const garten = k.garten_id ? gartensSorted.get(k.garten_id) : {}
     const gartenPerson = garten.person_id ? persons.get(garten.person_id) : {}
     const herkunft = k.herkunft_id ? herkunfts.get(k.herkunft_id) : {}
 
@@ -152,7 +159,7 @@ const buildOptions = ({ store, cb, val }) => {
   }
   const searchEventSuggestions = eventsFiltered.map((e) => {
     const kultur = e.kultur_id ? kulturs.get(e.kultur_id) : {}
-    const garten = kultur.garten_id ? gartens.get(kultur.garten_id) : {}
+    const garten = kultur.garten_id ? gartensSorted.get(kultur.garten_id) : {}
     const gartenPerson = garten.person_id ? persons.get(garten.person_id) : {}
 
     return {
@@ -195,14 +202,14 @@ const buildOptions = ({ store, cb, val }) => {
       : {}
     const vonKultur = l.von_kultur_id ? kulturs.get(l.von_kultur_id) : {}
     const vonKulturGarten = vonKultur.garten_id
-      ? gartens.get(vonKultur.garten_id)
+      ? gartensSorted.get(vonKultur.garten_id)
       : {}
     const vonKulturGartenPerson = vonKulturGarten.person_id
       ? persons.get(vonKulturGarten.person_id)
       : {}
     const nachKultur = l.nach_kultur_id ? kulturs.get(l.nach_kultur_id) : {}
     const nachKulturGarten = nachKultur.garten_id
-      ? gartens.get(nachKultur.garten_id)
+      ? gartensSorted.get(nachKultur.garten_id)
       : {}
     const nachKulturGartenPerson = nachKulturGarten.person_id
       ? persons.get(nachKulturGarten.person_id)
