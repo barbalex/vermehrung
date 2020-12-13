@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'

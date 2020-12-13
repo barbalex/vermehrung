@@ -17,29 +17,6 @@ const zaehlungRevQuery = gql`
       __typename
       zaehlung_id
       kultur_id
-      kultur {
-        id
-        __typename
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-          }
-        }
-        art {
-          id
-          __typename
-          art_ae_art {
-            id
-            __typename
-            name
-          }
-        }
-      }
       datum
       prognose
       bemerkungen

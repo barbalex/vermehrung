@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy'
+import { first as first$ } from 'rxjs/operators'
 
 import artLabelFromAeArt from './artLabelFromAeArt'
-import personFullname from './personFullname'
 
 const kultursSortedFromKulturs = async (kulturs) => {
   const kulturSorters = await Promise.all(
@@ -16,9 +16,9 @@ const kultursSortedFromKulturs = async (kulturs) => {
       const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
       const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
       const garten = await kultur.garten.fetch()
-      const gartenName = garten?.name?.toString()?.toLowerCase()
-      const gartenPerson = garten ? await garten.person.fetch() : undefined
-      const gartenPersonFullname = personFullname(gartenPerson)
+      const gartenLabel = await garten.label
+        .pipe(first$())
+        .toPromise()
         ?.toString()
         ?.toLowerCase()
       const sort = [
@@ -26,8 +26,7 @@ const kultursSortedFromKulturs = async (kulturs) => {
         herkunftNr,
         herkunftGemeinde,
         herkunftLokalname,
-        gartenName,
-        gartenPersonFullname,
+        gartenLabel,
       ]
       return { id: kultur.id, sort }
     }),

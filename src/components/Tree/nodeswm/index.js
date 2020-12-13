@@ -1497,7 +1497,7 @@ const buildNodes = async ({ store }) => {
               (s) => s.id === `${personId}${gartenId}`,
             )
 
-            // garten > kultur nodes
+            // person > garten > kultur nodes
             const gartenKulturQuery = garten.kulturs.extend(
               ...tableFilter({ store, table: 'kultur' }),
             )

@@ -17,29 +17,8 @@ const sammlungRevQuery = gql`
       __typename
       sammlung_id
       art_id
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
       person_id
-      person {
-        id
-        __typename
-        name
-      }
       herkunft_id
-      herkunft {
-        id
-        __typename
-        gemeinde
-        lokalname
-        nr
-      }
       nr
       datum
       von_anzahl_individuen

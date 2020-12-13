@@ -18,68 +18,11 @@ const lieferungRevQuery = gql`
       lieferung_id
       sammel_lieferung_id
       art_id
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
       person_id
-      person {
-        id
-        __typename
-        name
-      }
       von_sammlung_id
-      sammlung {
-        id
-        __typename
-        datum
-        herkunft {
-          id
-          __typename
-          nr
-        }
-        person {
-          id
-          __typename
-          name
-        }
-      }
       von_kultur_id
-      kulturByVonKulturId {
-        id
-        __typename
-        garten {
-          id
-          __typename
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
       datum
       nach_kultur_id
-      kulturByNachKulturId {
-        id
-        __typename
-        garten {
-          id
-          __typename
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
       nach_ausgepflanzt
       von_anzahl_individuen
       anzahl_pflanzen
