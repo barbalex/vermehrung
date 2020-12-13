@@ -12,6 +12,7 @@ import uniqBy from 'lodash/uniqBy'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import SimpleBar from 'simplebar-react'
+import { first as first$ } from 'rxjs/operators'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -28,6 +29,7 @@ import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkun
 import gartenLabelFromGarten from '../../../../utils/gartenLabelFromGarten'
 import getConstants from '../../../../utils/constants'
 import notDeletedQuery from '../../../../utils/notDeletedQuery'
+import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens'
 
 const constants = getConstants()
 
@@ -69,12 +71,12 @@ const KulturForm = ({
     artsSorted,
     errors,
     filter,
-    gartensSorted,
     herkunftsSorted,
     online,
     sammlungsSorted,
     unsetError,
     userPersonOption,
+    db,
   } = store
 
   const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption
@@ -98,6 +100,33 @@ const KulturForm = ({
     }
     run()
   }, [row.garten])
+
+  // TODO:
+  // if art was choosen: remove gartens where this art has two kulturs for every herkunft?
+  // if herkunft was choosen: remove gartens where this herkunft has two kulturs
+  const [gartenWerte, setGartenWerte] = useState([])
+  useEffect(() => {
+    const run = async () => {
+      const gartens = await db.collections
+        .get('garten')
+        .query(notDeletedQuery)
+        .fetch()
+      const gartensSorted = gartensSortedFromGartens(gartens)
+      const gartenWerte = await Promise.all(
+        gartensSorted.map(async (garten) => {
+          const label = await garten.label.pipe(first$()).toPromise()
+
+          return {
+            value: garten.id,
+            label,
+          }
+        }),
+      )
+      setGartenWerte(gartenWerte)
+    }
+    run()
+  }, [db.collections])
+
   const artHerkunftInGartenNichtZl = thisGartenKulturs
     .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
     // only consider kulturen with both art and herkunft chosen
@@ -213,18 +242,6 @@ const KulturForm = ({
           }
         }),
     [artenToChoose, artsSorted, store.ae_arts],
-  )
-
-  // TODO:
-  // if art was choosen: remove gartens where this art has two kulturs for every herkunft?
-  // if herkunft was choosen: remove gartens where this herkunft has two kulturs
-  const gartenWerte = useMemo(
-    () =>
-      gartensSorted.map((el) => ({
-        value: el.id,
-        label: gartenLabelFromGarten({ garten: el, store }),
-      })),
-    [gartensSorted, store],
   )
 
   const herkunftWerte = useMemo(
