@@ -24,7 +24,6 @@ import lieferungSort from '../utils/lieferungSort'
 import personSort from '../utils/personSort'
 import sammlungSort from '../utils/sammlungSort'
 import teilkulturSort from '../utils/teilkulturSort'
-import teilzaehlungSort from '../utils/teilzaehlungSort'
 import herkunftSort from '../utils/herkunftSort'
 import kulturSort from '../utils/kulturSort'
 import notDeletedOrHasConflict from '../utils/notDeletedOrHasConflict'
@@ -1939,15 +1938,5 @@ export const RootStore = RootStoreBase.props({
           return true
         })
         .sort((a, b) => teilkulturSort({ a, b, store: self }))
-    },
-    get teilzaehlungsSorted() {
-      return [...self.teilzaehlungs.values()]
-        .filter((a) => {
-          if (self.filter.teilzaehlung._deleted === false) {
-            return notDeletedOrHasConflict(a)
-          }
-          return true
-        })
-        .sort((a, b) => teilzaehlungSort({ a, b, store: self }))
     },
   }))
