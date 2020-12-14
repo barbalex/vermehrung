@@ -7,6 +7,7 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
@@ -14,7 +15,6 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import { StoreContext } from '../../../models/reactUtils'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import tableFilter from '../../../utils/tableFilter'
 import personSort from '../../../utils/personSort'
 
@@ -75,7 +75,9 @@ const Personen = ({ filter: showFilter, width, height }) => {
   const [dataState, setDataState] = useState({ persons: [], totalCount: 0 })
   useEffect(() => {
     const collection = db.collections.get('person')
-    const countObservable = collection.query(notDeletedQuery).observeCount()
+    const countObservable = collection
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observeCount()
     const dataObservable = collection
       .query(...tableFilter({ table: 'person', store }))
       .observeWithColumns(['vorname', 'name'])

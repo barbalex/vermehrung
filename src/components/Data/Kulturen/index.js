@@ -15,7 +15,6 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import tableFilter from '../../../utils/tableFilter'
 import kultursSortedFromKulturs from '../../../utils/kultursSortedFromKulturs'
 
@@ -92,7 +91,9 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.collections.get('kultur')
-    const countObservable = collection.query(notDeletedQuery).observeCount()
+    const countObservable = collection
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observeCount()
     const dataObservable = collection
       .query(...tableFilter({ table: 'kultur', store }), ...hierarchyQuery)
       .observeWithColumns([

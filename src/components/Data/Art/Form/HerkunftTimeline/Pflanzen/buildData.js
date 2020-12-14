@@ -134,6 +134,7 @@ const buildData = async ({ artId, herkunftId, db }) => {
     .get('kultur')
     .query(
       Q.where('_deleted', false),
+      Q.where('aktiv', true),
       Q.where('herkunft_id', herkunftId),
       Q.where('art_id', artId),
     )

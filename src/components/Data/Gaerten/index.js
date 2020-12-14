@@ -15,7 +15,6 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import tableFilter from '../../../utils/tableFilter'
 import gartensSortedFromGartens from '../../../utils/gartensSortedFromGartens'
 
@@ -83,7 +82,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
       : []
     const collection = db.collections.get('garten')
     const totalCountObservable = collection
-      .query(notDeletedQuery)
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeCount()
     const gartenObservable = collection
       .query(...tableFilter({ store, table: 'garten' }), ...hierarchyQuery)

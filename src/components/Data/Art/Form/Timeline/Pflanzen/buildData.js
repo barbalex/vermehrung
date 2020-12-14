@@ -110,7 +110,11 @@ const buildData = async ({ artId, db }) => {
   //    at every date the last count is used
   const kultursOfArt = await db.collections
     .get('kultur')
-    .query(Q.where('_deleted', false), Q.where('art_id', artId))
+    .query(
+      Q.where('_deleted', false),
+      Q.where('aktiv', true),
+      Q.where('art_id', artId),
+    )
     .fetch()
   // 3. for every date get:
   //    - sum of last zaehlung

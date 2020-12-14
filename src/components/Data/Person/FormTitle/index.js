@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
-import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import tableFilter from '../../../../utils/tableFilter'
 
 const PersonFormTitleChooser = ({
@@ -25,7 +25,7 @@ const PersonFormTitleChooser = ({
   useEffect(() => {
     const collection = db.collections.get('person')
     const totalCountObservable = collection
-      .query(notDeletedQuery)
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'person' }))

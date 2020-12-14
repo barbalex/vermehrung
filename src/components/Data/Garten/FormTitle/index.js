@@ -6,7 +6,6 @@ import { combineLatest } from 'rxjs'
 import { StoreContext } from '../../../../models/reactUtils'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
-import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import tableFilter from '../../../../utils/tableFilter'
 
 const GartenFormTitle = ({
@@ -32,7 +31,11 @@ const GartenFormTitle = ({
       : []
     const collection = db.collections.get('garten')
     const totalCountObservable = collection
-      .query(notDeletedQuery, ...hierarchyQuery)
+      .query(
+        Q.where('_deleted', false),
+        Q.where('aktiv', true),
+        ...hierarchyQuery,
+      )
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'garten' }), ...hierarchyQuery)
