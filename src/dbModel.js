@@ -1269,6 +1269,7 @@ export class Teilzaehlung extends Model {
     delete newObjectForStore.teilzaehlung_id
     // optimistically update store
     await this.update((row) => ({ ...row, ...newObjectForStore }))
+    return
   }
   @action async delete({ store }) {
     await this.subAction(() =>

@@ -54,13 +54,7 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const Teilzaehlung = ({
-  id,
-  zaehlungId,
-  kulturId,
-  teilkulturenWerte,
-  index,
-}) => {
+const Teilzaehlung = ({ id, kulturId, teilkulturenWerte, index }) => {
   const store = useContext(StoreContext)
   const { online, db } = store
 
@@ -120,7 +114,6 @@ const Teilzaehlung = ({
             >
               <Form
                 id={id}
-                zaehlungId={zaehlungId}
                 kulturId={kulturId}
                 row={row}
                 rawRow={rawRow}
@@ -167,7 +160,6 @@ const Teilzaehlung = ({
         <InnerContainer>
           <Form
             id={id}
-            zaehlungId={zaehlungId}
             kulturId={kulturId}
             row={row}
             rawRow={rawRow}
