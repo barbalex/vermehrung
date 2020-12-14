@@ -99,6 +99,17 @@ import kultursSortedFromKulturs from '../../../utils/kultursSortedFromKulturs'
 import gartensSortedFromGartens from '../../../utils/gartensSortedFromGartens'
 import sammlungsSortedFromSammlungs from '../../../utils/sammlungsSortedFromSammlungs'
 import tableFilter from '../../../utils/tableFilter'
+import getShowArt from '../../../utils/showArt'
+import getShowEvent from '../../../utils/showEvent'
+import getShowGarten from '../../../utils/showGarten'
+import getShowHerkunft from '../../../utils/showHerkunft'
+import getShowKultur from '../../../utils/showKultur'
+import getShowLieferung from '../../../utils/showLieferung'
+import getShowPerson from '../../../utils/showPerson'
+import getShowSammelLieferung from '../../../utils/showSammelLieferung'
+import getShowSammlung from '../../../utils/showSammlung'
+import getShowTeilkultur from '../../../utils/showTeilkultur'
+import getShowZaehlung from '../../../utils/showZaehlung'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -110,22 +121,21 @@ const compare = (a, b) => {
 }
 
 const buildNodes = async ({ store }) => {
-  const { db } = store
-  const {
-    openNodes: openNodesRaw,
-    showArt,
-    showHerkunft,
-    showSammlung,
-    showGarten,
-    showKultur,
-    showTeilkultur,
-    showZaehlung,
-    showLieferung,
-    showSammelLieferung,
-    showEvent,
-    showPerson,
-  } = store.tree
+  const { db, user } = store
+  const { openNodes: openNodesRaw } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
+
+  const showArt = await getShowArt({ user, db })
+  const showEvent = await getShowEvent({ user, db })
+  const showGarten = await getShowGarten({ user, db })
+  const showHerkunft = await getShowHerkunft({ user, db })
+  const showKultur = await getShowKultur({ user, db })
+  const showLieferung = await getShowLieferung({ user, db })
+  const showPerson = await getShowPerson({ user, db })
+  const showSammelLieferung = await getShowSammelLieferung({ user, db })
+  const showSammlung = await getShowSammlung({ user, db })
+  const showTeilkultur = await getShowTeilkultur({ user, db })
+  const showZaehlung = await getShowZaehlung({ user, db })
 
   let artFolderNodes = []
   let artNodes = []
