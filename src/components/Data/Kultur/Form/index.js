@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton'
 import SimpleBar from 'simplebar-react'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -71,13 +72,6 @@ const KulturForm = ({
   const store = useContext(StoreContext)
   const { errors, filter, online, unsetError, user, db } = store
 
-  const [userPersonOption, setUserPersonOption] = useState()
-  useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
-  }, [db, user])
-
-  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
-
   // From all collected combinations of art and herkunft show only arten of those not present in this garten
   // => find all combinations of art and herkunft in sammlungen
   // => substract the ones existing in this garden
@@ -87,42 +81,73 @@ const KulturForm = ({
   const art_id = row?.art_id
   const herkunft_id = row?.herkunft_id
 
-  const [thisGartenKulturs, setThisGartenKulturs] = useState([])
-  useEffect(() => {
-    const run = async () => {
-      const garten = await row?.garten?.fetch()
-      if (!garten) return setThisGartenKulturs([])
-      const kulturs = await garten.kulturs.extend(notDeletedQuery).fetch()
-      setThisGartenKulturs(kulturs)
-    }
-    run()
-  }, [row.garten])
-
   // TODO:
   // if art was choosen: remove gartens where this art has two kulturs for every herkunft?
   // if herkunft was choosen: remove gartens where this herkunft has two kulturs
-  const [gartenWerte, setGartenWerte] = useState([])
+  const [dataState, setDataState] = useState({
+    gartenWerte: [],
+    thisGartenKulturs: [],
+    userPersonOption: undefined,
+    artHerkuenfte: [],
+  })
   useEffect(() => {
-    const run = async () => {
-      const gartens = await db.collections
-        .get('garten')
-        .query(Q.where('_deleted', false), Q.where('aktiv', true))
-        .fetch()
-      const gartensSorted = await gartensSortedFromGartens(gartens)
-      const gartenWerte = await Promise.all(
-        gartensSorted.map(async (garten) => {
-          const label = await garten.label.pipe(first$()).toPromise()
+    const gartensObservable = db.collections
+      .get('garten')
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observe()
+    const gartenObservable = row?.garten?.observe()
+    const sammlungsObservable = db.collections
+      .get('sammlung')
+      .query(notDeletedQuery)
+      .observe()
+    const allCollectionsObservable = combineLatest([
+      gartensObservable,
+      gartenObservable,
+      sammlungsObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      async ([gartens, garten, sammlungs]) => {
+        const userPersonOption = await getUserPersonOption({ user, db })
+        const gartensSorted = await gartensSortedFromGartens(gartens)
+        const gartenWerte = await Promise.all(
+          gartensSorted.map(async (garten) => {
+            const label = await garten.label.pipe(first$()).toPromise()
 
-          return {
-            value: garten.id,
-            label,
-          }
-        }),
-      )
-      setGartenWerte(gartenWerte)
-    }
-    run()
-  }, [db.collections])
+            return {
+              value: garten.id,
+              label,
+            }
+          }),
+        )
+        const gartenKulturs =
+          (await garten?.kulturs
+            ?.extend(Q.where('_deleted', true), Q.where('aktiv', true))
+            ?.fetch()) ?? []
+        setDataState({
+          gartenWerte,
+          userPersonOption,
+          thisGartenKulturs: gartenKulturs,
+          artHerkuenfte: uniqBy(
+            sammlungs.map((a) => ({
+              art_id: a.art_id,
+              herkunft_id: a.herkunft_id,
+            })),
+            (ah) => `${ah.art_id}/${ah.herkunft_id}`,
+          ),
+        })
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [db, db.collections, row?.garten, user])
+  const {
+    gartenWerte,
+    thisGartenKulturs,
+    userPersonOption,
+    artHerkuenfte,
+  } = dataState
+
+  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
 
   const artHerkunftInGartenNichtZl = thisGartenKulturs
     .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
@@ -134,27 +159,6 @@ const KulturForm = ({
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => !!o.art_id && !!o.herkunft_id)
     .filter((k) => k.zwischenlager)
-
-  const [artHerkuenfte, setArtHerkuenfte] = useState([])
-  useEffect(() => {
-    const run = async () => {
-      const sammlungs = await db.collections
-        .get('sammlung')
-        .query(notDeletedQuery)
-        .fetch()
-
-      setArtHerkuenfte(
-        uniqBy(
-          sammlungs.map((a) => ({
-            art_id: a.art_id,
-            herkunft_id: a.herkunft_id,
-          })),
-          (ah) => `${ah.art_id}/${ah.herkunft_id}`,
-        ),
-      )
-    }
-    run()
-  }, [db.collections])
 
   const artenToChoose = useMemo(
     () =>

@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useCallback,
-  useMemo,
-  useState,
-  useEffect,
-} from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -31,18 +25,24 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const store = useContext(StoreContext)
   const { user, db } = store
 
-  const [userPersonOption, setUserPersonOption] = useState()
+  const [dataState, setDataState] = useState({
+    kulturOption: undefined,
+    userPersonOption: undefined,
+  })
   useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
-  }, [db, user])
+    const run = async () => {
+      const userPersonOption = await getUserPersonOption({ user, db })
+      const kulturOption = await db.collections
+        .get('kultur_option')
+        .find(kulturId)
+      setDataState({ userPersonOption, kulturOption })
+    }
+    run()
+  }, [db, kulturId, user])
+  const { kulturOption, userPersonOption } = dataState
 
-  const kulturOption = useMemo(() => store.kultur_options.get(kulturId) ?? {}, [
-    kulturId,
-    store.kultur_options,
-  ])
-  const { tk } = kulturOption
-
-  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption
+  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
+  const { tk } = kulturOption ?? {}
 
   const saveToDbKulturOption = useCallback(
     async (event) => {
