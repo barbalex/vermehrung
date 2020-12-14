@@ -1,9 +1,12 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SimpleBar from 'simplebar-react'
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -15,7 +18,10 @@ import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
+import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
+import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
+import teilkulturSort from '../../../../utils/teilkulturSort'
+import personSort from '../../../../utils/personSort'
 import getConstants from '../../../../utils/constants'
 
 const constants = getConstants()
@@ -51,59 +57,81 @@ const EventForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    insertTeilkulturRev,
-    kultursSorted,
-    personsSorted,
-    teilkultursSorted,
-    errors,
-    unsetError,
-  } = store
+  const { filter, online, insertTeilkulturRev, errors, unsetError, db } = store
 
   useEffect(() => {
     unsetError('event')
   }, [id, unsetError])
 
-  const kulturWerte = useMemo(
-    () =>
-      kultursSorted.map((el) => ({
-        value: el.id,
-        label: kulturLabelFromKultur({ kultur: el, store }),
-      })),
-    [kultursSorted, store],
-  )
-
   const kulturId = row?.kultur_id
-  const teilkulturWerte = useMemo(
-    () =>
-      teilkultursSorted
-        .filter((t) => t.kultur_id === kulturId)
-        .map((t) => ({
-          value: t.id,
-          label: t.name || '(kein Name)',
-        })),
-    [kulturId, teilkultursSorted],
-  )
 
-  const personWerte = useMemo(
-    () =>
-      personsSorted.map((el) => ({
-        value: el.id,
-        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-      })),
-    [personsSorted],
-  )
+  const [dataState, setDataState] = useState({
+    kulturWerte: [],
+    teilkulturWerte: [],
+    personWerte: [],
+    kulturOptions: undefined,
+  })
+  useEffect(() => {
+    const kultursObservable = db.collections
+      .get('kultur')
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observe()
+    const teilkulturObservable = db.collections
+      .get('teilkultur')
+      .query(Q.where('_deleted', false), Q.where('kultur_id', kulturId))
+      .observe()
+    const personObservable = db.collections
+      .get('person')
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observe()
+    const kulturObservable = row.kultur.observe()
+    const allCollectionsObservable = combineLatest([
+      kultursObservable,
+      teilkulturObservable,
+      personObservable,
+      kulturObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      async ([kulturs, teilkulturs, persons, kultur]) => {
+        const kultursSorted = await kultursSortedFromKulturs(kulturs)
+        const kulturWerte = await Promise.all(
+          kultursSorted.map(async (t) => {
+            const label = await t.label.pipe(first$()).toPromise()
 
-  const kulturOption = store.kultur_options.get(row?.kultur_id) || {}
-  const {
-    tk,
-    ev_datum,
-    ev_teilkultur_id,
-    ev_geplant,
-    ev_person_id,
-  } = kulturOption
+            return {
+              value: t.id,
+              label,
+            }
+          }),
+        )
+        const teilkulturWerte = teilkulturs
+          .sort((a, b) => teilkulturSort({ a, b }))
+          .map((t) => ({
+            value: t.id,
+            label: t.name || '(kein Name)',
+          }))
+        const personWerte = persons
+          .sort((a, b) => personSort({ a, b }))
+          .map((person) => ({
+            value: person.id,
+            label: personLabelFromPerson({ person }),
+          }))
+        const kulturOption = await kultur.kultur_option.fetch()
+        setDataState({
+          kulturWerte,
+          teilkulturWerte,
+          personWerte,
+          kulturOption,
+        })
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [db.collections, kulturId, row.kultur])
+  const { kulturWerte, teilkulturWerte, personWerte, kulturOption } = dataState
+
+  const { tk, ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
+    kulturOption ?? {}
 
   const saveToDb = useCallback(
     (event) => {
