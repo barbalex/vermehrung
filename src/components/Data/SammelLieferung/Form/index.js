@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
@@ -7,6 +7,7 @@ import { StoreContext } from '../../../../models/reactUtils'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
+import getUserPersonOption from '../../../../utils/getUserPersonOption'
 import exists from '../../../../utils/exists'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
@@ -41,10 +42,14 @@ const SammelLieferungForm = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, online, userPersonOption, errors, unsetError } = store
+  const { filter, online, user, db, errors, unsetError } = store
   const { setWidthInPercentOfScreen, activeNodeArray } = store.tree
 
-  const { sl_show_empty_when_next_to_li } = userPersonOption
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
+  const { sl_show_empty_when_next_to_li } = userPersonOption ?? {}
 
   useEffect(() => {
     unsetError('sammel_lieferung')

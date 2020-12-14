@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -10,6 +16,7 @@ import styled from 'styled-components'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import getConstants from '../../../../../utils/constants'
+import getUserPersonOption from '../../../../../utils/getUserPersonOption'
 
 const constants = getConstants()
 
@@ -22,7 +29,12 @@ const Title = styled.div`
 
 const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
+  const { user, db } = store
+
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
 
   const kulturOption = useMemo(() => store.kultur_options.get(kulturId) ?? {}, [
     kulturId,

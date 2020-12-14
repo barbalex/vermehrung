@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
@@ -8,6 +14,7 @@ import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
+import getUserPersonOption from '../../../../utils/getUserPersonOption'
 import Files from '../../Files'
 import Coordinates from '../../../shared/Coordinates'
 import ConflictList from '../../../shared/ConflictList'
@@ -40,11 +47,12 @@ const Herkunft = ({
   const {
     filter,
     online,
-    userPersonOption,
     herkunftsSorted,
     errors,
     setError,
     unsetError,
+    db,
+    user,
   } = store
 
   // ensure that activeConflict is reset
@@ -53,7 +61,13 @@ const Herkunft = ({
     setActiveConflict(null)
   }, [id, setActiveConflict])
 
-  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = userPersonOption
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
+
+  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
+    userPersonOption ?? {}
 
   useEffect(() => {
     unsetError('herkunft')

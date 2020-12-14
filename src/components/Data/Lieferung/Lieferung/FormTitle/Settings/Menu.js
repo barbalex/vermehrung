@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -10,6 +10,7 @@ import styled from 'styled-components'
 
 import { StoreContext } from '../../../../../../models/reactUtils'
 import getConstants from '../../../../../../utils/constants'
+import getUserPersonOption from '../../../../../../utils/getUserPersonOption'
 
 const constants = getConstants()
 
@@ -33,8 +34,13 @@ const Info = styled.div`
 
 const SettingsLieferungMenu = ({ anchorEl, setAnchorEl }) => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
-  const { li_show_sl_felder, li_show_sl } = userPersonOption
+  const { user, db } = store
+
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
+  const { li_show_sl_felder, li_show_sl } = userPersonOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {

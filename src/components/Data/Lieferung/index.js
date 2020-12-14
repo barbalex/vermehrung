@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import isUuid from 'is-uuid'
 import last from 'lodash/last'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
 import { StoreContext } from '../../../models/reactUtils'
+import getUserPersonOption from '../../../utils/getUserPersonOption'
 
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;
@@ -40,7 +40,7 @@ const StyledSplitPane = styled(SplitPane)`
 
 const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
   const store = useContext(StoreContext)
-  const { userPersonOption, filter } = store
+  const { filter, db, user } = store
   const { activeNodeArray } = store.tree
   let id = idPassed
   if (!idPassed) {
@@ -49,7 +49,6 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   }
 
-  const db = useDatabase()
   const [row, setRow] = useState(null)
   // need raw row because observable does not provoke rerendering of components
   const [rawRow, setRawRow] = useState(null)
@@ -77,7 +76,11 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
   // TODO: convert once sammel_lieferung is built
   const sammelLieferung = store.sammel_lieferungs.get(sammelLieferungId) || {}
 
-  const { li_show_sl } = userPersonOption
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
+  const { li_show_sl } = userPersonOption ?? {}
 
   //console.log('Lieferung, row:', row)
 

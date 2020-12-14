@@ -32,6 +32,7 @@ import sammlungLabelFromSammlung from './utils/sammlungLabelFromSammlung'
 import sammlungLabelFromSammlungUnderHerkunft from './utils/sammlungLabelFromSammlungUnderHerkunft'
 import sammelLieferungLabelFromSammelLieferung from './utils/sammelLieferungLabelFromSammelLieferung'
 import zaehlungLabelFromZaehlung from './utils/zaehlungLabelFromZaehlung'
+import getUserPersonOption from './utils/getUserPersonOption'
 import toPgArray from './utils/toPgArray'
 import deleteAccount from './utils/deleteAccount'
 import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
@@ -1511,7 +1512,8 @@ export class SammelLieferung extends Model {
     })
   }
   @action async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError, userPersonOption } = store
+    const { addQueuedQuery, user, unsetError, db } = store
+    const userPersonOption = await getUserPersonOption({ user, db })
 
     unsetError(`sammel_lieferung.${field}`)
     // first build the part that will be revisioned
@@ -1586,7 +1588,7 @@ export class SammelLieferung extends Model {
     delete newObjectForStore.sammel_lieferung_id
     // optimistically update store
     await this.update((row) => ({ ...row, ...newObjectForStore }))
-    const { sl_auto_copy_edits } = userPersonOption
+    const sl_auto_copy_edits = userPersonOption?.sl_auto_copy_edits
     setTimeout(() => {
       // copy to all lieferungen
       if (sl_auto_copy_edits) {

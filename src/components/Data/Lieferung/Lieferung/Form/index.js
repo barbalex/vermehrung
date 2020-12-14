@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
@@ -8,6 +8,7 @@ import Checkbox2States from '../../../../shared/Checkbox2States'
 import Checkbox3States from '../../../../shared/Checkbox3States'
 import exists from '../../../../../utils/exists'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
+import getUserPersonOption from '../../../../../utils/getUserPersonOption'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import Was from './Was'
 import Von from './Von'
@@ -42,10 +43,14 @@ const LierferungForm = ({
   const existsSammelLieferung = !!sammelLieferung?.id
   const store = useContext(StoreContext)
 
-  const { errors, filter, unsetError, userPersonOption } = store
+  const { errors, filter, unsetError, user, db } = store
   const { activeNodeArray } = store.tree
 
-  const { li_show_sl_felder } = userPersonOption
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
+  const { li_show_sl_felder } = userPersonOption ?? {}
 
   const ifNeeded = useCallback(
     (field) => {

@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -11,6 +11,7 @@ import styled from 'styled-components'
 
 import { StoreContext } from '../../models/reactUtils'
 import getConstants from '../../utils/constants'
+import getUserPersonOption from '../../utils/getUserPersonOption'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
 const constants = getConstants()
@@ -41,15 +42,19 @@ const Info = styled.div`
 
 const SettingsTree = () => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
+  const { user, db } = store
 
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
   const {
     tree_kultur,
     tree_teilkultur,
     tree_zaehlung,
     tree_lieferung,
     tree_event,
-  } = userPersonOption
+  } = userPersonOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
