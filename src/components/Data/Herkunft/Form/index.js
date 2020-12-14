@@ -1,13 +1,9 @@
-import React, {
-  useContext,
-  useEffect,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import TextField from '../../../shared/TextField'
@@ -18,7 +14,6 @@ import getUserPersonOption from '../../../../utils/getUserPersonOption'
 import Files from '../../Files'
 import Coordinates from '../../../shared/Coordinates'
 import ConflictList from '../../../shared/ConflictList'
-import exists from '../../../../utils/exists'
 
 const Container = styled.div`
   padding: 10px;
@@ -44,16 +39,7 @@ const Herkunft = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    herkunftsSorted,
-    errors,
-    setError,
-    unsetError,
-    db,
-    user,
-  } = store
+  const { filter, online, errors, setError, unsetError, db, user } = store
 
   // ensure that activeConflict is reset
   // when changing dataset
@@ -61,10 +47,38 @@ const Herkunft = ({
     setActiveConflict(null)
   }, [id, setActiveConflict])
 
-  const [userPersonOption, setUserPersonOption] = useState()
+  const rowNr = row?.nr
+  const [dataState, setDataState] = useState({
+    userPersonOption: undefined,
+  })
   useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
-  }, [db, user])
+    const herkunftObservable = db.collections
+      .get('herkunft')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('nr', rowNr ?? '99999999999999999999'),
+      )
+      .observe()
+    const allCollectionsObservable = combineLatest([herkunftObservable])
+    const allSubscription = allCollectionsObservable.subscribe(
+      async ([herkunfts]) => {
+        const userPersonOption = await getUserPersonOption({ user, db })
+        const nrCount = rowNr ? herkunfts.length : 0
+        if (nrCount > 1) {
+          setError({
+            path: 'herkunft.nr',
+            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
+          })
+        }
+        setDataState({
+          userPersonOption,
+        })
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [db, db.collections, rowNr, setError, user])
+  const { userPersonOption } = dataState
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
     userPersonOption ?? {}
@@ -91,20 +105,6 @@ const Herkunft = ({
     },
     [filter, row, showFilter, store],
   )
-
-  const rowNr = row?.nr
-  const nrCount = useMemo(() => {
-    if (!exists(rowNr)) return 0
-    return herkunftsSorted.filter((h) => h.nr === rowNr).length
-  }, [herkunftsSorted, rowNr])
-  useEffect(() => {
-    if (nrCount > 1) {
-      setError({
-        path: 'herkunft.nr',
-        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
-      })
-    }
-  }, [nrCount, setError])
 
   const showDeleted =
     showFilter || filter.herkunft._deleted !== false || row?._deleted
