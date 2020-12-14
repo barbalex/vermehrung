@@ -57,52 +57,6 @@ export default types
       const singleRowHeight = isMobile ? 30 : 23
       return singleRowHeight
     },
-    get showArt() {
-      const store = getParent(self, 1)
-      return store?.userRole !== 'gaertner'
-    },
-    get showEvent() {
-      const store = getParent(self, 1)
-      return store?.userPersonOption?.tree_event
-    },
-    get showGarten() {
-      return true
-    },
-    get showHerkunft() {
-      const store = getParent(self, 1)
-      return store?.userRole !== 'gaertner'
-    },
-    get showKultur() {
-      const store = getParent(self, 1)
-      return store?.userPersonOption?.tree_kultur
-    },
-    get showLieferung() {
-      const store = getParent(self, 1)
-      return store?.userPersonOption?.tree_lieferung
-    },
-    get showPerson() {
-      return true
-    },
-    get showSammelLieferung() {
-      const store = getParent(self, 1)
-      // TODO: own setting?
-      return store?.userPersonOption?.tree_lieferung
-    },
-    get showSammlung() {
-      const store = getParent(self, 1)
-      return store?.userRole !== 'gaertner'
-    },
-    get showTeilkultur() {
-      const store = getParent(self, 1)
-      return store?.userPersonOption?.tree_teilkultur
-    },
-    get showTeilzaehlung() {
-      return true
-    },
-    get showZaehlung() {
-      const store = getParent(self, 1)
-      return store?.userPersonOption?.tree_zaehlung
-    },
   }))
 
 export const defaultValue = {
