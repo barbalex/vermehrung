@@ -23,7 +23,7 @@ const buildExceljsWorksheetsForTzSums = async ({
     )
     .fetch()
   const teilzaehlungsSorted = await teilzaehlungsSortByTk(teilzaehlungs)
-  const teilzaehlungsData = Promise.all(
+  const teilzaehlungsData = await Promise.all(
     teilzaehlungsSorted.map(async (z) => {
       const teilkultur = await z.teilkultur?.fetch()
 
@@ -43,10 +43,7 @@ const buildExceljsWorksheetsForTzSums = async ({
       return newZ
     }),
   )
-  console.log(
-    'buildExceljsWorksheetsForTzSums, teilzaehlungsData:',
-    teilzaehlungsData,
-  )
+
   addWorksheetToExceljsWorkbook({
     workbook,
     title: `teilzahlungen_von_garten_${garten_id}`,
