@@ -1,4 +1,7 @@
+import { Q } from '@nozbe/watermelondb'
+
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook'
+import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk'
 
 /**
  * this function cann be used from higher up
@@ -9,39 +12,45 @@ const buildExceljsWorksheetsForTzSums = async ({
   garten_id,
   workbook,
 }) => {
-  const { teilzaehlungsSorted } = store
+  const { db } = store
 
-  const teilzaehlungenArray = teilzaehlungsSorted.filter((t) => {
-    const zaehlung = t.zaehlung_id ? store.zaehlungs.get(t.zaehlung_id) : {}
-    const kultur = zaehlung.kultur_id
-      ? store.kulturs.get(zaehlung.kultur_id)
-      : {}
-    return kultur?.garten_id === garten_id
-  })
-  const teilzaehlungen = teilzaehlungenArray.map((z) => {
-    const teilkultur = z.teilkultur_id
-      ? store.teilkulturs.get(z.teilkultur_id)
-      : {}
+  const teilzaehlungs = await db.collections
+    .get('teilzaehlung')
+    .query(
+      Q.experimentalNestedJoin('zaehlung', 'kultur'),
+      Q.on('zaehlung', Q.on('kultur', Q.where('garten_id', garten_id))),
+      Q.where('_deleted', false),
+    )
+    .fetch()
+  const teilzaehlungsSorted = await teilzaehlungsSortByTk(teilzaehlungs)
+  const teilzaehlungsData = Promise.all(
+    teilzaehlungsSorted.map(async (z) => {
+      const teilkultur = await z.teilkultur?.fetch()
 
-    const newZ = {
-      id: z.id,
-      zaehlung_id: z.zaehlung_id,
-      teilkultur_id: z.teilkultur_id,
-      teilkultur_name: teilkultur?.name ?? '',
-      anzahl_pflanzen: z.anzahl_pflanzen,
-      anzahl_auspflanzbereit: z.anzahl_auspflanzbereit,
-      anzahl_mutterpflanzen: z.anzahl_mutterpflanzen,
-      andere_menge: z.andere_menge,
-      auspflanzbereit_beschreibung: z.auspflanzbereit_beschreibung,
-      bemerkungen: z.bemerkungen,
-    }
+      const newZ = {
+        id: z.id,
+        zaehlung_id: z.zaehlung_id,
+        teilkultur_id: z.teilkultur_id,
+        teilkultur_name: teilkultur?.name ?? '',
+        anzahl_pflanzen: z.anzahl_pflanzen,
+        anzahl_auspflanzbereit: z.anzahl_auspflanzbereit,
+        anzahl_mutterpflanzen: z.anzahl_mutterpflanzen,
+        andere_menge: z.andere_menge,
+        auspflanzbereit_beschreibung: z.auspflanzbereit_beschreibung,
+        bemerkungen: z.bemerkungen,
+      }
 
-    return newZ
-  })
+      return newZ
+    }),
+  )
+  console.log(
+    'buildExceljsWorksheetsForTzSums, teilzaehlungsData:',
+    teilzaehlungsData,
+  )
   addWorksheetToExceljsWorkbook({
     workbook,
     title: `teilzahlungen_von_garten_${garten_id}`,
-    data: teilzaehlungen,
+    data: teilzaehlungsData,
   })
 
   return
