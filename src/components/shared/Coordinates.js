@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
+import getUserPersonOption from '../../utils/getUserPersonOption'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import epsg2056to4326 from '../../utils/epsg2056to4326'
 import {
@@ -68,11 +69,15 @@ const MenuTitle = styled.div`
 
 const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
+  const { user, db } = store
 
   const { id, lv95_x, lv95_y, wgs84_lat, wgs84_long } = row
 
-  const { ga_lat_lng } = userPersonOption
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
+  const { ga_lat_lng } = userPersonOption ?? {}
 
   const [lv95XState, setLv95XState] = useState(lv95_x || '')
   const [lv95YState, setLv95YState] = useState(lv95_y || '')

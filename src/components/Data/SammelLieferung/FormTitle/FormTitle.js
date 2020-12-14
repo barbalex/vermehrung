@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
@@ -11,6 +11,7 @@ import Delete from './Delete'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import Menu from '../../../shared/Menu'
 import HistoryButton from '../../../shared/HistoryButton'
+import getUserPersonOption from '../../../../utils/getUserPersonOption'
 import NavButtons from './NavButtons'
 import PrintButtons from './PrintButtons'
 import Anleitung from './Anleitung'
@@ -50,10 +51,14 @@ const SammelLieferungFormTitle = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-
-  const { filter, userPersonOption } = store
+  const { filter, user, db } = store
   const { activeNodeArray } = store.tree
-  const { sl_auto_copy_edits } = userPersonOption
+
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
+  const { sl_auto_copy_edits } = userPersonOption ?? {}
 
   const shownAsSammelLieferung =
     activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'

@@ -1783,22 +1783,7 @@ export const RootStore = RootStoreBase.props({
     get zaehlungIdInActiveNodeArray() {
       return zaehlungIdInUrl(self.tree.activeNodeArray)
     },
-    get userPerson() {
-      const { user, persons } = self
-      const userPerson = [...persons.values()].find(
-        (p) => p.account_id === user.uid,
-      )
-      return userPerson ?? {}
-    },
-    get userPersonOption() {
-      const { userPerson, person_options } = self
-      const userPersonOption = person_options.get(userPerson.id)
-      return userPersonOption ?? {}
-    },
     get artsFiltered() {
-      return queryFromStore({ store: self, table: 'art' })
-    },
-    get artsFilteredWm() {
       return queryFromStore({ store: self, table: 'art' })
     },
     get artsSorted() {

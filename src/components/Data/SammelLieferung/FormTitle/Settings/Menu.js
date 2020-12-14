@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -7,6 +7,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../../../models/reactUtils'
+import getUserPersonOption from '../../../../../utils/getUserPersonOption'
 
 const TitleRow = styled.div`
   display: flex;
@@ -23,9 +24,14 @@ const Title = styled.div`
 
 const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
+  const { user, db } = store
 
-  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } = userPersonOption
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
+  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
+    userPersonOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {

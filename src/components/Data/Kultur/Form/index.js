@@ -31,6 +31,7 @@ import getConstants from '../../../../utils/constants'
 import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens'
 import herkunftSort from '../../../../utils/herkunftSort'
+import getUserPersonOption from '../../../../utils/getUserPersonOption'
 
 const constants = getConstants()
 
@@ -68,9 +69,14 @@ const KulturForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { errors, filter, online, unsetError, userPersonOption, db } = store
+  const { errors, filter, online, unsetError, user, db } = store
 
-  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+  }, [db, user])
+
+  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
 
   // From all collected combinations of art and herkunft show only arten of those not present in this garten
   // => find all combinations of art and herkunft in sammlungen
