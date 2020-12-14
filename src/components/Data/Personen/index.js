@@ -17,6 +17,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import tableFilter from '../../../utils/tableFilter'
 import personSort from '../../../utils/personSort'
+import getUserRole from '../../../utils/getUserRole'
 
 const Container = styled.div`
   height: 100%;
@@ -68,11 +69,15 @@ const singleRowHeight = 48
 
 const Personen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertPersonRev, userRole, db } = store
+  const { insertPersonRev, db, user } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { person: personFilter } = store.filter
 
-  const [dataState, setDataState] = useState({ persons: [], totalCount: 0 })
+  const [dataState, setDataState] = useState({
+    persons: [],
+    totalCount: 0,
+    userRole: undefined,
+  })
   useEffect(() => {
     const collection = db.collections.get('person')
     const countObservable = collection
@@ -86,10 +91,12 @@ const Personen = ({ filter: showFilter, width, height }) => {
       dataObservable,
     ])
     const allSubscription = allCollectionsObservable.subscribe(
-      ([totalCount, persons]) => {
+      async ([totalCount, persons]) => {
+        const userRole = await getUserRole({ user, db })
         setDataState({
           persons: persons.sort((a, b) => personSort({ a, b })),
           totalCount,
+          userRole,
         })
       },
     )
@@ -99,7 +106,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db.collections, ...Object.values(personFilter), personFilter, store])
 
-  const { persons, totalCount } = dataState
+  const { persons, totalCount, userRole } = dataState
   const filteredCount = persons.length
 
   const add = useCallback(() => {

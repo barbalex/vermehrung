@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
@@ -6,6 +6,17 @@ import SimpleBar from 'simplebar-react'
 import Row from './Row'
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import getShowArt from '../../../utils/showArt'
+import getShowEvent from '../../../utils/showEvent'
+import getShowGarten from '../../../utils/showGarten'
+import getShowHerkunft from '../../../utils/showHerkunft'
+import getShowKultur from '../../../utils/showKultur'
+import getShowLieferung from '../../../utils/showLieferung'
+import getShowPerson from '../../../utils/showPerson'
+import getShowSammelLieferung from '../../../utils/showSammelLieferung'
+import getShowSammlung from '../../../utils/showSammlung'
+import getShowTeilkultur from '../../../utils/showTeilkultur'
+import getShowZaehlung from '../../../utils/showZaehlung'
 
 const Container = styled.div`
   height: 100%;
@@ -20,6 +31,65 @@ const FieldsContainer = styled.div`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
+  const { user, db } = store
+
+  const [dataState, setDataState] = useState({
+    showArt: false,
+    showEvent: false,
+    showGarten: false,
+    showHerkunft: false,
+    showKultur: false,
+    showLieferung: false,
+    showPerson: false,
+    showSammelLieferung: false,
+    showSammlung: false,
+    showTeilkultur: false,
+    showZaehlung: false,
+  })
+  useEffect(() => {
+    const run = async () => {
+      const sArt = await getShowArt({ user, db })
+      const sEvent = await getShowEvent({ user, db })
+      const sGarten = await getShowGarten({ user, db })
+      const sHerkunft = await getShowHerkunft({ user, db })
+      const sKultur = await getShowKultur({ user, db })
+      const sLieferung = await getShowLieferung({ user, db })
+      const sPerson = await getShowPerson({ user, db })
+      const sSammelLieferung = await getShowSammelLieferung({ user, db })
+      const sSammlung = await getShowSammlung({ user, db })
+      const sTeilkultur = await getShowTeilkultur({ user, db })
+      const sZaehlung = await getShowZaehlung({ user, db })
+
+      setDataState({
+        showArt: sArt,
+        showEvent: sEvent,
+        showGarten: sGarten,
+        showHerkunft: sHerkunft,
+        showKultur: sKultur,
+        showLieferung: sLieferung,
+        showPerson: sPerson,
+        showSammelLieferung: sSammelLieferung,
+        showSammlung: sSammlung,
+        showTeilkultur: sTeilkultur,
+        showZaehlung: sZaehlung,
+      })
+    }
+    run()
+  }, [
+    db,
+    showArt,
+    showEvent,
+    showGarten,
+    showHerkunft,
+    showKultur,
+    showLieferung,
+    showPerson,
+    showSammelLieferung,
+    showSammlung,
+    showTeilkultur,
+    showZaehlung,
+    user,
+  ])
   const {
     showArt,
     showEvent,
@@ -32,7 +102,9 @@ const Root = ({ filter: showFilter }) => {
     showSammlung,
     showTeilkultur,
     showZaehlung,
-  } = store.tree
+  } = dataState
+
+  console.log('Root, dataState:', dataState)
 
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value

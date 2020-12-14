@@ -69,21 +69,21 @@ const EventForm = ({
     kulturWerte: [],
     teilkulturWerte: [],
     personWerte: [],
-    kulturOptions: undefined,
+    kulturOption: undefined,
   })
   useEffect(() => {
     const kultursObservable = db.collections
       .get('kultur')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
-      .observe()
+      .observeWithColumns('garten_id', 'art_id', 'herkunft_id', 'zwischenlager')
     const teilkulturObservable = db.collections
       .get('teilkultur')
       .query(Q.where('_deleted', false), Q.where('kultur_id', kulturId))
-      .observe()
+      .observeWithColumns('name')
     const personObservable = db.collections
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
-      .observe()
+      .observeWithColumns('vorname', 'name')
     const kulturObservable = row.kultur.observe()
     const allCollectionsObservable = combineLatest([
       kultursObservable,

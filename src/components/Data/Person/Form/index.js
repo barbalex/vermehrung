@@ -1,7 +1,14 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import TextField from '../../../shared/TextField'
@@ -43,22 +50,41 @@ const Person = ({
     filter,
     online,
     personsSorted,
-    user_roles,
     errors,
     unsetError,
     setError,
+    db,
   } = store
 
-  const userRoleWerte = useMemo(
-    () =>
-      [...user_roles.values()]
-        .sort((a, b) => userRoleSort({ a, b }))
-        .map((el) => ({
-          value: el.id,
-          label: el.label,
-        })),
-    [user_roles],
-  )
+  const [dataState, setDataState] = useState({
+    userRoleWerte: [],
+    userRole: undefined,
+  })
+  useEffect(() => {
+    const userRolesObservable = db.collections
+      .get('user_role')
+      .query()
+      .observe()
+    const allCollectionsObservable = combineLatest([userRolesObservable])
+    const allSubscription = allCollectionsObservable.subscribe(
+      async ([userRoles]) => {
+        const userRoleWerte = userRoles
+          .sort((a, b) => userRoleSort({ a, b }))
+          .map((el) => ({
+            value: el.id,
+            label: el.label,
+          }))
+        const userRole = await row.user_role?.fetch()
+        setDataState({
+          userRoleWerte,
+          userRole,
+        })
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [db.collections, row.user_role])
+  const { userRoleWerte, userRole } = dataState
 
   useEffect(() => {
     unsetError('person')
@@ -100,10 +126,6 @@ const Person = ({
 
   const showDeleted =
     showFilter || filter.person._deleted !== false || row?._deleted
-
-  const userRole = row?.user_role_id
-    ? store.user_roles.get(row.user_role_id)
-    : {}
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>

@@ -1,7 +1,10 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { Q } from '@nozbe/watermelondb'
+//import { first as first$ } from 'rxjs/operators'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -9,6 +12,9 @@ import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
+import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
+import getUserPersonOption from '../../../../utils/getUserPersonOption'
+import personSort from '../../../../utils/personSort'
 import Files from '../../Files'
 import Coordinates from '../../../shared/Coordinates'
 import Personen from './Personen'
@@ -38,15 +44,41 @@ const GartenForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    userPersonOption,
-    personsSorted,
-    errors,
-    unsetError,
-    insertGvRev,
-  } = store
+  const { filter, online, errors, unsetError, insertGvRev, db, user } = store
+
+  useEffect(() => {
+    unsetError('garten')
+  }, [id, unsetError])
+
+  const [dataState, setDataState] = useState({
+    personWerte: [],
+    userPersonOption: undefined,
+  })
+  useEffect(() => {
+    const personObservable = db.collections
+      .get('person')
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observeWithColumns('vorname', 'name')
+    const allCollectionsObservable = combineLatest([personObservable])
+    const allSubscription = allCollectionsObservable.subscribe(
+      async ([persons]) => {
+        const userPersonOption = await getUserPersonOption({ user, db })
+        const personWerte = persons
+          .sort((a, b) => personSort({ a, b }))
+          .map((person) => ({
+            value: person.id,
+            label: personLabelFromPerson({ person }),
+          }))
+        setDataState({
+          personWerte,
+          userPersonOption,
+        })
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [db, db.collections, user])
+  const { personWerte, userPersonOption } = dataState
 
   const {
     ga_strasse,
@@ -55,20 +87,7 @@ const GartenForm = ({
     ga_geom_point,
     ga_aktiv,
     ga_bemerkungen,
-  } = userPersonOption
-
-  useEffect(() => {
-    unsetError('garten')
-  }, [id, unsetError])
-
-  const personWerte = useMemo(
-    () =>
-      personsSorted.map((el) => ({
-        value: el.id,
-        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-      })),
-    [personsSorted],
-  )
+  } = userPersonOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {

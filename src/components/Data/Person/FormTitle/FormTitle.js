@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
@@ -9,6 +9,7 @@ import DeleteButton from './DeleteButton'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import Menu from '../../../shared/Menu'
 import HistoryButton from '../../../shared/HistoryButton'
+import getUserRole from '../../../../utils/getUserRole'
 import KontoMenu from './KontoMenu'
 import NavButtons from './NavButtons'
 
@@ -43,7 +44,12 @@ const PersonFormTitle = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { userRole } = store
+  const { user, db } = store
+
+  const [userRole, setUserRole] = useState(undefined)
+  useEffect(() => {
+    getUserRole({ user, db }).then((userRole) => setUserRole(userRole))
+  }, [db, user])
 
   if (width < 568) {
     return (

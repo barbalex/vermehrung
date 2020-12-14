@@ -3,7 +3,7 @@
  * because ref did not work when this was included in it's parent
  * listRef.current was always null
  */
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -12,6 +12,7 @@ import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
 
 import { StoreContext } from '../../models/reactUtils'
+import getUserRole from '../../utils/getUserRole'
 import Row from './Row'
 
 const StyledList = styled(List)`
@@ -37,12 +38,17 @@ const StyledList = styled(List)`
 
 const Tree = ({ scrollableNodeRef, contentNodeRef, width, height, nodes }) => {
   const store = useContext(StoreContext)
+  const { user, db } = store
   const { singleRowHeight, activeNodeArray: aNAProxy } = store.tree
   const aNA = getSnapshot(aNAProxy)
   const activeNode = nodes.find((n) => isEqual(n.url, aNA))
 
-  const listRef = useRef(null)
+  const [userRole, setUserRole] = useState()
+  useEffect(() => {
+    getUserRole({ user, db }).then((userRole) => setUserRole(userRole))
+  }, [db, user])
 
+  const listRef = useRef(null)
   const nodeIndex = findIndex(nodes, (node) => isEqual(node.url, aNA))
   useEffect(() => {
     if (nodeIndex > -1) {
@@ -67,6 +73,7 @@ const Tree = ({ scrollableNodeRef, contentNodeRef, width, height, nodes }) => {
           index={index}
           node={nodes[index]}
           nodes={nodes}
+          userRole={userRole}
         />
       )}
     </StyledList>
