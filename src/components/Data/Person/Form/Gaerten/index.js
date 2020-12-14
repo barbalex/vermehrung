@@ -94,7 +94,11 @@ const PersonArten = ({ person }) => {
     const run = async () => {
       const gartens = await db.collections
         .get('garten')
-        .query(Q.where('_deleted', true), Q.where('id', Q.notIn(gvArtIds)))
+        .query(
+          Q.where('_deleted', false),
+          Q.where('aktiv', true),
+          Q.where('id', Q.notIn(gvArtIds)),
+        )
         .fetch()
       const gartensSorted = await gartensSortedFromGartens(gartens)
       const gartenWerte = await Promise.all(

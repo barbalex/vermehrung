@@ -30,7 +30,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
   const avs = await db.collections.get('av').query(notDeletedQuery).fetch()
   const gartens = await db.collections
     .get('garten')
-    .query(notDeletedQuery)
+    .query(Q.where('_deleted', false), Q.where('aktiv', true))
     .fetch()
   const gartensSorted = await gartensSortedFromGartens(gartens)
   const herkunfts = await db.collections
@@ -40,7 +40,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
   const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
   const kulturs = await db.collections
     .get('kultur')
-    .query(notDeletedQuery)
+    .query(Q.where('_deleted', false), Q.where('aktiv', true))
     .fetch()
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
   const lieferungs = await db.collections
@@ -50,7 +50,7 @@ const createMessageFunctions = async ({ artId, store, db }) => {
   const lieferungsSorted = lieferungs.sort((a, b) => lieferungSort({ a, b }))
   const persons = await db.collections
     .get('person')
-    .query(notDeletedQuery)
+    .query(Q.where('_deleted', false), Q.where('aktiv', true))
     .fetch()
   const personsSorted = persons.sort((a, b) => personSort({ a, b }))
 
@@ -105,7 +105,10 @@ const createMessageFunctions = async ({ artId, store, db }) => {
   // TODO: check if some of this could be optimized using watermelon queries
   return {
     personsWithNonUniqueNr: async () => {
-      const pGroupedByNr = groupBy(personsSorted.filter(p=>exists(p.nr)), (h) => h.nr)
+      const pGroupedByNr = groupBy(
+        personsSorted.filter((p) => exists(p.nr)),
+        (h) => h.nr,
+      )
       return Object.values(pGroupedByNr)
         .filter((v) => v.length > 1)
         .flatMap((vs) =>

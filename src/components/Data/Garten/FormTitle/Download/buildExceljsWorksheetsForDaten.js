@@ -51,7 +51,11 @@ const buildExceljsWorksheetsForDaten = async ({
   // 2. Get Kulturen
   const kultursOfGarten = await db.collections
     .get('kultur')
-    .query(Q.where('_deleted', false), Q.where('garten_id', garten_id))
+    .query(
+      Q.where('_deleted', false),
+      Q.where('aktiv', true),
+      Q.where('garten_id', garten_id),
+    )
     .fetch()
   const kultursOfGartenSorted = await kultursSortedFromKulturs(kultursOfGarten)
   const kulturData = await Promise.all(

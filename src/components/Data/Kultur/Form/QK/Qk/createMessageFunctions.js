@@ -1,6 +1,6 @@
 import format from 'date-fns/format'
 import { first as first$ } from 'rxjs/operators'
-//import { Q } from '@nozbe/watermelondb'
+import { Q } from '@nozbe/watermelondb'
 
 import exists from '../../../../../../utils/exists'
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
@@ -23,7 +23,7 @@ const createMessageFunctions = async ({ kulturId, db }) => {
   const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
   const kulturs = await db.collections
     .get('kultur')
-    .query(notDeletedQuery)
+    .query(Q.where('_deleted', false), Q.where('aktiv', true))
     .fetch()
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
   const lieferungs = await db.collections

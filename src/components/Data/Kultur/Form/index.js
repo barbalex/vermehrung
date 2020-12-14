@@ -100,7 +100,7 @@ const KulturForm = ({
     const run = async () => {
       const gartens = await db.collections
         .get('garten')
-        .query(notDeletedQuery)
+        .query(Q.where('_deleted', false), Q.where('aktiv', true))
         .fetch()
       const gartensSorted = await gartensSortedFromGartens(gartens)
       const gartenWerte = await Promise.all(
