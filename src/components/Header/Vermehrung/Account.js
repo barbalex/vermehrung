@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback, useContext, useEffect } from 'react'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
@@ -10,6 +10,8 @@ import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import logout from '../../../utils/logout'
 import getConstants from '../../../utils/constants'
+import getUserPerson from '../../../utils/getUserPerson'
+import personFullname from '../../../utils/personFullname'
 
 const constants = getConstants()
 
@@ -41,7 +43,12 @@ const StyledMenuItem = styled(MenuItem)`
 const Account = () => {
   const store = useContext(StoreContext)
 
-  const { user, firebase, userPerson, flushData, online } = store
+  const { user, firebase, flushData, online, db } = store
+
+  const [userPerson, setUserPerson] = useState(undefined)
+  useEffect(() => {
+    getUserPerson({ user, db }).then((userPerson) => setUserPerson(userPerson))
+  }, [db, user])
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
@@ -124,7 +131,7 @@ const Account = () => {
           onClose={onCloseMenu}
         >
           <MenuItem onClick={onClickLogout}>{`${
-            userPerson?.fullname ?? ''
+            personFullname(userPerson) ?? ''
           } abmelden`}</MenuItem>
           <MenuItem onClick={onClickResetPassword}>{resetTitle}</MenuItem>
           <Line />

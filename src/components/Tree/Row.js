@@ -202,10 +202,10 @@ const MenuSubtitle = styled.div`
   padding-top: 7px;
 `
 
-const Row = ({ style, node, nodes }) => {
+const Row = ({ style, node, nodes, userRole }) => {
   const store = useContext(StoreContext)
 
-  const { showTreeInSingleColumnView, singleColumnView, tree, userRole } = store
+  const { showTreeInSingleColumnView, singleColumnView, tree } = store
   const { activeNodeArray, singleRowHeight } = tree
 
   const isMobile = showTreeInSingleColumnView && singleColumnView
