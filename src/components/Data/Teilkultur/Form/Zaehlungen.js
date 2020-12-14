@@ -1,9 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import format from 'date-fns/format'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import exists from '../../../../utils/exists'
+import teilzaehlungsSortByTk from '../../../../utils/teilzaehlungsSortByTk'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
@@ -72,13 +74,25 @@ const Other = styled.div`
 
 const TkZaehlungen = ({ kulturId, teilkulturId }) => {
   const store = useContext(StoreContext)
-  const { teilzaehlungsSorted } = store
+  const { db } = store
 
-  // there should only be one tz per teilkultur_id
-  const teilzaehlungs = teilzaehlungsSorted.filter((tz) => {
-    const zaehlung = tz?.zaehlung_id ? store.zaehlungs.get(tz.zaehlung_id) : {}
-    return zaehlung?.kultur_id === kulturId && tz.teilkultur_id === teilkulturId
-  })
+  const [teilzaehlungs, setTeilzaehlungs] = useState([])
+  useEffect(() => {
+    const run = async () => {
+      const teilzaehlungs = await db.collections
+        .get('teilzaehlung')
+        // there should only be one tz per teilkultur_id
+        .query(
+          Q.where('_deleted', false),
+          Q.where('teilkultur_id', teilkulturId),
+          Q.on('zaehlung', Q.where('kultur_id', kulturId)),
+        )
+        .fetch()
+      const teilzaehlungsSorted = await teilzaehlungsSortByTk(teilzaehlungs)
+      setTeilzaehlungs(teilzaehlungsSorted)
+    }
+    run()
+  }, [db.collections, kulturId, teilkulturId])
 
   return (
     <ErrorBoundary>

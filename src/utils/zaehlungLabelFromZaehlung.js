@@ -2,12 +2,7 @@ import { DateTime } from 'luxon'
 
 import exists from './exists'
 
-const zaehlungLabelFromZaehlung = ({
-  zaehlung,
-  store,
-  teilzaehlungs: teilzaehlungsPassed,
-}) => {
-  const teilzaehlungs = store?.teilzaehlungsSorted ?? teilzaehlungsPassed
+const zaehlungLabelFromZaehlung = ({ zaehlung, teilzaehlungs }) => {
   const datumLabel = zaehlung.datum
     ? DateTime.fromSQL(zaehlung.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
