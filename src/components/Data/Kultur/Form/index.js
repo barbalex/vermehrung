@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import uniq from 'lodash/uniq'
@@ -29,7 +23,6 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 import getConstants from '../../../../utils/constants'
-import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens'
 import herkunftSort from '../../../../utils/herkunftSort'
 import getUserPersonOption from '../../../../utils/getUserPersonOption'
@@ -86,9 +79,9 @@ const KulturForm = ({
   // if herkunft was choosen: remove gartens where this herkunft has two kulturs
   const [dataState, setDataState] = useState({
     gartenWerte: [],
-    thisGartenKulturs: [],
     userPersonOption: undefined,
-    artHerkuenfte: [],
+    artsToChoose: [],
+    herkunftsToChoose: [],
   })
   useEffect(() => {
     const gartensObservable = db.collections
@@ -98,7 +91,11 @@ const KulturForm = ({
     const gartenObservable = row?.garten?.observe()
     const sammlungsObservable = db.collections
       .get('sammlung')
-      .query(notDeletedQuery)
+      .query(
+        Q.where('_deleted', false),
+        Q.where('art_id', Q.notEq(null)),
+        Q.where('herkunft_id', Q.notEq(null)),
+      )
       .observe()
     const allCollectionsObservable = combineLatest([
       gartensObservable,
@@ -107,7 +104,7 @@ const KulturForm = ({
     ])
     const allSubscription = allCollectionsObservable.subscribe(
       async ([gartens, garten, sammlungs]) => {
-        const userPersonOption = await getUserPersonOption({ user, db })
+        const userPersonOption = await getUserPersonOption({ user, db }) // need to make this dynamic
         const gartensSorted = await gartensSortedFromGartens(gartens)
         const gartenWerte = await Promise.all(
           gartensSorted.map(async (garten) => {
@@ -119,111 +116,106 @@ const KulturForm = ({
             }
           }),
         )
-        const gartenKulturs =
+        // only consider kulturen with both art and herkunft chosen
+        const thisGartenKulturs =
           (await garten?.kulturs
-            ?.extend(Q.where('_deleted', true), Q.where('aktiv', true))
+            ?.extend(
+              Q.where('_deleted', true),
+              Q.where('aktiv', true),
+              Q.where('art_id', Q.notEq(null)),
+              Q.where('herkunft_id', Q.notEq(null)),
+            )
             ?.fetch()) ?? []
+        const artHerkuenfte = uniqBy(
+          sammlungs.map((a) => ({
+            art_id: a.art_id,
+            herkunft_id: a.herkunft_id,
+          })),
+          (ah) => `${ah.art_id}/${ah.herkunft_id}`,
+        )
+        const artHerkunftInGartenNichtZl = thisGartenKulturs
+          .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
+          .filter((k) => !k.zwischenlager)
+        const artHerkunftZwischenlagerInGarten = thisGartenKulturs
+          .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
+          // only consider kulturen with both art and herkunft chosen
+          .filter((k) => k.zwischenlager)
+        const artsToChoose = uniq([
+          ...artHerkuenfte
+            // only arten with herkunft
+            .filter((ah) =>
+              herkunft_id ? ah.herkunft_id === herkunft_id : true,
+            )
+            .filter((s) => {
+              // do not filter if no garten choosen
+              if (!row.garten_id) return true
+              // do not return if exists nicht zl AND zl
+              return !(
+                !!artHerkunftInGartenNichtZl.find(
+                  (a) =>
+                    a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+                ) &&
+                !!artHerkunftZwischenlagerInGarten.find(
+                  (a) =>
+                    a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+                )
+              )
+            })
+            // only arten
+            .map((a) => a.art_id),
+          // do show own art
+          ...(art_id ? [art_id] : []),
+        ])
+        const herkunftsToChoose = uniq([
+          ...artHerkuenfte
+            .filter((s) => (art_id ? s.art_id === art_id : true))
+            .filter((s) => {
+              // do not filter if no garten choosen
+              if (!row.garten_id) return true
+              // do not return if exists nicht zl AND zl
+              return !(
+                !!artHerkunftInGartenNichtZl.find(
+                  (a) =>
+                    a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+                ) &&
+                !!artHerkunftZwischenlagerInGarten.find(
+                  (a) =>
+                    a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+                )
+              )
+            })
+            .map((a) => a.herkunft_id),
+          // do show own herkunft
+          ...(herkunft_id ? [herkunft_id] : []),
+        ])
         setDataState({
           gartenWerte,
           userPersonOption,
-          thisGartenKulturs: gartenKulturs,
-          artHerkuenfte: uniqBy(
-            sammlungs.map((a) => ({
-              art_id: a.art_id,
-              herkunft_id: a.herkunft_id,
-            })),
-            (ah) => `${ah.art_id}/${ah.herkunft_id}`,
-          ),
+          artsToChoose,
+          herkunftsToChoose,
         })
       },
     )
 
     return () => allSubscription.unsubscribe()
-  }, [db, db.collections, row?.garten, user])
+  }, [
+    art_id,
+    db,
+    db.collections,
+    filter.garten.aktiv,
+    herkunft_id,
+    row?.garten,
+    row.garten_id,
+    user,
+  ])
   const {
     gartenWerte,
-    thisGartenKulturs,
     userPersonOption,
-    artHerkuenfte,
+    artsToChoose,
+    herkunftsToChoose,
   } = dataState
 
   const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
-
-  const artHerkunftInGartenNichtZl = thisGartenKulturs
-    .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
-    // only consider kulturen with both art and herkunft chosen
-    .filter((o) => !!o.art_id && !!o.herkunft_id)
-    .filter((k) => !k.zwischenlager)
-  const artHerkunftZwischenlagerInGarten = thisGartenKulturs
-    .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
-    // only consider kulturen with both art and herkunft chosen
-    .filter((o) => !!o.art_id && !!o.herkunft_id)
-    .filter((k) => k.zwischenlager)
-
-  const artenToChoose = useMemo(
-    () =>
-      uniq([
-        ...artHerkuenfte
-          // only arten with herkunft
-          .filter((ah) => (herkunft_id ? ah.herkunft_id === herkunft_id : true))
-          .filter((s) => {
-            // do not filter if no garten choosen
-            if (!row.garten_id) return true
-            // do not return if exists nicht zl AND zl
-            return !(
-              !!artHerkunftInGartenNichtZl.find(
-                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-              ) &&
-              !!artHerkunftZwischenlagerInGarten.find(
-                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-              )
-            )
-          })
-          // only arten
-          .map((a) => a.art_id),
-        // do show own art
-        ...(art_id ? [art_id] : []),
-      ]),
-    [
-      artHerkuenfte,
-      artHerkunftInGartenNichtZl,
-      artHerkunftZwischenlagerInGarten,
-      herkunft_id,
-      row.garten_id,
-      art_id,
-    ],
-  )
-  const herkunftsToChoose = useMemo(
-    () =>
-      uniq([
-        ...artHerkuenfte
-          .filter((s) => (art_id ? s.art_id === art_id : true))
-          .filter((s) => {
-            // do not filter if no garten choosen
-            if (!row.garten_id) return true
-            // do not return if exists nicht zl AND zl
-            return !(
-              !!artHerkunftInGartenNichtZl.find(
-                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-              ) &&
-              !!artHerkunftZwischenlagerInGarten.find(
-                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-              )
-            )
-          })
-          .map((a) => a.herkunft_id),
-        // do show own herkunft
-        ...(herkunft_id ? [herkunft_id] : []),
-      ]),
-    [
-      artHerkuenfte,
-      artHerkunftInGartenNichtZl,
-      artHerkunftZwischenlagerInGarten,
-      art_id,
-      row.garten_id,
-      herkunft_id,
-    ],
-  )
 
   useEffect(() => {
     unsetError('kultur')
@@ -231,55 +223,62 @@ const KulturForm = ({
 
   // artForArtWerte not used because too complicated
   /*const artForArtWerte = artsSorted.filter(
-    (a) => !!a.ae_id && artenToChoose.includes(a.id),
+    (a) => !!a.ae_id && artsToChoose.includes(a.id),
   )*/
-  const [artWerte, setArtWerte] = useState([])
+  const [dataState2, setDataState2] = useState({
+    artWerte: [],
+    herkunftWerte: [],
+  })
   useEffect(() => {
-    const run = async () => {
-      const arts = await db.collections
-        .get('art')
-        .query(
-          Q.where('_deleted', false),
-          Q.where('ae_id', Q.notEq(null)),
-          Q.where('id', Q.oneOf(artenToChoose)),
-        )
-        .fetch()
-      const artWerte = await Promise.all(
-        arts.map(async (art) => {
-          const label = await art.label.pipe(first$()).toPromise()
-          return {
-            value: art.id,
-            label,
-          }
-        }),
+    const artsObservable = db.collections
+      .get('art')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('ae_id', Q.notEq(null)),
+        Q.where('id', Q.oneOf(artsToChoose)),
       )
-      setArtWerte(artWerte)
-    }
-    run()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [artenToChoose.length, db.collections])
+      .observe()
+    const herkunftsObservable = db.collections
+      .get('herkunft')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('id', Q.oneOf(herkunftsToChoose)),
+      )
+      .observe()
+    const allCollectionsObservable = combineLatest([
+      artsObservable,
+      herkunftsObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      async ([arts, herkunfts]) => {
+        const artWerte = await Promise.all(
+          arts.map(async (art) => {
+            const label = await art.label.pipe(first$()).toPromise()
 
-  const [herkunftWerte, setHerkunftWerte] = useState([])
-  useEffect(() => {
-    const run = async () => {
-      const herkunfts = await db.collections
-        .get('herkunft')
-        .query(
-          Q.where('_deleted', false),
-          Q.where('id', Q.oneOf(herkunftsToChoose)),
+            return {
+              value: art.id,
+              label,
+            }
+          }),
         )
-        .fetch()
-      const herkunftWerte = herkunfts
-        .sort((a, b) => herkunftSort({ a, b }))
-        .map((herkunft) => ({
-          value: herkunft.id,
-          label: herkunftLabelFromHerkunft({ herkunft }),
-        }))
-      setHerkunftWerte(herkunftWerte)
-    }
-    run()
+        const herkunftWerte = herkunfts
+          .sort((a, b) => herkunftSort({ a, b }))
+          .map((herkunft) => ({
+            value: herkunft.id,
+            label: herkunftLabelFromHerkunft({ herkunft }),
+          }))
+
+        setDataState2({
+          artWerte,
+          herkunftWerte,
+        })
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, herkunftsToChoose.length])
+  }, [db, db.collections, user, artsToChoose.length, herkunftsToChoose.length])
+  const { artWerte, herkunftWerte } = dataState2
 
   const saveToDb = useCallback(
     async (event) => {
