@@ -33,9 +33,11 @@ const HistoryButton = ({ asMenu, row, showHistory, setShowHistory }) => {
     setShowHistory(!showHistory)
   }, [disabled, setShowHistory, showHistory])
 
-  const title = showHistory
-    ? 'Frühere Versionen ausblenden'
-    : 'Frühere Versionen anzeigen'
+  const title = online
+    ? showHistory
+      ? 'Frühere Versionen ausblenden'
+      : 'Frühere Versionen anzeigen'
+    : 'Frühere Versionen sind nur online verfügbar'
 
   if (asMenu) {
     return (

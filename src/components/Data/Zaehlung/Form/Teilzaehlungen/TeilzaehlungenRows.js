@@ -5,7 +5,7 @@ import { StoreContext } from '../../../../../models/reactUtils'
 import Teilzaehlung from './Teilzaehlung'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
-const TeilzaehlungenRows = ({ kulturId, zaehlungId, teilzaehlungs }) => {
+const TeilzaehlungenRows = ({ kulturId, teilzaehlungs }) => {
   const store = useContext(StoreContext)
   const { teilkultursSorted } = store
 
@@ -27,7 +27,6 @@ const TeilzaehlungenRows = ({ kulturId, zaehlungId, teilzaehlungs }) => {
           key={r.id}
           index={index}
           id={r.id}
-          zaehlungId={zaehlungId}
           kulturId={kulturId}
           teilkulturenWerte={teilkulturenWerte}
         />

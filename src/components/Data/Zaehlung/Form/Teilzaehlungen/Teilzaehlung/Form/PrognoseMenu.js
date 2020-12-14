@@ -5,12 +5,14 @@ import Menu from '@material-ui/core/Menu'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../../../models/reactUtils'
 import TextField from '../../../../../../shared/TextField'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
 import exists from '../../../../../../../utils/exists'
 import getConstants from '../../../../../../../utils/constants'
+import zaehlungSort from '../../../../../../../utils/zaehlungSort'
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
 
 const constants = getConstants()
@@ -41,19 +43,15 @@ const PrognoseMenu = ({
   anchorEl,
   setAnchorEl,
   teilzaehlung,
-  zaehlungId,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    addNotification,
-    insertZaehlungRev,
-    insertTeilzaehlungRev,
-    teilzaehlungsSorted,
-    zaehlungsSorted,
-  } = store
+  const { addNotification, insertZaehlungRev, db } = store
 
-  const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
-  const kulturId = zaehlung.kultur_id
+  const [zaehlung, setZaehlung] = useState(null)
+  useEffect(() => {
+    teilzaehlung.zaehlung.fetch().then((zaehlung) => setZaehlung(zaehlung))
+  }, [teilzaehlung.zaehlung])
+  const kulturId = zaehlung?.kultur_id
 
   const [jahr, setJahr] = useState(null)
   const [anz, setAnz] = useState(null)
@@ -87,16 +85,24 @@ const PrognoseMenu = ({
       // we have both values. Let's go on
       // check if zaehlung with date of 15.09. of year exist
       const dateOfZaehlung = `${yearToUse}-09-15`
-      const existingZaehlungData = zaehlungsSorted
-        .filter((z) => z.datum === dateOfZaehlung)
-        .filter((z) => z.prognose)
-        .filter((z) => z.kultur_id === kulturId)
-      const existingZaehlung = existingZaehlungData?.[0]
+      const existingZaehlungData = await db.collections
+        .get('zaehlung')
+        .query(
+          Q.where('_deleted', false),
+          Q.where('prognose', true),
+          Q.where('datum', dateOfZaehlung),
+          Q.where('kultur_id', kulturId),
+        )
+        .fetch()
+      const existingZaehlungDataSorted = existingZaehlungData.sort((a, b) =>
+        zaehlungSort({ a, b }),
+      )
+      const existingZaehlung = existingZaehlungDataSorted?.[0]
       // if not: create it first
       let newZaehlungId
       // if not: create it first
       if (!existingZaehlung) {
-        newZaehlungId = insertZaehlungRev({
+        newZaehlungId = await insertZaehlungRev({
           values: {
             kultur_id: kulturId,
             datum: dateOfZaehlung,
@@ -105,53 +111,38 @@ const PrognoseMenu = ({
         })
       }
       const zaehlungId = existingZaehlung?.id ?? newZaehlungId
-      console.log({
-        newZaehlungId,
-        zaehlungId,
-        teilzaehlung,
-      })
-      // create new teilzaehlung
-      insertTeilzaehlungRev({
-        values: {
-          zaehlung_id: zaehlungId,
-          teilkultur_id: teilzaehlung.teilkultur_id,
-          anzahl_auspflanzbereit: anzAuspflanzbereit,
-        },
-      })
-      // delete empty teilzaehlung
-      let emptyTeilzaehlungenData = teilzaehlungsSorted
-        .filter((t) => t.zaehlung_id === zaehlungId)
-        .filter((t) => !t.teilkultur_id)
-        .filter((t) => !exists(t.anzahl_pflanzen))
-        .filter((t) => !exists(t.anzahl_auspflanzbereit))
-        .filter((t) => !exists(t.anzahl_mutterpflanzen))
-        .filter((t) => !exists(t.andere_menge))
-        .filter((t) => !exists(t.bemerkungen))
-        .filter((t) => !exists(t.auspflanzbereit_beschreibung))
-      const emptyTeilzaehlung = emptyTeilzaehlungenData?.teilzaehlung?.[0]
-      if (emptyTeilzaehlung) {
-        const emptyTzModel = store.teilzaehlungs.get(emptyTeilzaehlung.id)
-        emptyTzModel.delete({ store })
-      }
-      addNotification({
-        message: 'Die Prognose wurde gespeichert',
-        type: 'info',
-      })
-      setAnchorEl(null)
-      setErrors({})
+      // fetch teilzaehlungen with zaehlung_id === newZaehlungId, then update that
+      // if inserting there will be two teilzaehlungs because of server trigger
+      const interval = setInterval(async () => {
+        const newTzs = await db.collections
+          .get('teilzaehlung')
+          .query(Q.where('zaehlung_id', zaehlungId))
+        const newTz = newTzs?.[0]
+        if (newTz) {
+          clearInterval(interval)
+          await newTz.edit({
+            field: 'anzahl_auspflanzbereit',
+            value: anzAuspflanzbereit,
+            store,
+          })
+          addNotification({
+            message: 'Die Prognose wurde gespeichert',
+            type: 'info',
+          })
+        }
+        setAnchorEl(null)
+        setErrors({})
+      }, 200)
     },
     [
       addNotification,
       anz,
-      insertTeilzaehlungRev,
       insertZaehlungRev,
       jahr,
       kulturId,
       setAnchorEl,
       store,
-      teilzaehlung,
-      teilzaehlungsSorted,
-      zaehlungsSorted,
+      db.collections,
     ],
   )
   const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])

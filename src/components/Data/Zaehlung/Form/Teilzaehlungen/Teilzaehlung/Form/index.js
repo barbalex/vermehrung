@@ -78,7 +78,6 @@ const DeletedContainer = styled.div`
 
 const TeilzaehlungForm = ({
   id,
-  zaehlungId,
   kulturId,
   row,
   rawRow,
@@ -141,7 +140,6 @@ const TeilzaehlungForm = ({
       // only update if value has changed
       if (value === previousValue) return
 
-      console.log('Teilzaehlung', { field, value, store })
       row.edit({ field, value, store })
     },
     [row, store],
@@ -312,8 +310,9 @@ const TeilzaehlungForm = ({
           )}
           <IconButton
             aria-label="Prognose"
-            title="Prognose"
+            title={online ? 'Prognose' : 'Prognose (nur online verfügbar)'}
             onClick={onClickPrognosis}
+            disabled={!online}
           >
             <FaChartLine />
           </IconButton>
@@ -323,7 +322,6 @@ const TeilzaehlungForm = ({
               anchorEl={anchorEl}
               setAnchorEl={setAnchorEl}
               teilzaehlung={row}
-              zaehlungId={zaehlungId}
             />
           )}
         </div>
