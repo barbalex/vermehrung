@@ -9,12 +9,13 @@ import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
 import exists from '../../../../../utils/exists'
 import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs'
 import zaehlungSort from '../../../../../utils/zaehlungSort'
+import lieferungSort from '../../../../../utils/lieferungSort'
 
 const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
   store,
   workbook,
 }) => {
-  const { lieferungsSorted, db } = store
+  const { db } = store
 
   const kulturs = await db.collections
     .get('kultur')
@@ -80,10 +81,21 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (anzahl_mutterpflanzen ?? 0)
           : ''
 
-      const ownAusLieferungen = lieferungsSorted
-        .filter((l) => l.von_kultur_id === kultur.id)
-        .filter((l) => !!l.datum)
-        .filter((l) => exists(l.anzahl_pflanzen))
+      const lieferungs = await db.collections
+        .get('lieferung')
+        .query(
+          Q.where('_deleted', false),
+          Q.where('datum', Q.notEq(null)),
+          Q.where('anzahl_pflanzen', Q.notEq(null)),
+        )
+        .fetch()
+      const lieferungsSorted = lieferungs.sort((a, b) =>
+        lieferungSort({ a, b }),
+      )
+
+      const ownAusLieferungen = lieferungsSorted.filter(
+        (l) => l.von_kultur_id === kultur.id,
+      )
       const lastAusLieferung = ownAusLieferungen[ownAusLieferungen.length - 1]
       const letzte_lieferung_anzahl_pflanzen =
         lastAusLieferung?.anzahl_pflanzen ?? ''
@@ -132,10 +144,9 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (auslSinceAnzahlMutterpflanzen ?? 0)
           : ''
 
-      const ownAnLieferungen = lieferungsSorted
-        .filter((l) => l.nach_kultur_id === kultur.id)
-        .filter((l) => !!l.datum)
-        .filter((l) => exists(l.anzahl_pflanzen))
+      const ownAnLieferungen = lieferungsSorted.filter(
+        (l) => l.nach_kultur_id === kultur.id,
+      )
 
       const anlSinceLastZaehlung = ownAnLieferungen
         .filter(
@@ -180,6 +191,9 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         von_anzahl_individuen: kultur.von_anzahl_individuen,
         bemerkungen: kultur.bemerkungen,
         aktiv: kultur.aktiv,
+        zaehlungen_daten: ownZaehlungenSorted
+          .map((z) => format(new Date(z.datum), 'yyyy.MM.dd'))
+          .join(', '),
         letzte_zaehlung_datum: lastZaehlung
           ? format(new Date(lastZaehlung.datum), 'yyyy.MM.dd')
           : '',
