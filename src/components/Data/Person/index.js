@@ -2,7 +2,7 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { of as $of } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -51,29 +51,25 @@ const Person = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
-
-  const db = useDatabase()
-  const [row, setRow] = useState(null)
-  // need raw row because observable does not provoke rerendering of components
-  const [rawRow, setRawRow] = useState(null)
+  const { filter, online, db } = store
+  const [dataState, setDataState] = useState({
+    row: undefined,
+    // need raw row because observable does not provoke rerendering of components
+    rawRow: undefined,
+  })
   useEffect(() => {
-    let subscription
-    if (showFilter) {
-      setRow(filter.person)
-    } else {
-      subscription = db.collections
-        .get('person')
-        .findAndObserve(id)
-        .subscribe((newRow) => {
-          setRow(newRow)
-          setRawRow(JSON.stringify(newRow._raw))
-        })
-    }
-    return () => {
-      if (subscription) subscription.unsubscribe()
-    }
+    const personObservable = showFilter
+      ? $of(filter.person)
+      : db.collections.get('person').findAndObserve(id)
+    const subscription = personObservable.subscribe((newRow) => {
+      setDataState({
+        row: newRow,
+        rawRow: JSON.stringify(newRow?._raw ?? newRow),
+      })
+    })
+    return () => subscription.unsubscribe()
   }, [db.collections, filter.person, id, showFilter])
+  const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(

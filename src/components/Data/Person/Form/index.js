@@ -86,6 +86,21 @@ const Person = ({
   }, [db.collections, row.user_role])
   const { userRoleWerte, userRole } = dataState
 
+  const rowNr = row?.nr
+  const nrCount = useMemo(() => {
+    if (!exists(rowNr)) return 0
+    return personsSorted.filter((h) => h.nr === rowNr).length
+  }, [personsSorted, rowNr])
+
+  useEffect(() => {
+    if (nrCount > 1) {
+      setError({
+        path: 'person.nr',
+        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Personen eindeutig sein`,
+      })
+    }
+  }, [nrCount, setError])
+
   useEffect(() => {
     unsetError('person')
   }, [id, unsetError])
@@ -108,21 +123,6 @@ const Person = ({
     },
     [filter, row, showFilter, store],
   )
-
-  const rowNr = row?.nr
-  const nrCount = useMemo(() => {
-    if (!exists(rowNr)) return 0
-    return personsSorted.filter((h) => h.nr === rowNr).length
-  }, [personsSorted, rowNr])
-
-  useEffect(() => {
-    if (nrCount > 1) {
-      setError({
-        path: 'person.nr',
-        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Personen eindeutig sein`,
-      })
-    }
-  }, [nrCount, setError])
 
   const showDeleted =
     showFilter || filter.person._deleted !== false || row?._deleted
