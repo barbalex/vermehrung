@@ -1,16 +1,11 @@
-import React, {
-  useContext,
-  useEffect,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
 import { combineLatest, of as $of } from 'rxjs'
+import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
@@ -27,7 +22,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
-import artLabelFromArt from '../../../../utils/artLabelFromArt'
+import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 import exists from '../../../../utils/exists'
 import personSort from '../../../../utils/personSort'
 import herkunftSort from '../../../../utils/herkunftSort'
@@ -68,12 +63,13 @@ const SammlungForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, artsSorted, errors, unsetError, setError, db } = store
+  const { filter, online, errors, unsetError, setError, db } = store
 
   const [dataState, setDataState] = useState({
     userPersonOption: undefined,
     personWerte: [],
     herkunftWerte: [],
+    artWerte: [],
   })
   useEffect(() => {
     const personsObservable = db.collections
@@ -84,6 +80,10 @@ const SammlungForm = ({
       .get('herkunft')
       .query(Q.where('_deleted', false))
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+    const artsObservable = db.collections
+      .get('art')
+      .query(Q.where('_deleted', false))
+      .observeWithColumns(['ae_id'])
     const sammlungsNrCountObservable =
       showFilter || !exists(row?.nr)
         ? $of(0)
@@ -95,9 +95,10 @@ const SammlungForm = ({
       sammlungsNrCountObservable,
       personsObservable,
       herkunftsObservable,
+      artsObservable,
     ])
     const allSubscription = combinedObservables.subscribe(
-      async ([nrCount, persons, herkunfts]) => {
+      async ([nrCount, persons, herkunfts, arts]) => {
         if (!showFilter && nrCount > 1) {
           setError({
             path: 'sammlung.nr',
@@ -116,11 +117,23 @@ const SammlungForm = ({
             value: herkunft.id,
             label: herkunftLabelFromHerkunft({ herkunft }),
           }))
+        const artsSorted = await artsSortedFromArts(arts)
+        const artWerte = await Promise.all(
+          artsSorted.map(async (art) => {
+            const label = await art.label.pipe(first$()).toPromise()
+
+            return {
+              value: art.id,
+              label,
+            }
+          }),
+        )
 
         setDataState({
           userPersonOption,
           personWerte,
           herkunftWerte,
+          artWerte,
         })
       },
     )
@@ -135,16 +148,7 @@ const SammlungForm = ({
     showFilter,
     userPersonOption,
   ])
-  const { userPersonOption, personWerte, herkunftWerte } = dataState
-
-  const artWerte = useMemo(
-    () =>
-      artsSorted.map((el) => ({
-        value: el.id,
-        label: artLabelFromArt({ art: el, store }),
-      })),
-    [artsSorted, store],
-  )
+  const { userPersonOption, personWerte, herkunftWerte, artWerte } = dataState
 
   // ensure that activeConflict is reset
   // when changing dataset
