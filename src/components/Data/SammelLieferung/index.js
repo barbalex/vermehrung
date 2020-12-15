@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { of as $of } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import Lieferschein from './Lieferschein'
@@ -54,29 +54,26 @@ const SammelLieferung = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, isPrint, online } = store
+  const { filter, isPrint, online, db } = store
 
-  const db = useDatabase()
-  const [row, setRow] = useState(null)
-  // need raw row because observable does not provoke rerendering of components
-  const [rawRow, setRawRow] = useState(null)
+  const [dataState, setDataState] = useState({
+    row: undefined,
+    // need raw row because observable does not provoke rerendering of components
+    rawRow: undefined,
+  })
   useEffect(() => {
-    let subscription
-    if (showFilter) {
-      setRow(filter.sammel_lieferung)
-    } else {
-      subscription = db.collections
-        .get('sammel_lieferung')
-        .findAndObserve(id)
-        .subscribe((newRow) => {
-          setRow(newRow)
-          setRawRow(JSON.stringify(newRow._raw))
-        })
-    }
-    return () => {
-      if (subscription) subscription.unsubscribe()
-    }
+    const observable = showFilter
+      ? $of(filter.sammel_lieferung)
+      : db.collections.get('sammel_lieferung').findAndObserve(id)
+    const subscription = observable.subscribe((newRow) => {
+      setDataState({
+        row: newRow,
+        rawRow: JSON.stringify(newRow?._raw ?? newRow),
+      })
+    })
+    return () => subscription.unsubscribe()
   }, [db.collections, filter.sammel_lieferung, id, showFilter])
+  const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
