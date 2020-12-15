@@ -11,6 +11,7 @@ import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import getUserPersonOption from '../../../../utils/getUserPersonOption'
+import exists from '../../../../utils/exists'
 import Files from '../../Files'
 import Coordinates from '../../../shared/Coordinates'
 import ConflictList from '../../../shared/ConflictList'
@@ -52,20 +53,17 @@ const Herkunft = ({
     userPersonOption: undefined,
   })
   useEffect(() => {
-    const herkunftObservable = showFilter
-      ? $of(filter.herkunft)
-      : db.collections
-          .get('herkunft')
-          .query(
-            Q.where('_deleted', false),
-            Q.where('nr', rowNr ?? '99999999999999999999'),
-          )
-          .observe()
-    const allCollectionsObservable = combineLatest([herkunftObservable])
+    const herkunftsNrCountObservable =
+      showFilter || !exists(rowNr)
+        ? $of(0)
+        : db.collections
+            .get('herkunft')
+            .query(Q.where('_deleted', false), Q.where('nr', rowNr))
+            .observeCount()
+    const allCollectionsObservable = combineLatest([herkunftsNrCountObservable])
     const allSubscription = allCollectionsObservable.subscribe(
-      async ([herkunfts]) => {
+      async ([nrCount]) => {
         const userPersonOption = await getUserPersonOption({ user, db })
-        const nrCount = rowNr ? herkunfts.length : 0
         if (!showFilter && nrCount > 1) {
           setError({
             path: 'herkunft.nr',

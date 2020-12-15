@@ -9,7 +9,6 @@ import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
-import artLabelFromArt from '../../../../utils/artLabelFromArt'
 import aeArtSort from '../../../../utils/aeArtSort'
 import Files from '../../Files'
 import Timeline from './Timeline'
@@ -39,7 +38,6 @@ const ArtForm = ({
   activeConflict,
   id,
   row,
-  rawRow,
   setActiveConflict,
   showFilter,
   showHistory,
@@ -159,6 +157,8 @@ const ArtForm = ({
             saveToDb={saveToDb}
             error={errors?.art?.ae_id}
             modelFilter={aeArtsFilter}
+            labelTable="ae_art"
+            labelField="name"
           />
           {online && !showFilter && row?._conflicts?.map && (
             <ConflictList

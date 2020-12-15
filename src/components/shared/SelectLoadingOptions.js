@@ -79,7 +79,12 @@ const SelectLoadingOptions = ({
   saveToDb,
   error: saveToDbError,
   modelFilter = () => true,
+  labelTable,
+  labelField,
 }) => {
+  const store = useContext(StoreContext)
+  const { db } = store
+
   const [stateValue, setStateValue] = useState({
     value: row[field] || '',
     label: '',
@@ -87,11 +92,16 @@ const SelectLoadingOptions = ({
   useEffect(() => {
     const run = async () => {
       // TODO: need to get this to work without row.label
-      const label = (await row?.label?.pipe(first$()).toPromise()) ?? ''
-      setStateValue({ value: row[field] || '', label })
+      const record = row[field]
+        ? await db.collections.get(labelTable).find(row[field])
+        : {}
+      setStateValue({
+        value: row[field] || '',
+        label: record[labelField] ?? '',
+      })
     }
     run()
-  }, [field, row])
+  }, [db.collections, field, labelField, labelTable, row])
 
   const loadOptions = useCallback(
     (inputValue, cb) => {
