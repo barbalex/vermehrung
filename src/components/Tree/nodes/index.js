@@ -253,6 +253,7 @@ const buildNodes = async ({ store }) => {
       for (const artNode of openArtNodes) {
         const artId = artNode[1]
         const art = artsSorted.find((a) => a.id === artId)
+        if (!art) break
         const artIndex = artNodes.findIndex((a) => a.id === artId)
 
         // 1.1 art > sammlung
@@ -296,9 +297,11 @@ const buildNodes = async ({ store }) => {
           for (const artSammlungNode of openArtSammlungNodes) {
             const sammlungId = artSammlungNode[3]
             const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
+            if (!sammlung) break
             const sammlungIndex = artSammlungNodes.findIndex(
               (s) => s.id === `${artId}${sammlungId}`,
             )
+
             const lieferungs = await sammlung.lieferungs
               .extend(...tableFilter({ store, table: 'lieferung' }))
               .fetch()
@@ -606,10 +609,11 @@ const buildNodes = async ({ store }) => {
       for (const herkunftNode of openHerkunftNodes) {
         const herkunftId = herkunftNode[1]
         const herkunft = herkunftsSorted.find((a) => a.id === herkunftId)
+        if (!herkunft) break
+
         const herkunftIndex = herkunftNodes.findIndex(
           (a) => a.id === herkunftId,
         )
-        if (!herkunft) break
 
         // 2.1 herkunft > sammlung
         const herkunftSammlungQuery = herkunft.sammlungs.extend(
@@ -649,6 +653,7 @@ const buildNodes = async ({ store }) => {
           for (const herkunftSammlungNode of openHerkunftSammlungNodes) {
             const sammlungId = herkunftSammlungNode[3]
             const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
+            if (!sammlung) break
             const sammlungIndex = herkunftSammlungNodes.findIndex(
               (s) => s.id === `${herkunftId}${sammlungId}`,
             )
@@ -718,6 +723,7 @@ const buildNodes = async ({ store }) => {
       for (const sammlungNode of openSammlungNodes) {
         const sammlungId = sammlungNode[1]
         const sammlung = sammlungsSorted.find((a) => a.id === sammlungId)
+        if (!sammlung) break
         const sammlungIndex = sammlungNodes.findIndex(
           (a) => a.id === sammlungId,
         )
@@ -807,6 +813,7 @@ const buildNodes = async ({ store }) => {
       for (const gartenNode of openGartenNodes) {
         const gartenId = gartenNode[1]
         const garten = gartensSorted.find((a) => a.id === gartenId)
+        if (!garten) break
         const gartenIndex = gartenNodes.findIndex((a) => a.id === gartenId)
 
         // 2.1 garten > kultur
@@ -848,6 +855,7 @@ const buildNodes = async ({ store }) => {
             const kulturId = gartenKulturNode[3]
             const kultur = kultursSorted.find((s) => s.id === kulturId)
             if (!kultur) break
+
             const kulturIndex = gartenKulturNodes.findIndex(
               (s) => s.id === `${gartenId}${kulturId}`,
             )
@@ -1351,6 +1359,7 @@ const buildNodes = async ({ store }) => {
         const sammelLieferung = sammelLieferungsSorted.find(
           (a) => a.id === sammelLieferungId,
         )
+        if (!sammelLieferung) break
         const sammelLieferungIndex = sammelLieferungNodes.findIndex(
           (a) => a.id === sammelLieferungId,
         )
@@ -1428,6 +1437,7 @@ const buildNodes = async ({ store }) => {
       for (const personNode of openPersonNodes) {
         const personId = personNode[1]
         const person = personsSorted.find((a) => a.id === personId)
+        if (!person) break
         const personIndex = personNodes.findIndex((a) => a.id === personId)
 
         // person > sammlung
@@ -1556,11 +1566,11 @@ const buildNodes = async ({ store }) => {
               )
               for (const personGartenKulturNode of openPersonGartenKulturNodes) {
                 const kulturId = personGartenKulturNode[5]
+                const kultur = kultursSorted.find((s) => s.id === kulturId)
+                if (!kultur) break
                 const kulturIndex = personGartenKulturNodes.findIndex(
                   (s) => s.id === `${personId}${gartenId}${kulturId}`,
                 )
-                const kultur = kultursSorted.find((s) => s.id === kulturId)
-                if (!kultur) break
 
                 // teilkultur nodes
                 const kulturOption = await kultur.kultur_option.fetch()

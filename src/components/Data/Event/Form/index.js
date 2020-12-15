@@ -6,7 +6,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
-import { combineLatest } from 'rxjs'
+import { combineLatest, of as $of } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -76,19 +76,22 @@ const EventForm = ({
       .get('kultur')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeWithColumns('garten_id', 'art_id', 'herkunft_id', 'zwischenlager')
+    const tkKulturQuery = showFilter ? [] : [Q.where('kultur_id', kulturId)]
     const teilkulturObservable = db.collections
       .get('teilkultur')
-      .query(Q.where('_deleted', false), Q.where('kultur_id', kulturId))
+      .query(Q.where('_deleted', false), ...tkKulturQuery)
       .observeWithColumns('name')
-    const personObservable = db.collections
+    const personsObservable = db.collections
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeWithColumns('vorname', 'name')
-    const kulturObservable = row.kultur.observe()
+    const kulturObservable = showFilter
+      ? $of(filter.kultur)
+      : row.kultur.observe()
     const allCollectionsObservable = combineLatest([
       kultursObservable,
       teilkulturObservable,
-      personObservable,
+      personsObservable,
       kulturObservable,
     ])
     const allSubscription = allCollectionsObservable.subscribe(
@@ -116,7 +119,7 @@ const EventForm = ({
             value: person.id,
             label: personLabelFromPerson({ person }),
           }))
-        const kulturOption = await kultur.kultur_option.fetch()
+        const kulturOption = (await kultur?.kultur_option?.fetch()) ?? {}
         setDataState({
           kulturWerte,
           teilkulturWerte,
@@ -127,7 +130,7 @@ const EventForm = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [db.collections, kulturId, row.kultur])
+  }, [db.collections, filter.kultur, kulturId, row.kultur, showFilter])
   const { kulturWerte, teilkulturWerte, personWerte, kulturOption } = dataState
 
   const { tk, ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
@@ -220,11 +223,13 @@ const EventForm = ({
             saveToDb={saveToDb}
             error={errors?.event?.kultur_id}
           />
-          {((tk && ev_teilkultur_id) || showFilter) && (
+          {((tk && ev_teilkultur_id) || !showFilter) && (
             <SelectCreatable
               key={`${row.id}${row.teilkultur_id}teilkultur_id`}
+              table="event"
               row={row}
               rawRow={rawRow}
+              showFilter={showFilter}
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturWerte}

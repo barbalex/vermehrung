@@ -55,11 +55,11 @@ const GartenForm = ({
     userPersonOption: undefined,
   })
   useEffect(() => {
-    const personObservable = db.collections
+    const personsObservable = db.collections
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeWithColumns('vorname', 'name')
-    const allCollectionsObservable = combineLatest([personObservable])
+    const allCollectionsObservable = combineLatest([personsObservable])
     const allSubscription = allCollectionsObservable.subscribe(
       async ([persons]) => {
         const userPersonOption = await getUserPersonOption({ user, db })

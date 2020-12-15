@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { of as $of } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -58,21 +59,14 @@ const Art = ({
   // need raw row because observable does not provoke rerendering of components
   const [rawRow, setRawRow] = useState(null)
   useEffect(() => {
-    let subscription
-    if (showFilter) {
-      setRow(filter.art)
-    } else {
-      subscription = db.collections
-        .get('art')
-        .findAndObserve(id)
-        .subscribe((newRow) => {
-          setRow(newRow)
-          setRawRow(JSON.stringify(newRow._raw))
-        })
-    }
-    return () => {
-      if (subscription) subscription.unsubscribe()
-    }
+    const observable = showFilter
+      ? $of(filter.art)
+      : db.collections.get('art').findAndObserve(id)
+    const subscription = observable.subscribe((newRow) => {
+      setRow(newRow)
+      setRawRow(JSON.stringify(newRow?._raw ?? newRow))
+    })
+    return () => subscription.unsubscribe()
   }, [db.collections, filter.art, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)

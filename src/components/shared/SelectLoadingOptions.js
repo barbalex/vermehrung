@@ -2,8 +2,10 @@ import React, { useCallback, useContext, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/Async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { first as first$ } from 'rxjs/operators'
 
 import { StoreContext } from '../../models/reactUtils'
+import artLabelFromAeArt from '../../utils/artLabelFromAeArt'
 
 const Container = styled.div`
   display: flex;
@@ -70,34 +72,39 @@ const StyledSelect = styled(AsyncSelect)`
 `
 
 const SelectLoadingOptions = ({
-  valueLabelFunction,
-  valueLabelKey,
   field = '',
   label,
   labelSize = 12,
   row,
   saveToDb,
   error: saveToDbError,
-  modelKey,
   modelFilter = () => true,
 }) => {
-  const store = useContext(StoreContext)
-
-  const [stateValue, setStateValue] = useState(row[field] || '')
+  const [stateValue, setStateValue] = useState({
+    value: row[field] || '',
+    label: '',
+  })
   useEffect(() => {
-    setStateValue(row[field] || '')
+    const run = async () => {
+      // TODO: need to get this to work without row.label
+      const label = (await row?.label?.pipe(first$()).toPromise()) ?? ''
+      setStateValue({ value: row[field] || '', label })
+    }
+    run()
   }, [field, row])
 
   const loadOptions = useCallback(
     (inputValue, cb) => {
       const data = modelFilter(inputValue).slice(0, 7)
-      const options = data.map((o) => ({
-        value: o.id,
-        label: o?.[modelKey] ?? `(kein ${label})`,
-      }))
+      const options = data.map((o) => {
+        return {
+          value: o.id,
+          label: artLabelFromAeArt({ ae_art: o }),
+        }
+      })
       cb(options)
     },
-    [label, modelFilter, modelKey],
+    [modelFilter],
   )
 
   const onChange = useCallback(
@@ -115,11 +122,6 @@ const SelectLoadingOptions = ({
     [field, saveToDb],
   )
 
-  const value = {
-    value: stateValue,
-    label: valueLabelFunction({ [valueLabelKey]: row, store }),
-  }
-
   return (
     <Container data-id={field}>
       {label && <Label labelsize={labelSize}>{label}</Label>}
@@ -128,7 +130,7 @@ const SelectLoadingOptions = ({
         defaultOptions
         name={field}
         onChange={onChange}
-        value={value}
+        value={stateValue}
         hideSelectedOptions
         placeholder=""
         isClearable
@@ -137,7 +139,7 @@ const SelectLoadingOptions = ({
         nocaret
         // don't show a no options message if a value exists
         noOptionsMessage={() =>
-          value.value ? null : '(Bitte Tippen für Vorschläge)'
+          stateValue.value ? null : '(Bitte Tippen für Vorschläge)'
         }
         // enable deleting typed values
         backspaceRemovesValue

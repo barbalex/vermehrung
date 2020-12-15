@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
@@ -18,6 +19,7 @@ import Personen from './Personen'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import notDeletedQuery from '../../../../utils/notDeletedQuery'
+import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -43,16 +45,35 @@ const ArtForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { artsSorted, filter, online, errors, unsetError, db } = store
+  const { filter, online, errors, unsetError, db } = store
 
-  const [aeArts, setAeArts] = useState([])
+  const [dataState, setDataState] = useState({
+    artsSorted: [],
+    aeArts: [],
+  })
   useEffect(() => {
-    db.collections
-      .get('ae_art')
+    const aeArtObservable = db.collections.get('ae_art').query().observe()
+    const artsObservable = db.collections
+      .get('art')
       .query(notDeletedQuery)
-      .fetch()
-      .then((aeArts) => setAeArts(aeArts.sort((a, b) => aeArtSort({ a, b }))))
-  }, [db])
+      .observe()
+    const allCollectionsObservable = combineLatest([
+      aeArtObservable,
+      artsObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      async ([aeArts, arts]) => {
+        const artsSorted = await artsSortedFromArts(arts)
+        setDataState({
+          aeArts: aeArts.sort((a, b) => aeArtSort({ a, b })),
+          artsSorted,
+        })
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [db.collections])
+  const { artsSorted, aeArts } = dataState
 
   useEffect(() => {
     unsetError('art')
@@ -131,16 +152,12 @@ const ArtForm = ({
             </>
           )}
           <SelectLoadingOptions
-            key={`${row.id}ae_id`}
+            key={`${row.id}${row.ae_id}ae_id`}
             field="ae_id"
-            valueLabelFunction={artLabelFromArt}
-            valueLabelKey="art"
             label="Art"
             row={row}
-            rawRow={rawRow}
             saveToDb={saveToDb}
             error={errors?.art?.ae_id}
-            modelKey="name"
             modelFilter={aeArtsFilter}
           />
           {online && !showFilter && row?._conflicts?.map && (
