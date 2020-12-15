@@ -48,17 +48,16 @@ const Herkunft = ({
     setActiveConflict(null)
   }, [id, setActiveConflict])
 
-  const rowNr = row?.nr
   const [dataState, setDataState] = useState({
     userPersonOption: undefined,
   })
   useEffect(() => {
     const herkunftsNrCountObservable =
-      showFilter || !exists(rowNr)
+      showFilter || !exists(row?.nr)
         ? $of(0)
         : db.collections
             .get('herkunft')
-            .query(Q.where('_deleted', false), Q.where('nr', rowNr))
+            .query(Q.where('_deleted', false), Q.where('nr', row.nr))
             .observeCount()
     const allCollectionsObservable = combineLatest([herkunftsNrCountObservable])
     const allSubscription = allCollectionsObservable.subscribe(
@@ -77,7 +76,7 @@ const Herkunft = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [db, db.collections, filter.herkunft, rowNr, setError, showFilter, user])
+  }, [db, db.collections, filter.herkunft, row.nr, setError, showFilter, user])
   const { userPersonOption } = dataState
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =

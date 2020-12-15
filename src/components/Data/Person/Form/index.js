@@ -8,7 +8,8 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
-import { combineLatest } from 'rxjs'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import TextField from '../../../shared/TextField'
@@ -46,28 +47,30 @@ const Person = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    personsSorted,
-    errors,
-    unsetError,
-    setError,
-    db,
-  } = store
+  const { filter, online, errors, unsetError, setError, db } = store
 
   const [dataState, setDataState] = useState({
     userRoleWerte: [],
     userRole: undefined,
   })
   useEffect(() => {
+    const personsNrCountObservable =
+      showFilter || !exists(row?.nr)
+        ? $of(0)
+        : db.collections
+            .get('person')
+            .query(Q.where('_deleted', false), Q.where('nr', row.nr))
+            .observeCount()
     const userRolesObservable = db.collections
       .get('user_role')
       .query()
       .observe()
-    const allCollectionsObservable = combineLatest([userRolesObservable])
+    const allCollectionsObservable = combineLatest([
+      userRolesObservable,
+      personsNrCountObservable,
+    ])
     const allSubscription = allCollectionsObservable.subscribe(
-      async ([userRoles]) => {
+      async ([userRoles, nrCount]) => {
         const userRoleWerte = userRoles
           .sort((a, b) => userRoleSort({ a, b }))
           .map((el) => ({
@@ -75,6 +78,12 @@ const Person = ({
             label: el.label,
           }))
         const userRole = await row.user_role?.fetch()
+        if (!showFilter && nrCount > 1) {
+          setError({
+            path: 'person.nr',
+            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Personen eindeutig sein`,
+          })
+        }
         setDataState({
           userRoleWerte,
           userRole,
@@ -83,23 +92,8 @@ const Person = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [db.collections, row.user_role])
+  }, [db.collections, row.nr, row.user_role, setError, showFilter])
   const { userRoleWerte, userRole } = dataState
-
-  const rowNr = row?.nr
-  const nrCount = useMemo(() => {
-    if (!exists(rowNr)) return 0
-    return personsSorted.filter((h) => h.nr === rowNr).length
-  }, [personsSorted, rowNr])
-
-  useEffect(() => {
-    if (nrCount > 1) {
-      setError({
-        path: 'person.nr',
-        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Personen eindeutig sein`,
-      })
-    }
-  }, [nrCount, setError])
 
   useEffect(() => {
     unsetError('person')
