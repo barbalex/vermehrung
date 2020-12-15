@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -8,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton'
 import SimpleBar from 'simplebar-react'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
-import { combineLatest } from 'rxjs'
+import { combineLatest, of as $of } from 'rxjs'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -88,7 +89,9 @@ const KulturForm = ({
       .get('garten')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
-    const gartenObservable = row?.garten?.observe()
+    const gartenObservable = row?.garten
+      ? row?.garten?.observe()
+      : $of(filter.garten)
     const sammlungsObservable = db.collections
       .get('sammlung')
       .query(
@@ -198,16 +201,7 @@ const KulturForm = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [
-    art_id,
-    db,
-    db.collections,
-    filter.garten.aktiv,
-    herkunft_id,
-    row?.garten,
-    row.garten_id,
-    user,
-  ])
+  }, [])
   const {
     gartenWerte,
     userPersonOption,

@@ -81,7 +81,9 @@ const emptyValue = {
 const SharedSelect = ({
   field = '',
   label,
+  table,
   row,
+  showFilter,
   error,
   options,
   loading = false,
@@ -91,6 +93,7 @@ const SharedSelect = ({
   callback = () => {},
 }) => {
   const store = useContext(StoreContext)
+  const { filter } = store
 
   const [stateValue, setStateValue] = useState(row[field])
   useEffect(() => {
@@ -109,7 +112,11 @@ const SharedSelect = ({
       const newValue = option ? option.value : null
       setStateValue(newValue)
 
-      row.edit({ field, value: newValue, store })
+      if (showFilter) {
+        filter.setValue({ table, key: field, newValue })
+      } else {
+        row.edit({ field, value: newValue, store })
+      }
       callback()
     },
     [store],

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
-import { combineLatest } from 'rxjs'
+import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
@@ -52,19 +52,21 @@ const Herkunft = ({
     userPersonOption: undefined,
   })
   useEffect(() => {
-    const herkunftObservable = db.collections
-      .get('herkunft')
-      .query(
-        Q.where('_deleted', false),
-        Q.where('nr', rowNr ?? '99999999999999999999'),
-      )
-      .observe()
+    const herkunftObservable = showFilter
+      ? $of(filter.herkunft)
+      : db.collections
+          .get('herkunft')
+          .query(
+            Q.where('_deleted', false),
+            Q.where('nr', rowNr ?? '99999999999999999999'),
+          )
+          .observe()
     const allCollectionsObservable = combineLatest([herkunftObservable])
     const allSubscription = allCollectionsObservable.subscribe(
       async ([herkunfts]) => {
         const userPersonOption = await getUserPersonOption({ user, db })
         const nrCount = rowNr ? herkunfts.length : 0
-        if (nrCount > 1) {
+        if (!showFilter && nrCount > 1) {
           setError({
             path: 'herkunft.nr',
             value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
@@ -77,7 +79,7 @@ const Herkunft = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [db, db.collections, rowNr, setError, user])
+  }, [db, db.collections, filter.herkunft, rowNr, setError, showFilter, user])
   const { userPersonOption } = dataState
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =

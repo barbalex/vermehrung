@@ -2,6 +2,7 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { of as $of } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -56,21 +57,14 @@ const Garten = ({
   // need raw row because observable does not provoke rerendering of components
   const [rawRow, setRawRow] = useState(null)
   useEffect(() => {
-    let subscription
-    if (showFilter) {
-      setRow(filter.garten)
-    } else {
-      subscription = db.collections
-        .get('garten')
-        .findAndObserve(id)
-        .subscribe((newRow) => {
-          setRow(newRow)
-          setRawRow(JSON.stringify(newRow._raw))
-        })
-    }
-    return () => {
-      if (subscription) subscription.unsubscribe()
-    }
+    const observable = showFilter
+      ? $of(filter.garten)
+      : db.collections.get('garten').findAndObserve(id)
+    const subscription = observable.subscribe((newRow) => {
+      setRow(newRow)
+      setRawRow(JSON.stringify(newRow?._raw ?? newRow))
+    })
+    return () => subscription.unsubscribe()
   }, [db.collections, filter.garten, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)

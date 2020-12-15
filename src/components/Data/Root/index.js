@@ -104,8 +104,6 @@ const Root = ({ filter: showFilter }) => {
     showZaehlung,
   } = dataState
 
-  console.log('Root, dataState:', dataState)
-
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value
   const rows = [

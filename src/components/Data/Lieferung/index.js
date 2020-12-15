@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import isUuid from 'is-uuid'
 import last from 'lodash/last'
+import { combineLatest, of as $of } from 'rxjs'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
@@ -49,45 +50,41 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   }
 
-  const [row, setRow] = useState(null)
-  // need raw row because observable does not provoke rerendering of components
-  const [rawRow, setRawRow] = useState(null)
+  const [dataState, setDataState] = useState({
+    row: undefined,
+    rawRow: undefined,
+    userPersonOption: undefined,
+    sammelLieferung: undefined,
+  })
   useEffect(() => {
-    let subscription
-    if (showFilter) {
-      setRow(filter.lieferung)
-    } else {
-      subscription = db.collections
-        .get('lieferung')
-        .findAndObserve(id)
-        .subscribe((newRow) => {
-          setRow(newRow)
-          setRawRow(JSON.stringify(newRow._raw))
+    const lieferungObservable = showFilter
+      ? $of(filter.lieferung)
+      : db.collections.get('lieferung').findAndObserve(id)
+    const sammelLieferungObservable =
+      showFilter || !row?.sammel_lieferung ? $of({}) : row.sammel_lieferung
+    const allCollectionsObservable = combineLatest([
+      lieferungObservable,
+      sammelLieferungObservable,
+    ])
+    const allSubscription = allCollectionsObservable.subscribe(
+      async ([lieferung, sammelLieferung]) => {
+        const userPersonOption = await getUserPersonOption({ user, db })
+
+        setDataState({
+          row: lieferung,
+          rawRow: lieferung?._raw ?? lieferung,
+          userPersonOption,
+          sammelLieferung,
         })
-    }
-    return () => {
-      if (subscription) subscription.unsubscribe()
-    }
-  }, [db.collections, filter.lieferung, id, showFilter])
+      },
+    )
 
-  // TODO:
-  const sammelLieferungId =
-    row?.sammel_lieferung_id ?? '99999999-9999-9999-9999-999999999999'
-  // TODO: convert once sammel_lieferung is built
-  const sammelLieferung = store.sammel_lieferungs.get(sammelLieferungId) || {}
-
-  const [userPersonOption, setUserPersonOption] = useState()
-  useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
-  }, [db, user])
+    return () => allSubscription.unsubscribe()
+  }, [db, filter.lieferung, id, row?.sammel_lieferung, showFilter, user])
+  const { row, rawRow, userPersonOption, sammelLieferung } = dataState
   const { li_show_sl } = userPersonOption ?? {}
 
-  //console.log('Lieferung, row:', row)
-
-  if (
-    sammelLieferungId !== '99999999-9999-9999-9999-999999999999' &&
-    li_show_sl
-  ) {
+  if (row?.sammel_lieferung_id && li_show_sl) {
     // this lieferung is part of a sammel_lieferung
     // show that too
     return (
@@ -101,12 +98,13 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
         />
         <SammelLieferung
           showFilter={showFilter}
-          id={sammelLieferungId}
+          id={row?.sammel_lieferung_id}
           lieferung={row}
         />
       </StyledSplitPane>
     )
   }
+
   return (
     <Lieferung
       id={id}
