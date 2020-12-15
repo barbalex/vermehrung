@@ -62,11 +62,11 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       : db.collections.get('lieferung').findAndObserve(id)
     const sammelLieferungObservable =
       showFilter || !row?.sammel_lieferung ? $of({}) : row.sammel_lieferung
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       lieferungObservable,
       sammelLieferungObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const allSubscription = combinedObservables.subscribe(
       async ([lieferung, sammelLieferung]) => {
         const userPersonOption = await getUserPersonOption({ user, db })
 

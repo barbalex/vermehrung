@@ -40,11 +40,11 @@ const GartenFormTitle = ({
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'garten' }), ...hierarchyQuery)
       .observeCount()
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       totalCountObservable,
       filteredCountObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const allSubscription = combinedObservables.subscribe(
       ([totalCount, filteredCount]) =>
         setCountState({ totalCount, filteredCount }),
     )

@@ -100,12 +100,12 @@ const KulturForm = ({
         Q.where('herkunft_id', Q.notEq(null)),
       )
       .observe()
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       gartensObservable,
       gartenObservable,
       sammlungsObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const allSubscription = combinedObservables.subscribe(
       async ([gartens, garten, sammlungs]) => {
         const userPersonOption = await getUserPersonOption({ user, db }) // need to make this dynamic
         const gartensSorted = await gartensSortedFromGartens(gartens)
@@ -239,11 +239,11 @@ const KulturForm = ({
         Q.where('id', Q.oneOf(herkunftsToChoose)),
       )
       .observe()
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       artsObservable,
       herkunftsObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const allSubscription = combinedObservables.subscribe(
       async ([arts, herkunfts]) => {
         const artWerte = await Promise.all(
           arts.map(async (art) => {

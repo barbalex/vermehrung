@@ -110,11 +110,8 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
 
     // so need to hackily use merge
-    const allCollectionsObservable = combineLatest([
-      countObservable,
-      dataObservable,
-    ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const allSubscription = combinedObservables.subscribe(
       async ([totalCount, sammlungs]) => {
         const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
         setDataState({

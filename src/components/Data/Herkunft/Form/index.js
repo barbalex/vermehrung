@@ -59,21 +59,19 @@ const Herkunft = ({
             .get('herkunft')
             .query(Q.where('_deleted', false), Q.where('nr', row.nr))
             .observeCount()
-    const allCollectionsObservable = combineLatest([herkunftsNrCountObservable])
-    const allSubscription = allCollectionsObservable.subscribe(
-      async ([nrCount]) => {
-        const userPersonOption = await getUserPersonOption({ user, db })
-        if (!showFilter && nrCount > 1) {
-          setError({
-            path: 'herkunft.nr',
-            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
-          })
-        }
-        setDataState({
-          userPersonOption,
+    const combinedObservables = combineLatest([herkunftsNrCountObservable])
+    const allSubscription = combinedObservables.subscribe(async ([nrCount]) => {
+      const userPersonOption = await getUserPersonOption({ user, db })
+      if (!showFilter && nrCount > 1) {
+        setError({
+          path: 'herkunft.nr',
+          value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
         })
-      },
-    )
+      }
+      setDataState({
+        userPersonOption,
+      })
+    })
 
     return () => allSubscription.unsubscribe()
   }, [db, db.collections, filter.herkunft, row.nr, setError, showFilter, user])

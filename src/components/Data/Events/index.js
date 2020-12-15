@@ -86,11 +86,8 @@ const Events = ({ filter: showFilter, width, height }) => {
     const dataObservable = collection
       .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)
       .observeWithColumns(['datum', 'beschreibung'])
-    const allCollectionsObservable = combineLatest([
-      countObservable,
-      dataObservable,
-    ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const allSubscription = combinedObservables.subscribe(
       ([totalCount, events]) => {
         setDataState({
           events: events.sort((a, b) => eventSort({ a, b })),

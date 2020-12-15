@@ -65,11 +65,11 @@ const Person = ({
       .get('user_role')
       .query()
       .observe()
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       userRolesObservable,
       personsNrCountObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const allSubscription = combinedObservables.subscribe(
       async ([userRoles, nrCount]) => {
         const userRoleWerte = userRoles
           .sort((a, b) => userRoleSort({ a, b }))

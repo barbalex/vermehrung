@@ -102,11 +102,8 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
         'garten_id',
         'zwischenlager',
       ])
-    const allCollectionsObservable = combineLatest([
-      countObservable,
-      dataObservable,
-    ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const allSubscription = combinedObservables.subscribe(
       async ([totalCount, kulturs]) => {
         const kultursSorted = await kultursSortedFromKulturs(kulturs)
         setDataState({

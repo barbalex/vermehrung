@@ -59,22 +59,20 @@ const GartenForm = ({
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeWithColumns('vorname', 'name')
-    const allCollectionsObservable = combineLatest([personsObservable])
-    const allSubscription = allCollectionsObservable.subscribe(
-      async ([persons]) => {
-        const userPersonOption = await getUserPersonOption({ user, db })
-        const personWerte = persons
-          .sort((a, b) => personSort({ a, b }))
-          .map((person) => ({
-            value: person.id,
-            label: personLabelFromPerson({ person }),
-          }))
-        setDataState({
-          personWerte,
-          userPersonOption,
-        })
-      },
-    )
+    const combinedObservables = combineLatest([personsObservable])
+    const allSubscription = combinedObservables.subscribe(async ([persons]) => {
+      const userPersonOption = await getUserPersonOption({ user, db })
+      const personWerte = persons
+        .sort((a, b) => personSort({ a, b }))
+        .map((person) => ({
+          value: person.id,
+          label: personLabelFromPerson({ person }),
+        }))
+      setDataState({
+        personWerte,
+        userPersonOption,
+      })
+    })
 
     return () => allSubscription.unsubscribe()
   }, [db, db.collections, user])

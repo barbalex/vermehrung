@@ -87,11 +87,11 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
     const gartenObservable = collection
       .query(...tableFilter({ store, table: 'garten' }), ...hierarchyQuery)
       .observeWithColumns(['name', 'person_id'])
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       totalCountObservable,
       gartenObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const allSubscription = combinedObservables.subscribe(
       async ([totalCount, gartens]) => {
         const gartensSorted = await gartensSortedFromGartens(gartens)
         setDataState({

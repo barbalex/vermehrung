@@ -80,11 +80,11 @@ const Arten = ({ filter: showFilter, width, height }) => {
     const artsObservable = collection
       .query(...tableFilter({ store, table: 'art' }))
       .observeWithColumns(['ae_id'])
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       totalCountObservable,
       artsObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const allSubscription = combinedObservables.subscribe(
       async ([totalCount, arts]) => {
         const artsSorted = await artsSortedFromArts(arts)
         setDataState({ arts: artsSorted, totalCount })

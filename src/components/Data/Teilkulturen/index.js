@@ -92,11 +92,8 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
         ...hierarchyQuery,
       )
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
-    const allCollectionsObservable = combineLatest([
-      countObservable,
-      dataObservable,
-    ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const allSubscription = combinedObservables.subscribe(
       ([totalCount, teilkulturs]) => {
         setDataState({
           teilkulturs: teilkulturs.sort((a, b) => teilkulturSort({ a, b })),
