@@ -88,13 +88,13 @@ const EventForm = ({
     const kulturObservable = showFilter
       ? $of(filter.kultur)
       : row.kultur.observe()
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       kultursObservable,
       teilkulturObservable,
       personsObservable,
       kulturObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const allSubscription = combinedObservables.subscribe(
       async ([kulturs, teilkulturs, persons, kultur]) => {
         const kultursSorted = await kultursSortedFromKulturs(kulturs)
         const kulturWerte = await Promise.all(

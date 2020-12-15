@@ -55,11 +55,8 @@ const ArtForm = ({
       .get('art')
       .query(notDeletedQuery)
       .observe()
-    const allCollectionsObservable = combineLatest([
-      aeArtObservable,
-      artsObservable,
-    ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const combinedObservables = combineLatest([aeArtObservable, artsObservable])
+    const allSubscription = combinedObservables.subscribe(
       async ([aeArts, arts]) => {
         const artsSorted = await artsSortedFromArts(arts)
         setDataState({

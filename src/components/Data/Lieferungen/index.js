@@ -120,11 +120,8 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
         ...hierarchyQuery,
       )
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-    const allCollectionsObservable = combineLatest([
-      countObservable,
-      dataObservable,
-    ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const allSubscription = combinedObservables.subscribe(
       ([totalCount, lieferungs]) => {
         setDataState({
           lieferungs: lieferungs.sort((a, b) => lieferungSort({ a, b })),

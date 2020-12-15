@@ -93,11 +93,8 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
       )
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
 
-    const allCollectionsObservable = combineLatest([
-      countObservable,
-      dataObservable,
-    ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const allSubscription = combinedObservables.subscribe(
       ([totalCount, zaehlungs]) => {
         setDataState({
           zaehlungs: zaehlungs.sort((a, b) => zaehlungSort({ a, b })),

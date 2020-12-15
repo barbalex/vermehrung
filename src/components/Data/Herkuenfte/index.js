@@ -86,11 +86,11 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     const herkunftsObservable = collection
       .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       countObservable,
       herkunftsObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const allSubscription = combinedObservables.subscribe(
       ([totalCount, herkunfts]) => setDataState({ herkunfts, totalCount }),
     )
 

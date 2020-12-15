@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/Async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { first as first$ } from 'rxjs/operators'
 
 import { StoreContext } from '../../models/reactUtils'
 import artLabelFromAeArt from '../../utils/artLabelFromAeArt'

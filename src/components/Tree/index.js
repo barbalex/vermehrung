@@ -117,7 +117,7 @@ const Tree = ({ width, height }) => {
       .get('person')
       .query(...tableFilter({ store, table: 'person' }))
       .observeWithColumns(['vorname', 'name'])
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       artObservable,
       eventObservable,
       gartenObservable,
@@ -130,7 +130,7 @@ const Tree = ({ width, height }) => {
       teilkulturObservable,
       zaehlungObservable,
     ]).pipe(throttle(() => interval(100)))
-    const subscription = allCollectionsObservable.subscribe(() => {
+    const subscription = combinedObservables.subscribe(() => {
       console.log('Tree data-subscription ordering rebuild')
       buildMyNodesDebounced.callback()
     })

@@ -17,7 +17,7 @@ const EventFormTitle = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { kulturIdInActiveNodeArray,  db } = store
+  const { kulturIdInActiveNodeArray, db } = store
 
   const [countState, setCountState] = useState({
     totalCount: 0,
@@ -37,11 +37,11 @@ const EventFormTitle = ({
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)
       .observeCount()
-    const allCollectionsObservable = combineLatest([
+    const combinedObservables = combineLatest([
       totalCountObservable,
       filteredCountObservable,
     ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const allSubscription = combinedObservables.subscribe(
       ([totalCount, filteredCount]) =>
         setCountState({ totalCount, filteredCount }),
     )

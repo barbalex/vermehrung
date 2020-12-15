@@ -86,11 +86,8 @@ const Personen = ({ filter: showFilter, width, height }) => {
     const dataObservable = collection
       .query(...tableFilter({ table: 'person', store }))
       .observeWithColumns(['vorname', 'name'])
-    const allCollectionsObservable = combineLatest([
-      countObservable,
-      dataObservable,
-    ])
-    const allSubscription = allCollectionsObservable.subscribe(
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const allSubscription = combinedObservables.subscribe(
       async ([totalCount, persons]) => {
         const userRole = await getUserRole({ user, db })
         setDataState({
