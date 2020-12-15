@@ -1,9 +1,17 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -18,8 +26,11 @@ import getConstants from '../../../../utils/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
+import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
 import artLabelFromArt from '../../../../utils/artLabelFromArt'
 import exists from '../../../../utils/exists'
+import personSort from '../../../../utils/personSort'
+import herkunftSort from '../../../../utils/herkunftSort'
 
 const constants = getConstants()
 
@@ -57,17 +68,83 @@ const SammlungForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    artsSorted,
-    herkunftsSorted,
-    personsSorted,
-    sammlungsSorted,
-    errors,
-    unsetError,
+  const { filter, online, artsSorted, errors, unsetError, setError, db } = store
+
+  const [dataState, setDataState] = useState({
+    userPersonOption: undefined,
+    personWerte: [],
+    herkunftWerte: [],
+  })
+  useEffect(() => {
+    const personsObservable = db.collections
+      .get('person')
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observeWithColumns(['vorname', 'name'])
+    const herkunftsObservable = db.collections
+      .get('herkunft')
+      .query(Q.where('_deleted', false))
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+    const sammlungsNrCountObservable =
+      showFilter || !exists(row?.nr)
+        ? $of(0)
+        : db.collections
+            .get('sammlung')
+            .query(Q.where('_deleted', false), Q.where('nr', row.nr))
+            .observeCount()
+    const combinedObservables = combineLatest([
+      sammlungsNrCountObservable,
+      personsObservable,
+      herkunftsObservable,
+    ])
+    const allSubscription = combinedObservables.subscribe(
+      async ([nrCount, persons, herkunfts]) => {
+        if (!showFilter && nrCount > 1) {
+          setError({
+            path: 'sammlung.nr',
+            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
+          })
+        }
+        const personWerte = persons
+          .sort((a, b) => personSort({ a, b }))
+          .map((person) => ({
+            value: person.id,
+            label: personLabelFromPerson({ person }),
+          }))
+        const herkunftWerte = herkunfts
+          .sort((a, b) => herkunftSort({ a, b }))
+          .map((herkunft) => ({
+            value: herkunft.id,
+            label: herkunftLabelFromHerkunft({ herkunft }),
+          }))
+
+        setDataState({
+          userPersonOption,
+          personWerte,
+          herkunftWerte,
+        })
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [
+    db,
+    db.collections,
+    filter.herkunft,
+    row.nr,
     setError,
-  } = store
+    showFilter,
+    userPersonOption,
+  ])
+  const { userPersonOption, personWerte, herkunftWerte } = dataState
+
+  const artWerte = useMemo(
+    () =>
+      artsSorted.map((el) => ({
+        value: el.id,
+        label: artLabelFromArt({ art: el, store }),
+      })),
+    [artsSorted, store],
+  )
 
   // ensure that activeConflict is reset
   // when changing dataset
@@ -78,33 +155,6 @@ const SammlungForm = ({
   useEffect(() => {
     unsetError('sammlung')
   }, [id, unsetError])
-
-  const personWerte = useMemo(
-    () =>
-      personsSorted.map((el) => ({
-        value: el.id,
-        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-      })),
-    [personsSorted],
-  )
-
-  const herkunftWerte = useMemo(
-    () =>
-      herkunftsSorted.map((el) => ({
-        value: el.id,
-        label: herkunftLabelFromHerkunft({ herkunft: el }),
-      })),
-    [herkunftsSorted],
-  )
-
-  const artWerte = useMemo(
-    () =>
-      artsSorted.map((el) => ({
-        value: el.id,
-        label: artLabelFromArt({ art: el, store }),
-      })),
-    [artsSorted, store],
-  )
 
   const saveToDb = useCallback(
     (event) => {
@@ -142,20 +192,6 @@ const SammlungForm = ({
       window.open(url)
     }
   }, [])
-
-  const rowNr = row?.nr
-  const nrCount = useMemo(() => {
-    if (!exists(rowNr)) return 0
-    return sammlungsSorted.filter((h) => h.nr === rowNr).length
-  }, [sammlungsSorted, rowNr])
-  useEffect(() => {
-    if (nrCount > 1) {
-      setError({
-        path: 'sammlung.nr',
-        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
-      })
-    }
-  }, [nrCount, setError])
 
   const showDeleted =
     showFilter || filter.sammlung._deleted !== false || row?._deleted
