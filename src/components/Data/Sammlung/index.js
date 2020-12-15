@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { of as $of } from 'rxjs'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FormTitle from './FormTitle'
@@ -51,29 +51,26 @@ const Sammlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter, online, db } = store
 
-  const db = useDatabase()
-  const [row, setRow] = useState(null)
-  // need raw row because observable does not provoke rerendering of components
-  const [rawRow, setRawRow] = useState(null)
+  const [dataState, setDataState] = useState({
+    row: undefined,
+    // need raw row because observable does not provoke rerendering of components
+    rawRow: undefined,
+  })
   useEffect(() => {
-    let subscription
-    if (showFilter) {
-      setRow(filter.sammlung)
-    } else {
-      subscription = db.collections
-        .get('sammlung')
-        .findAndObserve(id)
-        .subscribe((newRow) => {
-          setRow(newRow)
-          setRawRow(JSON.stringify(newRow._raw))
-        })
-    }
-    return () => {
-      if (subscription) subscription.unsubscribe()
-    }
+    const observable = showFilter
+      ? $of(filter.sammlung)
+      : db.collections.get('sammlung').findAndObserve(id)
+    const subscription = observable.subscribe((newRow) => {
+      setDataState({
+        row: newRow,
+        rawRow: JSON.stringify(newRow?._raw ?? newRow),
+      })
+    })
+    return () => subscription.unsubscribe()
   }, [db.collections, filter.sammlung, id, showFilter])
+  const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
