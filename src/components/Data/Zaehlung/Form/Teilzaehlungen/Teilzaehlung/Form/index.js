@@ -81,11 +81,12 @@ const TeilzaehlungForm = ({
   kulturId,
   row,
   rawRow,
-  teilkulturenWerte,
+  teilkulturWerte,
   activeConflict,
   setActiveConflict,
   showHistory,
   setShowHistory,
+  kulturOption,
 }) => {
   const store = useContext(StoreContext)
   const { insertTeilkulturRev, errors, unsetError, online, filter } = store
@@ -102,7 +103,6 @@ const TeilzaehlungForm = ({
     setAnchorEl(event.currentTarget)
   }, [])
 
-  const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const {
     tk,
     tz_teilkultur_id,
@@ -110,7 +110,7 @@ const TeilzaehlungForm = ({
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = kulturOption
+  } = kulturOption ?? {}
 
   const onCreateNewTeilkultur = useCallback(
     ({ name }) => {
@@ -199,7 +199,7 @@ const TeilzaehlungForm = ({
               rawRow={rawRow}
               field="teilkultur_id"
               label="Teilkultur"
-              options={teilkulturenWerte}
+              options={teilkulturWerte}
               error={errors?.teilzaehlung?.teilkultur_id}
               onCreateNew={onCreateNewTeilkultur}
             />

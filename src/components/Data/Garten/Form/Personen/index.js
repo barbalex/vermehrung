@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useState,
-  useMemo,
   useEffect,
   useContext,
   useRef,
@@ -13,7 +12,6 @@ import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
-import uniqBy from 'lodash/uniqBy'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Person from './Person'

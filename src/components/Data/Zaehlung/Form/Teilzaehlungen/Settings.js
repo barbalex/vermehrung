@@ -33,20 +33,16 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsTeilzaehlungen = ({ kulturId }) => {
+const SettingsTeilzaehlungen = ({ kulturOption }) => {
   const store = useContext(StoreContext)
 
-  const kulturOption = useMemo(() => store.kultur_options.get(kulturId) ?? {}, [
-    kulturId,
-    store.kultur_options,
-  ])
   const {
     tz_teilkultur_id,
     tz_anzahl_mutterpflanzen,
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = kulturOption
+  } = kulturOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
