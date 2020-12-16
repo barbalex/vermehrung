@@ -7,6 +7,7 @@ import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest, of as $of } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -113,7 +114,13 @@ const EventForm = ({
             value: t.id,
             label: t.name || '(kein Name)',
           }))
-        const personWerte = persons
+        // need to show a choosen person even if inactive but not if deleted
+        const person = await row.person?.fetch()
+        const personsIncludingInactiveChoosen = uniqBy(
+          [...persons, ...(person && !person?._deleted ? [person] : [])],
+          'id',
+        )
+        const personWerte = personsIncludingInactiveChoosen
           .sort((a, b) => personSort({ a, b }))
           .map((person) => ({
             value: person.id,
@@ -130,7 +137,14 @@ const EventForm = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [db.collections, filter.kultur, kulturId, row.kultur, showFilter])
+  }, [
+    db.collections,
+    filter.kultur,
+    kulturId,
+    row.kultur,
+    row.person,
+    showFilter,
+  ])
   const { kulturWerte, teilkulturWerte, personWerte, kulturOption } = dataState
 
   const { tk, ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
