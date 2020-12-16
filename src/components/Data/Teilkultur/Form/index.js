@@ -100,8 +100,9 @@ const TeilkulturForm = ({
         return filter.setValue({ table: 'teilkultur', key: field, value })
       }
 
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row[field])
       // only update if value has changed
+      console.log('Teilkultur form', { value, previousValue, field })
       if (value === previousValue) return
       row.edit({ field, value, store })
     },
