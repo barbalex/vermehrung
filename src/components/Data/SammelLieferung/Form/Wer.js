@@ -3,15 +3,19 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  useMemo,
   useRef,
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
+import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
+import personSort from '../../../../utils/personSort'
 
 const Title = styled.div`
   font-weight: bold;
@@ -43,16 +47,34 @@ const TitleRow = styled.div`
 const SammelLieferungWer = ({ showFilter, row, ifNeeded, saveToDb }) => {
   const store = useContext(StoreContext)
 
-  const { personsSorted, errors } = store
+  const { errors, db } = store
 
-  const personWerte = useMemo(
-    () =>
-      personsSorted.map((el) => ({
-        value: el.id,
-        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-      })),
-    [personsSorted],
-  )
+  const [personWerte, setArtWerte] = useState([])
+  useEffect(() => {
+    const personsObservable = db.collections
+      .get('person')
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observe()
+    const combinedObservables = combineLatest([personsObservable])
+    const allSubscription = combinedObservables.subscribe(async ([persons]) => {
+      // need to show a choosen person even if inactive but not if deleted
+      const person = await row.person?.fetch()
+      const personsIncludingInactiveChoosen = uniqBy(
+        [...persons, ...(person && !person?._deleted ? [person] : [])],
+        'id',
+      )
+      const personWerte = personsIncludingInactiveChoosen
+        .sort((a, b) => personSort({ a, b }))
+        .map((el) => ({
+          value: el.id,
+          label: personLabelFromPerson({ person: el }),
+        }))
+
+      setArtWerte(personWerte)
+    })
+
+    return () => allSubscription.unsubscribe()
+  }, [db.collections, row.person])
 
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)

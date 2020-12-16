@@ -11,12 +11,17 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Person from './Person'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import gvsSortByPerson from '../../../../../utils/gvsSortByPerson'
+import personSort from '../../../../../utils/personSort'
+import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -50,7 +55,7 @@ const Aven = styled.div`
 
 const GartenPersonen = ({ garten }) => {
   const store = useContext(StoreContext)
-  const { personsSorted, insertGvRev } = store
+  const { db, insertGvRev } = store
 
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [garten.id])
@@ -76,29 +81,38 @@ const GartenPersonen = ({ garten }) => {
     [anim, open],
   )
 
-  const [gvsSorted, setGvsSorted] = useState([])
+  const [dataState, setDataState] = useState({
+    gvsSorted: [],
+    personWerte: [],
+  })
   useEffect(() => {
-    const subscription = garten?.gvs?.observe().subscribe(async (gvs) => {
-      const _gvsSorted = await gvsSortByPerson(gvs)
-      setGvsSorted(_gvsSorted)
-    })
-    return () => {
-      if (subscription) subscription.unsubscribe()
-    }
-  }, [garten.gvs])
+    const personsObservable = db.collections
+      .get('person')
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observe()
+    const gvsObservable = garten?.gvs?.observe()
+    const combinedObservables = combineLatest([
+      gvsObservable,
+      personsObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([gvs, persons]) => {
+        const gvsSorted = await gvsSortByPerson(gvs)
+        const gvPersonIds = gvsSorted.map((v) => v.person_id)
+        const personWerte = persons
+          .filter((a) => !gvPersonIds.includes(a.id))
+          .sort((a, b) => personSort({ a, b }))
+          .map((el) => ({
+            value: el.id,
+            label: personLabelFromPerson({ person: el }),
+          }))
 
-  const gvPersonIds = gvsSorted.map((v) => v.person_id)
-
-  const personWerte = useMemo(
-    () =>
-      personsSorted
-        .filter((a) => !gvPersonIds.includes(a.id))
-        .map((el) => ({
-          value: el.id,
-          label: el?.fullname || '(kein Name)',
-        })),
-    [personsSorted, gvPersonIds],
-  )
+        setDataState({ gvsSorted, personWerte })
+      },
+    )
+    return () => subscription.unsubscribe()
+  }, [db.collections, garten?.gvs])
+  const { gvsSorted, personWerte } = dataState
 
   const saveToDb = useCallback(
     async (event) => {
