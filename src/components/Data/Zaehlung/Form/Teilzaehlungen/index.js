@@ -9,12 +9,15 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk'
+import teilkulturLabelFromTeilkultur from '../../../../../utils/teilkulturLabelFromTeilkultur'
+import teilkulturSort from '../../../../../utils/teilkulturSort'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -45,19 +48,36 @@ const Teilzaehlungen = ({ zaehlung }) => {
 
   const kulturId = zaehlung.kultur_id
 
-  const [teilzaehlungs, setTeilzaehlungs] = useState([])
+  const [dataState, setDataState] = useState({
+    teilzaehlungs: [],
+    teilkulturWerte: [],
+    kulturOption: undefined,
+  })
   useEffect(() => {
-    const subscription = zaehlung.teilzaehlungs
-      .observe()
-      .subscribe(async (tzs) => {
-        const tzsSorted = await teilzaehlungsSortByTk(tzs)
-        setTeilzaehlungs(tzsSorted)
-      })
+    const teilzaehlungsObservable = zaehlung.teilzaehlungs.observe()
+    const teilkultursObservable = zaehlung.teilkulturs.observe()
+    const combinedObservables = combineLatest([
+      teilzaehlungsObservable,
+      teilkultursObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([tzs, teilkulturs]) => {
+        const teilzaehlungs = await teilzaehlungsSortByTk(tzs)
+        const kulturOption = await zaehlung.kultur_option?.fetch()
+        const teilkulturWerte = teilkulturs
+          .sort((a, b) => teilkulturSort({ a, b }))
+          .map((tk) => ({
+            value: tk.id,
+            label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
+          }))
+        setDataState({ teilzaehlungs, kulturOption, teilkulturWerte })
+      },
+    )
     return () => subscription.unsubscribe()
-  }, [zaehlung.teilzaehlungs])
+  }, [zaehlung.kultur_option, zaehlung.teilkulturs, zaehlung.teilzaehlungs])
+  const { teilzaehlungs, teilkulturWerte, kulturOption } = dataState
 
-  const kulturOption = store.kultur_options.get(kulturId) ?? {}
-  const { tk } = kulturOption
+  const { tk } = kulturOption ?? {}
 
   const onClickNew = useCallback(() => {
     insertTeilzaehlungRev()
@@ -85,7 +105,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
       <TitleRow ref={titleRowRef} data-sticky={isSticky}>
         <Title>{title}</Title>
         <div>
-          {kulturId && <Settings kulturId={kulturId} />}
+          {kulturId && <Settings kulturOption={kulturOption} />}
           {showNew && (
             <IconButton
               aria-label="Neu"
@@ -97,7 +117,12 @@ const Teilzaehlungen = ({ zaehlung }) => {
           )}
         </div>
       </TitleRow>
-      <TeilzaehlungenRows kulturId={kulturId} teilzaehlungs={teilzaehlungs} />
+      <TeilzaehlungenRows
+        kulturId={kulturId}
+        teilzaehlungs={teilzaehlungs}
+        teilkulturWerte={teilkulturWerte}
+        kulturOption={kulturOption}
+      />
     </ErrorBoundary>
   )
 }

@@ -1024,6 +1024,7 @@ export class Zaehlung extends Model {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
     kultur_option: { type: 'belongs_to', key: 'kultur_id' },
     teilzaehlung: { type: 'has_many', foreignKey: 'zaehlung_id' },
+    teilkultur: { type: 'has_many', foreignKey: 'zaehlung_id' },
   }
 
   @field('id') id
@@ -1044,6 +1045,7 @@ export class Zaehlung extends Model {
   @relation('kultur', 'kultur_id') kultur
   @relation('kultur_option', 'kultur_id') kultur_option
   @children('teilzaehlung') teilzaehlungs
+  @children('teilkultur') teilkulturs
 
   @lazy label = this.observe().pipe(
     distinctUntilChanged(),

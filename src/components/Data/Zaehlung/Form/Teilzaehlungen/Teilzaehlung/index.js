@@ -54,27 +54,36 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const Teilzaehlung = ({ id, kulturId, teilkulturenWerte, index }) => {
+const Teilzaehlung = ({
+  id,
+  kulturId,
+  teilkulturWerte,
+  kulturOption,
+  index,
+}) => {
   const store = useContext(StoreContext)
   const { online, db } = store
 
   // TODO: should I subscribe to this row to rerender on updates of history?
 
-  const [row, setRow] = useState(null)
-  // need raw row because observable does not provoke rerendering of components
-  const [rawRow, setRawRow] = useState(null)
+  const [dataState, setDataState] = useState({
+    row: undefined,
+    // need raw row because observable does not provoke rerendering of components
+    rawRow: undefined,
+  })
   useEffect(() => {
     const subscription = db.collections
       .get('teilzaehlung')
       .findAndObserve(id)
       .subscribe((newRow) => {
-        setRow(newRow)
-        setRawRow(JSON.stringify(newRow._raw))
+        setDataState({
+          row: newRow,
+          rawRow: JSON.stringify(newRow?._raw ?? newRow),
+        })
       })
-    return () => {
-      subscription.unsubscribe()
-    }
+    return () => subscription.unsubscribe()
   }, [db.collections, id])
+  const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -117,11 +126,12 @@ const Teilzaehlung = ({ id, kulturId, teilkulturenWerte, index }) => {
                 kulturId={kulturId}
                 row={row}
                 rawRow={rawRow}
-                teilkulturenWerte={teilkulturenWerte}
+                teilkulturWerte={teilkulturWerte}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
                 setShowHistory={setShowHistory}
+                kulturOption={kulturOption}
               />
               <>
                 {online && (
@@ -163,11 +173,12 @@ const Teilzaehlung = ({ id, kulturId, teilkulturenWerte, index }) => {
             kulturId={kulturId}
             row={row}
             rawRow={rawRow}
-            teilkulturenWerte={teilkulturenWerte}
+            teilkulturWerte={teilkulturWerte}
             activeConflict={activeConflict}
             setActiveConflict={setActiveConflict}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
+            kulturOption={kulturOption}
           />
         </InnerContainer>
       </Container>
