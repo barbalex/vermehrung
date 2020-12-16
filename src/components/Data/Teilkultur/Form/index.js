@@ -102,7 +102,6 @@ const TeilkulturForm = ({
 
       const previousValue = ifIsNumericAsNumber(row[field])
       // only update if value has changed
-      console.log('Teilkultur form', { value, previousValue, field })
       if (value === previousValue) return
       row.edit({ field, value, store })
     },
