@@ -1,7 +1,11 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { first as first$ } from 'rxjs/operators'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -13,7 +17,7 @@ import Zaehlungen from './Zaehlungen'
 import Events from './Events'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
+import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -38,23 +42,52 @@ const TeilkulturForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, kultursSorted, errors, unsetError } = store
-
-  const kulturOpion = store.kultur_options.get(row.kultur_id) || {}
-  const { tk_bemerkungen } = kulturOpion
+  const { filter, online, db, errors, unsetError } = store
 
   useEffect(() => {
     unsetError('teilkultur')
   }, [id, unsetError])
 
-  const kulturWerte = useMemo(
-    () =>
-      kultursSorted.map((el) => ({
-        value: el.id,
-        label: kulturLabelFromKultur({ kultur: el, store }),
-      })),
-    [kultursSorted, store],
-  )
+  const [dataState, setDataState] = useState({
+    kulturWerte: [],
+    kulturOption: undefined,
+  })
+  useEffect(() => {
+    const kultursObservable = db.collections
+      .get('kultur')
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observe()
+    const combinedObservables = combineLatest([kultursObservable])
+    const allSubscription = combinedObservables.subscribe(async ([kulturs]) => {
+      // need to show a choosen kultur even if inactive but not if deleted
+      const kultur = await row.kultur?.fetch()
+      const kultursIncludingInactiveChoosen = uniqBy(
+        [...kulturs, ...(kultur && !kultur?._deleted ? [kultur] : [])],
+        'id',
+      )
+      const kultursSorted = await kultursSortedFromKulturs(
+        kultursIncludingInactiveChoosen,
+      )
+      const kulturWerte = await Promise.all(
+        kultursSorted.map(async (el) => {
+          const label = await el.label.pipe(first$()).toPromise()
+
+          return {
+            value: el.id,
+            label,
+          }
+        }),
+      )
+      const kulturOption = await row.kultur_option?.fetch()
+
+      setDataState({ kulturWerte, kulturOption })
+    })
+
+    return () => allSubscription.unsubscribe()
+  }, [db.collections, row.kultur, row.kultur_option])
+  const { kulturWerte, kulturOption } = dataState
+
+  const { tk_bemerkungen } = kulturOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {

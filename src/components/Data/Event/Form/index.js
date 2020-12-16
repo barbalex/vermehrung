@@ -97,7 +97,14 @@ const EventForm = ({
     ])
     const allSubscription = combinedObservables.subscribe(
       async ([kulturs, teilkulturs, persons, kultur]) => {
-        const kultursSorted = await kultursSortedFromKulturs(kulturs)
+        // need to show a choosen kultur even if inactive but not if deleted
+        const kultursIncludingInactiveChoosen = uniqBy(
+          [...kulturs, ...(kultur && !kultur?._deleted ? [kultur] : [])],
+          'id',
+        )
+        const kultursSorted = await kultursSortedFromKulturs(
+          kultursIncludingInactiveChoosen,
+        )
         const kulturWerte = await Promise.all(
           kultursSorted.map(async (t) => {
             const label = await t.label.pipe(first$()).toPromise()
