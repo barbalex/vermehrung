@@ -87,7 +87,7 @@ const PersonArten = ({ person }) => {
     return () => subscription.unsubscribe()
   }, [person.gvs])
 
-  const gvArtIds = gvsSorted.map((v) => v.garten_id)
+  const gvGartenIds = gvsSorted.map((v) => v.garten_id)
 
   const [gartenWerte, setGartenWerte] = useState([])
   useEffect(() => {
@@ -97,7 +97,7 @@ const PersonArten = ({ person }) => {
         .query(
           Q.where('_deleted', false),
           Q.where('aktiv', true),
-          Q.where('id', Q.notIn(gvArtIds)),
+          Q.where('id', Q.notIn(gvGartenIds)),
         )
         .fetch()
       const gartensSorted = await gartensSortedFromGartens(gartens)
@@ -115,7 +115,7 @@ const PersonArten = ({ person }) => {
     }
     run()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, gvArtIds.length])
+  }, [db.collections, gvGartenIds.length])
 
   const saveToDb = useCallback(
     async (event) => {

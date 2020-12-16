@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useState,
-  useMemo,
   useEffect,
   useContext,
   useRef,
@@ -11,12 +10,16 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Person from './Person'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import avsSortByPerson from '../../../../../utils/avsSortByPerson'
+import personSort from '../../../../../utils/personSort'
+import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -50,7 +53,7 @@ const Aven = styled.div`
 
 const ArtPersonen = ({ art }) => {
   const store = useContext(StoreContext)
-  const { personsSorted, insertAvRev, errors, unsetError } = store
+  const { db, insertAvRev, errors, unsetError } = store
 
   useEffect(() => unsetError('av'), [art.id, unsetError])
 
@@ -75,27 +78,37 @@ const ArtPersonen = ({ art }) => {
     [anim, open],
   )
 
-  const [avsSorted, setAvsSorted] = useState([])
+  const [dataState, setDataState] = useState({
+    avsSorted: [],
+    personWerte: [],
+  })
   useEffect(() => {
-    const subscription = art.avs.observe().subscribe(async (avs) => {
-      const _avsSorted = await avsSortByPerson(avs)
-      setAvsSorted(_avsSorted)
-    })
+    const personsObservable = db.collections
+      .get('person')
+      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .observe()
+    const avsObservable = art.avs.observe()
+    const combinedObservables = combineLatest([
+      personsObservable,
+      avsObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([persons, avs]) => {
+        const avsSorted = await avsSortByPerson(avs)
+        const avPersonIds = avsSorted.map((v) => v.person_id)
+        const personWerte = persons
+          .filter((a) => !avPersonIds.includes(a.id))
+          .sort((a, b) => personSort({ a, b }))
+          .map((el) => ({
+            value: el.id,
+            label: personLabelFromPerson({ person: el }),
+          }))
+        setDataState({ avsSorted, personWerte })
+      },
+    )
     return () => subscription.unsubscribe()
-  }, [art.avs])
-
-  const avPersonIds = avsSorted.map((v) => v.person_id)
-
-  const personWerte = useMemo(
-    () =>
-      personsSorted
-        .filter((a) => !avPersonIds.includes(a.id))
-        .map((el) => ({
-          value: el.id,
-          label: el?.fullname ?? '(kein Name)',
-        })),
-    [personsSorted, avPersonIds],
-  )
+  }, [art.avs, db.collections])
+  const { avsSorted, personWerte } = dataState
 
   const saveToDb = useCallback(
     async (event) => {

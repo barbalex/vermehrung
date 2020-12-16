@@ -109,8 +109,13 @@ const KulturForm = ({
       async ([gartens, garten, sammlungs]) => {
         const userPersonOption = await getUserPersonOption({ user, db }) // need to make this dynamic
         const gartensSorted = await gartensSortedFromGartens(gartens)
+        // need to show a choosen garten even if inactive but not if deleted
+        const gartensIncludingInactiveChoosen = uniqBy(
+          [...gartensSorted, ...(garten && !garten?._deleted ? [garten] : [])],
+          'id',
+        )
         const gartenWerte = await Promise.all(
-          gartensSorted.map(async (garten) => {
+          gartensIncludingInactiveChoosen.map(async (garten) => {
             const label = await garten.label.pipe(first$()).toPromise()
 
             return {
