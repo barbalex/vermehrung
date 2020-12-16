@@ -94,28 +94,62 @@ const LierferungForm = ({
 
   const urlLastName = activeNodeArray[activeNodeArray.length - 2]
   const isAnlieferung = urlLastName === 'An-Lieferungen'
-  const nachKultur = row.nach_kultur_id
-    ? store.kulturs.get(row.nach_kultur_id)
-    : {}
-  const nachKulturHerkunft = nachKultur.herkunft_id
-    ? store.herkunfts.get(nachKultur.herkunft_id)
-    : undefined
-  const vonKultur = row.von_kultur_id
-    ? store.kulturs.get(row.von_kultur_id)
-    : {}
-  const vonKulturHerkunft = vonKultur.herkunft_id
-    ? store.herkunfts.get(vonKultur.herkunft_id)
-    : undefined
-  const herkunftByKultur = isAnlieferung
-    ? nachKulturHerkunft
-    : vonKulturHerkunft
-  const vonSammlung = row.von_sammlung_id
-    ? store.sammlungs.get(row.von_sammlung_id)
-    : {}
-  const vonSammlungHerkunft = vonSammlung?.herkunft_id
-    ? store.herkunfts.get(vonSammlung.herkunft_id)
-    : undefined
-  const herkunft = herkunftByKultur || vonSammlungHerkunft
+  const [dataState, setDataState] = useState({
+    herkunft: undefined,
+    herkunftQuelle: undefined,
+  })
+  useEffect(() => {
+    const run = async () => {
+      const vonSammlung = row.von_sammlung_id
+        ? await row.sammlung.fetch()
+        : undefined
+      const vonSammlungHerkunft = vonSammlung
+        ? await vonSammlung.herkunft?.fetch()
+        : undefined
+
+      if (vonSammlungHerkunft) {
+        return setDataState({
+          herkunft: vonSammlungHerkunft,
+          herkunftQuelle: 'Sammlung',
+        })
+      }
+
+      if (row.von_kultur_id) {
+        const vonKultur = row.von_kultur_id
+          ? await db.collections.get('kultur').find(row.von_kultur_id)
+          : undefined
+        const herkunftByVonKultur = vonKultur
+          ? await vonKultur.herkunft?.fetch()
+          : undefined
+        if (herkunftByVonKultur) {
+          return setDataState({
+            herkunft: herkunftByVonKultur,
+            herkunftQuelle: 'von-Kultur',
+          })
+        }
+      }
+      const nachKultur = row.nach_kultur_id
+        ? await db.collections.get('kultur').find(row.nach_kultur_id)
+        : undefined
+      const herkunftByNachKultur = nachKultur
+        ? await nachKultur.herkunft?.fetch()
+        : undefined
+
+      setDataState({
+        herkunft: herkunftByNachKultur,
+        herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
+      })
+    }
+    run()
+  }, [
+    db.collections,
+    isAnlieferung,
+    row.nach_kultur_id,
+    row.sammlung,
+    row.von_kultur_id,
+    row.von_sammlung_id,
+  ])
+  const { herkunft, herkunftQuelle } = dataState
 
   const showDeleted =
     showFilter || filter.lieferung._deleted !== false || row?._deleted
@@ -175,7 +209,7 @@ const LierferungForm = ({
             saveToDb={saveToDb}
             ifNeeded={ifNeeded}
             herkunft={herkunft}
-            herkunftByKultur={herkunftByKultur}
+            herkunftQuelle={herkunftQuelle}
           />
           <Nach
             showFilter={showFilter}

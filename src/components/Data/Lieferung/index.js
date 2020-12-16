@@ -72,7 +72,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
 
         setDataState({
           row: lieferung,
-          rawRow: lieferung?._raw ?? lieferung,
+          rawRow: JSON.stringify(lieferung?._raw ?? lieferung),
           userPersonOption,
           sammelLieferung,
         })

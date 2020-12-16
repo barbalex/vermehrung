@@ -3,18 +3,19 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  useMemo,
   useRef,
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Select from '../../../../shared/Select'
 import exists from '../../../../../utils/exists'
-import kulturSort from '../../../../../utils/kulturSort'
-import sammlungLabelFromSammlung from '../sammlungLabelFromSammlung'
-import kulturLabelFromKultur from '../../../../../utils/kulturLabelFromKultur'
+import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs'
+import sammlungsSortedFromSammlungs from '../../../../../utils/sammlungsSortedFromSammlungs'
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft'
 
 const Title = styled.div`
@@ -60,61 +61,97 @@ const LieferungVon = ({
   saveToDb,
   ifNeeded,
   herkunft,
-  herkunftByKultur,
+  herkunftQuelle,
 }) => {
   const store = useContext(StoreContext)
-  const { errors, sammlungsSorted } = store
+  const { errors, db } = store
 
-  // BEWARE: need to include inactive kulturs, persons
-  const kultursSorted = [...store.kulturs.values()].sort((a, b) =>
-    kulturSort({ a, b, store }),
-  )
+  const [dataState, setDataState] = useState({
+    herkunftLabel: undefined,
+    vonKulturWerte: [],
+    sammlungWerte: [],
+  })
+  useEffect(() => {
+    // BEWARE: need to include inactive kulturs, persons
+    const kultursObservable = db.collections
+      .get('kultur')
+      .query(Q.where('_deleted', false))
+      .observe()
+    const sammlungsObservable = db.collections
+      .get('sammlung')
+      .query(Q.where('_deleted', false))
+      .observe()
+    const combinedObservables = combineLatest([
+      kultursObservable,
+      sammlungsObservable,
+    ])
+    const allSubscription = combinedObservables.subscribe(
+      async ([kulturs, sammlungs]) => {
+        const herkunftLabel =
+          herkunftLabelFromHerkunft({ herkunft }) ??
+          '(verfügbar, wenn Sammlung oder Kultur gewählt)'
+        const kultursFiltered = kulturs
+          // show only kulturen of art_id
+          .filter((k) => {
+            if (row?.art_id) return k.art_id === row.art_id
+            return true
+          })
+          // show only kulturen with same herkunft
+          .filter((k) => {
+            if (herkunft) return k?.herkunft_id === herkunft.id
+            return true
+          })
+          // shall not be delivered to same kultur it came from
+          .filter((k) => {
+            if (
+              row?.nach_kultur_id &&
+              row?.von_kultur_id !== row?.nach_kultur_id
+            ) {
+              return k.id !== row.nach_kultur_id
+            }
+            return true
+          })
+        const kultursSorted = await kultursSortedFromKulturs(kultursFiltered)
+        const vonKulturWerte = await Promise.all(
+          kultursSorted.map(async (el) => {
+            const label = await el.label.pipe(first$()).toPromise()
 
-  const herkunftQuelle = herkunftByKultur ? 'Kultur' : 'Sammlung'
-  const herkunftValue = herkunft
-    ? herkunftLabelFromHerkunft({ herkunft })
-    : '(verfügbar, wenn Sammlung oder Kultur gewählt)'
+            return {
+              value: el.id,
+              label,
+            }
+          }),
+        )
+        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+        const sammlungWerte = await Promise.all(
+          sammlungsSorted.map(async (el) => {
+            const label = await el.label.pipe(first$()).toPromise()
 
-  const vonKulturWerteData = kultursSorted
-    // show only kulturen of art_id
-    .filter((k) => {
-      if (row?.art_id) return k.art_id === row.art_id
-      return true
-    })
-    // show only kulturen with same herkunft
-    .filter((k) => {
-      if (herkunft) return k?.herkunft_id === herkunft.id
-      return true
-    })
-    // shall not be delivered to same kultur it came from
-    .filter((k) => {
-      if (row?.nach_kultur_id && row?.von_kultur_id !== row?.nach_kultur_id) {
-        return k.id !== row.nach_kultur_id
-      }
-      return true
-    })
-  const vonKulturWerte = useMemo(
-    () =>
-      vonKulturWerteData.map((el) => ({
-        value: el.id,
-        label: kulturLabelFromKultur({ kultur: el, store }),
-      })),
-    [store, vonKulturWerteData],
-  )
+            return {
+              value: el.id,
+              label,
+            }
+          }),
+        )
 
-  const sammlungWerte = useMemo(
-    () =>
-      sammlungsSorted
-        .filter((s) => {
-          if (row.art_id) return s.art_id === row.art_id
-          return true
+        setDataState({
+          herkunftLabel,
+          vonKulturWerte,
+          sammlungWerte,
         })
-        .map((el) => ({
-          value: el.id,
-          label: sammlungLabelFromSammlung({ sammlung: el, store }),
-        })),
-    [row.art_id, sammlungsSorted, store],
-  )
+      },
+    )
+
+    return () => allSubscription.unsubscribe()
+  }, [
+    db,
+    db.collections,
+    herkunft,
+    row.art_id,
+    row.nach_kultur_id,
+    row?.von_kultur_id,
+  ])
+  const { herkunftLabel, vonKulturWerte, sammlungWerte } = dataState
 
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)
@@ -171,7 +208,7 @@ const LieferungVon = ({
         <HerkunftLabel>
           {herkunft ? `Herkunft (aus ${herkunftQuelle})` : 'Herkunft'}
         </HerkunftLabel>
-        {herkunftValue}
+        {herkunftLabel}
       </Herkunft>
     </>
   )

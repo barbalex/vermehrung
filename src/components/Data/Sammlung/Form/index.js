@@ -7,6 +7,7 @@ import SimpleBar from 'simplebar-react'
 import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
+import uniqBy from 'lodash/uniqBy'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -105,7 +106,13 @@ const SammlungForm = ({
             value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
           })
         }
-        const personWerte = persons
+        // need to show a choosen person even if inactive but not if deleted
+        const person = await row.person?.fetch()
+        const personsIncludingInactiveChoosen = uniqBy(
+          [...persons, ...(person && !person?._deleted ? [person] : [])],
+          'id',
+        )
+        const personWerte = personsIncludingInactiveChoosen
           .sort((a, b) => personSort({ a, b }))
           .map((person) => ({
             value: person.id,
@@ -144,6 +151,7 @@ const SammlungForm = ({
     db.collections,
     filter.herkunft,
     row.nr,
+    row.person,
     setError,
     showFilter,
     userPersonOption,

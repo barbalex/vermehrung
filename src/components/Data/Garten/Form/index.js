@@ -5,6 +5,7 @@ import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
 //import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
@@ -62,7 +63,13 @@ const GartenForm = ({
     const combinedObservables = combineLatest([personsObservable])
     const allSubscription = combinedObservables.subscribe(async ([persons]) => {
       const userPersonOption = await getUserPersonOption({ user, db })
-      const personWerte = persons
+      // need to show a choosen person even if inactive but not if deleted
+      const person = await row.person?.fetch()
+      const personsIncludingInactiveChoosen = uniqBy(
+        [...persons, ...(person && !person?._deleted ? [person] : [])],
+        'id',
+      )
+      const personWerte = personsIncludingInactiveChoosen
         .sort((a, b) => personSort({ a, b }))
         .map((person) => ({
           value: person.id,
@@ -75,7 +82,7 @@ const GartenForm = ({
     })
 
     return () => allSubscription.unsubscribe()
-  }, [db, db.collections, user])
+  }, [db, db.collections, row.person, user])
   const { personWerte, userPersonOption } = dataState
 
   const {
