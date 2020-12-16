@@ -136,7 +136,7 @@ const TeilzaehlungForm = ({
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row[field])
       // only update if value has changed
       if (value === previousValue) return
 

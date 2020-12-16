@@ -95,7 +95,7 @@ const Herkunft = ({
         return filter.setValue({ table: 'herkunft', key: field, value })
       }
 
-      const previousValue = row._raw[field]
+      const previousValue = ifIsNumericAsNumber(row._raw[field])
       // only update if value has changed
       if (value === previousValue) return
       await row.edit({ field, value, store })

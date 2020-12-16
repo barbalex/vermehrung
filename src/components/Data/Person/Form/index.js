@@ -104,7 +104,7 @@ const Person = ({
         return filter.setValue({ table: 'person', key: field, value })
       }
 
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row[field])
       // only update if value has changed
       if (value === previousValue) return
       row.edit({ field, value, store })

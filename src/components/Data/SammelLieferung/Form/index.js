@@ -68,7 +68,7 @@ const SammelLieferungForm = ({
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row[field])
 
       if (showFilter) {
         return filter.setValue({ table: 'sammel_lieferung', key: field, value })

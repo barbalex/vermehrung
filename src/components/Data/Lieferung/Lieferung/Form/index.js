@@ -85,7 +85,7 @@ const LierferungForm = ({
       }
 
       // only update if value has changed
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row[field])
       if (value === previousValue) return
       row.edit({ field, value, store })
     },
