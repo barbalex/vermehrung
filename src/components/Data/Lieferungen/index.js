@@ -151,12 +151,12 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
   const { lieferungs, totalCount } = dataState
   const filteredCount = lieferungs.length
 
-  const add = useCallback(() => {
+  const add = useCallback(async () => {
     const isSammelLieferung =
       activeNodeArray.length >= 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
     if (isSammelLieferung) {
       const slId = activeNodeArray[1]
-      const sl = store.sammel_lieferungs.get(slId)
+      const sl = await db.get('sammel_lieferung').find(slId)
       let additionalValuesToSet = {}
 
       const entries = Object.entries(sl)
@@ -184,7 +184,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
       })
     }
     insertLieferungRev()
-  }, [activeNodeArray, insertLieferungRev, store.sammel_lieferungs])
+  }, [activeNodeArray, db, insertLieferungRev])
 
   const onClickUp = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
