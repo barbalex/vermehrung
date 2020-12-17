@@ -61,11 +61,12 @@ const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
         id: l.id,
         sammel_lieferung_id: l.sammel_lieferung_id,
         art_id: l.art_id,
+        // TODO: use wm
         art_label: artLabelFromLieferung({ lieferung: l, store }),
         person_id: l.person_id,
         person_label: personLabelFromPerson({ person: lieferungPerson, store }),
         von_sammlung_id: l.von_sammlung_id,
-        // TODO:
+        // TODO: usw wm
         von_sammlung_label: sammlungLabelFromSammlung({
           sammlung: vonSammlung,
           store,

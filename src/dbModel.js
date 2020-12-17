@@ -334,6 +334,7 @@ export class Sammlung extends Model {
 export class Lieferung extends Model {
   static table = 'lieferung'
   static associations = {
+    art: { type: 'belongs_to', key: 'art_id' },
     sammlung: { type: 'belongs_to', key: 'von_sammlung_id' },
     sammel_lieferung: { type: 'belongs_to', key: 'sammel_lieferung_id' },
     // not possible to build two associations to one table, see:
@@ -371,6 +372,7 @@ export class Lieferung extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
+  @relation('art', 'art_id') art
   @relation('sammlung', 'von_sammlung_id') sammlung
   @relation('sammel_lieferung', 'sammel_lieferung_id') sammel_lieferung
   @relation('kultur', 'von_kultur_id') von_kultur
@@ -1461,6 +1463,7 @@ export class Person extends Model {
 export class SammelLieferung extends Model {
   static table = 'sammel_lieferung'
   static associations = {
+    art: { type: 'belongs_to', key: 'art_id' },
     sammlung: { type: 'belongs_to', key: 'von_sammlung_id' },
     von_kultur: { type: 'belongs_to', key: 'von_kultur_id' },
     nach_kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
@@ -1493,6 +1496,7 @@ export class SammelLieferung extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
+  @relation('art', 'art_id') art
   @relation('sammlung', 'von_sammlung_id') sammlung
   @relation('sammlung', 'von_kultur_id') von_kultur
   @relation('sammlung', 'nach_kultur_id') nach_kultur
