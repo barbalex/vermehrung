@@ -19,8 +19,8 @@ const buildExceljsWorksheetsForDaten = async ({
   const { db } = store
 
   // 1. Get Garten
-  const garten = store.gartens.get(garten_id)
-  const person = garten.person_id ? store.persons.get(garten.person_id) : {}
+  const garten = await db.collections.get('garten').find(garten_id)
+  const person = garten.person ? await garten.person.fetch() : {}
   const newGarten = {
     id: garten.id,
     name: garten.name,
