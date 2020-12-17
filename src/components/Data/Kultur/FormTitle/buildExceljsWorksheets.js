@@ -4,7 +4,6 @@ import { first as first$ } from 'rxjs/operators'
 
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
 import removeMetadataFromDataset from '../../../../utils/removeMetadataFromDataset'
-import artLabelFromKultur from '../../../../utils/artLabelFromKultur'
 import exists from '../../../../utils/exists'
 import teilzaehlungsSortByTk from '../../../../utils/teilzaehlungsSortByTk'
 import zaehlungSort from '../../../../utils/zaehlungSort'
