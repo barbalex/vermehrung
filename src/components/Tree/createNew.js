@@ -1,16 +1,14 @@
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import isUuid from 'is-uuid'
-import { Q } from '@nozbe/watermelondb'
 
 import tableFromTitleHash from '../../utils/tableFromTitleHash'
 import exists from '../../utils/exists'
-import kultursSortedFromKulturs from '../../utils/kultursSortedFromKulturs'
 
 const createNew = async ({ node, store }) => {
   // get parent table, parent table id and table from url
   const { nodeType, url } = node
-  const { sammlungsSorted, sammelLieferungsSorted, db } = store
+  const { db } = store
   const { setActiveNodeArray } = store.tree
 
   // get table and id from url
@@ -70,14 +68,16 @@ const createNew = async ({ node, store }) => {
   if (table === 'lieferung' && parentTable === 'sammlung') {
     // need to choose von_kultur_id or nach_kultur_id
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
-    // need to get art_id from sammlung and set it
-    const sammlung = sammlungsSorted.find((s) => s.id === parentId)
+    // need to get art_id from sammlung and set itconst kultur = parentId
+    const sammlung = parentId
+      ? await db.collections.get('sammlung').find(parentId)
+      : undefined
     additionalValuesToSet.art_id = sammlung?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
-    const sammelLieferung = sammelLieferungsSorted.find(
-      (s) => s.id === parentId,
-    )
+    const sammelLieferung = parentId
+      ? await db.collections.get('sammel_lieferung').find(parentId)
+      : undefined
     if (!sammelLieferung) return console.log('no sammelLieferung found!')
     const entries = Object.entries(sammelLieferung)
       .filter(
