@@ -35,17 +35,18 @@ const SettingsEventsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const store = useContext(StoreContext)
   const { db } = store
 
-  const [kulturOption, setKulturOption] = useState()
+  const [dataState, setDataState] = useState({ kulturOption })
   useEffect(() => {
     const kulturOptionObservable = db.collections
       .get('kultur_option')
       .findAndObserve(kulturId)
     const subscription = kulturOptionObservable.subscribe((kulturOption) =>
-      setKulturOption(kulturOption),
+      setDataState({ kulturOption }),
     )
 
     return () => subscription.unsubscribe()
   }, [db.collections, kulturId])
+  const { kulturOption } = dataState
 
   const { ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
     kulturOption ?? {}

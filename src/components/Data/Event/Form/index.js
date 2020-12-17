@@ -89,14 +89,19 @@ const EventForm = ({
     const kulturObservable = showFilter
       ? $of(filter.kultur)
       : row.kultur.observe()
+    const kulturOptionObservable = row?.kultur_id
+      ? db.get('kultur_option').findAndObserve(row.kultur_id)
+      : $of({})
     const combinedObservables = combineLatest([
       kultursObservable,
       teilkulturObservable,
       personsObservable,
       kulturObservable,
+      kulturOptionObservable,
     ])
     const allSubscription = combinedObservables.subscribe(
-      async ([kulturs, teilkulturs, persons, kultur]) => {
+      async ([kulturs, teilkulturs, persons, kultur, kulturOption]) => {
+        console.log('Event Form useEffect', { kulturOption, row })
         // need to show a choosen kultur even if inactive but not if deleted
         const kultursIncludingInactiveChoosen = uniqBy(
           [...kulturs, ...(kultur && !kultur?._deleted ? [kultur] : [])],
@@ -133,7 +138,6 @@ const EventForm = ({
             value: person.id,
             label: personLabelFromPerson({ person }),
           }))
-        const kulturOption = (await kultur?.kultur_option?.fetch()) ?? {}
         setDataState({
           kulturWerte,
           teilkulturWerte,
@@ -145,14 +149,18 @@ const EventForm = ({
 
     return () => allSubscription.unsubscribe()
   }, [
+    db,
     db.collections,
     filter.kultur,
     kulturId,
+    row,
     row.kultur,
+    row.kultur_option,
     row.person,
     showFilter,
   ])
   const { kulturWerte, teilkulturWerte, personWerte, kulturOption } = dataState
+  console.log('Event Form rendering', { kulturOption, row })
 
   const { tk, ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
     kulturOption ?? {}
