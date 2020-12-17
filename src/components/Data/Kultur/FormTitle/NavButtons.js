@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 
@@ -38,7 +38,16 @@ const KulturNavButtons = ({ row }) => {
     () => setActiveNodeArray([...activeNodeArray, 'Teilkulturen']),
     [activeNodeArray, setActiveNodeArray],
   )
-  const kulturOption = store.kultur_options.get(row.id)
+
+  const [kulturOption, setKulturOption] = useState()
+  useEffect(() => {
+    const kOObservable = row.kultur_option.observe()
+    const subscription = kOObservable.subscribe((kulturOption) =>
+      setKulturOption(kulturOption),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [row.kultur_option, setKulturOption])
 
   return (
     <>
