@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
-import { combineLatest } from 'rxjs'
+import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
 import { StoreContext } from '../../../../models/reactUtils'
@@ -58,12 +58,19 @@ const TeilkulturForm = ({
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
     const kulturObservable = row.kultur.observe()
+    const kulturOptionsObservable = row.kultur_id
+      ? db.collections
+          .get('kultur_option')
+          .query(Q.where('_deleted', false), Q.where('id', row.kultur_id))
+          .observe()
+      : $of([])
     const combinedObservables = combineLatest([
       kultursObservable,
       kulturObservable,
+      kulturOptionsObservable,
     ])
     const allSubscription = combinedObservables.subscribe(
-      async ([kulturs, kultur]) => {
+      async ([kulturs, kultur, kulturOptions]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         const kultursIncludingInactiveChoosen = uniqBy(
           [...kulturs, ...(kultur && !kultur?._deleted ? [kultur] : [])],
@@ -82,14 +89,13 @@ const TeilkulturForm = ({
             }
           }),
         )
-        const kulturOption = await row.kultur_option?.fetch()
 
-        setDataState({ kulturWerte, kulturOption })
+        setDataState({ kulturWerte, kulturOption: kulturOptions[0] })
       },
     )
 
     return () => allSubscription.unsubscribe()
-  }, [db.collections, row.kultur, row.kultur_option])
+  }, [db.collections, row.kultur, row.kultur_id])
   const { kulturWerte, kulturOption } = dataState
 
   const { tk_bemerkungen } = kulturOption ?? {}

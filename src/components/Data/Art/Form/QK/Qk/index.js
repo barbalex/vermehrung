@@ -61,7 +61,6 @@ const ApQkQk = ({ artId, qkChoosens }) => {
   useEffect(() => {
     createMessageFunctions({
       artId,
-      store,
       db,
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(

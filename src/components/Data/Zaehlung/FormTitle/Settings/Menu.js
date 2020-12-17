@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -33,13 +39,20 @@ const Info = styled.div`
 
 const SettingsZaehlungenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const store = useContext(StoreContext)
-  const { kultur_options } = store
+  const { db } = store
 
-  const kulturOption = useMemo(() => kultur_options.get(kulturId) ?? {}, [
-    kulturId,
-    kultur_options,
-  ])
-  const { z_bemerkungen } = kulturOption
+  const [kulturOption, setKulturOption] = useState()
+  useEffect(() => {
+    const kOObservable = db.collections
+      .get('kultur_option')
+      .findAndObserve(kulturId)
+    const subscription = kOObservable.subscribe((kulturOption) =>
+      setKulturOption(kulturOption),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db.collections, kulturId])
+  const { z_bemerkungen } = kulturOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
