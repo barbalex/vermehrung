@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
@@ -205,7 +205,7 @@ const MenuSubtitle = styled.div`
 const Row = ({ style, node, nodes, userRole }) => {
   const store = useContext(StoreContext)
 
-  const { showTreeInSingleColumnView, singleColumnView, tree } = store
+  const { showTreeInSingleColumnView, singleColumnView, tree, db } = store
   const { activeNodeArray, singleRowHeight } = tree
 
   const isMobile = showTreeInSingleColumnView && singleColumnView
@@ -238,10 +238,18 @@ const Row = ({ style, node, nodes, userRole }) => {
     useSymbolIcon = false
   }
 
-  const person =
-    node?.nodeType === 'table' && node.table === 'person'
-      ? store.persons.get(last(node?.url))
-      : null
+  const [person, setPerson] = useState()
+  useEffect(() => {
+    const run = async () => {
+      const person =
+        node?.nodeType === 'table' && node.table === 'person' && node.url
+          ? await db.get('person').find(last(node.url))
+          : undefined
+      setPerson(person)
+    }
+    run()
+  }, [db, node?.nodeType, node.table, node.url])
+
   const accountId = person?.account_id ?? null
 
   const onClickNode = useCallback(

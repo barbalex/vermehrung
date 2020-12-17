@@ -1,17 +1,20 @@
 import tableFromTitleHash from '../../utils/tableFromTitleHash'
 
 const deleteModule = async ({ node, store }) => {
+  const { db } = store
   const {
     activeNodeArray,
     setActiveNodeArray,
     removeOpenNodeWithChildren,
   } = store.tree
+
   // get table and id from url
   const title = node.url.slice(-2)[0]
   const id = node.url.slice(-1)[0]
+  if (!id) throw new Error(`Keine id gefunden`)
   const table = tableFromTitleHash[title]
 
-  const me = store[`${table}s`].get(id)
+  const me = await db.get(table).find(id)
   if (!me?.delete) throw new Error(`Kein Modell für Tabelle ${table} gefunden`)
   me.delete({ store })
   setActiveNodeArray(activeNodeArray.slice(0, -1))
