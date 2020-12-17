@@ -15,51 +15,37 @@ const StyledTableCell = styled(TableCell)`
 
 const Zeile = ({ value }) => <div>{value}</div>
 
-const LieferungForLieferschein = ({ lieferung: l }) => {
+const LieferungForLieferschein = ({ lieferung: row }) => {
   const store = useContext(StoreContext)
   const { db } = store
 
-  console.log('LieferungForLieferschein', { l })
   const [dataState, setDataState] = useState({
     artLabel: '',
     herkunftLabel: '',
   })
   useEffect(() => {
-    console.log('LieferungForLieferschein useEffect running')
-    const artObservable = l.art.observe()
-    const vonKulturHerkunftObservable = l.von_kultur_id
+    const artObservable = row.art_id
+      ? db.collections.get('art').findAndObserve(row.art_id)
+      : $of({})
+    const vonKulturHerkunftObservable = row.von_kultur_id
       ? db.collections
           .get('herkunft')
-          .query(Q.on('kultur', Q.where('id', l.von_kultur_id)))
+          .query(Q.on('kultur', Q.where('id', row.von_kultur_id)))
           .observe()
-      : $of()
-    const vonSammlungHerkunftObservable = l.von_sammlung_id
+      : $of({})
+    const vonSammlungHerkunftObservable = row.von_sammlung_id
       ? db.collections
           .get('herkunft')
-          .query(Q.on('sammlung', Q.where('id', l.von_sammlung_id)))
+          .query(Q.on('sammlung', Q.where('id', row.von_sammlung_id)))
           .observe()
-      : $of()
-    console.log('LieferungForLieferschein useEffect', {
-      artObservable,
-      vonKulturHerkunftObservable,
-      vonSammlungHerkunftObservable,
-    })
+      : $of({})
     const combinedObservables = combineLatest([
       artObservable,
       vonKulturHerkunftObservable,
       vonSammlungHerkunftObservable,
     ])
-    console.log(
-      'LieferungForLieferschein useEffect, combinedObservables:',
-      combinedObservables,
-    )
     const subscription = combinedObservables.subscribe(
-      async ([art, vonKulturHerkunft, vonSammlungHerkunft]) => {
-        console.log('LieferungForLieferschein subscription result', {
-          art,
-          vonKulturHerkunft,
-          vonSammlungHerkunft,
-        })
+      async ([art, [vonKulturHerkunft], [vonSammlungHerkunft]]) => {
         const artLabel = await art.label.pipe(first$()).toPromise()
         const herkunftLabel = vonKulturHerkunft
           ? herkunftLabelFromHerkunft({
@@ -68,30 +54,30 @@ const LieferungForLieferschein = ({ lieferung: l }) => {
           : vonSammlungHerkunft
           ? herkunftLabelFromHerkunft({ herkunft: vonSammlungHerkunft })
           : ''
-        console.log('LieferungForLieferschein subscription result', {
-          artLabel,
-          herkunftLabel,
-        })
 
         setDataState({ artLabel, herkunftLabel })
       },
     )
 
-    console.log('LieferungForLieferschein subscription', subscription)
-
     return () => subscription.unsubscribe()
-  }, [db.collections, l.art, l.von_kultur_id, l.von_sammlung_id])
+  }, [
+    db.collections,
+    row.art,
+    row.art_id,
+    row.von_kultur_id,
+    row.von_sammlung_id,
+  ])
   const { artLabel, herkunftLabel } = dataState
 
   const wasArray = []
-  l.anzahl_pflanzen && wasArray.push(`${l.anzahl_pflanzen} Pflanzen`)
-  l.anzahl_auspflanzbereit &&
-    wasArray.push(`${l.anzahl_auspflanzbereit} Pflanzen auspflanzbereit`)
-  l.gramm_samen && wasArray.push(`${l.gramm_samen} Gramm Samen`)
-  l.von_anzahl_individuen &&
-    wasArray.push(`von ${l.von_anzahl_individuen} Individuen`)
-  l.andere_menge && wasArray.push(l.andere_menge)
-  const bemerkungen = l.bemerkungen ?? ''
+  row.anzahl_pflanzen && wasArray.push(`${row.anzahl_pflanzen} Pflanzen`)
+  row.anzahl_auspflanzbereit &&
+    wasArray.push(`${row.anzahl_auspflanzbereit} Pflanzen auspflanzbereit`)
+  row.gramm_samen && wasArray.push(`${row.gramm_samen} Gramm Samen`)
+  row.von_anzahl_individuen &&
+    wasArray.push(`von ${row.von_anzahl_individuen} Individuen`)
+  row.andere_menge && wasArray.push(row.andere_menge)
+  const bemerkungen = row.bemerkungen ?? ''
 
   return (
     <TableRow>
