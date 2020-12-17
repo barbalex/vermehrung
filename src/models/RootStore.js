@@ -1783,16 +1783,6 @@ export const RootStore = RootStoreBase.props({
     get zaehlungIdInActiveNodeArray() {
       return zaehlungIdInUrl(self.tree.activeNodeArray)
     },
-    get eventsSorted() {
-      return [...self.events.values()]
-        .filter((a) => {
-          if (self.filter.event._deleted === false) {
-            return notDeletedOrHasConflict(a)
-          }
-          return true
-        })
-        .sort((a, b) => eventSort({ a, b }))
-    },
     get herkunftsFiltered() {
       return queryFromStore({ store: self, table: 'herkunft' })
     },
