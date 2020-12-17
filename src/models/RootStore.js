@@ -1779,19 +1779,6 @@ export const RootStore = RootStoreBase.props({
     get zaehlungIdInActiveNodeArray() {
       return zaehlungIdInUrl(self.tree.activeNodeArray)
     },
-    get personsSorted() {
-      return [...self.persons.values()]
-        .filter((a) => {
-          if (self.filter.person._deleted === false) {
-            return notDeletedOrHasConflict(a)
-          }
-          return true
-        })
-        .filter((a) =>
-          self.filter.person.aktiv === true ? a.aktiv === true : true,
-        )
-        .sort((a, b) => personSort({ a, b }))
-    },
     get sammelLieferungsFiltered() {
       return queryFromStore({ store: self, table: 'sammel_lieferung' })
     },

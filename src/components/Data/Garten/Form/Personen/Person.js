@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaTimes } from 'react-icons/fa'
@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
 
 const Container = styled.div`
   display: flex;
@@ -45,15 +46,20 @@ const MenuTitle = styled.h3`
 
 const Gv = ({ gv }) => {
   const store = useContext(StoreContext)
-  const { personsSorted } = store
+
+  const [personLabel, setPersonLabel] = useState(null)
+  useEffect(() => {
+    const personSubscription = gv.person
+      .observe()
+      .subscribe((person) => setPersonLabel(personLabelFromPerson({ person })))
+
+    return () => personSubscription.unsubscribe()
+  }, [gv.person])
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = useCallback(() => gv.delete({ store }), [gv, store])
-
-  const person = personsSorted.find((p) => p.id === gv.person_id)
-  const personname = person?.fullname ?? '(kein Name)'
 
   if (!gv) return null
 
@@ -61,7 +67,7 @@ const Gv = ({ gv }) => {
     <ErrorBoundary>
       <Container>
         <Text>
-          <div>{personname}</div>
+          <div>{personLabel}</div>
         </Text>
         <DelIcon
           title="löschen"
