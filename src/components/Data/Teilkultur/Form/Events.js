@@ -1,9 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import format from 'date-fns/format'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import eventSort from '../../../../utils/eventSort'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -63,14 +65,20 @@ const Geplant = styled.div`
   margin-right: 10px;
 `
 
-const TkEvents = ({ kulturId, teilkulturId }) => {
+const TkEvents = ({ teilkultur }) => {
   const store = useContext(StoreContext)
-  const { eventsSorted } = store
 
-  // there should only be one ev per teilkultur_id
-  const events = eventsSorted.filter(
-    (ev) => ev?.kultur_id === kulturId && ev.teilkultur_id === teilkulturId,
-  )
+  const [events, setEvents] = useState([])
+  useEffect(() => {
+    const eventsObservable = teilkultur.events
+      .extend(Q.where('_deleted', false))
+      .observeWithColumns(['datum', 'beschreibung', 'geplant'])
+    const subscription = eventsObservable.subscribe((events) => {
+      const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+      setEvents(eventsSorted)
+    })
+    return () => subscription.unsubscribe()
+  }, [teilkultur.events])
 
   return (
     <ErrorBoundary>

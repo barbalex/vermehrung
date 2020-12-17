@@ -926,6 +926,8 @@ export class Teilkultur extends Model {
   static table = 'teilkultur'
   static associations = {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
+    event: { type: 'has_many', foreignKey: 'teilkultur_id' },
+    teilzaehlung: { type: 'has_many', foreignKey: 'teilkultur_id' },
   }
 
   @field('id') id
@@ -946,6 +948,8 @@ export class Teilkultur extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @relation('kultur', 'kultur_id') kultur
+  @children('event') events
+  @children('teilzaehlung') teilzaehlungs
 
   @action async removeConflict(_rev) {
     await this.update((row) => {

@@ -57,31 +57,36 @@ const TeilkulturForm = ({
       .get('kultur')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
-    const combinedObservables = combineLatest([kultursObservable])
-    const allSubscription = combinedObservables.subscribe(async ([kulturs]) => {
-      // need to show a choosen kultur even if inactive but not if deleted
-      const kultur = await row.kultur?.fetch()
-      const kultursIncludingInactiveChoosen = uniqBy(
-        [...kulturs, ...(kultur && !kultur?._deleted ? [kultur] : [])],
-        'id',
-      )
-      const kultursSorted = await kultursSortedFromKulturs(
-        kultursIncludingInactiveChoosen,
-      )
-      const kulturWerte = await Promise.all(
-        kultursSorted.map(async (el) => {
-          const label = await el.label.pipe(first$()).toPromise()
+    const kulturObservable = row.kultur.observe()
+    const combinedObservables = combineLatest([
+      kultursObservable,
+      kulturObservable,
+    ])
+    const allSubscription = combinedObservables.subscribe(
+      async ([kulturs, kultur]) => {
+        // need to show a choosen kultur even if inactive but not if deleted
+        const kultursIncludingInactiveChoosen = uniqBy(
+          [...kulturs, ...(kultur && !kultur?._deleted ? [kultur] : [])],
+          'id',
+        )
+        const kultursSorted = await kultursSortedFromKulturs(
+          kultursIncludingInactiveChoosen,
+        )
+        const kulturWerte = await Promise.all(
+          kultursSorted.map(async (el) => {
+            const label = await el.label.pipe(first$()).toPromise()
 
-          return {
-            value: el.id,
-            label,
-          }
-        }),
-      )
-      const kulturOption = await row.kultur_option?.fetch()
+            return {
+              value: el.id,
+              label,
+            }
+          }),
+        )
+        const kulturOption = await row.kultur_option?.fetch()
 
-      setDataState({ kulturWerte, kulturOption })
-    })
+        setDataState({ kulturWerte, kulturOption })
+      },
+    )
 
     return () => allSubscription.unsubscribe()
   }, [db.collections, row.kultur, row.kultur_option])
@@ -202,10 +207,10 @@ const TeilkulturForm = ({
               setActiveConflict={setActiveConflict}
             />
           )}
-          {!showFilter && (
+          {!showFilter && row.kultur_id && (
             <>
-              <Zaehlungen kulturId={row.kultur_id} teilkulturId={row.id} />
-              <Events kulturId={row.kultur_id} teilkulturId={row.id} />
+              <Zaehlungen teilkultur={row} />
+              <Events teilkultur={row} />
             </>
           )}
         </FieldsContainer>
