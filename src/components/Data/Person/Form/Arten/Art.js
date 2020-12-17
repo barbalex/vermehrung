@@ -46,7 +46,6 @@ const MenuTitle = styled.h3`
 
 const Av = ({ av }) => {
   const store = useContext(StoreContext)
-  const { db } = store
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -68,7 +67,7 @@ const Av = ({ av }) => {
       setArtLabel(label)
     })
     return () => subscription.unsubscribe()
-  }, [av.art, db.collections])
+  }, [av.art])
 
   if (!av) return null
   if (!artLabel) return null
