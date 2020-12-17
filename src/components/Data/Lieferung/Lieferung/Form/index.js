@@ -152,6 +152,8 @@ const LierferungForm = ({
   const showDeleted =
     showFilter || filter.lieferung._deleted !== false || row?._deleted
 
+  console.log('Lieferung, row:', row)
+
   return (
     <ErrorBoundary>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>

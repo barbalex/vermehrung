@@ -46,6 +46,7 @@ export class Herkunft extends Model {
   static table = 'herkunft'
   static associations = {
     sammlung: { type: 'has_many', foreignKey: 'herkunft_id' },
+    kultur: { type: 'has_many', foreignKey: 'herkunft_id' },
     herkunft_file: { type: 'has_many', foreignKey: 'herkunft_id' },
   }
 
@@ -72,6 +73,7 @@ export class Herkunft extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @children('sammlung') sammlungs
+  @children('herkunft') herkunfts
   @children('herkunft_file') files
 
   @action async removeConflict(_rev) {
@@ -339,9 +341,9 @@ export class Lieferung extends Model {
     sammel_lieferung: { type: 'belongs_to', key: 'sammel_lieferung_id' },
     // not possible to build two associations to one table, see:
     // https://github.com/Nozbe/WatermelonDB/issues/885
-    kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
+    //kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
     // this association will not do anything becaus no table with this name exists
-    nach_kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
+    //nach_kultur: { type: 'belongs_to', key: 'nach_kultur_id' },
     person: { type: 'belongs_to', key: 'person_id' },
     lieferung_file: { type: 'has_many', foreignKey: 'lieferung_id' },
   }
@@ -375,10 +377,29 @@ export class Lieferung extends Model {
   @relation('art', 'art_id') art
   @relation('sammlung', 'von_sammlung_id') sammlung
   @relation('sammel_lieferung', 'sammel_lieferung_id') sammel_lieferung
-  @relation('kultur', 'von_kultur_id') von_kultur
-  @relation('kultur', 'nach_kultur_id') nach_kultur
+  //@relation('kultur', 'von_kultur_id') von_kultur
+  //@relation('kultur', 'nach_kultur_id') nach_kultur
   @relation('person', 'person_id') person
   @children('lieferung_file') files
+
+  @lazy von_kultur = this.observe().pipe(
+    map$(async (lieferung) =>
+      lieferung.von_kultur_id
+        ? await lieferung.collections
+            .get('kultur')
+            .find(lieferung.von_kultur_id)
+        : undefined,
+    ),
+  )
+  @lazy nach_kultur = this.observe().pipe(
+    map$(async (lieferung) =>
+      lieferung.nach_kultur_id
+        ? await lieferung.collections
+            .get('kultur')
+            .find(lieferung.nach_kultur_id)
+        : undefined,
+    ),
+  )
 
   @lazy label = this.observe().pipe(
     distinctUntilChanged(
@@ -740,7 +761,7 @@ export class Kultur extends Model {
     // https://github.com/Nozbe/WatermelonDB/issues/885
     lieferung: { type: 'has_many', foreignKey: 'nach_kultur_id' },
     // this association will not do anything becaus no table with this name exists
-    auslieferung: { type: 'has_many', foreignKey: 'nach_kultur_id' },
+    //auslieferung: { type: 'has_many', foreignKey: 'nach_kultur_id' },
     teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
     zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
     event: { type: 'has_many', foreignKey: 'kultur_id' },
