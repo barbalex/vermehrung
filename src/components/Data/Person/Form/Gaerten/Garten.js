@@ -1,13 +1,14 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import { first as first$ } from 'rxjs/operators'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
+import { StoreContext } from '../../../../../models/reactUtils'
 
 const Container = styled.div`
   display: flex;
@@ -44,20 +45,26 @@ const MenuTitle = styled.h3`
 `
 
 const Garten = ({ gv }) => {
+  const store = useContext(StoreContext)
+
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClose = useCallback(() => setDelMenuAnchorEl(null), [])
-  const onClickDelete = useCallback(
+  const onClickDeleteIcon = useCallback(
     (event) => setDelMenuAnchorEl(event.currentTarget),
     [],
   )
+  const onClickDelete = useCallback(() => {
+    gv.delete({ store })
+    setDelMenuAnchorEl(null)
+  }, [gv, store])
 
   const [gartenLabel, setGartenLabel] = useState(null)
   useEffect(() => {
     const gartenSubscription = gv.garten.observe().subscribe(async (garten) => {
-      const person = await garten.person.fetch()
-      setGartenLabel(gartenLabelFromGarten({ garten, person }))
+      const label = await garten.label.pipe(first$()).toPromise()
+      setGartenLabel(label)
     })
     return () => gartenSubscription.unsubscribe()
   }, [gv.garten])
@@ -76,7 +83,7 @@ const Garten = ({ gv }) => {
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={onClickDelete}
+          onClick={onClickDeleteIcon}
         >
           <FaTimes />
         </DelIcon>
@@ -93,7 +100,7 @@ const Garten = ({ gv }) => {
           }}
         >
           <MenuTitle>löschen?</MenuTitle>
-          <MenuItem onClick={gv.delete}>ja</MenuItem>
+          <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={onClose}>nein</MenuItem>
         </Menu>
       </Container>

@@ -46,10 +46,9 @@ const TitleRow = styled.div`
 
 const SammelLieferungWer = ({ showFilter, row, ifNeeded, saveToDb }) => {
   const store = useContext(StoreContext)
-
   const { errors, db } = store
 
-  const [personWerte, setArtWerte] = useState([])
+  const [personWerte, setPersonWerte] = useState([])
   useEffect(() => {
     const personsObservable = db.collections
       .get('person')
@@ -70,7 +69,7 @@ const SammelLieferungWer = ({ showFilter, row, ifNeeded, saveToDb }) => {
           label: personLabelFromPerson({ person: el }),
         }))
 
-      setArtWerte(personWerte)
+      setPersonWerte(personWerte)
     })
 
     return () => allSubscription.unsubscribe()

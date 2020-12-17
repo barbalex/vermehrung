@@ -223,7 +223,8 @@ create table art_qk_choosen (
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
-  unique(art_id, qk_name)
+  -- this created problems in the on conflict clause of the revision trigger
+  -- unique(art_id, qk_name)
 );
 create index on art_qk_choosen using btree (id);
 create index on art_qk_choosen using btree (art_id);
@@ -658,7 +659,8 @@ create table kultur_qk_choosen (
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
-  unique(id, qk_name)
+  -- this created problems in the on conflict clause of the revision trigger
+  --unique(id, qk_name)
 );
 create index on kultur_qk_choosen using btree (id);
 create index on kultur_qk_choosen using btree (kultur_id);
@@ -1268,13 +1270,15 @@ create table av (
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
-  unique (person_id, art_id)
+  -- this created problems in the on conflict clause of the revision trigger
+  --unique (person_id, art_id)
 );
 create index on av using btree (id);
 create index on av using btree (art_id);
 create index on av using btree (person_id);
 create index on av using btree (_deleted);
 create index on av using btree (_rev_at);
+ALTER TABLE public.av DROP CONSTRAINT av_person_id_art_id_key;
 
 drop table if exists av_rev cascade;
 create table av_rev (
@@ -1312,13 +1316,16 @@ create table gv (
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
-  unique (person_id, garten_id)
+  -- this created problems in the on conflict clause of the revision trigger
+  -- unique (person_id, garten_id) 
 );
 create index on gv using btree (id);
 create index on gv using btree (garten_id);
 create index on gv using btree (person_id);
 create index on gv using btree (_deleted);
 create index on gv using btree (_rev_at);
+
+ALTER TABLE public.gv DROP CONSTRAINT gv_person_id_garten_id_key;
 
 drop table if exists gv_rev cascade;
 create table gv_rev (

@@ -80,26 +80,31 @@ const PersonArten = ({ person }) => {
 
   const [gvsSorted, setGvsSorted] = useState([])
   useEffect(() => {
-    const subscription = person.gvs.observe().subscribe(async (gvs) => {
-      const _gvsSorted = await gvsSortByGarten(gvs)
-      setGvsSorted(_gvsSorted)
-    })
+    const subscription = person.gvs
+      .extend(Q.where('_deleted', false))
+      .observe()
+      .subscribe(async (gvs) => {
+        const gvsSorted = await gvsSortByGarten(gvs)
+        setGvsSorted(gvsSorted)
+      })
     return () => subscription.unsubscribe()
   }, [person.gvs])
+
+  console.log('Gaerten, gvsSorted:', gvsSorted)
 
   const gvGartenIds = gvsSorted.map((v) => v.garten_id)
 
   const [gartenWerte, setGartenWerte] = useState([])
   useEffect(() => {
-    const run = async () => {
-      const gartens = await db.collections
-        .get('garten')
-        .query(
-          Q.where('_deleted', false),
-          Q.where('aktiv', true),
-          Q.where('id', Q.notIn(gvGartenIds)),
-        )
-        .fetch()
+    const gartensObservable = db.collections
+      .get('garten')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('aktiv', true),
+        Q.where('id', Q.notIn(gvGartenIds)),
+      )
+      .observe()
+    const subscription = gartensObservable.subscribe(async (gartens) => {
       const gartensSorted = await gartensSortedFromGartens(gartens)
       const gartenWerte = await Promise.all(
         gartensSorted.map(async (garten) => {
@@ -112,8 +117,8 @@ const PersonArten = ({ person }) => {
         }),
       )
       setGartenWerte(gartenWerte)
-    }
-    run()
+    })
+    return () => subscription.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db.collections, gvGartenIds.length])
 
