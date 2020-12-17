@@ -13,16 +13,8 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
-import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
 import NotificationType from './Notification'
-import lieferungSort from '../utils/lieferungSort'
-import personSort from '../utils/personSort'
-import sammlungSort from '../utils/sammlungSort'
-import teilkulturSort from '../utils/teilkulturSort'
-import herkunftSort from '../utils/herkunftSort'
-import kulturSort from '../utils/kulturSort'
-import notDeletedOrHasConflict from '../utils/notDeletedOrHasConflict'
 import artIdInUrl from '../utils/artIdInUrl'
 import herkunftIdInUrl from '../utils/herkunftIdInUrl'
 import gartenIdInUrl from '../utils/gartenIdInUrl'
@@ -1634,6 +1626,7 @@ export const RootStore = RootStoreBase.props({
         self.docFilter = val
       },
       flushData() {
+        // TODO: refactor for watermelonDB
         self.ae_art_lastUpdated = 0
         self.art_lastUpdated = 0
         self.art_file_lastUpdated = 0
@@ -1663,34 +1656,8 @@ export const RootStore = RootStoreBase.props({
         self.teilzaehlung_lastUpdated = 0
         self.user_role_lastUpdated = 0
         self.zaehlung_lastUpdated = 0
-        self.ae_arts.clear()
-        self.arts.clear()
-        self.art_files.clear()
-        self.art_qks.clear()
-        self.art_qk_choosens.clear()
-        self.avs.clear()
-        self.events.clear()
-        self.gartens.clear()
-        self.garten_files.clear()
-        self.gvs.clear()
-        self.herkunfts.clear()
-        self.herkunft_files.clear()
-        self.kulturs.clear()
-        self.kultur_files.clear()
-        self.kultur_options.clear()
-        self.kultur_qks.clear()
-        self.lieferungs.clear()
-        self.lieferung_files.clear()
-        self.persons.clear()
-        self.person_files.clear()
-        self.person_options.clear()
-        self.sammel_lieferungs.clear()
-        self.sammlungs.clear()
-        self.sammlung_files.clear()
-        self.teilkulturs.clear()
-        self.teilzaehlungs.clear()
-        self.user_roles.clear()
-        self.zaehlungs.clear()
+        // was for all tables:
+        //self.ae_arts.clear()
       },
     }
   })
@@ -1778,18 +1745,5 @@ export const RootStore = RootStoreBase.props({
     },
     get zaehlungIdInActiveNodeArray() {
       return zaehlungIdInUrl(self.tree.activeNodeArray)
-    },
-    get teilkultursFiltered() {
-      return queryFromStore({ store: self, table: 'teilkultur' })
-    },
-    get teilkultursSorted() {
-      return [...self.teilkulturs.values()]
-        .filter((a) => {
-          if (self.filter.teilkultur._deleted === false) {
-            return notDeletedOrHasConflict(a)
-          }
-          return true
-        })
-        .sort((a, b) => teilkulturSort({ a, b, store: self }))
     },
   }))

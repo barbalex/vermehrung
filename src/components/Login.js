@@ -65,6 +65,7 @@ const Login = () => {
       await firebase.auth().signOut()
       localForage.clear()
       window.localStorage.removeItem('token')
+      // TODO: refactor for watermelonDB
       flushData()
       setTimeout(async () => {
         try {

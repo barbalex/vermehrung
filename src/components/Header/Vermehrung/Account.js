@@ -60,6 +60,7 @@ const Account = () => {
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
     firebase.auth().signOut()
+    // TODO: refactor for watermelonDB
     flushData()
   }, [firebase, flushData])
 
