@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { graphql, useStaticQuery } from 'gatsby'
@@ -14,6 +14,7 @@ import SimpleBar from 'simplebar-react'
 
 import Lieferung from './Lieferung'
 import { StoreContext } from '../../../../models/reactUtils'
+import lieferungSort from '../../../../utils/lieferungSort'
 
 const Container = styled.div`
   background-color: #f8f8f8;
@@ -93,7 +94,16 @@ const StyledTable = styled(Table)`
 
 const Lieferschein = ({ row }) => {
   const store = useContext(StoreContext)
-  const { lieferungsSorted } = store
+
+  const [lieferungs, setLieferungs] = useState([])
+  useEffect(() => {
+    const lieferungsObservable = row.lieferungs.observe()
+    const subscription = lieferungsObservable.subscribe((lieferungs) => {
+      setLieferungs(lieferungs.sort((a, b) => lieferungSort({ a, b })))
+    })
+
+    return () => subscription.unsubscribe()
+  }, [row.lieferungs])
 
   const imageData = useStaticQuery(graphql`
     query QueryLieferscheinImage {
@@ -128,10 +138,6 @@ const Lieferschein = ({ row }) => {
   const am = row.datum
     ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
     : '(Kein Datum erfasst)'
-
-  const lieferungen = lieferungsSorted.filter(
-    (l) => l.sammel_lieferung_id === row.id,
-  )
 
   return (
     <Container>
@@ -177,7 +183,7 @@ const Lieferschein = ({ row }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {lieferungen.map((l) => (
+                {lieferungs.map((l) => (
                   <Lieferung key={l.id} lieferung={l} />
                 ))}
               </TableBody>

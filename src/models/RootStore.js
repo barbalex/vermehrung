@@ -1779,25 +1779,6 @@ export const RootStore = RootStoreBase.props({
     get zaehlungIdInActiveNodeArray() {
       return zaehlungIdInUrl(self.tree.activeNodeArray)
     },
-    get kultursFiltered() {
-      return queryFromStore({ store: self, table: 'kultur' })
-    },
-    get lieferungsFiltered() {
-      return queryFromStore({ store: self, table: 'lieferung' })
-    },
-    get lieferungsSorted() {
-      return [...self.lieferungs.values()]
-        .filter((a) => {
-          if (self.filter.lieferung._deleted === false) {
-            return notDeletedOrHasConflict(a)
-          }
-          return true
-        })
-        .sort((a, b) => lieferungSort({ a, b }))
-    },
-    get personsFiltered() {
-      return queryFromStore({ store: self, table: 'person' })
-    },
     get personsSorted() {
       return [...self.persons.values()]
         .filter((a) => {
