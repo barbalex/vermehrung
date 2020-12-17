@@ -1,14 +1,16 @@
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import isUuid from 'is-uuid'
+import { Q } from '@nozbe/watermelondb'
 
 import tableFromTitleHash from '../../utils/tableFromTitleHash'
 import exists from '../../utils/exists'
+import kultursSortedFromKulturs from '../../utils/kultursSortedFromKulturs'
 
 const createNew = async ({ node, store }) => {
   // get parent table, parent table id and table from url
   const { nodeType, url } = node
-  const { kultursSorted, sammlungsSorted, sammelLieferungsSorted } = store
+  const { sammlungsSorted, sammelLieferungsSorted, db } = store
   const { setActiveNodeArray } = store.tree
 
   // get table and id from url
@@ -60,7 +62,9 @@ const createNew = async ({ node, store }) => {
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
     if (tableTitle === 'An-Lieferungen') fkName = `nach_${parentTable}_id`
     // need to get art_id from kultur and set it
-    const kultur = kultursSorted.find((k) => k.id === parentId)
+    const kultur = parentId
+      ? await db.collections.get('kultur').find(parentId)
+      : undefined
     additionalValuesToSet.art_id = kultur?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammlung') {
