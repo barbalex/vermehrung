@@ -4,34 +4,12 @@ import personLabelFromPerson from './personLabelFromPerson'
 
 const sammlungLabelFromSammlung = ({
   sammlung,
-  store,
-  art: artPassed,
-  ae_art: aeArtPassed,
-  person: personPassed,
-  herkunft: herkunftPassed,
+  art,
+  ae_art,
+  person,
+  herkunft,
 }) => {
-  const art = store
-    ? sammlung?.art_id
-      ? store.arts.get(sammlung.art_id)
-      : undefined
-    : artPassed
-  const aeArt = store
-    ? art?.ae_id
-      ? store.ae_arts.get(art.ae_id)
-      : undefined
-    : aeArtPassed
-  const person = store
-    ? sammlung.person_id
-      ? store.persons.get(sammlung.person_id)
-      : undefined
-    : personPassed
-  const herkunft = store
-    ? sammlung.herkunft_id
-      ? store.herkunfts.get(sammlung.herkunft_id)
-      : undefined
-    : herkunftPassed
-
-  const artLabel = art ? aeArt?.name ?? '(Art ohne Name)' : '(keine Art)'
+  const artLabel = art ? ae_art?.name ?? '(Art ohne Name)' : '(keine Art)'
   const personLabel = personLabelFromPerson({ person })
   const herkunftLabel = herkunft?.id
     ? `von ${herkunft?.nr}` ?? '(Herkunft ohne Nr)'

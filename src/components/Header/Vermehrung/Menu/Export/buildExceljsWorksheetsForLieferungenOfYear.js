@@ -65,6 +65,7 @@ const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
         person_id: l.person_id,
         person_label: personLabelFromPerson({ person: lieferungPerson, store }),
         von_sammlung_id: l.von_sammlung_id,
+        // TODO:
         von_sammlung_label: sammlungLabelFromSammlung({
           sammlung: vonSammlung,
           store,
