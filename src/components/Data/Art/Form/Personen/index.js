@@ -87,7 +87,7 @@ const ArtPersonen = ({ art }) => {
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
-    const avsObservable = art.avs.observe()
+    const avsObservable = art.avs.extend(Q.where('_deleted', false)).observe()
     const combinedObservables = combineLatest([
       personsObservable,
       avsObservable,

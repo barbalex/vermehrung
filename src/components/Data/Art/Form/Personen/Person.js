@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useStore } from 'react'
+import React, { useCallback, useState, useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaTimes } from 'react-icons/fa'
@@ -45,23 +45,28 @@ const MenuTitle = styled.h3`
 `
 
 const Av = ({ av }) => {
-  const store = useStore(StoreContext)
+  const store = useContext(StoreContext)
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClose = useCallback(() => setDelMenuAnchorEl(null), [])
-  const onClickIcon = useCallback(
+  const onClickDeleteIcon = useCallback(
     (event) => setDelMenuAnchorEl(event.currentTarget),
     [],
   )
+  const onClickDelete = useCallback(() => {
+    av.delete({ store })
+    setDelMenuAnchorEl(null)
+  }, [av, store])
 
   const [personLabel, setPersonLabel] = useState(null)
   useEffect(() => {
-    const personSubscription = av.person.observe().subscribe(async (person) => {
+    const observable = av.person.observe()
+    const subscription = observable.subscribe((person) => {
       setPersonLabel(personLabelFromPerson({ person }))
     })
-    return () => personSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [av.person])
 
   if (!av) return null
@@ -78,7 +83,7 @@ const Av = ({ av }) => {
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={onClickIcon}
+          onClick={onClickDeleteIcon}
         >
           <FaTimes />
         </DelIcon>
@@ -95,7 +100,7 @@ const Av = ({ av }) => {
           }}
         >
           <MenuTitle>löschen?</MenuTitle>
-          <MenuItem onClick={() => av.delete({ store })}>ja</MenuItem>
+          <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={onClose}>nein</MenuItem>
         </Menu>
       </Container>

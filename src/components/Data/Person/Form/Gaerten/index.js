@@ -90,8 +90,6 @@ const PersonArten = ({ person }) => {
     return () => subscription.unsubscribe()
   }, [person.gvs])
 
-  console.log('Gaerten, gvsSorted:', gvsSorted)
-
   const gvGartenIds = gvsSorted.map((v) => v.garten_id)
 
   const [gartenWerte, setGartenWerte] = useState([])
