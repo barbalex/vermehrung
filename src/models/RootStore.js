@@ -1782,19 +1782,6 @@ export const RootStore = RootStoreBase.props({
     get kultursFiltered() {
       return queryFromStore({ store: self, table: 'kultur' })
     },
-    get kultursSorted() {
-      return [...self.kulturs.values()]
-        .filter((a) => {
-          if (self.filter.kultur._deleted === false) {
-            return notDeletedOrHasConflict(a)
-          }
-          return true
-        })
-        .filter((a) =>
-          self.filter.kultur.aktiv === true ? a.aktiv === true : true,
-        )
-        .sort((a, b) => kulturSort({ a, b, store: self }))
-    },
     get lieferungsFiltered() {
       return queryFromStore({ store: self, table: 'lieferung' })
     },
