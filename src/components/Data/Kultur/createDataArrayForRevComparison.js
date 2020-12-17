@@ -1,23 +1,19 @@
-import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from '../../../utils/gartenLabelFromGarten'
-import artLabelFromKultur from '../../../utils/artLabelFromKultur'
-
-const createDataArrayForRevComparison = ({ row, revRow, store }) => [
+const createDataArrayForRevComparison = ({ row, revRow }) => [
   {
-    valueInRow: artLabelFromKultur({ kultur: row, store }),
-    valueInRev: artLabelFromKultur({ kultur: revRow, store }),
-    label: 'Art',
+    valueInRow: row.art_id,
+    valueInRev: revRow.art_id,
+    label: 'Art (id)',
   },
   {
-    valueInRow: herkunftLabelFromHerkunft({ herkunft: row }),
-    valueInRev: herkunftLabelFromHerkunft({ herkunft: revRow }),
-    label: 'Herkunft',
+    valueInRow: row.herkunft_id,
+    valueInRev: revRow.herkunft_id,
+    label: 'Herkunft (id)',
   },
   { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
   {
-    valueInRow: gartenLabelFromGarten({ garten: row, store }),
-    valueInRev: gartenLabelFromGarten({ garten: revRow, store }),
-    label: 'Garten',
+    valueInRow: row.garten_id,
+    valueInRev: revRow.garten_id,
+    label: 'Garten (id)',
   },
   {
     valueInRow: row?.zwischenlager == true,

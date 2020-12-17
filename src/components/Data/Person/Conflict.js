@@ -66,8 +66,8 @@ const PersonConflict = ({
   const revRow = useMemo(() => data?.person_rev?.[0] ?? {}, [data?.person_rev])
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow, store }),
-    [revRow, row, store],
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
   )
 
   const onClickVerwerfen = useCallback(() => {
@@ -122,7 +122,13 @@ const PersonConflict = ({
     })
     deletePersonRevModel(revRow)
     conflictDisposalCallback()
-  }, [addQueuedQuery, conflictDisposalCallback, deletePersonRevModel, revRow, user.email])
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    deletePersonRevModel,
+    revRow,
+    user.email,
+  ])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing

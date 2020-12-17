@@ -1,18 +1,12 @@
-const createDataArrayForRevComparison = ({ row: rowPassed, revRow, store }) => {
+const createDataArrayForRevComparison = ({ row: rowPassed, revRow }) => {
   // need to use raw values here
   const row = rowPassed._raw
-  const rowUserRole = row?.user_role_id
-    ? store.user_roles.get(row.user_role_id)
-    : {}
-  const revRowUserRole = revRow?.user_role_id
-    ? store.user_roles.get(revRow.user_role_id)
-    : {}
 
   return [
     {
-      valueInRow: rowUserRole?.label,
-      valueInRev: revRowUserRole?.label,
-      label: 'Rolle',
+      valueInRow: row.user_role_id,
+      valueInRev: revRow.user_role_id,
+      label: 'Rolle (id)',
     },
     {
       valueInRow: row?.nr,
@@ -20,9 +14,14 @@ const createDataArrayForRevComparison = ({ row: rowPassed, revRow, store }) => {
       label: 'Nr',
     },
     {
-      valueInRow: row?.fullname,
-      valueInRev: revRow?.fullname,
-      label: 'Name',
+      valueInRow: row?.vorname,
+      valueInRev: revRow?.vorname,
+      label: 'Vorname',
+    },
+    {
+      valueInRow: row?.name,
+      valueInRev: revRow?.name,
+      label: 'Nachname',
     },
     {
       valueInRow: row?.adresszusatz,

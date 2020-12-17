@@ -60,8 +60,8 @@ const ZaehlungConflict = ({
   ])
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow, store }),
-    [revRow, row, store],
+    () => createDataArrayForRevComparison({ row, revRow,  }),
+    [revRow, row, ],
   )
 
   const onClickVerwerfen = useCallback(() => {
