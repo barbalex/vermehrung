@@ -4,11 +4,8 @@ import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook'
-import sammlungLabelFromSammlung from '../../../../../utils/sammlungLabelFromSammlung'
-import kulturLabelFromKultur from '../../../../../utils/kulturLabelFromKultur'
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
-import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'
 import lieferungSort from '../../../../../utils/lieferungSort'
 
@@ -31,13 +28,24 @@ const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
       .map(async (l) => {
         const lieferungPerson = await l.person?.fetch()
         const vonSammlung = await l.sammlung?.fetch()
+        const von_sammlung_label = vonSammlung?.label.pipe(first$()).toPromise()
         const vonSammlungPerson = await vonSammlung?.person?.fetch()
         const vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
         const vonKultur = await l.von_kultur.pipe(first$()).toPromise()
+        const von_kultur_label = await vonKultur?.label
+          .pipe(first$())
+          .toPromise()
         const vonKulturGarten = await vonKultur?.garten?.fetch()
+        const von_kultur_garten_label = await vonKulturGarten?.label
+          .pipe(first$())
+          .toPromise()
         const vonKulturHerkunft = await vonKultur?.herkunft?.fetch()
         const nachKultur = await l.nach_kultur.pipe(first$()).toPromise()
+        const nach_kultur_label = nachKultur?.label.pipe(first$()).toPromise()
         const nachKulturGarten = await nachKultur?.garten?.fetch()
+        const nach_kultur_garten_label = nachKulturGarten?.label
+          .pipe(first$())
+          .toPromise()
         const nachKulturHerkunft = await nachKultur?.herkunft?.fetch()
         const art = await l.art?.fetch()
         const art_label = await art?.label.pipe(first$()).toPromise()
@@ -52,24 +60,18 @@ const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
             person: lieferungPerson,
           }),
           von_sammlung_id: l.von_sammlung_id,
-          // TODO: usw wm
-          von_sammlung_label: sammlungLabelFromSammlung({
-            sammlung: vonSammlung,
-            store,
-          }),
+          von_sammlung_label,
           von_sammlung_datum: vonSammlung?.datum ?? '',
           von_sammlung_herkunft_id: vonSammlung?.herkunft_id ?? '',
           von_sammlung_herkunft_nr: vonSammlungHerkunft?.nr ?? '',
           von_sammlung_person_id: vonSammlung?.person_id ?? '',
-          von_sammlung_person_name: vonSammlungPerson?.fullname ?? '',
-          von_kultur_id: l.von_kultur_id,
-          von_kultur_label: kulturLabelFromKultur({ kultur: vonKultur, store }),
-          von_kultur_garten_id: vonKultur?.garten_id ?? '',
-          // TODO: use wm
-          von_kultur_garten_label: gartenLabelFromGarten({
-            garten: vonKulturGarten,
-            store,
+          von_sammlung_person_name: personLabelFromPerson({
+            person: vonSammlungPerson,
           }),
+          von_kultur_id: l.von_kultur_id,
+          von_kultur_label,
+          von_kultur_garten_id: vonKultur?.garten_id ?? '',
+          von_kultur_garten_label,
           von_kultur_herkunft_id: vonKultur?.herkunft_id ?? '',
           von_kultur_herkunft_label: herkunftLabelFromHerkunft({
             herkunft: vonKulturHerkunft,
@@ -77,16 +79,9 @@ const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
           von_kultur_herkunft_nr: vonKulturHerkunft?.nr ?? '',
           datum: l.datum,
           nach_kultur_id: l.nach_kultur_id,
-          nach_kultur_label: kulturLabelFromKultur({
-            kultur: nachKultur,
-            store,
-          }),
+          nach_kultur_label,
           nach_kultur_garten_id: nachKultur?.garten_id ?? '',
-          // TODO: use wm
-          nach_kultur_garten_label: gartenLabelFromGarten({
-            garten: nachKulturGarten,
-            store,
-          }),
+          nach_kultur_garten_label,
           nach_kultur_garten_name: nachKulturGarten?.name ?? '',
           nach_kultur_herkunft_id: nachKultur?.herkunft_id ?? '',
           nach_kultur_herkunft_nr: nachKulturHerkunft?.nr ?? '',
