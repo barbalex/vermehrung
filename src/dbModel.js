@@ -743,6 +743,7 @@ export class Kultur extends Model {
     event: { type: 'has_many', foreignKey: 'kultur_id' },
     kultur_option: { type: 'belongs_to', key: 'id' },
     kultur_file: { type: 'has_many', foreignKey: 'kultur_id' },
+    qk_choosen: { type: 'has_many', foreignKey: 'kultur_id' },
   }
 
   @field('id') id
@@ -768,6 +769,7 @@ export class Kultur extends Model {
   @children('zaehlung') zaehlungs
   @children('event') events
   @children('kultur_file') files
+  @children('qk_choosen') qk_choosens
   @relation('kultur_option', 'id') kultur_option
   @relation('garten', 'garten_id') garten
   @relation('art', 'art_id') art

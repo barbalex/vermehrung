@@ -1,3 +1,4 @@
+// not in use, 2020.12.17
 import types from '../models/Filter/simpleTypes'
 import camelCase from 'lodash/camelCase'
 

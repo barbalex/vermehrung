@@ -13,6 +13,8 @@ import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { motion, useAnimation } from 'framer-motion'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Qk from './Qk'
@@ -57,6 +59,7 @@ const Body = styled.div`
 
 const KulturQk = ({ kultur }) => {
   const store = useContext(StoreContext)
+  const { db } = store
 
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)
@@ -75,13 +78,46 @@ const KulturQk = ({ kultur }) => {
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const kulturQkChoosen = [...store.kultur_qk_choosens.values()].filter(
-    (q) => q.kultur_id === kultur.id,
-  )
-  const qkChoosens = kulturQkChoosen.filter((qk) => qk.choosen)
+  const [dataState, setDataState] = useState({
+    totalCount: 0,
+    choosenCount: 0,
+    choosen: [],
+  })
+  useEffect(() => {
+    const totalCountObservable = db.collections
+      .get('kultur_qk_choosen')
+      .query(Q.where('_deleted', false), Q.where('kultur_id', kultur.id))
+      .observeCount()
+    const choosenCountObservable = db.collections
+      .get('kultur_qk_choosen')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('kultur_id', kultur.id),
+        Q.where('choosen', true),
+      )
+      .observeCount()
+    const choosenObservable = db.collections
+      .get('kultur_qk_choosen')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('kultur_id', kultur.id),
+        Q.where('choosen', true),
+      )
+      .observe()
+    const combinedObservables = combineLatest([
+      totalCountObservable,
+      choosenCountObservable,
+      choosenObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, choosenCount, choosen]) => {
+        setDataState({ totalCount, choosenCount, choosen })
+      },
+    )
 
-  const qkCount = kulturQkChoosen.length
-  const kulturQkCount = qkChoosens.length
+    return () => subscription.unsubscribe()
+  }, [db.collections, kultur.id])
+  const { totalCount, choosenCount, choosen } = dataState
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
@@ -154,7 +190,7 @@ const KulturQk = ({ kultur }) => {
               <Tab label="ausführen" value="qk" data-id="qk" />
               <Tab
                 label={`auswählen${
-                  qkCount ? ` (${kulturQkCount}/${qkCount})` : ''
+                  totalCount ? ` (${choosenCount}/${totalCount})` : ''
                 }`}
                 value="waehlen"
                 data-id="waehlen"
@@ -162,7 +198,7 @@ const KulturQk = ({ kultur }) => {
             </StyledTabs>
             <Body>
               {tab === 'qk' ? (
-                <Qk kultur={kultur} qkChoosens={qkChoosens} />
+                <Qk kultur={kultur} qkChoosens={choosen} />
               ) : (
                 <Choose />
               )}
