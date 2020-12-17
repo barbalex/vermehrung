@@ -16,10 +16,6 @@ import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArra
 import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
 import NotificationType from './Notification'
-import artSort from '../utils/artSort'
-import avSort from '../utils/avSort'
-import gvSort from '../utils/gvSort'
-import eventSort from '../utils/eventSort'
 import lieferungSort from '../utils/lieferungSort'
 import personSort from '../utils/personSort'
 import sammlungSort from '../utils/sammlungSort'
@@ -1782,16 +1778,6 @@ export const RootStore = RootStoreBase.props({
     },
     get zaehlungIdInActiveNodeArray() {
       return zaehlungIdInUrl(self.tree.activeNodeArray)
-    },
-    get herkunftsSorted() {
-      return [...self.herkunfts.values()]
-        .filter((a) => {
-          if (self.filter.herkunft._deleted === false) {
-            return notDeletedOrHasConflict(a)
-          }
-          return true
-        })
-        .sort((a, b) => herkunftSort({ a, b }))
     },
     get kultursFiltered() {
       return queryFromStore({ store: self, table: 'kultur' })
