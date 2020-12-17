@@ -17,6 +17,8 @@ import {
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
+import { DateTime } from 'luxon'
+import { first as first$ } from 'rxjs/operators'
 
 import toStringIfPossible from './utils/toStringIfPossible'
 import personLabelFromPerson from './utils/personLabelFromPerson'
@@ -30,7 +32,6 @@ import kulturLabelFromKulturUnderArt from './utils/kulturLabelFromKulturUnderArt
 import kulturLabelFromKulturUnderGarten from './utils/kulturLabelFromKulturUnderGarten'
 import sammlungLabelFromSammlung from './utils/sammlungLabelFromSammlung'
 import sammlungLabelFromSammlungUnderHerkunft from './utils/sammlungLabelFromSammlungUnderHerkunft'
-import sammelLieferungLabelFromSammelLieferung from './utils/sammelLieferungLabelFromSammelLieferung'
 import zaehlungLabelFromZaehlung from './utils/zaehlungLabelFromZaehlung'
 import getUserPersonOption from './utils/getUserPersonOption'
 import toPgArray from './utils/toPgArray'
@@ -1501,16 +1502,20 @@ export class SammelLieferung extends Model {
   @lazy label = this.observe().pipe(
     distinctUntilChanged(),
     map$(async (lieferung) => {
-      const vonKultur = await lieferung.von_kultur.fetch()
+      const vonKultur = lieferung.von_kultur_id
+        ? await this.collections.get('kultur').find(lieferung.von_kultur_id)
+        : undefined
       const vonGarten = vonKultur ? await vonKultur.garten.fetch() : undefined
+      const gartenLabel = await vonGarten.label.pipe(first$()).toPromise()
       const person = await lieferung.person.fetch()
+      const personLabel = personLabelFromPerson({ person })
+      const datumLabel = lieferung.datum
+        ? DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
+        : `Kein Datum. ID: ${lieferung.id}`
+      const von = gartenLabel ? `von: ${gartenLabel}` : ''
+      const label = [datumLabel, von, personLabel].filter((e) => !!e).join('; ')
 
-      return sammelLieferungLabelFromSammelLieferung({
-        lieferung,
-        vonKultur,
-        vonGarten,
-        person,
-      })
+      return label
     }),
   )
 
