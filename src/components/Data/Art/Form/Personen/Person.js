@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useStore } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaTimes } from 'react-icons/fa'
@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
+import { StoreContext } from '../../../../../models/reactUtils'
 
 const Container = styled.div`
   display: flex;
@@ -44,6 +45,8 @@ const MenuTitle = styled.h3`
 `
 
 const Av = ({ av }) => {
+  const store = useStore(StoreContext)
+
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
@@ -92,7 +95,7 @@ const Av = ({ av }) => {
           }}
         >
           <MenuTitle>löschen?</MenuTitle>
-          <MenuItem onClick={av.delete}>ja</MenuItem>
+          <MenuItem onClick={() => av.delete({ store })}>ja</MenuItem>
           <MenuItem onClick={onClose}>nein</MenuItem>
         </Menu>
       </Container>
