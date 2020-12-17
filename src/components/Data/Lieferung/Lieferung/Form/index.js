@@ -44,12 +44,69 @@ const LierferungForm = ({
   const store = useContext(StoreContext)
 
   const { errors, filter, unsetError, user, db } = store
-  const { activeNodeArray } = store.tree
 
-  const [userPersonOption, setUserPersonOption] = useState()
+  const [dataState, setDataState] = useState({
+    herkunft: undefined,
+    herkunftQuelle: undefined,
+    userPersonOption,
+  })
   useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
-  }, [db, user])
+    const run = async () => {
+      const vonSammlung = row.von_sammlung_id
+        ? await row.sammlung.fetch()
+        : undefined
+      const vonSammlungHerkunft = vonSammlung
+        ? await vonSammlung.herkunft?.fetch()
+        : undefined
+
+      if (vonSammlungHerkunft) {
+        return setDataState({
+          herkunft: vonSammlungHerkunft,
+          herkunftQuelle: 'Sammlung',
+        })
+      }
+
+      if (row.von_kultur_id) {
+        const vonKultur = row.von_kultur_id
+          ? await db.collections.get('kultur').find(row.von_kultur_id)
+          : undefined
+        const herkunftByVonKultur = vonKultur
+          ? await vonKultur.herkunft?.fetch()
+          : undefined
+        if (herkunftByVonKultur) {
+          return setDataState({
+            herkunft: herkunftByVonKultur,
+            herkunftQuelle: 'von-Kultur',
+          })
+        }
+      }
+      const nachKultur = row.nach_kultur_id
+        ? await db.collections.get('kultur').find(row.nach_kultur_id)
+        : undefined
+      const herkunftByNachKultur = nachKultur
+        ? await nachKultur.herkunft?.fetch()
+        : undefined
+
+      const userPersonOption = getUserPersonOption({ user, db })
+
+      setDataState({
+        herkunft: herkunftByNachKultur,
+        herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
+        userPersonOption,
+      })
+    }
+    run()
+  }, [
+    db,
+    db.collections,
+    row.nach_kultur_id,
+    row.sammlung,
+    row.von_kultur_id,
+    row.von_sammlung_id,
+    user,
+  ])
+  const { herkunft, herkunftQuelle, userPersonOption } = dataState
+
   const { li_show_sl_felder } = userPersonOption ?? {}
 
   const ifNeeded = useCallback(
@@ -91,65 +148,6 @@ const LierferungForm = ({
     },
     [filter, row, showFilter, store],
   )
-
-  const urlLastName = activeNodeArray[activeNodeArray.length - 2]
-  const isAnlieferung = urlLastName === 'An-Lieferungen'
-  const [dataState, setDataState] = useState({
-    herkunft: undefined,
-    herkunftQuelle: undefined,
-  })
-  useEffect(() => {
-    const run = async () => {
-      const vonSammlung = row.von_sammlung_id
-        ? await row.sammlung.fetch()
-        : undefined
-      const vonSammlungHerkunft = vonSammlung
-        ? await vonSammlung.herkunft?.fetch()
-        : undefined
-
-      if (vonSammlungHerkunft) {
-        return setDataState({
-          herkunft: vonSammlungHerkunft,
-          herkunftQuelle: 'Sammlung',
-        })
-      }
-
-      if (row.von_kultur_id) {
-        const vonKultur = row.von_kultur_id
-          ? await db.collections.get('kultur').find(row.von_kultur_id)
-          : undefined
-        const herkunftByVonKultur = vonKultur
-          ? await vonKultur.herkunft?.fetch()
-          : undefined
-        if (herkunftByVonKultur) {
-          return setDataState({
-            herkunft: herkunftByVonKultur,
-            herkunftQuelle: 'von-Kultur',
-          })
-        }
-      }
-      const nachKultur = row.nach_kultur_id
-        ? await db.collections.get('kultur').find(row.nach_kultur_id)
-        : undefined
-      const herkunftByNachKultur = nachKultur
-        ? await nachKultur.herkunft?.fetch()
-        : undefined
-
-      setDataState({
-        herkunft: herkunftByNachKultur,
-        herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
-      })
-    }
-    run()
-  }, [
-    db.collections,
-    isAnlieferung,
-    row.nach_kultur_id,
-    row.sammlung,
-    row.von_kultur_id,
-    row.von_sammlung_id,
-  ])
-  const { herkunft, herkunftQuelle } = dataState
 
   const showDeleted =
     showFilter || filter.lieferung._deleted !== false || row?._deleted

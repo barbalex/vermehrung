@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useState,
-  useMemo,
   useEffect,
   useContext,
   useRef,
@@ -11,12 +10,14 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Art from './Art'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import artLabelFromArt from '../../../../../utils/artLabelFromArt'
+import artsSortedFromArts from '../../../../../utils/artsSortedFromArts'
 import avsSortByArt from '../../../../../utils/avsSortByArt'
 
 const TitleRow = styled.div`
@@ -51,7 +52,7 @@ const Avs = styled.div`
 
 const PersonArten = ({ person }) => {
   const store = useContext(StoreContext)
-  const { artsSorted, insertAvRev } = store
+  const { db, insertAvRev } = store
 
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [person])
@@ -79,25 +80,41 @@ const PersonArten = ({ person }) => {
 
   const [avsSorted, setAvsSorted] = useState([])
   useEffect(() => {
-    const subscription = person.avs.observe().subscribe(async (avs) => {
-      const _avsSorted = await avsSortByArt(avs)
-      setAvsSorted(_avsSorted)
-    })
+    const subscription = person.avs
+      .extend(Q.where('_deleted', false))
+      .observe()
+      .subscribe(async (avs) => {
+        const _avsSorted = await avsSortByArt(avs)
+        setAvsSorted(_avsSorted)
+      })
     return () => subscription.unsubscribe()
   }, [person.avs])
 
   const avArtIds = avsSorted.map((v) => v.art_id)
 
-  const artWerte = useMemo(
-    () =>
-      artsSorted
-        .filter((a) => !avArtIds.includes(a.id))
-        .map((el) => ({
-          value: el.id,
-          label: artLabelFromArt({ art: el, store }),
-        })),
-    [artsSorted, avArtIds, store],
-  )
+  const [artWerte, setArtWerte] = useState([])
+  useEffect(() => {
+    const artsObservable = db.collections
+      .get('art')
+      .query(Q.where('_deleted', false), Q.where('id', Q.notIn(avArtIds)))
+      .observe()
+    const subscription = artsObservable.subscribe(async (arts) => {
+      const artsSorted = await artsSortedFromArts(arts)
+      const artWerte = await Promise.all(
+        artsSorted.map(async (art) => {
+          const label = await art.label.pipe(first$()).toPromise()
+
+          return {
+            value: art.id,
+            label,
+          }
+        }),
+      )
+      setArtWerte(artWerte)
+    })
+    return () => subscription.unsubscribe()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db.collections, avArtIds.length])
 
   const saveToDb = useCallback(
     async (event) => {

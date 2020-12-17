@@ -45,10 +45,67 @@ const SammelLieferungForm = ({
   const { filter, online, user, db, errors, unsetError } = store
   const { setWidthInPercentOfScreen, activeNodeArray } = store.tree
 
-  const [userPersonOption, setUserPersonOption] = useState()
+  const [dataState, setDataState] = useState({
+    herkunft: undefined,
+    herkunftQuelle: undefined,
+    userPersonOption,
+  })
   useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
-  }, [db, user])
+    const run = async () => {
+      const vonSammlung = row.von_sammlung_id
+        ? await row.sammlung.fetch()
+        : undefined
+      const vonSammlungHerkunft = vonSammlung
+        ? await vonSammlung.herkunft?.fetch()
+        : undefined
+
+      if (vonSammlungHerkunft) {
+        return setDataState({
+          herkunft: vonSammlungHerkunft,
+          herkunftQuelle: 'Sammlung',
+        })
+      }
+
+      if (row.von_kultur_id) {
+        const vonKultur = row.von_kultur_id
+          ? await db.collections.get('kultur').find(row.von_kultur_id)
+          : undefined
+        const herkunftByVonKultur = vonKultur
+          ? await vonKultur.herkunft?.fetch()
+          : undefined
+        if (herkunftByVonKultur) {
+          return setDataState({
+            herkunft: herkunftByVonKultur,
+            herkunftQuelle: 'von-Kultur',
+          })
+        }
+      }
+      const nachKultur = row.nach_kultur_id
+        ? await db.collections.get('kultur').find(row.nach_kultur_id)
+        : undefined
+      const herkunftByNachKultur = nachKultur
+        ? await nachKultur.herkunft?.fetch()
+        : undefined
+
+      const userPersonOption = getUserPersonOption({ user, db })
+
+      setDataState({
+        herkunft: herkunftByNachKultur,
+        herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
+        userPersonOption,
+      })
+    }
+    run()
+  }, [
+    db,
+    db.collections,
+    row.nach_kultur_id,
+    row.sammlung,
+    row.von_kultur_id,
+    row.von_sammlung_id,
+    user,
+  ])
+  const { herkunft, herkunftQuelle, userPersonOption } = dataState
   const { sl_show_empty_when_next_to_li } = userPersonOption ?? {}
 
   useEffect(() => {
@@ -101,27 +158,6 @@ const SammelLieferungForm = ({
     (fields) => fields.some((f) => ifNeeded(f)),
     [ifNeeded],
   )
-
-  const nachKultur = row.nach_kultur_id
-    ? store.kulturs.get(row.nach_kultur_id)
-    : {}
-  const nachKulturHerkunft = nachKultur.herkunft_id
-    ? store.herkunfts.get(nachKultur.herkunft_id)
-    : undefined
-  const vonKultur = row.von_kultur_id
-    ? store.kulturs.get(row.von_kultur_id)
-    : {}
-  const vonKulturHerkunft = vonKultur.herkunft_id
-    ? store.herkunfts.get(vonKultur.herkunft_id)
-    : undefined
-  const vonSammlung = row.von_sammlung_id
-    ? store.sammlungs.get(row.von_sammlung_id)
-    : {}
-  const vonSammlungHerkunft = vonSammlung?.herkunft_id
-    ? store.herkunfts.get(vonSammlung.herkunft_id)
-    : undefined
-  const herkunft =
-    nachKulturHerkunft ?? vonKulturHerkunft ?? vonSammlungHerkunft
 
   const showDeleted =
     showFilter || filter.sammel_lieferung._deleted !== false || row?._deleted
@@ -182,8 +218,7 @@ const SammelLieferungForm = ({
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
               herkunft={herkunft}
-              nachKulturHerkunft={nachKulturHerkunft}
-              vonKulturHerkunft={vonKulturHerkunft}
+              herkunftQuelle={herkunftQuelle}
             />
           )}
           {ifSomeNeeded(['nach_kultur_id', 'nach_ausgepflanzt']) && (
