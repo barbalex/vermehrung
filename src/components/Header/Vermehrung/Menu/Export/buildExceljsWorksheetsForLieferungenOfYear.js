@@ -9,12 +9,19 @@ import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHer
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
 import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'
+import notDeletedQuery from '../../../../../utils/notDeletedQuery'
+import lieferungSort from '../../../../../utils/lieferungSort'
 
-const buildExceljsWorksheetsForLieferungenOfYear = ({ store, year }) => {
+const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
   const workbook = new ExcelJs.Workbook()
-  const { lieferungsSorted } = store
 
-  const lieferungs = lieferungsSorted
+  const lieferungs = await store.db.collections
+    .get('lieferung')
+    .query(notDeletedQuery)
+    .fetch()
+  const lieferungsSorted = lieferungs.sort((a, b) => lieferungSort({ a, b }))
+
+  const lieferungsdata = lieferungsSorted
     .filter((l) => {
       if (!l.datum) return false
       const lYear = DateTime.fromSQL(l.datum).toFormat('yyyy')
@@ -102,11 +109,11 @@ const buildExceljsWorksheetsForLieferungenOfYear = ({ store, year }) => {
         changed_by: l.changed_by,
       }
     })
-  if (lieferungs.length) {
+  if (lieferungsdata.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
       title: `Lieferungen ${year}`,
-      data: lieferungs,
+      data: lieferungsdata,
     })
   }
   downloadExceljsWorkbook({ store, fileName: `Lieferungen_${year}`, workbook })
