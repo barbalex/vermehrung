@@ -1783,29 +1783,6 @@ export const RootStore = RootStoreBase.props({
     get zaehlungIdInActiveNodeArray() {
       return zaehlungIdInUrl(self.tree.activeNodeArray)
     },
-    get artsSorted() {
-      return [...self.arts.values()]
-        .filter((a) => {
-          if (self.filter.art._deleted === false) {
-            return notDeletedOrHasConflict(a)
-          }
-          return true
-        })
-        .sort((a, b) => artSort({ a, b, store: self }))
-    },
-    get avsSorted() {
-      return [...self.avs.values()]
-        .filter((a) => notDeletedOrHasConflict(a))
-        .sort((a, b) => avSort({ a, b, store: self }))
-    },
-    get gvsSorted() {
-      return [...self.gvs.values()]
-        .filter((a) => notDeletedOrHasConflict(a))
-        .sort((a, b) => gvSort({ a, b, store: self }))
-    },
-    get eventsFiltered() {
-      return queryFromStore({ store: self, table: 'event' })
-    },
     get eventsSorted() {
       return [...self.events.values()]
         .filter((a) => {
