@@ -56,8 +56,8 @@ const GartenConflict = ({
   const revRow = useMemo(() => data?.garten_rev?.[0] ?? {}, [data?.garten_rev])
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow, store }),
-    [revRow, row, store],
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
   )
 
   const onClickVerwerfen = useCallback(() => {
