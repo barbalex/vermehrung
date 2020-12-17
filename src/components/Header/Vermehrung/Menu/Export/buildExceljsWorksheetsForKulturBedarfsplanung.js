@@ -5,7 +5,6 @@ import { first as first$ } from 'rxjs/operators'
 
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook'
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
 import exists from '../../../../../utils/exists'
 import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs'
 import zaehlungSort from '../../../../../utils/zaehlungSort'
@@ -34,6 +33,7 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       const artname = await art?.label?.pipe(first$()).toPromise()
       const herkunft = await kultur.herkunft?.fetch()
       const garten = await kultur.garten?.fetch()
+      const garten_label = await garten?.label.pipe(first$()).toPromise()
 
       const ownZaehlungen = await db.collections
         .get('zaehlung')
@@ -185,7 +185,7 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         herkunft_nr: herkunft?.nr ?? '',
         herkunft_label: herkunftLabelFromHerkunft({ herkunft }),
         garten_id: kultur.garten_id,
-        garten_label: gartenLabelFromGarten({ garten, store }),
+        garten_label,
         zwischenlager: kultur.zwischenlager,
         erhaltungskultur: kultur.erhaltungskultur,
         von_anzahl_individuen: kultur.von_anzahl_individuen,
