@@ -27,19 +27,16 @@ const buildExceljsWorksheets = async ({
 
   // 1. Get Kultur
   if (!calledFromHigherUp) {
-    const kultur = store.kulturs.get(kultur_id)
-    const art = kultur.art_id ? store.arts.get(kultur.art_id) : {}
-    const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
-    const herkunft = kultur?.herkunft_id
-      ? store.herkunfts.get(kultur.herkunft_id)
-      : {}
-    const garten = kultur?.garten_id ? store.gartens.get(kultur.garten_id) : {}
+    const kultur = await db.collections.get('kultur').find(kultur_id)
+    const art = kultur.art_id ? await kultur.art.fetch() : {}
+    const artName = await art.label.pipe(first$()).toPromise()
+    const herkunft = kultur?.herkunft_id ? await kultur.herkunft.fetch() : {}
+    const garten = kultur?.garten_id ? await kultur.garten.fetch() : {}
 
     const newK = {
       id: kultur.id,
       art_id: kultur.art_id,
-      art_ae_id: aeArt?.id,
-      art_ae_name: artLabelFromKultur({ kultur, store }),
+      art_name: artName,
       herkunft_id: kultur.herkunft_id,
       herkunft_nr: herkunft?.nr,
       herkunft_rohdaten: removeMetadataFromDataset({
@@ -138,24 +135,24 @@ const buildExceljsWorksheets = async ({
     )
     .fetch()
   const teilzaehlungsSorted = await teilzaehlungsSortByTk(teilzaehlungs)
-  const teilzaehlungData = teilzaehlungsSorted.map((t) => {
-    const teilkultur = t.teilkultur_id
-      ? store.teilkulturs.get(t.teilkultur_id)
-      : {}
-    const newZ = {
-      id: t.id,
-      zaehlung_id: t.zaehlung_id,
-      teilkultur_id: t.teilkultur_id,
-      teilkultur_name: teilkultur?.name,
-      anzahl_pflanzen: t.anzahl_pflanzen,
-      anzahl_auspflanzbereit: t.anzahl_auspflanzbereit,
-      anzahl_mutterpflanzen: t.anzahl_mutterpflanzen,
-      andere_menge: t.andere_menge,
-      auspflanzbereit_beschreibung: t.auspflanzbereit_beschreibung,
-      bemerkungen: t.bemerkungen,
-    }
-    return newZ
-  })
+  const teilzaehlungData = await Promise.all(
+    teilzaehlungsSorted.map(async (t) => {
+      const teilkultur = t.teilkultur_id ? await t.kultur.fetch() : {}
+      const newZ = {
+        id: t.id,
+        zaehlung_id: t.zaehlung_id,
+        teilkultur_id: t.teilkultur_id,
+        teilkultur_name: teilkultur?.name,
+        anzahl_pflanzen: t.anzahl_pflanzen,
+        anzahl_auspflanzbereit: t.anzahl_auspflanzbereit,
+        anzahl_mutterpflanzen: t.anzahl_mutterpflanzen,
+        andere_menge: t.andere_menge,
+        auspflanzbereit_beschreibung: t.auspflanzbereit_beschreibung,
+        bemerkungen: t.bemerkungen,
+      }
+      return newZ
+    }),
+  )
   if (teilzaehlungData.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
