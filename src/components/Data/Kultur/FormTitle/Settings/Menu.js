@@ -45,9 +45,15 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
       kulturOptionObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      ([[userPersonOption], kulturOption]) => {
-        console.log('Kultur Menu useEffect', { userPersonOption, kulturOption })
-        setDataState({ userPersonOption, kulturOption })
+      ([userPersonOptions, kulturOption]) => {
+        console.log('Kultur Menu useEffect', {
+          userPersonOptions,
+          kulturOption,
+        })
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
+          kulturOption,
+        })
       },
     )
 

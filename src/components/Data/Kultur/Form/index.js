@@ -26,7 +26,6 @@ import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkun
 import getConstants from '../../../../utils/constants'
 import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens'
 import herkunftSort from '../../../../utils/herkunftSort'
-import getUserPersonOption from '../../../../utils/getUserPersonOption'
 
 const constants = getConstants()
 
@@ -85,6 +84,12 @@ const KulturForm = ({
     herkunftsToChoose: [],
   })
   useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
+      : $of({})
     const gartensObservable = db.collections
       .get('garten')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
@@ -101,13 +106,13 @@ const KulturForm = ({
       )
       .observe()
     const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
       gartensObservable,
       gartenObservable,
       sammlungsObservable,
     ])
     const allSubscription = combinedObservables.subscribe(
-      async ([gartens, garten, sammlungs]) => {
-        const userPersonOption = await getUserPersonOption({ user, db }) // need to make this dynamic
+      async ([[userPersonOption], gartens, garten, sammlungs]) => {
         const gartensSorted = await gartensSortedFromGartens(gartens)
         // need to show a choosen garten even if inactive but not if deleted
         const gartensIncludingInactiveChoosen = uniqBy(
@@ -213,6 +218,13 @@ const KulturForm = ({
     artsToChoose,
     herkunftsToChoose,
   } = dataState
+
+  console.log('Kultur Form', {
+    gartenWerte,
+    userPersonOption,
+    artsToChoose,
+    herkunftsToChoose,
+  })
 
   const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
 
@@ -324,7 +336,7 @@ const KulturForm = ({
   const showDeleted =
     showFilter || filter.kultur._deleted !== false || row?._deleted
 
-  console.log('Kultur rendering')
+  //console.log('Kultur rendering')
 
   return (
     <ErrorBoundary>

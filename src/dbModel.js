@@ -2293,12 +2293,13 @@ export class KulturOption extends Model {
       _deleted: field === '_deleted' ? value : this._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
-    newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
+    // need to copy object for store (see below)
     const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
@@ -2320,16 +2321,16 @@ export class KulturOption extends Model {
       revertValue: this[field],
       newValue: value,
     })
-    // do not stringify revisions for store
-    // as _that_ is a real array
+    // create optimistic winner for store
+    // do not stringify revisions as _this_ is a real array
     newObjectForStore._revisions = this._revisions
       ? [rev, ...this._revisions]
       : [rev]
     newObjectForStore._conflicts = this._conflicts
-    // for store: convert herkuft_rev to kultur_option
+    // for store: convert rev to winner
     newObjectForStore.id = this.id
     delete newObjectForStore.kultur_id
-    // optimistically update store
+    // optimistically update
     await this.update((row) => ({ ...row, ...newObjectForStore }))
   }
   @action async delete({ store }) {
