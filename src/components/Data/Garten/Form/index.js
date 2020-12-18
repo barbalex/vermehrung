@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
 //import { first as first$ } from 'rxjs/operators'
-import { combineLatest } from 'rxjs'
+import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
 import { StoreContext } from '../../../../models/reactUtils'
@@ -14,7 +14,6 @@ import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
-import getUserPersonOption from '../../../../utils/getUserPersonOption'
 import personSort from '../../../../utils/personSort'
 import Files from '../../Files'
 import Coordinates from '../../../shared/Coordinates'
@@ -53,35 +52,52 @@ const GartenForm = ({
 
   const [dataState, setDataState] = useState({
     personWerte: [],
-    userPersonOption: undefined,
+    userPersonOption: {},
   })
   useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'ga_strasse',
+            'ga_plz',
+            'ga_ort',
+            'ga_geom_point',
+            'ga_aktiv',
+            'ga_bemerkungen',
+          ])
+      : $of({})
     const personsObservable = db.collections
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeWithColumns('vorname', 'name')
-    const combinedObservables = combineLatest([personsObservable])
-    const allSubscription = combinedObservables.subscribe(async ([persons]) => {
-      const userPersonOption = await getUserPersonOption({ user, db })
-      // need to show a choosen person even if inactive but not if deleted
-      const person = await row.person?.fetch()
-      const personsIncludingInactiveChoosen = uniqBy(
-        [...persons, ...(person && !person?._deleted ? [person] : [])],
-        'id',
-      )
-      const personWerte = personsIncludingInactiveChoosen
-        .sort((a, b) => personSort({ a, b }))
-        .map((person) => ({
-          value: person.id,
-          label: personLabelFromPerson({ person }),
-        }))
-      setDataState({
-        personWerte,
-        userPersonOption,
-      })
-    })
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      personsObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([userPersonOptions, persons]) => {
+        // need to show a choosen person even if inactive but not if deleted
+        const person = await row.person?.fetch()
+        const personsIncludingInactiveChoosen = uniqBy(
+          [...persons, ...(person && !person?._deleted ? [person] : [])],
+          'id',
+        )
+        const personWerte = personsIncludingInactiveChoosen
+          .sort((a, b) => personSort({ a, b }))
+          .map((person) => ({
+            value: person.id,
+            label: personLabelFromPerson({ person }),
+          }))
+        setDataState({
+          personWerte,
+          userPersonOption: userPersonOptions?.[0],
+        })
+      },
+    )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db, db.collections, row.person, user])
   const { personWerte, userPersonOption } = dataState
 
@@ -92,7 +108,7 @@ const GartenForm = ({
     ga_geom_point,
     ga_aktiv,
     ga_bemerkungen,
-  } = userPersonOption ?? {}
+  } = userPersonOption
 
   const saveToDb = useCallback(
     async (event) => {

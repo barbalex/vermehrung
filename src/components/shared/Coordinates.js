@@ -9,8 +9,9 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import getUserPersonOption from '../../utils/getUserPersonOption'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import epsg2056to4326 from '../../utils/epsg2056to4326'
 import {
@@ -73,10 +74,28 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
 
   const { id, lv95_x, lv95_y, wgs84_lat, wgs84_long } = row
 
-  const [userPersonOption, setUserPersonOption] = useState()
+  const [dataState, setDataState] = useState({
+    userPersonOption: undefined,
+  })
   useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
-  }, [db, user])
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['ga_lat_lng'])
+      : $of({})
+    const combinedObservables = combineLatest([userPersonOptionsObservable])
+    const subscription = combinedObservables.subscribe(
+      ([userPersonOptions]) => {
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { userPersonOption } = dataState
   const { ga_lat_lng } = userPersonOption ?? {}
 
   const [lv95XState, setLv95XState] = useState(lv95_x || '')
