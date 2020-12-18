@@ -3,8 +3,9 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../../../../models/reactUtils'
+import { StoreContext } from '../../../../../../models/reactUtils'
 import checkForOnlineError from '../../../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../../../utils/toPgArray'
 import Conflict from '../../../../../shared/Conflict'
@@ -20,14 +21,6 @@ const teilzaehlungRevQuery = gql`
       teilzaehlung_id
       zaehlung_id
       teilkultur_id
-      teilkultur {
-        id
-        __typename
-        name
-        ort1
-        ort2
-        ort3
-      }
       anzahl_pflanzen
       anzahl_auspflanzbereit
       anzahl_mutterpflanzen
@@ -62,7 +55,7 @@ const TeilzaehlungConflict = ({
   } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, data, loading } = useQuery(teilzaehlungRevQuery, {
+  const [{ error, data, fetching }] = useQuery(teilzaehlungRevQuery, {
     variables: {
       rev,
       id,
@@ -75,8 +68,8 @@ const TeilzaehlungConflict = ({
   ])
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow,  }),
-    [revRow, row, ],
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
   )
 
   const onClickVerwerfen = useCallback(() => {
@@ -203,7 +196,7 @@ const TeilzaehlungConflict = ({
       name="Zaehlung"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
       onClickVerwerfen={onClickVerwerfen}
       onClickUebernehmen={onClickUebernehmen}

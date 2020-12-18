@@ -3,8 +3,9 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
@@ -19,29 +20,6 @@ const teilkulturRevQuery = gql`
       __typename
       teilkultur_id
       kultur_id
-      kultur {
-        id
-        __typename
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-          }
-        }
-        art {
-          id
-          __typename
-          art_ae_art {
-            id
-            __typename
-            name
-          }
-        }
-      }
       name
       ort1
       ort2
@@ -74,7 +52,7 @@ const TeilkulturConflict = ({
   } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, data, loading } = useQuery(teilkulturRevQuery, {
+  const [{ error, data, fetching }] = useQuery(teilkulturRevQuery, {
     variables: {
       rev,
       id,
@@ -204,7 +182,7 @@ const TeilkulturConflict = ({
       name="Teilkultur"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
       onClickVerwerfen={onClickVerwerfen}
       onClickUebernehmen={onClickUebernehmen}

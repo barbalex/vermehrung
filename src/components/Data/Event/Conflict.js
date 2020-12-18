@@ -3,8 +3,9 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
@@ -44,7 +45,7 @@ const EventConflict = ({
   const { user, addNotification, addQueuedQuery, deleteEventRevModel } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, data, loading } = useQuery(eventRevQuery, {
+  const [{ error, data, fetching }] = useQuery(eventRevQuery, {
     variables: {
       rev,
       id,
@@ -173,7 +174,7 @@ const EventConflict = ({
       name="Event"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
       onClickVerwerfen={onClickVerwerfen}
       onClickUebernehmen={onClickUebernehmen}

@@ -3,8 +3,9 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
@@ -19,68 +20,11 @@ const sammelLieferungRevQuery = gql`
       __typename
       sammel_lieferung_id
       art_id
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
       person_id
-      person {
-        id
-        __typename
-        name
-      }
       von_sammlung_id
-      sammlung {
-        id
-        __typename
-        datum
-        herkunft {
-          id
-          __typename
-          nr
-        }
-        person {
-          id
-          __typename
-          name
-        }
-      }
       von_kultur_id
-      kulturByVonKulturId {
-        id
-        __typename
-        garten {
-          id
-          __typename
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
       datum
       nach_kultur_id
-      kulturByNachKulturId {
-        id
-        __typename
-        garten {
-          id
-          __typename
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
       nach_ausgepflanzt
       von_anzahl_individuen
       anzahl_pflanzen
@@ -116,7 +60,7 @@ const SammelLieferungConflict = ({
   } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, data, loading } = useQuery(sammelLieferungRevQuery, {
+  const [{ error, data, fetching }] = useQuery(sammelLieferungRevQuery, {
     variables: {
       rev,
       id,
@@ -272,7 +216,7 @@ const SammelLieferungConflict = ({
       name="Sammel-Lieferung"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
       onClickVerwerfen={onClickVerwerfen}
       onClickUebernehmen={onClickUebernehmen}

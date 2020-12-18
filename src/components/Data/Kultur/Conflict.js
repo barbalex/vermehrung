@@ -3,8 +3,9 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
@@ -46,7 +47,7 @@ const KulturConflict = ({
   const { user, addNotification, addQueuedQuery, deleteKulturRevModel } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, data, loading } = useQuery(kulturRevQuery, {
+  const [{ error, data, fetching }] = useQuery(kulturRevQuery, {
     variables: {
       rev,
       id,
@@ -183,7 +184,7 @@ const KulturConflict = ({
       name="Kultur"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
       onClickVerwerfen={onClickVerwerfen}
       onClickUebernehmen={onClickUebernehmen}
