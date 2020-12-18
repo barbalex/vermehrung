@@ -45,7 +45,6 @@ const Account = () => {
   const store = useContext(StoreContext)
   const { user, firebase, flushData, online, db } = store
 
-  console.log('Account, userUid:', user?.uid)
   const [userPerson, setUserPerson] = useState(undefined)
   useEffect(() => {
     const userPersonObservable = user.uid
@@ -60,8 +59,6 @@ const Account = () => {
 
     return () => subscription.unsubscribe()
   }, [db, user])
-
-  console.log('Account, userPerson:', userPerson)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
