@@ -3,8 +3,9 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
@@ -45,7 +46,7 @@ const GartenConflict = ({
   const store = useContext(StoreContext)
   const { user, addNotification, addQueuedQuery, deleteGartenRevModel } = store
 
-  const { error, data, loading } = useQuery(gartenRevQuery, {
+  const [{ error, data, fetching }] = useQuery(gartenRevQuery, {
     variables: {
       rev,
       id,
@@ -181,7 +182,7 @@ const GartenConflict = ({
       name="Garten"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
       onClickVerwerfen={onClickVerwerfen}
       onClickUebernehmen={onClickUebernehmen}

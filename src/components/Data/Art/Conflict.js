@@ -3,8 +3,9 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
@@ -38,7 +39,7 @@ const ArtConflict = ({
   const { user, addNotification, addQueuedQuery, deleteArtRevModel } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, data, loading } = useQuery(artRevQuery, {
+  const [{ error, data, fetching }] = useQuery(artRevQuery, {
     variables: {
       rev,
       id,
@@ -63,7 +64,6 @@ const ArtConflict = ({
       _depth: newDepth,
       _deleted: true,
     }
-    console.log('Conflict, onclickVerwerfen, newObject:', newObject)
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
@@ -151,7 +151,7 @@ const ArtConflict = ({
       name="Art"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
       onClickVerwerfen={onClickVerwerfen}
       onClickUebernehmen={onClickUebernehmen}

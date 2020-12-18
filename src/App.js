@@ -3,6 +3,8 @@ import 'isomorphic-fetch'
 import { observer } from 'mobx-react-lite'
 import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 
+import { Provider as UrqlProvider } from 'urql'
+
 import { StoreContext } from './models'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
@@ -85,11 +87,11 @@ const App = ({ element }) => {
     <DatabaseProvider database={database}>
       <MuiThemeProvider theme={materialTheme}>
         <StoreContext.Provider value={store}>
-          <>
+          <UrqlProvider value={store.rawQglClient}>
             <GlobalStyle />
             {element}
             <Notifications />
-          </>
+          </UrqlProvider>
         </StoreContext.Provider>
       </MuiThemeProvider>
     </DatabaseProvider>

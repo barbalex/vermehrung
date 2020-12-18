@@ -1,6 +1,6 @@
 import { createHttpClient } from 'mst-gql'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
-import { GraphQLClient } from 'graphql-request'
+import { createClient } from 'urql'
 
 import { RootStore } from '../models'
 import getConstants from './constants'
@@ -77,10 +77,16 @@ const initiateApp = async () => {
   store.setGqlHttpClient(gqlHttpClient)
   store.setGqlWsClient(gqlWsClient)
 
-  const rawGqlClient = new GraphQLClient(constants?.graphQlUri, {
-    headers: { authorization: `Bearer ${token}` },
+  const rawQglClient = createClient({
+    url: constants?.graphQlUri,
+    fetchOptions: () => {
+      const token = getToken()
+      return {
+        headers: { authorization: token ? `Bearer ${token}` : '' },
+      }
+    },
   })
-  store.setRawQglClient(rawGqlClient)
+  store.setRawQglClient(rawQglClient)
 
   if (typeof window === 'undefined') return store
   const module = await import('./recreatePersistedStore')
