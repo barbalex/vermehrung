@@ -12,7 +12,6 @@ import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../../models/reactUtils'
 import getConstants from '../../../../../../utils/constants'
-import getUserPersonOption from '../../../../../../utils/getUserPersonOption'
 
 const constants = getConstants()
 

@@ -5,9 +5,10 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../models/reactUtils'
-import getUserPersonOption from '../../../../../utils/getUserPersonOption'
 
 const TitleRow = styled.div`
   display: flex;
@@ -26,10 +27,31 @@ const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
   const store = useContext(StoreContext)
   const { user, db } = store
 
-  const [userPersonOption, setUserPersonOption] = useState()
+  const [dataState, setDataState] = useState({
+    userPersonOption: {},
+  })
   useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
-  }, [db, user])
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'sl_show_empty_when_next_to_li',
+            'sl_auto_copy_edits',
+          ])
+      : $of({})
+    const combinedObservables = combineLatest([userPersonOptionsObservable])
+    const subscription = combinedObservables.subscribe(
+      ([userPersonOptions]) => {
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { userPersonOption } = dataState
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
     userPersonOption ?? {}
 
