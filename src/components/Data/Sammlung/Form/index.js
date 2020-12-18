@@ -67,7 +67,6 @@ const SammlungForm = ({
   const { filter, online, errors, unsetError, setError, db } = store
 
   const [dataState, setDataState] = useState({
-    userPersonOption: undefined,
     personWerte: [],
     herkunftWerte: [],
     artWerte: [],
@@ -137,7 +136,6 @@ const SammlungForm = ({
         )
 
         setDataState({
-          userPersonOption,
           personWerte,
           herkunftWerte,
           artWerte,
@@ -154,9 +152,8 @@ const SammlungForm = ({
     row.person,
     setError,
     showFilter,
-    userPersonOption,
   ])
-  const { userPersonOption, personWerte, herkunftWerte, artWerte } = dataState
+  const { personWerte, herkunftWerte, artWerte } = dataState
 
   // ensure that activeConflict is reset
   // when changing dataset
