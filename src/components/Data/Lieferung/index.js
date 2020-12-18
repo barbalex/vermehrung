@@ -52,6 +52,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
 
   const [dataState, setDataState] = useState({
     row: undefined,
+    // need raw row because observable does not provoke rerendering of components
     rawRow: undefined,
     userPersonOption: undefined,
     sammelLieferung: undefined,
@@ -73,7 +74,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       lieferungObservable,
       sammelLieferungObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([userPersonOptions, lieferung, sammelLieferung]) =>
         setDataState({
           row: lieferung,
@@ -83,7 +84,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
         }),
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db, filter.lieferung, id, row?.sammel_lieferung, showFilter, user])
   const { row, rawRow, userPersonOption, sammelLieferung } = dataState
   const { li_show_sl } = userPersonOption ?? {}

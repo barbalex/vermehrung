@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
-import getUserPersonOption from '../../../../utils/getUserPersonOption'
 import exists from '../../../../utils/exists'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
@@ -48,62 +49,72 @@ const SammelLieferungForm = ({
   const [dataState, setDataState] = useState({
     herkunft: undefined,
     herkunftQuelle: undefined,
-    userPersonOption,
+    userPersonOption: undefined,
   })
   useEffect(() => {
-    const run = async () => {
-      const vonSammlung = row.von_sammlung_id
-        ? await row.sammlung.fetch()
-        : undefined
-      const vonSammlungHerkunft = vonSammlung
-        ? await vonSammlung.herkunft?.fetch()
-        : undefined
-
-      if (vonSammlungHerkunft) {
-        return setDataState({
-          herkunft: vonSammlungHerkunft,
-          herkunftQuelle: 'Sammlung',
-        })
-      }
-
-      if (row.von_kultur_id) {
-        const vonKultur = row.von_kultur_id
-          ? await db.collections.get('kultur').find(row.von_kultur_id)
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['sl_show_empty_when_next_to_li'])
+      : $of({})
+    const combinedObservables = combineLatest([userPersonOptionsObservable])
+    const subscription = combinedObservables.subscribe(
+      async ([userPersonOptions]) => {
+        const vonSammlung = row.von_sammlung_id
+          ? await row.sammlung.fetch()
           : undefined
-        const herkunftByVonKultur = vonKultur
-          ? await vonKultur.herkunft?.fetch()
+        const vonSammlungHerkunft = vonSammlung
+          ? await vonSammlung.herkunft?.fetch()
           : undefined
-        if (herkunftByVonKultur) {
+
+        if (vonSammlungHerkunft) {
           return setDataState({
-            herkunft: herkunftByVonKultur,
-            herkunftQuelle: 'von-Kultur',
+            herkunft: vonSammlungHerkunft,
+            herkunftQuelle: 'Sammlung',
+            userPersonOption: userPersonOptions?.[0],
           })
         }
-      }
-      const nachKultur = row.nach_kultur_id
-        ? await db.collections.get('kultur').find(row.nach_kultur_id)
-        : undefined
-      const herkunftByNachKultur = nachKultur
-        ? await nachKultur.herkunft?.fetch()
-        : undefined
 
-      const userPersonOption = getUserPersonOption({ user, db })
+        if (row.von_kultur_id) {
+          const vonKultur = row.von_kultur_id
+            ? await db.collections.get('kultur').find(row.von_kultur_id)
+            : undefined
+          const herkunftByVonKultur = vonKultur
+            ? await vonKultur.herkunft?.fetch()
+            : undefined
+          if (herkunftByVonKultur) {
+            return setDataState({
+              herkunft: herkunftByVonKultur,
+              herkunftQuelle: 'von-Kultur',
+              userPersonOption: userPersonOptions?.[0],
+            })
+          }
+        }
+        const nachKultur = row.nach_kultur_id
+          ? await db.collections.get('kultur').find(row.nach_kultur_id)
+          : undefined
+        const herkunftByNachKultur = nachKultur
+          ? await nachKultur.herkunft?.fetch()
+          : undefined
 
-      setDataState({
-        herkunft: herkunftByNachKultur,
-        herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
-        userPersonOption,
-      })
-    }
-    run()
+        setDataState({
+          herkunft: herkunftByNachKultur,
+          herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
+          userPersonOption: userPersonOptions?.[0],
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
   }, [
     db,
-    db.collections,
     row.nach_kultur_id,
+    row.sammel_lieferung,
     row.sammlung,
     row.von_kultur_id,
     row.von_sammlung_id,
-    user,
+    user.uid,
   ])
   const { herkunft, herkunftQuelle, userPersonOption } = dataState
   const { sl_show_empty_when_next_to_li } = userPersonOption ?? {}

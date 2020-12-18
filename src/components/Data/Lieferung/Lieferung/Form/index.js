@@ -67,10 +67,6 @@ const LierferungForm = ({
     ])
     const subscription = combinedObservables.subscribe(
       async ([userPersonOptions, sammelLieferung]) => {
-        console.log('Lieferung useEffect', {
-          userPersonOptions,
-          sammelLieferung,
-        })
         const vonSammlung = row.von_sammlung_id
           ? await row.sammlung.fetch()
           : undefined
