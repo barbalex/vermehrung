@@ -27,7 +27,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const { user, db } = store
 
   const [dataState, setDataState] = useState({
-    kulturOption: undefined,
+    kulturOptionRaw: undefined,
     userPersonOption: undefined,
   })
   useEffect(() => {
@@ -35,7 +35,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
       ? db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
-          .observe()
+          .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
       : $of({})
     const kulturOptionObservable = db
       .get('kultur_option')
@@ -46,10 +46,6 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
     ])
     const subscription = combinedObservables.subscribe(
       ([userPersonOptions, kulturOption]) => {
-        console.log('Kultur Menu useEffect', {
-          userPersonOptions,
-          kulturOption,
-        })
         setDataState({
           userPersonOption: userPersonOptions?.[0],
           kulturOption,
@@ -60,14 +56,6 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
     return () => subscription.unsubscribe()
   }, [db, kulturId, user.uid])
   const { kulturOption, userPersonOption } = dataState
-
-  console.log('Kultur Menu rendering', {
-    userPersonOption,
-    kulturOption,
-    kulturId,
-    user,
-    userUid: user.uid,
-  })
 
   const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
   const { tk } = kulturOption ?? {}
