@@ -79,7 +79,7 @@ const KulturForm = ({
   // if herkunft was choosen: remove gartens where this herkunft has two kulturs
   const [dataState, setDataState] = useState({
     gartenWerte: [],
-    userPersonOption: undefined,
+    userPersonOption: {},
     artsToChoose: [],
     herkunftsToChoose: [],
   })
@@ -90,14 +90,14 @@ const KulturForm = ({
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
       : $of({})
-    const gartensObservable = db.collections
+    const gartensObservable = db
       .get('garten')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
     const gartenObservable = row?.garten
       ? row?.garten?.observe()
       : $of(filter.garten)
-    const sammlungsObservable = db.collections
+    const sammlungsObservable = db
       .get('sammlung')
       .query(
         Q.where('_deleted', false),
@@ -112,7 +112,7 @@ const KulturForm = ({
       sammlungsObservable,
     ])
     const allSubscription = combinedObservables.subscribe(
-      async ([[userPersonOption], gartens, garten, sammlungs]) => {
+      async ([userPersonOptions, gartens, garten, sammlungs]) => {
         const gartensSorted = await gartensSortedFromGartens(gartens)
         // need to show a choosen garten even if inactive but not if deleted
         const gartensIncludingInactiveChoosen = uniqBy(
@@ -203,7 +203,7 @@ const KulturForm = ({
         ])
         setDataState({
           gartenWerte,
-          userPersonOption,
+          userPersonOption: userPersonOptions?.[0],
           artsToChoose,
           herkunftsToChoose,
         })
@@ -211,20 +211,20 @@ const KulturForm = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [])
+  }, [
+    user.uid,
+    row?.garten,
+    ...Object.values(filter.garten),
+    herkunft_id,
+    art_id,
+    row.garten_id,
+  ])
   const {
     gartenWerte,
     userPersonOption,
     artsToChoose,
     herkunftsToChoose,
   } = dataState
-
-  console.log('Kultur Form', {
-    gartenWerte,
-    userPersonOption,
-    artsToChoose,
-    herkunftsToChoose,
-  })
 
   const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
 
