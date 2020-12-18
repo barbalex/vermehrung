@@ -141,8 +141,7 @@ const Vermehrung = ({ location }) => {
         Object.values(unsubscribe).forEach((value) => value.unsubscribe())
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [existsUser])
+  }, [existsUser, store])
 
   if (gettingAuthUser || isIOS) {
     return (

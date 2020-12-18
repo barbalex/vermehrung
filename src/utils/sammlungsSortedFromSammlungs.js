@@ -1,21 +1,22 @@
 import sortBy from 'lodash/sortBy'
+import { first as first$ } from 'rxjs/operators'
 
 import personFullname from './personFullname'
-import artLabelFromAeArt from './artLabelFromAeArt'
 
 const sammlungsSortedFromSammlungs = async (sammlungs) => {
   const sammlungSorters = await Promise.all(
     sammlungs.map(async (sammlung) => {
       const datum = sammlung.datum ?? ''
-      const herkunft = await sammlung.herkunft.fetch()
+      const herkunft = await sammlung.herkunft?.fetch()
       const herkunftNr = herkunft?.nr?.toString()?.toLowerCase()
       const herkunftGemeinde = herkunft?.gemeinde?.toString()?.toLowerCase()
       const herkunftLokalname = herkunft?.lokalname?.toString()?.toLowerCase()
-      const person = await sammlung.person.fetch()
+      const person = await sammlung.person?.fetch()
       const fullname = personFullname(person)?.toString()?.toLowerCase()
-      const art = await sammlung.art.fetch()
-      const ae_art = art ? await art.ae_art.fetch() : undefined
-      const aeArtLabel = artLabelFromAeArt({ ae_art })
+      const art = await sammlung.art?.fetch()
+      const artLabel = await art?.label
+        .pipe(first$())
+        .toPromise()
         ?.toString()
         ?.toLowerCase()
       const sort = [
@@ -24,7 +25,7 @@ const sammlungsSortedFromSammlungs = async (sammlungs) => {
         herkunftGemeinde,
         herkunftLokalname,
         fullname,
-        aeArtLabel,
+        artLabel,
       ]
 
       return { id: sammlung.id, sort }
