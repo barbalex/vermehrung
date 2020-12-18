@@ -7,10 +7,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import getConstants from '../../../../../utils/constants'
-import getUserPersonOption from '../../../../../utils/getUserPersonOption'
 
 const constants = getConstants()
 
@@ -36,10 +37,33 @@ const SettingsHerkunftMenu = ({ anchorEl, setAnchorEl }) => {
   const store = useContext(StoreContext)
   const { user, db } = store
 
-  const [userPersonOption, setUserPersonOption] = useState()
+  const [dataState, setDataState] = useState({
+    userPersonOption: {},
+  })
   useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
-  }, [db, user])
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'hk_kanton',
+            'hk_land',
+            'hk_bemerkungen',
+            'hk_geom_point',
+          ])
+      : $of({})
+    const combinedObservables = combineLatest([userPersonOptionsObservable])
+    const subscription = combinedObservables.subscribe(
+      ([userPersonOptions]) => {
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { userPersonOption } = dataState
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
     userPersonOption ?? {}

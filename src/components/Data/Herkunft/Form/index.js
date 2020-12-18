@@ -10,7 +10,6 @@ import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
-import getUserPersonOption from '../../../../utils/getUserPersonOption'
 import exists from '../../../../utils/exists'
 import Files from '../../Files'
 import Coordinates from '../../../shared/Coordinates'
@@ -52,6 +51,17 @@ const Herkunft = ({
     userPersonOption: undefined,
   })
   useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'hk_kanton',
+            'hk_land',
+            'hk_bemerkungen',
+            'hk_geom_point',
+          ])
+      : $of({})
     const herkunftsNrCountObservable =
       showFilter || !exists(row?.nr)
         ? $of(0)
@@ -59,21 +69,25 @@ const Herkunft = ({
             .get('herkunft')
             .query(Q.where('_deleted', false), Q.where('nr', row.nr))
             .observeCount()
-    const combinedObservables = combineLatest([herkunftsNrCountObservable])
-    const allSubscription = combinedObservables.subscribe(async ([nrCount]) => {
-      const userPersonOption = await getUserPersonOption({ user, db })
-      if (!showFilter && nrCount > 1) {
-        setError({
-          path: 'herkunft.nr',
-          value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      herkunftsNrCountObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([userPersonOptions, nrCount]) => {
+        if (!showFilter && nrCount > 1) {
+          setError({
+            path: 'herkunft.nr',
+            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
+          })
+        }
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
         })
-      }
-      setDataState({
-        userPersonOption,
-      })
-    })
+      },
+    )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db, db.collections, filter.herkunft, row.nr, setError, showFilter, user])
   const { userPersonOption } = dataState
 

@@ -28,7 +28,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
 
   const [dataState, setDataState] = useState({
     kulturOption: undefined,
-    userPersonOption: undefined,
+    userPersonOption: {},
   })
   useEffect(() => {
     const userPersonOptionsObservable = user.uid

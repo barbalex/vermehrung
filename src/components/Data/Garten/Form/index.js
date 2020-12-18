@@ -108,7 +108,7 @@ const GartenForm = ({
     ga_geom_point,
     ga_aktiv,
     ga_bemerkungen,
-  } = userPersonOption
+  } = userPersonOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
