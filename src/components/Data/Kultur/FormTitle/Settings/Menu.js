@@ -27,7 +27,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const { user, db } = store
 
   const [dataState, setDataState] = useState({
-    kulturOptionRaw: undefined,
+    kulturOption: undefined,
     userPersonOption: undefined,
   })
   useEffect(() => {

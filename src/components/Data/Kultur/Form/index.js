@@ -226,7 +226,7 @@ const KulturForm = ({
     herkunftsToChoose,
   } = dataState
 
-  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
+  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption
 
   useEffect(() => {
     unsetError('kultur')
