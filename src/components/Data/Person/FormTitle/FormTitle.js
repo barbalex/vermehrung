@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import AddButton from './AddButton'
@@ -9,7 +10,6 @@ import DeleteButton from './DeleteButton'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import Menu from '../../../shared/Menu'
 import HistoryButton from '../../../shared/HistoryButton'
-import getUserRole from '../../../../utils/getUserRole'
 import KontoMenu from './KontoMenu'
 import NavButtons from './NavButtons'
 
@@ -48,7 +48,15 @@ const PersonFormTitle = ({
 
   const [userRole, setUserRole] = useState(undefined)
   useEffect(() => {
-    getUserRole({ user, db }).then((userRole) => setUserRole(userRole))
+    const userRoleObservable = db
+      .get('user_role')
+      .query(Q.on('person', Q.where('account_id', user.uid)))
+      .observeWithColumns(['name'])
+    const subscription = userRoleObservable.subscribe(([userRole]) =>
+      setUserRole(userRole),
+    )
+
+    return () => subscription.unsubscribe()
   }, [db, user])
 
   if (width < 568) {

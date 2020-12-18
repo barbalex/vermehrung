@@ -1,7 +1,4 @@
-import getUserRole from './getUserRole'
-
-const showArt = async ({ user, db }) => {
-  const userRole = await getUserRole({ user, db })
+const showArt = ({ userRole }) => {
   return userRole !== 'gaertner'
 }
 

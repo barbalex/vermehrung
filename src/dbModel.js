@@ -33,7 +33,6 @@ import kulturLabelFromKulturUnderGarten from './utils/kulturLabelFromKulturUnder
 import sammlungLabelFromSammlung from './utils/sammlungLabelFromSammlung'
 import sammlungLabelFromSammlungUnderHerkunft from './utils/sammlungLabelFromSammlungUnderHerkunft'
 import zaehlungLabelFromZaehlung from './utils/zaehlungLabelFromZaehlung'
-import getUserPersonOption from './utils/getUserPersonOption'
 import toPgArray from './utils/toPgArray'
 import deleteAccount from './utils/deleteAccount'
 import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
@@ -1551,7 +1550,12 @@ export class SammelLieferung extends Model {
   }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError, db } = store
-    const userPersonOption = await getUserPersonOption({ user, db })
+    const [userPersonOption] = user.uid
+      ? await db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .fetch()
+      : [undefined]
 
     unsetError(`sammel_lieferung.${field}`)
     // first build the part that will be revisioned

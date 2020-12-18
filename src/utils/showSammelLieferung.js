@@ -1,7 +1,4 @@
-import getUserPersonOption from './getUserPersonOption'
-
-const showSammelLieferung = async ({ user, db }) => {
-  const userPersonOption = await getUserPersonOption({ user, db })
+const showSammelLieferung = ({ userPersonOption }) => {
   return userPersonOption?.tree_lieferung
 }
 

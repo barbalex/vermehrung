@@ -5,12 +5,13 @@ import Menu from '@material-ui/core/Menu'
 import { FaUserCircle as UserIcon } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import logout from '../../../utils/logout'
 import getConstants from '../../../utils/constants'
-import getUserPerson from '../../../utils/getUserPerson'
 import personFullname from '../../../utils/personFullname'
 
 const constants = getConstants()
@@ -42,13 +43,25 @@ const StyledMenuItem = styled(MenuItem)`
 
 const Account = () => {
   const store = useContext(StoreContext)
-
   const { user, firebase, flushData, online, db } = store
 
+  console.log('Account, userUid:', user?.uid)
   const [userPerson, setUserPerson] = useState(undefined)
   useEffect(() => {
-    getUserPerson({ user, db }).then((userPerson) => setUserPerson(userPerson))
+    const userPersonObservable = user.uid
+      ? db
+          .get('person')
+          .query(Q.where('account_id', user.uid))
+          .observeWithColumns(['vorname', 'name'])
+      : $of({})
+    const subscription = userPersonObservable.subscribe(([userPerson]) =>
+      setUserPerson(userPerson),
+    )
+
+    return () => subscription.unsubscribe()
   }, [db, user])
+
+  console.log('Account, userPerson:', userPerson)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')

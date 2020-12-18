@@ -1,7 +1,4 @@
-import getUserPersonOption from './getUserPersonOption'
-
-const showZaehlung = async ({ user, db }) => {
-  const userPersonOption = await getUserPersonOption({ user, db })
+const showZaehlung = ({ userPersonOption }) => {
   return userPersonOption?.tree_zaehlung
 }
 

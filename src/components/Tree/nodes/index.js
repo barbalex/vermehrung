@@ -120,22 +120,22 @@ const compare = (a, b) => {
   return a - b
 }
 
-const buildNodes = async ({ store }) => {
-  const { db, user } = store
+const buildNodes = async ({ store, userPersonOption, userRole }) => {
+  const { db } = store
   const { openNodes: openNodesRaw } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
 
-  const showArt = await getShowArt({ user, db })
-  const showEvent = await getShowEvent({ user, db })
-  const showGarten = await getShowGarten({ user, db })
-  const showHerkunft = await getShowHerkunft({ user, db })
-  const showKultur = await getShowKultur({ user, db })
-  const showLieferung = await getShowLieferung({ user, db })
-  const showPerson = await getShowPerson({ user, db })
-  const showSammelLieferung = await getShowSammelLieferung({ user, db })
-  const showSammlung = await getShowSammlung({ user, db })
-  const showTeilkultur = await getShowTeilkultur({ user, db })
-  const showZaehlung = await getShowZaehlung({ user, db })
+  const showArt = getShowArt({ userRole })
+  const showEvent = getShowEvent({ userPersonOption })
+  const showGarten = getShowGarten()
+  const showHerkunft = getShowHerkunft({ userRole })
+  const showKultur = getShowKultur({ userPersonOption })
+  const showLieferung = getShowLieferung({ userPersonOption })
+  const showPerson = getShowPerson()
+  const showSammelLieferung = getShowSammelLieferung({ userPersonOption })
+  const showSammlung = getShowSammlung({ userRole })
+  const showTeilkultur = getShowTeilkultur({ userPersonOption })
+  const showZaehlung = getShowZaehlung({ userPersonOption })
 
   let artFolderNodes = []
   let artNodes = []

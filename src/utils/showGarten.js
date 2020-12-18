@@ -1,3 +1,3 @@
-const showGarten = async () => true
+const showGarten = () => true
 
 export default showGarten

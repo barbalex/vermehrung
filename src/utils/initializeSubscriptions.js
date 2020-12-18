@@ -64,6 +64,8 @@ const initializeSubscriptions = ({ store }) => {
   } = store
   const unsubscribe = {}
 
+  // TODO:
+  // resubscribe in a throttled way when _lastUpdated changes
   unsubscribe.ae_art = store.gqlWsClient
     .request({
       query: `subscription AeArt($where: ae_art_bool_exp) { ae_art(where: $where) {

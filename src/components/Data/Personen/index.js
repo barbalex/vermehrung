@@ -17,7 +17,6 @@ import { StoreContext } from '../../../models/reactUtils'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import tableFilter from '../../../utils/tableFilter'
 import personSort from '../../../utils/personSort'
-import getUserRole from '../../../utils/getUserRole'
 
 const Container = styled.div`
   height: 100%;
@@ -86,10 +85,17 @@ const Personen = ({ filter: showFilter, width, height }) => {
     const dataObservable = collection
       .query(...tableFilter({ table: 'person', store }))
       .observeWithColumns(['vorname', 'name'])
-    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const userRoleObservable = db
+      .get('user_role')
+      .query(Q.on('person', Q.where('account_id', user.uid)))
+      .observeWithColumns(['name'])
+    const combinedObservables = combineLatest([
+      countObservable,
+      dataObservable,
+      userRoleObservable,
+    ])
     const allSubscription = combinedObservables.subscribe(
-      async ([totalCount, persons]) => {
-        const userRole = await getUserRole({ user, db })
+      async ([totalCount, persons, [userRole]]) => {
         setDataState({
           persons: persons.sort((a, b) => personSort({ a, b })),
           totalCount,

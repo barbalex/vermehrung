@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import Row from './Row'
 import { StoreContext } from '../../../models/reactUtils'
@@ -47,34 +49,57 @@ const Root = ({ filter: showFilter }) => {
     showZaehlung: false,
   })
   useEffect(() => {
-    const run = async () => {
-      const sArt = await getShowArt({ user, db })
-      const sEvent = await getShowEvent({ user, db })
-      const sGarten = await getShowGarten({ user, db })
-      const sHerkunft = await getShowHerkunft({ user, db })
-      const sKultur = await getShowKultur({ user, db })
-      const sLieferung = await getShowLieferung({ user, db })
-      const sPerson = await getShowPerson({ user, db })
-      const sSammelLieferung = await getShowSammelLieferung({ user, db })
-      const sSammlung = await getShowSammlung({ user, db })
-      const sTeilkultur = await getShowTeilkultur({ user, db })
-      const sZaehlung = await getShowZaehlung({ user, db })
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'tree_kultur',
+            'tree_teilkultur',
+            'tree_zaehlung',
+            'tree_lieferung',
+            'tree_event',
+          ])
+      : $of({})
+    const userRoleObservable = db
+      .get('user_role')
+      .query(Q.on('person', Q.where('account_id', user.uid)))
+      .observeWithColumns(['name'])
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      userRoleObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([[userPersonOption], [userRole]]) => {
+        const sArt = getShowArt({ userRole })
+        const sEvent = getShowEvent({ userPersonOption })
+        const sGarten = getShowGarten()
+        const sHerkunft = getShowHerkunft({ userRole })
+        const sKultur = getShowKultur({ userPersonOption })
+        const sLieferung = getShowLieferung({ userPersonOption })
+        const sPerson = getShowPerson()
+        const sSammelLieferung = getShowSammelLieferung({ userPersonOption })
+        const sSammlung = getShowSammlung({ userRole })
+        const sTeilkultur = getShowTeilkultur({ userPersonOption })
+        const sZaehlung = getShowZaehlung({ userPersonOption })
 
-      setDataState({
-        showArt: sArt,
-        showEvent: sEvent,
-        showGarten: sGarten,
-        showHerkunft: sHerkunft,
-        showKultur: sKultur,
-        showLieferung: sLieferung,
-        showPerson: sPerson,
-        showSammelLieferung: sSammelLieferung,
-        showSammlung: sSammlung,
-        showTeilkultur: sTeilkultur,
-        showZaehlung: sZaehlung,
-      })
-    }
-    run()
+        setDataState({
+          showArt: sArt,
+          showEvent: sEvent,
+          showGarten: sGarten,
+          showHerkunft: sHerkunft,
+          showKultur: sKultur,
+          showLieferung: sLieferung,
+          showPerson: sPerson,
+          showSammelLieferung: sSammelLieferung,
+          showSammlung: sSammlung,
+          showTeilkultur: sTeilkultur,
+          showZaehlung: sZaehlung,
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
   }, [
     db,
     showArt,

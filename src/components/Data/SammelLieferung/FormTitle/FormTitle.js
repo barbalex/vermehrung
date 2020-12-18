@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
+import { of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Settings from './Settings'
@@ -11,7 +13,6 @@ import Delete from './Delete'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import Menu from '../../../shared/Menu'
 import HistoryButton from '../../../shared/HistoryButton'
-import getUserPersonOption from '../../../../utils/getUserPersonOption'
 import NavButtons from './NavButtons'
 import PrintButtons from './PrintButtons'
 import Anleitung from './Anleitung'
@@ -56,7 +57,17 @@ const SammelLieferungFormTitle = ({
 
   const [userPersonOption, setUserPersonOption] = useState()
   useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['sl_auto_copy_edits'])
+      : $of({})
+    const subscription = userPersonOptionsObservable.subscribe(
+      ([userPersonOption]) => setUserPersonOption(userPersonOption),
+    )
+
+    return () => subscription.unsubscribe()
   }, [db, user])
   const { sl_auto_copy_edits } = userPersonOption ?? {}
 
