@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useMemo, useRef } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import styled from 'styled-components'
-import Select from 'react-select/Async'
+import Select from 'react-select/async'
 import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useDebouncedCallback } from 'use-debounce'
