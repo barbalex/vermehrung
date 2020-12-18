@@ -29,6 +29,7 @@ const gartenRevQuery = gql`
       person_id
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -46,7 +47,8 @@ const GartenConflict = ({
   const store = useContext(StoreContext)
   const { user, addNotification, addQueuedQuery, deleteGartenRevModel } = store
 
-  const [{ error, data, fetching }] = useQuery(gartenRevQuery, {
+  const [{ error, data, fetching }] = useQuery({
+    query: gartenRevQuery,
     variables: {
       rev,
       id,

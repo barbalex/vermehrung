@@ -25,6 +25,7 @@ const zaehlungRevQuery = gql`
       changed_by
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -48,7 +49,8 @@ const ZaehlungConflict = ({
   } = store
 
   // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery(zaehlungRevQuery, {
+  const [{ error, data, fetching }] = useQuery({
+    query: zaehlungRevQuery,
     variables: {
       rev,
       id,

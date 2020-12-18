@@ -3,11 +3,36 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Slider from 'react-slick'
 import SimpleBar from 'simplebar-react'
+import { useQuery } from 'urql'
+import gql from 'graphql-tag'
 
-import { useQuery } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
 import Row from './Row'
+
+const herkunftRevQuery = gql`
+  query herkunftRevForHistoryQuery($rev: [String!]) {
+    herkunft_rev(where: { _rev: { _in: $rev } }) {
+      id
+      __typename
+      bemerkungen
+      gemeinde
+      geom_point
+      herkunft_id
+      kanton
+      land
+      lokalname
+      nr
+      changed
+      changed_by
+      _rev
+      _parent_rev
+      _revisions
+      _depth
+      _deleted
+    }
+  }
+`
 
 const Container = styled.div`
   padding: 0 25px;
@@ -38,11 +63,12 @@ const sliderSettings = {
 
 const HerkunftHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const priorRevisions = row._revisions.slice(1)
-  const { error, data, loading } = useQuery((store) =>
-    store.queryHerkunft_rev({
-      where: { _rev: { _in: priorRevisions } },
-    }),
-  )
+  const [{ error, data, fetching }] = useQuery({
+    query: herkunftRevQuery,
+    variables: {
+      rev: priorRevisions,
+    },
+  })
   error && checkForOnlineError(error)
 
   const revRowsUnsorted = useMemo(() => data?.herkunft_rev ?? [], [
@@ -50,7 +76,7 @@ const HerkunftHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   ])
   const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
-  if (loading) {
+  if (fetching) {
     return <Spinner message="lade Versionen" />
   }
 

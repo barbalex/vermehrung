@@ -27,6 +27,7 @@ const eventRevQuery = gql`
       changed_by
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -45,7 +46,8 @@ const EventConflict = ({
   const { user, addNotification, addQueuedQuery, deleteEventRevModel } = store
 
   // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery(eventRevQuery, {
+  const [{ error, data, fetching }] = useQuery({
+    query: eventRevQuery,
     variables: {
       rev,
       id,
