@@ -59,7 +59,7 @@ module.exports = {
         icon: 'src/images/seedling.png',
         include_favicon: true,
         url: 'https://vermehrung.ch',
-        lang: '',
+        lang: 'de-CH',
         screenshots: [],
         orientation: 'portrait',
       },
