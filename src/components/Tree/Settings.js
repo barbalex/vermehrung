@@ -8,10 +8,11 @@ import Checkbox from '@material-ui/core/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
+import { of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../models/reactUtils'
 import getConstants from '../../utils/constants'
-import getUserPersonOption from '../../utils/getUserPersonOption'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
 const constants = getConstants()
@@ -44,10 +45,32 @@ const SettingsTree = () => {
   const store = useContext(StoreContext)
   const { user, db } = store
 
-  const [userPersonOption, setUserPersonOption] = useState()
+  const [dataState, setDataState] = useState({
+    userPersonOption: undefined,
+  })
   useEffect(() => {
-    getUserPersonOption({ user, db }).then((o) => setUserPersonOption(o))
-  }, [db, user])
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'tree_kultur',
+            'tree_teilkultur',
+            'tree_zaehlung',
+            'tree_lieferung',
+            'tree_event',
+          ])
+      : $of({})
+    const subscription = userPersonOptionsObservable.subscribe(
+      async (userPersonOptions) =>
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
+        }),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { userPersonOption } = dataState
   const {
     tree_kultur,
     tree_teilkultur,
