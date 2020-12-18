@@ -8,7 +8,7 @@ import { FaCog } from 'react-icons/fa'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import Menu from './Menu'
 
-const SettingsOverall = ({ asMenu, kulturId }) => {
+const KulturSettings = ({ asMenu, kulturId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickConfig = useCallback(
     (event) => setAnchorEl(event.currentTarget),
@@ -50,4 +50,4 @@ const SettingsOverall = ({ asMenu, kulturId }) => {
   )
 }
 
-export default observer(SettingsOverall)
+export default observer(KulturSettings)

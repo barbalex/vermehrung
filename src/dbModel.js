@@ -1799,8 +1799,8 @@ export class Av extends Model {
   @lazy artLabel = this.art.observe().pipe(
     distinctUntilKeyChanged('ae_id'),
     map$(async (art) => {
-      const ae_art = await art.ae_art.fetch()
-      const artLabel = artLabelFromAeArt({ ae_art })
+      const artLabel = await art?.label.pipe(first$()).toPromise()
+
       return artLabel
     }),
   )

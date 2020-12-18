@@ -39,15 +39,16 @@ const KulturNavButtons = ({ row }) => {
     [activeNodeArray, setActiveNodeArray],
   )
 
-  const [kulturOption, setKulturOption] = useState()
+  const [dataState, setDataState] = useState({ kulturOption })
   useEffect(() => {
     const kOObservable = row.kultur_option.observe()
     const subscription = kOObservable.subscribe((kulturOption) =>
-      setKulturOption(kulturOption),
+      setDataState({ kulturOption }),
     )
 
     return () => subscription.unsubscribe()
-  }, [row.kultur_option, setKulturOption])
+  }, [row.kultur_option])
+  const { kulturOption } = dataState
 
   return (
     <>

@@ -7,10 +7,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import getConstants from '../../../../../utils/constants'
-import getUserPersonOption from '../../../../../utils/getUserPersonOption'
 
 const constants = getConstants()
 
@@ -30,16 +31,37 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
     userPersonOption: undefined,
   })
   useEffect(() => {
-    const run = async () => {
-      const userPersonOption = await getUserPersonOption({ user, db })
-      const kulturOption = await db.collections
-        .get('kultur_option')
-        .find(kulturId)
-      setDataState({ userPersonOption, kulturOption })
-    }
-    run()
-  }, [db, kulturId, user])
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observe()
+      : $of({})
+    const kulturOptionObservable = db
+      .get('kultur_option')
+      .findAndObserve(kulturId)
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      kulturOptionObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      ([[userPersonOption], kulturOption]) => {
+        console.log('Kultur Menu useEffect', { userPersonOption, kulturOption })
+        setDataState({ userPersonOption, kulturOption })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, kulturId, user.uid])
   const { kulturOption, userPersonOption } = dataState
+
+  console.log('Kultur Menu rendering', {
+    userPersonOption,
+    kulturOption,
+    kulturId,
+    user,
+    userUid: user.uid,
+  })
 
   const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
   const { tk } = kulturOption ?? {}
