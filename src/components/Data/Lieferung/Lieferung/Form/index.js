@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import Checkbox2States from '../../../../shared/Checkbox2States'
 import Checkbox3States from '../../../../shared/Checkbox3States'
 import exists from '../../../../../utils/exists'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
-import getUserPersonOption from '../../../../../utils/getUserPersonOption'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import Was from './Was'
 import Von from './Von'
@@ -31,7 +32,6 @@ const Rev = styled.span`
 `
 
 const LierferungForm = ({
-  sammelLieferung,
   showFilter,
   id,
   row,
@@ -40,7 +40,7 @@ const LierferungForm = ({
   setActiveConflict,
   showHistory,
 }) => {
-  const existsSammelLieferung = !!sammelLieferung?.id
+  const existsSammelLieferung = !!row?.sammel_lieferung_id
   const store = useContext(StoreContext)
 
   const { errors, filter, unsetError, user, db } = store
@@ -48,73 +48,105 @@ const LierferungForm = ({
   const [dataState, setDataState] = useState({
     herkunft: undefined,
     herkunftQuelle: undefined,
-    userPersonOption,
+    userPersonOption: undefined,
+    sammelLieferung: undefined,
   })
   useEffect(() => {
-    const run = async () => {
-      const vonSammlung = row.von_sammlung_id
-        ? await row.sammlung.fetch()
-        : undefined
-      const vonSammlungHerkunft = vonSammlung
-        ? await vonSammlung.herkunft?.fetch()
-        : undefined
-
-      if (vonSammlungHerkunft) {
-        return setDataState({
-          herkunft: vonSammlungHerkunft,
-          herkunftQuelle: 'Sammlung',
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['li_show_sl_felder'])
+      : $of({})
+    const sLObservable = row.sammel_lieferung
+      ? row.sammel_lieferung.observe()
+      : $of({})
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      sLObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([userPersonOptions, sammelLieferung]) => {
+        console.log('Lieferung useEffect', {
+          userPersonOptions,
+          sammelLieferung,
         })
-      }
+        const vonSammlung = row.von_sammlung_id
+          ? await row.sammlung.fetch()
+          : undefined
+        const vonSammlungHerkunft = vonSammlung
+          ? await vonSammlung.herkunft?.fetch()
+          : undefined
 
-      if (row.von_kultur_id) {
-        const vonKultur = row.von_kultur_id
-          ? await db.collections.get('kultur').find(row.von_kultur_id)
-          : undefined
-        const herkunftByVonKultur = vonKultur
-          ? await vonKultur.herkunft?.fetch()
-          : undefined
-        if (herkunftByVonKultur) {
+        if (vonSammlungHerkunft) {
           return setDataState({
-            herkunft: herkunftByVonKultur,
-            herkunftQuelle: 'von-Kultur',
+            herkunft: vonSammlungHerkunft,
+            herkunftQuelle: 'Sammlung',
+            userPersonOption: userPersonOptions?.[0],
+            sammelLieferung,
           })
         }
-      }
-      const nachKultur = row.nach_kultur_id
-        ? await db.collections.get('kultur').find(row.nach_kultur_id)
-        : undefined
-      const herkunftByNachKultur = nachKultur
-        ? await nachKultur.herkunft?.fetch()
-        : undefined
 
-      const userPersonOption = getUserPersonOption({ user, db })
+        if (row.von_kultur_id) {
+          const vonKultur = row.von_kultur_id
+            ? await db.collections.get('kultur').find(row.von_kultur_id)
+            : undefined
+          const herkunftByVonKultur = vonKultur
+            ? await vonKultur.herkunft?.fetch()
+            : undefined
+          if (herkunftByVonKultur) {
+            return setDataState({
+              herkunft: herkunftByVonKultur,
+              herkunftQuelle: 'von-Kultur',
+              userPersonOption: userPersonOptions?.[0],
+              sammelLieferung,
+            })
+          }
+        }
+        const nachKultur = row.nach_kultur_id
+          ? await db.collections.get('kultur').find(row.nach_kultur_id)
+          : undefined
+        const herkunftByNachKultur = nachKultur
+          ? await nachKultur.herkunft?.fetch()
+          : undefined
 
-      setDataState({
-        herkunft: herkunftByNachKultur,
-        herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
-        userPersonOption,
-      })
-    }
-    run()
+        setDataState({
+          herkunft: herkunftByNachKultur,
+          herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
+          userPersonOption: userPersonOptions?.[0],
+          sammelLieferung,
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
   }, [
     db,
-    db.collections,
     row.nach_kultur_id,
+    row.sammel_lieferung,
     row.sammlung,
     row.von_kultur_id,
     row.von_sammlung_id,
-    user,
+    user.uid,
   ])
-  const { herkunft, herkunftQuelle, userPersonOption } = dataState
+  const {
+    herkunft,
+    herkunftQuelle,
+    userPersonOption,
+    sammelLieferung,
+  } = dataState
 
   const { li_show_sl_felder } = userPersonOption ?? {}
 
   const ifNeeded = useCallback(
     (field) => {
       if (existsSammelLieferung && li_show_sl_felder) return true
-      if (!exists(sammelLieferung[field]) || sammelLieferung[field] === false) {
+      if (
+        !exists(sammelLieferung?.[field]) ||
+        sammelLieferung?.[field] === false
+      ) {
         return true
-      } else if (sammelLieferung[field] !== row[field]) {
+      } else if (sammelLieferung?.[field] !== row[field]) {
         return true
       }
       return false
@@ -152,7 +184,7 @@ const LierferungForm = ({
   const showDeleted =
     showFilter || filter.lieferung._deleted !== false || row?._deleted
 
-  console.log('Lieferung, row:', row)
+  //console.log('Lieferung, row:', row)
 
   return (
     <ErrorBoundary>
