@@ -1,7 +1,4 @@
-import getUserPersonOption from './getUserPersonOption'
-
-const showTeilkultur = async ({ user, db }) => {
-  const userPersonOption = await getUserPersonOption({ user, db })
+const showTeilkultur = ({ userPersonOption }) => {
   return userPersonOption?.tree_teilkultur
 }
 

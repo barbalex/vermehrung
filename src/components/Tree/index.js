@@ -4,7 +4,8 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
-import { interval, combineLatest } from 'rxjs'
+import { interval, combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -22,7 +23,7 @@ const Container = styled.div`
 
 const Tree = ({ width, height }) => {
   const store = useContext(StoreContext)
-  const { db } = store
+  const { db, user } = store
   const {
     art: artFilter,
     herkunft: herkunftFilter,
@@ -41,26 +42,52 @@ const Tree = ({ width, height }) => {
   const openNodes = getSnapshot(openNodesProxy)
 
   const [nodes, setNodes] = useState([])
+  const [dataState, setDataState] = useState({
+    userPersonOption: undefined,
+    userRole: undefined,
+  })
+  const { userPersonOption, userRole } = dataState
 
   const buildMyNodes = useCallback(async () => {
     console.log('buildNodes building tree nodes')
-    const nodes = await buildNodes({ store })
+    const nodes = await buildNodes({
+      store,
+      userPersonOption,
+      userRole,
+    })
     setNodes(nodes)
-  }, [store])
+  }, [store, userPersonOption, userRole])
 
   const buildMyNodesDebounced = useDebouncedCallback(buildMyNodes, 100)
 
   useEffect(() => {
+    // need to rebuild nodes when options change
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'tree_kultur',
+            'tree_teilkultur',
+            'tree_zaehlung',
+            'tree_lieferung',
+            'tree_event',
+          ])
+      : $of({})
+    const userRoleObservable = db
+      .get('user_role')
+      .query(Q.on('person', Q.where('account_id', user.uid)))
+      .observeWithColumns(['name'])
     // need subscription to all tables that provokes treeBuild on next
-    const artObservable = db.collections
+    const artsObservable = db
       .get('art')
       .query(...tableFilter({ store, table: 'art' }))
       .observeWithColumns(['ae_id'])
-    const herkunftObservable = db.collections
+    const herkunftsObservable = db
       .get('herkunft')
       .query(...tableFilter({ store, table: 'herkunft' }))
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-    const sammlungObservable = db.collections
+    const sammlungsObservable = db
       .get('sammlung')
       .query(...tableFilter({ store, table: 'sammlung' }))
       .observeWithColumns([
@@ -70,11 +97,11 @@ const Tree = ({ width, height }) => {
         'datum',
         'geplant',
       ])
-    const gartenObservable = db.collections
+    const gartensObservable = db
       .get('garten')
       .query(...tableFilter({ store, table: 'garten' }))
       .observeWithColumns(['name', 'person_id'])
-    const kulturObservable = db.collections
+    const kultursObservable = db
       .get('kultur')
       .query(...tableFilter({ store, table: 'kultur' }))
       .observeWithColumns([
@@ -83,11 +110,11 @@ const Tree = ({ width, height }) => {
         'garten_id',
         'zwischenlager',
       ])
-    const teilkulturObservable = db.collections
+    const teilkultursObservable = db
       .get('teilkultur')
       .query(...tableFilter({ store, table: 'teilkultur' }))
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
-    const zaehlungObservable = db.collections
+    const zaehlungsObservable = db
       .get('zaehlung')
       .query(...tableFilter({ store, table: 'zaehlung' }))
       .observeWithColumns([
@@ -97,7 +124,7 @@ const Tree = ({ width, height }) => {
         //'anzahl_auspflanzbereit',
         //'anzahl_mutterpflanzen',
       ])
-    const lieferungObservable = db.collections
+    const lieferungsObservable = db
       .get('lieferung')
       .query(...tableFilter({ store, table: 'lieferung' }))
       .observeWithColumns([
@@ -105,38 +132,44 @@ const Tree = ({ width, height }) => {
         'anzahl_pflanzen',
         'anzahl_auspflanzbereit',
       ])
-    const sammel_lieferungObservable = db.collections
+    const sammelLieferungsObservable = db
       .get('sammel_lieferung')
       .query(...tableFilter({ store, table: 'sammel_lieferung' }))
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
-    const eventObservable = db.collections
+    const eventsObservable = db
       .get('event')
       .query(...tableFilter({ store, table: 'event' }))
       .observeWithColumns(['datum', 'beschreibung'])
-    const personObservable = db.collections
+    const personsObservable = db
       .get('person')
       .query(...tableFilter({ store, table: 'person' }))
       .observeWithColumns(['vorname', 'name'])
     const combinedObservables = combineLatest([
-      artObservable,
-      eventObservable,
-      gartenObservable,
-      herkunftObservable,
-      kulturObservable,
-      lieferungObservable,
-      personObservable,
-      sammel_lieferungObservable,
-      sammlungObservable,
-      teilkulturObservable,
-      zaehlungObservable,
+      userPersonOptionsObservable,
+      userRoleObservable,
+      artsObservable,
+      eventsObservable,
+      gartensObservable,
+      herkunftsObservable,
+      kultursObservable,
+      lieferungsObservable,
+      personsObservable,
+      sammelLieferungsObservable,
+      sammlungsObservable,
+      teilkultursObservable,
+      zaehlungsObservable,
     ]).pipe(throttle(() => interval(100)))
-    const subscription = combinedObservables.subscribe(() => {
-      console.log('Tree data-subscription ordering rebuild')
-      buildMyNodesDebounced.callback()
-    })
+    const subscription = combinedObservables.subscribe(
+      // eslint-disable-next-line no-unused-vars
+      ([[userPersonOption], [userRole], ...rest]) => {
+        console.log('Tree data-useEffect ordering rebuild')
+        setDataState({ userPersonOption, userRole })
+        buildMyNodesDebounced.callback()
+      },
+    )
 
     return () => subscription.unsubscribe()
-  }, [buildMyNodesDebounced, db.collections, store])
+  }, [buildMyNodesDebounced, db, store, user.uid])
 
   useEffect(() => {
     console.log('Tree second useEffect ordering rebuild')
@@ -172,6 +205,7 @@ const Tree = ({ width, height }) => {
     // need to rebuild tree on openNodes changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     openNodes,
+    user.uid,
   ])
 
   // what else to rerender on?
@@ -191,6 +225,7 @@ const Tree = ({ width, height }) => {
                 contentNodeRef={contentNodeRef}
                 width={width}
                 height={height}
+                userRole={userRole}
               />
             )}
           </SimpleBar>

@@ -1,8 +1,4 @@
-import getUserPersonOption from './getUserPersonOption'
-
-const showKultur = async ({ user, db }) => {
-  const userPersonOption = await getUserPersonOption({ user, db })
-
+const showKultur = ({ userPersonOption }) => {
   return userPersonOption?.tree_kultur
 }
 

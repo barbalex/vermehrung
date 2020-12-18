@@ -1,3 +1,3 @@
-const showPerson = async () => true
+const showPerson = () => true
 
 export default showPerson
