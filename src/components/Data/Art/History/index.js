@@ -4,8 +4,8 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
 import SimpleBar from 'simplebar-react'
+import { useQuery } from 'urql'
 
-import { useQuery } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
 import Row from './Row'
@@ -20,6 +20,8 @@ const artRevQuery = gql`
       changed
       changed_by
       _rev
+      _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -55,7 +57,8 @@ const sliderSettings = {
 
 const ArtHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const priorRevisions = row._revisions.slice(1)
-  const { error, data, loading } = useQuery(artRevQuery, {
+  const [{ error, data, fetching }] = useQuery({
+    query: artRevQuery,
     variables: {
       rev: priorRevisions,
     },
@@ -65,7 +68,7 @@ const ArtHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const revRowsUnsorted = useMemo(() => data?.art_rev ?? [], [data?.art_rev])
   const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
-  if (loading) {
+  if (fetching) {
     return <Spinner message="lade Versionen" />
   }
 

@@ -3,12 +3,37 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'urql'
+import gql from 'graphql-tag'
 
 import { StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
+
+const herkunftRevQuery = gql`
+  query herkunftRevForConflictQuery($id: uuid!, $rev: String!) {
+    herkunft_rev(where: { herkunft_id: { _eq: $id }, _rev: { _eq: $rev } }) {
+      id
+      __typename
+      bemerkungen
+      gemeinde
+      geom_point
+      herkunft_id
+      kanton
+      land
+      lokalname
+      nr
+      changed
+      changed_by
+      _rev
+      _parent_rev
+      _revisions
+      _depth
+      _deleted
+    }
+  }
+`
 
 const HerkunftConflict = ({
   rev,
@@ -25,12 +50,16 @@ const HerkunftConflict = ({
     deleteHerkunftRevModel,
   } = store
 
-  const [{ error, data, fetching }] = useQuery((store) =>
-    store.queryHerkunft_rev({
-      where: { _rev: { _eq: rev }, herkunft_id: { _eq: row.id } },
-    }),
-  )
+  const [{ error, data, fetching }] = useQuery({
+    query: herkunftRevQuery,
+    variables: {
+      rev,
+      id: row.id,
+    },
+  })
   error && checkForOnlineError(error)
+
+  console.log('Herkunft Conflict, data:', data)
 
   const revRow = useMemo(() => data?.herkunft_rev?.[0] ?? {}, [
     data?.herkunft_rev,

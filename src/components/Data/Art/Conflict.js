@@ -21,6 +21,8 @@ const artRevQuery = gql`
       changed
       changed_by
       _rev
+      _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -39,7 +41,8 @@ const ArtConflict = ({
   const { user, addNotification, addQueuedQuery, deleteArtRevModel } = store
 
   // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery(artRevQuery, {
+  const [{ error, data, fetching }] = useQuery({
+    query: artRevQuery,
     variables: {
       rev,
       id,

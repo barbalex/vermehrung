@@ -29,6 +29,7 @@ const teilkulturRevQuery = gql`
       changed_by
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -52,7 +53,8 @@ const TeilkulturConflict = ({
   } = store
 
   // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery(teilkulturRevQuery, {
+  const [{ error, data, fetching }] = useQuery({
+    query: teilkulturRevQuery,
     variables: {
       rev,
       id,
