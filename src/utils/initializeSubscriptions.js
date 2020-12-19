@@ -27,6 +27,7 @@ import { teilkulturModelPrimitives } from '../models/teilkulturModel.base'
 import { teilzaehlungModelPrimitives } from '../models/teilzaehlungModel.base'
 import { user_roleModelPrimitives } from '../models/user_roleModel.base'
 import { zaehlungModelPrimitives } from '../models/zaehlungModel.base'
+import gql from 'graphql-tag'
 
 import processSubscriptionResult from './processSubscriptionResult'
 
@@ -68,9 +69,14 @@ const initializeSubscriptions = ({ store }) => {
   // resubscribe in a throttled way when _lastUpdated changes
   unsubscribe.ae_art = store.gqlWsClient
     .request({
-      query: `subscription AeArt($where: ae_art_bool_exp) { ae_art(where: $where) {
-        ${ae_artModelPrimitives.toString()}
-      } }`,
+      query: gql`
+        subscription AeArt($where: ae_art_bool_exp) {
+          ae_art(where: $where) {
+            id
+            name
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: ae_art_lastUpdated } } },
     })
     .subscribe({
