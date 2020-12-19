@@ -208,9 +208,7 @@ const Tree = ({ width, height }) => {
     user.uid,
   ])
 
-  // what else to rerender on?
-
-  console.log('Tree rendering')
+  //console.log('Tree rendering')
 
   return (
     <ErrorBoundary>
