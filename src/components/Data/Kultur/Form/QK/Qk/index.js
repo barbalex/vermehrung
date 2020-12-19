@@ -8,7 +8,7 @@ import FormControl from '@material-ui/core/FormControl'
 
 import createMessageFunctions from './createMessageFunctions'
 import getConstants from '../../../../../../utils/constants'
-import { StoreContext } from '../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../storeContext'
 
 const constants = getConstants()
 

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 import { navigate } from 'gatsby'
 
-import { StoreContext } from '../models/reactUtils'
+import StoreContext from '../storeContext'
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'

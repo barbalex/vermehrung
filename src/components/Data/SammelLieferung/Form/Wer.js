@@ -11,7 +11,7 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'

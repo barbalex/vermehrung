@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 //import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import isNodeOpen from './isNodeOpen'
 import someChildrenAreOpen from './someChildrenAreOpen'

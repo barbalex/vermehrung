@@ -3,7 +3,7 @@ import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import artLabelFromAeArt from '../../utils/artLabelFromAeArt'
 
 const Container = styled.div`

@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 
 const StyledButton = styled(Button)`
   color: white !important;

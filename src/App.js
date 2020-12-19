@@ -5,8 +5,6 @@ import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 
 import { Provider as UrqlProvider } from 'urql'
 
-import { StoreContext } from './models'
-
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
@@ -29,6 +27,8 @@ import materialTheme from './utils/materialTheme'
 
 import createGlobalStyle from './utils/createGlobalStyle'
 const GlobalStyle = createGlobalStyle()
+
+import { Provider as MobxProvider } from './storeContext'
 
 import initiateApp from './utils/initiateApp'
 import initiateDb from './utils/initiateDb'
@@ -86,13 +86,13 @@ const App = ({ element }) => {
   return (
     <DatabaseProvider database={database}>
       <MuiThemeProvider theme={materialTheme}>
-        <StoreContext.Provider value={store}>
+        <MobxProvider value={store}>
           <UrqlProvider value={store.rawQglClient}>
             <GlobalStyle />
             {element}
             <Notifications />
           </UrqlProvider>
-        </StoreContext.Provider>
+        </MobxProvider>
       </MuiThemeProvider>
     </DatabaseProvider>
   )

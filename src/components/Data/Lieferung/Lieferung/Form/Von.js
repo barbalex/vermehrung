@@ -11,7 +11,7 @@ import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import Select from '../../../../shared/Select'
 import exists from '../../../../../utils/exists'
 import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs'

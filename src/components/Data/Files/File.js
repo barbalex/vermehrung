@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
 import isImageFile from './isImageFile'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'

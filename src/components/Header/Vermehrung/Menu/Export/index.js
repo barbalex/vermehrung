@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField'
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import buildExceljsWorksheetsForLieferungenOfYear from './buildExceljsWorksheetsForLieferungenOfYear'
 import buildExceljsWorksheetsForKulturBedarfsplanung from './buildExceljsWorksheetsForKulturBedarfsplanung'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'

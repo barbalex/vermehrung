@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'
 import Conflict from './Conflict'

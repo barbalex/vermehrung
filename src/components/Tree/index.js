@@ -9,7 +9,7 @@ import { Q } from '@nozbe/watermelondb'
 import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import Settings from './Settings'
 import List from './List'
 import ErrorBoundary from '../shared/ErrorBoundary'

@@ -6,7 +6,7 @@ import sortBy from 'lodash/sortBy'
 import isUuid from 'is-uuid'
 
 import Row from './Row'
-import { StoreContext } from '../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../storeContext'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
 

@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import logout from '../../../utils/logout'
 import getConstants from '../../../utils/constants'

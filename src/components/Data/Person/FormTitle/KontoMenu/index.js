@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import signup from '../../../../../utils/signup'
 import Menu from './Menu'
 

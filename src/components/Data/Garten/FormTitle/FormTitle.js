@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Settings from './Settings'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'

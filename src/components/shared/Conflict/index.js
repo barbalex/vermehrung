@@ -12,7 +12,7 @@ import {
 
 import Explainer from './Explainer'
 import Data from './Data'
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 
 const Container = styled.div`
   padding: 10px;

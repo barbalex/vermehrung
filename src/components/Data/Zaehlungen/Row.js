@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { first as first$ } from 'rxjs/operators'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 
 const singleRowHeight = 48
 const Row = styled.div`

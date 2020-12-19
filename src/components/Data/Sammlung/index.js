@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { of as $of } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FormTitle from './FormTitle'
 import Form from './Form'
 import ErrorBoundary from '../../shared/ErrorBoundary'

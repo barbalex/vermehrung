@@ -15,7 +15,7 @@ import styled from 'styled-components'
 import localForage from 'localforage'
 
 import ErrorBoundary from './shared/ErrorBoundary'
-import { StoreContext } from '../models/reactUtils'
+import StoreContext from '../storeContext'
 import getConstants from '../utils/constants'
 
 const constants = getConstants()

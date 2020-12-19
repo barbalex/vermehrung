@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 
 const TitleRow = styled.div`
   display: flex;

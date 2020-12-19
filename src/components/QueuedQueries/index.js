@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import QueuedQuery from './QueuedQuery'
 import getConstants from '../../utils/constants'
 

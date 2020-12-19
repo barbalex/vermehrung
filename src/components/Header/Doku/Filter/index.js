@@ -5,7 +5,7 @@ import { FaTimes, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Numbers from './Numbers'
 
 const Container = styled.div`

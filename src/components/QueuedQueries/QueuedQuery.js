@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { FaUndoAlt } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 
 // to hover and style row, see: https://stackoverflow.com/a/48109479/712005
 const Value = styled.div`

@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import buildExceljsWorksheets from './buildExceljsWorksheets'
 import downloadExceljsWorkbook from '../../../../utils/downloadExceljsWorkbook'
 

@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../../storeContext'
 import TextField from '../../../../../../shared/TextField'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
 import exists from '../../../../../../../utils/exists'

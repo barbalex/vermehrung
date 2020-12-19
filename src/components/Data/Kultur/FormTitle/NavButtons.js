@@ -2,7 +2,7 @@ import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import ZaDownSvg from '../../../../svg/to_za_down.inline.svg'
 import AnLiDownSvg from '../../../../svg/to_anli_down.inline.svg'
 import AusLiDownSvg from '../../../../svg/to_ausli_down.inline.svg'

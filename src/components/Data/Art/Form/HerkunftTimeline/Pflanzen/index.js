@@ -22,7 +22,7 @@ import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
-import { StoreContext } from '../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../storeContext'
 import herkunftLabelFromHerkunft from '../../../../../../utils/herkunftLabelFromHerkunft'
 import buildData from './buildData'
 

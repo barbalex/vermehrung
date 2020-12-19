@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 
-import { StoreContext } from '../../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../../storeContext'
 import TextField from '../../../../../../shared/TextField'
 import TextFieldNonUpdatable from '../../../../../../shared/TextFieldNonUpdatable'
 import Checkbox2States from '../../../../../../shared/Checkbox2States'

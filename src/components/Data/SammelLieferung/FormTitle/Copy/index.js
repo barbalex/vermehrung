@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { FaRegCopy } from 'react-icons/fa'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import exists from '../../../../../utils/exists'
 import updateLieferung from './updateLieferung'
 import updateAllLieferungen from './updateAllLieferungen'

@@ -4,7 +4,7 @@ import NavTree from '../../../svg/nav_tree.inline.svg'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 
 const StyledNavTree = styled(NavTree)`
   width: 24px;

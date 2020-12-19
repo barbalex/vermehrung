@@ -9,7 +9,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;

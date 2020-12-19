@@ -16,7 +16,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import Pflanzen from './Pflanzen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import herkunftSort from '../../../../../utils/herkunftSort'
 import notDeletedQuery from '../../../../../utils/notDeletedQuery'
 

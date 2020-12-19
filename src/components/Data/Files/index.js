@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button'
 import { v1 as uuidv1 } from 'uuid'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import Uploader from '../../Uploader'
 import File from './File'
 import 'react-image-lightbox/style.css'

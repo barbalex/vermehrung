@@ -2,8 +2,8 @@ import { createHttpClient } from 'mst-gql'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { createClient } from 'urql'
 
-import { RootStore } from '../models'
 import getConstants from './constants'
+import MobxStore from '../store'
 
 const constants = getConstants()
 
@@ -27,10 +27,6 @@ const initiateApp = async () => {
   // need to prevent gatsby from executing it server side
   // see: https://github.com/apollographql/subscriptions-transport-ws/issues/333#issuecomment-359261024
   let gqlWsClient
-  let storeOptions = {
-    gqlHttpClient,
-  }
-  let store
   let token
   if (typeof window !== 'undefined') {
     // https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
@@ -62,18 +58,12 @@ const initiateApp = async () => {
     gqlWsClient.onConnected(() => console.log('ws client connected'))
     gqlWsClient.onDisconnected(() => console.log('ws client disconnected'))
     gqlWsClient.onReconnected(() => console.log('ws client re-connected'))
-
-    // https://github.com/mobxjs/mst-gql/blob/master/src/MSTGQLStore.ts#L42-L43
-    storeOptions = {
-      gqlHttpClient,
-      gqlWsClient,
-    }
   }
   // need to renew header any time
   // solutions:
   // https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-307793837
 
-  store = RootStore.create(undefined, storeOptions)
+  const store = MobxStore.create()
   store.setGqlHttpClient(gqlHttpClient)
   store.setGqlWsClient(gqlWsClient)
 

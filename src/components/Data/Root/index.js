@@ -6,7 +6,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import Row from './Row'
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import getShowArt from '../../../utils/showArt'
 import getShowEvent from '../../../utils/showEvent'

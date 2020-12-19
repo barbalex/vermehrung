@@ -15,7 +15,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import Lieferung from './Lieferung'
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import lieferungSort from '../../../../utils/lieferungSort'
 import personFullname from '../../../../utils/personFullname'
 
