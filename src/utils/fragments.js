@@ -175,8 +175,8 @@ export const event = gql`
 export const eventRev = gql`
   fragment EventRevFields on event_rev {
     id
-    event_rev
-    #__typename
+    event_id
+    __typename
     kultur_id
     teilkultur_id
     person_id
@@ -496,7 +496,7 @@ export const kulturOption = gql`
 export const kulturOptionRev = gql`
   fragment KulturOptionRevFields on kultur_option_rev {
     id
-    kultur_option_id
+    kultur_id
     #__typename
     ev_datum
     ev_geplant
@@ -623,7 +623,7 @@ export const personRev = gql`
   fragment PersonRevFields on person_rev {
     id
     person_id
-    #__typename
+    __typename
     nr
     vorname
     name
@@ -689,8 +689,8 @@ export const personOption = gql`
 export const personOptionRev = gql`
   fragment PersonOptionRevFields on person_option_rev {
     id
-    person_option_id
-    #__typename
+    person_id
+    __typename
     ar_name_deutsch
     ga_strasse
     ga_plz
