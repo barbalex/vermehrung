@@ -126,7 +126,6 @@ const myTypes = types
   .volatile(() => ({
     user: {},
     firebase: null,
-    gqlHttpClient: null,
     gqlWsClient: null,
     db: null,
     rawQglClient: null,
@@ -290,9 +289,6 @@ const myTypes = types
       },
       unsetError(path) {
         unset(self.errors, path)
-      },
-      setGqlHttpClient(val) {
-        self.gqlHttpClient = val
       },
       setGqlWsClient(val) {
         self.gqlWsClient = val
@@ -1458,40 +1454,6 @@ const myTypes = types
       },
       setDocFilter(val) {
         self.docFilter = val
-      },
-      flushData() {
-        // TODO: refactor for watermelonDB
-        self.ae_art_lastUpdated = 0
-        self.art_lastUpdated = 0
-        self.art_file_lastUpdated = 0
-        self.art_qk_lastUpdated = 0
-        self.art_qk_choosen_lastUpdated = 0
-        self.av_lastUpdated = 0
-        self.event_lastUpdated = 0
-        self.garten_lastUpdated = 0
-        self.garten_file_lastUpdated = 0
-        self.gv_lastUpdated = 0
-        self.herkunft_lastUpdated = 0
-        self.herkunft_file_lastUpdated = 0
-        self.kultur_lastUpdated = 0
-        self.kultur_file_lastUpdated = 0
-        self.kultur_option_lastUpdated = 0
-        self.kultur_qk_lastUpdated = 0
-        self.kultur_qk_choosen_lastUpdated = 0
-        self.lieferung_lastUpdated = 0
-        self.lieferung_file_lastUpdated = 0
-        self.person_lastUpdated = 0
-        self.person_file_lastUpdated = 0
-        self.person_option_lastUpdated = 0
-        self.sammel_lieferung_lastUpdated = 0
-        self.sammlung_lastUpdated = 0
-        self.sammlung_file_lastUpdated = 0
-        self.teilkultur_lastUpdated = 0
-        self.teilzaehlung_lastUpdated = 0
-        self.user_role_lastUpdated = 0
-        self.zaehlung_lastUpdated = 0
-        // was for all tables:
-        //self.ae_arts.clear()
       },
     }
   })

@@ -1,4 +1,3 @@
-import { createHttpClient } from 'mst-gql'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { createClient } from 'urql'
 
@@ -15,14 +14,6 @@ const getToken = () => {
 }
 
 const initiateApp = async () => {
-  // https://github.com/mobxjs/mst-gql/issues/247
-  //const gqlHttpClient = createHttpClient(constants?.graphQlUri)
-  const gqlHttpClient = (() => {
-    const client = createHttpClient(constants?.graphQlUri)
-    client.setHeaders({ authorization: `Bearer ${getToken()}` })
-    return client
-  })()
-
   // ws client only works in the browser
   // need to prevent gatsby from executing it server side
   // see: https://github.com/apollographql/subscriptions-transport-ws/issues/333#issuecomment-359261024
@@ -64,7 +55,6 @@ const initiateApp = async () => {
   // https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-307793837
 
   const store = MobxStore.create()
-  store.setGqlHttpClient(gqlHttpClient)
   store.setGqlWsClient(gqlWsClient)
 
   const rawQglClient = createClient({

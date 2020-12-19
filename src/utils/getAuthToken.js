@@ -5,7 +5,6 @@ const getAuthToken = async ({ store }) => {
     addNotification,
     setAuthorizing,
     user,
-    gqlHttpClient,
     online,
     setOnline,
   } = store
@@ -54,7 +53,6 @@ const getAuthToken = async ({ store }) => {
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
     //console.log('getAuthToken got new token:', token)
     window.localStorage.setItem('token', token)
-    gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
     setAuthorizing(false)
   } else {
     //console.log('getAuthToken, got no new token')

@@ -30,10 +30,10 @@ const Pre = styled.pre`
   background-color: rgba(128, 128, 128, 0.09);
 `
 
-const onReset = () => {
+const onReset = async () => {
   if (typeof window !== 'undefined') {
+    await localForage.clear()
     window.location.reload(true)
-    localForage.clear()
   }
 }
 
