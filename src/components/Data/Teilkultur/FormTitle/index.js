@@ -30,7 +30,7 @@ const TeilkulturFormTitleChooser = ({
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('teilkultur')
+    const collection = db.get('teilkultur')
     const totalCountObservable = collection
       .query(notDeletedQuery, ...hierarchyQuery)
       .observeCount()
@@ -48,7 +48,7 @@ const TeilkulturFormTitleChooser = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     kulturIdInActiveNodeArray,
     // need to rerender if any of the values of teilkulturFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps

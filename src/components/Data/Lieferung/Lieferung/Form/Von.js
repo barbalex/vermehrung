@@ -73,11 +73,11 @@ const LieferungVon = ({
   })
   useEffect(() => {
     // BEWARE: need to include inactive kulturs, persons
-    const kultursObservable = db.collections
+    const kultursObservable = db
       .get('kultur')
       .query(Q.where('_deleted', false))
       .observe()
-    const sammlungsObservable = db.collections
+    const sammlungsObservable = db
       .get('sammlung')
       .query(Q.where('_deleted', false))
       .observe()
@@ -143,14 +143,7 @@ const LieferungVon = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [
-    db,
-    db.collections,
-    herkunft,
-    row.art_id,
-    row.nach_kultur_id,
-    row?.von_kultur_id,
-  ])
+  }, [db, herkunft, row.art_id, row.nach_kultur_id, row?.von_kultur_id])
   const { herkunftLabel, vonKulturWerte, sammlungWerte } = dataState
 
   const titleRowRef = useRef(null)

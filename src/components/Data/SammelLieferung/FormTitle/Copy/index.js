@@ -7,9 +7,7 @@ import { FaRegCopy } from 'react-icons/fa'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../../../models/reactUtils'
-import { sammelLieferung as sammelLieferungFragment } from '../../../../../utils/fragments'
 import exists from '../../../../../utils/exists'
-import fieldsFromFragment from '../../../../../utils/fieldsFromFragment'
 import updateLieferung from './updateLieferung'
 import updateAllLieferungen from './updateAllLieferungen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
@@ -27,7 +25,29 @@ const Title = styled.div`
   user-select: none;
 `
 
-const sammelLieferungFields = fieldsFromFragment(sammelLieferungFragment)
+const sammelLieferungFields = [
+  'id',
+  'art_id',
+  'person_id',
+  'von_sammlung_id',
+  'von_kultur_id',
+  'datum',
+  'nach_kultur_id',
+  'nach_ausgepflanzt',
+  'von_anzahl_individuen',
+  'anzahl_pflanzen',
+  'anzahl_auspflanzbereit',
+  'gramm_samen',
+  'andere_menge',
+  'geplant',
+  'bemerkungen',
+  '_rev',
+  '_parent_rev',
+  '_revisions',
+  '_depth',
+  '_conflicts',
+  '_deleted',
+]
 
 const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
   console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })

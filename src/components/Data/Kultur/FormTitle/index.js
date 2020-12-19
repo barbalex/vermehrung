@@ -34,7 +34,7 @@ const KulturFormTitleChooser = ({
           Q.on('art', 'id', artIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('kultur')
+    const collection = db.get('kultur')
     const totalCountObservable = collection
       .query(
         Q.where('_deleted', false),
@@ -56,7 +56,7 @@ const KulturFormTitleChooser = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
     // need to rerender if any of the values of kulturFilter changes

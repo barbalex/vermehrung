@@ -91,16 +91,14 @@ const SelectLoadingOptions = ({
   useEffect(() => {
     const run = async () => {
       // TODO: need to get this to work without row.label
-      const record = row[field]
-        ? await db.collections.get(labelTable).find(row[field])
-        : {}
+      const record = row[field] ? await db.get(labelTable).find(row[field]) : {}
       setStateValue({
         value: row[field] || '',
         label: record[labelField] ?? '',
       })
     }
     run()
-  }, [db.collections, field, labelField, labelTable, row])
+  }, [db, field, labelField, labelTable, row])
 
   const loadOptions = useCallback(
     (inputValue, cb) => {

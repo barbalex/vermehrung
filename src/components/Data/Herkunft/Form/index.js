@@ -65,7 +65,7 @@ const Herkunft = ({
     const herkunftsNrCountObservable =
       showFilter || !exists(row?.nr)
         ? $of(0)
-        : db.collections
+        : db
             .get('herkunft')
             .query(Q.where('_deleted', false), Q.where('nr', row.nr))
             .observeCount()
@@ -88,7 +88,7 @@ const Herkunft = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db, db.collections, filter.herkunft, row.nr, setError, showFilter, user])
+  }, [db, filter.herkunft, row.nr, setError, showFilter, user])
   const { userPersonOption } = dataState
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =

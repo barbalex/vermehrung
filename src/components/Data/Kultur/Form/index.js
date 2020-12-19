@@ -241,7 +241,7 @@ const KulturForm = ({
     herkunftWerte: [],
   })
   useEffect(() => {
-    const artsObservable = db.collections
+    const artsObservable = db
       .get('art')
       .query(
         Q.where('_deleted', false),
@@ -249,7 +249,7 @@ const KulturForm = ({
         Q.where('id', Q.oneOf(artsToChoose)),
       )
       .observe()
-    const herkunftsObservable = db.collections
+    const herkunftsObservable = db
       .get('herkunft')
       .query(
         Q.where('_deleted', false),
@@ -288,7 +288,7 @@ const KulturForm = ({
 
     return () => allSubscription.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db, db.collections, user, artsToChoose.length, herkunftsToChoose.length])
+  }, [db, user, artsToChoose.length, herkunftsToChoose.length])
   const { artWerte, herkunftWerte } = dataState2
 
   const saveToDb = useCallback(

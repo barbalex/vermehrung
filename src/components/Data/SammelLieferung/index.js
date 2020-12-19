@@ -64,7 +64,7 @@ const SammelLieferung = ({
   useEffect(() => {
     const observable = showFilter
       ? $of(filter.sammel_lieferung)
-      : db.collections.get('sammel_lieferung').findAndObserve(id)
+      : db.get('sammel_lieferung').findAndObserve(id)
     const subscription = observable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -72,7 +72,7 @@ const SammelLieferung = ({
       })
     })
     return () => subscription.unsubscribe()
-  }, [db.collections, filter.sammel_lieferung, id, showFilter])
+  }, [db, filter.sammel_lieferung, id, showFilter])
   const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)

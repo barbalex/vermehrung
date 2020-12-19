@@ -530,6 +530,7 @@ export class Art extends Model {
   @children('kultur') kulturs
   @children('av') avs
   @children('art_file') files
+
   @lazy label = this.ae_art.observe().pipe(
     distinctUntilKeyChanged('ae_id'),
     map$((ae_art) => artLabelFromAeArt({ ae_art })),

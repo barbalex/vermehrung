@@ -54,7 +54,7 @@ const LieferungTitleChooser = ({
             Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
           ]
         : []
-    const collection = db.collections.get('lieferung')
+    const collection = db.get('lieferung')
     const totalCountObservable = collection
       .query(notDeletedQuery, ...hierarchyQuery)
       .observeCount()
@@ -72,7 +72,7 @@ const LieferungTitleChooser = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     kulturIdInActiveNodeArray,
     sammelLieferungIdInActiveNodeArray,
     personIdInActiveNodeArray,

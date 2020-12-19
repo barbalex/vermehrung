@@ -64,7 +64,7 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
         qkChoosens.map(async (qkChoosen) => {
-          const qk = await db.collections.get('kultur_qk').find(qkChoosen.qk_id)
+          const qk = await db.get('kultur_qk').find(qkChoosen.qk_id)
 
           return {
             title: qk?.titel,

@@ -97,7 +97,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
           Q.on('person', 'id', personIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('sammlung')
+    const collection = db.get('sammlung')
     const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(
@@ -123,7 +123,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     // need to rerender if any of the values of sammlungFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(sammlungFilter),

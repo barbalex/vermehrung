@@ -61,7 +61,7 @@ const Sammlung = ({
   useEffect(() => {
     const observable = showFilter
       ? $of(filter.sammlung)
-      : db.collections.get('sammlung').findAndObserve(id)
+      : db.get('sammlung').findAndObserve(id)
     const subscription = observable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -69,7 +69,7 @@ const Sammlung = ({
       })
     })
     return () => subscription.unsubscribe()
-  }, [db.collections, filter.sammlung, id, showFilter])
+  }, [db, filter.sammlung, id, showFilter])
   const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)

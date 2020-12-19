@@ -77,7 +77,7 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
     totalCount: 0,
   })
   useEffect(() => {
-    const collection = db.collections.get('sammel_lieferung')
+    const collection = db.get('sammel_lieferung')
     const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(
@@ -101,7 +101,7 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     // need to rerender if any of the values of sammelLieferungFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(sammelLieferungFilter),

@@ -228,7 +228,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 1 art
   if (showArt) {
-    const artQuery = db.collections
+    const artQuery = db
       .get('art')
       .query(...tableFilter({ store, table: 'art' }))
     const artCount = await artQuery.fetchCount()
@@ -590,7 +590,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 2 herkunft
   if (showHerkunft) {
-    const herkunftQuery = db.collections
+    const herkunftQuery = db
       .get('herkunft')
       .query(...tableFilter({ store, table: 'herkunft' }))
     const herkunftCount = await herkunftQuery.fetchCount()
@@ -702,7 +702,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 3 sammlung
   if (showSammlung) {
-    const sammlungQuery = db.collections
+    const sammlungQuery = db
       .get('sammlung')
       .query(...tableFilter({ store, table: 'sammlung' }))
     const sammlungCount = await sammlungQuery.fetchCount()
@@ -792,7 +792,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 4 garten
   if (showGarten) {
-    const gartenQuery = db.collections
+    const gartenQuery = db
       .get('garten')
       .query(...tableFilter({ store, table: 'garten' }))
     const gartenCount = await gartenQuery.fetchCount()
@@ -1074,7 +1074,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 5 kultur
   if (showKultur) {
-    const kulturQuery = db.collections
+    const kulturQuery = db
       .get('kultur')
       .query(...tableFilter({ store, table: 'kultur' }))
     const kulturCount = await kulturQuery.fetchCount()
@@ -1272,7 +1272,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 6 teilkultur
   if (showTeilkultur) {
-    const teilkulturQuery = db.collections
+    const teilkulturQuery = db
       .get('teilkultur')
       .query(...tableFilter({ store, table: 'teilkultur' }))
     const teilkulturCount = await teilkulturQuery.fetchCount()
@@ -1290,7 +1290,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 7 zaehlung
   if (showZaehlung) {
-    const zaehlungQuery = db.collections
+    const zaehlungQuery = db
       .get('zaehlung')
       .query(...tableFilter({ store, table: 'zaehlung' }))
     const zaehlungCount = await zaehlungQuery.fetchCount()
@@ -1308,7 +1308,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 8 lieferung
   if (showLieferung) {
-    const lieferungQuery = db.collections
+    const lieferungQuery = db
       .get('lieferung')
       .query(...tableFilter({ store, table: 'lieferung' }))
     const lieferungCount = await lieferungQuery.fetchCount()
@@ -1326,7 +1326,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 9 sammelLieferung
   if (showSammelLieferung) {
-    const sammelLieferungQuery = db.collections
+    const sammelLieferungQuery = db
       .get('sammel_lieferung')
       .query(...tableFilter({ store, table: 'sammel_lieferung' }))
     const sammelLieferungCount = await sammelLieferungQuery.fetchCount()
@@ -1402,7 +1402,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 10 event
   if (showEvent) {
-    const eventQuery = db.collections
+    const eventQuery = db
       .get('event')
       .query(...tableFilter({ store, table: 'event' }))
     const eventCount = await eventQuery.fetchCount()
@@ -1418,7 +1418,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 11 person
   if (showPerson) {
-    const personQuery = db.collections
+    const personQuery = db
       .get('person')
       .query(...tableFilter({ store, table: 'person' }))
     const personCount = await personQuery.fetchCount()

@@ -66,7 +66,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       : $of({})
     const lieferungObservable = showFilter
       ? $of(filter.lieferung)
-      : db.collections.get('lieferung').findAndObserve(id)
+      : db.get('lieferung').findAndObserve(id)
     const sammelLieferungObservable =
       showFilter || !row?.sammel_lieferung ? $of({}) : row.sammel_lieferung
     const combinedObservables = combineLatest([

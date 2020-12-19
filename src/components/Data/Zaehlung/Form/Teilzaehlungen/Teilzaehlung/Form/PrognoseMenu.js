@@ -85,7 +85,7 @@ const PrognoseMenu = ({
       // we have both values. Let's go on
       // check if zaehlung with date of 15.09. of year exist
       const dateOfZaehlung = `${yearToUse}-09-15`
-      const existingZaehlungData = await db.collections
+      const existingZaehlungData = await db
         .get('zaehlung')
         .query(
           Q.where('_deleted', false),
@@ -114,7 +114,7 @@ const PrognoseMenu = ({
       // fetch teilzaehlungen with zaehlung_id === newZaehlungId, then update that
       // if inserting there will be two teilzaehlungs because of server trigger
       const interval = setInterval(async () => {
-        const newTzs = await db.collections
+        const newTzs = await db
           .get('teilzaehlung')
           .query(Q.where('zaehlung_id', zaehlungId))
         const newTz = newTzs?.[0]
@@ -142,7 +142,7 @@ const PrognoseMenu = ({
       kulturId,
       setAnchorEl,
       store,
-      db.collections,
+      db,
     ],
   )
   const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])

@@ -16,7 +16,7 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
 }) => {
   const { db } = store
 
-  const kulturs = await db.collections
+  const kulturs = await db
     .get('kultur')
     .query(
       Q.where('_deleted', false),
@@ -35,7 +35,7 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       const garten = await kultur.garten?.fetch()
       const garten_label = await garten?.label.pipe(first$()).toPromise()
 
-      const ownZaehlungen = await db.collections
+      const ownZaehlungen = await db
         .get('zaehlung')
         .query(
           Q.where('_deleted', false),
@@ -81,7 +81,7 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (anzahl_mutterpflanzen ?? 0)
           : ''
 
-      const lieferungs = await db.collections
+      const lieferungs = await db
         .get('lieferung')
         .query(
           Q.where('_deleted', false),

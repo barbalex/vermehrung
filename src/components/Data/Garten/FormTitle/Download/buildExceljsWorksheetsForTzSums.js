@@ -14,7 +14,7 @@ const buildExceljsWorksheetsForTzSums = async ({
 }) => {
   const { db } = store
 
-  const teilzaehlungs = await db.collections
+  const teilzaehlungs = await db
     .get('teilzaehlung')
     .query(
       Q.experimentalNestedJoin('zaehlung', 'kultur'),

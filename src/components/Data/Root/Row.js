@@ -38,7 +38,7 @@ const RootRow = ({ row, style, last }) => {
   const [count, setCount] = useState(0)
   useEffect(() => {
     const run = async () => {
-      const count = await db.collections
+      const count = await db
         .get(row.table)
         .query(...tableFilter({ store, table: row.table }))
         .fetchCount()
@@ -46,7 +46,7 @@ const RootRow = ({ row, style, last }) => {
     }
     run()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, row.table, store, ...Object.values(filter)])
+  }, [db, row.table, store, ...Object.values(filter)])
 
   const onClickRow = useCallback(() => setActiveNodeArray(row.url), [
     row.url,

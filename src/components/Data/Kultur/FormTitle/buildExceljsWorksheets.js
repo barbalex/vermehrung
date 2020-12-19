@@ -26,7 +26,7 @@ const buildExceljsWorksheets = async ({
 
   // 1. Get Kultur
   if (!calledFromHigherUp) {
-    const kultur = await db.collections.get('kultur').find(kultur_id)
+    const kultur = await db.get('kultur').find(kultur_id)
     const art = kultur.art_id ? await kultur.art.fetch() : {}
     const artName = await art.label.pipe(first$()).toPromise()
     const herkunft = kultur?.herkunft_id ? await kultur.herkunft.fetch() : {}
@@ -63,7 +63,7 @@ const buildExceljsWorksheets = async ({
     })
   }
   // 2. Get Zählungen
-  const zaehlungs = await db.collections
+  const zaehlungs = await db
     .get('zaehlung')
     .query(Q.where('_deleted', false), Q.where('kultur_id', kultur_id))
     .fetch()
@@ -126,7 +126,7 @@ const buildExceljsWorksheets = async ({
     })
   }
   // 3. Get Teil-Zählungen
-  const teilzaehlungs = await db.collections
+  const teilzaehlungs = await db
     .get('teilzaehlung')
     .query(
       Q.where('_deleted', false),
@@ -162,7 +162,7 @@ const buildExceljsWorksheets = async ({
     })
   }
   // 4. Get An-Lieferungen
-  const anlieferungs = await db.collections
+  const anlieferungs = await db
     .get('lieferung')
     .query(Q.where('_deleted', false), Q.where('nach_kultur_id', kultur_id))
     .fetch()
@@ -174,17 +174,17 @@ const buildExceljsWorksheets = async ({
       const aeArt = await art?.ae_art?.fetch()
       const lieferungPerson = await l.person?.fetch()
       const vonSammlung = l.von_sammlung_id
-        ? await db.collections.get('sammlung').find(l.von_sammlung_id)
+        ? await db.get('sammlung').find(l.von_sammlung_id)
         : undefined
       const vonSammlungPerson = await vonSammlung?.person?.fetch()
       const vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
       const vonKultur = l.von_kultur_id
-        ? await db.collections.get('kultur').find(l.von_kultur_id)
+        ? await db.get('kultur').find(l.von_kultur_id)
         : undefined
       const vonKulturGarten = await vonKultur?.garten?.fetch()
       const vonKulturHerkunft = await vonKultur?.herkunft?.fetch()
       const nachKultur = l.nach_kultur_id
-        ? await db.collections.get('kultur').find(l.nach_kultur_id)
+        ? await db.get('kultur').find(l.nach_kultur_id)
         : undefined
       const nachKulturGarten = await nachKultur?.garten?.fetch()
       const nachKulturHerkunft = await nachKultur?.herkunft?.fetch()
@@ -292,7 +292,7 @@ const buildExceljsWorksheets = async ({
     })
   }
   // 5. Get Aus-Lieferungen
-  const auslieferungs = await db.collections
+  const auslieferungs = await db
     .get('lieferung')
     .query(Q.where('_deleted', false), Q.where('von_kultur_id', kultur_id))
     .fetch()
@@ -306,17 +306,17 @@ const buildExceljsWorksheets = async ({
       const aeArt = await art?.ae_art?.fetch()
       const lieferungPerson = await l.person?.fetch()
       const vonSammlung = l.von_sammlung_id
-        ? await db.collections.get('sammlung').find(l.von_sammlung_id)
+        ? await db.get('sammlung').find(l.von_sammlung_id)
         : undefined
       const vonSammlungPerson = await vonSammlung?.person?.fetch()
       const vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
       const vonKultur = l.von_kultur_id
-        ? await db.collections.get('kultur').find(l.von_kultur_id)
+        ? await db.get('kultur').find(l.von_kultur_id)
         : undefined
       const vonKulturGarten = await vonKultur?.garten?.fetch()
       const vonKulturHerkunft = await vonKultur?.herkunft?.fetch()
       const nachKultur = l.nach_kultur_id
-        ? await db.collections.get('kultur').find(l.nach_kultur_id)
+        ? await db.get('kultur').find(l.nach_kultur_id)
         : undefined
       const nachKulturGarten = await nachKultur?.garten?.fetch()
       const nachKulturHerkunft = await nachKultur?.herkunft?.fetch()
@@ -418,7 +418,7 @@ const buildExceljsWorksheets = async ({
     })
   }
   // 6. Get Events
-  const events = await db.collections
+  const events = await db
     .get('event')
     .query(Q.where('_deleted', false), Q.where('kultur_id', kultur_id))
     .fetch()
@@ -426,7 +426,7 @@ const buildExceljsWorksheets = async ({
   const eventsData = await Promise.all(
     eventsSorted.map(async (e) => {
       const teilkultur = e.teilkultur_id
-        ? await db.collections.get('teilkultur').find(e.teilkultur_id)
+        ? await db.get('teilkultur').find(e.teilkultur_id)
         : undefined
       const person = await e.person?.fetch()
 

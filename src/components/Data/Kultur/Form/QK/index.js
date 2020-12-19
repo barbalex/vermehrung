@@ -84,11 +84,11 @@ const KulturQk = ({ kultur }) => {
     choosen: [],
   })
   useEffect(() => {
-    const totalCountObservable = db.collections
+    const totalCountObservable = db
       .get('kultur_qk_choosen')
       .query(Q.where('_deleted', false), Q.where('kultur_id', kultur.id))
       .observeCount()
-    const choosenCountObservable = db.collections
+    const choosenCountObservable = db
       .get('kultur_qk_choosen')
       .query(
         Q.where('_deleted', false),
@@ -96,7 +96,7 @@ const KulturQk = ({ kultur }) => {
         Q.where('choosen', true),
       )
       .observeCount()
-    const choosenObservable = db.collections
+    const choosenObservable = db
       .get('kultur_qk_choosen')
       .query(
         Q.where('_deleted', false),
@@ -116,7 +116,7 @@ const KulturQk = ({ kultur }) => {
     )
 
     return () => subscription.unsubscribe()
-  }, [db.collections, kultur.id])
+  }, [db, kultur.id])
   const { totalCount, choosenCount, choosen } = dataState
 
   const openDocs = useCallback((e) => {

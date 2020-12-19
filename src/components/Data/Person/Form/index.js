@@ -51,14 +51,11 @@ const Person = ({
     const personsNrCountObservable =
       showFilter || !exists(row?.nr)
         ? $of(0)
-        : db.collections
+        : db
             .get('person')
             .query(Q.where('_deleted', false), Q.where('nr', row.nr))
             .observeCount()
-    const userRolesObservable = db.collections
-      .get('user_role')
-      .query()
-      .observe()
+    const userRolesObservable = db.get('user_role').query().observe()
     const combinedObservables = combineLatest([
       userRolesObservable,
       personsNrCountObservable,
@@ -86,7 +83,7 @@ const Person = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [db.collections, row.nr, row.user_role, setError, showFilter])
+  }, [db, row.nr, row.user_role, setError, showFilter])
   const { userRoleWerte, userRole } = dataState
 
   useEffect(() => {

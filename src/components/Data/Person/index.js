@@ -60,7 +60,7 @@ const Person = ({
   useEffect(() => {
     const personObservable = showFilter
       ? $of(filter.person)
-      : db.collections.get('person').findAndObserve(id)
+      : db.get('person').findAndObserve(id)
     const subscription = personObservable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -68,7 +68,7 @@ const Person = ({
       })
     })
     return () => subscription.unsubscribe()
-  }, [db.collections, filter.person, id, showFilter])
+  }, [db, filter.person, id, showFilter])
   const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)

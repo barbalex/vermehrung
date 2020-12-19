@@ -84,7 +84,7 @@ const GartenPersonen = ({ garten }) => {
     personWerte: [],
   })
   useEffect(() => {
-    const personsObservable = db.collections
+    const personsObservable = db
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
@@ -109,7 +109,7 @@ const GartenPersonen = ({ garten }) => {
       },
     )
     return () => subscription.unsubscribe()
-  }, [db.collections, garten?.gvs])
+  }, [db, garten?.gvs])
   const { gvsSorted, personWerte } = dataState
 
   const saveToDb = useCallback(
