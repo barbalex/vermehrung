@@ -30,7 +30,7 @@ const EventFormTitle = ({
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('event')
+    const collection = db.get('event')
     const totalCountObservable = collection
       .query(notDeletedQuery, ...hierarchyQuery)
       .observeCount()
@@ -48,7 +48,7 @@ const EventFormTitle = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     kulturIdInActiveNodeArray,
     // need to rerender if any of the values of eventFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps

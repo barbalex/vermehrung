@@ -73,7 +73,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
 
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
-    const collection = db.collections.get('art')
+    const collection = db.get('art')
     const totalCountObservable = collection
       .query(notDeletedQuery)
       .observeCount()
@@ -94,7 +94,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
     return () => allSubscription.unsubscribe()
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(artFilter), artFilter, store])
+  }, [db, ...Object.values(artFilter), artFilter, store])
 
   const { arts, totalCount } = dataState
   const filteredCount = arts.length

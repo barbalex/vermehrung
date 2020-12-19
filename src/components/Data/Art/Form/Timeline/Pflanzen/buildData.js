@@ -4,7 +4,7 @@ import max from 'lodash/max'
 import { Q } from '@nozbe/watermelondb'
 
 const buildData = async ({ artId, db }) => {
-  const zaehlungsDone = await db.collections
+  const zaehlungsDone = await db
     .get('zaehlung')
     .query(
       Q.experimentalJoinTables(['kultur']),
@@ -16,7 +16,7 @@ const buildData = async ({ artId, db }) => {
       Q.where('_deleted', false),
     )
     .fetch()
-  const zaehlungsPlannedAll = await db.collections
+  const zaehlungsPlannedAll = await db
     .get('zaehlung')
     .query(
       Q.experimentalJoinTables(['kultur']),
@@ -36,7 +36,7 @@ const buildData = async ({ artId, db }) => {
     (lg) => !zaehlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
-  const sammlungsDone = await db.collections
+  const sammlungsDone = await db
     .get('sammlung')
     .query(
       Q.where('art_id', artId),
@@ -46,7 +46,7 @@ const buildData = async ({ artId, db }) => {
       Q.where('_deleted', false),
     )
     .fetch()
-  const sammlungsPlannedAll = await db.collections
+  const sammlungsPlannedAll = await db
     .get('sammlung')
     .query(
       Q.where('art_id', artId),
@@ -64,7 +64,7 @@ const buildData = async ({ artId, db }) => {
     (lg) => !sammlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
-  const lieferungsDone = await db.collections
+  const lieferungsDone = await db
     .get('lieferung')
     .query(
       Q.where('art_id', artId),
@@ -75,7 +75,7 @@ const buildData = async ({ artId, db }) => {
       Q.where('_deleted', false),
     )
     .fetch()
-  const lieferungsPlannedAll = await db.collections
+  const lieferungsPlannedAll = await db
     .get('lieferung')
     .query(
       Q.where('art_id', artId),
@@ -108,7 +108,7 @@ const buildData = async ({ artId, db }) => {
   // 2. get list of all non deleted kulturs
   //    these are the basis for counting:
   //    at every date the last count is used
-  const kultursOfArt = await db.collections
+  const kultursOfArt = await db
     .get('kultur')
     .query(
       Q.where('_deleted', false),

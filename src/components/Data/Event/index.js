@@ -61,13 +61,13 @@ const Event = ({
   useEffect(() => {
     const observable = showFilter
       ? $of(filter.event)
-      : db.collections.get('event').findAndObserve(id)
+      : db.get('event').findAndObserve(id)
     const subscription = observable.subscribe((newRow) => {
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))
     })
     return () => subscription.unsubscribe()
-  }, [db.collections, filter.event, id, showFilter])
+  }, [db, filter.event, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(

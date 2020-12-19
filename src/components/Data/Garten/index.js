@@ -59,13 +59,13 @@ const Garten = ({
   useEffect(() => {
     const observable = showFilter
       ? $of(filter.garten)
-      : db.collections.get('garten').findAndObserve(id)
+      : db.get('garten').findAndObserve(id)
     const subscription = observable.subscribe((newRow) => {
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))
     })
     return () => subscription.unsubscribe()
-  }, [db.collections, filter.garten, id, showFilter])
+  }, [db, filter.garten, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(

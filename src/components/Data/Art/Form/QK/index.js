@@ -65,12 +65,11 @@ const ApQk = ({ artId }) => {
 
   const [artQkChoosen, setArtQkChoosen] = useState([])
   useEffect(() => {
-    db.collections
-      .get('art_qk_choosen')
+    db.get('art_qk_choosen')
       .query(notDeletedQuery)
       .fetch()
       .then((artQkChoosen) => setArtQkChoosen(artQkChoosen))
-  }, [db.collections])
+  }, [db])
   const allQkChoosens = artQkChoosen.filter((q) => q.art_id === artId)
   const qkChoosens = allQkChoosens.filter((qk) => qk.choosen)
 
