@@ -68,7 +68,7 @@ const GartenForm = ({
             'ga_bemerkungen',
           ])
       : $of({})
-    const personsObservable = db.collections
+    const personsObservable = db
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeWithColumns('vorname', 'name')
@@ -98,7 +98,7 @@ const GartenForm = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db, db.collections, row.person, user])
+  }, [db, row.person, user])
   const { personWerte, userPersonOption } = dataState
 
   const {

@@ -23,7 +23,7 @@ const ArtFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const collection = db.collections.get('art')
+    const collection = db.get('art')
     const totalCountObservable = collection
       .query(notDeletedQuery)
       .observeCount()
@@ -41,7 +41,7 @@ const ArtFormTitleChooser = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     // need to rerender if any of the values of artFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.art),

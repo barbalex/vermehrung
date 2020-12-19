@@ -73,16 +73,16 @@ const EventForm = ({
     kulturOption: undefined,
   })
   useEffect(() => {
-    const kultursObservable = db.collections
+    const kultursObservable = db
       .get('kultur')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeWithColumns('garten_id', 'art_id', 'herkunft_id', 'zwischenlager')
     const tkKulturQuery = showFilter ? [] : [Q.where('kultur_id', kulturId)]
-    const teilkulturObservable = db.collections
+    const teilkulturObservable = db
       .get('teilkultur')
       .query(Q.where('_deleted', false), ...tkKulturQuery)
       .observeWithColumns('name')
-    const personsObservable = db.collections
+    const personsObservable = db
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeWithColumns('vorname', 'name')
@@ -150,7 +150,6 @@ const EventForm = ({
     return () => allSubscription.unsubscribe()
   }, [
     db,
-    db.collections,
     filter.kultur,
     kulturId,
     row,

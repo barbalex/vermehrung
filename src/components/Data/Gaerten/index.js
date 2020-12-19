@@ -80,7 +80,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
           Q.on('person', 'id', personIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('garten')
+    const collection = db.get('garten')
     const totalCountObservable = collection
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeCount()
@@ -103,7 +103,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     personIdInActiveNodeArray,
     // need to rerender if any of the values of gartenFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -23,42 +23,36 @@ const createMessageFunctions = async ({ artId, db }) => {
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
 
-  const arts = await db.collections.get('art').query(notDeletedQuery).fetch()
+  const arts = await db.get('art').query(notDeletedQuery).fetch()
   const artsSorted = await artsSortedFromArts(arts)
-  const avs = await db.collections.get('av').query(notDeletedQuery).fetch()
-  const gartens = await db.collections
+  const avs = await db.get('av').query(notDeletedQuery).fetch()
+  const gartens = await db
     .get('garten')
     .query(Q.where('_deleted', false), Q.where('aktiv', true))
     .fetch()
   const gartensSorted = await gartensSortedFromGartens(gartens)
-  const herkunfts = await db.collections
-    .get('herkunft')
-    .query(notDeletedQuery)
-    .fetch()
+  const herkunfts = await db.get('herkunft').query(notDeletedQuery).fetch()
   const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
-  const kulturs = await db.collections
+  const kulturs = await db
     .get('kultur')
     .query(Q.where('_deleted', false), Q.where('aktiv', true))
     .fetch()
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
-  const lieferungs = await db.collections
-    .get('lieferung')
-    .query(notDeletedQuery)
-    .fetch()
+  const lieferungs = await db.get('lieferung').query(notDeletedQuery).fetch()
   const lieferungsSorted = lieferungs.sort((a, b) => lieferungSort({ a, b }))
-  const persons = await db.collections
+  const persons = await db
     .get('person')
     .query(Q.where('_deleted', false), Q.where('aktiv', true))
     .fetch()
   const personsSorted = persons.sort((a, b) => personSort({ a, b }))
-  const sammlungsOfArt = await db.collections
+  const sammlungsOfArt = await db
     .get('sammlung')
     .query(Q.where('_deleted', false), Q.on('art', 'id', artId))
     .fetch()
   const sammlungsOfArtSorted = await sammlungsSortedFromSammlungs(
     sammlungsOfArt,
   )
-  const zaehlungsOfArt = await db.collections
+  const zaehlungsOfArt = await db
     .get('zaehlung')
     .query(
       Q.experimentalNestedJoin('kultur', 'art'),
@@ -69,7 +63,7 @@ const createMessageFunctions = async ({ artId, db }) => {
   const zaehlungsOfArtSorted = zaehlungsOfArt.sort((a, b) =>
     zaehlungSort({ a, b }),
   )
-  const teilzaehlungsOfArt = await db.collections
+  const teilzaehlungsOfArt = await db
     .get('teilzaehlung')
     .query(
       Q.experimentalNestedJoin('zaehlung', 'kultur'),
@@ -78,7 +72,7 @@ const createMessageFunctions = async ({ artId, db }) => {
       Q.where('_deleted', false),
     )
     .fetch()
-  const teilkultursOfArt = await db.collections
+  const teilkultursOfArt = await db
     .get('teilkultur')
     .query(
       Q.experimentalNestedJoin('kultur', 'art'),
@@ -89,7 +83,7 @@ const createMessageFunctions = async ({ artId, db }) => {
   const teilkultursOfArtSorted = teilkultursOfArt.sort((a, b) =>
     teilkulturSort({ a, b }),
   )
-  const eventsOfArt = await db.collections
+  const eventsOfArt = await db
     .get('event')
     .query(
       Q.experimentalNestedJoin('kultur', 'art'),
@@ -377,7 +371,7 @@ const createMessageFunctions = async ({ artId, db }) => {
           }),
       ),
     zaehlungsInFutureNotPrognose: async () => {
-      const zaehlungs = await db.collections
+      const zaehlungs = await db
         .get('zaehlung')
         .query(
           Q.experimentalNestedJoin('kultur', 'art'),
@@ -402,7 +396,7 @@ const createMessageFunctions = async ({ artId, db }) => {
       )
     },
     zaehlungsWithoutDatum: async () => {
-      const zaehlungs = await db.collections
+      const zaehlungs = await db
         .get('zaehlung')
         .query(
           Q.experimentalNestedJoin('kultur', 'art'),
@@ -513,7 +507,7 @@ const createMessageFunctions = async ({ artId, db }) => {
           }),
       ),
     zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen: async () => {
-      const zaehlungsOfArt = await db.collections
+      const zaehlungsOfArt = await db
         .get('zaehlung')
         .query(
           Q.experimentalNestedJoin('kultur', 'art'),

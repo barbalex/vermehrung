@@ -65,7 +65,7 @@ const ApQkQk = ({ artId, qkChoosens }) => {
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
         qkChoosens.map(async (qkChoosen) => {
-          const qk = await db.collections.get('art_qk').find(qkChoosen.qk_id)
+          const qk = await db.get('art_qk').find(qkChoosen.qk_id)
 
           return {
             title: qk?.titel,
@@ -77,7 +77,7 @@ const ApQkQk = ({ artId, qkChoosens }) => {
       )
       setMessageGroups(msgGroups.filter((qk) => qk.messages.length))
     })
-  }, [artId, db, db.collections, qkChoosens, store])
+  }, [artId, db, qkChoosens, store])
 
   const messageGroupsFiltered = messageGroups
     ? messageGroups.filter((messageGroup) => {

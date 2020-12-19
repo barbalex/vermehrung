@@ -26,12 +26,11 @@ const ChooseQk = () => {
 
   const [artQks, setArtQks] = useState([])
   useEffect(() => {
-    db.collections
-      .get('art_qk')
+    db.get('art_qk')
       .query(notDeletedQuery)
       .fetch()
       .then((artQks) => setArtQks(sortBy(artQks, 'name')))
-  }, [db.collections])
+  }, [db])
 
   return (
     <ErrorBoundary>

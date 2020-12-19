@@ -81,7 +81,7 @@ const Events = ({ filter: showFilter, width, height }) => {
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('event')
+    const collection = db.get('event')
     const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)
@@ -100,7 +100,7 @@ const Events = ({ filter: showFilter, width, height }) => {
     // need to rerender if any of the values of eventFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    db.collections,
+    db,
     kulturIdInActiveNodeArray,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(eventFilter),

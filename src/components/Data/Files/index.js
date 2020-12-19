@@ -75,7 +75,7 @@ const Files = ({ parentTable, parent }) => {
       .observeWithColumns(['name'])
       .subscribe((files) => setEvent(files.sort(fileSort)))
     return () => subscription.unsubscribe()
-  }, [db.collections, parent.files])
+  }, [parent.files])
 
   const onChangeUploader = useCallback(
     (file) => {

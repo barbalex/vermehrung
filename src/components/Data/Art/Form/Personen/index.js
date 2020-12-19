@@ -83,7 +83,7 @@ const ArtPersonen = ({ art }) => {
     personWerte: [],
   })
   useEffect(() => {
-    const personsObservable = db.collections
+    const personsObservable = db
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
@@ -107,7 +107,7 @@ const ArtPersonen = ({ art }) => {
       },
     )
     return () => subscription.unsubscribe()
-  }, [art.avs, db.collections])
+  }, [art.avs, db])
   const { avsSorted, personWerte } = dataState
 
   const saveToDb = useCallback(
