@@ -1,11 +1,11 @@
 ---
 path: '/Dokumentation/offline-wie'
-date: '2020-09-03'
+date: '2020-12-18'
 title: 'Offline: Wie es funktioniert'
 sort1: 25
 ---
 
-Schon lange würden wir in apflora.ch gerne offline arbeiten können. In vermehrung.ch wäre es ebenso nützlich. Weil die Umsetzung sehr anspruchsvoll und aufwändig ist, gab es bisher kein Konzept dafür. Nachfolgend das beinahe umgesetzte Konzept für vermehrung.ch:<br/><br/>
+Schon lange würden wir in apflora.ch gerne offline arbeiten können. In vermehrung.ch ist es ebenso nützlich. Weil die Umsetzung sehr anspruchsvoll und aufwändig ist, gab es bisher kein Konzept dafür. Nachfolgend das für vermehrung.ch umgesetzte Konzept:<br/><br/>
 
 ### 1. Konflikt-fähige Datenstruktur
 
@@ -34,11 +34,11 @@ Vereinfacht gesagt funktioniert das so:
 
 - Datensätze werden nie geändert. Jede Änderung wird in eine neue Version geschrieben
 - Datensätze speichern eine Liste ihrer "Vorfahren" (= frühere Versionen)
-- Wird derselbe Datensatz parallel von mehreren Benutzern verändert, entsteht eine "Ast-Gabel" im "Ahnen-Baum". Der Stamm ist der Ur-Ahne dieses Datensatzes. So entsteht mit der Zeit für jeden Datensatz ein mehr oder weniger stark verästelter Ahnen-Baum
+- Wird derselbe Datensatz parallel von mehreren Benutzern verändert, entsteht eine "Ast-Gabel" im (von oben nach unten wachsenden) "Ahnen-Baum". Der Stamm ist der Ur-Ahne dieses Datensatzes, Gabelungen markieren Konflikte
 
 Nun gibt es schlaue Abfragen, welche immer wenn eine Version eintrifft:
 
-- Konflikte finden (Ast-Gabeln)
+- Konflikte finden
 - Automatisch einen "Sieger" wählen
 - Eine Liste aller "Sieger" bauen, mit Hinweis auf allfällige Konflikte
 
@@ -66,12 +66,12 @@ Die App verpackt alle Daten-Änderungen (Operationen) in "Päckli". Die Päckli 
 
 Bevor die App offline ist, muss sie die für die Feld- bzw. Garten-Arbeit gewünschten Daten geladen haben:
 
-- Die App lädt bei jedem Start alle Daten, welche der jeweilige Benutzer lesen darf
+- Die App lädt beim ersten Start alle Daten, welche der jeweilige Benutzer lesen darf
 - Daten werden dauernd live aktualisiert
 
 ### 4. Authentifikation
 
-Offline ist Authentifikation nicht möglich. Die App muss mit den vorhandenen Daten auch dann weiter funktionieren, wenn die Authentifikation während der Offline-Zeit ablaufen sollte. Sobald sie online ist, muss die Authentifikation erneuert werden.<br/><br/>
+Offline ist Authentifikation nicht möglich. Die App funktioniert mit den vorhandenen Daten auch dann weiter, wenn die Authentifikation während der Offline-Zeit ablaufen sollte. Sobald sie online ist, wird die Authentifikation erneuert.<br/><br/>
 
 ### 5. Suche, Auswertungen
 
@@ -93,7 +93,7 @@ Es gibt viel Arbeit. Sehr viel. Beispiele:
 
 Weil apflora.ch viel komplexer ist (ca. Faktor 2), wurde das zuerst in vermehrung.ch eingeführt.<br/><br/>
 
-Bilanz: Die Implementation war ca. 7 Wochen Aufwand.<br/><br/>
+Bilanz: Die Implementation war ca. 14 Wochen Aufwand. Ein zweites Mal würde das wohl halb so lange dauern.<br/><br/>
 
 Wenn:
 
