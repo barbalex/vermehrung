@@ -156,27 +156,17 @@ const myTypes = types
             revertId,
             revertValue,
           } = query
-          //console.log('operation, name:', name)
-          console.log('operation, variables:', variables)
-          //console.log('operation, mutations:', mutations)
           const mutation = mutations[name]
           if (!mutation) throw new Error('keine Mutation gefunden für: ', name)
-          //console.log('operation, mutation:', mutation)
           try {
             // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
             variables
               ? yield self.rawQglClient
                   .mutation(mutation, JSON.parse(variables))
-                  .toPromise() //yield self[name](JSON.parse(variables))
-              : yield self.rawQglClient.mutation(mutation).toPromise() //yield self[name]()
+                  .toPromise()
+              : yield self.rawQglClient.mutation(mutation).toPromise()
           } catch (error) {
             const lcMessage = error.message.toLowerCase()
-            console.log('queued query reaction, error:', {
-              error,
-              message: error.message,
-              variables: JSON.parse(variables),
-              queryName: query.name,
-            })
             // In case a conflict was caused by two EXACT SAME changes,
             // this will bounce because of the same rev. We want to ignore this:
             if (error.message.includes('JWT')) {
