@@ -43,7 +43,7 @@ const EventConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, deleteEventRevModel } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -62,7 +62,7 @@ const EventConflict = ({
     [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -100,13 +100,25 @@ const EventConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deleteEventRevModel(revRow)
+    // update model: remove this conflict
+    const collection = db.get('event')
+    const model = await collection.find(revRow.event_id)
+    await model.removeConflict(revRow._rev)
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deleteEventRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.beschreibung,
+    revRow.datum,
+    revRow.event_id,
+    revRow.geplant,
+    revRow.kultur_id,
+    revRow.person_id,
+    revRow.teilkultur_id,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {

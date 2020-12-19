@@ -38,7 +38,7 @@ const ArtConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, deleteArtRevModel } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -57,7 +57,7 @@ const ArtConflict = ({
     [revRow, row, store],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -90,13 +90,20 @@ const ArtConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deleteArtRevModel(revRow)
+    // update model: remove this conflict
+    const collection = db.get('art')
+    const model = await collection.find(revRow.art_id)
+    await model.removeConflict(revRow._rev)
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deleteArtRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.ae_id,
+    revRow.art_id,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {

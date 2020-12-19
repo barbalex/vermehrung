@@ -45,7 +45,7 @@ const KulturConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, deleteKulturRevModel } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -64,7 +64,7 @@ const KulturConflict = ({
     [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -105,13 +105,27 @@ const KulturConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deleteKulturRevModel(revRow)
+    // update model: remove this conflict
+    const collection = db.get('kultur')
+    const model = await collection.find(revRow.kultur_id)
+    await model.removeConflict(revRow._rev)
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deleteKulturRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.aktiv,
+    revRow.art_id,
+    revRow.bemerkungen,
+    revRow.erhaltungskultur,
+    revRow.garten_id,
+    revRow.herkunft_id,
+    revRow.kultur_id,
+    revRow.von_anzahl_individuen,
+    revRow.zwischenlager,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {

@@ -45,7 +45,7 @@ const GartenConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, deleteGartenRevModel } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   const [{ error, data, fetching }] = useQuery({
     query: gartenRevQuery,
@@ -63,7 +63,7 @@ const GartenConflict = ({
     [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -103,13 +103,27 @@ const GartenConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deleteGartenRevModel(revRow)
+    // update model: remove this conflict
+    const collection = db.get('garten')
+    const model = await collection.find(revRow.garten_id)
+    await model.removeConflict(revRow._rev)
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deleteGartenRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.aktiv,
+    revRow.bemerkungen,
+    revRow.garten_id,
+    revRow.geom_point,
+    revRow.name,
+    revRow.ort,
+    revRow.person_id,
+    revRow.plz,
+    revRow.strasse,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {

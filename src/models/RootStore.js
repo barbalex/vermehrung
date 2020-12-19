@@ -405,16 +405,6 @@ export const RootStore = RootStoreBase.props({
           setActiveNodeArray(newActiveNodeArray)
         })
       },
-      async deleteArtRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('art')
-        const model = await collection.find(val.art_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.art_revs.get(val.id)
-        destroy(rev_model)
-      },
       async insertArtQkChoosenRev(args) {
         const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
@@ -468,16 +458,6 @@ export const RootStore = RootStoreBase.props({
           ])
         })
       },
-      async deleteArtQkChoosenRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('art_qk_choosen')
-        const model = await collection.find(val.art_qk_choosen_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.art_qk_choosen_revs.get(val.id)
-        destroy(rev_model)
-      },
       async insertAvRev(args) {
         const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
@@ -529,16 +509,6 @@ export const RootStore = RootStoreBase.props({
             collection.prepareCreateFromDirtyRaw(newObjectForStore),
           ])
         })
-      },
-      async deleteAvRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('av')
-        const model = await collection.find(val.av_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.av_revs.get(val.id)
-        destroy(rev_model)
       },
       async insertEventRev(args) {
         const {
@@ -613,16 +583,6 @@ export const RootStore = RootStoreBase.props({
           setActiveNodeArray(newActiveNodeArray)
         })
       },
-      async deleteEventRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('event')
-        const model = await collection.find(val.event_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.event_revs.get(val.id)
-        destroy(rev_model)
-      },
       async insertGartenRev(args) {
         const { user, addQueuedQuery, personIdInActiveNodeArray } = self
 
@@ -692,16 +652,6 @@ export const RootStore = RootStoreBase.props({
           setActiveNodeArray(newActiveNodeArray)
         })
       },
-      async deleteGartenRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('garten')
-        const model = await collection.find(val.garten_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.garten_revs.get(val.id)
-        destroy(rev_model)
-      },
       async insertGvRev(args) {
         const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
@@ -753,16 +703,6 @@ export const RootStore = RootStoreBase.props({
             collection.prepareCreateFromDirtyRaw(newObjectForStore),
           ])
         })
-      },
-      async deleteGvRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('gv')
-        const model = await collection.find(val.gv_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.gv_revs.get(val.id)
-        destroy(rev_model)
       },
       async insertHerkunftRev(args) {
         const { user, addQueuedQuery } = self
@@ -831,16 +771,6 @@ export const RootStore = RootStoreBase.props({
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
         })
-      },
-      async deleteHerkunftRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('herkunft')
-        const model = await collection.find(val.herkunft_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.herkunft_revs.get(val.id)
-        destroy(rev_model)
       },
       destroy(model) {
         destroy(model)
@@ -919,26 +849,6 @@ export const RootStore = RootStoreBase.props({
           setActiveNodeArray(newActiveNodeArray)
         })
       },
-      async deleteKulturRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('kultur')
-        const model = await collection.find(val.kultur_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.kultur_revs.get(val.id)
-        destroy(rev_model)
-      },
-      async deleteKulturOptionRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('kultur_option')
-        const model = await collection.find(val.kultur_option_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.kultur_option_revs.get(val.id)
-        destroy(rev_model)
-      },
       async insertKulturQkChoosenRev(args) {
         const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
@@ -991,16 +901,6 @@ export const RootStore = RootStoreBase.props({
             collection.prepareCreateFromDirtyRaw(newObjectForStore),
           ])
         })
-      },
-      async deleteKulturQkChoosenRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('kultur_qk_choosen')
-        const model = await collection.find(val.kultur_qk_choosen_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.kultur_qk_choosen_revs.get(val.id)
-        destroy(rev_model)
       },
       async insertLieferungRev(args) {
         const {
@@ -1094,16 +994,6 @@ export const RootStore = RootStoreBase.props({
           setActiveNodeArray(newActiveNodeArray)
         })
       },
-      async deleteLieferungRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('lieferung')
-        const model = await collection.find(val.lieferung_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.lieferung_revs.get(val.id)
-        destroy(rev_model)
-      },
       async insertPersonRev(args) {
         const { user, addQueuedQuery } = self
         const { activeNodeArray, setActiveNodeArray } = self.tree
@@ -1180,26 +1070,6 @@ export const RootStore = RootStoreBase.props({
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
         })
-      },
-      async deletePersonRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('person')
-        const model = await collection.find(val.person_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.person_revs.get(val.id)
-        destroy(rev_model)
-      },
-      async deletePersonOptionRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('person_option')
-        const model = await collection.find(val.person_option_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.person_option_revs.get(val.id)
-        destroy(rev_model)
       },
       async insertSammelLieferungRev(args) {
         const {
@@ -1283,16 +1153,6 @@ export const RootStore = RootStoreBase.props({
           setActiveNodeArray(newActiveNodeArray)
         })
       },
-      async deleteSammelLieferungRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('sammel_lieferung')
-        const model = await collection.find(val.sammel_lieferung_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.sammel_lieferung_revs.get(val.id)
-        destroy(rev_model)
-      },
       async insertSammlungRev(args) {
         const {
           user,
@@ -1371,16 +1231,6 @@ export const RootStore = RootStoreBase.props({
           setActiveNodeArray(newActiveNodeArray)
         })
       },
-      async deleteSammlungRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('sammlung')
-        const model = await collection.find(val.sammlung_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.sammlung_revs.get(val.id)
-        destroy(rev_model)
-      },
       async insertTeilkulturRev(args) {
         const { user, addQueuedQuery, kulturIdInActiveNodeArray } = self
 
@@ -1453,16 +1303,6 @@ export const RootStore = RootStoreBase.props({
         }
         return id
       },
-      async deleteTeilkulturRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('teilkultur')
-        const model = await collection.find(val.teilkultur_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.teilkultur_revs.get(val.id)
-        destroy(rev_model)
-      },
       async insertTeilzaehlungRev(args) {
         const {
           user,
@@ -1526,16 +1366,6 @@ export const RootStore = RootStoreBase.props({
             collection.prepareCreateFromDirtyRaw(newObjectForStore),
           ])
         })
-      },
-      async deleteTeilzaehlungRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('teilzaehlung')
-        const model = await collection.find(val.teilzaehlung_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.teilzaehlung_revs.get(val.id)
-        destroy(rev_model)
       },
       async insertZaehlungRev(args) {
         const { user, addQueuedQuery, kulturIdInActiveNodeArray } = self
@@ -1602,16 +1432,6 @@ export const RootStore = RootStoreBase.props({
           setActiveNodeArray(newActiveNodeArray)
         })
         return id
-      },
-      async deleteZaehlungRevModel(val) {
-        // 1. update model: remove this conflict
-        const { db, destroy } = self
-        const collection = db.get('zaehlung')
-        const model = await collection.find(val.zaehlung_id)
-        await model.removeConflict(val._rev)
-        // 2. delete rev model
-        const rev_model = self.zaehlung_revs.get(val.id)
-        destroy(rev_model)
       },
       setOnline(val) {
         self.online = val
