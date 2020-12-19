@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Spinner from '../../../shared/Spinner'
 import Conflict from './Conflict'

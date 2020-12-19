@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
 import notDeletedQuery from '../../../../utils/notDeletedQuery'

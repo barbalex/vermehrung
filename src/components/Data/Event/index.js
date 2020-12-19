@@ -5,7 +5,7 @@ import SplitPane from 'react-split-pane'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { of as $of } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FormTitle from './FormTitle'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'

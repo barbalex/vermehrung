@@ -5,7 +5,7 @@ import SimpleBar from 'simplebar-react'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import Checkbox2States from '../../../shared/Checkbox2States'

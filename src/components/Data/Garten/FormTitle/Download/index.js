@@ -7,7 +7,7 @@ import { FaDownload } from 'react-icons/fa'
 import styled from 'styled-components'
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten'
 import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'

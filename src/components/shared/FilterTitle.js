@@ -5,7 +5,7 @@ import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 
 const Container = styled.div`
   background-color: #ffe0b2;

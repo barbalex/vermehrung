@@ -8,7 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import getConstants from '../../../../../utils/constants'
 
 const constants = getConstants()

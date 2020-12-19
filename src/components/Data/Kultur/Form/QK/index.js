@@ -16,7 +16,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import Qk from './Qk'
 import Choose from './Choose'
 import getConstants from '../../../../../utils/constants'

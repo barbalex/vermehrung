@@ -13,7 +13,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import Art from './Art'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'

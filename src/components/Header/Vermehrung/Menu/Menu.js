@@ -7,7 +7,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import { FaChevronRight } from 'react-icons/fa'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import ExportMenu from './Export'
 
 const StyledMenuItem = styled(MenuItem)`

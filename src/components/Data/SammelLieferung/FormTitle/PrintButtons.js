@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 
 const SlPrint = ({ printPreview, setPrintPreview, asMenu }) => {
   const store = useContext(StoreContext)

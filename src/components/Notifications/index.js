@@ -16,7 +16,7 @@ const StyledIconButton = styled(IconButton)`
   margin-left: 5px !important;
 `
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import Notification from './Notification'
 
 const Notifications = () => {

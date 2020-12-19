@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 
 const TitleRow = styled.div`
   display: flex;

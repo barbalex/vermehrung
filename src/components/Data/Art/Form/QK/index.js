@@ -17,7 +17,7 @@ import { motion, useAnimation } from 'framer-motion'
 import Qk from './Qk'
 import Choose from './Choose'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import getConstants from '../../../../../utils/constants'
 import notDeletedQuery from '../../../../../utils/notDeletedQuery'
 

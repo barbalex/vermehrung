@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
 import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'

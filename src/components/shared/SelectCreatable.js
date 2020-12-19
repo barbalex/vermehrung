@@ -4,7 +4,7 @@ import Select from 'react-select/creatable'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 
 const Container = styled.div`
   display: flex;

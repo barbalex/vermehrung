@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { first as first$ } from 'rxjs/operators'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 
 const Container = styled.div`
   display: flex;

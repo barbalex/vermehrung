@@ -5,7 +5,7 @@ import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
 
 import History from '../../../shared/History'
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../utils/toPgArray'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison'

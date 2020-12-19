@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 
 const OuterContainer = styled.div`
   min-width: 48px;

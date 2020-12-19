@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import FilterNumbers from '../../../shared/FilterNumbers'

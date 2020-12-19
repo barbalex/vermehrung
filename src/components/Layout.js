@@ -9,7 +9,7 @@ import { useStaticQuery, graphql } from 'gatsby'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
 
-import { StoreContext } from '../models/reactUtils'
+import StoreContext from '../storeContext'
 import getConstants from '../utils/constants'
 
 const constants = getConstants()

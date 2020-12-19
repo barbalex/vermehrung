@@ -11,7 +11,7 @@ import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Select from '../../../shared/Select'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'

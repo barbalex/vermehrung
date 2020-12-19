@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import ErrorBoundary from './ErrorBoundary'
 
 const StyledMenuItem = styled(MenuItem)`

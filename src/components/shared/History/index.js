@@ -8,7 +8,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 
 import Data from '../Conflict/Data'
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import getConstants from '../../../utils/constants'
 
 const constants = getConstants()

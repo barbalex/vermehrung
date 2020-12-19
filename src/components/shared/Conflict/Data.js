@@ -4,7 +4,7 @@ import Diff from 'react-stylable-diff'
 import { observer } from 'mobx-react-lite'
 
 import toStringIfPossible from '../../../utils/toStringIfPossible'
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import Spinner from '../../shared/Spinner'
 
 const Row = styled.div`

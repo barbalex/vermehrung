@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
 import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../storeContext'
 
 const Row = styled.div`
   display: flex;

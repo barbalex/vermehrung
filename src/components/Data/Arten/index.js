@@ -9,7 +9,7 @@ import UpSvg from '../../../svg/to_up.inline.svg'
 import SimpleBar from 'simplebar-react'
 import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
