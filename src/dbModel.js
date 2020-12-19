@@ -107,7 +107,6 @@ export class Herkunft extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    console.log('Herkunft Model, newObject:', newObject)
     const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
@@ -2243,8 +2242,6 @@ export class KulturOption extends Model {
   }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
-
-    console.log('store, kultur_optionModel:', { field, value })
 
     unsetError(`kultur_option.${field}`)
     // first build the part that will be revisioned

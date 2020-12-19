@@ -29,15 +29,18 @@ const Beschreibung = styled.div`
 const ChooseArtQkRow = ({ artId, qk }) => {
   const store = useContext(StoreContext)
 
-  const [artQkChoosen, setArtQkChoosen] = useState()
+  const [dataState, setDataState] = useState({ artQkChoosen })
   useEffect(() => {
-    qk.art_qk_choosens
+    const observable = qk.art_qk_choosens
       .extend(Q.where('art_id', artId), Q.where('qk_id', qk.id))
-      .fetch()
-      .then((artQkChoosen) => {
-        setArtQkChoosen(artQkChoosen[0])
-      })
+      .observeWithColumns(['choosen'])
+    const subscription = observable.subscribe((artQkChoosen) =>
+      setDataState({ artQkChoosen }),
+    )
+
+    return () => subscription.unsubscribe()
   }, [artId, qk.art_qk_choosens, qk.id])
+  const { artQkChoosen } = dataState
 
   const checked = artQkChoosen?.choosen
 
