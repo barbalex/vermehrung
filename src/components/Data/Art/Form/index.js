@@ -53,7 +53,7 @@ const ArtForm = ({
     const aeArtObservable = db.get('ae_art').query().observe()
     const artsObservable = db.get('art').query(notDeletedQuery).observe()
     const combinedObservables = combineLatest([aeArtObservable, artsObservable])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([aeArts, arts]) => {
         const artsSorted = await artsSortedFromArts(arts)
         setDataState({
@@ -63,7 +63,7 @@ const ArtForm = ({
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db])
   const { artsSorted, aeArts } = dataState
 

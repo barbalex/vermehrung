@@ -91,7 +91,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
       totalCountObservable,
       gartenObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([totalCount, gartens]) => {
         const gartensSorted = await gartensSortedFromGartens(gartens)
         setDataState({
@@ -101,7 +101,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [
     db,
     personIdInActiveNodeArray,

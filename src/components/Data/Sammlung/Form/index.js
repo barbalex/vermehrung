@@ -97,7 +97,7 @@ const SammlungForm = ({
       herkunftsObservable,
       artsObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([nrCount, persons, herkunfts, arts]) => {
         if (!showFilter && nrCount > 1) {
           setError({
@@ -143,7 +143,7 @@ const SammlungForm = ({
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db, filter.herkunft, row.nr, row.person, setError, showFilter])
   const { personWerte, herkunftWerte, artWerte } = dataState
 

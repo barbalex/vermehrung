@@ -94,7 +94,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
       dataObservable,
       userRoleObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([totalCount, persons, [userRole]]) => {
         setDataState({
           persons: persons.sort((a, b) => personSort({ a, b })),
@@ -104,7 +104,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
     // need to rerender if any of the values of personFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, ...Object.values(personFilter), personFilter, store])

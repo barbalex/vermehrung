@@ -111,7 +111,7 @@ const KulturForm = ({
       gartenObservable,
       sammlungsObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([userPersonOptions, gartens, garten, sammlungs]) => {
         const gartensSorted = await gartensSortedFromGartens(gartens)
         // need to show a choosen garten even if inactive but not if deleted
@@ -210,7 +210,7 @@ const KulturForm = ({
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [
     user.uid,
     row?.garten,
@@ -260,7 +260,7 @@ const KulturForm = ({
       artsObservable,
       herkunftsObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([arts, herkunfts]) => {
         const artWerte = await Promise.all(
           arts.map(async (art) => {
@@ -286,7 +286,7 @@ const KulturForm = ({
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, user, artsToChoose.length, herkunftsToChoose.length])
   const { artWerte, herkunftWerte } = dataState2

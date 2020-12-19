@@ -94,7 +94,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
       .observeWithColumns(['datum', 'anzahl_pflanzen'])
 
     const combinedObservables = combineLatest([countObservable, dataObservable])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       ([totalCount, zaehlungs]) => {
         setDataState({
           zaehlungs: zaehlungs.sort((a, b) => zaehlungSort({ a, b })),
@@ -102,7 +102,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
         })
       },
     )
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [
     db,
     // need to rerender if any of the values of zaehlungFilter changes

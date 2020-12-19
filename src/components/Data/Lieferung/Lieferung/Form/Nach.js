@@ -66,7 +66,7 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
       kultursObservable,
       sammlungsObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(async ([kulturs]) => {
+    const subscription = combinedObservables.subscribe(async ([kulturs]) => {
       const kultursFiltered = kulturs
         // show only kulturen of art_id
         .filter((k) => {
@@ -105,7 +105,7 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
       })
     })
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db, herkunft?.id, row?.art_id, row?.nach_kultur_id, row?.von_kultur_id])
   const { nachKulturWerte } = dataState
 

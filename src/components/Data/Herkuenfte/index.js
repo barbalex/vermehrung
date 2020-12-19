@@ -90,11 +90,11 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
       countObservable,
       herkunftsObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       ([totalCount, herkunfts]) => setDataState({ herkunfts, totalCount }),
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [
     db,
     sammlungIdInActiveNodeArray,
