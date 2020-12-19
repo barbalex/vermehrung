@@ -70,7 +70,7 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
       .query(Q.where('_deleted', false))
       .observe()
     const combinedObservables = combineLatest([artsObservable])
-    const allSubscription = combinedObservables.subscribe(async ([arts]) => {
+    const subscription = combinedObservables.subscribe(async ([arts]) => {
       const artsSorted = await artsSortedFromArts(arts)
       const artWerte = await Promise.all(
         artsSorted.map(async (el) => {
@@ -86,7 +86,7 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
       setArtWerte(artWerte)
     })
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db])
 
   const openGenVielfaldDocs = useCallback(() => {

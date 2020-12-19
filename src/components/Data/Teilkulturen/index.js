@@ -93,7 +93,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
       )
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
     const combinedObservables = combineLatest([countObservable, dataObservable])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       ([totalCount, teilkulturs]) => {
         setDataState({
           teilkulturs: teilkulturs.sort((a, b) => teilkulturSort({ a, b })),
@@ -101,7 +101,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
         })
       },
     )
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [
     db,
     // need to rerender if any of the values of teilkulturFilter changes

@@ -41,12 +41,12 @@ const EventFormTitle = ({
       totalCountObservable,
       filteredCountObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       ([totalCount, filteredCount]) =>
         setCountState({ totalCount, filteredCount }),
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [
     db,
     kulturIdInActiveNodeArray,

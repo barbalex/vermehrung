@@ -88,7 +88,7 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
       )
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
     const combinedObservables = combineLatest([countObservable, dataObservable])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       ([totalCount, sammelLieferungs]) => {
         setDataState({
           sammelLieferungs: sammelLieferungs.sort((a, b) =>
@@ -99,7 +99,7 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [
     db,
     // need to rerender if any of the values of sammelLieferungFilter changes

@@ -55,7 +55,7 @@ const SammelLieferungWer = ({ showFilter, row, ifNeeded, saveToDb }) => {
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
     const combinedObservables = combineLatest([personsObservable])
-    const allSubscription = combinedObservables.subscribe(async ([persons]) => {
+    const subscription = combinedObservables.subscribe(async ([persons]) => {
       // need to show a choosen person even if inactive but not if deleted
       const person = await row.person?.fetch()
       const personsIncludingInactiveChoosen = uniqBy(
@@ -72,7 +72,7 @@ const SammelLieferungWer = ({ showFilter, row, ifNeeded, saveToDb }) => {
       setPersonWerte(personWerte)
     })
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db, row.person])
 
   const titleRowRef = useRef(null)

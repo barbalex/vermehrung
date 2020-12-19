@@ -67,7 +67,7 @@ const ZaehlungForm = ({
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
     const combinedObservables = combineLatest([kultursObservable])
-    const allSubscription = combinedObservables.subscribe(async ([kulturs]) => {
+    const subscription = combinedObservables.subscribe(async ([kulturs]) => {
       // need to show a choosen kultur even if inactive but not if deleted
       const kultur = await row.kultur?.fetch()
       const kultursIncludingInactiveChoosen = uniqBy(
@@ -97,7 +97,7 @@ const ZaehlungForm = ({
       setDataState({ kulturWerte, kulturOption })
     })
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db, row.art_id, row.kultur, row.kultur_option])
   const { kulturWerte, kulturOption } = dataState
 

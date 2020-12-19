@@ -69,7 +69,7 @@ const TeilkulturForm = ({
       kulturObservable,
       kulturOptionsObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([kulturs, kultur, kulturOptions]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         const kultursIncludingInactiveChoosen = uniqBy(
@@ -94,7 +94,7 @@ const TeilkulturForm = ({
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db, row.kultur, row.kultur_id])
   const { kulturWerte, kulturOption } = dataState
 

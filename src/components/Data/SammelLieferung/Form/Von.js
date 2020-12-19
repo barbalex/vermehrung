@@ -85,7 +85,7 @@ const SammelLieferungVon = ({
       kultursObservable,
       sammlungsObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([kulturs, sammlungs]) => {
         const herkunftLabel =
           herkunftLabelFromHerkunft({ herkunft }) ??
@@ -142,7 +142,7 @@ const SammelLieferungVon = ({
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db, herkunft, row.art_id, row.nach_kultur_id, row?.von_kultur_id])
   const { herkunftLabel, vonKulturWerte, sammlungWerte } = dataState
 

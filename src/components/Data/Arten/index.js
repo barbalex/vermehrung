@@ -84,14 +84,14 @@ const Arten = ({ filter: showFilter, width, height }) => {
       totalCountObservable,
       artsObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([totalCount, arts]) => {
         const artsSorted = await artsSortedFromArts(arts)
         setDataState({ arts: artsSorted, totalCount })
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, ...Object.values(artFilter), artFilter, store])

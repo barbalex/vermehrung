@@ -60,7 +60,7 @@ const Person = ({
       userRolesObservable,
       personsNrCountObservable,
     ])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([userRoles, nrCount]) => {
         const userRoleWerte = userRoles
           .sort((a, b) => userRoleSort({ a, b }))
@@ -82,7 +82,7 @@ const Person = ({
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [db, row.nr, row.user_role, setError, showFilter])
   const { userRoleWerte, userRole } = dataState
 

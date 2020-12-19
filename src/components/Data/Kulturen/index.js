@@ -103,7 +103,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
         'zwischenlager',
       ])
     const combinedObservables = combineLatest([countObservable, dataObservable])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([totalCount, kulturs]) => {
         const kultursSorted = await kultursSortedFromKulturs(kulturs)
         setDataState({
@@ -113,7 +113,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [
     db,
     // need to rerender if any of the values of kulturFilter changes

@@ -111,7 +111,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
 
     // so need to hackily use merge
     const combinedObservables = combineLatest([countObservable, dataObservable])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       async ([totalCount, sammlungs]) => {
         const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
         setDataState({
@@ -121,7 +121,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [
     db,
     // need to rerender if any of the values of sammlungFilter changes

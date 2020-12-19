@@ -87,7 +87,7 @@ const Events = ({ filter: showFilter, width, height }) => {
       .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)
       .observeWithColumns(['datum', 'beschreibung'])
     const combinedObservables = combineLatest([countObservable, dataObservable])
-    const allSubscription = combinedObservables.subscribe(
+    const subscription = combinedObservables.subscribe(
       ([totalCount, events]) => {
         setDataState({
           events: events.sort((a, b) => eventSort({ a, b })),
@@ -96,7 +96,7 @@ const Events = ({ filter: showFilter, width, height }) => {
       },
     )
 
-    return () => allSubscription.unsubscribe()
+    return () => subscription.unsubscribe()
     // need to rerender if any of the values of eventFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
