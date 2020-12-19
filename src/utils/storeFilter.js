@@ -1,4 +1,4 @@
-import types from '../models/Filter/simpleTypes'
+import types from '../store/Filter/simpleTypes'
 
 const test = ({ val, filterValues, table }) =>
   filterValues.every(([key, filterValue]) => {
