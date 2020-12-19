@@ -1,6 +1,6 @@
 import { Q } from '@nozbe/watermelondb'
 
-import types from '../models/Filter/simpleTypes'
+import types from '../store/Filter/simpleTypes'
 import exists from './exists'
 
 const tableFilter = ({ store, table }) => {
