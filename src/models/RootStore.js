@@ -32,6 +32,7 @@ import kulturIdOfAusLieferungInUrl from '../utils/kulturIdOfAusLieferungInUrl'
 import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
 import getAuthToken from '../utils/getAuthToken'
 import Errors, { defaultValue as defaultErrors } from './Errors'
+import mutations from '../utils/mutations'
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -155,12 +156,18 @@ export const RootStore = RootStoreBase.props({
             revertId,
             revertValue,
           } = query
+          //console.log('operation, name:', name)
+          console.log('operation, variables:', variables)
+          //console.log('operation, mutations:', mutations)
+          const mutation = mutations[name]
+          //console.log('operation, mutation:', mutation)
           try {
-            if (variables) {
-              yield self[name](JSON.parse(variables))
-            } else {
-              yield self[name]()
-            }
+            // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
+            variables
+              ? yield self.rawQglClient
+                  .mutation(mutation, JSON.parse(variables))
+                  .toPromise() //yield self[name](JSON.parse(variables))
+              : yield self.rawQglClient.mutation(mutation).toPromise() //yield self[name]()
           } catch (error) {
             const lcMessage = error.message.toLowerCase()
             console.log('store, error:', { error, query })
