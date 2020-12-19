@@ -10,11 +10,4 @@ export {
 /**
  * personModel
  */
-export const personModel = personModelBase.views((self) => ({
-  get fullname() {
-    if (self.vorname && self.name) return `${self.vorname} ${self.name}`
-    if (self.name) return self.name
-    if (self.vorname) return self.vorname
-    return undefined
-  },
-}))
+export const personModel = personModelBase
