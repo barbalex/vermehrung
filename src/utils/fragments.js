@@ -211,6 +211,26 @@ export const herkunft = gql`
     _deleted
   }
 `
+export const herkunftRev = gql`
+  fragment HerkunftRevFields on herkunft_rev {
+    id
+    herkunft_id
+    nr
+    lokalname
+    gemeinde
+    kanton
+    land
+    bemerkungen
+    geom_point
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _deleted
+  }
+`
 export const herkunftFile = gql`
   fragment HerkunftFileFields on herkunft_file {
     id

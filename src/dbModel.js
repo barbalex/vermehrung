@@ -6,7 +6,6 @@ import {
   json,
   lazy,
   relation,
-  readonly,
 } from '@nozbe/watermelondb/decorators'
 import { Q } from '@nozbe/watermelondb'
 import {
@@ -108,6 +107,7 @@ export class Herkunft extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
+    console.log('Herkunft Model, newObject:', newObject)
     const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
