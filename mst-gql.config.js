@@ -2,6 +2,7 @@ module.exports = {
   force: false,
   format: 'js',
   dontRenameModels: true,
+  namingConvention: 'asis',
   input: 'schema.graphql',
   outDir: 'src/models',
   roots: [
