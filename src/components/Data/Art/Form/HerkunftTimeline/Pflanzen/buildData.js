@@ -4,7 +4,7 @@ import max from 'lodash/max'
 import { Q } from '@nozbe/watermelondb'
 
 const buildData = async ({ artId, herkunftId, db }) => {
-  const zaehlungsDone = await db.collections
+  const zaehlungsDone = await db
     .get('zaehlung')
     .query(
       Q.experimentalJoinTables(['kultur']),
@@ -19,7 +19,7 @@ const buildData = async ({ artId, herkunftId, db }) => {
       Q.where('_deleted', false),
     )
     .fetch()
-  const zaehlungsPlannedAll = await db.collections
+  const zaehlungsPlannedAll = await db
     .get('zaehlung')
     .query(
       Q.experimentalJoinTables(['kultur']),
@@ -42,7 +42,7 @@ const buildData = async ({ artId, herkunftId, db }) => {
     (lg) => !zaehlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
-  const sammlungsDone = await db.collections
+  const sammlungsDone = await db
     .get('sammlung')
     .query(
       Q.where('art_id', artId),
@@ -53,7 +53,7 @@ const buildData = async ({ artId, herkunftId, db }) => {
       Q.where('_deleted', false),
     )
     .fetch()
-  const sammlungsPlannedAll = await db.collections
+  const sammlungsPlannedAll = await db
     .get('sammlung')
     .query(
       Q.where('art_id', artId),
@@ -72,7 +72,7 @@ const buildData = async ({ artId, herkunftId, db }) => {
     (lg) => !sammlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
-  const lieferungsDone1 = await db.collections
+  const lieferungsDone1 = await db
     .get('lieferung')
     .query(
       Q.where('art_id', artId),
@@ -86,11 +86,11 @@ const buildData = async ({ artId, herkunftId, db }) => {
   // can't use Q.on here because there are two associations to kultur
   const lieferungsDone = await Promise.all(
     lieferungsDone1.filter(async (l) => {
-      const vonKultur = await db.collections.get('kultur').find(l.von_kultur_id)
+      const vonKultur = await db.get('kultur').find(l.von_kultur_id)
       return vonKultur?.herkunft_id === herkunftId
     }),
   )
-  const lieferungsPlanned1 = await db.collections
+  const lieferungsPlanned1 = await db
     .get('lieferung')
     .query(
       Q.where('art_id', artId),
@@ -104,7 +104,7 @@ const buildData = async ({ artId, herkunftId, db }) => {
   // can't use Q.on here because there are two associations to kultur
   const lieferungsPlannedAll = await Promise.all(
     lieferungsPlanned1.filter(async (l) => {
-      const vonKultur = await db.collections.get('kultur').find(l.von_kultur_id)
+      const vonKultur = await db.get('kultur').find(l.von_kultur_id)
       return vonKultur?.herkunft_id === herkunftId
     }),
   )
@@ -130,7 +130,7 @@ const buildData = async ({ artId, herkunftId, db }) => {
   // 2. get list of all non deleted kulturs
   //    these are the basis for counting:
   //    at every date the last count is used
-  const kultursOfArt = await db.collections
+  const kultursOfArt = await db
     .get('kultur')
     .query(
       Q.where('_deleted', false),

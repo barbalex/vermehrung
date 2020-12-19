@@ -50,11 +50,8 @@ const ArtForm = ({
     aeArts: [],
   })
   useEffect(() => {
-    const aeArtObservable = db.collections.get('ae_art').query().observe()
-    const artsObservable = db.collections
-      .get('art')
-      .query(notDeletedQuery)
-      .observe()
+    const aeArtObservable = db.get('ae_art').query().observe()
+    const artsObservable = db.get('art').query(notDeletedQuery).observe()
     const combinedObservables = combineLatest([aeArtObservable, artsObservable])
     const allSubscription = combinedObservables.subscribe(
       async ([aeArts, arts]) => {
@@ -67,7 +64,7 @@ const ArtForm = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [db.collections])
+  }, [db])
   const { artsSorted, aeArts } = dataState
 
   useEffect(() => {

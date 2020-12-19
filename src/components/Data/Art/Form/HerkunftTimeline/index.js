@@ -53,7 +53,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
 
   const [herkunfts, setHerkunfts] = useState([])
   useEffect(() => {
-    const sammlungsObservable = db.collections
+    const sammlungsObservable = db
       .get('sammlung')
       .query(
         Q.where('_deleted', false),
@@ -61,7 +61,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
         Q.where('herkunft_id', Q.notEq(null)),
       )
       .observe()
-    const herkunftsObservable = db.collections
+    const herkunftsObservable = db
       .get('herkunft')
       .query(notDeletedQuery)
       .observe()
@@ -80,7 +80,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
     )
 
     return () => subscription.unsubscribe()
-  }, [artId, db.collections])
+  }, [artId, db])
 
   const [open, setOpen] = useState(false)
   let anim = useAnimation()

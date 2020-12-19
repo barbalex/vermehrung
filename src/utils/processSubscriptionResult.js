@@ -27,16 +27,16 @@ const processSubscriptionResult = async ({
   }
   setInitiallyQuerying(table)
 
-  const collection = db.collections.get(table)
+  const collection = db.get(table)
   const incomingIds = dataToCheck.map((d) => d.id)
 
   try {
     await db.action(async () => {
-      const objectsOfToUpdate = await db.collections
+      const objectsOfToUpdate = await db
         .get(table)
         .query(Q.where('id', Q.oneOf(incomingIds)))
         .fetch()
-      const objectsOfIncoming = await db.collections
+      const objectsOfIncoming = await db
         .get(table)
         .query(Q.where('id', Q.oneOf(incomingIds)))
         .fetch()
