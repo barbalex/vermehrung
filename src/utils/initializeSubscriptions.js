@@ -1,6 +1,28 @@
 import gql from 'graphql-tag'
 
 import processSubscriptionResult from './processSubscriptionResult'
+import {
+  aeArt as aeArtFragment,
+  art as artFragment,
+  artFile as artFileFragment,
+  artQk as artQkFragment,
+  artQkChoosen as artQkChoosenFragment,
+  av as avFragment,
+  event as eventFragment,
+  garten as gartenFragment,
+  gartenFile as gartenFileFragment,
+  gv as gvFragment,
+  herkunft as herkunftFragment,
+  herkunftFile as herkunftFileFragment,
+  kultur as kulturFragment,
+  kulturFile as kulturFileFragment,
+  lieferung as lieferungFragment,
+  lieferungFile as lieferungFileFragment,
+  person as personFragment,
+  sammelLieferung as sammelLieferungFragment,
+  sammlung as sammlungFragment,
+  zaehlung as zaehlungFragment,
+} from './fragments'
 
 const initializeSubscriptions = ({ store }) => {
   const {
@@ -43,10 +65,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription AeArt($where: ae_art_bool_exp) {
           ae_art(where: $where) {
-            id
-            name
+            ...AeArtFields
           }
         }
+        ${aeArtFragment}
       `,
       variables: { where: { _rev_at: { _gt: ae_art_lastUpdated } } },
     })
@@ -65,18 +87,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription Art($where: art_bool_exp) {
           art(where: $where) {
-            id
-            ae_id
-            changed
-            changed_by
-            _rev
-            _parent_rev
-            _revisions
-            _depth
-            _conflicts
-            _deleted
+            ...ArtFields
           }
         }
+        ${artFragment}
       `,
       variables: { where: { _rev_at: { _gt: art_lastUpdated } } },
     })
@@ -95,15 +109,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription ArtFile($where: art_file_bool_exp) {
           art_file(where: $where) {
-            id
-            art_id
-            file_id
-            file_mime_type
-            name
-            beschreibung
-            changed
+            ...ArtFileFields
           }
         }
+        ${artFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: art_file_lastUpdated } } },
     })
@@ -122,21 +131,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription ArtQk($where: art_qk_bool_exp) {
           art_qk(where: $where) {
-            id
-            name
-            titel
-            beschreibung
-            sort
-            changed
-            changed_by
-            _rev
-            _parent_rev
-            _revisions
-            _depth
-            _conflicts
-            _deleted
+            ...ArtQkFields
           }
         }
+        ${artQkFragment}
       `,
       variables: { where: { _rev_at: { _gt: art_qk_lastUpdated } } },
     })
@@ -155,20 +153,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription ArtQkChoosen($where: art_qk_choosen_bool_exp) {
           art_qk_choosen(where: $where) {
-            id
-            art_id
-            qk_id
-            choosen
-            changed
-            changed_by
-            _rev
-            _parent_rev
-            _revisions
-            _depth
-            _conflicts
-            _deleted
+            ...ArtQkChoosenFields
           }
         }
+        ${artQkChoosenFragment}
       `,
       variables: { where: { _rev_at: { _gt: art_qk_choosen_lastUpdated } } },
     })
@@ -187,19 +175,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription Av($where: av_bool_exp) {
           av(where: $where) {
-            id
-            art_id
-            person_id
-            changed
-            changed_by
-            _rev
-            _parent_rev
-            _revisions
-            _depth
-            _conflicts
-            _deleted
+            ...AvFields
           }
         }
+        ${avFragment}
       `,
       variables: { where: { _rev_at: { _gt: av_lastUpdated } } },
     })
@@ -218,23 +197,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription Event($where: event_bool_exp) {
           event(where: $where) {
-            id
-            kultur_id
-            teilkultur_id
-            person_id
-            beschreibung
-            geplant
-            datum
-            changed
-            changed_by
-            _rev
-            _parent_rev
-            _revisions
-            _depth
-            _conflicts
-            _deleted
+            ...EventFields
           }
         }
+        ${eventFragment}
       `,
       variables: { where: { _rev_at: { _gt: event_lastUpdated } } },
     })
@@ -253,28 +219,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription Garten($where: garten_bool_exp) {
           garten(where: $where) {
-            id
-            name
-            person_id
-            strasse
-            plz
-            ort
-            aktiv
-            bemerkungen
-            lv95_x
-            lv95_y
-            wgs84_lat
-            wgs84_long
-            changed
-            changed_by
-            _rev
-            _parent_rev
-            _revisions
-            _depth
-            _conflicts
-            _deleted
+            ...GartenFields
           }
         }
+        ${gartenFragment}
       `,
       variables: { where: { _rev_at: { _gt: garten_lastUpdated } } },
     })
@@ -293,15 +241,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription GartenFile($where: garten_file_bool_exp) {
           garten_file(where: $where) {
-            id
-            garten_id
-            file_id
-            file_mime_type
-            name
-            beschreibung
-            changed
+            ...GartenFileFields
           }
         }
+        ${gartenFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: garten_file_lastUpdated } } },
     })
@@ -320,19 +263,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription Gv($where: gv_bool_exp) {
           gv(where: $where) {
-            id
-            garten_id
-            person_id
-            changed
-            changed_by
-            _rev
-            _parent_rev
-            _revisions
-            _depth
-            _conflicts
-            _deleted
+            ...GvFields
           }
         }
+        ${gvFragment}
       `,
       variables: { where: { _rev_at: { _gt: gv_lastUpdated } } },
     })
@@ -351,27 +285,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription Herkunft($where: herkunft_bool_exp) {
           herkunft(where: $where) {
-            id
-            nr
-            lokalname
-            gemeinde
-            kanton
-            land
-            bemerkungen
-            lv95_x
-            lv95_y
-            wgs84_lat
-            wgs84_long
-            changed
-            changed_by
-            _rev
-            _parent_rev
-            _revisions
-            _depth
-            _conflicts
-            _deleted
+            ...HerkunftFields
           }
         }
+        ${herkunftFragment}
       `,
       variables: { where: { _rev_at: { _gt: herkunft_lastUpdated } } },
     })
@@ -390,15 +307,10 @@ const initializeSubscriptions = ({ store }) => {
       query: gql`
         subscription HerkunftFile($where: herkunft_file_bool_exp) {
           herkunft_file(where: $where) {
-            id
-            herkunft_id
-            file_id
-            file_mime_type
-            name
-            beschreibung
-            changed
+            ...HerkunftFileFields
           }
         }
+        ${herkunftFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: herkunft_file_lastUpdated } } },
     })
