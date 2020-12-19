@@ -78,7 +78,7 @@ const SammelLieferungForm = ({
 
         if (row.von_kultur_id) {
           const vonKultur = row.von_kultur_id
-            ? await db.collections.get('kultur').find(row.von_kultur_id)
+            ? await db.get('kultur').find(row.von_kultur_id)
             : undefined
           const herkunftByVonKultur = vonKultur
             ? await vonKultur.herkunft?.fetch()
@@ -92,7 +92,7 @@ const SammelLieferungForm = ({
           }
         }
         const nachKultur = row.nach_kultur_id
-          ? await db.collections.get('kultur').find(row.nach_kultur_id)
+          ? await db.get('kultur').find(row.nach_kultur_id)
           : undefined
         const herkunftByNachKultur = nachKultur
           ? await nachKultur.herkunft?.fetch()

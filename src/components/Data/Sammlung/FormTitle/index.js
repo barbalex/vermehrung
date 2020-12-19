@@ -45,7 +45,7 @@ const SammlungFormTitleChooser = ({
           Q.on('person', 'id', personIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('sammlung')
+    const collection = db.get('sammlung')
     const totalCountObservable = collection
       .query(notDeletedQuery, ...hierarchyQuery)
       .observeCount()
@@ -63,7 +63,7 @@ const SammlungFormTitleChooser = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     artIdInActiveNodeArray,
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,

@@ -35,7 +35,7 @@ const TkZaehlungen = ({ teilkultur }) => {
 
   const [teilzaehlungs, setTeilzaehlungs] = useState([])
   useEffect(() => {
-    const teilzaehlungsObservable = db.collections
+    const teilzaehlungsObservable = db
       .get('teilzaehlung')
       .query(
         Q.where('_deleted', false),
@@ -51,7 +51,7 @@ const TkZaehlungen = ({ teilkultur }) => {
       },
     )
     return () => subscription.unsubscribe()
-  }, [db.collections, teilkultur.kultur_id, teilkultur.zaehlung])
+  }, [db, teilkultur.kultur_id, teilkultur.zaehlung])
 
   return (
     <ErrorBoundary>

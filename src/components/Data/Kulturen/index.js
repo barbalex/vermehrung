@@ -90,7 +90,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
           Q.on('art', 'id', artIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('kultur')
+    const collection = db.get('kultur')
     const countObservable = collection
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeCount()
@@ -115,7 +115,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     // need to rerender if any of the values of kulturFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(kulturFilter),

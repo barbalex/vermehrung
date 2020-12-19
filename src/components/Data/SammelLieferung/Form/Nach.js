@@ -60,11 +60,11 @@ const SammelLieferungNach = ({
   })
   useEffect(() => {
     // BEWARE: need to include inactive kulturs
-    const kultursObservable = db.collections
+    const kultursObservable = db
       .get('kultur')
       .query(Q.where('_deleted', false))
       .observe()
-    const sammlungsObservable = db.collections
+    const sammlungsObservable = db
       .get('sammlung')
       .query(Q.where('_deleted', false))
       .observe()
@@ -112,13 +112,7 @@ const SammelLieferungNach = ({
     })
 
     return () => allSubscription.unsubscribe()
-  }, [
-    db.collections,
-    herkunft?.id,
-    row?.art_id,
-    row?.nach_kultur_id,
-    row?.von_kultur_id,
-  ])
+  }, [db, herkunft?.id, row?.art_id, row?.nach_kultur_id, row?.von_kultur_id])
   const { nachKulturWerte } = dataState
 
   const titleRowRef = useRef(null)

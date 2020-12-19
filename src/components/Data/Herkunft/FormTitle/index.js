@@ -31,7 +31,7 @@ const HerkunftFormTitleChooser = ({
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('herkunft')
+    const collection = db.get('herkunft')
     const totalCountObservable = collection
       .query(notDeletedQuery, ...hierarchyQuery)
       .observeCount()
@@ -49,7 +49,7 @@ const HerkunftFormTitleChooser = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     sammlungIdInActiveNodeArray,
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps

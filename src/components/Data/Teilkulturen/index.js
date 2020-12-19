@@ -81,7 +81,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('teilkultur')
+    const collection = db.get('teilkultur')
     const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(
@@ -103,7 +103,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
     )
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     // need to rerender if any of the values of teilkulturFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(teilkulturFilter),

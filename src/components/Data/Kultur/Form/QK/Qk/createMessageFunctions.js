@@ -16,32 +16,20 @@ const createMessageFunctions = async ({ kulturId, db }) => {
   const startNextYear = `${year + 1}-01-01`
   const now = new Date()
 
-  const events = await db.collections
-    .get('event')
-    .query(notDeletedQuery)
-    .fetch()
+  const events = await db.get('event').query(notDeletedQuery).fetch()
   const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
-  const kulturs = await db.collections
+  const kulturs = await db
     .get('kultur')
     .query(Q.where('_deleted', false), Q.where('aktiv', true))
     .fetch()
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
-  const lieferungs = await db.collections
-    .get('lieferung')
-    .query(notDeletedQuery)
-    .fetch()
+  const lieferungs = await db.get('lieferung').query(notDeletedQuery).fetch()
   const lieferungsSorted = lieferungs.sort((a, b) => lieferungSort({ a, b }))
-  const teilkulturs = await db.collections
-    .get('teilkultur')
-    .query(notDeletedQuery)
-    .fetch()
+  const teilkulturs = await db.get('teilkultur').query(notDeletedQuery).fetch()
   const teilkultursSorted = teilkulturs.sort((a, b) => teilkulturSort({ a, b }))
-  const zaehlungs = await db.collections
-    .get('zaehlung')
-    .query(notDeletedQuery)
-    .fetch()
+  const zaehlungs = await db.get('zaehlung').query(notDeletedQuery).fetch()
   const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
-  const teilzaehlungs = await db.collections
+  const teilzaehlungs = await db
     .get('teilzaehlung')
     .query(notDeletedQuery)
     .fetch()

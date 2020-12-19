@@ -65,7 +65,7 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
 
   const [artWerte, setArtWerte] = useState([])
   useEffect(() => {
-    const artsObservable = db.collections
+    const artsObservable = db
       .get('art')
       .query(Q.where('_deleted', false))
       .observe()
@@ -87,7 +87,7 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
     })
 
     return () => allSubscription.unsubscribe()
-  }, [db.collections])
+  }, [db])
 
   const openGenVielfaldDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`

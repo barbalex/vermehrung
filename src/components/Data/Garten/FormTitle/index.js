@@ -29,7 +29,7 @@ const GartenFormTitle = ({
           Q.on('person', 'id', personIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('garten')
+    const collection = db.get('garten')
     const totalCountObservable = collection
       .query(
         Q.where('_deleted', false),
@@ -51,7 +51,7 @@ const GartenFormTitle = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     personIdInActiveNodeArray,
     // need to rerender if any of the values of gartenFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps

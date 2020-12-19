@@ -107,7 +107,7 @@ const Lieferschein = ({ row }) => {
   useEffect(() => {
     const lieferungsObservable = row.lieferungs.observe()
     const vonKulturGartenObservable = row.von_kultur_id
-      ? db.collections
+      ? db
           .get('garten')
           .query(
             Q.where('_deleted', false),
@@ -131,7 +131,7 @@ const Lieferschein = ({ row }) => {
     )
 
     return () => subscription.unsubscribe()
-  }, [db.collections, row.lieferungs, row.person, row.von_kultur_id])
+  }, [db, row.lieferungs, row.person, row.von_kultur_id])
   const { lieferungs, vonKulturGarten, person } = dataState
 
   const von = row.von_kultur_id

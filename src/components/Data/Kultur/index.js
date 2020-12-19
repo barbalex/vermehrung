@@ -62,7 +62,7 @@ const Kultur = ({
     if (showFilter) {
       setRow(filter.kultur)
     } else {
-      subscription = db.collections
+      subscription = db
         .get('kultur')
         .findAndObserve(id)
         .subscribe((newRow) => {
@@ -73,7 +73,7 @@ const Kultur = ({
     return () => {
       if (subscription) subscription.unsubscribe()
     }
-  }, [db.collections, filter.kultur, id, showFilter])
+  }, [db, filter.kultur, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(

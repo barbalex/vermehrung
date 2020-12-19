@@ -59,7 +59,7 @@ const LieferungWer = ({
 
   const [personWerte, setPersonWerte] = useState([])
   useEffect(() => {
-    const personsObservable = db.collections
+    const personsObservable = db
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
@@ -82,7 +82,7 @@ const LieferungWer = ({
     })
 
     return () => allSubscription.unsubscribe()
-  }, [db.collections, row.person])
+  }, [db, row.person])
 
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)

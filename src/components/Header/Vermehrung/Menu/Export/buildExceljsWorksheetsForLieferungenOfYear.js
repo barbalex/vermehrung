@@ -13,7 +13,7 @@ const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
   const { db } = store
   const workbook = new ExcelJs.Workbook()
 
-  const lieferungs = await db.collections
+  const lieferungs = await db
     .get('lieferung')
     .query(Q.where('_deleted', false), Q.where('datum', Q.notEq(null)))
     .fetch()

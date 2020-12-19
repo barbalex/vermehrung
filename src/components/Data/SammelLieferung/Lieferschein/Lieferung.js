@@ -25,16 +25,16 @@ const LieferungForLieferschein = ({ lieferung: row }) => {
   })
   useEffect(() => {
     const artObservable = row.art_id
-      ? db.collections.get('art').findAndObserve(row.art_id)
+      ? db.get('art').findAndObserve(row.art_id)
       : $of({})
     const vonKulturHerkunftObservable = row.von_kultur_id
-      ? db.collections
+      ? db
           .get('herkunft')
           .query(Q.on('kultur', Q.where('id', row.von_kultur_id)))
           .observe()
       : $of({})
     const vonSammlungHerkunftObservable = row.von_sammlung_id
-      ? db.collections
+      ? db
           .get('herkunft')
           .query(Q.on('sammlung', Q.where('id', row.von_sammlung_id)))
           .observe()
@@ -60,13 +60,7 @@ const LieferungForLieferschein = ({ lieferung: row }) => {
     )
 
     return () => subscription.unsubscribe()
-  }, [
-    db.collections,
-    row.art,
-    row.art_id,
-    row.von_kultur_id,
-    row.von_sammlung_id,
-  ])
+  }, [db, row.art, row.art_id, row.von_kultur_id, row.von_sammlung_id])
   const { artLabel, herkunftLabel } = dataState
 
   const wasArray = []

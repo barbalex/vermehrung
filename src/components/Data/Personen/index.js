@@ -78,7 +78,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
     userRole: undefined,
   })
   useEffect(() => {
-    const collection = db.collections.get('person')
+    const collection = db.get('person')
     const countObservable = collection
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeCount()
@@ -107,7 +107,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
     return () => allSubscription.unsubscribe()
     // need to rerender if any of the values of personFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, ...Object.values(personFilter), personFilter, store])
+  }, [db, ...Object.values(personFilter), personFilter, store])
 
   const { persons, totalCount, userRole } = dataState
   const filteredCount = persons.length

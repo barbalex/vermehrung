@@ -72,22 +72,22 @@ const SammlungForm = ({
     artWerte: [],
   })
   useEffect(() => {
-    const personsObservable = db.collections
+    const personsObservable = db
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeWithColumns(['vorname', 'name'])
-    const herkunftsObservable = db.collections
+    const herkunftsObservable = db
       .get('herkunft')
       .query(Q.where('_deleted', false))
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-    const artsObservable = db.collections
+    const artsObservable = db
       .get('art')
       .query(Q.where('_deleted', false))
       .observeWithColumns(['ae_id'])
     const sammlungsNrCountObservable =
       showFilter || !exists(row?.nr)
         ? $of(0)
-        : db.collections
+        : db
             .get('sammlung')
             .query(Q.where('_deleted', false), Q.where('nr', row.nr))
             .observeCount()
@@ -144,15 +144,7 @@ const SammlungForm = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [
-    db,
-    db.collections,
-    filter.herkunft,
-    row.nr,
-    row.person,
-    setError,
-    showFilter,
-  ])
+  }, [db, filter.herkunft, row.nr, row.person, setError, showFilter])
   const { personWerte, herkunftWerte, artWerte } = dataState
 
   // ensure that activeConflict is reset

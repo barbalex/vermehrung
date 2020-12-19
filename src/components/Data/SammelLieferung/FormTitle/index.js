@@ -27,7 +27,7 @@ const SammelLieferungFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const collection = db.collections.get('sammel_lieferung')
+    const collection = db.get('sammel_lieferung')
     const totalCountObservable = collection
       .query(notDeletedQuery)
       .observeCount()
@@ -45,7 +45,7 @@ const SammelLieferungFormTitleChooser = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     // need to rerender if any of the values of sammel_lieferungFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.sammel_lieferung),

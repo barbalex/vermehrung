@@ -23,7 +23,7 @@ const PersonFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const collection = db.collections.get('person')
+    const collection = db.get('person')
     const totalCountObservable = collection
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeCount()
@@ -41,7 +41,7 @@ const PersonFormTitleChooser = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     // need to rerender if any of the values of personFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.person),

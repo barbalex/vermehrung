@@ -30,7 +30,7 @@ const ZaehlungFormTitleChooser = ({
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('zaehlung')
+    const collection = db.get('zaehlung')
     const totalCountObservable = collection
       .query(notDeletedQuery, ...hierarchyQuery)
       .observeCount()
@@ -48,7 +48,7 @@ const ZaehlungFormTitleChooser = ({
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     kulturIdInActiveNodeArray,
     // need to rerender if any of the values of zaehlungFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps

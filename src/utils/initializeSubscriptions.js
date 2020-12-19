@@ -83,6 +83,7 @@ const initializeSubscriptions = ({ store }) => {
     })
     .subscribe({
       next(data) {
+        //console.log('initializeSubscriptions, ae_art, data:', data.data.ae_art)
         processSubscriptionResult({
           data: data.data.ae_art,
           table: 'ae_art',
@@ -105,6 +106,7 @@ const initializeSubscriptions = ({ store }) => {
     })
     .subscribe({
       next(data) {
+        //console.log('initializeSubscriptions, art, data:', data.data.art)
         processSubscriptionResult({
           data: data.data.art,
           table: 'art',

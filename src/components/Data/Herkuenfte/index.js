@@ -81,7 +81,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('herkunft')
+    const collection = db.get('herkunft')
     const countObservable = collection.query(notDeletedQuery).observeCount()
     const herkunftsObservable = collection
       .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
@@ -96,7 +96,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     sammlungIdInActiveNodeArray,
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps

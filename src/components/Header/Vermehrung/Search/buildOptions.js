@@ -26,48 +26,48 @@ const formatDateForSearch = (datum) =>
 const buildOptions = async ({ store, cb, val }) => {
   const { db } = store
 
-  const arts = await db.collections
+  const arts = await db
     .get('art')
     .query(...tableFilter({ store, table: 'art' }))
     .fetch()
   const artsSorted = await artsSortedFromArts(arts)
-  const events = await db.collections
+  const events = await db
     .get('event')
     .query(...tableFilter({ store, table: 'event' }))
     .fetch()
   const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
-  const gartens = await db.collections
+  const gartens = await db
     .get('garten')
     .query(...tableFilter({ store, table: 'garten' }))
     .fetch()
   const gartensSorted = await gartensSortedFromGartens(gartens)
-  const herkunfts = await db.collections
+  const herkunfts = await db
     .get('herkunft')
     .query(...tableFilter({ store, table: 'herkunft' }))
     .fetch()
   const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
-  const kulturs = await db.collections
+  const kulturs = await db
     .get('kultur')
     .query(...tableFilter({ store, table: 'kultur' }))
     .fetch()
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
-  const lieferungs = await db.collections
+  const lieferungs = await db
     .get('lieferung')
     .query(...tableFilter({ store, table: 'lieferung' }))
     .fetch()
   const lieferungsSorted = lieferungs.sort((a, b) => lieferungSort({ a, b }))
-  const persons = await db.collections
+  const persons = await db
     .get('person')
     .query(...tableFilter({ store, table: 'person' }))
     .fetch()
   const personsSorted = persons.sort((a, b) => personSort({ a, b }))
-  const sammlungs = await db.collections
+  const sammlungs = await db
     .get('sammlung')
     .query(...tableFilter({ store, table: 'sammlung' }))
     .fetch()
   const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
 
-  const zaehlungs = await db.collections
+  const zaehlungs = await db
     .get('zaehlung')
     .query(...tableFilter({ store, table: 'zaehlung' }))
     .fetch()

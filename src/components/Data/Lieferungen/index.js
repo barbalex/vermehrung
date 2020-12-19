@@ -109,7 +109,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
         ]
       : []
-    const collection = db.collections.get('lieferung')
+    const collection = db.get('lieferung')
     const countObservable = collection.query(notDeletedQuery).observeCount()
     const dataObservable = collection
       .query(
@@ -132,7 +132,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
 
     return () => allSubscription.unsubscribe()
   }, [
-    db.collections,
+    db,
     // need to rerender if any of the values of lieferungFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(lieferungFilter),

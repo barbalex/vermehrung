@@ -72,7 +72,7 @@ const Teilzaehlung = ({
     rawRow: undefined,
   })
   useEffect(() => {
-    const subscription = db.collections
+    const subscription = db
       .get('teilzaehlung')
       .findAndObserve(id)
       .subscribe((newRow) => {
@@ -82,7 +82,7 @@ const Teilzaehlung = ({
         })
       })
     return () => subscription.unsubscribe()
-  }, [db.collections, id])
+  }, [db, id])
   const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)

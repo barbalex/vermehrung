@@ -94,7 +94,7 @@ const PersonArten = ({ person }) => {
 
   const [artWerte, setArtWerte] = useState([])
   useEffect(() => {
-    const artsObservable = db.collections
+    const artsObservable = db
       .get('art')
       .query(Q.where('_deleted', false), Q.where('id', Q.notIn(avArtIds)))
       .observe()
@@ -114,7 +114,7 @@ const PersonArten = ({ person }) => {
     })
     return () => subscription.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db.collections, avArtIds.length])
+  }, [db, avArtIds.length])
 
   const saveToDb = useCallback(
     async (event) => {

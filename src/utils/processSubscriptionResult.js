@@ -65,7 +65,7 @@ const processSubscriptionResult = async ({
 
             return object.prepareUpdate((ob) => {
               Object.keys(thisObjectsData)
-                .filter((key) => !['id', '__typename', '_rev_at'].includes(key))
+                .filter((key) => !['id', '__typename'].includes(key))
                 .forEach((key) => {
                   if (!isEqual(ob[key], thisObjectsData[key])) {
                     ob[key] = thisObjectsData[key]

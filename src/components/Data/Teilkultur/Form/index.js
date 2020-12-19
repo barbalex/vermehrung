@@ -53,13 +53,13 @@ const TeilkulturForm = ({
     kulturOption: undefined,
   })
   useEffect(() => {
-    const kultursObservable = db.collections
+    const kultursObservable = db
       .get('kultur')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
     const kulturObservable = row.kultur.observe()
     const kulturOptionsObservable = row.kultur_id
-      ? db.collections
+      ? db
           .get('kultur_option')
           .query(Q.where('_deleted', false), Q.where('id', row.kultur_id))
           .observe()
@@ -95,7 +95,7 @@ const TeilkulturForm = ({
     )
 
     return () => allSubscription.unsubscribe()
-  }, [db.collections, row.kultur, row.kultur_id])
+  }, [db, row.kultur, row.kultur_id])
   const { kulturWerte, kulturOption } = dataState
 
   const { tk_bemerkungen } = kulturOption ?? {}

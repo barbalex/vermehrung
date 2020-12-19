@@ -61,13 +61,13 @@ const Herkunft = ({
   useEffect(() => {
     const observable = showFilter
       ? $of(filter.herkunft)
-      : db.collections.get('herkunft').findAndObserve(id)
+      : db.get('herkunft').findAndObserve(id)
     const subscription = observable.subscribe((newRow) => {
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))
     })
     return () => subscription.unsubscribe()
-  }, [db.collections, filter.herkunft, id, showFilter])
+  }, [db, filter.herkunft, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(

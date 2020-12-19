@@ -62,7 +62,7 @@ const ZaehlungForm = ({
     kulturOption: undefined,
   })
   useEffect(() => {
-    const kultursObservable = db.collections
+    const kultursObservable = db
       .get('kultur')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
@@ -98,7 +98,7 @@ const ZaehlungForm = ({
     })
 
     return () => allSubscription.unsubscribe()
-  }, [db.collections, row.art_id, row.kultur, row.kultur_option])
+  }, [db, row.art_id, row.kultur, row.kultur_option])
   const { kulturWerte, kulturOption } = dataState
 
   const z_bemerkungen = kulturOption?.z_bemerkungen ?? true

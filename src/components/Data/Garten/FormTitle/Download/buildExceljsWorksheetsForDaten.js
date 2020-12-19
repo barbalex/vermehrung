@@ -19,7 +19,7 @@ const buildExceljsWorksheetsForDaten = async ({
   const { db } = store
 
   // 1. Get Garten
-  const garten = await db.collections.get('garten').find(garten_id)
+  const garten = await db.get('garten').find(garten_id)
   const person = garten.person ? await garten.person.fetch() : {}
   const newGarten = {
     id: garten.id,
@@ -49,7 +49,7 @@ const buildExceljsWorksheetsForDaten = async ({
     data: [newGarten],
   })
   // 2. Get Kulturen
-  const kultursOfGarten = await db.collections
+  const kultursOfGarten = await db
     .get('kultur')
     .query(
       Q.where('_deleted', false),
