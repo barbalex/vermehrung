@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 export const art = gql`
   fragment ArtFields on art {
     id
-    __typename
+    #__typename
     ae_id
     changed
     changed_by
@@ -18,7 +18,7 @@ export const art = gql`
 export const artQk = gql`
   fragment ArtQkFields on art_qk {
     id
-    __typename
+    #__typename
     name
     titel
     beschreibung
@@ -36,7 +36,7 @@ export const artQk = gql`
 export const artQkChoosen = gql`
   fragment ArtQkChoosenFields on art_qk_choosen {
     id
-    __typename
+    #__typename
     art_id
     qk_id
     choosen
@@ -55,7 +55,7 @@ export const artFile = gql`
     id
     art_id
     file_id
-    __typename
+    #__typename
     file_mime_type
     name
     beschreibung
@@ -65,7 +65,7 @@ export const artFile = gql`
 export const aeArt = gql`
   fragment AeArtFields on ae_art {
     id
-    __typename
+    #__typename
     name
     changed
   }
@@ -73,7 +73,7 @@ export const aeArt = gql`
 export const av = gql`
   fragment AvFields on av {
     id
-    __typename
+    #__typename
     art_id
     person_id
     changed
@@ -89,7 +89,7 @@ export const av = gql`
 export const event = gql`
   fragment EventFields on event {
     id
-    __typename
+    #__typename
     kultur_id
     teilkultur_id
     person_id
@@ -109,7 +109,7 @@ export const event = gql`
 export const garten = gql`
   fragment GartenFields on garten {
     id
-    __typename
+    #__typename
     name
     person_id
     strasse
@@ -134,13 +134,13 @@ export const garten = gql`
 export const garten_rev = gql`
   fragment GartenRevFields on garten_rev {
     id
-    __typename
+    #__typename
     garten_id
     name
     person_id
     #person {
     #  id
-    #  __typename
+    #  #__typename
     #  name
     #}
     strasse
@@ -162,7 +162,7 @@ export const garten_rev = gql`
 export const gartenFile = gql`
   fragment GartenFileFields on garten_file {
     id
-    __typename
+    #__typename
     garten_id
     file_id
     file_mime_type
@@ -174,7 +174,7 @@ export const gartenFile = gql`
 export const gv = gql`
   fragment GvFields on gv {
     id
-    __typename
+    #__typename
     garten_id
     person_id
     changed
@@ -190,7 +190,6 @@ export const gv = gql`
 export const herkunft = gql`
   fragment HerkunftFields on herkunft {
     id
-    __typename
     nr
     lokalname
     gemeinde
@@ -234,7 +233,7 @@ export const herkunftRev = gql`
 export const herkunftFile = gql`
   fragment HerkunftFileFields on herkunft_file {
     id
-    __typename
+    #__typename
     herkunft_id
     file_id
     file_mime_type
@@ -246,7 +245,7 @@ export const herkunftFile = gql`
 export const kultur = gql`
   fragment KulturFields on kultur {
     id
-    __typename
+    #__typename
     art_id
     herkunft_id
     garten_id
@@ -268,7 +267,7 @@ export const kultur = gql`
 export const kulturQk = gql`
   fragment KulturQkFields on kultur_qk {
     id
-    __typename
+    #__typename
     name
     titel
     beschreibung
@@ -286,7 +285,7 @@ export const kulturQk = gql`
 export const kulturQkChoosen = gql`
   fragment KulturQkChoosenFields on kultur_qk_choosen {
     id
-    __typename
+    #__typename
     kultur_id
     qk_id
     choosen
@@ -303,7 +302,7 @@ export const kulturQkChoosen = gql`
 export const kulturFile = gql`
   fragment KulturFileFields on kultur_file {
     id
-    __typename
+    #__typename
     kultur_id
     file_id
     file_mime_type
@@ -315,7 +314,7 @@ export const kulturFile = gql`
 export const kulturOption = gql`
   fragment KulturOptionFields on kultur_option {
     id
-    __typename
+    #__typename
     ev_datum
     ev_geplant
     ev_person_id
@@ -339,7 +338,7 @@ export const kulturOption = gql`
 export const lieferung = gql`
   fragment LieferungFields on lieferung {
     id
-    __typename
+    #__typename
     sammel_lieferung_id
     art_id
     person_id
@@ -396,7 +395,7 @@ export const lieferung_rev = gql`
 export const lieferungFile = gql`
   fragment LieferungFileFields on lieferung_file {
     id
-    __typename
+    #__typename
     lieferung_id
     file_id
     file_mime_type
@@ -408,7 +407,7 @@ export const lieferungFile = gql`
 export const person = gql`
   fragment PersonFields on person {
     id
-    __typename
+    #__typename
     nr
     vorname
     name
@@ -440,7 +439,7 @@ export const person = gql`
 export const personOption = gql`
   fragment PersonOptionFields on person_option {
     id
-    __typename
+    #__typename
     ar_name_deutsch
     ga_strasse
     ga_plz
@@ -475,7 +474,7 @@ export const personOption = gql`
 export const personFile = gql`
   fragment PersonFileFields on person_file {
     id
-    __typename
+    #__typename
     person_id
     file_id
     file_mime_type
@@ -487,7 +486,7 @@ export const personFile = gql`
 export const sammelLieferung = gql`
   fragment SammelLieferungFields on sammel_lieferung {
     id
-    __typename
+    #__typename
     art_id
     person_id
     von_sammlung_id
@@ -513,7 +512,7 @@ export const sammelLieferung = gql`
 export const sammlung = gql`
   fragment SammlungFields on sammlung {
     id
-    __typename
+    #__typename
     art_id
     person_id
     herkunft_id
@@ -542,7 +541,7 @@ export const sammlung = gql`
 export const sammlungFile = gql`
   fragment SammlungFileFields on sammlung_file {
     id
-    __typename
+    #__typename
     sammlung_id
     file_id
     file_mime_type
@@ -554,7 +553,7 @@ export const sammlungFile = gql`
 export const teilkultur = gql`
   fragment TeilkulturFields on teilkultur {
     id
-    __typename
+    #__typename
     kultur_id
     name
     ort1
@@ -574,7 +573,7 @@ export const teilkultur = gql`
 export const teilzaehlung = gql`
   fragment TeilzaehlungFields on teilzaehlung {
     id
-    __typename
+    #__typename
     zaehlung_id
     teilkultur_id
     anzahl_pflanzen
@@ -596,7 +595,7 @@ export const teilzaehlung = gql`
 export const userRole = gql`
   fragment UserRoleFields on user_role {
     id
-    __typename
+    #__typename
     name
     label
     sort
@@ -607,7 +606,7 @@ export const userRole = gql`
 export const zaehlung = gql`
   fragment ZaehlungFields on zaehlung {
     id
-    __typename
+    #__typename
     kultur_id
     datum
     prognose
