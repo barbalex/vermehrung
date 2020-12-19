@@ -1,6 +1,14 @@
 import gql from 'graphql-tag'
 
-import { artRev, herkunftRev, lieferungRev, sammlungRev } from './fragments'
+import {
+  artRev,
+  gartenRev,
+  herkunftRev,
+  kulturRev,
+  lieferungRev,
+  sammlungRev,
+  teilkulturRev,
+} from './fragments'
 
 const mutations = {
   mutateInsert_herkunft_rev_one: gql`
@@ -46,6 +54,39 @@ const mutations = {
       }
     }
     ${artRev}
+  `,
+  mutateInsert_garten_rev_one: gql`
+    mutation insert_garten_rev_one(
+      $object: garten_rev_insert_input!
+      $on_conflict: garten_rev_on_conflict
+    ) {
+      insert_garten_rev_one(object: $object, on_conflict: $on_conflict) {
+        ...GartenRevFields
+      }
+    }
+    ${gartenRev}
+  `,
+  mutateInsert_kultur_rev_one: gql`
+    mutation insert_kultur_rev_one(
+      $object: kultur_rev_insert_input!
+      $on_conflict: kultur_rev_on_conflict
+    ) {
+      insert_kultur_rev_one(object: $object, on_conflict: $on_conflict) {
+        ...KulturRevFields
+      }
+    }
+    ${kulturRev}
+  `,
+  mutateInsert_teilkultur_rev_one: gql`
+    mutation insert_teilkultur_rev_one(
+      $object: teilkultur_rev_insert_input!
+      $on_conflict: teilkultur_rev_on_conflict
+    ) {
+      insert_teilkultur_rev_one(object: $object, on_conflict: $on_conflict) {
+        ...TeilkulturRevFields
+      }
+    }
+    ${teilkulturRev}
   `,
 }
 

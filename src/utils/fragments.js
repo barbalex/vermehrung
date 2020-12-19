@@ -218,10 +218,11 @@ export const garten = gql`
     _deleted
   }
 `
-export const garten_rev = gql`
+export const gartenRev = gql`
   fragment GartenRevFields on garten_rev {
     id
-    #__typename
+    garten_id
+    __typename
     garten_id
     name
     person_id
@@ -237,7 +238,6 @@ export const garten_rev = gql`
     _parent_rev
     _revisions
     _depth
-    _conflicts
     _deleted
   }
 `
