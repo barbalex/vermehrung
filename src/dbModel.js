@@ -2244,7 +2244,7 @@ export class KulturOption extends Model {
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
-    //console.log('store, kultur_optionModel:', { this, field, value })
+    console.log('store, kultur_optionModel:', { field, value })
 
     unsetError(`kultur_option.${field}`)
     // first build the part that will be revisioned

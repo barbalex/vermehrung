@@ -170,7 +170,12 @@ export const RootStore = RootStoreBase.props({
               : yield self.rawQglClient.mutation(mutation).toPromise() //yield self[name]()
           } catch (error) {
             const lcMessage = error.message.toLowerCase()
-            console.log('store, error:', { error, query })
+            console.log('queued query reaction, error:', {
+              error,
+              message: error.message,
+              variables: JSON.parse(variables),
+              queryName: query.name,
+            })
             // In case a conflict was caused by two EXACT SAME changes,
             // this will bounce because of the same rev. We want to ignore this:
             if (error.message.includes('JWT')) {
