@@ -9,9 +9,12 @@ import {
   gvRev,
   herkunftRev,
   kulturRev,
+  kulturQkRev,
+  kulturQkChoosenRev,
   kulturOptionRev,
   lieferungRev,
   personRev,
+  personOptionRev,
   sammelLieferungRev,
   sammlungRev,
   teilkulturRev,
@@ -198,6 +201,42 @@ const mutations = {
       }
     }
     ${kulturOptionRev}
+  `,
+  mutateInsert_kultur_qk_rev_one: gql`
+    mutation insert_kultur_qk_rev_one(
+      $object: kultur_qk_rev_insert_input!
+      $on_conflict: kultur_qk_rev_on_conflict
+    ) {
+      insert_kultur_qk_rev_one(object: $object, on_conflict: $on_conflict) {
+        ...KulturQkRevFields
+      }
+    }
+    ${kulturQkRev}
+  `,
+  mutateInsert_kultur_qk_choosen_rev_one: gql`
+    mutation insert_kultur_qk_choosen_rev_one(
+      $object: kultur_qk_choosen_rev_insert_input!
+      $on_conflict: kultur_qk_choosen_rev_on_conflict
+    ) {
+      insert_kultur_qk_choosen_rev_one(
+        object: $object
+        on_conflict: $on_conflict
+      ) {
+        ...KulturQkChoosenRevFields
+      }
+    }
+    ${kulturQkChoosenRev}
+  `,
+  mutateInsert_person_option_rev_one: gql`
+    mutation insert_person_option_rev_one(
+      $object: person_option_rev_insert_input!
+      $on_conflict: person_option_rev_on_conflict
+    ) {
+      insert_person_option_rev_one(object: $object, on_conflict: $on_conflict) {
+        ...PersonOptionRevFields
+      }
+    }
+    ${personOptionRev}
   `,
 }
 

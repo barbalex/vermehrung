@@ -29,15 +29,22 @@ const Beschreibung = styled.div`
 const ChooseKulturQkRow = ({ kulturId, qk }) => {
   const store = useContext(StoreContext)
 
-  const [kulturQkChoosen, setKulturQkChoosen] = useState()
+  const [dataState, setDataState] = useState({ kulturQkChoosen })
   useEffect(() => {
-    qk.kultur_qk_choosens
-      .extend(Q.where('kultur_id', kulturId), Q.where('qk_id', qk.id))
-      .fetch()
-      .then((kulturQkChoosen) => {
-        setKulturQkChoosen(kulturQkChoosen[0])
-      })
+    const observable = qk.kultur_qk_choosens
+      .extend(
+        Q.where('kultur_id', kulturId),
+        Q.where('qk_id', qk.id),
+        Q.where('_deleted', false),
+      )
+      .observeWithColumns(['choosen'])
+    const subscription = observable.subscribe((kulturQkChoosen) =>
+      setDataState({ kulturQkChoosen: kulturQkChoosen[0] }),
+    )
+
+    return () => subscription.unsubscribe()
   }, [kulturId, qk.kultur_qk_choosens, qk.id])
+  const { kulturQkChoosen } = dataState
 
   const checked = kulturQkChoosen?.choosen
 

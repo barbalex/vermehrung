@@ -160,6 +160,7 @@ export const RootStore = RootStoreBase.props({
           console.log('operation, variables:', variables)
           //console.log('operation, mutations:', mutations)
           const mutation = mutations[name]
+          if (!mutation) throw new Error('keine Mutation gefunden für: ', name)
           //console.log('operation, mutation:', mutation)
           try {
             // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations

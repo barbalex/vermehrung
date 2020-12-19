@@ -64,7 +64,6 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      console.log('Kultur Form Menu, saveToDb', { kulturOption, field, value })
       kulturOption.edit({ field, value, store })
     },
     [kulturOption, store],
