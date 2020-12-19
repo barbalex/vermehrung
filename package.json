@@ -98,7 +98,7 @@
     "subscriptions-transport-ws": "0.9.18",
     "typography": "0.16.19",
     "uploadcare-widget": "3.10.2",
-    "urql": "^1.11.4",
+    "urql": "1.11.4",
     "use-debounce": "5.2.0",
     "uuid": "8.3.2"
   },
