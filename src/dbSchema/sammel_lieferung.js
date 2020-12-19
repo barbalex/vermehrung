@@ -41,7 +41,6 @@ const sammel_lieferung = {
     { name: 'changed', type: 'string', isOptional: true },
     { name: 'changed_by', type: 'string', isOptional: true },
     { name: '_rev', type: 'string', isOptional: true },
-    { name: '_rev_at', type: 'number', isOptional: true },
     { name: '_parent_rev', type: 'string', isOptional: true },
     { name: '_revisions', type: 'string', isOptional: true },
     { name: '_depth', type: 'number', isOptional: true },

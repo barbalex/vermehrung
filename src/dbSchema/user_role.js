@@ -8,7 +8,6 @@ const user_role = {
     { name: 'sort', type: 'number', isOptional: true, isIndexed: true },
     { name: 'comment', type: 'string', isOptional: true },
     { name: 'changed', type: 'string', isOptional: true },
-    { name: '_rev_at', type: 'number', isOptional: true },
   ],
 }
 

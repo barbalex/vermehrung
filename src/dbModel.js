@@ -64,7 +64,6 @@ export class Herkunft extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -196,7 +195,6 @@ export class Sammlung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -366,7 +364,6 @@ export class Lieferung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -519,7 +516,6 @@ export class Art extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -645,7 +641,6 @@ export class Garten extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -781,7 +776,6 @@ export class Kultur extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -965,7 +959,6 @@ export class Teilkultur extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -1064,7 +1057,6 @@ export class Zaehlung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -1213,7 +1205,6 @@ export class Teilzaehlung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -1347,7 +1338,6 @@ export class Person extends Model {
   @field('info') info
   @field('aktiv') aktiv
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -1509,7 +1499,6 @@ export class SammelLieferung extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -1672,7 +1661,6 @@ export class Event extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -1782,7 +1770,6 @@ export class Av extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -1888,7 +1875,6 @@ export class Gv extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -1993,7 +1979,6 @@ export class ArtFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
-  @readonly @field('_rev_at') _rev_at
 
   @relation('art', 'art_id') art
 }
@@ -2011,7 +1996,6 @@ export class GartenFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
-  @readonly @field('_rev_at') _rev_at
 
   @relation('garten', 'garten_id') garten
 }
@@ -2029,7 +2013,6 @@ export class HerkunftFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
-  @readonly @field('_rev_at') _rev_at
 
   @relation('herkunft', 'herkunft_id') herkunft
 }
@@ -2047,7 +2030,6 @@ export class KulturFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
-  @readonly @field('_rev_at') _rev_at
 
   @relation('kultur', 'kultur_id') kultur
 }
@@ -2065,7 +2047,6 @@ export class LieferungFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
-  @readonly @field('_rev_at') _rev_at
 
   @relation('lieferung', 'lieferung_id') lieferung
 }
@@ -2083,7 +2064,6 @@ export class PersonFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
-  @readonly @field('_rev_at') _rev_at
 
   @relation('person', 'person_id') person
 }
@@ -2101,7 +2081,6 @@ export class SammlungFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
-  @readonly @field('_rev_at') _rev_at
 
   @relation('sammlung', 'sammlung_id') sammlung
 }
@@ -2120,7 +2099,6 @@ export class ArtQk extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -2214,7 +2192,6 @@ export class ArtQkChoosen extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -2247,7 +2224,6 @@ export class KulturOption extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -2358,7 +2334,6 @@ export class KulturQk extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -2452,7 +2427,6 @@ export class KulturQkChoosen extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -2562,7 +2536,6 @@ export class PersonOption extends Model {
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
-  @readonly @field('_rev_at') _rev_at
   @field('_parent_rev') _parent_rev
   @json('_revisions', dontSanitize) _revisions
   @field('_depth') _depth
@@ -2679,7 +2652,6 @@ export class UserRole extends Model {
   @field('sort') sort
   @field('comment') comment
   @field('changed') changed
-  @readonly @field('_rev_at') _rev_at
 
   @relation('person', 'user_role_id') person
 }
