@@ -43,12 +43,7 @@ const HerkunftConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    user,
-    addNotification,
-    addQueuedQuery,
-    deleteHerkunftRevModel,
-  } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   const [{ error, data, fetching }] = useQuery({
     query: herkunftRevQuery,
@@ -70,7 +65,7 @@ const HerkunftConflict = ({
     [revRow, row, store],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -109,13 +104,26 @@ const HerkunftConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deleteHerkunftRevModel(revRow)
+    // update model: remove this conflict
+    const collection = db.get('herkunft')
+    const model = await collection.find(revRow.herkunft_id)
+    await model.removeConflict(revRow._rev)
     setTimeout(() => conflictDisposalCallback())
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deleteHerkunftRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.bemerkungen,
+    revRow.gemeinde,
+    revRow.geom_point,
+    revRow.herkunft_id,
+    revRow.kanton,
+    revRow.land,
+    revRow.lokalname,
+    revRow.nr,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {

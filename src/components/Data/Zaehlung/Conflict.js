@@ -41,12 +41,7 @@ const ZaehlungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    user,
-    addNotification,
-    addQueuedQuery,
-    deleteZaehlungRevModel,
-  } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -67,7 +62,7 @@ const ZaehlungConflict = ({
     [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -103,13 +98,23 @@ const ZaehlungConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deleteZaehlungRevModel(revRow)
+    // update model: remove this conflict
+    const collection = db.get('zaehlung')
+    const model = await collection.find(revRow.zaehlung_id)
+    await model.removeConflict(revRow._rev)
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deleteZaehlungRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.bemerkungen,
+    revRow.datum,
+    revRow.kultur_id,
+    revRow.prognose,
+    revRow.zaehlung_id,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {

@@ -45,12 +45,7 @@ const TeilkulturConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    user,
-    addNotification,
-    addQueuedQuery,
-    deleteTeilkulturRevModel,
-  } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -71,7 +66,7 @@ const TeilkulturConflict = ({
     [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -109,13 +104,25 @@ const TeilkulturConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deleteTeilkulturRevModel(revRow)
+    // update model: remove this conflict
+    const collection = db.get('teilkultur')
+    const model = await collection.find(revRow.teilkultur_id)
+    await model.removeConflict(revRow._rev)
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deleteTeilkulturRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.bemerkungen,
+    revRow.kultur_id,
+    revRow.name,
+    revRow.ort1,
+    revRow.ort2,
+    revRow.ort3,
+    revRow.teilkultur_id,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {

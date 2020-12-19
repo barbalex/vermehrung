@@ -54,7 +54,7 @@ const PersonConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, deletePersonRevModel } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -73,7 +73,7 @@ const PersonConflict = ({
     [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -123,13 +123,37 @@ const PersonConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deletePersonRevModel(revRow)
+    // remove conflict from model
+    const collection = db.get('person')
+    const model = await collection.find(revRow.person_id)
+    await model.removeConflict(revRow._rev)
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deletePersonRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.account_id,
+    revRow.adresszusatz,
+    revRow.aktiv,
+    revRow.bemerkungen,
+    revRow.email,
+    revRow.info,
+    revRow.kein_email,
+    revRow.kommerziell,
+    revRow.name,
+    revRow.nr,
+    revRow.ort,
+    revRow.person_id,
+    revRow.plz,
+    revRow.strasse,
+    revRow.telefon_geschaeft,
+    revRow.telefon_mobile,
+    revRow.telefon_privat,
+    revRow.user_role_id,
+    revRow.vorname,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {

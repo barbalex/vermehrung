@@ -52,12 +52,7 @@ const LieferungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    user,
-    addNotification,
-    addQueuedQuery,
-    deleteLieferungRevModel,
-  } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -78,7 +73,7 @@ const LieferungConflict = ({
     [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -125,13 +120,34 @@ const LieferungConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deleteLieferungRevModel(revRow)
+    // update model: remove this conflict
+    const collection = db.get('lieferung')
+    const model = await collection.find(revRow.lieferung_id)
+    await model.removeConflict(revRow._rev)
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deleteLieferungRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.andere_menge,
+    revRow.anzahl_auspflanzbereit,
+    revRow.anzahl_pflanzen,
+    revRow.art_id,
+    revRow.bemerkungen,
+    revRow.datum,
+    revRow.geplant,
+    revRow.gramm_samen,
+    revRow.lieferung_id,
+    revRow.nach_ausgepflanzt,
+    revRow.nach_kultur_id,
+    revRow.person_id,
+    revRow.sammel_lieferung_id,
+    revRow.von_anzahl_individuen,
+    revRow.von_kultur_id,
+    revRow.von_sammlung_id,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {

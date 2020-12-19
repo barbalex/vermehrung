@@ -49,12 +49,7 @@ const SammlungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    user,
-    addNotification,
-    addQueuedQuery,
-    deleteSammlungRevModel,
-  } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -75,7 +70,7 @@ const SammlungConflict = ({
     [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -119,13 +114,31 @@ const SammlungConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deleteSammlungRevModel(revRow)
+    // update model: remove this conflict
+    const collection = db.get('sammlung')
+    const model = await collection.find(revRow.sammlung_id)
+    await model.removeConflict(revRow._rev)
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deleteSammlungRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.andere_menge,
+    revRow.anzahl_pflanzen,
+    revRow.art_id,
+    revRow.bemerkungen,
+    revRow.datum,
+    revRow.geom_point,
+    revRow.geplant,
+    revRow.gramm_samen,
+    revRow.herkunft_id,
+    revRow.nr,
+    revRow.person_id,
+    revRow.sammlung_id,
+    revRow.von_anzahl_individuen,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {

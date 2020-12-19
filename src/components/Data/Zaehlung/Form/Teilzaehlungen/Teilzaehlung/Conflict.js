@@ -48,12 +48,7 @@ const TeilzaehlungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    user,
-    addNotification,
-    addQueuedQuery,
-    deleteTeilzaehlungRevModel,
-  } = store
+  const { user, addNotification, addQueuedQuery, db } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -74,7 +69,7 @@ const TeilzaehlungConflict = ({
     [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
+  const onClickVerwerfen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -115,13 +110,28 @@ const TeilzaehlungConflict = ({
       revertField: '_deleted',
       revertValue: false,
     })
-    deleteTeilzaehlungRevModel(revRow)
+    // update model: remove this conflict
+    const collection = db.get('teilzaehlung')
+    const model = await collection.find(revRow.teilzaehlung_id)
+    await model.removeConflict(revRow._rev)
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
     conflictDisposalCallback,
-    deleteTeilzaehlungRevModel,
-    revRow,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.andere_menge,
+    revRow.anzahl_auspflanzbereit,
+    revRow.anzahl_mutterpflanzen,
+    revRow.anzahl_pflanzen,
+    revRow.auspflanzbereit_beschreibung,
+    revRow.bemerkungen,
+    revRow.prognose_von_tz,
+    revRow.teilkultur_id,
+    revRow.teilzaehlung_id,
+    revRow.zaehlung_id,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {
