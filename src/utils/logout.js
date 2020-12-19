@@ -1,10 +1,12 @@
 import localForage from 'localforage'
 
 const logout = async ({ store }) => {
+  const { db } = store
   console.log('LOGGING OUT')
   if (typeof window !== 'undefined') {
-    store.firebase.auth().signOut()
-    localForage.clear()
+    await store.firebase.auth().signOut()
+    await localForage.clear()
+    await db.action(async () => db.unsafeResetDatabase())
     window.localStorage.removeItem('token')
     window.location.reload(true)
   }

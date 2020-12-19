@@ -19,31 +19,10 @@ const constants = getConstants()
 const StyledUserIcon = styled(UserIcon)`
   color: white;
 `
-const Line = styled.hr`
-  background: rgba(74, 20, 140, 0.3) !important;
-  margin: 5px 0;
-`
-const StyledMenuItem = styled(MenuItem)`
-  ${(props) => props['data-active'] === 'yes' && 'font-style: italic;'}
-  ${(props) =>
-    props['data-active'] === 'yes' &&
-    'animation: flickerAnimation 1s infinite;'}
-  @keyframes flickerAnimation {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-`
 
 const Account = () => {
   const store = useContext(StoreContext)
-  const { user, firebase, flushData, online, db } = store
+  const { user, firebase, online, db } = store
 
   const [userPerson, setUserPerson] = useState(undefined)
   useEffect(() => {
@@ -67,12 +46,11 @@ const Account = () => {
     [],
   )
   const onCloseMenu = useCallback(() => setAnchorEl(null), [])
-  const onClickLogout = useCallback(() => {
+
+  const onClickLogout = useCallback(async () => {
     setAnchorEl(null)
-    firebase.auth().signOut()
-    // TODO: refactor for watermelonDB
-    flushData()
-  }, [firebase, flushData])
+    logout({ store })
+  }, [store])
 
   const { email } = user || {}
 
@@ -96,22 +74,6 @@ const Account = () => {
       setAnchorEl(null)
     }, 5000)
   }, [email, firebase])
-  const onClickLogoutAndClear = useCallback(() => {
-    logout({ store })
-  }, [store])
-
-  const [refreshing, setRefreshing] = useState('no')
-  const onClickRefresh = useCallback(async () => {
-    setRefreshing('yes')
-    flushData()
-    window.location.reload(true)
-  }, [flushData])
-  const refreshText =
-    refreshing === 'no'
-      ? 'Daten neu laden'
-      : refreshing === 'yes'
-      ? 'Entferne lokale Daten...'
-      : 'Die Daten wurden neu geladen'
 
   if (!online) return null
 
@@ -145,20 +107,6 @@ const Account = () => {
             personFullname(userPerson) ?? ''
           } abmelden`}</MenuItem>
           <MenuItem onClick={onClickResetPassword}>{resetTitle}</MenuItem>
-          <Line />
-          <StyledMenuItem
-            onClick={onClickRefresh}
-            data-id="appbar-more-logout"
-            data-active={refreshing}
-          >
-            {refreshText}
-          </StyledMenuItem>
-          <MenuItem
-            onClick={onClickLogoutAndClear}
-            data-id="appbar-more-logout"
-          >
-            Daten neu laden plus: Einstellungen und Anmeldung zurücksetzen
-          </MenuItem>
         </Menu>
       </>
     </ErrorBoundary>

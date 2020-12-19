@@ -24,7 +24,6 @@ const recreatePersistedStore = async ({ store }) => {
   const blacklist = [
     'authorizing',
     'user',
-    'gqlHttpClient',
     'gqlWsClient',
     'gettingAuthUser',
     'online',
