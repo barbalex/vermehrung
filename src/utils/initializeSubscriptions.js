@@ -1,32 +1,3 @@
-import { ae_artModelPrimitives } from '../models/ae_artModel.base'
-import { artModelPrimitives } from '../models/artModel.base'
-import { art_fileModelPrimitives } from '../models/art_fileModel.base'
-import { art_qkModelPrimitives } from '../models/art_qkModel.base'
-import { art_qk_choosenModelPrimitives } from '../models/art_qk_choosenModel.base'
-import { avModelPrimitives } from '../models/avModel.base'
-import { eventModelPrimitives } from '../models/eventModel.base'
-import { gartenModelPrimitives } from '../models/gartenModel.base'
-import { garten_fileModelPrimitives } from '../models/garten_fileModel.base'
-import { gvModelPrimitives } from '../models/gvModel.base'
-import { herkunftModelPrimitives } from '../models/herkunftModel.base'
-import { herkunft_fileModelPrimitives } from '../models/herkunft_fileModel.base'
-import { kulturModelPrimitives } from '../models/kulturModel.base'
-import { kultur_fileModelPrimitives } from '../models/kultur_fileModel.base'
-import { kultur_optionModelPrimitives } from '../models/kultur_optionModel.base'
-import { kultur_qkModelPrimitives } from '../models/kultur_qkModel.base'
-import { kultur_qk_choosenModelPrimitives } from '../models/kultur_qk_choosenModel.base'
-import { lieferungModelPrimitives } from '../models/lieferungModel.base'
-import { lieferung_fileModelPrimitives } from '../models/lieferung_fileModel.base'
-import { personModelPrimitives } from '../models/personModel.base'
-import { person_fileModelPrimitives } from '../models/person_fileModel.base'
-import { person_optionModelPrimitives } from '../models/person_optionModel.base'
-import { sammel_lieferungModelPrimitives } from '../models/sammel_lieferungModel.base'
-import { sammlungModelPrimitives } from '../models/sammlungModel.base'
-import { sammlung_fileModelPrimitives } from '../models/sammlung_fileModel.base'
-import { teilkulturModelPrimitives } from '../models/teilkulturModel.base'
-import { teilzaehlungModelPrimitives } from '../models/teilzaehlungModel.base'
-import { user_roleModelPrimitives } from '../models/user_roleModel.base'
-import { zaehlungModelPrimitives } from '../models/zaehlungModel.base'
 import gql from 'graphql-tag'
 
 import processSubscriptionResult from './processSubscriptionResult'
@@ -91,9 +62,22 @@ const initializeSubscriptions = ({ store }) => {
     })
   unsubscribe.art = store.gqlWsClient
     .request({
-      query: `subscription Art($where: art_bool_exp) { art(where: $where) {
-      ${artModelPrimitives.toString()}
-    } }`,
+      query: gql`
+        subscription Art($where: art_bool_exp) {
+          art(where: $where) {
+            id
+            ae_id
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: art_lastUpdated } } },
     })
     .subscribe({
@@ -108,9 +92,19 @@ const initializeSubscriptions = ({ store }) => {
     })
   unsubscribe.art_file = store.gqlWsClient
     .request({
-      query: `subscription ArtFile($where: art_file_bool_exp) { art_file(where: $where) {
-    ${art_fileModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription ArtFile($where: art_file_bool_exp) {
+          art_file(where: $where) {
+            id
+            art_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: art_file_lastUpdated } } },
     })
     .subscribe({
@@ -125,9 +119,25 @@ const initializeSubscriptions = ({ store }) => {
     })
   unsubscribe.art_qk = store.gqlWsClient
     .request({
-      query: `subscription ArtQk($where: art_qk_bool_exp) { art_qk(where: $where) {
-    ${art_qkModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription ArtQk($where: art_qk_bool_exp) {
+          art_qk(where: $where) {
+            id
+            name
+            titel
+            beschreibung
+            sort
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: art_qk_lastUpdated } } },
     })
     .subscribe({
@@ -142,9 +152,24 @@ const initializeSubscriptions = ({ store }) => {
     })
   unsubscribe.art_qk_choosen = store.gqlWsClient
     .request({
-      query: `subscription ArtQkChoosen($where: art_qk_choosen_bool_exp) { art_qk_choosen(where: $where) {
-    ${art_qk_choosenModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription ArtQkChoosen($where: art_qk_choosen_bool_exp) {
+          art_qk_choosen(where: $where) {
+            id
+            art_id
+            qk_id
+            choosen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: art_qk_choosen_lastUpdated } } },
     })
     .subscribe({
@@ -159,9 +184,23 @@ const initializeSubscriptions = ({ store }) => {
     })
   unsubscribe.av = store.gqlWsClient
     .request({
-      query: `subscription Av($where: av_bool_exp) { av(where: $where) {
-    ${avModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription Av($where: av_bool_exp) {
+          av(where: $where) {
+            id
+            art_id
+            person_id
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: av_lastUpdated } } },
     })
     .subscribe({
@@ -176,9 +215,27 @@ const initializeSubscriptions = ({ store }) => {
     })
   unsubscribe.event = store.gqlWsClient
     .request({
-      query: `subscription Event($where: event_bool_exp) { event(where: $where) {
-  ${eventModelPrimitives.toString()}
-} }`,
+      query: gql`
+        subscription Event($where: event_bool_exp) {
+          event(where: $where) {
+            id
+            kultur_id
+            teilkultur_id
+            person_id
+            beschreibung
+            geplant
+            datum
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: event_lastUpdated } } },
     })
     .subscribe({
@@ -193,9 +250,32 @@ const initializeSubscriptions = ({ store }) => {
     })
   unsubscribe.garten = store.gqlWsClient
     .request({
-      query: `subscription Garten($where: garten_bool_exp) { garten(where: $where) {
-${gartenModelPrimitives.toString()}
-} }`,
+      query: gql`
+        subscription Garten($where: garten_bool_exp) {
+          garten(where: $where) {
+            id
+            name
+            person_id
+            strasse
+            plz
+            ort
+            aktiv
+            bemerkungen
+            lv95_x
+            lv95_y
+            wgs84_lat
+            wgs84_long
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: garten_lastUpdated } } },
     })
     .subscribe({
@@ -210,9 +290,19 @@ ${gartenModelPrimitives.toString()}
     })
   unsubscribe.garten_file = store.gqlWsClient
     .request({
-      query: `subscription GartenFile($where: garten_file_bool_exp) { garten_file(where: $where) {
-${garten_fileModelPrimitives.toString()}
-} }`,
+      query: gql`
+        subscription GartenFile($where: garten_file_bool_exp) {
+          garten_file(where: $where) {
+            id
+            garten_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: garten_file_lastUpdated } } },
     })
     .subscribe({
@@ -227,9 +317,23 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.gv = store.gqlWsClient
     .request({
-      query: `subscription Gv($where: gv_bool_exp) { gv(where: $where) {
-    ${gvModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription Gv($where: gv_bool_exp) {
+          gv(where: $where) {
+            id
+            garten_id
+            person_id
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: gv_lastUpdated } } },
     })
     .subscribe({
@@ -244,9 +348,31 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.herkunft = store.gqlWsClient
     .request({
-      query: `subscription Herkunft($where: herkunft_bool_exp) { herkunft(where: $where) {
-    ${herkunftModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription Herkunft($where: herkunft_bool_exp) {
+          herkunft(where: $where) {
+            id
+            nr
+            lokalname
+            gemeinde
+            kanton
+            land
+            bemerkungen
+            lv95_x
+            lv95_y
+            wgs84_lat
+            wgs84_long
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: herkunft_lastUpdated } } },
     })
     .subscribe({
@@ -261,9 +387,19 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.herkunft_file = store.gqlWsClient
     .request({
-      query: `subscription HerkunftFile($where: herkunft_file_bool_exp) { herkunft_file(where: $where) {
-    ${herkunft_fileModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription HerkunftFile($where: herkunft_file_bool_exp) {
+          herkunft_file(where: $where) {
+            id
+            herkunft_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: herkunft_file_lastUpdated } } },
     })
     .subscribe({
@@ -278,9 +414,29 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.kultur = store.gqlWsClient
     .request({
-      query: `subscription Kultur($where: kultur_bool_exp) { kultur(where: $where) {
-    ${kulturModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription Kultur($where: kultur_bool_exp) {
+          kultur(where: $where) {
+            id
+            art_id
+            herkunft_id
+            garten_id
+            zwischenlager
+            erhaltungskultur
+            von_anzahl_individuen
+            aktiv
+            bemerkungen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: kultur_lastUpdated } } },
     })
     .subscribe({
@@ -295,9 +451,19 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.kultur_file = store.gqlWsClient
     .request({
-      query: `subscription KulturFile($where: kultur_file_bool_exp) { kultur_file(where: $where) {
-    ${kultur_fileModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription KulturFile($where: kultur_file_bool_exp) {
+          kultur_file(where: $where) {
+            id
+            kultur_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: kultur_file_lastUpdated } } },
     })
     .subscribe({
@@ -312,9 +478,31 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.kultur_option = store.gqlWsClient
     .request({
-      query: `subscription KulturOption($where: kultur_option_bool_exp) { kultur_option(where: $where) {
-    ${kultur_optionModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription KulturOption($where: kultur_option_bool_exp) {
+          kultur_option(where: $where) {
+            id
+            ev_datum
+            ev_geplant
+            ev_person_id
+            ev_teilkultur_id
+            tk
+            tk_bemerkungen
+            tz_andere_menge
+            tz_anzahl_mutterpflanzen
+            tz_auspflanzbereit_beschreibung
+            tz_teilkultur_id
+            tz_bemerkungen
+            z_bemerkungen
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: kultur_option_lastUpdated } } },
     })
     .subscribe({
@@ -329,9 +517,25 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.kultur_qk = store.gqlWsClient
     .request({
-      query: `subscription KulturQk($where: kultur_qk_bool_exp) { kultur_qk(where: $where) {
-    ${kultur_qkModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription KulturQk($where: kultur_qk_bool_exp) {
+          kultur_qk(where: $where) {
+            id
+            name
+            titel
+            beschreibung
+            sort
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: kultur_qk_lastUpdated } } },
     })
     .subscribe({
@@ -346,9 +550,24 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.kultur_qk_choosen = store.gqlWsClient
     .request({
-      query: `subscription KulturQkChoosen($where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen(where: $where) {
-    ${kultur_qk_choosenModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription KulturQkChoosen($where: kultur_qk_choosen_bool_exp) {
+          kultur_qk_choosen(where: $where) {
+            id
+            kultur_id
+            qk_id
+            choosen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: kultur_qk_choosen_lastUpdated } } },
     })
     .subscribe({
@@ -364,9 +583,36 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.lieferung = store.gqlWsClient
     .request({
-      query: `subscription Lieferung($where: lieferung_bool_exp) { lieferung(where: $where) {
-    ${lieferungModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription Lieferung($where: lieferung_bool_exp) {
+          lieferung(where: $where) {
+            id
+            sammel_lieferung_id
+            art_id
+            person_id
+            von_sammlung_id
+            von_kultur_id
+            datum
+            nach_kultur_id
+            nach_ausgepflanzt
+            von_anzahl_individuen
+            anzahl_pflanzen
+            anzahl_auspflanzbereit
+            gramm_samen
+            andere_menge
+            geplant
+            bemerkungen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: lieferung_lastUpdated } } },
     })
     .subscribe({
@@ -381,9 +627,19 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.lieferung_file = store.gqlWsClient
     .request({
-      query: `subscription LieferungFile($where: lieferung_file_bool_exp) { lieferung_file(where: $where) {
-    ${lieferung_fileModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription LieferungFile($where: lieferung_file_bool_exp) {
+          lieferung_file(where: $where) {
+            id
+            lieferung_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: lieferung_file_lastUpdated } } },
     })
     .subscribe({
@@ -398,9 +654,39 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.person = store.gqlWsClient
     .request({
-      query: `subscription Person($where: person_bool_exp) { person(where: $where) {
-    ${personModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription Person($where: person_bool_exp) {
+          person(where: $where) {
+            id
+            nr
+            vorname
+            name
+            adresszusatz
+            strasse
+            plz
+            ort
+            telefon_privat
+            telefon_geschaeft
+            telefon_mobile
+            email
+            kein_email
+            bemerkungen
+            account_id
+            user_role_id
+            kommerziell
+            info
+            aktiv
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: person_lastUpdated } } },
     })
     .subscribe({
@@ -415,9 +701,19 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.person_file = store.gqlWsClient
     .request({
-      query: `subscription PersonFile($where: person_file_bool_exp) { person_file(where: $where) {
-    ${person_fileModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription PersonFile($where: person_file_bool_exp) {
+          person_file(where: $where) {
+            id
+            person_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: person_file_lastUpdated } } },
     })
     .subscribe({
@@ -432,9 +728,42 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.person_option = store.gqlWsClient
     .request({
-      query: `subscription PersonOption($where: person_option_bool_exp) { person_option(where: $where) {
-    ${person_optionModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription PersonOption($where: person_option_bool_exp) {
+          person_option(where: $where) {
+            id
+            ar_name_deutsch
+            ga_strasse
+            ga_plz
+            ga_ort
+            ga_geom_point
+            ga_lat_lng
+            ga_aktiv
+            ga_bemerkungen
+            hk_kanton
+            hk_land
+            hk_bemerkungen
+            hk_geom_point
+            ku_zwischenlager
+            ku_erhaltungskultur
+            li_show_sl_felder
+            li_show_sl
+            sl_show_empty_when_next_to_li
+            sl_auto_copy_edits
+            tree_kultur
+            tree_teilkultur
+            tree_zaehlung
+            tree_lieferung
+            tree_event
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: person_option_lastUpdated } } },
     })
     .subscribe({
@@ -449,9 +778,33 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.sammel_lieferung = store.gqlWsClient
     .request({
-      query: `subscription SammelLieferung($where: sammel_lieferung_bool_exp) { sammel_lieferung(where: $where) {
-    ${sammel_lieferungModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription SammelLieferung($where: sammel_lieferung_bool_exp) {
+          sammel_lieferung(where: $where) {
+            id
+            art_id
+            person_id
+            von_sammlung_id
+            von_kultur_id
+            datum
+            nach_kultur_id
+            nach_ausgepflanzt
+            von_anzahl_individuen
+            anzahl_pflanzen
+            anzahl_auspflanzbereit
+            gramm_samen
+            andere_menge
+            geplant
+            bemerkungen
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: sammel_lieferung_lastUpdated } } },
     })
     .subscribe({
@@ -467,9 +820,36 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.sammlung = store.gqlWsClient
     .request({
-      query: `subscription Sammlung($where: sammlung_bool_exp) { sammlung(where: $where) {
-    ${sammlungModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription Sammlung($where: sammlung_bool_exp) {
+          sammlung(where: $where) {
+            id
+            art_id
+            person_id
+            herkunft_id
+            nr
+            datum
+            von_anzahl_individuen
+            anzahl_pflanzen
+            gramm_samen
+            andere_menge
+            geplant
+            bemerkungen
+            lv95_x
+            lv95_y
+            wgs84_lat
+            wgs84_long
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: sammlung_lastUpdated } } },
     })
     .subscribe({
@@ -484,9 +864,19 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.sammlung_file = store.gqlWsClient
     .request({
-      query: `subscription SammlungFile($where: sammlung_file_bool_exp) { sammlung_file(where: $where) {
-    ${sammlung_fileModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription SammlungFile($where: sammlung_file_bool_exp) {
+          sammlung_file(where: $where) {
+            id
+            sammlung_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: sammlung_file_lastUpdated } } },
     })
     .subscribe({
@@ -501,9 +891,27 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.teilkultur = store.gqlWsClient
     .request({
-      query: `subscription Teilkultur($where: teilkultur_bool_exp) { teilkultur(where: $where) {
-    ${teilkulturModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription Teilkultur($where: teilkultur_bool_exp) {
+          teilkultur(where: $where) {
+            id
+            kultur_id
+            name
+            ort1
+            ort2
+            ort3
+            bemerkungen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: teilkultur_lastUpdated } } },
     })
     .subscribe({
@@ -518,9 +926,29 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.teilzaehlung = store.gqlWsClient
     .request({
-      query: `subscription Teilzaehlung($where: teilzaehlung_bool_exp) { teilzaehlung(where: $where) {
-    ${teilzaehlungModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription Teilzaehlung($where: teilzaehlung_bool_exp) {
+          teilzaehlung(where: $where) {
+            id
+            zaehlung_id
+            teilkultur_id
+            anzahl_pflanzen
+            anzahl_auspflanzbereit
+            anzahl_mutterpflanzen
+            andere_menge
+            auspflanzbereit_beschreibung
+            bemerkungen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: teilzaehlung_lastUpdated } } },
     })
     .subscribe({
@@ -535,9 +963,18 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.user_role = store.gqlWsClient
     .request({
-      query: `subscription UserRole($where: user_role_bool_exp) { user_role(where: $where) {
-    ${user_roleModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription UserRole($where: user_role_bool_exp) {
+          user_role(where: $where) {
+            id
+            name
+            label
+            sort
+            comment
+            changed
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: user_role_lastUpdated } } },
     })
     .subscribe({
@@ -552,9 +989,25 @@ ${garten_fileModelPrimitives.toString()}
     })
   unsubscribe.zaehlung = store.gqlWsClient
     .request({
-      query: `subscription Zaehlung($where: zaehlung_bool_exp) { zaehlung(where: $where) {
-    ${zaehlungModelPrimitives.toString()}
-  } }`,
+      query: gql`
+        subscription Zaehlung($where: zaehlung_bool_exp) {
+          zaehlung(where: $where) {
+            id
+            kultur_id
+            datum
+            prognose
+            bemerkungen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
       variables: { where: { _rev_at: { _gt: zaehlung_lastUpdated } } },
     })
     .subscribe({

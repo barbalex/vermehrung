@@ -5,15 +5,9 @@ export const art = gql`
     id
     __typename
     ae_id
-    #art_ae_art {
-    #  id
-    #  __typename
-    #  name
-    #}
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -32,7 +26,6 @@ export const artQk = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -50,7 +43,6 @@ export const artQkChoosen = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -68,7 +60,6 @@ export const artFile = gql`
     name
     beschreibung
     changed
-    _rev_at
   }
 `
 export const aeArt = gql`
@@ -77,7 +68,6 @@ export const aeArt = gql`
     __typename
     name
     changed
-    _rev_at
   }
 `
 export const av = gql`
@@ -89,7 +79,6 @@ export const av = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -110,7 +99,6 @@ export const event = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -124,12 +112,6 @@ export const garten = gql`
     __typename
     name
     person_id
-    #person {
-    #  id
-    #  __typename
-    #  name
-    #  ort
-    #}
     strasse
     plz
     ort
@@ -142,7 +124,6 @@ export const garten = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -171,74 +152,11 @@ export const garten_rev = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
     _deleted
-  }
-`
-export const gartenTeilzaehlungSums = gql`
-  fragment GartenTeilzaehlungSumsFields on garten_teilzaehlung_sums {
-    garten_id
-    __typename
-    garten_name
-    garten_person_id
-    garten_person_name
-    garten_strasse
-    garten_plz
-    garten_ort
-    garten_aktiv
-    garten_bemerkungen
-    garten_anzahl_kulturen
-    kultur_id
-    kultur_art_id
-    kultur_art_name
-    kultur_herkunft_nr
-    kultur_zwischenlager
-    kultur_erhaltungskultur
-    kultur_von_anzahl_individuen
-    kultur_aktiv
-    kultur_bemerkungen
-    kultur_events_anzahl
-    kultur_events_datum_beschreibung
-    kultur_letzter_event_id
-    kultur_letzter_event_datum
-    kultur_letzter_event_beschreibung
-    kultur_letzter_event_geplant
-    kultur_letzter_event_person_name
-    kultur_letzter_event_teilkultur_name
-    kultur_letzter_event_teilkultur_ort1
-    kultur_letzter_event_teilkultur_ort2
-    kultur_letzter_event_teilkultur_ort3
-    kultur_letzter_event_teilkultur_bemerkungen
-    kultur_teilkulturen_anzahl
-    kultur_teilkulturen_namen
-    kultur_zaehlungen_anzahl
-    kultur_anzahl_pflanzen
-    kultur_anzahl_auspflanzbereit
-    kultur_anzahl_mutterpflanzen
-    zaehlung_id
-    zaehlung_datum
-    zaehlung_prognose
-    zaehlung_bemerkungen
-    zaehlung_anzahl_teilzaehlungen
-    zaehlung_anzahl_pflanzen
-    zaehlung_anzahl_auspflanzbereit
-    zaehlung_anzahl_mutterpflanzen
-    teilzaehlung_id
-    teilzaehlung_teilkultur_name
-    teilzaehlung_teilkultur_ort1
-    teilzaehlung_teilkultur_ort2
-    teilzaehlung_teilkultur_ort3
-    teilzaehlung_teilkultur_bemerkungen
-    teilzaehlung_anzahl_pflanzen
-    teilzaehlung_anzahl_auspflanzbereit
-    teilzaehlung_anzahl_mutterpflanzen
-    teilzaehlung_andere_menge
-    teilzaehlung_auspflanzbereit_beschreibung
-    teilzaehlung_bemerkungen
   }
 `
 export const gartenFile = gql`
@@ -251,7 +169,6 @@ export const gartenFile = gql`
     name
     beschreibung
     changed
-    _rev_at
   }
 `
 export const gv = gql`
@@ -263,7 +180,6 @@ export const gv = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -288,7 +204,6 @@ export const herkunft = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -306,7 +221,6 @@ export const herkunftFile = gql`
     name
     beschreibung
     changed
-    _rev_at
   }
 `
 export const kultur = gql`
@@ -324,7 +238,6 @@ export const kultur = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -343,7 +256,6 @@ export const kulturQk = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -361,7 +273,6 @@ export const kulturQkChoosen = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -379,7 +290,6 @@ export const kulturFile = gql`
     name
     beschreibung
     changed
-    _rev_at
   }
 `
 export const kulturOption = gql`
@@ -399,7 +309,6 @@ export const kulturOption = gql`
     tz_bemerkungen
     z_bemerkungen
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -429,7 +338,6 @@ export const lieferung = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -459,7 +367,6 @@ export const lieferung_rev = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -476,7 +383,6 @@ export const lieferungFile = gql`
     name
     beschreibung
     changed
-    _rev_at
   }
 `
 export const person = gql`
@@ -504,7 +410,6 @@ export const person = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -540,7 +445,6 @@ export const personOption = gql`
     tree_lieferung
     tree_event
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -558,7 +462,6 @@ export const personFile = gql`
     name
     beschreibung
     changed
-    _rev_at
   }
 `
 export const sammelLieferung = gql`
@@ -580,7 +483,6 @@ export const sammelLieferung = gql`
     geplant
     bemerkungen
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -610,7 +512,6 @@ export const sammlung = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -628,7 +529,6 @@ export const sammlungFile = gql`
     name
     beschreibung
     changed
-    _rev_at
   }
 `
 export const teilkultur = gql`
@@ -644,7 +544,6 @@ export const teilkultur = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -667,7 +566,6 @@ export const teilzaehlung = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -697,7 +595,6 @@ export const zaehlung = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
