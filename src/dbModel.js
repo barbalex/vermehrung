@@ -608,6 +608,9 @@ export class Art extends Model {
 
 export class AeArt extends Model {
   static table = 'ae_art'
+  static associations = {
+    art: { type: 'has_many', foreignKey: 'ae_id' },
+  }
 
   @field('id') id
   @field('name') name

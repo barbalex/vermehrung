@@ -15,10 +15,23 @@ export const art = gql`
     _deleted
   }
 `
+export const artRev = gql`
+  fragment ArtRevFields on art_rev {
+    id
+    art_id
+    ae_id
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _deleted
+  }
+`
 export const artQk = gql`
   fragment ArtQkFields on art_qk {
     id
-    #__typename
     name
     titel
     beschreibung
@@ -30,6 +43,23 @@ export const artQk = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const artQkRev = gql`
+  fragment ArtQkRevFields on art_qk_rev {
+    id
+    art_qk_id
+    name
+    titel
+    beschreibung
+    sort
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -50,12 +80,27 @@ export const artQkChoosen = gql`
     _deleted
   }
 `
+export const artQkChoosenRev = gql`
+  fragment ArtQkChoosenRevFields on art_qk_choosen_rev {
+    id
+    art_qk_choosen_id
+    art_id
+    qk_id
+    choosen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _deleted
+  }
+`
 export const artFile = gql`
   fragment ArtFileFields on art_file {
     id
     art_id
     file_id
-    #__typename
     file_mime_type
     name
     beschreibung
@@ -65,7 +110,6 @@ export const artFile = gql`
 export const aeArt = gql`
   fragment AeArtFields on ae_art {
     id
-    #__typename
     name
     changed
   }
@@ -213,7 +257,7 @@ export const herkunft = gql`
 export const herkunftRev = gql`
   fragment HerkunftRevFields on herkunft_rev {
     id
-    herkunft_id
+    herkunft_id # <<
     nr
     lokalname
     gemeinde
@@ -226,7 +270,7 @@ export const herkunftRev = gql`
     _rev
     _parent_rev
     _revisions
-    _depth
+    _depth # no conflicts
     _deleted
   }
 `
