@@ -88,7 +88,9 @@ const GartenPersonen = ({ garten }) => {
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
-    const gvsObservable = garten?.gvs?.observe()
+    const gvsObservable = garten?.gvs
+      ?.extend(Q.where('_deleted', false))
+      .observe()
     const combinedObservables = combineLatest([
       gvsObservable,
       personsObservable,
@@ -160,8 +162,11 @@ const GartenPersonen = ({ garten }) => {
         {open && (
           <>
             <Aven>
-              {gvsSorted.map((gv) => (
-                <Person key={`${gv.garten_id}/${gv.person_id}`} gv={gv} />
+              {gvsSorted.map((gv, index) => (
+                <Person
+                  key={`${gv.garten_id}/${gv.person_id}/${index}`}
+                  gv={gv}
+                />
               ))}
             </Aven>
             {!!personWerte.length && (

@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
+import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'
 import Art from './Art'
@@ -78,27 +79,20 @@ const PersonArten = ({ person }) => {
     [anim, open],
   )
 
-  const [avsSorted, setAvsSorted] = useState([])
+  const [dataState, setDataState] = useState({ avs: [], artWerte: [] })
+  const { avs, artWerte } = dataState
+  const avArtIds = avs.map((v) => v.art_id)
   useEffect(() => {
-    const subscription = person.avs
+    const avsObservable = person.avs
       .extend(Q.where('_deleted', false))
       .observe()
-      .subscribe(async (avs) => {
-        const _avsSorted = await avsSortByArt(avs)
-        setAvsSorted(_avsSorted)
-      })
-    return () => subscription.unsubscribe()
-  }, [person.avs])
-
-  const avArtIds = avsSorted.map((v) => v.art_id)
-
-  const [artWerte, setArtWerte] = useState([])
-  useEffect(() => {
     const artsObservable = db
       .get('art')
       .query(Q.where('_deleted', false), Q.where('id', Q.notIn(avArtIds)))
       .observe()
-    const subscription = artsObservable.subscribe(async (arts) => {
+    const combinedObservables = combineLatest([avsObservable, artsObservable])
+    const subscription = combinedObservables.subscribe(async ([avs, arts]) => {
+      const avsSorted = await avsSortByArt(avs)
       const artsSorted = await artsSortedFromArts(arts)
       const artWerte = await Promise.all(
         artsSorted.map(async (art) => {
@@ -110,11 +104,13 @@ const PersonArten = ({ person }) => {
           }
         }),
       )
-      setArtWerte(artWerte)
+      setDataState({ avs: avsSorted, artWerte })
     })
     return () => subscription.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db, avArtIds.length])
+  }, [person.avs, avArtIds.length, db])
+
+  console.log('Person Arten rendering')
 
   const saveToDb = useCallback(
     async (event) => {
@@ -149,7 +145,7 @@ const PersonArten = ({ person }) => {
         ref={titleRowRef}
         data-sticky={isSticky}
       >
-        <Title>{`Mitarbeitend bei ${avsSorted.length} Arten`}</Title>
+        <Title>{`Mitarbeitend bei ${avs.length} Arten`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -164,8 +160,8 @@ const PersonArten = ({ person }) => {
         {open && (
           <>
             <Avs>
-              {avsSorted.map((av) => (
-                <Art key={`${av.person_id}/${av.art_id}`} av={av} />
+              {avs.map((av, index) => (
+                <Art key={`${av.person_id}/${av.art_id}/${index}`} av={av} />
               ))}
             </Avs>
             {!!artWerte.length && (

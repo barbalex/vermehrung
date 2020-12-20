@@ -76,16 +76,21 @@ const EventForm = ({
     const kultursObservable = db
       .get('kultur')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
-      .observeWithColumns('garten_id', 'art_id', 'herkunft_id', 'zwischenlager')
+      .observeWithColumns([
+        'garten_id',
+        'art_id',
+        'herkunft_id',
+        'zwischenlager',
+      ])
     const tkKulturQuery = showFilter ? [] : [Q.where('kultur_id', kulturId)]
     const teilkulturObservable = db
       .get('teilkultur')
       .query(Q.where('_deleted', false), ...tkKulturQuery)
-      .observeWithColumns('name')
+      .observeWithColumns(['name'])
     const personsObservable = db
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
-      .observeWithColumns('vorname', 'name')
+      .observeWithColumns(['vorname', 'name'])
     const kulturObservable = showFilter
       ? $of(filter.kultur)
       : row.kultur.observe()

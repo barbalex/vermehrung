@@ -64,6 +64,7 @@ const Av = ({ av }) => {
   useEffect(() => {
     const subscription = av.art.observe().subscribe(async (art) => {
       const label = await art.label.pipe(first$()).toPromise()
+
       setArtLabel(label)
     })
     return () => subscription.unsubscribe()

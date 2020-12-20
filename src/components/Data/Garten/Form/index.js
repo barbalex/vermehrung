@@ -53,6 +53,7 @@ const GartenForm = ({
   const [dataState, setDataState] = useState({
     personWerte: [],
     userPersonOption: {},
+    gvs: [],
   })
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
@@ -71,17 +72,20 @@ const GartenForm = ({
     const personsObservable = db
       .get('person')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
-      .observeWithColumns('vorname', 'name')
+      .observeWithColumns(['vorname', 'name'])
+    const personObservable = row.person ? row.person.observe() : $of({})
+    const gvsObservable = row.gvs.extend(Q.where('_deleted', false)).observe()
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       personsObservable,
+      personObservable,
+      gvsObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([userPersonOptions, persons]) => {
+      async ([userPersonOptions, persons, person, gvs]) => {
         // need to show a choosen person even if inactive but not if deleted
-        const person = await row.person?.fetch()
         const personsIncludingInactiveChoosen = uniqBy(
-          [...persons, ...(person && !person?._deleted ? [person] : [])],
+          [...persons, ...(person?.id && !person?._deleted ? [person] : [])],
           'id',
         )
         const personWerte = personsIncludingInactiveChoosen
@@ -90,16 +94,19 @@ const GartenForm = ({
             value: person.id,
             label: personLabelFromPerson({ person }),
           }))
+
         setDataState({
           personWerte,
           userPersonOption: userPersonOptions?.[0],
+          gvs,
         })
       },
     )
 
     return () => subscription.unsubscribe()
-  }, [db, row.person, user])
-  const { personWerte, userPersonOption } = dataState
+  }, [db, row.gvs, row.person, user])
+  const { personWerte, userPersonOption, gvs } = dataState
+  const gvPersonIds = gvs.map((v) => v.person_id)
 
   const {
     ga_strasse,
@@ -120,16 +127,22 @@ const GartenForm = ({
       if (showFilter) {
         return filter.setValue({ table: 'garten', key: field, value })
       }
-
+      console.log('Garten Form saveToDb', { field, value })
       const previousValue = ifIsNumericAsNumber(row[field])
+      console.log('Garten Form saveToDb', { previousValue })
       // only update if value has changed
       if (value === previousValue) return
       row.edit({ field, value, store })
       if (field === 'person_id') {
-        insertGvRev({ values: { garten_id: row.id, person_id: value } })
+        // only if not yet exists
+        // do this in garten.edit?
+        if (!gvPersonIds.includes(value)) {
+          insertGvRev({ values: { garten_id: row.id, person_id: value } })
+        }
       }
     },
-    [filter, insertGvRev, row, showFilter, store],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filter, gvPersonIds.length, insertGvRev, row, showFilter, store],
   )
 
   const showDeleted =

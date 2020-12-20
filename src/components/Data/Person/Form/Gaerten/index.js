@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
+import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'
 import Garten from './Garten'
@@ -78,22 +79,13 @@ const PersonArten = ({ person }) => {
     [anim, open],
   )
 
-  const [gvsSorted, setGvsSorted] = useState([])
+  const [dataState, setDataState] = useState({ gvs: [], gartenWerte: [] })
+  const { gvs, gartenWerte } = dataState
+  const gvGartenIds = gvs.map((v) => v.garten_id)
   useEffect(() => {
-    const subscription = person.gvs
+    const gvsObservable = person.gvs
       .extend(Q.where('_deleted', false))
       .observe()
-      .subscribe(async (gvs) => {
-        const gvsSorted = await gvsSortByGarten(gvs)
-        setGvsSorted(gvsSorted)
-      })
-    return () => subscription.unsubscribe()
-  }, [person.gvs])
-
-  const gvGartenIds = gvsSorted.map((v) => v.garten_id)
-
-  const [gartenWerte, setGartenWerte] = useState([])
-  useEffect(() => {
     const gartensObservable = db
       .get('garten')
       .query(
@@ -102,23 +94,30 @@ const PersonArten = ({ person }) => {
         Q.where('id', Q.notIn(gvGartenIds)),
       )
       .observe()
-    const subscription = gartensObservable.subscribe(async (gartens) => {
-      const gartensSorted = await gartensSortedFromGartens(gartens)
-      const gartenWerte = await Promise.all(
-        gartensSorted.map(async (garten) => {
-          const label = await garten.label.pipe(first$()).toPromise()
+    const combinedObservables = combineLatest([
+      gvsObservable,
+      gartensObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([gvs, gartens]) => {
+        const gvsSorted = await gvsSortByGarten(gvs)
+        const gartensSorted = await gartensSortedFromGartens(gartens)
+        const gartenWerte = await Promise.all(
+          gartensSorted.map(async (garten) => {
+            const label = await garten.label.pipe(first$()).toPromise()
 
-          return {
-            value: garten.id,
-            label,
-          }
-        }),
-      )
-      setGartenWerte(gartenWerte)
-    })
+            return {
+              value: garten.id,
+              label,
+            }
+          }),
+        )
+        setDataState({ gvs: gvsSorted, gartenWerte })
+      },
+    )
     return () => subscription.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db, gvGartenIds.length])
+  }, [person.gvs, gvGartenIds.length, db])
 
   const saveToDb = useCallback(
     async (event) => {
@@ -153,7 +152,7 @@ const PersonArten = ({ person }) => {
         ref={titleRowRef}
         data-sticky={isSticky}
       >
-        <Title>{`Mitarbeitend bei ${gvsSorted.length} Gärten`}</Title>
+        <Title>{`Mitarbeitend bei ${gvs.length} Gärten`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -168,8 +167,11 @@ const PersonArten = ({ person }) => {
         {open && (
           <>
             <Gvs>
-              {gvsSorted.map((gv) => (
-                <Garten key={`${gv.person_id}/${gv.garten_id}`} gv={gv} />
+              {gvs.map((gv, index) => (
+                <Garten
+                  key={`${gv.person_id}/${gv.garten_id}/${index}`}
+                  gv={gv}
+                />
               ))}
             </Gvs>
             {!!gartenWerte.length && (
