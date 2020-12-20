@@ -98,7 +98,7 @@ const TeilkulturForm = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db, row.kultur, row.kultur_id])
+  }, [db, row.kultur, row.kultur_id, showFilter])
   const { kulturWerte, kulturOption } = dataState
 
   const { tk_bemerkungen } = kulturOption ?? {}

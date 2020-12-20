@@ -74,7 +74,9 @@ const GartenForm = ({
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observeWithColumns(['vorname', 'name'])
     const personObservable = row.person ? row.person.observe() : $of({})
-    const gvsObservable = row.gvs.extend(Q.where('_deleted', false)).observe()
+    const gvsObservable = row.gvs
+      ? row.gvs.extend(Q.where('_deleted', false)).observe()
+      : $of([])
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       personsObservable,
@@ -107,7 +109,7 @@ const GartenForm = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db, row.gvs, row.person, user])
+  }, [db, row.gvs, row.person, showFilter, user])
   const { personWerte, userPersonOption, gvs } = dataState
   const gvPersonIds = gvs.map((v) => v.person_id)
 
@@ -277,8 +279,12 @@ const GartenForm = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        <Personen gartenId={row.id} garten={row} />
-        {!showFilter && <Files parentTable="garten" parent={row} />}
+        {!showFilter && (
+          <>
+            <Personen gartenId={row.id} garten={row} />{' '}
+            <Files parentTable="garten" parent={row} />
+          </>
+        )}
       </FieldsContainer>
     </SimpleBar>
   )

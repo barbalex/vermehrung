@@ -101,7 +101,7 @@ const ZaehlungForm = ({
     })
 
     return () => subscription.unsubscribe()
-  }, [db, row.art_id, row.kultur, row.kultur_option])
+  }, [db, row.art_id, row.kultur, row.kultur_option, showFilter])
   const { kulturWerte, kulturOption } = dataState
 
   const z_bemerkungen = kulturOption?.z_bemerkungen ?? true
