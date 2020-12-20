@@ -35,7 +35,7 @@ const TkEvents = ({ teilkultur }) => {
       .extend(Q.where('_deleted', false))
       .observeWithColumns(['datum', 'beschreibung', 'geplant'])
     const subscription = eventsObservable.subscribe((events) => {
-      const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+      const eventsSorted = events.sort(eventSort)
       setEvents(eventsSorted)
     })
     return () => subscription.unsubscribe()

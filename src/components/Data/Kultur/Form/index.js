@@ -272,12 +272,10 @@ const KulturForm = ({
             }
           }),
         )
-        const herkunftWerte = herkunfts
-          .sort((a, b) => herkunftSort({ a, b }))
-          .map((herkunft) => ({
-            value: herkunft.id,
-            label: herkunftLabelFromHerkunft({ herkunft }),
-          }))
+        const herkunftWerte = herkunfts.sort(herkunftSort).map((herkunft) => ({
+          value: herkunft.id,
+          label: herkunftLabelFromHerkunft({ herkunft }),
+        }))
 
         setDataState2({
           artWerte,

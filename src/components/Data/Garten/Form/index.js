@@ -89,7 +89,7 @@ const GartenForm = ({
           'id',
         )
         const personWerte = personsIncludingInactiveChoosen
-          .sort((a, b) => personSort({ a, b }))
+          .sort(personSort)
           .map((person) => ({
             value: person.id,
             label: personLabelFromPerson({ person }),

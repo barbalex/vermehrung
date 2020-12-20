@@ -63,7 +63,7 @@ const SammelLieferungWer = ({ showFilter, row, ifNeeded, saveToDb }) => {
         'id',
       )
       const personWerte = personsIncludingInactiveChoosen
-        .sort((a, b) => personSort({ a, b }))
+        .sort(personSort)
         .map((el) => ({
           value: el.id,
           label: personLabelFromPerson({ person: el }),

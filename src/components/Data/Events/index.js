@@ -90,7 +90,7 @@ const Events = ({ filter: showFilter, width, height }) => {
     const subscription = combinedObservables.subscribe(
       ([totalCount, events]) => {
         setDataState({
-          events: events.sort((a, b) => eventSort({ a, b })),
+          events: events.sort(eventSort),
           totalCount,
         })
       },

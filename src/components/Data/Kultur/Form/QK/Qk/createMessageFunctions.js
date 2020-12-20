@@ -17,7 +17,7 @@ const createMessageFunctions = async ({ kulturId, db }) => {
   const now = new Date()
 
   const events = await db.get('event').query(notDeletedQuery).fetch()
-  const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+  const eventsSorted = events.sort(eventSort)
   const kulturs = await db
     .get('kultur')
     .query(Q.where('_deleted', false), Q.where('aktiv', true))

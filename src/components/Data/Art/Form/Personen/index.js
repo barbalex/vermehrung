@@ -98,7 +98,7 @@ const ArtPersonen = ({ art }) => {
         const avPersonIds = avsSorted.map((v) => v.person_id)
         const personWerte = persons
           .filter((a) => !avPersonIds.includes(a.id))
-          .sort((a, b) => personSort({ a, b }))
+          .sort(personSort)
           .map((el) => ({
             value: el.id,
             label: personLabelFromPerson({ person: el }),
