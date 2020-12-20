@@ -43,7 +43,7 @@ const kulturLabelFromKultur = ({
     .filter((e) => !!e)
     .join('; ')
 
-  return label
+  return label ?? '(Kultur ohne Art, Herkunft und Garten)'
 }
 
 export default kulturLabelFromKultur

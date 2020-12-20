@@ -798,6 +798,7 @@ export class Kultur extends Model {
   @relation('garten', 'garten_id') garten
   @relation('art', 'art_id') art
   @relation('herkunft', 'herkunft_id') herkunft
+
   @lazy anlieferungs = this.collections
     .get('lieferung')
     .query(Q.where('nach_kultur_id', this.id))
