@@ -5,8 +5,6 @@ import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
 
 import StoreContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
@@ -75,18 +73,12 @@ const File = ({ file, parent }) => {
 
   useEffect(() => unsetError(`${parent}_file`), [file, parent, unsetError])
 
-  const onClickDelete = useCallback(() => {
-    store[`mutateDelete_${parent}_file`](
-      {
-        where: { id: { _eq: file.id } },
-      },
-      undefined,
-      () => {
-        store[`${parent}s`].delete(file.id)
-      },
-    )
-    store[`delete${upperFirst(camelCase(parent))}FileModel`](file)
-  }, [file, parent, store])
+  const onClickDelete = useCallback(
+    async () =>
+      // TODO: need to add delete to all file models
+      file.delete({ store }),
+    [file, store],
+  )
   const onClickDownload = useCallback(
     () => window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`),
     [file],
@@ -96,12 +88,8 @@ const File = ({ file, parent }) => {
     async (event) => {
       const field = event.target.name
       const value = event.target.value || null
-      const newObject = { ...file.toJSON(), ...{ [field]: value } }
-      delete newObject.__typename
-      await store[`mutateUpdate_${parent}_file`]({
-        _set: newObject,
-        where: { id: { _eq: file.id } },
-      })
+      // TODO: need to add edit to all file models
+      await file.edit({ field, value, store })
       unsetError(`${parent}_file`)
     },
     [file, parent, store, unsetError],

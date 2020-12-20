@@ -110,6 +110,7 @@ export const artFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const aeArt = gql`
@@ -251,6 +252,7 @@ export const gartenFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const gv = gql`
@@ -341,6 +343,7 @@ export const herkunftFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const kultur = gql`
@@ -467,6 +470,7 @@ export const kulturFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const kulturOption = gql`
@@ -585,6 +589,7 @@ export const lieferungFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const person = gql`
@@ -731,6 +736,7 @@ export const personFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const sammelLieferung = gql`
@@ -851,6 +857,7 @@ export const sammlungFile = gql`
     name
     beschreibung
     changed
+    _rev_at
   }
 `
 export const teilkultur = gql`

@@ -19,6 +19,7 @@ import 'react-image-lightbox/style.css'
 import isImageFile from './isImageFile'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import fileSort from '../../../utils/fileSort'
+import mutations from '../../../utils/mutations'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -62,7 +63,7 @@ const Content = styled.div`
 
 const Files = ({ parentTable, parent }) => {
   const store = useContext(StoreContext)
-  const { online } = store
+  const { online, rawQglClient } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
@@ -78,7 +79,7 @@ const Files = ({ parentTable, parent }) => {
   }, [parent.files])
 
   const onChangeUploader = useCallback(
-    (file) => {
+    async (file) => {
       if (file) {
         file.done(async (info) => {
           const newObject = {
@@ -94,17 +95,24 @@ const Files = ({ parentTable, parent }) => {
             // which enables overriding watermelons own id
             await db.batch([collection.prepareCreateFromDirtyRaw(newObject)])
           })
-          await store[`mutateInsert_${parentTable}_file_one`]({
+          // TODO: need to add mutations for all file-tables
+          const mutation = mutations[`mutateInsert_${parentTable}_file_one`]
+          const variables = {
             object: newObject,
             on_conflict: {
               constraint: `${parentTable}_file_pkey`,
               update_columns: ['id'],
             },
-          })
+          }
+          try {
+            await rawQglClient.mutation(mutation, variables).toPromise()
+          } catch (error) {
+            console.log(error)
+          }
         })
       }
     },
-    [db, parent.id, parentTable, store],
+    [db, parent.id, parentTable, rawQglClient],
   )
 
   const images = files.filter((f) => isImageFile(f))
