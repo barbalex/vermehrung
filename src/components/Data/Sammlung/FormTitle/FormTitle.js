@@ -39,6 +39,7 @@ const TitleSymbols = styled.div`
 
 const SammlungFormTitle = ({
   row,
+  rawRow,
   totalCount,
   filteredCount,
   width,
@@ -92,6 +93,7 @@ const SammlungFormTitle = ({
           <Menu white={false}>
             <HistoryButton
               row={row}
+              rawRow={rawRow}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -135,6 +137,7 @@ const SammlungFormTitle = ({
         <DeleteButton row={row} />
         <HistoryButton
           row={row}
+          rawRow={rawRow}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />

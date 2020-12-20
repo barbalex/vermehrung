@@ -39,6 +39,7 @@ const TitleSymbols = styled.div`
 
 const Herkunft = ({
   row,
+  rawRow,
   totalCount,
   filteredCount,
   width,
@@ -86,6 +87,7 @@ const Herkunft = ({
           <Menu white={false}>
             <HistoryButton
               row={row}
+              rawRow={rawRow}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -123,6 +125,7 @@ const Herkunft = ({
         )}
         <HistoryButton
           row={row}
+          rawRow={rawRow}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
