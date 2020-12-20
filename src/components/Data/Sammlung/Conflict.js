@@ -8,6 +8,7 @@ import { useQuery } from 'urql'
 import StoreContext from '../../../storeContext'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import mutations from '../../../utils/mutations'
 import Conflict from '../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
@@ -49,7 +50,7 @@ const SammlungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db } = store
+  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -173,13 +174,15 @@ const SammlungConflict = ({
       : toPgArray([rev])
     //console.log('Sammlung Conflict', { row, revRow, newObject })
     try {
-      await store.mutateInsert_sammlung_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
+      await rawQglClient
+        .query(mutations.mutateInsert_sammlung_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'sammlung_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
     } catch (error) {
       checkForOnlineError(error)
       addNotification({
@@ -190,6 +193,7 @@ const SammlungConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
+    rawQglClient,
     revRow._deleted,
     revRow.andere_menge,
     revRow.anzahl_pflanzen,
@@ -207,7 +211,6 @@ const SammlungConflict = ({
     row._depth,
     row._rev,
     row._revisions,
-    store,
     user.email,
   ])
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [

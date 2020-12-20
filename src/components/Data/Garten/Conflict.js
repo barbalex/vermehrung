@@ -8,6 +8,7 @@ import { useQuery } from 'urql'
 import StoreContext from '../../../storeContext'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import mutations from '../../../utils/mutations'
 import Conflict from '../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
@@ -45,7 +46,7 @@ const GartenConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db } = store
+  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
 
   const [{ error, data, fetching }] = useQuery({
     query: gartenRevQuery,
@@ -154,13 +155,15 @@ const GartenConflict = ({
       : toPgArray([rev])
     //console.log('Garten Conflict', { row, revRow, newObject })
     try {
-      await store.mutateInsert_garten_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'garten_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
+      await rawQglClient
+        .query(mutations.mutateInsert_garten_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'garten_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
     } catch (error) {
       checkForOnlineError(error)
       addNotification({
@@ -171,6 +174,7 @@ const GartenConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
+    rawQglClient,
     revRow._deleted,
     revRow.aktiv,
     revRow.bemerkungen,
@@ -184,7 +188,6 @@ const GartenConflict = ({
     row._depth,
     row._rev,
     row._revisions,
-    store,
     user.email,
   ])
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [

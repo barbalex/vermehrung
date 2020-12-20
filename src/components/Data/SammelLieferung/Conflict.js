@@ -8,6 +8,7 @@ import { useQuery } from 'urql'
 import StoreContext from '../../../storeContext'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import mutations from '../../../utils/mutations'
 import Conflict from '../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
@@ -53,7 +54,7 @@ const SammelLieferungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db } = store
+  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -183,13 +184,15 @@ const SammelLieferungConflict = ({
       : toPgArray([rev])
     //console.log('SammelLieferung Conflict', { row, revRow, newObject })
     try {
-      await store.mutateInsert_sammel_lieferung_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammel_lieferung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
+      await rawQglClient
+        .query(mutations.mutateInsert_sammel_lieferung_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'sammel_lieferung_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
     } catch (error) {
       checkForOnlineError(error)
       addNotification({
@@ -200,6 +203,7 @@ const SammelLieferungConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
+    rawQglClient,
     revRow._deleted,
     revRow.andere_menge,
     revRow.anzahl_auspflanzbereit,
@@ -219,7 +223,6 @@ const SammelLieferungConflict = ({
     row._depth,
     row._rev,
     row._revisions,
-    store,
     user.email,
   ])
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [
