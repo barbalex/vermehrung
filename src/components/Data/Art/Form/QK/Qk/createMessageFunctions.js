@@ -80,9 +80,7 @@ const createMessageFunctions = async ({ artId, db }) => {
       Q.where('_deleted', false),
     )
     .fetch()
-  const teilkultursOfArtSorted = teilkultursOfArt.sort((a, b) =>
-    teilkulturSort({ a, b }),
-  )
+  const teilkultursOfArtSorted = teilkultursOfArt.sort(teilkulturSort)
   const eventsOfArt = await db
     .get('event')
     .query(

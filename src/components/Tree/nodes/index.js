@@ -406,9 +406,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   n[4] === 'Teilkulturen',
               )
               if (artKulturTeilkulturFolderIsOpen) {
-                const teilkultursSorted = teilkulturs.sort((a, b) =>
-                  teilkulturSort({ a, b }),
-                )
+                const teilkultursSorted = teilkulturs.sort(teilkulturSort)
                 artKulturTeilkulturNodes = teilkultursSorted.map(
                   (teilkultur, teilkulturIndex) =>
                     buildArtKulturTeilkultur({
@@ -890,9 +888,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   n[4] === 'Teilkulturen',
               )
               if (gartenKulturTeilkulturFolderIsOpen) {
-                const teilkultursSorted = teilkulturs.sort((a, b) =>
-                  teilkulturSort({ a, b }),
-                )
+                const teilkultursSorted = teilkulturs.sort(teilkulturSort)
                 gartenKulturTeilkulturNodes = teilkultursSorted.map(
                   (teilkultur, teilkulturIndex) =>
                     buildGartenKulturTeilkultur({
@@ -1120,9 +1116,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           )
           if (kulturTeilkulturFolderIsOpen) {
             const teilkulturs = await kulturTeilkulturQuery.fetch()
-            const teilkultursSorted = teilkulturs.sort((a, b) =>
-              teilkulturSort({ a, b }),
-            )
+            const teilkultursSorted = teilkulturs.sort(teilkulturSort)
             kulturTeilkulturNodes = teilkultursSorted.map(
               (teilkultur, teilkulturIndex) =>
                 buildKulturTeilkultur({
@@ -1279,9 +1273,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     teilkulturFolderNodes = buildTeilkulturFolder({ count: teilkulturCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Teilkulturen')) {
       const teilkulturs = await teilkulturQuery.fetch()
-      const teilkultursSorted = teilkulturs.sort((a, b) =>
-        teilkulturSort({ a, b }),
-      )
+      const teilkultursSorted = teilkulturs.sort(teilkulturSort)
       teilkulturNodes = teilkultursSorted.map((teilkultur, index) =>
         buildTeilkultur({ teilkultur, index }),
       )
@@ -1604,9 +1596,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
                   if (personGartenKulturTeilkulturFolderIsOpen) {
                     const teilkulturs = await teilkulturQuery.fetch()
-                    const teilkultursSorted = teilkulturs.sort((a, b) =>
-                      teilkulturSort({ a, b }),
-                    )
+                    const teilkultursSorted = teilkulturs.sort(teilkulturSort)
                     personGartenKulturTeilkulturNodes = teilkultursSorted.map(
                       (teilkultur, teilkulturIndex) =>
                         buildPersonGartenKulturTeilkultur({
