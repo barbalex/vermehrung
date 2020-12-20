@@ -71,7 +71,7 @@ const buildOptions = async ({ store, cb, val }) => {
     .get('zaehlung')
     .query(...tableFilter({ store, table: 'zaehlung' }))
     .fetch()
-  const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
+  const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
 
   const options = []
   const searchArtSuggestions = await Promise.all(

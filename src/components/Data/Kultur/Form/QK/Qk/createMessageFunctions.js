@@ -28,7 +28,7 @@ const createMessageFunctions = async ({ kulturId, db }) => {
   const teilkulturs = await db.get('teilkultur').query(notDeletedQuery).fetch()
   const teilkultursSorted = teilkulturs.sort(teilkulturSort)
   const zaehlungs = await db.get('zaehlung').query(notDeletedQuery).fetch()
-  const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
+  const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
   const teilzaehlungs = await db
     .get('teilzaehlung')
     .query(notDeletedQuery)

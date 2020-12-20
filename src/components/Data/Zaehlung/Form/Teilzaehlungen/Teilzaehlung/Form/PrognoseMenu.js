@@ -94,9 +94,7 @@ const PrognoseMenu = ({
           Q.where('kultur_id', kulturId),
         )
         .fetch()
-      const existingZaehlungDataSorted = existingZaehlungData.sort((a, b) =>
-        zaehlungSort({ a, b }),
-      )
+      const existingZaehlungDataSorted = existingZaehlungData.sort(zaehlungSort)
       const existingZaehlung = existingZaehlungDataSorted?.[0]
       // if not: create it first
       let newZaehlungId

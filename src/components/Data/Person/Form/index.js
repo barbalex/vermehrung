@@ -62,12 +62,10 @@ const Person = ({
     ])
     const subscription = combinedObservables.subscribe(
       async ([userRoles, nrCount]) => {
-        const userRoleWerte = userRoles
-          .sort((a, b) => userRoleSort({ a, b }))
-          .map((el) => ({
-            value: el.id,
-            label: el.label,
-          }))
+        const userRoleWerte = userRoles.sort(userRoleSort).map((el) => ({
+          value: el.id,
+          label: el.label,
+        }))
         const userRole = await row.user_role?.fetch()
         if (!showFilter && nrCount > 1) {
           setError({

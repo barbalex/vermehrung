@@ -97,7 +97,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
     const subscription = combinedObservables.subscribe(
       ([totalCount, zaehlungs]) => {
         setDataState({
-          zaehlungs: zaehlungs.sort((a, b) => zaehlungSort({ a, b })),
+          zaehlungs: zaehlungs.sort(zaehlungSort),
           totalCount,
         })
       },

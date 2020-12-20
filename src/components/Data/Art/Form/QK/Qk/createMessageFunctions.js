@@ -60,9 +60,7 @@ const createMessageFunctions = async ({ artId, db }) => {
       Q.where('_deleted', false),
     )
     .fetch()
-  const zaehlungsOfArtSorted = zaehlungsOfArt.sort((a, b) =>
-    zaehlungSort({ a, b }),
-  )
+  const zaehlungsOfArtSorted = zaehlungsOfArt.sort(zaehlungSort)
   const teilzaehlungsOfArt = await db
     .get('teilzaehlung')
     .query(
@@ -515,9 +513,7 @@ const createMessageFunctions = async ({ artId, db }) => {
           Q.where('_deleted', false),
         )
         .fetch()
-      const zaehlungsOfArtSorted = zaehlungsOfArt.sort((a, b) =>
-        zaehlungSort({ a, b }),
-      )
+      const zaehlungsOfArtSorted = zaehlungsOfArt.sort(zaehlungSort)
       return await Promise.all(
         zaehlungsOfArtSorted
           .filter((z) => {

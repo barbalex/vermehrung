@@ -44,9 +44,7 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
           Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
         )
         .fetch()
-      const ownZaehlungenSorted = ownZaehlungen.sort((a, b) =>
-        zaehlungSort({ a, b }),
-      )
+      const ownZaehlungenSorted = ownZaehlungen.sort(zaehlungSort)
       const lastZaehlung = ownZaehlungenSorted[ownZaehlungenSorted.length - 1]
       const lZTeilzaehlungs = lastZaehlung
         ? await lastZaehlung?.teilzaehlungs
