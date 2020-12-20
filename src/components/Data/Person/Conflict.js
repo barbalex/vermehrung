@@ -8,6 +8,7 @@ import { useQuery } from 'urql'
 import StoreContext from '../../../storeContext'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import mutations from '../../../utils/mutations'
 import Conflict from '../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
@@ -54,7 +55,7 @@ const PersonConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db } = store
+  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -193,13 +194,15 @@ const PersonConflict = ({
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
     try {
-      await store.mutateInsert_person_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'person_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
+      await rawQglClient
+        .query(mutations.mutateInsert_person_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'person_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
     } catch (error) {
       checkForOnlineError(error)
       addNotification({
@@ -210,6 +213,7 @@ const PersonConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
+    rawQglClient,
     revRow._deleted,
     revRow.account_id,
     revRow.adresszusatz,
@@ -233,7 +237,6 @@ const PersonConflict = ({
     row._depth,
     row._rev,
     row._revisions,
-    store,
     user.email,
   ])
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [

@@ -8,6 +8,7 @@ import gql from 'graphql-tag'
 import StoreContext from '../../../storeContext'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import mutations from '../../../utils/mutations'
 import Conflict from '../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
@@ -43,7 +44,7 @@ const HerkunftConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db } = store
+  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
 
   const [{ error, data, fetching }] = useQuery({
     query: herkunftRevQuery,
@@ -152,13 +153,15 @@ const HerkunftConflict = ({
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
     try {
-      await store.mutateInsert_herkunft_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'herkunft_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
+      await rawQglClient
+        .query(mutations.mutateInsert_herkunft_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'herkunft_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
     } catch (error) {
       checkForOnlineError(error)
       addNotification({
@@ -169,6 +172,7 @@ const HerkunftConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
+    rawQglClient,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.gemeinde,
@@ -181,7 +185,6 @@ const HerkunftConflict = ({
     row._depth,
     row._rev,
     row._revisions,
-    store,
     user.email,
   ])
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [

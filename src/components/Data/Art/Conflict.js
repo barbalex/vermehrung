@@ -9,6 +9,7 @@ import StoreContext from '../../../storeContext'
 import Conflict from '../../shared/Conflict'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import mutations from '../../../utils/mutations'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
 const artRevQuery = gql`
@@ -38,7 +39,7 @@ const ArtConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db } = store
+  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -126,13 +127,15 @@ const ArtConflict = ({
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
     try {
-      await store.mutateInsert_art_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'art_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
+      await rawQglClient
+        .query(mutations.mutateInsert_art_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'art_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
     } catch (error) {
       checkForOnlineError(error)
       addNotification({
@@ -143,13 +146,13 @@ const ArtConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
+    rawQglClient,
     revRow._deleted,
     revRow.ae_id,
     revRow.art_id,
     row._depth,
     row._rev,
     row._revisions,
-    store,
     user.email,
   ])
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [
