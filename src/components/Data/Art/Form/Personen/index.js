@@ -155,8 +155,8 @@ const ArtPersonen = ({ art }) => {
         {open && (
           <>
             <Aven>
-              {avsSorted.map((av) => (
-                <Person key={`${av.art_id}/${av.person_id}`} av={av} />
+              {avsSorted.map((av, index) => (
+                <Person key={`${av.art_id}/${av.person_id}/${index}`} av={av} />
               ))}
             </Aven>
             {!!personWerte.length && (
