@@ -55,7 +55,7 @@ const buildOptions = async ({ store, cb, val }) => {
     .get('lieferung')
     .query(...tableFilter({ store, table: 'lieferung' }))
     .fetch()
-  const lieferungsSorted = lieferungs.sort((a, b) => lieferungSort({ a, b }))
+  const lieferungsSorted = lieferungs.sort(lieferungSort)
   const persons = await db
     .get('person')
     .query(...tableFilter({ store, table: 'person' }))

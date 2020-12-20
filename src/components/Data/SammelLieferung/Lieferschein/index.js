@@ -124,7 +124,7 @@ const Lieferschein = ({ row }) => {
     const subscription = combinedObservables.subscribe(
       async ([lieferungs, vonKulturGarten, person]) =>
         setDataState({
-          lieferungs: lieferungs.sort((a, b) => lieferungSort({ a, b })),
+          lieferungs: lieferungs.sort(lieferungSort),
           vonKulturGarten,
           person,
         }),
