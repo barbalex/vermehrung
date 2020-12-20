@@ -324,9 +324,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 n[4] === 'Aus-Lieferungen',
             )
             if (artSammlungAuslieferungFolderIsOpen) {
-              const lieferungsSorted = lieferungs.sort((a, b) =>
-                lieferungSort({ a, b }),
-              )
+              const lieferungsSorted = lieferungs.sort(lieferungSort)
               artSammlungAuslieferungNodes = lieferungsSorted.map(
                 (lieferung, lieferungIndex) =>
                   buildArtSammlungAuslieferung({
@@ -483,9 +481,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 n[4] === 'An-Lieferungen',
             )
             if (artKulturAnlieferungFolderIsOpen) {
-              const anlieferungsSorted = anlieferungs.sort((a, b) =>
-                lieferungSort({ a, b }),
-              )
+              const anlieferungsSorted = anlieferungs.sort(lieferungSort)
               artKulturAnlieferungNodes = anlieferungsSorted.map(
                 (lieferung, lieferungIndex) =>
                   buildArtKulturAnlieferung({
@@ -527,9 +523,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 n[4] === 'Aus-Lieferungen',
             )
             if (artKulturAuslieferungFolderIsOpen) {
-              const auslieferungsSorted = auslieferungs.sort((a, b) =>
-                lieferungSort({ a, b }),
-              )
+              const auslieferungsSorted = auslieferungs.sort(lieferungSort)
               artKulturAuslieferungNodes = auslieferungsSorted.map(
                 (lieferung, lieferungIndex) =>
                   buildArtKulturAuslieferung({
@@ -675,9 +669,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 n[4] === 'Aus-Lieferungen',
             )
             if (herkunftSammlungAuslieferungFolderIsOpen) {
-              const lieferungsSorted = lieferungs.sort((a, b) =>
-                lieferungSort({ a, b }),
-              )
+              const lieferungsSorted = lieferungs.sort(lieferungSort)
               herkunftSammlungAuslieferungNodes = lieferungsSorted.map(
                 (lieferung, lieferungIndex) =>
                   buildHerkunftSammlungAuslieferung({
@@ -769,9 +761,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
         )
         if (sammlungAuslieferungFolderIsOpen) {
           const lieferungs = await sammlungLieferungQuery.fetch()
-          const lieferungsSorted = lieferungs.sort((a, b) =>
-            lieferungSort({ a, b }),
-          )
+          const lieferungsSorted = lieferungs.sort(lieferungSort)
           sammlungAuslieferungNodes = lieferungsSorted.map(
             (lieferung, lieferungIndex) =>
               buildSammlungAuslieferung({
@@ -968,9 +958,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 n[4] === 'Aus-Lieferungen',
             )
             if (gartenKulturAnlieferungFolderIsOpen) {
-              const anlieferungsSorted = anlieferungs.sort((a, b) =>
-                lieferungSort({ a, b }),
-              )
+              const anlieferungsSorted = anlieferungs.sort(lieferungSort)
               gartenKulturAnlieferungNodes = anlieferungsSorted.map(
                 (lieferung, lieferungIndex) =>
                   buildGartenKulturAnlieferung({
@@ -1007,9 +995,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 n[4] === 'Aus-Lieferungen',
             )
             if (gartenKulturAuslieferungFolderIsOpen) {
-              const auslieferungsSorted = auslieferungs.sort((a, b) =>
-                lieferungSort({ a, b }),
-              )
+              const auslieferungsSorted = auslieferungs.sort(lieferungSort)
               gartenKulturAuslieferungNodes = auslieferungsSorted.map(
                 (lieferung, lieferungIndex) =>
                   buildGartenKulturAuslieferung({
@@ -1178,9 +1164,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
         )
         if (kulturAnlieferungFolderIsOpen) {
           const anlieferungs = await kulturAnlieferungQuery.fetch()
-          const anlieferungsSorted = anlieferungs.sort((a, b) =>
-            lieferungSort({ a, b }),
-          )
+          const anlieferungsSorted = anlieferungs.sort(lieferungSort)
           kulturAnlieferungNodes = anlieferungsSorted.map(
             (lieferung, lieferungIndex) =>
               buildKulturAnlieferung({
@@ -1211,9 +1195,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
         )
         if (kulturAuslieferungFolderIsOpen) {
           const auslieferungs = await kulturAuslieferungQuery.fetch()
-          const auslieferungsSorted = auslieferungs.sort((a, b) =>
-            lieferungSort({ a, b }),
-          )
+          const auslieferungsSorted = auslieferungs.sort(lieferungSort)
           kulturAuslieferungNodes = auslieferungsSorted.map(
             (lieferung, lieferungIndex) =>
               buildKulturAuslieferung({
@@ -1301,9 +1283,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     lieferungFolderNodes = buildLieferungFolder({ count: lieferungCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Lieferungen')) {
       const lieferungs = await lieferungQuery.fetch()
-      const lieferungsSorted = lieferungs.sort((a, b) =>
-        lieferungSort({ a, b }),
-      )
+      const lieferungsSorted = lieferungs.sort(lieferungSort)
       lieferungNodes = lieferungsSorted.map((lieferung, index) =>
         buildLieferung({ lieferung, index }),
       )
@@ -1323,9 +1303,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
       openNodes.some((n) => n.length === 1 && n[0] === 'Sammel-Lieferungen')
     ) {
       const sammelLieferungs = await sammelLieferungQuery.fetch()
-      const sammelLieferungsSorted = sammelLieferungs.sort((a, b) =>
-        lieferungSort({ a, b }),
-      )
+      const sammelLieferungsSorted = sammelLieferungs.sort(lieferungSort)
       sammelLieferungNodes = await Promise.all(
         sammelLieferungsSorted.map(
           async (sammelLieferung, index) =>
@@ -1354,9 +1332,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
         const lieferungs = await sammelLieferung.lieferungs
           .extend(...tableFilter({ store, table: 'lieferung' }))
           .fetch()
-        const lieferungsSorted = lieferungs.sort((a, b) =>
-          lieferungSort({ a, b }),
-        )
+        const lieferungsSorted = lieferungs.sort(lieferungSort)
         sammelLieferungLieferungFolderNodes = buildSammelLieferungLieferungFolder(
           {
             children: lieferungsSorted,
@@ -1685,9 +1661,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
                 if (personGartenKulturAnlieferungFolderIsOpen) {
                   const anlieferungs = await anlieferungQuery.fetch()
-                  const anlieferungsSorted = anlieferungs.sort((a, b) =>
-                    lieferungSort({ a, b }),
-                  )
+                  const anlieferungsSorted = anlieferungs.sort(lieferungSort)
                   personGartenKulturAnlieferungNodes = anlieferungsSorted.map(
                     (lieferung, lieferungIndex) =>
                       buildPersonGartenKulturAnlieferung({
@@ -1733,9 +1707,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
                 if (personGartenKulturAuslieferungFolderIsOpen) {
                   const auslieferungs = await auslieferungQuery.fetch()
-                  const auslieferungsSorted = auslieferungs.sort((a, b) =>
-                    lieferungSort({ a, b }),
-                  )
+                  const auslieferungsSorted = auslieferungs.sort(lieferungSort)
                   personGartenKulturAuslieferungNodes = auslieferungsSorted.map(
                     (lieferung, lieferungIndex) =>
                       buildPersonGartenKulturAuslieferung({
@@ -1822,9 +1794,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
         )
         if (personLieferungFolderIsOpen) {
           const lieferungs = await personLieferungQuery.fetch()
-          const lieferungsSorted = lieferungs.sort((a, b) =>
-            lieferungSort({ a, b }),
-          )
+          const lieferungsSorted = lieferungs.sort(lieferungSort)
           personLieferungNodes = lieferungsSorted.map((lieferung, index) =>
             buildPersonLieferung({
               lieferung,

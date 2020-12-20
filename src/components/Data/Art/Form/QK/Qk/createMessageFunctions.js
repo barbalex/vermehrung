@@ -39,7 +39,7 @@ const createMessageFunctions = async ({ artId, db }) => {
     .fetch()
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
   const lieferungs = await db.get('lieferung').query(notDeletedQuery).fetch()
-  const lieferungsSorted = lieferungs.sort((a, b) => lieferungSort({ a, b }))
+  const lieferungsSorted = lieferungs.sort(lieferungSort)
   const persons = await db
     .get('person')
     .query(Q.where('_deleted', false), Q.where('aktiv', true))

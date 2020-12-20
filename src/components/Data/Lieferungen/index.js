@@ -124,7 +124,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
     const subscription = combinedObservables.subscribe(
       ([totalCount, lieferungs]) => {
         setDataState({
-          lieferungs: lieferungs.sort((a, b) => lieferungSort({ a, b })),
+          lieferungs: lieferungs.sort(lieferungSort),
           totalCount,
         })
       },

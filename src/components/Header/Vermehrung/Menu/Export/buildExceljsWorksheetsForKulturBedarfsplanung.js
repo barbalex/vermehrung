@@ -87,9 +87,7 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
           Q.where('anzahl_pflanzen', Q.notEq(null)),
         )
         .fetch()
-      const lieferungsSorted = lieferungs.sort((a, b) =>
-        lieferungSort({ a, b }),
-      )
+      const lieferungsSorted = lieferungs.sort(lieferungSort)
 
       const ownAusLieferungen = lieferungsSorted.filter(
         (l) => l.von_kultur_id === kultur.id,

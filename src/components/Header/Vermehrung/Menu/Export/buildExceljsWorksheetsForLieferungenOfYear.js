@@ -17,7 +17,7 @@ const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
     .get('lieferung')
     .query(Q.where('_deleted', false), Q.where('datum', Q.notEq(null)))
     .fetch()
-  const lieferungsSorted = lieferungs.sort((a, b) => lieferungSort({ a, b }))
+  const lieferungsSorted = lieferungs.sort(lieferungSort)
 
   const lieferungsdata = await Promise.all(
     lieferungsSorted

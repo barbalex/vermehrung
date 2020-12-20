@@ -166,7 +166,7 @@ const buildExceljsWorksheets = async ({
     .get('lieferung')
     .query(Q.where('_deleted', false), Q.where('nach_kultur_id', kultur_id))
     .fetch()
-  const lieferungsSorted = anlieferungs.sort((a, b) => lieferungSort({ a, b }))
+  const lieferungsSorted = anlieferungs.sort(lieferungSort)
   const anlieferungData = await Promise.all(
     lieferungsSorted.map(async (l) => {
       const art = await l.art?.fetch()
@@ -296,9 +296,7 @@ const buildExceljsWorksheets = async ({
     .get('lieferung')
     .query(Q.where('_deleted', false), Q.where('von_kultur_id', kultur_id))
     .fetch()
-  const auslieferungsSorted = auslieferungs.sort((a, b) =>
-    lieferungSort({ a, b }),
-  )
+  const auslieferungsSorted = auslieferungs.sort(lieferungSort)
   const auslieferungen = await Promise.all(
     auslieferungsSorted.map(async (l) => {
       const art = await l.art?.fetch()
