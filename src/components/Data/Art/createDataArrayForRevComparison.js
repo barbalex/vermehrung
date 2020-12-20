@@ -1,7 +1,7 @@
 const createDataArrayForRevComparison = ({ row, revRow }) => [
   {
-    valueInRow: row.art_id,
-    valueInRev: revRow.art_id,
+    valueInRow: row.ae_id,
+    valueInRev: revRow.ae_id,
     label: 'Art (id)',
   },
   {

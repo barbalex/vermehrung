@@ -8,11 +8,12 @@ import History from '../../../shared/History'
 import StoreContext from '../../../../storeContext'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../utils/toPgArray'
+import mutations from '../../../../utils/mutations'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, db } = store
+  const { user, addNotification, db, rawQglClient } = store
 
   // need to extract raw value?
   const dataArray = useMemo(
@@ -56,13 +57,15 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     const newObjectForStore = { ...newObject }
     //console.log('Person History', { row, revRow, newObject })
     try {
-      await store.mutateInsert_person_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'person_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
+      await rawQglClient
+        .query(mutations.mutateInsert_person_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'person_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
     } catch (error) {
       checkForOnlineError(error)
       addNotification({
@@ -94,6 +97,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     addNotification,
     db,
     historyTakeoverCallback,
+    rawQglClient,
     revRow._deleted,
     revRow.account_id,
     revRow.adresszusatz,
@@ -115,7 +119,6 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     revRow.user_role_id,
     revRow.vorname,
     row,
-    store,
     user.email,
   ])
 

@@ -8,11 +8,12 @@ import History from '../../../shared/History'
 import StoreContext from '../../../../storeContext'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../utils/toPgArray'
+import mutations from '../../../../utils/mutations'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, db } = store
+  const { user, addNotification, db, rawQglClient } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -43,13 +44,15 @@ const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     const newObjectForStore = { ...newObject }
     //console.log('Teilkultur History', { row, revRow, newObject })
     try {
-      await store.mutateInsert_teilkultur_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'teilkultur_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
+      await rawQglClient
+        .query(mutations.mutateInsert_teilkultur_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'teilkultur_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
     } catch (error) {
       checkForOnlineError(error)
       addNotification({
@@ -81,6 +84,7 @@ const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     addNotification,
     db,
     historyTakeoverCallback,
+    rawQglClient,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.kultur_id,
@@ -90,7 +94,6 @@ const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     revRow.ort3,
     revRow.teilkultur_id,
     row,
-    store,
     user.email,
   ])
 
