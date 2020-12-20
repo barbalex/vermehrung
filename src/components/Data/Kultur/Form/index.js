@@ -221,6 +221,7 @@ const KulturForm = ({
     herkunft_id,
     art_id,
     row.garten_id,
+    showFilter,
   ])
   const {
     gartenWerte,

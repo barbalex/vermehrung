@@ -85,7 +85,7 @@ const LieferungWer = ({
     })
 
     return () => subscription.unsubscribe()
-  }, [db, row.person])
+  }, [db, row.person, showFilter])
 
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)
