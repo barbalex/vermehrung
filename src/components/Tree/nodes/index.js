@@ -444,9 +444,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             )
             if (artKulturZaehlungFolderIsOpen) {
               const zaehlungs = await artKulturZaehlungQuery.fetch()
-              const zaehlungsSorted = zaehlungs.sort((a, b) =>
-                zaehlungSort({ a, b }),
-              )
+              const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
               artKulturZaehlungNodes = await Promise.all(
                 zaehlungsSorted.map(
                   async (zaehlung, zaehlungIndex) =>
@@ -931,9 +929,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 n[4] === 'Zaehlungen',
             )
             if (gartenKulturZaehlungFolderIsOpen) {
-              const zaehlungsSorted = zaehlungs.sort((a, b) =>
-                zaehlungSort({ a, b }),
-              )
+              const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
               gartenKulturZaehlungNodes = await Promise.all(
                 zaehlungsSorted.map(
                   async (zaehlung, zaehlungIndex) =>
@@ -1149,9 +1145,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
         )
         if (kulturZaehlungFolderIsOpen) {
           const zaehlungs = await kulturZaehlungQuery.fetch()
-          const zaehlungsSorted = zaehlungs.sort((a, b) =>
-            zaehlungSort({ a, b }),
-          )
+          const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
           kulturZaehlungNodes = await Promise.all(
             zaehlungsSorted.map(
               async (zaehlung, zaehlungIndex) =>
@@ -1289,7 +1283,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     zaehlungFolderNodes = buildZaehlungFolder({ count: zaehlungCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Zaehlungen')) {
       const zaehlungs = await zaehlungQuery.fetch()
-      const zaehlungsSorted = zaehlungs.sort((a, b) => zaehlungSort({ a, b }))
+      const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
       zaehlungNodes = await Promise.all(
         zaehlungsSorted.map(
           async (zaehlung, index) => await buildZaehlung({ zaehlung, index }),
@@ -1643,9 +1637,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
                 if (personGartenKulturZaehlungFolderIsOpen) {
                   const zaehlungs = await zaehlungQuery.fetch()
-                  const zaehlungsSorted = zaehlungs.sort((a, b) =>
-                    zaehlungSort({ a, b }),
-                  )
+                  const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
                   personGartenKulturZaehlungNodes = await Promise.all(
                     zaehlungsSorted.map(
                       async (zaehlung, zaehlungIndex) =>
