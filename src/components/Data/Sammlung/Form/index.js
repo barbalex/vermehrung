@@ -112,17 +112,15 @@ const SammlungForm = ({
           'id',
         )
         const personWerte = personsIncludingInactiveChoosen
-          .sort((a, b) => personSort({ a, b }))
+          .sort(personSort)
           .map((person) => ({
             value: person.id,
             label: personLabelFromPerson({ person }),
           }))
-        const herkunftWerte = herkunfts
-          .sort((a, b) => herkunftSort({ a, b }))
-          .map((herkunft) => ({
-            value: herkunft.id,
-            label: herkunftLabelFromHerkunft({ herkunft }),
-          }))
+        const herkunftWerte = herkunfts.sort(herkunftSort).map((herkunft) => ({
+          value: herkunft.id,
+          label: herkunftLabelFromHerkunft({ herkunft }),
+        }))
         const artsSorted = await artsSortedFromArts(arts)
         const artWerte = await Promise.all(
           artsSorted.map(async (art) => {

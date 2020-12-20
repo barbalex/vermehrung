@@ -101,7 +101,7 @@ const GartenPersonen = ({ garten }) => {
         const gvPersonIds = gvsSorted.map((v) => v.person_id)
         const personWerte = persons
           .filter((a) => !gvPersonIds.includes(a.id))
-          .sort((a, b) => personSort({ a, b }))
+          .sort(personSort)
           .map((el) => ({
             value: el.id,
             label: personLabelFromPerson({ person: el }),

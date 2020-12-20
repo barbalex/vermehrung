@@ -35,7 +35,7 @@ const buildOptions = async ({ store, cb, val }) => {
     .get('event')
     .query(...tableFilter({ store, table: 'event' }))
     .fetch()
-  const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+  const eventsSorted = events.sort(eventSort)
   const gartens = await db
     .get('garten')
     .query(...tableFilter({ store, table: 'garten' }))
@@ -45,7 +45,7 @@ const buildOptions = async ({ store, cb, val }) => {
     .get('herkunft')
     .query(...tableFilter({ store, table: 'herkunft' }))
     .fetch()
-  const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
+  const herkunftsSorted = herkunfts.sort(herkunftSort)
   const kulturs = await db
     .get('kultur')
     .query(...tableFilter({ store, table: 'kultur' }))
@@ -60,7 +60,7 @@ const buildOptions = async ({ store, cb, val }) => {
     .get('person')
     .query(...tableFilter({ store, table: 'person' }))
     .fetch()
-  const personsSorted = persons.sort((a, b) => personSort({ a, b }))
+  const personsSorted = persons.sort(personSort)
   const sammlungs = await db
     .get('sammlung')
     .query(...tableFilter({ store, table: 'sammlung' }))

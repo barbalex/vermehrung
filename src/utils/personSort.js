@@ -1,6 +1,6 @@
 import personFullname from './personFullname'
 
-const personSort = ({ a, b }) => {
+const personSort = (a, b) => {
   const nameA = personFullname(a)?.toString()?.toLowerCase() ?? ''
   const nameB = personFullname(b)?.toString()?.toLowerCase() ?? ''
   if (nameA < nameB) return -1

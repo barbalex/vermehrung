@@ -568,7 +568,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             )
             if (artKulturEventFolderIsOpen) {
               const events = await eventsQuery.fetch()
-              const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+              const eventsSorted = events.sort(eventSort)
               artKulturEventNodes = eventsSorted.map((event, eventIndex) =>
                 buildArtKulturEvent({
                   event,
@@ -595,7 +595,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     herkunftFolderNodes = buildHerkunftFolder({ count: herkunftCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Herkuenfte')) {
       const herkunfts = await herkunftQuery.fetch()
-      const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
+      const herkunftsSorted = herkunfts.sort(herkunftSort)
       herkunftNodes = herkunftsSorted.map((herkunft, index) =>
         buildHerkunft({ herkunft, index }),
       )
@@ -1050,7 +1050,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             )
             if (gartenKulturEventFolderIsOpen) {
               const events = await gartenKulturEventQuery.fetch()
-              const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+              const eventsSorted = events.sort(eventSort)
               gartenKulturEventNodes = eventsSorted.map((event, eventIndex) =>
                 buildGartenKulturEvent({
                   event,
@@ -1250,7 +1250,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
         )
         if (kulturEventFolderIsOpen) {
           const events = await kulturEventQuery.fetch()
-          const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+          const eventsSorted = events.sort(eventSort)
           kulturEventNodes = eventsSorted.map((event, eventIndex) =>
             buildKulturEvent({
               event,
@@ -1401,7 +1401,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     eventFolderNodes = buildEventFolder({ count: eventCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Events')) {
       const events = await eventQuery.fetch()
-      const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+      const eventsSorted = events.sort(eventSort)
       eventNodes = eventsSorted.map((event, index) =>
         buildEvent({ event, index }),
       )
@@ -1417,7 +1417,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     personFolderNodes = buildPersonFolder({ count: personCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Personen')) {
       const persons = await personQuery.fetch()
-      const personsSorted = persons.sort((a, b) => personSort({ a, b }))
+      const personsSorted = persons.sort(personSort)
       personNodes = personsSorted.map((person, index) =>
         buildPerson({ person, index }),
       )

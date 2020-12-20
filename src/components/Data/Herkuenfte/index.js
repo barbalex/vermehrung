@@ -17,6 +17,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import notDeletedQuery from '../../../utils/notDeletedQuery'
 import tableFilter from '../../../utils/tableFilter'
+import herkunftSort from '../../../utils/herkunftSort'
 
 const Container = styled.div`
   height: 100%;
@@ -91,7 +92,8 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
       herkunftsObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      ([totalCount, herkunfts]) => setDataState({ herkunfts, totalCount }),
+      ([totalCount, herkunfts]) =>
+        setDataState({ herkunfts: herkunfts.sort(herkunftSort), totalCount }),
     )
 
     return () => subscription.unsubscribe()

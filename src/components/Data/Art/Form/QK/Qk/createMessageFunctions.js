@@ -32,7 +32,7 @@ const createMessageFunctions = async ({ artId, db }) => {
     .fetch()
   const gartensSorted = await gartensSortedFromGartens(gartens)
   const herkunfts = await db.get('herkunft').query(notDeletedQuery).fetch()
-  const herkunftsSorted = herkunfts.sort((a, b) => herkunftSort({ a, b }))
+  const herkunftsSorted = herkunfts.sort(herkunftSort)
   const kulturs = await db
     .get('kultur')
     .query(Q.where('_deleted', false), Q.where('aktiv', true))
@@ -44,7 +44,7 @@ const createMessageFunctions = async ({ artId, db }) => {
     .get('person')
     .query(Q.where('_deleted', false), Q.where('aktiv', true))
     .fetch()
-  const personsSorted = persons.sort((a, b) => personSort({ a, b }))
+  const personsSorted = persons.sort(personSort)
   const sammlungsOfArt = await db
     .get('sammlung')
     .query(Q.where('_deleted', false), Q.on('art', 'id', artId))
@@ -89,7 +89,7 @@ const createMessageFunctions = async ({ artId, db }) => {
       Q.where('_deleted', false),
     )
     .fetch()
-  const eventsOfArtSorted = eventsOfArt.sort((a, b) => eventSort({ a, b }))
+  const eventsOfArtSorted = eventsOfArt.sort(eventSort)
 
   // TODO: check if some of this could be optimized using watermelon queries
   return {

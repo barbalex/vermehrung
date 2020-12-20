@@ -422,7 +422,7 @@ const buildExceljsWorksheets = async ({
     .get('event')
     .query(Q.where('_deleted', false), Q.where('kultur_id', kultur_id))
     .fetch()
-  const eventsSorted = events.sort((a, b) => eventSort({ a, b }))
+  const eventsSorted = events.sort(eventSort)
   const eventsData = await Promise.all(
     eventsSorted.map(async (e) => {
       const teilkultur = e.teilkultur_id

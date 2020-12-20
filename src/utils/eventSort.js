@@ -1,4 +1,4 @@
-const eventSort = ({ a, b }) => {
+const eventSort = (a, b) => {
   const datumA = a?.datum ? new Date(a.datum) : ''
   const datumB = b?.datum ? new Date(b.datum) : ''
   if (datumA < datumB) return -1
