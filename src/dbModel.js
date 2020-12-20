@@ -18,6 +18,7 @@ import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
 import { DateTime } from 'luxon'
 import { first as first$ } from 'rxjs/operators'
+import gql from 'graphql-tag'
 
 import toStringIfPossible from './utils/toStringIfPossible'
 import personLabelFromPerson from './utils/personLabelFromPerson'
@@ -35,6 +36,15 @@ import zaehlungLabelFromZaehlung from './utils/zaehlungLabelFromZaehlung'
 import toPgArray from './utils/toPgArray'
 import deleteAccount from './utils/deleteAccount'
 import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
+import {
+  artFile as artFileFragment,
+  gartenFile as gartenFileFragment,
+  herkunftFile as herkunftFileFragment,
+  kulturFile as kulturFileFragment,
+  lieferungFile as lieferungFileFragment,
+  personFile as personFileFragment,
+  sammlungFile as sammlungFileFragment,
+} from './utils/fragments'
 
 const dontSanitize = (val) => val
 /*const sanitizeArrayOfStrings = (val) =>
@@ -1982,8 +1992,82 @@ export class ArtFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
+  @field('_rev_at') _rev_at
 
   @relation('art', 'art_id') art
+
+  @action async edit({ field, value, store }) {
+    // extract only the needed keys
+    const {
+      id,
+      art_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+    } = this
+    const newObject = {
+      id,
+      art_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+      [field]: value,
+      _rev_at: Date.now(),
+    }
+    const mutation = gql`
+      mutation update_art_file(
+        $_inc: art_file_inc_input
+        $_set: art_file_set_input
+        $where: art_file_bool_exp!
+      ) {
+        update_art_file(_inc: $_inc, _set: $_set, where: $where) {
+          returning {
+            ...ArtFileFields
+          }
+        }
+      }
+      ${artFileFragment}
+    `
+    const variables = {
+      _set: newObject,
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.update((row) => {
+      row[field] = value
+    })
+    return
+  }
+  @action async delete({ store }) {
+    const mutation = gql`
+      mutation delete_art_file($where: art_file_bool_exp!) {
+        delete_art_file(where: $where) {
+          returning {
+            id
+          }
+        }
+      }
+    `
+    const variables = {
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.destroyPermanently()
+  }
 }
 
 export class GartenFile extends Model {
@@ -1999,8 +2083,82 @@ export class GartenFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
+  @field('_rev_at') _rev_at
 
   @relation('garten', 'garten_id') garten
+
+  @action async edit({ field, value, store }) {
+    // extract only the needed keys
+    const {
+      id,
+      garten_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+    } = this
+    const newObject = {
+      id,
+      garten_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+      [field]: value,
+      _rev_at: Date.now(),
+    }
+    const mutation = gql`
+      mutation update_garten_file(
+        $_inc: garten_file_inc_input
+        $_set: garten_file_set_input
+        $where: garten_file_bool_exp!
+      ) {
+        update_garten_file(_inc: $_inc, _set: $_set, where: $where) {
+          returning {
+            ...GartenFileFields
+          }
+        }
+      }
+      ${gartenFileFragment}
+    `
+    const variables = {
+      _set: newObject,
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.update((row) => {
+      row[field] = value
+    })
+    return
+  }
+  @action async delete({ store }) {
+    const mutation = gql`
+      mutation delete_garten_file($where: garten_file_bool_exp!) {
+        delete_garten_file(where: $where) {
+          returning {
+            id
+          }
+        }
+      }
+    `
+    const variables = {
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.destroyPermanently()
+  }
 }
 
 export class HerkunftFile extends Model {
@@ -2016,8 +2174,82 @@ export class HerkunftFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
+  @field('_rev_at') _rev_at
 
   @relation('herkunft', 'herkunft_id') herkunft
+
+  @action async edit({ field, value, store }) {
+    // extract only the needed keys
+    const {
+      id,
+      herkunft_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+    } = this
+    const newObject = {
+      id,
+      herkunft_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+      [field]: value,
+      _rev_at: Date.now(),
+    }
+    const mutation = gql`
+      mutation update_herkunft_file(
+        $_inc: herkunft_file_inc_input
+        $_set: herkunft_file_set_input
+        $where: herkunft_file_bool_exp!
+      ) {
+        update_herkunft_file(_inc: $_inc, _set: $_set, where: $where) {
+          returning {
+            ...HerkunftFileFields
+          }
+        }
+      }
+      ${herkunftFileFragment}
+    `
+    const variables = {
+      _set: newObject,
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.update((row) => {
+      row[field] = value
+    })
+    return
+  }
+  @action async delete({ store }) {
+    const mutation = gql`
+      mutation delete_herkunft_file($where: herkunft_file_bool_exp!) {
+        delete_herkunft_file(where: $where) {
+          returning {
+            id
+          }
+        }
+      }
+    `
+    const variables = {
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.destroyPermanently()
+  }
 }
 
 export class KulturFile extends Model {
@@ -2033,8 +2265,82 @@ export class KulturFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
+  @field('_rev_at') _rev_at
 
   @relation('kultur', 'kultur_id') kultur
+
+  @action async edit({ field, value, store }) {
+    // extract only the needed keys
+    const {
+      id,
+      kultur_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+    } = this
+    const newObject = {
+      id,
+      kultur_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+      [field]: value,
+      _rev_at: Date.now(),
+    }
+    const mutation = gql`
+      mutation update_kultur_file(
+        $_inc: kultur_file_inc_input
+        $_set: kultur_file_set_input
+        $where: kultur_file_bool_exp!
+      ) {
+        update_kultur_file(_inc: $_inc, _set: $_set, where: $where) {
+          returning {
+            ...KulturFileFields
+          }
+        }
+      }
+      ${kulturFileFragment}
+    `
+    const variables = {
+      _set: newObject,
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.update((row) => {
+      row[field] = value
+    })
+    return
+  }
+  @action async delete({ store }) {
+    const mutation = gql`
+      mutation delete_kultur_file($where: kultur_file_bool_exp!) {
+        delete_kultur_file(where: $where) {
+          returning {
+            id
+          }
+        }
+      }
+    `
+    const variables = {
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.destroyPermanently()
+  }
 }
 
 export class LieferungFile extends Model {
@@ -2050,8 +2356,82 @@ export class LieferungFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
+  @field('_rev_at') _rev_at
 
   @relation('lieferung', 'lieferung_id') lieferung
+
+  @action async edit({ field, value, store }) {
+    // extract only the needed keys
+    const {
+      id,
+      lieferung_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+    } = this
+    const newObject = {
+      id,
+      lieferung_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+      [field]: value,
+      _rev_at: Date.now(),
+    }
+    const mutation = gql`
+      mutation update_lieferung_file(
+        $_inc: lieferung_file_inc_input
+        $_set: lieferung_file_set_input
+        $where: lieferung_file_bool_exp!
+      ) {
+        update_lieferung_file(_inc: $_inc, _set: $_set, where: $where) {
+          returning {
+            ...LieferungFileFields
+          }
+        }
+      }
+      ${lieferungFileFragment}
+    `
+    const variables = {
+      _set: newObject,
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.update((row) => {
+      row[field] = value
+    })
+    return
+  }
+  @action async delete({ store }) {
+    const mutation = gql`
+      mutation delete_lieferung_file($where: lieferung_file_bool_exp!) {
+        delete_lieferung_file(where: $where) {
+          returning {
+            id
+          }
+        }
+      }
+    `
+    const variables = {
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.destroyPermanently()
+  }
 }
 
 export class PersonFile extends Model {
@@ -2067,8 +2447,82 @@ export class PersonFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
+  @field('_rev_at') _rev_at
 
   @relation('person', 'person_id') person
+
+  @action async edit({ field, value, store }) {
+    // extract only the needed keys
+    const {
+      id,
+      person_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+    } = this
+    const newObject = {
+      id,
+      person_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+      [field]: value,
+      _rev_at: Date.now(),
+    }
+    const mutation = gql`
+      mutation update_person_file(
+        $_inc: person_file_inc_input
+        $_set: person_file_set_input
+        $where: person_file_bool_exp!
+      ) {
+        update_person_file(_inc: $_inc, _set: $_set, where: $where) {
+          returning {
+            ...PersonFileFields
+          }
+        }
+      }
+      ${personFileFragment}
+    `
+    const variables = {
+      _set: newObject,
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.update((row) => {
+      row[field] = value
+    })
+    return
+  }
+  @action async delete({ store }) {
+    const mutation = gql`
+      mutation delete_person_file($where: person_file_bool_exp!) {
+        delete_person_file(where: $where) {
+          returning {
+            id
+          }
+        }
+      }
+    `
+    const variables = {
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.destroyPermanently()
+  }
 }
 
 export class SammlungFile extends Model {
@@ -2084,8 +2538,82 @@ export class SammlungFile extends Model {
   @field('name') name
   @field('beschreibung') beschreibung
   @field('changed') changed
+  @field('_rev_at') _rev_at
 
   @relation('sammlung', 'sammlung_id') sammlung
+
+  @action async edit({ field, value, store }) {
+    // extract only the needed keys
+    const {
+      id,
+      sammlung_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+    } = this
+    const newObject = {
+      id,
+      sammlung_id,
+      file_id,
+      file_mime_type,
+      name,
+      beschreibung,
+      changed,
+      [field]: value,
+      _rev_at: Date.now(),
+    }
+    const mutation = gql`
+      mutation update_sammlung_file(
+        $_inc: sammlung_file_inc_input
+        $_set: sammlung_file_set_input
+        $where: sammlung_file_bool_exp!
+      ) {
+        update_sammlung_file(_inc: $_inc, _set: $_set, where: $where) {
+          returning {
+            ...SammlungFileFields
+          }
+        }
+      }
+      ${sammlungFileFragment}
+    `
+    const variables = {
+      _set: newObject,
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.update((row) => {
+      row[field] = value
+    })
+    return
+  }
+  @action async delete({ store }) {
+    const mutation = gql`
+      mutation delete_sammlung_file($where: sammlung_file_bool_exp!) {
+        delete_sammlung_file(where: $where) {
+          returning {
+            id
+          }
+        }
+      }
+    `
+    const variables = {
+      where: { id: { _eq: this.id } },
+    }
+    try {
+      await store.rawQglClient.mutation(mutation, variables).toPromise()
+    } catch (error) {
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.destroyPermanently()
+  }
 }
 
 export class ArtQk extends Model {
@@ -2203,7 +2731,85 @@ export class ArtQkChoosen extends Model {
 
   @relation('art', 'art_id') art
   @relation('art_qk', 'qk_id') art_qk
+
+  // BEGIN
+  // BEGIN
+  // BEGIN
+  // BEGIN
+
+  @action async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
+  @action async edit({ field, value, store }) {
+    const { addQueuedQuery, user, unsetError } = store
+
+    unsetError(`art_qk_choosen.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      art_qk_choosen_id: this.id,
+      art_id: field === 'art_id' ? value : this.art_id,
+      qk_id: field === 'qk_id' ? value : this.qk_id,
+      choosen: field === 'choosen' ? value : this.choosen,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_art_qk_choosen_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'art_qk_choosen_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'art_qk_choosen',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = this._revisions
+      ? [rev, ...this._revisions]
+      : [rev]
+    newObjectForStore._conflicts = this._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = this.id
+    delete newObjectForStore.art_qk_choosen_id
+    // optimistically update store
+    await this.update((row) => ({ ...row, ...newObjectForStore }))
+  }
+  @action async delete({ store }) {
+    await this.subAction(() =>
+      this.edit({ field: '_deleted', value: true, store }),
+    )
+  }
 }
+
+// END
+// END
+// END
+// END
+// END
+// END
 
 export class KulturOption extends Model {
   static table = 'kultur_option'

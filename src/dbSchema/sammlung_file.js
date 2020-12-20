@@ -9,6 +9,7 @@ const sammlung_file = {
     { name: 'name', type: 'string', isOptional: true, isIndexed: true },
     { name: 'beschreibung', type: 'string', isOptional: true },
     { name: 'changed', type: 'string', isOptional: true },
+    { name: '_rev_at', type: 'string', isOptional: true },
   ],
 }
 

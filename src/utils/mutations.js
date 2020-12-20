@@ -2,21 +2,29 @@ import gql from 'graphql-tag'
 
 import {
   artRev,
+  artFile,
   artQkRev,
+  artQkChoosenRev,
   avRev,
   eventRev,
   gartenRev,
+  gartenFile,
   gvRev,
   herkunftRev,
+  herkunftFile,
   kulturRev,
+  kulturFile,
   kulturQkRev,
   kulturQkChoosenRev,
   kulturOptionRev,
   lieferungRev,
+  lieferungFile,
   personRev,
+  personFile,
   personOptionRev,
   sammelLieferungRev,
   sammlungRev,
+  sammlungFile,
   teilkulturRev,
   teilzaehlungRev,
   zaehlungRev,
@@ -227,6 +235,20 @@ const mutations = {
     }
     ${kulturQkChoosenRev}
   `,
+  mutateInsert_art_qk_choosen_rev_one: gql`
+    mutation insert_art_qk_choosen_rev_one(
+      $object: art_qk_choosen_rev_insert_input!
+      $on_conflict: art_qk_choosen_rev_on_conflict
+    ) {
+      insert_art_qk_choosen_rev_one(
+        object: $object
+        on_conflict: $on_conflict
+      ) {
+        ...ArtQkChoosenRevFields
+      }
+    }
+    ${artQkChoosenRev}
+  `,
   mutateInsert_person_option_rev_one: gql`
     mutation insert_person_option_rev_one(
       $object: person_option_rev_insert_input!
@@ -237,6 +259,132 @@ const mutations = {
       }
     }
     ${personOptionRev}
+  `,
+  mutateInsert_art_file_one: gql`
+    mutation insert_art_file_one(
+      $object: art_file_insert_input!
+      $on_conflict: art_file_on_conflict
+    ) {
+      insert_art_file_one(object: $object, on_conflict: $on_conflict) {
+        id
+      }
+    }
+  `,
+  mutateInsert_garten_file_one: gql`
+    mutation insert_garten_file_one(
+      $object: garten_file_insert_input!
+      $on_conflict: garten_file_on_conflict
+    ) {
+      insert_garten_file_one(object: $object, on_conflict: $on_conflict) {
+        id
+      }
+    }
+  `,
+  mutateInsert_herkunft_file_one: gql`
+    mutation insert_herkunft_file_one(
+      $object: herkunft_file_insert_input!
+      $on_conflict: herkunft_file_on_conflict
+    ) {
+      insert_herkunft_file_one(object: $object, on_conflict: $on_conflict) {
+        id
+      }
+    }
+  `,
+  mutateInsert_kultur_file_one: gql`
+    mutation insert_kultur_file_one(
+      $object: kultur_file_insert_input!
+      $on_conflict: kultur_file_on_conflict
+    ) {
+      insert_kultur_file_one(object: $object, on_conflict: $on_conflict) {
+        id
+      }
+    }
+  `,
+  mutateInsert_lieferung_file_one: gql`
+    mutation insert_lieferung_file_one(
+      $object: lieferung_file_insert_input!
+      $on_conflict: lieferung_file_on_conflict
+    ) {
+      insert_lieferung_file_one(object: $object, on_conflict: $on_conflict) {
+        id
+      }
+    }
+  `,
+  mutateInsert_person_file_one: gql`
+    mutation insert_person_file_one(
+      $object: person_file_insert_input!
+      $on_conflict: person_file_on_conflict
+    ) {
+      insert_person_file_one(object: $object, on_conflict: $on_conflict) {
+        id
+      }
+    }
+  `,
+  mutateInsert_sammlung_file_one: gql`
+    mutation insert_sammlung_file_one(
+      $object: sammlung_file_insert_input!
+      $on_conflict: sammlung_file_on_conflict
+    ) {
+      insert_sammlung_file_one(object: $object, on_conflict: $on_conflict) {
+        id
+      }
+    }
+  `,
+  mutateDelete_art_file: gql`
+    mutation delete_art_file($id: ID!) {
+      delete_art_file(id: $id) {
+        ...ArtFileFields
+      }
+    }
+    ${artFile}
+  `,
+  mutateDelete_garten_file: gql`
+    mutation delete_garten_file($id: ID!) {
+      delete_garten_file(id: $id) {
+        ...GartenFileFields
+      }
+    }
+    ${gartenFile}
+  `,
+  mutateDelete_herkunft_file: gql`
+    mutation delete_herkunft_file($id: ID!) {
+      delete_herkunft_file(id: $id) {
+        ...HerkunftFileFields
+      }
+    }
+    ${herkunftFile}
+  `,
+  mutateDelete_kultur_file: gql`
+    mutation delete_kultur_file($id: ID!) {
+      delete_kultur_file(id: $id) {
+        ...KulturFileFields
+      }
+    }
+    ${kulturFile}
+  `,
+  mutateDelete_lieferung_file: gql`
+    mutation delete_lieferung_file($id: ID!) {
+      delete_lieferung_file(id: $id) {
+        ...LieferungFileFields
+      }
+    }
+    ${lieferungFile}
+  `,
+  mutateDelete_person_file: gql`
+    mutation delete_person_file($id: ID!) {
+      delete_person_file(id: $id) {
+        ...PersonFileFields
+      }
+    }
+    ${personFile}
+  `,
+  mutateDelete_sammlung_file: gql`
+    mutation delete_sammlung_file($id: ID!) {
+      delete_sammlung_file(id: $id) {
+        ...SammlungFileFields
+      }
+    }
+    ${sammlungFile}
   `,
 }
 

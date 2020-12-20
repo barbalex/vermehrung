@@ -34,7 +34,7 @@ const ChooseArtQkRow = ({ artId, qk }) => {
     const observable = qk.art_qk_choosens
       .extend(Q.where('art_id', artId), Q.where('qk_id', qk.id))
       .observeWithColumns(['choosen'])
-    const subscription = observable.subscribe((artQkChoosen) =>
+    const subscription = observable.subscribe(([artQkChoosen]) =>
       setDataState({ artQkChoosen }),
     )
 
