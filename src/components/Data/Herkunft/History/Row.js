@@ -8,11 +8,12 @@ import History from '../../../shared/History'
 import StoreContext from '../../../../storeContext'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../utils/toPgArray'
+import mutations from '../../../../utils/mutations'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, db } = store
+  const { user, addNotification, db, rawQglClient } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -44,13 +45,15 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     const newObjectForStore = { ...newObject }
     //console.log('Herkunft History', { row, revRow, newObject })
     try {
-      await store.mutateInsert_herkunft_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'herkunft_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
+      await rawQglClient
+        .query(mutations.mutateInsert_herkunft_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'herkunft_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
     } catch (error) {
       checkForOnlineError(error)
       addNotification({
@@ -82,6 +85,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     addNotification,
     db,
     historyTakeoverCallback,
+    rawQglClient,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.gemeinde,
@@ -92,7 +96,6 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     revRow.lokalname,
     revRow.nr,
     row,
-    store,
     user.email,
   ])
 

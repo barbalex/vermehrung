@@ -8,11 +8,12 @@ import History from '../../../../../../shared/History'
 import StoreContext from '../../../../../../../storeContext'
 import checkForOnlineError from '../../../../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../../../../utils/toPgArray'
+import mutations from '../../../../../../../utils/mutations'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, db } = store
+  const { user, addNotification, db, rawQglClient } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -46,13 +47,15 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     const newObjectForStore = { ...newObject }
     //console.log('Teilzaehlung History', { row, revRow, newObject })
     try {
-      await store.mutateInsert_teilzaehlung_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'teilzaehlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
+      await rawQglClient
+        .query(mutations.mutateInsert_teilzaehlung_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'teilzaehlung_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
     } catch (error) {
       checkForOnlineError(error)
       addNotification({
@@ -84,6 +87,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     addNotification,
     db,
     historyTakeoverCallback,
+    rawQglClient,
     revRow._deleted,
     revRow.andere_menge,
     revRow.anzahl_auspflanzbereit,
@@ -96,7 +100,6 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     revRow.teilzaehlung_id,
     revRow.zaehlung_id,
     row,
-    store,
     user.email,
   ])
 
