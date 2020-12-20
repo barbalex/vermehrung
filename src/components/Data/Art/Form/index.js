@@ -56,8 +56,9 @@ const ArtForm = ({
     const subscription = combinedObservables.subscribe(
       async ([aeArts, arts]) => {
         const artsSorted = await artsSortedFromArts(arts)
+
         setDataState({
-          aeArts: aeArts.sort((a, b) => aeArtSort({ a, b })),
+          aeArts: aeArts.sort(aeArtSort),
           artsSorted,
         })
       },
