@@ -71,7 +71,10 @@ const ZaehlungForm = ({
       // need to show a choosen kultur even if inactive but not if deleted
       const kultur = await row.kultur?.fetch()
       const kultursIncludingInactiveChoosen = uniqBy(
-        [...kulturs, ...(kultur && !kultur?._deleted ? [kultur] : [])],
+        [
+          ...kulturs,
+          ...(kultur && !kultur?._deleted && !showFilter ? [kultur] : []),
+        ],
         'id',
       )
       const kultursSorted = await kultursSortedFromKulturs(

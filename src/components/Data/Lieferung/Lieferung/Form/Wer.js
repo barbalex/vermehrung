@@ -68,7 +68,10 @@ const LieferungWer = ({
       // need to show a choosen person even if inactive but not if deleted
       const person = await row.person?.fetch()
       const personsIncludingInactiveChoosen = uniqBy(
-        [...persons, ...(person && !person?._deleted ? [person] : [])],
+        [
+          ...persons,
+          ...(person && !person?._deleted && !showFilter ? [person] : []),
+        ],
         'id',
       )
       const personWerte = personsIncludingInactiveChoosen

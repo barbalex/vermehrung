@@ -85,7 +85,10 @@ const GartenForm = ({
       async ([userPersonOptions, persons, person, gvs]) => {
         // need to show a choosen person even if inactive but not if deleted
         const personsIncludingInactiveChoosen = uniqBy(
-          [...persons, ...(person?.id && !person?._deleted ? [person] : [])],
+          [
+            ...persons,
+            ...(person?.id && !person?._deleted && !showFilter ? [person] : []),
+          ],
           'id',
         )
         const personWerte = personsIncludingInactiveChoosen

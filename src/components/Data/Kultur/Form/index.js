@@ -116,7 +116,10 @@ const KulturForm = ({
         const gartensSorted = await gartensSortedFromGartens(gartens)
         // need to show a choosen garten even if inactive but not if deleted
         const gartensIncludingInactiveChoosen = uniqBy(
-          [...gartensSorted, ...(garten && !garten?._deleted ? [garten] : [])],
+          [
+            ...gartensSorted,
+            ...(garten && !garten?._deleted && !showFilter ? [garten] : []),
+          ],
           'id',
         )
         const gartenWerte = await Promise.all(
