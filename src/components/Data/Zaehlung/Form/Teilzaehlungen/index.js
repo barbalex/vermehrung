@@ -64,12 +64,10 @@ const Teilzaehlungen = ({ zaehlung }) => {
       async ([tzs, teilkulturs]) => {
         const teilzaehlungs = await teilzaehlungsSortByTk(tzs)
         const kulturOption = await zaehlung.kultur_option?.fetch()
-        const teilkulturWerte = teilkulturs
-          .sort((a, b) => teilkulturSort({ a, b }))
-          .map((tk) => ({
-            value: tk.id,
-            label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
-          }))
+        const teilkulturWerte = teilkulturs.sort(teilkulturSort).map((tk) => ({
+          value: tk.id,
+          label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
+        }))
         setDataState({ teilzaehlungs, kulturOption, teilkulturWerte })
       },
     )

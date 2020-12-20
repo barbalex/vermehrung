@@ -96,7 +96,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
     const subscription = combinedObservables.subscribe(
       ([totalCount, teilkulturs]) => {
         setDataState({
-          teilkulturs: teilkulturs.sort((a, b) => teilkulturSort({ a, b })),
+          teilkulturs: teilkulturs.sort(teilkulturSort),
           totalCount,
         })
       },

@@ -125,12 +125,10 @@ const EventForm = ({
             }
           }),
         )
-        const teilkulturWerte = teilkulturs
-          .sort((a, b) => teilkulturSort({ a, b }))
-          .map((t) => ({
-            value: t.id,
-            label: t.name || '(kein Name)',
-          }))
+        const teilkulturWerte = teilkulturs.sort(teilkulturSort).map((t) => ({
+          value: t.id,
+          label: t.name || '(kein Name)',
+        }))
         // need to show a choosen person even if inactive but not if deleted
         const person = await row.person?.fetch()
         const personsIncludingInactiveChoosen = uniqBy(
