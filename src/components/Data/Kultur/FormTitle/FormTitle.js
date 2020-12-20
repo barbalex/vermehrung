@@ -37,6 +37,7 @@ const TitleSymbols = styled.div`
 
 const KulturFormTitle = ({
   row,
+  rawRow,
   totalCount,
   filteredCount,
   width,
@@ -55,6 +56,7 @@ const KulturFormTitle = ({
             <Download row={row} asMenu />
             <HistoryButton
               row={row}
+              rawRow={rawRow}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -84,6 +86,7 @@ const KulturFormTitle = ({
             <Download row={row} asMenu />
             <HistoryButton
               row={row}
+              rawRow={rawRow}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -114,6 +117,7 @@ const KulturFormTitle = ({
             <Download row={row} asMenu />
             <HistoryButton
               row={row}
+              rawRow={rawRow}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -147,6 +151,7 @@ const KulturFormTitle = ({
             <Download row={row} asMenu />
             <HistoryButton
               row={row}
+              rawRow={rawRow}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -175,6 +180,7 @@ const KulturFormTitle = ({
           <Menu white={false}>
             <HistoryButton
               row={row}
+              rawRow={rawRow}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -196,6 +202,7 @@ const KulturFormTitle = ({
         <Download row={row} />
         <HistoryButton
           row={row}
+          rawRow={rawRow}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />

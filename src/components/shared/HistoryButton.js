@@ -25,8 +25,12 @@ const StyledIconButton = styled(IconButton)`
 const HistoryButton = ({ asMenu, row, showHistory, setShowHistory }) => {
   const store = useContext(StoreContext)
   const { online } = store
-  const existMultipleRevisions = (row?._revisions || []).length > 1
+
+  const existMultipleRevisions =
+    row?._revisions?.length && row?._revisions?.length > 1
   const disabled = !online || !existMultipleRevisions
+
+  console.log('HistoryButton, revisions.length:', row?._revisions?.length)
 
   const show = useCallback(() => {
     if (disabled) return

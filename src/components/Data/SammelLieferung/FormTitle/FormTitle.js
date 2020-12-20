@@ -42,6 +42,7 @@ const TitleSymbols = styled.div`
 const SammelLieferungFormTitle = ({
   showFilter,
   row,
+  rawRow,
   totalCount,
   filteredCount,
   lieferung,
@@ -101,6 +102,7 @@ const SammelLieferungFormTitle = ({
               <Anleitung asMenu />
               <HistoryButton
                 row={row}
+                rawRow={rawRow}
                 showHistory={showHistory}
                 setShowHistory={setShowHistory}
                 asMenu
@@ -143,6 +145,7 @@ const SammelLieferungFormTitle = ({
             <Menu white={false}>
               <HistoryButton
                 row={row}
+                rawRow={rawRow}
                 showHistory={showHistory}
                 setShowHistory={setShowHistory}
                 asMenu
@@ -184,6 +187,7 @@ const SammelLieferungFormTitle = ({
           />
           <HistoryButton
             row={row}
+            rawRow={rawRow}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
@@ -226,6 +230,7 @@ const SammelLieferungFormTitle = ({
           )}
           <HistoryButton
             row={row}
+            rawRow={rawRow}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
@@ -268,6 +273,7 @@ const SammelLieferungFormTitle = ({
         <>
           <HistoryButton
             row={row}
+            rawRow={rawRow}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />

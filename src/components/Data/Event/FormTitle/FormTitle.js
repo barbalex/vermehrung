@@ -38,6 +38,7 @@ const TitleSymbols = styled.div`
 
 const EventFormTitle = ({
   row,
+  rawRow,
   totalCount,
   filteredCount,
   width,
@@ -64,6 +65,7 @@ const EventFormTitle = ({
           <Menu white={false}>
             <HistoryButton
               row={row}
+              rawRow={rawRow}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -92,6 +94,7 @@ const EventFormTitle = ({
         <DeleteButton row={row} />
         <HistoryButton
           row={row}
+          rawRow={rawRow}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
