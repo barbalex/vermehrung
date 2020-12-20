@@ -15,7 +15,6 @@ import {
 } from 'rxjs/operators'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import isEqual from 'lodash/isEqual'
 import { DateTime } from 'luxon'
 import { first as first$ } from 'rxjs/operators'
 import gql from 'graphql-tag'
@@ -117,7 +116,6 @@ export class Herkunft extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -140,24 +138,16 @@ export class Herkunft extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert herkuft_rev to herkunft
-    newObjectForStore.id = this.id
-    newObjectForStore.wgs84_lat = this.wgs84_lat
-    newObjectForStore.wgs84_long = this.wgs84_long
-    newObjectForStore.lv95_x = this.lv95_x
-    newObjectForStore.lv95_y = this.lv95_y
-    delete newObjectForStore.herkunft_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
     await this.update((row) => {
-      Object.keys(newObjectForStore).forEach((key) => {
-        if (!isEqual(row[key], newObjectForStore[key])) {
-          row[key] = newObjectForStore[key]
-        }
-      })
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
     })
     // NOOOOO: this leads to conflicts due to multiple identical id's!
     //if (field === '_deleted' && value) await this.markAsDeleted()
@@ -293,7 +283,6 @@ export class Sammlung extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -316,15 +305,17 @@ export class Sammlung extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.sammlung_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
     if (field === '_deleted' && value) {
       const lieferungs = await this?.lieferungs?.fetch()
       console.log('sammlung model, lieferungs:', lieferungs)
@@ -468,7 +459,6 @@ export class Lieferung extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -491,15 +481,17 @@ export class Lieferung extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.lieferung_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
 
   @action async delete({ store }) {
@@ -570,7 +562,6 @@ export class Art extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -593,15 +584,17 @@ export class Art extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.art_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
     if (field === '_deleted' && value) {
       const sammlungs = await this?.sammlungs?.fetch()
       console.log('art model, sammlungs:', sammlungs)
@@ -713,7 +706,6 @@ export class Garten extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -736,15 +728,17 @@ export class Garten extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.garten_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
     if (field === '_deleted' && value) {
       const kulturs = await this?.kulturs?.fetch()
       console.log('garten model, kulturs:', kulturs)
@@ -902,7 +896,6 @@ export class Kultur extends Model {
     newObject._revisions = this._revisions
       ? toPgArray([rev, ...this._revisions])
       : toPgArray([rev])
-    const newObjectForStore = { ...newObject }
     addQueuedQuery({
       name: 'mutateInsert_kultur_rev_one',
       variables: JSON.stringify({
@@ -920,15 +913,17 @@ export class Kultur extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.kultur_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
     if (field === '_deleted' && value) {
       const teilkulturs = await this?.teilkulturs?.fetch()
       console.log('kultur model, teilkulturs:', teilkulturs)
@@ -1013,7 +1008,6 @@ export class Teilkultur extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -1036,15 +1030,17 @@ export class Teilkultur extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.teilkultur_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -1153,7 +1149,6 @@ export class Zaehlung extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -1176,15 +1171,17 @@ export class Zaehlung extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.zaehlung_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
     if (field === '_deleted' && value) {
       const zaehlungs = await this?.zaehlungs?.fetch()
       console.log('kultur model, zaehlungs:', zaehlungs)
@@ -1273,7 +1270,6 @@ export class Teilzaehlung extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -1296,15 +1292,17 @@ export class Teilzaehlung extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.teilzaehlung_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
     return
   }
   @action async delete({ store }) {
@@ -1440,7 +1438,6 @@ export class Person extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -1463,15 +1460,17 @@ export class Person extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.person_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
 
   @action async delete({ store }) {
@@ -1531,9 +1530,9 @@ export class SammelLieferung extends Model {
       const vonKultur = lieferung.von_kultur_id
         ? await this.collections.get('kultur').find(lieferung.von_kultur_id)
         : undefined
-      const vonGarten = vonKultur ? await vonKultur.garten.fetch() : undefined
-      const gartenLabel = await vonGarten.label.pipe(first$()).toPromise()
-      const person = await lieferung.person.fetch()
+      const vonGarten = await vonKultur?.garten?.fetch()
+      const gartenLabel = await vonGarten?.label.pipe(first$()).toPromise()
+      const person = await lieferung.person?.fetch()
       const personLabel = personLabelFromPerson({ person })
       const datumLabel = lieferung.datum
         ? DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
@@ -1600,7 +1599,6 @@ export class SammelLieferung extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -1623,15 +1621,17 @@ export class SammelLieferung extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.sammel_lieferung_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
     const sl_auto_copy_edits = userPersonOption?.sl_auto_copy_edits
     setTimeout(() => {
       // copy to all lieferungen
@@ -1730,7 +1730,6 @@ export class Event extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -1753,15 +1752,17 @@ export class Event extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.event_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -1835,7 +1836,6 @@ export class Av extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -1858,15 +1858,17 @@ export class Av extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.av_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -1939,7 +1941,6 @@ export class Gv extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -1962,15 +1963,17 @@ export class Gv extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.gv_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -2669,7 +2672,6 @@ export class ArtQk extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -2692,15 +2694,17 @@ export class ArtQk extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.art_qk_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -2732,11 +2736,6 @@ export class ArtQkChoosen extends Model {
   @relation('art', 'art_id') art
   @relation('art_qk', 'qk_id') art_qk
 
-  // BEGIN
-  // BEGIN
-  // BEGIN
-  // BEGIN
-
   @action async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
@@ -2764,7 +2763,6 @@ export class ArtQkChoosen extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -2787,15 +2785,17 @@ export class ArtQkChoosen extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.art_qk_choosen_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -2803,13 +2803,6 @@ export class ArtQkChoosen extends Model {
     )
   }
 }
-
-// END
-// END
-// END
-// END
-// END
-// END
 
 export class KulturOption extends Model {
   static table = 'kultur_option'
@@ -2886,8 +2879,6 @@ export class KulturOption extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    // need to copy object for store (see below)
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -2910,15 +2901,17 @@ export class KulturOption extends Model {
     })
     // create optimistic winner for store
     // do not stringify revisions as _this_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.kultur_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -2980,7 +2973,6 @@ export class KulturQk extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -3003,15 +2995,17 @@ export class KulturQk extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.kultur_qk_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -3070,7 +3064,6 @@ export class KulturQkChoosen extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -3093,15 +3086,17 @@ export class KulturQkChoosen extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert rev to winner
-    newObjectForStore.id = this.id
-    delete newObjectForStore.kultur_qk_choosen_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -3207,7 +3202,6 @@ export class PersonOption extends Model {
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = this._revisions
@@ -3230,15 +3224,17 @@ export class PersonOption extends Model {
     })
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = this._revisions
-      ? [rev, ...this._revisions]
-      : [rev]
-    newObjectForStore._conflicts = this._conflicts
-    // for store: convert herkuft_rev to person_option
-    newObjectForStore.id = this.id
-    delete newObjectForStore.person_id
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
-    await this.update((row) => ({ ...row, ...newObjectForStore }))
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
   }
   @action async delete({ store }) {
     await this.subAction(() =>

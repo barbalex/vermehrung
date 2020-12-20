@@ -7,6 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
+import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'
 import getConstants from '../../../../../utils/constants'
@@ -37,7 +38,9 @@ const SettingsTeilkulturenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
 
   const [kulturOption, setKulturOption] = useState()
   useEffect(() => {
-    const kOObservable = db.get('kultur_option').findAndObserve(kulturId)
+    const kOObservable = kulturId
+      ? db.get('kultur_option').findAndObserve(kulturId)
+      : $of({})
     const subscription = kOObservable.subscribe((kulturOption) =>
       setKulturOption(kulturOption),
     )

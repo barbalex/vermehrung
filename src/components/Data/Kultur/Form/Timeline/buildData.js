@@ -92,9 +92,9 @@ const buildData = async ({ row }) => {
   )
   const zaehlungenPlannedIncludedData = await Promise.all(
     zaehlungenPlannedIncluded.map(async (z) => {
-      const teilzaehlungs = await z.teilzaehlungs.extend(
-        Q.where('_deleted', false),
-      )
+      const teilzaehlungs = z.teilzaehlungs
+        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))
+        : []
       const anzahlenPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_pflanzen)
         .filter((a) => exists(a))

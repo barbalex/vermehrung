@@ -148,6 +148,8 @@ const GartenForm = ({
   const showDeleted =
     showFilter || filter.garten._deleted !== false || row?._deleted
 
+  console.log('Garten Form, personId:', row.person_id)
+
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
       <FieldsContainer>
