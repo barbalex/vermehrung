@@ -81,6 +81,7 @@ const Teilzaehlung = ({
           rawRow: JSON.stringify(newRow?._raw ?? newRow),
         })
       })
+
     return () => subscription.unsubscribe()
   }, [db, id])
   const { row, rawRow } = dataState

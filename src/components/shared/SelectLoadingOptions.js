@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { of as $of } from 'rxjs'
 
 import StoreContext from '../../storeContext'
 import artLabelFromAeArt from '../../utils/artLabelFromAeArt'
@@ -89,15 +90,18 @@ const SelectLoadingOptions = ({
     label: '',
   })
   useEffect(() => {
-    const run = async () => {
-      // TODO: need to get this to work without row.label
-      const record = row[field] ? await db.get(labelTable).find(row[field]) : {}
+    const observable =
+      labelTable && row[field]
+        ? db.get(labelTable).findAndObserve(row[field])
+        : $of({})
+    const subscription = observable.subscribe((record) =>
       setStateValue({
         value: row[field] || '',
         label: record[labelField] ?? '',
-      })
-    }
-    run()
+      }),
+    )
+
+    return () => subscription.unsubscribe()
   }, [db, field, labelField, labelTable, row])
 
   const loadOptions = useCallback(

@@ -105,9 +105,10 @@ const GartenConflict = ({
       revertValue: false,
     })
     // update model: remove this conflict
-    const collection = db.get('garten')
-    const model = await collection.find(revRow.garten_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('garten').find(revRow.garten_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,

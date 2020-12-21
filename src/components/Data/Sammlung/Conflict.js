@@ -116,9 +116,10 @@ const SammlungConflict = ({
       revertValue: false,
     })
     // update model: remove this conflict
-    const collection = db.get('sammlung')
-    const model = await collection.find(revRow.sammlung_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('sammlung').find(revRow.sammlung_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,

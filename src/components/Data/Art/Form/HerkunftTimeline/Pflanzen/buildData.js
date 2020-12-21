@@ -101,7 +101,11 @@ const buildData = async ({ artId, herkunftId, db }) => {
   // can't use Q.on here because there are two associations to kultur
   const lieferungsDone = await Promise.all(
     lieferungsDone1.filter(async (l) => {
-      const vonKultur = await db.get('kultur').find(l.von_kultur_id)
+      let vonKultur
+      try {
+        vonKultur = await db.get('kultur').find(l.von_kultur_id)
+      } catch {}
+
       return vonKultur?.herkunft_id === herkunftId
     }),
   )
@@ -124,7 +128,11 @@ const buildData = async ({ artId, herkunftId, db }) => {
     lieferungsPlanned1
       .filter((l) => !!l.von_kultur_id)
       .filter(async (l) => {
-        const vonKultur = await db.get('kultur').find(l.von_kultur_id)
+        let vonKultur
+        try {
+          vonKultur = await db.get('kultur').find(l.von_kultur_id)
+        } catch {}
+
         return vonKultur?.herkunft_id === herkunftId
       }),
   )

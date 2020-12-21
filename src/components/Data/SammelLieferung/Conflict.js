@@ -122,9 +122,12 @@ const SammelLieferungConflict = ({
       revertValue: false,
     })
     // remove conflict from model
-    const collection = db.get('sammel_lieferung')
-    const model = await collection.find(revRow.sammel_lieferung_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db
+        .get('sammel_lieferung')
+        .find(revRow.sammel_lieferung_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,

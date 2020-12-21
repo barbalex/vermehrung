@@ -64,7 +64,10 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
         qkChoosens.map(async (qkChoosen) => {
-          const qk = await db.get('kultur_qk').find(qkChoosen.qk_id)
+          let qk
+          try {
+            qk = await db.get('kultur_qk').find(qkChoosen.qk_id)
+          } catch {}
 
           return {
             title: qk?.titel,

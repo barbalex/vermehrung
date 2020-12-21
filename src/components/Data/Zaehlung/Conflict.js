@@ -100,9 +100,10 @@ const ZaehlungConflict = ({
       revertValue: false,
     })
     // update model: remove this conflict
-    const collection = db.get('zaehlung')
-    const model = await collection.find(revRow.zaehlung_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('zaehlung').find(revRow.zaehlung_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,

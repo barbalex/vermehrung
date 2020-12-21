@@ -7,6 +7,7 @@ import { MdAccountCircle as AccountIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 //import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
+import { of as $of } from 'rxjs'
 
 import StoreContext from '../../storeContext'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
@@ -240,14 +241,16 @@ const Row = ({ style, node, nodes, userRole }) => {
 
   const [person, setPerson] = useState()
   useEffect(() => {
-    const run = async () => {
-      const person =
-        node?.nodeType === 'table' && node.table === 'person' && node.url
-          ? await db.get('person').find(last(node.url))
-          : undefined
-      setPerson(person)
-    }
-    run()
+    const personObservable =
+      node?.nodeType === 'table' && node.table === 'person' && node.url
+        ? db.get('person').findAndObserve(last(node.url))
+        : $of({})
+
+    const subscription = personObservable.subscribe((person) =>
+      setPerson(person),
+    )
+
+    return () => subscription.unsubscribe()
   }, [db, node?.nodeType, node.table, node.url])
 
   const accountId = person?.account_id ?? null

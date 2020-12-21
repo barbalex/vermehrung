@@ -156,7 +156,10 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
       activeNodeArray.length >= 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
     if (isSammelLieferung) {
       const slId = activeNodeArray[1]
-      const sl = await db.get('sammel_lieferung').find(slId)
+      let sl
+      try {
+        sl = await db.get('sammel_lieferung').find(slId)
+      } catch {}
       let additionalValuesToSet = {}
 
       const entries = Object.entries(sl)

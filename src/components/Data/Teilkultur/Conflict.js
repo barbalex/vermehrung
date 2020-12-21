@@ -106,9 +106,10 @@ const TeilkulturConflict = ({
       revertValue: false,
     })
     // update model: remove this conflict
-    const collection = db.get('teilkultur')
-    const model = await collection.find(revRow.teilkultur_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('teilkultur').find(revRow.teilkultur_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,
