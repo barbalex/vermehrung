@@ -2153,7 +2153,7 @@ export class ArtFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2177,7 +2177,7 @@ export class ArtFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2244,7 +2244,7 @@ export class GartenFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2268,7 +2268,7 @@ export class GartenFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2335,7 +2335,7 @@ export class HerkunftFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2359,7 +2359,7 @@ export class HerkunftFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2426,7 +2426,7 @@ export class KulturFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2450,7 +2450,7 @@ export class KulturFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2517,7 +2517,7 @@ export class LieferungFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2541,7 +2541,7 @@ export class LieferungFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2608,7 +2608,7 @@ export class PersonFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2632,7 +2632,7 @@ export class PersonFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2699,7 +2699,7 @@ export class SammlungFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }
@@ -2723,7 +2723,7 @@ export class SammlungFile extends Model {
       where: { id: { _eq: this.id } },
     }
     try {
-      await store.rawQglClient.mutation(mutation, variables).toPromise()
+      await store.gqlClient.mutation(mutation, variables).toPromise()
     } catch (error) {
       return console.log(error)
     }

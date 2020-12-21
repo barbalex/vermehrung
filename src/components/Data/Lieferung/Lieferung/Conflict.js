@@ -53,7 +53,7 @@ const LieferungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -187,7 +187,7 @@ const LieferungConflict = ({
       : toPgArray([rev])
     //console.log('Lieferung Conflict', { row, revRow, newObject })
     try {
-      await rawQglClient
+      await gqlClient
         .query(mutations.mutateInsert_lieferung_rev_one, {
           object: newObject,
           on_conflict: {
@@ -206,7 +206,7 @@ const LieferungConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
-    rawQglClient,
+    gqlClient,
     revRow._deleted,
     revRow.andere_menge,
     revRow.anzahl_auspflanzbereit,

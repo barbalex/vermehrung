@@ -42,7 +42,7 @@ const ZaehlungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -143,7 +143,7 @@ const ZaehlungConflict = ({
       : toPgArray([rev])
     //console.log('Zaehlung Conflict', { row, revRow, newObject })
     try {
-      await rawQglClient
+      await gqlClient
         .query(mutations.mutateInsert_zaehlung_rev_one, {
           object: newObject,
           on_conflict: {
@@ -162,7 +162,7 @@ const ZaehlungConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
-    rawQglClient,
+    gqlClient,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.datum,

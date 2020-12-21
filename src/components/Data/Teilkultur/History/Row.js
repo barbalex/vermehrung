@@ -13,7 +13,7 @@ import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, db, rawQglClient } = store
+  const { user, addNotification, db, gqlClient } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -44,7 +44,7 @@ const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     const newObjectForStore = { ...newObject }
     //console.log('Teilkultur History', { row, revRow, newObject })
     try {
-      await rawQglClient
+      await gqlClient
         .query(mutations.mutateInsert_teilkultur_rev_one, {
           object: newObject,
           on_conflict: {
@@ -84,7 +84,7 @@ const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     addNotification,
     db,
     historyTakeoverCallback,
-    rawQglClient,
+    gqlClient,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.kultur_id,

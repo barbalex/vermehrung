@@ -13,7 +13,7 @@ import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, db, rawQglClient } = store
+  const { user, addNotification, db, gqlClient } = store
 
   // need to extract raw value?
   const dataArray = useMemo(
@@ -57,7 +57,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     const newObjectForStore = { ...newObject }
     //console.log('Person History', { row, revRow, newObject })
     try {
-      await rawQglClient
+      await gqlClient
         .query(mutations.mutateInsert_person_rev_one, {
           object: newObject,
           on_conflict: {
@@ -97,7 +97,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     addNotification,
     db,
     historyTakeoverCallback,
-    rawQglClient,
+    gqlClient,
     revRow._deleted,
     revRow.account_id,
     revRow.adresszusatz,

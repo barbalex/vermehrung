@@ -55,7 +55,7 @@ const PersonConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -195,7 +195,7 @@ const PersonConflict = ({
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
     try {
-      await rawQglClient
+      await gqlClient
         .query(mutations.mutateInsert_person_rev_one, {
           object: newObject,
           on_conflict: {
@@ -214,7 +214,7 @@ const PersonConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
-    rawQglClient,
+    gqlClient,
     revRow._deleted,
     revRow.account_id,
     revRow.adresszusatz,
