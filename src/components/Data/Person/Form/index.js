@@ -66,7 +66,10 @@ const Person = ({
           value: el.id,
           label: el.label,
         }))
-        const userRole = await row.user_role?.fetch()
+        let userRole
+        try {
+          userRole = await row.user_role.fetch()
+        } catch {}
         if (!showFilter && nrCount > 1) {
           setError({
             path: 'person.nr',

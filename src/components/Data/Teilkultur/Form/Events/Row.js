@@ -45,7 +45,11 @@ const TkEventRow = ({ event, last }) => {
   const [personName, setPersonName] = useState()
   useEffect(() => {
     const run = async () => {
-      const person = event.person?.fetch()
+      let person
+      try {
+        person = event.person.fetch()
+      } catch {}
+
       setPersonName(personFullname(person))
     }
     run()

@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
+import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../../../storeContext'
 import TextField from '../../../../../../shared/TextField'
@@ -49,8 +50,15 @@ const PrognoseMenu = ({
 
   const [zaehlung, setZaehlung] = useState(null)
   useEffect(() => {
-    teilzaehlung.zaehlung.fetch().then((zaehlung) => setZaehlung(zaehlung))
-  }, [teilzaehlung.zaehlung])
+    const zaehlungObservable = teilzaehlung.zaehlung_id
+      ? teilzaehlung.zaehlung
+      : $of({})
+    const subscription = zaehlungObservable.subscribe((zaehlung) =>
+      setZaehlung(zaehlung),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [teilzaehlung.zaehlung, teilzaehlung.zaehlung_id])
   const kulturId = zaehlung?.kultur_id
 
   const [jahr, setJahr] = useState(null)
@@ -85,15 +93,18 @@ const PrognoseMenu = ({
       // we have both values. Let's go on
       // check if zaehlung with date of 15.09. of year exist
       const dateOfZaehlung = `${yearToUse}-09-15`
-      const existingZaehlungData = await db
-        .get('zaehlung')
-        .query(
-          Q.where('_deleted', false),
-          Q.where('prognose', true),
-          Q.where('datum', dateOfZaehlung),
-          Q.where('kultur_id', kulturId),
-        )
-        .fetch()
+      let existingZaehlungData = []
+      try {
+        existingZaehlungData = await db
+          .get('zaehlung')
+          .query(
+            Q.where('_deleted', false),
+            Q.where('prognose', true),
+            Q.where('datum', dateOfZaehlung),
+            Q.where('kultur_id', kulturId),
+          )
+          .fetch()
+      } catch {}
       const existingZaehlungDataSorted = existingZaehlungData.sort(zaehlungSort)
       const existingZaehlung = existingZaehlungDataSorted?.[0]
       // if not: create it first
