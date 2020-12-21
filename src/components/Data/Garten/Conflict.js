@@ -46,7 +46,7 @@ const GartenConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   const [{ error, data, fetching }] = useQuery({
     query: gartenRevQuery,
@@ -156,7 +156,7 @@ const GartenConflict = ({
       : toPgArray([rev])
     //console.log('Garten Conflict', { row, revRow, newObject })
     try {
-      await rawQglClient
+      await gqlClient
         .query(mutations.mutateInsert_garten_rev_one, {
           object: newObject,
           on_conflict: {
@@ -175,7 +175,7 @@ const GartenConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
-    rawQglClient,
+    gqlClient,
     revRow._deleted,
     revRow.aktiv,
     revRow.bemerkungen,

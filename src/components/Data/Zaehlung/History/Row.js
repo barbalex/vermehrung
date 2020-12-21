@@ -13,7 +13,7 @@ import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, db, rawQglClient } = store
+  const { user, addNotification, db, gqlClient } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -42,7 +42,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     const newObjectForStore = { ...newObject }
     //console.log('Zaehlung History', { row, revRow, newObject })
     try {
-      await rawQglClient
+      await gqlClient
         .query(mutations.mutateInsert_zaehlung_rev_one, {
           object: newObject,
           on_conflict: {
@@ -82,7 +82,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     addNotification,
     db,
     historyTakeoverCallback,
-    rawQglClient,
+    gqlClient,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.datum,

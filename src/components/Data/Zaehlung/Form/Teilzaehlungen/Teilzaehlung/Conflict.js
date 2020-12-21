@@ -49,7 +49,7 @@ const TeilzaehlungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   // need to use this query to ensure that the person's name is queried
   const [{ error, data, fetching }] = useQuery({
@@ -165,7 +165,7 @@ const TeilzaehlungConflict = ({
       : toPgArray([rev])
     //console.log('Zaehlung Conflict', { row, revRow, newObject })
     try {
-      await rawQglClient
+      await gqlClient
         .query(mutations.mutateInsert_teilzaehlung_rev_one, {
           object: newObject,
           on_conflict: {
@@ -184,7 +184,7 @@ const TeilzaehlungConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
-    rawQglClient,
+    gqlClient,
     revRow._deleted,
     revRow.andere_menge,
     revRow.anzahl_auspflanzbereit,

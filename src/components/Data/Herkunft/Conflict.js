@@ -44,7 +44,7 @@ const HerkunftConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, addQueuedQuery, db, rawQglClient } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   const [{ error, data, fetching }] = useQuery({
     query: herkunftRevQuery,
@@ -154,7 +154,7 @@ const HerkunftConflict = ({
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
     try {
-      await rawQglClient
+      await gqlClient
         .query(mutations.mutateInsert_herkunft_rev_one, {
           object: newObject,
           on_conflict: {
@@ -173,7 +173,7 @@ const HerkunftConflict = ({
   }, [
     addNotification,
     conflictSelectionCallback,
-    rawQglClient,
+    gqlClient,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.gemeinde,

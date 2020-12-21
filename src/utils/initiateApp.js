@@ -57,7 +57,7 @@ const initiateApp = async () => {
   const store = MobxStore.create()
   store.setGqlWsClient(gqlWsClient)
 
-  const rawQglClient = createClient({
+  const gqlClient = createClient({
     url: constants?.graphQlUri,
     fetchOptions: () => {
       const token = getToken()
@@ -66,7 +66,7 @@ const initiateApp = async () => {
       }
     },
   })
-  store.setRawQglClient(rawQglClient)
+  store.setGqlClient(gqlClient)
 
   if (typeof window === 'undefined') return store
   const module = await import('./recreatePersistedStore')

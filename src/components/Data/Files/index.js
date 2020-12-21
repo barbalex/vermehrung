@@ -63,7 +63,7 @@ const Content = styled.div`
 
 const Files = ({ parentTable, parent }) => {
   const store = useContext(StoreContext)
-  const { online, rawQglClient } = store
+  const { online, gqlClient } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
@@ -105,14 +105,14 @@ const Files = ({ parentTable, parent }) => {
             },
           }
           try {
-            await rawQglClient.mutation(mutation, variables).toPromise()
+            await gqlClient.mutation(mutation, variables).toPromise()
           } catch (error) {
             console.log(error)
           }
         })
       }
     },
-    [db, parent.id, parentTable, rawQglClient],
+    [db, parent.id, parentTable, gqlClient],
   )
 
   const images = files.filter((f) => isImageFile(f))

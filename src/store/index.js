@@ -128,7 +128,7 @@ const myTypes = types
     firebase: null,
     gqlWsClient: null,
     db: null,
-    rawQglClient: null,
+    gqlClient: null,
   }))
   .actions((self) => {
     reaction(
@@ -161,10 +161,10 @@ const myTypes = types
           try {
             // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
             variables
-              ? yield self.rawQglClient
+              ? yield self.gqlClient
                   .mutation(mutation, JSON.parse(variables))
                   .toPromise()
-              : yield self.rawQglClient.mutation(mutation).toPromise()
+              : yield self.gqlClient.mutation(mutation).toPromise()
           } catch (error) {
             const lcMessage = error.message.toLowerCase()
             // In case a conflict was caused by two EXACT SAME changes,
@@ -232,8 +232,8 @@ const myTypes = types
       setInitiallyQuerying(val) {
         self.initiallyQuerying = val
       },
-      setRawQglClient(val) {
-        self.rawQglClient = val
+      setGqlClient(val) {
+        self.gqlClient = val
       },
       setDb(val) {
         self.db = val

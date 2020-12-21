@@ -87,7 +87,7 @@ const App = ({ element }) => {
     <DatabaseProvider database={database}>
       <MuiThemeProvider theme={materialTheme}>
         <MobxProvider value={store}>
-          <UrqlProvider value={store.rawQglClient}>
+          <UrqlProvider value={store.gqlClient}>
             <GlobalStyle />
             {element}
             <Notifications />

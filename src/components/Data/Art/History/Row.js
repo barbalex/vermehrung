@@ -13,7 +13,7 @@ import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, db, rawQglClient } = store
+  const { user, addNotification, db, gqlClient } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
@@ -39,7 +39,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
     try {
-      await rawQglClient
+      await gqlClient
         .query(mutations.mutateInsert_art_rev_one, {
           object: newObject,
           on_conflict: {
@@ -79,7 +79,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     addNotification,
     db,
     historyTakeoverCallback,
-    rawQglClient,
+    gqlClient,
     revRow._deleted,
     revRow.ae_id,
     revRow.art_id,
