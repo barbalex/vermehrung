@@ -173,8 +173,14 @@ const createMessageFunctions = async ({ kulturId, db }) => {
           .filter((z) => z.kultur_id === kulturId)
           .filter((z) => !z.datum)
           .map(async (z) => {
-            const kultur = await z.kultur.fetch()
-            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            let kultur
+            try {
+              kultur = await z.kultur.fetch()
+            } catch {}
+            let kulturLabel
+            try {
+              kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: [
@@ -185,7 +191,7 @@ const createMessageFunctions = async ({ kulturId, db }) => {
                 'Zaehlungen',
                 z.id,
               ],
-              text: `${kulturLabel}, Zählung-ID: ${z.id}`,
+              text: `${kulturLabel ?? '(keine Kultur)'}, Zählung-ID: ${z.id}`,
             }
           }),
       ),
@@ -201,15 +207,23 @@ const createMessageFunctions = async ({ kulturId, db }) => {
                 .filter((tz) => !exists(tz.anzahl_pflanzen)).length,
           )
           .map(async (z) => {
-            const kultur = await z.kultur.fetch()
-            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            let kultur
+            try {
+              kultur = await z.kultur.fetch()
+            } catch {}
+            let kulturLabel
+            try {
+              kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            } catch {}
             const zaehlungLabel = z.datum
               ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
             const tzs = await z.teilzaehlungs.extend(notDeletedQuery).fetch()
             const anzTz = tzs.length
             const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-            const text = `${kulturLabel}, ${zaehlungLabel}${teilzaehlung}`
+            const text = `${
+              kulturLabel ?? '(keine Kultur)'
+            }, ${zaehlungLabel}${teilzaehlung}`
 
             return {
               url: [
@@ -236,8 +250,14 @@ const createMessageFunctions = async ({ kulturId, db }) => {
                 .filter((tz) => !exists(tz.anzahl_auspflanzbereit)).length,
           )
           .map(async (z) => {
-            const kultur = await z.kultur.fetch()
-            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            let kultur
+            try {
+              kultur = await z.kultur.fetch()
+            } catch {}
+            let kulturLabel
+            try {
+              kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            } catch {}
             const zaehlung = z.datum
               ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
@@ -245,7 +265,9 @@ const createMessageFunctions = async ({ kulturId, db }) => {
               .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted).length
             const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-            const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
+            const text = `${
+              kulturLabel ?? '(keine Kultur)'
+            }, ${zaehlung}${teilzaehlung}`
 
             return {
               url: [
@@ -272,8 +294,14 @@ const createMessageFunctions = async ({ kulturId, db }) => {
                 .filter((tz) => !exists(tz.anzahl_mutterpflanzen)).length,
           )
           .map(async (z) => {
-            const kultur = await z.kultur.fetch()
-            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            let kultur
+            try {
+              kultur = await z.kultur.fetch()
+            } catch {}
+            let kulturLabel
+            try {
+              kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            } catch {}
             const zaehlung = z.datum
               ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
@@ -281,7 +309,9 @@ const createMessageFunctions = async ({ kulturId, db }) => {
               .filter((tz) => tz.zaehlung_id === z.id)
               .filter((tz) => !tz._deleted).length
             const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-            const text = `${kulturLabel}, ${zaehlung}${teilzaehlung}`
+            const text = `${
+              kulturLabel ?? '(keine Kultur)'
+            }, ${zaehlung}${teilzaehlung}`
 
             return {
               url: [
@@ -301,7 +331,11 @@ const createMessageFunctions = async ({ kulturId, db }) => {
         zaehlungsSorted
           .filter((z) => z.kultur_id === kulturId)
           .filter(async (z) => {
-            const kulturOption = await z.kultur_option.fetch()
+            let kulturOption
+            try {
+              kulturOption = await z.kultur_option.fetch()
+            } catch {}
+
             return !!kulturOption?.tk
           })
           .filter((z) => {
@@ -311,8 +345,14 @@ const createMessageFunctions = async ({ kulturId, db }) => {
             return tzs.length && tzs.filter((tz) => !tz.teilkultur_id).length
           })
           .map(async (z) => {
-            const kultur = await z.kultur.fetch()
-            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            let kultur
+            try {
+              kultur = await z.kultur.fetch()
+            } catch {}
+            let kulturLabel
+            try {
+              kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            } catch {}
             const zaehlung = z.datum
               ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
@@ -330,7 +370,9 @@ const createMessageFunctions = async ({ kulturId, db }) => {
                 'Zaehlungen',
                 z.id,
               ],
-              text: `${kulturLabel}, ${zaehlung}${teilzaehlung}`,
+              text: `${
+                kulturLabel ?? '(keine Kultur)'
+              }, ${zaehlung}${teilzaehlung}`,
             }
           }),
       ),
@@ -566,12 +608,18 @@ const createMessageFunctions = async ({ kulturId, db }) => {
           .filter((e) => e.kultur_id === kulturId)
           .filter((e) => !e.beschreibung)
           .map(async (ev) => {
-            const kultur = await ev.kultur.fetch()
-            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            let kultur
+            try {
+              kultur = await ev.kultur.fetch()
+            } catch {}
+            let kulturLabel
+            try {
+              kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Kulturen', kulturId, 'Events', ev.id],
-              text: `${kulturLabel}, Event-ID: ${ev.id}`,
+              text: `${kulturLabel ?? '(keine Kultur)'}, Event-ID: ${ev.id}`,
             }
           }),
       ),
@@ -581,12 +629,18 @@ const createMessageFunctions = async ({ kulturId, db }) => {
           .filter((e) => e.kultur_id === kulturId)
           .filter((e) => !e.datum)
           .map(async (ev) => {
-            const kultur = await ev.kultur.fetch()
-            const kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            let kultur
+            try {
+              kultur = await ev.kultur.fetch()
+            } catch {}
+            let kulturLabel
+            try {
+              kulturLabel = await kultur.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Kulturen', kulturId, 'Events', ev.id],
-              text: `${kulturLabel}, Event-ID: ${ev.id}`,
+              text: `${kulturLabel ?? '(keine Kultur)'}, Event-ID: ${ev.id}`,
             }
           }),
       ),

@@ -7,28 +7,34 @@ import format from 'date-fns/format'
 import exists from '../../../../../utils/exists'
 
 const buildData = async ({ row }) => {
-  const zaehlungenDone = await row.zaehlungs
-    .extend(
-      Q.experimentalJoinTables(['teilzaehlung']),
-      Q.where('prognose', false),
-      Q.where('datum', Q.notEq(null)),
-      Q.where('datum', Q.lte(format(new Date(), 'yyyy-mm-dd'))),
-      Q.where('_deleted', false),
-      // following was not included before refactoring but seems a good idea
-      //Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
-    )
-    .fetch()
+  let zaehlungenDone = []
+  try {
+    zaehlungenDone = await row.zaehlungs
+      .extend(
+        Q.experimentalJoinTables(['teilzaehlung']),
+        Q.where('prognose', false),
+        Q.where('datum', Q.notEq(null)),
+        Q.where('datum', Q.lte(format(new Date(), 'yyyy-mm-dd'))),
+        Q.where('_deleted', false),
+        // following was not included before refactoring but seems a good idea
+        //Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+      )
+      .fetch()
+  } catch {}
   const lastZaehlungDone = sortBy(zaehlungenDone, 'datum').slice(-1)[0] ?? {}
 
-  const zaehlungenPlanned = await row.zaehlungs
-    .extend(
-      Q.experimentalJoinTables(['teilzaehlung']),
-      Q.where('prognose', true),
-      Q.where('datum', Q.notEq(null)),
-      Q.where('_deleted', false),
-      //Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
-    )
-    .fetch()
+  let zaehlungenPlanned = []
+  try {
+    zaehlungenPlanned = await row.zaehlungs
+      .extend(
+        Q.experimentalJoinTables(['teilzaehlung']),
+        Q.where('prognose', true),
+        Q.where('datum', Q.notEq(null)),
+        Q.where('_deleted', false),
+        //Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+      )
+      .fetch()
+  } catch {}
   const zaehlungenPlannedIgnored = zaehlungenPlanned.filter((zg) =>
     // check if more recent zaehlungenDone exists
     zaehlungenDone.some((z) => z.datum >= zg.datum),
@@ -189,21 +195,27 @@ const buildData = async ({ row }) => {
     // eslint-disable-next-line no-unused-vars
   ).map(([key, value]) => Object.assign({}, ...value))
 
-  const anLieferungenDone = await row.anlieferungs
-    .extend(
-      Q.where('geplant', false),
-      Q.where('datum', Q.notEq(null)),
-      Q.where('datum', Q.lte(format(new Date(), 'yyyy-mm-dd'))),
-      Q.where('_deleted', false),
-    )
-    .fetch()
-  const anLieferungenPlanned = await row.anlieferungs
-    .extend(
-      Q.where('geplant', true),
-      Q.where('datum', Q.notEq(null)),
-      Q.where('_deleted', false),
-    )
-    .fetch()
+  let anLieferungenDone = []
+  try {
+    anLieferungenDone = await row.anlieferungs
+      .extend(
+        Q.where('geplant', false),
+        Q.where('datum', Q.notEq(null)),
+        Q.where('datum', Q.lte(format(new Date(), 'yyyy-mm-dd'))),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
+  let anLieferungenPlanned = []
+  try {
+    anLieferungenPlanned = await row.anlieferungs
+      .extend(
+        Q.where('geplant', true),
+        Q.where('datum', Q.notEq(null)),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
   const anLieferungenPlannedIgnored = anLieferungenPlanned.filter((lg) =>
     // check if more recent anLieferungenDone exists
     anLieferungenDone.some((lu) => lu.datum >= lg.datum),
@@ -216,21 +228,27 @@ const buildData = async ({ row }) => {
     'datum',
   )
 
-  const ausLieferungenDone = await row.auslieferungs
-    .extend(
-      Q.where('geplant', false),
-      Q.where('datum', Q.notEq(null)),
-      Q.where('datum', Q.lte(format(new Date(), 'yyyy-mm-dd'))),
-      Q.where('_deleted', false),
-    )
-    .fetch()
-  const ausLieferungenPlanned = await row.auslieferungs
-    .extend(
-      Q.where('geplant', true),
-      Q.where('datum', Q.notEq(null)),
-      Q.where('_deleted', false),
-    )
-    .fetch()
+  let ausLieferungenDone = []
+  try {
+    ausLieferungenDone = await row.auslieferungs
+      .extend(
+        Q.where('geplant', false),
+        Q.where('datum', Q.notEq(null)),
+        Q.where('datum', Q.lte(format(new Date(), 'yyyy-mm-dd'))),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
+  let ausLieferungenPlanned = []
+  try {
+    ausLieferungenPlanned = await row.auslieferungs
+      .extend(
+        Q.where('geplant', true),
+        Q.where('datum', Q.notEq(null)),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
   const ausLieferungenPlannedIgnored = ausLieferungenPlanned.filter((lg) =>
     // check if more recent ausLieferungenDone exists
     ausLieferungenDone.some((l) => l.datum >= lg.datum),
@@ -261,11 +279,12 @@ const buildData = async ({ row }) => {
           a.datum < l.datum,
       )
 
-      const previousZaehlungTzs = previousZaehlung
-        ? await previousZaehlung.teilzaehlungs
-            .extend(Q.where('_deleted', false))
-            .fetch()
-        : [0]
+      let previousZaehlungTzs = []
+      try {
+        previousZaehlungTzs = await previousZaehlung.teilzaehlungs
+          .extend(Q.where('_deleted', false))
+          .fetch()
+      } catch {}
       const anzahlenPflanzenOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
         .filter((a) => exists(a))
@@ -323,11 +342,12 @@ const buildData = async ({ row }) => {
           a.datum > (previousZaehlung?.datum ?? '1900.01.01') &&
           a.datum < l.datum,
       )
-      const previousZaehlungTzs = previousZaehlung
-        ? await previousZaehlung.teilzaehlungs
-            .extend(Q.where('_deleted', false))
-            .fetch()
-        : [0]
+      let previousZaehlungTzs = []
+      try {
+        previousZaehlungTzs = await previousZaehlung.teilzaehlungs
+          .extend(Q.where('_deleted', false))
+          .fetch()
+      } catch {}
       const anzahlenPflanzenOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
         .filter((a) => exists(a))
@@ -386,11 +406,12 @@ const buildData = async ({ row }) => {
           a.datum < l.datum,
       )
 
-      const previousZaehlungTzs = previousZaehlung
-        ? await previousZaehlung.teilzaehlungs
-            .extend(Q.where('_deleted', false))
-            .fetch()
-        : [0]
+      let previousZaehlungTzs = []
+      try {
+        previousZaehlungTzs = await previousZaehlung.teilzaehlungs
+          .extend(Q.where('_deleted', false))
+          .fetch()
+      } catch {}
       const anzahlenPflanzenOfPrevoiusZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
         .filter((a) => exists(a))
@@ -471,11 +492,12 @@ const buildData = async ({ row }) => {
           a.datum < l.datum,
       )
 
-      const previousZaehlungTzs = previousZaehlung
-        ? await previousZaehlung.teilzaehlungs
-            .extend(Q.where('_deleted', false))
-            .fetch()
-        : [0]
+      let previousZaehlungTzs = []
+      try {
+        previousZaehlungTzs = await previousZaehlung.teilzaehlungs
+          .extend(Q.where('_deleted', false))
+          .fetch()
+      } catch {}
       const anzahlenPflanzenOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
         .filter((a) => exists(a))
