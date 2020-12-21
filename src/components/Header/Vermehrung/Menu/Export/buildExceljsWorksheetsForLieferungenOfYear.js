@@ -13,10 +13,13 @@ const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
   const { db } = store
   const workbook = new ExcelJs.Workbook()
 
-  const lieferungs = await db
-    .get('lieferung')
-    .query(Q.where('_deleted', false), Q.where('datum', Q.notEq(null)))
-    .fetch()
+  let lieferungs = []
+  try {
+    lieferungs = await db
+      .get('lieferung')
+      .query(Q.where('_deleted', false), Q.where('datum', Q.notEq(null)))
+      .fetch()
+  } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
 
   const lieferungsdata = await Promise.all(
@@ -26,29 +29,78 @@ const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
         return lYear == year
       })
       .map(async (l) => {
-        const lieferungPerson = await l.person?.fetch()
-        const vonSammlung = await l.sammlung?.fetch()
-        const von_sammlung_label = vonSammlung?.label.pipe(first$()).toPromise()
-        const vonSammlungPerson = await vonSammlung?.person?.fetch()
-        const vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
-        const vonKultur = await l.von_kultur.pipe(first$()).toPromise()
-        const von_kultur_label = await vonKultur?.label
-          .pipe(first$())
-          .toPromise()
-        const vonKulturGarten = await vonKultur?.garten?.fetch()
-        const von_kultur_garten_label = await vonKulturGarten?.label
-          .pipe(first$())
-          .toPromise()
-        const vonKulturHerkunft = await vonKultur?.herkunft?.fetch()
-        const nachKultur = await l.nach_kultur.pipe(first$()).toPromise()
-        const nach_kultur_label = nachKultur?.label.pipe(first$()).toPromise()
-        const nachKulturGarten = await nachKultur?.garten?.fetch()
-        const nach_kultur_garten_label = nachKulturGarten?.label
-          .pipe(first$())
-          .toPromise()
-        const nachKulturHerkunft = await nachKultur?.herkunft?.fetch()
-        const art = await l.art?.fetch()
-        const art_label = await art?.label.pipe(first$()).toPromise()
+        let lieferungPerson
+        try {
+          lieferungPerson = await l.person.fetch()
+        } catch {}
+        let vonSammlung
+        try {
+          vonSammlung = await l.sammlung.fetch()
+        } catch {}
+        let von_sammlung_label
+        try {
+          von_sammlung_label = vonSammlung?.label.pipe(first$()).toPromise()
+        } catch {}
+        let vonSammlungPerson
+        try {
+          vonSammlungPerson = await vonSammlung?.person?.fetch()
+        } catch {}
+        let vonSammlungHerkunft
+        try {
+          vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
+        } catch {}
+        let vonKultur
+        try {
+          vonKultur = await l.von_kultur.pipe(first$()).toPromise()
+        } catch {}
+        let von_kultur_label
+        try {
+          von_kultur_label = await vonKultur?.label.pipe(first$()).toPromise()
+        } catch {}
+        let vonKulturGarten
+        try {
+          vonKulturGarten = await vonKultur?.garten?.fetch()
+        } catch {}
+        let von_kultur_garten_label
+        try {
+          von_kultur_garten_label = await vonKulturGarten?.label
+            .pipe(first$())
+            .toPromise()
+        } catch {}
+        let vonKulturHerkunft
+        try {
+          vonKulturHerkunft = await vonKultur?.herkunft?.fetch()
+        } catch {}
+        let nachKultur
+        try {
+          nachKultur = await l.nach_kultur.pipe(first$()).toPromise()
+        } catch {}
+        let nach_kultur_label
+        try {
+          nach_kultur_label = nachKultur?.label.pipe(first$()).toPromise()
+        } catch {}
+        let nachKulturGarten
+        try {
+          nachKulturGarten = await nachKultur?.garten?.fetch()
+        } catch {}
+        let nach_kultur_garten_label
+        try {
+          nach_kultur_garten_label = nachKulturGarten?.label
+            .pipe(first$())
+            .toPromise()
+        } catch {}
+        let nachKulturHerkunft
+        try {
+          nachKulturHerkunft = await nachKultur?.herkunft?.fetch()
+        } catch {}
+        let art
+        try {
+          art = await l.art?.fetch()
+        } catch {}
+        let art_label
+        try {
+          art_label = await art?.label.pipe(first$()).toPromise()
+        } catch {}
 
         return {
           id: l.id,
