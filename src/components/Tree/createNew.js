@@ -60,22 +60,27 @@ const createNew = async ({ node, store }) => {
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
     if (tableTitle === 'An-Lieferungen') fkName = `nach_${parentTable}_id`
     // need to get art_id from kultur and set it
-    const kultur = parentId ? await db.get('kultur').find(parentId) : undefined
+    let kultur
+    try {
+      kultur = await db.get('kultur').find(parentId)
+    } catch {}
     additionalValuesToSet.art_id = kultur?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammlung') {
     // need to choose von_kultur_id or nach_kultur_id
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
     // need to get art_id from sammlung and set itconst kultur = parentId
-    const sammlung = parentId
-      ? await db.get('sammlung').find(parentId)
-      : undefined
+    let sammlung
+    try {
+      sammlung = await db.get('sammlung').find(parentId)
+    } catch {}
     additionalValuesToSet.art_id = sammlung?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
-    const sammelLieferung = parentId
-      ? await db.get('sammel_lieferung').find(parentId)
-      : undefined
+    let sammelLieferung
+    try {
+      sammelLieferung = await db.get('sammel_lieferung').find(parentId)
+    } catch {}
     if (!sammelLieferung) return console.log('no sammelLieferung found!')
     const entries = Object.entries(sammelLieferung)
       .filter(

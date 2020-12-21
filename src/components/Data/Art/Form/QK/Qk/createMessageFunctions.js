@@ -169,7 +169,10 @@ const createMessageFunctions = async ({ artId, db }) => {
                 .filter((av) => !av._deleted).length,
           )
           .map(async (a) => {
-            const text = await a.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await a.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', a.id],

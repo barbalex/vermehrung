@@ -125,9 +125,10 @@ const PersonConflict = ({
       revertValue: false,
     })
     // remove conflict from model
-    const collection = db.get('person')
-    const model = await collection.find(revRow.person_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('person').find(revRow.person_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,

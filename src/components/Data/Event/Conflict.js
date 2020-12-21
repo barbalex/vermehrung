@@ -102,9 +102,10 @@ const EventConflict = ({
       revertValue: false,
     })
     // update model: remove this conflict
-    const collection = db.get('event')
-    const model = await collection.find(revRow.event_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('event').find(revRow.event_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,

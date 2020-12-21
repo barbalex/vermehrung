@@ -122,9 +122,10 @@ const LieferungConflict = ({
       revertValue: false,
     })
     // update model: remove this conflict
-    const collection = db.get('lieferung')
-    const model = await collection.find(revRow.lieferung_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('lieferung').find(revRow.lieferung_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,

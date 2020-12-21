@@ -112,9 +112,10 @@ const TeilzaehlungConflict = ({
       revertValue: false,
     })
     // update model: remove this conflict
-    const collection = db.get('teilzaehlung')
-    const model = await collection.find(revRow.teilzaehlung_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('teilzaehlung').find(revRow.teilzaehlung_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,

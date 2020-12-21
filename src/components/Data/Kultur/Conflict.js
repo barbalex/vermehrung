@@ -107,9 +107,10 @@ const KulturConflict = ({
       revertValue: false,
     })
     // update model: remove this conflict
-    const collection = db.get('kultur')
-    const model = await collection.find(revRow.kultur_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('kultur').find(revRow.kultur_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,

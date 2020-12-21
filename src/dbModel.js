@@ -406,22 +406,26 @@ export class Lieferung extends Model {
   @children('lieferung_file') files
 
   @lazy von_kultur = this.observe().pipe(
-    map$(async (lieferung) =>
-      lieferung.von_kultur_id
-        ? await lieferung.collections
-            .get('kultur')
-            .find(lieferung.von_kultur_id)
-        : undefined,
-    ),
+    map$(async (lieferung) => {
+      let vonKultur
+      try {
+        vonKultur = await lieferung.collections
+          .get('kultur')
+          .find(lieferung.von_kultur_id)
+      } catch {}
+      return vonKultur
+    }),
   )
   @lazy nach_kultur = this.observe().pipe(
-    map$(async (lieferung) =>
-      lieferung.nach_kultur_id
-        ? await lieferung.collections
-            .get('kultur')
-            .find(lieferung.nach_kultur_id)
-        : undefined,
-    ),
+    map$(async (lieferung) => {
+      let nachKultur
+      try {
+        nachKultur = await lieferung.collections
+          .get('kultur')
+          .find(lieferung.nach_kultur_id)
+      } catch {}
+      return nachKultur
+    }),
   )
 
   @lazy label = this.observe().pipe(

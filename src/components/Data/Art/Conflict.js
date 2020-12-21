@@ -92,9 +92,10 @@ const ArtConflict = ({
       revertValue: false,
     })
     // update model: remove this conflict
-    const collection = db.get('art')
-    const model = await collection.find(revRow.art_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('art').find(revRow.art_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
   }, [
     addQueuedQuery,

@@ -4,14 +4,19 @@ import sortBy from 'lodash/sortBy'
 const teilzaehlungsSortByZaehlungTk = async (tzs) => {
   const tzsIdLabel = await Promise.all(
     tzs.map(async (tz) => {
-      const zaehlung =
-        (await tz.zaehlung?.observe().pipe(first$()).toPromise()) ?? {}
-      const zaehlungDatum = zaehlung.datum ?? ''
-      const label = (await tz.label?.pipe(first$()).toPromise()) ?? ''
+      let zaehlung
+      try {
+        zaehlung = await tz.zaehlung.observe().pipe(first$()).toPromise()
+      } catch {}
+      const zaehlungDatum = zaehlung?.datum ?? ''
+      let label
+      try {
+        label = await tz.label?.pipe(first$()).toPromise()
+      } catch {}
 
       return {
         id: tz.id,
-        sort: [zaehlungDatum, label],
+        sort: [zaehlungDatum, label ?? ''],
       }
     }),
   )

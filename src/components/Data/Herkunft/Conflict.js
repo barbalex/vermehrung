@@ -106,9 +106,10 @@ const HerkunftConflict = ({
       revertValue: false,
     })
     // update model: remove this conflict
-    const collection = db.get('herkunft')
-    const model = await collection.find(revRow.herkunft_id)
-    await model.removeConflict(revRow._rev)
+    try {
+      const model = await db.get('herkunft').find(revRow.herkunft_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     setTimeout(() => conflictDisposalCallback())
   }, [
     addQueuedQuery,

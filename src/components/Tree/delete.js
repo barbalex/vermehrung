@@ -14,7 +14,10 @@ const deleteModule = async ({ node, store }) => {
   if (!id) throw new Error(`Keine id gefunden`)
   const table = tableFromTitleHash[title]
 
-  const me = await db.get(table).find(id)
+  let me
+  try {
+    me = await db.get(table).find(id)
+  } catch {}
   if (!me?.delete) throw new Error(`Kein Modell für Tabelle ${table} gefunden`)
   me.delete({ store })
   setActiveNodeArray(activeNodeArray.slice(0, -1))
