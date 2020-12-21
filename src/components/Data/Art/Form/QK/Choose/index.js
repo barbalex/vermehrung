@@ -26,10 +26,15 @@ const ChooseQk = () => {
 
   const [artQks, setArtQks] = useState([])
   useEffect(() => {
-    db.get('art_qk')
+    const artQksObservable = db
+      .get('art_qk')
       .query(notDeletedQuery)
-      .fetch()
-      .then((artQks) => setArtQks(sortBy(artQks, 'name')))
+      .observeWithColumns(['name'])
+    const subscription = artQksObservable.subscribe((artQks) =>
+      setArtQks(sortBy(artQks, 'name')),
+    )
+
+    return () => subscription.unsubscribe()
   }, [db])
 
   return (

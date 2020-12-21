@@ -7,13 +7,28 @@ const sammlungsSortedFromSammlungs = async (sammlungs) => {
   const sammlungSorters = await Promise.all(
     sammlungs.map(async (sammlung) => {
       const datum = sammlung?.datum ?? ''
-      const herkunft = await sammlung?.herkunft?.fetch()
+      let herkunft
+      try {
+        herkunft = await sammlung?.herkunft?.fetch()
+      } catch (error) {
+        // leave herkunft undefined
+      }
       const herkunftNr = herkunft?.nr
       const herkunftGemeinde = herkunft?.gemeinde
       const herkunftLokalname = herkunft?.lokalname
-      const person = await sammlung?.person?.fetch()
+      let person
+      try {
+        person = await sammlung?.person?.fetch()
+      } catch (error) {
+        // leave person undefined
+      }
       const fullname = personFullname(person)
-      const art = await sammlung?.art?.fetch()
+      let art
+      try {
+        art = await sammlung?.art?.fetch()
+      } catch (error) {
+        // leave art undefined
+      }
       const artLabel = await art?.label?.pipe(first$()).toPromise()
       const sort = [
         datum,
