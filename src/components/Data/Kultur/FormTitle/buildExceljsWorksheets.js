@@ -26,11 +26,26 @@ const buildExceljsWorksheets = async ({
 
   // 1. Get Kultur
   if (!calledFromHigherUp) {
-    const kultur = await db.get('kultur').find(kultur_id)
-    const art = kultur.art_id ? await kultur.art.fetch() : {}
-    const artName = await art.label.pipe(first$()).toPromise()
-    const herkunft = kultur?.herkunft_id ? await kultur.herkunft.fetch() : {}
-    const garten = kultur?.garten_id ? await kultur.garten.fetch() : {}
+    let kultur
+    try {
+      kultur = await db.get('kultur').find(kultur_id)
+    } catch {}
+    let art
+    try {
+      art = await kultur.art.fetch()
+    } catch {}
+    let artName
+    try {
+      artName = await art.label.pipe(first$()).toPromise()
+    } catch {}
+    let herkunft
+    try {
+      herkunft = await kultur.herkunft.fetch()
+    } catch {}
+    let garten
+    try {
+      garten = await kultur.garten.fetch()
+    } catch {}
 
     const newK = {
       id: kultur.id,
@@ -169,26 +184,62 @@ const buildExceljsWorksheets = async ({
   const lieferungsSorted = anlieferungs.sort(lieferungSort)
   const anlieferungData = await Promise.all(
     lieferungsSorted.map(async (l) => {
-      const art = await l.art?.fetch()
-      const artName = await art?.label?.pipe(first$()).toPromise()
-      const aeArt = await art?.ae_art?.fetch()
-      const lieferungPerson = await l.person?.fetch()
-      const vonSammlung = l.von_sammlung_id
-        ? await db.get('sammlung').find(l.von_sammlung_id)
-        : undefined
-      const vonSammlungPerson = await vonSammlung?.person?.fetch()
-      const vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
-      const vonKultur = l.von_kultur_id
-        ? await db.get('kultur').find(l.von_kultur_id)
-        : undefined
-      const vonKulturGarten = await vonKultur?.garten?.fetch()
-      const vonKulturHerkunft = await vonKultur?.herkunft?.fetch()
-      const nachKultur = l.nach_kultur_id
-        ? await db.get('kultur').find(l.nach_kultur_id)
-        : undefined
-      const nachKulturGarten = await nachKultur?.garten?.fetch()
-      const nachKulturHerkunft = await nachKultur?.herkunft?.fetch()
-      const sammelLieferung = await l.sammel_lieferung.fetch()
+      let art
+      try {
+        art = await l.art.fetch()
+      } catch {}
+      let artName
+      try {
+        artName = await art.label.pipe(first$()).toPromise()
+      } catch {}
+      let aeArt
+      try {
+        aeArt = await art.ae_art.fetch()
+      } catch {}
+      let lieferungPerson
+      try {
+        lieferungPerson = await l.person.fetch()
+      } catch {}
+      let vonSammlung
+      try {
+        vonSammlung = await db.get('sammlung').find(l.von_sammlung_id)
+      } catch {}
+      let vonSammlungPerson
+      try {
+        vonSammlungPerson = await vonSammlung.person.fetch()
+      } catch {}
+      let vonSammlungHerkunft
+      try {
+        vonSammlungHerkunft = await vonSammlung.herkunft.fetch()
+      } catch {}
+      let vonKultur
+      try {
+        vonKultur = await db.get('kultur').find(l.von_kultur_id)
+      } catch {}
+      let vonKulturGarten
+      try {
+        vonKulturGarten = await vonKultur.garten.fetch()
+      } catch {}
+      let vonKulturHerkunft
+      try {
+        vonKulturHerkunft = await vonKultur.herkunft.fetch()
+      } catch {}
+      let nachKultur
+      try {
+        nachKultur = await db.get('kultur').find(l.nach_kultur_id)
+      } catch {}
+      let nachKulturGarten
+      try {
+        nachKulturGarten = await nachKultur.garten.fetch()
+      } catch {}
+      let nachKulturHerkunft
+      try {
+        nachKulturHerkunft = await nachKultur.herkunft.fetch()
+      } catch {}
+      let sammelLieferung
+      try {
+        sammelLieferung = await l.sammel_lieferung.fetch()
+      } catch {}
 
       const newZ = {
         id: l.id,
@@ -292,33 +343,72 @@ const buildExceljsWorksheets = async ({
     })
   }
   // 5. Get Aus-Lieferungen
-  const auslieferungs = await db
-    .get('lieferung')
-    .query(Q.where('_deleted', false), Q.where('von_kultur_id', kultur_id))
-    .fetch()
+  let auslieferungs = []
+  try {
+    auslieferungs = await db
+      .get('lieferung')
+      .query(Q.where('_deleted', false), Q.where('von_kultur_id', kultur_id))
+      .fetch()
+  } catch {}
   const auslieferungsSorted = auslieferungs.sort(lieferungSort)
   const auslieferungen = await Promise.all(
     auslieferungsSorted.map(async (l) => {
-      const art = await l.art?.fetch()
-      const artName = await art?.label?.pipe(first$()).toPromise()
-      const aeArt = await art?.ae_art?.fetch()
-      const lieferungPerson = await l.person?.fetch()
-      const vonSammlung = l.von_sammlung_id
-        ? await db.get('sammlung').find(l.von_sammlung_id)
-        : undefined
-      const vonSammlungPerson = await vonSammlung?.person?.fetch()
-      const vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
-      const vonKultur = l.von_kultur_id
-        ? await db.get('kultur').find(l.von_kultur_id)
-        : undefined
-      const vonKulturGarten = await vonKultur?.garten?.fetch()
-      const vonKulturHerkunft = await vonKultur?.herkunft?.fetch()
-      const nachKultur = l.nach_kultur_id
-        ? await db.get('kultur').find(l.nach_kultur_id)
-        : undefined
-      const nachKulturGarten = await nachKultur?.garten?.fetch()
-      const nachKulturHerkunft = await nachKultur?.herkunft?.fetch()
-      const sammelLieferung = await l.sammel_lieferung.fetch()
+      let art
+      try {
+        art = await l.art.fetch()
+      } catch {}
+      let artName
+      try {
+        artName = await art.label.pipe(first$()).toPromise()
+      } catch {}
+      let aeArt
+      try {
+        aeArt = await art.ae_art.fetch()
+      } catch {}
+      let lieferungPerson
+      try {
+        lieferungPerson = await l.person.fetch()
+      } catch {}
+      let vonSammlung
+      try {
+        vonSammlung = await db.get('sammlung').find(l.von_sammlung_id)
+      } catch {}
+      let vonSammlungPerson
+      try {
+        vonSammlungPerson = await vonSammlung.person.fetch()
+      } catch {}
+      let vonSammlungHerkunft
+      try {
+        vonSammlungHerkunft = await vonSammlung.herkunft.fetch()
+      } catch {}
+      let vonKultur
+      try {
+        vonKultur = await db.get('kultur').find(l.von_kultur_id)
+      } catch {}
+      let vonKulturGarten
+      try {
+        vonKulturGarten = await vonKultur.garten.fetch()
+      } catch {}
+      let vonKulturHerkunft
+      try {
+        vonKulturHerkunft = await vonKultur.herkunft.fetch()
+      } catch {}
+      let nachKultur
+      try {
+        nachKultur = await db.get('kultur').find(l.nach_kultur_id)
+      } catch {}
+      let nachKulturGarten
+      try {
+        nachKulturGarten = await nachKultur.garten.fetch()
+      } catch {}
+      let nachKulturHerkunft
+      try {
+        nachKulturHerkunft = await nachKultur.herkunft.fetch()
+      } catch {}
+      let sammelLieferung
+      try {
+        sammelLieferung = await l.sammel_lieferung.fetch()
+      } catch {}
 
       const newZ = {
         id: l.id,
@@ -416,17 +506,24 @@ const buildExceljsWorksheets = async ({
     })
   }
   // 6. Get Events
-  const events = await db
-    .get('event')
-    .query(Q.where('_deleted', false), Q.where('kultur_id', kultur_id))
-    .fetch()
+  let events = []
+  try {
+    events = await db
+      .get('event')
+      .query(Q.where('_deleted', false), Q.where('kultur_id', kultur_id))
+      .fetch()
+  } catch {}
   const eventsSorted = events.sort(eventSort)
   const eventsData = await Promise.all(
     eventsSorted.map(async (e) => {
-      const teilkultur = e.teilkultur_id
-        ? await db.get('teilkultur').find(e.teilkultur_id)
-        : undefined
-      const person = await e.person?.fetch()
+      let teilkultur
+      try {
+        teilkultur = await db.get('teilkultur').find(e.teilkultur_id)
+      } catch {}
+      let person
+      try {
+        person = await e.person.fetch()
+      } catch {}
 
       const newZ = {
         id: e.id,
