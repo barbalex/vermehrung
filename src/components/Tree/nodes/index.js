@@ -1887,10 +1887,11 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 )
 
                 if (personGartenKulturEventFolderIsOpen) {
-                  const events = await eventQuery.fetch()
-                  const eventsSorted = events.sort((a, b) =>
-                    eventSort({ a, b }),
-                  )
+                  let events = []
+                  try {
+                    events = await eventQuery.fetch()
+                  } catch {}
+                  const eventsSorted = events.sort(eventSort)
                   personGartenKulturEventNodes = eventsSorted.map(
                     (event, eventIndex) =>
                       buildPersonGartenKulturEvent({
@@ -1928,7 +1929,10 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             n[2] === 'Lieferungen',
         )
         if (personLieferungFolderIsOpen) {
-          const lieferungs = await personLieferungQuery.fetch()
+          let lieferungs = []
+          try {
+            lieferungs = await personLieferungQuery.fetch()
+          } catch {}
           const lieferungsSorted = lieferungs.sort(lieferungSort)
           personLieferungNodes = lieferungsSorted.map((lieferung, index) =>
             buildPersonLieferung({
