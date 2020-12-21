@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
-import { combineLatest } from 'rxjs'
+import { combineLatest, of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
@@ -44,7 +44,7 @@ const Title = styled.div`
 
 const Teilzaehlungen = ({ zaehlung }) => {
   const store = useContext(StoreContext)
-  const { insertTeilzaehlungRev } = store
+  const { insertTeilzaehlungRev, db } = store
 
   const kulturId = zaehlung.kultur_id
 
@@ -56,14 +56,17 @@ const Teilzaehlungen = ({ zaehlung }) => {
   useEffect(() => {
     const teilzaehlungsObservable = zaehlung.teilzaehlungs.observe()
     const teilkultursObservable = zaehlung.teilkulturs.observe()
+    const kulturOptionObservable = kulturId
+      ? db.get('kultur_option').find(kulturId)
+      : $of({})
     const combinedObservables = combineLatest([
       teilzaehlungsObservable,
       teilkultursObservable,
+      kulturOptionObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([tzs, teilkulturs]) => {
+      async ([tzs, teilkulturs, kulturOption]) => {
         const teilzaehlungs = await teilzaehlungsSortByTk(tzs)
-        const kulturOption = await zaehlung.kultur_option?.fetch()
         const teilkulturWerte = teilkulturs.sort(teilkulturSort).map((tk) => ({
           value: tk.id,
           label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
@@ -72,7 +75,13 @@ const Teilzaehlungen = ({ zaehlung }) => {
       },
     )
     return () => subscription.unsubscribe()
-  }, [zaehlung.kultur_option, zaehlung.teilkulturs, zaehlung.teilzaehlungs])
+  }, [
+    db,
+    kulturId,
+    zaehlung.kultur_option,
+    zaehlung.teilkulturs,
+    zaehlung.teilzaehlungs,
+  ])
   const { teilzaehlungs, teilkulturWerte, kulturOption } = dataState
 
   const { tk } = kulturOption ?? {}

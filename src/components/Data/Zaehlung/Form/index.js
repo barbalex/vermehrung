@@ -69,7 +69,10 @@ const ZaehlungForm = ({
     const combinedObservables = combineLatest([kultursObservable])
     const subscription = combinedObservables.subscribe(async ([kulturs]) => {
       // need to show a choosen kultur even if inactive but not if deleted
-      const kultur = await row.kultur?.fetch()
+      let kultur
+      try {
+        kultur = await row.kultur.fetch()
+      } catch {}
       const kultursIncludingInactiveChoosen = uniqBy(
         [
           ...kulturs,
@@ -95,7 +98,10 @@ const ZaehlungForm = ({
             }
           }),
       )
-      const kulturOption = await row.kultur_option?.fetch()
+      let kulturOption
+      try {
+        kulturOption = await row.kultur_option.fetch()
+      } catch {}
 
       setDataState({ kulturWerte, kulturOption })
     })

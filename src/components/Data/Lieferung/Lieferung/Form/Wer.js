@@ -66,7 +66,10 @@ const LieferungWer = ({
     const combinedObservables = combineLatest([personsObservable])
     const subscription = combinedObservables.subscribe(async ([persons]) => {
       // need to show a choosen person even if inactive but not if deleted
-      const person = await row.person?.fetch()
+      let person
+      try {
+        person = await row.person.fetch()
+      } catch {}
       const personsIncludingInactiveChoosen = uniqBy(
         [
           ...persons,

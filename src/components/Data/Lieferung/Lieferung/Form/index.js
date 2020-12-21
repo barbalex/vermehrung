@@ -67,12 +67,14 @@ const LierferungForm = ({
     ])
     const subscription = combinedObservables.subscribe(
       async ([userPersonOptions, sammelLieferung]) => {
-        const vonSammlung = row.von_sammlung_id
-          ? await row.sammlung.fetch()
-          : undefined
-        const vonSammlungHerkunft = vonSammlung
-          ? await vonSammlung.herkunft?.fetch()
-          : undefined
+        let vonSammlung
+        try {
+          vonSammlung = await row.sammlung.fetch()
+        } catch {}
+        let vonSammlungHerkunft
+        try {
+          vonSammlungHerkunft = await vonSammlung.herkunft.fetch()
+        } catch {}
 
         if (vonSammlungHerkunft) {
           return setDataState({
@@ -84,12 +86,14 @@ const LierferungForm = ({
         }
 
         if (row.von_kultur_id) {
-          const vonKultur = row.von_kultur_id
-            ? await db.get('kultur').find(row.von_kultur_id)
-            : undefined
-          const herkunftByVonKultur = vonKultur
-            ? await vonKultur.herkunft?.fetch()
-            : undefined
+          let vonKultur
+          try {
+            vonKultur = await db.get('kultur').find(row.von_kultur_id)
+          } catch {}
+          let herkunftByVonKultur
+          try {
+            herkunftByVonKultur = await vonKultur.herkunft.fetch()
+          } catch {}
           if (herkunftByVonKultur) {
             return setDataState({
               herkunft: herkunftByVonKultur,
@@ -99,12 +103,14 @@ const LierferungForm = ({
             })
           }
         }
-        const nachKultur = row.nach_kultur_id
-          ? await db.get('kultur').find(row.nach_kultur_id)
-          : undefined
-        const herkunftByNachKultur = nachKultur
-          ? await nachKultur.herkunft?.fetch()
-          : undefined
+        let nachKultur
+        try {
+          nachKultur = await db.get('kultur').find(row.nach_kultur_id)
+        } catch {}
+        let herkunftByNachKultur
+        try {
+          herkunftByNachKultur = await nachKultur.herkunft.fetch()
+        } catch {}
 
         setDataState({
           herkunft: herkunftByNachKultur,
