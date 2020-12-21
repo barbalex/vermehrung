@@ -19,8 +19,14 @@ const buildExceljsWorksheetsForDaten = async ({
   const { db } = store
 
   // 1. Get Garten
-  const garten = await db.get('garten').find(garten_id)
-  const person = garten.person ? await garten.person.fetch() : {}
+  let garten
+  try {
+    garten = await db.get('garten').find(garten_id)
+  } catch {}
+  let person
+  try {
+    person = await garten?.person?.fetch()
+  } catch {}
   const newGarten = {
     id: garten.id,
     name: garten.name,
@@ -49,22 +55,40 @@ const buildExceljsWorksheetsForDaten = async ({
     data: [newGarten],
   })
   // 2. Get Kulturen
-  const kultursOfGarten = await db
-    .get('kultur')
-    .query(
-      Q.where('_deleted', false),
-      Q.where('aktiv', true),
-      Q.where('garten_id', garten_id),
-    )
-    .fetch()
+  let kultursOfGarten = []
+  try {
+    kultursOfGarten = await db
+      .get('kultur')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('aktiv', true),
+        Q.where('garten_id', garten_id),
+      )
+      .fetch()
+  } catch {}
   const kultursOfGartenSorted = await kultursSortedFromKulturs(kultursOfGarten)
   const kulturData = await Promise.all(
     kultursOfGartenSorted.map(async (kultur) => {
-      const art = await kultur.art?.fetch()
-      const artLabel = await art?.label?.pipe(first$()).toPromise()
-      const aeArt = await art?.ae_art?.fetch()
-      const herkunft = await kultur.herkunft?.fetch()
-      const garten = await kultur.garten?.fetch()
+      let art
+      try {
+        art = await kultur.art?.fetch()
+      } catch {}
+      let artLabel
+      try {
+        artLabel = await art?.label?.pipe(first$()).toPromise()
+      } catch {}
+      let aeArt
+      try {
+        aeArt = await art?.ae_art?.fetch()
+      } catch {}
+      let herkunft
+      try {
+        herkunft = await kultur.herkunft?.fetch()
+      } catch {}
+      let garten
+      try {
+        garten = await kultur.garten?.fetch()
+      } catch {}
 
       const newK = {
         id: kultur.id,

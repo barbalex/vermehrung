@@ -14,18 +14,24 @@ const buildExceljsWorksheetsForTzSums = async ({
 }) => {
   const { db } = store
 
-  const teilzaehlungs = await db
-    .get('teilzaehlung')
-    .query(
-      Q.experimentalNestedJoin('zaehlung', 'kultur'),
-      Q.on('zaehlung', Q.on('kultur', Q.where('garten_id', garten_id))),
-      Q.where('_deleted', false),
-    )
-    .fetch()
+  let teilzaehlungs = []
+  try {
+    teilzaehlungs = await db
+      .get('teilzaehlung')
+      .query(
+        Q.experimentalNestedJoin('zaehlung', 'kultur'),
+        Q.on('zaehlung', Q.on('kultur', Q.where('garten_id', garten_id))),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
   const teilzaehlungsSorted = await teilzaehlungsSortByTk(teilzaehlungs)
   const teilzaehlungsData = await Promise.all(
     teilzaehlungsSorted.map(async (z) => {
-      const teilkultur = await z.teilkultur?.fetch()
+      let teilkultur
+      try {
+        teilkultur = await z.teilkultur?.fetch()
+      } catch {}
 
       const newZ = {
         id: z.id,

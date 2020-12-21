@@ -26,10 +26,12 @@ const ChooseQk = () => {
 
   const [kulturQks, setKulturQks] = useState([])
   useEffect(() => {
-    db.get('kultur_qk')
-      .query(notDeletedQuery)
-      .fetch()
-      .then((kulturQks) => setKulturQks(sortBy(kulturQks, 'name')))
+    const kulturQksObservable = db.get('kultur_qk').query(notDeletedQuery)
+    const subscription = kulturQksObservable.subscribe((kulturQks) =>
+      setKulturQks(sortBy(kulturQks, 'name')),
+    )
+
+    return () => subscription.unsubscribe()
   }, [db])
 
   return (

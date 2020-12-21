@@ -133,7 +133,10 @@ const EventForm = ({
           label: t.name || '(kein Name)',
         }))
         // need to show a choosen person even if inactive but not if deleted
-        const person = await row.person?.fetch()
+        let person
+        try {
+          person = await row.person?.fetch()
+        } catch {}
         const personsIncludingInactiveChoosen = uniqBy(
           [...persons, ...(person && !person?._deleted ? [person] : [])],
           'id',
