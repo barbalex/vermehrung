@@ -6,14 +6,29 @@ import gartenLabelFromGarten from './gartenLabelFromGarten'
 const kultursSortedFromKulturs = async (kulturs) => {
   const kulturSorters = await Promise.all(
     kulturs.map(async (kultur) => {
-      const art = await kultur?.art?.fetch()
-      const artLabel = await art?.label.pipe(first$()).toPromise()
-      const herkunft = await kultur?.herkunft?.fetch()
+      let art
+      try {
+        art = await kultur?.art?.fetch()
+      } catch {}
+      let artLabel
+      try {
+        artLabel = await art?.label.pipe(first$()).toPromise()
+      } catch {}
+      let herkunft
+      try {
+        herkunft = await kultur?.herkunft?.fetch()
+      } catch {}
       const herkunftNr = herkunft?.nr
       const herkunftGemeinde = herkunft?.gemeinde
       const herkunftLokalname = herkunft?.lokalname
-      const garten = await kultur?.garten?.fetch()
-      const gartenPerson = await garten?.person?.fetch()
+      let garten
+      try {
+        garten = await kultur?.garten?.fetch()
+      } catch {}
+      let gartenPerson
+      try {
+        gartenPerson = await garten?.person?.fetch()
+      } catch {}
       const gartenLabel = await gartenLabelFromGarten({
         garten,
         person: gartenPerson,

@@ -32,14 +32,20 @@ const processSubscriptionResult = async ({
 
   try {
     await db.action(async () => {
-      const objectsOfToUpdate = await db
-        .get(table)
-        .query(Q.where('id', Q.oneOf(incomingIds)))
-        .fetch()
-      const objectsOfIncoming = await db
-        .get(table)
-        .query(Q.where('id', Q.oneOf(incomingIds)))
-        .fetch()
+      let objectsOfToUpdate = []
+      try {
+        objectsOfToUpdate = await db
+          .get(table)
+          .query(Q.where('id', Q.oneOf(incomingIds)))
+          .fetch()
+      } catch {}
+      let objectsOfIncoming = []
+      try {
+        objectsOfIncoming = await db
+          .get(table)
+          .query(Q.where('id', Q.oneOf(incomingIds)))
+          .fetch()
+      } catch {}
       const existingIds = objectsOfIncoming.map((d) => d.id)
       const missingIds = incomingIds.filter((d) => !existingIds.includes(d))
       const dataToCreateObjectsFrom = dataToCheck.filter((d) =>
