@@ -124,7 +124,10 @@ const KulturForm = ({
         )
         const gartenWerte = await Promise.all(
           gartensIncludingInactiveChoosen.map(async (garten) => {
-            const label = await garten.label.pipe(first$()).toPromise()
+            let label
+            try {
+              label = await garten.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               value: garten.id,
@@ -270,7 +273,10 @@ const KulturForm = ({
       async ([arts, herkunfts]) => {
         const artWerte = await Promise.all(
           arts.map(async (art) => {
-            const label = await art.label.pipe(first$()).toPromise()
+            let label
+            try {
+              label = await art.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               value: art.id,

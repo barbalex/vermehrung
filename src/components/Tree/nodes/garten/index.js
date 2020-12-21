@@ -1,7 +1,10 @@
 import { first as first$ } from 'rxjs/operators'
 
 const gartenNodes = async ({ garten, index }) => {
-  const label = await garten.label.pipe(first$()).toPromise()
+  let label = ''
+  try {
+    label = await garten.label.pipe(first$()).toPromise()
+  } catch {}
 
   return {
     nodeType: 'table',

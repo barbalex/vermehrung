@@ -1,7 +1,10 @@
 import { first as first$ } from 'rxjs/operators'
 
 const kulturNodes = async ({ kultur, index }) => {
-  const label = await kultur.label.pipe(first$()).toPromise()
+  let label = ''
+  try {
+    label = await kultur.label.pipe(first$()).toPromise()
+  } catch {}
 
   return {
     nodeType: 'table',

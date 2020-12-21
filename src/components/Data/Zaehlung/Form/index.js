@@ -90,7 +90,10 @@ const ZaehlungForm = ({
             return true
           })
           .map(async (el) => {
-            const label = await el.label.pipe(first$()).toPromise()
+            let label = ''
+            try {
+              label = await el.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               value: el.id,

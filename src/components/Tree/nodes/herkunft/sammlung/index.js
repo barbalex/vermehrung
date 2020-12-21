@@ -6,7 +6,10 @@ const herkunftSammlungNodes = async ({
   herkunftId,
   herkunftIndex,
 }) => {
-  const label = await sammlung.labelUnderHerkunft.pipe(first$()).toPromise()
+  let label = ''
+  try {
+    label = await sammlung.labelUnderHerkunft.pipe(first$()).toPromise()
+  } catch {}
 
   return {
     nodeType: 'table',

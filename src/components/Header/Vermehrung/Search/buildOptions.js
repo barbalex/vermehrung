@@ -110,7 +110,10 @@ const buildOptions = async ({ store, cb, val }) => {
   const options = []
   const searchArtSuggestions = await Promise.all(
     artsSorted.map(async (a) => {
-      const label = await a.label.pipe(first$()).toPromise()
+      let label = ''
+      try {
+        label = await a.label.pipe(first$()).toPromise()
+      } catch {}
 
       return {
         value: a.id,

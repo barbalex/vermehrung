@@ -91,7 +91,10 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
       const kultursSorted = await kultursSortedFromKulturs(kultursFiltered)
       const nachKulturWerte = await Promise.all(
         kultursSorted.map(async (el) => {
-          const label = await el.label.pipe(first$()).toPromise()
+          let label
+          try {
+            label = await el.label.pipe(first$()).toPromise()
+          } catch {}
 
           return {
             value: el.id,

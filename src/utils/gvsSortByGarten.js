@@ -4,7 +4,11 @@ import sortBy from 'lodash/sortBy'
 const gvsSortByGarten = async (gvs) => {
   const gvsIdLabel = await Promise.all(
     gvs.map(async (gv) => {
-      const label = await gv.gartenLabel.pipe(first$()).toPromise()
+      let label = ''
+      try {
+        label = await gv.gartenLabel.pipe(first$()).toPromise()
+      } catch {}
+
       return {
         id: gv.id,
         label,
