@@ -133,15 +133,17 @@ const KulturForm = ({
           }),
         )
         // only consider kulturen with both art and herkunft chosen
-        const thisGartenKulturs =
-          (await garten?.kulturs
-            ?.extend(
+        let thisGartenKulturs = []
+        try {
+          await garten.kulturs
+            .extend(
               Q.where('_deleted', true),
               Q.where('aktiv', true),
               Q.where('art_id', Q.notEq(null)),
               Q.where('herkunft_id', Q.notEq(null)),
             )
-            ?.fetch()) ?? []
+            .fetch()
+        } catch {}
         const artHerkuenfte = uniqBy(
           sammlungs.map((a) => ({
             art_id: a.art_id,
