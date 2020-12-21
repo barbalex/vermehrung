@@ -152,7 +152,10 @@ export class Herkunft extends Model {
     // NOOOOO: this leads to conflicts due to multiple identical id's!
     //if (field === '_deleted' && value) await this.markAsDeleted()
     if (field === '_deleted' && value) {
-      const sammlungs = await this?.sammlungs?.fetch()
+      let sammlungs
+      try {
+        sammlungs = await this?.sammlungs?.fetch()
+      } catch {}
       console.log('herkunft model, sammlungs:', sammlungs)
       // TODO: edit to set _deleted true
     }
@@ -210,10 +213,22 @@ export class Sammlung extends Model {
     // TODO: optimize untilChanged
     distinctUntilChanged(),
     map$(async (sammlung) => {
-      const art = await sammlung.art.fetch()
-      const ae_art = art ? await art.ae_art.fetch() : undefined
-      const person = await sammlung.person.fetch()
-      const herkunft = await sammlung.herkunft.fetch()
+      let art
+      try {
+        art = await sammlung.art.fetch()
+      } catch {}
+      let ae_art
+      try {
+        ae_art = await art?.ae_art?.fetch()
+      } catch {}
+      let person
+      try {
+        person = await sammlung.person?.fetch()
+      } catch {}
+      let herkunft
+      try {
+        herkunft = await sammlung.herkunft?.fetch()
+      } catch {}
 
       return sammlungLabelFromSammlung({
         sammlung,
@@ -228,9 +243,18 @@ export class Sammlung extends Model {
     // TODO: optimize untilChanged
     distinctUntilChanged(),
     map$(async (sammlung) => {
-      const art = await sammlung.art.fetch()
-      const ae_art = art ? await art.ae_art.fetch() : undefined
-      const person = await sammlung.person.fetch()
+      let art
+      try {
+        art = await sammlung.art.fetch()
+      } catch {}
+      let ae_art
+      try {
+        ae_art = await art?.ae_art?.fetch()
+      } catch {}
+      let person
+      try {
+        person = await sammlung.person.fetch()
+      } catch {}
 
       return sammlungLabelFromSammlungUnderHerkunft({
         sammlung,
@@ -317,7 +341,10 @@ export class Sammlung extends Model {
       row._revisions = newRevisions
     })
     if (field === '_deleted' && value) {
-      const lieferungs = await this?.lieferungs?.fetch()
+      let lieferungs
+      try {
+        lieferungs = await this?.lieferungs?.fetch()
+      } catch {}
       console.log('sammlung model, lieferungs:', lieferungs)
       // TODO: edit to set _deleted true
     }
@@ -596,7 +623,10 @@ export class Art extends Model {
       row._revisions = newRevisions
     })
     if (field === '_deleted' && value) {
-      const sammlungs = await this?.sammlungs?.fetch()
+      let sammlungs
+      try {
+        sammlungs = await this?.sammlungs?.fetch()
+      } catch {}
       console.log('art model, sammlungs:', sammlungs)
       // TODO: edit to set _deleted true
     }
@@ -664,7 +694,10 @@ export class Garten extends Model {
       (p, q) => p.name === q.name && p.person_id === q.person_id,
     ),
     map$(async (garten) => {
-      const person = await garten.person.fetch()
+      let person
+      try {
+        person = await garten.person.fetch()
+      } catch {}
 
       return gartenLabelFromGarten({
         garten,
@@ -740,7 +773,10 @@ export class Garten extends Model {
       row._revisions = newRevisions
     })
     if (field === '_deleted' && value) {
-      const kulturs = await this?.kulturs?.fetch()
+      let kulturs
+      try {
+        kulturs = await this?.kulturs?.fetch()
+      } catch {}
       console.log('garten model, kulturs:', kulturs)
       // TODO: edit to set _deleted true
     }
@@ -809,11 +845,26 @@ export class Kultur extends Model {
   @lazy label = this.observe().pipe(
     distinctUntilChanged(),
     map$(async (kultur) => {
-      const garten = await kultur.garten.fetch()
-      const gartenPerson = garten ? await garten.person.fetch() : undefined
-      const art = await kultur.art.fetch()
-      const aeArt = art ? await art.ae_art.fetch() : undefined
-      const herkunft = await kultur.herkunft.fetch()
+      let garten
+      try {
+        garten = await kultur.garten?.fetch()
+      } catch {}
+      let gartenPerson
+      try {
+        gartenPerson = await garten?.person?.fetch()
+      } catch {}
+      let art
+      try {
+        art = await kultur.art?.fetch()
+      } catch {}
+      let aeArt
+      try {
+        aeArt = await art?.ae_art?.fetch()
+      } catch {}
+      let herkunft
+      try {
+        herkunft = await kultur.herkunft.fetch()
+      } catch {}
 
       return kulturLabelFromKultur({
         kultur,
@@ -828,9 +879,18 @@ export class Kultur extends Model {
   @lazy labelUnderArt = this.observe().pipe(
     distinctUntilChanged(),
     map$(async (kultur) => {
-      const garten = await kultur.garten.fetch()
-      const gartenPerson = garten ? await garten.person.fetch() : undefined
-      let herkunft = await kultur.herkunft.fetch()
+      let garten
+      try {
+        garten = await kultur.garten?.fetch()
+      } catch {}
+      let gartenPerson
+      try {
+        gartenPerson = await garten?.person?.fetch()
+      } catch {}
+      let herkunft
+      try {
+        herkunft = await kultur.herkunft?.fetch()
+      } catch {}
 
       return kulturLabelFromKulturUnderArt({
         kultur,
@@ -843,9 +903,18 @@ export class Kultur extends Model {
   @lazy labelUnderGarten = this.observe().pipe(
     distinctUntilChanged(),
     map$(async (kultur) => {
-      const art = await kultur.art.fetch()
-      const aeArt = art ? await art.ae_art.fetch() : undefined
-      const herkunft = await kultur.herkunft.fetch()
+      let art
+      try {
+        art = await kultur.art?.fetch()
+      } catch {}
+      let aeArt
+      try {
+        aeArt = await art?.ae_art?.fetch()
+      } catch {}
+      let herkunft
+      try {
+        herkunft = await kultur.herkunft?.fetch()
+      } catch {}
 
       return kulturLabelFromKulturUnderGarten({
         kultur,
@@ -926,19 +995,34 @@ export class Kultur extends Model {
       row._revisions = newRevisions
     })
     if (field === '_deleted' && value) {
-      const teilkulturs = await this?.teilkulturs?.fetch()
+      let teilkulturs
+      try {
+        teilkulturs = await this.teilkulturs?.fetch()
+      } catch {}
       console.log('kultur model, teilkulturs:', teilkulturs)
       // TODO: edit to set _deleted true
-      const zaehlungs = await this?.zaehlungs?.fetch()
+      let zaehlungs
+      try {
+        zaehlungs = await this.zaehlungs?.fetch()
+      } catch {}
       console.log('kultur model, zaehlungs:', zaehlungs)
       // TODO: edit to set _deleted true
-      const events = await this?.events?.fetch()
+      let events
+      try {
+        events = await this.events?.fetch()
+      } catch {}
       console.log('kultur model, events:', events)
       // TODO: edit to set _deleted true
-      const anlieferungs = await this?.anlieferungs?.fetch()
+      let anlieferungs
+      try {
+        anlieferungs = await this.anlieferungs?.fetch()
+      } catch {}
       console.log('kultur model, anlieferungs:', anlieferungs)
       // TODO: edit to set _deleted true
-      const auslieferungs = await this?.auslieferungs?.fetch()
+      let auslieferungs
+      try {
+        auslieferungs = await this?.auslieferungs?.fetch()
+      } catch {}
       console.log('kultur model, auslieferungs:', auslieferungs)
       // TODO: edit to set _deleted true
     }
@@ -1081,7 +1165,10 @@ export class Zaehlung extends Model {
   @lazy label = this.observe().pipe(
     distinctUntilChanged(),
     map$(async (zaehlung) => {
-      const teilzaehlungs = await zaehlung.teilzaehlungs.fetch()
+      let teilzaehlungs
+      try {
+        teilzaehlungs = await zaehlung.teilzaehlungs?.fetch()
+      } catch {}
 
       return await zaehlungLabelFromZaehlung({
         zaehlung,
@@ -1184,7 +1271,10 @@ export class Zaehlung extends Model {
       row._revisions = newRevisions
     })
     if (field === '_deleted' && value) {
-      const zaehlungs = await this?.zaehlungs?.fetch()
+      let zaehlungs
+      try {
+        zaehlungs = await this.zaehlungs?.fetch()
+      } catch {}
       console.log('kultur model, zaehlungs:', zaehlungs)
       // TODO: edit to set _deleted true
     }
@@ -1528,12 +1618,24 @@ export class SammelLieferung extends Model {
   @lazy label = this.observe().pipe(
     distinctUntilChanged(),
     map$(async (lieferung) => {
-      const vonKultur = lieferung.von_kultur_id
-        ? await this.collections.get('kultur').find(lieferung.von_kultur_id)
-        : undefined
-      const vonGarten = await vonKultur?.garten?.fetch()
-      const gartenLabel = await vonGarten?.label.pipe(first$()).toPromise()
-      const person = await lieferung.person?.fetch()
+      let vonKultur
+      try {
+        vonKultur = await this.collections
+          .get('kultur')
+          .find(lieferung.von_kultur_id)
+      } catch {}
+      let vonGarten
+      try {
+        vonGarten = await vonKultur?.garten?.fetch()
+      } catch {}
+      let gartenLabel
+      try {
+        gartenLabel = await vonGarten?.label.pipe(first$()).toPromise()
+      } catch {}
+      let person
+      try {
+        person = await lieferung.person?.fetch()
+      } catch {}
       const personLabel = personLabelFromPerson({ person })
       const datumLabel = lieferung.datum
         ? DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
@@ -1552,12 +1654,14 @@ export class SammelLieferung extends Model {
   }
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError, db } = store
-    const [userPersonOption] = user.uid
-      ? await db
-          .get('person_option')
-          .query(Q.on('person', Q.where('account_id', user.uid)))
-          .fetch()
-      : [undefined]
+    let userPersonOption
+    try {
+      const userPersonOptions = await db
+        .get('person_option')
+        .query(Q.on('person', Q.where('account_id', user.uid)))
+        .fetch()
+      if (userPersonOptions?.[0]) userPersonOption = userPersonOptions[0]
+    } catch {}
 
     unsetError(`sammel_lieferung.${field}`)
     // first build the part that will be revisioned
@@ -1911,7 +2015,11 @@ export class Gv extends Model {
   @lazy gartenLabel = this.garten.observe().pipe(
     distinctUntilChanged(),
     map$(async (garten) => {
-      const person = await garten.person.fetch()
+      let person
+      try {
+        person = await garten.person?.fetch()
+      } catch {}
+
       return gartenLabelFromGarten({ garten, person })
     }),
   )

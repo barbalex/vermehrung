@@ -4,36 +4,42 @@ import max from 'lodash/max'
 import { Q } from '@nozbe/watermelondb'
 
 const buildData = async ({ artId, herkunftId, db }) => {
-  const zaehlungsDone = await db
-    .get('zaehlung')
-    .query(
-      Q.experimentalJoinTables(['kultur']),
-      Q.experimentalJoinTables(['teilzaehlung']),
-      Q.on('kultur', [
-        Q.where('art_id', artId),
-        Q.where('herkunft_id', herkunftId),
-      ]),
-      Q.where('prognose', false),
-      Q.where('datum', Q.notEq(null)),
-      Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
-      Q.where('_deleted', false),
-    )
-    .fetch()
-  const zaehlungsPlannedAll = await db
-    .get('zaehlung')
-    .query(
-      Q.experimentalJoinTables(['kultur']),
-      Q.experimentalJoinTables(['teilzaehlung']),
-      Q.where('prognose', true),
-      Q.where('datum', Q.notEq(null)),
-      Q.on('kultur', [
-        Q.where('art_id', artId),
-        Q.where('herkunft_id', herkunftId),
-      ]),
-      Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
-      Q.where('_deleted', false),
-    )
-    .fetch()
+  let zaehlungsDone = []
+  try {
+    zaehlungsDone = await db
+      .get('zaehlung')
+      .query(
+        Q.experimentalJoinTables(['kultur']),
+        Q.experimentalJoinTables(['teilzaehlung']),
+        Q.on('kultur', [
+          Q.where('art_id', artId),
+          Q.where('herkunft_id', herkunftId),
+        ]),
+        Q.where('prognose', false),
+        Q.where('datum', Q.notEq(null)),
+        Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
+  let zaehlungsPlannedAll = []
+  try {
+    zaehlungsPlannedAll = await db
+      .get('zaehlung')
+      .query(
+        Q.experimentalJoinTables(['kultur']),
+        Q.experimentalJoinTables(['teilzaehlung']),
+        Q.where('prognose', true),
+        Q.where('datum', Q.notEq(null)),
+        Q.on('kultur', [
+          Q.where('art_id', artId),
+          Q.where('herkunft_id', herkunftId),
+        ]),
+        Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
   const zaehlungsPlannedIgnored = zaehlungsPlannedAll.filter((zg) =>
     // check if more recent zaehlungsDone exists
     zaehlungsDone.some((z) => z.datum >= zg.datum),
@@ -42,28 +48,34 @@ const buildData = async ({ artId, herkunftId, db }) => {
     (lg) => !zaehlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
-  const sammlungsDone = await db
-    .get('sammlung')
-    .query(
-      Q.where('art_id', artId),
-      Q.where('herkunft_id', herkunftId),
-      Q.where('geplant', false),
-      Q.where('datum', Q.notEq(null)),
-      Q.where('anzahl_pflanzen', Q.notEq(null)),
-      Q.where('_deleted', false),
-    )
-    .fetch()
-  const sammlungsPlannedAll = await db
-    .get('sammlung')
-    .query(
-      Q.where('art_id', artId),
-      Q.where('herkunft_id', herkunftId),
-      Q.where('geplant', true),
-      Q.where('datum', Q.notEq(null)),
-      Q.where('anzahl_pflanzen', Q.notEq(null)),
-      Q.where('_deleted', false),
-    )
-    .fetch()
+  let sammlungsDone = []
+  try {
+    sammlungsDone = await db
+      .get('sammlung')
+      .query(
+        Q.where('art_id', artId),
+        Q.where('herkunft_id', herkunftId),
+        Q.where('geplant', false),
+        Q.where('datum', Q.notEq(null)),
+        Q.where('anzahl_pflanzen', Q.notEq(null)),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
+  let sammlungsPlannedAll = []
+  try {
+    sammlungsPlannedAll = await db
+      .get('sammlung')
+      .query(
+        Q.where('art_id', artId),
+        Q.where('herkunft_id', herkunftId),
+        Q.where('geplant', true),
+        Q.where('datum', Q.notEq(null)),
+        Q.where('anzahl_pflanzen', Q.notEq(null)),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
   const sammlungsPlannedIgnored = sammlungsPlannedAll.filter((zg) =>
     // check if more recent zaehlungsDone exists
     sammlungsDone.some((z) => z.datum >= zg.datum),
@@ -72,17 +84,20 @@ const buildData = async ({ artId, herkunftId, db }) => {
     (lg) => !sammlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
-  const lieferungsDone1 = await db
-    .get('lieferung')
-    .query(
-      Q.where('art_id', artId),
-      Q.where('nach_ausgepflanzt', true),
-      Q.where('geplant', false),
-      Q.where('datum', Q.notEq(null)),
-      Q.where('anzahl_pflanzen', Q.notEq(null)),
-      Q.where('_deleted', false),
-    )
-    .fetch()
+  let lieferungsDone1 = []
+  try {
+    lieferungsDone1 = await db
+      .get('lieferung')
+      .query(
+        Q.where('art_id', artId),
+        Q.where('nach_ausgepflanzt', true),
+        Q.where('geplant', false),
+        Q.where('datum', Q.notEq(null)),
+        Q.where('anzahl_pflanzen', Q.notEq(null)),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
   // can't use Q.on here because there are two associations to kultur
   const lieferungsDone = await Promise.all(
     lieferungsDone1.filter(async (l) => {
@@ -90,17 +105,20 @@ const buildData = async ({ artId, herkunftId, db }) => {
       return vonKultur?.herkunft_id === herkunftId
     }),
   )
-  const lieferungsPlanned1 = await db
-    .get('lieferung')
-    .query(
-      Q.where('art_id', artId),
-      Q.where('nach_ausgepflanzt', true),
-      Q.where('geplant', true),
-      Q.where('datum', Q.notEq(null)),
-      Q.where('anzahl_pflanzen', Q.notEq(null)),
-      Q.where('_deleted', false),
-    )
-    .fetch()
+  let lieferungsPlanned1 = []
+  try {
+    lieferungsPlanned1 = await db
+      .get('lieferung')
+      .query(
+        Q.where('art_id', artId),
+        Q.where('nach_ausgepflanzt', true),
+        Q.where('geplant', true),
+        Q.where('datum', Q.notEq(null)),
+        Q.where('anzahl_pflanzen', Q.notEq(null)),
+        Q.where('_deleted', false),
+      )
+      .fetch()
+  } catch {}
   // can't use Q.on here because there are two associations to kultur
   const lieferungsPlannedAll = await Promise.all(
     lieferungsPlanned1
@@ -132,15 +150,18 @@ const buildData = async ({ artId, herkunftId, db }) => {
   // 2. get list of all non deleted kulturs
   //    these are the basis for counting:
   //    at every date the last count is used
-  const kultursOfArt = await db
-    .get('kultur')
-    .query(
-      Q.where('_deleted', false),
-      Q.where('aktiv', true),
-      Q.where('herkunft_id', herkunftId),
-      Q.where('art_id', artId),
-    )
-    .fetch()
+  let kultursOfArt = []
+  try {
+    kultursOfArt = await db
+      .get('kultur')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('aktiv', true),
+        Q.where('herkunft_id', herkunftId),
+        Q.where('art_id', artId),
+      )
+      .fetch()
+  } catch {}
   // 3. for every date get:
   //    - sum of last zaehlung
   //    - whether last zahlung includes prognose
@@ -186,7 +207,11 @@ const buildData = async ({ artId, herkunftId, db }) => {
           )
           const lastTzAnzahls = await Promise.all(
             lastZaehlungsOfKultur.map(async (z) => {
-              const tzs = await z.teilzaehlungs.fetch()
+              let tzs = []
+              try {
+                tzs = await z.teilzaehlungs?.fetch()
+              } catch {}
+
               return sum(tzs.map((tz) => tz.anzahl_pflanzen))
             }),
           )
