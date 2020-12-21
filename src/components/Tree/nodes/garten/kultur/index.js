@@ -6,7 +6,10 @@ const gartenKulturNodes = async ({
   gartenId,
   gartenIndex,
 }) => {
-  const label = await kultur.labelUnderGarten.pipe(first$()).toPromise()
+  let label = ''
+  try {
+    label = await kultur.labelUnderGarten.pipe(first$()).toPromise()
+  } catch {}
 
   return {
     nodeType: 'table',

@@ -4,7 +4,10 @@ import { first as first$ } from 'rxjs/operators'
 const gartensSortedFromGartens = async (gartens) => {
   const gartenSorters = await Promise.all(
     gartens.map(async (garten) => {
-      const label = await garten?.label?.pipe(first$()).toPromise()
+      let label = ''
+      try {
+        label = await garten?.label?.pipe(first$()).toPromise()
+      } catch {}
       const sort = label?.toString()?.toLowerCase()
 
       return { id: garten.id, sort }

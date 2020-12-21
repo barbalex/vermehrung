@@ -74,7 +74,10 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
       const artsSorted = await artsSortedFromArts(arts)
       const artWerte = await Promise.all(
         artsSorted.map(async (el) => {
-          const label = await el.label.pipe(first$()).toPromise()
+          let label
+          try {
+            label = await el.label.pipe(first$()).toPromise()
+          } catch {}
 
           return {
             value: el.id,

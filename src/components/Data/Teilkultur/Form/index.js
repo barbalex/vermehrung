@@ -84,7 +84,10 @@ const TeilkulturForm = ({
         )
         const kulturWerte = await Promise.all(
           kultursSorted.map(async (el) => {
-            const label = await el.label.pipe(first$()).toPromise()
+            let label = ''
+            try {
+              label = await el.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               value: el.id,

@@ -6,7 +6,10 @@ const kulturZaehlungNodes = async ({
   kulturId,
   kulturIndex,
 }) => {
-  const label = await zaehlung.label.pipe(first$()).toPromise()
+  let label = ''
+  try {
+    label = await zaehlung.label.pipe(first$()).toPromise()
+  } catch {}
 
   return {
     nodeType: 'table',

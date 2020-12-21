@@ -46,7 +46,10 @@ const LieferungForLieferschein = ({ lieferung: row }) => {
     ])
     const subscription = combinedObservables.subscribe(
       async ([art, [vonKulturHerkunft], [vonSammlungHerkunft]]) => {
-        const artLabel = await art.label.pipe(first$()).toPromise()
+        let artLabel
+        try {
+          artLabel = await art.label.pipe(first$()).toPromise()
+        } catch {}
         const herkunftLabel = vonKulturHerkunft
           ? herkunftLabelFromHerkunft({
               herkunft: vonKulturHerkunft,

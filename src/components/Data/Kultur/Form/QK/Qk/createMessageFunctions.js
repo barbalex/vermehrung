@@ -56,7 +56,10 @@ const createMessageFunctions = async ({ kulturId, db }) => {
           .filter((k) => k.id === kulturId)
           .filter((k) => !exists(k.von_anzahl_individuen))
           .map(async (k) => {
-            const text = await k.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await k.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Kulturen', kulturId],
@@ -70,7 +73,10 @@ const createMessageFunctions = async ({ kulturId, db }) => {
           .filter((k) => k.id === kulturId)
           .filter((k) => !k.garten_id)
           .map(async (k) => {
-            const text = await k.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await k.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Kulturen', kulturId],
@@ -84,7 +90,10 @@ const createMessageFunctions = async ({ kulturId, db }) => {
           .filter((k) => k.id === kulturId)
           .filter((k) => !k.herkunft_id)
           .map(async (k) => {
-            const text = await k.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await k.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Kulturen', kulturId],
@@ -107,7 +116,10 @@ const createMessageFunctions = async ({ kulturId, db }) => {
                 ).length === 0,
           )
           .map(async (k) => {
-            const text = await k.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await k.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Kulturen', kulturId],

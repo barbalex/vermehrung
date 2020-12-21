@@ -4,7 +4,11 @@ import { first as first$ } from 'rxjs/operators'
 const artsSortedFromArts = async (arts) => {
   const artSorters = await Promise.all(
     arts.map(async (art) => {
-      const label = await art.label.pipe(first$()).toPromise()
+      let label = ''
+      try {
+        label = await art.label.pipe(first$()).toPromise()
+      } catch {}
+
       return { id: art.id, label: label?.toString()?.toLowerCase() }
     }),
   )

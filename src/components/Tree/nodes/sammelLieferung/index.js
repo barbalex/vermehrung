@@ -1,7 +1,10 @@
 import { first as first$ } from 'rxjs/operators'
 
 const sammelLieferungNodes = async ({ sammelLieferung, index }) => {
-  const label = await sammelLieferung.label.pipe(first$()).toPromise()
+  let label = ''
+  try {
+    label = await sammelLieferung.label.pipe(first$()).toPromise()
+  } catch {}
 
   return {
     nodeType: 'table',

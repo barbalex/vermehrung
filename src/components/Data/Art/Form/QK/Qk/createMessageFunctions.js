@@ -188,7 +188,10 @@ const createMessageFunctions = async ({ artId, db }) => {
             (s) => !lieferungsSorted.find((l) => l.von_sammlung_id === s.id),
           )
           .map(async (s) => {
-            const text = await s.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await s.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Sammlungen', s.id],
@@ -206,7 +209,10 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter((s) => s.length > 1)
           .flatMap((vs) =>
             vs.map(async (s) => {
-              const text = await s.label.pipe(first$()).toPromise()
+              let text
+              try {
+                text = await s.label.pipe(first$()).toPromise()
+              } catch {}
 
               return {
                 url: ['Sammlungen', s.id],
@@ -222,7 +228,10 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter((s) => s.art_id === artId)
           .filter((s) => !exists(s.nr))
           .map(async (s) => {
-            const text = await s.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await s.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', artId, 'Sammlungen', s.id],
@@ -236,7 +245,10 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter((s) => s.art_id === artId)
           .filter((s) => !s.herkunft_id)
           .map(async (s) => {
-            const text = await s.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await s.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', artId, 'Sammlungen', s.id],
@@ -250,7 +262,10 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter((s) => s.art_id === artId)
           .filter((s) => !s.person_id)
           .map(async (s) => {
-            const text = await s.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await s.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', artId, 'Sammlungen', s.id],
@@ -264,7 +279,10 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter((s) => s.art_id === artId)
           .filter((s) => !s.datum)
           .map(async (s) => {
-            const text = await s.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await s.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', artId, 'Sammlungen', s.id],
@@ -278,7 +296,10 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter((s) => s.art_id === artId)
           .filter((s) => !exists(s.anzahl_pflanzen))
           .map(async (s) => {
-            const text = await s.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await s.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', artId, 'Sammlungen', s.id],
@@ -292,7 +313,10 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter((s) => s.art_id === artId)
           .filter((s) => !exists(s.von_anzahl_individuen))
           .map(async (s) => {
-            const text = await s.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await s.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', artId, 'Sammlungen', s.id],
@@ -314,7 +338,10 @@ const createMessageFunctions = async ({ artId, db }) => {
             return !!kultursCount && !activeKultursCount
           })
           .map(async (g) => {
-            const text = await g.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await g.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Gaerten', g.id],
@@ -328,7 +355,10 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter((s) => s.art_id === artId)
           .filter((s) => !exists(s.von_anzahl_individuen))
           .map(async (k) => {
-            const text = await k.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await k.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', artId, 'Kulturen', k.id],
@@ -342,7 +372,10 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter((s) => s.art_id === artId)
           .filter((s) => !s.garten_id)
           .map(async (k) => {
-            const text = await k.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await k.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', artId, 'Kulturen', k.id],
@@ -356,7 +389,10 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter((s) => s.art_id === artId)
           .filter((s) => !s.herkunft_id)
           .map(async (k) => {
-            const text = await k.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await k.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', artId, 'Kulturen', k.id],
@@ -379,7 +415,10 @@ const createMessageFunctions = async ({ artId, db }) => {
                 ).length === 0,
           )
           .map(async (k) => {
-            const text = await k.label.pipe(first$()).toPromise()
+            let text
+            try {
+              text = await k.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               url: ['Arten', artId, 'Kulturen', k.id],

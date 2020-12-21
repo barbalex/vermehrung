@@ -120,7 +120,10 @@ const EventForm = ({
         )
         const kulturWerte = await Promise.all(
           kultursSorted.map(async (t) => {
-            const label = await t.label.pipe(first$()).toPromise()
+            let label
+            try {
+              label = await t.label.pipe(first$()).toPromise()
+            } catch {}
 
             return {
               value: t.id,
