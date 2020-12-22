@@ -83,10 +83,6 @@ const initializeSubscriptions = ({ store }) => {
     })
     .subscribe({
       next(data) {
-        console.log('initializeSubscriptions, ae_art:', {
-          this: this,
-          unsubscribe,
-        })
         processSubscriptionResult({
           data: data.data.ae_art,
           table: 'ae_art',
