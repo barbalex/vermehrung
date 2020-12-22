@@ -4,6 +4,7 @@ import { FaHistory } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
+import { of as $of } from 'rxjs'
 
 import StoreContext from '../../storeContext'
 import ErrorBoundary from './ErrorBoundary'
@@ -28,7 +29,9 @@ const HistoryButton = ({ asMenu, id, showHistory, setShowHistory }) => {
 
   const [dataState, setDataState] = useState({ row })
   useEffect(() => {
-    const tzObservable = db.get('teilzaehlung').findAndObserve(id)
+    const tzObservable = id
+      ? db.get('teilzaehlung').findAndObserve(id)
+      : $of(null)
     const subscription = tzObservable.subscribe((row) => setDataState({ row }))
 
     return () => subscription.unsubscribe()
