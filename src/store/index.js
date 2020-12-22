@@ -123,6 +123,8 @@ const myTypes = types
     authorizing: types.optional(types.boolean, true),
     errors: types.optional(Errors, defaultErrors),
     diffConflict: types.optional(types.boolean, true),
+    // wsReconnectCount is made so a subscription can provoke re-subscription on error
+    // see initializeSubscriptions, unsubscribe.ae_art
     wsReconnectCount: types.maybeNull(types.number, 0),
   })
   .volatile(() => ({
