@@ -133,7 +133,7 @@ const myTypes = types
   }))
   .actions((self) => {
     reaction(
-      () => `${self.queuedQueries}/${self.online}`,
+      () => `${self.queuedQueries}/${self.shortTermOnline}`,
       flow(function* () {
         /**
          * TODO:

@@ -75,15 +75,16 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       })
     })
   }, [
-    addNotification,
-    db,
-    historyTakeoverCallback,
-    gqlClient,
-    revRow._deleted,
-    revRow.ae_id,
-    revRow.art_id,
     row,
+    revRow.art_id,
+    revRow.ae_id,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   console.log('Art History row', { revRow, row, dataArray })

@@ -77,18 +77,19 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       })
     })
   }, [
-    addNotification,
-    db,
-    historyTakeoverCallback,
-    gqlClient,
-    revRow._deleted,
-    revRow.bemerkungen,
-    revRow.datum,
-    revRow.kultur_id,
-    revRow.prognose,
-    revRow.zaehlung_id,
     row,
+    revRow.zaehlung_id,
+    revRow.kultur_id,
+    revRow.datum,
+    revRow.prognose,
+    revRow.bemerkungen,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   return (
