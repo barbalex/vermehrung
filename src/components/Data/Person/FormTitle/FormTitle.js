@@ -66,7 +66,7 @@ const PersonFormTitle = ({
         <Title>Person</Title>
         <TitleSymbols>
           <NavButtons />
-          {userRole === 'manager' && (
+          {userRole?.name === 'manager' && (
             <>
               <AddButton />
               <DeleteButton row={row} />
@@ -97,7 +97,7 @@ const PersonFormTitle = ({
       <Title>Person</Title>
       <TitleSymbols>
         <NavButtons />
-        {userRole === 'manager' && (
+        {userRole?.name === 'manager' && (
           <>
             <AddButton />
             <DeleteButton row={row} />

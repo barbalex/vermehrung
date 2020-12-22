@@ -373,7 +373,7 @@ const Row = ({ style, node, nodes, userRole }) => {
             )}
           {node?.nodeType === 'table' &&
             node?.menuTitle === 'Person' &&
-            userRole === 'manager' &&
+            userRole?.name === 'manager' &&
             !accountId && (
               <>
                 <MenuSubtitle className="react-contextmenu-title">
@@ -384,7 +384,7 @@ const Row = ({ style, node, nodes, userRole }) => {
             )}
           {node?.nodeType === 'table' &&
             node?.menuTitle === 'Person' &&
-            userRole === 'manager' &&
+            userRole?.name === 'manager' &&
             accountId && (
               <>
                 <MenuSubtitle className="react-contextmenu-title">

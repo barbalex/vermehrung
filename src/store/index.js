@@ -833,11 +833,13 @@ const myTypes = types
         // optimistically update store
         const { db } = self
         await db.action(async () => {
-          const collection = db.get('kultur')
+          const kulturCollection = db.get('kultur')
+          const kulturOptionCollection = db.get('kultur_option')
           // using batch because can create from raw
           // which enables overriding watermelons own id
           await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+            kulturCollection.prepareCreateFromDirtyRaw(newObjectForStore),
+            kulturOptionCollection.prepareCreateFromDirtyRaw({ id }),
           ])
         })
         setTimeout(() => {
@@ -1055,11 +1057,13 @@ const myTypes = types
         // optimistically update store
         const { db } = self
         await db.action(async () => {
-          const collection = db.get('person')
+          const personCollection = db.get('person')
+          const personOptionCollection = db.get('person_option')
           // using batch because can create from raw
           // which enables overriding watermelons own id
           await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
+            personCollection.prepareCreateFromDirtyRaw(newObjectForStore),
+            personOptionCollection.prepareCreateFromDirtyRaw({ id }),
           ])
         })
         setTimeout(() => {

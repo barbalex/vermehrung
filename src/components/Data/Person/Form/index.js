@@ -56,20 +56,20 @@ const Person = ({
             .query(Q.where('_deleted', false), Q.where('nr', row.nr))
             .observeCount()
     const userRolesObservable = db.get('user_role').query().observe()
+    const userRoleObservable = row.user_role
+      ? row.user_role.observe()
+      : $of(null)
     const combinedObservables = combineLatest([
       userRolesObservable,
       personsNrCountObservable,
+      userRoleObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([userRoles, nrCount]) => {
+      async ([userRoles, nrCount, userRole]) => {
         const userRoleWerte = userRoles.sort(userRoleSort).map((el) => ({
           value: el.id,
           label: el.label,
         }))
-        let userRole
-        try {
-          userRole = await row.user_role.fetch()
-        } catch {}
         if (!showFilter && nrCount > 1) {
           setError({
             path: 'person.nr',
