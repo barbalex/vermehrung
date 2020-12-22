@@ -96,6 +96,7 @@ const Vermehrung = ({ location }) => {
     setOpenNodes,
     setActiveNodeArray,
     widthInPercentOfScreen,
+    wsReconnectCount,
   } = store.tree
   const showFilter = store.filter.show
   let treeWidth = singleColumnView
@@ -141,7 +142,7 @@ const Vermehrung = ({ location }) => {
         Object.values(unsubscribe).forEach((value) => value.unsubscribe())
       }
     }
-  }, [existsUser, store])
+  }, [existsUser, store, wsReconnectCount])
 
   if (gettingAuthUser || isIOS) {
     return (

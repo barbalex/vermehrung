@@ -32,9 +32,7 @@ const initiateApp = async () => {
         lazy: true,
         connectionCallback: (error) => {
           if (error) {
-            console.log('gqlWsClient connectionCallback:', {
-              error,
-            })
+            console.log('gqlWsClient connectionCallback error:', error)
             token = getToken()
           } else {
             console.log('gqlWsClient connectionCallback worked')
@@ -53,7 +51,10 @@ const initiateApp = async () => {
       console.log('ws client disconnected')
       store.setShortTermOnline(false)
     })
-    gqlWsClient.onReconnected(() => console.log('ws client re-connected'))
+    gqlWsClient.onReconnected(() => {
+      console.log('ws client re-connected')
+      store.setShortTermOnline(true)
+    })
   }
   // need to renew header any time
   // solutions:

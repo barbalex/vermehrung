@@ -83,14 +83,23 @@ const initializeSubscriptions = ({ store }) => {
     })
     .subscribe({
       next(data) {
-        //console.log('initializeSubscriptions, ae_art, data:', data.data.ae_art)
+        console.log('initializeSubscriptions, ae_art:', {
+          this: this,
+          unsubscribe,
+        })
         processSubscriptionResult({
           data: data.data.ae_art,
           table: 'ae_art',
           store,
         })
       },
-      error: (error) => console.log('subscribeAeArt, onError:', error),
+      error(error) {
+        // if error.message contains JWT, do what?
+        // re-subscribe
+        console.log('subscribeAeArt, onError:', error)
+        // need to retry
+        setTimeout(() => store.incrementWsReconnectCount(), 5000)
+      },
     })
   unsubscribe.art = store.gqlWsClient
     .request({
