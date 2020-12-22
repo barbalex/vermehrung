@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaHistory } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
@@ -22,9 +22,18 @@ const StyledIconButton = styled(IconButton)`
     'box-shadow:inset 0px 0px 0px 1px rgba(0, 0, 0, 0.04);'}
 `
 
-const HistoryButton = ({ asMenu, row, showHistory, setShowHistory }) => {
+const HistoryButton = ({ asMenu, id, showHistory, setShowHistory }) => {
   const store = useContext(StoreContext)
-  const { online } = store
+  const { online, db } = store
+
+  const [dataState, setDataState] = useState({ row })
+  useEffect(() => {
+    const tzObservable = db.get('teilzaehlung').findAndObserve(id)
+    const subscription = tzObservable.subscribe((row) => setDataState({ row }))
+
+    return () => subscription.unsubscribe()
+  }, [id, db])
+  const { row } = dataState
 
   const existMultipleRevisions =
     row?._revisions?.length && row?._revisions?.length > 1
