@@ -142,7 +142,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
               <IconButton title={upTitle} onClick={onClickUp}>
                 <UpSvg />
               </IconButton>
-              {userRole === 'manager' && (
+              {userRole?.name === 'manager' && (
                 <IconButton
                   aria-label="neue Person"
                   title="neue Person"

@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
 import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../../storeContext'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
@@ -54,7 +55,9 @@ const Teilzaehlungen = ({ zaehlung }) => {
     kulturOption: undefined,
   })
   useEffect(() => {
-    const teilzaehlungsObservable = zaehlung.teilzaehlungs.observe()
+    const teilzaehlungsObservable = zaehlung.teilzaehlungs
+      .extend(Q.where('_deleted', false))
+      .observe()
     const teilkultursObservable = zaehlung.teilkulturs.observe()
     const kulturOptionObservable = kulturId
       ? db.get('kultur_option').find(kulturId)
