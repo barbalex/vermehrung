@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Slider from 'react-slick'
@@ -8,6 +8,7 @@ import gql from 'graphql-tag'
 
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
+import StoreContext from '../../../../storeContext'
 import Row from './Row'
 
 const herkunftRevQuery = gql`
@@ -62,6 +63,8 @@ const sliderSettings = {
 }
 
 const HerkunftHistory = ({ row, rawRow, historyTakeoverCallback }) => {
+  const store = useContext(StoreContext)
+
   const priorRevisions = row._revisions.slice(1)
   const [{ error, data, fetching }] = useQuery({
     query: herkunftRevQuery,
@@ -69,7 +72,7 @@ const HerkunftHistory = ({ row, rawRow, historyTakeoverCallback }) => {
       rev: priorRevisions,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
   const revRowsUnsorted = useMemo(() => data?.herkunft_rev ?? [], [
     data?.herkunft_rev,

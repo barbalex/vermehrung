@@ -64,7 +64,7 @@ const SammelLieferungConflict = ({
       id,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
   const revRow = useMemo(() => data?.sammel_lieferung_rev?.[0] ?? {}, [
     data?.sammel_lieferung_rev,
@@ -185,21 +185,19 @@ const SammelLieferungConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    //console.log('SammelLieferung Conflict', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_sammel_lieferung_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'sammel_lieferung_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_sammel_lieferung_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'sammel_lieferung_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     // now we need to delete the previous conflict
@@ -229,6 +227,7 @@ const SammelLieferungConflict = ({
     row._depth,
     row._rev,
     row._revisions,
+    store,
     user.email,
   ])
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [

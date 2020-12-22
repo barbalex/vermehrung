@@ -48,21 +48,19 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('Sammlung History', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_sammlung_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'sammlung_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_sammlung_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'sammlung_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()
@@ -87,26 +85,27 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       })
     })
   }, [
-    addNotification,
-    db,
-    historyTakeoverCallback,
-    gqlClient,
-    revRow._deleted,
-    revRow.andere_menge,
-    revRow.anzahl_pflanzen,
+    row,
+    revRow.sammlung_id,
     revRow.art_id,
-    revRow.bemerkungen,
-    revRow.datum,
-    revRow.geom_point,
-    revRow.geplant,
-    revRow.gramm_samen,
+    revRow.person_id,
     revRow.herkunft_id,
     revRow.nr,
-    revRow.person_id,
-    revRow.sammlung_id,
+    revRow.datum,
     revRow.von_anzahl_individuen,
-    row,
+    revRow.anzahl_pflanzen,
+    revRow.gramm_samen,
+    revRow.andere_menge,
+    revRow.geom_point,
+    revRow.geplant,
+    revRow.bemerkungen,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   return (

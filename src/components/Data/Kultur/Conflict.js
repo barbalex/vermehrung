@@ -56,7 +56,7 @@ const KulturConflict = ({
       id,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
   const revRow = useMemo(() => data?.kultur_rev?.[0] ?? {}, [data?.kultur_rev])
 
@@ -156,21 +156,19 @@ const KulturConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    //console.log('Kultur Conflict', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_kultur_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'kultur_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_kultur_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'kultur_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     // now we need to delete the previous conflict
@@ -194,6 +192,7 @@ const KulturConflict = ({
     row._depth,
     row._rev,
     row._revisions,
+    store,
     user.email,
   ])
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [

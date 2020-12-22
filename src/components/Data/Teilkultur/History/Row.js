@@ -42,21 +42,19 @@ const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('Teilkultur History', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_teilkultur_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'teilkultur_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_teilkultur_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'teilkultur_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()
@@ -81,20 +79,21 @@ const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       })
     })
   }, [
-    addNotification,
-    db,
-    historyTakeoverCallback,
-    gqlClient,
-    revRow._deleted,
-    revRow.bemerkungen,
+    row,
+    revRow.teilkultur_id,
     revRow.kultur_id,
     revRow.name,
     revRow.ort1,
     revRow.ort2,
     revRow.ort3,
-    revRow.teilkultur_id,
-    row,
+    revRow.bemerkungen,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   return (

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
@@ -8,6 +8,7 @@ import { useQuery } from 'urql'
 
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
+import StoreContext from '../../../../storeContext'
 import Row from './Row'
 
 const zaehlungRevQuery = gql`
@@ -59,6 +60,8 @@ const sliderSettings = {
 }
 
 const ZaehlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
+  const store = useContext(StoreContext)
+
   const priorRevisions = row._revisions.slice(1)
   const [{ error, data, fetching }] = useQuery({
     query: zaehlungRevQuery,
@@ -66,7 +69,7 @@ const ZaehlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
       rev: priorRevisions,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
   const revRowsUnsorted = useMemo(() => data?.zaehlung_rev ?? [], [
     data?.zaehlung_rev,

@@ -51,21 +51,19 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('Lieferung History', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_lieferung_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'lieferung_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_lieferung_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'lieferung_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()
@@ -90,29 +88,30 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       })
     })
   }, [
-    addNotification,
-    db,
-    historyTakeoverCallback,
-    gqlClient,
-    revRow._deleted,
-    revRow.andere_menge,
-    revRow.anzahl_auspflanzbereit,
-    revRow.anzahl_pflanzen,
-    revRow.art_id,
-    revRow.bemerkungen,
-    revRow.datum,
-    revRow.geplant,
-    revRow.gramm_samen,
-    revRow.lieferung_id,
-    revRow.nach_ausgepflanzt,
-    revRow.nach_kultur_id,
-    revRow.person_id,
-    revRow.sammel_lieferung_id,
-    revRow.von_anzahl_individuen,
-    revRow.von_kultur_id,
-    revRow.von_sammlung_id,
     row,
+    revRow.lieferung_id,
+    revRow.sammel_lieferung_id,
+    revRow.art_id,
+    revRow.person_id,
+    revRow.von_sammlung_id,
+    revRow.von_kultur_id,
+    revRow.datum,
+    revRow.nach_kultur_id,
+    revRow.nach_ausgepflanzt,
+    revRow.von_anzahl_individuen,
+    revRow.anzahl_pflanzen,
+    revRow.anzahl_auspflanzbereit,
+    revRow.gramm_samen,
+    revRow.andere_menge,
+    revRow.geplant,
+    revRow.bemerkungen,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   return (
