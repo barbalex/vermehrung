@@ -2,7 +2,6 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../storeContext'
@@ -52,9 +51,8 @@ const Kultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter, online, db } = store
 
-  const db = useDatabase()
   const [row, setRow] = useState(null)
   // need raw row because observable does not provoke rerendering of components
   const [rawRow, setRawRow] = useState(null)

@@ -10,7 +10,6 @@ import styled from 'styled-components'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
 import { v1 as uuidv1 } from 'uuid'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 import StoreContext from '../../../storeContext'
 import Uploader from '../../Uploader'
@@ -63,12 +62,11 @@ const Content = styled.div`
 
 const Files = ({ parentTable, parent }) => {
   const store = useContext(StoreContext)
-  const { online, gqlClient, addNotification } = store
+  const { online, gqlClient, addNotification, db } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
-  const db = useDatabase()
   // use object with two keys to only render once on setting
   const [files, setEvent] = useState([])
   useEffect(() => {
