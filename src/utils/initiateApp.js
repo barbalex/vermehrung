@@ -14,6 +14,7 @@ const getToken = () => {
 }
 
 const initiateApp = async () => {
+  const store = MobxStore.create()
   // ws client only works in the browser
   // need to prevent gatsby from executing it server side
   // see: https://github.com/apollographql/subscriptions-transport-ws/issues/333#issuecomment-359261024
@@ -50,6 +51,7 @@ const initiateApp = async () => {
     gqlWsClient.onDisconnected(() => {
       // TODO: react
       console.log('ws client disconnected')
+      store.setShortTermOnline(false)
     })
     gqlWsClient.onReconnected(() => console.log('ws client re-connected'))
   }
@@ -57,7 +59,6 @@ const initiateApp = async () => {
   // solutions:
   // https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-307793837
 
-  const store = MobxStore.create()
   store.setGqlWsClient(gqlWsClient)
 
   const gqlClient = createClient({

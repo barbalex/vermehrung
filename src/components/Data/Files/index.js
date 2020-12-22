@@ -63,7 +63,7 @@ const Content = styled.div`
 
 const Files = ({ parentTable, parent }) => {
   const store = useContext(StoreContext)
-  const { online, gqlClient } = store
+  const { online, gqlClient, addNotification } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
@@ -104,15 +104,19 @@ const Files = ({ parentTable, parent }) => {
               update_columns: ['id'],
             },
           }
-          try {
-            await gqlClient.mutation(mutation, variables).toPromise()
-          } catch (error) {
-            console.log(error)
+          const response = await gqlClient
+            .mutation(mutation, variables)
+            .toPromise()
+          if (response.error) {
+            console.log(response.error)
+            return addNotification({
+              message: response.error.message,
+            })
           }
         })
       }
     },
-    [db, parent.id, parentTable, gqlClient],
+    [parentTable, parent.id, db, gqlClient, addNotification],
   )
 
   const images = files.filter((f) => isImageFile(f))
