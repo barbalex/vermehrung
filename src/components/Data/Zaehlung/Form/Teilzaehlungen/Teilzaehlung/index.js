@@ -54,13 +54,7 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const Teilzaehlung = ({
-  id,
-  kulturId,
-  teilkulturWerte,
-  kulturOption,
-  index,
-}) => {
+const Teilzaehlung = ({ id, kulturId, index }) => {
   const store = useContext(StoreContext)
   const { online, db } = store
 
@@ -72,15 +66,13 @@ const Teilzaehlung = ({
     rawRow: undefined,
   })
   useEffect(() => {
-    const subscription = db
-      .get('teilzaehlung')
-      .findAndObserve(id)
-      .subscribe((newRow) => {
-        setDataState({
-          row: newRow,
-          rawRow: JSON.stringify(newRow?._raw ?? newRow),
-        })
+    const tzObservable = db.get('teilzaehlung').findAndObserve(id)
+    const subscription = tzObservable.subscribe((newRow) => {
+      setDataState({
+        row: newRow,
+        rawRow: JSON.stringify(newRow?._raw ?? newRow),
       })
+    })
 
     return () => subscription.unsubscribe()
   }, [db, id])
@@ -125,14 +117,10 @@ const Teilzaehlung = ({
               <Form
                 id={id}
                 kulturId={kulturId}
-                row={row}
-                rawRow={rawRow}
-                teilkulturWerte={teilkulturWerte}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
                 setShowHistory={setShowHistory}
-                kulturOption={kulturOption}
               />
               <>
                 {online && (
@@ -172,14 +160,10 @@ const Teilzaehlung = ({
           <Form
             id={id}
             kulturId={kulturId}
-            row={row}
-            rawRow={rawRow}
-            teilkulturWerte={teilkulturWerte}
             activeConflict={activeConflict}
             setActiveConflict={setActiveConflict}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
-            kulturOption={kulturOption}
           />
         </InnerContainer>
       </Container>

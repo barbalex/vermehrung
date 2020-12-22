@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -8,6 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
+import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'
 import getConstants from '../../../../../utils/constants'
@@ -33,8 +34,25 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsTeilzaehlungen = ({ kulturOption }) => {
+const SettingsTeilzaehlungen = ({ kulturId }) => {
   const store = useContext(StoreContext)
+  const { db } = store
+
+  const [dataState, setDataState] = useState({
+    kulturOption: undefined,
+  })
+  useEffect(() => {
+    const kulturOptionObservable = kulturId
+      ? db.get('kultur_option').findAndObserve(kulturId)
+      : $of({})
+    const subscription = kulturOptionObservable.subscribe(
+      async (kulturOption) => {
+        setDataState({ kulturOption })
+      },
+    )
+    return () => subscription.unsubscribe()
+  }, [db, kulturId])
+  const { kulturOption } = dataState
 
   const {
     tz_teilkultur_id,

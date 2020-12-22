@@ -17,8 +17,6 @@ import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk'
-import teilkulturLabelFromTeilkultur from '../../../../../utils/teilkulturLabelFromTeilkultur'
-import teilkulturSort from '../../../../../utils/teilkulturSort'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -51,30 +49,23 @@ const Teilzaehlungen = ({ zaehlung }) => {
 
   const [dataState, setDataState] = useState({
     teilzaehlungs: [],
-    teilkulturWerte: [],
     kulturOption: undefined,
   })
   useEffect(() => {
     const teilzaehlungsObservable = zaehlung.teilzaehlungs
       .extend(Q.where('_deleted', false))
       .observe()
-    const teilkultursObservable = zaehlung.teilkulturs.observe()
     const kulturOptionObservable = kulturId
       ? db.get('kultur_option').find(kulturId)
       : $of({})
     const combinedObservables = combineLatest([
       teilzaehlungsObservable,
-      teilkultursObservable,
       kulturOptionObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([tzs, teilkulturs, kulturOption]) => {
+      async ([tzs, kulturOption]) => {
         const teilzaehlungs = await teilzaehlungsSortByTk(tzs)
-        const teilkulturWerte = teilkulturs.sort(teilkulturSort).map((tk) => ({
-          value: tk.id,
-          label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
-        }))
-        setDataState({ teilzaehlungs, kulturOption, teilkulturWerte })
+        setDataState({ teilzaehlungs, kulturOption })
       },
     )
     return () => subscription.unsubscribe()
@@ -85,7 +76,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
     zaehlung.teilkulturs,
     zaehlung.teilzaehlungs,
   ])
-  const { teilzaehlungs, teilkulturWerte, kulturOption } = dataState
+  const { teilzaehlungs, kulturOption } = dataState
 
   const { tk } = kulturOption ?? {}
 
@@ -115,7 +106,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
       <TitleRow ref={titleRowRef} data-sticky={isSticky}>
         <Title>{title}</Title>
         <div>
-          {kulturId && <Settings kulturOption={kulturOption} />}
+          {kulturId && <Settings kulturId={kulturId} />}
           {showNew && (
             <IconButton
               aria-label="Neu"
@@ -127,12 +118,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
           )}
         </div>
       </TitleRow>
-      <TeilzaehlungenRows
-        kulturId={kulturId}
-        teilzaehlungs={teilzaehlungs}
-        teilkulturWerte={teilkulturWerte}
-        kulturOption={kulturOption}
-      />
+      <TeilzaehlungenRows kulturId={kulturId} teilzaehlungs={teilzaehlungs} />
     </ErrorBoundary>
   )
 }

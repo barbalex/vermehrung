@@ -9,6 +9,8 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest, of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../../../storeContext'
 import TextField from '../../../../../../shared/TextField'
@@ -18,6 +20,8 @@ import Select from '../../../../../../shared/SelectCreatable'
 import ConflictList from '../../../../../../shared/ConflictList'
 import HistoryButton from '../../../../../../shared/HistoryButton'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
+import teilkulturSort from '../../../../../../../utils/teilkulturSort'
+import teilkulturLabelFromTeilkultur from '../../../../../../../utils/teilkulturLabelFromTeilkultur'
 import PrognoseMenu from './PrognoseMenu'
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
 import exists from '../../../../../../../utils/exists'
@@ -79,17 +83,48 @@ const DeletedContainer = styled.div`
 const TeilzaehlungForm = ({
   id,
   kulturId,
-  row,
-  rawRow,
-  teilkulturWerte,
   activeConflict,
   setActiveConflict,
   showHistory,
   setShowHistory,
-  kulturOption,
 }) => {
   const store = useContext(StoreContext)
-  const { insertTeilkulturRev, errors, unsetError, online, filter } = store
+  const { insertTeilkulturRev, errors, unsetError, online, filter, db } = store
+
+  const [dataState, setDataState] = useState({
+    teilkulturWerte: [],
+    kulturOption,
+    row,
+  })
+  useEffect(() => {
+    const teilkultursObservable = db
+      .get('teilkultur')
+      .query(Q.where('_deleted', false), Q.where('kultur_id', kulturId))
+      .observeWithColumns(['name'])
+    const kulturOptionObservable = kulturId
+      ? db.get('kultur_option').findAndObserve(kulturId)
+      : $of(null)
+    const tzObservable = db.get('teilzaehlung').findAndObserve(id)
+    const combinedObservables = combineLatest([
+      teilkultursObservable,
+      kulturOptionObservable,
+      tzObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      ([teilkulturs, kulturOption, teilzaehlung]) => {
+        const teilkulturWerte = teilkulturs.sort(teilkulturSort).map((tk) => ({
+          value: tk.id,
+          label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
+        }))
+        setDataState({ teilkulturWerte, kulturOption, row: teilzaehlung })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, id, kulturId])
+  const { teilkulturWerte, kulturOption, row } = dataState
+
+  console.log('Teilzaehlung Form', { teilkulturWerte, kulturOption })
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -196,7 +231,6 @@ const TeilzaehlungForm = ({
             <Select
               key={`${row.id}teilkultur_id`}
               row={row}
-              rawRow={rawRow}
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturWerte}
@@ -295,8 +329,7 @@ const TeilzaehlungForm = ({
         )}
         <div>
           <HistoryButton
-            row={row}
-            rawRow={rawRow}
+            id={id}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
