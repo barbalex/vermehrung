@@ -67,7 +67,7 @@ const TeilkulturConflict = ({
     [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(async () => {
+  const onClickAktuellUebernehmen = useCallback(async () => {
     // build new object
     const newDepth = revRow._depth + 1
     const newObject = {
@@ -127,7 +127,7 @@ const TeilkulturConflict = ({
     revRow.teilkultur_id,
     user.email,
   ])
-  const onClickUebernehmen = useCallback(async () => {
+  const onClickWiderspruchUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -169,13 +169,13 @@ const TeilkulturConflict = ({
       })
     }
     // now we need to delete the previous conflict
-    onClickVerwerfen()
+    onClickAktuellUebernehmen()
     conflictSelectionCallback()
   }, [
     addNotification,
     conflictSelectionCallback,
     gqlClient,
-    onClickVerwerfen,
+    onClickAktuellUebernehmen,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.kultur_id,
@@ -200,8 +200,8 @@ const TeilkulturConflict = ({
       dataArray={dataArray}
       fetching={fetching}
       error={error}
-      onClickVerwerfen={onClickVerwerfen}
-      onClickUebernehmen={onClickUebernehmen}
+      onClickAktuellUebernehmen={onClickAktuellUebernehmen}
+      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
       onClickSchliessen={onClickSchliessen}
     />
   )

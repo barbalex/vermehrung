@@ -15,12 +15,12 @@ const Row = styled.div`
   border-bottom: ${(props) =>
     props['data-last'] ? '1px solid rgba(0, 0, 0, 0.1)' : 'none'};
   .Difference > del {
-    background-color: rgba(216, 67, 21, 0.2);
+    background-color: rgb(201, 238, 211);
     text-decoration: none;
   }
   .Difference > ins {
     padding-left: 2px;
-    background-color: rgb(201, 238, 211);
+    background-color: rgba(216, 67, 21, 0.2);
     text-decoration: none;
   }
 `

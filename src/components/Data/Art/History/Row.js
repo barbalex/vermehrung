@@ -20,7 +20,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     [revRow, row, store],
   )
 
-  const onClickUebernehmen = useCallback(async () => {
+  const onClickWiderspruchUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -93,7 +93,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     <History
       rev={revRow._rev}
       dataArray={dataArray}
-      onClickUebernehmen={onClickUebernehmen}
+      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
     />
   )
 }
