@@ -72,7 +72,7 @@ const Conflict = ({
         <StyledButton
           onClick={onClickVerwerfen}
           variant="outlined"
-          title="Der Konflikt gilt er als gelöst und erscheint nicht mehr"
+          title="Die widersprüchliche Version wird verworfen. Der Konflikt gilt er als gelöst und erscheint nicht mehr"
           startIcon={<FaRegTrashAlt />}
         >
           verwerfen
@@ -80,7 +80,7 @@ const Conflict = ({
         <StyledButton
           onClick={onClickUebernehmen}
           variant="outlined"
-          title="Die widersprüchliche Version wird zur aktuellen. Die bisher aktuelle wird zur widersprüchlichen"
+          title="Die widersprüchliche Version wird übernommen, die aktuelle verworfen. Der Konflikt gilt er als gelöst und erscheint nicht mehr"
           startIcon={<FaExchangeAlt />}
         >
           {diffConflict ? 'grüne Version übernehmen' : 'übernehmen'}

@@ -168,11 +168,14 @@ const TeilkulturConflict = ({
         message: error.message,
       })
     }
+    // now we need to delete the previous conflict
+    onClickVerwerfen()
     conflictSelectionCallback()
   }, [
     addNotification,
     conflictSelectionCallback,
     gqlClient,
+    onClickVerwerfen,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.kultur_id,
