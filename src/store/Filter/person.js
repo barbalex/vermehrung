@@ -107,7 +107,7 @@ export const empty = {
   user_role_id: null,
   kommerziell: null,
   info: null,
-  aktiv: null,
+  aktiv: true,
   _deleted: false,
 }
 

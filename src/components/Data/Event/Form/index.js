@@ -106,7 +106,6 @@ const EventForm = ({
     ])
     const subscription = combinedObservables.subscribe(
       async ([kulturs, teilkulturs, persons, kultur, kulturOption]) => {
-        console.log('Event Form useEffect', { kulturOption, row })
         // need to show a choosen kultur even if inactive but not if deleted
         const kultursIncludingInactiveChoosen = uniqBy(
           [
@@ -171,7 +170,6 @@ const EventForm = ({
     showFilter,
   ])
   const { kulturWerte, teilkulturWerte, personWerte, kulturOption } = dataState
-  console.log('Event Form rendering', { kulturOption, row })
 
   const { tk, ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
     kulturOption ?? {}

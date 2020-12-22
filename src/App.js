@@ -75,9 +75,7 @@ const App = ({ element }) => {
         unregister = unregisterReturned
       },
     )
-    return () => {
-      unregister()
-    }
+    return () => unregister()
   }, [])
 
   // without store bad things happen

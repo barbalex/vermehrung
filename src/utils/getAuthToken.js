@@ -7,6 +7,8 @@ const getAuthToken = async ({ store }) => {
     user,
     online,
     setOnline,
+    shortTermOnline,
+    setShortTermOnline,
   } = store
   if (!user?.uid) {
     console.log('getAuthToken returning because of missing user.uid')
@@ -29,6 +31,9 @@ const getAuthToken = async ({ store }) => {
     if (online) {
       setOnline(false)
     }
+    if (shortTermOnline) {
+      setShortTermOnline(false)
+    }
     addNotification({
       message: error?.response?.data,
     })
@@ -36,6 +41,9 @@ const getAuthToken = async ({ store }) => {
   if (res?.status === 200) {
     if (!online) {
       setOnline(true)
+    }
+    if (!shortTermOnline) {
+      setShortTermOnline(true)
     }
     let token
     try {

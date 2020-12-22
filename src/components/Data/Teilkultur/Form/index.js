@@ -57,7 +57,7 @@ const TeilkulturForm = ({
       .get('kultur')
       .query(Q.where('_deleted', false), Q.where('aktiv', true))
       .observe()
-    const kulturObservable = row.kultur.observe()
+    const kulturObservable = row.kultur ? row.kultur.observe() : $of({})
     const kulturOptionsObservable = row.kultur_id
       ? db
           .get('kultur_option')

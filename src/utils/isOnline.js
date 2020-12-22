@@ -5,7 +5,7 @@ import getConstants from './constants'
 const constants = getConstants()
 const config = {
   url: constants?.healthUri,
-  timeout: 5000,
+  timeout: 5000, // timeout error happens after 5 seconds
 }
 
 const isOnline = async () => {

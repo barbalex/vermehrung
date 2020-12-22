@@ -13,7 +13,7 @@ const pollInterval = 5000
 
 const ApiDetector = () => {
   const store = useContext(StoreContext)
-  const { online, setOnline } = store
+  const { online, setOnline, shortTermOnline, setShortTermOnline } = store
 
   useEffect(() => {
     const pollingId = setInterval(() => {
@@ -21,13 +21,16 @@ const ApiDetector = () => {
         if (online !== nowOnline) {
           setOnline(nowOnline)
         }
+        if (shortTermOnline !== nowOnline) {
+          setShortTermOnline(nowOnline)
+        }
       })
     }, pollInterval)
 
     return () => {
       clearInterval(pollingId)
     }
-  }, [online, setOnline])
+  }, [online, setOnline, setShortTermOnline, shortTermOnline])
 
   return null
 }
