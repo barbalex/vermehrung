@@ -55,8 +55,6 @@ const HerkunftConflict = ({
   })
   error && checkForOnlineError(error)
 
-  console.log('Herkunft Conflict, data:', data)
-
   const revRow = useMemo(() => data?.herkunft_rev?.[0] ?? {}, [
     data?.herkunft_rev,
   ])
@@ -169,11 +167,14 @@ const HerkunftConflict = ({
         message: error.message,
       })
     }
+    // now we need to delete the previous conflict
+    onClickVerwerfen()
     conflictSelectionCallback()
   }, [
     addNotification,
     conflictSelectionCallback,
     gqlClient,
+    onClickVerwerfen,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.gemeinde,
