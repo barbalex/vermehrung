@@ -54,7 +54,6 @@ const processSubscriptionResult = async ({
       // only if remote changed after local
       const objectsToUpdate = objectsOfToUpdate.filter((o) => {
         const dat = stripTypename(dataToCheck.find((d) => d.id === o.id))
-
         return !Object.entries(dat).every(([key, value]) =>
           isEqual(value, o[key]),
         )
