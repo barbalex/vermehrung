@@ -47,7 +47,10 @@ const initiateApp = async () => {
       })
     })()
     gqlWsClient.onConnected(() => console.log('ws client connected'))
-    gqlWsClient.onDisconnected(() => console.log('ws client disconnected'))
+    gqlWsClient.onDisconnected(() => {
+      // TODO: react
+      console.log('ws client disconnected')
+    })
     gqlWsClient.onReconnected(() => console.log('ws client re-connected'))
   }
   // need to renew header any time

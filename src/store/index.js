@@ -166,6 +166,8 @@ const myTypes = types
                   .toPromise()
               : yield self.gqlClient.mutation(mutation).toPromise()
           } catch (error) {
+            console.log('operation reaction error:', error)
+            // TODO: if offline, return and set shortTermOffline
             const lcMessage = error.message.toLowerCase()
             // In case a conflict was caused by two EXACT SAME changes,
             // this will bounce because of the same rev. We want to ignore this:

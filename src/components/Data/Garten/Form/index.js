@@ -132,9 +132,7 @@ const GartenForm = ({
       if (showFilter) {
         return filter.setValue({ table: 'garten', key: field, value })
       }
-      console.log('Garten Form saveToDb', { field, value })
       const previousValue = ifIsNumericAsNumber(row[field])
-      console.log('Garten Form saveToDb', { previousValue })
       // only update if value has changed
       if (value === previousValue) return
       row.edit({ field, value, store })
@@ -152,8 +150,6 @@ const GartenForm = ({
 
   const showDeleted =
     showFilter || filter.garten._deleted !== false || row?._deleted
-
-  console.log('Garten Form, personId:', row.person_id)
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
