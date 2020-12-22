@@ -142,6 +142,8 @@ const Vermehrung = ({ location }) => {
         Object.values(unsubscribe).forEach((value) => value.unsubscribe())
       }
     }
+    // wsReconnectCount is made so a subscription can provoke re-subscription on error
+    // see initializeSubscriptions, unsubscribe.ae_art
   }, [existsUser, store, wsReconnectCount])
 
   if (gettingAuthUser || isIOS) {
