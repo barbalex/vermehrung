@@ -123,6 +123,7 @@ const myTypes = types
     authorizing: types.optional(types.boolean, true),
     errors: types.optional(Errors, defaultErrors),
     diffConflict: types.optional(types.boolean, true),
+    wsReconnectCount: types.maybeNull(types.number, 0),
   })
   .volatile(() => ({
     user: {},
@@ -236,6 +237,9 @@ const myTypes = types
       },
     )
     return {
+      incrementWsReconnectCount() {
+        self.wsReconnectCount = self.wsReconnectCount + 1
+      },
       setInitiallyQuerying(val) {
         self.initiallyQuerying = val
       },
