@@ -17,7 +17,15 @@ const firebaseConfig = {
 
 const recreatePersistedStore = async ({ store }) => {
   let unregisterAuthObserver = () => {}
-  const { setUser, setGettingAuthUser, setFirebase, online, setOnline } = store
+  const {
+    setUser,
+    setGettingAuthUser,
+    setFirebase,
+    online,
+    setOnline,
+    shortTermOnline,
+    setShortTermOnline,
+  } = store
   window.store = store
   // need to blacklist authorizing or mst-persist will set it to false
   // and login form appears for a short moment until auth state changed
@@ -27,6 +35,7 @@ const recreatePersistedStore = async ({ store }) => {
     'gqlWsClient',
     'gettingAuthUser',
     'online',
+    'shortTermOnline',
     'errors',
     'ae_art_initially_queried',
     'art_initially_queried',
@@ -79,6 +88,7 @@ const recreatePersistedStore = async ({ store }) => {
     }
     const nowOnline = await isOnline()
     if (nowOnline !== online) setOnline(nowOnline)
+    if (nowOnline !== shortTermOnline) setShortTermOnline(nowOnline)
     if (nowOnline) {
       await getAuthToken({ store })
     }

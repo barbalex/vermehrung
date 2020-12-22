@@ -99,8 +99,6 @@ const Zaehlung = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
-  console.log('Zaehlung, revisions.length:', row?._revisions?.length)
-
   return (
     <ErrorBoundary>
       <>

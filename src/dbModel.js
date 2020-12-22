@@ -2152,10 +2152,14 @@ export class ArtFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2176,10 +2180,14 @@ export class ArtFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2243,10 +2251,14 @@ export class GartenFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2267,10 +2279,14 @@ export class GartenFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2334,10 +2350,14 @@ export class HerkunftFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2358,10 +2378,14 @@ export class HerkunftFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2425,10 +2449,14 @@ export class KulturFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2449,10 +2477,14 @@ export class KulturFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2516,10 +2548,14 @@ export class LieferungFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2540,10 +2576,14 @@ export class LieferungFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2607,10 +2647,14 @@ export class PersonFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2631,10 +2675,14 @@ export class PersonFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2698,10 +2746,14 @@ export class SammlungFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2722,10 +2774,14 @@ export class SammlungFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    try {
-      await store.gqlClient.mutation(mutation, variables).toPromise()
-    } catch (error) {
-      return console.log(error)
+    const response = await store.gqlClient
+      .mutation(mutation, variables)
+      .toPromise()
+    if (response.error) {
+      store.addNotification({
+        message: response.error.message,
+      })
+      return console.log(response.error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()

@@ -1,4 +1,9 @@
-const checkForOnlineError = (error) =>
-  console.log('checkForOnlineError, error:', error)
+const checkForOnlineError = ({ error, store }) => {
+  if (error.message.includes('Failed to fetch')) {
+    console.log('checkForOnlineError, network is failing')
+    store.setShortTermOnline(false)
+    return
+  }
+}
 
 export default checkForOnlineError

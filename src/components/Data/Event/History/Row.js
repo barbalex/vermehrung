@@ -43,20 +43,19 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
     //console.log('Event History', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_event_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'event_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_event_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'event_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
@@ -9,6 +9,7 @@ import { useQuery } from 'urql'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
 import Row from './Row'
+import StoreContext from '../../../../storeContext'
 
 const artRevQuery = gql`
   query artRevForHistoryQuery($rev: [String!]) {
@@ -56,6 +57,8 @@ const sliderSettings = {
 }
 
 const ArtHistory = ({ row, rawRow, historyTakeoverCallback }) => {
+  const store = useContext(StoreContext)
+
   const priorRevisions = row._revisions.slice(1)
   const [{ error, data, fetching }] = useQuery({
     query: artRevQuery,
@@ -63,7 +66,7 @@ const ArtHistory = ({ row, rawRow, historyTakeoverCallback }) => {
       rev: priorRevisions,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
   const revRowsUnsorted = useMemo(() => data?.art_rev ?? [], [data?.art_rev])
   const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)

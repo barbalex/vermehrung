@@ -45,6 +45,7 @@ const myTypes = types
     singleColumnView: types.optional(types.boolean, false),
     showTreeInSingleColumnView: types.optional(types.boolean, false),
     online: types.optional(types.boolean, true),
+    shortTermOnline: types.optional(types.boolean, true),
     // every table saves last updated timestamp in seconds since 1.1.1970
     // why? so data to be updated can be efficiently extracted
     // from the live queries
@@ -144,7 +145,7 @@ const myTypes = types
          * Also important: How to combine when online?
          * as long as same id is active?
          */
-        if (self.online) {
+        if (self.shortTermOnline) {
           // execute operation
           const query = self.queuedQueriesSorted[0]
           if (!query) return
@@ -158,20 +159,22 @@ const myTypes = types
           } = query
           const mutation = mutations[name]
           if (!mutation) throw new Error('keine Mutation gefunden für: ', name)
-          try {
-            // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
-            variables
-              ? yield self.gqlClient
-                  .mutation(mutation, JSON.parse(variables))
-                  .toPromise()
-              : yield self.gqlClient.mutation(mutation).toPromise()
-          } catch (error) {
-            console.log('operation reaction error:', error)
+          let response
+          // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
+          variables
+            ? (response = yield self.gqlClient
+                .mutation(mutation, JSON.parse(variables))
+                .toPromise())
+            : (response = yield self.gqlClient.mutation(mutation).toPromise())
+          if (response.error) {
+            // TODO:
+            // use urql difference between networkError and graphQLErrors
+            console.log('operation reaction error:', response.error)
             // TODO: if offline, return and set shortTermOffline
-            const lcMessage = error.message.toLowerCase()
+            const lcMessage = response.error.message.toLowerCase()
             // In case a conflict was caused by two EXACT SAME changes,
             // this will bounce because of the same rev. We want to ignore this:
-            if (error.message.includes('JWT')) {
+            if (response.error.message.includes('JWT')) {
               return getAuthToken({ store: self })
             } else if (
               lcMessage.includes('uniqueness violation') &&
@@ -181,28 +184,30 @@ const myTypes = types
                 'There is a conflict with exact same changes - ingoring the error thrown',
               )
             } else if (lcMessage.includes('unique-constraint')) {
-              let { message } = error
+              let { message } = response.error
               if (lcMessage.includes('single_art_herkunft_garden_active_idx')) {
                 message =
                   'Pro Art, Herkunft und Garten darf nur eine Kultur aktiv sein (plus ein Zwischenlager). Offenbar gibt es schon eine aktive Kultur'
               }
-              // do not add a notification: show this error below the field
+              // do not add a notification: show this response.error below the field
               self.setError({
                 path: `${revertTable}.${revertField}`,
                 value: message,
               })
               console.log('a unique constraint was violated')
-            } else if (error.message.includes('Failed to fetch')) {
-              console.log('ignore fetch failing')
+            } else if (response.error.message.includes('Failed to fetch')) {
+              console.log('network is failing')
+              self.setShortTermOnline(false)
+              return
             } else {
               self.setError({
                 path: `${revertTable}.${revertField}`,
-                value: error.message,
+                value: response.error.message,
               })
               return self.addNotification({
                 title:
                   'Eine Operation kann nicht in die Datenbank geschrieben werden',
-                message: error.message,
+                message: response.error.message,
                 actionLabel: 'Operation löschen',
                 actionName: 'removeQueuedQueryById',
                 actionArgument: query.id,
@@ -1424,6 +1429,9 @@ const myTypes = types
       },
       setOnline(val) {
         self.online = val
+      },
+      setShortTermOnline(val) {
+        self.shortTermOnline = val
       },
       setFirebase(val) {
         if (!self.firebase) {
