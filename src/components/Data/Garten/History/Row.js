@@ -45,20 +45,19 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
     //console.log('Kultur History', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_garten_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'garten_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_garten_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'garten_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()
@@ -83,22 +82,23 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       })
     })
   }, [
-    addNotification,
-    db,
-    historyTakeoverCallback,
-    gqlClient,
-    revRow._deleted,
+    row,
+    revRow.garten_id,
+    revRow.name,
+    revRow.person_id,
+    revRow.strasse,
+    revRow.plz,
+    revRow.ort,
+    revRow.geom_point,
     revRow.aktiv,
     revRow.bemerkungen,
-    revRow.garten_id,
-    revRow.geom_point,
-    revRow.name,
-    revRow.ort,
-    revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
-    row,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   return (

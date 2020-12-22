@@ -44,21 +44,19 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('Kultur History', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_kultur_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'kultur_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_kultur_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'kultur_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()
@@ -83,22 +81,23 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       })
     })
   }, [
-    addNotification,
-    db,
-    historyTakeoverCallback,
-    gqlClient,
-    revRow._deleted,
-    revRow.aktiv,
-    revRow.art_id,
-    revRow.bemerkungen,
-    revRow.erhaltungskultur,
-    revRow.garten_id,
-    revRow.herkunft_id,
-    revRow.kultur_id,
-    revRow.von_anzahl_individuen,
-    revRow.zwischenlager,
     row,
+    revRow.kultur_id,
+    revRow.art_id,
+    revRow.herkunft_id,
+    revRow.garten_id,
+    revRow.zwischenlager,
+    revRow.erhaltungskultur,
+    revRow.von_anzahl_individuen,
+    revRow.bemerkungen,
+    revRow.aktiv,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   return (

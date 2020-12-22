@@ -40,21 +40,19 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('Zaehlung History', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_zaehlung_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'zaehlung_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_zaehlung_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'zaehlung_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()

@@ -55,21 +55,19 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('Person History', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_person_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'person_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_person_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'person_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()
@@ -94,32 +92,33 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       })
     })
   }, [
-    addNotification,
-    db,
-    historyTakeoverCallback,
-    gqlClient,
-    revRow._deleted,
-    revRow.account_id,
-    revRow.adresszusatz,
-    revRow.aktiv,
-    revRow.bemerkungen,
-    revRow.email,
-    revRow.info,
-    revRow.kein_email,
-    revRow.kommerziell,
-    revRow.name,
-    revRow.nr,
-    revRow.ort,
+    row,
     revRow.person_id,
-    revRow.plz,
+    revRow.nr,
+    revRow.vorname,
+    revRow.name,
+    revRow.adresszusatz,
     revRow.strasse,
+    revRow.plz,
+    revRow.ort,
+    revRow.telefon_privat,
     revRow.telefon_geschaeft,
     revRow.telefon_mobile,
-    revRow.telefon_privat,
+    revRow.email,
+    revRow.kein_email,
+    revRow.bemerkungen,
+    revRow.account_id,
     revRow.user_role_id,
-    revRow.vorname,
-    row,
+    revRow.kommerziell,
+    revRow.info,
+    revRow.aktiv,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   return (

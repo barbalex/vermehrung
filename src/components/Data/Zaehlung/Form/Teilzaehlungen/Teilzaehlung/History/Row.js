@@ -45,21 +45,19 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('Teilzaehlung History', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_teilzaehlung_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'teilzaehlung_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_teilzaehlung_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'teilzaehlung_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()
@@ -84,23 +82,24 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       })
     })
   }, [
-    addNotification,
-    db,
-    historyTakeoverCallback,
-    gqlClient,
-    revRow._deleted,
-    revRow.andere_menge,
+    row,
+    revRow.teilzaehlung_id,
+    revRow.zaehlung_id,
+    revRow.teilkultur_id,
+    revRow.anzahl_pflanzen,
     revRow.anzahl_auspflanzbereit,
     revRow.anzahl_mutterpflanzen,
-    revRow.anzahl_pflanzen,
+    revRow.andere_menge,
     revRow.auspflanzbereit_beschreibung,
     revRow.bemerkungen,
     revRow.prognose_von_tz,
-    revRow.teilkultur_id,
-    revRow.teilzaehlung_id,
-    revRow.zaehlung_id,
-    row,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   return (

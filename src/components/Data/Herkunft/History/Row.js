@@ -44,20 +44,19 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
     //console.log('Herkunft History', { row, revRow, newObject })
-    try {
-      await gqlClient
-        .query(mutations.mutateInsert_herkunft_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'herkunft_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+    const response = await gqlClient
+      .query(mutations.mutateInsert_herkunft_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'herkunft_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()
@@ -82,21 +81,22 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       })
     })
   }, [
-    addNotification,
-    db,
-    historyTakeoverCallback,
-    gqlClient,
-    revRow._deleted,
-    revRow.bemerkungen,
-    revRow.gemeinde,
-    revRow.geom_point,
+    row,
     revRow.herkunft_id,
+    revRow.nr,
+    revRow.lokalname,
+    revRow.gemeinde,
     revRow.kanton,
     revRow.land,
-    revRow.lokalname,
-    revRow.nr,
-    row,
+    revRow.geom_point,
+    revRow.bemerkungen,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   return (
