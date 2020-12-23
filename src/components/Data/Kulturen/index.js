@@ -114,6 +114,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
               : [true, false, null],
           ),
         ),
+        ...hierarchyQuery,
       )
       .observeCount()
     const dataObservable = collection

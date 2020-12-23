@@ -110,6 +110,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
               : [true, false, null],
           ),
         ),
+        ...hierarchyQuery,
       )
       .observeCount()
     const dataObservable = collection
