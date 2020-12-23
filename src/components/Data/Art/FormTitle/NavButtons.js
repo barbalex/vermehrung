@@ -10,12 +10,12 @@ import KuDownSvg from '../../../../svg/to_ku_down.inline.svg'
 const ArtNavButtons = () => {
   const store = useContext(StoreContext)
   const { tree } = store
-  const { activeNodeArray, setActiveNodeArray } = tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = tree
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   const onClickToSammlungen = useCallback(
     () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
     [activeNodeArray, setActiveNodeArray],

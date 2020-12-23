@@ -47,12 +47,12 @@ const LieferungTitleFormTitle = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   const nachKulturId = row?.nach_kultur_id
   const onClickToKultur = useCallback(
     () =>
@@ -63,7 +63,8 @@ const LieferungTitleFormTitle = ({
       ]),
     [activeNodeArray, nachKulturId, setActiveNodeArray],
   )
-  const showToKu = activeNodeArray[0] === 'Sammlungen'
+  // to kulturen is not implemented in nodes, so turned off
+  const showToKu = false && activeNodeArray[0] === 'Sammlungen'
 
   if (width < 520) {
     return (

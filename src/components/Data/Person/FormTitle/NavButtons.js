@@ -10,12 +10,12 @@ import LiDownSvg from '../../../../svg/to_li_down.inline.svg'
 
 const PersonFormTitleNavButtons = () => {
   const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   const onClickToSammlungen = useCallback(
     () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
     [activeNodeArray, setActiveNodeArray],

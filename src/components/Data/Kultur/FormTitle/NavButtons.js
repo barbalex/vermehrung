@@ -12,12 +12,12 @@ import UpSvg from '../../../../svg/to_up.inline.svg'
 
 const KulturNavButtons = ({ row }) => {
   const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const onClickToKulturen = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickToKulturen = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   const onClickToZaehlungen = useCallback(
     () => setActiveNodeArray([...activeNodeArray, 'Zaehlungen']),
     [activeNodeArray, setActiveNodeArray],

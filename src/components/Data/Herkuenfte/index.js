@@ -69,7 +69,11 @@ const singleRowHeight = 48
 const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const { insertHerkunftRev, sammlungIdInActiveNodeArray, db, filter } = store
-  const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
+  const {
+    activeNodeArray: anaRaw,
+    setActiveNodeArray,
+    removeOpenNode,
+  } = store.tree
   const { herkunft: herkunftFilter } = store.filter
   const activeNodeArray = anaRaw.toJSON()
 
@@ -124,10 +128,10 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
 
   const add = useCallback(() => insertHerkunftRev(), [insertHerkunftRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Herkuenfte') {
     upTitle = 'Zu allen Listen'
