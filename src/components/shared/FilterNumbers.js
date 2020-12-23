@@ -1,8 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import MenuItem from '@material-ui/core/MenuItem'
-
-import StoreContext from '../../storeContext'
 
 const OuterContainer = styled.div`
   min-width: 48px;
@@ -31,11 +29,6 @@ const StyledMenuItem = styled(MenuItem)`
 `
 
 const FilterNumbers = ({ filteredCount, totalCount, asMenu }) => {
-  const store = useContext(StoreContext)
-  const { filtered, show } = store.filter
-
-  if (!(show || filtered)) return null
-
   if (asMenu) {
     return (
       <StyledMenuItem dense>
