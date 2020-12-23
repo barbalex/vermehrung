@@ -103,6 +103,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
               : [true, false, null],
           ),
         ),
+        ...hierarchyQuery,
       )
       .observeCount()
     const gartenObservable = collection
