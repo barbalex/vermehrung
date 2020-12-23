@@ -903,7 +903,6 @@ export class Kultur extends Model {
   @action async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
-    // TODO: do this in all models?
     unsetError(`kultur.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1

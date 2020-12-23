@@ -14,6 +14,7 @@ import Settings from './Settings'
 import List from './List'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import tableFilter from '../../utils/tableFilter'
+import notDeletedQuery from '../../utils/notDeletedQuery'
 import buildNodes from './nodes'
 
 const Container = styled.div`
@@ -144,6 +145,10 @@ const Tree = ({ width, height }) => {
       .get('person')
       .query(...tableFilter({ store, table: 'person' }))
       .observeWithColumns(['vorname', 'name'])
+    const kulturOptionsObservable = db
+      .get('kultur_option')
+      .query(notDeletedQuery)
+      .observeWithColumns(['tk'])
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       userRoleObservable,
@@ -158,6 +163,7 @@ const Tree = ({ width, height }) => {
       sammlungsObservable,
       teilkultursObservable,
       zaehlungsObservable,
+      kulturOptionsObservable,
     ]).pipe(throttle(() => interval(100)))
     const subscription = combinedObservables.subscribe(
       // eslint-disable-next-line no-unused-vars
