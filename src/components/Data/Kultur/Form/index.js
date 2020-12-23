@@ -334,8 +334,16 @@ const KulturForm = ({
     ])
     const subscription = combinedObservables.subscribe(
       async ([arts, herkunfts]) => {
+        let art
+        try {
+          art = await row.art.fetch()
+        } catch {}
+        const artsIncludingChoosen = uniqBy(
+          [...arts, ...(art && !showFilter ? [art] : [])],
+          'id',
+        )
         const artWerte = await Promise.all(
-          arts.map(async (art) => {
+          artsIncludingChoosen.map(async (art) => {
             let label
             try {
               label = await art.label.pipe(first$()).toPromise()
@@ -347,10 +355,20 @@ const KulturForm = ({
             }
           }),
         )
-        const herkunftWerte = herkunfts.sort(herkunftSort).map((herkunft) => ({
-          value: herkunft.id,
-          label: herkunftLabelFromHerkunft({ herkunft }),
-        }))
+        let herkunft
+        try {
+          herkunft = await row.herkunft.fetch()
+        } catch {}
+        const herkunftsIncludingChoosen = uniqBy(
+          [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
+          'id',
+        )
+        const herkunftWerte = herkunftsIncludingChoosen
+          .sort(herkunftSort)
+          .map((herkunft) => ({
+            value: herkunft.id,
+            label: herkunftLabelFromHerkunft({ herkunft }),
+          }))
 
         setDataState2({
           artWerte,
