@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
 import StoreContext from '../../../../../storeContext'
 import Select from '../../../../shared/Select'
@@ -133,7 +134,17 @@ const LieferungVon = ({
             }
             return true
           })
-        const kultursSorted = await kultursSortedFromKulturs(kultursFiltered)
+        let kultur
+        try {
+          kultur = await db.get('kultur').find(row.von_kultur_id)
+        } catch {}
+        const kultursIncludingChoosen = uniqBy(
+          [...kultursFiltered, ...(kultur && !showFilter ? [kultur] : [])],
+          'id',
+        )
+        const kultursSorted = await kultursSortedFromKulturs(
+          kultursIncludingChoosen,
+        )
         const vonKulturWerte = await Promise.all(
           kultursSorted.map(async (el) => {
             let label
@@ -147,7 +158,17 @@ const LieferungVon = ({
             }
           }),
         )
-        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+        let sammlung
+        try {
+          sammlung = await db.get('sammlung').find(row.von_sammlung_id)
+        } catch {}
+        const sammlungsIncludingChoosen = uniqBy(
+          [...sammlungs, ...(sammlung && !showFilter ? [sammlung] : [])],
+          'id',
+        )
+        const sammlungsSorted = await sammlungsSortedFromSammlungs(
+          sammlungsIncludingChoosen,
+        )
         const sammlungWerte = await Promise.all(
           sammlungsSorted.map(async (el) => {
             let label
@@ -176,9 +197,11 @@ const LieferungVon = ({
     filter.kultur._deleted,
     filter.sammlung._deleted,
     herkunft,
-    row.art_id,
-    row.nach_kultur_id,
+    row?.art_id,
+    row?.nach_kultur_id,
     row?.von_kultur_id,
+    row?.von_sammlung_id,
+    showFilter,
   ])
   const { herkunftLabel, vonKulturWerte, sammlungWerte } = dataState
 
