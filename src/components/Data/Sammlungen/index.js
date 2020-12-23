@@ -15,7 +15,6 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import tableFilter from '../../../utils/tableFilter'
 import sammlungsSortedFromSammlungs from '../../../utils/sammlungsSortedFromSammlungs'
 
@@ -75,6 +74,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
     db,
+    filter,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { sammlung: sammlungFilter } = store.filter
@@ -98,7 +98,20 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.get('sammlung')
-    const countObservable = collection.query(notDeletedQuery).observeCount()
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.sammlung._deleted === false
+              ? [false]
+              : filter.sammlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -133,6 +146,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
     store,
+    filter.sammlung._deleted,
   ])
 
   const { sammlungs, totalCount } = dataState

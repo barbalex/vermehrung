@@ -15,7 +15,6 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import tableFilter from '../../../utils/tableFilter'
 import zaehlungSort from '../../../utils/zaehlungSort'
 
@@ -69,7 +68,7 @@ const singleRowHeight = 48
 
 const Zaehlungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertZaehlungRev, kulturIdInActiveNodeArray, db } = store
+  const { insertZaehlungRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { zaehlung: zaehlungFilter } = store.filter
 
@@ -82,7 +81,20 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.get('zaehlung')
-    const countObservable = collection.query(notDeletedQuery).observeCount()
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.zaehlung._deleted === false
+              ? [false]
+              : filter.zaehlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -111,6 +123,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
     zaehlungFilter,
     kulturIdInActiveNodeArray,
     store,
+    filter.zaehlung._deleted,
   ])
 
   const { zaehlungs, totalCount } = dataState

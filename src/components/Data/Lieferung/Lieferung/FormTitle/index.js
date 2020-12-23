@@ -6,7 +6,6 @@ import { combineLatest } from 'rxjs'
 import StoreContext from '../../../../../storeContext'
 import FilterTitle from '../../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
-import notDeletedQuery from '../../../../../utils/notDeletedQuery'
 import tableFilter from '../../../../../utils/tableFilter'
 
 const LieferungTitleChooser = ({
@@ -24,6 +23,7 @@ const LieferungTitleChooser = ({
     sammelLieferungIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
     db,
+    filter,
   } = store
   const { activeNodeArray } = store.tree
 
@@ -56,7 +56,19 @@ const LieferungTitleChooser = ({
         : []
     const collection = db.get('lieferung')
     const totalCountObservable = collection
-      .query(notDeletedQuery, ...hierarchyQuery)
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.lieferung._deleted === false
+              ? [false]
+              : filter.lieferung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'lieferung' }), ...hierarchyQuery)
@@ -82,6 +94,7 @@ const LieferungTitleChooser = ({
     ...Object.values(store.filter.lieferung),
     store,
     activeNodeArray,
+    filter.lieferung._deleted,
   ])
 
   const { totalCount, filteredCount } = countState

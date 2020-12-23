@@ -15,7 +15,6 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import tableFilter from '../../../utils/tableFilter'
 import teilkulturSort from '../../../utils/teilkulturSort'
 
@@ -69,7 +68,7 @@ const singleRowHeight = 48
 
 const Teilkulturen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertTeilkulturRev, kulturIdInActiveNodeArray, db } = store
+  const { insertTeilkulturRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { teilkultur: teilkulturFilter } = store.filter
 
@@ -82,7 +81,20 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.get('teilkultur')
-    const countObservable = collection.query(notDeletedQuery).observeCount()
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.teilkultur._deleted === false
+              ? [false]
+              : filter.teilkultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -110,6 +122,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
     teilkulturFilter,
     kulturIdInActiveNodeArray,
     store,
+    filter.teilkultur._deleted,
   ])
 
   const { teilkulturs, totalCount } = dataState

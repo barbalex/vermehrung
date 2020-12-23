@@ -19,7 +19,21 @@ const createMessageFunctions = async ({ kulturId, db, store }) => {
 
   let events = []
   try {
-    events = await db.get('event').query(notDeletedQuery).fetch()
+    events = await db
+      .get('event')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.event._deleted === false
+              ? [false]
+              : filter.event._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .fetch()
   } catch {}
   const eventsSorted = events.sort(eventSort)
   let kulturs = []

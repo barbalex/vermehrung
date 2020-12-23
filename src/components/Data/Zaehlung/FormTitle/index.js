@@ -6,7 +6,6 @@ import { combineLatest } from 'rxjs'
 import StoreContext from '../../../../storeContext'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
-import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import tableFilter from '../../../../utils/tableFilter'
 
 const ZaehlungFormTitleChooser = ({
@@ -17,7 +16,7 @@ const ZaehlungFormTitleChooser = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { kulturIdInActiveNodeArray, db } = store
+  const { kulturIdInActiveNodeArray, db, filter } = store
 
   const [countState, setCountState] = useState({
     totalCount: 0,
@@ -32,7 +31,19 @@ const ZaehlungFormTitleChooser = ({
       : []
     const collection = db.get('zaehlung')
     const totalCountObservable = collection
-      .query(notDeletedQuery, ...hierarchyQuery)
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.zaehlung._deleted === false
+              ? [false]
+              : filter.zaehlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'zaehlung' }), ...hierarchyQuery)
@@ -54,6 +65,7 @@ const ZaehlungFormTitleChooser = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.zaehlung),
     store,
+    filter.zaehlung._deleted,
   ])
 
   const { totalCount, filteredCount } = countState

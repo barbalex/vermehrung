@@ -14,7 +14,6 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import tableFilter from '../../../utils/tableFilter'
 import lieferungSort from '../../../utils/lieferungSort'
 
@@ -68,7 +67,7 @@ const singleRowHeight = 48
 
 const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertSammelLieferungRev, db } = store
+  const { insertSammelLieferungRev, db, filter } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { sammel_lieferung: sammelLieferungFilter } = store.filter
 
@@ -78,7 +77,20 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   })
   useEffect(() => {
     const collection = db.get('sammel_lieferung')
-    const countObservable = collection.query(notDeletedQuery).observeCount()
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.sammel_lieferung._deleted === false
+              ? [false]
+              : filter.sammel_lieferung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -105,6 +117,7 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
     ...Object.values(sammelLieferungFilter),
     sammelLieferungFilter,
     store,
+    filter.sammel_lieferung._deleted,
   ])
 
   const { sammelLieferungs, totalCount } = dataState
