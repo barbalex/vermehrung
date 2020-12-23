@@ -160,7 +160,6 @@ const SammlungForm = ({
             value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
           })
         }
-        // need to show a choosen person even if inactive but not if deleted
         let person
         try {
           person = await row.person.fetch()
@@ -175,11 +174,29 @@ const SammlungForm = ({
             value: person.id,
             label: personLabelFromPerson({ person }),
           }))
-        const herkunftWerte = herkunfts.sort(herkunftSort).map((herkunft) => ({
-          value: herkunft.id,
-          label: herkunftLabelFromHerkunft({ herkunft }),
-        }))
-        const artsSorted = await artsSortedFromArts(arts)
+        let herkunft
+        try {
+          herkunft = await row.herkunft.fetch()
+        } catch {}
+        const herkunftsIncludingChoosen = uniqBy(
+          [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
+          'id',
+        )
+        const herkunftWerte = herkunftsIncludingChoosen
+          .sort(herkunftSort)
+          .map((herkunft) => ({
+            value: herkunft.id,
+            label: herkunftLabelFromHerkunft({ herkunft }),
+          }))
+        let art
+        try {
+          art = await row.art.fetch()
+        } catch {}
+        const artsIncludingChoosen = uniqBy(
+          [...arts, ...(art && !showFilter ? [art] : [])],
+          'id',
+        )
+        const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
         const artWerte = await Promise.all(
           artsSorted.map(async (art) => {
             let label = ''
@@ -210,6 +227,8 @@ const SammlungForm = ({
     filter.person._deleted,
     filter.person.aktiv,
     filter.sammlung._deleted,
+    row.art,
+    row.herkunft,
     row.nr,
     row.person,
     setError,
