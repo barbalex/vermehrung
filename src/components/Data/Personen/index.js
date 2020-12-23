@@ -68,7 +68,7 @@ const singleRowHeight = 48
 
 const Personen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertPersonRev, db, user } = store
+  const { insertPersonRev, db, user, filter } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { person: personFilter } = store.filter
 
@@ -80,7 +80,28 @@ const Personen = ({ filter: showFilter, width, height }) => {
   useEffect(() => {
     const collection = db.get('person')
     const countObservable = collection
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeCount()
     const dataObservable = collection
       .query(...tableFilter({ table: 'person', store }))

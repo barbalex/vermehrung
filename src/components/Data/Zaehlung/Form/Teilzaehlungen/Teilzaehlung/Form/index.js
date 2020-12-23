@@ -99,7 +99,19 @@ const TeilzaehlungForm = ({
   useEffect(() => {
     const teilkultursObservable = db
       .get('teilkultur')
-      .query(Q.where('_deleted', false), Q.where('kultur_id', kulturId))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.teilkultur._deleted === false
+              ? [false]
+              : filter.teilkultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where('kultur_id', kulturId),
+      )
       .observeWithColumns(['name'])
     const kulturOptionObservable = kulturId
       ? db.get('kultur_option').findAndObserve(kulturId)
@@ -121,7 +133,7 @@ const TeilzaehlungForm = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db, id, kulturId])
+  }, [db, filter.teilkultur._deleted, id, kulturId])
   const { teilkulturWerte, kulturOption, row } = dataState
 
   const [openPrognosis, setOpenPrognosis] = useState(false)

@@ -53,7 +53,7 @@ const Aven = styled.div`
 
 const GartenPersonen = ({ garten }) => {
   const store = useContext(StoreContext)
-  const { db, insertGvRev } = store
+  const { db, insertGvRev, filter } = store
 
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [garten.id])
@@ -86,7 +86,28 @@ const GartenPersonen = ({ garten }) => {
   useEffect(() => {
     const personsObservable = db
       .get('person')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observe()
     const gvsObservable = garten?.gvs
       ?.extend(Q.where('_deleted', false))
@@ -111,7 +132,7 @@ const GartenPersonen = ({ garten }) => {
       },
     )
     return () => subscription.unsubscribe()
-  }, [db, garten?.gvs])
+  }, [db, filter.person._deleted, filter.person.aktiv, garten?.gvs])
   const { gvsSorted, personWerte } = dataState
 
   const saveToDb = useCallback(

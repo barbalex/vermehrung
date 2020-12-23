@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { Q } from '@nozbe/watermelondb'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import eventSort from '../../../../../utils/eventSort'
+import storeContext from '../../../../../storeContext'
 import Row from './Row'
 
 const TitleRow = styled.div`
@@ -29,17 +30,31 @@ const Title = styled.div`
 const Rows = styled.div``
 
 const TkEvents = ({ teilkultur }) => {
+  const store = useContext(storeContext)
+  const { filter } = store
+
   const [events, setEvents] = useState([])
   useEffect(() => {
     const eventsObservable = teilkultur.events
-      .extend(Q.where('_deleted', false))
+      .extend(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.event._deleted === false
+              ? [false]
+              : filter.event._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeWithColumns(['datum', 'beschreibung', 'geplant'])
     const subscription = eventsObservable.subscribe((events) => {
       const eventsSorted = events.sort(eventSort)
       setEvents(eventsSorted)
     })
     return () => subscription.unsubscribe()
-  }, [teilkultur.events])
+  }, [filter.event._deleted, teilkultur.events])
 
   return (
     <ErrorBoundary>

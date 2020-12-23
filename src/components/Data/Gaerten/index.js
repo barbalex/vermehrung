@@ -68,7 +68,7 @@ const singleRowHeight = 48
 
 const Gaerten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertGartenRev, personIdInActiveNodeArray, db } = store
+  const { insertGartenRev, personIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { garten: gartenFilter } = store.filter
 
@@ -82,7 +82,28 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
       : []
     const collection = db.get('garten')
     const totalCountObservable = collection
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.garten._deleted === false
+              ? [false]
+              : filter.garten._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.garten.aktiv === true
+              ? [true]
+              : filter.garten.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeCount()
     const gartenObservable = collection
       .query(...tableFilter({ store, table: 'garten' }), ...hierarchyQuery)
@@ -110,6 +131,8 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
     ...Object.values(gartenFilter),
     gartenFilter,
     store,
+    filter.garten._deleted,
+    filter.garten.aktiv,
   ])
 
   const { gartens, totalCount } = dataState

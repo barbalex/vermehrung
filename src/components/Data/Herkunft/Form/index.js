@@ -67,7 +67,19 @@ const Herkunft = ({
         ? $of(0)
         : db
             .get('herkunft')
-            .query(Q.where('_deleted', false), Q.where('nr', row.nr))
+            .query(
+              Q.where(
+                '_deleted',
+                Q.oneOf(
+                  filter.herkunft._deleted === false
+                    ? [false]
+                    : filter.herkunft._deleted === true
+                    ? [true]
+                    : [true, false, null],
+                ),
+              ),
+              Q.where('nr', row.nr),
+            )
             .observeCount()
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,

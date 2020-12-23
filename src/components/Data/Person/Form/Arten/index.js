@@ -53,7 +53,7 @@ const Avs = styled.div`
 
 const PersonArten = ({ person }) => {
   const store = useContext(StoreContext)
-  const { db, insertAvRev } = store
+  const { db, insertAvRev, filter } = store
 
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [person])
@@ -88,7 +88,19 @@ const PersonArten = ({ person }) => {
       .observe()
     const artsObservable = db
       .get('art')
-      .query(Q.where('_deleted', false), Q.where('id', Q.notIn(avArtIds)))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where('id', Q.notIn(avArtIds)),
+      )
       .observe()
     const combinedObservables = combineLatest([avsObservable, artsObservable])
     const subscription = combinedObservables.subscribe(async ([avs, arts]) => {

@@ -16,7 +16,12 @@ const KulturFormTitleChooser = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { gartenIdInActiveNodeArray, artIdInActiveNodeArray, db } = store
+  const {
+    artIdInActiveNodeArray,
+    db,
+    filter,
+    gartenIdInActiveNodeArray,
+  } = store
 
   const [countState, setCountState] = useState({
     totalCount: 0,
@@ -37,8 +42,26 @@ const KulturFormTitleChooser = ({
     const collection = db.get('kultur')
     const totalCountObservable = collection
       .query(
-        Q.where('_deleted', false),
-        Q.where('aktiv', true),
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.kultur.aktiv === true
+              ? [true]
+              : filter.kultur.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
         ...hierarchyQuery,
       )
       .observeCount()
@@ -63,6 +86,8 @@ const KulturFormTitleChooser = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.kultur),
     store,
+    filter.kultur._deleted,
+    filter.kultur.aktiv,
   ])
 
   const { totalCount, filteredCount } = countState

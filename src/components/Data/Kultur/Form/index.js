@@ -167,8 +167,26 @@ const KulturForm = ({
         try {
           await garten.kulturs
             .extend(
-              Q.where('_deleted', false),
-              Q.where('aktiv', true),
+              Q.where(
+                '_deleted',
+                Q.oneOf(
+                  filter.kultur._deleted === false
+                    ? [false]
+                    : filter.kultur._deleted === true
+                    ? [true]
+                    : [true, false, null],
+                ),
+              ),
+              Q.where(
+                'aktiv',
+                Q.oneOf(
+                  filter.kultur.aktiv === true
+                    ? [true]
+                    : filter.kultur.aktiv === false
+                    ? [false]
+                    : [true, false, null],
+                ),
+              ),
               Q.where('art_id', Q.notEq(null)),
               Q.where('herkunft_id', Q.notEq(null)),
             )
@@ -280,7 +298,16 @@ const KulturForm = ({
     const artsObservable = db
       .get('art')
       .query(
-        Q.where('_deleted', false),
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
         Q.where('ae_id', Q.notEq(null)),
         Q.where('id', Q.oneOf(artsToChoose)),
       )
@@ -288,7 +315,16 @@ const KulturForm = ({
     const herkunftsObservable = db
       .get('herkunft')
       .query(
-        Q.where('_deleted', false),
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.herkunft._deleted === false
+              ? [false]
+              : filter.herkunft._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
         Q.where('id', Q.oneOf(herkunftsToChoose)),
       )
       .observe()
