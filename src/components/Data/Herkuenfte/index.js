@@ -15,7 +15,6 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import tableFilter from '../../../utils/tableFilter'
 import herkunftSort from '../../../utils/herkunftSort'
 
@@ -69,7 +68,7 @@ const singleRowHeight = 48
 
 const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertHerkunftRev, sammlungIdInActiveNodeArray, db } = store
+  const { insertHerkunftRev, sammlungIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
   const { herkunft: herkunftFilter } = store.filter
   const activeNodeArray = anaRaw.toJSON()
@@ -83,7 +82,20 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.get('herkunft')
-    const countObservable = collection.query(notDeletedQuery).observeCount()
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.herkunft._deleted === false
+              ? [false]
+              : filter.herkunft._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeCount()
     const herkunftsObservable = collection
       .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
@@ -104,6 +116,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(herkunftFilter),
     store,
+    filter.herkunft._deleted,
   ])
 
   const { herkunfts, totalCount } = dataState

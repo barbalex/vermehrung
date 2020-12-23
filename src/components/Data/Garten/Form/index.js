@@ -127,7 +127,15 @@ const GartenForm = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db, row.gvs, row.person, showFilter, user])
+  }, [
+    db,
+    filter.person._deleted,
+    filter.person.aktiv,
+    row.gvs,
+    row.person,
+    showFilter,
+    user,
+  ])
   const { personWerte, userPersonOption, gvs } = dataState
   const gvPersonIds = gvs.map((v) => v.person_id)
 

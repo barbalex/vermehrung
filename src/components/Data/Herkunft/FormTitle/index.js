@@ -6,7 +6,6 @@ import { combineLatest } from 'rxjs'
 import StoreContext from '../../../../storeContext'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
-import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import tableFilter from '../../../../utils/tableFilter'
 
 const HerkunftFormTitleChooser = ({
@@ -18,7 +17,7 @@ const HerkunftFormTitleChooser = ({
   activeConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { sammlungIdInActiveNodeArray, db } = store
+  const { sammlungIdInActiveNodeArray, db, filter } = store
 
   const [countState, setCountState] = useState({
     totalCount: 0,
@@ -33,7 +32,19 @@ const HerkunftFormTitleChooser = ({
       : []
     const collection = db.get('herkunft')
     const totalCountObservable = collection
-      .query(notDeletedQuery, ...hierarchyQuery)
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.herkunft._deleted === false
+              ? [false]
+              : filter.herkunft._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
@@ -55,6 +66,7 @@ const HerkunftFormTitleChooser = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.herkunft),
     store,
+    filter.herkunft._deleted,
   ])
 
   const { totalCount, filteredCount } = countState
