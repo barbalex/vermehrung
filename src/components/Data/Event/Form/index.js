@@ -144,9 +144,6 @@ const EventForm = ({
         ),
       )
       .observeWithColumns(['vorname', 'name'])
-    const kulturObservable = showFilter
-      ? $of(filter.kultur)
-      : row.kultur.observe()
     const kulturOptionObservable = row?.kultur_id
       ? db.get('kultur_option').findAndObserve(row.kultur_id)
       : $of({})
@@ -154,12 +151,15 @@ const EventForm = ({
       kultursObservable,
       teilkulturObservable,
       personsObservable,
-      kulturObservable,
       kulturOptionObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([kulturs, teilkulturs, persons, kultur, kulturOption]) => {
+      async ([kulturs, teilkulturs, persons, kulturOption]) => {
         // need to show a choosen kultur even if inactive but not if deleted
+        let kultur
+        try {
+          kultur = await row.kultur.fetch()
+        } catch {}
         const kultursIncludingChoosen = uniqBy(
           [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
           'id',
@@ -180,20 +180,30 @@ const EventForm = ({
             }
           }),
         )
-        const teilkulturWerte = teilkulturs.sort(teilkulturSort).map((t) => ({
-          value: t.id,
-          label: t.name || '(kein Name)',
-        }))
+        let teilkultur
+        try {
+          teilkultur = await row.teilkultur.fetch()
+        } catch {}
+        const teilkultursIncludingChoosen = uniqBy(
+          [...teilkulturs, ...(teilkultur && !showFilter ? [teilkultur] : [])],
+          'id',
+        )
+        const teilkulturWerte = teilkultursIncludingChoosen
+          .sort(teilkulturSort)
+          .map((t) => ({
+            value: t.id,
+            label: t.name || '(kein Name)',
+          }))
         // need to show a choosen person even if inactive but not if deleted
         let person
         try {
-          person = await row.person?.fetch()
+          person = await row.person.fetch()
         } catch {}
-        const personsIncludingInactiveChoosen = uniqBy(
-          [...persons, ...(person && !person?._deleted ? [person] : [])],
+        const personsIncludingChoosen = uniqBy(
+          [...persons, ...(person && !showFilter ? [person] : [])],
           'id',
         )
-        const personWerte = personsIncludingInactiveChoosen
+        const personWerte = personsIncludingChoosen
           .sort(personSort)
           .map((person) => ({
             value: person.id,
@@ -217,9 +227,9 @@ const EventForm = ({
     filter.teilkultur._deleted,
     kulturId,
     row,
-    row.kultur,
-    row.kultur_option,
-    row.person,
+    row?.kultur,
+    row?.kultur_option,
+    row?.person,
     showFilter,
   ])
   const { kulturWerte, teilkulturWerte, personWerte, kulturOption } = dataState

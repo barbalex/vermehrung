@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
 import StoreContext from '../../../../../../../storeContext'
 import TextField from '../../../../../../shared/TextField'
@@ -123,17 +124,27 @@ const TeilzaehlungForm = ({
       tzObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      ([teilkulturs, kulturOption, teilzaehlung]) => {
-        const teilkulturWerte = teilkulturs.sort(teilkulturSort).map((tk) => ({
-          value: tk.id,
-          label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
-        }))
+      async ([teilkulturs, kulturOption, teilzaehlung]) => {
+        let teilkultur
+        try {
+          teilkultur = await row.person.fetch()
+        } catch {}
+        const teilkultursIncludingChoosen = uniqBy(
+          [...teilkulturs, ...(teilkultur ? [teilkultur] : [])],
+          'id',
+        )
+        const teilkulturWerte = teilkultursIncludingChoosen
+          .sort(teilkulturSort)
+          .map((tk) => ({
+            value: tk.id,
+            label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
+          }))
         setDataState({ teilkulturWerte, kulturOption, row: teilzaehlung })
       },
     )
 
     return () => subscription.unsubscribe()
-  }, [db, filter.teilkultur._deleted, id, kulturId])
+  }, [db, filter.teilkultur._deleted, id, kulturId, row.person])
   const { teilkulturWerte, kulturOption, row } = dataState
 
   const [openPrognosis, setOpenPrognosis] = useState(false)

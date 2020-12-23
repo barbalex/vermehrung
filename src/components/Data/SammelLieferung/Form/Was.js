@@ -12,6 +12,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
 import StoreContext from '../../../../storeContext'
 import Select from '../../../shared/Select'
@@ -81,7 +82,15 @@ const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
       .observe()
     const combinedObservables = combineLatest([artsObservable])
     const subscription = combinedObservables.subscribe(async ([arts]) => {
-      const artsSorted = await artsSortedFromArts(arts)
+      let art
+      try {
+        art = await row.art.fetch()
+      } catch {}
+      const artsIncludingChoosen = uniqBy(
+        [...arts, ...(art && !showFilter ? [art] : [])],
+        'id',
+      )
+      const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
       const artWerte = await Promise.all(
         artsSorted.map(async (el) => {
           let label
@@ -100,7 +109,7 @@ const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
     })
 
     return () => subscription.unsubscribe()
-  }, [db, filter.art._deleted])
+  }, [db, filter.art._deleted, row.art, showFilter])
 
   const openGenVielfaldDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
