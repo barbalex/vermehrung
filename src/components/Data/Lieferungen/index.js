@@ -16,7 +16,6 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import exists from '../../../utils/exists'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import tableFilter from '../../../utils/tableFilter'
 import lieferungSort from '../../../utils/lieferungSort'
 
@@ -77,6 +76,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
     personIdInActiveNodeArray,
     sammelLieferungIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
+    filter,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { lieferung: lieferungFilter } = store.filter
@@ -110,7 +110,20 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.get('lieferung')
-    const countObservable = collection.query(notDeletedQuery).observeCount()
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.lieferung._deleted === false
+              ? [false]
+              : filter.lieferung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeCount()
     const dataObservable = collection
       .query(
         ...tableFilter({
@@ -146,6 +159,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     activeNodeArray[activeNodeArray.length - 1],
     store,
+    filter.lieferung._deleted,
   ])
 
   const { lieferungs, totalCount } = dataState

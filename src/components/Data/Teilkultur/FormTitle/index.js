@@ -6,7 +6,6 @@ import { combineLatest } from 'rxjs'
 import StoreContext from '../../../../storeContext'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
-import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import tableFilter from '../../../../utils/tableFilter'
 
 const TeilkulturFormTitleChooser = ({
@@ -17,7 +16,7 @@ const TeilkulturFormTitleChooser = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { kulturIdInActiveNodeArray, db } = store
+  const { kulturIdInActiveNodeArray, db, filter } = store
 
   const [countState, setCountState] = useState({
     totalCount: 0,
@@ -32,7 +31,19 @@ const TeilkulturFormTitleChooser = ({
       : []
     const collection = db.get('teilkultur')
     const totalCountObservable = collection
-      .query(notDeletedQuery, ...hierarchyQuery)
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.teilkultur._deleted === false
+              ? [false]
+              : filter.teilkultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'teilkultur' }), ...hierarchyQuery)
@@ -54,6 +65,7 @@ const TeilkulturFormTitleChooser = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.teilkultur),
     store,
+    filter.teilkultur._deleted,
   ])
 
   const { totalCount, filteredCount } = countState

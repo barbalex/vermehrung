@@ -6,7 +6,6 @@ import { combineLatest } from 'rxjs'
 import StoreContext from '../../../../storeContext'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
-import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import tableFilter from '../../../../utils/tableFilter'
 
 const SammlungFormTitleChooser = ({
@@ -22,6 +21,7 @@ const SammlungFormTitleChooser = ({
     personIdInActiveNodeArray,
     artIdInActiveNodeArray,
     db,
+    filter,
   } = store
 
   const [countState, setCountState] = useState({
@@ -47,7 +47,19 @@ const SammlungFormTitleChooser = ({
       : []
     const collection = db.get('sammlung')
     const totalCountObservable = collection
-      .query(notDeletedQuery, ...hierarchyQuery)
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.sammlung._deleted === false
+              ? [false]
+              : filter.sammlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'sammlung' }), ...hierarchyQuery)
@@ -71,6 +83,7 @@ const SammlungFormTitleChooser = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.sammlung),
     store,
+    filter.sammlung._deleted,
   ])
 
   const { totalCount, filteredCount } = countState

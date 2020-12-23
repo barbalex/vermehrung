@@ -5,7 +5,6 @@ import { combineLatest } from 'rxjs'
 import StoreContext from '../../../../storeContext'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
-import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import tableFilter from '../../../../utils/tableFilter'
 
 const SammelLieferungFormTitleChooser = ({
@@ -29,7 +28,18 @@ const SammelLieferungFormTitleChooser = ({
   useEffect(() => {
     const collection = db.get('sammel_lieferung')
     const totalCountObservable = collection
-      .query(notDeletedQuery)
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.sammel_lieferung._deleted === false
+              ? [false]
+              : filter.sammel_lieferung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'sammel_lieferung' }))
@@ -50,6 +60,7 @@ const SammelLieferungFormTitleChooser = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.sammel_lieferung),
     store,
+    filter.sammel_lieferung._deleted,
   ])
 
   const { totalCount, filteredCount } = countState
