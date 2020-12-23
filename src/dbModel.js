@@ -149,15 +149,6 @@ export class Herkunft extends Model {
       row.changed_by = newObject.changed_by
       row._revisions = newRevisions
     })
-    /*if (field === '_deleted' && value) {
-      let sammlungs
-      try {
-        sammlungs = await this?.sammlungs?.fetch()
-      } catch {}
-      for (const row of sammlungs) {
-        row.delete({ store })
-      }
-    }*/
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -339,14 +330,6 @@ export class Sammlung extends Model {
       row.changed_by = newObject.changed_by
       row._revisions = newRevisions
     })
-    if (field === '_deleted' && value) {
-      let lieferungs
-      try {
-        lieferungs = await this?.lieferungs?.fetch()
-      } catch {}
-      console.log('sammlung model, lieferungs:', lieferungs)
-      // TODO: edit to set _deleted true
-    }
   }
 
   @action async delete({ store }) {
@@ -625,14 +608,6 @@ export class Art extends Model {
       row.changed_by = newObject.changed_by
       row._revisions = newRevisions
     })
-    if (field === '_deleted' && value) {
-      let sammlungs
-      try {
-        sammlungs = await this?.sammlungs?.fetch()
-      } catch {}
-      console.log('art model, sammlungs:', sammlungs)
-      // TODO: edit to set _deleted true
-    }
   }
 
   @action async delete({ store }) {
@@ -775,14 +750,6 @@ export class Garten extends Model {
       row.changed_by = newObject.changed_by
       row._revisions = newRevisions
     })
-    if (field === '_deleted' && value) {
-      let kulturs
-      try {
-        kulturs = await this?.kulturs?.fetch()
-      } catch {}
-      console.log('garten model, kulturs:', kulturs)
-      // TODO: edit to set _deleted true
-    }
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -997,38 +964,6 @@ export class Kultur extends Model {
       row.changed_by = newObject.changed_by
       row._revisions = newRevisions
     })
-    if (field === '_deleted' && value) {
-      let teilkulturs
-      try {
-        teilkulturs = await this.teilkulturs?.fetch()
-      } catch {}
-      console.log('kultur model, teilkulturs:', teilkulturs)
-      // TODO: edit to set _deleted true
-      let zaehlungs
-      try {
-        zaehlungs = await this.zaehlungs?.fetch()
-      } catch {}
-      console.log('kultur model, zaehlungs:', zaehlungs)
-      // TODO: edit to set _deleted true
-      let events
-      try {
-        events = await this.events?.fetch()
-      } catch {}
-      console.log('kultur model, events:', events)
-      // TODO: edit to set _deleted true
-      let anlieferungs
-      try {
-        anlieferungs = await this.anlieferungs?.fetch()
-      } catch {}
-      console.log('kultur model, anlieferungs:', anlieferungs)
-      // TODO: edit to set _deleted true
-      let auslieferungs
-      try {
-        auslieferungs = await this?.auslieferungs?.fetch()
-      } catch {}
-      console.log('kultur model, auslieferungs:', auslieferungs)
-      // TODO: edit to set _deleted true
-    }
   }
   @action async delete({ store }) {
     await this.subAction(() =>
@@ -1273,14 +1208,6 @@ export class Zaehlung extends Model {
       row.changed_by = newObject.changed_by
       row._revisions = newRevisions
     })
-    if (field === '_deleted' && value) {
-      let zaehlungs
-      try {
-        zaehlungs = await this.zaehlungs?.fetch()
-      } catch {}
-      console.log('kultur model, zaehlungs:', zaehlungs)
-      // TODO: edit to set _deleted true
-    }
   }
   @action async delete({ store }) {
     await this.subAction(() =>
