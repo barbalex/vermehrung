@@ -1,5 +1,5 @@
 const showTeilkultur = ({ userPersonOption }) => {
-  return userPersonOption?.tree_teilkultur
+  return !!userPersonOption?.tree_teilkultur
 }
 
 export default showTeilkultur
