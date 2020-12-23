@@ -8,7 +8,7 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { Q } from '@nozbe/watermelondb'
-import { combineLatest } from 'rxjs'
+import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
 import StoreContext from '../../../../storeContext'
@@ -44,42 +44,78 @@ const TitleRow = styled.div`
   }
 `
 
-const SammelLieferungWer = ({ showFilter, row, ifNeeded, saveToDb }) => {
+const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
   const store = useContext(StoreContext)
-  const { errors, db } = store
+  const { errors, db, filter } = store
 
-  const [personWerte, setPersonWerte] = useState([])
+  const [dataState, setDataState] = useState({ personWerte: [], row })
   useEffect(() => {
+    const rowObservable = showFilter
+      ? $of(filter.sammel_lieferung)
+      : db.get('sammel_lieferung').findAndObserve(id)
     const personsObservable = db
       .get('person')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
-      .observe()
-    const combinedObservables = combineLatest([personsObservable])
-    const subscription = combinedObservables.subscribe(async ([persons]) => {
-      // need to show a choosen person even if inactive but not if deleted
-      let person
-      try {
-        person = await row.person.fetch()
-      } catch {}
-      const personsIncludingInactiveChoosen = uniqBy(
-        [
-          ...persons,
-          ...(person && !person?._deleted && !showFilter ? [person] : []),
-        ],
-        'id',
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
       )
-      const personWerte = personsIncludingInactiveChoosen
-        .sort(personSort)
-        .map((el) => ({
-          value: el.id,
-          label: personLabelFromPerson({ person: el }),
-        }))
+      .observeWithColumns(['name', 'vorname'])
+    const combinedObservables = combineLatest([
+      personsObservable,
+      rowObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([persons, row]) => {
+        // need to show a choosen kultur even if inactive but not if deleted
+        let person
+        try {
+          person = await row.person.fetch()
+        } catch {}
+        const personsIncludingChoosen = uniqBy(
+          [...persons, ...(person && !showFilter ? [person] : [])],
+          'id',
+        )
+        const personWerte = personsIncludingChoosen
+          .sort(personSort)
+          .map((el) => ({
+            value: el.id,
+            label: personLabelFromPerson({ person: el }),
+          }))
 
-      setPersonWerte(personWerte)
-    })
+        setDataState({ personWerte, row })
+      },
+    )
 
     return () => subscription.unsubscribe()
-  }, [db, row.person, showFilter])
+  }, [
+    db,
+    filter.sammel_lieferung,
+    filter.person._deleted,
+    filter.person.aktiv,
+    id,
+    row,
+    row?.person_id,
+    showFilter,
+  ])
+  const { row, personWerte } = dataState
 
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)
@@ -94,6 +130,8 @@ const SammelLieferungWer = ({ showFilter, row, ifNeeded, saveToDb }) => {
       window.removeEventListener('scroll', scrollHandler, true)
     }
   }, [scrollHandler])
+
+  if (!row) return null
 
   return (
     <>

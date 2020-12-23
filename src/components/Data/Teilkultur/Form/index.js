@@ -55,7 +55,28 @@ const TeilkulturForm = ({
   useEffect(() => {
     const kultursObservable = db
       .get('kultur')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.kultur.aktiv === true
+              ? [true]
+              : filter.kultur.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observe()
     const kulturObservable = row.kultur ? row.kultur.observe() : $of({})
     const kulturOptionsObservable = row.kultur_id
@@ -72,15 +93,12 @@ const TeilkulturForm = ({
     const subscription = combinedObservables.subscribe(
       async ([kulturs, kultur, kulturOptions]) => {
         // need to show a choosen kultur even if inactive but not if deleted
-        const kultursIncludingInactiveChoosen = uniqBy(
-          [
-            ...kulturs,
-            ...(kultur && !kultur?._deleted && !showFilter ? [kultur] : []),
-          ],
+        const kultursIncludingChoosen = uniqBy(
+          [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
           'id',
         )
         const kultursSorted = await kultursSortedFromKulturs(
-          kultursIncludingInactiveChoosen,
+          kultursIncludingChoosen,
         )
         const kulturWerte = await Promise.all(
           kultursSorted.map(async (el) => {
@@ -101,7 +119,14 @@ const TeilkulturForm = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db, row.kultur, row.kultur_id, showFilter])
+  }, [
+    db,
+    filter.kultur._deleted,
+    filter.kultur.aktiv,
+    row.kultur,
+    row.kultur_id,
+    showFilter,
+  ])
   const { kulturWerte, kulturOption } = dataState
 
   const { tk_bemerkungen } = kulturOption ?? {}

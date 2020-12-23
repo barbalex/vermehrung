@@ -18,7 +18,6 @@ import Pflanzen from './Pflanzen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import StoreContext from '../../../../../storeContext'
 import herkunftSort from '../../../../../utils/herkunftSort'
-import notDeletedQuery from '../../../../../utils/notDeletedQuery'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -49,7 +48,7 @@ const Title = styled.div`
 
 const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
   const store = useContext(StoreContext)
-  const { db } = store
+  const { db, filter } = store
 
   const [herkunfts, setHerkunfts] = useState([])
   useEffect(() => {
@@ -63,7 +62,18 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
       .observe()
     const herkunftsObservable = db
       .get('herkunft')
-      .query(notDeletedQuery)
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.herkunft._deleted === false
+              ? [false]
+              : filter.herkunft._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observe()
     const combinedObservables = combineLatest([
       sammlungsObservable,
@@ -80,7 +90,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
     )
 
     return () => subscription.unsubscribe()
-  }, [artId, db])
+  }, [artId, db, filter.herkunft._deleted])
 
   const [open, setOpen] = useState(false)
   let anim = useAnimation()

@@ -92,7 +92,28 @@ const KulturForm = ({
       : $of({})
     const gartensObservable = db
       .get('garten')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.garten._deleted === false
+              ? [false]
+              : filter.garten._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.garten.aktiv === true
+              ? [true]
+              : filter.garten.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observe()
     const gartenObservable = row?.garten
       ? row?.garten?.observe()
@@ -100,7 +121,16 @@ const KulturForm = ({
     const sammlungsObservable = db
       .get('sammlung')
       .query(
-        Q.where('_deleted', false),
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.sammlung._deleted === false
+              ? [false]
+              : filter.sammlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
         Q.where('art_id', Q.notEq(null)),
         Q.where('herkunft_id', Q.notEq(null)),
       )
@@ -115,15 +145,12 @@ const KulturForm = ({
       async ([userPersonOptions, gartens, garten, sammlungs]) => {
         const gartensSorted = await gartensSortedFromGartens(gartens)
         // need to show a choosen garten even if inactive but not if deleted
-        const gartensIncludingInactiveChoosen = uniqBy(
-          [
-            ...gartensSorted,
-            ...(garten && !garten?._deleted && !showFilter ? [garten] : []),
-          ],
+        const gartensIncludingChoosen = uniqBy(
+          [...gartensSorted, ...(garten && !showFilter ? [garten] : [])],
           'id',
         )
         const gartenWerte = await Promise.all(
-          gartensIncludingInactiveChoosen.map(async (garten) => {
+          gartensIncludingChoosen.map(async (garten) => {
             let label
             try {
               label = await garten.label.pipe(first$()).toPromise()
@@ -140,7 +167,7 @@ const KulturForm = ({
         try {
           await garten.kulturs
             .extend(
-              Q.where('_deleted', true),
+              Q.where('_deleted', false),
               Q.where('aktiv', true),
               Q.where('art_id', Q.notEq(null)),
               Q.where('herkunft_id', Q.notEq(null)),

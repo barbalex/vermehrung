@@ -149,16 +149,15 @@ export class Herkunft extends Model {
       row.changed_by = newObject.changed_by
       row._revisions = newRevisions
     })
-    // NOOOOO: this leads to conflicts due to multiple identical id's!
-    //if (field === '_deleted' && value) await this.markAsDeleted()
-    if (field === '_deleted' && value) {
+    /*if (field === '_deleted' && value) {
       let sammlungs
       try {
         sammlungs = await this?.sammlungs?.fetch()
       } catch {}
-      console.log('herkunft model, sammlungs:', sammlungs)
-      // TODO: edit to set _deleted true
-    }
+      for (const row of sammlungs) {
+        row.delete({ store })
+      }
+    }*/
   }
   @action async delete({ store }) {
     await this.subAction(() =>

@@ -18,14 +18,29 @@ import teilkulturSort from '../../../../../../utils/teilkulturSort'
 import zaehlungSort from '../../../../../../utils/zaehlungSort'
 import personFullname from '../../../../../../utils/personFullname'
 
-const createMessageFunctions = async ({ artId, db }) => {
+const createMessageFunctions = async ({ artId, db, store }) => {
+  const { filter } = store
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
 
   let arts = []
   try {
-    arts = await db.get('art').query(notDeletedQuery).fetch()
+    arts = await db
+      .get('art')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .fetch()
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
   let avs
@@ -42,7 +57,31 @@ const createMessageFunctions = async ({ artId, db }) => {
   const gartensSorted = await gartensSortedFromGartens(gartens)
   let herkunfts = []
   try {
-    herkunfts = await db.get('herkunft').query(notDeletedQuery).fetch()
+    herkunfts = await db
+      .get('herkunft')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.herkunft._deleted === false
+              ? [false]
+              : filter.herkunft._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.herkunft.aktiv === true
+              ? [true]
+              : filter.herkunft.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .fetch()
   } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
   let kulturs = []
@@ -55,14 +94,49 @@ const createMessageFunctions = async ({ artId, db }) => {
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
   let lieferungs = []
   try {
-    lieferungs = await db.get('lieferung').query(notDeletedQuery).fetch()
+    lieferungs = await db
+      .get('lieferung')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.lieferung._deleted === false
+              ? [false]
+              : filter.lieferung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .fetch()
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
   let persons = []
   try {
     persons = await db
       .get('person')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .fetch()
   } catch {}
   const personsSorted = persons.sort(personSort)
@@ -70,7 +144,19 @@ const createMessageFunctions = async ({ artId, db }) => {
   try {
     sammlungsOfArt = await db
       .get('sammlung')
-      .query(Q.where('_deleted', false), Q.on('art', 'id', artId))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.sammlung._deleted === false
+              ? [false]
+              : filter.sammlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.on('art', 'id', artId),
+      )
       .fetch()
   } catch {}
   const sammlungsOfArtSorted = await sammlungsSortedFromSammlungs(
@@ -83,7 +169,16 @@ const createMessageFunctions = async ({ artId, db }) => {
       .query(
         Q.experimentalNestedJoin('kultur', 'art'),
         Q.on('kultur', Q.on('art', 'id', artId)),
-        Q.where('_deleted', false),
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.zaehlung._deleted === false
+              ? [false]
+              : filter.zaehlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
       )
       .fetch()
   } catch {}
@@ -107,7 +202,16 @@ const createMessageFunctions = async ({ artId, db }) => {
       .query(
         Q.experimentalNestedJoin('kultur', 'art'),
         Q.on('kultur', Q.on('art', 'id', artId)),
-        Q.where('_deleted', false),
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.teilkultur._deleted === false
+              ? [false]
+              : filter.teilkultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
       )
       .fetch()
   } catch {}
@@ -119,7 +223,16 @@ const createMessageFunctions = async ({ artId, db }) => {
       .query(
         Q.experimentalNestedJoin('kultur', 'art'),
         Q.on('kultur', Q.on('art', 'id', artId)),
-        Q.where('_deleted', false),
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.event._deleted === false
+              ? [false]
+              : filter.event._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
       )
       .fetch()
   } catch {}
@@ -330,7 +443,30 @@ const createMessageFunctions = async ({ artId, db }) => {
           .filter(async (g) => {
             let kulturs = []
             try {
-              kulturs = await g.kulturs.extend(notDeletedQuery).fetch()
+              kulturs = await g.kulturs
+                .extend(
+                  Q.where(
+                    '_deleted',
+                    Q.oneOf(
+                      filter.kultur._deleted === false
+                        ? [false]
+                        : filter.kultur._deleted === true
+                        ? [true]
+                        : [true, false, null],
+                    ),
+                  ),
+                  Q.where(
+                    'aktiv',
+                    Q.oneOf(
+                      filter.kultur.aktiv === true
+                        ? [true]
+                        : filter.kultur.aktiv === false
+                        ? [false]
+                        : [true, false, null],
+                    ),
+                  ),
+                )
+                .fetch()
             } catch {}
             const kultursCount = kulturs.length
             const activeKultursCount = kulturs.filter((k) => k.aktiv).length

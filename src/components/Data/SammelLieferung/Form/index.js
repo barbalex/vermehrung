@@ -260,8 +260,7 @@ const SammelLieferungForm = ({
           {ifSomeNeeded(['person_id', 'bemerkungen']) && (
             <Wer
               showFilter={showFilter}
-              row={row}
-              rawRow={rawRow}
+              id={id}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
             />

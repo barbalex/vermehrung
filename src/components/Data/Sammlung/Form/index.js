@@ -74,22 +74,77 @@ const SammlungForm = ({
   useEffect(() => {
     const personsObservable = db
       .get('person')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeWithColumns(['vorname', 'name'])
     const herkunftsObservable = db
       .get('herkunft')
-      .query(Q.where('_deleted', false))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.herkunft._deleted === false
+              ? [false]
+              : filter.herkunft._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
     const artsObservable = db
       .get('art')
-      .query(Q.where('_deleted', false))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeWithColumns(['ae_id'])
     const sammlungsNrCountObservable =
       showFilter || !exists(row?.nr)
         ? $of(0)
         : db
             .get('sammlung')
-            .query(Q.where('_deleted', false), Q.where('nr', row.nr))
+            .query(
+              Q.where(
+                '_deleted',
+                Q.oneOf(
+                  filter.sammlung._deleted === false
+                    ? [false]
+                    : filter.sammlung._deleted === true
+                    ? [true]
+                    : [true, false, null],
+                ),
+              ),
+              Q.where('nr', row.nr),
+            )
             .observeCount()
     const combinedObservables = combineLatest([
       sammlungsNrCountObservable,
@@ -110,14 +165,11 @@ const SammlungForm = ({
         try {
           person = await row.person.fetch()
         } catch {}
-        const personsIncludingInactiveChoosen = uniqBy(
-          [
-            ...persons,
-            ...(person && !person?._deleted && !showFilter ? [person] : []),
-          ],
+        const personsIncludingChoosen = uniqBy(
+          [...persons, ...(person && !showFilter ? [person] : [])],
           'id',
         )
-        const personWerte = personsIncludingInactiveChoosen
+        const personWerte = personsIncludingChoosen
           .sort(personSort)
           .map((person) => ({
             value: person.id,
@@ -151,7 +203,18 @@ const SammlungForm = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db, filter.herkunft, row.nr, row.person, setError, showFilter])
+  }, [
+    db,
+    filter.art._deleted,
+    filter.herkunft,
+    filter.person._deleted,
+    filter.person.aktiv,
+    filter.sammlung._deleted,
+    row.nr,
+    row.person,
+    setError,
+    showFilter,
+  ])
   const { personWerte, herkunftWerte, artWerte } = dataState
 
   // ensure that activeConflict is reset
