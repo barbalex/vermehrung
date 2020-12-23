@@ -144,7 +144,7 @@ const TeilzaehlungForm = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db, filter.teilkultur._deleted, id, kulturId, row.person])
+  }, [db, filter.teilkultur._deleted, id, kulturId, row?.person])
   const { teilkulturWerte, kulturOption, row } = dataState
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
