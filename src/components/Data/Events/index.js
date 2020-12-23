@@ -15,7 +15,6 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import eventSort from '../../../utils/eventSort'
 import tableFilter from '../../../utils/tableFilter'
 
@@ -69,7 +68,7 @@ const singleRowHeight = 48
 
 const Events = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertEventRev, kulturIdInActiveNodeArray, db } = store
+  const { insertEventRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { event: eventFilter } = store.filter
 
@@ -82,7 +81,20 @@ const Events = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.get('event')
-    const countObservable = collection.query(notDeletedQuery).observeCount()
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.event._deleted === false
+              ? [false]
+              : filter.event._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeCount()
     const dataObservable = collection
       .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)
       .observeWithColumns(['datum', 'beschreibung'])

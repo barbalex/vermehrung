@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
-import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import tableFilter from '../../../../utils/tableFilter'
 
 const ArtFormTitleChooser = ({
@@ -16,7 +16,7 @@ const ArtFormTitleChooser = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { db } = store
+  const { db, filter } = store
 
   const [countState, setCountState] = useState({
     totalCount: 0,
@@ -25,7 +25,18 @@ const ArtFormTitleChooser = ({
   useEffect(() => {
     const collection = db.get('art')
     const totalCountObservable = collection
-      .query(notDeletedQuery)
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'art' }))
@@ -46,6 +57,7 @@ const ArtFormTitleChooser = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.art),
     store,
+    filter.art._deleted,
   ])
 
   const { totalCount, filteredCount } = countState

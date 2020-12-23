@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
 import { combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
@@ -17,7 +18,6 @@ import QK from './QK'
 import Personen from './Personen'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import notDeletedQuery from '../../../../utils/notDeletedQuery'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 
 const FieldsContainer = styled.div`
@@ -51,7 +51,21 @@ const ArtForm = ({
   })
   useEffect(() => {
     const aeArtObservable = db.get('ae_art').query().observe()
-    const artsObservable = db.get('art').query(notDeletedQuery).observe()
+    const artsObservable = db
+      .get('art')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observe()
     const combinedObservables = combineLatest([aeArtObservable, artsObservable])
     const subscription = combinedObservables.subscribe(
       async ([aeArts, arts]) => {
@@ -65,7 +79,7 @@ const ArtForm = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db])
+  }, [db, filter.art._deleted])
   const { artsSorted, aeArts } = dataState
 
   useEffect(() => {

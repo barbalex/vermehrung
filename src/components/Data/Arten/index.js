@@ -8,6 +8,7 @@ import { withResizeDetector } from 'react-resize-detector'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import SimpleBar from 'simplebar-react'
 import { combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../storeContext'
 import FilterTitle from '../../shared/FilterTitle'
@@ -15,7 +16,6 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import tableFilter from '../../../utils/tableFilter'
-import notDeletedQuery from '../../../utils/notDeletedQuery'
 import artsSortedFromArts from '../../../utils/artsSortedFromArts'
 
 const Container = styled.div`
@@ -67,7 +67,7 @@ const singleRowHeight = 48
 
 const Arten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertArtRev, db } = store
+  const { insertArtRev, db, filter } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
   const { art: artFilter } = store.filter
 
@@ -75,7 +75,18 @@ const Arten = ({ filter: showFilter, width, height }) => {
   useEffect(() => {
     const collection = db.get('art')
     const totalCountObservable = collection
-      .query(notDeletedQuery)
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeCount()
     const artsObservable = collection
       .query(...tableFilter({ store, table: 'art' }))

@@ -62,6 +62,7 @@ const ApQkQk = ({ artId, qkChoosens }) => {
     createMessageFunctions({
       artId,
       db,
+      store,
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
         qkChoosens.map(async (qkChoosen) => {

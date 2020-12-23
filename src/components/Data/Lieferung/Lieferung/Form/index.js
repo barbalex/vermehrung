@@ -230,6 +230,7 @@ const LierferungForm = ({
           ]) && (
             <Was
               showFilter={showFilter}
+              id={id}
               row={row}
               rawRow={rawRow}
               saveToDb={saveToDb}
@@ -238,6 +239,7 @@ const LierferungForm = ({
           )}
           <Von
             showFilter={showFilter}
+            id={id}
             row={row}
             rawRow={rawRow}
             saveToDb={saveToDb}
@@ -247,6 +249,7 @@ const LierferungForm = ({
           />
           <Nach
             showFilter={showFilter}
+            id={id}
             row={row}
             rawRow={rawRow}
             saveToDb={saveToDb}
@@ -256,6 +259,7 @@ const LierferungForm = ({
           {ifSomeNeeded(['datum', 'geplant']) && (
             <Wann
               showFilter={showFilter}
+              id={id}
               row={row}
               rawRow={rawRow}
               saveToDb={saveToDb}
@@ -265,8 +269,7 @@ const LierferungForm = ({
           {ifSomeNeeded(['person_id', 'bemerkungen']) && (
             <Wer
               showFilter={showFilter}
-              row={row}
-              rawRow={rawRow}
+              id={id}
               saveToDb={saveToDb}
               ifNeeded={ifNeeded}
               activeConflict={activeConflict}

@@ -71,7 +71,28 @@ const GartenForm = ({
       : $of({})
     const personsObservable = db
       .get('person')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeWithColumns(['vorname', 'name'])
     const personObservable = row.person ? row.person.observe() : $of({})
     const gvsObservable = row.gvs
@@ -86,14 +107,11 @@ const GartenForm = ({
     const subscription = combinedObservables.subscribe(
       async ([userPersonOptions, persons, person, gvs]) => {
         // need to show a choosen person even if inactive but not if deleted
-        const personsIncludingInactiveChoosen = uniqBy(
-          [
-            ...persons,
-            ...(person?.id && !person?._deleted && !showFilter ? [person] : []),
-          ],
+        const personsIncludingChoosen = uniqBy(
+          [...persons, ...(person?.id && !showFilter ? [person] : [])],
           'id',
         )
-        const personWerte = personsIncludingInactiveChoosen
+        const personWerte = personsIncludingChoosen
           .sort(personSort)
           .map((person) => ({
             value: person.id,

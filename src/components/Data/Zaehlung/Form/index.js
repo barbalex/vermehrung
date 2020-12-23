@@ -64,7 +64,28 @@ const ZaehlungForm = ({
   useEffect(() => {
     const kultursObservable = db
       .get('kultur')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.kultur.aktiv === true
+              ? [true]
+              : filter.kultur.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observe()
     const combinedObservables = combineLatest([kultursObservable])
     const subscription = combinedObservables.subscribe(async ([kulturs]) => {
@@ -73,15 +94,12 @@ const ZaehlungForm = ({
       try {
         kultur = await row.kultur.fetch()
       } catch {}
-      const kultursIncludingInactiveChoosen = uniqBy(
-        [
-          ...kulturs,
-          ...(kultur && !kultur?._deleted && !showFilter ? [kultur] : []),
-        ],
+      const kultursIncludingChoosen = uniqBy(
+        [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
         'id',
       )
       const kultursSorted = await kultursSortedFromKulturs(
-        kultursIncludingInactiveChoosen,
+        kultursIncludingChoosen,
       )
       const kulturWerte = await Promise.all(
         kultursSorted
@@ -110,7 +128,15 @@ const ZaehlungForm = ({
     })
 
     return () => subscription.unsubscribe()
-  }, [db, row.art_id, row.kultur, row.kultur_option, showFilter])
+  }, [
+    db,
+    filter.kultur._deleted,
+    filter.kultur.aktiv,
+    row.art_id,
+    row.kultur,
+    row.kultur_option,
+    showFilter,
+  ])
   const { kulturWerte, kulturOption } = dataState
 
   const z_bemerkungen = kulturOption?.z_bemerkungen ?? true

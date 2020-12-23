@@ -75,21 +75,74 @@ const EventForm = ({
   useEffect(() => {
     const kultursObservable = db
       .get('kultur')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.kultur.aktiv === true
+              ? [true]
+              : filter.kultur.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeWithColumns([
         'garten_id',
         'art_id',
         'herkunft_id',
         'zwischenlager',
       ])
-    const tkKulturQuery = showFilter ? [] : [Q.where('kultur_id', kulturId)]
     const teilkulturObservable = db
       .get('teilkultur')
-      .query(Q.where('_deleted', false), ...tkKulturQuery)
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.teilkultur._deleted === false
+              ? [false]
+              : filter.teilkultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...(showFilter ? [] : [Q.where('kultur_id', kulturId)]),
+      )
       .observeWithColumns(['name'])
     const personsObservable = db
       .get('person')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeWithColumns(['vorname', 'name'])
     const kulturObservable = showFilter
       ? $of(filter.kultur)
@@ -107,15 +160,12 @@ const EventForm = ({
     const subscription = combinedObservables.subscribe(
       async ([kulturs, teilkulturs, persons, kultur, kulturOption]) => {
         // need to show a choosen kultur even if inactive but not if deleted
-        const kultursIncludingInactiveChoosen = uniqBy(
-          [
-            ...kulturs,
-            ...(kultur && !kultur?._deleted && !showFilter ? [kultur] : []),
-          ],
+        const kultursIncludingChoosen = uniqBy(
+          [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
           'id',
         )
         const kultursSorted = await kultursSortedFromKulturs(
-          kultursIncludingInactiveChoosen,
+          kultursIncludingChoosen,
         )
         const kulturWerte = await Promise.all(
           kultursSorted.map(async (t) => {
