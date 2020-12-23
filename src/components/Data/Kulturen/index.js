@@ -71,6 +71,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
   const {
     artIdInActiveNodeArray,
     db,
+    filter,
     gartenIdInActiveNodeArray,
     insertKulturRev,
   } = store
@@ -92,7 +93,28 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
       : []
     const collection = db.get('kultur')
     const countObservable = collection
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.kultur.aktiv === true
+              ? [true]
+              : filter.kultur.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeCount()
     const dataObservable = collection
       .query(...tableFilter({ table: 'kultur', store }), ...hierarchyQuery)
@@ -123,6 +145,8 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
     store,
+    filter.kultur._deleted,
+    filter.kultur.aktiv,
   ])
 
   const { kulturs, totalCount } = dataState

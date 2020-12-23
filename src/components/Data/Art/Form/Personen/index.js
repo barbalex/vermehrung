@@ -53,7 +53,7 @@ const Aven = styled.div`
 
 const ArtPersonen = ({ art }) => {
   const store = useContext(StoreContext)
-  const { db, insertAvRev, errors, unsetError } = store
+  const { db, insertAvRev, errors, unsetError, filter } = store
 
   useEffect(() => unsetError('av'), [art.id, unsetError])
 
@@ -85,7 +85,28 @@ const ArtPersonen = ({ art }) => {
   useEffect(() => {
     const personsObservable = db
       .get('person')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observe()
     const avsObservable = art.avs.extend(Q.where('_deleted', false)).observe()
     const combinedObservables = combineLatest([
@@ -107,7 +128,7 @@ const ArtPersonen = ({ art }) => {
       },
     )
     return () => subscription.unsubscribe()
-  }, [art.avs, db])
+  }, [art.avs, db, filter.person._deleted, filter.person.aktiv])
   const { avsSorted, personWerte } = dataState
 
   const saveToDb = useCallback(

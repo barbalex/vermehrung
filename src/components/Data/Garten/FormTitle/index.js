@@ -16,7 +16,7 @@ const GartenFormTitle = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { personIdInActiveNodeArray, db } = store
+  const { personIdInActiveNodeArray, db, filter } = store
 
   const [countState, setCountState] = useState({
     totalCount: 0,
@@ -32,8 +32,26 @@ const GartenFormTitle = ({
     const collection = db.get('garten')
     const totalCountObservable = collection
       .query(
-        Q.where('_deleted', false),
-        Q.where('aktiv', true),
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.garten._deleted === false
+              ? [false]
+              : filter.garten._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.garten.aktiv === true
+              ? [true]
+              : filter.garten.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
         ...hierarchyQuery,
       )
       .observeCount()
@@ -57,6 +75,8 @@ const GartenFormTitle = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.garten),
     store,
+    filter.garten._deleted,
+    filter.garten.aktiv,
   ])
 
   const { totalCount, filteredCount } = countState

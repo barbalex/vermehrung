@@ -62,18 +62,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
       .observe()
     const herkunftsObservable = db
       .get('herkunft')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.herkunft._deleted === false
-              ? [false]
-              : filter.herkunft._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(Q.where('_deleted', false))
       .observe()
     const combinedObservables = combineLatest([
       sammlungsObservable,

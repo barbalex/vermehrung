@@ -51,7 +51,28 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   try {
     gartens = await db
       .get('garten')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.garten._deleted === false
+              ? [false]
+              : filter.garten._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.garten.aktiv === true
+              ? [true]
+              : filter.garten.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .fetch()
   } catch {}
   const gartensSorted = await gartensSortedFromGartens(gartens)
@@ -88,7 +109,28 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   try {
     kulturs = await db
       .get('kultur')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.kultur.aktiv === true
+              ? [true]
+              : filter.kultur.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .fetch()
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
@@ -598,7 +640,16 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         .query(
           Q.experimentalNestedJoin('kultur', 'art'),
           Q.on('kultur', Q.on('art', 'id', artId)),
-          Q.where('_deleted', false),
+          Q.where(
+            '_deleted',
+            Q.oneOf(
+              filter.zaehlung._deleted === false
+                ? [false]
+                : filter.zaehlung._deleted === true
+                ? [true]
+                : [true, false, null],
+            ),
+          ),
           Q.where('datum', Q.notEq(null)),
           Q.where('datum', Q.gte(format(new Date(), 'yyyy-mm-dd'))),
         )
@@ -631,7 +682,16 @@ const createMessageFunctions = async ({ artId, db, store }) => {
           .query(
             Q.experimentalNestedJoin('kultur', 'art'),
             Q.on('kultur', Q.on('art', 'id', artId)),
-            Q.where('_deleted', false),
+            Q.where(
+              '_deleted',
+              Q.oneOf(
+                filter.zaehlung._deleted === false
+                  ? [false]
+                  : filter.zaehlung._deleted === true
+                  ? [true]
+                  : [true, false, null],
+              ),
+            ),
             Q.where('datum', Q.notEq(null)),
           )
           .fetch()
@@ -774,7 +834,16 @@ const createMessageFunctions = async ({ artId, db, store }) => {
             Q.on('kultur', Q.on('art', 'id', artId)),
             Q.experimentalNestedJoin('kultur', 'kultur_option'),
             Q.on('kultur', Q.on('kultur_option', 'tk', true)),
-            Q.where('_deleted', false),
+            Q.where(
+              '_deleted',
+              Q.oneOf(
+                filter.zaehlung._deleted === false
+                  ? [false]
+                  : filter.zaehlung._deleted === true
+                  ? [true]
+                  : [true, false, null],
+              ),
+            ),
           )
           .fetch()
       } catch {}

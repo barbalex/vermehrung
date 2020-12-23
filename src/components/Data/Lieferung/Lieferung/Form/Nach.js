@@ -47,7 +47,7 @@ const TitleRow = styled.div`
 
 const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
   const store = useContext(StoreContext)
-  const { errors, db } = store
+  const { errors, db, filter } = store
 
   const [dataState, setDataState] = useState({
     nachKulturWerte: [],
@@ -56,11 +56,33 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
     // BEWARE: need to include inactive kulturs
     const kultursObservable = db
       .get('kultur')
-      .query(Q.where('_deleted', false))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observe()
     const sammlungsObservable = db
       .get('sammlung')
-      .query(Q.where('_deleted', false))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.sammlung._deleted === false
+              ? [false]
+              : filter.sammlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observe()
     const combinedObservables = combineLatest([
       kultursObservable,
@@ -109,7 +131,15 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
     })
 
     return () => subscription.unsubscribe()
-  }, [db, herkunft?.id, row?.art_id, row?.nach_kultur_id, row?.von_kultur_id])
+  }, [
+    db,
+    filter.kultur._deleted,
+    filter.sammlung._deleted,
+    herkunft.id,
+    row.art_id,
+    row?.nach_kultur_id,
+    row.von_kultur_id,
+  ])
   const { nachKulturWerte } = dataState
 
   const titleRowRef = useRef(null)

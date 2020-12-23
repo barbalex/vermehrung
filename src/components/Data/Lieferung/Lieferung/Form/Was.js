@@ -61,13 +61,24 @@ const FieldRow = styled.div`
 const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
   const store = useContext(StoreContext)
 
-  const { db, errors } = store
+  const { db, errors, filter } = store
 
   const [artWerte, setArtWerte] = useState([])
   useEffect(() => {
     const artsObservable = db
       .get('art')
-      .query(Q.where('_deleted', false))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observe()
     const combinedObservables = combineLatest([artsObservable])
     const subscription = combinedObservables.subscribe(async ([arts]) => {
@@ -90,7 +101,7 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
     })
 
     return () => subscription.unsubscribe()
-  }, [db])
+  }, [db, filter.art._deleted])
 
   const openGenVielfaldDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`

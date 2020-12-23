@@ -16,7 +16,7 @@ const PersonFormTitleChooser = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { db } = store
+  const { db, filter } = store
 
   const [countState, setCountState] = useState({
     totalCount: 0,
@@ -25,7 +25,28 @@ const PersonFormTitleChooser = ({
   useEffect(() => {
     const collection = db.get('person')
     const totalCountObservable = collection
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'person' }))
@@ -46,6 +67,8 @@ const PersonFormTitleChooser = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.person),
     store,
+    filter.person._deleted,
+    filter.person.aktiv,
   ])
 
   const { totalCount, filteredCount } = countState

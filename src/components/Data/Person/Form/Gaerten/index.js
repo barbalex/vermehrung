@@ -53,7 +53,7 @@ const Gvs = styled.div`
 
 const PersonArten = ({ person }) => {
   const store = useContext(StoreContext)
-  const { insertGvRev, db } = store
+  const { insertGvRev, db, filter } = store
 
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [person.id])
@@ -89,8 +89,26 @@ const PersonArten = ({ person }) => {
     const gartensObservable = db
       .get('garten')
       .query(
-        Q.where('_deleted', false),
-        Q.where('aktiv', true),
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.garten._deleted === false
+              ? [false]
+              : filter.garten._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.garten.aktiv === true
+              ? [true]
+              : filter.garten.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
         Q.where('id', Q.notIn(gvGartenIds)),
       )
       .observe()
@@ -120,7 +138,13 @@ const PersonArten = ({ person }) => {
     )
     return () => subscription.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [person.gvs, gvGartenIds.length, db])
+  }, [
+    person.gvs,
+    gvGartenIds.length,
+    db,
+    filter.garten._deleted,
+    filter.garten.aktiv,
+  ])
 
   const saveToDb = useCallback(
     async (event) => {
