@@ -65,6 +65,7 @@ const EventFormTitle = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(store.filter.event),
     store,
+    filter.event._deleted,
   ])
 
   const { totalCount, filteredCount } = countState

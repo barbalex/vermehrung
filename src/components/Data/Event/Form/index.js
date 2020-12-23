@@ -212,6 +212,9 @@ const EventForm = ({
   }, [
     db,
     filter.kultur,
+    filter.person._deleted,
+    filter.person.aktiv,
+    filter.teilkultur._deleted,
     kulturId,
     row,
     row.kultur,

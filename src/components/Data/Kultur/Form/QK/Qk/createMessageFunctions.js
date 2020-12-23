@@ -10,7 +10,8 @@ import lieferungSort from '../../../../../../utils/lieferungSort'
 import teilkulturSort from '../../../../../../utils/teilkulturSort'
 import zaehlungSort from '../../../../../../utils/zaehlungSort'
 
-const createMessageFunctions = async ({ kulturId, db }) => {
+const createMessageFunctions = async ({ kulturId, db, store }) => {
+  const { filter } = store
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
@@ -25,23 +26,86 @@ const createMessageFunctions = async ({ kulturId, db }) => {
   try {
     kulturs = await db
       .get('kultur')
-      .query(Q.where('_deleted', false), Q.where('aktiv', true))
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.kultur.aktiv === true
+              ? [true]
+              : filter.kultur.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
       .fetch()
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
   let lieferungs = []
   try {
-    lieferungs = await db.get('lieferung').query(notDeletedQuery).fetch()
+    lieferungs = await db
+      .get('lieferung')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.lieferung._deleted === false
+              ? [false]
+              : filter.lieferung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .fetch()
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
   let teilkulturs = []
   try {
-    teilkulturs = await db.get('teilkultur').query(notDeletedQuery).fetch()
+    teilkulturs = await db
+      .get('teilkultur')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.teilkultur._deleted === false
+              ? [false]
+              : filter.teilkultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .fetch()
   } catch {}
   const teilkultursSorted = teilkulturs.sort(teilkulturSort)
   let zaehlungs = []
   try {
-    zaehlungs = await db.get('zaehlung').query(notDeletedQuery).fetch()
+    zaehlungs = await db
+      .get('zaehlung')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.zaehlung._deleted === false
+              ? [false]
+              : filter.zaehlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .fetch()
   } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
   let teilzaehlungs = []
