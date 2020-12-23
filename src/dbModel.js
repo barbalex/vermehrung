@@ -3225,7 +3225,7 @@ export class PersonOption extends Model {
   @field('sl_show_empty_when_next_to_li') sl_show_empty_when_next_to_li
   @field('sl_auto_copy_edits') sl_auto_copy_edits
   @field('tree_kultur') tree_kultur
-  @field('tree_teilkultur') xtree_teilkulturxx
+  @field('tree_teilkultur') tree_teilkultur
   @field('tree_zaehlung') tree_zaehlung
   @field('tree_lieferung') tree_lieferung
   @field('tree_event') tree_event
