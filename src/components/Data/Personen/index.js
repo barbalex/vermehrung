@@ -69,7 +69,7 @@ const singleRowHeight = 48
 const Personen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const { insertPersonRev, db, user, filter } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { person: personFilter } = store.filter
 
   const [dataState, setDataState] = useState({
@@ -137,10 +137,10 @@ const Personen = ({ filter: showFilter, width, height }) => {
     insertPersonRev()
   }, [insertPersonRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Personen') {
     upTitle = 'Zu allen Listen'

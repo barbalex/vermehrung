@@ -69,7 +69,7 @@ const singleRowHeight = 48
 const Gaerten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const { insertGartenRev, personIdInActiveNodeArray, db, filter } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { garten: gartenFilter } = store.filter
 
   const [dataState, setDataState] = useState({ gartens: [], totalCount: 0 })
@@ -142,10 +142,10 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
     insertGartenRev()
   }, [insertGartenRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Gaerten') {
     upTitle = 'Zu allen Listen'

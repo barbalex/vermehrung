@@ -48,13 +48,17 @@ const Herkunft = ({
   activeConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
+  const {
+    activeNodeArray: anaRaw,
+    setActiveNodeArray,
+    removeOpenNode,
+  } = store.tree
   const activeNodeArray = anaRaw.toJSON()
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   const onClickToSammlungen = useCallback(
     () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
     [activeNodeArray, setActiveNodeArray],

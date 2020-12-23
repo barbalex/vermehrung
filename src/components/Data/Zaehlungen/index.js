@@ -69,7 +69,7 @@ const singleRowHeight = 48
 const Zaehlungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const { insertZaehlungRev, kulturIdInActiveNodeArray, db, filter } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { zaehlung: zaehlungFilter } = store.filter
 
   const [dataState, setDataState] = useState({ zaehlungs: [], totalCount: 0 })
@@ -133,10 +133,11 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
     insertZaehlungRev()
   }, [insertZaehlungRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Zaehlungen') {
     upTitle = 'Zu allen Listen'

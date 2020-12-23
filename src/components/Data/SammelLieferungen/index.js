@@ -69,7 +69,7 @@ const singleRowHeight = 48
 const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const { insertSammelLieferungRev, db, filter } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { sammel_lieferung: sammelLieferungFilter } = store.filter
 
   const [dataState, setDataState] = useState({
@@ -128,10 +128,10 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
     insertSammelLieferungRev()
   }, [insertSammelLieferungRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Sammel-Lieferungen') {
     upTitle = 'Zu allen Listen'

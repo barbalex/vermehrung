@@ -68,7 +68,7 @@ const singleRowHeight = 48
 const Arten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const { insertArtRev, db, filter } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { art: artFilter } = store.filter
 
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
@@ -114,10 +114,10 @@ const Arten = ({ filter: showFilter, width, height }) => {
     insertArtRev()
   }, [insertArtRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Arten') {
     upTitle = 'Zu allen Listen'

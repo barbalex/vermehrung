@@ -78,7 +78,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
     sammlungIdInActiveNodeArray,
     filter,
   } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { lieferung: lieferungFilter } = store.filter
 
   const [dataState, setDataState] = useState({ lieferungs: [], totalCount: 0 })
@@ -203,10 +203,10 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
     insertLieferungRev()
   }, [activeNodeArray, db, insertLieferungRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Lieferungen') {
     upTitle = 'Zu allen Listen'

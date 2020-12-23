@@ -69,7 +69,7 @@ const singleRowHeight = 48
 const Events = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const { insertEventRev, kulturIdInActiveNodeArray, db, filter } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { event: eventFilter } = store.filter
 
   const [dataState, setDataState] = useState({ events: [], totalCount: 0 })
@@ -126,10 +126,10 @@ const Events = ({ filter: showFilter, width, height }) => {
     insertEventRev()
   }, [insertEventRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Events') {
     upTitle = 'Zu allen Listen'

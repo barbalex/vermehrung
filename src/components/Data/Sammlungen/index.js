@@ -76,7 +76,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     db,
     filter,
   } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { sammlung: sammlungFilter } = store.filter
 
   const [dataState, setDataState] = useState({ sammlungs: [], totalCount: 0 })
@@ -156,10 +156,10 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     insertSammlungRev()
   }, [insertSammlungRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Sammlungen') {
     upTitle = 'Zu allen Listen'
