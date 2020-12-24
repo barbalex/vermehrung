@@ -26,36 +26,24 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-const ChooseArtQkRow = ({ artId, qk }) => {
+const ChooseArtQkRow = ({ qk, userPersonOption }) => {
   const store = useContext(StoreContext)
 
-  const [dataState, setDataState] = useState({ artQkChoosen })
-  useEffect(() => {
-    const observable = qk.art_qk_choosens
-      .extend(Q.where('art_id', artId), Q.where('qk_id', qk.id))
-      .observeWithColumns(['choosen'])
-    const subscription = observable.subscribe(([artQkChoosen]) =>
-      setDataState({ artQkChoosen }),
-    )
-
-    return () => subscription.unsubscribe()
-  }, [artId, qk.art_qk_choosens, qk.id])
-  const { artQkChoosen } = dataState
-
-  const checked = artQkChoosen?.choosen
+  const checked = userPersonOption.art_qk_choosen.includes(qk.id)
 
   const onChange = useCallback(
     (event) => {
-      artQkChoosen.edit({
-        field: 'choosen',
-        value: event.target.checked,
+      const newValue = event.target.checked
+        ? [...userPersonOption.art_qk_choosen, qk.id]
+        : userPersonOption.art_qk_choosen.filter((id) => id !== qk.id)
+      userPersonOption.edit({
+        field: 'art_qk_choosen',
+        value: newValue,
         store,
       })
     },
-    [artQkChoosen, store],
+    [qk.id, store, userPersonOption],
   )
-
-  if (!artQkChoosen) return null
 
   return (
     <Row>

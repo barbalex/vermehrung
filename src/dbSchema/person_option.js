@@ -30,6 +30,8 @@ const person_option = {
     { name: 'tree_zaehlung', type: 'boolean', isOptional: true },
     { name: 'tree_lieferung', type: 'boolean', isOptional: true },
     { name: 'tree_event', type: 'boolean', isOptional: true },
+    { name: 'art_qk_choosen', type: 'string', isOptional: true },
+    { name: 'kultur_qk_choosen', type: 'string', isOptional: true },
 
     { name: 'changed', type: 'string', isOptional: true },
     { name: 'changed_by', type: 'string', isOptional: true },

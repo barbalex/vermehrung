@@ -208,6 +208,7 @@ create index on art_qk_rev using btree (_depth);
 create index on art_qk_rev using btree (_deleted);
 create index on art_qk_rev using btree (_rev_at);
 
+-- TODO: drop after changing to new method
 drop table if exists art_qk_choosen cascade;
 create table art_qk_choosen (
   id uuid primary key default uuid_generate_v1mc(),
@@ -644,6 +645,7 @@ create index on kultur_qk_rev using btree (_depth);
 create index on kultur_qk_rev using btree (_deleted);
 create index on kultur_qk_rev using btree (_rev_at);
 
+-- TODO: drop after changing to new method
 drop table if exists kultur_qk_choosen cascade;
 create table kultur_qk_choosen (
   id uuid primary key default uuid_generate_v1mc(),
@@ -1023,6 +1025,8 @@ create table person_option (
   tree_zaehlung boolean default false,
   tree_lieferung boolean default false,
   tree_event boolean default false,
+  art_qk_choosen text[] default null,
+  kultur_qk_choosen text[] default null,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
@@ -1033,8 +1037,10 @@ create table person_option (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table person_option add column ku_zwischenlager boolean default false;
-alter table person_option add column ku_erhaltungskultur boolean default false;
+-- 2020.12.24 refactor choosen qk
+alter table person_option add column art_qk_choosen text[] default null;
+alter table person_option add column kultur_qk_choosen text[] default null;
+
 create index on person_option using btree (id);
 create index on person_option using btree (_deleted);
 create index on person_option using btree (_rev_at);
@@ -1070,6 +1076,8 @@ create table person_option_rev (
   tree_zaehlung boolean default false,
   tree_lieferung boolean default false,
   tree_event boolean default false,
+  art_qk_choosen text[] default null,
+  kultur_qk_choosen text[] default null,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
@@ -1079,6 +1087,10 @@ create table person_option_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+-- 2020.12.24 refactor choosen qk
+alter table person_option_rev add column art_qk_choosen text[] default null;
+alter table person_option_rev add column kultur_qk_choosen text[] default null;
+
 alter table person_option_rev add column ku_zwischenlager boolean default false;
 alter table person_option_rev add column ku_erhaltungskultur boolean default false;
 create index on person_option_rev using btree (rev_id);

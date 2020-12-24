@@ -3229,6 +3229,8 @@ export class PersonOption extends Model {
   @field('tree_zaehlung') tree_zaehlung
   @field('tree_lieferung') tree_lieferung
   @field('tree_event') tree_event
+  @json('art_qk_choosen', dontSanitize) art_qk_choosen
+  @json('kultur_qk_choosen', dontSanitize) kultur_qk_choosen
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
@@ -3285,6 +3287,9 @@ export class PersonOption extends Model {
       tree_zaehlung: field === 'tree_zaehlung' ? value : this.tree_zaehlung,
       tree_lieferung: field === 'tree_lieferung' ? value : this.tree_lieferung,
       tree_event: field === 'tree_event' ? value : this.tree_event,
+      art_qk_choosen: field === 'art_qk_choosen' ? value : this.art_qk_choosen,
+      kultur_qk_choosen:
+        field === 'kultur_qk_choosen' ? value : this.kultur_qk_choosen,
       _parent_rev: this._rev,
       _depth: newDepth,
       _deleted: field === '_deleted' ? value : this._deleted,
