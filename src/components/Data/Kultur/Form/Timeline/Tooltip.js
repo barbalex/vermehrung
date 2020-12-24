@@ -16,10 +16,10 @@ const PRow = styled.div`
 `
 const PTitle = styled.div`
   font-size: 0.8em;
-  font-weight: 800;
+  font-weight: 700;
 `
 const Ereignis = styled.span`
-  font-weight: 600;
+  font-weight: 700;
   padding-left: 5px;
 `
 

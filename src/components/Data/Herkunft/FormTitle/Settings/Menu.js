@@ -24,7 +24,7 @@ const TitleRow = styled.div`
 const Title = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 800;
+  font-weight: 700;
   user-select: none;
 `
 const Info = styled.div`

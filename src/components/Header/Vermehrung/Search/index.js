@@ -150,7 +150,7 @@ const Search = () => {
         alignItems: 'center',
         justifyContent: 'space-between',
         color: 'rgba(0, 0, 0, 0.8)',
-        fontWeight: '800',
+        fontWeight: '700',
         userSelect: 'none',
         textTransform: 'none',
       }),

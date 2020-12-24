@@ -84,7 +84,7 @@ const ArtTimeline = ({ artId, herkunft, width }) => {
               position: 'insideLeft',
               offset: 15,
               fontSize: 14,
-              fontWeight: 800,
+              fontWeight: 700,
             }}
             fontSize={12}
           />

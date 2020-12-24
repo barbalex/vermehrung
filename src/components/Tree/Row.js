@@ -179,7 +179,7 @@ const SymbolSpan = styled.span`
     props['data-mobile'] ? '13px !important' : '11px !important'};
   padding-left: 9px;
   font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   margin-top: ${(props) =>
     props['data-mobile'] ? '-2px !important' : '-1px !important'};
   font-size: ${(props) =>
@@ -192,7 +192,7 @@ const TextSpan = styled.span`
   font-family: ${(props) => (props['data-mono'] ? 'Roboto Mono' : 'Roboto')};
   font-size: ${(props) => `${props['data-font-size']}px !important`};
   font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   white-space: nowrap;
   cursor: pointer;
   &:hover {

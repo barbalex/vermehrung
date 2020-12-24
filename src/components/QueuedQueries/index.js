@@ -43,10 +43,10 @@ const QueriesContainer = styled.div`
   overflow: hidden;
 `
 const Heading = styled.div`
-  font-weight: 600;
+  font-weight: 700;
 `
 const RevertHeading = styled.div`
-  font-weight: 600;
+  font-weight: 700;
   justify-self: center;
 `
 const CloseIcon = styled(IconButton)`
