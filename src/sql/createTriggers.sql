@@ -73,6 +73,7 @@ left join person_option
 on person_option.id = person.id
 where person_option.id is null;
 
+-- TODO: drop after changing to new method
 DROP TRIGGER IF EXISTS kultur_has_qk_choosen ON kultur_qk_choosen cascade;
 DROP FUNCTION IF EXISTS kultur_has_qk_choosen() cascade;
 CREATE or replace FUNCTION kultur_has_qk_choosen() RETURNS trigger AS $kultur_has_qk_choosen$
@@ -93,6 +94,7 @@ CREATE TRIGGER kultur_has_qk_choosen AFTER INSERT ON kultur
 --on kultur_qk_choosen.kultur_id = kultur.id
 --where kultur_qk_choosen.kultur_id is null;
 
+-- TODO: drop after changing to new method
 DROP TRIGGER IF EXISTS art_has_qk_choosen ON art_qk_choosen cascade;
 DROP FUNCTION IF EXISTS art_has_qk_choosen() cascade;
 CREATE or replace FUNCTION art_has_qk_choosen() RETURNS trigger AS $art_has_qk_choosen$
@@ -179,3 +181,51 @@ from sammlung
 where art_id is not null and herkunft_id is not null
 group by art_id, herkunft_id
 ON CONFLICT DO NOTHING;
+
+------------------------------------------
+-- TODO: 2020.12.24 refactor choosen qk
+
+DROP TRIGGER IF EXISTS person_option_has_qks ON person_option cascade;
+DROP FUNCTION IF EXISTS person_option_has_qks() cascade;
+CREATE FUNCTION person_option_has_qks() RETURNS trigger AS $$
+BEGIN
+  update person_option
+  set art_qk_choosen = ARRAY (select id from art_qk);
+  update person_option
+  set kultur_qk_choosen = ARRAY (select id from kultur_qk);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER person_option_has_qks AFTER INSERT ON person_option
+  FOR EACH ROW EXECUTE PROCEDURE person_option_has_qks();
+
+-- add when inserting art_qk
+
+DROP TRIGGER IF EXISTS person_option_has_art_qks ON art_qk cascade;
+DROP FUNCTION IF EXISTS person_option_has_art_qks() cascade;
+CREATE FUNCTION person_option_has_art_qks() RETURNS trigger AS $$
+BEGIN
+  update person_option
+  set art_qk_choosen = art_qk_choosen || new.id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER person_option_has_art_qks AFTER INSERT ON art_qk
+  FOR EACH ROW EXECUTE PROCEDURE person_option_has_art_qks();
+
+-- add when inserting kultur_qk
+
+DROP TRIGGER IF EXISTS person_option_has_kultur_qks ON kultur_qk cascade;
+DROP FUNCTION IF EXISTS person_option_has_kultur_qks() cascade;
+CREATE FUNCTION person_option_has_kultur_qks() RETURNS trigger AS $$
+BEGIN
+  update person_option
+  set kultur_qk_choosen = kultur_qk_choosen || new.id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER person_option_has_kultur_qks AFTER INSERT ON kultur_qk
+  FOR EACH ROW EXECUTE PROCEDURE person_option_has_kultur_qks();

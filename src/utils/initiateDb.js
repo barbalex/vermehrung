@@ -33,11 +33,12 @@ import {
   UserRole,
   Zaehlung,
 } from '../dbModel'
+import migrations from './migrations'
 
 const initiateDb = () => {
   const adapter = new LokiJSAdapter({
     schema,
-    // migrations, // optional migrations
+    migrations, // optional migrations
     useWebWorker: false,
     useIncrementalIndexedDB: true,
     // dbName: 'myapp', // optional db name

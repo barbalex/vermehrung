@@ -683,6 +683,8 @@ export const personOption = gql`
     tree_zaehlung
     tree_lieferung
     tree_event
+    art_qk_choosen
+    kultur_qk_choosen
     _rev
     _parent_rev
     _revisions
@@ -719,6 +721,8 @@ export const personOptionRev = gql`
     tree_zaehlung
     tree_lieferung
     tree_event
+    art_qk_choosen
+    kultur_qk_choosen
     _rev
     _parent_rev
     _revisions
