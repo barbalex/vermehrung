@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "7.12.12",
+    "@fontsource/roboto": "4.0.1",
+    "@fontsource/roboto-mono": "4.0.1",
     "@material-ui/core": "4.11.2",
     "@material-ui/icons": "4.11.2",
     "@nozbe/watermelondb": "0.20.0",
@@ -30,8 +32,6 @@
     "exceljs": "4.2.0",
     "file-saver": "2.0.5",
     "firebase": "8.2.1",
-    "fontsource-roboto": "3.1.5",
-    "fontsource-roboto-mono": "3.1.6",
     "framer-motion": "3.1.1",
     "fuse.js": "6.4.3",
     "gatsby": "2.29.2",

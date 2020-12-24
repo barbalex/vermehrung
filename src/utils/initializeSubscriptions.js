@@ -94,6 +94,7 @@ const initializeSubscriptions = ({ store }) => {
         // re-subscribe
         console.log('subscribeAeArt, onError:', error)
         //typeof window !== 'undefined' && window.location.reload(true)
+        store.firebase.auth().signOut()
         // need to retry
         setTimeout(() => store.incrementWsReconnectCount(), 5000)
       },
