@@ -16,17 +16,13 @@ const Info = styled.div`
   text-align: center;
 `
 
-const ChooseQk = ({ qks, userPersonOption }) => (
+const ChooseQk = ({ qks }) => (
   <ErrorBoundary>
     <Container>
       <Info>Diese Wahl gilt für alle Arten</Info>
       <FieldsContainer>
         {qks.map((row) => (
-          <RowComponent
-            key={row.id}
-            qk={row}
-            userPersonOption={userPersonOption}
-          />
+          <RowComponent key={row.id} qk={row} />
         ))}
       </FieldsContainer>
     </Container>

@@ -27,7 +27,7 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-const ChooseKulturQkRow = ({ kulturId, qk }) => {
+const ChooseKulturQkRow = ({ qk }) => {
   const store = useContext(StoreContext)
   const { user, db } = store
 

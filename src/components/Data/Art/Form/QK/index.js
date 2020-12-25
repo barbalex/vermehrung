@@ -194,7 +194,7 @@ const ApQk = ({ artId }) => {
               {tab === 'qk' ? (
                 <Qk artId={artId} qkChoosens={qkChoosens} />
               ) : (
-                <Choose qks={qks} userPersonOption={userPersonOption} />
+                <Choose qks={qks} />
               )}
             </Body>
           </>

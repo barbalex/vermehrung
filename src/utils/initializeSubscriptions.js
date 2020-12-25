@@ -49,7 +49,6 @@ const initializeSubscriptions = ({ store }) => {
     kultur_file_lastUpdated,
     kultur_option_lastUpdated,
     kultur_qk_lastUpdated,
-    kultur_qk_choosen_lastUpdated,
     lieferung_lastUpdated,
     lieferung_file_lastUpdated,
     person_lastUpdated,
@@ -405,29 +404,6 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeKulturQk, onError:', error),
-    })
-  unsubscribe.kultur_qk_choosen = store.gqlWsClient
-    .request({
-      query: gql`
-        subscription KulturQkChoosen($where: kultur_qk_choosen_bool_exp) {
-          kultur_qk_choosen(where: $where) {
-            ...KulturQkChoosenFields
-          }
-        }
-        ${kulturQkChoosenFragment}
-      `,
-      variables: { where: { _rev_at: { _gt: kultur_qk_choosen_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
-        processSubscriptionResult({
-          data: data.data.kultur_qk_choosen,
-          table: 'kultur_qk_choosen',
-          store,
-        })
-      },
-      error: (error) =>
-        console.log('subscribeKulturQkChoosen, onError:', error),
     })
   unsubscribe.lieferung = store.gqlWsClient
     .request({
