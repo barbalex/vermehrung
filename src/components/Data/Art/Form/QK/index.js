@@ -13,13 +13,15 @@ import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { motion, useAnimation } from 'framer-motion'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
+import sortBy from 'lodash/sortBy'
 
 import Qk from './Qk'
 import Choose from './Choose'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import StoreContext from '../../../../../storeContext'
 import getConstants from '../../../../../utils/constants'
-import notDeletedQuery from '../../../../../utils/notDeletedQuery'
 
 const constants = getConstants()
 
@@ -58,28 +60,44 @@ const Body = styled.div`
 
 const ApQk = ({ artId }) => {
   const store = useContext(StoreContext)
-  const { db } = store
+  const { db, user } = store
 
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const [artQkChoosen, setArtQkChoosen] = useState([])
+  const [dataState, setDataState] = useState({ qks: [], userPersonOption })
   useEffect(() => {
-    const artQkChoosenObservable = db
-      .get('art_qk_choosen')
-      .query(notDeletedQuery)
-      .observe()
-    const subscription = artQkChoosenObservable.subscribe((artQkChoosen) =>
-      setArtQkChoosen(artQkChoosen),
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['art_qk_choosen'])
+      : $of({})
+    const artQksObservable = db
+      .get('art_qk')
+      .query(Q.where('_deleted', false))
+      .observeWithColumns(['name'])
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      artQksObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      ([userPersonOptions, qks]) =>
+        setDataState({
+          qks: sortBy(qks, 'name'),
+          userPersonOption: userPersonOptions?.[0],
+        }),
     )
 
     return () => subscription.unsubscribe()
-  }, [db])
-  const allQkChoosens = artQkChoosen.filter((q) => q.art_id === artId)
-  const qkChoosens = allQkChoosens.filter((qk) => qk.choosen)
+  }, [db, user.uid])
+  const { qks, userPersonOption } = dataState
+  const qkChoosens = qks.filter((qk) =>
+    userPersonOption.art_qk_choosen.includes(qk.id),
+  )
 
-  const qkCount = allQkChoosens.length
-  const artQkCount = qkChoosens.length
+  const qkCount = qks.length
+  const qkChoosenCount = qkChoosens.length
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
@@ -166,7 +184,7 @@ const ApQk = ({ artId }) => {
               <Tab label="ausführen" value="qk" data-id="qk" />
               <Tab
                 label={`auswählen${
-                  qkCount ? ` (${artQkCount}/${qkCount})` : ''
+                  qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
                 }`}
                 value="waehlen"
                 data-id="waehlen"
@@ -176,7 +194,7 @@ const ApQk = ({ artId }) => {
               {tab === 'qk' ? (
                 <Qk artId={artId} qkChoosens={qkChoosens} />
               ) : (
-                <Choose />
+                <Choose qks={qks} userPersonOption={userPersonOption} />
               )}
             </Body>
           </>

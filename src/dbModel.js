@@ -3287,9 +3287,14 @@ export class PersonOption extends Model {
       tree_zaehlung: field === 'tree_zaehlung' ? value : this.tree_zaehlung,
       tree_lieferung: field === 'tree_lieferung' ? value : this.tree_lieferung,
       tree_event: field === 'tree_event' ? value : this.tree_event,
-      art_qk_choosen: field === 'art_qk_choosen' ? value : this.art_qk_choosen,
+      art_qk_choosen:
+        field === 'art_qk_choosen'
+          ? toPgArray(value)
+          : toPgArray(this.art_qk_choosen),
       kultur_qk_choosen:
-        field === 'kultur_qk_choosen' ? value : this.kultur_qk_choosen,
+        field === 'kultur_qk_choosen'
+          ? toPgArray(value)
+          : toPgArray(this.kultur_qk_choosen),
       _parent_rev: this._rev,
       _depth: newDepth,
       _deleted: field === '_deleted' ? value : this._deleted,
