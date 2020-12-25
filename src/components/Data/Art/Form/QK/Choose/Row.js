@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
+import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../../../storeContext'
@@ -26,23 +27,48 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-const ChooseArtQkRow = ({ qk, userPersonOption }) => {
+const ChooseArtQkRow = ({ qk }) => {
   const store = useContext(StoreContext)
+  const { user, db } = store
 
-  const checked = userPersonOption.art_qk_choosen.includes(qk.id)
+  const [dataState, setDataState] = useState({
+    userPersonOption,
+    artQkChoosen: [],
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['art_qk_choosen'])
+      : $of({})
+    const combinedObservables = combineLatest([userPersonOptionsObservable])
+    const subscription = combinedObservables.subscribe(([userPersonOptions]) =>
+      setDataState({
+        userPersonOption: userPersonOptions?.[0],
+        artQkChoosen: userPersonOptions?.[0]?.art_qk_choosen ?? [],
+      }),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { userPersonOption, artQkChoosen } = dataState
+
+  const checked = artQkChoosen.includes(qk.id)
 
   const onChange = useCallback(
     (event) => {
       const newValue = event.target.checked
-        ? [...userPersonOption.art_qk_choosen, qk.id]
-        : userPersonOption.art_qk_choosen.filter((id) => id !== qk.id)
+        ? [...artQkChoosen, qk.id]
+        : artQkChoosen.filter((id) => id !== qk.id)
+
       userPersonOption.edit({
         field: 'art_qk_choosen',
         value: newValue,
         store,
       })
     },
-    [qk.id, store, userPersonOption],
+    [artQkChoosen, qk.id, store, userPersonOption],
   )
 
   return (

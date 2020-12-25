@@ -65,19 +65,10 @@ const ApQkQk = ({ artId, qkChoosens }) => {
       store,
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
-        qkChoosens.map(async (qkChoosen) => {
-          let qk
-          try {
-            qk = await db.get('art_qk').find(qkChoosen.qk_id)
-          } catch {}
-
-          return {
-            title: qk?.titel,
-            messages: messageFunctions
-              ? await messageFunctions[qk?.name]()
-              : [],
-          }
-        }),
+        qkChoosens.map(async (qk) => ({
+          title: qk?.titel,
+          messages: messageFunctions ? await messageFunctions[qk?.name]() : [],
+        })),
       )
       setMessageGroups(msgGroups.filter((qk) => qk.messages.length))
     })
@@ -132,7 +123,7 @@ const ApQkQk = ({ artId, qkChoosens }) => {
           ))}
         </StyledPaper>
       ))}
-      {messageGroups?.length === 0 && (
+      {!messageGroups?.length && (
         <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
       )}
     </Container>
