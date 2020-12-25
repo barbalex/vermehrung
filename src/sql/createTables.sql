@@ -210,57 +210,7 @@ create index on art_qk_rev using btree (_rev_at);
 
 -- TODO: drop after changing to new method
 drop table if exists art_qk_choosen cascade;
-create table art_qk_choosen (
-  id uuid primary key default uuid_generate_v1mc(),
-  art_id uuid NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_id uuid NOT NULL REFERENCES art_qk (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  choosen boolean default true,
-  changed timestamp default now(),
-  changed_by text default null,
-  _rev text default null,
-  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
-  _parent_rev text default null,
-  _revisions text[] default null,
-  _depth integer default 1,
-  _deleted boolean default false,
-  _conflicts text[] default null
-  -- this created problems in the on conflict clause of the revision trigger
-  -- unique(art_id, qk_name)
-);
-create index on art_qk_choosen using btree (id);
-create index on art_qk_choosen using btree (art_id);
-create index on art_qk_choosen using btree (qk_id);
-create index on art_qk_choosen using btree (choosen);
-create index on art_qk_choosen using btree (_deleted);
-create index on art_qk_choosen using btree (_rev_at);
-
-insert into art_qk_choosen (art_id, qk_name)
-select art.id, art_qk.name
-from art_qk, art
-on conflict do nothing;
-
 drop table if exists art_qk_choosen_rev cascade;
-create table art_qk_choosen_rev (
-  id uuid primary key default uuid_generate_v1mc(),
-  art_qk_choosen_id uuid default null,
-  art_id uuid NOT NULL,
-  qk_id uuid,
-  choosen boolean default true,
-  changed timestamp default now(),
-  changed_by text default null,
-  _rev text default null,
-  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
-  _parent_rev text default null,
-  _revisions text[] default null,
-  _depth integer default 1,
-  _deleted boolean default false
-);
-create index on art_qk_choosen_rev using btree (id);
-create index on art_qk_choosen_rev using btree (_rev);
-create index on art_qk_choosen_rev using btree (_parent_rev);
-create index on art_qk_choosen_rev using btree (_depth);
-create index on art_qk_choosen_rev using btree (_deleted);
-create index on art_qk_choosen_rev using btree (_rev_at);
 
 drop table if exists art_file cascade;
 create table art_file (

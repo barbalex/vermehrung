@@ -75,17 +75,7 @@ where person_option.id is null;
 
 -- TODO: drop after changing to new method
 DROP TRIGGER IF EXISTS kultur_has_qk_choosen ON kultur_qk_choosen cascade;
-DROP FUNCTION IF EXISTS kultur_has_qk_choosen() cascade;
-CREATE or replace FUNCTION kultur_has_qk_choosen() RETURNS trigger AS $kultur_has_qk_choosen$
-BEGIN
-  insert into kultur_qk_choosen(kultur_id, qk_id)
-  select distinct kultur.id, kultur_qk.id from kultur, kultur_qk where kultur.id = NEW.id;
-  RETURN NEW;
-END;
-$kultur_has_qk_choosen$ LANGUAGE plpgsql;
-
-CREATE TRIGGER kultur_has_qk_choosen AFTER INSERT ON kultur
-  FOR EACH ROW EXECUTE PROCEDURE kultur_has_qk_choosen();
+DROP FUNCTION IF EXISTS kultur_has_qk_choosen cascade;
 
 
 --insert into kultur_qk_choosen (kultur_id)
@@ -96,17 +86,7 @@ CREATE TRIGGER kultur_has_qk_choosen AFTER INSERT ON kultur
 
 -- TODO: drop after changing to new method
 DROP TRIGGER IF EXISTS art_has_qk_choosen ON art_qk_choosen cascade;
-DROP FUNCTION IF EXISTS art_has_qk_choosen() cascade;
-CREATE or replace FUNCTION art_has_qk_choosen() RETURNS trigger AS $art_has_qk_choosen$
-BEGIN
-  insert into art_qk_choosen(art_id, qk_id)
-  select distinct art.id, art_qk.id from art, art_qk where art.id = NEW.id;
-  RETURN NEW;
-END;
-$art_has_qk_choosen$ LANGUAGE plpgsql;
-
-CREATE TRIGGER art_has_qk_choosen AFTER INSERT ON art
-  FOR EACH ROW EXECUTE PROCEDURE art_has_qk_choosen();
+DROP FUNCTION IF EXISTS art_has_qk_choosen cascade;
 
 drop trigger if exists garten_person_has_gv on garten cascade;
 drop function if exists garten_person_has_gv() cascade;
