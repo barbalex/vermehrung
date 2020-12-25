@@ -65,10 +65,14 @@ const ApQkQk = ({ artId, qkChoosens }) => {
       store,
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
-        qkChoosens.map(async (qk) => ({
-          title: qk?.titel,
-          messages: messageFunctions ? await messageFunctions[qk?.name]() : [],
-        })),
+        qkChoosens
+          .filter((qk) => !!messageFunctions[qk.name])
+          .map(async (qk) => ({
+            title: qk?.titel,
+            messages: messageFunctions
+              ? await messageFunctions[qk?.name]()
+              : [],
+          })),
       )
       setMessageGroups(msgGroups.filter((qk) => qk.messages.length))
     })
@@ -76,12 +80,17 @@ const ApQkQk = ({ artId, qkChoosens }) => {
 
   const messageGroupsFiltered = messageGroups
     ? messageGroups.filter((messageGroup) => {
-        if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
+        if (!!filter && messageGroup?.title?.toLowerCase) {
           return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
         }
         return true
       })
     : []
+  const resultTitle = messageGroups
+    ? `${messageGroupsFiltered.length} ${
+        messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
+      }:`
+    : 'rechne...'
 
   return (
     <Container>
@@ -96,13 +105,7 @@ const ApQkQk = ({ artId, qkChoosens }) => {
           spellCheck={false}
         />
       </StyledFormControl>
-      <ResultTitle>
-        {messageGroups
-          ? `${messageGroupsFiltered.length} ${
-              messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
-            }:`
-          : 'rechne...'}
-      </ResultTitle>
+      <ResultTitle>{resultTitle}</ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
           <Title>{`${messageGroup.title} (${messageGroup.messages.length})`}</Title>
