@@ -52,7 +52,6 @@ const recreatePersistedStore = async ({ store }) => {
     'kultur_file_initially_queried',
     'kultur_option_initially_queried',
     'kultur_qk_initially_queried',
-    'kultur_qk_choosen_initially_queried',
     'lieferung_initially_queried',
     'lieferung_file_initially_queried',
     'person_initially_queried',

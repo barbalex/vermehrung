@@ -15,7 +15,6 @@ const tableNames = (table) => {
     kultur_file: 'Kulturen (Dateien)',
     kultur_option: 'Kulturen (Optionen)',
     kultur_qk: 'Kulturen (Qualitätskontrollen)',
-    kultur_qk_choosen: 'Kulturen (gewählte Qualitätskontrollen)',
     lieferung: 'Lieferungen',
     lieferung_file: 'Lieferungen (Dateien)',
     person: 'Personen',

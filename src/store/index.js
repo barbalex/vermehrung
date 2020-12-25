@@ -64,7 +64,6 @@ const myTypes = types
     kultur_file_lastUpdated: types.optional(types.number, 0),
     kultur_option_lastUpdated: types.optional(types.number, 0),
     kultur_qk_lastUpdated: types.optional(types.number, 0),
-    kultur_qk_choosen_lastUpdated: types.optional(types.number, 0),
     lieferung_lastUpdated: types.optional(types.number, 0),
     lieferung_file_lastUpdated: types.optional(types.number, 0),
     person_lastUpdated: types.optional(types.number, 0),
@@ -92,7 +91,6 @@ const myTypes = types
     kultur_file_initially_queried: types.optional(types.boolean, false),
     kultur_option_initially_queried: types.optional(types.boolean, false),
     kultur_qk_initially_queried: types.optional(types.boolean, false),
-    kultur_qk_choosen_initially_queried: types.optional(types.boolean, false),
     lieferung_initially_queried: types.optional(types.boolean, false),
     lieferung_file_initially_queried: types.optional(types.boolean, false),
     person_initially_queried: types.optional(types.boolean, false),
@@ -796,59 +794,6 @@ const myTypes = types
           setActiveNodeArray(newActiveNodeArray)
         })
       },
-      async insertKulturQkChoosenRev(args) {
-        const { user, addQueuedQuery } = self
-        const valuesPassed = args?.values ?? {}
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          kultur_qk_choosen_id: id,
-          kultur_id: undefined,
-          qk_id: undefined,
-          choosen: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.kultur_qk_choosen_id
-        delete newObjectForStore.kultur_qk_choosen_id
-        addQueuedQuery({
-          name: 'mutateInsert_kultur_qk_choosen_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'kultur_qk_choosen_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'kultur_qk_choosen',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.action(async () => {
-          const collection = db.get('kultur_qk_choosen')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-      },
       async insertLieferungRev(args) {
         const {
           user,
@@ -1430,7 +1375,6 @@ const myTypes = types
         self.kultur_file_initially_queried &&
         self.kultur_option_initially_queried &&
         self.kultur_qk_initially_queried &&
-        self.kultur_qk_choosen_initially_queried &&
         self.lieferung_initially_queried &&
         self.lieferung_file_initially_queried &&
         self.person_initially_queried &&

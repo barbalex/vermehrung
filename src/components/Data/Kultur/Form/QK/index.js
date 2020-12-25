@@ -194,7 +194,7 @@ const KulturQk = ({ kultur }) => {
               {tab === 'qk' ? (
                 <Qk kultur={kultur} qkChoosens={qkChoosens} />
               ) : (
-                <Choose qks={qks} userPersonOption={userPersonOption} />
+                <Choose qks={qks} />
               )}
             </Body>
           </>

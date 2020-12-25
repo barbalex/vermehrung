@@ -392,40 +392,6 @@ export const kulturQkRev = gql`
     _deleted
   }
 `
-export const kulturQkChoosen = gql`
-  fragment KulturQkChoosenFields on kultur_qk_choosen {
-    id
-    __typename
-    kultur_id
-    qk_id
-    choosen
-    changed
-    changed_by
-    _rev
-    _parent_rev
-    _revisions
-    _depth
-    _conflicts
-    _deleted
-  }
-`
-export const kulturQkChoosenRev = gql`
-  fragment KulturQkChoosenRevFields on kultur_qk_choosen_rev {
-    id
-    kultur_qk_choosen_id
-    #__typename
-    kultur_id
-    qk_id
-    choosen
-    changed
-    changed_by
-    _rev
-    _parent_rev
-    _revisions
-    _depth
-    _deleted
-  }
-`
 export const kulturFile = gql`
   fragment KulturFileFields on kultur_file {
     id
