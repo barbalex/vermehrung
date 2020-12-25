@@ -2715,9 +2715,6 @@ export class SammlungFile extends Model {
 
 export class ArtQk extends Model {
   static table = 'art_qk'
-  static associations = {
-    art_qk_choosen: { type: 'has_many', foreignKey: 'qk_id' },
-  }
 
   @field('id') id
   @field('name') name
@@ -2732,8 +2729,6 @@ export class ArtQk extends Model {
   @field('_depth') _depth
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
-
-  @children('art_qk_choosen') art_qk_choosens
 
   @action async removeConflict(_rev) {
     await this.update((row) => {
@@ -2781,97 +2776,6 @@ export class ArtQk extends Model {
         },
       }),
       revertTable: 'art_qk',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
-    // optimistically update store
-    await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
-    })
-  }
-  @action async delete({ store }) {
-    await this.subAction(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
-  }
-}
-
-export class ArtQkChoosen extends Model {
-  static table = 'art_qk_choosen'
-  static associations = {
-    art: { type: 'belongs_to', key: 'art_id' },
-    art_qk: { type: 'belongs_to', key: 'qk_id' },
-  }
-
-  @field('id') id
-  @field('art_id') art_id
-  @field('qk_id') qk_id
-  @field('choosen') choosen
-  @field('changed') changed
-  @field('changed_by') changed_by
-  @field('_rev') _rev
-  @field('_parent_rev') _parent_rev
-  @json('_revisions', dontSanitize) _revisions
-  @field('_depth') _depth
-  @field('_deleted') _deleted
-  @json('_conflicts', dontSanitize) _conflicts
-
-  @relation('art', 'art_id') art
-  @relation('art_qk', 'qk_id') art_qk
-
-  @action async removeConflict(_rev) {
-    await this.update((row) => {
-      row._conflicts = this._conflicts.filter((r) => r !== _rev)
-    })
-  }
-  @action async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
-    unsetError(`art_qk_choosen.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      art_qk_choosen_id: this.id,
-      art_id: field === 'art_id' ? value : this.art_id,
-      qk_id: field === 'qk_id' ? value : this.qk_id,
-      choosen: field === 'choosen' ? value : this.choosen,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_art_qk_choosen_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'art_qk_choosen_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'art_qk_choosen',
       revertId: this.id,
       revertField: field,
       revertValue: this[field],

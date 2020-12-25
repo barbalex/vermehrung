@@ -66,40 +66,6 @@ export const artQkRev = gql`
     _deleted
   }
 `
-export const artQkChoosen = gql`
-  fragment ArtQkChoosenFields on art_qk_choosen {
-    id
-    __typename
-    art_id
-    qk_id
-    choosen
-    changed
-    changed_by
-    _rev
-    _parent_rev
-    _revisions
-    _depth
-    _conflicts
-    _deleted
-  }
-`
-export const artQkChoosenRev = gql`
-  fragment ArtQkChoosenRevFields on art_qk_choosen_rev {
-    id
-    #__typename
-    art_qk_choosen_id
-    art_id
-    qk_id
-    choosen
-    changed
-    changed_by
-    _rev
-    _parent_rev
-    _revisions
-    _depth
-    _deleted
-  }
-`
 export const artFile = gql`
   fragment ArtFileFields on art_file {
     id

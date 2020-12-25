@@ -4,7 +4,6 @@ const tableNames = (table) => {
     art: 'Arten',
     art_file: 'Arten (Dateien)',
     art_qk: 'Arten (Qualitätskontrollen)',
-    art_qk_choosen: 'Arten (gewählte Qualitätskontrollen)',
     av: 'Arten (Mitarbeitende)',
     event: 'Events',
     garten: 'Gärten',

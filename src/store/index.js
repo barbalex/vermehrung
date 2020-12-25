@@ -53,7 +53,6 @@ const myTypes = types
     art_lastUpdated: types.optional(types.number, 0),
     art_file_lastUpdated: types.optional(types.number, 0),
     art_qk_lastUpdated: types.optional(types.number, 0),
-    art_qk_choosen_lastUpdated: types.optional(types.number, 0),
     av_lastUpdated: types.optional(types.number, 0),
     event_lastUpdated: types.optional(types.number, 0),
     garten_lastUpdated: types.optional(types.number, 0),
@@ -82,7 +81,6 @@ const myTypes = types
     art_initially_queried: types.optional(types.boolean, false),
     art_file_initially_queried: types.optional(types.boolean, false),
     art_qk_initially_queried: types.optional(types.boolean, false),
-    art_qk_choosen_initially_queried: types.optional(types.boolean, false),
     av_initially_queried: types.optional(types.boolean, false),
     event_initially_queried: types.optional(types.boolean, false),
     garten_initially_queried: types.optional(types.boolean, false),
@@ -403,59 +401,6 @@ const myTypes = types
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-        })
-      },
-      async insertArtQkChoosenRev(args) {
-        const { user, addQueuedQuery } = self
-        const valuesPassed = args?.values ?? {}
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          art_qk_choosen_id: id,
-          art_id: undefined,
-          qk_id: undefined,
-          choosen: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.art_qk_choosen_id
-        delete newObjectForStore.art_qk_choosen_id
-        addQueuedQuery({
-          name: 'mutateInsert_art_qk_choosen_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'art_qk_choosen_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'art_qk_choosen',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.action(async () => {
-          const collection = db.get('art_qk_choosen')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
         })
       },
       async insertAvRev(args) {
@@ -1474,7 +1419,6 @@ const myTypes = types
         self.art_initially_queried &&
         self.art_file_initially_queried &&
         self.art_qk_initially_queried &&
-        self.art_qk_choosen_initially_queried &&
         self.av_initially_queried &&
         self.event_initially_queried &&
         self.garten_initially_queried &&

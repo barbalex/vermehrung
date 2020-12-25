@@ -4,7 +4,6 @@ import {
   artRev,
   artFile,
   artQkRev,
-  artQkChoosenRev,
   avRev,
   eventRev,
   gartenRev,
@@ -234,20 +233,6 @@ const mutations = {
       }
     }
     ${kulturQkChoosenRev}
-  `,
-  mutateInsert_art_qk_choosen_rev_one: gql`
-    mutation insert_art_qk_choosen_rev_one(
-      $object: art_qk_choosen_rev_insert_input!
-      $on_conflict: art_qk_choosen_rev_on_conflict
-    ) {
-      insert_art_qk_choosen_rev_one(
-        object: $object
-        on_conflict: $on_conflict
-      ) {
-        ...ArtQkChoosenRevFields
-      }
-    }
-    ${artQkChoosenRev}
   `,
   mutateInsert_person_option_rev_one: gql`
     mutation insert_person_option_rev_one(

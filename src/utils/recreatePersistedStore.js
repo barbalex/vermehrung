@@ -41,7 +41,6 @@ const recreatePersistedStore = async ({ store }) => {
     'art_initially_queried',
     'art_file_initially_queried',
     'art_qk_initially_queried',
-    'art_qk_choosen_initially_queried',
     'av_initially_queried',
     'event_initially_queried',
     'garten_initially_queried',
