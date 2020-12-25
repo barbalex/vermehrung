@@ -16,7 +16,6 @@ import {
   kultur as kulturFragment,
   kulturFile as kulturFileFragment,
   kulturQk as kulturQkFragment,
-  kulturQkChoosen as kulturQkChoosenFragment,
   kulturOption as kulturOptionFragment,
   lieferung as lieferungFragment,
   lieferungFile as lieferungFileFragment,
@@ -91,9 +90,9 @@ const initializeSubscriptions = ({ store }) => {
         // re-subscribe
         console.log('subscribeAeArt, onError:', error)
         //typeof window !== 'undefined' && window.location.reload(true)
-        store.firebase.auth().signOut()
+        // store.firebase.auth().signOut()
         // need to retry
-        setTimeout(() => store.incrementWsReconnectCount(), 5000)
+        setTimeout(() => store.incrementWsReconnectCount(), 3000)
       },
     })
   unsubscribe.art = store.gqlWsClient
