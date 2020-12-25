@@ -43,10 +43,12 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       .fetch()
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
+
   let avs
   try {
     avs = await db.get('av').query(notDeletedQuery).fetch()
   } catch {}
+
   let gartens = []
   try {
     gartens = await db
@@ -76,6 +78,7 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       .fetch()
   } catch {}
   const gartensSorted = await gartensSortedFromGartens(gartens)
+
   let herkunfts = []
   try {
     herkunfts = await db
@@ -91,20 +94,11 @@ const createMessageFunctions = async ({ artId, db, store }) => {
               : [true, false, null],
           ),
         ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.herkunft.aktiv === true
-              ? [true]
-              : filter.herkunft.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
       )
       .fetch()
   } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
+
   let kulturs = []
   try {
     kulturs = await db
@@ -134,6 +128,7 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       .fetch()
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
+
   let lieferungs = []
   try {
     lieferungs = await db
@@ -153,6 +148,7 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       .fetch()
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
+
   let persons = []
   try {
     persons = await db
@@ -182,6 +178,7 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       .fetch()
   } catch {}
   const personsSorted = persons.sort(personSort)
+
   let sammlungsOfArt = []
   try {
     sammlungsOfArt = await db
@@ -204,6 +201,7 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   const sammlungsOfArtSorted = await sammlungsSortedFromSammlungs(
     sammlungsOfArt,
   )
+
   let zaehlungsOfArt = []
   try {
     zaehlungsOfArt = await db
@@ -225,6 +223,7 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       .fetch()
   } catch {}
   const zaehlungsOfArtSorted = zaehlungsOfArt.sort(zaehlungSort)
+
   let teilzaehlungsOfArt = []
   try {
     teilzaehlungsOfArt = await db
@@ -237,6 +236,7 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       )
       .fetch()
   } catch {}
+
   let teilkultursOfArt = []
   try {
     teilkultursOfArt = await db
@@ -258,6 +258,7 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       .fetch()
   } catch {}
   const teilkultursOfArtSorted = teilkultursOfArt.sort(teilkulturSort)
+
   let eventsOfArt = []
   try {
     eventsOfArt = await db
