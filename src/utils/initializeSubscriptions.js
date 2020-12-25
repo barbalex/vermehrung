@@ -6,7 +6,6 @@ import {
   art as artFragment,
   artFile as artFileFragment,
   artQk as artQkFragment,
-  artQkChoosen as artQkChoosenFragment,
   av as avFragment,
   event as eventFragment,
   garten as gartenFragment,
@@ -39,7 +38,6 @@ const initializeSubscriptions = ({ store }) => {
     art_lastUpdated,
     art_file_lastUpdated,
     art_qk_lastUpdated,
-    art_qk_choosen_lastUpdated,
     av_lastUpdated,
     event_lastUpdated,
     garten_lastUpdated,
@@ -165,28 +163,6 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeArtQk, onError:', error),
-    })
-  unsubscribe.art_qk_choosen = store.gqlWsClient
-    .request({
-      query: gql`
-        subscription ArtQkChoosen($where: art_qk_choosen_bool_exp) {
-          art_qk_choosen(where: $where) {
-            ...ArtQkChoosenFields
-          }
-        }
-        ${artQkChoosenFragment}
-      `,
-      variables: { where: { _rev_at: { _gt: art_qk_choosen_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
-        processSubscriptionResult({
-          data: data.data.art_qk_choosen,
-          table: 'art_qk_choosen',
-          store,
-        })
-      },
-      error: (error) => console.log('subscribeArtQkChoosen, onError:', error),
     })
   unsubscribe.av = store.gqlWsClient
     .request({

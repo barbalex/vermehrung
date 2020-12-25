@@ -17,34 +17,21 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   padding: 10px 0;
 `
+const Info = styled.div`
+  text-align: center;
+`
 
-const ChooseQk = () => {
-  const store = useContext(StoreContext)
-  const { db } = store
-  const { activeNodeArray } = store.tree
-  const kulturId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
-
-  const [kulturQks, setKulturQks] = useState([])
-  useEffect(() => {
-    const kulturQksObservable = db.get('kultur_qk').query(notDeletedQuery)
-    const subscription = kulturQksObservable.subscribe((kulturQks) =>
-      setKulturQks(sortBy(kulturQks, 'name')),
-    )
-
-    return () => subscription.unsubscribe()
-  }, [db])
-
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FieldsContainer>
-          {kulturQks.map((row) => (
-            <Row key={row.name} kulturId={kulturId} qk={row} />
-          ))}
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-}
+const ChooseQk = ({ qks, userPersonOption }) => (
+  <ErrorBoundary>
+    <Container>
+      <Info>Diese Wahl gilt für alle Kulturen</Info>
+      <FieldsContainer>
+        {qks.map((row) => (
+          <Row key={row.id} qk={row} userPersonOption={userPersonOption} />
+        ))}
+      </FieldsContainer>
+    </Container>
+  </ErrorBoundary>
+)
 
 export default observer(ChooseQk)

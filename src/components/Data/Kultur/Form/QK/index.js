@@ -14,7 +14,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
-import { combineLatest } from 'rxjs'
+import { combineLatest, of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'
 import Qk from './Qk'
@@ -59,7 +59,7 @@ const Body = styled.div`
 
 const KulturQk = ({ kultur }) => {
   const store = useContext(StoreContext)
-  const { db } = store
+  const { db, user } = store
 
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)
@@ -79,45 +79,39 @@ const KulturQk = ({ kultur }) => {
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
   const [dataState, setDataState] = useState({
-    totalCount: 0,
-    choosenCount: 0,
-    choosen: [],
+    qks: [],
+    userPersonOption,
   })
   useEffect(() => {
-    const totalCountObservable = db
-      .get('kultur_qk_choosen')
-      .query(Q.where('_deleted', false), Q.where('kultur_id', kultur.id))
-      .observeCount()
-    const choosenCountObservable = db
-      .get('kultur_qk_choosen')
-      .query(
-        Q.where('_deleted', false),
-        Q.where('kultur_id', kultur.id),
-        Q.where('choosen', true),
-      )
-      .observeCount()
-    const choosenObservable = db
-      .get('kultur_qk_choosen')
-      .query(
-        Q.where('_deleted', false),
-        Q.where('kultur_id', kultur.id),
-        Q.where('choosen', true),
-      )
-      .observe()
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['kultur_qk_choosen'])
+      : $of({})
+    const kulturQksObservable = db
+      .get('kultur_qk')
+      .query(Q.where('_deleted', false))
+      .observeWithColumns(['name'])
     const combinedObservables = combineLatest([
-      totalCountObservable,
-      choosenCountObservable,
-      choosenObservable,
+      userPersonOptionsObservable,
+      kulturQksObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      ([totalCount, choosenCount, choosen]) => {
-        setDataState({ totalCount, choosenCount, choosen })
+      ([userPersonOptions, qks]) => {
+        setDataState({ qks, userPersonOption: userPersonOptions?.[0] })
       },
     )
 
     return () => subscription.unsubscribe()
-  }, [db, kultur.id])
-  const { totalCount, choosenCount, choosen } = dataState
+  }, [db, user.uid])
+  const { qks, userPersonOption } = dataState
+  const qkChoosens = qks.filter((qk) =>
+    userPersonOption.kultur_qk_choosen.includes(qk.id),
+  )
+
+  const qkCount = qks.length
+  const qkChoosenCount = qkChoosens.length
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
@@ -190,7 +184,7 @@ const KulturQk = ({ kultur }) => {
               <Tab label="ausführen" value="qk" data-id="qk" />
               <Tab
                 label={`auswählen${
-                  totalCount ? ` (${choosenCount}/${totalCount})` : ''
+                  qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
                 }`}
                 value="waehlen"
                 data-id="waehlen"
@@ -198,9 +192,9 @@ const KulturQk = ({ kultur }) => {
             </StyledTabs>
             <Body>
               {tab === 'qk' ? (
-                <Qk kultur={kultur} qkChoosens={choosen} />
+                <Qk kultur={kultur} qkChoosens={qkChoosens} />
               ) : (
-                <Choose />
+                <Choose qks={qks} userPersonOption={userPersonOption} />
               )}
             </Body>
           </>

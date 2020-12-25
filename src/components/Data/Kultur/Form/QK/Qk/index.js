@@ -50,6 +50,7 @@ const StyledFormControl = styled(FormControl)`
 const KulturQkQk = ({ kultur, qkChoosens }) => {
   const store = useContext(StoreContext)
   const { db } = store
+
   const [filter, setFilter] = useState('')
   const onChangeFilter = useCallback(
     (event) => setFilter(event.target.value),
@@ -64,19 +65,14 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
       store,
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
-        qkChoosens.map(async (qkChoosen) => {
-          let qk
-          try {
-            qk = await db.get('kultur_qk').find(qkChoosen.qk_id)
-          } catch {}
-
-          return {
+        qkChoosens
+          .filter((qk) => !!messageFunctions[qk.name])
+          .map(async (qk) => ({
             title: qk?.titel,
             messages: messageFunctions
               ? await messageFunctions[qk?.name]()
               : [],
-          }
-        }),
+          })),
       )
       setMessageGroups(msgGroups.filter((qk) => qk.messages.length))
     })
@@ -90,6 +86,11 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
         return true
       })
     : []
+  const resultTitle = messageGroups
+    ? `${messageGroupsFiltered.length} ${
+        messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
+      }:`
+    : 'rechne...'
 
   return (
     <Container>
@@ -104,13 +105,7 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
           spellCheck={false}
         />
       </StyledFormControl>
-      <ResultTitle>
-        {messageGroups
-          ? `${messageGroupsFiltered.length} ${
-              messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
-            }:`
-          : 'rechne...'}
-      </ResultTitle>
+      <ResultTitle>{resultTitle}</ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
           <Title>{`${messageGroup.title} (${messageGroup.messages.length})`}</Title>
