@@ -14,7 +14,6 @@ import {
   kulturRev,
   kulturFile,
   kulturQkRev,
-  kulturQkChoosenRev,
   kulturOptionRev,
   lieferungRev,
   lieferungFile,
