@@ -182,6 +182,11 @@ const myTypes = types
               console.log(
                 'There is a conflict with exact same changes - ingoring the error thrown',
               )
+            } else if (
+              response.error?.graphQLErrors?.[0]?.extensions?.internal?.error
+                ?.status_code === '21000'
+            ) {
+              console.log('user sent same edit to soon again')
             } else if (lcMessage.includes('unique-constraint')) {
               let { message } = response.error
               if (lcMessage.includes('single_art_herkunft_garden_active_idx')) {
