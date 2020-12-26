@@ -161,11 +161,17 @@ const GartenForm = ({
       const previousValue = ifIsNumericAsNumber(row[field])
       // only update if value has changed
       if (value === previousValue) return
+      console.log('Garten, will edit row:', { field, value })
       row.edit({ field, value, store })
       if (field === 'person_id') {
         // only if not yet exists
         // do this in garten.edit?
         if (!gvPersonIds.includes(value)) {
+          console.log('Garten, will insert into gvRev:', {
+            garten_id: row.id,
+            person_id: value,
+            gvPersonIds,
+          })
           insertGvRev({ values: { garten_id: row.id, person_id: value } })
         }
       }
