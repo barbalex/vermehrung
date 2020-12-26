@@ -79,19 +79,16 @@ const TeilkulturForm = ({
       )
       .observe()
     const kulturObservable = row.kultur ? row.kultur.observe() : $of({})
-    const kulturOptionsObservable = row.kultur_id
-      ? db
-          .get('kultur_option')
-          .query(Q.where('_deleted', false), Q.where('id', row.kultur_id))
-          .observe()
-      : $of([])
+    const kulturOptionObservable = row.kultur_id
+      ? db.get('kultur_option').findAndObserve(row.kultur_id)
+      : $of(null)
     const combinedObservables = combineLatest([
       kultursObservable,
       kulturObservable,
-      kulturOptionsObservable,
+      kulturOptionObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([kulturs, kultur, kulturOptions]) => {
+      async ([kulturs, kultur, kulturOption]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         const kultursIncludingChoosen = uniqBy(
           [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
@@ -114,7 +111,7 @@ const TeilkulturForm = ({
           }),
         )
 
-        setDataState({ kulturWerte, kulturOption: kulturOptions[0] })
+        setDataState({ kulturWerte, kulturOption })
       },
     )
 
