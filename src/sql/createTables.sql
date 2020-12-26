@@ -94,6 +94,8 @@ create table person_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY person_rev ALTER COLUMN person_id SET DEFAULT null;
+
 create index on person_rev using btree (id);
 create index on person_rev using btree (person_id);
 create index on person_rev using btree (_rev);
@@ -152,6 +154,8 @@ create table art_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY art_rev ALTER COLUMN art_id SET DEFAULT null;
+
 create index on art_rev using btree (id);
 create index on art_rev using btree (art_id);
 create index on art_rev using btree (_rev);
@@ -201,6 +205,8 @@ create table art_qk_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY art_qk_rev ALTER COLUMN art_qk_id SET DEFAULT null;
+
 create index on art_qk_rev using btree (id);
 create index on art_qk_rev using btree (_rev);
 create index on art_qk_rev using btree (_parent_rev);
@@ -280,6 +286,8 @@ create table herkunft_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY herkunft_rev ALTER COLUMN herkunft_id SET DEFAULT null;
+
 create index on herkunft_rev using btree (id);
 create index on herkunft_rev using btree (herkunft_id);
 create index on herkunft_rev using btree (_rev);
@@ -371,6 +379,8 @@ create table sammlung_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY sammlung_rev ALTER COLUMN sammlung_id SET DEFAULT null;
+
 create index on sammlung_rev using btree (rev_id);
 create index on sammlung_rev using btree (id);
 create index on sammlung_rev using btree (_rev);
@@ -453,6 +463,8 @@ create table garten_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY garten_rev ALTER COLUMN garten_id SET DEFAULT null;
+
 create index on garten_rev using btree (rev_id);
 create index on garten_rev using btree (id);
 create index on garten_rev using btree (_rev);
@@ -535,6 +547,8 @@ create table kultur_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY kultur_rev ALTER COLUMN kultur_id SET DEFAULT null;
+
 create index on kultur_rev using btree (rev_id);
 create index on kultur_rev using btree (id);
 create index on kultur_rev using btree (_rev);
@@ -588,6 +602,8 @@ create table kultur_qk_rev (
   _depth integer default 1,
   _deleted boolean default false,
 );
+ALTER TABLE ONLY kultur_qk_rev ALTER COLUMN kultur_qk_id SET DEFAULT null;
+
 create index on kultur_qk_rev using btree (id);
 create index on kultur_qk_rev using btree (_rev);
 create index on kultur_qk_rev using btree (_parent_rev);
@@ -597,57 +613,7 @@ create index on kultur_qk_rev using btree (_rev_at);
 
 -- TODO: drop after changing to new method
 drop table if exists kultur_qk_choosen cascade;
-create table kultur_qk_choosen (
-  id uuid primary key default uuid_generate_v1mc(),
-  kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_id uuid NOT NULL REFERENCES kultur_qk (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  choosen boolean default true,
-  changed timestamp default now(),
-  changed_by text default null,
-  _rev text default null,
-  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
-  _parent_rev text default null,
-  _revisions text[] default null,
-  _depth integer default 1,
-  _deleted boolean default false,
-  _conflicts text[] default null
-  -- this created problems in the on conflict clause of the revision trigger
-  --unique(id, qk_name)
-);
-create index on kultur_qk_choosen using btree (id);
-create index on kultur_qk_choosen using btree (kultur_id);
-create index on kultur_qk_choosen using btree (qk_id);
-create index on kultur_qk_choosen using btree (_deleted);
-create index on kultur_qk_choosen using btree (_rev_at);
-
-insert into kultur_qk_choosen (kultur_id, qk_name)
-select kultur.id, kultur_qk.name
-from kultur_qk, kultur
-on conflict do nothing;
-
 drop table if exists kultur_qk_choosen_rev cascade;
-create table kultur_qk_choosen_rev (
-  id uuid primary key default uuid_generate_v1mc(),
-  kultur_qk_choosen_id uuid default null,
-  -- TODO: remove reference
-  kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_id uuid,
-  choosen boolean default true,
-  changed timestamp default now(),
-  changed_by text default null,
-  _rev text default null,
-  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
-  _parent_rev text default null,
-  _revisions text[] default null,
-  _depth integer default 1,
-  _deleted boolean default false
-);
-create index on kultur_qk_choosen_rev using btree (id);
-create index on kultur_qk_choosen_rev using btree (_rev);
-create index on kultur_qk_choosen_rev using btree (_parent_rev);
-create index on kultur_qk_choosen_rev using btree (_depth);
-create index on kultur_qk_choosen_rev using btree (_deleted);
-create index on kultur_qk_choosen_rev using btree (_rev_at);
 
 drop table if exists kultur_file cascade;
 create table kultur_file (
@@ -710,6 +676,8 @@ create table teilkultur_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY teilkultur_rev ALTER COLUMN teilkultur_id SET DEFAULT null;
+
 create index on teilkultur_rev using btree (rev_id);
 create index on teilkultur_rev using btree (id);
 create index on teilkultur_rev using btree (_rev);
@@ -766,6 +734,8 @@ create table event_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY event_rev ALTER COLUMN event_id SET DEFAULT null;
+
 create index on event_rev using btree (rev_id);
 create index on event_rev using btree (id);
 create index on event_rev using btree (_rev);
@@ -815,6 +785,8 @@ create table zaehlung_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY zaehlung_rev ALTER COLUMN zaehlung_id SET DEFAULT null;
+
 create index on zaehlung_rev using btree (rev_id);
 create index on zaehlung_rev using btree (id);
 create index on zaehlung_rev using btree (_rev);
@@ -878,6 +850,8 @@ create table teilzaehlung_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY teilzaehlung_rev ALTER COLUMN teilzaehlung_id SET DEFAULT null;
+
 create index on teilzaehlung_rev using btree (rev_id);
 create index on teilzaehlung_rev using btree (id);
 create index on teilzaehlung_rev using btree (_rev);
@@ -941,6 +915,8 @@ create table kultur_option_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY kultur_option_rev ALTER COLUMN kultur_id SET DEFAULT null;
+
 create index on kultur_option_rev using btree (id);
 create index on kultur_option_rev using btree (kultur_id);
 create index on kultur_option_rev using btree (_rev);
@@ -1040,6 +1016,8 @@ create table person_option_rev (
 -- 2020.12.24 refactor choosen qk
 alter table person_option_rev add column art_qk_choosen text[] default null;
 alter table person_option_rev add column kultur_qk_choosen text[] default null;
+ALTER TABLE ONLY person_option_rev ALTER COLUMN person_id SET DEFAULT null;
+
 
 alter table person_option_rev add column ku_zwischenlager boolean default false;
 alter table person_option_rev add column ku_erhaltungskultur boolean default false;
@@ -1125,6 +1103,8 @@ create table lieferung_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY lieferung_rev ALTER COLUMN lieferung_id SET DEFAULT null;
+
 create index on lieferung_rev using btree (rev_id);
 create index on lieferung_rev using btree (id);
 create index on lieferung_rev using btree (_rev);
@@ -1193,6 +1173,8 @@ create table sammel_lieferung_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY sammel_lieferung_rev ALTER COLUMN sammel_lieferung_id SET DEFAULT null;
+
 create index on sammel_lieferung_rev using btree (rev_id);
 create index on sammel_lieferung_rev using btree (id);
 create index on sammel_lieferung_rev using btree (_rev);
@@ -1257,6 +1239,8 @@ create table av_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY av_rev ALTER COLUMN av_id SET DEFAULT null;
+
 create index on av_rev using btree (id);
 create index on av_rev using btree (_rev);
 create index on av_rev using btree (_parent_rev);
@@ -1304,6 +1288,8 @@ create table gv_rev (
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY gv_rev ALTER COLUMN gv_id SET DEFAULT null;
+
 create index on gv_rev using btree (id);
 create index on gv_rev using btree (_rev);
 create index on gv_rev using btree (_parent_rev);
