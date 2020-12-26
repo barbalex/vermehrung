@@ -36,17 +36,18 @@ const SettingsTeilkulturenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const store = useContext(StoreContext)
   const { db } = store
 
-  const [kulturOption, setKulturOption] = useState()
+  const [dataState, setDataState] = useState({ kulturOption })
   useEffect(() => {
     const kOObservable = kulturId
       ? db.get('kultur_option').findAndObserve(kulturId)
       : $of({})
     const subscription = kOObservable.subscribe((kulturOption) =>
-      setKulturOption(kulturOption),
+      setDataState({ kulturOption }),
     )
 
     return () => subscription.unsubscribe()
   }, [db, kulturId])
+  const { kulturOption } = dataState
   const { tk_bemerkungen } = kulturOption ?? {}
 
   const saveToDb = useCallback(
