@@ -74,8 +74,8 @@ const PersonFormTitle = ({
           )}
           <Menu white={false}>
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="person"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -104,8 +104,8 @@ const PersonFormTitle = ({
           </>
         )}
         <HistoryButton
-          row={row}
-          rawRow={rawRow}
+          table="person"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />

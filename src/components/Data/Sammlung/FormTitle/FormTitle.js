@@ -92,8 +92,8 @@ const SammlungFormTitle = ({
           <DeleteButton row={row} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="sammlung"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -136,8 +136,8 @@ const SammlungFormTitle = ({
         <AddButton />
         <DeleteButton row={row} />
         <HistoryButton
-          row={row}
-          rawRow={rawRow}
+          table="sammlung"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />

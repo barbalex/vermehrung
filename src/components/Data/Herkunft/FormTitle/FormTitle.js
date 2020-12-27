@@ -90,8 +90,8 @@ const Herkunft = ({
           )}
           <Menu white={false}>
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="herkunft"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -128,8 +128,8 @@ const Herkunft = ({
           </>
         )}
         <HistoryButton
-          row={row}
-          rawRow={rawRow}
+          table="herkunft"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />

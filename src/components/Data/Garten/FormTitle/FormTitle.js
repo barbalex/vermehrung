@@ -74,8 +74,8 @@ const GartenFormTitle = ({
           <Download gartenId={row.id} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="garten"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -106,7 +106,8 @@ const GartenFormTitle = ({
         <DeleteButton row={row} />
         <Download gartenId={row.id} />
         <HistoryButton
-          row={row}
+          table="garten"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />

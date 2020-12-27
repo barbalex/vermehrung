@@ -101,8 +101,8 @@ const SammelLieferungFormTitle = ({
               />
               <Anleitung asMenu />
               <HistoryButton
-                row={row}
-                rawRow={rawRow}
+                table="sammel_lieferung"
+                id={row.id}
                 showHistory={showHistory}
                 setShowHistory={setShowHistory}
                 asMenu
@@ -144,8 +144,8 @@ const SammelLieferungFormTitle = ({
             />
             <Menu white={false}>
               <HistoryButton
-                row={row}
-                rawRow={rawRow}
+                table="sammel_lieferung"
+                id={row.id}
                 showHistory={showHistory}
                 setShowHistory={setShowHistory}
                 asMenu
@@ -186,8 +186,8 @@ const SammelLieferungFormTitle = ({
             setPrintPreview={setPrintPreview}
           />
           <HistoryButton
-            row={row}
-            rawRow={rawRow}
+            table="sammel_lieferung"
+            id={row.id}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
@@ -229,8 +229,8 @@ const SammelLieferungFormTitle = ({
             <Copy sammelLieferung={row} lieferung={lieferung} />
           )}
           <HistoryButton
-            row={row}
-            rawRow={rawRow}
+            table="sammel_lieferung"
+            id={row.id}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
@@ -272,8 +272,8 @@ const SammelLieferungFormTitle = ({
         )}
         <>
           <HistoryButton
-            row={row}
-            rawRow={rawRow}
+            table="sammel_lieferung"
+            id={row.id}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />

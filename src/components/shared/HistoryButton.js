@@ -23,24 +23,30 @@ const StyledIconButton = styled(IconButton)`
     'box-shadow:inset 0px 0px 0px 1px rgba(0, 0, 0, 0.04);'}
 `
 
-const HistoryButton = ({ asMenu, id, showHistory, setShowHistory }) => {
+const HistoryButton = ({ asMenu, id, showHistory, setShowHistory, table }) => {
   const store = useContext(StoreContext)
   const { online, db } = store
 
   const [dataState, setDataState] = useState({ row })
   useEffect(() => {
-    const tzObservable = id
-      ? db.get('teilzaehlung').findAndObserve(id)
-      : $of(null)
-    const subscription = tzObservable.subscribe((row) => setDataState({ row }))
+    const observable = id ? db.get(table).findAndObserve(id) : $of(null)
+    const subscription = observable.subscribe((row) => setDataState({ row }))
 
     return () => subscription.unsubscribe()
-  }, [id, db])
+  }, [id, db, table])
   const { row } = dataState
 
   const existMultipleRevisions =
     row?._revisions?.length && row?._revisions?.length > 1
   const disabled = !online || !existMultipleRevisions
+
+  console.log('HistoryButton', {
+    disabled,
+    existMultipleRevisions,
+    row,
+    id,
+    table,
+  })
 
   const show = useCallback(() => {
     if (disabled) return

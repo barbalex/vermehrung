@@ -64,8 +64,8 @@ const EventFormTitle = ({
           <DeleteButton row={row} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="event"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -93,8 +93,8 @@ const EventFormTitle = ({
         <AddButton />
         <DeleteButton row={row} />
         <HistoryButton
-          row={row}
-          rawRow={rawRow}
+          table="event"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />

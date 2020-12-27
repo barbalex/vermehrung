@@ -65,8 +65,8 @@ const TeilkulturFormTitle = ({
           <DeleteButton row={row} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="teilkultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -94,8 +94,8 @@ const TeilkulturFormTitle = ({
         <AddButton />
         <DeleteButton row={row} />
         <HistoryButton
-          row={row}
-          rawRow={rawRow}
+          table="teilkultur"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
