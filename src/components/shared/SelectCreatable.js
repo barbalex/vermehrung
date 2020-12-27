@@ -78,12 +78,12 @@ const emptyValue = {
   label: '',
 }
 
-const SharedSelect = ({
+const SelectCreatable = ({
   field = '',
   label,
-  table,
   row,
   showFilter,
+  table,
   error,
   options,
   loading = false,
@@ -152,4 +152,4 @@ const SharedSelect = ({
   )
 }
 
-export default observer(SharedSelect)
+export default observer(SelectCreatable)

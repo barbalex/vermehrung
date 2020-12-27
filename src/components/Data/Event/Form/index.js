@@ -52,7 +52,6 @@ const EventForm = ({
   showFilter,
   id,
   row,
-  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -265,8 +264,8 @@ const EventForm = ({
   }, [])
 
   const onCreateNewTeilkultur = useCallback(
-    ({ name }) => {
-      const teilkultur_id = insertTeilkulturRev({
+    async ({ name }) => {
+      const teilkultur_id = await insertTeilkulturRev({
         noNavigateInTree: true,
         values: {
           name,
@@ -326,10 +325,9 @@ const EventForm = ({
           {(tk || showFilter) && (
             <SelectCreatable
               key={`${row.id}${row.teilkultur_id}teilkultur_id`}
-              table="event"
               row={row}
-              rawRow={rawRow}
               showFilter={showFilter}
+              table="event"
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturWerte}

@@ -127,7 +127,7 @@ const TeilzaehlungForm = ({
       async ([teilkulturs, kulturOption, teilzaehlung]) => {
         let teilkultur
         try {
-          teilkultur = await row.person.fetch()
+          teilkultur = await row.teilkultur.fetch()
         } catch {}
         const teilkultursIncludingChoosen = uniqBy(
           [...teilkulturs, ...(teilkultur ? [teilkultur] : [])],
@@ -144,8 +144,21 @@ const TeilzaehlungForm = ({
     )
 
     return () => subscription.unsubscribe()
-  }, [db, filter.teilkultur._deleted, id, kulturId, row?.person])
+  }, [
+    db,
+    filter.teilkultur._deleted,
+    id,
+    kulturId,
+    row?.teilkultur,
+    row?.teilkultur_id,
+  ])
   const { teilkulturWerte, kulturOption, row } = dataState
+
+  console.log('Teilzaehlung Form', {
+    row,
+    tkId: row?.teilkultur_id,
+    teilkulturWerte,
+  })
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -169,8 +182,8 @@ const TeilzaehlungForm = ({
   } = kulturOption ?? {}
 
   const onCreateNewTeilkultur = useCallback(
-    ({ name }) => {
-      const teilkultur_id = insertTeilkulturRev({
+    async ({ name }) => {
+      const teilkultur_id = await insertTeilkulturRev({
         noNavigateInTree: true,
         values: {
           name,
@@ -250,7 +263,7 @@ const TeilzaehlungForm = ({
         {tk && tz_teilkultur_id && (
           <Teilkultur>
             <Select
-              key={`${row.id}teilkultur_id`}
+              key={`${row.id}${row.teilkultur_id}teilkultur_id`}
               row={row}
               field="teilkultur_id"
               label="Teilkultur"
