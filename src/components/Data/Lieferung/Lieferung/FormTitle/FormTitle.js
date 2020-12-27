@@ -83,8 +83,8 @@ const LieferungTitleFormTitle = ({
           <DeleteButton row={row} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="lieferung"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -117,8 +117,8 @@ const LieferungTitleFormTitle = ({
         <AddButton />
         <DeleteButton row={row} />
         <HistoryButton
-          row={row}
-          rawRow={rawRow}
+          table="lieferung"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />

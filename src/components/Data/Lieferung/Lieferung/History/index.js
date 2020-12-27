@@ -73,7 +73,7 @@ const sliderSettings = {
 const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
 
-  const priorRevisions = row._revisions.slice(1)
+  const priorRevisions = row?._revisions?.slice(1) ?? []
   const [{ error, data, fetching }] = useQuery({
     query: lieferungRevQuery,
     variables: {

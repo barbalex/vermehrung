@@ -351,6 +351,7 @@ const TeilzaehlungForm = ({
         <div>
           <HistoryButton
             id={id}
+            table="teilzaehlung"
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />

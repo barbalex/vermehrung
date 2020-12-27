@@ -55,8 +55,8 @@ const KulturFormTitle = ({
             <Delete asMenu row={row} />
             <Download row={row} asMenu />
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="kultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -85,8 +85,8 @@ const KulturFormTitle = ({
           <Menu white={false}>
             <Download row={row} asMenu />
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="kultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -116,8 +116,8 @@ const KulturFormTitle = ({
           <Menu white={false}>
             <Download row={row} asMenu />
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="kultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -150,8 +150,8 @@ const KulturFormTitle = ({
           <Menu white={false}>
             <Download row={row} asMenu />
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="kultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -179,8 +179,8 @@ const KulturFormTitle = ({
           />
           <Menu white={false}>
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="kultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -201,8 +201,8 @@ const KulturFormTitle = ({
         <Delete row={row} />
         <Download row={row} />
         <HistoryButton
-          row={row}
-          rawRow={rawRow}
+          table="kultur"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />

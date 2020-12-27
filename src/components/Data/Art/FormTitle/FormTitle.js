@@ -51,8 +51,8 @@ const Art = ({
           <DeleteButton row={row} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
-              rawRow={rawRow}
+              table="art"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -76,8 +76,8 @@ const Art = ({
         <AddButton />
         <DeleteButton row={row} />
         <HistoryButton
-          row={row}
-          rawRow={rawRow}
+          table="art"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
