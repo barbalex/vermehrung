@@ -115,7 +115,6 @@ const Event = ({
               showFilter={showFilter}
               id={id}
               row={row}
-              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
