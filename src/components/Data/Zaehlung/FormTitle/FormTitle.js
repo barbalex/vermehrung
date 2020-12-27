@@ -38,7 +38,6 @@ const TitleSymbols = styled.div`
 
 const ZaehlungFormTitle = ({
   row,
-  rawRow,
   totalCount,
   filteredCount,
   width,

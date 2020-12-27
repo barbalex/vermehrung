@@ -42,7 +42,6 @@ const TitleSymbols = styled.div`
 const SammelLieferungFormTitle = ({
   showFilter,
   row,
-  rawRow,
   totalCount,
   filteredCount,
   lieferung,

@@ -39,7 +39,6 @@ const TitleSymbols = styled.div`
 
 const LieferungTitleFormTitle = ({
   row,
-  rawRow,
   totalCount,
   filteredCount,
   width,

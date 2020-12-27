@@ -38,7 +38,6 @@ const TitleSymbols = styled.div`
 
 const EventFormTitle = ({
   row,
-  rawRow,
   totalCount,
   filteredCount,
   width,

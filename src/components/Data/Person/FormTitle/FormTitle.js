@@ -37,7 +37,6 @@ const TitleSymbols = styled.div`
 
 const PersonFormTitle = ({
   row,
-  rawRow,
   totalCount,
   filteredCount,
   width,

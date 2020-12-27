@@ -38,7 +38,6 @@ const TitleSymbols = styled.div`
 
 const TeilkulturFormTitle = ({
   row,
-  rawRow,
   totalCount,
   filteredCount,
   width,
