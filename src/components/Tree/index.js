@@ -211,10 +211,11 @@ const Tree = ({ width, height }) => {
     // need to rebuild tree on openNodes changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     openNodes,
+    openNodes.length,
     user.uid,
   ])
 
-  //console.log('Tree rendering')
+  //console.log('Tree rendering, openNodes:', openNodes)
 
   return (
     <ErrorBoundary>
