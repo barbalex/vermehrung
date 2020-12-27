@@ -113,7 +113,7 @@ const SharedSelect = ({
       setStateValue(newValue)
 
       if (showFilter) {
-        filter.setValue({ table, key: field, newValue })
+        filter.setValue({ table, key: field, value: newValue })
       } else {
         row.edit({ field, value: newValue, store })
       }
