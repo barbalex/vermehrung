@@ -243,7 +243,6 @@ const EventForm = ({
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
 
-      console.log('Event Form, saveToDb', { field, value, showFilter })
       if (showFilter) {
         return filter.setValue({ table: 'event', key: field, value })
       }
