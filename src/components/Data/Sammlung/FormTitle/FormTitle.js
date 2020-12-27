@@ -39,7 +39,6 @@ const TitleSymbols = styled.div`
 
 const SammlungFormTitle = ({
   row,
-  rawRow,
   totalCount,
   filteredCount,
   width,

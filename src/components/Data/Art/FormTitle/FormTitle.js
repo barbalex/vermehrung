@@ -34,7 +34,6 @@ const TitleSymbols = styled.div`
 
 const Art = ({
   row,
-  rawRow,
   totalCount,
   filteredCount,
   width,

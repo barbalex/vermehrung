@@ -37,7 +37,6 @@ const TitleSymbols = styled.div`
 
 const KulturFormTitle = ({
   row,
-  rawRow,
   totalCount,
   filteredCount,
   width,

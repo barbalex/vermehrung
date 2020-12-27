@@ -39,7 +39,6 @@ const TitleSymbols = styled.div`
 
 const Herkunft = ({
   row,
-  rawRow,
   totalCount,
   filteredCount,
   width,
