@@ -48,8 +48,7 @@ const SettingsEventsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   }, [db, kulturId])
   const { kulturOption } = dataState
 
-  const { ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
-    kulturOption ?? {}
+  const { ev_datum, tk, ev_geplant, ev_person_id } = kulturOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
@@ -93,13 +92,13 @@ const SettingsEventsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
       </TitleRow>
       <MenuItem>
         <FormControlLabel
-          value={ev_teilkultur_id === true ? 'true' : 'false'}
+          value={tk === true ? 'true' : 'false'}
           control={
             <Checkbox
               color="primary"
-              checked={ev_teilkultur_id}
+              checked={tk}
               onClick={saveToDb}
-              name="ev_teilkultur_id"
+              name="tk"
             />
           }
           label="Teilkultur"

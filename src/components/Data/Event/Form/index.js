@@ -234,8 +234,7 @@ const EventForm = ({
   ])
   const { kulturWerte, teilkulturWerte, personWerte, kulturOption } = dataState
 
-  const { tk, ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
-    kulturOption ?? {}
+  const { tk, ev_datum, ev_geplant, ev_person_id } = kulturOption ?? {}
 
   const saveToDb = useCallback(
     (event) => {
@@ -244,6 +243,7 @@ const EventForm = ({
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
 
+      console.log('Event Form, saveToDb', { field, value, showFilter })
       if (showFilter) {
         return filter.setValue({ table: 'event', key: field, value })
       }
@@ -324,7 +324,7 @@ const EventForm = ({
             saveToDb={saveToDb}
             error={errors?.event?.kultur_id}
           />
-          {((tk && ev_teilkultur_id) || !showFilter) && (
+          {(tk || showFilter) && (
             <SelectCreatable
               key={`${row.id}${row.teilkultur_id}teilkultur_id`}
               table="event"

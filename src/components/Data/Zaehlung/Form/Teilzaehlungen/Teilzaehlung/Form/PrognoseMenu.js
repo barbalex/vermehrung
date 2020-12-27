@@ -51,7 +51,7 @@ const PrognoseMenu = ({
   const [zaehlung, setZaehlung] = useState(null)
   useEffect(() => {
     const zaehlungObservable = teilzaehlung.zaehlung_id
-      ? teilzaehlung.zaehlung
+      ? teilzaehlung.zaehlung.observe()
       : $of({})
     const subscription = zaehlungObservable.subscribe((zaehlung) =>
       setZaehlung(zaehlung),
