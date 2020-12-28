@@ -1,3 +1,8 @@
+/**
+ * never used
+ * because rev do not exist for originally imported data which is why
+ * they are not found
+ */
 import md5 from 'blueimp-md5'
 import gql from 'graphql-tag'
 import upperFirst from 'lodash/upperFirst'
@@ -65,12 +70,36 @@ const addMissingRevsToFirstDepthForTable = async ({ table, store }) => {
     delete datWithout.changed_by
     delete datWithout._revisions
     const rev = `${1}-${md5(JSON.stringify(datWithout))}`
-    const newDat = {
-      ...dat,
-      _rev: rev,
-      _revisions: toPgArray([rev]),
+    const revisions = toPgArray([rev])
+    await gqlClient
+      .mutation(
+        gql`
+      mutation MyQuery {
+        update_herkunft_by_pk(
+          pk_columns: { id: "${dat.id}" }
+          _set: { _rev: "${rev}", _revisions: "${revisions}" }
+        ) {
+          id
+        }
+      }
+    `,
+      )
+      .toPromise()
+    await gqlClient
+      .mutation(
+        gql`
+        mutation MyQuery {
+  update_herkunft_rev(
+    where: {herkunft_id: {_eq: "${dat.id}"}, _depth: {_eq: 1}}
+    _set: { _rev: "${rev}", _revisions: "${revisions}" }
+    ) {
+      returning {
+        id
+      }
     }
-    await gqlClient(gql``)
+  }`,
+      )
+      .toPromise()
   }
   // 2. add _parent_rev and _revisions to depth 2 without parent_rev
 }
