@@ -81,6 +81,11 @@ const SettingsOverallMenu = ({
     [],
   )
 
+  const onClickUptime = useCallback(() => {
+    typeof window !== 'undefined' && window.open('https://uptime.vermehrung.ch')
+    setAnchorEl(null)
+  }, [])
+
   return (
     <Menu
       id="menu"
@@ -127,6 +132,9 @@ const SettingsOverallMenu = ({
           label="Inaktive Gärten, Kulturen und Personen verbergen"
           labelPlacement="end"
         />
+      </MenuItem>
+      <MenuItem onClick={onClickUptime}>
+        online-Verfügbarkeit von vermehrung.ch
       </MenuItem>
     </Menu>
   )
