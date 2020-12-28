@@ -2,13 +2,14 @@ import { DateTime } from 'luxon'
 
 import exists from './exists'
 
-const zaehlungLabelFromZaehlung = ({ zaehlung, store }) => {
-  const { teilzaehlungsSorted } = store
+const zaehlungLabelFromZaehlung = ({ zaehlung, teilzaehlungs }) => {
   const datumLabel = zaehlung.datum
     ? DateTime.fromSQL(zaehlung.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
 
-  const tzs = teilzaehlungsSorted.filter((tz) => tz.zaehlung_id === zaehlung.id)
+  const tzs = (teilzaehlungs ?? []).filter(
+    (tz) => tz.zaehlung_id === zaehlung.id,
+  )
 
   const anzahlenPfl = tzs
     .map((tz) => tz.anzahl_pflanzen)

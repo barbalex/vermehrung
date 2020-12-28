@@ -1,12 +1,12 @@
 import React, { useCallback, useContext, useMemo, useRef } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import styled from 'styled-components'
-import Select from 'react-select/Async'
+import Select from 'react-select/async'
 import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import buildOptions from './buildOptions'
 
 const Container = styled.div`
@@ -150,7 +150,7 @@ const Search = () => {
         alignItems: 'center',
         justifyContent: 'space-between',
         color: 'rgba(0, 0, 0, 0.8)',
-        fontWeight: '800',
+        fontWeight: '700',
         userSelect: 'none',
         textTransform: 'none',
       }),

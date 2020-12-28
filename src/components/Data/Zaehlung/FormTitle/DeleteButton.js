@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
@@ -18,7 +18,7 @@ const TitleRow = styled.div`
 const Title = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 800;
+  font-weight: 700;
   user-select: none;
 `
 
@@ -41,7 +41,7 @@ const ZaehlungDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    row.delete()
+    row.delete({ store })
     setAnchorEl(null)
     if (filter.zaehlung._deleted === false) {
       // need to remove openNode from openNodes
@@ -50,6 +50,7 @@ const ZaehlungDeleteButton = ({ row }) => {
     }
   }, [
     row,
+    store,
     filter.zaehlung._deleted,
     removeOpenNodeWithChildren,
     activeNodeArray,

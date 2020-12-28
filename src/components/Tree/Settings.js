@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -8,8 +8,10 @@ import Checkbox from '@material-ui/core/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
+import { of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import getConstants from '../../utils/constants'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
@@ -30,7 +32,7 @@ const TitleRow = styled.div`
 const Title = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 800;
+  font-weight: 700;
   user-select: none;
 `
 const Info = styled.div`
@@ -41,23 +43,49 @@ const Info = styled.div`
 
 const SettingsTree = () => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
+  const { user, db } = store
 
+  const [dataState, setDataState] = useState({
+    userPersonOption: undefined,
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'tree_kultur',
+            'tree_teilkultur',
+            'tree_zaehlung',
+            'tree_lieferung',
+            'tree_event',
+          ])
+      : $of({})
+    const subscription = userPersonOptionsObservable.subscribe(
+      async (userPersonOptions) =>
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
+        }),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { userPersonOption } = dataState
   const {
     tree_kultur,
     tree_teilkultur,
     tree_zaehlung,
     tree_lieferung,
     tree_event,
-  } = userPersonOption
+  } = userPersonOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      userPersonOption.edit({ field, value })
+      userPersonOption.edit({ field, value, store })
     },
-    [userPersonOption],
+    [store, userPersonOption],
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)

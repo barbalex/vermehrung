@@ -1,9 +1,13 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { first as first$ } from 'rxjs/operators'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest, of as $of } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
@@ -13,7 +17,7 @@ import Zaehlungen from './Zaehlungen'
 import Events from './Events'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
+import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -38,23 +42,91 @@ const TeilkulturForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, kultursSorted, errors, unsetError } = store
-
-  const kulturOpion = store.kultur_options.get(row.kultur_id) || {}
-  const { tk_bemerkungen } = kulturOpion
+  const { filter, online, db, errors, unsetError } = store
 
   useEffect(() => {
     unsetError('teilkultur')
   }, [id, unsetError])
 
-  const kulturWerte = useMemo(
-    () =>
-      kultursSorted.map((el) => ({
-        value: el.id,
-        label: kulturLabelFromKultur({ kultur: el, store }),
-      })),
-    [kultursSorted, store],
-  )
+  const [dataState, setDataState] = useState({
+    kulturWerte: [],
+    kulturOption: undefined,
+  })
+  useEffect(() => {
+    const kultursObservable = db
+      .get('kultur')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.kultur.aktiv === true
+              ? [true]
+              : filter.kultur.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observe()
+    const kulturObservable = row.kultur ? row.kultur.observe() : $of({})
+    const kulturOptionObservable = row.kultur_id
+      ? db.get('kultur_option').findAndObserve(row.kultur_id)
+      : $of(null)
+    const combinedObservables = combineLatest([
+      kultursObservable,
+      kulturObservable,
+      kulturOptionObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([kulturs, kultur, kulturOption]) => {
+        // need to show a choosen kultur even if inactive but not if deleted
+        const kultursIncludingChoosen = uniqBy(
+          [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
+          'id',
+        )
+        const kultursSorted = await kultursSortedFromKulturs(
+          kultursIncludingChoosen,
+        )
+        const kulturWerte = await Promise.all(
+          kultursSorted.map(async (el) => {
+            let label = ''
+            try {
+              label = await el.label.pipe(first$()).toPromise()
+            } catch {}
+
+            return {
+              value: el.id,
+              label,
+            }
+          }),
+        )
+
+        setDataState({ kulturWerte, kulturOption })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    filter.kultur._deleted,
+    filter.kultur.aktiv,
+    row.kultur,
+    row.kultur_id,
+    showFilter,
+  ])
+  const { kulturWerte, kulturOption } = dataState
+
+  const { tk_bemerkungen } = kulturOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
@@ -67,14 +139,15 @@ const TeilkulturForm = ({
         return filter.setValue({ table: 'teilkultur', key: field, value })
       }
 
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row[field])
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.teilkultur._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>
@@ -168,10 +241,10 @@ const TeilkulturForm = ({
               setActiveConflict={setActiveConflict}
             />
           )}
-          {!showFilter && (
+          {!showFilter && row.kultur_id && (
             <>
-              <Zaehlungen kulturId={row.kultur_id} teilkulturId={row.id} />
-              <Events kulturId={row.kultur_id} teilkulturId={row.id} />
+              <Zaehlungen teilkultur={row} />
+              <Events teilkultur={row} />
             </>
           )}
         </FieldsContainer>

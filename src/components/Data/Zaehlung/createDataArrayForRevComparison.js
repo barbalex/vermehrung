@@ -1,12 +1,10 @@
 import { DateTime } from 'luxon'
 
-import kulturLabelFromKultur from '../../../utils/kulturLabelFromKultur'
-
-const createDataArrayForRevComparison = ({ row, revRow, store }) => [
+const createDataArrayForRevComparison = ({ row, revRow }) => [
   {
-    valueInRow: kulturLabelFromKultur({ kultur: row, store }),
-    valueInRev: kulturLabelFromKultur({ kultur: revRow, store }),
-    label: 'Kultur',
+    valueInRow: row.kultur_id,
+    valueInRev: revRow.kultur_id,
+    label: 'Kultur (id)',
   },
   {
     valueInRow: row?.datum

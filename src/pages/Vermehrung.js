@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 import { navigate } from 'gatsby'
 
-import { StoreContext } from '../models/reactUtils'
+import StoreContext from '../storeContext'
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
@@ -18,6 +18,7 @@ import ErrorBoundary from '../components/shared/ErrorBoundary'
 import ApiDetector from '../components/ApiDetector'
 import QueuedQueries from '../components/QueuedQueries'
 import isThisIOS from '../utils/isIOS'
+import tableNames from '../utils/tableNames'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);
@@ -33,7 +34,10 @@ const LoginContainer = styled.div`
   margin: 20px;
 `
 const SpinnerText = styled.div`
-  padding: 10px;
+  padding-top: 10px;
+`
+const SpinnerText2 = styled.div`
+  padding: 0;
 `
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;
@@ -69,17 +73,18 @@ const Vermehrung = ({ location }) => {
     activeForm,
     gettingAuthUser,
     initialDataQueried,
+    initiallyQuerying,
     isPrint,
     showQueuedQueries,
     singleColumnView,
     showTreeInSingleColumnView,
     user,
+    online,
   } = store
 
   const [isIOS, setIsIOS] = useState(false)
   useEffect(() => {
     setIsIOS(isThisIOS())
-    //setIsIOS(true)
   }, [])
 
   useEffect(() => {
@@ -91,6 +96,7 @@ const Vermehrung = ({ location }) => {
     setOpenNodes,
     setActiveNodeArray,
     widthInPercentOfScreen,
+    wsReconnectCount,
   } = store.tree
   const showFilter = store.filter.show
   let treeWidth = singleColumnView
@@ -123,17 +129,22 @@ const Vermehrung = ({ location }) => {
 
   useEffect(() => {
     let unsubscribe
-    if (existsUser && initialDataQueried) {
+    if (existsUser) {
       //console.log('Vermehrung initializing subsctiptions')
+      // TODO:
+      // if no data exists yet
+      // set initial data queried false
+      // then true on first data event
       unsubscribe = initializeSubscriptions({ store })
     }
     return function cleanup() {
-      if (unsubscribe && Object.keys(unsubscribe)) {
-        Object.keys(unsubscribe).forEach((table) => unsubscribe[table]())
+      if (unsubscribe && Object.values(unsubscribe)) {
+        Object.values(unsubscribe).forEach((value) => value.unsubscribe())
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [existsUser, initialDataQueried])
+    // wsReconnectCount is made so a subscription can provoke re-subscription on error
+    // see initializeSubscriptions, unsubscribe.ae_art
+  }, [existsUser, store, wsReconnectCount])
 
   if (gettingAuthUser || isIOS) {
     return (
@@ -153,10 +164,19 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  // uncommented this because:
-  // quite often there will already exist data
-  // so show it ealier instead of waiting for loading to be finished
-  /*if (!initialDataQueried) {
+  if (!existsUser) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <LoginContainer>
+            <Login />
+          </LoginContainer>
+        </Layout>
+      </ErrorBoundary>
+    )
+  }
+
+  if (online && !initialDataQueried) {
     return (
       <ErrorBoundary>
         <Layout>
@@ -167,20 +187,9 @@ const Vermehrung = ({ location }) => {
               backColor="#4a148c1a"
               loading={true}
             />
-            <SpinnerText>lade Daten</SpinnerText>
+            <SpinnerText>lade Daten für offline-Nutzung</SpinnerText>
+            <SpinnerText2>{tableNames(initiallyQuerying)}</SpinnerText2>
           </SpinnerContainer>
-        </Layout>
-      </ErrorBoundary>
-    )
-  }*/
-
-  if (!existsUser) {
-    return (
-      <ErrorBoundary>
-        <Layout>
-          <LoginContainer>
-            <Login />
-          </LoginContainer>
         </Layout>
       </ErrorBoundary>
     )

@@ -1,9 +1,11 @@
-import React, { useCallback, useContext } from 'react'
-import AsyncSelect from 'react-select/Async'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
+import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { of as $of } from 'rxjs'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
+import artLabelFromAeArt from '../../utils/artLabelFromAeArt'
 
 const Container = styled.div`
   display: flex;
@@ -70,34 +72,56 @@ const StyledSelect = styled(AsyncSelect)`
 `
 
 const SelectLoadingOptions = ({
-  valueLabelFunction,
-  valueLabelKey,
   field = '',
   label,
   labelSize = 12,
   row,
   saveToDb,
   error: saveToDbError,
-  modelKey,
   modelFilter = () => true,
+  labelTable,
+  labelField,
 }) => {
   const store = useContext(StoreContext)
+  const { db } = store
+
+  const [stateValue, setStateValue] = useState({
+    value: row[field] || '',
+    label: '',
+  })
+  useEffect(() => {
+    const observable =
+      labelTable && row[field]
+        ? db.get(labelTable).findAndObserve(row[field])
+        : $of({})
+    const subscription = observable.subscribe((record) =>
+      setStateValue({
+        value: row[field] || '',
+        label: record[labelField] ?? '',
+      }),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, field, labelField, labelTable, row])
 
   const loadOptions = useCallback(
     (inputValue, cb) => {
       const data = modelFilter(inputValue).slice(0, 7)
-      const options = data.map((o) => ({
-        value: o.id,
-        label: o?.[modelKey] ?? `(kein ${label})`,
-      }))
+      const options = data.map((o) => {
+        return {
+          value: o.id,
+          label: artLabelFromAeArt({ ae_art: o }),
+        }
+      })
       cb(options)
     },
-    [label, modelFilter, modelKey],
+    [modelFilter],
   )
 
   const onChange = useCallback(
     (option) => {
       const value = option && option.value ? option.value : null
+      setStateValue(value ?? '')
       const fakeEvent = {
         target: {
           name: field,
@@ -109,11 +133,6 @@ const SelectLoadingOptions = ({
     [field, saveToDb],
   )
 
-  const value = {
-    value: row[field] || '',
-    label: valueLabelFunction({ [valueLabelKey]: row, store }),
-  }
-
   return (
     <Container data-id={field}>
       {label && <Label labelsize={labelSize}>{label}</Label>}
@@ -122,7 +141,7 @@ const SelectLoadingOptions = ({
         defaultOptions
         name={field}
         onChange={onChange}
-        value={value}
+        value={stateValue}
         hideSelectedOptions
         placeholder=""
         isClearable
@@ -131,7 +150,7 @@ const SelectLoadingOptions = ({
         nocaret
         // don't show a no options message if a value exists
         noOptionsMessage={() =>
-          value.value ? null : '(Bitte Tippen für Vorschläge)'
+          stateValue.value ? null : '(Bitte Tippen für Vorschläge)'
         }
         // enable deleting typed values
         backspaceRemovesValue

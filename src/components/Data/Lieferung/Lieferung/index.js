@@ -1,15 +1,9 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Spinner from '../../../shared/Spinner'
 import Conflict from './Conflict'
@@ -51,16 +45,9 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const Lieferung = ({ id, showFilter, sammelLieferung = {} }) => {
+const Lieferung = ({ id, showFilter, sammelLieferung = {}, row, rawRow }) => {
   const store = useContext(StoreContext)
-  const { filter, online, lieferungs } = store
-
-  const row = useMemo(
-    () => (showFilter ? filter.lieferung : lieferungs.get(id) ?? null),
-    // need lieferungs.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.lieferung, id, showFilter, lieferungs, lieferungs.size],
-  )
+  const { filter, online } = store
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -94,6 +81,7 @@ const Lieferung = ({ id, showFilter, sammelLieferung = {} }) => {
       <Container showfilter={showFilter}>
         <FormTitle
           row={row}
+          rawRow={rawRow}
           showFilter={showFilter}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
@@ -109,6 +97,7 @@ const Lieferung = ({ id, showFilter, sammelLieferung = {} }) => {
               showFilter={showFilter}
               id={id}
               row={row}
+              rawRow={rawRow}
               sammelLieferung={sammelLieferung}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
@@ -122,6 +111,7 @@ const Lieferung = ({ id, showFilter, sammelLieferung = {} }) => {
                       rev={activeConflict}
                       id={id}
                       row={row}
+                      rawRow={rawRow}
                       conflictDisposalCallback={conflictDisposalCallback}
                       conflictSelectionCallback={conflictSelectionCallback}
                       setActiveConflict={setActiveConflict}
@@ -129,6 +119,7 @@ const Lieferung = ({ id, showFilter, sammelLieferung = {} }) => {
                   ) : showHistory ? (
                     <History
                       row={row}
+                      rawRow={rawRow}
                       historyTakeoverCallback={historyTakeoverCallback}
                     />
                   ) : null}

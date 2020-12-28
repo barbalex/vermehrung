@@ -1,15 +1,10 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { of as $of } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'
 import Conflict from './Conflict'
@@ -56,14 +51,21 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, herkunfts } = store
+  const { filter, online, db } = store
 
-  const row = useMemo(
-    () => (showFilter ? filter.herkunft : herkunfts.get(id) || null),
-    // need herkunfts.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.herkunft, id, showFilter, herkunfts, herkunfts.size],
-  )
+  const [row, setRow] = useState(null)
+  // need raw row because observable does not provoke rerendering of components
+  const [rawRow, setRawRow] = useState(null)
+  useEffect(() => {
+    const observable = showFilter
+      ? $of(filter.herkunft)
+      : db.get('herkunft').findAndObserve(id)
+    const subscription = observable.subscribe((newRow) => {
+      setRow(newRow)
+      setRawRow(JSON.stringify(newRow?._raw ?? newRow))
+    })
+    return () => subscription.unsubscribe()
+  }, [db, filter.herkunft, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -92,11 +94,14 @@ const Herkunft = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
+  if (!row) return null
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
         <FormTitle
           row={row}
+          rawRow={rawRow}
           showFilter={showFilter}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
@@ -113,6 +118,7 @@ const Herkunft = ({
               showFilter={showFilter}
               id={id}
               row={row}
+              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
@@ -125,6 +131,7 @@ const Herkunft = ({
                       rev={activeConflict}
                       id={id}
                       row={row}
+                      rawRow={rawRow}
                       conflictDisposalCallback={conflictDisposalCallback}
                       conflictSelectionCallback={conflictSelectionCallback}
                       setActiveConflict={setActiveConflict}
@@ -132,6 +139,7 @@ const Herkunft = ({
                   ) : showHistory ? (
                     <History
                       row={row}
+                      rawRow={rawRow}
                       historyTakeoverCallback={historyTakeoverCallback}
                     />
                   ) : null}

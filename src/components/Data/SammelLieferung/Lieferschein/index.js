@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { graphql, useStaticQuery } from 'gatsby'
@@ -11,9 +11,13 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import SimpleBar from 'simplebar-react'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import Lieferung from './Lieferung'
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
+import lieferungSort from '../../../../utils/lieferungSort'
+import personFullname from '../../../../utils/personFullname'
 
 const Container = styled.div`
   background-color: #f8f8f8;
@@ -93,7 +97,54 @@ const StyledTable = styled(Table)`
 
 const Lieferschein = ({ row }) => {
   const store = useContext(StoreContext)
-  const { lieferungsSorted } = store
+  const { db } = store
+
+  const [dataState, setDataState] = useState({
+    lieferungs: [],
+    vonKulturGarten: undefined,
+    person: undefined,
+  })
+  useEffect(() => {
+    const lieferungsObservable = row.lieferungs.observe()
+    const vonKulturGartenObservable = row.von_kultur_id
+      ? db
+          .get('garten')
+          .query(
+            Q.where('_deleted', false),
+            Q.on('kultur', Q.where('id', row.von_kultur_id)),
+          )
+          .observe()
+      : $of({})
+    const personObservable = row.person.observe()
+    const combinedObservables = combineLatest([
+      lieferungsObservable,
+      vonKulturGartenObservable,
+      personObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([lieferungs, vonKulturGarten, person]) =>
+        setDataState({
+          lieferungs: lieferungs.sort(lieferungSort),
+          vonKulturGarten,
+          person,
+        }),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, row.lieferungs, row.person, row.von_kultur_id])
+  const { lieferungs, vonKulturGarten, person } = dataState
+
+  const von = row.von_kultur_id
+    ? `${vonKulturGarten?.name ?? '(kein Name)'} (${
+        vonKulturGarten?.ort ?? 'kein Ort'
+      })`
+    : '(keine von-Kultur erfasst)'
+
+  const an = row.person_id
+    ? `${personFullname(person) ?? '(kein Name)'} (${
+        person?.ort ?? 'kein Ort'
+      })`
+    : '(keine Person erfasst)'
 
   const imageData = useStaticQuery(graphql`
     query QueryLieferscheinImage {
@@ -110,28 +161,9 @@ const Lieferschein = ({ row }) => {
   `)
   const image = imageData?.file?.childImageSharp?.fixed ?? {}
 
-  const vonKultur = store.kulturs.get(row.von_kultur_id) ?? {}
-  const vonKulturGarten = vonKultur.garten_id
-    ? store.gartens.get(vonKultur.garten_id)
-    : {}
-  const von = row.von_kultur_id
-    ? `${vonKulturGarten?.name ?? '(kein Name)'} (${
-        vonKulturGarten?.ort ?? 'kein Ort'
-      })`
-    : '(keine von-Kultur erfasst)'
-
-  const person = store.persons.get(row.person_id) ?? {}
-  const an = row.person_id
-    ? `${person?.fullname ?? '(kein Name)'} (${person?.ort ?? 'kein Ort'})`
-    : '(keine Person erfasst)'
-
   const am = row.datum
     ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
     : '(Kein Datum erfasst)'
-
-  const lieferungen = lieferungsSorted.filter(
-    (l) => l.sammel_lieferung_id === row.id,
-  )
 
   return (
     <Container>
@@ -177,7 +209,7 @@ const Lieferschein = ({ row }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {lieferungen.map((l) => (
+                {lieferungs.map((l) => (
                   <Lieferung key={l.id} lieferung={l} />
                 ))}
               </TableBody>

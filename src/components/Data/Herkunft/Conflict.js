@@ -2,12 +2,39 @@ import React, { useCallback, useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from 'urql'
+import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import mutations from '../../../utils/mutations'
 import Conflict from '../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
+
+const herkunftRevQuery = gql`
+  query herkunftRevForConflictQuery($id: uuid!, $rev: String!) {
+    herkunft_rev(where: { herkunft_id: { _eq: $id }, _rev: { _eq: $rev } }) {
+      id
+      __typename
+      bemerkungen
+      gemeinde
+      geom_point
+      herkunft_id
+      kanton
+      land
+      lokalname
+      nr
+      changed
+      changed_by
+      _rev
+      _parent_rev
+      _revisions
+      _depth
+      _deleted
+    }
+  }
+`
 
 const HerkunftConflict = ({
   rev,
@@ -17,34 +44,89 @@ const HerkunftConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
-  const { error, loading } = useQuery((store) =>
-    store.queryHerkunft_rev({
-      where: { _rev: { _eq: rev }, herkunft_id: { _eq: row.id } },
-    }),
-  )
-  error && checkForOnlineError(error)
+  const [{ error, data, fetching }] = useQuery({
+    query: herkunftRevQuery,
+    variables: {
+      rev,
+      id: row.id,
+    },
+  })
+  error && checkForOnlineError({ error, store })
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.herkunft_revs.values()].find(
-        (v) => v._rev === rev && v.herkunft_id === row.id,
-      ) || {},
-    [rev, row.id, store.herkunft_revs],
-  )
+  const revRow = useMemo(() => data?.herkunft_rev?.[0] ?? {}, [
+    data?.herkunft_rev,
+  ])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
     [revRow, row, store],
   )
 
-  const onClickVerwerfen = useCallback(() => {
-    revRow.setDeleted()
+  const onClickAktuellUebernehmen = useCallback(async () => {
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      herkunft_id: revRow.herkunft_id,
+      nr: revRow.nr,
+      lokalname: revRow.lokalname,
+      gemeinde: revRow.gemeinde,
+      kanton: revRow.kanton,
+      land: revRow.land,
+      geom_point: revRow.geom_point,
+      bemerkungen: revRow.bemerkungen,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_herkunft_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'herkunft_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'herkunft',
+      revertId: revRow.herkunft_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    // update model: remove this conflict
+    try {
+      const model = await db.get('herkunft').find(revRow.herkunft_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     setTimeout(() => conflictDisposalCallback())
-  }, [conflictDisposalCallback, revRow])
-  const onClickUebernehmen = useCallback(async () => {
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.bemerkungen,
+    revRow.gemeinde,
+    revRow.geom_point,
+    revRow.herkunft_id,
+    revRow.kanton,
+    revRow.land,
+    revRow.lokalname,
+    revRow.nr,
+    user.email,
+  ])
+  const onClickWiderspruchUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -69,24 +151,29 @@ const HerkunftConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    try {
-      await store.mutateInsert_herkunft_rev_one({
+    const response = await gqlClient
+      .query(mutations.mutateInsert_herkunft_rev_one, {
         object: newObject,
         on_conflict: {
           constraint: 'herkunft_rev_pkey',
           update_columns: ['id'],
         },
       })
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
+    // now we need to delete the previous conflict
+    onClickAktuellUebernehmen()
     conflictSelectionCallback()
   }, [
     addNotification,
     conflictSelectionCallback,
+    gqlClient,
+    onClickAktuellUebernehmen,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.gemeinde,
@@ -112,10 +199,10 @@ const HerkunftConflict = ({
       rev={rev}
       dataArray={dataArray}
       dataArrayKey={JSON.stringify(dataArray)}
-      loading={loading}
+      fetching={fetching}
       error={error}
-      onClickVerwerfen={onClickVerwerfen}
-      onClickUebernehmen={onClickUebernehmen}
+      onClickAktuellUebernehmen={onClickAktuellUebernehmen}
+      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
       onClickSchliessen={onClickSchliessen}
     />
   )

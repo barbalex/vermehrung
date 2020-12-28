@@ -19,9 +19,7 @@ CREATE SERVER ae_server
 -- so: insert into own table
 create foreign table ae_art_live (
   id uuid,
-  name text,
-  name_deutsch text,
-  name_latein text
+  name text
 )
 server ae_server options (schema_name 'ae', table_name 'v_vermehrung_arten');
 
@@ -33,8 +31,6 @@ OPTIONS (user 'fdw_user', password 'secret');
 create table ae_art (
   id uuid primary key,
   name text,
-  name_deutsch text,
-  name_latein text,
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
@@ -42,6 +38,6 @@ create index on ae_art using btree (id);
 create index on ae_art using btree (name);
 create index on ae_art using btree (_rev_at);
 
-insert into ae_art (id,name,name_deutsch,name_latein)
-select id, name, name_deutsch, name_latein
+insert into ae_art (id,name)
+select id, name
 from ae_art_live;

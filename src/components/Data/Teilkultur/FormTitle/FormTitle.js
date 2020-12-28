@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Settings from './Settings'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
@@ -38,19 +38,20 @@ const TitleSymbols = styled.div`
 
 const TeilkulturFormTitle = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+
   if (width < 520) {
     return (
       <TitleContainer>
@@ -63,14 +64,19 @@ const TeilkulturFormTitle = ({
           <DeleteButton row={row} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
+              table="teilkultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
             />
             <Settings kulturId={row.kultur_id} asMenu />
             <Anleitung asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -87,13 +93,14 @@ const TeilkulturFormTitle = ({
         <AddButton />
         <DeleteButton row={row} />
         <HistoryButton
-          row={row}
+          table="teilkultur"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
         <Settings kulturId={row.kultur_id} />
         <Anleitung />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

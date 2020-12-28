@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useMemo, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import {
   ComposedChart,
   Bar,
@@ -22,7 +22,7 @@ import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
-import { StoreContext } from '../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../storeContext'
 import buildData from './buildData'
 
 const NoData = styled.div`
@@ -31,9 +31,13 @@ const NoData = styled.div`
 
 const ArtTimeline = ({ artId, width }) => {
   const store = useContext(StoreContext)
+  const { db } = store
   const [narrow, setNarrow] = useState(false)
 
-  const data = useMemo(() => buildData({ store, artId }), [])
+  const [data, setData] = useState(null)
+  useEffect(() => {
+    buildData({ db, artId }).then((data) => setData(data))
+  }, [artId, db])
 
   useEffect(() => {
     if (width < 1100 && !narrow) {
@@ -44,7 +48,7 @@ const ArtTimeline = ({ artId, width }) => {
     }
   }, [narrow, width])
 
-  if (!data.length) {
+  if (data && !data.length) {
     return <NoData>Keine Daten verfügbar für Anzahl Pflanzen</NoData>
   }
 
@@ -67,7 +71,7 @@ const ArtTimeline = ({ artId, width }) => {
               position: 'insideLeft',
               offset: 15,
               fontSize: 14,
-              fontWeight: 800,
+              fontWeight: 700,
             }}
             fontSize={12}
           />

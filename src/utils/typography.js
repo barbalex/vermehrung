@@ -9,7 +9,7 @@ const typography = new Typography({
   googleFonts: [
     {
       name: 'Roboto',
-      styles: ['300', '400', '500', '600', '700'],
+      styles: ['400', '500', '700'],
     },
   ],
 })

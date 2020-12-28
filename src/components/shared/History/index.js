@@ -8,7 +8,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 
 import Data from '../Conflict/Data'
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import getConstants from '../../../utils/constants'
 
 const constants = getConstants()
@@ -46,7 +46,7 @@ const StyledButton = styled(Button)`
   }
 `
 
-const History = ({ rev, dataArray, onClickUebernehmen }) => {
+const History = ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
   const store = useContext(StoreContext)
   const { diffConflict, setDiffConflict } = store
 
@@ -82,12 +82,12 @@ const History = ({ rev, dataArray, onClickUebernehmen }) => {
       <Data dataArray={dataArray} />
       <ButtonRow>
         <StyledButton
-          onClick={onClickUebernehmen}
+          onClick={onClickWiderspruchUebernehmen}
           variant="outlined"
           title="Diese Version wiederherstellen"
           startIcon={<FaUndoAlt />}
         >
-          wiederherstellen
+          {diffConflict ? 'grüne Werte wiederherstellen' : 'wiederherstellen'}
         </StyledButton>
         <StyledButton
           onClick={onClickToggleDiff}

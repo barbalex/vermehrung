@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 
 const TitleRow = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ const TitleRow = styled.div`
 const Title = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 800;
+  font-weight: 700;
   user-select: none;
 `
 
@@ -32,8 +32,8 @@ const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
     setAnchorEl(null)
   }, [setAnchorEl])
 
-  const remove = useCallback(() => {
-    row.delete()
+  const remove = useCallback(async () => {
+    await row.delete({ store })
     setAnchorEl(null)
     if (filter.kultur.delete === false) {
       // need to remove openNode from openNodes
@@ -47,6 +47,7 @@ const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
     row,
     setActiveNodeArray,
     setAnchorEl,
+    store,
   ])
 
   return (

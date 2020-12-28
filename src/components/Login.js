@@ -15,7 +15,7 @@ import styled from 'styled-components'
 import localForage from 'localforage'
 
 import ErrorBoundary from './shared/ErrorBoundary'
-import { StoreContext } from '../models/reactUtils'
+import StoreContext from '../storeContext'
 import getConstants from '../utils/constants'
 
 const constants = getConstants()
@@ -39,7 +39,7 @@ const ResetButton = styled(Button)`
 `
 
 const Login = () => {
-  const { firebase, flushData } = useContext(StoreContext)
+  const { firebase, db } = useContext(StoreContext)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -63,9 +63,9 @@ const Login = () => {
         passwordPassed || password || passwordInput.current.value
       // do everything to clean up so no data is left
       await firebase.auth().signOut()
-      localForage.clear()
+      await localForage.clear()
       window.localStorage.removeItem('token')
-      flushData()
+      await db.action(async () => db.unsafeResetDatabase())
       setTimeout(async () => {
         try {
           await firebase
@@ -75,10 +75,11 @@ const Login = () => {
           setEmailErrorText(error.message)
           return setPasswordErrorText(error.message)
         }
-        setTimeout(() => window.location.reload(true))
+        // 2020.12.19 trying to go without reloading
+        //setTimeout(() => window.location.reload(true))
       })
     },
-    [email, firebase, flushData, password],
+    [db, email, firebase, password],
   )
   const onBlurEmail = useCallback(
     (e) => {

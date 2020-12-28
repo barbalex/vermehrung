@@ -1,15 +1,10 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { of as $of } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import Lieferschein from './Lieferschein'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'
@@ -55,25 +50,30 @@ const StyledSplitPane = styled(SplitPane)`
 const SammelLieferung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
-  lieferungId,
+  lieferung,
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, isPrint, online, sammel_lieferungs } = store
+  const { filter, isPrint, online, db } = store
 
-  const row = useMemo(
-    () =>
-      showFilter ? filter.sammel_lieferung : sammel_lieferungs.get(id) || null,
-    // need sammel_lieferungs.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      filter.sammel_lieferung,
-      id,
-      showFilter,
-      sammel_lieferungs,
-      sammel_lieferungs.size,
-    ],
-  )
+  const [dataState, setDataState] = useState({
+    row: undefined,
+    // need raw row because observable does not provoke rerendering of components
+    rawRow: undefined,
+  })
+  useEffect(() => {
+    const observable = showFilter
+      ? $of(filter.sammel_lieferung)
+      : db.get('sammel_lieferung').findAndObserve(id)
+    const subscription = observable.subscribe((newRow) => {
+      setDataState({
+        row: newRow,
+        rawRow: JSON.stringify(newRow?._raw ?? newRow),
+      })
+    })
+    return () => subscription.unsubscribe()
+  }, [db, filter.sammel_lieferung, id, showFilter])
+  const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -112,14 +112,15 @@ const SammelLieferung = ({
         <FormTitle
           showFilter={showFilter}
           row={row}
-          lieferungId={lieferungId}
+          rawRow={rawRow}
+          lieferung={lieferung}
           printPreview={printPreview}
           setPrintPreview={setPrintPreview}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
         {printPreview ? (
-          <Lieferschein row={row} />
+          <Lieferschein row={row} rawRow={rawRow} />
         ) : (
           <Container>
             <StyledSplitPane
@@ -132,6 +133,7 @@ const SammelLieferung = ({
                 showFilter={showFilter}
                 id={id}
                 row={row}
+                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -142,6 +144,7 @@ const SammelLieferung = ({
                     rev={activeConflict}
                     id={id}
                     row={row}
+                    rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
@@ -149,6 +152,7 @@ const SammelLieferung = ({
                 ) : showHistory ? (
                   <History
                     row={row}
+                    rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
                 ) : null}

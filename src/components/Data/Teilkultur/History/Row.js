@@ -2,22 +2,24 @@ import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import isEqual from 'lodash/isEqual'
 
 import History from '../../../shared/History'
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../utils/toPgArray'
+import mutations from '../../../../utils/mutations'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification, upsertTeilkulturModel } = store
+  const { user, addNotification, db, gqlClient } = store
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
     [revRow, row, store],
   )
-  const onClickUebernehmen = useCallback(async () => {
+  const onClickWiderspruchUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -40,19 +42,19 @@ const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    //console.log('Teilkultur History', { row, revRow, newObject })
-    try {
-      await store.mutateInsert_teilkultur_rev_one({
+    const response = await gqlClient
+      .query(mutations.mutateInsert_teilkultur_rev_one, {
         object: newObject,
         on_conflict: {
           constraint: 'teilkultur_rev_pkey',
           update_columns: ['id'],
         },
       })
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
     historyTakeoverCallback()
@@ -67,33 +69,38 @@ const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObjectForStore.id = row.id
     delete newObjectForStore.teilkultur_id
     // optimistically update store
-    upsertTeilkulturModel(newObjectForStore)
+    await db.action(async () => {
+      await row.update((row) => {
+        Object.entries(newObjectForStore).forEach(([key, value]) => {
+          if (!isEqual(value, row[key])) {
+            row[key] = value
+          }
+        })
+      })
+    })
   }, [
-    addNotification,
-    historyTakeoverCallback,
-    revRow._deleted,
-    revRow.bemerkungen,
+    row,
+    revRow.teilkultur_id,
     revRow.kultur_id,
     revRow.name,
     revRow.ort1,
     revRow.ort2,
     revRow.ort3,
-    revRow.teilkultur_id,
-    row._conflicts,
-    row._depth,
-    row._rev,
-    row._revisions,
-    row.id,
-    store,
-    upsertTeilkulturModel,
+    revRow.bemerkungen,
+    revRow._deleted,
     user.email,
+    gqlClient,
+    historyTakeoverCallback,
+    db,
+    store,
+    addNotification,
   ])
 
   return (
     <History
       rev={revRow._rev}
       dataArray={dataArray}
-      onClickUebernehmen={onClickUebernehmen}
+      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
     />
   )
 }

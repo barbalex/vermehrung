@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
@@ -7,8 +7,9 @@ import { MdAccountCircle as AccountIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 //import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
+import { of as $of } from 'rxjs'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import isNodeOpen from './isNodeOpen'
 import someChildrenAreOpen from './someChildrenAreOpen'
@@ -178,7 +179,7 @@ const SymbolSpan = styled.span`
     props['data-mobile'] ? '13px !important' : '11px !important'};
   padding-left: 9px;
   font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   margin-top: ${(props) =>
     props['data-mobile'] ? '-2px !important' : '-1px !important'};
   font-size: ${(props) =>
@@ -191,7 +192,7 @@ const TextSpan = styled.span`
   font-family: ${(props) => (props['data-mono'] ? 'Roboto Mono' : 'Roboto')};
   font-size: ${(props) => `${props['data-font-size']}px !important`};
   font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   white-space: nowrap;
   cursor: pointer;
   &:hover {
@@ -202,10 +203,10 @@ const MenuSubtitle = styled.div`
   padding-top: 7px;
 `
 
-const Row = ({ style, node, nodes }) => {
+const Row = ({ style, node, nodes, userRole }) => {
   const store = useContext(StoreContext)
 
-  const { showTreeInSingleColumnView, singleColumnView, tree, userRole } = store
+  const { showTreeInSingleColumnView, singleColumnView, tree, db } = store
   const { activeNodeArray, singleRowHeight } = tree
 
   const isMobile = showTreeInSingleColumnView && singleColumnView
@@ -238,19 +239,30 @@ const Row = ({ style, node, nodes }) => {
     useSymbolIcon = false
   }
 
-  const person =
-    node?.nodeType === 'table' && node.table === 'person'
-      ? store.persons.get(last(node?.url))
-      : null
+  const [person, setPerson] = useState()
+  useEffect(() => {
+    const personObservable =
+      node?.nodeType === 'table' && node.table === 'person' && node.url
+        ? db.get('person').findAndObserve(last(node.url))
+        : $of({})
+
+    const subscription = personObservable.subscribe((person) =>
+      setPerson(person),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, node?.nodeType, node.table, node.url])
+
   const accountId = person?.account_id ?? null
 
   const onClickNode = useCallback(
     () =>
       toggleNode({
+        nodes,
         node,
         store,
       }),
-    [node, store],
+    [node, nodes, store],
   )
   const onClickNodeSymbol = useCallback(
     () => toggleNodeSymbol({ node, store }),
@@ -361,7 +373,7 @@ const Row = ({ style, node, nodes }) => {
             )}
           {node?.nodeType === 'table' &&
             node?.menuTitle === 'Person' &&
-            userRole === 'manager' &&
+            userRole?.name === 'manager' &&
             !accountId && (
               <>
                 <MenuSubtitle className="react-contextmenu-title">
@@ -372,7 +384,7 @@ const Row = ({ style, node, nodes }) => {
             )}
           {node?.nodeType === 'table' &&
             node?.menuTitle === 'Person' &&
-            userRole === 'manager' &&
+            userRole?.name === 'manager' &&
             accountId && (
               <>
                 <MenuSubtitle className="react-contextmenu-title">

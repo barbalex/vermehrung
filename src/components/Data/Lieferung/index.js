@@ -1,13 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import isUuid from 'is-uuid'
 import last from 'lodash/last'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;
@@ -39,7 +41,7 @@ const StyledSplitPane = styled(SplitPane)`
 
 const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
+  const { filter, db, user } = store
   const { activeNodeArray } = store.tree
   let id = idPassed
   if (!idPassed) {
@@ -47,37 +49,72 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       ? '99999999-9999-9999-9999-999999999999'
       : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   }
-  const lieferung = store.lieferungs.get(id) || {}
-  const sammelLieferungId =
-    lieferung?.sammel_lieferung_id ?? '99999999-9999-9999-9999-999999999999'
-  const sammelLieferung = store.sammel_lieferungs.get(sammelLieferungId) || {}
 
-  const { li_show_sl } = userPersonOption
+  const [dataState, setDataState] = useState({
+    row: undefined,
+    // need raw row because observable does not provoke rerendering of components
+    rawRow: undefined,
+    userPersonOption: undefined,
+    sammelLieferung: undefined,
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['li_show_sl'])
+      : $of({})
+    const lieferungObservable = showFilter
+      ? $of(filter.lieferung)
+      : db.get('lieferung').findAndObserve(id)
+    const sammelLieferungObservable =
+      showFilter || !row?.sammel_lieferung ? $of({}) : row.sammel_lieferung
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      lieferungObservable,
+      sammelLieferungObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([userPersonOptions, lieferung, sammelLieferung]) =>
+        setDataState({
+          row: lieferung,
+          rawRow: JSON.stringify(lieferung?._raw ?? lieferung),
+          userPersonOption: userPersonOptions?.[0],
+          sammelLieferung,
+        }),
+    )
 
-  if (
-    sammelLieferungId !== '99999999-9999-9999-9999-999999999999' &&
-    li_show_sl
-  ) {
+    return () => subscription.unsubscribe()
+  }, [db, filter.lieferung, id, row?.sammel_lieferung, showFilter, user])
+  const { row, rawRow, userPersonOption, sammelLieferung } = dataState
+  const { li_show_sl } = userPersonOption ?? {}
+
+  if (row?.sammel_lieferung_id && li_show_sl) {
     // this lieferung is part of a sammel_lieferung
     // show that too
     return (
       <StyledSplitPane split="vertical" size="50%" minSize={200}>
         <Lieferung
           showFilter={showFilter}
+          row={row}
+          rawRow={rawRow}
           sammelLieferung={sammelLieferung}
           id={id}
         />
         <SammelLieferung
           showFilter={showFilter}
-          id={sammelLieferungId}
-          lieferungId={id}
+          id={row?.sammel_lieferung_id}
+          lieferung={row}
         />
       </StyledSplitPane>
     )
   }
+
   return (
     <Lieferung
       id={id}
+      row={row}
+      rawRow={rawRow}
       showFilter={showFilter}
       sammelLieferung={sammelLieferung}
     />

@@ -1,40 +1,82 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
+import tableFilter from '../../../../utils/tableFilter'
 
 const ZaehlungFormTitleChooser = ({
   row,
+  rawRow,
   showFilter,
   showHistory,
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
+  const { kulturIdInActiveNodeArray, db, filter } = store
+
+  const [countState, setCountState] = useState({
+    totalCount: 0,
+    filteredCount: 0,
+  })
+  useEffect(() => {
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['kultur']),
+          Q.on('kultur', 'id', kulturIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.get('zaehlung')
+    const totalCountObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.zaehlung._deleted === false
+              ? [false]
+              : filter.zaehlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
+      .observeCount()
+    const filteredCountObservable = collection
+      .query(...tableFilter({ store, table: 'zaehlung' }), ...hierarchyQuery)
+      .observeCount()
+    const combinedObservables = combineLatest([
+      totalCountObservable,
+      filteredCountObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, filteredCount]) =>
+        setCountState({ totalCount, filteredCount }),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [
+    db,
     kulturIdInActiveNodeArray,
-    zaehlungsSorted,
-    zaehlungsFiltered,
-  } = store
+    // need to rerender if any of the values of zaehlungFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(store.filter.zaehlung),
+    store,
+    filter.zaehlung._deleted,
+  ])
 
-  const hierarchyFilter = (r) => {
-    if (kulturIdInActiveNodeArray) {
-      return r.kultur_id === kulturIdInActiveNodeArray
-    }
-    return true
-  }
-
-  const totalNr = zaehlungsSorted.filter(hierarchyFilter).length
-  const filteredNr = zaehlungsFiltered.filter(hierarchyFilter).length
+  const { totalCount, filteredCount } = countState
 
   if (showFilter) {
     return (
       <FilterTitle
         title="Zählung"
         table="zaehlung"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -42,8 +84,9 @@ const ZaehlungFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      rawRow={rawRow}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
     />

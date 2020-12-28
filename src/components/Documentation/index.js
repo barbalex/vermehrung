@@ -8,7 +8,7 @@ import Layout from '../Layout'
 import ArticleList from './ArticleList'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import getConstants from '../../utils/constants'
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import Doku from './Doku'
 
 const constants = getConstants()

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import Select from 'react-select'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
@@ -76,7 +76,7 @@ const emptyValue = {
 }
 
 const SharedSelect = ({
-  value,
+  value: valuePassed,
   field = '',
   label,
   name,
@@ -89,12 +89,19 @@ const SharedSelect = ({
   noCaret = false,
   saveToDb,
 }) => {
+  const [stateValue, setStateValue] = useState(valuePassed)
+  useEffect(() => {
+    setStateValue(valuePassed)
+  }, [valuePassed])
+
   const onChange = useCallback(
     (option) => {
+      const newValue = option ? option.value : null
+      setStateValue(newValue)
       const fakeEvent = {
         target: {
           name,
-          value: option ? option.value : null,
+          value: newValue,
         },
       }
       saveToDb(fakeEvent)
@@ -103,9 +110,10 @@ const SharedSelect = ({
   )
 
   // show ... whyle options are loading
-  const loadingOptions = [{ value, label: '...' }]
-  const optionsToUse = loading && value ? loadingOptions : options
-  const selectValue = optionsToUse.find((o) => o.value === value) || emptyValue
+  const loadingOptions = [{ value: stateValue, label: '...' }]
+  const optionsToUse = loading && valuePassed ? loadingOptions : options
+  const selectValue =
+    optionsToUse.find((o) => o.value === valuePassed) || emptyValue
 
   return (
     <Container>

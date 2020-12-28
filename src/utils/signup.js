@@ -45,7 +45,7 @@ const signup = async ({ person, store }) => {
       message: `Keine Person mit id ${person.id} gefunden`,
     })
   }
-  person.edit({ field: 'account_id', value: res.data })
+  person.edit({ field: 'account_id', value: res.data, store })
 }
 
 export default signup

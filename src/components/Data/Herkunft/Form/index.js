@@ -1,17 +1,19 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
+import exists from '../../../../utils/exists'
 import Files from '../../Files'
 import Coordinates from '../../../shared/Coordinates'
 import ConflictList from '../../../shared/ConflictList'
-import exists from '../../../../utils/exists'
 
 const Container = styled.div`
   padding: 10px;
@@ -31,20 +33,13 @@ const Herkunft = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    userPersonOption,
-    herkunftsSorted,
-    errors,
-    setError,
-    unsetError,
-  } = store
+  const { filter, online, errors, setError, unsetError, db, user } = store
 
   // ensure that activeConflict is reset
   // when changing dataset
@@ -52,7 +47,64 @@ const Herkunft = ({
     setActiveConflict(null)
   }, [id, setActiveConflict])
 
-  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = userPersonOption
+  const [dataState, setDataState] = useState({
+    userPersonOption: undefined,
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'hk_kanton',
+            'hk_land',
+            'hk_bemerkungen',
+            'hk_geom_point',
+          ])
+      : $of({})
+    const herkunftsNrCountObservable =
+      showFilter || !exists(row?.nr)
+        ? $of(0)
+        : db
+            .get('herkunft')
+            .query(
+              Q.where(
+                '_deleted',
+                Q.oneOf(
+                  filter.herkunft._deleted === false
+                    ? [false]
+                    : filter.herkunft._deleted === true
+                    ? [true]
+                    : [true, false, null],
+                ),
+              ),
+              Q.where('nr', row.nr),
+            )
+            .observeCount()
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      herkunftsNrCountObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([userPersonOptions, nrCount]) => {
+        if (!showFilter && nrCount > 1) {
+          setError({
+            path: 'herkunft.nr',
+            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
+          })
+        }
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, filter.herkunft, row.nr, setError, showFilter, user])
+  const { userPersonOption } = dataState
+
+  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
+    userPersonOption ?? {}
 
   useEffect(() => {
     unsetError('herkunft')
@@ -69,29 +121,16 @@ const Herkunft = ({
         return filter.setValue({ table: 'herkunft', key: field, value })
       }
 
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row._raw[field])
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      await row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
 
-  const rowNr = row?.nr
-  const nrCount = useMemo(() => {
-    if (!exists(rowNr)) return 0
-    return herkunftsSorted.filter((h) => h.nr === rowNr).length
-  }, [herkunftsSorted, rowNr])
-  useEffect(() => {
-    if (nrCount > 1) {
-      setError({
-        path: 'herkunft.nr',
-        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
-      })
-    }
-  }, [nrCount, setError])
-
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.herkunft._deleted !== false || row?._deleted
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
@@ -169,7 +208,7 @@ const Herkunft = ({
           />
         )}
         {!showFilter && hk_geom_point && (
-          <Coordinates row={row} saveToDb={saveToDb} />
+          <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
         )}
         {hk_bemerkungen && (
           <TextField
@@ -189,7 +228,7 @@ const Herkunft = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {!showFilter && row.id && <Files parentId={row.id} parent="herkunft" />}
+        {!showFilter && row.id && <Files parentTable="herkunft" parent={row} />}
       </Container>
     </SimpleBar>
   )

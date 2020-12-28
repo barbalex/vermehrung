@@ -1,15 +1,10 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { of as $of } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'
 import Conflict from './Conflict'
@@ -56,14 +51,21 @@ const Art = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, arts } = store
+  const { filter, online, db } = store
 
-  const row = useMemo(
-    () => (showFilter ? filter.art : arts.get(id) || null),
-    // need arts.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.art, id, showFilter, arts, arts.size],
-  )
+  const [row, setRow] = useState(null)
+  // need raw row because observable does not provoke rerendering of components
+  const [rawRow, setRawRow] = useState(null)
+  useEffect(() => {
+    const observable = showFilter
+      ? $of(filter.art)
+      : db.get('art').findAndObserve(id)
+    const subscription = observable.subscribe((newRow) => {
+      setRow(newRow)
+      setRawRow(JSON.stringify(newRow?._raw ?? newRow))
+    })
+    return () => subscription.unsubscribe()
+  }, [db, filter.art, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -92,11 +94,14 @@ const Art = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
+  //console.log('Art, row:', row)
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
         <FormTitle
           row={row}
+          rawRow={rawRow}
           showFilter={showFilter}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
@@ -112,6 +117,7 @@ const Art = ({
               showFilter={showFilter}
               id={id}
               row={row}
+              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
@@ -124,6 +130,7 @@ const Art = ({
                       rev={activeConflict}
                       id={id}
                       row={row}
+                      rawRow={rawRow}
                       conflictDisposalCallback={conflictDisposalCallback}
                       conflictSelectionCallback={conflictSelectionCallback}
                       setActiveConflict={setActiveConflict}
@@ -131,6 +138,7 @@ const Art = ({
                   ) : showHistory ? (
                     <History
                       row={row}
+                      rawRow={rawRow}
                       historyTakeoverCallback={historyTakeoverCallback}
                     />
                   ) : null}

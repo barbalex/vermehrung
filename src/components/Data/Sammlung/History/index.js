@@ -1,13 +1,14 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
 import SimpleBar from 'simplebar-react'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
+import StoreContext from '../../../../storeContext'
 import Row from './Row'
 
 const sammlungRevQuery = gql`
@@ -17,29 +18,8 @@ const sammlungRevQuery = gql`
       __typename
       sammlung_id
       art_id
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
       person_id
-      person {
-        id
-        __typename
-        name
-      }
       herkunft_id
-      herkunft {
-        id
-        __typename
-        gemeinde
-        lokalname
-        nr
-      }
       nr
       datum
       von_anzahl_individuen
@@ -53,6 +33,7 @@ const sammlungRevQuery = gql`
       changed_by
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -82,32 +63,28 @@ const ErrorContainer = styled.div`
 `
 
 const sliderSettings = {
-  dots: true,
+  dots: false,
   infinite: false,
 }
 
-const SammlungHistory = ({ row, historyTakeoverCallback }) => {
+const SammlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
 
-  // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(sammlungRevQuery, {
+  const priorRevisions = row?._revisions?.slice(1) ?? []
+  const [{ error, data, fetching }] = useQuery({
+    query: sammlungRevQuery,
     variables: {
-      rev: row._revisions,
+      rev: priorRevisions,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
-  // need to grab store object to ensure this remains up to date
-  const revRows = useMemo(
-    () =>
-      [...store.sammlung_revs.values()]
-        .filter((v) => row?._revisions?.includes(v._rev) ?? true)
-        .filter((r) => r._rev !== row._rev)
-        .sort((a, b) => b._depth - a._depth) || {},
-    [row._rev, row._revisions, store.sammlung_revs],
-  )
+  const revRowsUnsorted = useMemo(() => data?.sammlung_rev ?? [], [
+    data?.sammlung_rev,
+  ])
+  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
-  if (loading) {
+  if (fetching) {
     return <Spinner message="lade Versionen" />
   }
 
@@ -124,6 +101,7 @@ const SammlungHistory = ({ row, historyTakeoverCallback }) => {
               key={row._rev}
               revRow={r}
               row={row}
+              rawRow={rawRow}
               historyTakeoverCallback={historyTakeoverCallback}
             />
           ))}

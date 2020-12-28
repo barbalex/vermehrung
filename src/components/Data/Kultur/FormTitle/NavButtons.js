@@ -1,8 +1,8 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import ZaDownSvg from '../../../../svg/to_za_down.inline.svg'
 import AnLiDownSvg from '../../../../svg/to_anli_down.inline.svg'
 import AusLiDownSvg from '../../../../svg/to_ausli_down.inline.svg'
@@ -12,12 +12,12 @@ import UpSvg from '../../../../svg/to_up.inline.svg'
 
 const KulturNavButtons = ({ row }) => {
   const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const onClickToKulturen = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickToKulturen = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   const onClickToZaehlungen = useCallback(
     () => setActiveNodeArray([...activeNodeArray, 'Zaehlungen']),
     [activeNodeArray, setActiveNodeArray],
@@ -38,7 +38,17 @@ const KulturNavButtons = ({ row }) => {
     () => setActiveNodeArray([...activeNodeArray, 'Teilkulturen']),
     [activeNodeArray, setActiveNodeArray],
   )
-  const kulturOption = store.kultur_options.get(row.id)
+
+  const [dataState, setDataState] = useState({ kulturOption })
+  useEffect(() => {
+    const kOObservable = row.kultur_option.observe()
+    const subscription = kOObservable.subscribe((kulturOption) =>
+      setDataState({ kulturOption }),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [row.kultur_option])
+  const { kulturOption } = dataState
 
   return (
     <>

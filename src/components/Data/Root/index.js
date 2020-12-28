@@ -1,12 +1,24 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import camelCase from 'lodash/camelCase'
 import SimpleBar from 'simplebar-react'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import Row from './Row'
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import getShowArt from '../../../utils/showArt'
+import getShowEvent from '../../../utils/showEvent'
+import getShowGarten from '../../../utils/showGarten'
+import getShowHerkunft from '../../../utils/showHerkunft'
+import getShowKultur from '../../../utils/showKultur'
+import getShowLieferung from '../../../utils/showLieferung'
+import getShowPerson from '../../../utils/showPerson'
+import getShowSammelLieferung from '../../../utils/showSammelLieferung'
+import getShowSammlung from '../../../utils/showSammlung'
+import getShowTeilkultur from '../../../utils/showTeilkultur'
+import getShowZaehlung from '../../../utils/showZaehlung'
 
 const Container = styled.div`
   height: 100%;
@@ -21,7 +33,88 @@ const FieldsContainer = styled.div`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { initialDataQueried } = store
+  const { user, db } = store
+
+  const [dataState, setDataState] = useState({
+    showArt: false,
+    showEvent: false,
+    showGarten: false,
+    showHerkunft: false,
+    showKultur: false,
+    showLieferung: false,
+    showPerson: false,
+    showSammelLieferung: false,
+    showSammlung: false,
+    showTeilkultur: false,
+    showZaehlung: false,
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'tree_kultur',
+            'tree_teilkultur',
+            'tree_zaehlung',
+            'tree_lieferung',
+            'tree_event',
+          ])
+      : $of({})
+    const userRoleObservable = db
+      .get('user_role')
+      .query(Q.on('person', Q.where('account_id', user.uid)))
+      .observeWithColumns(['name'])
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      userRoleObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([[userPersonOption], [userRole]]) => {
+        const sArt = getShowArt({ userRole })
+        const sEvent = getShowEvent({ userPersonOption })
+        const sGarten = getShowGarten()
+        const sHerkunft = getShowHerkunft({ userRole })
+        const sKultur = getShowKultur({ userPersonOption })
+        const sLieferung = getShowLieferung({ userPersonOption })
+        const sPerson = getShowPerson()
+        const sSammelLieferung = getShowSammelLieferung({ userPersonOption })
+        const sSammlung = getShowSammlung({ userRole })
+        const sTeilkultur = getShowTeilkultur({ userPersonOption })
+        const sZaehlung = getShowZaehlung({ userPersonOption })
+
+        setDataState({
+          showArt: sArt,
+          showEvent: sEvent,
+          showGarten: sGarten,
+          showHerkunft: sHerkunft,
+          showKultur: sKultur,
+          showLieferung: sLieferung,
+          showPerson: sPerson,
+          showSammelLieferung: sSammelLieferung,
+          showSammlung: sSammlung,
+          showTeilkultur: sTeilkultur,
+          showZaehlung: sZaehlung,
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    showArt,
+    showEvent,
+    showGarten,
+    showHerkunft,
+    showKultur,
+    showLieferung,
+    showPerson,
+    showSammelLieferung,
+    showSammlung,
+    showTeilkultur,
+    showZaehlung,
+    user,
+  ])
   const {
     showArt,
     showEvent,
@@ -34,7 +127,7 @@ const Root = ({ filter: showFilter }) => {
     showSammlung,
     showTeilkultur,
     showZaehlung,
-  } = store.tree
+  } = dataState
 
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value
@@ -108,15 +201,7 @@ const Root = ({ filter: showFilter }) => {
         <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
           <FieldsContainer>
             {rows.map((row) => (
-              <Row
-                key={row.name}
-                row={row}
-                length={
-                  !initialDataQueried
-                    ? '...'
-                    : store[`${camelCase(row.table)}sFiltered`].length
-                }
-              />
+              <Row key={row.name} row={row} />
             ))}
           </FieldsContainer>
         </SimpleBar>

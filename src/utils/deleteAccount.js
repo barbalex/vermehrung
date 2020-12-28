@@ -5,7 +5,13 @@ import getConstants from './constants'
 const constants = getConstants()
 
 const deleteAccount = async ({ store, person }) => {
-  const { addNotification, online, setOnline } = store
+  const {
+    addNotification,
+    online,
+    setOnline,
+    shortTermOnline,
+    setShortTermOnline,
+  } = store
   // delete firebase user
   if (person?.account_id) {
     try {
@@ -15,12 +21,18 @@ const deleteAccount = async ({ store, person }) => {
       if (online) {
         setOnline(false)
       }
+      if (shortTermOnline) {
+        setShortTermOnline(false)
+      }
       return addNotification({
         message: error.response.data,
       })
     }
     if (!online) {
       setOnline(true)
+    }
+    if (!shortTermOnline) {
+      setShortTermOnline(true)
     }
   }
   if (!person) {
@@ -31,7 +43,7 @@ const deleteAccount = async ({ store, person }) => {
   // remove users account_id
   // but only if it exists
   if (person?.account_id) {
-    person.edit({ field: 'account_id', value: null })
+    person.edit({ field: 'account_id', value: null, store })
     return addNotification({
       message: `Das Benutzerkonto wurde entfernt`,
       type: 'info',

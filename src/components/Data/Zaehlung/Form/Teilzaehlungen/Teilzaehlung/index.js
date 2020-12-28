@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 
-import { StoreContext } from '../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../storeContext'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import Form from './Form'
@@ -54,16 +54,29 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const Teilzaehlung = ({
-  id,
-  zaehlungId,
-  kulturId,
-  teilzaehlung: row,
-  teilkulturenWerte,
-  index,
-}) => {
+const Teilzaehlung = ({ id, kulturId, index }) => {
   const store = useContext(StoreContext)
-  const { online } = store
+  const { online, db } = store
+
+  // TODO: should I subscribe to this row to rerender on updates of history?
+
+  const [dataState, setDataState] = useState({
+    row: undefined,
+    // need raw row because observable does not provoke rerendering of components
+    rawRow: undefined,
+  })
+  useEffect(() => {
+    const tzObservable = db.get('teilzaehlung').findAndObserve(id)
+    const subscription = tzObservable.subscribe((newRow) => {
+      setDataState({
+        row: newRow,
+        rawRow: JSON.stringify(newRow?._raw ?? newRow),
+      })
+    })
+
+    return () => subscription.unsubscribe()
+  }, [db, id])
+  const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -103,10 +116,7 @@ const Teilzaehlung = ({
             >
               <Form
                 id={id}
-                zaehlungId={zaehlungId}
                 kulturId={kulturId}
-                row={row}
-                teilkulturenWerte={teilkulturenWerte}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -120,6 +130,7 @@ const Teilzaehlung = ({
                         rev={activeConflict}
                         id={id}
                         row={row}
+                        rawRow={rawRow}
                         conflictDisposalCallback={conflictDisposalCallback}
                         conflictSelectionCallback={conflictSelectionCallback}
                         setActiveConflict={setActiveConflict}
@@ -127,6 +138,7 @@ const Teilzaehlung = ({
                     ) : showHistory ? (
                       <History
                         row={row}
+                        rawRow={rawRow}
                         historyTakeoverCallback={historyTakeoverCallback}
                       />
                     ) : null}
@@ -147,10 +159,7 @@ const Teilzaehlung = ({
         <InnerContainer>
           <Form
             id={id}
-            zaehlungId={zaehlungId}
             kulturId={kulturId}
-            row={row}
-            teilkulturenWerte={teilkulturenWerte}
             activeConflict={activeConflict}
             setActiveConflict={setActiveConflict}
             showHistory={showHistory}

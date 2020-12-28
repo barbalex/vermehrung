@@ -1,15 +1,10 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { of as $of } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FormTitle from './FormTitle'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'
@@ -56,14 +51,21 @@ const Event = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, events } = store
+  const { filter, online, db } = store
 
-  const row = useMemo(
-    () => (showFilter ? filter.event : store.events.get(id) || null),
-    // need events.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.event, id, showFilter, events, events.size],
-  )
+  const [row, setRow] = useState(null)
+  // need raw row because observable does not provoke rerendering of components
+  const [rawRow, setRawRow] = useState(null)
+  useEffect(() => {
+    const observable = showFilter
+      ? $of(filter.event)
+      : db.get('event').findAndObserve(id)
+    const subscription = observable.subscribe((newRow) => {
+      setRow(newRow)
+      setRawRow(JSON.stringify(newRow?._raw ?? newRow))
+    })
+    return () => subscription.unsubscribe()
+  }, [db, filter.event, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -97,6 +99,7 @@ const Event = ({
       <Container showfilter={showFilter}>
         <FormTitle
           row={row}
+          rawRow={rawRow}
           showFilter={showFilter}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
@@ -124,6 +127,7 @@ const Event = ({
                       rev={activeConflict}
                       id={id}
                       row={row}
+                      rawRow={rawRow}
                       conflictDisposalCallback={conflictDisposalCallback}
                       conflictSelectionCallback={conflictSelectionCallback}
                       setActiveConflict={setActiveConflict}
@@ -131,6 +135,7 @@ const Event = ({
                   ) : showHistory ? (
                     <History
                       row={row}
+                      rawRow={rawRow}
                       historyTakeoverCallback={historyTakeoverCallback}
                     />
                   ) : null}

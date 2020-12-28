@@ -6,10 +6,8 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { FaRegCopy } from 'react-icons/fa'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../../../models/reactUtils'
-import { sammelLieferung as sammelLieferungFragment } from '../../../../../utils/fragments'
+import StoreContext from '../../../../../storeContext'
 import exists from '../../../../../utils/exists'
-import fieldsFromFragment from '../../../../../utils/fieldsFromFragment'
 import updateLieferung from './updateLieferung'
 import updateAllLieferungen from './updateAllLieferungen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
@@ -23,13 +21,36 @@ const TitleRow = styled.div`
 const Title = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 800;
+  font-weight: 700;
   user-select: none;
 `
 
-const sammelLieferungFields = fieldsFromFragment(sammelLieferungFragment)
+const sammelLieferungFields = [
+  'id',
+  'art_id',
+  'person_id',
+  'von_sammlung_id',
+  'von_kultur_id',
+  'datum',
+  'nach_kultur_id',
+  'nach_ausgepflanzt',
+  'von_anzahl_individuen',
+  'anzahl_pflanzen',
+  'anzahl_auspflanzbereit',
+  'gramm_samen',
+  'andere_menge',
+  'geplant',
+  'bemerkungen',
+  '_rev',
+  '_parent_rev',
+  '_revisions',
+  '_depth',
+  '_conflicts',
+  '_deleted',
+]
 
-const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
+const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
+  console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })
   const store = useContext(StoreContext)
   const { addNotification } = store
 
@@ -57,7 +78,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
     setAnchorEl(null)
     try {
       await updateLieferung({
-        lieferungId,
+        lieferung,
         sammelLieferung,
         store,
       })
@@ -68,7 +89,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
       message: 'Lieferung aktualisiert',
       type: 'info',
     })
-  }, [addNotification, lieferungId, sammelLieferung, store])
+  }, [addNotification, lieferung, sammelLieferung, store])
   const onClickAllLieferung = useCallback(async () => {
     setAnchorEl(null)
     updateAllLieferungen({
@@ -98,7 +119,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
         <TitleRow>
           <Title>Die Daten der Sammel-Lieferung kopieren:</Title>
         </TitleRow>
-        {lieferungId && (
+        {lieferung && (
           <MenuItem onClick={onClickActiveLieferung}>
             in die links angezeigte Lieferung
           </MenuItem>

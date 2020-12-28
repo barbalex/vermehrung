@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -8,7 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import getConstants from '../../../../../utils/constants'
 
 const constants = getConstants()
@@ -22,7 +22,7 @@ const TitleRow = styled.div`
 const Title = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 800;
+  font-weight: 700;
   user-select: none;
 `
 const Info = styled.div`
@@ -33,20 +33,30 @@ const Info = styled.div`
 
 const SettingsEventsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const store = useContext(StoreContext)
+  const { db } = store
 
-  const kulturOption = useMemo(() => store.kultur_options.get(kulturId) ?? {}, [
-    kulturId,
-    store.kultur_options,
-  ])
-  const { ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } = kulturOption
+  const [dataState, setDataState] = useState({ kulturOption })
+  useEffect(() => {
+    const kulturOptionObservable = db
+      .get('kultur_option')
+      .findAndObserve(kulturId)
+    const subscription = kulturOptionObservable.subscribe((kulturOption) =>
+      setDataState({ kulturOption }),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, kulturId])
+  const { kulturOption } = dataState
+
+  const { ev_datum, tk, ev_geplant, ev_person_id } = kulturOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      kulturOption.edit({ field, value })
+      kulturOption.edit({ field, value, store })
     },
-    [kulturOption],
+    [kulturOption, store],
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
@@ -82,13 +92,13 @@ const SettingsEventsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
       </TitleRow>
       <MenuItem>
         <FormControlLabel
-          value={ev_teilkultur_id === true ? 'true' : 'false'}
+          value={tk === true ? 'true' : 'false'}
           control={
             <Checkbox
               color="primary"
-              checked={ev_teilkultur_id}
+              checked={tk}
               onClick={saveToDb}
-              name="ev_teilkultur_id"
+              name="tk"
             />
           }
           label="Teilkultur"

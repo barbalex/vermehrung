@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Settings from './Settings'
@@ -39,25 +39,34 @@ const TitleSymbols = styled.div`
 
 const Herkunft = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
   activeConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const {
+    activeNodeArray: anaRaw,
+    setActiveNodeArray,
+    removeOpenNode,
+  } = store.tree
+  const activeNodeArray = anaRaw.toJSON()
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   const onClickToSammlungen = useCallback(
     () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
     [activeNodeArray, setActiveNodeArray],
   )
   const showToSa = activeNodeArray[0] === 'Herkuenfte'
+
+  // herkunft is top node
+  // never enable adding below that
+  const editingAllowed = activeNodeArray.length <= 2
 
   if (width < 520) {
     return (
@@ -72,18 +81,27 @@ const Herkunft = ({
               <SaDownSvg />
             </IconButton>
           )}
-          <AddButton />
-          <DeleteButton row={row} />
+          {editingAllowed && (
+            <>
+              <AddButton />
+              <DeleteButton row={row} />
+            </>
+          )}
           <Menu white={false}>
             <HistoryButton
-              row={row}
+              table="herkunft"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
             />
             <Anleitung asMenu />
             <Settings asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -102,16 +120,21 @@ const Herkunft = ({
             <SaDownSvg />
           </IconButton>
         )}
-        <AddButton />
-        <DeleteButton row={row} />
+        {editingAllowed && (
+          <>
+            <AddButton />
+            <DeleteButton row={row} />
+          </>
+        )}
         <HistoryButton
-          row={row}
+          table="herkunft"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
         <Anleitung />
         <Settings />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

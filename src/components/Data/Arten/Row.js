@@ -1,9 +1,9 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import { first as first$ } from 'rxjs/operators'
 
-import { StoreContext } from '../../../models/reactUtils'
-import artLabelFromArt from '../../../utils/artLabelFromArt'
+import StoreContext from '../../../storeContext'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -28,9 +28,17 @@ const Row = styled.div`
   }
 `
 
-const Arten = ({ row, style, last }) => {
+const ArtenRow = ({ row, style, last }) => {
   const store = useContext(StoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
+
+  const [label, setLabel] = useState('')
+  useEffect(() => {
+    row.label
+      .pipe(first$())
+      .toPromise()
+      .then((label) => setLabel(label))
+  }, [row])
 
   const onClickRow = useCallback(
     () => setActiveNodeArray([...activeNodeArray, row.id]),
@@ -39,9 +47,9 @@ const Arten = ({ row, style, last }) => {
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{artLabelFromArt({ art: row, store })}</div>
+      <div>{label}</div>
     </Row>
   )
 }
 
-export default observer(Arten)
+export default observer(ArtenRow)

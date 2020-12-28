@@ -1,13 +1,8 @@
-import artLabelFromArt from '../../../utils/artLabelFromArt'
-
-const createDataArrayForRevComparison = ({ row, revRow, store }) => [
+const createDataArrayForRevComparison = ({ row, revRow }) => [
   {
-    valueInRow: artLabelFromArt({ art: row, store }),
-    valueInRev: artLabelFromArt({
-      art: revRow,
-      store,
-    }),
-    label: 'Art',
+    valueInRow: row.ae_id,
+    valueInRev: revRow.ae_id,
+    label: 'Art (id)',
   },
   {
     valueInRow: row?.changed,

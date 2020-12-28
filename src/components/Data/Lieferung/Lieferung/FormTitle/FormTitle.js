@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import Settings from './Settings'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
@@ -39,19 +39,19 @@ const TitleSymbols = styled.div`
 
 const LieferungTitleFormTitle = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   const nachKulturId = row?.nach_kultur_id
   const onClickToKultur = useCallback(
     () =>
@@ -62,7 +62,8 @@ const LieferungTitleFormTitle = ({
       ]),
     [activeNodeArray, nachKulturId, setActiveNodeArray],
   )
-  const showToKu = activeNodeArray[0] === 'Sammlungen'
+  // to kulturen is not implemented in nodes, so turned off
+  const showToKu = false && activeNodeArray[0] === 'Sammlungen'
 
   if (width < 520) {
     return (
@@ -81,14 +82,19 @@ const LieferungTitleFormTitle = ({
           <DeleteButton row={row} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
+              table="lieferung"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
             />
             <Settings asMenu />
             <Anleitung asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -110,13 +116,14 @@ const LieferungTitleFormTitle = ({
         <AddButton />
         <DeleteButton row={row} />
         <HistoryButton
-          row={row}
+          table="lieferung"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
         <Settings />
         <Anleitung />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

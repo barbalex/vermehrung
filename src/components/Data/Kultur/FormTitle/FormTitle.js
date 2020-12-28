@@ -37,8 +37,8 @@ const TitleSymbols = styled.div`
 
 const KulturFormTitle = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
@@ -54,14 +54,19 @@ const KulturFormTitle = ({
             <Delete asMenu row={row} />
             <Download row={row} asMenu />
             <HistoryButton
-              row={row}
+              table="kultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
             />
             <Anleitung asMenu />
             <Settings kulturId={row.id} asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -79,14 +84,19 @@ const KulturFormTitle = ({
           <Menu white={false}>
             <Download row={row} asMenu />
             <HistoryButton
-              row={row}
+              table="kultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
             />
             <Anleitung asMenu />
             <Settings kulturId={row.id} asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -105,13 +115,18 @@ const KulturFormTitle = ({
           <Menu white={false}>
             <Download row={row} asMenu />
             <HistoryButton
-              row={row}
+              table="kultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
             />
             <Anleitung asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -127,11 +142,15 @@ const KulturFormTitle = ({
           <Add />
           <Delete row={row} />
           <Settings kulturId={row.id} />
-          <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+          <FilterNumbers
+            filteredCount={filteredCount}
+            totalCount={totalCount}
+          />
           <Menu white={false}>
             <Download row={row} asMenu />
             <HistoryButton
-              row={row}
+              table="kultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -153,10 +172,14 @@ const KulturFormTitle = ({
           <Delete row={row} />
           <Download row={row} />
           <Settings kulturId={row.id} />
-          <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+          <FilterNumbers
+            filteredCount={filteredCount}
+            totalCount={totalCount}
+          />
           <Menu white={false}>
             <HistoryButton
-              row={row}
+              table="kultur"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
@@ -177,13 +200,14 @@ const KulturFormTitle = ({
         <Delete row={row} />
         <Download row={row} />
         <HistoryButton
-          row={row}
+          table="kultur"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
         <Anleitung />
         <Settings kulturId={row.id} />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

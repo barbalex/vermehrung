@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useCallback } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
@@ -34,16 +36,94 @@ const SammelLieferungForm = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, online, userPersonOption, errors, unsetError } = store
+  const { filter, online, user, db, errors, unsetError } = store
   const { setWidthInPercentOfScreen, activeNodeArray } = store.tree
 
-  const { sl_show_empty_when_next_to_li } = userPersonOption
+  const [dataState, setDataState] = useState({
+    herkunft: undefined,
+    herkunftQuelle: undefined,
+    userPersonOption: undefined,
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['sl_show_empty_when_next_to_li'])
+      : $of({})
+    const combinedObservables = combineLatest([userPersonOptionsObservable])
+    const subscription = combinedObservables.subscribe(
+      async ([userPersonOptions]) => {
+        let vonSammlung
+        try {
+          vonSammlung = await row.sammlung.fetch()
+        } catch {}
+        let vonSammlungHerkunft
+        try {
+          vonSammlungHerkunft = await vonSammlung.herkunft.fetch()
+        } catch {}
+
+        if (vonSammlungHerkunft) {
+          return setDataState({
+            herkunft: vonSammlungHerkunft,
+            herkunftQuelle: 'Sammlung',
+            userPersonOption: userPersonOptions?.[0],
+          })
+        }
+
+        if (row.von_kultur_id) {
+          let vonKultur
+          try {
+            vonKultur = await db.get('kultur').find(row.von_kultur_id)
+          } catch {}
+          let herkunftByVonKultur
+          try {
+            herkunftByVonKultur = await vonKultur.herkunft.fetch()
+          } catch {}
+          if (herkunftByVonKultur) {
+            return setDataState({
+              herkunft: herkunftByVonKultur,
+              herkunftQuelle: 'von-Kultur',
+              userPersonOption: userPersonOptions?.[0],
+            })
+          }
+        }
+        let nachKultur
+        try {
+          nachKultur = await db.get('kultur').find(row.nach_kultur_id)
+        } catch {}
+        let herkunftByNachKultur
+        try {
+          herkunftByNachKultur = await nachKultur.herkunft.fetch()
+        } catch {}
+
+        setDataState({
+          herkunft: herkunftByNachKultur,
+          herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
+          userPersonOption: userPersonOptions?.[0],
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    row.nach_kultur_id,
+    row.sammel_lieferung,
+    row.sammlung,
+    row.von_kultur_id,
+    row.von_sammlung_id,
+    user.uid,
+  ])
+  const { herkunft, herkunftQuelle, userPersonOption } = dataState
+  const { sl_show_empty_when_next_to_li } = userPersonOption ?? {}
 
   useEffect(() => {
     unsetError('sammel_lieferung')
@@ -62,7 +142,7 @@ const SammelLieferungForm = ({
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row[field])
 
       if (showFilter) {
         return filter.setValue({ table: 'sammel_lieferung', key: field, value })
@@ -70,9 +150,9 @@ const SammelLieferungForm = ({
 
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
   const shownAsSammelLieferung =
     activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
@@ -96,28 +176,8 @@ const SammelLieferungForm = ({
     [ifNeeded],
   )
 
-  const nachKultur = row.nach_kultur_id
-    ? store.kulturs.get(row.nach_kultur_id)
-    : {}
-  const nachKulturHerkunft = nachKultur.herkunft_id
-    ? store.herkunfts.get(nachKultur.herkunft_id)
-    : undefined
-  const vonKultur = row.von_kultur_id
-    ? store.kulturs.get(row.von_kultur_id)
-    : {}
-  const vonKulturHerkunft = vonKultur.herkunft_id
-    ? store.herkunfts.get(vonKultur.herkunft_id)
-    : undefined
-  const vonSammlung = row.von_sammlung_id
-    ? store.sammlungs.get(row.von_sammlung_id)
-    : {}
-  const vonSammlungHerkunft = vonSammlung?.herkunft_id
-    ? store.herkunfts.get(vonSammlung.herkunft_id)
-    : undefined
-  const herkunft =
-    nachKulturHerkunft ?? vonKulturHerkunft ?? vonSammlungHerkunft
-
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.sammel_lieferung._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>
@@ -162,6 +222,7 @@ const SammelLieferungForm = ({
             <Was
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
             />
@@ -170,17 +231,18 @@ const SammelLieferungForm = ({
             <Von
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
               herkunft={herkunft}
-              nachKulturHerkunft={nachKulturHerkunft}
-              vonKulturHerkunft={vonKulturHerkunft}
+              herkunftQuelle={herkunftQuelle}
             />
           )}
           {ifSomeNeeded(['nach_kultur_id', 'nach_ausgepflanzt']) && (
             <Nach
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
               herkunft={herkunft}
@@ -190,6 +252,7 @@ const SammelLieferungForm = ({
             <Wann
               showFilter={showFilter}
               row={row}
+              rawRow={rawRow}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
             />
@@ -197,7 +260,7 @@ const SammelLieferungForm = ({
           {ifSomeNeeded(['person_id', 'bemerkungen']) && (
             <Wer
               showFilter={showFilter}
-              row={row}
+              id={id}
               ifNeeded={ifNeeded}
               saveToDb={saveToDb}
             />

@@ -5,9 +5,10 @@ const getAuthToken = async ({ store }) => {
     addNotification,
     setAuthorizing,
     user,
-    gqlHttpClient,
     online,
     setOnline,
+    shortTermOnline,
+    setShortTermOnline,
   } = store
   if (!user?.uid) {
     console.log('getAuthToken returning because of missing user.uid')
@@ -30,6 +31,9 @@ const getAuthToken = async ({ store }) => {
     if (online) {
       setOnline(false)
     }
+    if (shortTermOnline) {
+      setShortTermOnline(false)
+    }
     addNotification({
       message: error?.response?.data,
     })
@@ -37,6 +41,9 @@ const getAuthToken = async ({ store }) => {
   if (res?.status === 200) {
     if (!online) {
       setOnline(true)
+    }
+    if (!shortTermOnline) {
+      setShortTermOnline(true)
     }
     let token
     try {
@@ -54,7 +61,6 @@ const getAuthToken = async ({ store }) => {
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
     //console.log('getAuthToken got new token:', token)
     window.localStorage.setItem('token', token)
-    gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
     setAuthorizing(false)
   } else {
     //console.log('getAuthToken, got no new token')

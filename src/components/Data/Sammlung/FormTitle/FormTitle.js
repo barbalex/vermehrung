@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Anleitung from './Anleitung'
@@ -39,19 +39,19 @@ const TitleSymbols = styled.div`
 
 const SammlungFormTitle = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   const onClickToLieferungen = useCallback(
     () => setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen']),
     [activeNodeArray, setActiveNodeArray],
@@ -91,13 +91,18 @@ const SammlungFormTitle = ({
           <DeleteButton row={row} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
+              table="sammlung"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
             />
             <Anleitung asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -130,12 +135,13 @@ const SammlungFormTitle = ({
         <AddButton />
         <DeleteButton row={row} />
         <HistoryButton
-          row={row}
+          table="sammlung"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
         <Anleitung />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

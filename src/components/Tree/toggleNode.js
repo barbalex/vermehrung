@@ -1,15 +1,20 @@
+import { getSnapshot } from 'mobx-state-tree'
+import isEqual from 'lodash/isEqual'
+
 import isNodeOpen from './isNodeOpen'
 import openNode from './openNode'
 
-const toggleNode = ({ node, store }) => {
-  const { addNotification, tree } = store
+const toggleNode = ({ node, nodes, store }) => {
+  const { addNotification } = store
   if (!node.url) {
     console.log('passsed node has no url:', node)
     return addNotification({
       message: 'Fehler: Dem Knoten im Navigationsbaum fehlt die url',
     })
   }
-  const { setActiveNodeArray } = store.tree
+  const { setActiveNodeArray, activeNodeArray: aNAProxy } = store.tree
+  const aNA = getSnapshot(aNAProxy)
+  const activeNode = nodes.find((n) => isEqual(n.url, aNA))
 
   const nodeIsOpen = isNodeOpen({ store, url: node.url })
   if (!nodeIsOpen) {
@@ -18,7 +23,7 @@ const toggleNode = ({ node, store }) => {
     openNode({ node, store })
     const newActiveNodeArray = [...node.url]
     setActiveNodeArray(newActiveNodeArray)
-  } else if (node.id === tree?.activeNode?.id) {
+  } else if (node.id === activeNode?.id) {
     // the node is open
     // AND it is the active node
     // make it's parent the new active node

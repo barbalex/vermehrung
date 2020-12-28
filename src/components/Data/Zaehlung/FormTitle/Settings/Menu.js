@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -8,7 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import getConstants from '../../../../../utils/constants'
 
 const constants = getConstants()
@@ -22,7 +22,7 @@ const TitleRow = styled.div`
 const Title = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 800;
+  font-weight: 700;
   user-select: none;
 `
 const Info = styled.div`
@@ -33,21 +33,26 @@ const Info = styled.div`
 
 const SettingsZaehlungenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const store = useContext(StoreContext)
-  const { kultur_options } = store
+  const { db } = store
 
-  const kulturOption = useMemo(() => kultur_options.get(kulturId) ?? {}, [
-    kulturId,
-    kultur_options,
-  ])
-  const { z_bemerkungen } = kulturOption
+  const [kulturOption, setKulturOption] = useState()
+  useEffect(() => {
+    const kOObservable = db.get('kultur_option').findAndObserve(kulturId)
+    const subscription = kOObservable.subscribe((kulturOption) =>
+      setKulturOption(kulturOption),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, kulturId])
+  const { z_bemerkungen } = kulturOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      kulturOption.edit({ field, value })
+      kulturOption.edit({ field, value, store })
     },
-    [kulturOption],
+    [kulturOption, store],
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)

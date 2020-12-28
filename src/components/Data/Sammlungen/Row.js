@@ -1,9 +1,9 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import { first as first$ } from 'rxjs/operators'
 
-import { StoreContext } from '../../../models/reactUtils'
-import sammlungLabelFromSammlung from '../../../utils/sammlungLabelFromSammlung'
+import StoreContext from '../../../storeContext'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -30,7 +30,21 @@ const Row = styled.div`
 
 const Arten = ({ row, style, last }) => {
   const store = useContext(StoreContext)
+  const { herkunftIdInActiveNodeArray } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
+
+  const [label, setLabel] = useState('')
+  useEffect(() => {
+    herkunftIdInActiveNodeArray
+      ? row.labelUnderHerkunft
+          .pipe(first$())
+          .toPromise()
+          .then((label) => setLabel(label))
+      : row.label
+          .pipe(first$())
+          .toPromise()
+          .then((label) => setLabel(label))
+  }, [herkunftIdInActiveNodeArray, row])
 
   const onClickRow = useCallback(
     () => setActiveNodeArray([...activeNodeArray, row.id]),
@@ -39,7 +53,7 @@ const Arten = ({ row, style, last }) => {
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{sammlungLabelFromSammlung({ sammlung: row, store })}</div>
+      <div>{label}</div>
     </Row>
   )
 }

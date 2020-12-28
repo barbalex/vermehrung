@@ -1,11 +1,12 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaHistory } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
+import { of as $of } from 'rxjs'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import ErrorBoundary from './ErrorBoundary'
 
 const StyledMenuItem = styled(MenuItem)`
@@ -22,10 +23,21 @@ const StyledIconButton = styled(IconButton)`
     'box-shadow:inset 0px 0px 0px 1px rgba(0, 0, 0, 0.04);'}
 `
 
-const HistoryButton = ({ asMenu, row, showHistory, setShowHistory }) => {
+const HistoryButton = ({ asMenu, id, showHistory, setShowHistory, table }) => {
   const store = useContext(StoreContext)
-  const { online } = store
-  const existMultipleRevisions = (row?._revisions || []).length > 1
+  const { online, db } = store
+
+  const [dataState, setDataState] = useState({ row })
+  useEffect(() => {
+    const observable = id ? db.get(table).findAndObserve(id) : $of(null)
+    const subscription = observable.subscribe((row) => setDataState({ row }))
+
+    return () => subscription.unsubscribe()
+  }, [id, db, table])
+  const { row } = dataState
+
+  const existMultipleRevisions =
+    row?._revisions?.length && row?._revisions?.length > 1
   const disabled = !online || !existMultipleRevisions
 
   const show = useCallback(() => {
@@ -33,9 +45,11 @@ const HistoryButton = ({ asMenu, row, showHistory, setShowHistory }) => {
     setShowHistory(!showHistory)
   }, [disabled, setShowHistory, showHistory])
 
-  const title = showHistory
-    ? 'Frühere Versionen ausblenden'
-    : 'Frühere Versionen anzeigen'
+  const title = online
+    ? showHistory
+      ? 'Frühere Versionen ausblenden'
+      : 'Frühere Versionen anzeigen'
+    : 'Frühere Versionen sind nur online verfügbar'
 
   if (asMenu) {
     return (

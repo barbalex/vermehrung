@@ -1,11 +1,15 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SimpleBar from 'simplebar-react'
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
+import { combineLatest } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
@@ -16,7 +20,7 @@ import Teilzaehlungen from './Teilzaehlungen'
 import getConstants from '../../../../utils/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
+import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
 
 const constants = getConstants()
 
@@ -45,33 +49,101 @@ const ZaehlungForm = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, kultursSorted, errors, unsetError } = store
+  const { filter, online, db, errors, unsetError } = store
 
-  const kulturOption = store.kultur_options.get(row.kultur_id)
+  const [dataState, setDataState] = useState({
+    kulturWerte: [],
+    kulturOption: undefined,
+  })
+  useEffect(() => {
+    const kultursObservable = db
+      .get('kultur')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.kultur.aktiv === true
+              ? [true]
+              : filter.kultur.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observe()
+    const combinedObservables = combineLatest([kultursObservable])
+    const subscription = combinedObservables.subscribe(async ([kulturs]) => {
+      // need to show a choosen kultur even if inactive but not if deleted
+      let kultur
+      try {
+        kultur = await row.kultur.fetch()
+      } catch {}
+      const kultursIncludingChoosen = uniqBy(
+        [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
+        'id',
+      )
+      const kultursSorted = await kultursSortedFromKulturs(
+        kultursIncludingChoosen,
+      )
+      const kulturWerte = await Promise.all(
+        kultursSorted
+          .filter((k) => {
+            if (row.art_id) return k.art_id === row.art_id
+            return true
+          })
+          .map(async (el) => {
+            let label = ''
+            try {
+              label = await el.label.pipe(first$()).toPromise()
+            } catch {}
+
+            return {
+              value: el.id,
+              label,
+            }
+          }),
+      )
+      let kulturOption
+      try {
+        kulturOption = await row.kultur_option.fetch()
+      } catch {}
+
+      setDataState({ kulturWerte, kulturOption })
+    })
+
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    filter.kultur._deleted,
+    filter.kultur.aktiv,
+    row.art_id,
+    row.kultur,
+    row.kultur_option,
+    showFilter,
+  ])
+  const { kulturWerte, kulturOption } = dataState
+
   const z_bemerkungen = kulturOption?.z_bemerkungen ?? true
 
   useEffect(() => {
     unsetError('zaehlung')
   }, [id, unsetError])
-
-  const kulturWerte = useMemo(
-    () =>
-      kultursSorted
-        .filter((k) => {
-          if (row.art_id) return k.art_id === row.art_id
-          return true
-        })
-        .map((el) => ({
-          value: el.id,
-          label: kulturLabelFromKultur({ kultur: el, store }),
-        })),
-    [kultursSorted, row.art_id, store],
-  )
 
   const saveToDb = useCallback(
     async (event) => {
@@ -84,12 +156,12 @@ const ZaehlungForm = ({
         return filter.setValue({ table: 'zaehlung', key: field, value })
       }
 
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row[field])
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Planen`
@@ -101,7 +173,10 @@ const ZaehlungForm = ({
     }
   }, [])
 
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.zaehlung._deleted !== false || row?._deleted
+
+  //console.log('Zaehlung Form rendering, row:', { row, renderEnforcer })
 
   return (
     <ErrorBoundary>
@@ -202,7 +277,9 @@ const ZaehlungForm = ({
               setActiveConflict={setActiveConflict}
             />
           )}
-          {!showFilter && <Teilzaehlungen zaehlungId={id} />}
+          {!showFilter && (
+            <Teilzaehlungen zaehlungId={id} zaehlung={row} rawRow={rawRow} />
+          )}
         </FieldsContainer>
       </SimpleBar>
     </ErrorBoundary>

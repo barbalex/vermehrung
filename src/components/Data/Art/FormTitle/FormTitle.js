@@ -34,8 +34,8 @@ const TitleSymbols = styled.div`
 
 const Art = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
@@ -50,12 +50,17 @@ const Art = ({
           <DeleteButton row={row} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
+              table="art"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
             />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -70,11 +75,12 @@ const Art = ({
         <AddButton />
         <DeleteButton row={row} />
         <HistoryButton
-          row={row}
+          table="art"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

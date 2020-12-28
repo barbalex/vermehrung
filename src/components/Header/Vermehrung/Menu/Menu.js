@@ -7,7 +7,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import { FaChevronRight } from 'react-icons/fa'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import ExportMenu from './Export'
 
 const StyledMenuItem = styled(MenuItem)`
@@ -81,6 +81,11 @@ const SettingsOverallMenu = ({
     [],
   )
 
+  const onClickUptime = useCallback(() => {
+    typeof window !== 'undefined' && window.open('https://uptime.vermehrung.ch')
+    setAnchorEl(null)
+  }, [])
+
   return (
     <Menu
       id="menu"
@@ -127,6 +132,9 @@ const SettingsOverallMenu = ({
           label="Inaktive Gärten, Kulturen und Personen verbergen"
           labelPlacement="end"
         />
+      </MenuItem>
+      <MenuItem onClick={onClickUptime}>
+        Verfügbarkeit der Server von vermehrung.ch
       </MenuItem>
     </Menu>
   )

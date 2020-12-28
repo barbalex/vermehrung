@@ -1,13 +1,14 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
 import SimpleBar from 'simplebar-react'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
+import StoreContext from '../../../../storeContext'
 import Row from './Row'
 
 const eventRevQuery = gql`
@@ -17,42 +18,8 @@ const eventRevQuery = gql`
       __typename
       event_id
       kultur_id
-      kultur {
-        id
-        __typename
-        art {
-          id
-          __typename
-          art_ae_art {
-            id
-            __typename
-            name
-          }
-        }
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
       teilkultur_id
-      teilkultur {
-        id
-        __typename
-        name
-      }
       person_id
-      person {
-        id
-        __typename
-        name
-      }
       beschreibung
       geplant
       datum
@@ -60,6 +27,7 @@ const eventRevQuery = gql`
       changed_by
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -89,32 +57,28 @@ const ErrorContainer = styled.div`
 `
 
 const sliderSettings = {
-  dots: true,
+  dots: false,
   infinite: false,
 }
 
-const KulturHistory = ({ row, historyTakeoverCallback }) => {
+const EventHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
 
-  // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(eventRevQuery, {
+  const priorRevisions = row?._revisions?.slice(1) ?? []
+  const [{ error, data, fetching }] = useQuery({
+    query: eventRevQuery,
     variables: {
-      rev: row._revisions,
+      rev: priorRevisions,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
-  // need to grab store object to ensure this remains up to date
-  const revRows = useMemo(
-    () =>
-      [...store.event_revs.values()]
-        .filter((v) => row?._revisions?.includes(v._rev) ?? true)
-        .filter((r) => r._rev !== row._rev)
-        .sort((a, b) => b._depth - a._depth) || {},
-    [row._rev, row._revisions, store.event_revs],
-  )
+  const revRowsUnsorted = useMemo(() => data?.event_rev ?? [], [
+    data?.event_rev,
+  ])
+  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
-  if (loading) {
+  if (fetching) {
     return <Spinner message="lade Versionen" />
   }
 
@@ -131,6 +95,7 @@ const KulturHistory = ({ row, historyTakeoverCallback }) => {
               key={row._rev}
               revRow={r}
               row={row}
+              rawRow={rawRow}
               historyTakeoverCallback={historyTakeoverCallback}
             />
           ))}
@@ -140,4 +105,4 @@ const KulturHistory = ({ row, historyTakeoverCallback }) => {
   )
 }
 
-export default observer(KulturHistory)
+export default observer(EventHistory)

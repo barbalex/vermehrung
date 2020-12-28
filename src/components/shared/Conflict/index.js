@@ -12,7 +12,7 @@ import {
 
 import Explainer from './Explainer'
 import Data from './Data'
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 
 const Container = styled.div`
   padding: 10px;
@@ -45,8 +45,8 @@ const Conflict = ({
   dataArray,
   loading,
   error,
-  onClickVerwerfen,
-  onClickUebernehmen,
+  onClickAktuellUebernehmen,
+  onClickWiderspruchUebernehmen,
   onClickSchliessen,
 }) => {
   const store = useContext(StoreContext)
@@ -70,20 +70,24 @@ const Conflict = ({
       <Data dataArray={dataArray} loading={loading} />
       <ButtonRow>
         <StyledButton
-          onClick={onClickVerwerfen}
+          onClick={onClickAktuellUebernehmen}
           variant="outlined"
-          title="Der Konflikt gilt er als gelöst und erscheint nicht mehr"
+          title="Die widersprüchliche Version wird verworfen, die aktuelle beibehalten. Der Konflikt gilt als gelöst und erscheint nicht mehr"
           startIcon={<FaRegTrashAlt />}
         >
-          verwerfen
+          {diffConflict
+            ? 'grüne (= aktuelle) Version übernehmen'
+            : 'aktuelle Version übernehmen'}
         </StyledButton>
         <StyledButton
-          onClick={onClickUebernehmen}
+          onClick={onClickWiderspruchUebernehmen}
           variant="outlined"
-          title="Die widersprüchliche Version wird zur aktuellen. Die bisher aktuelle wird zur widersprüchlichen"
+          title="Die widersprüchliche Version wird übernommen, die aktuelle verworfen. Der Konflikt gilt als gelöst und erscheint nicht mehr"
           startIcon={<FaExchangeAlt />}
         >
-          übernehmen
+          {diffConflict
+            ? 'rote (= widersprüchliche) Version übernehmen'
+            : 'widersprüchliche Version übernehmen'}
         </StyledButton>
         <StyledButton
           onClick={onClickToggleDiff}

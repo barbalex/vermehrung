@@ -1,15 +1,10 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import { of as $of } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'
 import Conflict from './Conflict'
@@ -56,14 +51,28 @@ const Teilkultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, teilkulturs } = store
+  const { filter, online, db } = store
 
-  const row = useMemo(
-    () => (showFilter ? filter.teilkultur : teilkulturs.get(id) || null),
-    // need teilkulturs.size for when row arrives after first login
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filter.teilkultur, id, showFilter, teilkulturs, teilkulturs.size],
-  )
+  const [dataState, setDataState] = useState({
+    row: undefined,
+    // need raw row because observable does not provoke rerendering of components
+    rawRow: undefined,
+  })
+  useEffect(() => {
+    const observable = showFilter
+      ? $of(filter.teilkultur)
+      : db.get('teilkultur').findAndObserve(id)
+    const subscription = observable.subscribe((newRow) => {
+      setDataState({
+        row: newRow,
+        rawRow: JSON.stringify(newRow?._raw ?? newRow),
+      })
+    })
+    return () => {
+      if (subscription) subscription.unsubscribe()
+    }
+  }, [db, filter.teilkultur, id, showFilter])
+  const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
@@ -97,6 +106,7 @@ const Teilkultur = ({
       <Container showfilter={showFilter}>
         <FormTitle
           row={row}
+          rawRow={rawRow}
           showFilter={showFilter}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
@@ -112,6 +122,7 @@ const Teilkultur = ({
               showFilter={showFilter}
               id={id}
               row={row}
+              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
@@ -122,6 +133,7 @@ const Teilkultur = ({
                   rev={activeConflict}
                   id={id}
                   row={row}
+                  rawRow={rawRow}
                   conflictDisposalCallback={conflictDisposalCallback}
                   conflictSelectionCallback={conflictSelectionCallback}
                   setActiveConflict={setActiveConflict}
@@ -129,6 +141,7 @@ const Teilkultur = ({
               ) : showHistory ? (
                 <History
                   row={row}
+                  rawRow={rawRow}
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
               ) : null}

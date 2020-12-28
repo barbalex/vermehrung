@@ -11,10 +11,13 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import uniq from 'lodash/uniq'
 import { motion, useAnimation } from 'framer-motion'
+import { combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import Pflanzen from './Pflanzen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
+import herkunftSort from '../../../../../utils/herkunftSort'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -45,16 +48,38 @@ const Title = styled.div`
 
 const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
   const store = useContext(StoreContext)
+  const { db, filter } = store
 
-  const herkunftIds = uniq(
-    store.sammlungsSorted
-      .filter((s) => s.art_id === artId)
-      .map((s) => s.herkunft_id)
-      .filter((i) => !!i),
-  )
-  const herkunftsSorted = store.herkunftsSorted.filter((h) =>
-    herkunftIds.includes(h.id),
-  )
+  const [herkunfts, setHerkunfts] = useState([])
+  useEffect(() => {
+    const sammlungsObservable = db
+      .get('sammlung')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('art_id', artId),
+        Q.where('herkunft_id', Q.notEq(null)),
+      )
+      .observe()
+    const herkunftsObservable = db
+      .get('herkunft')
+      .query(Q.where('_deleted', false))
+      .observe()
+    const combinedObservables = combineLatest([
+      sammlungsObservable,
+      herkunftsObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      ([sammlungs, herkunfts]) => {
+        const herkunftIds = uniq(sammlungs.map((s) => s.herkunft_id))
+        const herkunftsSorted = herkunfts
+          .filter((h) => herkunftIds.includes(h.id))
+          .sort(herkunftSort)
+        setHerkunfts(herkunftsSorted)
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [artId, db, filter.herkunft._deleted])
 
   const [open, setOpen] = useState(false)
   let anim = useAnimation()
@@ -100,7 +125,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
         ref={titleRowRef}
         data-sticky={isSticky}
       >
-        <Title>{`Zeit-Achsen ${herkunftsSorted.length} Herkünfte`}</Title>
+        <Title>{`Zeit-Achsen ${herkunfts.length} Herkünfte`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -113,7 +138,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
       </TitleRow>
       <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
         {open &&
-          herkunftsSorted.map((herkunft) => (
+          herkunfts.map((herkunft) => (
             <Pflanzen key={herkunft.id} artId={artId} herkunft={herkunft} />
           ))}
       </motion.div>

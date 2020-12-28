@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -7,8 +7,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import getConstants from '../../../../../utils/constants'
 
 const constants = getConstants()
@@ -21,7 +23,7 @@ const TitleRow = styled.div`
 const Title = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 800;
+  font-weight: 700;
   user-select: none;
 `
 const Info = styled.div`
@@ -32,7 +34,38 @@ const Info = styled.div`
 
 const SettingsGartenMenu = ({ anchorEl, setAnchorEl }) => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
+  const { user, db } = store
+
+  const [dataState, setDataState] = useState({
+    userPersonOption: undefined,
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns([
+            'ga_strasse',
+            'ga_plz',
+            'ga_ort',
+            'ga_geom_point',
+            'ga_lat_lng',
+            'ga_aktiv',
+            'ga_bemerkungen',
+          ])
+      : $of({})
+    const combinedObservables = combineLatest([userPersonOptionsObservable])
+    const subscription = combinedObservables.subscribe(
+      ([userPersonOptions]) => {
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { userPersonOption } = dataState
 
   const {
     ga_strasse,
@@ -42,15 +75,15 @@ const SettingsGartenMenu = ({ anchorEl, setAnchorEl }) => {
     ga_lat_lng,
     ga_aktiv,
     ga_bemerkungen,
-  } = userPersonOption
+  } = userPersonOption ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      userPersonOption.edit({ field, value })
+      userPersonOption.edit({ field, value, store })
     },
-    [userPersonOption],
+    [store, userPersonOption],
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)

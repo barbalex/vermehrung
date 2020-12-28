@@ -3,10 +3,12 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import mutations from '../../../utils/mutations'
 import Conflict from '../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
@@ -25,13 +27,10 @@ const gartenRevQuery = gql`
       bemerkungen
       changed
       changed_by
-      person {
-        id
-        __typename
-        name
-      }
+      person_id
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -47,36 +46,89 @@ const GartenConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
-  // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(gartenRevQuery, {
+  const [{ error, data, fetching }] = useQuery({
+    query: gartenRevQuery,
     variables: {
       rev,
       id,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.garten_revs.values()].find(
-        (v) => v._rev === rev && v.garten_id === id,
-      ) || {},
-    [id, rev, store.garten_revs],
-  )
+  const revRow = useMemo(() => data?.garten_rev?.[0] ?? {}, [data?.garten_rev])
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow, store }),
-    [revRow, row, store],
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
-    revRow.setDeleted()
+  const onClickAktuellUebernehmen = useCallback(async () => {
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      garten_id: revRow.garten_id,
+      name: revRow.name,
+      person_id: revRow.person_id,
+      strasse: revRow.strasse,
+      plz: revRow.plz,
+      ort: revRow.ort,
+      geom_point: revRow.geom_point,
+      aktiv: revRow.aktiv,
+      bemerkungen: revRow.bemerkungen,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_garten_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'garten_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'garten',
+      revertId: revRow.garten_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    // update model: remove this conflict
+    try {
+      const model = await db.get('garten').find(revRow.garten_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
-  const onClickUebernehmen = useCallback(async () => {
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.aktiv,
+    revRow.bemerkungen,
+    revRow.garten_id,
+    revRow.geom_point,
+    revRow.name,
+    revRow.ort,
+    revRow.person_id,
+    revRow.plz,
+    revRow.strasse,
+    user.email,
+  ])
+  const onClickWiderspruchUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -103,24 +155,29 @@ const GartenConflict = ({
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
     //console.log('Garten Conflict', { row, revRow, newObject })
-    try {
-      await store.mutateInsert_garten_rev_one({
+    const response = await gqlClient
+      .query(mutations.mutateInsert_garten_rev_one, {
         object: newObject,
         on_conflict: {
           constraint: 'garten_rev_pkey',
           update_columns: ['id'],
         },
       })
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
+    // now we need to delete the previous conflict
+    onClickAktuellUebernehmen()
     conflictSelectionCallback()
   }, [
     addNotification,
     conflictSelectionCallback,
+    gqlClient,
+    onClickAktuellUebernehmen,
     revRow._deleted,
     revRow.aktiv,
     revRow.bemerkungen,
@@ -148,10 +205,10 @@ const GartenConflict = ({
       name="Garten"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
-      onClickVerwerfen={onClickVerwerfen}
-      onClickUebernehmen={onClickUebernehmen}
+      onClickAktuellUebernehmen={onClickAktuellUebernehmen}
+      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
       onClickSchliessen={onClickSchliessen}
     />
   )

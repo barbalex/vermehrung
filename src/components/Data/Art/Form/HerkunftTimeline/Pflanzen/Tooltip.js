@@ -14,10 +14,10 @@ const PRow = styled.div`
 `
 const PTitle = styled.div`
   font-size: 0.8em;
-  font-weight: 800;
+  font-weight: 700;
 `
 const Ereignis = styled.div`
-  font-weight: 600;
+  font-weight: 700;
 `
 
 const CustomTooltip = ({ payload, label, active }) => {

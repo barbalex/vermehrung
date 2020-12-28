@@ -1,9 +1,9 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import { first as first$ } from 'rxjs/operators'
 
-import { StoreContext } from '../../../models/reactUtils'
-import sammelLieferungLabelFromSammelLieferung from '../../../utils/sammelLieferungLabelFromSammelLieferung'
+import StoreContext from '../../../storeContext'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -28,7 +28,7 @@ const Row = styled.div`
   }
 `
 
-const EventsRows = ({ row, style, last }) => {
+const SLRows = ({ row, style, last }) => {
   const store = useContext(StoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -37,13 +37,19 @@ const EventsRows = ({ row, style, last }) => {
     [activeNodeArray, row.id, setActiveNodeArray],
   )
 
+  const [label, setLabel] = useState('')
+  useEffect(() => {
+    row.label
+      .pipe(first$())
+      .toPromise()
+      .then((label) => setLabel(label))
+  }, [row.label])
+
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>
-        {sammelLieferungLabelFromSammelLieferung({ lieferung: row, store })}
-      </div>
+      <div>{label}</div>
     </Row>
   )
 }
 
-export default observer(EventsRows)
+export default observer(SLRows)

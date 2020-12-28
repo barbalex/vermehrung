@@ -5,7 +5,7 @@ import 'firebase/auth'
 import persist from 'mst-persist'
 
 import getAuthToken from './getAuthToken'
-import queryAllData from './queryAllData'
+import isOnline from './isOnline'
 
 // Configure Firebase
 const firebaseConfig = {
@@ -17,19 +17,53 @@ const firebaseConfig = {
 
 const recreatePersistedStore = async ({ store }) => {
   let unregisterAuthObserver = () => {}
-  const { setUser, setGettingAuthUser, setFirebase } = store
+  const {
+    setUser,
+    setGettingAuthUser,
+    setFirebase,
+    online,
+    setOnline,
+    shortTermOnline,
+    setShortTermOnline,
+  } = store
   window.store = store
   // need to blacklist authorizing or mst-persist will set it to false
   // and login form appears for a short moment until auth state changed
   const blacklist = [
     'authorizing',
     'user',
-    'gqlHttpClient',
     'gqlWsClient',
-    'initialDataQueried',
     'gettingAuthUser',
     'online',
+    'shortTermOnline',
     'errors',
+    'ae_art_initially_queried',
+    'art_initially_queried',
+    'art_file_initially_queried',
+    'art_qk_initially_queried',
+    'av_initially_queried',
+    'event_initially_queried',
+    'garten_initially_queried',
+    'garten_file_initially_queried',
+    'gv_initially_queried',
+    'herkunft_initially_queried',
+    'herkunft_file_initially_queried',
+    'kultur_initially_queried',
+    'kultur_file_initially_queried',
+    'kultur_option_initially_queried',
+    'kultur_qk_initially_queried',
+    'lieferung_initially_queried',
+    'lieferung_file_initially_queried',
+    'person_initially_queried',
+    'person_file_initially_queried',
+    'person_option_initially_queried',
+    'sammel_lieferung_initially_queried',
+    'sammlung_initially_queried',
+    'sammlung_file_initially_queried',
+    'teilkultur_initially_queried',
+    'teilzaehlung_initially_queried',
+    'user_role_initially_queried',
+    'zaehlung_initially_queried',
   ]
   await persist('store', store, {
     storage: localForage,
@@ -50,13 +84,13 @@ const recreatePersistedStore = async ({ store }) => {
         navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
       }, 200)
     }
-    setTimeout(async () => {
-      if (store.online) {
-        await getAuthToken({ store })
-        queryAllData({ store })
-      }
-      setGettingAuthUser(false)
-    })
+    const nowOnline = await isOnline()
+    if (nowOnline !== online) setOnline(nowOnline)
+    if (nowOnline !== shortTermOnline) setShortTermOnline(nowOnline)
+    if (nowOnline) {
+      await getAuthToken({ store })
+    }
+    setGettingAuthUser(false)
   })
   return unregisterAuthObserver
 }

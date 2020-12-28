@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 import QueuedQuery from './QueuedQuery'
 import getConstants from '../../utils/constants'
 
@@ -43,10 +43,10 @@ const QueriesContainer = styled.div`
   overflow: hidden;
 `
 const Heading = styled.div`
-  font-weight: 600;
+  font-weight: 700;
 `
 const RevertHeading = styled.div`
-  font-weight: 600;
+  font-weight: 700;
   justify-self: center;
 `
 const CloseIcon = styled(IconButton)`
@@ -126,8 +126,8 @@ const QueuedQueries = () => {
             <QueriesContainer>
               <Heading>Zeit</Heading>
               <Heading>Tabelle</Heading>
-              <Heading>Feld / Operation</Heading>
               <Heading>ID</Heading>
+              <Heading>Feld / Operation</Heading>
               <Heading>vorher</Heading>
               <Heading>nachher</Heading>
               <RevertHeading>widerrufen</RevertHeading>

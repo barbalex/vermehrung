@@ -3,10 +3,12 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../storeContext'
 import checkForOnlineError from '../../../../../../utils/checkForOnlineError'
 import toPgArray from '../../../../../../utils/toPgArray'
+import mutations from '../../../../../../utils/mutations'
 import Conflict from '../../../../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
@@ -20,14 +22,6 @@ const teilzaehlungRevQuery = gql`
       teilzaehlung_id
       zaehlung_id
       teilkultur_id
-      teilkultur {
-        id
-        __typename
-        name
-        ort1
-        ort2
-        ort3
-      }
       anzahl_pflanzen
       anzahl_auspflanzbereit
       anzahl_mutterpflanzen
@@ -39,6 +33,7 @@ const teilzaehlungRevQuery = gql`
       changed_by
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -54,36 +49,94 @@ const TeilzaehlungConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(teilzaehlungRevQuery, {
+  const [{ error, data, fetching }] = useQuery({
+    query: teilzaehlungRevQuery,
     variables: {
       rev,
       id,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.teilzaehlung_revs.values()].find(
-        (v) => v._rev === rev && v.teilzaehlung_id === id,
-      ) || {},
-    [id, rev, store.teilzaehlung_revs],
-  )
+  const revRow = useMemo(() => data?.teilzaehlung_rev?.[0] ?? {}, [
+    data?.teilzaehlung_rev,
+  ])
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow, store }),
-    [revRow, row, store],
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
-    revRow.setDeleted()
+  const onClickAktuellUebernehmen = useCallback(async () => {
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      teilzaehlung_id: revRow.teilzaehlung_id,
+      zaehlung_id: revRow.zaehlung_id,
+      teilkultur_id: revRow.teilkultur_id,
+      anzahl_pflanzen: revRow.anzahl_pflanzen,
+      anzahl_auspflanzbereit: revRow.anzahl_auspflanzbereit,
+      anzahl_mutterpflanzen: revRow.anzahl_mutterpflanzen,
+      andere_menge: revRow.andere_menge,
+      auspflanzbereit_beschreibung: revRow.auspflanzbereit_beschreibung,
+      bemerkungen: revRow.bemerkungen,
+      prognose_von_tz: revRow.prognose_von_tz,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_teilzaehlung_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'teilzaehlung_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'teilzaehlung',
+      revertId: revRow.teilzaehlung_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    // update model: remove this conflict
+    try {
+      const model = await db.get('teilzaehlung').find(revRow.teilzaehlung_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
-  const onClickUebernehmen = useCallback(async () => {
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.andere_menge,
+    revRow.anzahl_auspflanzbereit,
+    revRow.anzahl_mutterpflanzen,
+    revRow.anzahl_pflanzen,
+    revRow.auspflanzbereit_beschreibung,
+    revRow.bemerkungen,
+    revRow.prognose_von_tz,
+    revRow.teilkultur_id,
+    revRow.teilzaehlung_id,
+    revRow.zaehlung_id,
+    user.email,
+  ])
+  const onClickWiderspruchUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -110,25 +163,29 @@ const TeilzaehlungConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    //console.log('Zaehlung Conflict', { row, revRow, newObject })
-    try {
-      await store.mutateInsert_teilzaehlung_rev_one({
+    const response = await gqlClient
+      .query(mutations.mutateInsert_teilzaehlung_rev_one, {
         object: newObject,
         on_conflict: {
           constraint: 'teilzaehlung_rev_pkey',
           update_columns: ['id'],
         },
       })
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
+    // now we need to delete the previous conflict
+    onClickAktuellUebernehmen()
     conflictSelectionCallback()
   }, [
     addNotification,
     conflictSelectionCallback,
+    gqlClient,
+    onClickAktuellUebernehmen,
     revRow._deleted,
     revRow.andere_menge,
     revRow.anzahl_auspflanzbereit,
@@ -157,10 +214,10 @@ const TeilzaehlungConflict = ({
       name="Zaehlung"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
-      onClickVerwerfen={onClickVerwerfen}
-      onClickUebernehmen={onClickUebernehmen}
+      onClickAktuellUebernehmen={onClickAktuellUebernehmen}
+      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
       onClickSchliessen={onClickSchliessen}
     />
   )

@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useState,
-  useMemo,
   useEffect,
   useContext,
   useRef,
@@ -11,12 +10,16 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
+import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import Art from './Art'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import artLabelFromArt from '../../../../../utils/artLabelFromArt'
+import artsSortedFromArts from '../../../../../utils/artsSortedFromArts'
+import avsSortByArt from '../../../../../utils/avsSortByArt'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -48,12 +51,12 @@ const Avs = styled.div`
   padding-bottom: 8px;
 `
 
-const PersonArten = ({ personId }) => {
+const PersonArten = ({ person }) => {
   const store = useContext(StoreContext)
-  const { avsSorted, artsSorted, insertAvRev } = store
+  const { db, insertAvRev, filter } = store
 
   const [errors, setErrors] = useState({})
-  useEffect(() => setErrors({}), [personId])
+  useEffect(() => setErrors({}), [person])
 
   const [open, setOpen] = useState(false)
   let anim = useAnimation()
@@ -76,28 +79,62 @@ const PersonArten = ({ personId }) => {
     [anim, open],
   )
 
-  const avs = avsSorted.filter((a) => a.person_id === personId)
+  const [dataState, setDataState] = useState({ avs: [], artWerte: [] })
+  const { avs, artWerte } = dataState
   const avArtIds = avs.map((v) => v.art_id)
+  useEffect(() => {
+    const avsObservable = person.avs
+      .extend(Q.where('_deleted', false))
+      .observe()
+    const artsObservable = db
+      .get('art')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where('id', Q.notIn(avArtIds)),
+      )
+      .observe()
+    const combinedObservables = combineLatest([avsObservable, artsObservable])
+    const subscription = combinedObservables.subscribe(async ([avs, arts]) => {
+      const avsSorted = await avsSortByArt(avs)
+      const artsSorted = await artsSortedFromArts(arts)
+      const artWerte = await Promise.all(
+        artsSorted.map(async (art) => {
+          let label
+          try {
+            label = await art.label.pipe(first$()).toPromise()
+          } catch {}
 
-  const artWerte = useMemo(
-    () =>
-      artsSorted
-        .filter((a) => !avArtIds.includes(a.id))
-        .map((el) => ({
-          value: el.id,
-          label: artLabelFromArt({ art: el, store }),
-        })),
-    [artsSorted, avArtIds, store],
-  )
+          return {
+            value: art.id,
+            label,
+          }
+        }),
+      )
+      setDataState({ avs: avsSorted, artWerte })
+    })
+    return () => subscription.unsubscribe()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [person.avs, avArtIds.length, db])
+
+  console.log('Person Arten rendering')
 
   const saveToDb = useCallback(
     async (event) => {
       insertAvRev({
-        values: { person_id: personId, art_id: event.target.value },
+        values: { person_id: person.id, art_id: event.target.value },
       })
       setErrors({})
     },
-    [insertAvRev, personId],
+    [insertAvRev, person.id],
   )
 
   const titleRowRef = useRef(null)
@@ -138,8 +175,8 @@ const PersonArten = ({ personId }) => {
         {open && (
           <>
             <Avs>
-              {avs.map((av) => (
-                <Art key={`${av.person_id}/${av.art_id}`} av={av} />
+              {avs.map((av, index) => (
+                <Art key={`${av.person_id}/${av.art_id}/${index}`} av={av} />
               ))}
             </Avs>
             {!!artWerte.length && (

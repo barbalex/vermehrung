@@ -1,14 +1,15 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
-import artLabelFromArt from '../../../../utils/artLabelFromArt'
 import aeArtSort from '../../../../utils/aeArtSort'
 import Files from '../../Files'
 import Timeline from './Timeline'
@@ -17,6 +18,7 @@ import QK from './QK'
 import Personen from './Personen'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
+import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -41,12 +43,44 @@ const ArtForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { artsSorted, filter, online, errors, unsetError, ae_arts } = store
+  const { filter, online, errors, unsetError, db } = store
 
-  const aeArtsSorted = useMemo(
-    () => [...ae_arts.values()].sort((a, b) => aeArtSort({ a, b })),
-    [ae_arts],
-  )
+  const [dataState, setDataState] = useState({
+    artsSorted: [],
+    aeArts: [],
+  })
+  useEffect(() => {
+    const aeArtObservable = db.get('ae_art').query().observe()
+    const artsObservable = db
+      .get('art')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observe()
+    const combinedObservables = combineLatest([aeArtObservable, artsObservable])
+    const subscription = combinedObservables.subscribe(
+      async ([aeArts, arts]) => {
+        const artsSorted = await artsSortedFromArts(arts)
+
+        setDataState({
+          aeArts: aeArts.sort(aeArtSort),
+          artsSorted,
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, filter.art._deleted])
+  const { artsSorted, aeArts } = dataState
 
   useEffect(() => {
     unsetError('art')
@@ -63,12 +97,12 @@ const ArtForm = ({
         return filter.setValue({ table: 'art', key: field, value })
       }
 
-      const previousValue = row[field]
       // only update if value has changed
+      const previousValue = ifIsNumericAsNumber(row[field])
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
 
   const aeArtIdsNotToShow = artsSorted
@@ -77,19 +111,20 @@ const ArtForm = ({
 
   const aeArtsFilter = (val) => {
     if (showFilter) {
-      return aeArtsSorted
+      return aeArts
         .filter((a) => artsSorted.map((ar) => ar.ae_id).includes(a.id))
         .filter((a) => a.name.toLowerCase().includes(val))
     }
     if (val) {
-      return aeArtsSorted
+      return aeArts
         .filter((a) => !aeArtIdsNotToShow.includes(a.id))
         .filter((a) => a.name.toLowerCase().includes(val))
     }
-    return aeArtsSorted.filter((a) => !aeArtIdsNotToShow.includes(a.id))
+    return aeArts.filter((a) => !aeArtIdsNotToShow.includes(a.id))
   }
 
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.art._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>
@@ -124,16 +159,15 @@ const ArtForm = ({
             </>
           )}
           <SelectLoadingOptions
-            key={`${row.id}ae_id`}
+            key={`${row.id}${row.ae_id}ae_id`}
             field="ae_id"
-            valueLabelFunction={artLabelFromArt}
-            valueLabelKey="art"
             label="Art"
             row={row}
             saveToDb={saveToDb}
             error={errors?.art?.ae_id}
-            modelKey="name"
             modelFilter={aeArtsFilter}
+            labelTable="ae_art"
+            labelField="name"
           />
           {online && !showFilter && row?._conflicts?.map && (
             <ConflictList
@@ -144,11 +178,11 @@ const ArtForm = ({
           )}
           {!showFilter && (
             <>
-              <Personen artId={id} />
+              <Personen art={row} />
               <Timeline artId={id} />
               <HerkunftTimeline artId={id} />
               <QK artId={id} />
-              <Files parentId={id} parent="art" />
+              <Files parent={row} parentTable="art" />
             </>
           )}
         </FieldsContainer>

@@ -1,4 +1,4 @@
-const userRoleSort = ({ a, b }) => {
+const userRoleSort = (a, b) => {
   const sortA = a.sort ?? ''
   const sortB = b.sort ?? ''
   if (sortA < sortB) return -1

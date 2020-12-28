@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -12,7 +12,6 @@ const Container = styled.div`
 `
 const StyledFormControl = styled(FormControl)`
   padding-left: 1px !important;
-  /*padding-bottom: 15px !important;*/
 `
 const StyledFormLabel = styled(FormLabel)`
   padding-top: 10px !important;
@@ -37,12 +36,24 @@ const AsideComment = styled.span`
   color: rgba(0, 0, 0, 0.54);
 `
 
-const Checkbox3States = ({ label, name, value, error, saveToDb }) => {
+const Checkbox3States = ({
+  label,
+  name,
+  value: valuePassed,
+  error,
+  saveToDb,
+}) => {
+  const [stateValue, setStateValue] = useState(valuePassed)
+  useEffect(() => {
+    setStateValue(valuePassed)
+  }, [valuePassed])
+
   const onClickButton = useCallback(() => {
     let newValue = null
-    if (value === true) newValue = false
-    if (value === false) newValue = null
-    if (value === null) newValue = true
+    if (stateValue === true) newValue = false
+    if (stateValue === false) newValue = null
+    if (stateValue === null) newValue = true
+    setStateValue(newValue)
     const fakeEvent = {
       target: {
         value: newValue,
@@ -50,16 +61,16 @@ const Checkbox3States = ({ label, name, value, error, saveToDb }) => {
       },
     }
     saveToDb(fakeEvent)
-  }, [value, name, saveToDb])
+  }, [stateValue, name, saveToDb])
 
-  const indeterminate = value === null
-  const checked = value === true
+  const indeterminate = stateValue === null
+  const checked = stateValue === true
   const asideText =
-    value === true ? `Ja` : value === false ? `Nein` : `Unbestimmt`
+    stateValue === true ? `Ja` : stateValue === false ? `Nein` : `Unbestimmt`
   const asideComment =
-    value === true
+    stateValue === true
       ? `(nach nächstem Klick 'Nein')`
-      : value === false
+      : stateValue === false
       ? `(nach nächstem Klick 'Unbestimmt')`
       : `(nach nächstem Klick 'Ja')`
 

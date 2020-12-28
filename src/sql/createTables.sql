@@ -10,7 +10,7 @@ create table user_role (
   sort integer,
   comment text,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on user_role using btree (id);
 create index on user_role using btree (name);
@@ -45,7 +45,7 @@ create table person (
   info boolean default false,
   aktiv boolean default true,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -88,12 +88,14 @@ create table person_rev (
   info boolean default false,
   aktiv boolean default true,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY person_rev ALTER COLUMN person_id SET DEFAULT null;
+
 create index on person_rev using btree (id);
 create index on person_rev using btree (person_id);
 create index on person_rev using btree (_rev);
@@ -111,7 +113,7 @@ create table person_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on person_file using btree (id);
 create index on person_file using btree (person_id);
@@ -126,7 +128,7 @@ create table art (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -146,12 +148,14 @@ create table art_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY art_rev ALTER COLUMN art_id SET DEFAULT null;
+
 create index on art_rev using btree (id);
 create index on art_rev using btree (art_id);
 create index on art_rev using btree (_rev);
@@ -170,7 +174,7 @@ create table art_qk (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -195,12 +199,14 @@ create table art_qk_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY art_qk_rev ALTER COLUMN art_qk_id SET DEFAULT null;
+
 create index on art_qk_rev using btree (id);
 create index on art_qk_rev using btree (_rev);
 create index on art_qk_rev using btree (_parent_rev);
@@ -208,57 +214,9 @@ create index on art_qk_rev using btree (_depth);
 create index on art_qk_rev using btree (_deleted);
 create index on art_qk_rev using btree (_rev_at);
 
+-- TODO: drop after changing to new method
 drop table if exists art_qk_choosen cascade;
-create table art_qk_choosen (
-  id uuid primary key default uuid_generate_v1mc(),
-  art_id uuid NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_id uuid NOT NULL REFERENCES art_qk (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  choosen boolean default true,
-  changed timestamp default now(),
-  changed_by text default null,
-  _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
-  _parent_rev text default null,
-  _revisions text[] default null,
-  _depth integer default 1,
-  _deleted boolean default false,
-  _conflicts text[] default null
-  unique(art_id, qk_name)
-);
-create index on art_qk_choosen using btree (id);
-create index on art_qk_choosen using btree (art_id);
-create index on art_qk_choosen using btree (qk_id);
-create index on art_qk_choosen using btree (choosen);
-create index on art_qk_choosen using btree (_deleted);
-create index on art_qk_choosen using btree (_rev_at);
-
-insert into art_qk_choosen (art_id, qk_name)
-select art.id, art_qk.name
-from art_qk, art
-on conflict do nothing;
-
 drop table if exists art_qk_choosen_rev cascade;
-create table art_qk_choosen_rev (
-  id uuid primary key default uuid_generate_v1mc(),
-  art_qk_choosen_id uuid default null,
-  art_id uuid NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_id uuid,
-  choosen boolean default true,
-  changed timestamp default now(),
-  changed_by text default null,
-  _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
-  _parent_rev text default null,
-  _revisions text[] default null,
-  _depth integer default 1,
-  _deleted boolean default false
-);
-create index on art_qk_choosen_rev using btree (id);
-create index on art_qk_choosen_rev using btree (_rev);
-create index on art_qk_choosen_rev using btree (_parent_rev);
-create index on art_qk_choosen_rev using btree (_depth);
-create index on art_qk_choosen_rev using btree (_deleted);
-create index on art_qk_choosen_rev using btree (_rev_at);
 
 drop table if exists art_file cascade;
 create table art_file (
@@ -269,7 +227,7 @@ create table art_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on art_file using btree (id);
 create index on art_file using btree (art_id);
@@ -294,7 +252,7 @@ create table herkunft (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -322,12 +280,14 @@ create table herkunft_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY herkunft_rev ALTER COLUMN herkunft_id SET DEFAULT null;
+
 create index on herkunft_rev using btree (id);
 create index on herkunft_rev using btree (herkunft_id);
 create index on herkunft_rev using btree (_rev);
@@ -345,7 +305,7 @@ create table herkunft_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on herkunft_file using btree (id);
 create index on herkunft_file using btree (herkunft_id);
@@ -375,7 +335,7 @@ create table sammlung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -398,9 +358,9 @@ drop table if exists sammlung_rev cascade;
 create table sammlung_rev (
   id uuid primary key default uuid_generate_v1mc(),
   sammlung_id uuid default null,
-  art_id uuid default null references art (id) on update no action on delete set null,
-  person_id uuid default null references person (id) on update no action on delete set null,
-  herkunft_id uuid default null references herkunft (id) on update no action on delete set null,
+  art_id uuid default null,
+  person_id uuid default null,
+  herkunft_id uuid default null,
   nr text default null,  -- DO NOT set unique - does not work for offline edits
   datum date default null,
   von_anzahl_individuen integer default null,
@@ -413,12 +373,14 @@ create table sammlung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY sammlung_rev ALTER COLUMN sammlung_id SET DEFAULT null;
+
 create index on sammlung_rev using btree (rev_id);
 create index on sammlung_rev using btree (id);
 create index on sammlung_rev using btree (_rev);
@@ -436,7 +398,7 @@ create table sammlung_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on sammlung_file using btree (id);
 create index on sammlung_file using btree (sammlung_id);
@@ -463,7 +425,7 @@ create table garten (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -485,7 +447,7 @@ create table garten_rev (
   id uuid primary key default uuid_generate_v1mc(),
   garten_id uuid default null,
   name text default null,
-  person_id uuid default null references person (id) on update no action on delete set null,
+  person_id uuid default null,
   strasse text default null,
   plz integer default null,
   ort text default null,
@@ -495,12 +457,14 @@ create table garten_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY garten_rev ALTER COLUMN garten_id SET DEFAULT null;
+
 create index on garten_rev using btree (rev_id);
 create index on garten_rev using btree (id);
 create index on garten_rev using btree (_rev);
@@ -518,7 +482,7 @@ create table garten_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on garten_file using btree (id);
 create index on garten_file using btree (garten_id);
@@ -540,7 +504,7 @@ create table kultur (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -566,9 +530,9 @@ drop table if exists kultur_rev cascade;
 create table kultur_rev (
   id uuid primary key default uuid_generate_v1mc(),
   kultur_id uuid default null,
-  art_id uuid default null references art (id) on update no action on delete set null,
-  herkunft_id uuid default null references herkunft (id) on update no action on delete set null,
-  garten_id uuid default null references garten (id) on update no action on delete set null,
+  art_id uuid default null,
+  herkunft_id uuid default null,
+  garten_id uuid default null,
   zwischenlager boolean default false,
   erhaltungskultur boolean default false,
   von_anzahl_individuen integer default null,
@@ -577,12 +541,14 @@ create table kultur_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY kultur_rev ALTER COLUMN kultur_id SET DEFAULT null;
+
 create index on kultur_rev using btree (rev_id);
 create index on kultur_rev using btree (id);
 create index on kultur_rev using btree (_rev);
@@ -601,7 +567,7 @@ create table kultur_qk (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -630,12 +596,14 @@ create table kultur_qk_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
 );
+ALTER TABLE ONLY kultur_qk_rev ALTER COLUMN kultur_qk_id SET DEFAULT null;
+
 create index on kultur_qk_rev using btree (id);
 create index on kultur_qk_rev using btree (_rev);
 create index on kultur_qk_rev using btree (_parent_rev);
@@ -643,56 +611,9 @@ create index on kultur_qk_rev using btree (_depth);
 create index on kultur_qk_rev using btree (_deleted);
 create index on kultur_qk_rev using btree (_rev_at);
 
+-- TODO: drop after changing to new method
 drop table if exists kultur_qk_choosen cascade;
-create table kultur_qk_choosen (
-  id uuid primary key default uuid_generate_v1mc(),
-  kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_id uuid NOT NULL REFERENCES kultur_qk (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  choosen boolean default true,
-  changed timestamp default now(),
-  changed_by text default null,
-  _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
-  _parent_rev text default null,
-  _revisions text[] default null,
-  _depth integer default 1,
-  _deleted boolean default false,
-  _conflicts text[] default null
-  unique(id, qk_name)
-);
-create index on kultur_qk_choosen using btree (id);
-create index on kultur_qk_choosen using btree (kultur_id);
-create index on kultur_qk_choosen using btree (qk_id);
-create index on kultur_qk_choosen using btree (_deleted);
-create index on kultur_qk_choosen using btree (_rev_at);
-
-insert into kultur_qk_choosen (kultur_id, qk_name)
-select kultur.id, kultur_qk.name
-from kultur_qk, kultur
-on conflict do nothing;
-
 drop table if exists kultur_qk_choosen_rev cascade;
-create table kultur_qk_choosen_rev (
-  id uuid primary key default uuid_generate_v1mc(),
-  kultur_qk_choosen_id uuid default null,
-  kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_id uuid,
-  choosen boolean default true,
-  changed timestamp default now(),
-  changed_by text default null,
-  _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
-  _parent_rev text default null,
-  _revisions text[] default null,
-  _depth integer default 1,
-  _deleted boolean default false
-);
-create index on kultur_qk_choosen_rev using btree (id);
-create index on kultur_qk_choosen_rev using btree (_rev);
-create index on kultur_qk_choosen_rev using btree (_parent_rev);
-create index on kultur_qk_choosen_rev using btree (_depth);
-create index on kultur_qk_choosen_rev using btree (_deleted);
-create index on kultur_qk_choosen_rev using btree (_rev_at);
 
 drop table if exists kultur_file cascade;
 create table kultur_file (
@@ -703,7 +624,7 @@ create table kultur_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on kultur_file using btree (id);
 create index on kultur_file using btree (kultur_id);
@@ -723,7 +644,7 @@ create table teilkultur (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -740,7 +661,7 @@ drop table if exists teilkultur_rev cascade;
 create table teilkultur_rev (
   id uuid primary key default uuid_generate_v1mc(),
   teilkultur_id uuid default null,
-  kultur_id uuid default null references kultur (id) on update no action on delete set null,
+  kultur_id uuid default null,
   name text default null,
   ort1 text default null,
   ort2 text default null,
@@ -749,12 +670,14 @@ create table teilkultur_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY teilkultur_rev ALTER COLUMN teilkultur_id SET DEFAULT null;
+
 create index on teilkultur_rev using btree (rev_id);
 create index on teilkultur_rev using btree (id);
 create index on teilkultur_rev using btree (_rev);
@@ -775,7 +698,7 @@ create table event (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -796,21 +719,23 @@ drop table if exists event_rev cascade;
 create table event_rev (
   id uuid primary key default uuid_generate_v1mc(),
   event_id uuid default null,
-  kultur_id uuid default null references kultur (id) on update no action on delete set null,
-  teilkultur_id uuid default null references teilkultur (id) on update no action on delete set null,
-  person_id uuid default null references person (id) on update no action on delete set null,
+  kultur_id uuid default null,
+  teilkultur_id uuid default null,
+  person_id uuid default null,
   beschreibung text default null,
   geplant boolean default false,
   datum date default null,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY event_rev ALTER COLUMN event_id SET DEFAULT null;
+
 create index on event_rev using btree (rev_id);
 create index on event_rev using btree (id);
 create index on event_rev using btree (_rev);
@@ -829,7 +754,7 @@ create table zaehlung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -847,19 +772,21 @@ drop table if exists zaehlung_rev cascade;
 create table zaehlung_rev (
   id uuid primary key default uuid_generate_v1mc(),
   zaehlung_id uuid default null,
-  kultur_id uuid default null references kultur (id) on update no action on delete set null,
+  kultur_id uuid default null,
   datum date default null,
   prognose boolean default false,
   bemerkungen text default null,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY zaehlung_rev ALTER COLUMN zaehlung_id SET DEFAULT null;
+
 create index on zaehlung_rev using btree (rev_id);
 create index on zaehlung_rev using btree (id);
 create index on zaehlung_rev using btree (_rev);
@@ -883,7 +810,7 @@ create table teilzaehlung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -905,24 +832,26 @@ drop table if exists teilzaehlung_rev cascade;
 create table teilzaehlung_rev (
   id uuid primary key default uuid_generate_v1mc(),
   teilzaehlung_id uuid default null,
-  zaehlung_id uuid default null references zaehlung (id) on update no action on delete set null,
-  teilkultur_id uuid default null references teilkultur (id) on update no action on delete set null,
+  zaehlung_id uuid default null,
+  teilkultur_id uuid default null,
   anzahl_pflanzen integer default null,
   anzahl_auspflanzbereit integer default null,
   anzahl_mutterpflanzen integer default null,
   andere_menge text default null,
   auspflanzbereit_beschreibung text default null,
   bemerkungen text default null,
-  prognose_von_tz uuid default null references teilzaehlung (id) on update no action on delete set null,
+  prognose_von_tz uuid default null,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY teilzaehlung_rev ALTER COLUMN teilzaehlung_id SET DEFAULT null;
+
 create index on teilzaehlung_rev using btree (rev_id);
 create index on teilzaehlung_rev using btree (id);
 create index on teilzaehlung_rev using btree (_rev);
@@ -949,7 +878,7 @@ create table kultur_option (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -964,7 +893,7 @@ COMMENT ON COLUMN kultur_option.tk IS 'opt-in Option für Teilkulturen';
 drop table if exists kultur_option_rev cascade;
 create table kultur_option_rev (
   id uuid primary key default uuid_generate_v1mc(),
-  kultur_id uuid not null references kultur (id) on update no action on delete set null,
+  kultur_id uuid not null,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
   tz_anzahl_mutterpflanzen boolean default true,
@@ -980,12 +909,14 @@ create table kultur_option_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY kultur_option_rev ALTER COLUMN kultur_id SET DEFAULT null;
+
 create index on kultur_option_rev using btree (id);
 create index on kultur_option_rev using btree (kultur_id);
 create index on kultur_option_rev using btree (_rev);
@@ -1020,18 +951,22 @@ create table person_option (
   tree_zaehlung boolean default false,
   tree_lieferung boolean default false,
   tree_event boolean default false,
+  art_qk_choosen text[] default null,
+  kultur_qk_choosen text[] default null,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table person_option add column ku_zwischenlager boolean default false;
-alter table person_option add column ku_erhaltungskultur boolean default false;
+-- 2020.12.24 refactor choosen qk
+alter table person_option add column art_qk_choosen text[] default null;
+alter table person_option add column kultur_qk_choosen text[] default null;
+
 create index on person_option using btree (id);
 create index on person_option using btree (_deleted);
 create index on person_option using btree (_rev_at);
@@ -1043,7 +978,7 @@ comment on column person_option.ar_name_deutsch is 'Dieses Feld wird (momentan) 
 drop table if exists person_option_rev cascade;
 create table person_option_rev (
   id uuid primary key default uuid_generate_v1mc(),
-  person_id uuid not null references person (id) on update no action on delete set null,
+  person_id uuid not null,
   ar_name_deutsch boolean default true,  -- not in use
   ga_strasse boolean default true,
   ga_plz boolean default true,
@@ -1067,15 +1002,23 @@ create table person_option_rev (
   tree_zaehlung boolean default false,
   tree_lieferung boolean default false,
   tree_event boolean default false,
+  art_qk_choosen text[] default null,
+  kultur_qk_choosen text[] default null,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+-- 2020.12.24 refactor choosen qk
+alter table person_option_rev add column art_qk_choosen text[] default null;
+alter table person_option_rev add column kultur_qk_choosen text[] default null;
+ALTER TABLE ONLY person_option_rev ALTER COLUMN person_id SET DEFAULT null;
+
+
 alter table person_option_rev add column ku_zwischenlager boolean default false;
 alter table person_option_rev add column ku_erhaltungskultur boolean default false;
 create index on person_option_rev using btree (rev_id);
@@ -1107,7 +1050,7 @@ create table lieferung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1137,12 +1080,12 @@ create table lieferung_rev (
   id uuid primary key default uuid_generate_v1mc(),
   lieferung_id uuid default null,
   sammel_lieferung_id uuid default null,
-  art_id uuid default null references art (id) on update no action on delete set null,
-  person_id uuid default null references person (id) on update no action on delete set null,
-  von_sammlung_id uuid default null references sammlung (id) on update no action on delete set null,
-  von_kultur_id uuid default null references kultur (id) on update no action on delete set null,
+  art_id uuid default null,
+  person_id uuid default null,
+  von_sammlung_id uuid default null,
+  von_kultur_id uuid default null,
   datum date default null,
-  nach_kultur_id uuid default null references kultur (id) on update no action on delete set null,
+  nach_kultur_id uuid default null,
   nach_ausgepflanzt boolean default false,
   von_anzahl_individuen integer default null,
   anzahl_pflanzen integer default null,
@@ -1154,12 +1097,14 @@ create table lieferung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY lieferung_rev ALTER COLUMN lieferung_id SET DEFAULT null;
+
 create index on lieferung_rev using btree (rev_id);
 create index on lieferung_rev using btree (id);
 create index on lieferung_rev using btree (_rev);
@@ -1188,7 +1133,7 @@ create table sammel_lieferung (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
@@ -1205,12 +1150,12 @@ drop table if exists sammel_lieferung_rev cascade;
 create table sammel_lieferung_rev (
   id uuid primary key default uuid_generate_v1mc(),
   sammel_lieferung_id uuid default null,
-  art_id uuid default null references art (id) on update no action on delete set null,
-  person_id uuid default null references person (id) on update no action on delete set null,
-  von_sammlung_id uuid default null references sammlung (id) on update no action on delete set null,
-  von_kultur_id uuid default null references kultur (id) on update no action on delete set null,
+  art_id uuid default null,
+  person_id uuid default null,
+  von_sammlung_id uuid default null,
+  von_kultur_id uuid default null,
   datum date default null,
-  nach_kultur_id uuid default null references kultur (id) on update no action on delete set null,
+  nach_kultur_id uuid default null,
   nach_ausgepflanzt boolean default false,
   von_anzahl_individuen integer default null,
   anzahl_pflanzen integer default null,
@@ -1222,12 +1167,14 @@ create table sammel_lieferung_rev (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY sammel_lieferung_rev ALTER COLUMN sammel_lieferung_id SET DEFAULT null;
+
 create index on sammel_lieferung_rev using btree (rev_id);
 create index on sammel_lieferung_rev using btree (id);
 create index on sammel_lieferung_rev using btree (_rev);
@@ -1245,7 +1192,7 @@ create table lieferung_file (
   name text default null,
   beschreibung text default null,
   changed timestamp default now(),
-  _rev_at decimal default extract(epoch from now())
+  _rev_at decimal default extract(epoch from now() at time zone 'utc')
 );
 create index on lieferung_file using btree (id);
 create index on lieferung_file using btree (lieferung_id);
@@ -1261,35 +1208,39 @@ create table av (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
-  unique (person_id, art_id)
+  -- this created problems in the on conflict clause of the revision trigger
+  --unique (person_id, art_id)
 );
 create index on av using btree (id);
 create index on av using btree (art_id);
 create index on av using btree (person_id);
 create index on av using btree (_deleted);
 create index on av using btree (_rev_at);
+ALTER TABLE public.av DROP CONSTRAINT av_person_id_art_id_key;
 
 drop table if exists av_rev cascade;
 create table av_rev (
   id uuid primary key default uuid_generate_v1mc(),
   av_id uuid default null,
-  art_id uuid default null REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  person_id uuid references person (id) on delete cascade on update cascade,
+  art_id uuid default null,
+  person_id uuid,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY av_rev ALTER COLUMN av_id SET DEFAULT null;
+
 create index on av_rev using btree (id);
 create index on av_rev using btree (_rev);
 create index on av_rev using btree (_parent_rev);
@@ -1305,13 +1256,14 @@ create table gv (
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
   _conflicts text[] default null
-  unique (person_id, garten_id)
+  -- this created problems in the on conflict clause of the revision trigger
+  -- unique (person_id, garten_id) 
 );
 create index on gv using btree (id);
 create index on gv using btree (garten_id);
@@ -1319,21 +1271,25 @@ create index on gv using btree (person_id);
 create index on gv using btree (_deleted);
 create index on gv using btree (_rev_at);
 
+ALTER TABLE public.gv DROP CONSTRAINT gv_person_id_garten_id_key;
+
 drop table if exists gv_rev cascade;
 create table gv_rev (
   id uuid primary key default uuid_generate_v1mc(),
   gv_id uuid default null,
-  garten_id uuid default null REFERENCES garten (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  person_id uuid references person (id) on delete cascade on update cascade,
+  garten_id uuid default null,
+  person_id uuid,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
-  _rev_at decimal default extract(epoch from now()),
+  _rev_at decimal default extract(epoch from now() at time zone 'utc'),
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false
 );
+ALTER TABLE ONLY gv_rev ALTER COLUMN gv_id SET DEFAULT null;
+
 create index on gv_rev using btree (id);
 create index on gv_rev using btree (_rev);
 create index on gv_rev using btree (_parent_rev);

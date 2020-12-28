@@ -1,9 +1,11 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../storeContext'
 
 const Row = styled.div`
   display: flex;
@@ -25,25 +27,48 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-const ChooseKulturQkRow = ({ kulturId, qk }) => {
+const ChooseKulturQkRow = ({ qk }) => {
   const store = useContext(StoreContext)
+  const { user, db } = store
 
-  const kulturQkChoosen = [...store.kultur_qk_choosens.values()].find(
-    (v) => v.kultur_id === kulturId && v.qk_id === qk.id,
-  )
-  const checked = kulturQkChoosen?.choosen
+  const [dataState, setDataState] = useState({
+    userPersonOption,
+    kulturQkChoosen: [],
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['kultur_qk_choosen'])
+      : $of({})
+    const combinedObservables = combineLatest([userPersonOptionsObservable])
+    const subscription = combinedObservables.subscribe(([userPersonOptions]) =>
+      setDataState({
+        userPersonOption: userPersonOptions?.[0],
+        kulturQkChoosen: userPersonOptions?.[0]?.kultur_qk_choosen ?? [],
+      }),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { userPersonOption, kulturQkChoosen } = dataState
+
+  const checked = kulturQkChoosen.includes(qk.id)
 
   const onChange = useCallback(() => {
-    console.log('ChooseKulturQkRow', {
-      kulturQkChoosen,
-      checked,
-      kulturId,
-      qk,
-      qkName: qk.name,
-      value: event.target.checked,
+    const newValue = event.target.checked
+      ? [...kulturQkChoosen, qk.id]
+      : kulturQkChoosen.filter((id) => id !== qk.id)
+
+    userPersonOption.edit({
+      field: 'kultur_qk_choosen',
+      value: newValue,
+      store,
     })
-    kulturQkChoosen.edit({ field: 'choosen', value: event.target.checked })
-  }, [checked, kulturId, kulturQkChoosen, qk])
+  }, [kulturQkChoosen, qk.id, store, userPersonOption])
+
+  if (!kulturQkChoosen) return null
 
   return (
     <Row>

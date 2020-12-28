@@ -1,4 +1,4 @@
-const fileSort = ({ a, b }) => {
+const fileSort = (a, b) => {
   const nameA = a?.name?.toString()?.toLowerCase() ?? ''
   const nameB = b?.name?.toString()?.toLowerCase() ?? ''
   if (nameA < nameB) return -1

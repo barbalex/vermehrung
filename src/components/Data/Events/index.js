@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -6,13 +6,17 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import eventSort from '../../../utils/eventSort'
+import tableFilter from '../../../utils/tableFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -64,37 +68,69 @@ const singleRowHeight = 48
 
 const Events = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const {
-    insertEventRev,
-    eventsSorted,
-    eventsFiltered,
+  const { insertEventRev, kulturIdInActiveNodeArray, db, filter } = store
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+  const { event: eventFilter } = store.filter
+
+  const [dataState, setDataState] = useState({ events: [], totalCount: 0 })
+  useEffect(() => {
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['kultur']),
+          Q.on('kultur', 'id', kulturIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.get('event')
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.event._deleted === false
+              ? [false]
+              : filter.event._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
+      .observeCount()
+    const dataObservable = collection
+      .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)
+      .observeWithColumns(['datum', 'beschreibung'])
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, events]) => {
+        setDataState({
+          events: events.sort(eventSort),
+          totalCount,
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+    // need to rerender if any of the values of eventFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    db,
     kulturIdInActiveNodeArray,
-  } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(eventFilter),
+    eventFilter,
+  ])
 
-  const hierarchyFilter = (e) => {
-    if (kulturIdInActiveNodeArray)
-      return e.kultur_id === kulturIdInActiveNodeArray
-    return true
-  }
-
-  const storeRowsFiltered = eventsFiltered.filter((e) => {
-    if (kulturIdInActiveNodeArray) {
-      return e.kultur_id === kulturIdInActiveNodeArray
-    }
-    return true
-  })
-  const totalNr = eventsSorted.filter(hierarchyFilter).length
-  const filteredNr = eventsFiltered.filter(hierarchyFilter).length
+  const { events, totalCount } = dataState
+  const filteredCount = events.length
 
   const add = useCallback(() => {
     insertEventRev()
   }, [insertEventRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Events') {
     upTitle = 'Zu allen Listen'
@@ -110,8 +146,8 @@ const Events = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Event"
             table="event"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -127,7 +163,10 @@ const Events = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}
@@ -137,7 +176,7 @@ const Events = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={events.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -148,8 +187,8 @@ const Events = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={events[index]}
+                      last={index === events.length - 1}
                     />
                   )}
                 </StyledList>

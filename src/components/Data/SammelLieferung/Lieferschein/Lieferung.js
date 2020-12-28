@@ -1,10 +1,12 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
+import { combineLatest, of as $of } from 'rxjs'
+import { first as first$ } from 'rxjs/operators'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../models/reactUtils'
-import artLabelFromLieferung from '../../../../utils/artLabelFromLieferung'
+import StoreContext from '../../../../storeContext'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 
 const StyledTableCell = styled(TableCell)`
@@ -13,41 +15,71 @@ const StyledTableCell = styled(TableCell)`
 
 const Zeile = ({ value }) => <div>{value}</div>
 
-const LieferungForLieferschein = ({ lieferung: l }) => {
+const LieferungForLieferschein = ({ lieferung: row }) => {
   const store = useContext(StoreContext)
+  const { db } = store
 
-  const art = artLabelFromLieferung({ lieferung: l, store })
-  const vonKultur = l.von_kultur_id ? store.kulturs.get(l.von_kultur_id) : {}
-  const vonKulturHerkunft = vonKultur?.herkunft_id
-    ? store.herkunfts.get(vonKultur.herkunft_id)
-    : undefined
-  const vonSammlung = l.von_sammlung_id
-    ? store.sammlungs.get(l.von_sammlung_id)
-    : {}
-  const vonSammlungHerkunft = vonSammlung?.herkunft_id
-    ? store.herkunfts.get(vonSammlung.herkunft_id)
-    : undefined
-  const herkunft = vonKulturHerkunft
-    ? herkunftLabelFromHerkunft({
-        herkunft: vonKulturHerkunft,
-      })
-    : vonSammlungHerkunft
-    ? herkunftLabelFromHerkunft({ herkunft: vonSammlungHerkunft })
-    : ''
+  const [dataState, setDataState] = useState({
+    artLabel: '',
+    herkunftLabel: '',
+  })
+  useEffect(() => {
+    const artObservable = row.art_id
+      ? db.get('art').findAndObserve(row.art_id)
+      : $of({})
+    const vonKulturHerkunftObservable = row.von_kultur_id
+      ? db
+          .get('herkunft')
+          .query(Q.on('kultur', Q.where('id', row.von_kultur_id)))
+          .observe()
+      : $of({})
+    const vonSammlungHerkunftObservable = row.von_sammlung_id
+      ? db
+          .get('herkunft')
+          .query(Q.on('sammlung', Q.where('id', row.von_sammlung_id)))
+          .observe()
+      : $of({})
+    const combinedObservables = combineLatest([
+      artObservable,
+      vonKulturHerkunftObservable,
+      vonSammlungHerkunftObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([art, [vonKulturHerkunft], [vonSammlungHerkunft]]) => {
+        let artLabel
+        try {
+          artLabel = await art.label.pipe(first$()).toPromise()
+        } catch {}
+        const herkunftLabel = vonKulturHerkunft
+          ? herkunftLabelFromHerkunft({
+              herkunft: vonKulturHerkunft,
+            })
+          : vonSammlungHerkunft
+          ? herkunftLabelFromHerkunft({ herkunft: vonSammlungHerkunft })
+          : ''
+
+        setDataState({ artLabel, herkunftLabel })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, row.art, row.art_id, row.von_kultur_id, row.von_sammlung_id])
+  const { artLabel, herkunftLabel } = dataState
+
   const wasArray = []
-  l.anzahl_pflanzen && wasArray.push(`${l.anzahl_pflanzen} Pflanzen`)
-  l.anzahl_auspflanzbereit &&
-    wasArray.push(`${l.anzahl_auspflanzbereit} Pflanzen auspflanzbereit`)
-  l.gramm_samen && wasArray.push(`${l.gramm_samen} Gramm Samen`)
-  l.von_anzahl_individuen &&
-    wasArray.push(`von ${l.von_anzahl_individuen} Individuen`)
-  l.andere_menge && wasArray.push(l.andere_menge)
-  const bemerkungen = l.bemerkungen
+  row.anzahl_pflanzen && wasArray.push(`${row.anzahl_pflanzen} Pflanzen`)
+  row.anzahl_auspflanzbereit &&
+    wasArray.push(`${row.anzahl_auspflanzbereit} Pflanzen auspflanzbereit`)
+  row.gramm_samen && wasArray.push(`${row.gramm_samen} Gramm Samen`)
+  row.von_anzahl_individuen &&
+    wasArray.push(`von ${row.von_anzahl_individuen} Individuen`)
+  row.andere_menge && wasArray.push(row.andere_menge)
+  const bemerkungen = row.bemerkungen ?? ''
 
   return (
     <TableRow>
-      <StyledTableCell>{art}</StyledTableCell>
-      <StyledTableCell>{herkunft}</StyledTableCell>
+      <StyledTableCell>{artLabel}</StyledTableCell>
+      <StyledTableCell>{herkunftLabel}</StyledTableCell>
       <StyledTableCell>
         {wasArray.map((w, i) => (
           <Zeile key={i} value={w} />

@@ -1,7 +1,10 @@
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
+
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook'
 import buildExceljsWorksheetsForKultur from '../../../Kultur/FormTitle/buildExceljsWorksheets'
 import removeMetadataFromDataset from '../../../../../utils/removeMetadataFromDataset'
-import artLabelFromKultur from '../../../../../utils/artLabelFromKultur'
+import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs'
 
 /**
  * this function cann be used from higher up
@@ -13,18 +16,24 @@ const buildExceljsWorksheetsForDaten = async ({
   workbook,
   calledFromHigherUp,
 }) => {
-  const { kultursSorted } = store
+  const { db } = store
 
   // 1. Get Garten
-  const garten = store.gartens.get(garten_id)
-  const person = garten.person_id ? store.persons.get(garten.person_id) : {}
+  let garten
+  try {
+    garten = await db.get('garten').find(garten_id)
+  } catch {}
+  let person
+  try {
+    person = await garten?.person?.fetch()
+  } catch {}
   const newGarten = {
     id: garten.id,
     name: garten.name,
     person_id: garten.person_id,
     person_name: person?.fullname ?? '',
     person_rohdaten: removeMetadataFromDataset({
-      dataset: person,
+      dataset: person?._raw,
       foreignKeys: [],
     }),
     strasse: garten.strasse,
@@ -46,54 +55,82 @@ const buildExceljsWorksheetsForDaten = async ({
     data: [newGarten],
   })
   // 2. Get Kulturen
-  const kultursArray = kultursSorted.filter((k) => k.garten_id === garten_id)
-  const kulturs = kultursArray.map((kultur) => {
-    const art = kultur.art_id ? store.arts.get(kultur.art_id) : {}
-    const aeArt = art.ae_id ? store.ae_arts.get(art.ae_id) : {}
-    const herkunft = kultur.herkunft_id
-      ? store.herkunfts.get(kultur.herkunft_id)
-      : {}
-    const garten = kultur.garten_id ? store.gartens.get(kultur.garten_id) : {}
-    const newK = {
-      id: kultur.id,
-      art_id: kultur.art_id,
-      art_ae_id: aeArt?.id ?? '',
-      art_ae_name: artLabelFromKultur({ kultur, store }),
-      herkunft_id: kultur.herkunft_id,
-      herkunft_nr: herkunft?.nr ?? '',
-      herkunft_rohdaten: removeMetadataFromDataset({
-        dataset: herkunft,
-        foreignKeys: ['sammlungs'],
-      }),
-      garten_id: kultur.garten_id,
-      garten_name: garten?.name ?? '',
-      garten_rohdaten: removeMetadataFromDataset({
-        dataset: garten,
-        foreignKeys: ['kulturs', 'person'],
-      }),
-      zwischenlager: kultur.zwischenlager,
-      erhaltungskultur: kultur.erhaltungskultur,
-      von_anzahl_individuen: kultur.von_anzahl_individuen,
-      bemerkungen: kultur.bemerkungen,
-      aktiv: kultur.aktiv,
-      changed: kultur.changed,
-      changed_by: kultur.changed_by,
-    }
-    return newK
-  })
-  if (kulturs.length) {
+  let kultursOfGarten = []
+  try {
+    kultursOfGarten = await db
+      .get('kultur')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('aktiv', true),
+        Q.where('garten_id', garten_id),
+      )
+      .fetch()
+  } catch {}
+  const kultursOfGartenSorted = await kultursSortedFromKulturs(kultursOfGarten)
+  const kulturData = await Promise.all(
+    kultursOfGartenSorted.map(async (kultur) => {
+      let art
+      try {
+        art = await kultur.art?.fetch()
+      } catch {}
+      let artLabel
+      try {
+        artLabel = await art?.label?.pipe(first$()).toPromise()
+      } catch {}
+      let aeArt
+      try {
+        aeArt = await art?.ae_art?.fetch()
+      } catch {}
+      let herkunft
+      try {
+        herkunft = await kultur.herkunft?.fetch()
+      } catch {}
+      let garten
+      try {
+        garten = await kultur.garten?.fetch()
+      } catch {}
+
+      const newK = {
+        id: kultur.id,
+        art_id: kultur.art_id,
+        art_ae_id: aeArt?.id ?? '',
+        art_ae_name: artLabel,
+        herkunft_id: kultur.herkunft_id,
+        herkunft_nr: herkunft?.nr ?? '',
+        herkunft_rohdaten: removeMetadataFromDataset({
+          dataset: herkunft?._raw,
+          foreignKeys: ['sammlungs'],
+        }),
+        garten_id: kultur.garten_id,
+        garten_name: garten?.name ?? '',
+        garten_rohdaten: removeMetadataFromDataset({
+          dataset: garten?._raw,
+          foreignKeys: ['kulturs', 'person'],
+        }),
+        zwischenlager: kultur.zwischenlager,
+        erhaltungskultur: kultur.erhaltungskultur,
+        von_anzahl_individuen: kultur.von_anzahl_individuen,
+        bemerkungen: kultur.bemerkungen,
+        aktiv: kultur.aktiv,
+        changed: kultur.changed,
+        changed_by: kultur.changed_by,
+      }
+      return newK
+    }),
+  )
+  if (kulturData.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
       title: calledFromHigherUp ? `Garten_${garten_id}_Kulturen` : 'Kulturen',
-      data: kulturs,
+      data: kulturData,
     })
     // 3. for all kulturen, call Kultur/buildExceljsWorksheets
-    const myKulturIds = kulturs.map((k) => k.id)
+    const myKulturIds = kulturData.map((k) => k.id)
     // need to pass index
     // as explained in https://stackoverflow.com/a/34349073/712005
     // because excel limits length of names and uuid is too long
     for (const [index, kultur_id] of [myKulturIds].entries()) {
-      buildExceljsWorksheetsForKultur({
+      await buildExceljsWorksheetsForKultur({
         store,
         kultur_id: kultur_id[0],
         kultur_name: index + 1,

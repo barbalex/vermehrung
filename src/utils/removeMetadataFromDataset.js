@@ -11,6 +11,7 @@ const removeMetadata = (d) => {
 }
 
 const removeMetadataFromDataset = ({ dataset: d, foreignKeys }) => {
+  if (!d) return null
   const datasetRaw = { ...d }
   const dataset = removeMetadata(datasetRaw)
   if (foreignKeys.length) {

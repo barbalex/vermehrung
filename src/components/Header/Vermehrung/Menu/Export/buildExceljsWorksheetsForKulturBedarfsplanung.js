@@ -1,58 +1,81 @@
 import format from 'date-fns/format'
 import sumBy from 'lodash/sumBy'
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
 
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook'
-import artLabelFromArt from '../../../../../utils/artLabelFromArt'
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
 import exists from '../../../../../utils/exists'
-import kulturLabelFromKultur from '../../../../../utils/kulturLabelFromKultur'
+import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs'
+import zaehlungSort from '../../../../../utils/zaehlungSort'
+import lieferungSort from '../../../../../utils/lieferungSort'
 
 const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
   store,
   workbook,
 }) => {
-  const {
-    kultursSorted,
-    zaehlungsSorted,
-    teilzaehlungsSorted,
-    lieferungsSorted,
-  } = store
+  const { db } = store
 
-  const kulturs = kultursSorted
-    .filter((kultur) => {
-      if (!kultur.aktiv) return false
-      if (kultur._deleted) return false
-      const garten = store.gartens.get(kultur.garten_id)
-      if (!garten) return false
-      if (!garten?.aktiv) return false
-      if (garten?._deleted) return false
-      return true
-    })
-    .map((kultur) => {
-      const art = kultur.art_id ? store.arts.get(kultur.art_id) : {}
-      //const aeArt = art?.ae_id ? store.ae_arts.get(art.ae_id) : {}
-      const herkunft = kultur?.herkunft_id
-        ? store.herkunfts.get(kultur.herkunft_id)
-        : {}
-      const garten = kultur?.garten_id
-        ? store.gartens.get(kultur.garten_id)
-        : {}
+  let kulturs = []
+  try {
+    kulturs = await db
+      .get('kultur')
+      .query(
+        Q.where('_deleted', false),
+        Q.where('aktiv', true),
+        Q.where('garten_id', Q.notEq(null)),
+        Q.on('garten', [Q.where('aktiv', true), Q.where('_deleted', false)]),
+      )
+      .fetch()
+  } catch {}
+  const kultursSorted = await kultursSortedFromKulturs(kulturs)
+  const kultursData = await Promise.all(
+    kultursSorted.map(async (kultur) => {
+      let kulturLabel
+      try {
+        kulturLabel = await kultur.label.pipe(first$()).toPromise()
+      } catch {}
+      let art
+      try {
+        art = await kultur.art.fetch()
+      } catch {}
+      let artname
+      try {
+        artname = await art.label.pipe(first$()).toPromise()
+      } catch {}
+      let herkunft
+      try {
+        herkunft = await kultur.herkunft.fetch()
+      } catch {}
+      let garten
+      try {
+        garten = await kultur.garten.fetch()
+      } catch {}
+      let garten_label
+      try {
+        garten_label = await garten.label.pipe(first$()).toPromise()
+      } catch {}
 
-      const ownZaehlungen = zaehlungsSorted
-        .filter((z) => z.kultur_id === kultur.id)
-        .filter((z) => !!z.datum)
-        // anzahl_pflanzen must exist
-        .filter(
-          (z) =>
-            !!teilzaehlungsSorted
-              .filter((t) => t.zaehlung_id === z.id)
-              .filter((t) => exists(t.anzahl_pflanzen)).length,
-        )
-      const lastZaehlung = ownZaehlungen[ownZaehlungen.length - 1]
-      const lZTeilzaehlungs = lastZaehlung
-        ? teilzaehlungsSorted.filter((t) => t.zaehlung_id === lastZaehlung.id)
-        : []
+      let ownZaehlungen = []
+      try {
+        ownZaehlungen = await db
+          .get('zaehlung')
+          .query(
+            Q.where('_deleted', false),
+            Q.where('kultur_id', kultur.id),
+            Q.where('datum', Q.notEq(null)),
+            Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+          )
+          .fetch()
+      } catch {}
+      const ownZaehlungenSorted = ownZaehlungen.sort(zaehlungSort)
+      const lastZaehlung = ownZaehlungenSorted[ownZaehlungenSorted.length - 1]
+      let lZTeilzaehlungs = []
+      try {
+        lZTeilzaehlungs = await lastZaehlung?.teilzaehlungs
+          .extend(Q.where('_deleted', false))
+          .fetch()
+      } catch {}
 
       // danger: sumBy returns 0 when field was undefined!
       const tzsToSumAnzahlPflanzen = lZTeilzaehlungs.filter((l) =>
@@ -81,10 +104,22 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (anzahl_mutterpflanzen ?? 0)
           : ''
 
-      const ownAusLieferungen = lieferungsSorted
-        .filter((l) => l.von_kultur_id === kultur.id)
-        .filter((l) => !!l.datum)
-        .filter((l) => exists(l.anzahl_pflanzen))
+      let lieferungs = []
+      try {
+        lieferungs = await db
+          .get('lieferung')
+          .query(
+            Q.where('_deleted', false),
+            Q.where('datum', Q.notEq(null)),
+            Q.where('anzahl_pflanzen', Q.notEq(null)),
+          )
+          .fetch()
+      } catch {}
+      const lieferungsSorted = lieferungs.sort(lieferungSort)
+
+      const ownAusLieferungen = lieferungsSorted.filter(
+        (l) => l.von_kultur_id === kultur.id,
+      )
       const lastAusLieferung = ownAusLieferungen[ownAusLieferungen.length - 1]
       const letzte_lieferung_anzahl_pflanzen =
         lastAusLieferung?.anzahl_pflanzen ?? ''
@@ -133,10 +168,9 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (auslSinceAnzahlMutterpflanzen ?? 0)
           : ''
 
-      const ownAnLieferungen = lieferungsSorted
-        .filter((l) => l.nach_kultur_id === kultur.id)
-        .filter((l) => !!l.datum)
-        .filter((l) => exists(l.anzahl_pflanzen))
+      const ownAnLieferungen = lieferungsSorted.filter(
+        (l) => l.nach_kultur_id === kultur.id,
+      )
 
       const anlSinceLastZaehlung = ownAnLieferungen
         .filter(
@@ -169,22 +203,21 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
 
       const row = {
         id: kultur.id,
-        label: kulturLabelFromKultur({ kultur, store }),
-        //art_id: kultur.art_id,
-        //art_ae_id: aeArt?.id ?? '',
-        artname: artLabelFromArt({ art, store }),
+        label: kulturLabel,
+        artname,
         herkunft_id: kultur.herkunft_id,
         herkunft_nr: herkunft?.nr ?? '',
         herkunft_label: herkunftLabelFromHerkunft({ herkunft }),
         garten_id: kultur.garten_id,
-        garten_label: gartenLabelFromGarten({ garten, store }),
+        garten_label,
         zwischenlager: kultur.zwischenlager,
         erhaltungskultur: kultur.erhaltungskultur,
         von_anzahl_individuen: kultur.von_anzahl_individuen,
         bemerkungen: kultur.bemerkungen,
         aktiv: kultur.aktiv,
-        //changed: kultur.changed,
-        //changed_by: kultur.changed_by,
+        zaehlungen_daten: ownZaehlungenSorted
+          .map((z) => format(new Date(z.datum), 'yyyy.MM.dd'))
+          .join(', '),
         letzte_zaehlung_datum: lastZaehlung
           ? format(new Date(lastZaehlung.datum), 'yyyy.MM.dd')
           : '',
@@ -238,12 +271,13 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       }
 
       return row
-    })
+    }),
+  )
 
   addWorksheetToExceljsWorkbook({
     workbook,
     title: `Kulturen für Bedarfsplanung`,
-    data: kulturs,
+    data: kultursData,
   })
 
   return

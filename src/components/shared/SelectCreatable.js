@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect, useContext } from 'react'
 import Select from 'react-select/creatable'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+
+import StoreContext from '../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -76,10 +78,12 @@ const emptyValue = {
   label: '',
 }
 
-const SharedSelect = ({
+const SelectCreatable = ({
   field = '',
   label,
   row,
+  showFilter,
+  table,
   error,
   options,
   loading = false,
@@ -88,23 +92,41 @@ const SharedSelect = ({
   onCreateNew,
   callback = () => {},
 }) => {
-  const value = row[field]
-  const onChange = useCallback((option, actionMeta) => {
-    // if action is create-option
-    // need to create new dataset
-    if (actionMeta.action === 'create-option') {
-      // 1. create new dataset
-      onCreateNew({ name: option.label })
-      return
-    }
-    row.edit({ field, value: option ? option.value : null })
-    callback()
+  const store = useContext(StoreContext)
+  const { filter } = store
+
+  const [stateValue, setStateValue] = useState(row[field])
+  useEffect(() => {
+    setStateValue(row[field])
   }, [])
 
+  const onChange = useCallback(
+    (option, actionMeta) => {
+      // if action is create-option
+      // need to create new dataset
+      if (actionMeta.action === 'create-option') {
+        // 1. create new dataset
+        onCreateNew({ name: option.label })
+        return
+      }
+      const newValue = option ? option.value : null
+      setStateValue(newValue)
+
+      if (showFilter) {
+        filter.setValue({ table, key: field, value: newValue })
+      } else {
+        row.edit({ field, value: newValue, store })
+      }
+      callback()
+    },
+    [store],
+  )
+
   // show ... whyle options are loading
-  const loadingOptions = [{ value, label: '...' }]
-  const optionsToUse = loading && value ? loadingOptions : options
-  const selectValue = optionsToUse.find((o) => o.value === value) || emptyValue
+  const loadingOptions = [{ value: stateValue, label: '...' }]
+  const optionsToUse = loading && stateValue ? loadingOptions : options
+  const selectValue =
+    optionsToUse.find((o) => o.value === stateValue) || emptyValue
 
   return (
     <Container>
@@ -130,4 +152,4 @@ const SharedSelect = ({
   )
 }
 
-export default observer(SharedSelect)
+export default observer(SelectCreatable)

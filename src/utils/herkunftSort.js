@@ -1,4 +1,4 @@
-const herkunftSort = ({ a, b }) => {
+const herkunftSort = (a, b) => {
   const gemeindeA = a?.gemeinde?.toString()?.toLowerCase() ?? ''
   const gemeindeB = b?.gemeinde?.toString()?.toLowerCase() ?? ''
   if (gemeindeA < gemeindeB) return -1

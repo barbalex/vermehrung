@@ -9,11 +9,14 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -38,25 +41,50 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const Teilzaehlungen = ({ zaehlungId }) => {
+const Teilzaehlungen = ({ zaehlung }) => {
   const store = useContext(StoreContext)
-  const { insertTeilzaehlungRev, teilzaehlungsSorted } = store
+  const { insertTeilzaehlungRev, db } = store
 
-  const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
   const kulturId = zaehlung.kultur_id
 
-  const hierarchyFilter = (r) => r.zaehlung_id === zaehlungId
+  const [dataState, setDataState] = useState({
+    teilzaehlungs: [],
+    kulturOption: undefined,
+  })
+  useEffect(() => {
+    const teilzaehlungsObservable = zaehlung.teilzaehlungs
+      .extend(Q.where('_deleted', false))
+      .observe()
+    const kulturOptionObservable = kulturId
+      ? db.get('kultur_option').find(kulturId)
+      : $of({})
+    const combinedObservables = combineLatest([
+      teilzaehlungsObservable,
+      kulturOptionObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([tzs, kulturOption]) => {
+        const teilzaehlungs = await teilzaehlungsSortByTk(tzs)
+        setDataState({ teilzaehlungs, kulturOption })
+      },
+    )
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    kulturId,
+    zaehlung.kultur_option,
+    zaehlung.teilkulturs,
+    zaehlung.teilzaehlungs,
+  ])
+  const { teilzaehlungs, kulturOption } = dataState
 
-  const storeRowsFiltered = teilzaehlungsSorted.filter(hierarchyFilter)
-
-  const kulturOption = store.kultur_options.get(kulturId) ?? {}
-  const { tk } = kulturOption
+  const { tk } = kulturOption ?? {}
 
   const onClickNew = useCallback(() => {
     insertTeilzaehlungRev()
   }, [insertTeilzaehlungRev])
 
-  const showNew = storeRowsFiltered.length === 0 || tk
+  const showNew = teilzaehlungs.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'
 
   const titleRowRef = useRef(null)
@@ -90,7 +118,7 @@ const Teilzaehlungen = ({ zaehlungId }) => {
           )}
         </div>
       </TitleRow>
-      <TeilzaehlungenRows zaehlungId={zaehlungId} kulturId={kulturId} />
+      <TeilzaehlungenRows kulturId={kulturId} teilzaehlungs={teilzaehlungs} />
     </ErrorBoundary>
   )
 }

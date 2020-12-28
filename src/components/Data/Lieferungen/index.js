@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -6,14 +6,18 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import exists from '../../../utils/exists'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import tableFilter from '../../../utils/tableFilter'
+import lieferungSort from '../../../utils/lieferungSort'
 
 const Container = styled.div`
   height: 100%;
@@ -66,48 +70,111 @@ const singleRowHeight = 48
 const Lieferungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
+    db,
     insertLieferungRev,
-    lieferungsSorted,
-    lieferungsFiltered,
     kulturIdInActiveNodeArray,
-    sammelLieferungIdInActiveNodeArray,
     personIdInActiveNodeArray,
+    sammelLieferungIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
+    filter,
   } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+  const { lieferung: lieferungFilter } = store.filter
 
-  const hierarchyFilter = (e) => {
+  const [dataState, setDataState] = useState({ lieferungs: [], totalCount: 0 })
+  useEffect(() => {
+    let kulturOnField = 'von_kultur_id'
     if (kulturIdInActiveNodeArray) {
-      if (activeNodeArray.includes('Aus-Lieferungen')) {
-        return e.von_kultur_id === kulturIdInActiveNodeArray
-      }
-      if (activeNodeArray.includes('An-Lieferungen')) {
-        return e.nach_kultur_id === kulturIdInActiveNodeArray
-      }
+      const lastAnAElement = activeNodeArray[activeNodeArray.length - 1]
+      if (lastAnAElement === 'An-Lieferungen') kulturOnField = 'nach_kultur_id'
     }
-    if (sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-      return e.sammel_lieferung_id === sammelLieferungIdInActiveNodeArray
-    }
-    if (personIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-      return e.person_id === personIdInActiveNodeArray
-    }
-    if (sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-      return e.von_sammlung_id === sammlungIdInActiveNodeArray
-    }
-    return true
-  }
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? // this should get kulturen connected by von_kultur_id or nach_kultur_id
+        // depending on activeNodeArray[last] being 'An-Lieferung' or 'Aus-Lieferung'
+        // Q.on did not work because only one association can be declared per table
+        [Q.where(kulturOnField, kulturIdInActiveNodeArray)]
+      : sammelLieferungIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['sammel_lieferung']),
+          Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
+        ]
+      : personIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['person']),
+          Q.on('person', 'id', personIdInActiveNodeArray),
+        ]
+      : sammlungIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['sammlung']),
+          Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.get('lieferung')
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.lieferung._deleted === false
+              ? [false]
+              : filter.lieferung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
+      .observeCount()
+    const dataObservable = collection
+      .query(
+        ...tableFilter({
+          table: 'lieferung',
+          store,
+        }),
+        ...hierarchyQuery,
+      )
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, lieferungs]) => {
+        setDataState({
+          lieferungs: lieferungs.sort(lieferungSort),
+          totalCount,
+        })
+      },
+    )
 
-  const storeRowsFiltered = lieferungsFiltered.filter(hierarchyFilter)
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    // need to rerender if any of the values of lieferungFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(lieferungFilter),
+    lieferungFilter,
+    kulturIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+    sammelLieferungIdInActiveNodeArray,
+    sammlungIdInActiveNodeArray,
+    activeNodeArray,
+    // need to rerender if last element of activeNodeArray changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    activeNodeArray[activeNodeArray.length - 1],
+    store,
+    filter.lieferung._deleted,
+  ])
 
-  const totalNr = lieferungsSorted.filter(hierarchyFilter).length
-  const filteredNr = lieferungsFiltered.filter(hierarchyFilter).length
+  const { lieferungs, totalCount } = dataState
+  const filteredCount = lieferungs.length
 
-  const add = useCallback(() => {
+  const add = useCallback(async () => {
     const isSammelLieferung =
       activeNodeArray.length >= 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
     if (isSammelLieferung) {
       const slId = activeNodeArray[1]
-      const sl = store.sammel_lieferungs.get(slId)
+      let sl
+      try {
+        sl = await db.get('sammel_lieferung').find(slId)
+      } catch {}
       let additionalValuesToSet = {}
 
       const entries = Object.entries(sl)
@@ -117,7 +184,6 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
             !key.startsWith('_') &&
             ![
               'lieferungs',
-              'lieferungs_aggregate',
               'kulturByNachKulturId',
               'kulturByVonKulturId',
               'person',
@@ -136,12 +202,12 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
       })
     }
     insertLieferungRev()
-  }, [activeNodeArray, insertLieferungRev, store.sammel_lieferungs])
+  }, [activeNodeArray, db, insertLieferungRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Lieferungen') {
     upTitle = 'Zu allen Listen'
@@ -163,8 +229,8 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Lieferung"
             table="lieferung"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -180,7 +246,10 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}
@@ -190,7 +259,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={lieferungs.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -201,8 +270,8 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={lieferungs[index]}
+                      last={index === lieferungs.length - 1}
                     />
                   )}
                 </StyledList>

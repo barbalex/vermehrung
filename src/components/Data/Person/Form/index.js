@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import Checkbox2States from '../../../shared/Checkbox2States'
@@ -39,26 +41,51 @@ const Person = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    personsSorted,
-    user_roles,
-    errors,
-    unsetError,
-    setError,
-  } = store
+  const { filter, online, errors, unsetError, setError, db } = store
 
-  const userRoleWerte = useMemo(
-    () =>
-      [...user_roles.values()]
-        .sort((a, b) => userRoleSort({ a, b }))
-        .map((el) => ({
+  const [dataState, setDataState] = useState({
+    userRoleWerte: [],
+    userRole: undefined,
+  })
+  useEffect(() => {
+    const personsNrCountObservable =
+      showFilter || !exists(row?.nr)
+        ? $of(0)
+        : db
+            .get('person')
+            .query(Q.where('_deleted', false), Q.where('nr', row.nr))
+            .observeCount()
+    const userRolesObservable = db.get('user_role').query().observe()
+    const userRoleObservable = row.user_role
+      ? row.user_role.observe()
+      : $of(null)
+    const combinedObservables = combineLatest([
+      userRolesObservable,
+      personsNrCountObservable,
+      userRoleObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([userRoles, nrCount, userRole]) => {
+        const userRoleWerte = userRoles.sort(userRoleSort).map((el) => ({
           value: el.id,
           label: el.label,
-        })),
-    [user_roles],
-  )
+        }))
+        if (!showFilter && nrCount > 1) {
+          setError({
+            path: 'person.nr',
+            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Personen eindeutig sein`,
+          })
+        }
+        setDataState({
+          userRoleWerte,
+          userRole,
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, row.nr, row.user_role, setError, showFilter])
+  const { userRoleWerte, userRole } = dataState
 
   useEffect(() => {
     unsetError('person')
@@ -75,34 +102,16 @@ const Person = ({
         return filter.setValue({ table: 'person', key: field, value })
       }
 
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row[field])
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
 
-  const rowNr = row?.nr
-  const nrCount = useMemo(() => {
-    if (!exists(rowNr)) return 0
-    return personsSorted.filter((h) => h.nr === rowNr).length
-  }, [personsSorted, rowNr])
-
-  useEffect(() => {
-    if (nrCount > 1) {
-      setError({
-        path: 'person.nr',
-        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Personen eindeutig sein`,
-      })
-    }
-  }, [nrCount, setError])
-
-  const showDeleted = showFilter || row._deleted
-
-  const userRole = row?.user_role_id
-    ? store.user_roles.get(row.user_role_id)
-    : {}
+  const showDeleted =
+    showFilter || filter.person._deleted !== false || row?._deleted
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
@@ -327,11 +336,11 @@ const Person = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {userRole?.name === 'artverantwortlich' && <Arten personId={row.id} />}
+        {userRole?.name === 'artverantwortlich' && <Arten person={row} />}
         {['gaertner', 'artverantwortlich'].includes(userRole?.name) && (
-          <Gaerten personId={row.id} />
+          <Gaerten person={row} />
         )}
-        {!showFilter && row.id && <Files parentId={row.id} parent="person" />}
+        {!showFilter && row.id && <Files parentTable="person" parent={row} />}
       </Container>
     </SimpleBar>
   )
