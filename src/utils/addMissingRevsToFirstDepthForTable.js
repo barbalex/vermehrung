@@ -14,6 +14,7 @@ import {
   teilzaehlung,
   teilkultur,
 } from './fragments'
+import toPgArray from './toPgArray'
 
 const fragments = {
   art,
@@ -54,10 +55,23 @@ const addMissingRevsToFirstDepthForTable = async ({ table, store }) => {
   }
   const tableData = response.data[table]
   console.log('addMissingRevsToFirstDepthForTable', {
-    table,
-    response,
     tableData,
   })
+  for (const dat of tableData) {
+    const datWithout = { ...dat }
+    delete datWithout._rev
+    delete datWithout.id
+    delete datWithout.changed
+    delete datWithout.changed_by
+    delete datWithout._revisions
+    const rev = `${1}-${md5(JSON.stringify(datWithout))}`
+    const newDat = {
+      ...dat,
+      _rev: rev,
+      _revisions: toPgArray([rev]),
+    }
+    await gqlClient(gql``)
+  }
   // 2. add _parent_rev and _revisions to depth 2 without parent_rev
 }
 
