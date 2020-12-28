@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -6,13 +6,17 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import tableFilter from '../../../utils/tableFilter'
+import sammlungsSortedFromSammlungs from '../../../utils/sammlungsSortedFromSammlungs'
 
 const Container = styled.div`
   height: 100%;
@@ -66,40 +70,97 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
     insertSammlungRev,
-    sammlungsFiltered,
-    sammlungsSorted,
     artIdInActiveNodeArray,
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
+    db,
+    filter,
   } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+  const { sammlung: sammlungFilter } = store.filter
 
-  const hierarchyFilter = (s) => {
-    if (artIdInActiveNodeArray) {
-      return s.art_id === artIdInActiveNodeArray
-    }
-    if (herkunftIdInActiveNodeArray) {
-      return s.herkunft_id === herkunftIdInActiveNodeArray
-    }
-    if (personIdInActiveNodeArray) {
-      return s.person_id === personIdInActiveNodeArray
-    }
-    return true
-  }
+  const [dataState, setDataState] = useState({ sammlungs: [], totalCount: 0 })
+  useEffect(() => {
+    const hierarchyQuery = artIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['art']),
+          Q.on('art', 'id', artIdInActiveNodeArray),
+        ]
+      : herkunftIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['herkunft']),
+          Q.on('herkunft', 'id', herkunftIdInActiveNodeArray),
+        ]
+      : personIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['person']),
+          Q.on('person', 'id', personIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.get('sammlung')
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.sammlung._deleted === false
+              ? [false]
+              : filter.sammlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
+      .observeCount()
+    const dataObservable = collection
+      .query(
+        ...tableFilter({
+          table: 'sammlung',
+          store,
+        }),
+        ...hierarchyQuery,
+      )
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
 
-  const storeRowsFiltered = sammlungsFiltered.filter(hierarchyFilter)
+    // so need to hackily use merge
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const subscription = combinedObservables.subscribe(
+      async ([totalCount, sammlungs]) => {
+        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+        setDataState({
+          sammlungs: sammlungsSorted,
+          totalCount,
+        })
+      },
+    )
 
-  const totalNr = sammlungsSorted.filter(hierarchyFilter).length
-  const filteredNr = sammlungsFiltered.filter(hierarchyFilter).length
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    // need to rerender if any of the values of sammlungFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(sammlungFilter),
+
+    sammlungFilter,
+    artIdInActiveNodeArray,
+    herkunftIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+    store,
+    filter.sammlung._deleted,
+  ])
+
+  const { sammlungs, totalCount } = dataState
+  const filteredCount = sammlungs.length
 
   const add = useCallback(() => {
     insertSammlungRev()
   }, [insertSammlungRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Sammlungen') {
     upTitle = 'Zu allen Listen'
@@ -118,8 +179,8 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Sammlung"
             table="sammlung"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -135,7 +196,10 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}
@@ -145,7 +209,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={sammlungs.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -156,8 +220,8 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={sammlungs[index]}
+                      last={index === sammlungs.length - 1}
                     />
                   )}
                 </StyledList>

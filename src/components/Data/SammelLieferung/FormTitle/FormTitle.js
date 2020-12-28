@@ -1,9 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
+import { of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Settings from './Settings'
 import Copy from './Copy'
 import Add from './Add'
@@ -40,9 +42,9 @@ const TitleSymbols = styled.div`
 const SammelLieferungFormTitle = ({
   showFilter,
   row,
-  totalNr,
-  filteredNr,
-  lieferungId,
+  totalCount,
+  filteredCount,
+  lieferung,
   printPreview,
   setPrintPreview,
   width,
@@ -50,10 +52,24 @@ const SammelLieferungFormTitle = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-
-  const { filter, userPersonOption } = store
+  const { filter, user, db } = store
   const { activeNodeArray } = store.tree
-  const { sl_auto_copy_edits } = userPersonOption
+
+  const [userPersonOption, setUserPersonOption] = useState()
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['sl_auto_copy_edits'])
+      : $of({})
+    const subscription = userPersonOptionsObservable.subscribe(
+      ([userPersonOption]) => setUserPersonOption(userPersonOption),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user])
+  const { sl_auto_copy_edits } = userPersonOption ?? {}
 
   const shownAsSammelLieferung =
     activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
@@ -73,7 +89,7 @@ const SammelLieferungFormTitle = ({
             </>
           )}
           {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferungId={lieferungId} asMenu />
+            <Copy sammelLieferung={row} lieferung={lieferung} asMenu />
           )}
           <>
             <Menu white={false}>
@@ -84,7 +100,8 @@ const SammelLieferungFormTitle = ({
               />
               <Anleitung asMenu />
               <HistoryButton
-                row={row}
+                table="sammel_lieferung"
+                id={row.id}
                 showHistory={showHistory}
                 setShowHistory={setShowHistory}
                 asMenu
@@ -92,8 +109,8 @@ const SammelLieferungFormTitle = ({
               {row.id && <Settings asMenu />}
               {shownAsSammelLieferung && (
                 <FilterNumbers
-                  filteredNr={filteredNr}
-                  totalNr={totalNr}
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
                   asMenu
                 />
               )}
@@ -117,7 +134,7 @@ const SammelLieferungFormTitle = ({
             </>
           )}
           {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferungId={lieferungId} asMenu />
+            <Copy sammelLieferung={row} lieferung={lieferung} asMenu />
           )}
           <>
             <PrintButtons
@@ -126,7 +143,8 @@ const SammelLieferungFormTitle = ({
             />
             <Menu white={false}>
               <HistoryButton
-                row={row}
+                table="sammel_lieferung"
+                id={row.id}
                 showHistory={showHistory}
                 setShowHistory={setShowHistory}
                 asMenu
@@ -135,8 +153,8 @@ const SammelLieferungFormTitle = ({
               <Anleitung asMenu />
               {shownAsSammelLieferung && (
                 <FilterNumbers
-                  filteredNr={filteredNr}
-                  totalNr={totalNr}
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
                   asMenu
                 />
               )}
@@ -160,14 +178,15 @@ const SammelLieferungFormTitle = ({
             </>
           )}
           {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferungId={lieferungId} asMenu />
+            <Copy sammelLieferung={row} lieferung={lieferung} asMenu />
           )}
           <PrintButtons
             printPreview={printPreview}
             setPrintPreview={setPrintPreview}
           />
           <HistoryButton
-            row={row}
+            table="sammel_lieferung"
+            id={row.id}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
@@ -177,8 +196,8 @@ const SammelLieferungFormTitle = ({
               <Anleitung asMenu />
               {shownAsSammelLieferung && (
                 <FilterNumbers
-                  filteredNr={filteredNr}
-                  totalNr={totalNr}
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
                   asMenu
                 />
               )}
@@ -206,10 +225,11 @@ const SammelLieferungFormTitle = ({
             </>
           )}
           {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferungId={lieferungId} />
+            <Copy sammelLieferung={row} lieferung={lieferung} />
           )}
           <HistoryButton
-            row={row}
+            table="sammel_lieferung"
+            id={row.id}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
@@ -219,8 +239,8 @@ const SammelLieferungFormTitle = ({
               <Anleitung asMenu />
               {shownAsSammelLieferung && (
                 <FilterNumbers
-                  filteredNr={filteredNr}
-                  totalNr={totalNr}
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
                   asMenu
                 />
               )}
@@ -247,18 +267,22 @@ const SammelLieferungFormTitle = ({
           </>
         )}
         {!sl_auto_copy_edits && (
-          <Copy sammelLieferung={row} lieferungId={lieferungId} />
+          <Copy sammelLieferung={row} lieferung={lieferung} />
         )}
         <>
           <HistoryButton
-            row={row}
+            table="sammel_lieferung"
+            id={row.id}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
           {row.id && <Settings />}
           <Anleitung />
           {shownAsSammelLieferung && (
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+            />
           )}
         </>
       </TitleSymbols>

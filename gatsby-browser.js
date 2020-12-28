@@ -17,7 +17,7 @@ export const wrapRootElement = ({ element }) => <App element={element} />
 
 // https://github.com/gatsbyjs/gatsby/issues/9087#issuecomment-459105021
 //export const onServiceWorkerUpdateReady = () => {
-export const onServiceWorkerUpdateFound = () => {
+export const onServiceWorkerUpdateFound = async () => {
   if (
     window.confirm(
       'vermehrung.ch neu laden, um die neuste Version zu installieren?',
@@ -25,7 +25,7 @@ export const onServiceWorkerUpdateFound = () => {
   ) {
     // TODO: empty everything but the login?
     // seems that is what is happening
-    localForage.clear()
+    await localForage.clear()
     window.location.reload(true)
   }
 }

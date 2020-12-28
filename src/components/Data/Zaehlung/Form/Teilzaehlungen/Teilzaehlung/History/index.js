@@ -1,12 +1,13 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../../../../../models/reactUtils'
 import checkForOnlineError from '../../../../../../../utils/checkForOnlineError'
 import Spinner from '../../../../../../shared/Spinner'
+import StoreContext from '../../../../../../../storeContext'
 import Row from './Row'
 
 const teilzaehlungRevQuery = gql`
@@ -17,14 +18,6 @@ const teilzaehlungRevQuery = gql`
       teilzaehlung_id
       zaehlung_id
       teilkultur_id
-      teilkultur {
-        id
-        __typename
-        name
-        ort1
-        ort2
-        ort3
-      }
       anzahl_pflanzen
       anzahl_auspflanzbereit
       anzahl_mutterpflanzen
@@ -36,6 +29,7 @@ const teilzaehlungRevQuery = gql`
       changed_by
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -65,32 +59,28 @@ const ErrorContainer = styled.div`
 `
 
 const sliderSettings = {
-  dots: true,
+  dots: false,
   infinite: false,
 }
 
-const KulturHistory = ({ row, historyTakeoverCallback }) => {
+const TeilzaehlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
 
-  // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(teilzaehlungRevQuery, {
+  const priorRevisions = row?._revisions?.slice(1) ?? []
+  const [{ error, data, fetching }] = useQuery({
+    query: teilzaehlungRevQuery,
     variables: {
-      rev: row._revisions,
+      rev: priorRevisions,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
-  // need to grab store object to ensure this remains up to date
-  const revRows = useMemo(
-    () =>
-      [...store.teilzaehlung_revs.values()]
-        .filter((v) => row?._revisions?.includes(v._rev) ?? true)
-        .filter((r) => r._rev !== row._rev)
-        .sort((a, b) => b._depth - a._depth) || {},
-    [row._rev, row._revisions, store.teilzaehlung_revs],
-  )
+  const revRowsUnsorted = useMemo(() => data?.teilzaehlung_rev ?? [], [
+    data?.teilzaehlung_rev,
+  ])
+  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
-  if (loading) {
+  if (fetching) {
     return <Spinner message="lade Versionen" />
   }
 
@@ -106,6 +96,7 @@ const KulturHistory = ({ row, historyTakeoverCallback }) => {
             key={row._rev}
             revRow={r}
             row={row}
+            rawRow={rawRow}
             historyTakeoverCallback={historyTakeoverCallback}
           />
         ))}
@@ -114,4 +105,4 @@ const KulturHistory = ({ row, historyTakeoverCallback }) => {
   )
 }
 
-export default observer(KulturHistory)
+export default observer(TeilzaehlungHistory)

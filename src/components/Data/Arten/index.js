@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -7,12 +7,16 @@ import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import SimpleBar from 'simplebar-react'
+import { combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
+import tableFilter from '../../../utils/tableFilter'
+import artsSortedFromArts from '../../../utils/artsSortedFromArts'
 
 const Container = styled.div`
   height: 100%;
@@ -63,20 +67,57 @@ const singleRowHeight = 48
 
 const Arten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertArtRev, artsFiltered, artsSorted } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { insertArtRev, db, filter } = store
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+  const { art: artFilter } = store.filter
 
-  const totalNr = artsSorted.length
-  const filteredNr = artsFiltered.length
+  const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
+  useEffect(() => {
+    const collection = db.get('art')
+    const totalCountObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeCount()
+    const artsObservable = collection
+      .query(...tableFilter({ store, table: 'art' }))
+      .observeWithColumns(['ae_id'])
+    const combinedObservables = combineLatest([
+      totalCountObservable,
+      artsObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([totalCount, arts]) => {
+        const artsSorted = await artsSortedFromArts(arts)
+        setDataState({ arts: artsSorted, totalCount })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+    // need to rerender if any of the values of herkunftFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db, ...Object.values(artFilter), artFilter, store])
+
+  const { arts, totalCount } = dataState
+  const filteredCount = arts.length
 
   const add = useCallback(() => {
     insertArtRev()
   }, [insertArtRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Arten') {
     upTitle = 'Zu allen Listen'
@@ -89,8 +130,8 @@ const Arten = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Art"
             table="art"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -102,7 +143,10 @@ const Arten = ({ filter: showFilter, width, height }) => {
               <IconButton aria-label="neue Art" title="neue Art" onClick={add}>
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}
@@ -112,7 +156,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={artsFiltered.length}
+                  itemCount={arts.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -123,8 +167,8 @@ const Arten = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={artsFiltered[index]}
-                      last={index === artsFiltered.length - 1}
+                      row={arts[index]}
+                      last={index === arts.length - 1}
                     />
                   )}
                 </StyledList>

@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import { MdClose as CloseIcon } from 'react-icons/md'
 
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 
 const Container = styled.div`
   display: flex;

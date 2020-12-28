@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -7,8 +7,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import getConstants from '../../../../../utils/constants'
 
 const constants = getConstants()
@@ -16,38 +18,64 @@ const constants = getConstants()
 const Title = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.6);
-  font-weight: 800;
+  font-weight: 700;
   user-select: none;
 `
 
 const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
+  const { user, db } = store
 
-  const kulturOption = useMemo(() => store.kultur_options.get(kulturId) ?? {}, [
-    kulturId,
-    store.kultur_options,
-  ])
-  const { tk } = kulturOption
+  const [dataState, setDataState] = useState({
+    kulturOption: undefined,
+    userPersonOption: {},
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
+      : $of({})
+    const kulturOptionObservable = db
+      .get('kultur_option')
+      .findAndObserve(kulturId)
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      kulturOptionObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      ([userPersonOptions, kulturOption]) => {
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
+          kulturOption,
+        })
+      },
+    )
 
-  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption
+    return () => subscription.unsubscribe()
+  }, [db, kulturId, user.uid])
+  const { kulturOption, userPersonOption } = dataState
+
+  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
+  const { tk } = kulturOption ?? {}
 
   const saveToDbKulturOption = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      kulturOption.edit({ field, value })
+      kulturOption.edit({ field, value, store })
     },
-    [kulturOption],
+    [kulturOption, store],
   )
 
   const saveToDbPersonOption = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      userPersonOption.edit({ field, value })
+      userPersonOption.edit({ field, value, store })
     },
-    [userPersonOption],
+    [store, userPersonOption],
   )
 
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])

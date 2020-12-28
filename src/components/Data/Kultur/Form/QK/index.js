@@ -13,8 +13,10 @@ import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { motion, useAnimation } from 'framer-motion'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest, of as $of } from 'rxjs'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import Qk from './Qk'
 import Choose from './Choose'
 import getConstants from '../../../../../utils/constants'
@@ -57,6 +59,7 @@ const Body = styled.div`
 
 const KulturQk = ({ kultur }) => {
   const store = useContext(StoreContext)
+  const { db, user } = store
 
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)
@@ -75,13 +78,40 @@ const KulturQk = ({ kultur }) => {
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const kulturQkChoosen = [...store.kultur_qk_choosens.values()].filter(
-    (q) => q.kultur_id === kultur.id,
-  )
-  const qkChoosens = kulturQkChoosen.filter((qk) => qk.choosen)
+  const [dataState, setDataState] = useState({
+    qks: [],
+    userPersonOption,
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['kultur_qk_choosen'])
+      : $of({})
+    const kulturQksObservable = db
+      .get('kultur_qk')
+      .query(Q.where('_deleted', false))
+      .observeWithColumns(['name'])
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      kulturQksObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      ([userPersonOptions, qks]) => {
+        setDataState({ qks, userPersonOption: userPersonOptions?.[0] })
+      },
+    )
 
-  const qkCount = kulturQkChoosen.length
-  const kulturQkCount = qkChoosens.length
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { qks, userPersonOption } = dataState
+  const qkChoosens = qks.filter((qk) =>
+    userPersonOption.kultur_qk_choosen.includes(qk.id),
+  )
+
+  const qkCount = qks.length
+  const qkChoosenCount = qkChoosens.length
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
@@ -154,7 +184,7 @@ const KulturQk = ({ kultur }) => {
               <Tab label="ausführen" value="qk" data-id="qk" />
               <Tab
                 label={`auswählen${
-                  qkCount ? ` (${kulturQkCount}/${qkCount})` : ''
+                  qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
                 }`}
                 value="waehlen"
                 data-id="waehlen"
@@ -164,7 +194,7 @@ const KulturQk = ({ kultur }) => {
               {tab === 'qk' ? (
                 <Qk kultur={kultur} qkChoosens={qkChoosens} />
               ) : (
-                <Choose />
+                <Choose qks={qks} />
               )}
             </Body>
           </>

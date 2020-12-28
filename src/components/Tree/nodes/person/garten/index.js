@@ -1,39 +1,21 @@
-import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
+import { first as first$ } from 'rxjs/operators'
 
-const personGartenNodes = ({ store }) => {
-  const { showPerson, visibleOpenNodes, person } = store.tree
-  if (!showPerson) return []
+const personGartenNodes = async ({ garten, index, personId, personIndex }) => {
+  let label = ''
+  try {
+    label = await garten.label.pipe(first$()).toPromise()
+  } catch {}
 
-  const parentNodes = visibleOpenNodes.filter(
-    (node) =>
-      node.length === 3 && node[0] === 'Personen' && node[2] === 'Gaerten',
-  )
-
-  if (!parentNodes.length) return []
-
-  return parentNodes.flatMap((node) => {
-    const personId = node[1]
-    const personIndex = person.findIndex((a) => a.id === personId)
-
-    const gaerten = store.gartensFiltered.filter(
-      (s) => s.person_id === personId,
-    )
-
-    return gaerten
-      .map((el) => ({
-        nodeType: 'table',
-        menuTitle: 'Garten',
-        table: 'garten',
-        id: `${personId}${el.id}`,
-        label: gartenLabelFromGarten({ garten: el, store }),
-        url: ['Personen', personId, 'Gaerten', el.id],
-        hasChildren: true,
-      }))
-      .map((el, index) => {
-        el.sort = [11, personIndex, 2, index]
-        return el
-      })
-  })
+  return {
+    nodeType: 'table',
+    menuTitle: 'Garten',
+    table: 'garten',
+    id: `${personId}${garten.id}`,
+    label,
+    url: ['Personen', personId, 'Gaerten', garten.id],
+    sort: [11, personIndex, 2, index],
+    hasChildren: true,
+  }
 }
 
 export default personGartenNodes

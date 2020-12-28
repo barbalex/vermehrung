@@ -1,8 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import MenuItem from '@material-ui/core/MenuItem'
-
-import { StoreContext } from '../../models/reactUtils'
 
 const OuterContainer = styled.div`
   min-width: 48px;
@@ -30,17 +28,12 @@ const StyledMenuItem = styled(MenuItem)`
   color: rgba(0, 0, 0, 0.54) !important;
 `
 
-const FilterNumbers = ({ filteredNr, totalNr, asMenu }) => {
-  const store = useContext(StoreContext)
-  const { filtered, show } = store.filter
-
-  if (!(show || filtered)) return null
-
+const FilterNumbers = ({ filteredCount, totalCount, asMenu }) => {
   if (asMenu) {
     return (
       <StyledMenuItem dense>
-        <span title="gefilterte Anzahl">{filteredNr}</span>/
-        <span title="totale Anzahl">{totalNr}</span>
+        <span title="gefilterte Anzahl">{filteredCount}</span>/
+        <span title="totale Anzahl">{totalCount}</span>
       </StyledMenuItem>
     )
   }
@@ -48,8 +41,8 @@ const FilterNumbers = ({ filteredNr, totalNr, asMenu }) => {
   return (
     <OuterContainer>
       <Container>
-        <Filtered title="gefilterte Anzahl">{filteredNr}</Filtered>
-        <Total title="totale Anzahl">{totalNr}</Total>
+        <Filtered title="gefilterte Anzahl">{filteredCount}</Filtered>
+        <Total title="totale Anzahl">{totalCount}</Total>
       </Container>
     </OuterContainer>
   )

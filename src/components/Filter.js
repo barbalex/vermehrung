@@ -15,7 +15,7 @@ import Sammlung from './Data/Sammlung'
 import Teilkultur from './Data/Teilkultur'
 import Zaehlung from './Data/Zaehlung'
 import ErrorBoundary from './shared/ErrorBoundary'
-import { StoreContext } from '../models/reactUtils'
+import StoreContext from '../storeContext'
 
 const Container = styled.div`
   height: 100%;

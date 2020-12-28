@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import 'isomorphic-fetch'
 import { observer } from 'mobx-react-lite'
+import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 
-import { StoreContext } from './models'
+import { Provider as UrqlProvider } from 'urql'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
@@ -18,16 +19,22 @@ import 'slick-carousel/slick/slick-theme.css'
 import Notifications from './components/Notifications'
 
 // see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
-import 'fontsource-roboto-mono'
+import '@fontsource/roboto-mono'
+import '@fontsource/roboto-mono/700.css'
 // see: https://github.com/fontsource/fontsource/tree/master/packages/roboto-mono
-import 'fontsource-roboto'
+import '@fontsource/roboto'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
 
 import materialTheme from './utils/materialTheme'
 
 import createGlobalStyle from './utils/createGlobalStyle'
 const GlobalStyle = createGlobalStyle()
 
+import { Provider as MobxProvider } from './storeContext'
+
 import initiateApp from './utils/initiateApp'
+import initiateDb from './utils/initiateDb'
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -53,6 +60,15 @@ if (typeof window !== 'undefined') {
 
 const App = ({ element }) => {
   const [store, setStore] = useState(null)
+  const [database, setDatabase] = useState(null)
+
+  useEffect(() => {
+    if (store && !database) {
+      const db = initiateDb()
+      setDatabase(db)
+      store.setDb(db)
+    }
+  }, [store, database])
 
   useEffect(() => {
     let unregister
@@ -62,24 +78,24 @@ const App = ({ element }) => {
         unregister = unregisterReturned
       },
     )
-    return () => {
-      unregister()
-    }
+    return () => unregister()
   }, [])
 
   // without store bad things happen
-  if (!store) return null
+  if (!store || !database) return null
 
   return (
-    <MuiThemeProvider theme={materialTheme}>
-      <StoreContext.Provider value={store}>
-        <>
-          <GlobalStyle />
-          {element}
-          <Notifications />
-        </>
-      </StoreContext.Provider>
-    </MuiThemeProvider>
+    <DatabaseProvider database={database}>
+      <MuiThemeProvider theme={materialTheme}>
+        <MobxProvider value={store}>
+          <UrqlProvider value={store.gqlClient}>
+            <GlobalStyle />
+            {element}
+            <Notifications />
+          </UrqlProvider>
+        </MobxProvider>
+      </MuiThemeProvider>
+    </DatabaseProvider>
   )
 }
 

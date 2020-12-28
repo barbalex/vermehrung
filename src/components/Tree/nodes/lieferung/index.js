@@ -1,34 +1,15 @@
-import isEqual from 'lodash/isEqual'
-
 import lieferungLabelFromLieferung from '../../../../utils/lieferungLabelFromLieferung'
 
-const lieferungNodes = ({ store }) => {
-  const { showLieferung, visibleOpenNodes } = store.tree
-
-  if (!showLieferung) return []
-  const lieferungen = store.lieferungsFiltered
-
-  return (
-    lieferungen
-      // only show if parent node exists
-      .filter(() =>
-        visibleOpenNodes.some((node) => isEqual(['Lieferungen'], node)),
-      )
-      .map((el) => ({
-        nodeType: 'table',
-        menuTitle: 'Lieferung',
-        table: 'lieferung',
-        id: el.id,
-        label: lieferungLabelFromLieferung({ lieferung: el }),
-        url: ['Lieferungen', el.id],
-        hasChildren: false,
-        mono: true,
-      }))
-      .map((el, index) => {
-        el.sort = [8, index]
-        return el
-      })
-  )
-}
+const lieferungNodes = ({ lieferung, index }) => ({
+  nodeType: 'table',
+  menuTitle: 'Lieferung',
+  table: 'lieferung',
+  id: lieferung.id,
+  label: lieferungLabelFromLieferung({ lieferung }),
+  url: ['Lieferungen', lieferung.id],
+  sort: [8, index],
+  hasChildren: false,
+  mono: true,
+})
 
 export default lieferungNodes

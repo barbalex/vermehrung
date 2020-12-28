@@ -4,7 +4,7 @@ import Diff from 'react-stylable-diff'
 import { observer } from 'mobx-react-lite'
 
 import toStringIfPossible from '../../../utils/toStringIfPossible'
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import Spinner from '../../shared/Spinner'
 
 const Row = styled.div`
@@ -15,12 +15,12 @@ const Row = styled.div`
   border-bottom: ${(props) =>
     props['data-last'] ? '1px solid rgba(0, 0, 0, 0.1)' : 'none'};
   .Difference > del {
-    background-color: rgba(216, 67, 21, 0.2);
+    background-color: rgb(201, 238, 211);
     text-decoration: none;
   }
   .Difference > ins {
     padding-left: 2px;
-    background-color: rgb(201, 238, 211);
+    background-color: rgba(216, 67, 21, 0.2);
     text-decoration: none;
   }
 `
@@ -42,10 +42,8 @@ const ConflictData = ({ dataArray, loading }) => {
     let inputB = toStringIfPossible(d.valueInRev)
     // explicitly show when only one of the values is empty
     if (inputA !== inputB) {
-      inputA =
-        !!inputA || inputA === 0 || inputA === false ? inputA : '(nichts)'
-      inputB =
-        !!inputB || inputB === 0 || inputB === false ? inputB : '(nichts)'
+      inputA = inputA ?? '(nichts)'
+      inputB = inputB ?? '(nichts)'
     }
 
     const showDiff =
@@ -57,7 +55,7 @@ const ConflictData = ({ dataArray, loading }) => {
         {showDiff ? (
           <Diff inputA={inputA} inputB={inputB} type="sentences" />
         ) : (
-          <div>{inputA}</div>
+          <div>{inputB}</div>
         )}
       </Row>
     )

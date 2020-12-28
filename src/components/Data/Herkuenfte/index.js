@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -6,13 +6,17 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import tableFilter from '../../../utils/tableFilter'
+import herkunftSort from '../../../utils/herkunftSort'
 
 const Container = styled.div`
   height: 100%;
@@ -64,38 +68,71 @@ const singleRowHeight = 48
 
 const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
+  const { insertHerkunftRev, sammlungIdInActiveNodeArray, db, filter } = store
   const {
-    insertHerkunftRev,
-    herkunftsSorted,
-    herkunftsFiltered,
-    sammlungIdInActiveNodeArray,
-  } = store
-  const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
+    activeNodeArray: anaRaw,
+    setActiveNodeArray,
+    removeOpenNode,
+  } = store.tree
+  const { herkunft: herkunftFilter } = store.filter
   const activeNodeArray = anaRaw.toJSON()
 
-  const hierarchyFilter = (h) => {
-    if (sammlungIdInActiveNodeArray) {
-      return [...store.sammlungs.values()]
-        .filter((s) => s.herkunft_id === h.id)
-        .map((s) => s.id)
-        .includes(sammlungIdInActiveNodeArray)
-    }
-    return true
-  }
+  const [dataState, setDataState] = useState({ herkunfts: [], totalCount: 0 })
+  useEffect(() => {
+    const hierarchyQuery = sammlungIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['sammlung']),
+          Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.get('herkunft')
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.herkunft._deleted === false
+              ? [false]
+              : filter.herkunft._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
+      .observeCount()
+    const herkunftsObservable = collection
+      .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+    const combinedObservables = combineLatest([
+      countObservable,
+      herkunftsObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, herkunfts]) =>
+        setDataState({ herkunfts: herkunfts.sort(herkunftSort), totalCount }),
+    )
 
-  const storeRowsFiltered = herkunftsFiltered.filter(hierarchyFilter)
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    sammlungIdInActiveNodeArray,
+    // need to rerender if any of the values of herkunftFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(herkunftFilter),
+    store,
+    filter.herkunft._deleted,
+  ])
 
-  const totalNr = herkunftsSorted.filter(hierarchyFilter).length
-  const filteredNr = storeRowsFiltered.length
+  const { herkunfts, totalCount } = dataState
+  const filteredCount = herkunfts.length
 
-  const add = useCallback(async () => {
-    insertHerkunftRev()
-  }, [insertHerkunftRev])
+  const add = useCallback(() => insertHerkunftRev(), [insertHerkunftRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Herkuenfte') {
     upTitle = 'Zu allen Listen'
@@ -112,8 +149,8 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Herkunft"
             table="herkunft"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -131,7 +168,10 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
                   <FaPlus />
                 </IconButton>
               )}
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}
@@ -141,7 +181,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={herkunfts.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -152,8 +192,8 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={herkunfts[index]}
+                      last={index === herkunfts.length - 1}
                     />
                   )}
                 </StyledList>

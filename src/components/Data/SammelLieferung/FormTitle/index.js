@@ -1,14 +1,18 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
+import tableFilter from '../../../../utils/tableFilter'
 
 const SammelLieferungFormTitleChooser = ({
-  lieferungId,
+  lieferung,
   printPreview,
   row,
+  rawRow,
   setPrintPreview,
   showFilter,
   showHistory,
@@ -16,14 +20,51 @@ const SammelLieferungFormTitleChooser = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, sammelLieferungsFiltered, sammelLieferungsSorted } = store
+  const { filter, db } = store
 
-  const hierarchyFilter = () => {
-    return true
-  }
+  const [countState, setCountState] = useState({
+    totalCount: 0,
+    filteredCount: 0,
+  })
+  useEffect(() => {
+    const collection = db.get('sammel_lieferung')
+    const totalCountObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.sammel_lieferung._deleted === false
+              ? [false]
+              : filter.sammel_lieferung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeCount()
+    const filteredCountObservable = collection
+      .query(...tableFilter({ store, table: 'sammel_lieferung' }))
+      .observeCount()
+    const combinedObservables = combineLatest([
+      totalCountObservable,
+      filteredCountObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, filteredCount]) =>
+        setCountState({ totalCount, filteredCount }),
+    )
 
-  const totalNr = sammelLieferungsSorted.filter(hierarchyFilter).length
-  const filteredNr = sammelLieferungsFiltered.filter(hierarchyFilter).length
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    // need to rerender if any of the values of sammel_lieferungFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(store.filter.sammel_lieferung),
+    store,
+    filter.sammel_lieferung._deleted,
+  ])
+
+  const { totalCount, filteredCount } = countState
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -32,8 +73,8 @@ const SammelLieferungFormTitleChooser = ({
       <FilterTitle
         title="Sammel-Lieferung"
         table="sammel_lieferung"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalCount={totalCount}
+        filteredCount={filteredCount}
       />
     )
   }
@@ -41,10 +82,11 @@ const SammelLieferungFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
-      totalNr={totalNr}
-      filteredNr={filteredNr}
+      rawRow={rawRow}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
       showFilter={showFilter}
-      lieferungId={lieferungId}
+      lieferung={lieferung}
       printPreview={printPreview}
       setPrintPreview={setPrintPreview}
       showHistory={showHistory}

@@ -1,3 +1,5 @@
+// not in use any more
+// 2020.12.13
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
   if (a !== 0 && !a) return -1

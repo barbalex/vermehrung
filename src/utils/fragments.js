@@ -5,19 +5,28 @@ export const art = gql`
     id
     __typename
     ae_id
-    #art_ae_art {
-    #  id
-    #  __typename
-    #  name
-    #}
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const artRev = gql`
+  fragment ArtRevFields on art_rev {
+    id
+    #__typename
+    art_id
+    ae_id
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -32,7 +41,6 @@ export const artQk = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -40,30 +48,30 @@ export const artQk = gql`
     _deleted
   }
 `
-export const artQkChoosen = gql`
-  fragment ArtQkChoosenFields on art_qk_choosen {
+export const artQkRev = gql`
+  fragment ArtQkRevFields on art_qk_rev {
     id
-    __typename
-    art_id
-    qk_id
-    choosen
+    #__typename
+    art_qk_id
+    name
+    titel
+    beschreibung
+    sort
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
-    _conflicts
     _deleted
   }
 `
 export const artFile = gql`
   fragment ArtFileFields on art_file {
     id
+    __typename
     art_id
     file_id
-    __typename
     file_mime_type
     name
     beschreibung
@@ -77,9 +85,6 @@ export const aeArt = gql`
     __typename
     name
     changed
-    _rev_at
-    # name_deutsch
-    # name_latein
   }
 `
 export const av = gql`
@@ -91,11 +96,26 @@ export const av = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const avRev = gql`
+  fragment AvRevFields on av_rev {
+    id
+    av_id
+    #__typename
+    art_id
+    person_id
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -112,11 +132,30 @@ export const event = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const eventRev = gql`
+  fragment EventRevFields on event_rev {
+    id
+    event_id
+    __typename
+    kultur_id
+    teilkultur_id
+    person_id
+    beschreibung
+    geplant
+    datum
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -126,17 +165,12 @@ export const garten = gql`
     __typename
     name
     person_id
-    #person {
-    #  id
-    #  __typename
-    #  name
-    #  ort
-    #}
     strasse
     plz
     ort
     aktiv
     bemerkungen
+    geom_point
     lv95_x
     lv95_y
     wgs84_lat
@@ -144,7 +178,6 @@ export const garten = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -152,95 +185,27 @@ export const garten = gql`
     _deleted
   }
 `
-export const garten_rev = gql`
+export const gartenRev = gql`
   fragment GartenRevFields on garten_rev {
     id
+    garten_id
     __typename
     garten_id
     name
     person_id
-    #person {
-    #  id
-    #  __typename
-    #  name
-    #}
     strasse
     plz
     ort
-    geom_point
     aktiv
     bemerkungen
+    geom_point
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
-    _conflicts
     _deleted
-  }
-`
-export const gartenTeilzaehlungSums = gql`
-  fragment GartenTeilzaehlungSumsFields on garten_teilzaehlung_sums {
-    garten_id
-    __typename
-    garten_name
-    garten_person_id
-    garten_person_name
-    garten_strasse
-    garten_plz
-    garten_ort
-    garten_aktiv
-    garten_bemerkungen
-    garten_anzahl_kulturen
-    kultur_id
-    kultur_art_id
-    kultur_art_name
-    kultur_herkunft_nr
-    kultur_zwischenlager
-    kultur_erhaltungskultur
-    kultur_von_anzahl_individuen
-    kultur_aktiv
-    kultur_bemerkungen
-    kultur_events_anzahl
-    kultur_events_datum_beschreibung
-    kultur_letzter_event_id
-    kultur_letzter_event_datum
-    kultur_letzter_event_beschreibung
-    kultur_letzter_event_geplant
-    kultur_letzter_event_person_name
-    kultur_letzter_event_teilkultur_name
-    kultur_letzter_event_teilkultur_ort1
-    kultur_letzter_event_teilkultur_ort2
-    kultur_letzter_event_teilkultur_ort3
-    kultur_letzter_event_teilkultur_bemerkungen
-    kultur_teilkulturen_anzahl
-    kultur_teilkulturen_namen
-    kultur_zaehlungen_anzahl
-    kultur_anzahl_pflanzen
-    kultur_anzahl_auspflanzbereit
-    kultur_anzahl_mutterpflanzen
-    zaehlung_id
-    zaehlung_datum
-    zaehlung_prognose
-    zaehlung_bemerkungen
-    zaehlung_anzahl_teilzaehlungen
-    zaehlung_anzahl_pflanzen
-    zaehlung_anzahl_auspflanzbereit
-    zaehlung_anzahl_mutterpflanzen
-    teilzaehlung_id
-    teilzaehlung_teilkultur_name
-    teilzaehlung_teilkultur_ort1
-    teilzaehlung_teilkultur_ort2
-    teilzaehlung_teilkultur_ort3
-    teilzaehlung_teilkultur_bemerkungen
-    teilzaehlung_anzahl_pflanzen
-    teilzaehlung_anzahl_auspflanzbereit
-    teilzaehlung_anzahl_mutterpflanzen
-    teilzaehlung_andere_menge
-    teilzaehlung_auspflanzbereit_beschreibung
-    teilzaehlung_bemerkungen
   }
 `
 export const gartenFile = gql`
@@ -265,11 +230,26 @@ export const gv = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const gvRev = gql`
+  fragment GvRevFields on gv_rev {
+    id
+    gv_id
+    #__typename
+    garten_id
+    person_id
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -283,6 +263,7 @@ export const herkunft = gql`
     kanton
     land
     bemerkungen
+    geom_point
     lv95_x
     lv95_y
     wgs84_lat
@@ -290,11 +271,31 @@ export const herkunft = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const herkunftRev = gql`
+  fragment HerkunftRevFields on herkunft_rev {
+    id
+    #__typename
+    herkunft_id # <<
+    nr
+    lokalname
+    gemeinde
+    kanton
+    land
+    bemerkungen
+    geom_point
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth # no conflicts
     _deleted
   }
 `
@@ -326,11 +327,32 @@ export const kultur = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const kulturRev = gql`
+  fragment KulturRevFields on kultur_rev {
+    id
+    kultur_id
+    #__typename
+    art_id
+    herkunft_id
+    garten_id
+    zwischenlager
+    erhaltungskultur
+    von_anzahl_individuen
+    aktiv
+    bemerkungen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -345,7 +367,6 @@ export const kulturQk = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -353,21 +374,21 @@ export const kulturQk = gql`
     _deleted
   }
 `
-export const kulturQkChoosen = gql`
-  fragment KulturQkChoosenFields on kultur_qk_choosen {
+export const kulturQkRev = gql`
+  fragment KulturQkRevFields on kultur_qk_rev {
     id
-    __typename
-    kultur_id
-    qk_id
-    choosen
+    kultur_qk_id
+    #__typename
+    name
+    titel
+    beschreibung
+    sort
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
-    _conflicts
     _deleted
   }
 `
@@ -401,11 +422,34 @@ export const kulturOption = gql`
     tz_bemerkungen
     z_bemerkungen
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const kulturOptionRev = gql`
+  fragment KulturOptionRevFields on kultur_option_rev {
+    id
+    kultur_id
+    #__typename
+    ev_datum
+    ev_geplant
+    ev_person_id
+    ev_teilkultur_id
+    tk
+    tk_bemerkungen
+    tz_andere_menge
+    tz_anzahl_mutterpflanzen
+    tz_auspflanzbereit_beschreibung
+    tz_teilkultur_id
+    tz_bemerkungen
+    z_bemerkungen
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -431,7 +475,6 @@ export const lieferung = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -439,9 +482,10 @@ export const lieferung = gql`
     _deleted
   }
 `
-export const lieferung_rev = gql`
+export const lieferungRev = gql`
   fragment LieferungRevFields on lieferung_rev {
     id
+    #__typename
     lieferung_id
     sammel_lieferung_id
     art_id
@@ -461,7 +505,6 @@ export const lieferung_rev = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
@@ -506,11 +549,42 @@ export const person = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const personRev = gql`
+  fragment PersonRevFields on person_rev {
+    id
+    person_id
+    __typename
+    nr
+    vorname
+    name
+    adresszusatz
+    strasse
+    plz
+    ort
+    telefon_privat
+    telefon_geschaeft
+    telefon_mobile
+    email
+    kein_email
+    bemerkungen
+    account_id
+    user_role_id
+    kommerziell
+    info
+    aktiv
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -541,12 +615,50 @@ export const personOption = gql`
     tree_zaehlung
     tree_lieferung
     tree_event
+    art_qk_choosen
+    kultur_qk_choosen
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const personOptionRev = gql`
+  fragment PersonOptionRevFields on person_option_rev {
+    id
+    person_id
+    __typename
+    ar_name_deutsch
+    ga_strasse
+    ga_plz
+    ga_ort
+    ga_geom_point
+    ga_lat_lng
+    ga_aktiv
+    ga_bemerkungen
+    hk_kanton
+    hk_land
+    hk_bemerkungen
+    hk_geom_point
+    ku_zwischenlager
+    ku_erhaltungskultur
+    li_show_sl_felder
+    li_show_sl
+    sl_show_empty_when_next_to_li
+    sl_auto_copy_edits
+    tree_kultur
+    tree_teilkultur
+    tree_zaehlung
+    tree_lieferung
+    tree_event
+    art_qk_choosen
+    kultur_qk_choosen
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -582,11 +694,36 @@ export const sammelLieferung = gql`
     geplant
     bemerkungen
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const sammelLieferungRev = gql`
+  fragment SammelLieferungRevFields on sammel_lieferung_rev {
+    id
+    sammel_lieferung_id
+    #__typename
+    art_id
+    person_id
+    von_sammlung_id
+    von_kultur_id
+    datum
+    nach_kultur_id
+    nach_ausgepflanzt
+    von_anzahl_individuen
+    anzahl_pflanzen
+    anzahl_auspflanzbereit
+    gramm_samen
+    andere_menge
+    geplant
+    bemerkungen
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -605,6 +742,7 @@ export const sammlung = gql`
     andere_menge
     geplant
     bemerkungen
+    geom_point
     lv95_x
     lv95_y
     wgs84_lat
@@ -612,11 +750,36 @@ export const sammlung = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const sammlungRev = gql`
+  fragment SammlungRevFields on sammlung_rev {
+    id
+    sammlung_id
+    #__typename
+    art_id
+    person_id
+    herkunft_id
+    nr
+    datum
+    von_anzahl_individuen
+    anzahl_pflanzen
+    gramm_samen
+    andere_menge
+    geplant
+    bemerkungen
+    geom_point
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -646,11 +809,30 @@ export const teilkultur = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const teilkulturRev = gql`
+  fragment TeilkulturRevFields on teilkultur_rev {
+    id
+    teilkultur_id
+    #__typename
+    kultur_id
+    name
+    ort1
+    ort2
+    ort3
+    bemerkungen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -669,11 +851,32 @@ export const teilzaehlung = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const teilzaehlungRev = gql`
+  fragment TeilzaehlungRevFields on teilzaehlung_rev {
+    id
+    teilzaehlung_id
+    #__typename
+    zaehlung_id
+    teilkultur_id
+    anzahl_pflanzen
+    anzahl_auspflanzbereit
+    anzahl_mutterpflanzen
+    andere_menge
+    auspflanzbereit_beschreibung
+    bemerkungen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `
@@ -699,11 +902,28 @@ export const zaehlung = gql`
     changed
     changed_by
     _rev
-    _rev_at
     _parent_rev
     _revisions
     _depth
     _conflicts
+    _deleted
+  }
+`
+export const zaehlungRev = gql`
+  fragment ZaehlungRevFields on zaehlung_rev {
+    id
+    zaehlung_id
+    #__typename
+    kultur_id
+    datum
+    prognose
+    bemerkungen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
     _deleted
   }
 `

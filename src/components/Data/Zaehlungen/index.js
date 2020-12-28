@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -6,13 +6,17 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import tableFilter from '../../../utils/tableFilter'
+import zaehlungSort from '../../../utils/zaehlungSort'
 
 const Container = styled.div`
   height: 100%;
@@ -64,39 +68,77 @@ const singleRowHeight = 48
 
 const Zaehlungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const {
-    insertZaehlungRev,
-    zaehlungsFiltered,
-    zaehlungsSorted,
+  const { insertZaehlungRev, kulturIdInActiveNodeArray, db, filter } = store
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+  const { zaehlung: zaehlungFilter } = store.filter
+
+  const [dataState, setDataState] = useState({ zaehlungs: [], totalCount: 0 })
+  useEffect(() => {
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['kultur']),
+          Q.on('kultur', 'id', kulturIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.get('zaehlung')
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.zaehlung._deleted === false
+              ? [false]
+              : filter.zaehlung._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
+      .observeCount()
+    const dataObservable = collection
+      .query(
+        ...tableFilter({
+          table: 'zaehlung',
+          store,
+        }),
+        ...hierarchyQuery,
+      )
+      .observeWithColumns(['datum', 'anzahl_pflanzen'])
+
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, zaehlungs]) => {
+        setDataState({
+          zaehlungs: zaehlungs.sort(zaehlungSort),
+          totalCount,
+        })
+      },
+    )
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    // need to rerender if any of the values of zaehlungFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(zaehlungFilter),
+    zaehlungFilter,
     kulturIdInActiveNodeArray,
-  } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+    store,
+    filter.zaehlung._deleted,
+  ])
 
-  const hierarchyFilter = (r) => {
-    if (kulturIdInActiveNodeArray) {
-      return r.kultur_id === kulturIdInActiveNodeArray
-    }
-    return true
-  }
-
-  const storeRowsFiltered = zaehlungsFiltered.filter((r) => {
-    if (kulturIdInActiveNodeArray) {
-      return r.kultur_id === kulturIdInActiveNodeArray
-    }
-    return true
-  })
-
-  const totalNr = zaehlungsSorted.filter(hierarchyFilter).length
-  const filteredNr = zaehlungsFiltered.filter(hierarchyFilter).length
+  const { zaehlungs, totalCount } = dataState
+  const filteredCount = zaehlungs.length
 
   const add = useCallback(() => {
     insertZaehlungRev()
   }, [insertZaehlungRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Zaehlungen') {
     upTitle = 'Zu allen Listen'
@@ -112,8 +154,8 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Zählung"
             table="zaehlung"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -129,7 +171,10 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}
@@ -139,7 +184,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={zaehlungs.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -150,8 +195,8 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={zaehlungs[index]}
+                      last={index === zaehlungs.length - 1}
                     />
                   )}
                 </StyledList>

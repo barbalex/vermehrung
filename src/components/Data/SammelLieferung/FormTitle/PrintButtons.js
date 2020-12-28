@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 
 const SlPrint = ({ printPreview, setPrintPreview, asMenu }) => {
   const store = useContext(StoreContext)
@@ -37,13 +37,6 @@ const SlPrint = ({ printPreview, setPrintPreview, asMenu }) => {
 
   return (
     <>
-      <IconButton
-        aria-label={printPreview ? 'Formular' : 'Lieferschein'}
-        title={printPreview ? 'Formular' : 'Lieferschein'}
-        onClick={showLieferschein}
-      >
-        {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
-      </IconButton>
       {printPreview && (
         <IconButton
           aria-label="Lieferschein drucken"
@@ -53,6 +46,13 @@ const SlPrint = ({ printPreview, setPrintPreview, asMenu }) => {
           <MdPrint />
         </IconButton>
       )}
+      <IconButton
+        aria-label={printPreview ? 'Formular' : 'Lieferschein'}
+        title={printPreview ? 'Formular' : 'Lieferschein'}
+        onClick={showLieferschein}
+      >
+        {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
+      </IconButton>
     </>
   )
 }

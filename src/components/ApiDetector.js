@@ -1,51 +1,36 @@
 /**
- * inspired by:
- * https://github.com/chrisbolin/react-detect-offline/blob/master/src/index.js
+ * based on:
+ * https://hasura.io/docs/1.0/graphql/core/api-reference/health.html
  */
 // eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import axios from 'redaxios'
 
-import { StoreContext } from '../models/reactUtils'
-import getConstants from '../utils/constants'
+import StoreContext from '../storeContext'
+import isOnline from '../utils/isOnline'
 
-const constants = getConstants()
-
-const config = {
-  url: constants?.healthUri,
-  timeout: 5000,
-  interval: 5000,
-}
-
-const ping = async () => {
-  let res
-  try {
-    res = await axios.get(config.url, { timeout: config.timeout })
-  } catch (error) {
-    // error can also be caused by timeout
-    return false
-  }
-  if (res.status === 200) return true
-  return false
-}
+const pollInterval = 5000
 
 const ApiDetector = () => {
   const store = useContext(StoreContext)
-  const { online, setOnline } = store
+  const { online, setOnline, shortTermOnline, setShortTermOnline } = store
 
   useEffect(() => {
     const pollingId = setInterval(() => {
-      ping().then((nowOnline) => {
+      isOnline().then((nowOnline) => {
         if (online !== nowOnline) {
           setOnline(nowOnline)
         }
+        if (shortTermOnline !== nowOnline) {
+          setShortTermOnline(nowOnline)
+        }
       })
-    }, config.interval)
+    }, pollInterval)
+
     return () => {
       clearInterval(pollingId)
     }
-  }, [online, setOnline])
+  }, [online, setOnline, setShortTermOnline, shortTermOnline])
 
   return null
 }

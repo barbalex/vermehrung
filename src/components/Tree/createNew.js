@@ -8,7 +8,7 @@ import exists from '../../utils/exists'
 const createNew = async ({ node, store }) => {
   // get parent table, parent table id and table from url
   const { nodeType, url } = node
-  const { kultursSorted, sammlungsSorted, sammelLieferungsSorted } = store
+  const { db } = store
   const { setActiveNodeArray } = store.tree
 
   // get table and id from url
@@ -60,20 +60,27 @@ const createNew = async ({ node, store }) => {
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
     if (tableTitle === 'An-Lieferungen') fkName = `nach_${parentTable}_id`
     // need to get art_id from kultur and set it
-    const kultur = kultursSorted.find((k) => k.id === parentId)
+    let kultur
+    try {
+      kultur = await db.get('kultur').find(parentId)
+    } catch {}
     additionalValuesToSet.art_id = kultur?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammlung') {
     // need to choose von_kultur_id or nach_kultur_id
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
-    // need to get art_id from sammlung and set it
-    const sammlung = sammlungsSorted.find((s) => s.id === parentId)
+    // need to get art_id from sammlung and set itconst kultur = parentId
+    let sammlung
+    try {
+      sammlung = await db.get('sammlung').find(parentId)
+    } catch {}
     additionalValuesToSet.art_id = sammlung?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
-    const sammelLieferung = sammelLieferungsSorted.find(
-      (s) => s.id === parentId,
-    )
+    let sammelLieferung
+    try {
+      sammelLieferung = await db.get('sammel_lieferung').find(parentId)
+    } catch {}
     if (!sammelLieferung) return console.log('no sammelLieferung found!')
     const entries = Object.entries(sammelLieferung)
       .filter(
@@ -82,7 +89,6 @@ const createNew = async ({ node, store }) => {
           !key.startsWith('_') &&
           ![
             'lieferungs',
-            'lieferungs_aggregate',
             'kulturByNachKulturId',
             'kulturByVonKulturId',
             'person',

@@ -1,11 +1,15 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import { combineLatest, of as $of } from 'rxjs'
+import { first as first$ } from 'rxjs/operators'
+import { Q } from '@nozbe/watermelondb'
+import uniqBy from 'lodash/uniqBy'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import Date from '../../../shared/Date'
@@ -18,8 +22,11 @@ import getConstants from '../../../../utils/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
-import artLabelFromArt from '../../../../utils/artLabelFromArt'
+import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
+import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 import exists from '../../../../utils/exists'
+import personSort from '../../../../utils/personSort'
+import herkunftSort from '../../../../utils/herkunftSort'
 
 const constants = getConstants()
 
@@ -51,22 +58,183 @@ const SammlungForm = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    artsSorted,
-    herkunftsSorted,
-    personsSorted,
-    sammlungsSorted,
-    errors,
-    unsetError,
+  const { filter, online, errors, unsetError, setError, db } = store
+
+  const [dataState, setDataState] = useState({
+    personWerte: [],
+    herkunftWerte: [],
+    artWerte: [],
+  })
+  useEffect(() => {
+    const personsObservable = db
+      .get('person')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeWithColumns(['vorname', 'name'])
+    const herkunftsObservable = db
+      .get('herkunft')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.herkunft._deleted === false
+              ? [false]
+              : filter.herkunft._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+    const artsObservable = db
+      .get('art')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.art._deleted === false
+              ? [false]
+              : filter.art._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeWithColumns(['ae_id'])
+    const sammlungsNrCountObservable =
+      showFilter || !exists(row?.nr)
+        ? $of(0)
+        : db
+            .get('sammlung')
+            .query(
+              Q.where(
+                '_deleted',
+                Q.oneOf(
+                  filter.sammlung._deleted === false
+                    ? [false]
+                    : filter.sammlung._deleted === true
+                    ? [true]
+                    : [true, false, null],
+                ),
+              ),
+              Q.where('nr', row.nr),
+            )
+            .observeCount()
+    const combinedObservables = combineLatest([
+      sammlungsNrCountObservable,
+      personsObservable,
+      herkunftsObservable,
+      artsObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([nrCount, persons, herkunfts, arts]) => {
+        if (!showFilter && nrCount > 1) {
+          setError({
+            path: 'sammlung.nr',
+            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
+          })
+        }
+        let person
+        try {
+          person = await row.person.fetch()
+        } catch {}
+        const personsIncludingChoosen = uniqBy(
+          [...persons, ...(person && !showFilter ? [person] : [])],
+          'id',
+        )
+        const personWerte = personsIncludingChoosen
+          .sort(personSort)
+          .map((person) => ({
+            value: person.id,
+            label: personLabelFromPerson({ person }),
+          }))
+        let herkunft
+        try {
+          herkunft = await row.herkunft.fetch()
+        } catch {}
+        const herkunftsIncludingChoosen = uniqBy(
+          [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
+          'id',
+        )
+        const herkunftWerte = herkunftsIncludingChoosen
+          .sort(herkunftSort)
+          .map((herkunft) => ({
+            value: herkunft.id,
+            label: herkunftLabelFromHerkunft({ herkunft }),
+          }))
+        let art
+        try {
+          art = await row.art.fetch()
+        } catch {}
+        const artsIncludingChoosen = uniqBy(
+          [...arts, ...(art && !showFilter ? [art] : [])],
+          'id',
+        )
+        const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
+        const artWerte = await Promise.all(
+          artsSorted.map(async (art) => {
+            let label = ''
+            try {
+              label = await art.label.pipe(first$()).toPromise()
+            } catch {}
+
+            return {
+              value: art.id,
+              label,
+            }
+          }),
+        )
+
+        setDataState({
+          personWerte,
+          herkunftWerte,
+          artWerte,
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    filter.art._deleted,
+    filter.herkunft,
+    filter.person._deleted,
+    filter.person.aktiv,
+    filter.sammlung._deleted,
+    row.art,
+    row.herkunft,
+    row.nr,
+    row.person,
     setError,
-  } = store
+    showFilter,
+  ])
+  const { personWerte, herkunftWerte, artWerte } = dataState
 
   // ensure that activeConflict is reset
   // when changing dataset
@@ -78,50 +246,23 @@ const SammlungForm = ({
     unsetError('sammlung')
   }, [id, unsetError])
 
-  const personWerte = useMemo(
-    () =>
-      personsSorted.map((el) => ({
-        value: el.id,
-        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-      })),
-    [personsSorted],
-  )
-
-  const herkunftWerte = useMemo(
-    () =>
-      herkunftsSorted.map((el) => ({
-        value: el.id,
-        label: herkunftLabelFromHerkunft({ herkunft: el }),
-      })),
-    [herkunftsSorted],
-  )
-
-  const artWerte = useMemo(
-    () =>
-      artsSorted.map((el) => ({
-        value: el.id,
-        label: artLabelFromArt({ art: el, store }),
-      })),
-    [artsSorted, store],
-  )
-
   const saveToDb = useCallback(
     (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const previousValue = row[field]
 
       if (showFilter) {
         return filter.setValue({ table: 'sammlung', key: field, value })
       }
 
       // only update if value has changed
+      const previousValue = ifIsNumericAsNumber(row[field])
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Planen`
@@ -142,21 +283,8 @@ const SammlungForm = ({
     }
   }, [])
 
-  const rowNr = row?.nr
-  const nrCount = useMemo(() => {
-    if (!exists(rowNr)) return 0
-    return sammlungsSorted.filter((h) => h.nr === rowNr).length
-  }, [sammlungsSorted, rowNr])
-  useEffect(() => {
-    if (nrCount > 1) {
-      setError({
-        path: 'sammlung.nr',
-        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
-      })
-    }
-  }, [nrCount, setError])
-
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.sammlung._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>
@@ -286,7 +414,9 @@ const SammlungForm = ({
               </IconButton>
             </div>
           </FieldRow>
-          {!showFilter && <Coordinates row={row} saveToDb={saveToDb} />}
+          {!showFilter && (
+            <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
+          )}
           <FieldRow>
             {showFilter ? (
               <Checkbox3States
@@ -333,7 +463,7 @@ const SammlungForm = ({
               setActiveConflict={setActiveConflict}
             />
           )}
-          {!showFilter && <Files parentId={row.id} parent="sammlung" />}
+          {!showFilter && <Files parentTable="sammlung" parent={row} />}
         </FieldsContainer>
       </SimpleBar>
     </ErrorBoundary>

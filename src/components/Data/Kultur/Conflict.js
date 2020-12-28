@@ -3,10 +3,12 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import mutations from '../../../utils/mutations'
 import Conflict from '../../shared/Conflict'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
@@ -17,34 +19,8 @@ const kulturRevQuery = gql`
       __typename
       kultur_id
       art_id
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
       herkunft_id
-      herkunft {
-        id
-        __typename
-        gemeinde
-        lokalname
-        nr
-      }
       garten_id
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-        }
-      }
       zwischenlager
       erhaltungskultur
       von_anzahl_individuen
@@ -54,6 +30,7 @@ const kulturRevQuery = gql`
       changed_by
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -69,37 +46,91 @@ const KulturConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(kulturRevQuery, {
+  const [{ error, data, fetching }] = useQuery({
+    query: kulturRevQuery,
     variables: {
       rev,
       id,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.kultur_revs.values()].find(
-        (v) => v._rev === rev && v.kultur_id === id,
-      ) || {},
-    [id, rev, store.kultur_revs],
-  )
+  const revRow = useMemo(() => data?.kultur_rev?.[0] ?? {}, [data?.kultur_rev])
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow, store }),
-    [revRow, row, store],
+    () => createDataArrayForRevComparison({ row, revRow }),
+    [revRow, row],
   )
 
-  const onClickVerwerfen = useCallback(() => {
-    console.log('Kultur Conflict, onClickVerwerfen, revRow:', revRow)
-    revRow.setDeleted()
+  const onClickAktuellUebernehmen = useCallback(async () => {
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      kultur_id: revRow.kultur_id,
+      art_id: revRow.art_id,
+      herkunft_id: revRow.herkunft_id,
+      garten_id: revRow.garten_id,
+      zwischenlager: revRow.zwischenlager,
+      erhaltungskultur: revRow.erhaltungskultur,
+      von_anzahl_individuen: revRow.von_anzahl_individuen,
+      bemerkungen: revRow.bemerkungen,
+      aktiv: revRow.aktiv,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
+
+    addQueuedQuery({
+      name: 'mutateInsert_kultur_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'kultur_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'kultur',
+      revertId: revRow.kultur_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    // update model: remove this conflict
+    try {
+      const model = await db.get('kultur').find(revRow.kultur_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
-  const onClickUebernehmen = useCallback(async () => {
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.aktiv,
+    revRow.art_id,
+    revRow.bemerkungen,
+    revRow.erhaltungskultur,
+    revRow.garten_id,
+    revRow.herkunft_id,
+    revRow.kultur_id,
+    revRow.von_anzahl_individuen,
+    revRow.zwischenlager,
+    user.email,
+  ])
+  const onClickWiderspruchUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -125,25 +156,29 @@ const KulturConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    //console.log('Kultur Conflict', { row, revRow, newObject })
-    try {
-      await store.mutateInsert_kultur_rev_one({
+    const response = await gqlClient
+      .query(mutations.mutateInsert_kultur_rev_one, {
         object: newObject,
         on_conflict: {
           constraint: 'kultur_rev_pkey',
           update_columns: ['id'],
         },
       })
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
+    // now we need to delete the previous conflict
+    onClickAktuellUebernehmen()
     conflictSelectionCallback()
   }, [
     addNotification,
     conflictSelectionCallback,
+    gqlClient,
+    onClickAktuellUebernehmen,
     revRow._deleted,
     revRow.aktiv,
     revRow.art_id,
@@ -171,10 +206,10 @@ const KulturConflict = ({
       name="Kultur"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
-      onClickVerwerfen={onClickVerwerfen}
-      onClickUebernehmen={onClickUebernehmen}
+      onClickAktuellUebernehmen={onClickAktuellUebernehmen}
+      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
       onClickSchliessen={onClickSchliessen}
     />
   )

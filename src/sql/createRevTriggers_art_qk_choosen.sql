@@ -294,3 +294,7 @@ create trigger trigger_art_qk_choosen_rev_set_winning_revision
   after insert on art_qk_choosen_rev
   for each row
   execute procedure art_qk_choosen_rev_set_winning_revision ()
+
+--TODO:
+drop function art_qk_choosen_rev_set_winning_revision;
+drop trigger trigger_art_qk_choosen_rev_set_winning_revision;

@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
@@ -6,13 +6,17 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
+import tableFilter from '../../../utils/tableFilter'
+import teilkulturSort from '../../../utils/teilkulturSort'
 
 const Container = styled.div`
   height: 100%;
@@ -64,39 +68,75 @@ const singleRowHeight = 48
 
 const Teilkulturen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const {
-    insertTeilkulturRev,
+  const { insertTeilkulturRev, kulturIdInActiveNodeArray, db, filter } = store
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+  const { teilkultur: teilkulturFilter } = store.filter
+
+  const [dataState, setDataState] = useState({ teilkulturs: [], totalCount: 0 })
+  useEffect(() => {
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['kultur']),
+          Q.on('kultur', 'id', kulturIdInActiveNodeArray),
+        ]
+      : []
+    const collection = db.get('teilkultur')
+    const countObservable = collection
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.teilkultur._deleted === false
+              ? [false]
+              : filter.teilkultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...hierarchyQuery,
+      )
+      .observeCount()
+    const dataObservable = collection
+      .query(
+        ...tableFilter({
+          table: 'teilkultur',
+          store,
+        }),
+        ...hierarchyQuery,
+      )
+      .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, teilkulturs]) => {
+        setDataState({
+          teilkulturs: teilkulturs.sort(teilkulturSort),
+          totalCount,
+        })
+      },
+    )
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    // need to rerender if any of the values of teilkulturFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(teilkulturFilter),
+    teilkulturFilter,
     kulturIdInActiveNodeArray,
-    teilkultursSorted,
-    teilkultursFiltered,
-  } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+    store,
+    filter.teilkultur._deleted,
+  ])
 
-  const hierarchyFilter = (r) => {
-    if (kulturIdInActiveNodeArray) {
-      return r.kultur_id === kulturIdInActiveNodeArray
-    }
-    return true
-  }
-
-  const storeRowsFiltered = teilkultursFiltered.filter((r) => {
-    if (kulturIdInActiveNodeArray) {
-      return r.kultur_id === kulturIdInActiveNodeArray
-    }
-    return true
-  })
-
-  const totalNr = teilkultursSorted.filter(hierarchyFilter).length
-  const filteredNr = teilkultursFiltered.filter(hierarchyFilter).length
+  const { teilkulturs, totalCount } = dataState
+  const filteredCount = teilkulturs.length
 
   const add = useCallback(() => {
     insertTeilkulturRev()
   }, [insertTeilkulturRev])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Teilkulturen') {
     upTitle = 'Zu allen Listen'
@@ -112,8 +152,8 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
           <FilterTitle
             title="Teilkultur"
             table="teilkultur"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
+            totalCount={totalCount}
+            filteredCount={filteredCount}
           />
         ) : (
           <TitleContainer>
@@ -129,7 +169,10 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
             </TitleSymbols>
           </TitleContainer>
         )}
@@ -139,7 +182,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
                   height={height - 48}
-                  itemCount={storeRowsFiltered.length}
+                  itemCount={teilkulturs.length}
                   itemSize={singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
@@ -150,8 +193,8 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
                       key={index}
                       style={style}
                       index={index}
-                      row={storeRowsFiltered[index]}
-                      last={index === storeRowsFiltered.length - 1}
+                      row={teilkulturs[index]}
+                      last={index === teilkulturs.length - 1}
                     />
                   )}
                 </StyledList>

@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft'
 
 const singleRowHeight = 48

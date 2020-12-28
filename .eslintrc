@@ -7,7 +7,8 @@
     "no-console": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "no-unused-vars": 1
+    "no-unused-vars": 1,
+    "no-empty": ["error", { "allowEmptyCatch": true }]
   },
   "env": {
     "browser": true,

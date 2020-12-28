@@ -1,14 +1,14 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useCallback, useState, useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import { first as first$ } from 'rxjs/operators'
 
-import { StoreContext } from '../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
+import StoreContext from '../../../../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -47,28 +47,47 @@ const MenuTitle = styled.h3`
 const Garten = ({ gv }) => {
   const store = useContext(StoreContext)
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = useCallback(() => gv.delete(), [gv])
+  const onClose = useCallback(() => setDelMenuAnchorEl(null), [])
+  const onClickDeleteIcon = useCallback(
+    (event) => setDelMenuAnchorEl(event.currentTarget),
+    [],
+  )
+  const onClickDelete = useCallback(() => {
+    gv.delete({ store })
+    setDelMenuAnchorEl(null)
+  }, [gv, store])
 
-  const garten = store.gartens.get(gv.garten_id)
-  const gartenname = gartenLabelFromGarten({ garten, store })
+  const [gartenLabel, setGartenLabel] = useState(null)
+  useEffect(() => {
+    const gartenSubscription = gv.garten.observe().subscribe(async (garten) => {
+      let label
+      try {
+        label = await garten.label.pipe(first$()).toPromise()
+      } catch {}
+
+      setGartenLabel(label)
+    })
+    return () => gartenSubscription.unsubscribe()
+  }, [gv.garten])
 
   if (!gv) return null
+  if (!gartenLabel) return null
 
   return (
     <ErrorBoundary>
       <Container>
         <Text>
-          <div>{gartenname}</div>
+          <div>{gartenLabel}</div>
         </Text>
         <DelIcon
           title="löschen"
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+          onClick={onClickDeleteIcon}
         >
           <FaTimes />
         </DelIcon>
@@ -76,7 +95,7 @@ const Garten = ({ gv }) => {
           id="delMenu"
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
-          onClose={() => setDelMenuAnchorEl(null)}
+          onClose={onClose}
           PaperProps={{
             style: {
               maxHeight: 48 * 4.5,
@@ -86,7 +105,7 @@ const Garten = ({ gv }) => {
         >
           <MenuTitle>löschen?</MenuTitle>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
-          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+          <MenuItem onClick={onClose}>nein</MenuItem>
         </Menu>
       </Container>
     </ErrorBoundary>

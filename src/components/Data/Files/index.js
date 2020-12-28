@@ -11,13 +11,14 @@ import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
 import { v1 as uuidv1 } from 'uuid'
 
-import { StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import Uploader from '../../Uploader'
 import File from './File'
 import 'react-image-lightbox/style.css'
 import isImageFile from './isImageFile'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import fileSort from '../../../utils/fileSort'
+import mutations from '../../../utils/mutations'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -52,11 +53,6 @@ const LightboxButton = styled(Button)`
   margin-left: 10px !important;
   text-transform: none !important;
   border: none !important;
-  /*&:active,
-  &:hover,
-  &:focus {
-    border: 1px solid rgba(74, 20, 140, 0.5) !important;
-  }*/
 `
 const Content = styled.div`
   display: flex;
@@ -64,41 +60,61 @@ const Content = styled.div`
   justify-content: center;
 `
 
-const Files = ({ parentId, parent }) => {
+const Files = ({ parentTable, parent }) => {
   const store = useContext(StoreContext)
-  const { upsertArtFileModel, online } = store
+  const { online, gqlClient, addNotification, db } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
-  const files = [...store[`${parent}_files`].values()]
-    .sort((a, b) => fileSort({ a, b }))
-    .filter((f) => f[`${parent}_id`] === parentId)
+  // use object with two keys to only render once on setting
+  const [files, setEvent] = useState([])
+  useEffect(() => {
+    const subscription = parent.files
+      .observeWithColumns(['name'])
+      .subscribe((files) => setEvent(files.sort(fileSort)))
+    return () => subscription.unsubscribe()
+  }, [parent.files])
 
   const onChangeUploader = useCallback(
-    (file) => {
+    async (file) => {
       if (file) {
         file.done(async (info) => {
-          //console.log({ info })
           const newObject = {
             id: uuidv1(),
             file_id: info.uuid,
             file_mime_type: info.mimeType,
-            [`${parent}_id`]: parentId,
+            [`${parentTable}_id`]: parent.id,
             name: info.name,
           }
-          upsertArtFileModel(newObject)
-          await store[`mutateInsert_${parent}_file_one`]({
+          await db.action(async () => {
+            const collection = db.get(`${parentTable}_file`)
+            // using batch because can create from raw
+            // which enables overriding watermelons own id
+            await db.batch([collection.prepareCreateFromDirtyRaw(newObject)])
+          })
+          // TODO: need to add mutations for all file-tables
+          const mutation = mutations[`mutateInsert_${parentTable}_file_one`]
+          const variables = {
             object: newObject,
             on_conflict: {
-              constraint: `${parent}_file_pkey`,
+              constraint: `${parentTable}_file_pkey`,
               update_columns: ['id'],
             },
-          })
+          }
+          const response = await gqlClient
+            .mutation(mutation, variables)
+            .toPromise()
+          if (response.error) {
+            console.log(response.error)
+            return addNotification({
+              message: response.error.message,
+            })
+          }
         })
       }
     },
-    [parent, parentId, store, upsertArtFileModel],
+    [parentTable, parent.id, db, gqlClient, addNotification],
   )
 
   const images = files.filter((f) => isImageFile(f))

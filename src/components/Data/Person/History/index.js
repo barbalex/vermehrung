@@ -1,13 +1,14 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
 import SimpleBar from 'simplebar-react'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
+import StoreContext from '../../../../storeContext'
 import Row from './Row'
 
 const personRevQuery = gql`
@@ -37,6 +38,7 @@ const personRevQuery = gql`
       changed_by
       _rev
       _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -66,32 +68,28 @@ const ErrorContainer = styled.div`
 `
 
 const sliderSettings = {
-  dots: true,
+  dots: false,
   infinite: false,
 }
 
-const PersonHistory = ({ row, historyTakeoverCallback }) => {
+const PersonHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
 
-  // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(personRevQuery, {
+  const priorRevisions = row?._revisions?.slice(1) ?? []
+  const [{ error, data, fetching }] = useQuery({
+    query: personRevQuery,
     variables: {
-      rev: row._revisions,
+      rev: priorRevisions,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
-  // need to grab store object to ensure this remains up to date
-  const revRows = useMemo(
-    () =>
-      [...store.person_revs.values()]
-        .filter((v) => row?._revisions?.includes(v._rev) ?? true)
-        .filter((r) => r._rev !== row._rev)
-        .sort((a, b) => b._depth - a._depth) || {},
-    [row._rev, row._revisions, store.person_revs],
-  )
+  const revRowsUnsorted = useMemo(() => data?.person_rev ?? [], [
+    data?.person_rev,
+  ])
+  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
-  if (loading) {
+  if (fetching) {
     return <Spinner message="lade Versionen" />
   }
 
@@ -108,6 +106,7 @@ const PersonHistory = ({ row, historyTakeoverCallback }) => {
               key={row._rev}
               revRow={r}
               row={row}
+              rawRow={rawRow}
               historyTakeoverCallback={historyTakeoverCallback}
             />
           ))}

@@ -1,321 +1,197 @@
-create or replace function herkunft_rev_set_winning_revision ()
-  returns trigger
-  as $body$
+create or replace function herkunft_rev_children(herkunft_id uuid, parent_rev text) returns setof herkunft_rev as $$
+  select
+    *
+  from
+    herkunft_rev
+  where
+    herkunft_rev.herkunft_id = $1
+    -- it's parent is the herkunft_rev, thus this is it's child
+    and herkunft_rev._parent_rev = $2
+$$ LANGUAGE sql;
+
+create or replace function herkunft_rev_leaves(herkunft_id uuid, deleted boolean default false) returns setof herkunft_rev as $$
+  select
+    *
+  from
+    herkunft_rev
+  where
+    -- of this record
+    herkunft_id = $1
+    -- undeleted
+    and _deleted = $2
+    -- leaves
+    and not exists (
+      select 1 from herkunft_rev_children($1, herkunft_rev._rev)
+    );
+$$ LANGUAGE sql;
+
+create or replace function herkunft_rev_max_depth(herkunft_id uuid, deleted boolean default false) returns int as $$
+  select
+    max(_depth)
+  from
+    herkunft_rev_leaves($1, $2);
+$$ LANGUAGE sql;
+
+create or replace function herkunft_rev_winner_rev_value(herkunft_id uuid, deleted boolean default false) returns text as $$
+  select
+   -- here we choose the winning revision
+    max(leaves._rev) as _rev
+  from
+    herkunft_rev_leaves($1, $2) as leaves
+  where 
+    herkunft_rev_max_depth($1, $2) = leaves._depth
+$$ LANGUAGE sql;
+
+create or replace function herkunft_rev_winner(herkunft_id uuid, deleted boolean default false) returns setof herkunft_rev as $$
+  select
+    *
+  from
+    herkunft_rev_leaves($1, $2) as leaves
+  where 
+    leaves._rev = herkunft_rev_winner_rev_value($1, $2)
+$$ LANGUAGE sql;
+
+create or replace function herkunft_conflicts_of_winner(herkunft_id uuid, deleted boolean default false) returns text[] as $$
+  select 
+    array(
+      select _rev from herkunft_rev_leaves($1, $2)
+      where 
+        _rev <> herkunft_rev._rev
+    )
+  from herkunft_rev_winner($1, $2) as herkunft_rev
+$$ LANGUAGE sql;
+
+create or replace function herkunft_rev_set_winning_revision() returns trigger as $$
 begin
-  -- 1. check if non deleted winner exists
-  if exists(
-    with leaves as (
-    select
-      herkunft_id,
-      _rev,
-      _depth
-    from
-      herkunft_rev
-    where
-      not exists (
-        select
-          herkunft_id
-        from
-          herkunft_rev as t
-        where
-          t.herkunft_id = new.herkunft_id
-          and t._parent_rev = herkunft_rev._rev
-      )
-      and _deleted = false
-      and herkunft_id = new.herkunft_id
-    ),
-    max_depths as (
-      select
-        max(_depth) as max_depth
-      from
-        leaves
-    ),
-    winning_revisions as (
-      select
-        max(leaves._rev) as _rev
-      from
-        leaves
-        join max_depths on leaves._depth = max_depths.max_depth
-    )
-    select * from herkunft_rev
-    join winning_revisions on herkunft_rev._rev = winning_revisions._rev
-  ) then
-    -- 2. insert winner of non deleted datasets
-    insert into herkunft (
-      id,
-      nr,
-      lokalname,
-      gemeinde,
-      kanton,
-      land,
-      geom_point,
-      bemerkungen,
-      changed,
-      changed_by,
-      _rev,
-      _rev_at,
-      _revisions,
-      _parent_rev,
-      _depth,
-      _deleted,
-      _conflicts
+if exists (
+  select 1 from herkunft_rev_winner(new.herkunft_id, false)
+)
+-- 1. if a winning undeleted leaf exists, use this
+--    (else pick a winner from the deleted leaves)
+then
+  insert into herkunft (
+    id,
+    nr,
+    lokalname,
+    gemeinde,
+    kanton,
+    land,
+    geom_point,
+    bemerkungen,
+    changed,
+    changed_by,
+    _rev,
+    _rev_at,
+    _revisions,
+    _parent_rev,
+    _depth,
+    _deleted,
+    _conflicts
   )
-  with leaves as (
-    select
-      herkunft_id,
-      _rev,
-      _depth,
-      _parent_rev
-    from
-      herkunft_rev
-    where
-      not exists (
-        select
-          herkunft_id
-        from
-          herkunft_rev as t
-        where
-          t.herkunft_id = new.herkunft_id
-          and t._parent_rev = herkunft_rev._rev
-      )
-      and _deleted = false
-      and herkunft_id = new.herkunft_id
-    ),
-    deleted_conflicts_of_leaves as (
-      select
-        herkunft_id,
-        _rev,
-        _depth
-      from
-        herkunft_rev
-      where
-        not exists (
-          select
-            herkunft_id
-          from
-            herkunft_rev as t
-          where
-            t.herkunft_id = new.herkunft_id
-            and t._parent_rev = herkunft_rev._rev
-        )
-        and _deleted is true
-        and herkunft_id = new.herkunft_id
-        and exists (
-          select herkunft_id from leaves l
-          where 
-            l._parent_rev = herkunft_rev._parent_rev
-            and l._depth = herkunft_rev._depth
-        )
-    ),
-    max_depths as (
-      select
-        max(_depth) as max_depth
-      from
-        leaves
-    ),
-    winning_revisions as (
-      select
-        max(leaves._rev) as _rev
-      from
-        leaves
-        join max_depths on leaves._depth = max_depths.max_depth
-    )
-    select
-      herkunft_rev.herkunft_id,
-      herkunft_rev.nr,
-      herkunft_rev.lokalname,
-      herkunft_rev.gemeinde,
-      herkunft_rev.kanton,
-      herkunft_rev.land,
-      herkunft_rev.geom_point,
-      herkunft_rev.bemerkungen,
-      herkunft_rev.changed,
-      herkunft_rev.changed_by,
-      herkunft_rev._rev,
-      herkunft_rev._rev_at,
-      herkunft_rev._revisions,
-      herkunft_rev._parent_rev,
-      herkunft_rev._depth,
-      herkunft_rev._deleted,
-      (select array(
-        select _rev from leaves
-        where 
-          _rev <> herkunft_rev._rev
-          and _rev <> ANY(herkunft_rev._revisions)
-        union select _rev from deleted_conflicts_of_leaves
-      )) as _conflicts
-    from
-      herkunft_rev
-      join winning_revisions on herkunft_rev._rev = winning_revisions._rev
-    on conflict on constraint herkunft_pkey do update set
-      -- do not update the id = pkey
-      nr = excluded.nr,
-      lokalname = excluded.lokalname,
-      gemeinde = excluded.gemeinde,
-      kanton = excluded.kanton,
-      land = excluded.land,
-      geom_point = excluded.geom_point,
-      bemerkungen = excluded.bemerkungen,
-      changed = excluded.changed,
-      changed_by = excluded.changed_by,
-      _rev = excluded._rev,
-      _rev_at = excluded._rev_at,
-      _revisions = excluded._revisions,
-      _parent_rev = excluded._parent_rev,
-      _depth = excluded._depth,
-      _deleted = excluded._deleted,
-      _conflicts = excluded._conflicts;
-  else
-    -- 3. insert winner of deleted datasets
-    insert into herkunft (
-        id,
-        nr,
-        lokalname,
-        gemeinde,
-        kanton,
-        land,
-        geom_point,
-        bemerkungen,
-        changed,
-        changed_by,
-        _rev,
-        _rev_at,
-        _revisions,
-        _parent_rev,
-        _depth,
-        _deleted,
-        _conflicts
-    )
-    with leaves as (
-      select
-        herkunft_id,
-        _rev,
-        _depth,
-        _parent_rev
-      from
-        herkunft_rev
-      where
-        not exists (
-          select
-            herkunft_id
-          from
-            herkunft_rev as t
-          where
-            t.herkunft_id = new.herkunft_id
-            and t._parent_rev = herkunft_rev._rev
-        )
-        and _deleted is false
-        and herkunft_id = new.herkunft_id
-      ),
-      deleted_conflicts_of_leaves as (
-        select
-          herkunft_id,
-          _rev,
-          _depth
-        from
-          herkunft_rev
-        where
-          not exists (
-            select
-              herkunft_id
-            from
-              herkunft_rev as t
-            where
-              t.herkunft_id = new.herkunft_id
-              and t._parent_rev = herkunft_rev._rev
-          )
-          and _deleted is true
-          and herkunft_id = new.herkunft_id
-          and exists (
-            select herkunft_id from leaves l
-            where 
-              l._parent_rev = herkunft_rev._parent_rev
-              and l._depth = herkunft_rev._depth
-          )
-      ),
-      leaves_deleted as (
-      select
-        herkunft_id,
-        _rev,
-        _depth
-      from
-        herkunft_rev
-      where
-        not exists (
-          select
-            herkunft_id
-          from
-            herkunft_rev as t
-          where
-            t.herkunft_id = new.herkunft_id
-            and t._parent_rev = herkunft_rev._rev
-        )
-        --and _deleted = false
-        and herkunft_id = new.herkunft_id
-      ),
-      max_depths as (
-        select
-          max(_depth) as max_depth
-        from
-          leaves_deleted
-      ),
-      winning_revisions as (
-        select
-          max(leaves_deleted._rev) as _rev
-        from
-          leaves_deleted
-          join max_depths on leaves_deleted._depth = max_depths.max_depth
-      )
-      select
-        herkunft_rev.herkunft_id,
-        herkunft_rev.nr,
-        herkunft_rev.lokalname,
-        herkunft_rev.gemeinde,
-        herkunft_rev.kanton,
-        herkunft_rev.land,
-        herkunft_rev.geom_point,
-        herkunft_rev.bemerkungen,
-        herkunft_rev.changed,
-        herkunft_rev.changed_by,
-        herkunft_rev._rev,
-        herkunft_rev._rev_at,
-        herkunft_rev._revisions,
-        herkunft_rev._parent_rev,
-        herkunft_rev._depth,
-        herkunft_rev._deleted,
-        (select array(
-          select _rev from leaves
-          where 
-            _rev <> herkunft_rev._rev
-            and _rev <> ANY(herkunft_rev._revisions)
-        union select _rev from deleted_conflicts_of_leaves
-        )) as _conflicts
-      from
-        herkunft_rev
-        join winning_revisions on herkunft_rev._rev = winning_revisions._rev
-      on conflict on constraint herkunft_pkey do update set
-        -- do not update the id = pkey
-        nr = excluded.nr,
-        lokalname = excluded.lokalname,
-        gemeinde = excluded.gemeinde,
-        kanton = excluded.kanton,
-        land = excluded.land,
-        geom_point = excluded.geom_point,
-        bemerkungen = excluded.bemerkungen,
-        changed = excluded.changed,
-        changed_by = excluded.changed_by,
-        _rev = excluded._rev,
-        _rev_at = excluded._rev_at,
-        _revisions = excluded._revisions,
-        _parent_rev = excluded._parent_rev,
-        _depth = excluded._depth,
-        _deleted = excluded._deleted,
-        _conflicts = excluded._conflicts;
-  end if;
-  return new;
+  select
+    winner.herkunft_id,
+    winner.nr,
+    winner.lokalname,
+    winner.gemeinde,
+    winner.kanton,
+    winner.land,
+    winner.geom_point,
+    winner.bemerkungen,
+    winner.changed,
+    winner.changed_by,
+    winner._rev,
+    winner._rev_at,
+    winner._revisions,
+    winner._parent_rev,
+    winner._depth,
+    winner._deleted,
+    herkunft_conflicts_of_winner(new.herkunft_id, false) as _conflicts
+  from
+    herkunft_rev_winner(new.herkunft_id, false) as winner
+  on conflict on constraint herkunft_pkey do update set
+    -- do not update the id = pkey
+    nr = excluded.nr,
+    lokalname = excluded.lokalname,
+    gemeinde = excluded.gemeinde,
+    kanton = excluded.kanton,
+    land = excluded.land,
+    geom_point = excluded.geom_point,
+    bemerkungen = excluded.bemerkungen,
+    changed = excluded.changed,
+    changed_by = excluded.changed_by,
+    _rev = excluded._rev,
+    _rev_at = excluded._rev_at,
+    _revisions = excluded._revisions,
+    _parent_rev = excluded._parent_rev,
+    _depth = excluded._depth,
+    _deleted = excluded._deleted,
+    _conflicts = excluded._conflicts;
+else
+  -- 2. so there is no undeleted winning leaf
+  --    choose winner from deleted leaves
+  --    is necessary to set the winner deleted
+  --    so the client can pick this up
+  insert into herkunft (
+    id,
+    nr,
+    lokalname,
+    gemeinde,
+    kanton,
+    land,
+    geom_point,
+    bemerkungen,
+    changed,
+    changed_by,
+    _rev,
+    _rev_at,
+    _revisions,
+    _parent_rev,
+    _depth,
+    _deleted,
+    _conflicts
+  )
+  select
+    winner.herkunft_id,
+    winner.nr,
+    winner.lokalname,
+    winner.gemeinde,
+    winner.kanton,
+    winner.land,
+    winner.geom_point,
+    winner.bemerkungen,
+    winner.changed,
+    winner.changed_by,
+    winner._rev,
+    winner._rev_at,
+    winner._revisions,
+    winner._parent_rev,
+    winner._depth,
+    winner._deleted,
+    herkunft_conflicts_of_winner(new.herkunft_id, true) as _conflicts
+  from
+    herkunft_rev_winner(new.herkunft_id, true) as winner
+  on conflict on constraint herkunft_pkey do update set
+    -- do not update the id = pkey
+    nr = excluded.nr,
+    lokalname = excluded.lokalname,
+    gemeinde = excluded.gemeinde,
+    kanton = excluded.kanton,
+    land = excluded.land,
+    geom_point = excluded.geom_point,
+    bemerkungen = excluded.bemerkungen,
+    changed = excluded.changed,
+    changed_by = excluded.changed_by,
+    _rev = excluded._rev,
+    _rev_at = excluded._rev_at,
+    _revisions = excluded._revisions,
+    _parent_rev = excluded._parent_rev,
+    _depth = excluded._depth,
+    _deleted = excluded._deleted,
+    _conflicts = excluded._conflicts;
+end if;
+return new;
 end;
-$body$
-language plpgsql;
+$$ language plpgsql;
 
 create trigger trigger_herkunft_rev_set_winning_revision
   after insert on herkunft_rev

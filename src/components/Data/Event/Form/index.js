@@ -1,11 +1,15 @@
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SimpleBar from 'simplebar-react'
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
+import { combineLatest, of as $of } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Select from '../../../shared/Select'
 import SelectCreatable from '../../../shared/SelectCreatable'
 import TextField from '../../../shared/TextField'
@@ -15,7 +19,10 @@ import Checkbox3States from '../../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
-import kulturLabelFromKultur from '../../../../utils/kulturLabelFromKultur'
+import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
+import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
+import teilkulturSort from '../../../../utils/teilkulturSort'
+import personSort from '../../../../utils/personSort'
 import getConstants from '../../../../utils/constants'
 
 const constants = getConstants()
@@ -50,59 +57,183 @@ const EventForm = ({
   showHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    insertTeilkulturRev,
-    kultursSorted,
-    personsSorted,
-    teilkultursSorted,
-    errors,
-    unsetError,
-  } = store
+  const { filter, online, insertTeilkulturRev, errors, unsetError, db } = store
 
   useEffect(() => {
     unsetError('event')
   }, [id, unsetError])
 
-  const kulturWerte = useMemo(
-    () =>
-      kultursSorted.map((el) => ({
-        value: el.id,
-        label: kulturLabelFromKultur({ kultur: el, store }),
-      })),
-    [kultursSorted, store],
-  )
-
   const kulturId = row?.kultur_id
-  const teilkulturWerte = useMemo(
-    () =>
-      teilkultursSorted
-        .filter((t) => t.kultur_id === kulturId)
-        .map((t) => ({
-          value: t.id,
-          label: t.name || '(kein Name)',
-        })),
-    [kulturId, teilkultursSorted],
-  )
 
-  const personWerte = useMemo(
-    () =>
-      personsSorted.map((el) => ({
-        value: el.id,
-        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-      })),
-    [personsSorted],
-  )
+  const [dataState, setDataState] = useState({
+    kulturWerte: [],
+    teilkulturWerte: [],
+    personWerte: [],
+    kulturOption: undefined,
+  })
+  useEffect(() => {
+    const kultursObservable = db
+      .get('kultur')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.kultur._deleted === false
+              ? [false]
+              : filter.kultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.kultur.aktiv === true
+              ? [true]
+              : filter.kultur.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeWithColumns([
+        'garten_id',
+        'art_id',
+        'herkunft_id',
+        'zwischenlager',
+      ])
+    const teilkulturObservable = db
+      .get('teilkultur')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.teilkultur._deleted === false
+              ? [false]
+              : filter.teilkultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        ...(showFilter ? [] : [Q.where('kultur_id', kulturId)]),
+      )
+      .observeWithColumns(['name'])
+    const personsObservable = db
+      .get('person')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observeWithColumns(['vorname', 'name'])
+    const kulturOptionObservable = row?.kultur_id
+      ? db.get('kultur_option').findAndObserve(row.kultur_id)
+      : $of({})
+    const combinedObservables = combineLatest([
+      kultursObservable,
+      teilkulturObservable,
+      personsObservable,
+      kulturOptionObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([kulturs, teilkulturs, persons, kulturOption]) => {
+        // need to show a choosen kultur even if inactive but not if deleted
+        let kultur
+        try {
+          kultur = await row.kultur.fetch()
+        } catch {}
+        const kultursIncludingChoosen = uniqBy(
+          [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
+          'id',
+        )
+        const kultursSorted = await kultursSortedFromKulturs(
+          kultursIncludingChoosen,
+        )
+        const kulturWerte = await Promise.all(
+          kultursSorted.map(async (t) => {
+            let label
+            try {
+              label = await t.label.pipe(first$()).toPromise()
+            } catch {}
 
-  const kulturOption = store.kultur_options.get(row?.kultur_id) || {}
-  const {
-    tk,
-    ev_datum,
-    ev_teilkultur_id,
-    ev_geplant,
-    ev_person_id,
-  } = kulturOption
+            return {
+              value: t.id,
+              label,
+            }
+          }),
+        )
+        let teilkultur
+        try {
+          teilkultur = await row.teilkultur.fetch()
+        } catch {}
+        const teilkultursIncludingChoosen = uniqBy(
+          [...teilkulturs, ...(teilkultur && !showFilter ? [teilkultur] : [])],
+          'id',
+        )
+        const teilkulturWerte = teilkultursIncludingChoosen
+          .sort(teilkulturSort)
+          .map((t) => ({
+            value: t.id,
+            label: t.name || '(kein Name)',
+          }))
+        // need to show a choosen person even if inactive but not if deleted
+        let person
+        try {
+          person = await row.person.fetch()
+        } catch {}
+        const personsIncludingChoosen = uniqBy(
+          [...persons, ...(person && !showFilter ? [person] : [])],
+          'id',
+        )
+        const personWerte = personsIncludingChoosen
+          .sort(personSort)
+          .map((person) => ({
+            value: person.id,
+            label: personLabelFromPerson({ person }),
+          }))
+        setDataState({
+          kulturWerte,
+          teilkulturWerte,
+          personWerte,
+          kulturOption,
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    filter.kultur,
+    filter.person._deleted,
+    filter.person.aktiv,
+    filter.teilkultur._deleted,
+    kulturId,
+    row,
+    row?.kultur,
+    row?.kultur_option,
+    row?.person,
+    showFilter,
+  ])
+  const { kulturWerte, teilkulturWerte, personWerte, kulturOption } = dataState
+
+  const { tk, ev_datum, ev_geplant, ev_person_id } = kulturOption ?? {}
 
   const saveToDb = useCallback(
     (event) => {
@@ -115,12 +246,12 @@ const EventForm = ({
         return filter.setValue({ table: 'event', key: field, value })
       }
 
-      const previousValue = row?.[field]
+      const previousValue = ifIsNumericAsNumber(row?.[field])
       // only update if value has changed
       if (value === previousValue) return
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [filter, row, showFilter],
+    [filter, row, showFilter, store],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Planen`
@@ -133,20 +264,21 @@ const EventForm = ({
   }, [])
 
   const onCreateNewTeilkultur = useCallback(
-    ({ name }) => {
-      const teilkultur_id = insertTeilkulturRev({
+    async ({ name }) => {
+      const teilkultur_id = await insertTeilkulturRev({
         noNavigateInTree: true,
         values: {
           name,
           kultur_id: row.kultur_id,
         },
       })
-      row.edit({ field: 'teilkultur_id', value: teilkultur_id })
+      row.edit({ field: 'teilkultur_id', value: teilkultur_id, store })
     },
-    [insertTeilkulturRev, row],
+    [insertTeilkulturRev, row, store],
   )
 
-  const showDeleted = showFilter || row._deleted
+  const showDeleted =
+    showFilter || filter.event._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>
@@ -190,10 +322,12 @@ const EventForm = ({
             saveToDb={saveToDb}
             error={errors?.event?.kultur_id}
           />
-          {((tk && ev_teilkultur_id) || showFilter) && (
+          {(tk || showFilter) && (
             <SelectCreatable
               key={`${row.id}${row.teilkultur_id}teilkultur_id`}
               row={row}
+              showFilter={showFilter}
+              table="event"
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturWerte}

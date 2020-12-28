@@ -294,3 +294,7 @@ create trigger trigger_kultur_qk_choosen_rev_set_winning_revision
   after insert on kultur_qk_choosen_rev
   for each row
   execute procedure kultur_qk_choosen_rev_set_winning_revision ()
+
+-- TODO:
+drop function kultur_qk_choosen_rev_set_winning_revision cascade;
+drop trigger trigger_kultur_qk_choosen_rev_set_winning_revision;

@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Vermehrung v0.52.1',
+    title: 'Vermehrung v0.90.18',
   },
   plugins: [
     {
@@ -32,7 +32,7 @@ module.exports = {
         name: 'docs-pages',
       },
     },
-    'gatsby-plugin-sharp',
+    { resolve: 'gatsby-plugin-sharp', options: { failOnError: false } },
     'gatsby-transformer-sharp',
     {
       resolve: 'gatsby-plugin-typography',
@@ -59,7 +59,7 @@ module.exports = {
         icon: 'src/images/seedling.png',
         include_favicon: true,
         url: 'https://vermehrung.ch',
-        lang: '',
+        lang: 'de-CH',
         screenshots: [],
         orientation: 'portrait',
       },

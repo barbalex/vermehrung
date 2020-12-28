@@ -3,11 +3,13 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import { useQuery } from 'urql'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import StoreContext from '../../../storeContext'
 import Conflict from '../../shared/Conflict'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
+import mutations from '../../../utils/mutations'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
 const artRevQuery = gql`
@@ -17,14 +19,11 @@ const artRevQuery = gql`
       __typename
       art_id
       ae_id
-      art_rev_ae_art {
-        id
-        __typename
-        name
-      }
       changed
       changed_by
       _rev
+      _parent_rev
+      _revisions
       _depth
       _deleted
     }
@@ -40,38 +39,76 @@ const ArtConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
+  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(artRevQuery, {
+  const [{ error, data, fetching }] = useQuery({
+    query: artRevQuery,
     variables: {
       rev,
       id,
     },
   })
-  error && checkForOnlineError(error)
+  error && checkForOnlineError({ error, store })
 
-  // need to grab store object to ensure this remains up to date
-  const revRow = useMemo(
-    () =>
-      [...store.art_revs.values()].find(
-        (v) => v._rev === rev && v.art_id === id,
-      ) || {},
-    [id, rev, store.art_revs],
-  )
+  const revRow = useMemo(() => data?.art_rev?.[0] ?? {}, [data?.art_rev])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow, store }),
     [revRow, row, store],
   )
 
-  //console.log('Art Conflict', { dataArray, row, revRow, id, rev })
+  const onClickAktuellUebernehmen = useCallback(async () => {
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      art_id: revRow.art_id,
+      ae_id: revRow.ae_id,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
 
-  const onClickVerwerfen = useCallback(() => {
-    revRow.setDeleted()
+    addQueuedQuery({
+      name: 'mutateInsert_art_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'art_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'art',
+      revertId: revRow.art_id,
+      revertField: '_deleted',
+      revertValue: false,
+    })
+    // update model: remove this conflict
+    try {
+      const model = await db.get('art').find(revRow.art_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
     conflictDisposalCallback()
-  }, [conflictDisposalCallback, revRow])
-  const onClickUebernehmen = useCallback(async () => {
+  }, [
+    addQueuedQuery,
+    conflictDisposalCallback,
+    db,
+    revRow._depth,
+    revRow._rev,
+    revRow._revisions,
+    revRow.ae_id,
+    revRow.art_id,
+    user.email,
+  ])
+  const onClickWiderspruchUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -90,24 +127,29 @@ const ArtConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    try {
-      await store.mutateInsert_art_rev_one({
+    const response = await gqlClient
+      .query(mutations.mutateInsert_art_rev_one, {
         object: newObject,
         on_conflict: {
           constraint: 'art_rev_pkey',
           update_columns: ['id'],
         },
       })
-    } catch (error) {
-      checkForOnlineError(error)
-      addNotification({
-        message: error.message,
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error, store })
+      return addNotification({
+        message: response.error.message,
       })
     }
+    // now we need to delete the previous conflict
+    onClickAktuellUebernehmen()
     conflictSelectionCallback()
   }, [
     addNotification,
     conflictSelectionCallback,
+    gqlClient,
+    onClickAktuellUebernehmen,
     revRow._deleted,
     revRow.ae_id,
     revRow.art_id,
@@ -126,10 +168,10 @@ const ArtConflict = ({
       name="Art"
       rev={rev}
       dataArray={dataArray}
-      loading={loading}
+      fetching={fetching}
       error={error}
-      onClickVerwerfen={onClickVerwerfen}
-      onClickUebernehmen={onClickUebernehmen}
+      onClickAktuellUebernehmen={onClickAktuellUebernehmen}
+      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
       onClickSchliessen={onClickSchliessen}
     />
   )

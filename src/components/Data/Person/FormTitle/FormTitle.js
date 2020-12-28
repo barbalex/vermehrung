@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import FilterNumbers from '../../../shared/FilterNumbers'
@@ -36,14 +37,27 @@ const TitleSymbols = styled.div`
 
 const PersonFormTitle = ({
   row,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
   width,
   showHistory,
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { userRole } = store
+  const { user, db } = store
+
+  const [userRole, setUserRole] = useState(undefined)
+  useEffect(() => {
+    const userRoleObservable = db
+      .get('user_role')
+      .query(Q.on('person', Q.where('account_id', user.uid)))
+      .observeWithColumns(['name'])
+    const subscription = userRoleObservable.subscribe(([userRole]) =>
+      setUserRole(userRole),
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user])
 
   if (width < 568) {
     return (
@@ -51,7 +65,7 @@ const PersonFormTitle = ({
         <Title>Person</Title>
         <TitleSymbols>
           <NavButtons />
-          {userRole === 'manager' && (
+          {userRole?.name === 'manager' && (
             <>
               <AddButton />
               <DeleteButton row={row} />
@@ -59,13 +73,18 @@ const PersonFormTitle = ({
           )}
           <Menu white={false}>
             <HistoryButton
-              row={row}
+              table="person"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
             />
             <KontoMenu row={row} asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -77,19 +96,20 @@ const PersonFormTitle = ({
       <Title>Person</Title>
       <TitleSymbols>
         <NavButtons />
-        {userRole === 'manager' && (
+        {userRole?.name === 'manager' && (
           <>
             <AddButton />
             <DeleteButton row={row} />
           </>
         )}
         <HistoryButton
-          row={row}
+          table="person"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
         <KontoMenu row={row} />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
   )

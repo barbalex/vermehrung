@@ -1,10 +1,19 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest, of as $of } from 'rxjs'
+import uniqBy from 'lodash/uniqBy'
 
-import { StoreContext } from '../../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../../storeContext'
 import TextField from '../../../../../../shared/TextField'
 import TextFieldNonUpdatable from '../../../../../../shared/TextFieldNonUpdatable'
 import Checkbox2States from '../../../../../../shared/Checkbox2States'
@@ -12,8 +21,11 @@ import Select from '../../../../../../shared/SelectCreatable'
 import ConflictList from '../../../../../../shared/ConflictList'
 import HistoryButton from '../../../../../../shared/HistoryButton'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
+import teilkulturSort from '../../../../../../../utils/teilkulturSort'
+import teilkulturLabelFromTeilkultur from '../../../../../../../utils/teilkulturLabelFromTeilkultur'
 import PrognoseMenu from './PrognoseMenu'
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
+import exists from '../../../../../../../utils/exists'
 
 const FieldContainer = styled.div`
   display: flex;
@@ -71,17 +83,82 @@ const DeletedContainer = styled.div`
 
 const TeilzaehlungForm = ({
   id,
-  zaehlungId,
   kulturId,
-  row,
-  teilkulturenWerte,
   activeConflict,
   setActiveConflict,
   showHistory,
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { insertTeilkulturRev, errors, unsetError, online } = store
+  const { insertTeilkulturRev, errors, unsetError, online, filter, db } = store
+
+  const [dataState, setDataState] = useState({
+    teilkulturWerte: [],
+    kulturOption,
+    row,
+  })
+  useEffect(() => {
+    const teilkultursObservable = db
+      .get('teilkultur')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.teilkultur._deleted === false
+              ? [false]
+              : filter.teilkultur._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where('kultur_id', kulturId),
+      )
+      .observeWithColumns(['name'])
+    const kulturOptionObservable = kulturId
+      ? db.get('kultur_option').findAndObserve(kulturId)
+      : $of(null)
+    const tzObservable = db.get('teilzaehlung').findAndObserve(id)
+    const combinedObservables = combineLatest([
+      teilkultursObservable,
+      kulturOptionObservable,
+      tzObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([teilkulturs, kulturOption, teilzaehlung]) => {
+        let teilkultur
+        try {
+          teilkultur = await row.teilkultur.fetch()
+        } catch {}
+        const teilkultursIncludingChoosen = uniqBy(
+          [...teilkulturs, ...(teilkultur ? [teilkultur] : [])],
+          'id',
+        )
+        const teilkulturWerte = teilkultursIncludingChoosen
+          .sort(teilkulturSort)
+          .map((tk) => ({
+            value: tk.id,
+            label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
+          }))
+        setDataState({ teilkulturWerte, kulturOption, row: teilzaehlung })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [
+    db,
+    filter.teilkultur._deleted,
+    id,
+    kulturId,
+    row?.teilkultur,
+    row?.teilkultur_id,
+  ])
+  const { teilkulturWerte, kulturOption, row } = dataState
+
+  console.log('Teilzaehlung Form', {
+    row,
+    tkId: row?.teilkultur_id,
+    teilkulturWerte,
+  })
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -95,7 +172,6 @@ const TeilzaehlungForm = ({
     setAnchorEl(event.currentTarget)
   }, [])
 
-  const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const {
     tk,
     tz_teilkultur_id,
@@ -103,20 +179,20 @@ const TeilzaehlungForm = ({
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = kulturOption
+  } = kulturOption ?? {}
 
   const onCreateNewTeilkultur = useCallback(
-    ({ name }) => {
-      const teilkultur_id = insertTeilkulturRev({
+    async ({ name }) => {
+      const teilkultur_id = await insertTeilkulturRev({
         noNavigateInTree: true,
         values: {
           name,
           kultur_id: kulturId,
         },
       })
-      row.edit({ field: 'teilkultur_id', value: teilkultur_id })
+      row.edit({ field: 'teilkultur_id', value: teilkultur_id, store })
     },
-    [insertTeilkulturRev, kulturId, row],
+    [insertTeilkulturRev, kulturId, row, store],
   )
 
   useEffect(() => {
@@ -124,24 +200,45 @@ const TeilzaehlungForm = ({
   }, [id, unsetError])
 
   const saveToDb = useCallback(
-    async (event) => {
+    (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const previousValue = row[field]
+      const previousValue = ifIsNumericAsNumber(row[field])
       // only update if value has changed
       if (value === previousValue) return
 
-      row.edit({ field, value })
+      row.edit({ field, value, store })
     },
-    [row],
+    [row, store],
   )
   const onClickDelete = useCallback(() => {
-    row.delete()
-  }, [row])
+    row.delete({ store })
+  }, [row, store])
 
-  const showDeleted = row._deleted
+  const showDeleted = row?._deleted || filter.teilzaehlung._deleted !== false
+
+  const anzahl_jungpflanzen = useMemo(() => {
+    if (
+      exists(row?.anzahl_pflanzen) &&
+      exists(row?.anzahl_auspflanzbereit) &&
+      exists(row?.anzahl_mutterpflanzen)
+    ) {
+      return (
+        row?.anzahl_pflanzen -
+        row?.anzahl_auspflanzbereit -
+        row?.anzahl_mutterpflanzen
+      )
+    }
+    return null
+  }, [
+    row?.anzahl_auspflanzbereit,
+    row?.anzahl_mutterpflanzen,
+    row?.anzahl_pflanzen,
+  ])
+
+  if (!row) return null
 
   return (
     <ErrorBoundary>
@@ -166,11 +263,11 @@ const TeilzaehlungForm = ({
         {tk && tz_teilkultur_id && (
           <Teilkultur>
             <Select
-              key={`${row.id}teilkultur_id`}
+              key={`${row.id}${row.teilkultur_id}teilkultur_id`}
               row={row}
               field="teilkultur_id"
               label="Teilkultur"
-              options={teilkulturenWerte}
+              options={teilkulturWerte}
               error={errors?.teilzaehlung?.teilkultur_id}
               onCreateNew={onCreateNewTeilkultur}
             />
@@ -179,7 +276,7 @@ const TeilzaehlungForm = ({
         <Anzahl>
           <TextField
             key={`${row.id}anzahl_pflanzen`}
-            labelWeight={600}
+            labelWeight={700}
             name="anzahl_pflanzen"
             label="Anzahl Pflanzen"
             value={row.anzahl_pflanzen}
@@ -217,7 +314,7 @@ const TeilzaehlungForm = ({
             key={`${row.id}anzahl_jungpflanzen`}
             label="Anzahl Jungpflanzen"
             schrinkLabel={true}
-            value={row.anzahl_jungpflanzen}
+            value={anzahl_jungpflanzen}
             type="number"
             message="Wird berechnet aus: Anzahl Pflanzen - auspflanzbereit - Mutterpflanzen"
           />
@@ -228,7 +325,7 @@ const TeilzaehlungForm = ({
               key={`${row.id}andere_menge`}
               name="andere_menge"
               label={`Andere Menge (z.B. "3 Zwiebeln")`}
-              labelWeight={600}
+              labelWeight={700}
               value={row.andere_menge}
               saveToDb={saveToDb}
               error={errors?.teilzaehlung?.andere_menge}
@@ -242,7 +339,7 @@ const TeilzaehlungForm = ({
               key={`${row.id}auspflanzbereit_beschreibung`}
               name="auspflanzbereit_beschreibung"
               label="Beschreibung auspflanzbereite Pflanzen (z.B. Topfgrösse)"
-              labelWeight={600}
+              labelWeight={700}
               value={row.auspflanzbereit_beschreibung}
               saveToDb={saveToDb}
               error={errors?.teilzaehlung?.auspflanzbereit_beschreibung}
@@ -256,7 +353,7 @@ const TeilzaehlungForm = ({
               key={`${row.id}bemerkungen`}
               name="bemerkungen"
               label="Bemerkungen"
-              labelWeight={600}
+              labelWeight={700}
               value={row.bemerkungen}
               saveToDb={saveToDb}
               error={errors?.teilzaehlung?.bemerkungen}
@@ -266,7 +363,8 @@ const TeilzaehlungForm = ({
         )}
         <div>
           <HistoryButton
-            row={row}
+            id={id}
+            table="teilzaehlung"
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
@@ -281,8 +379,9 @@ const TeilzaehlungForm = ({
           )}
           <IconButton
             aria-label="Prognose"
-            title="Prognose"
+            title={online ? 'Prognose' : 'Prognose (nur online verfügbar)'}
             onClick={onClickPrognosis}
+            disabled={!online}
           >
             <FaChartLine />
           </IconButton>
@@ -292,7 +391,6 @@ const TeilzaehlungForm = ({
               anchorEl={anchorEl}
               setAnchorEl={setAnchorEl}
               teilzaehlung={row}
-              zaehlungId={zaehlungId}
             />
           )}
         </div>

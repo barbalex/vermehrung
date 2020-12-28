@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
-import localForage from 'localforage'
 
 const Container = styled.div`
   padding: 15px;
@@ -30,19 +29,22 @@ const Pre = styled.pre`
   background-color: rgba(128, 128, 128, 0.09);
 `
 
-const onReset = () => {
+const onReload = () => {
   if (typeof window !== 'undefined') {
     window.location.reload(true)
-    localForage.clear()
   }
 }
 
 const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
-  const onReload = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      window.location.reload(true)
-    }
-  }, [])
+  // ISSUE:
+  // watermelondb throws error when record not found
+  // this can happen when data is loaded first time and url is direct link to a dataset
+  // turned off as using own ErrorBoundary to catch this
+  /*const lcMessage = error.message.toLowerCase()
+  if (lcMessage.includes('record') && lcMessage.includes('not found')) {
+    console.log('ErrorBoundary', error.message)
+    return null
+  }*/
 
   return (
     <Container>
@@ -67,7 +69,7 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
 }
 
 const MyErrorBoundary = ({ children }) => (
-  <ErrorBoundary FallbackComponent={ErrorFallback} onReset={onReset}>
+  <ErrorBoundary FallbackComponent={ErrorFallback} onReset={onReload}>
     {children}
   </ErrorBoundary>
 )

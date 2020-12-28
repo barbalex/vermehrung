@@ -1,9 +1,11 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
-import { StoreContext } from '../../../../../../models/reactUtils'
+import StoreContext from '../../../../../../storeContext'
 
 const Row = styled.div`
   display: flex;
@@ -25,20 +27,48 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-const ChooseArtQkRow = ({ artId, qk }) => {
+const ChooseArtQkRow = ({ qk }) => {
   const store = useContext(StoreContext)
+  const { user, db } = store
 
-  const artQkChoosen = [...store.art_qk_choosens.values()].find(
-    (v) => v.art_id === artId && v.qk_id === qk.id,
-  )
+  const [dataState, setDataState] = useState({
+    userPersonOption,
+    artQkChoosen: [],
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['art_qk_choosen'])
+      : $of({})
+    const combinedObservables = combineLatest([userPersonOptionsObservable])
+    const subscription = combinedObservables.subscribe(([userPersonOptions]) =>
+      setDataState({
+        userPersonOption: userPersonOptions?.[0],
+        artQkChoosen: userPersonOptions?.[0]?.art_qk_choosen ?? [],
+      }),
+    )
 
-  const checked = artQkChoosen.choosen
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { userPersonOption, artQkChoosen } = dataState
+
+  const checked = artQkChoosen.includes(qk.id)
 
   const onChange = useCallback(
     (event) => {
-      artQkChoosen.edit({ field: 'choosen', value: event.target.checked })
+      const newValue = event.target.checked
+        ? [...artQkChoosen, qk.id]
+        : artQkChoosen.filter((id) => id !== qk.id)
+
+      userPersonOption.edit({
+        field: 'art_qk_choosen',
+        value: newValue,
+        store,
+      })
     },
-    [artQkChoosen],
+    [artQkChoosen, qk.id, store, userPersonOption],
   )
 
   return (

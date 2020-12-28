@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useState,
-  useMemo,
   useEffect,
   useContext,
   useRef,
@@ -11,12 +10,16 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
+import { Q } from '@nozbe/watermelondb'
+import { first as first$ } from 'rxjs/operators'
+import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import Garten from './Garten'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import gartenLabelFromGarten from '../../../../../utils/gartenLabelFromGarten'
+import gartensSortedFromGartens from '../../../../../utils/gartensSortedFromGartens'
+import gvsSortByGarten from '../../../../../utils/gvsSortByGarten'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -48,12 +51,12 @@ const Gvs = styled.div`
   padding-bottom: 8px;
 `
 
-const PersonArten = ({ personId }) => {
+const PersonArten = ({ person }) => {
   const store = useContext(StoreContext)
-  const { gvsSorted, gartensSorted, insertGvRev } = store
+  const { insertGvRev, db, filter } = store
 
   const [errors, setErrors] = useState({})
-  useEffect(() => setErrors({}), [personId])
+  useEffect(() => setErrors({}), [person.id])
 
   const [open, setOpen] = useState(false)
   let anim = useAnimation()
@@ -76,28 +79,81 @@ const PersonArten = ({ personId }) => {
     [anim, open],
   )
 
-  const gvs = gvsSorted.filter((a) => a.person_id === personId)
-  const gvArtIds = gvs.map((v) => v.garten_id)
+  const [dataState, setDataState] = useState({ gvs: [], gartenWerte: [] })
+  const { gvs, gartenWerte } = dataState
+  const gvGartenIds = gvs.map((v) => v.garten_id)
+  useEffect(() => {
+    const gvsObservable = person.gvs
+      .extend(Q.where('_deleted', false))
+      .observe()
+    const gartensObservable = db
+      .get('garten')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.garten._deleted === false
+              ? [false]
+              : filter.garten._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.garten.aktiv === true
+              ? [true]
+              : filter.garten.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+        Q.where('id', Q.notIn(gvGartenIds)),
+      )
+      .observe()
+    const combinedObservables = combineLatest([
+      gvsObservable,
+      gartensObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([gvs, gartens]) => {
+        const gvsSorted = await gvsSortByGarten(gvs)
+        const gartensSorted = await gartensSortedFromGartens(gartens)
+        const gartenWerte = await Promise.all(
+          gartensSorted.map(async (garten) => {
+            let label
+            try {
+              label = await garten.label.pipe(first$()).toPromise()
+            } catch {}
 
-  const gartenWerte = useMemo(
-    () =>
-      gartensSorted
-        .filter((a) => !gvArtIds.includes(a.id))
-        .map((el) => ({
-          value: el.id,
-          label: gartenLabelFromGarten({ garten: el, store }),
-        })),
-    [gartensSorted, gvArtIds, store],
-  )
+            return {
+              value: garten.id,
+              label,
+            }
+          }),
+        )
+        setDataState({ gvs: gvsSorted, gartenWerte })
+      },
+    )
+    return () => subscription.unsubscribe()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    person.gvs,
+    gvGartenIds.length,
+    db,
+    filter.garten._deleted,
+    filter.garten.aktiv,
+  ])
 
   const saveToDb = useCallback(
     async (event) => {
       insertGvRev({
-        values: { garten_id: event.target.value, person_id: personId },
+        values: { garten_id: event.target.value, person_id: person.id },
       })
       setErrors({})
     },
-    [insertGvRev, personId],
+    [insertGvRev, person.id],
   )
 
   const titleRowRef = useRef(null)
@@ -138,8 +194,11 @@ const PersonArten = ({ personId }) => {
         {open && (
           <>
             <Gvs>
-              {gvs.map((gv) => (
-                <Garten key={`${gv.person_id}/${gv.garten_id}`} gv={gv} />
+              {gvs.map((gv, index) => (
+                <Garten
+                  key={`${gv.person_id}/${gv.garten_id}/${index}`}
+                  gv={gv}
+                />
               ))}
             </Gvs>
             {!!gartenWerte.length && (

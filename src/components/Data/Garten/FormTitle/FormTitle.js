@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import StoreContext from '../../../../storeContext'
 import Settings from './Settings'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
@@ -39,19 +39,20 @@ const TitleSymbols = styled.div`
 
 const GartenFormTitle = ({
   row,
+  rawRow,
   showHistory,
   setShowHistory,
   width,
-  totalNr,
-  filteredNr,
+  totalCount,
+  filteredCount,
 }) => {
   const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  const onClickUp = useCallback(() => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
   const onClickToKulturen = useCallback(
     () => setActiveNodeArray([...activeNodeArray, 'Kulturen']),
     [activeNodeArray, setActiveNodeArray],
@@ -69,17 +70,22 @@ const GartenFormTitle = ({
             <KuDownSvg />
           </IconButton>
           <AddButton />
-          <DeleteButton row={row} />
+          <DeleteButton row={row} rawRow={rawRow} />
           <Download gartenId={row.id} />
           <Menu white={false}>
             <HistoryButton
-              row={row}
+              table="garten"
+              id={row.id}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
               asMenu
             />
             <Settings asMenu />
-            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
           </Menu>
         </TitleSymbols>
       </Container>
@@ -100,12 +106,13 @@ const GartenFormTitle = ({
         <DeleteButton row={row} />
         <Download gartenId={row.id} />
         <HistoryButton
-          row={row}
+          table="garten"
+          id={row.id}
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
         <Settings />
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </Container>
   )

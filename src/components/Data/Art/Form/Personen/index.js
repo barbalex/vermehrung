@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useState,
-  useMemo,
   useEffect,
   useContext,
   useRef,
@@ -11,11 +10,16 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { motion, useAnimation } from 'framer-motion'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import StoreContext from '../../../../../storeContext'
 import Person from './Person'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import avsSortByPerson from '../../../../../utils/avsSortByPerson'
+import personSort from '../../../../../utils/personSort'
+import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -47,11 +51,11 @@ const Aven = styled.div`
   padding-bottom: 8px;
 `
 
-const ArtPersonen = ({ artId }) => {
+const ArtPersonen = ({ art }) => {
   const store = useContext(StoreContext)
-  const { avsSorted, personsSorted, insertAvRev, errors, unsetError } = store
+  const { db, insertAvRev, errors, unsetError, filter } = store
 
-  useEffect(() => unsetError('av'), [artId, unsetError])
+  useEffect(() => unsetError('av'), [art.id, unsetError])
 
   const [open, setOpen] = useState(false)
   let anim = useAnimation()
@@ -74,25 +78,64 @@ const ArtPersonen = ({ artId }) => {
     [anim, open],
   )
 
-  const avs = avsSorted.filter((a) => a.art_id === artId)
-  const avPersonIds = avs.map((v) => v.person_id)
-
-  const personWerte = useMemo(
-    () =>
-      personsSorted
-        .filter((a) => !avPersonIds.includes(a.id))
-        .map((el) => ({
-          value: el.id,
-          label: el?.fullname ?? '(kein Name)',
-        })),
-    [personsSorted, avPersonIds],
-  )
+  const [dataState, setDataState] = useState({
+    avsSorted: [],
+    personWerte: [],
+  })
+  useEffect(() => {
+    const personsObservable = db
+      .get('person')
+      .query(
+        Q.where(
+          '_deleted',
+          Q.oneOf(
+            filter.person._deleted === false
+              ? [false]
+              : filter.person._deleted === true
+              ? [true]
+              : [true, false, null],
+          ),
+        ),
+        Q.where(
+          'aktiv',
+          Q.oneOf(
+            filter.person.aktiv === true
+              ? [true]
+              : filter.person.aktiv === false
+              ? [false]
+              : [true, false, null],
+          ),
+        ),
+      )
+      .observe()
+    const avsObservable = art.avs.extend(Q.where('_deleted', false)).observe()
+    const combinedObservables = combineLatest([
+      personsObservable,
+      avsObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([persons, avs]) => {
+        const avsSorted = await avsSortByPerson(avs)
+        const avPersonIds = avsSorted.map((v) => v.person_id)
+        const personWerte = persons
+          .filter((a) => !avPersonIds.includes(a.id))
+          .sort(personSort)
+          .map((el) => ({
+            value: el.id,
+            label: personLabelFromPerson({ person: el }),
+          }))
+        setDataState({ avsSorted, personWerte })
+      },
+    )
+    return () => subscription.unsubscribe()
+  }, [art.avs, db, filter.person._deleted, filter.person.aktiv])
+  const { avsSorted, personWerte } = dataState
 
   const saveToDb = useCallback(
     async (event) => {
-      insertAvRev({ values: { art_id: artId, person_id: event.target.value } })
+      insertAvRev({ values: { art_id: art.id, person_id: event.target.value } })
     },
-    [artId, insertAvRev],
+    [art.id, insertAvRev],
   )
 
   const titleRowRef = useRef(null)
@@ -118,7 +161,7 @@ const ArtPersonen = ({ artId }) => {
         ref={titleRowRef}
         data-sticky={isSticky}
       >
-        <Title>{`Mitarbeitende Personen (${avs.length})`}</Title>
+        <Title>{`Mitarbeitende Personen (${avsSorted.length})`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -133,8 +176,8 @@ const ArtPersonen = ({ artId }) => {
         {open && (
           <>
             <Aven>
-              {avs.map((av) => (
-                <Person key={`${av.art_id}/${av.person_id}`} av={av} />
+              {avsSorted.map((av, index) => (
+                <Person key={`${av.art_id}/${av.person_id}/${index}`} av={av} />
               ))}
             </Aven>
             {!!personWerte.length && (

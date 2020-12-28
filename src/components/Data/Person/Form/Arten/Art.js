@@ -1,14 +1,14 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useCallback, useEffect, useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import { first as first$ } from 'rxjs/operators'
 
-import { StoreContext } from '../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import artLabelFromArt from '../../../../../utils/artLabelFromArt'
+import StoreContext from '../../../../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -46,30 +46,48 @@ const MenuTitle = styled.h3`
 
 const Av = ({ av }) => {
   const store = useContext(StoreContext)
-  const { artsSorted } = store
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = useCallback(() => av.delete(), [av])
+  const onClose = useCallback(() => setDelMenuAnchorEl(null), [])
+  const onClickDeleteIcon = useCallback(
+    (event) => setDelMenuAnchorEl(event.currentTarget),
+    [],
+  )
+  const onClickDelete = useCallback(() => {
+    av.delete({ store })
+    setDelMenuAnchorEl(null)
+  }, [av, store])
 
-  const art = artsSorted.find((a) => a.id === av.art_id)
-  const artname = artLabelFromArt({ art, store })
+  const [artLabel, setArtLabel] = useState(null)
+  useEffect(() => {
+    const subscription = av.art.observe().subscribe(async (art) => {
+      let label
+      try {
+        label = await art.label.pipe(first$()).toPromise()
+      } catch {}
+
+      setArtLabel(label)
+    })
+    return () => subscription.unsubscribe()
+  }, [av.art])
 
   if (!av) return null
+  if (!artLabel) return null
 
   return (
     <ErrorBoundary>
       <Container>
         <Text>
-          <div>{artname}</div>
+          <div>{artLabel}</div>
         </Text>
         <DelIcon
           title="löschen"
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+          onClick={onClickDeleteIcon}
         >
           <FaTimes />
         </DelIcon>
@@ -77,7 +95,7 @@ const Av = ({ av }) => {
           id="delMenu"
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
-          onClose={() => setDelMenuAnchorEl(null)}
+          onClose={onClose}
           PaperProps={{
             style: {
               maxHeight: 48 * 4.5,
@@ -87,7 +105,7 @@ const Av = ({ av }) => {
         >
           <MenuTitle>löschen?</MenuTitle>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
-          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+          <MenuItem onClick={onClose}>nein</MenuItem>
         </Menu>
       </Container>
     </ErrorBoundary>

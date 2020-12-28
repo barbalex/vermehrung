@@ -9,6 +9,8 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { combineLatest, of as $of } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import epsg2056to4326 from '../../utils/epsg2056to4326'
@@ -28,7 +30,7 @@ import {
   isValid as wgs84LongIsValid,
   message as wgs84LongMessage,
 } from '../../utils/wgs84LongIsValid'
-import { StoreContext } from '../../models/reactUtils'
+import StoreContext from '../../storeContext'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -68,11 +70,33 @@ const MenuTitle = styled.div`
 
 const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
   const store = useContext(StoreContext)
-  const { userPersonOption } = store
+  const { user, db } = store
 
   const { id, lv95_x, lv95_y, wgs84_lat, wgs84_long } = row
 
-  const { ga_lat_lng } = userPersonOption
+  const [dataState, setDataState] = useState({
+    userPersonOption: undefined,
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['ga_lat_lng'])
+      : $of({})
+    const combinedObservables = combineLatest([userPersonOptionsObservable])
+    const subscription = combinedObservables.subscribe(
+      ([userPersonOptions]) => {
+        setDataState({
+          userPersonOption: userPersonOptions?.[0],
+        })
+      },
+    )
+
+    return () => subscription.unsubscribe()
+  }, [db, user.uid])
+  const { userPersonOption } = dataState
+  const { ga_lat_lng } = userPersonOption ?? {}
 
   const [lv95XState, setLv95XState] = useState(lv95_x || '')
   const [lv95YState, setLv95YState] = useState(lv95_y || '')
@@ -93,6 +117,21 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
     setWgs84LatState(wgs84_lat || '')
     setWgs84LongState(wgs84_long || '')
   }, [wgs84_lat, wgs84_long])
+
+  const saveToDbLv95 = useCallback(
+    (x, y) => {
+      let geomPoint = null
+      if (x && y) {
+        geomPoint = {
+          type: 'Point',
+          coordinates: epsg2056to4326(x, y),
+          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+        }
+      }
+      saveToDb(geomPoint, 'lv95')
+    },
+    [saveToDb],
+  )
 
   const onChangeX = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
@@ -130,6 +169,21 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
     [lv95XState, lv95_y, saveToDbLv95],
   )
 
+  const saveToDbWgs84 = useCallback(
+    (lat, long) => {
+      let geomPoint = null
+      if (lat && long) {
+        geomPoint = {
+          type: 'Point',
+          coordinates: [long, lat],
+          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+        }
+      }
+      saveToDb(geomPoint, 'wgs84')
+    },
+    [saveToDb],
+  )
+
   const onChangeWgs84Lat = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LatState(value)
@@ -165,35 +219,6 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
       }
     },
     [saveToDbWgs84, wgs84LatState, wgs84_long],
-  )
-
-  const saveToDbLv95 = useCallback(
-    (x, y) => {
-      let geomPoint = null
-      if (x && y) {
-        geomPoint = {
-          type: 'Point',
-          coordinates: epsg2056to4326(x, y),
-          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
-        }
-      }
-      saveToDb(geomPoint, 'lv95')
-    },
-    [saveToDb],
-  )
-  const saveToDbWgs84 = useCallback(
-    (lat, long) => {
-      let geomPoint = null
-      if (lat && long) {
-        geomPoint = {
-          type: 'Point',
-          coordinates: [long, lat],
-          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
-        }
-      }
-      saveToDb(geomPoint, 'wgs84')
-    },
-    [saveToDb],
   )
 
   const saveToDb = useCallback(

@@ -1,13 +1,39 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Slider from 'react-slick'
 import SimpleBar from 'simplebar-react'
+import { useQuery } from 'urql'
+import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
+import StoreContext from '../../../../storeContext'
 import Row from './Row'
+
+const herkunftRevQuery = gql`
+  query herkunftRevForHistoryQuery($rev: [String!]) {
+    herkunft_rev(where: { _rev: { _in: $rev } }) {
+      id
+      __typename
+      bemerkungen
+      gemeinde
+      geom_point
+      herkunft_id
+      kanton
+      land
+      lokalname
+      nr
+      changed
+      changed_by
+      _rev
+      _parent_rev
+      _revisions
+      _depth
+      _deleted
+    }
+  }
+`
 
 const Container = styled.div`
   padding: 0 25px;
@@ -32,31 +58,28 @@ const ErrorContainer = styled.div`
 `
 
 const sliderSettings = {
-  dots: true,
+  dots: false,
   infinite: false,
 }
 
-const HerkunftHistory = ({ row, historyTakeoverCallback }) => {
+const HerkunftHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
 
-  const { error, loading } = useQuery((store) =>
-    store.queryHerkunft_rev({
-      where: { _rev: { _in: row._revisions } },
-    }),
-  )
-  error && checkForOnlineError(error)
+  const priorRevisions = row?._revisions?.slice(1) ?? []
+  const [{ error, data, fetching }] = useQuery({
+    query: herkunftRevQuery,
+    variables: {
+      rev: priorRevisions,
+    },
+  })
+  error && checkForOnlineError({ error, store })
 
-  // need to grab store object to ensure this remains up to date
-  const revRows = useMemo(
-    () =>
-      [...store.herkunft_revs.values()]
-        .filter((v) => row?._revisions?.includes(v._rev) ?? true)
-        .filter((r) => r._rev !== row._rev)
-        .sort((a, b) => b._depth - a._depth) || {},
-    [row._rev, row._revisions, store.herkunft_revs],
-  )
+  const revRowsUnsorted = useMemo(() => data?.herkunft_rev ?? [], [
+    data?.herkunft_rev,
+  ])
+  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
-  if (loading) {
+  if (fetching) {
     return <Spinner message="lade Versionen" />
   }
 
@@ -73,6 +96,7 @@ const HerkunftHistory = ({ row, historyTakeoverCallback }) => {
               key={row._rev}
               revRow={r}
               row={row}
+              rawRow={rawRow}
               historyTakeoverCallback={historyTakeoverCallback}
             />
           ))}
