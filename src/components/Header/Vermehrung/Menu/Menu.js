@@ -86,10 +86,6 @@ const SettingsOverallMenu = ({
     typeof window !== 'undefined' && window.open('https://uptime.vermehrung.ch')
     setAnchorEl(null)
   }, [])
-  const onClickAddRevisions = useCallback(() => {
-    addMissingRevsToFirstDepthForTable({ table: 'herkunft', store })
-    setAnchorEl(null)
-  }, [store])
 
   return (
     <Menu
@@ -140,9 +136,6 @@ const SettingsOverallMenu = ({
       </MenuItem>
       <MenuItem onClick={onClickUptime}>
         online-Verfügbarkeit von vermehrung.ch
-      </MenuItem>
-      <MenuItem onClick={onClickAddRevisions}>
-        add revisions to herkunft
       </MenuItem>
     </Menu>
   )
