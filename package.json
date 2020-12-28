@@ -7,7 +7,7 @@
     "dev": "gatsby develop",
     "lazydev": "GATSBY_EXPERIMENTAL_LAZY_DEVJS=true gatsby develop",
     "clean": "gatsby clean",
-    "build": "gatsby clean && gatsby build && copyfiles .now/* public && copyfiles now.json public && copyfiles assetlinks.json public/.well-known",
+    "build": "gatsby clean && gatsby build && copyfiles .vercel/* public && copyfiles vercel.json public && copyfiles assetlinks.json public/.well-known",
     "serve": "gatsby serve"
   },
   "dependencies": {
