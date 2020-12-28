@@ -9,7 +9,6 @@ import styled from 'styled-components'
 
 import StoreContext from '../../../../storeContext'
 import ExportMenu from './Export'
-import addMissingRevsToFirstDepthForTable from '../../../../utils/addMissingRevsToFirstDepthForTable'
 
 const StyledMenuItem = styled(MenuItem)`
   display: flex !important;
@@ -135,7 +134,7 @@ const SettingsOverallMenu = ({
         />
       </MenuItem>
       <MenuItem onClick={onClickUptime}>
-        online-Verfügbarkeit von vermehrung.ch
+        Verfügbarkeit der Server von vermehrung.ch
       </MenuItem>
     </Menu>
   )
