@@ -15,6 +15,19 @@ import {
   teilkultur,
 } from './fragments'
 
+const fragments = {
+  art,
+  herkunft,
+  garten,
+  sammlung,
+  lieferung,
+  person,
+  kultur,
+  zaehlung,
+  teilzaehlung,
+  teilkultur,
+}
+
 const addMissingRevsToFirstDepthForTable = async ({ table, store }) => {
   const { gqlClient } = store
 
@@ -22,14 +35,14 @@ const addMissingRevsToFirstDepthForTable = async ({ table, store }) => {
   const response = await gqlClient
     .query(
       gql`
-        query tableQuery($id: uuid!, $rev: String!) {
+        query tableQuery {
           ${table}(
             where: {_depth: {_eq: 1}, _rev: {_is_null: true}}
           ) {
             ...${`${upperFirst(table)}Fields`}
           }
         }
-        ${table}
+        ${fragments[table]}
       `,
     )
     .toPromise()
