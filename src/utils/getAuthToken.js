@@ -67,6 +67,7 @@ const getAuthToken = async ({ store }) => {
     setAuthorizing(false)
   }
   setAuthorizing(false)
+  return true
 }
 
 export default getAuthToken
