@@ -3,6 +3,7 @@ import { createClient } from 'urql'
 
 import getConstants from './constants'
 import MobxStore from '../store'
+import getAuthToken from './getAuthToken'
 
 const constants = getConstants()
 
@@ -30,9 +31,10 @@ const initiateApp = async () => {
       return new SubscriptionClient(constants?.graphQlWsUri, {
         reconnect: true,
         lazy: true,
-        connectionCallback: (error) => {
+        connectionCallback: async (error) => {
           if (error) {
             console.log('gqlWsClient connectionCallback error:', error)
+            await getAuthToken({ store })
             token = getToken()
           } else {
             console.log('gqlWsClient connectionCallback worked')
