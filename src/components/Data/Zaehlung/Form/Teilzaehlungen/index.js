@@ -90,7 +90,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
   const titleRowRef = useRef(null)
   const [isSticky, setIsSticky] = useState(false)
   const scrollHandler = useCallback(() => {
-    const { top } = titleRowRef?.current?.getBoundingClientRect()
+    const top = titleRowRef?.current?.getBoundingClientRect()?.top
     if (top < 112 && !isSticky) return setIsSticky(true)
     if (top > 112 && isSticky) setIsSticky(false)
   }, [isSticky])
