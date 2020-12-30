@@ -34,7 +34,7 @@ const initiateApp = async () => {
         connectionCallback: async (error) => {
           if (error) {
             console.log('gqlWsClient connectionCallback error:', error)
-            if (error.message.toLowerCase().includes('jwt')) {
+            if (error.toLowerCase().includes('jwt')) {
               await getAuthToken({ store })
               token = getToken()
               window.location.reload(true)
