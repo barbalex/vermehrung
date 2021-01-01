@@ -4083,29 +4083,13 @@
               "id"
             ],
             "filter": {
-              "_exists": {
-                "_where": {
-                  "_exists": {
-                    "_where": {
-                      "kulturByNachKulturId": {
-                        "garten": {
-                          "gvs": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "_table": {
-                      "schema": "public",
-                      "name": "lieferung"
+              "kulturs": {
+                "garten": {
+                  "gvs": {
+                    "person_id": {
+                      "_eq": "X-Hasura-User-Id"
                     }
                   }
-                },
-                "_table": {
-                  "schema": "public",
-                  "name": "sammlung"
                 }
               }
             },
