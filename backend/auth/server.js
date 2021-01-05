@@ -29,6 +29,13 @@ if (serviceAccount) {
 
 async function start() {
   server.route({
+    method: '*',
+    path: '/',
+    handler: () => {
+      return `Hello from the auth api`
+    },
+  })
+  server.route({
     method: 'GET',
     path: '/create-user/{email}',
     handler: async (req, h) => {

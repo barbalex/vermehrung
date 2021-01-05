@@ -21,7 +21,7 @@ auth.vermehrung.ch {
   reverse_proxy * {
     to v_auth:7000
     header_down Access-Control-Allow-Origin *
-    header_down Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    header_down Access-Control-Allow-Methods "HEAD, GET, POST, OPTIONS"
     header_up Host {http.request.host}
     header_up X-Real-IP {http.request.remote}
     header_up X-Forwarded-For {http.request.remote}
