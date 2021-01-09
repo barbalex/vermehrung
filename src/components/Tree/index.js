@@ -50,7 +50,7 @@ const Tree = ({ width, height }) => {
   const { userPersonOption, userRole } = dataState
 
   const buildMyNodes = useCallback(async () => {
-    console.log('buildNodes building tree nodes')
+    //console.log('buildNodes building tree nodes')
     const nodes = await buildNodes({
       store,
       userPersonOption,
@@ -168,7 +168,7 @@ const Tree = ({ width, height }) => {
     const subscription = combinedObservables.subscribe(
       // eslint-disable-next-line no-unused-vars
       ([[userPersonOption], [userRole], ...rest]) => {
-        console.log('Tree data-useEffect ordering rebuild')
+        //console.log('Tree data-useEffect ordering rebuild')
         setDataState({ userPersonOption, userRole })
         buildMyNodesDebounced.callback()
       },
@@ -178,7 +178,7 @@ const Tree = ({ width, height }) => {
   }, [buildMyNodesDebounced, db, store, user.uid])
 
   useEffect(() => {
-    console.log('Tree second useEffect ordering rebuild')
+    //console.log('Tree second useEffect ordering rebuild')
     buildMyNodesDebounced.callback()
   }, [
     buildMyNodesDebounced,
