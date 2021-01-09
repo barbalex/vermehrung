@@ -154,12 +154,6 @@ const TeilzaehlungForm = ({
   ])
   const { teilkulturWerte, kulturOption, row } = dataState
 
-  console.log('Teilzaehlung Form', {
-    row,
-    tkId: row?.teilkultur_id,
-    teilkulturWerte,
-  })
-
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const onClosePrognosis = useCallback((event, reason) => {

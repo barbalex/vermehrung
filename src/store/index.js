@@ -5,7 +5,6 @@ import { v1 as uuidv1 } from 'uuid'
 import md5 from 'blueimp-md5'
 import last from 'lodash/last'
 import set from 'lodash/set'
-import unset from 'lodash/unset'
 import isUuid from 'is-uuid'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
@@ -292,7 +291,7 @@ const myTypes = types
         set(self.errors, path, value)
       },
       unsetError(path) {
-        unset(self.errors, path)
+        self.errors[path] = {}
       },
       setGqlWsClient(val) {
         self.gqlWsClient = val
