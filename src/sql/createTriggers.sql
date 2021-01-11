@@ -73,21 +73,6 @@ left join person_option
 on person_option.id = person.id
 where person_option.id is null;
 
--- TODO: drop after changing to new method
-DROP TRIGGER IF EXISTS kultur_has_qk_choosen ON kultur_qk_choosen cascade;
-DROP FUNCTION IF EXISTS kultur_has_qk_choosen cascade;
-
-
---insert into kultur_qk_choosen (kultur_id)
---select kultur.id, kultur_qk.name from kultur, kultur_qk
---left join kultur_qk_choosen
---on kultur_qk_choosen.kultur_id = kultur.id
---where kultur_qk_choosen.kultur_id is null;
-
--- TODO: drop after changing to new method
-DROP TRIGGER IF EXISTS art_has_qk_choosen ON art_qk_choosen cascade;
-DROP FUNCTION IF EXISTS art_has_qk_choosen cascade;
-
 drop trigger if exists garten_person_has_gv on garten cascade;
 drop function if exists garten_person_has_gv() cascade;
 create function garten_person_has_gv() returns trigger as $garten_person_has_gv$
