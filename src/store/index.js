@@ -131,7 +131,7 @@ const myTypes = types
   }))
   .actions((self) => {
     reaction(
-      () => `${self.queuedQueries}/${self.shortTermOnline}`,
+      () => `${self.queuedQueries.size}/${self.shortTermOnline}`,
       flow(function* () {
         /*console.log('Store, reaction, shortTermOnline:', {
           shortTermOnline: self.shortTermOnline,
