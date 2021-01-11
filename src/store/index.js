@@ -131,7 +131,7 @@ const myTypes = types
   }))
   .actions((self) => {
     reaction(
-      () => `${self.queuedQueries.size}/${self.shortTermOnline}`,
+      () => `${self.queuedQueries}/${self.shortTermOnline}`,
       flow(function* () {
         /*console.log('Store, reaction, shortTermOnline:', {
           shortTermOnline: self.shortTermOnline,
@@ -241,6 +241,7 @@ const myTypes = types
           run() // ensure it runs immediately if online
           setInterval(run, 30000) // 30000 = thirty seconds
         },
+        fireImmediately: true,
       },
     )
     return {
