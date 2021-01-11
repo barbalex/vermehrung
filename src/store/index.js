@@ -131,8 +131,12 @@ const myTypes = types
   }))
   .actions((self) => {
     reaction(
-      () => `${self.queuedQueries}/${self.shortTermOnline}`,
+      () => `${self.queuedQueries.size}/${self.shortTermOnline}`,
       flow(function* () {
+        /*console.log('Store, reaction, shortTermOnline:', {
+          shortTermOnline: self.shortTermOnline,
+          queuedQueriesSize: self.queuedQueries.size,
+        })*/
         /**
          * TODO:
          * When new query is added
@@ -146,6 +150,7 @@ const myTypes = types
         if (self.shortTermOnline) {
           // execute operation
           const query = self.queuedQueriesSorted[0]
+          //console.log('Store, reaction, shortTermOnline:', self.shortTermOnline)
           if (!query) return
           const {
             name,
