@@ -64,9 +64,9 @@
     "luxon": "1.25.0",
     "md5-hex": "3.0.1",
     "memoize-one": "5.1.1",
-    "mobx": "5.15.7",
-    "mobx-react-lite": "2.2.2",
-    "mobx-state-tree": "3.17.2",
+    "mobx": "6.0.4",
+    "mobx-react-lite": "3.1.6",
+    "mobx-state-tree": "5.0.0",
     "mst-persist": "0.1.3",
     "observable-hooks": "3.1.2",
     "prettier": "2.2.1",
@@ -107,7 +107,8 @@
   },
   "dev-comments": {
     "react-contextmenu": "using file copied from own build. When using v2.14.0 get Error in production: https://github.com/vkbansal/react-contextmenu/issues/284, https://github.com/gatsbyjs/gatsby/issues/19618. For better solution see: https://github.com/vkbansal/react-contextmenu/issues/284#issuecomment-670711499",
-    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1"
+    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
+    "mobx": "DO NOT UPGRADE TO V6 before solving how to get the offline queue reaction to react when it is initialized, see https://github.com/mobxjs/mobx/issues/2707#issuecomment-757812798"
   },
   "peerDependencies": {
     "@babel/types": "7.x",
