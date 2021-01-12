@@ -63,6 +63,17 @@ async function start() {
           password: 'initial-passwort-bitte-aendern',
         })
       } catch (error) {
+        console.log(
+          `firebase error while creating user for email ${email}:`,
+          error,
+        )
+        const code = error.errorInfo.code
+        if (code === 'auth/email-already-exists') {
+          // Somehow the uid did not arrive in vermehrung.ch. Re-query this users uid
+          const existingUser = await admin.auth().getUserByEmail(email)
+          console.log(`returning uid of the existing user:`, existingUser.uid)
+          return h.response(existingUser.uid).code(200)
+        }
         return h
           .response(`firebase createUser error: ${error.message}`)
           .code(500)

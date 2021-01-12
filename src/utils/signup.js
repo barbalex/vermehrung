@@ -25,12 +25,11 @@ const signup = async ({ person, store }) => {
   try {
     res = await axios.get(`${constants?.authUri}/create-user/${email}`)
   } catch (error) {
-    console.log(error)
     if (online) {
       setOnline(false)
     }
     return addNotification({
-      message: error.response.data,
+      message: error?.response?.data ?? 'Oh je. Da ging was schief',
     })
   }
   if (!online) {
