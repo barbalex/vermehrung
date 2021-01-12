@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Vermehrung v1.0.7',
+    title: 'Vermehrung v1.0.8',
   },
   plugins: [
     {
