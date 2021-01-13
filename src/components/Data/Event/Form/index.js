@@ -15,7 +15,7 @@ import SelectCreatable from '../../../shared/SelectCreatable'
 import TextField from '../../../shared/TextField'
 import Date from '../../../shared/Date'
 import Checkbox2States from '../../../shared/Checkbox2States'
-import Checkbox3States from '../../../shared/Checkbox3States'
+import JesNo from '../../../shared/JesNo'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
@@ -292,7 +292,7 @@ const EventForm = ({
           {showDeleted && (
             <>
               {showFilter ? (
-                <Checkbox3States
+                <JesNo
                   key={`${row.id}_deleted`}
                   label="gelöscht"
                   name="_deleted"
@@ -369,7 +369,7 @@ const EventForm = ({
           {(ev_geplant || showFilter) && (
             <FieldRow>
               {showFilter ? (
-                <Checkbox3States
+                <JesNo
                   key={`${row.id}geplant`}
                   label="geplant"
                   name="geplant"

@@ -9,7 +9,7 @@ import StoreContext from '../../../../storeContext'
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import Checkbox2States from '../../../shared/Checkbox2States'
-import Checkbox3States from '../../../shared/Checkbox3States'
+import JesNo from '../../../shared/JesNo'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import Files from '../../Files'
 import Arten from './Arten'
@@ -124,7 +124,7 @@ const Person = ({
         {showDeleted && (
           <>
             {showFilter ? (
-              <Checkbox3States
+              <JesNo
                 key={`${row.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -245,7 +245,7 @@ const Person = ({
           error={errors?.person?.email}
         />
         {showFilter ? (
-          <Checkbox3States
+          <JesNo
             key={`${row.id}kein_email`}
             label="Kein Email"
             name="kein_email"
@@ -264,7 +264,7 @@ const Person = ({
           />
         )}
         {showFilter ? (
-          <Checkbox3States
+          <JesNo
             key={`${row.id}kommerziell`}
             label="Kommerziell"
             name="kommerziell"
@@ -283,7 +283,7 @@ const Person = ({
           />
         )}
         {showFilter ? (
-          <Checkbox3States
+          <JesNo
             key={`${row.id}info`}
             label="Info"
             name="info"
@@ -302,7 +302,7 @@ const Person = ({
           />
         )}
         {showFilter ? (
-          <Checkbox3States
+          <JesNo
             key={`${row.id}aktiv`}
             label="aktiv"
             name="aktiv"

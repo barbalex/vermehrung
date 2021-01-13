@@ -11,7 +11,7 @@ import StoreContext from '../../../../storeContext'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
-import Checkbox3States from '../../../shared/Checkbox3States'
+import JesNo from '../../../shared/JesNo'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
 import personSort from '../../../../utils/personSort'
@@ -194,7 +194,7 @@ const GartenForm = ({
         {showDeleted && (
           <>
             {showFilter ? (
-              <Checkbox3States
+              <JesNo
                 key={`${row.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -269,7 +269,7 @@ const GartenForm = ({
         {ga_aktiv && (
           <>
             {showFilter ? (
-              <Checkbox3States
+              <JesNo
                 key={`${row.id}aktiv`}
                 label="aktiv"
                 name="aktiv"

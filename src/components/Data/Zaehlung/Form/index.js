@@ -13,7 +13,7 @@ import StoreContext from '../../../../storeContext'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
-import Checkbox3States from '../../../shared/Checkbox3States'
+import JesNo from '../../../shared/JesNo'
 import Date from '../../../shared/Date'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import Teilzaehlungen from './Teilzaehlungen'
@@ -190,7 +190,7 @@ const ZaehlungForm = ({
           {showDeleted && (
             <>
               {showFilter ? (
-                <Checkbox3States
+                <JesNo
                   key={`${row.id}_deleted`}
                   label="gelöscht"
                   name="_deleted"
@@ -231,7 +231,7 @@ const ZaehlungForm = ({
           />
           <FieldRow>
             {showFilter ? (
-              <Checkbox3States
+              <JesNo
                 key={`${row.id}prognose`}
                 label="Prognose"
                 name="prognose"
