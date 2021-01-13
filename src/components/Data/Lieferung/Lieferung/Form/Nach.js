@@ -15,7 +15,7 @@ import uniqBy from 'lodash/uniqBy'
 import StoreContext from '../../../../../storeContext'
 import Select from '../../../../shared/Select'
 import Checkbox2States from '../../../../shared/Checkbox2States'
-import Checkbox3States from '../../../../shared/Checkbox3States'
+import JesNo from '../../../../shared/JesNo'
 import exists from '../../../../../utils/exists'
 import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs'
 
@@ -198,7 +198,7 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
       {ifNeeded('nach_ausgepflanzt') && (
         <>
           {showFilter ? (
-            <Checkbox3States
+            <JesNo
               key={`${row.id}nach_ausgepflanzt`}
               label="ausgepflanzt"
               name="nach_ausgepflanzt"

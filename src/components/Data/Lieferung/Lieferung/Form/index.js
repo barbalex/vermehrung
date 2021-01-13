@@ -7,7 +7,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../../storeContext'
 import Checkbox2States from '../../../../shared/Checkbox2States'
-import Checkbox3States from '../../../../shared/Checkbox3States'
+import JesNo from '../../../../shared/JesNo'
 import exists from '../../../../../utils/exists'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
@@ -200,7 +200,7 @@ const LierferungForm = ({
           {showDeleted && (
             <>
               {showFilter ? (
-                <Checkbox3States
+                <JesNo
                   key={`${row.id}_deleted`}
                   label="gelöscht"
                   name="_deleted"

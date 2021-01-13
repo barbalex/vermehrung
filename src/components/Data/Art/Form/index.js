@@ -8,7 +8,7 @@ import { Q } from '@nozbe/watermelondb'
 import StoreContext from '../../../../storeContext'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import Checkbox2States from '../../../shared/Checkbox2States'
-import Checkbox3States from '../../../shared/Checkbox3States'
+import JesNo from '../../../shared/JesNo'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import aeArtSort from '../../../../utils/aeArtSort'
 import Files from '../../Files'
@@ -138,7 +138,7 @@ const ArtForm = ({
           {showDeleted && (
             <>
               {showFilter ? (
-                <Checkbox3States
+                <JesNo
                   key={`${row.id}_deleted`}
                   label="gelöscht"
                   name="_deleted"

@@ -15,7 +15,7 @@ import StoreContext from '../../../../storeContext'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
-import Checkbox3States from '../../../shared/Checkbox3States'
+import JesNo from '../../../shared/JesNo'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import Files from '../../Files'
 import Timeline from './Timeline'
@@ -441,7 +441,7 @@ const KulturForm = ({
           {showDeleted && (
             <>
               {showFilter ? (
-                <Checkbox3States
+                <JesNo
                   key={`${row.id}_deleted`}
                   label="gelöscht"
                   name="_deleted"
@@ -494,7 +494,7 @@ const KulturForm = ({
           {(ku_zwischenlager || !!row?.zwischenlager) && (
             <>
               {showFilter ? (
-                <Checkbox3States
+                <JesNo
                   key={`${row.id}zwischenlager`}
                   label="Zwischenlager"
                   name="zwischenlager"
@@ -517,7 +517,7 @@ const KulturForm = ({
           {(ku_erhaltungskultur || !!row?.erhaltungskultur) && (
             <>
               {showFilter ? (
-                <Checkbox3States
+                <JesNo
                   key={`${row.id}erhaltungskultur`}
                   label="Erhaltungskultur"
                   name="erhaltungskultur"
@@ -558,7 +558,7 @@ const KulturForm = ({
             </div>
           </FieldRow>
           {showFilter ? (
-            <Checkbox3States
+            <JesNo
               key={`${row.id}aktiv`}
               label="aktiv"
               name="aktiv"

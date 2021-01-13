@@ -14,7 +14,7 @@ import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import Date from '../../../shared/Date'
 import Checkbox2States from '../../../shared/Checkbox2States'
-import Checkbox3States from '../../../shared/Checkbox3States'
+import JesNo from '../../../shared/JesNo'
 import Coordinates from '../../../shared/Coordinates'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import Files from '../../Files'
@@ -298,7 +298,7 @@ const SammlungForm = ({
           {showDeleted && (
             <>
               {showFilter ? (
-                <Checkbox3States
+                <JesNo
                   key={`${row.id}_deleted`}
                   label="gelöscht"
                   name="_deleted"
@@ -419,7 +419,7 @@ const SammlungForm = ({
           )}
           <FieldRow>
             {showFilter ? (
-              <Checkbox3States
+              <JesNo
                 key={`${row.id}geplant`}
                 label="Geplant"
                 name="geplant"

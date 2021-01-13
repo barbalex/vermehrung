@@ -13,7 +13,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import StoreContext from '../../../../storeContext'
 import Date from '../../../shared/Date'
 import Checkbox2States from '../../../shared/Checkbox2States'
-import Checkbox3States from '../../../shared/Checkbox3States'
+import JesNo from '../../../shared/JesNo'
 import getConstants from '../../../../utils/constants'
 
 const constants = getConstants()
@@ -106,7 +106,7 @@ const SammelLieferungWann = ({ showFilter, row, ifNeeded, saveToDb }) => {
       {ifNeeded('geplant') && (
         <FieldRow>
           {showFilter ? (
-            <Checkbox3States
+            <JesNo
               key={`${row.id}geplant`}
               label="Geplant"
               name="geplant"
