@@ -131,6 +131,8 @@ const KulturTimeline = ({ row, width }) => {
     [allData],
   )
 
+  if (!allData) return null
+
   if (!row || !allData.length) {
     return (
       <ErrorBoundary>

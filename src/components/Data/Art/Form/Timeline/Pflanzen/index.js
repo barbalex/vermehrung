@@ -48,12 +48,16 @@ const ArtTimeline = ({ artId, width }) => {
     }
   }, [narrow, width])
 
+  if (!data) return null
+
   if (data && !data.length) {
     return <NoData>Keine Daten verfügbar für Anzahl Pflanzen</NoData>
   }
 
   // need to disable animation or labels will not show on first render
   // https://github.com/recharts/recharts/issues/806
+
+  console.log('Pflanzen, data:', data)
 
   return (
     <ErrorBoundary>

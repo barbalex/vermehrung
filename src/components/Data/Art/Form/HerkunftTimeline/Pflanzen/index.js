@@ -55,6 +55,8 @@ const ArtTimeline = ({ artId, herkunft, width }) => {
 
   const herkunftLabel = herkunftLabelFromHerkunft({ herkunft })
 
+  if (!data) return null
+
   if (data && !data.length) {
     return (
       <>
