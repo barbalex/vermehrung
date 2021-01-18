@@ -1,5 +1,5 @@
 # https://registry.hub.docker.com/r/postgis/postgis/tags
-FROM postgis/postgis:12-3.0
+FROM postgis/postgis:12-3.1
 
 # activate this if needing to initiate from backup
 # see: apf2
