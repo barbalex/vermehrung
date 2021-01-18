@@ -206,10 +206,8 @@ const Tree = ({ width, height }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(personFilter),
     // need to rebuild tree on activeNodeArray changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     aNA,
     // need to rebuild tree on openNodes changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     openNodes,
     openNodes.length,
     user.uid,
