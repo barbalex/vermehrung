@@ -122,20 +122,30 @@ const compare = (a, b) => {
 
 const buildNodes = async ({ store, userPersonOption, userRole }) => {
   const { db } = store
-  const { openNodes: openNodesRaw } = store.tree
+  const {
+    openNodes: openNodesRaw,
+    activeNodeArray: activeNodeArrayRaw,
+  } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
+  const activeNodeArray = activeNodeArrayRaw.toJSON()
 
-  const showArt = getShowArt({ userRole })
-  const showEvent = getShowEvent({ userPersonOption })
+  const showArt = getShowArt({ userRole, activeNodeArray })
+  const showEvent = getShowEvent({ userPersonOption, activeNodeArray })
   const showGarten = getShowGarten()
-  const showHerkunft = getShowHerkunft({ userRole })
-  const showKultur = getShowKultur({ userPersonOption })
-  const showLieferung = getShowLieferung({ userPersonOption })
+  const showHerkunft = getShowHerkunft({ userRole, activeNodeArray })
+  const showKultur = getShowKultur({ userPersonOption, activeNodeArray })
+  const showLieferung = getShowLieferung({ userPersonOption, activeNodeArray })
   const showPerson = getShowPerson()
-  const showSammelLieferung = getShowSammelLieferung({ userPersonOption })
-  const showSammlung = getShowSammlung({ userRole })
-  const showTeilkultur = getShowTeilkultur({ userPersonOption })
-  const showZaehlung = getShowZaehlung({ userPersonOption })
+  const showSammelLieferung = getShowSammelLieferung({
+    userPersonOption,
+    activeNodeArray,
+  })
+  const showSammlung = getShowSammlung({ userRole, activeNodeArray })
+  const showTeilkultur = getShowTeilkultur({
+    userPersonOption,
+    activeNodeArray,
+  })
+  const showZaehlung = getShowZaehlung({ userPersonOption, activeNodeArray })
 
   let artFolderNodes = []
   let artNodes = []

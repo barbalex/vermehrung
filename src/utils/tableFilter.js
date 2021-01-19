@@ -1,9 +1,11 @@
 import { Q } from '@nozbe/watermelondb'
+import camelCase from 'lodash/camelCase'
 
 import types from '../store/Filter/simpleTypes'
 import exists from './exists'
 
 const tableFilter = ({ store, table }) => {
+  if (!table) throw `no table passed`
   const filter = store.filter[table]
   if (!filter) throw `no filter found for table ${table}`
 
@@ -16,8 +18,8 @@ const tableFilter = ({ store, table }) => {
 
   if (!filterEntries.length) return []
 
-  return filterEntries.map(([key, filterValue]) => {
-    const type = types[table][key] || 'string'
+  const filterArray = filterEntries.map(([key, filterValue]) => {
+    const type = types[table][key] ?? 'string'
     //console.log('tableFilter', { key, filterValue, type })
     if (type === 'string' && filterValue) {
       if (filterValue?.toString()?.toLowerCase()) {
@@ -32,6 +34,18 @@ const tableFilter = ({ store, table }) => {
     }
     return Q.where(key, Q.eq(filterValue))
   })
+
+  // if a url is opened, a dataset should always show
+  // even if it was filtered away
+  const tableIdInActiveNodeArray =
+    store[`${camelCase(table)}IdInActiveNodeArray`]
+  if (tableIdInActiveNodeArray) {
+    return [
+      Q.or(Q.where('id', tableIdInActiveNodeArray), Q.and(...filterArray)),
+    ]
+  }
+
+  return filterArray
 }
 
 export default tableFilter
