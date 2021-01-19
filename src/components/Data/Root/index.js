@@ -34,6 +34,8 @@ const FieldsContainer = styled.div`
 const Root = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
   const { user, db } = store
+  const { activeNodeArray: activeNodeArrayRaw } = store.tree
+  const activeNodeArray = activeNodeArrayRaw.toJSON()
 
   const [dataState, setDataState] = useState({
     showArt: false,
@@ -71,17 +73,26 @@ const Root = ({ filter: showFilter }) => {
     ])
     const subscription = combinedObservables.subscribe(
       async ([[userPersonOption], [userRole]]) => {
-        const sArt = getShowArt({ userRole })
-        const sEvent = getShowEvent({ userPersonOption })
+        const sArt = getShowArt({ userRole, activeNodeArray })
+        const sEvent = getShowEvent({ userPersonOption, activeNodeArray })
         const sGarten = getShowGarten()
-        const sHerkunft = getShowHerkunft({ userRole })
-        const sKultur = getShowKultur({ userPersonOption })
-        const sLieferung = getShowLieferung({ userPersonOption })
+        const sHerkunft = getShowHerkunft({ userRole, activeNodeArray })
+        const sKultur = getShowKultur({ userPersonOption, activeNodeArray })
+        const sLieferung = getShowLieferung({
+          userPersonOption,
+          activeNodeArray,
+        })
         const sPerson = getShowPerson()
-        const sSammelLieferung = getShowSammelLieferung({ userPersonOption })
-        const sSammlung = getShowSammlung({ userRole })
-        const sTeilkultur = getShowTeilkultur({ userPersonOption })
-        const sZaehlung = getShowZaehlung({ userPersonOption })
+        const sSammelLieferung = getShowSammelLieferung({
+          userPersonOption,
+          activeNodeArray,
+        })
+        const sSammlung = getShowSammlung({ userRole, activeNodeArray })
+        const sTeilkultur = getShowTeilkultur({
+          userPersonOption,
+          activeNodeArray,
+        })
+        const sZaehlung = getShowZaehlung({ userPersonOption, activeNodeArray })
 
         setDataState({
           showArt: sArt,

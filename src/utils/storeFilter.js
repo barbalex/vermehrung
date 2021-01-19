@@ -1,3 +1,4 @@
+// NOT IN USE
 import types from '../store/Filter/simpleTypes'
 
 const test = ({ val, filterValues, table }) =>
