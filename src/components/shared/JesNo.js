@@ -10,6 +10,9 @@ import { observer } from 'mobx-react-lite'
 
 import toStringIfPossible from '../../utils/toStringIfPossible'
 
+const Container = styled.div`
+  display: block;
+`
 // without slight padding radio is slightly cut off!
 const StyledFormControl = styled(FormControl)`
   padding-left: 1px !important;
@@ -99,34 +102,38 @@ const RadioButtonGroup = ({
       : ''
 
   return (
-    <StyledFormControl
-      component="fieldset"
-      error={!!error}
-      aria-describedby={`${label}ErrorText`}
-    >
-      <StyledFormLabel component="legend">{label}</StyledFormLabel>
-      <RadioGroup
-        aria-label={label}
-        value={valueSelected}
-        onChange={onChangeGroup}
+    <Container>
+      <StyledFormControl
+        component="fieldset"
+        error={!!error}
+        aria-describedby={`${label}ErrorText`}
       >
-        {dataSource.map((e, index) => (
-          <FormControlLabel
-            key={index}
-            value={toStringIfPossible(e.value)}
-            control={<StyledRadio color="primary" />}
-            label={e.label}
-            onClick={onClickButton}
-          />
-        ))}
-      </RadioGroup>
-      {!!error && (
-        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-      )}
-      {!!helperText && (
-        <FormHelperText id={`${label}HelperText`}>{helperText}</FormHelperText>
-      )}
-    </StyledFormControl>
+        <StyledFormLabel component="legend">{label}</StyledFormLabel>
+        <RadioGroup
+          aria-label={label}
+          value={valueSelected}
+          onChange={onChangeGroup}
+        >
+          {dataSource.map((e, index) => (
+            <FormControlLabel
+              key={index}
+              value={toStringIfPossible(e.value)}
+              control={<StyledRadio color="primary" />}
+              label={e.label}
+              onClick={onClickButton}
+            />
+          ))}
+        </RadioGroup>
+        {!!error && (
+          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+        )}
+        {!!helperText && (
+          <FormHelperText id={`${label}HelperText`}>
+            {helperText}
+          </FormHelperText>
+        )}
+      </StyledFormControl>
+    </Container>
   )
 }
 
