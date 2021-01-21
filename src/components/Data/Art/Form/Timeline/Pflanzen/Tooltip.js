@@ -20,7 +20,7 @@ const Ereignis = styled.div`
   font-weight: 700;
 `
 
-const CustomTooltip = ({ payload, label, active }) => {
+const ArtPflanzenTooltip = ({ payload, label, active }) => {
   if (active) {
     return (
       <Popup>
@@ -31,8 +31,8 @@ const CustomTooltip = ({ payload, label, active }) => {
         {payload
           // Zählung and Prognose are only used for the optics,
           // do not want them in the tooltip
-          .filter((p) => !['Zählung', 'Prognose'].includes(p.dataKey))
-          .map((o) => {
+          ?.filter((p) => !['Zählung', 'Prognose'].includes(p.dataKey))
+          ?.map((o) => {
             const label = o.dataKey
             const value =
               label === 'Auspflanzung' && Math.abs(o.value)
@@ -48,4 +48,4 @@ const CustomTooltip = ({ payload, label, active }) => {
   return null
 }
 
-export default CustomTooltip
+export default ArtPflanzenTooltip

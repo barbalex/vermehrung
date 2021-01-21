@@ -31,8 +31,8 @@ const CustomTooltip = ({ payload, label, active }) => {
         {payload
           // Zählung and Prognose are only used for the optics,
           // do not want them in the tooltip
-          .filter((p) => !['Zählung', 'Prognose'].includes(p.dataKey))
-          .map((o) => {
+          ?.filter((p) => !['Zählung', 'Prognose'].includes(p.dataKey))
+          ?.map((o) => {
             const label = o.dataKey
             const value =
               label === 'Auspflanzung' && Math.abs(o.value)

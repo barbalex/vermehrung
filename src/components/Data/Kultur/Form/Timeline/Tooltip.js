@@ -47,7 +47,7 @@ const CustomTooltip = ({ payload: payloadPassed, label, active }) => {
           {title}
           <Ereignis>{ereignis}</Ereignis>
         </PTitle>
-        {payload.map((o, i) => {
+        {payload?.map((o, i) => {
           // do not repeat Zählung/Lieferung all over the place
           const label = o.dataKey
             .replace('Zählung ', '')
