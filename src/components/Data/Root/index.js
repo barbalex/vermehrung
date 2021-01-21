@@ -112,6 +112,7 @@ const Root = ({ filter: showFilter }) => {
 
     return () => subscription.unsubscribe()
   }, [
+    activeNodeArray,
     db,
     showArt,
     showEvent,
