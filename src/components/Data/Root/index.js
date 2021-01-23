@@ -50,83 +50,91 @@ const Root = ({ filter: showFilter }) => {
     showTeilkultur: false,
     showZaehlung: false,
   })
-  useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
-          .get('person_option')
-          .query(Q.on('person', Q.where('account_id', user.uid)))
-          .observeWithColumns([
-            'tree_kultur',
-            'tree_teilkultur',
-            'tree_zaehlung',
-            'tree_lieferung',
-            'tree_event',
-          ])
-      : $of({})
-    const userRoleObservable = db
-      .get('user_role')
-      .query(Q.on('person', Q.where('account_id', user.uid)))
-      .observeWithColumns(['name'])
-    const combinedObservables = combineLatest([
-      userPersonOptionsObservable,
-      userRoleObservable,
-    ])
-    const subscription = combinedObservables.subscribe(
-      async ([[userPersonOption], [userRole]]) => {
-        const sArt = getShowArt({ userRole, activeNodeArray })
-        const sEvent = getShowEvent({ userPersonOption, activeNodeArray })
-        const sGarten = getShowGarten()
-        const sHerkunft = getShowHerkunft({ userRole, activeNodeArray })
-        const sKultur = getShowKultur({ userPersonOption, activeNodeArray })
-        const sLieferung = getShowLieferung({
-          userPersonOption,
-          activeNodeArray,
-        })
-        const sPerson = getShowPerson()
-        const sSammelLieferung = getShowSammelLieferung({
-          userPersonOption,
-          activeNodeArray,
-        })
-        const sSammlung = getShowSammlung({ userRole, activeNodeArray })
-        const sTeilkultur = getShowTeilkultur({
-          userPersonOption,
-          activeNodeArray,
-        })
-        const sZaehlung = getShowZaehlung({ userPersonOption, activeNodeArray })
+  useEffect(
+    () => {
+      const userPersonOptionsObservable = user.uid
+        ? db
+            .get('person_option')
+            .query(Q.on('person', Q.where('account_id', user.uid)))
+            .observeWithColumns([
+              'tree_kultur',
+              'tree_teilkultur',
+              'tree_zaehlung',
+              'tree_lieferung',
+              'tree_event',
+            ])
+        : $of({})
+      const userRoleObservable = db
+        .get('user_role')
+        .query(Q.on('person', Q.where('account_id', user.uid)))
+        .observeWithColumns(['name'])
+      const combinedObservables = combineLatest([
+        userPersonOptionsObservable,
+        userRoleObservable,
+      ])
+      const subscription = combinedObservables.subscribe(
+        async ([[userPersonOption], [userRole]]) => {
+          const sArt = getShowArt({ userRole, activeNodeArray })
+          const sEvent = getShowEvent({ userPersonOption, activeNodeArray })
+          const sGarten = getShowGarten()
+          const sHerkunft = getShowHerkunft({ userRole, activeNodeArray })
+          const sKultur = getShowKultur({ userPersonOption, activeNodeArray })
+          const sLieferung = getShowLieferung({
+            userPersonOption,
+            activeNodeArray,
+          })
+          const sPerson = getShowPerson()
+          const sSammelLieferung = getShowSammelLieferung({
+            userPersonOption,
+            activeNodeArray,
+          })
+          const sSammlung = getShowSammlung({ userRole, activeNodeArray })
+          const sTeilkultur = getShowTeilkultur({
+            userPersonOption,
+            activeNodeArray,
+          })
+          const sZaehlung = getShowZaehlung({
+            userPersonOption,
+            activeNodeArray,
+          })
 
-        setDataState({
-          showArt: sArt,
-          showEvent: sEvent,
-          showGarten: sGarten,
-          showHerkunft: sHerkunft,
-          showKultur: sKultur,
-          showLieferung: sLieferung,
-          showPerson: sPerson,
-          showSammelLieferung: sSammelLieferung,
-          showSammlung: sSammlung,
-          showTeilkultur: sTeilkultur,
-          showZaehlung: sZaehlung,
-        })
-      },
-    )
+          setDataState({
+            showArt: sArt,
+            showEvent: sEvent,
+            showGarten: sGarten,
+            showHerkunft: sHerkunft,
+            showKultur: sKultur,
+            showLieferung: sLieferung,
+            showPerson: sPerson,
+            showSammelLieferung: sSammelLieferung,
+            showSammlung: sSammlung,
+            showTeilkultur: sTeilkultur,
+            showZaehlung: sZaehlung,
+          })
+        },
+      )
 
-    return () => subscription.unsubscribe()
-  }, [
-    activeNodeArray,
-    db,
-    showArt,
-    showEvent,
-    showGarten,
-    showHerkunft,
-    showKultur,
-    showLieferung,
-    showPerson,
-    showSammelLieferung,
-    showSammlung,
-    showTeilkultur,
-    showZaehlung,
-    user,
-  ])
+      return () => subscription.unsubscribe()
+    },
+    // DO NOT ADD activeNodeArray
+    // causes maximum update depth exceeded error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      db,
+      showArt,
+      showEvent,
+      showGarten,
+      showHerkunft,
+      showKultur,
+      showLieferung,
+      showPerson,
+      showSammelLieferung,
+      showSammlung,
+      showTeilkultur,
+      showZaehlung,
+      user,
+    ],
+  )
   const {
     showArt,
     showEvent,
