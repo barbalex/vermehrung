@@ -1250,11 +1250,13 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             ...tableFilter({ store, table: 'teilkultur' }),
           )
           const kulturTeilkulturCount = await kulturTeilkulturQuery.fetchCount()
-          kulturTeilkulturFolderNodes = buildKulturTeilkulturFolder({
-            count: kulturTeilkulturCount,
-            kulturIndex,
-            kulturId,
-          })
+          kulturTeilkulturFolderNodes.push(
+            buildKulturTeilkulturFolder({
+              count: kulturTeilkulturCount,
+              kulturIndex,
+              kulturId,
+            }),
+          )
 
           const kulturTeilkulturFolderIsOpen = openNodes.some(
             (n) =>
@@ -1269,7 +1271,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
               teilkulturs = await kulturTeilkulturQuery.fetch()
             } catch {}
             const teilkultursSorted = teilkulturs.sort(teilkulturSort)
-            kulturTeilkulturNodes = teilkultursSorted.map(
+            const newKulturTeilkulturNodes = teilkultursSorted.map(
               (teilkultur, teilkulturIndex) =>
                 buildKulturTeilkultur({
                   teilkultur,
@@ -1278,6 +1280,10 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   kulturIndex,
                 }),
             )
+            kulturTeilkulturNodes = [
+              ...kulturTeilkulturNodes,
+              ...newKulturTeilkulturNodes,
+            ]
           }
         }
 
@@ -1286,11 +1292,13 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           ...tableFilter({ store, table: 'zaehlung' }),
         )
         const kulturZaehlungCount = await kulturZaehlungQuery.fetchCount()
-        kulturZaehlungFolderNodes = buildKulturZaehlungFolder({
-          count: kulturZaehlungCount,
-          kulturIndex,
-          kulturId,
-        })
+        kulturZaehlungFolderNodes.push(
+          buildKulturZaehlungFolder({
+            count: kulturZaehlungCount,
+            kulturIndex,
+            kulturId,
+          }),
+        )
 
         const kulturZaehlungFolderIsOpen = openNodes.some(
           (n) =>
@@ -1305,7 +1313,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             zaehlungs = await kulturZaehlungQuery.fetch()
           } catch {}
           const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
-          kulturZaehlungNodes = await Promise.all(
+          const newKulturZaehlungNodes = await Promise.all(
             zaehlungsSorted.map(
               async (zaehlung, zaehlungIndex) =>
                 await buildKulturZaehlung({
@@ -1316,6 +1324,10 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 }),
             ),
           )
+          kulturZaehlungNodes = [
+            ...kulturZaehlungNodes,
+            ...newKulturZaehlungNodes,
+          ]
         }
 
         // kultur > anlieferung
@@ -1323,11 +1335,13 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           ...tableFilter({ store, table: 'lieferung' }),
         )
         const kulturAnlieferungCount = await kulturAnlieferungQuery.fetchCount()
-        kulturAnlieferungFolderNodes = buildKulturAnlieferungFolder({
-          count: kulturAnlieferungCount,
-          kulturIndex,
-          kulturId,
-        })
+        kulturAnlieferungFolderNodes.push(
+          buildKulturAnlieferungFolder({
+            count: kulturAnlieferungCount,
+            kulturIndex,
+            kulturId,
+          }),
+        )
         const kulturAnlieferungFolderIsOpen = openNodes.some(
           (n) =>
             n.length === 3 &&
@@ -1341,7 +1355,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             anlieferungs = await kulturAnlieferungQuery.fetch()
           } catch {}
           const anlieferungsSorted = anlieferungs.sort(lieferungSort)
-          kulturAnlieferungNodes = anlieferungsSorted.map(
+          const newKulturAnlieferungNodes = anlieferungsSorted.map(
             (lieferung, lieferungIndex) =>
               buildKulturAnlieferung({
                 lieferung,
@@ -1350,6 +1364,10 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 kulturIndex,
               }),
           )
+          kulturAnlieferungNodes = [
+            ...kulturAnlieferungNodes,
+            ...newKulturAnlieferungNodes,
+          ]
         }
 
         // kultur > auslieferung
