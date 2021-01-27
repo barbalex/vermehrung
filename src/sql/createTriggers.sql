@@ -99,7 +99,8 @@ create trigger garten_person_has_gv after update on garten
 --where person_id is not null;
 
 
-DROP TRIGGER IF EXISTS zwischenvermehrung_exists_for_herkunft_in_gaw ON teilzaehlung cascade;
+-- 2021.01.27: den trigger ausgeschaltet
+DROP TRIGGER IF EXISTS zwischenvermehrung_exists_for_herkunft_in_gaw ON sammlung cascade;
 DROP FUNCTION IF EXISTS zwischenvermehrung_exists_for_herkunft_in_gaw() cascade;
 CREATE or replace FUNCTION zwischenvermehrung_exists_for_herkunft_in_gaw() RETURNS trigger AS $zwischenvermehrung_exists_for_herkunft_in_gaw$
 BEGIN
