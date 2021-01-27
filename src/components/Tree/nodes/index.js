@@ -277,11 +277,13 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           }),
         )
         const sammlungCount = await sammlungsQuery.fetchCount()
-        artSammlungFolderNodes = buildArtSammlungFolder({
-          count: sammlungCount,
-          artIndex,
-          artId,
-        })
+        artSammlungFolderNodes.push(
+          buildArtSammlungFolder({
+            count: sammlungCount,
+            artIndex,
+            artId,
+          }),
+        )
 
         const artSammlungFolderIsOpen = openNodes.some(
           (n) =>
@@ -296,7 +298,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             sammlungs = await sammlungsQuery.fetch()
           } catch {}
           const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-          artSammlungNodes = await Promise.all(
+          const newArtSammlungNodes = await Promise.all(
             sammlungsSorted.map(
               async (sammlung, sammlungIndex) =>
                 await buildArtSammlung({
@@ -307,6 +309,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 }),
             ),
           )
+          artSammlungNodes = [...artSammlungNodes, ...newArtSammlungNodes]
           const openArtSammlungNodes = openNodes.filter(
             (n) => n[0] === 'Arten' && n[2] === 'Sammlungen' && n.length === 4,
           )
@@ -314,7 +317,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             const sammlungId = artSammlungNode[3]
             const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
             if (!sammlung) break
-            const sammlungIndex = artSammlungNodes.findIndex(
+            const sammlungIndex = newArtSammlungNodes.findIndex(
               (s) => s.id === `${artId}${sammlungId}`,
             )
 
@@ -402,7 +405,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             const kulturId = artKulturNode[3]
             const kultur = kultursSorted.find((s) => s.id === kulturId)
             if (!kultur) break
-            const kulturIndex = artKulturNodes.findIndex(
+            const kulturIndex = newArtKulturNodes.findIndex(
               (s) => s.id === `${artId}${kulturId}`,
             )
 
@@ -554,7 +557,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 )
                 .fetch()
             } catch {}
-            artKulturAuslieferungFolderNodes = await buildArtKulturAuslieferungFolder(
+            const newArtKulturAuslieferungFolderNode = await buildArtKulturAuslieferungFolder(
               {
                 kulturId,
                 kulturIndex,
@@ -562,6 +565,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 artIndex,
                 children: auslieferungs,
               },
+            )
+            artKulturAuslieferungFolderNodes.push(
+              newArtKulturAuslieferungFolderNode,
             )
             const artKulturAuslieferungFolderIsOpen = openNodes.some(
               (n) =>
@@ -592,13 +598,16 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
               ...tableFilter({ store, table: 'event' }),
             )
             const eventsCount = await eventsQuery.fetchCount()
-            artKulturEventFolderNodes = await buildArtKulturEventFolder({
-              kulturId,
-              kulturIndex,
-              artId,
-              artIndex,
-              count: eventsCount,
-            })
+            const newArtKulturEventFolderNode = await buildArtKulturEventFolder(
+              {
+                kulturId,
+                kulturIndex,
+                artId,
+                artIndex,
+                count: eventsCount,
+              },
+            )
+            artKulturEventFolderNodes.push(newArtKulturEventFolderNode)
             const artKulturEventFolderIsOpen = openNodes.some(
               (n) =>
                 n.length === 5 &&
@@ -684,7 +693,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             sammlungs = await herkunftSammlungQuery.fetch()
           } catch {}
           const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-          herkunftSammlungNodes = await Promise.all(
+          const newHerkunftSammlungNodes = await Promise.all(
             sammlungsSorted.map(
               async (sammlung, sammlungIndex) =>
                 await buildHerkunftSammlung({
@@ -695,6 +704,10 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 }),
             ),
           )
+          herkunftSammlungNodes = [
+            ...herkunftSammlungNodes,
+            ...newHerkunftSammlungNodes,
+          ]
           const openHerkunftSammlungNodes = openNodes.filter(
             (n) =>
               n[0] === 'Herkuenfte' && n[2] === 'Sammlungen' && n.length === 4,
@@ -703,7 +716,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             const sammlungId = herkunftSammlungNode[3]
             const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
             if (!sammlung) break
-            const sammlungIndex = herkunftSammlungNodes.findIndex(
+            const sammlungIndex = newHerkunftSammlungNodes.findIndex(
               (s) => s.id === `${herkunftId}${sammlungId}`,
             )
             let lieferungs = []
@@ -712,7 +725,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 .extend(...tableFilter({ store, table: 'lieferung' }))
                 .fetch()
             } catch {}
-            herkunftSammlungAuslieferungFolderNodes = await buildHerkunftSammlungAuslieferungFolder(
+            const newHerkunftSammlungAuslieferungFolderNode = buildHerkunftSammlungAuslieferungFolder(
               {
                 sammlungId,
                 sammlungIndex,
@@ -720,6 +733,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 herkunftIndex,
                 children: lieferungs,
               },
+            )
+            herkunftSammlungAuslieferungFolderNodes.push(
+              newHerkunftSammlungAuslieferungFolderNode,
             )
             const herkunftSammlungAuslieferungFolderIsOpen = openNodes.some(
               (n) =>
@@ -881,11 +897,12 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           ...tableFilter({ store, table: 'kultur' }),
         )
         const gartenKulturCount = await gartenKulturQuery.fetchCount()
-        gartenKulturFolderNodes = buildGartenKulturFolder({
+        const newGartenKulturFolderNode = buildGartenKulturFolder({
           count: gartenKulturCount,
           gartenIndex,
           gartenId,
         })
+        gartenKulturFolderNodes.push(newGartenKulturFolderNode)
         const gartenKulturFolderIsOpen = openNodes.some(
           (n) =>
             n.length === 3 &&
@@ -899,7 +916,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             kulturs = await gartenKulturQuery.fetch()
           } catch {}
           const kultursSorted = await kultursSortedFromKulturs(kulturs)
-          gartenKulturNodes = await Promise.all(
+          const newGartenKulturNodes = await Promise.all(
             kultursSorted.map(
               async (kultur, kulturIndex) =>
                 await buildGartenKultur({
@@ -910,6 +927,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 }),
             ),
           )
+          gartenKulturNodes = [...gartenKulturNodes, ...newGartenKulturNodes]
 
           const openGartenKulturNodes = openNodes.filter(
             (n) => n[0] === 'Gaerten' && n[2] === 'Kulturen' && n.length === 4,
@@ -919,7 +937,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             const kultur = kultursSorted.find((s) => s.id === kulturId)
             if (!kultur) break
 
-            const kulturIndex = gartenKulturNodes.findIndex(
+            const kulturIndex = newGartenKulturNodes.findIndex(
               (s) => s.id === `${gartenId}${kulturId}`,
             )
 
@@ -937,7 +955,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   )
                   .fetch()
               } catch {}
-              gartenKulturTeilkulturFolderNodes = await buildGartenKulturTeilkulturFolder(
+              const newGartenKulturTeilkulturFolderNode = buildGartenKulturTeilkulturFolder(
                 {
                   kulturId,
                   kulturIndex,
@@ -945,6 +963,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   gartenIndex,
                   children: teilkulturs,
                 },
+              )
+              gartenKulturTeilkulturFolderNodes.push(
+                newGartenKulturTeilkulturFolderNode,
               )
               const gartenKulturTeilkulturFolderIsOpen = openNodes.some(
                 (n) =>
@@ -983,14 +1004,14 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 )
                 .fetch()
             } catch {}
-            gartenKulturZaehlungFolderNodes = await buildGartenKulturZaehlungFolder(
-              {
+            gartenKulturZaehlungFolderNodes.push(
+              buildGartenKulturZaehlungFolder({
                 kulturId,
                 kulturIndex,
                 gartenId,
                 gartenIndex,
                 children: zaehlungs,
-              },
+              }),
             )
             const gartenKulturZaehlungFolderIsOpen = openNodes.some(
               (n) =>
