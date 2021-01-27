@@ -841,9 +841,9 @@ const myTypes = types
         const activeNodeArray = aNaRaw.toJSON()
 
         const kultur = kulturIdOfAnLieferungInActiveNodeArray
-          ? self.kulturs.get(kulturIdOfAnLieferungInActiveNodeArray)
+          ? self.kulturs?.get(kulturIdOfAnLieferungInActiveNodeArray)
           : kulturIdOfAusLieferungInActiveNodeArray
-          ? self.kulturs.get(kulturIdOfAusLieferungInActiveNodeArray)
+          ? self.kulturs?.get(kulturIdOfAusLieferungInActiveNodeArray)
           : undefined
         const artIdOfKultur = kultur?.artId
 
