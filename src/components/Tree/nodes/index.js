@@ -263,6 +263,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
       const openArtNodes = openNodes.filter(
         (n) => n[0] === 'Arten' && n.length === 2,
       )
+      console.log('buildNodes', { openArtNodes })
       for (const artNode of openArtNodes) {
         const artId = artNode[1]
         const art = artsSorted.find((a) => a.id === artId)
@@ -309,10 +310,11 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 }),
             ),
           )
-          artSammlungNodes = [...artSammlungNodes, ...newArtSammlungNodes]
+          artSammlungNodes.push(...newArtSammlungNodes)
           const openArtSammlungNodes = openNodes.filter(
             (n) => n[0] === 'Arten' && n[2] === 'Sammlungen' && n.length === 4,
           )
+          console.log('buildNodes', { openArtSammlungNodes })
           for (const artSammlungNode of openArtSammlungNodes) {
             const sammlungId = artSammlungNode[3]
             const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
@@ -327,17 +329,14 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 .extend(...tableFilter({ store, table: 'lieferung' }))
                 .fetch()
             } catch {}
-            const newArtSammlungAuslieferungFolderNode = await buildArtSammlungAuslieferungFolder(
-              {
+            artSammlungAuslieferungFolderNodes.push(
+              buildArtSammlungAuslieferungFolder({
                 sammlungId,
                 sammlungIndex,
                 artId,
                 artIndex,
                 children: lieferungs,
-              },
-            )
-            artSammlungAuslieferungFolderNodes.push(
-              newArtSammlungAuslieferungFolderNode,
+              }),
             )
             const artSammlungAuslieferungFolderIsOpen = openNodes.some(
               (n) =>
@@ -361,10 +360,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     artIndex,
                   }),
               )
-              artSammlungAuslieferungNodes = [
-                ...artSammlungAuslieferungNodes,
+              artSammlungAuslieferungNodes.push(
                 ...newArtSammlungAuslieferungNodes,
-              ]
+              )
             }
           }
         }
@@ -403,7 +401,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 await buildArtKultur({ kultur, kulturIndex, artId, artIndex }),
             ),
           )
-          artKulturNodes = [...artKulturNodes, ...newArtKulturNodes]
+          artKulturNodes.push(...newArtKulturNodes)
           const openArtKulturNodes = openNodes.filter(
             (n) => n[0] === 'Arten' && n[2] === 'Kulturen' && n.length === 4,
           )
@@ -458,10 +456,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                       artIndex,
                     }),
                 )
-                artKulturTeilkulturNodes = [
-                  ...artKulturTeilkulturNodes,
-                  ...newArtKulturTeilkulturNodes,
-                ]
+                artKulturTeilkulturNodes.push(...newArtKulturTeilkulturNodes)
               }
             }
 
@@ -507,10 +502,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     }),
                 ),
               )
-              artKulturZaehlungNodes = [
-                ...artKulturZaehlungNodes,
-                ...newArtKulturZaehlungNodes,
-              ]
+              artKulturZaehlungNodes.push(...newArtKulturZaehlungNodes)
             }
 
             // anlieferung nodes
@@ -551,10 +543,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     artIndex,
                   }),
               )
-              artKulturAnlieferungNodes = [
-                ...artKulturAnlieferungNodes,
-                ...newArtKulturAnlieferungNodes,
-              ]
+              artKulturAnlieferungNodes.push(...newArtKulturAnlieferungNodes)
             }
 
             // auslieferung nodes
@@ -600,10 +589,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     artIndex,
                   }),
               )
-              artKulturAuslieferungNodes = [
-                ...artKulturAuslieferungNodes,
-                ...newArtKulturAuslieferungNodes,
-              ]
+              artKulturAuslieferungNodes.push(...newArtKulturAuslieferungNodes)
             }
 
             // event nodes
@@ -646,10 +632,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     artIndex,
                   }),
               )
-              artKulturEventNodes = [
-                ...artKulturEventNodes,
-                ...newArtKulturEventNodes,
-              ]
+              artKulturEventNodes.push(...newArtKulturEventNodes)
             }
           }
         }
@@ -723,10 +706,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 }),
             ),
           )
-          herkunftSammlungNodes = [
-            ...herkunftSammlungNodes,
-            ...newHerkunftSammlungNodes,
-          ]
+          herkunftSammlungNodes.push(...newHerkunftSammlungNodes)
           const openHerkunftSammlungNodes = openNodes.filter(
             (n) =>
               n[0] === 'Herkuenfte' && n[2] === 'Sammlungen' && n.length === 4,
@@ -775,10 +755,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     herkunftIndex,
                   }),
               )
-              herkunftSammlungAuslieferungNodes = [
-                ...herkunftSammlungAuslieferungNodes,
+              herkunftSammlungAuslieferungNodes.push(
                 ...newHerkunftSammlungAuslieferungNodes,
-              ]
+              )
             }
           }
         }
@@ -881,10 +860,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 sammlungIndex,
               }),
           )
-          sammlungAuslieferungNodes = [
-            ...sammlungAuslieferungNodes,
-            ...newSammlungAuslieferungNodes,
-          ]
+          sammlungAuslieferungNodes.push(...newSammlungAuslieferungNodes)
         }
       }
     }
@@ -955,7 +931,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 }),
             ),
           )
-          gartenKulturNodes = [...gartenKulturNodes, ...newGartenKulturNodes]
+          gartenKulturNodes.push(...newGartenKulturNodes)
 
           const openGartenKulturNodes = openNodes.filter(
             (n) => n[0] === 'Gaerten' && n[2] === 'Kulturen' && n.length === 4,
@@ -1014,10 +990,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                       gartenIndex,
                     }),
                 )
-                gartenKulturTeilkulturNodes = [
-                  ...gartenKulturTeilkulturNodes,
+                gartenKulturTeilkulturNodes.push(
                   ...newGartenKulturTeilkulturNodes,
-                ]
+                )
               }
             }
 
@@ -1066,10 +1041,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     }),
                 ),
               )
-              gartenKulturZaehlungNodes = [
-                ...gartenKulturZaehlungNodes,
-                ...newGartenKulturZaehlungNodes,
-              ]
+              gartenKulturZaehlungNodes.push(...newGartenKulturZaehlungNodes)
             }
 
             // garten > kultur > anlieferung
@@ -1110,10 +1082,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     gartenIndex,
                   }),
               )
-              gartenKulturAnlieferungNodes = [
-                ...gartenKulturAnlieferungNodes,
+              gartenKulturAnlieferungNodes.push(
                 ...newGartenKulturAnlieferungNodes,
-              ]
+              )
             }
 
             // garten > kultur > auslieferung
@@ -1154,10 +1125,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     gartenIndex,
                   }),
               )
-              gartenKulturAuslieferungNodes = [
-                ...gartenKulturAuslieferungNodes,
+              gartenKulturAuslieferungNodes.push(
                 ...newGartenKulturAuslieferungNodes,
-              ]
+              )
             }
 
             // garten > kultur > event
@@ -1200,10 +1170,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     gartenIndex,
                   }),
               )
-              gartenKulturEventNodes = [
-                ...gartenKulturEventNodes,
-                ...newGartenKulturEventNodes,
-              ]
+              gartenKulturEventNodes.push(...newGartenKulturEventNodes)
             }
           }
         }
@@ -1280,10 +1247,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   kulturIndex,
                 }),
             )
-            kulturTeilkulturNodes = [
-              ...kulturTeilkulturNodes,
-              ...newKulturTeilkulturNodes,
-            ]
+            kulturTeilkulturNodes.push(...newKulturTeilkulturNodes)
           }
         }
 
@@ -1324,10 +1288,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 }),
             ),
           )
-          kulturZaehlungNodes = [
-            ...kulturZaehlungNodes,
-            ...newKulturZaehlungNodes,
-          ]
+          kulturZaehlungNodes.push(...newKulturZaehlungNodes)
         }
 
         // kultur > anlieferung
@@ -1364,10 +1325,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 kulturIndex,
               }),
           )
-          kulturAnlieferungNodes = [
-            ...kulturAnlieferungNodes,
-            ...newKulturAnlieferungNodes,
-          ]
+          kulturAnlieferungNodes.push(...newKulturAnlieferungNodes)
         }
 
         // kultur > auslieferung
@@ -1404,10 +1362,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 kulturIndex,
               }),
           )
-          kulturAuslieferungNodes = [
-            ...kulturAuslieferungNodes,
-            ...newKulturAuslieferungNodes,
-          ]
+          kulturAuslieferungNodes.push(...newKulturAuslieferungNodes)
         }
 
         // kultur > event
@@ -1443,7 +1398,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
               kulturIndex,
             }),
           )
-          kulturEventNodes = [...kulturEventNodes, ...newKulturEventNodes]
+          kulturEventNodes.push(...newKulturEventNodes)
         }
       }
     }
@@ -1581,10 +1536,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 sammelLieferungIndex,
               }),
           )
-          sammelLieferungLieferungNodes = [
-            ...sammelLieferungLieferungNodes,
+          sammelLieferungLieferungNodes.push(
             ...newSammelLieferungLieferungNodes,
-          ]
+          )
         }
       }
     }
@@ -1673,10 +1627,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 }),
             ),
           )
-          personSammlungNodes = [
-            ...personSammlungNodes,
-            ...newPersonSammlungNodes,
-          ]
+          personSammlungNodes.push(...newPersonSammlungNodes)
         }
 
         // person > garten
@@ -1715,7 +1666,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 }),
             ),
           )
-          personGartenNodes = [...personGartenNodes, ...newPersonGartenNodes]
+          personGartenNodes.push(...newPersonGartenNodes)
 
           const openPersonGartenNodes = openNodes.filter(
             (n) => n[0] === 'Personen' && n[2] === 'Gaerten' && n.length === 4,
@@ -1770,10 +1721,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     }),
                 ),
               )
-              personGartenKulturNodes = [
-                ...personGartenKulturNodes,
-                ...newPersonGartenKulturNodes,
-              ]
+              personGartenKulturNodes.push(...newPersonGartenKulturNodes)
 
               const openPersonGartenKulturNodes = openNodes.filter(
                 (n) =>
@@ -1844,10 +1792,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                           personIndex,
                         }),
                     )
-                    personGartenKulturTeilkulturNodes = [
-                      ...personGartenKulturTeilkulturNodes,
+                    personGartenKulturTeilkulturNodes.push(
                       ...newPersonGartenKulturTeilkulturNodes,
-                    ]
+                    )
                   }
                 }
 
@@ -1900,10 +1847,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                         }),
                     ),
                   )
-                  personGartenKulturZaehlungNodes = [
-                    ...personGartenKulturZaehlungNodes,
+                  personGartenKulturZaehlungNodes.push(
                     ...newPersonGartenKulturZaehlungNodes,
-                  ]
+                  )
                 }
 
                 // anlieferung nodes
@@ -1953,10 +1899,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                         personIndex,
                       }),
                   )
-                  personGartenKulturAnlieferungNodes = [
-                    ...personGartenKulturAnlieferungNodes,
+                  personGartenKulturAnlieferungNodes.push(
                     ...newPersonGartenKulturAnlieferungNodes,
-                  ]
+                  )
                 }
 
                 // auslieferung nodes
@@ -2006,10 +1951,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                         personIndex,
                       }),
                   )
-                  personGartenKulturAuslieferungNodes = [
-                    ...personGartenKulturAuslieferungNodes,
+                  personGartenKulturAuslieferungNodes.push(
                     ...newPersonGartenKulturAuslieferungNodes,
-                  ]
+                  )
                 }
 
                 // event nodes
@@ -2059,10 +2003,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                         personIndex,
                       }),
                   )
-                  personGartenKulturEventNodes = [
-                    ...personGartenKulturEventNodes,
+                  personGartenKulturEventNodes.push(
                     ...newPersonGartenKulturEventNodes,
-                  ]
+                  )
                 }
               }
             }
@@ -2103,10 +2046,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 personIndex,
               }),
           )
-          personLieferungNodes = [
-            ...personLieferungNodes,
-            ...newPersonLieferungNodes,
-          ]
+          personLieferungNodes.push(...newPersonLieferungNodes)
         }
       }
     }
@@ -2221,7 +2161,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
       compare(a.sort[9], b.sort[9]) ||
       compare(a.sort[10], b.sort[10]),
   )
-  console.log('buildNodes, nodes:', nodesSorted)
+  //console.log('buildNodes, nodes:', nodesSorted)
   return nodesSorted
 }
 
