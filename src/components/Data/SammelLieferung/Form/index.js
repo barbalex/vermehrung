@@ -177,7 +177,7 @@ const SammelLieferungForm = ({
   )
 
   const showDeleted =
-    showFilter || filter.sammel_lieferung._deleted !== false || row?._deleted
+    filter.sammel_lieferung._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>

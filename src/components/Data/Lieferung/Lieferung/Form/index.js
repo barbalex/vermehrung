@@ -183,8 +183,7 @@ const LierferungForm = ({
     [filter, row, showFilter, store],
   )
 
-  const showDeleted =
-    showFilter || filter.lieferung._deleted !== false || row?._deleted
+  const showDeleted = filter.lieferung._deleted !== false || row?._deleted
 
   //console.log('Lieferung, row:', row)
 

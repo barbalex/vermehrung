@@ -110,8 +110,7 @@ const Person = ({
     [filter, row, showFilter, store],
   )
 
-  const showDeleted =
-    showFilter || filter.person._deleted !== false || row?._deleted
+  const showDeleted = filter.person._deleted !== false || row?._deleted
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
