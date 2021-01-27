@@ -123,8 +123,7 @@ const ArtForm = ({
     return aeArts.filter((a) => !aeArtIdsNotToShow.includes(a.id))
   }
 
-  const showDeleted =
-    showFilter || filter.art._deleted !== false || row?._deleted
+  const showDeleted = filter.art._deleted !== false || row?._deleted
 
   return (
     <ErrorBoundary>

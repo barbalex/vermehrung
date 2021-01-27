@@ -424,8 +424,7 @@ const KulturForm = ({
     ? 'Von einer Herkunft einer Art dürfen in einem Garten maximal zwei aktive Kulturen existieren: eine "normale" und ein Zwischenlager'
     : errors.kultur?.herkunft_id
 
-  const showDeleted =
-    showFilter || filter.kultur._deleted !== false || row?._deleted
+  const showDeleted = filter.kultur._deleted !== false || row?._deleted
 
   //console.log('Kultur rendering')
 
