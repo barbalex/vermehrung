@@ -324,7 +324,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 .extend(...tableFilter({ store, table: 'lieferung' }))
                 .fetch()
             } catch {}
-            artSammlungAuslieferungFolderNodes = await buildArtSammlungAuslieferungFolder(
+            const newArtSammlungAuslieferungFolderNode = await buildArtSammlungAuslieferungFolder(
               {
                 sammlungId,
                 sammlungIndex,
@@ -332,6 +332,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 artIndex,
                 children: lieferungs,
               },
+            )
+            artSammlungAuslieferungFolderNodes.push(
+              newArtSammlungAuslieferungFolderNode,
             )
             const artSammlungAuslieferungFolderIsOpen = openNodes.some(
               (n) =>
@@ -385,13 +388,13 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             kulturs = await artKulturQuery.fetch()
           } catch {}
           const kultursSorted = await kultursSortedFromKulturs(kulturs)
-          artKulturNodes = await Promise.all(
+          const newArtKulturNodes = await Promise.all(
             kultursSorted.map(
               async (kultur, kulturIndex) =>
                 await buildArtKultur({ kultur, kulturIndex, artId, artIndex }),
             ),
           )
-
+          artKulturNodes = [...artKulturNodes, ...newArtKulturNodes]
           const openArtKulturNodes = openNodes.filter(
             (n) => n[0] === 'Arten' && n[2] === 'Kulturen' && n.length === 4,
           )
@@ -452,13 +455,16 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
               ...tableFilter({ store, table: 'zaehlung' }),
             )
             const zaehlungsCount = await artKulturZaehlungQuery.fetchCount()
-            artKulturZaehlungFolderNodes = await buildArtKulturZaehlungFolder({
-              kulturId,
-              kulturIndex,
-              artId,
-              artIndex,
-              count: zaehlungsCount,
-            })
+            const newArtKulturZaehlungFolderNodes = await buildArtKulturZaehlungFolder(
+              {
+                kulturId,
+                kulturIndex,
+                artId,
+                artIndex,
+                count: zaehlungsCount,
+              },
+            )
+            artKulturZaehlungFolderNodes.push(newArtKulturZaehlungFolderNodes)
             const artKulturZaehlungFolderIsOpen = openNodes.some(
               (n) =>
                 n.length === 5 &&
@@ -474,7 +480,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 zaehlungs = await artKulturZaehlungQuery.fetch()
               } catch {}
               const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
-              artKulturZaehlungNodes = await Promise.all(
+              const newArtKulturZaehlungNodes = await Promise.all(
                 zaehlungsSorted.map(
                   async (zaehlung, zaehlungIndex) =>
                     await buildArtKulturZaehlung({
@@ -487,6 +493,10 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     }),
                 ),
               )
+              artKulturZaehlungNodes = [
+                ...artKulturZaehlungNodes,
+                ...newArtKulturZaehlungNodes,
+              ]
             }
 
             // anlieferung nodes
@@ -496,7 +506,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 .extend(...tableFilter({ store, table: 'lieferung' }))
                 .fetch()
             } catch {}
-            artKulturAnlieferungFolderNodes = await buildArtKulturAnlieferungFolder(
+            const newArtKulturAnlieferungFolderNode = await buildArtKulturAnlieferungFolder(
               {
                 kulturId,
                 kulturIndex,
@@ -504,6 +514,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 artIndex,
                 children: anlieferungs,
               },
+            )
+            artKulturAnlieferungFolderNodes.push(
+              newArtKulturAnlieferungFolderNode,
             )
             const artKulturAnlieferungFolderIsOpen = openNodes.some(
               (n) =>
@@ -2066,7 +2079,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
       compare(a.sort[9], b.sort[9]) ||
       compare(a.sort[10], b.sort[10]),
   )
-
+  console.log('buildNodes, nodes:', nodesSorted)
   return nodesSorted
 }
 
