@@ -1,4 +1,4 @@
-import { types, getParent } from 'mobx-state-tree'
+import { types, getParent, getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 import { navigate } from '@reach/router'
 
@@ -46,7 +46,8 @@ export default types
     addOpenNodes(nodes) {
       // need set to ensure contained arrays are unique
       const set = new Set([...self.openNodes, ...nodes].map(JSON.stringify))
-      self.openNodes = Array.from(set).map(JSON.parse)
+      const newOpenNodes = Array.from(set).map(JSON.parse)
+      self.openNodes = newOpenNodes
     },
   }))
   .views((self) => ({
