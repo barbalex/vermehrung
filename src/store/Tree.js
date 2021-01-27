@@ -1,4 +1,4 @@
-import { types, getParent, getSnapshot } from 'mobx-state-tree'
+import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 import { navigate } from '@reach/router'
 
