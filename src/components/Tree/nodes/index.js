@@ -1375,11 +1375,13 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           ...tableFilter({ store, table: 'lieferung' }),
         )
         const kulturAuslieferungCount = await kulturAuslieferungQuery.fetchCount()
-        kulturAuslieferungFolderNodes = buildKulturAuslieferungFolder({
-          count: kulturAuslieferungCount,
-          kulturIndex,
-          kulturId,
-        })
+        kulturAuslieferungFolderNodes.push(
+          buildKulturAuslieferungFolder({
+            count: kulturAuslieferungCount,
+            kulturIndex,
+            kulturId,
+          }),
+        )
         const kulturAuslieferungFolderIsOpen = openNodes.some(
           (n) =>
             n.length === 3 &&
@@ -1393,7 +1395,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             auslieferungs = await kulturAuslieferungQuery.fetch()
           } catch {}
           const auslieferungsSorted = auslieferungs.sort(lieferungSort)
-          kulturAuslieferungNodes = auslieferungsSorted.map(
+          const newKulturAuslieferungNodes = auslieferungsSorted.map(
             (lieferung, lieferungIndex) =>
               buildKulturAuslieferung({
                 lieferung,
@@ -1402,6 +1404,10 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 kulturIndex,
               }),
           )
+          kulturAuslieferungNodes = [
+            ...kulturAuslieferungNodes,
+            ...newKulturAuslieferungNodes,
+          ]
         }
 
         // kultur > event
@@ -1409,11 +1415,13 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           ...tableFilter({ store, table: 'event' }),
         )
         const kulturEventCount = await kulturEventQuery.fetchCount()
-        kulturEventFolderNodes = buildKulturEventFolder({
-          count: kulturEventCount,
-          kulturIndex,
-          kulturId,
-        })
+        kulturEventFolderNodes.push(
+          buildKulturEventFolder({
+            count: kulturEventCount,
+            kulturIndex,
+            kulturId,
+          }),
+        )
         const kulturEventFolderIsOpen = openNodes.some(
           (n) =>
             n.length === 3 &&
@@ -1427,7 +1435,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             events = await kulturEventQuery.fetch()
           } catch {}
           const eventsSorted = events.sort(eventSort)
-          kulturEventNodes = eventsSorted.map((event, eventIndex) =>
+          const newKulturEventNodes = eventsSorted.map((event, eventIndex) =>
             buildKulturEvent({
               event,
               eventIndex,
@@ -1435,6 +1443,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
               kulturIndex,
             }),
           )
+          kulturEventNodes = [...kulturEventNodes, ...newKulturEventNodes]
         }
       }
     }
@@ -1548,12 +1557,12 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             .fetch()
         } catch {}
         const lieferungsSorted = lieferungs.sort(lieferungSort)
-        sammelLieferungLieferungFolderNodes = buildSammelLieferungLieferungFolder(
-          {
+        sammelLieferungLieferungFolderNodes.push(
+          buildSammelLieferungLieferungFolder({
             children: lieferungsSorted,
             sammelLieferungIndex,
             sammelLieferungId,
-          },
+          }),
         )
         const sammelLieferungLieferungFolderIsOpen = openNodes.some(
           (n) =>
@@ -1563,7 +1572,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             n[2] === 'Lieferungen',
         )
         if (sammelLieferungLieferungFolderIsOpen) {
-          sammelLieferungLieferungNodes = lieferungsSorted.map(
+          const newSammelLieferungLieferungNodes = lieferungsSorted.map(
             (lieferung, lieferungIndex) =>
               buildSammelLieferungLieferung({
                 lieferung,
@@ -1572,6 +1581,10 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 sammelLieferungIndex,
               }),
           )
+          sammelLieferungLieferungNodes = [
+            ...sammelLieferungLieferungNodes,
+            ...newSammelLieferungLieferungNodes,
+          ]
         }
       }
     }
