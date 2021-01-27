@@ -838,10 +838,9 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             n[2] === 'Herkuenfte',
         )
         if (sammlungHerkunftFolderIsOpen) {
-          sammlungHerkunftNodes = [herkunft].map((herkunft, herkunftIndex) =>
+          sammlungHerkunftNodes.push(
             buildSammlungHerkunft({
               herkunft,
-              herkunftIndex,
               sammlungId,
               sammlungIndex,
             }),
