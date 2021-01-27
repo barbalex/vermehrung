@@ -2,10 +2,10 @@ import { getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
 import isNodeOpen from './isNodeOpen'
-import openNode from './openNode'
 
 const toggleNode = ({ node, nodes, store }) => {
   const { addNotification } = store
+  const { addOpenNode } = store.tree
   if (!node.url) {
     console.log('passsed node has no url:', node)
     return addNotification({
@@ -20,7 +20,7 @@ const toggleNode = ({ node, nodes, store }) => {
   if (!nodeIsOpen) {
     // node is closed
     // open it and make it the active node
-    openNode({ node, store })
+    addOpenNode(node.url)
     const newActiveNodeArray = [...node.url]
     setActiveNodeArray(newActiveNodeArray)
   } else if (node.id === activeNode?.id) {
