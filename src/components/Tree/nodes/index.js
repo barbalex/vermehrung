@@ -263,7 +263,6 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
       const openArtNodes = openNodes.filter(
         (n) => n[0] === 'Arten' && n.length === 2,
       )
-      console.log('buildNodes', { openArtNodes })
       for (const artNode of openArtNodes) {
         const artId = artNode[1]
         const art = artsSorted.find((a) => a.id === artId)
@@ -312,14 +311,17 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           )
           artSammlungNodes.push(...newArtSammlungNodes)
           const openArtSammlungNodes = openNodes.filter(
-            (n) => n[0] === 'Arten' && n[2] === 'Sammlungen' && n.length === 4,
+            (n) =>
+              n[0] === 'Arten' &&
+              n[1] === artId &&
+              n[2] === 'Sammlungen' &&
+              n.length === 4,
           )
-          console.log('buildNodes', { openArtSammlungNodes })
           for (const artSammlungNode of openArtSammlungNodes) {
             const sammlungId = artSammlungNode[3]
             const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
             if (!sammlung) break
-            const sammlungIndex = artSammlungNodes.findIndex(
+            const sammlungIndex = newArtSammlungNodes.findIndex(
               (s) => s.id === `${artId}${sammlungId}`,
             )
 
@@ -403,13 +405,17 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           )
           artKulturNodes.push(...newArtKulturNodes)
           const openArtKulturNodes = openNodes.filter(
-            (n) => n[0] === 'Arten' && n[2] === 'Kulturen' && n.length === 4,
+            (n) =>
+              n[0] === 'Arten' &&
+              n[1] === artId &&
+              n[2] === 'Kulturen' &&
+              n.length === 4,
           )
           for (const artKulturNode of openArtKulturNodes) {
             const kulturId = artKulturNode[3]
             const kultur = kultursSorted.find((s) => s.id === kulturId)
             if (!kultur) break
-            const kulturIndex = artKulturNodes.findIndex(
+            const kulturIndex = newArtKulturNodes.findIndex(
               (s) => s.id === `${artId}${kulturId}`,
             )
 
@@ -709,13 +715,16 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           herkunftSammlungNodes.push(...newHerkunftSammlungNodes)
           const openHerkunftSammlungNodes = openNodes.filter(
             (n) =>
-              n[0] === 'Herkuenfte' && n[2] === 'Sammlungen' && n.length === 4,
+              n[0] === 'Herkuenfte' &&
+              n[1] === herkunftId &&
+              n[2] === 'Sammlungen' &&
+              n.length === 4,
           )
           for (const herkunftSammlungNode of openHerkunftSammlungNodes) {
             const sammlungId = herkunftSammlungNode[3]
             const sammlung = sammlungsSorted.find((s) => s.id === sammlungId)
             if (!sammlung) break
-            const sammlungIndex = herkunftSammlungNodes.findIndex(
+            const sammlungIndex = newHerkunftSammlungNodes.findIndex(
               (s) => s.id === `${herkunftId}${sammlungId}`,
             )
             let lieferungs = []
@@ -934,14 +943,18 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           gartenKulturNodes.push(...newGartenKulturNodes)
 
           const openGartenKulturNodes = openNodes.filter(
-            (n) => n[0] === 'Gaerten' && n[2] === 'Kulturen' && n.length === 4,
+            (n) =>
+              n[0] === 'Gaerten' &&
+              n[1] === gartenId &&
+              n[2] === 'Kulturen' &&
+              n.length === 4,
           )
           for (const gartenKulturNode of openGartenKulturNodes) {
             const kulturId = gartenKulturNode[3]
             const kultur = kultursSorted.find((s) => s.id === kulturId)
             if (!kultur) break
 
-            const kulturIndex = gartenKulturNodes.findIndex(
+            const kulturIndex = newGartenKulturNodes.findIndex(
               (s) => s.id === `${gartenId}${kulturId}`,
             )
 
@@ -1008,6 +1021,13 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 )
                 .fetch()
             } catch {}
+            console.log('buildNodes', {
+              kulturId,
+              kulturIndex,
+              gartenId,
+              gartenIndex,
+              zaehlungs,
+            })
             gartenKulturZaehlungFolderNodes.push(
               buildGartenKulturZaehlungFolder({
                 kulturId,
@@ -1669,13 +1689,17 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           personGartenNodes.push(...newPersonGartenNodes)
 
           const openPersonGartenNodes = openNodes.filter(
-            (n) => n[0] === 'Personen' && n[2] === 'Gaerten' && n.length === 4,
+            (n) =>
+              n[0] === 'Personen' &&
+              n[1] === personId &&
+              n[2] === 'Gaerten' &&
+              n.length === 4,
           )
           for (const personGartenNode of openPersonGartenNodes) {
             const gartenId = personGartenNode[3]
             const garten = gartensSorted.find((s) => s.id === gartenId)
             if (!garten) break
-            const gartenIndex = personGartenNodes.findIndex(
+            const gartenIndex = newPersonGartenNodes.findIndex(
               (s) => s.id === `${personId}${gartenId}`,
             )
 
@@ -1736,7 +1760,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 const kulturId = personGartenKulturNode[5]
                 const kultur = kultursSorted.find((s) => s.id === kulturId)
                 if (!kultur) break
-                const kulturIndex = personGartenKulturNodes.findIndex(
+                const kulturIndex = newPersonGartenKulturNodes.findIndex(
                   (s) => s.id === `${personId}${gartenId}${kulturId}`,
                 )
 
@@ -1929,7 +1953,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     n[3] === gartenId &&
                     n[4] === 'Kulturen' &&
                     n[5] === kulturId &&
-                    n[6] === 'An-Lieferungen',
+                    n[6] === 'Aus-Lieferungen',
                 )
 
                 if (personGartenKulturAuslieferungFolderIsOpen) {
