@@ -1,14 +1,12 @@
-const herkunftSammlungFolder = ({ count, herkunftIndex, herkunftId }) => [
-  {
-    nodeType: 'folder',
-    menuTitle: 'Sammlungen',
-    id: `${herkunftId}SammlungFolder`,
-    label: `Sammlungen (${count})`,
-    url: ['Herkuenfte', herkunftId, 'Sammlungen'],
-    sort: [2, herkunftIndex, 2],
-    hasChildren: true,
-    childrenCount: count,
-  },
-]
+const herkunftSammlungFolder = ({ count, herkunftIndex, herkunftId }) => ({
+  nodeType: 'folder',
+  menuTitle: 'Sammlungen',
+  id: `${herkunftId}SammlungFolder`,
+  label: `Sammlungen (${count})`,
+  url: ['Herkuenfte', herkunftId, 'Sammlungen'],
+  sort: [2, herkunftIndex, 2],
+  hasChildren: true,
+  childrenCount: count,
+})
 
 export default herkunftSammlungFolder
