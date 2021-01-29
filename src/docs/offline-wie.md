@@ -5,7 +5,7 @@ title: 'Offline: Wie es funktioniert'
 sort1: 25
 ---
 
-Schon lange würden wir in apflora.ch gerne offline arbeiten können. In vermehrung.ch ist es ebenso nützlich. Weil die Umsetzung sehr anspruchsvoll und aufwändig ist, gab es bisher kein Konzept dafür. Nachfolgend das für vermehrung.ch umgesetzte Konzept:<br/><br/>
+Zuverlässige Offline-Fähigkeit ist schwer. Nachfolgend das für vermehrung.ch umgesetzte Konzept:<br/><br/>
 
 ### 1. Konflikt-fähige Datenstruktur
 
@@ -75,7 +75,7 @@ Offline ist Authentifikation nicht möglich. Die App funktioniert mit den vorhan
 
 ### 5. Suche, Auswertungen
 
-Suche, Zeit-Achsen und Exporte sollen auch offline funktionieren.<br/><br/>
+Suche, Zeit-Achsen und Exporte funktionieren auch offline.<br/><br/>
 
 ### 6. Dateien
 
@@ -83,22 +83,12 @@ Dateien können offline nicht verwaltet werden, da keine Verbindung zum Speicher
 
 ### 7. Schrittweise Umsetzung
 
-Es gibt viel Arbeit. Sehr viel. Beispiele:
+Es gab viel Arbeit. Sehr viel. Beispiele:
 
-- Die Anzahl Tabellen in der Datenbank wird verdoppelt (!)
-- Die Datenbank muss lernen, mit Konflikten umzugehen
-- Die lokale Datenhaltung der App muss von Grund auf neu aufgebaut werden (!)
-- Das Management der Operationen (App), Konflikte und Daten (Datenbank) und die Daten-Schnittstelle werden künftig mehr Ressourcen (Leistung und Speicher) beanspruchen
-- Während die neue App aufgebaut wird, muss die bisherige weiter betrieben werden (sobald der Import erfolgt ist)
-
-Weil apflora.ch viel komplexer ist (ca. Faktor 2), wurde das zuerst in vermehrung.ch eingeführt.<br/><br/>
+- Die Anzahl Tabellen in der Datenbank wurde verdoppelt (!)
+- Die Datenbank musste lernen, mit Konflikten umzugehen
+- Die lokale Datenhaltung der App musste von Grund auf neu aufgebaut werden (!)
+- Das Management der Operationen (App), Konflikte und Daten (Datenbank) und die Daten-Schnittstelle beanspruchen nun mehr Ressourcen (Leistung und Speicher)
+- Während die neue App aufgebaut wurde, musste die bisherige weiter betrieben werden
 
 Bilanz: Die Implementation war ca. 14 Wochen Aufwand. Ein zweites Mal würde das wohl halb so lange dauern.<br/><br/>
-
-Wenn:
-
-- es sich in vermehrung.ch bewährt,
-- für apflora.ch gewünscht wird,
-- der Aufwand gerechtfertigt und finanziert werden kann,
-
-...können wir beginnen, es für apflora.ch umsetzen.

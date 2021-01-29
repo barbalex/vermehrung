@@ -1,6 +1,6 @@
 ---
 path: '/Dokumentation/offline'
-date: '2020-07-01'
+date: '2021-01-29'
 title: 'Offline arbeiten'
 sort1: 24
 ---
@@ -11,7 +11,7 @@ Nicht jeder Garten verfügt über WLAN. Nicht jedes Eingabegerät verfügt über
 
 ### Kann eine Web-App offline funktionieren?
 
-Ja. Aktuell sind die meisten dafür nötigen Anpassungen erfolgt. Ausgiebig getestet ist es noch nicht. Mit Fehlern und Nachbesserungen ist daher zu rechnen.<br/><br/>
+Ja. Na ja - nicht auf iOS, [weil Apple Web-App's nicht genug Speicher geben will](../iOS).<br/><br/>
 
 ### Verbindungs-Status
 
@@ -35,7 +35,7 @@ Sobald vermehrung wieder online ist, werden die Päckchen dem Server geschickt..
 
 Sie können sich durch Klick auf das Online-Symbol auch die Schlange auflisten lassen:
 ![Operationen-Liste](005.png)
-...und sogar Operationen widerrufen.<br/><br/>
+...und wenn nötig Operationen widerrufen.<br/><br/>
 
 ### Konflikte
 
