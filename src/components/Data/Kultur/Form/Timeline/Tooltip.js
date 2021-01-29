@@ -38,7 +38,7 @@ const CustomTooltip = ({ payload: payloadPassed = [], label, active }) => {
     }),
   ]
 
-  if (active) {
+  if (active && label && payloadPassed) {
     const ereignis = payload?.[0]?.payload?.ereignis ?? ''
     const title = DateTime.fromMillis(label).toFormat('yyyy.LL.dd')
 
