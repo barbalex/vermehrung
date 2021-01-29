@@ -5,7 +5,7 @@ title: 'Daten-Historie'
 sort1: 26
 ---
 
-Die Historisierung ermöglicht, Änderungen an Daten rückgängig zu machen. Aber sie zeigt alle bisherigen Versionen eines Datensatzes an, unabhängig davon wer sie wann durchführte. Und sie ermöglicht, jeden dieser Zustände wieder herzustellen.<br/><br/>
+Die Historisierung zeigt alle bisherigen Versionen eines Datensatzes an. Und sie ermöglicht, jeden dieser Zustände wieder herzustellen.<br/><br/>
 
 Um offline fähig zu sein ([mehr dazu](../offline-wie)) erstellt vermehrung.ch bei jeder Änderung eines Datensatzes eine neue Version. Somit **verfügt vermehrung.ch über eine vollständige Historisierung aller Datensätze**, beginnend seit deren Import im Sommer 2020. Aktuell (im Herbst 2020) gibt es bei den meisten Daten noch keine historischen Versionen, weil sie noch nicht innerhalb von vermehrung.ch bearbeitet wurden.<br/><br/>
 

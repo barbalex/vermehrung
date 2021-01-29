@@ -39,6 +39,6 @@ Wollt ihr mehr wissen? Dann müssen wir etwas ausholen:<br/><br/>
   - [Tizen](https://www.tizen.org/about)
   - alle künftig neu entstehenden
 - Müsste vermehrung.ch mit den bisher üblichen Mitteln für die vier wichtigsten Betriebssysteme (Windows, macOS, Android, iOS) programmiert werden, wäre der Aufwand ungefähr 6 mal so hoch als mit einer Web App alleine. Das wäre weder sinnvoll noch mit den verfügbaren (Naturschutz-!)Budgets finanzierbar
-- Apple weiss das. Und rechnet damit, dass sich kein App-Entwickler leisten kann, nicht auf iOS verfügbar zu sein. Weil dort für Apps die höchsten Preise bezahlt werden ([Quelle](https://fueled.com/blog/app-store-vs-google-play/#:~:text=In%20fact%2C%20research%20by%20Stardust,freely%20available%20on%20Android%20devices.))
+- Apple rechnet damit, dass sich kein App-Entwickler leisten kann, nicht auf iOS verfügbar zu sein. Weil dort für Apps die höchsten Preise bezahlt werden ([Quelle](https://fueled.com/blog/app-store-vs-google-play/#:~:text=In%20fact%2C%20research%20by%20Stardust,freely%20available%20on%20Android%20devices.))
 
-Vermehrung.ch und iOS-Benutzerinnen sind somit Opfer des Kollateralschadens, der entsteht, weil Apple an allen Zahlungen in und für Apps 30% verdienen will.<br/><br/>
+Vermehrung.ch und iOS-Benutzerinnen sind somit Opfer des Kollateralschadens, der entsteht, weil Apple an Zahlungen in und für Apps 30% verdienen will.<br/><br/>
