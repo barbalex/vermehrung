@@ -23,7 +23,8 @@ const Ereignis = styled.span`
   padding-left: 5px;
 `
 
-const CustomTooltip = ({ payload: payloadPassed, label, active }) => {
+// somehow payload sometimes arrives as undefined, so set to []
+const CustomTooltip = ({ payload: payloadPassed = [], label, active }) => {
   // filter out zählung information if ereignis is not zählung
   const payload = [
     ...payloadPassed.filter((p) => {
