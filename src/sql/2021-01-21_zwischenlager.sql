@@ -10,7 +10,7 @@ with list as (
   left join garten
   on garten.id = kultur.garten_id
   left join herkunft
-  on herkunft.id = kultur.herkunft_id 
+  on herkunft.id = kultur.herkunft_id
   left join art
     left join ae_art
     on ae_art.id = art.ae_id
