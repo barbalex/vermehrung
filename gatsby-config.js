@@ -49,19 +49,20 @@ module.exports = {
       options: {
         // uncommented scope because of gatsby issue
         // https://github.com/gatsbyjs/gatsby/issues/27839
-        //scope: '/',
+        scope: '.',
         name: 'vermehrung.ch',
         short_name: 'vermehrung',
-        start_url: 'https://vermehrung.ch/',
+        start_url: './Vermehrung',
         background_color: '#2e0c58',
         theme_color: '#2e0c58',
-        display: 'standalone',
+        display: 'minimal-ui',
         icon: 'src/images/seedling.png',
         include_favicon: true,
         url: 'https://vermehrung.ch',
         lang: 'de-CH',
         screenshots: [],
         orientation: 'portrait',
+        description: 'breeding endangered plant species',
       },
     },
     {
