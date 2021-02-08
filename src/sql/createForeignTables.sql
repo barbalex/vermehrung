@@ -38,6 +38,15 @@ create index on ae_art using btree (id);
 create index on ae_art using btree (name);
 create index on ae_art using btree (_rev_at);
 
-insert into ae_art (id,name)
-select id, name
-from ae_art_live;
+insert into ae_art (id,name,name_latein,name_deutsch)
+select id, name, name_latein, name_deutsch
+from ae_art_live
+on conflict on constraint ae_art_pkey do update set 
+  name = EXCLUDED.name,
+  name_latein = EXCLUDED.name_latein,
+  name_deutsch = EXCLUDED.name_deutsch;
+
+insert into ae_art (id,name,name_latein,name_deutsch)
+select id, name, name_latein, name_deutsch
+from ae_art_live
+on conflict on constraint ae_art_pkey do nothing;
