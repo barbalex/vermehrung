@@ -2,15 +2,28 @@ import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 import { navigate } from '@reach/router'
 
+import Node from './Node'
+
 export default types
   .model('Tree', {
     activeNodeArray: types.array(types.union(types.string, types.number)),
+    nodes: types.map(Node),
     openNodes: types.array(
       types.array(types.union(types.string, types.number)),
     ),
     widthInPercentOfScreen: types.optional(types.number, 33),
   })
   .actions((self) => ({
+    setNodes(nodes) {
+      self.nodes.clear()
+      nodes.forEach((n) => self.nodes.set(n.id, n))
+    },
+    addNode(node) {
+      self.nodes.set(node.id, node)
+    },
+    removeNode(node) {
+      self.nodes.delete(node.id)
+    },
     setWidthInPercentOfScreen(val) {
       self.widthInPercentOfScreen = val
     },
@@ -62,6 +75,9 @@ export default types
       const isMobile = showTreeInSingleColumnView && singleColumnView
       const singleRowHeight = isMobile ? 30 : 23
       return singleRowHeight
+    },
+    get nodes() {
+      return 'TODO:'
     },
   }))
 

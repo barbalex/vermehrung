@@ -56,6 +56,8 @@ const Tree = ({
     }
   }, [listRef, activeNode?.label, aNA, nodes, nodeIndex])
 
+  console.log('List rendering')
+
   return (
     <StyledList
       height={height - 5}

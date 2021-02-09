@@ -8,6 +8,7 @@ import { interval, combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
+import isEqual from 'lodash/isEqual'
 
 import StoreContext from '../../storeContext'
 import Settings from './Settings'
@@ -38,7 +39,11 @@ const Tree = ({ width, height }) => {
     event: eventFilter,
     person: personFilter,
   } = store.filter
-  const { activeNodeArray: aNAProxy, openNodes: openNodesProxy } = store.tree
+  const {
+    activeNodeArray: aNAProxy,
+    openNodes: openNodesProxy,
+    setNodes: setStoreNodes,
+  } = store.tree
   const aNA = getSnapshot(aNAProxy)
   const openNodes = getSnapshot(openNodesProxy)
 
@@ -50,14 +55,17 @@ const Tree = ({ width, height }) => {
   const { userPersonOption, userRole } = dataState
 
   const buildMyNodes = useCallback(async () => {
-    //console.log('buildNodes building tree nodes')
-    const nodes = await buildNodes({
+    const newNodes = await buildNodes({
       store,
       userPersonOption,
       userRole,
     })
-    setNodes(nodes)
-  }, [store, userPersonOption, userRole])
+    if (!isEqual(newNodes, nodes)) {
+      console.log('buildNodes setting new tree nodes')
+      setNodes(newNodes)
+      setStoreNodes(newNodes)
+    }
+  }, [nodes, setStoreNodes, store, userPersonOption, userRole])
 
   const buildMyNodesDebounced = useDebouncedCallback(buildMyNodes, 100)
 
@@ -168,7 +176,7 @@ const Tree = ({ width, height }) => {
     const subscription = combinedObservables.subscribe(
       // eslint-disable-next-line no-unused-vars
       ([[userPersonOption], [userRole], ...rest]) => {
-        //console.log('Tree data-useEffect ordering rebuild')
+        console.log('Tree data-useEffect ordering rebuild')
         setDataState({ userPersonOption, userRole })
         buildMyNodesDebounced.callback()
       },
@@ -178,7 +186,7 @@ const Tree = ({ width, height }) => {
   }, [buildMyNodesDebounced, db, store, user.uid])
 
   useEffect(() => {
-    //console.log('Tree second useEffect ordering rebuild')
+    console.log('Tree second useEffect ordering rebuild')
     buildMyNodesDebounced.callback()
   }, [
     buildMyNodesDebounced,
@@ -213,7 +221,7 @@ const Tree = ({ width, height }) => {
     user.uid,
   ])
 
-  //console.log('Tree rendering, openNodes:', openNodes)
+  console.log('Tree rendering', { openNodes, nodes })
 
   return (
     <ErrorBoundary>
