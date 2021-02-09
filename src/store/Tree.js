@@ -5,8 +5,11 @@ import { navigate } from '@reach/router'
 export default types
   .model('Tree', {
     activeNodeArray: types.array(types.union(types.string, types.number)),
-    // this is neede to keep the last clidked node or its arrow known
+    // this is needed to keep the last clicked arrow known
     // so it does not jump
+    // before using this, activeNodeArray was used instead
+    // but then when an arrow out of sight of the active node
+    // is clicked, the list jumps back to the active node :-(
     lastTouchedNode: types.optional(
       types.array(types.union(types.string, types.number)),
       [],
@@ -76,6 +79,7 @@ export default types
 
 export const defaultValue = {
   activeNodeArray: [],
+  lastTouchedNode: [],
   openNodes: [],
   widthInPercentOfScreen: 33,
 }
