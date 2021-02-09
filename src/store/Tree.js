@@ -5,12 +5,21 @@ import { navigate } from '@reach/router'
 export default types
   .model('Tree', {
     activeNodeArray: types.array(types.union(types.string, types.number)),
+    // this is neede to keep the last clidked node or its arrow known
+    // so it does not jump
+    lastTouchedNode: types.optional(
+      types.array(types.union(types.string, types.number)),
+      [],
+    ),
     openNodes: types.array(
       types.array(types.union(types.string, types.number)),
     ),
     widthInPercentOfScreen: types.optional(types.number, 33),
   })
   .actions((self) => ({
+    setLastTouchedNode(val) {
+      self.lastTouchedNode = val
+    },
     setWidthInPercentOfScreen(val) {
       self.widthInPercentOfScreen = val
     },
