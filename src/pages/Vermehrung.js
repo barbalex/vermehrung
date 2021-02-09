@@ -81,6 +81,7 @@ const Vermehrung = ({ location }) => {
     user,
     online,
   } = store
+  const { setLastTouchedNode } = store.tree
 
   const [isIOS, setIsIOS] = useState(false)
   useEffect(() => {
@@ -97,6 +98,7 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray,
     widthInPercentOfScreen,
     wsReconnectCount,
+    lastTouchedNode,
   } = store.tree
   const showFilter = store.filter.show
   let treeWidth = singleColumnView
@@ -118,6 +120,12 @@ const Vermehrung = ({ location }) => {
   // as openNodes is overwritten every time activeNodeArray changes
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
+    // set last touched node in case project is directly opened on it
+    console.log('Page Vermehrung setting last touched Node', {
+      activeNodeArray,
+      lastTouchedNode: lastTouchedNode.slice(),
+    })
+    setLastTouchedNode(activeNodeArray)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // when pathname changes, update activeNodeArray

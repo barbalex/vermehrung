@@ -44,12 +44,19 @@ const Tree = ({
   userRole,
 }) => {
   const store = useContext(StoreContext)
-  const { singleRowHeight, activeNodeArray: aNAProxy } = store.tree
+  const {
+    singleRowHeight,
+    activeNodeArray: aNAProxy,
+    lastTouchedNode: lastTouchedNodeProxy,
+  } = store.tree
   const aNA = getSnapshot(aNAProxy)
   const activeNode = nodes.find((n) => isEqual(n.url, aNA))
 
   const listRef = useRef(null)
-  const nodeIndex = findIndex(nodes, (node) => isEqual(node.url, aNA))
+  const lastTouchedNode = getSnapshot(lastTouchedNodeProxy)
+  // when loading on url, lastTouchedNode may not be set
+  const urlToFocus = lastTouchedNode.length ? lastTouchedNode : aNA
+  const nodeIndex = findIndex(nodes, (node) => isEqual(node.url, urlToFocus))
   useEffect(() => {
     if (nodeIndex > -1) {
       listRef.current?.scrollToItem(nodeIndex)
