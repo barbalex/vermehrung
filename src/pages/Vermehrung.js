@@ -121,10 +121,10 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
     // set last touched node in case project is directly opened on it
-    console.log('Page Vermehrung setting last touched Node', {
+    /*console.log('Page Vermehrung setting last touched Node', {
       activeNodeArray,
       lastTouchedNode: lastTouchedNode.slice(),
-    })
+    })*/
     setLastTouchedNode(activeNodeArray)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
