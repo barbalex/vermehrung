@@ -70,7 +70,13 @@ const recreatePersistedStore = async ({ store }) => {
     jsonify: false,
     blacklist,
   })
-  fb.initializeApp(firebaseConfig)
+  // catch app already existing
+  // https://stackoverflow.com/a/48686803/712005
+  if (!fb.apps.length) {
+    fb.initializeApp(firebaseConfig)
+  } else {
+    fb.app() // if already initialized, use that one
+  }
   setFirebase(fb)
   unregisterAuthObserver = fb.auth().onAuthStateChanged(async (user) => {
     setUser(user)
