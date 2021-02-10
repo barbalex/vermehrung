@@ -2811,7 +2811,6 @@ export class KulturOption extends Model {
   @field('id') id
   @field('z_bemerkungen') z_bemerkungen
   @field('tz_teilkultur_id') titel
-  @field('tz_anzahl_mutterpflanzen') beschreibung
   @field('tz_andere_menge') tz_andere_menge
   @field('tz_auspflanzbereit_beschreibung') tz_auspflanzbereit_beschreibung
   @field('tz_bemerkungen') tz_bemerkungen
@@ -2848,10 +2847,6 @@ export class KulturOption extends Model {
       z_bemerkungen: field === 'z_bemerkungen' ? value : this.z_bemerkungen,
       tz_teilkultur_id:
         field === 'tz_teilkultur_id' ? value : this.tz_teilkultur_id,
-      tz_anzahl_mutterpflanzen:
-        field === 'tz_anzahl_mutterpflanzen'
-          ? value
-          : this.tz_anzahl_mutterpflanzen,
       tz_andere_menge:
         field === 'tz_andere_menge' ? value : this.tz_andere_menge,
       tz_auspflanzbereit_beschreibung:

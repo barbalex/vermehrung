@@ -5,6 +5,7 @@ const kultur_option = {
   columns: [
     { name: 'z_bemerkungen', type: 'boolean', isOptional: true },
     { name: 'tz_teilkultur_id', type: 'boolean', isOptional: true },
+    // tz_anzahl_mutterpflanzen is not used any more
     { name: 'tz_anzahl_mutterpflanzen', type: 'boolean', isOptional: true },
     { name: 'tz_andere_menge', type: 'boolean', isOptional: true },
     {

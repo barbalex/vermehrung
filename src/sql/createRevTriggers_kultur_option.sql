@@ -44,6 +44,7 @@ begin
       id,
       z_bemerkungen,
       tz_teilkultur_id,
+      -- tz_anzahl_mutterpflanzen is not used any more
       tz_anzahl_mutterpflanzen,
       tz_andere_menge,
       tz_auspflanzbereit_beschreibung,
@@ -125,6 +126,7 @@ begin
       kultur_option_rev.kultur_id,
       kultur_option_rev.z_bemerkungen,
       kultur_option_rev.tz_teilkultur_id,
+      -- tz_anzahl_mutterpflanzen is not used any more
       kultur_option_rev.tz_anzahl_mutterpflanzen,
       kultur_option_rev.tz_andere_menge,
       kultur_option_rev.tz_auspflanzbereit_beschreibung,
@@ -155,6 +157,7 @@ begin
       -- do not update the id = pkey
       z_bemerkungen = excluded.z_bemerkungen,
       tz_teilkultur_id = excluded.tz_teilkultur_id,
+      -- tz_anzahl_mutterpflanzen is not used any more
       tz_anzahl_mutterpflanzen = excluded.tz_anzahl_mutterpflanzen,
       tz_andere_menge = excluded.tz_andere_menge,
       tz_auspflanzbereit_beschreibung = excluded.tz_auspflanzbereit_beschreibung,
@@ -178,6 +181,7 @@ begin
         id,
         z_bemerkungen,
         tz_teilkultur_id,
+        -- tz_anzahl_mutterpflanzen is not used any more
         tz_anzahl_mutterpflanzen,
         tz_andere_menge,
         tz_auspflanzbereit_beschreibung,
@@ -309,6 +313,7 @@ begin
         -- do not update the id = pkey
         z_bemerkungen = excluded.z_bemerkungen,
         tz_teilkultur_id = excluded.tz_teilkultur_id,
+        -- tz_anzahl_mutterpflanzen is not used any more
         tz_anzahl_mutterpflanzen = excluded.tz_anzahl_mutterpflanzen,
         tz_andere_menge = excluded.tz_andere_menge,
         tz_auspflanzbereit_beschreibung = excluded.tz_auspflanzbereit_beschreibung,
