@@ -81,7 +81,13 @@ const Vermehrung = ({ location }) => {
     user,
     online,
   } = store
-  const { setLastTouchedNode } = store.tree
+  const {
+    setActiveNodeArray,
+    setLastTouchedNode,
+    setOpenNodes,
+    widthInPercentOfScreen,
+    wsReconnectCount,
+  } = store.tree
 
   const [isIOS, setIsIOS] = useState(false)
   useEffect(() => {
@@ -93,13 +99,6 @@ const Vermehrung = ({ location }) => {
   }, [isIOS])
 
   const existsUser = !!user?.uid
-  const {
-    setOpenNodes,
-    setActiveNodeArray,
-    widthInPercentOfScreen,
-    wsReconnectCount,
-    lastTouchedNode,
-  } = store.tree
   const showFilter = store.filter.show
   let treeWidth = singleColumnView
     ? (!showTreeInSingleColumnView && activeForm) || showFilter
@@ -124,10 +123,8 @@ const Vermehrung = ({ location }) => {
     setLastTouchedNode(activeNodeArray)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // when pathname changes, update activeNodeArray
-  // seems no more needed?
   useEffect(() => {
-    // need not to navigate or app is blocked
+    // user pushed back button > update activeNodeArray
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
