@@ -169,7 +169,6 @@ const TeilzaehlungForm = ({
   const {
     tk,
     tz_teilkultur_id,
-    tz_anzahl_mutterpflanzen,
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
@@ -290,19 +289,17 @@ const TeilzaehlungForm = ({
             type="number"
           />
         </Anzahl>
-        {tz_anzahl_mutterpflanzen && (
-          <Anzahl>
-            <TextField
-              key={`${row.id}anzahl_mutterpflanzen`}
-              name="anzahl_mutterpflanzen"
-              label="Anzahl Mutter-Pflanzen"
-              value={row.anzahl_mutterpflanzen}
-              saveToDb={saveToDb}
-              error={errors?.teilzaehlung?.anzahl_mutterpflanzen}
-              type="number"
-            />
-          </Anzahl>
-        )}
+        <Anzahl>
+          <TextField
+            key={`${row.id}anzahl_mutterpflanzen`}
+            name="anzahl_mutterpflanzen"
+            label="Anzahl Mutter-Pflanzen"
+            value={row.anzahl_mutterpflanzen}
+            saveToDb={saveToDb}
+            error={errors?.teilzaehlung?.anzahl_mutterpflanzen}
+            type="number"
+          />
+        </Anzahl>
         <Anzahl>
           <TextFieldNonUpdatable
             key={`${row.id}anzahl_jungpflanzen`}

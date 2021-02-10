@@ -56,7 +56,6 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
 
   const {
     tz_teilkultur_id,
-    tz_anzahl_mutterpflanzen,
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
@@ -130,21 +129,6 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
                 />
               }
               label="Teilkultur"
-              labelPlacement="end"
-            />
-          </MenuItem>
-          <MenuItem>
-            <FormControlLabel
-              value={tz_anzahl_mutterpflanzen === true ? 'true' : 'false'}
-              control={
-                <Checkbox
-                  color="primary"
-                  checked={tz_anzahl_mutterpflanzen}
-                  onClick={saveToDb}
-                  name="tz_anzahl_mutterpflanzen"
-                />
-              }
-              label="Anzahl Mutterpflanzen"
               labelPlacement="end"
             />
           </MenuItem>

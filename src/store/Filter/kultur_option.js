@@ -6,6 +6,7 @@ export const type = types.model({
   tk_bemerkungen: types.optional(types.maybeNull(types.boolean), true),
   z_bemerkungen: types.optional(types.maybeNull(types.boolean), true),
   tz_teilkultur_id: types.optional(types.maybeNull(types.boolean), true),
+  // tz_anzahl_mutterpflanzen is not used any more
   tz_anzahl_mutterpflanzen: types.optional(
     types.maybeNull(types.boolean),
     true,
@@ -28,6 +29,7 @@ export const initial = {
   tk_bemerkungen: true,
   z_bemerkungen: true,
   tz_teilkultur_id: true,
+  // tz_anzahl_mutterpflanzen is not used any more
   tz_anzahl_mutterpflanzen: true,
   tz_andere_menge: true,
   tz_auspflanzbereit_beschreibung: true,
@@ -44,6 +46,7 @@ export const empty = {
   tk_bemerkungen: true,
   z_bemerkungen: true,
   tz_teilkultur_id: true,
+  // tz_anzahl_mutterpflanzen is not used any more
   tz_anzahl_mutterpflanzen: true,
   tz_andere_menge: true,
   tz_auspflanzbereit_beschreibung: true,
@@ -60,6 +63,7 @@ export const simpleTypes = {
   tk_bemerkungen: 'boolean',
   z_bemerkungen: 'boolean',
   tz_teilkultur_id: 'boolean',
+  // tz_anzahl_mutterpflanzen is not used any more
   tz_anzahl_mutterpflanzen: 'boolean',
   tz_andere_menge: 'boolean',
   tz_auspflanzbereit_beschreibung: 'boolean',

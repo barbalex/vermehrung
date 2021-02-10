@@ -416,7 +416,8 @@ export const kulturOption = gql`
     tk
     tk_bemerkungen
     tz_andere_menge
-    tz_anzahl_mutterpflanzen
+    # tz_anzahl_mutterpflanzen is not used any more
+    #tz_anzahl_mutterpflanzen
     tz_auspflanzbereit_beschreibung
     tz_teilkultur_id
     tz_bemerkungen
@@ -441,7 +442,8 @@ export const kulturOptionRev = gql`
     tk
     tk_bemerkungen
     tz_andere_menge
-    tz_anzahl_mutterpflanzen
+    # tz_anzahl_mutterpflanzen is not used any more
+    #tz_anzahl_mutterpflanzen
     tz_auspflanzbereit_beschreibung
     tz_teilkultur_id
     tz_bemerkungen

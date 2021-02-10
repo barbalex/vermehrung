@@ -868,6 +868,7 @@ create table kultur_option (
   id uuid unique not null references kultur (id) on delete cascade on update cascade,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
+  -- tz_anzahl_mutterpflanzen is not used any more
   tz_anzahl_mutterpflanzen boolean default true,
   tz_andere_menge boolean default true,
   tz_auspflanzbereit_beschreibung boolean default true,
@@ -899,6 +900,7 @@ create table kultur_option_rev (
   kultur_id uuid not null,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
+  -- tz_anzahl_mutterpflanzen is not used any more
   tz_anzahl_mutterpflanzen boolean default true,
   tz_andere_menge boolean default true,
   tz_auspflanzbereit_beschreibung boolean default true,
