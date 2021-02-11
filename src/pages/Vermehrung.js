@@ -131,7 +131,13 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     let unsubscribe
     if (existsUser) {
-      //console.log('Vermehrung initializing subsctiptions')
+      // TODO:
+      // need to fetch user to get role
+      // then pass role to initializeSubscriptions to skip fields
+      // this user has no access to
+      // would be much nicer if hasura simply passed null values
+      // https://github.com/hasura/graphql-engine/issues/6541
+
       // TODO:
       // if no data exists yet
       // set initial data queried false
