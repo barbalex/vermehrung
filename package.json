@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "7.12.13",
-    "@fontsource/roboto": "4.2.0",
-    "@fontsource/roboto-mono": "4.2.0",
+    "@fontsource/roboto": "4.2.1",
+    "@fontsource/roboto-mono": "4.2.1",
     "@material-ui/core": "4.11.3",
     "@material-ui/icons": "4.11.2",
     "@nozbe/watermelondb": "0.20.0",
@@ -64,7 +64,7 @@
     "luxon": "1.25.0",
     "md5-hex": "3.0.1",
     "memoize-one": "5.1.1",
-    "mobx": "6.1.5",
+    "mobx": "6.1.6",
     "mobx-react-lite": "3.2.0",
     "mobx-state-tree": "5.0.1",
     "mst-persist": "0.1.3",
@@ -97,7 +97,7 @@
     "subscriptions-transport-ws": "0.9.18",
     "typography": "0.16.19",
     "uploadcare-widget": "3.10.2",
-    "urql": "1.11.6",
+    "urql": "2.0.0",
     "use-debounce": "5.2.0",
     "uuid": "8.3.2"
   },
