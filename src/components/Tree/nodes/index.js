@@ -4,6 +4,8 @@ import buildArtSammlungFolder from './art/sammlung/folder'
 import buildArtSammlung from './art/sammlung'
 import buildArtSammlungAuslieferungFolder from './art/sammlung/auslieferung/folder'
 import buildArtSammlungAuslieferung from './art/sammlung/auslieferung'
+import buildArtHerkunftFolder from './art/herkunft/folder'
+import buildArtHerkunft from './art/herkunft'
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtKulturTeilkulturFolder from './art/kultur/teilkultur/folder'
@@ -149,6 +151,8 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   let artFolderNodes = []
   let artNodes = []
+  let artHerkunftFolderNodes = []
+  let artHerkunftNodes = []
   let artKulturFolderNodes = []
   let artKulturNodes = []
   let artKulturTeilkulturFolderNodes = []
@@ -269,7 +273,50 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
         if (!art) break
         const artIndex = artNodes.findIndex((a) => a.id === artId)
 
-        // 1.1 art > sammlung
+        // 1.1 art > Herkunft
+        const herkunftsQuery = art.herkunfts.extend(
+          ...tableFilter({
+            table: 'herkunft',
+            store,
+          }),
+        )
+        const herkunftCount = await herkunftsQuery.fetchCount()
+        artHerkunftFolderNodes.push(
+          buildArtHerkunftFolder({
+            count: herkunftCount,
+            artIndex,
+            artId,
+          }),
+        )
+
+        const artHerkunftFolderIsOpen = openNodes.some(
+          (n) =>
+            n.length === 3 &&
+            n[0] === 'Arten' &&
+            n[1] === artId &&
+            n[2] === 'Herkuenfte',
+        )
+        if (artHerkunftFolderIsOpen) {
+          let herkunfts = []
+          try {
+            herkunfts = await herkunftsQuery.fetch()
+          } catch {}
+          const herkunftsSorted = herkunfts.sort(herkunftSort)
+          const newArtHerkunftNodes = await Promise.all(
+            herkunftsSorted.map(
+              async (herkunft, herkunftIndex) =>
+                await buildArtHerkunft({
+                  herkunft,
+                  herkunftIndex,
+                  artId,
+                  artIndex,
+                }),
+            ),
+          )
+          artHerkunftNodes.push(...newArtHerkunftNodes)
+        }
+
+        // 1.2 art > sammlung
         const sammlungsQuery = art.sammlungs.extend(
           ...tableFilter({
             table: 'sammlung',
@@ -369,7 +416,7 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           }
         }
 
-        // 1.2 art > kultur
+        // 1.3 art > kultur
         const artKulturQuery = art.kulturs.extend(
           ...tableFilter({
             table: 'kultur',
@@ -1021,13 +1068,6 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 )
                 .fetch()
             } catch {}
-            console.log('buildNodes', {
-              kulturId,
-              kulturIndex,
-              gartenId,
-              gartenIndex,
-              zaehlungs,
-            })
             gartenKulturZaehlungFolderNodes.push(
               buildGartenKulturZaehlungFolder({
                 kulturId,
@@ -2087,6 +2127,8 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     ...artSammlungNodes,
     ...artSammlungAuslieferungFolderNodes,
     ...artSammlungAuslieferungNodes,
+    ...artHerkunftFolderNodes,
+    ...artHerkunftNodes,
     ...artKulturFolderNodes,
     ...artKulturNodes,
     ...artKulturTeilkulturFolderNodes,

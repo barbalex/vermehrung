@@ -13,7 +13,7 @@ const artKulturNode = async ({ kultur, kulturIndex, artId, artIndex }) => {
     id: `${artId}${kultur.id}`,
     label,
     url: ['Arten', artId, 'Kulturen', kultur.id],
-    sort: [1, artIndex, 2, kulturIndex],
+    sort: [1, artIndex, 3, kulturIndex],
     hasChildren: true,
   }
 }

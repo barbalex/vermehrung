@@ -10,7 +10,7 @@ const artKulturTeilkulturFolder = ({
   id: `${artId}${kulturId}TeilkulturFolder`,
   label: `Teilkulturen (${children.length})`,
   url: ['Arten', artId, 'Kulturen', kulturId, 'Teilkulturen'],
-  sort: [1, artIndex, 2, kulturIndex, 1],
+  sort: [1, artIndex, 3, kulturIndex, 1],
   hasChildren: true,
   childrenCount: children.length,
 })

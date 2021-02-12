@@ -14,7 +14,7 @@ const artKulturEventNodes = ({
   id: `${artId}${kulturId}${event.id}`,
   label: eventLabelFromEvent({ event: event }),
   url: ['Arten', artId, 'Kulturen', kulturId, 'Events', event.id],
-  sort: [1, artIndex, 2, kulturIndex, 5, eventIndex],
+  sort: [1, artIndex, 3, kulturIndex, 5, eventIndex],
   hasChildren: false,
 })
 

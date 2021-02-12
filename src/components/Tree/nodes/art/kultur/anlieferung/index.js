@@ -14,7 +14,7 @@ const artKulturAnlieferungNodes = ({
   id: `${artId}${kulturId}${lieferung.id}`,
   label: lieferungLabelFromLieferung({ lieferung }),
   url: ['Arten', artId, 'Kulturen', kulturId, 'An-Lieferungen', lieferung.id],
-  sort: [1, artIndex, 2, kulturIndex, 3, lieferungIndex],
+  sort: [1, artIndex, 3, kulturIndex, 3, lieferungIndex],
   hasChildren: false,
   mono: true,
 })

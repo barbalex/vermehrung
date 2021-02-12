@@ -1,17 +1,22 @@
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft'
 
-const sammlungHerkunftNodes = ({ herkunft, sammlungId, sammlungIndex }) => ({
+const artHerkunftNode = async ({
+  herkunft,
+  herkunftIndex,
+  artId,
+  artIndex,
+}) => ({
   nodeType: 'table',
   menuTitle: 'Herkunft',
   table: 'herkunft',
-  id: `${sammlungId}${herkunft.id}`,
+  id: `${artId}${herkunft.id}`,
   label: herkunftLabelFromHerkunft({ herkunft }),
-  url: ['Sammlungen', sammlungId, 'Herkuenfte', herkunft.id],
-  sort: [3, sammlungIndex, 1, 1],
+  url: ['Arten', artId, 'Herkuenfte', herkunft.id],
+  sort: [1, artIndex, 1, herkunftIndex],
   hasChildren: false,
   hasMenu: false,
   menuExplainerText:
     'Herkünfte können nur in ihrem eigenen Ast des Navigationsbaums neu geschaffen und gelöscht werden',
 })
 
-export default sammlungHerkunftNodes
+export default artHerkunftNode

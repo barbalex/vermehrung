@@ -549,6 +549,12 @@ export class Art extends Model {
     distinctUntilKeyChanged('ae_id'),
     map$((ae_art) => artLabelFromAeArt({ ae_art })),
   )
+  @lazy herkunfts = this.collections
+    .get('herkunft')
+    .query(
+      Q.experimentalNestedJoin('sammlung', 'art'),
+      Q.on('sammlung', 'art_id', this.id),
+    )
 
   @action async removeConflict(_rev) {
     await this.update((row) => {

@@ -1,14 +1,15 @@
-const sammlungHerkunftFolder = ({ count, sammlungIndex, sammlungId }) => ({
+const artHerkunftFolder = ({ count, artIndex, artId }) => ({
   nodeType: 'folder',
   menuTitle: 'Herkünfte',
-  id: `${sammlungId}HerkunftFolder`,
+  id: `${artId}HerkunftFolder`,
   label: `Herkünfte (${count})`,
-  url: ['Sammlungen', sammlungId, 'Herkuenfte'],
-  sort: [3, sammlungIndex, 1],
+  url: ['Arten', artId, 'Herkuenfte'],
+  sort: [1, artIndex, 1],
   hasChildren: true,
+  childrenCount: count,
   hasMenu: false,
   menuExplainerText:
     'Herkünfte können nur in ihrem eigenen Ast des Navigationsbaums neu geschaffen und gelöscht werden',
 })
 
-export default sammlungHerkunftFolder
+export default artHerkunftFolder

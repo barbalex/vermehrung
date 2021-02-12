@@ -19,7 +19,7 @@ const artSammlungNodes = async ({
     label,
     url: ['Arten', artId, 'Sammlungen', sammlung.id],
     hasChildren: true,
-    sort: [1, artIndex, 1, sammlungIndex],
+    sort: [1, artIndex, 2, sammlungIndex],
   }
 }
 
