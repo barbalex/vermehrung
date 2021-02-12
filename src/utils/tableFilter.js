@@ -18,9 +18,20 @@ const tableFilter = ({ store, table }) => {
 
   if (!filterEntries.length) return []
 
-  const filterArray = filterEntries.map(([key, filterValue]) => {
+  const filterArray = filterEntries.flatMap(([key, filterValue]) => {
     const type = types[table][key] ?? 'string'
     //console.log('tableFilter', { key, filterValue, type })
+    if (typeof type === 'function') {
+      const query = type(filterValue)
+      console.log('tableFilter, returning query:', {
+        query,
+        filterValue,
+        type,
+        table,
+        key,
+      })
+      return query
+    }
     if (type === 'string' && filterValue) {
       if (filterValue?.toString()?.toLowerCase()) {
         return Q.where(
@@ -44,7 +55,7 @@ const tableFilter = ({ store, table }) => {
       Q.or(Q.where('id', tableIdInActiveNodeArray), Q.and(...filterArray)),
     ]
   }
-
+  console.log('tableFilter', { filterArray, tableIdInActiveNodeArray })
   return filterArray
 }
 

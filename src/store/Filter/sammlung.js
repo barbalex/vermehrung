@@ -1,4 +1,5 @@
 import { types } from 'mobx-state-tree'
+import { Q } from '@nozbe/watermelondb'
 
 export const type = types.model({
   id: types.optional(
@@ -6,6 +7,10 @@ export const type = types.model({
     null,
   ),
   art_id: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  art_name: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
@@ -44,6 +49,7 @@ export const type = types.model({
 export const initial = {
   id: null,
   art_id: null,
+  art_name: null,
   person_id: null,
   herkunft_id: null,
   nr: null,
@@ -60,6 +66,7 @@ export const initial = {
 export const empty = {
   id: null,
   art_id: null,
+  art_name: null,
   person_id: null,
   herkunft_id: null,
   nr: null,
@@ -76,6 +83,17 @@ export const empty = {
 export const simpleTypes = {
   id: 'uuid',
   art_id: 'uuid',
+  art_name: (value) => [
+    Q.experimentalNestedJoin('art', 'ae_art'),
+    Q.on(
+      'art',
+      Q.on(
+        'ae_art',
+        'name',
+        Q.like(`'%${value?.toString()?.toLowerCase() ?? value}%'`),
+      ),
+    ),
+  ],
   person_id: 'uuid',
   herkunft_id: 'uuid',
   nr: 'string',

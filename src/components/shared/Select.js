@@ -1,7 +1,11 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useContext } from 'react'
 import Select from 'react-select'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
+
+import StoreContext from '../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -69,6 +73,10 @@ const StyledSelect = styled(Select)`
     z-index: 2;
   }
 `
+const StyledInputLabel = styled(InputLabel)`
+  margin-top: 5px;
+  font-weight: ${(props) => props['data-weight']} !important;
+`
 
 const emptyValue = {
   value: '',
@@ -89,7 +97,10 @@ const SharedSelect = ({
   noCaret = false,
   saveToDb,
 }) => {
+  const store = useContext(StoreContext)
+  const showFilter = store.filter.show
   const [stateValue, setStateValue] = useState(valuePassed)
+  const [textValue, setTextValue] = useState('')
   useEffect(() => {
     setStateValue(valuePassed)
   }, [valuePassed])
@@ -109,11 +120,64 @@ const SharedSelect = ({
     [name, saveToDb],
   )
 
+  const onChangeText = useCallback(
+    (event) => {
+      const value = event.target.value
+      setTextValue(value)
+      const fakeEvent = {
+        target: {
+          name: name.replace('_id', '_name'),
+          value,
+        },
+      }
+      saveToDb(fakeEvent)
+      console.log('onChangeText:', { value, name })
+    },
+    [name, saveToDb],
+  )
+
   // show ... whyle options are loading
   const loadingOptions = [{ value: stateValue, label: '...' }]
   const optionsToUse = loading && valuePassed ? loadingOptions : options
   const selectValue =
     optionsToUse.find((o) => o.value === valuePassed) || emptyValue
+
+  if (showFilter) {
+    // TODO: return group to enable searching by text
+    // TODO: need to adjust filter store for this to work
+    return (
+      <Container>
+        {label && <Label>{`${label} (wählen)`}</Label>}
+        <StyledSelect
+          id={field}
+          name={field}
+          value={selectValue}
+          options={optionsToUse}
+          onChange={onChange}
+          hideSelectedOptions
+          placeholder=""
+          isClearable={isClearable}
+          isSearchable
+          noOptionsMessage={() => '(keine)'}
+          maxheight={maxHeight}
+          classNamePrefix="react-select"
+          nocaret={noCaret}
+        />
+        <StyledInputLabel htmlFor={label} shrink={true} data-weight={400}>
+          {`${label} (nach Textinhalt)`}
+        </StyledInputLabel>
+        <Input
+          id={label}
+          name={name.replace('_id', '_name')}
+          //value={textValue}
+          type="text"
+          onBlur={onChangeText}
+        />
+        {error && <Error>{error}</Error>}
+        {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
+      </Container>
+    )
+  }
 
   return (
     <Container>
