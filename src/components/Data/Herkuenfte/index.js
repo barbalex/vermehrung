@@ -68,7 +68,13 @@ const singleRowHeight = 48
 
 const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertHerkunftRev, sammlungIdInActiveNodeArray, db, filter } = store
+  const {
+    insertHerkunftRev,
+    sammlungIdInActiveNodeArray,
+    artIdInActiveNodeArray,
+    db,
+    filter,
+  } = store
   const {
     activeNodeArray: anaRaw,
     setActiveNodeArray,
@@ -83,6 +89,11 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
       ? [
           Q.experimentalJoinTables(['sammlung']),
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
+        ]
+      : artIdInActiveNodeArray
+      ? [
+          Q.experimentalNestedJoin('sammlung', 'art'),
+          Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
         ]
       : []
     const collection = db.get('herkunft')

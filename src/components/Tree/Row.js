@@ -202,6 +202,14 @@ const TextSpan = styled.span`
 const MenuSubtitle = styled.div`
   padding-top: 7px;
 `
+const MenuExplainerItem = styled(MenuItem)`
+  white-space: normal !important;
+  cursor: auto !important;
+  &:hover {
+    color: white !important;
+    border-color: rgb(255, 255, 255) !important;
+  }
+`
 
 const Row = ({ style, node, nodes, userRole }) => {
   const store = useContext(StoreContext)
@@ -352,51 +360,66 @@ const Row = ({ style, node, nodes, userRole }) => {
       {['table', 'folder'].includes(node?.nodeType) && (
         <ContextMenu id={`cm${node?.id}`}>
           <div className="react-contextmenu-title">{node?.menuTitle}</div>
-          <MenuItem onClick={onClickNeu}>neu</MenuItem>
-          {node?.nodeType === 'table' && (
-            <MenuItem onClick={onClickDelete}>löschen</MenuItem>
+          {node?.menuExplainerText && (
+            <MenuExplainerItem>{node?.menuExplainerText}</MenuExplainerItem>
           )}
-          {node?.nodeType === 'folder' &&
-            isNodeOpen({ store, url: node?.url }) && (
-              <>
-                {someChildrenAreOpen({ store, nodes, url: node?.url }) && (
-                  <MenuItem onClick={onClickCloseAllChildren}>
-                    alle schliessen
-                  </MenuItem>
+          {!(node?.hasMenu === false) && (
+            <>
+              <MenuItem onClick={onClickNeu}>neu</MenuItem>
+              {node?.nodeType === 'table' && (
+                <MenuItem onClick={onClickDelete}>löschen</MenuItem>
+              )}
+              {node?.nodeType === 'folder' &&
+                isNodeOpen({ store, url: node?.url }) && (
+                  <>
+                    {someChildrenAreOpen({
+                      store,
+                      nodes,
+                      url: node?.url,
+                    }) && (
+                      <MenuItem onClick={onClickCloseAllChildren}>
+                        alle schliessen
+                      </MenuItem>
+                    )}
+                    {someChildrenAreClosed({
+                      store,
+                      nodes,
+                      url: node?.url,
+                    }) && (
+                      <MenuItem onClick={onClickOpenAllChildren}>
+                        alle öffnen
+                      </MenuItem>
+                    )}
+                  </>
                 )}
-                {someChildrenAreClosed({ store, nodes, url: node?.url }) && (
-                  <MenuItem onClick={onClickOpenAllChildren}>
-                    alle öffnen
-                  </MenuItem>
+              {node?.nodeType === 'table' &&
+                node?.menuTitle === 'Person' &&
+                userRole?.name === 'manager' &&
+                !accountId && (
+                  <>
+                    <MenuSubtitle className="react-contextmenu-title">
+                      Konto
+                    </MenuSubtitle>
+                    <MenuItem onClick={onClickSignup}>neu</MenuItem>
+                  </>
                 )}
-              </>
-            )}
-          {node?.nodeType === 'table' &&
-            node?.menuTitle === 'Person' &&
-            userRole?.name === 'manager' &&
-            !accountId && (
-              <>
-                <MenuSubtitle className="react-contextmenu-title">
-                  Konto
-                </MenuSubtitle>
-                <MenuItem onClick={onClickSignup}>neu</MenuItem>
-              </>
-            )}
-          {node?.nodeType === 'table' &&
-            node?.menuTitle === 'Person' &&
-            userRole?.name === 'manager' &&
-            accountId && (
-              <>
-                <MenuSubtitle className="react-contextmenu-title">
-                  Konto
-                </MenuSubtitle>
-                <MenuItem onClick={onClickSetPassword}>
-                  Email schicken, um ein Passwort zu setzen (Achtung: Ist nur
-                  ca. 2 Stunden gültig)
-                </MenuItem>
-                <MenuItem onClick={onClickDeleteAccout}>löschen</MenuItem>
-              </>
-            )}
+              {node?.nodeType === 'table' &&
+                node?.menuTitle === 'Person' &&
+                userRole?.name === 'manager' &&
+                accountId && (
+                  <>
+                    <MenuSubtitle className="react-contextmenu-title">
+                      Konto
+                    </MenuSubtitle>
+                    <MenuItem onClick={onClickSetPassword}>
+                      Email schicken, um ein Passwort zu setzen (Achtung: Ist
+                      nur ca. 2 Stunden gültig)
+                    </MenuItem>
+                    <MenuItem onClick={onClickDeleteAccout}>löschen</MenuItem>
+                  </>
+                )}
+            </>
+          )}
         </ContextMenu>
       )}
     </Container>

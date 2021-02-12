@@ -14,7 +14,7 @@ const artKulturTeilkulturNodes = ({
   id: `${artId}${kulturId}${teilkultur.id}`,
   label: teilkulturLabelFromTeilkultur({ teilkultur }),
   url: ['Arten', artId, 'Kulturen', kulturId, 'Teilkulturen', teilkultur.id],
-  sort: [1, artIndex, 2, kulturIndex, 1, teilkulturIndex],
+  sort: [1, artIndex, 3, kulturIndex, 1, teilkulturIndex],
   hasChildren: false,
 })
 

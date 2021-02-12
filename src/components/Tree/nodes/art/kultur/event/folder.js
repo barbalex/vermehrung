@@ -10,7 +10,7 @@ const artKulturEventFolder = ({
   id: `${artId}${kulturId}EventFolder`,
   label: `Events (${count})`,
   url: ['Arten', artId, 'Kulturen', kulturId, 'Events'],
-  sort: [1, artIndex, 2, kulturIndex, 5],
+  sort: [1, artIndex, 3, kulturIndex, 5],
   hasChildren: true,
   childrenCount: count,
 })

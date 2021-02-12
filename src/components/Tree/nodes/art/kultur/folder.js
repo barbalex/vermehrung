@@ -4,7 +4,7 @@ const artKulturFolder = ({ count, artIndex, artId }) => ({
   id: `${artId}KulturFolder`,
   label: `Kulturen (${count})`,
   url: ['Arten', artId, 'Kulturen'],
-  sort: [1, artIndex, 2],
+  sort: [1, artIndex, 3],
   hasChildren: true,
   childrenCount: count,
 })
