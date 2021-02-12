@@ -80,7 +80,6 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     setActiveNodeArray,
     removeOpenNode,
   } = store.tree
-  const { herkunft: herkunftFilter } = store.filter
   const activeNodeArray = anaRaw.toJSON()
 
   const [dataState, setDataState] = useState({ herkunfts: [], totalCount: 0 })
@@ -128,11 +127,9 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   }, [
     db,
     sammlungIdInActiveNodeArray,
-    // need to rerender if any of the values of herkunftFilter changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(herkunftFilter),
     store,
     filter.herkunft._deleted,
+    artIdInActiveNodeArray,
   ])
 
   const { herkunfts, totalCount } = dataState
