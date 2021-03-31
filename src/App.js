@@ -64,7 +64,7 @@ const App = ({ element }) => {
 
   useEffect(() => {
     if (store && !database) {
-      const db = initiateDb()
+      const db = initiateDb(store)
       setDatabase(db)
       store.setDb(db)
     }
