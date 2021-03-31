@@ -33,7 +33,7 @@ import {
 } from '../dbModel'
 import migrations from './migrations'
 
-const initiateDb = () => {
+const initiateDb = (store) => {
   const adapter = new LokiJSAdapter({
     schema,
     migrations, // optional migrations
@@ -49,7 +49,20 @@ const initiateDb = () => {
     //   }
     // },
     // Optional:
-    // onQuotaExceededError: (error) => { /* do something when user runs out of disk space */ },
+    onQuotaExceededError: () => {
+      console.log('the browser ran out of disk space')
+      store.addNotification({
+        message:
+          'Es gibt nicht genug Speicherplatz auf der Festplatte bzw. dem Browser steht nicht genug zur Verfügung.',
+      })
+    },
+    onSetUpError: () => {
+      // Database failed to load -- offer the user to reload the app or log out
+      store.addNotification({
+        message:
+          'Die Datenbank wurde nicht richtig initialisiert. Bitte laden Sie die App neu.',
+      })
+    },
   })
 
   const database = new Database({
