@@ -51,7 +51,7 @@ const SettingsTree = () => {
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns([
             'tree_kultur',
