@@ -18,15 +18,16 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
 
   let kulturs = []
   try {
-    kulturs = await db
-      .get('kultur')
-      .query(
-        Q.where('_deleted', false),
-        Q.where('aktiv', true),
-        Q.where('garten_id', Q.notEq(null)),
-        Q.on('garten', [Q.where('aktiv', true), Q.where('_deleted', false)]),
-      )
-      .fetch()
+    kulturs =
+      (await db
+        .get('kultur')
+        .query(
+          Q.where('_deleted', false),
+          Q.where('aktiv', true),
+          Q.where('garten_id', Q.notEq(null)),
+          Q.on('garten', [Q.where('aktiv', true), Q.where('_deleted', false)]),
+        )
+        .fetch()) ?? []
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
   const kultursData = await Promise.all(
@@ -58,23 +59,25 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
 
       let ownZaehlungen = []
       try {
-        ownZaehlungen = await db
-          .get('zaehlung')
-          .query(
-            Q.where('_deleted', false),
-            Q.where('kultur_id', kultur.id),
-            Q.where('datum', Q.notEq(null)),
-            Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
-          )
-          .fetch()
+        ownZaehlungen =
+          (await db
+            .get('zaehlung')
+            .query(
+              Q.where('_deleted', false),
+              Q.where('kultur_id', kultur.id),
+              Q.where('datum', Q.notEq(null)),
+              Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+            )
+            .fetch()) ?? []
       } catch {}
       const ownZaehlungenSorted = ownZaehlungen.sort(zaehlungSort)
       const lastZaehlung = ownZaehlungenSorted[ownZaehlungenSorted.length - 1]
       let lZTeilzaehlungs = []
       try {
-        lZTeilzaehlungs = await lastZaehlung?.teilzaehlungs
-          .extend(Q.where('_deleted', false))
-          .fetch()
+        lZTeilzaehlungs =
+          (await lastZaehlung?.teilzaehlungs
+            .extend(Q.where('_deleted', false))
+            .fetch()) ?? []
       } catch {}
 
       // danger: sumBy returns 0 when field was undefined!
@@ -106,14 +109,15 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
 
       let lieferungs = []
       try {
-        lieferungs = await db
-          .get('lieferung')
-          .query(
-            Q.where('_deleted', false),
-            Q.where('datum', Q.notEq(null)),
-            Q.where('anzahl_pflanzen', Q.notEq(null)),
-          )
-          .fetch()
+        lieferungs =
+          (await db
+            .get('lieferung')
+            .query(
+              Q.where('_deleted', false),
+              Q.where('datum', Q.notEq(null)),
+              Q.where('anzahl_pflanzen', Q.notEq(null)),
+            )
+            .fetch()) ?? []
       } catch {}
       const lieferungsSorted = lieferungs.sort(lieferungSort)
 
