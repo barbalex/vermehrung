@@ -60,7 +60,7 @@ const initiateDb = (store) => {
       // Database failed to load -- offer the user to reload the app or log out
       store.addNotification({
         message:
-          'Die Datenbank wurde nicht richtig initialisiert. Bitte laden Sie die App neu.',
+          'Die lokale Datenbank wurde nicht richtig initialisiert. Bitte laden Sie die App neu.',
       })
     },
   })
