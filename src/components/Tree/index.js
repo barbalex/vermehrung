@@ -170,7 +170,7 @@ const Tree = ({ width, height }) => {
       ([[userPersonOption], [userRole], ...rest]) => {
         //console.log('Tree data-useEffect ordering rebuild')
         setDataState({ userPersonOption, userRole })
-        buildMyNodesDebounced.callback()
+        buildMyNodesDebounced()
       },
     )
 
@@ -179,7 +179,7 @@ const Tree = ({ width, height }) => {
 
   useEffect(() => {
     //console.log('Tree second useEffect ordering rebuild')
-    buildMyNodesDebounced.callback()
+    buildMyNodesDebounced()
   }, [
     buildMyNodesDebounced,
     // need to rebuild tree if any filter value changes

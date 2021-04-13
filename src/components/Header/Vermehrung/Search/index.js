@@ -105,7 +105,7 @@ const Search = () => {
   }, 600)
   const loadOptions = useCallback(
     (val, cb) => {
-      buildOptionsDebounced.callback({ cb, val })
+      buildOptionsDebounced({ cb, val })
     },
     [buildOptionsDebounced],
   )
