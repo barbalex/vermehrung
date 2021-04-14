@@ -49,36 +49,6 @@ const createMessageFunctions = async ({ artId, db, store }) => {
     avs = await db.get('av').query(notDeletedQuery).fetch()
   } catch {}
 
-  let gartens = []
-  try {
-    gartens = await db
-      .get('garten')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.garten._deleted === false
-              ? [false]
-              : filter.garten._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.garten.aktiv === true
-              ? [true]
-              : filter.garten.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .fetch()
-  } catch {}
-  const gartensSorted = await gartensSortedFromGartens(gartens)
-
   let herkunfts = []
   try {
     herkunfts = await db
@@ -104,6 +74,7 @@ const createMessageFunctions = async ({ artId, db, store }) => {
     kulturs = await db
       .get('kultur')
       .query(
+        Q.where('art_id', Q.eq(artId)),
         Q.where(
           '_deleted',
           Q.oneOf(
@@ -480,58 +451,60 @@ const createMessageFunctions = async ({ artId, db, store }) => {
             }
           }),
       ),
-    gartensAllKultursInactive: async () =>
-      await Promise.all(
-        gartensSorted
-          .filter(async (g) => {
-            let kulturs = []
-            try {
-              kulturs = await g.kulturs
-                .extend(
-                  Q.where(
-                    '_deleted',
-                    Q.oneOf(
-                      filter.kultur._deleted === false
-                        ? [false]
-                        : filter.kultur._deleted === true
-                        ? [true]
-                        : [true, false, null],
-                    ),
-                  ),
-                  Q.where(
-                    'aktiv',
-                    Q.oneOf(
-                      filter.kultur.aktiv === true
-                        ? [true]
-                        : filter.kultur.aktiv === false
-                        ? [false]
-                        : [true, false, null],
-                    ),
-                  ),
-                )
-                .fetch()
-            } catch {}
-            const kultursCount = kulturs.length
-            const activeKultursCount = kulturs.filter((k) => k.aktiv).length
+    gartensAllKultursInactive: async () => {
+      let kulturs = []
+      try {
+        kulturs = await db
+          .get('kultur')
+          .query(Q.where('art_id', Q.eq(artId)), Q.where('_deleted', false))
+          .fetch()
+      } catch {}
 
-            return !!kultursCount && !activeKultursCount
-          })
-          .map(async (g) => {
-            let text
-            try {
-              text = await g.label.pipe(first$()).toPromise()
-            } catch {}
+      const gartenIds = kulturs
+        .filter((s) => !!s.garten_id)
+        .map((k) => k.garten_id)
+      const uniqueGartenIds = [...new Set(gartenIds)]
 
-            return {
-              url: ['Gaerten', g.id],
-              text,
-            }
-          }),
-      ),
+      let gartens = []
+      try {
+        gartens = await db
+          .get('garten')
+          .query(
+            Q.where('_deleted', false),
+            Q.where('aktiv', true),
+            Q.where('id', Q.oneOf(uniqueGartenIds)),
+          )
+          .fetch()
+      } catch {}
+      const gartensOfArt = await gartensSortedFromGartens(gartens)
+      const filterPromiseArray = gartensOfArt.map(async (g) => {
+        let kulturs = []
+        try {
+          kulturs = await g.kulturs.extend(Q.where('_deleted', false)).fetch()
+        } catch {}
+
+        return !!kulturs.length && kulturs.every((k) => !k.aktiv)
+      })
+      const gartensFiltered = gartensOfArt.filter(
+        (g, i) => filterPromiseArray[i] && g.aktiv,
+      )
+      return await Promise.all(
+        gartensFiltered.map(async (g) => {
+          let text
+          try {
+            text = await g.label.pipe(first$()).toPromise()
+          } catch {}
+
+          return {
+            url: ['Gaerten', g.id],
+            text,
+          }
+        }),
+      )
+    },
     kultursWithoutVonAnzahlIndividuen: async () =>
       await Promise.all(
         kultursSorted
-          .filter((s) => s.art_id === artId)
           .filter((s) => !exists(s.von_anzahl_individuen))
           .map(async (k) => {
             let text
@@ -548,7 +521,6 @@ const createMessageFunctions = async ({ artId, db, store }) => {
     kultursWithoutGarten: async () =>
       await Promise.all(
         kultursSorted
-          .filter((s) => s.art_id === artId)
           .filter((s) => !s.garten_id)
           .map(async (k) => {
             let text
@@ -565,7 +537,6 @@ const createMessageFunctions = async ({ artId, db, store }) => {
     kultursWithoutHerkunft: async () =>
       await Promise.all(
         kultursSorted
-          .filter((s) => s.art_id === artId)
           .filter((s) => !s.herkunft_id)
           .map(async (k) => {
             let text
@@ -582,7 +553,6 @@ const createMessageFunctions = async ({ artId, db, store }) => {
     kultursWithoutZaehlungThisYear: async () =>
       await Promise.all(
         kultursSorted
-          .filter((s) => s.art_id === artId)
           .filter(
             (k) =>
               zaehlungsOfArt
