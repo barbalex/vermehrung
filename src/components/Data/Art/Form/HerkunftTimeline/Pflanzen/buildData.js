@@ -84,9 +84,9 @@ const buildData = async ({ artId, herkunftId, db }) => {
     (lg) => !sammlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
-  let lieferungsDone1 = []
+  let allLieferungsDone = []
   try {
-    lieferungsDone1 = await db
+    allLieferungsDone = await db
       .get('lieferung')
       .query(
         Q.where('art_id', artId),
@@ -99,8 +99,8 @@ const buildData = async ({ artId, herkunftId, db }) => {
       .fetch()
   } catch {}
   // can't use Q.on here because there are two associations to kultur
-  const lieferungsDone = await Promise.all(
-    lieferungsDone1.filter(async (l) => {
+  const allLieferungsDonePromises = await Promise.all(
+    allLieferungsDone.map(async (l) => {
       let vonKultur
       try {
         vonKultur = await db.get('kultur').find(l.von_kultur_id)
@@ -109,9 +109,13 @@ const buildData = async ({ artId, herkunftId, db }) => {
       return vonKultur?.herkunft_id === herkunftId
     }),
   )
-  let lieferungsPlanned1 = []
+  const lieferungsDoneOfThisHerkunft = allLieferungsDone.filter(
+    (p, i) => allLieferungsDonePromises[i],
+  )
+
+  let allLieferungsPlanned = []
   try {
-    lieferungsPlanned1 = await db
+    allLieferungsPlanned = await db
       .get('lieferung')
       .query(
         Q.where('art_id', artId),
@@ -124,23 +128,25 @@ const buildData = async ({ artId, herkunftId, db }) => {
       .fetch()
   } catch {}
   // can't use Q.on here because there are two associations to kultur
-  const lieferungsPlannedAll = await Promise.all(
-    lieferungsPlanned1
-      .filter((l) => !!l.von_kultur_id)
-      .filter(async (l) => {
-        let vonKultur
-        try {
-          vonKultur = await db.get('kultur').find(l.von_kultur_id)
-        } catch {}
+  const allLieferungsPlannedPromises = await Promise.all(
+    allLieferungsPlanned.map(async (l) => {
+      let vonKultur
+      try {
+        vonKultur = await db.get('kultur').find(l?.von_kultur_id)
+      } catch {}
 
-        return vonKultur?.herkunft_id === herkunftId
-      }),
+      return vonKultur?.herkunft_id === herkunftId
+    }),
   )
-  const lieferungsPlannedIgnored = lieferungsPlannedAll.filter((zg) =>
-    // check if more recent zaehlungsDone exists
-    lieferungsDone.some((z) => z.datum >= zg.datum),
+  const lieferungsPlannedOfThisHerkunft = allLieferungsPlanned.filter(
+    (l, i) => allLieferungsPlannedPromises[i],
   )
-  const lieferungsPlanned = lieferungsPlannedAll.filter(
+  const lieferungsPlannedIgnored = lieferungsPlannedOfThisHerkunft.filter(
+    (zg) =>
+      // check if more recent zaehlungsDone exists
+      lieferungsDoneOfThisHerkunft.some((z) => z.datum >= zg.datum),
+  )
+  const lieferungsPlanned = lieferungsPlannedOfThisHerkunft.filter(
     (lg) => !lieferungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
@@ -151,7 +157,7 @@ const buildData = async ({ artId, herkunftId, db }) => {
       ...zaehlungsPlanned,
       ...sammlungsDone,
       ...sammlungsPlanned,
-      ...lieferungsDone,
+      ...lieferungsDoneOfThisHerkunft,
       ...lieferungsPlanned,
     ].map((z) => z.datum),
   ).sort()
@@ -187,7 +193,7 @@ const buildData = async ({ artId, herkunftId, db }) => {
       )
 
       const lieferungNow = -sum(
-        lieferungsDone
+        lieferungsDoneOfThisHerkunft
           .filter((s) => s.datum === date)
           .map((s) => s.anzahl_pflanzen),
       )
@@ -210,8 +216,8 @@ const buildData = async ({ artId, herkunftId, db }) => {
           const lastZaehlungDatum = max(
             zaehlungs.map((z) => z.datum).filter((d) => d <= date),
           )
-          const lastZaehlungsOfKultur = await Promise.all(
-            zaehlungs.filter((z) => z.datum === lastZaehlungDatum),
+          const lastZaehlungsOfKultur = zaehlungs.filter(
+            (z) => z.datum === lastZaehlungDatum,
           )
           const lastTzAnzahls = await Promise.all(
             lastZaehlungsOfKultur.map(async (z) => {
@@ -259,7 +265,7 @@ const buildData = async ({ artId, herkunftId, db }) => {
       }
 
       const lieferungsSinceLastZaehlung = [
-        ...lieferungsDone,
+        ...lieferungsDoneOfThisHerkunft,
         ...lieferungsPlanned,
       ].filter((l) => l.datum > lastZaehlungDatum && l.datum <= date)
       const lieferungsSince = {
@@ -289,9 +295,10 @@ const buildData = async ({ artId, herkunftId, db }) => {
           : `${sCount} Sammlungen`
         : undefined
 
-      const lfCount = [...lieferungsDone, ...lieferungsPlanned].filter(
-        (s) => s.datum === date,
-      ).length
+      const lfCount = [
+        ...lieferungsDoneOfThisHerkunft,
+        ...lieferungsPlanned,
+      ].filter((s) => s.datum === date).length
       const lieferungsTitle = lfCount
         ? lfCount === 1
           ? `${lfCount} Auspflanzung`
