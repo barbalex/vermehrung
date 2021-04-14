@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Vermehrung v1.2.2',
+    title: 'Vermehrung v1.2.3',
   },
   plugins: [
     {
@@ -58,7 +58,6 @@ module.exports = {
         display: 'minimal-ui',
         icon: 'src/images/seedling.png',
         include_favicon: true,
-        url: 'https://vermehrung.ch',
         lang: 'de-CH',
         screenshots: [],
         orientation: 'portrait',
