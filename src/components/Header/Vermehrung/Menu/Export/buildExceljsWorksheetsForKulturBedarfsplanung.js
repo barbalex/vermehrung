@@ -114,12 +114,31 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             .get('lieferung')
             .query(
               Q.where('_deleted', false),
+              Q.where('geplant', false),
               Q.where('datum', Q.notEq(null)),
               Q.where('anzahl_pflanzen', Q.notEq(null)),
             )
             .fetch()) ?? []
       } catch {}
       const lieferungsSorted = lieferungs.sort(lieferungSort)
+
+      let lieferungsGeplant = []
+      try {
+        lieferungsGeplant =
+          (await db
+            .get('lieferung')
+            .query(
+              Q.where('_deleted', false),
+              Q.where('geplant', true),
+              Q.where('datum', Q.notEq(null)),
+              Q.where('anzahl_pflanzen', Q.notEq(null)),
+            )
+            .fetch()) ?? []
+      } catch {}
+      const lieferungsGeplantSorted = lieferungsGeplant.sort(lieferungSort)
+      const ownAusLieferungsGeplant = lieferungsGeplantSorted.filter(
+        (l) => l.von_kultur_id === kultur.id,
+      )
 
       const ownAusLieferungen = lieferungsSorted.filter(
         (l) => l.von_kultur_id === kultur.id,
@@ -272,6 +291,20 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (auslSinceAnzahlJungpflanzen || 0) +
             (anlSinceAnzahlJungpflanzen || 0)
           : '',
+        auslieferungen_geplant: ownAusLieferungsGeplant
+          .map(
+            (l) =>
+              `${format(new Date(l.datum), 'yyyy.MM.dd')}: ${
+                l.anzahl_pflanzen ?? 0
+              } Pflanzen${
+                exists(l.anzahl_auspflanzbereit)
+                  ? `, ${l.anzahl_auspflanzbereit} auspflanzbereit`
+                  : ''
+              }${
+                exists(l.gramm_samen) ? `, ${l.gramm_samen} Gramm Samen` : ''
+              }${exists(l.andere_menge) ? `, ${l.andere_menge}` : ''}`,
+          )
+          .join('; '),
       }
 
       return row
