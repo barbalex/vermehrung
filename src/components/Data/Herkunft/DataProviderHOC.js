@@ -1,6 +1,6 @@
 // TODO:
 // causes error: Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object.
-import withObservables from '@nozbe/with-observables'
+import withObservables from '@nozbe/watermelondb'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 
 import Herkunft from './Herkunft'
