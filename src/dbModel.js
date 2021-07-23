@@ -1,6 +1,6 @@
 import { Model } from '@nozbe/watermelondb'
 import {
-  action,
+  writer,
   children,
   field,
   json,
@@ -82,12 +82,12 @@ export class Herkunft extends Model {
   @children('herkunft') herkunfts
   @children('herkunft_file') files
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`herkunft.${field}`)
@@ -150,8 +150,8 @@ export class Herkunft extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -255,12 +255,12 @@ export class Sammlung extends Model {
     }),
   )
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`sammlung.${field}`)
@@ -332,8 +332,8 @@ export class Sammlung extends Model {
     })
   }
 
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -421,12 +421,12 @@ export class Lieferung extends Model {
     map$((lieferung) => lieferungLabelFromLieferung({ lieferung })),
   )
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`lieferung.${field}`)
@@ -507,8 +507,8 @@ export class Lieferung extends Model {
     })
   }
 
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -556,12 +556,12 @@ export class Art extends Model {
       Q.on('sammlung', 'art_id', this.id),
     )
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`art.${field}`)
@@ -616,8 +616,8 @@ export class Art extends Model {
     })
   }
 
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -690,12 +690,12 @@ export class Garten extends Model {
     }),
   )
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`garten.${field}`)
@@ -757,8 +757,8 @@ export class Garten extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -901,12 +901,12 @@ export class Kultur extends Model {
     }),
   )
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`kultur.${field}`)
@@ -970,8 +970,8 @@ export class Kultur extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -1005,12 +1005,12 @@ export class Teilkultur extends Model {
   @children('event') events
   @children('teilzaehlung') teilzaehlungs
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`teilkultur.${field}`)
@@ -1070,8 +1070,8 @@ export class Teilkultur extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -1151,12 +1151,12 @@ export class Zaehlung extends Model {
     }),
   )*/
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`zaehlung.${field}`)
@@ -1214,8 +1214,8 @@ export class Zaehlung extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -1254,7 +1254,7 @@ export class Teilzaehlung extends Model {
     map$((teilkultur) => teilkulturLabelFromTeilkultur({ teilkultur })),
   )
 
-  @action
+  @writer
   async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
@@ -1331,8 +1331,8 @@ export class Teilzaehlung extends Model {
     })
     return
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -1408,12 +1408,12 @@ export class Person extends Model {
   @children('event') events
   @children('person_file') files
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`person.${field}`)
@@ -1499,8 +1499,8 @@ export class Person extends Model {
     })
   }
 
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
     // delete firebase user
@@ -1582,12 +1582,12 @@ export class SammelLieferung extends Model {
     }),
   )
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError, db } = store
     let userPersonOption
     try {
@@ -1690,8 +1690,8 @@ export class SammelLieferung extends Model {
     }, 50)
   }
 
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -1737,12 +1737,12 @@ export class Event extends Model {
     ),
   )
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`event.${field}`)
@@ -1804,8 +1804,8 @@ export class Event extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -1850,12 +1850,12 @@ export class Av extends Model {
     }),
   )
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`av.${field}`)
@@ -1910,8 +1910,8 @@ export class Av extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -1959,12 +1959,12 @@ export class Gv extends Model {
     }),
   )
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`gv.${field}`)
@@ -2019,8 +2019,8 @@ export class Gv extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -2043,17 +2043,10 @@ export class ArtFile extends Model {
 
   @relation('art', 'art_id') art
 
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     // extract only the needed keys
-    const {
-      id,
-      art_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-    } = this
+    const { id, art_id, file_id, file_mime_type, name, beschreibung, changed } =
+      this
     const newObject = {
       id,
       art_id,
@@ -2098,7 +2091,7 @@ export class ArtFile extends Model {
     })
     return
   }
-  @action async delete({ store }) {
+  @writer async delete({ store }) {
     const mutation = gql`
       mutation delete_art_file($where: art_file_bool_exp!) {
         delete_art_file(where: $where) {
@@ -2142,7 +2135,7 @@ export class GartenFile extends Model {
 
   @relation('garten', 'garten_id') garten
 
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     // extract only the needed keys
     const {
       id,
@@ -2197,7 +2190,7 @@ export class GartenFile extends Model {
     })
     return
   }
-  @action async delete({ store }) {
+  @writer async delete({ store }) {
     const mutation = gql`
       mutation delete_garten_file($where: garten_file_bool_exp!) {
         delete_garten_file(where: $where) {
@@ -2241,7 +2234,7 @@ export class HerkunftFile extends Model {
 
   @relation('herkunft', 'herkunft_id') herkunft
 
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     // extract only the needed keys
     const {
       id,
@@ -2296,7 +2289,7 @@ export class HerkunftFile extends Model {
     })
     return
   }
-  @action async delete({ store }) {
+  @writer async delete({ store }) {
     const mutation = gql`
       mutation delete_herkunft_file($where: herkunft_file_bool_exp!) {
         delete_herkunft_file(where: $where) {
@@ -2340,7 +2333,7 @@ export class KulturFile extends Model {
 
   @relation('kultur', 'kultur_id') kultur
 
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     // extract only the needed keys
     const {
       id,
@@ -2395,7 +2388,7 @@ export class KulturFile extends Model {
     })
     return
   }
-  @action async delete({ store }) {
+  @writer async delete({ store }) {
     const mutation = gql`
       mutation delete_kultur_file($where: kultur_file_bool_exp!) {
         delete_kultur_file(where: $where) {
@@ -2439,7 +2432,7 @@ export class LieferungFile extends Model {
 
   @relation('lieferung', 'lieferung_id') lieferung
 
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     // extract only the needed keys
     const {
       id,
@@ -2494,7 +2487,7 @@ export class LieferungFile extends Model {
     })
     return
   }
-  @action async delete({ store }) {
+  @writer async delete({ store }) {
     const mutation = gql`
       mutation delete_lieferung_file($where: lieferung_file_bool_exp!) {
         delete_lieferung_file(where: $where) {
@@ -2538,7 +2531,7 @@ export class PersonFile extends Model {
 
   @relation('person', 'person_id') person
 
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     // extract only the needed keys
     const {
       id,
@@ -2593,7 +2586,7 @@ export class PersonFile extends Model {
     })
     return
   }
-  @action async delete({ store }) {
+  @writer async delete({ store }) {
     const mutation = gql`
       mutation delete_person_file($where: person_file_bool_exp!) {
         delete_person_file(where: $where) {
@@ -2637,7 +2630,7 @@ export class SammlungFile extends Model {
 
   @relation('sammlung', 'sammlung_id') sammlung
 
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     // extract only the needed keys
     const {
       id,
@@ -2692,7 +2685,7 @@ export class SammlungFile extends Model {
     })
     return
   }
-  @action async delete({ store }) {
+  @writer async delete({ store }) {
     const mutation = gql`
       mutation delete_sammlung_file($where: sammlung_file_bool_exp!) {
         delete_sammlung_file(where: $where) {
@@ -2736,12 +2729,12 @@ export class ArtQk extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`art_qk.${field}`)
@@ -2801,8 +2794,8 @@ export class ArtQk extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -2837,12 +2830,12 @@ export class KulturOption extends Model {
 
   @relation('kultur', 'id') kultur
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`kultur_option.${field}`)
@@ -2912,8 +2905,8 @@ export class KulturOption extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -2936,12 +2929,12 @@ export class KulturQk extends Model {
   @field('_deleted') _deleted
   @json('_conflicts', dontSanitize) _conflicts
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`kultur_qk.${field}`)
@@ -3001,8 +2994,8 @@ export class KulturQk extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }
@@ -3051,12 +3044,12 @@ export class PersonOption extends Model {
 
   @relation('person', 'id') person
 
-  @action async removeConflict(_rev) {
+  @writer async removeConflict(_rev) {
     await this.update((row) => {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @action async edit({ field, value, store }) {
+  @writer async edit({ field, value, store }) {
     const { addQueuedQuery, user, unsetError } = store
 
     unsetError(`person_option.${field}`)
@@ -3149,8 +3142,8 @@ export class PersonOption extends Model {
       row._revisions = newRevisions
     })
   }
-  @action async delete({ store }) {
-    await this.subAction(() =>
+  @writer async delete({ store }) {
+    await this.callWriter(() =>
       this.edit({ field: '_deleted', value: true, store }),
     )
   }

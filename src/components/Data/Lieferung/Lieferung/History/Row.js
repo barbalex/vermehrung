@@ -78,7 +78,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObjectForStore.id = row.id
     delete newObjectForStore.lieferung_id
     // optimistically update store
-    await db.action(async () => {
+    await db.write(async () => {
       await row.update((row) => {
         Object.entries(newObjectForStore).forEach(([key, value]) => {
           if (!isEqual(value, row[key])) {

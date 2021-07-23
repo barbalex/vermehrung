@@ -65,7 +65,7 @@ const Login = () => {
       await firebase.auth().signOut()
       await localForage.clear()
       window.localStorage.removeItem('token')
-      await db.action(async () => db.unsafeResetDatabase())
+      await db.write(async () => db.unsafeResetDatabase())
       setTimeout(async () => {
         try {
           await firebase

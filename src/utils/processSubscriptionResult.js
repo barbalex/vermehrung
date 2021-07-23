@@ -15,12 +15,8 @@ const processSubscriptionResult = async ({
   table,
   store,
 }) => {
-  const {
-    db,
-    setInitiallyQueried,
-    setLastUpdated,
-    setInitiallyQuerying,
-  } = store
+  const { db, setInitiallyQueried, setLastUpdated, setInitiallyQuerying } =
+    store
   if (!dataToCheck.length) {
     setInitiallyQueried({ table })
     return
@@ -65,7 +61,7 @@ const processSubscriptionResult = async ({
   // need to stagger imports to keep ui responsive between them
   setTimeout(async () => {
     try {
-      await db.action(async () => {
+      await db.write(async () => {
         if (objectsToUpdate.length || dataToCreateObjectsFrom.length) {
           await db.batch(
             ...objectsToUpdate.map((object) => {

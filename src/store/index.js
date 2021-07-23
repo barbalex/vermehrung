@@ -311,7 +311,7 @@ const myTypes = types
           row = db.get(table).find(id).fetch()
         } catch {}
         if (row) {
-          await db.action(async () => {
+          await db.write(async () => {
             await row.update((row) => {
               row[field] = value
             })
@@ -326,7 +326,7 @@ const myTypes = types
         try {
           row = db.get(table).find(id).fetch()
         } catch {}
-        await db.action(async () => {
+        await db.write(async () => {
           await row.update((row) => {
             Object.entries(values).forEach(([key, value]) => {
               row[key] = value
@@ -414,7 +414,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('art')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -474,7 +474,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('av')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -539,7 +539,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('event')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -608,7 +608,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('garten')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -668,7 +668,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('gv')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -728,7 +728,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('herkunft')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -805,7 +805,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const kulturCollection = db.get('kultur')
           const kulturOptionCollection = db.get('kultur_option')
           // using batch because can create from raw
@@ -899,7 +899,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('lieferung')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -976,7 +976,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const personCollection = db.get('person')
           const personOptionCollection = db.get('person_option')
           // using batch because can create from raw
@@ -1060,7 +1060,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('sammel_lieferung')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -1138,7 +1138,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('sammlung')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -1207,7 +1207,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('teilkultur')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -1282,7 +1282,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('teilzaehlung')
           // using batch because can create from raw
           // which enables overriding watermelons own id
@@ -1339,7 +1339,7 @@ const myTypes = types
         })
         // optimistically update store
         const { db } = self
-        await db.action(async () => {
+        await db.write(async () => {
           const collection = db.get('zaehlung')
           // using batch because can create from raw
           // which enables overriding watermelons own id
