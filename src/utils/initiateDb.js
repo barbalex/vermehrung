@@ -96,7 +96,6 @@ const initiateDb = (store) => {
       UserRole,
       Zaehlung,
     ],
-    actionsEnabled: true,
   })
 
   return database

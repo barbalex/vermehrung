@@ -87,7 +87,7 @@ const Files = ({ parentTable, parent }) => {
             [`${parentTable}_id`]: parent.id,
             name: info.name,
           }
-          await db.action(async () => {
+          await db.write(async () => {
             const collection = db.get(`${parentTable}_file`)
             // using batch because can create from raw
             // which enables overriding watermelons own id

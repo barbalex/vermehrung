@@ -6,7 +6,7 @@ const logout = async ({ store }) => {
   if (typeof window !== 'undefined') {
     await store.firebase.auth().signOut()
     await localForage.clear()
-    await db.action(async () => db.unsafeResetDatabase())
+    await db.write(async () => db.unsafeResetDatabase())
     window.localStorage.removeItem('token')
     window.location.reload(true)
   }
