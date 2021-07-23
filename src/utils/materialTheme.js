@@ -1,8 +1,8 @@
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createTheme } from '@material-ui/core/styles'
 import purple from '@material-ui/core/colors/purple'
 import orange from '@material-ui/core/colors/orange'
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: { main: purple[900] },
     secondary: { main: orange[900] },
