@@ -11,13 +11,13 @@ vermehrung.ch funktioniert nicht auf iOS, d.h. auf iPhones und iPads.<br/><br/>
 
 Wollt ihr mehr wissen? Dann müssen wir etwas ausholen:<br/><br/>
 
-- Apple verdient **jährlich 10 bis 15 Milliarden** mit dem App Store: sie beanspruchen 30% jeder Überweisung für sich selbst ([Quelle](https://www.statista.com/chart/9671/developer-earnings-apple-app-store))
+- Apple verdient **jährlich 10 bis 15 Milliarden** mit dem App Store: sie beanspruchen 15-30% jeder Überweisung für sich selbst ([Quelle](https://www.statista.com/chart/9671/developer-earnings-apple-app-store))
 - Das ist ungerechtfertigt und geht nur, weil Apple ihr Monopol ausnützt
 - Eine ganze Reihe von Firmen wehren sich dagegen, auch gerichtlich. Allen voran Epic Games mit Fortnite. Sogar Microsoft hat sich klar dagegen gestellt ([Quelle](https://t3n.de/news/apple-vs-epic-microsoft-seite-1315266/)). In den USA und der EU wird der Sachverhalt von den Wettbewerbsbehörden untersucht ([Quelle](https://www.bbc.com/news/technology-54280982))
 - vermehrung.ch ist eine [Web App](/Dokumentation/PWA)
 - Web App's brauchen keinen App Store. Man kann sie direkt vom Browser aus installieren. Das passt Apple nicht
 - Web App's können aber nur mit anderen Apps konkurrieren, wenn der Browser die dafür nötigen Fähigkeiten anbietet
-- Apple verbietet auf den eigenen Mobilgeräten (Betriebssystem iOS) die Installation anderer Browser und setzt dies im App Store durch (die "Browser" von Chrome und Firefox sind nur eine Hülle um Safari)
+- Apple verbietet auf den eigenen Mobilgeräten (Betriebssystem "iOS") die Installation anderer Browser und setzt dies im App Store durch (die "Browser" von Chrome und Firefox sind auf iOS nur eine Hülle um Safari)
 - Weil auf Apple-Mobilgeräten nur Safari zur Verfügung steht, kann Apple verhindern, dass die für konkurrenzfähige Web-Apps nötigen Fähigkeiten verfügbar sind. Apple stellt zwar einige grundlegende Fähigkeiten bereit, damit nicht zu viele Web-Apps den Dienst verweigern. Aber **sie schränken diese Fähigkeiten ganz bewusst ein, damit Web-Apps gegenüber Apps aus dem App Store nicht konkurrenzfähig sein können**
 - Eine zentrale Funktion konkurrenzfähiger Apps ist Offline-Fähigkeit
 - Offline kann eine App nur funktionieren, wenn die benötigten Daten lokal gespeichert werden. Apple schränkt die lokal speicherbare Menge Daten sehr stark ein
