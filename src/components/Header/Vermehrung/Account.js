@@ -13,6 +13,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
+import { sendPasswordResetEmail } from 'firebase/auth'
 
 import StoreContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -36,7 +37,7 @@ const RiskyButton = styled(Button)`
 
 const Account = () => {
   const store = useContext(StoreContext)
-  const { user, firebase, online, db, queuedQueries } = store
+  const { user, online, db, queuedQueries, firebaseAuth } = store
 
   const [userPerson, setUserPerson] = useState(undefined)
   useEffect(() => {
@@ -61,10 +62,8 @@ const Account = () => {
   )
   const onCloseMenu = useCallback(() => setAnchorEl(null), [])
 
-  const [
-    pendingOperationsDialogOpen,
-    setPendingOperationsDialogOpen,
-  ] = useState(false)
+  const [pendingOperationsDialogOpen, setPendingOperationsDialogOpen] =
+    useState(false)
   const onClickLogout = useCallback(async () => {
     setAnchorEl(null)
     // TODO:
@@ -81,7 +80,7 @@ const Account = () => {
   const onClickResetPassword = useCallback(async () => {
     setResetTitle('...')
     try {
-      await firebase.auth().sendPasswordResetEmail(email, {
+      await sendPasswordResetEmail(firebaseAuth, email, {
         url: `${constants?.appUri}/Vermehrung`,
         handleCodeInApp: true,
       })
@@ -97,7 +96,7 @@ const Account = () => {
       setResetTitle('Passwort zurücksetzen')
       setAnchorEl(null)
     }, 5000)
-  }, [email, firebase])
+  }, [email, firebaseAuth])
 
   if (!online) return null
 

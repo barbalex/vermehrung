@@ -124,7 +124,7 @@ const myTypes = types
   })
   .volatile(() => ({
     user: {},
-    firebase: null,
+    firebaseAuth: null,
     gqlWsClient: null,
     db: null,
     gqlClient: null,
@@ -1363,9 +1363,9 @@ const myTypes = types
       setShortTermOnline(val) {
         self.shortTermOnline = val
       },
-      setFirebase(val) {
-        if (!self.firebase) {
-          self.firebase = val
+      setFirebaseAuth(val) {
+        if (!self.firebaseAuth) {
+          self.firebaseAuth = val
         }
       },
       setAuthorizing(val) {
