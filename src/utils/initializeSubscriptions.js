@@ -71,10 +71,12 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription AeArt($where: ae_art_bool_exp) {
           ae_art(where: $where) {
-            ...AeArtFields
+            id
+            __typename
+            name
+            changed
           }
         }
-        ${aeArtFragment}
       `,
       variables: { where: { _rev_at: { _gt: ae_art_lastUpdated } } },
     },
@@ -105,16 +107,25 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Art($where: art_bool_exp) {
           art(where: $where) {
-            ...ArtFields
+            id
+            __typename
+            ae_id
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${artFragment}
       `,
       variables: { where: { _rev_at: { _gt: art_lastUpdated } } },
     },
     {
       next: (data) => {
-        //console.log('initializeSubscriptions, art, data:', data.data.art)
+        console.log('initializeSubscriptions, art, data:', data.data.art)
         processSubscriptionResult({
           data: data.data.art,
           table: 'art',
@@ -130,10 +141,17 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription ArtFile($where: art_file_bool_exp) {
           art_file(where: $where) {
-            ...ArtFileFields
+            id
+            __typename
+            art_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+            _rev_at
           }
         }
-        ${artFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: art_file_lastUpdated } } },
     },
@@ -154,10 +172,22 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription ArtQk($where: art_qk_bool_exp) {
           art_qk(where: $where) {
-            ...ArtQkFields
+            id
+            __typename
+            name
+            titel
+            beschreibung
+            sort
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${artQkFragment}
       `,
       variables: { where: { _rev_at: { _gt: art_qk_lastUpdated } } },
     },
@@ -178,10 +208,20 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Av($where: av_bool_exp) {
           av(where: $where) {
-            ...AvFields
+            id
+            __typename
+            art_id
+            person_id
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${avFragment}
       `,
       variables: { where: { _rev_at: { _gt: av_lastUpdated } } },
     },
@@ -202,10 +242,24 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Event($where: event_bool_exp) {
           event(where: $where) {
-            ...EventFields
+            id
+            __typename
+            kultur_id
+            teilkultur_id
+            person_id
+            beschreibung
+            geplant
+            datum
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${eventFragment}
       `,
       variables: { where: { _rev_at: { _gt: event_lastUpdated } } },
     },
@@ -226,10 +280,30 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Garten($where: garten_bool_exp) {
           garten(where: $where) {
-            ...GartenFields
+            id
+            __typename
+            name
+            person_id
+            strasse
+            plz
+            ort
+            aktiv
+            bemerkungen
+            geom_point
+            lv95_x
+            lv95_y
+            wgs84_lat
+            wgs84_long
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${gartenFragment}
       `,
       variables: { where: { _rev_at: { _gt: garten_lastUpdated } } },
     },
@@ -250,10 +324,17 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription GartenFile($where: garten_file_bool_exp) {
           garten_file(where: $where) {
-            ...GartenFileFields
+            id
+            __typename
+            garten_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+            _rev_at
           }
         }
-        ${gartenFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: garten_file_lastUpdated } } },
     },
@@ -274,10 +355,20 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Gv($where: gv_bool_exp) {
           gv(where: $where) {
-            ...GvFields
+            id
+            __typename
+            garten_id
+            person_id
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${gvFragment}
       `,
       variables: { where: { _rev_at: { _gt: gv_lastUpdated } } },
     },
@@ -298,10 +389,29 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Herkunft($where: herkunft_bool_exp) {
           herkunft(where: $where) {
-            ...HerkunftFields
+            id
+            __typename
+            nr
+            lokalname
+            gemeinde
+            kanton
+            land
+            bemerkungen
+            geom_point
+            lv95_x
+            lv95_y
+            wgs84_lat
+            wgs84_long
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${herkunftFragment}
       `,
       variables: { where: { _rev_at: { _gt: herkunft_lastUpdated } } },
     },
@@ -322,10 +432,17 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription HerkunftFile($where: herkunft_file_bool_exp) {
           herkunft_file(where: $where) {
-            ...HerkunftFileFields
+            id
+            __typename
+            herkunft_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+            _rev_at
           }
         }
-        ${herkunftFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: herkunft_file_lastUpdated } } },
     },
@@ -346,10 +463,26 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Kultur($where: kultur_bool_exp) {
           kultur(where: $where) {
-            ...KulturFields
+            id
+            __typename
+            art_id
+            herkunft_id
+            garten_id
+            zwischenlager
+            erhaltungskultur
+            von_anzahl_individuen
+            aktiv
+            bemerkungen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${kulturFragment}
       `,
       variables: { where: { _rev_at: { _gt: kultur_lastUpdated } } },
     },
@@ -370,10 +503,17 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription KulturFile($where: kultur_file_bool_exp) {
           kultur_file(where: $where) {
-            ...KulturFileFields
+            id
+            __typename
+            kultur_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+            _rev_at
           }
         }
-        ${kulturFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: kultur_file_lastUpdated } } },
     },
@@ -394,10 +534,27 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription KulturOption($where: kultur_option_bool_exp) {
           kultur_option(where: $where) {
-            ...KulturOptionFields
+            id
+            __typename
+            ev_datum
+            ev_geplant
+            ev_person_id
+            ev_teilkultur_id
+            tk
+            tk_bemerkungen
+            tz_andere_menge
+            tz_auspflanzbereit_beschreibung
+            tz_teilkultur_id
+            tz_bemerkungen
+            z_bemerkungen
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${kulturOptionFragment}
       `,
       variables: { where: { _rev_at: { _gt: kultur_option_lastUpdated } } },
     },
@@ -418,10 +575,22 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription KulturQk($where: kultur_qk_bool_exp) {
           kultur_qk(where: $where) {
-            ...KulturQkFields
+            id
+            __typename
+            name
+            titel
+            beschreibung
+            sort
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${kulturQkFragment}
       `,
       variables: { where: { _rev_at: { _gt: kultur_qk_lastUpdated } } },
     },
@@ -442,10 +611,33 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Lieferung($where: lieferung_bool_exp) {
           lieferung(where: $where) {
-            ...LieferungFields
+            id
+            __typename
+            sammel_lieferung_id
+            art_id
+            person_id
+            von_sammlung_id
+            von_kultur_id
+            datum
+            nach_kultur_id
+            nach_ausgepflanzt
+            von_anzahl_individuen
+            anzahl_pflanzen
+            anzahl_auspflanzbereit
+            gramm_samen
+            andere_menge
+            geplant
+            bemerkungen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${lieferungFragment}
       `,
       variables: { where: { _rev_at: { _gt: lieferung_lastUpdated } } },
     },
@@ -466,10 +658,17 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription LieferungFile($where: lieferung_file_bool_exp) {
           lieferung_file(where: $where) {
-            ...LieferungFileFields
+            id
+            __typename
+            lieferung_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+            _rev_at
           }
         }
-        ${lieferungFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: lieferung_file_lastUpdated } } },
     },
@@ -490,10 +689,36 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Person($where: person_bool_exp) {
           person(where: $where) {
-            ...PersonFields
+            id
+            __typename
+            nr
+            vorname
+            name
+            adresszusatz
+            strasse
+            plz
+            ort
+            telefon_privat
+            telefon_geschaeft
+            telefon_mobile
+            email
+            kein_email
+            bemerkungen
+            account_id
+            user_role_id
+            kommerziell
+            info
+            aktiv
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${personFragment}
       `,
       variables: { where: { _rev_at: { _gt: person_lastUpdated } } },
     },
@@ -514,10 +739,17 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription PersonFile($where: person_file_bool_exp) {
           person_file(where: $where) {
-            ...PersonFileFields
+            id
+            __typename
+            person_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+            _rev_at
           }
         }
-        ${personFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: person_file_lastUpdated } } },
     },
@@ -538,10 +770,41 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription PersonOption($where: person_option_bool_exp) {
           person_option(where: $where) {
-            ...PersonOptionFields
+            id
+            __typename
+            ar_name_deutsch
+            ga_strasse
+            ga_plz
+            ga_ort
+            ga_geom_point
+            ga_lat_lng
+            ga_aktiv
+            ga_bemerkungen
+            hk_kanton
+            hk_land
+            hk_bemerkungen
+            hk_geom_point
+            ku_zwischenlager
+            ku_erhaltungskultur
+            li_show_sl_felder
+            li_show_sl
+            sl_show_empty_when_next_to_li
+            sl_auto_copy_edits
+            tree_kultur
+            tree_teilkultur
+            tree_zaehlung
+            tree_lieferung
+            tree_event
+            art_qk_choosen
+            kultur_qk_choosen
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${personOptionFragment}
       `,
       variables: { where: { _rev_at: { _gt: person_option_lastUpdated } } },
     },
@@ -562,10 +825,30 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription SammelLieferung($where: sammel_lieferung_bool_exp) {
           sammel_lieferung(where: $where) {
-            ...SammelLieferungFields
+            id
+            __typename
+            art_id
+            person_id
+            von_sammlung_id
+            von_kultur_id
+            datum
+            nach_kultur_id
+            nach_ausgepflanzt
+            von_anzahl_individuen
+            anzahl_pflanzen
+            anzahl_auspflanzbereit
+            gramm_samen
+            andere_menge
+            geplant
+            bemerkungen
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${sammelLieferungFragment}
       `,
       variables: { where: { _rev_at: { _gt: sammel_lieferung_lastUpdated } } },
     },
@@ -587,10 +870,34 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Sammlung($where: sammlung_bool_exp) {
           sammlung(where: $where) {
-            ...SammlungFields
+            id
+            __typename
+            art_id
+            person_id
+            herkunft_id
+            nr
+            datum
+            von_anzahl_individuen
+            anzahl_pflanzen
+            gramm_samen
+            andere_menge
+            geplant
+            bemerkungen
+            geom_point
+            lv95_x
+            lv95_y
+            wgs84_lat
+            wgs84_long
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${sammlungFragment}
       `,
       variables: { where: { _rev_at: { _gt: sammlung_lastUpdated } } },
     },
@@ -611,10 +918,17 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription SammlungFile($where: sammlung_file_bool_exp) {
           sammlung_file(where: $where) {
-            ...SammlungFileFields
+            id
+            __typename
+            sammlung_id
+            file_id
+            file_mime_type
+            name
+            beschreibung
+            changed
+            _rev_at
           }
         }
-        ${sammlungFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: sammlung_file_lastUpdated } } },
     },
@@ -635,10 +949,24 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Teilkultur($where: teilkultur_bool_exp) {
           teilkultur(where: $where) {
-            ...TeilkulturFields
+            id
+            __typename
+            kultur_id
+            name
+            ort1
+            ort2
+            ort3
+            bemerkungen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${teilkulturFragment}
       `,
       variables: { where: { _rev_at: { _gt: teilkultur_lastUpdated } } },
     },
@@ -659,10 +987,26 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Teilzaehlung($where: teilzaehlung_bool_exp) {
           teilzaehlung(where: $where) {
-            ...TeilzaehlungFields
+            id
+            __typename
+            zaehlung_id
+            teilkultur_id
+            anzahl_pflanzen
+            anzahl_auspflanzbereit
+            anzahl_mutterpflanzen
+            andere_menge
+            auspflanzbereit_beschreibung
+            bemerkungen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${teilzaehlungFragment}
       `,
       variables: { where: { _rev_at: { _gt: teilzaehlung_lastUpdated } } },
     },
@@ -683,10 +1027,15 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription UserRole($where: user_role_bool_exp) {
           user_role(where: $where) {
-            ...UserRoleFields
+            id
+            __typename
+            name
+            label
+            sort
+            comment
+            changed
           }
         }
-        ${userRoleFragment}
       `,
       variables: { where: { _rev_at: { _gt: user_role_lastUpdated } } },
     },
@@ -707,10 +1056,22 @@ const initializeSubscriptions = ({ store }) => {
       query: `
         subscription Zaehlung($where: zaehlung_bool_exp) {
           zaehlung(where: $where) {
-            ...ZaehlungFields
+            id
+            __typename
+            kultur_id
+            datum
+            prognose
+            bemerkungen
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
           }
         }
-        ${zaehlungFragment}
       `,
       variables: { where: { _rev_at: { _gt: zaehlung_lastUpdated } } },
     },
