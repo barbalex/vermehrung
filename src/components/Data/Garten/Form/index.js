@@ -161,7 +161,7 @@ const GartenForm = ({
       const previousValue = ifIsNumericAsNumber(row[field])
       // only update if value has changed
       if (value === previousValue) return
-      console.log('Garten, will edit row:', { field, value })
+      //console.log('Garten, will edit row:', { field, value })
       row.edit({ field, value, store })
       if (field === 'person_id') {
         // only if not yet exists
