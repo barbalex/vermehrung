@@ -65,9 +65,10 @@ const initializeSubscriptions = ({ store }) => {
 
   // TODO:
   // resubscribe in a throttled way when _lastUpdated changes
-  unsubscribe.ae_art = store.gqlWsClient
-    .request({
-      query: gql`
+  let aeArtResult
+  unsubscribe.ae_art = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription AeArt($where: ae_art_bool_exp) {
           ae_art(where: $where) {
             ...AeArtFields
@@ -76,16 +77,18 @@ const initializeSubscriptions = ({ store }) => {
         ${aeArtFragment}
       `,
       variables: { where: { _rev_at: { _gt: ae_art_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
+        console.log('subscription AeArt, next, data:', data)
+        aeArtResult = data.data.ae_art
         processSubscriptionResult({
           data: data.data.ae_art,
           table: 'ae_art',
           store,
         })
       },
-      error(error) {
+      error: (error) => {
         // if error.message contains JWT, do what?
         // re-subscribe
         console.log('subscribeAeArt, onError:', error)
@@ -94,10 +97,12 @@ const initializeSubscriptions = ({ store }) => {
         // need to retry
         setTimeout(() => store.incrementWsReconnectCount(), 3000)
       },
-    })
-  unsubscribe.art = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved ae_art, aeArtResult:', aeArtResult),
+    },
+  )
+  unsubscribe.art = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Art($where: art_bool_exp) {
           art(where: $where) {
             ...ArtFields
@@ -106,9 +111,9 @@ const initializeSubscriptions = ({ store }) => {
         ${artFragment}
       `,
       variables: { where: { _rev_at: { _gt: art_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         //console.log('initializeSubscriptions, art, data:', data.data.art)
         processSubscriptionResult({
           data: data.data.art,
@@ -117,10 +122,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeArt, onError:', error),
-    })
-  unsubscribe.art_file = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved art'),
+    },
+  )
+  unsubscribe.art_file = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription ArtFile($where: art_file_bool_exp) {
           art_file(where: $where) {
             ...ArtFileFields
@@ -129,9 +136,9 @@ const initializeSubscriptions = ({ store }) => {
         ${artFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: art_file_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.art_file,
           table: 'art_file',
@@ -139,10 +146,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeArtFile, onError:', error),
-    })
-  unsubscribe.art_qk = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved art_file'),
+    },
+  )
+  unsubscribe.art_qk = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription ArtQk($where: art_qk_bool_exp) {
           art_qk(where: $where) {
             ...ArtQkFields
@@ -151,9 +160,9 @@ const initializeSubscriptions = ({ store }) => {
         ${artQkFragment}
       `,
       variables: { where: { _rev_at: { _gt: art_qk_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.art_qk,
           table: 'art_qk',
@@ -161,10 +170,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeArtQk, onError:', error),
-    })
-  unsubscribe.av = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved art_qk'),
+    },
+  )
+  unsubscribe.av = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Av($where: av_bool_exp) {
           av(where: $where) {
             ...AvFields
@@ -173,9 +184,9 @@ const initializeSubscriptions = ({ store }) => {
         ${avFragment}
       `,
       variables: { where: { _rev_at: { _gt: av_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.av,
           table: 'av',
@@ -183,10 +194,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeAv, onError:', error),
-    })
-  unsubscribe.event = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved av'),
+    },
+  )
+  unsubscribe.event = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Event($where: event_bool_exp) {
           event(where: $where) {
             ...EventFields
@@ -195,9 +208,9 @@ const initializeSubscriptions = ({ store }) => {
         ${eventFragment}
       `,
       variables: { where: { _rev_at: { _gt: event_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.event,
           table: 'event',
@@ -205,10 +218,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeEvent, onError:', error),
-    })
-  unsubscribe.garten = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved event'),
+    },
+  )
+  unsubscribe.garten = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Garten($where: garten_bool_exp) {
           garten(where: $where) {
             ...GartenFields
@@ -217,9 +232,9 @@ const initializeSubscriptions = ({ store }) => {
         ${gartenFragment}
       `,
       variables: { where: { _rev_at: { _gt: garten_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.garten,
           table: 'garten',
@@ -227,10 +242,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeGarten, onError:', error),
-    })
-  unsubscribe.garten_file = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved garten'),
+    },
+  )
+  unsubscribe.garten_file = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription GartenFile($where: garten_file_bool_exp) {
           garten_file(where: $where) {
             ...GartenFileFields
@@ -239,9 +256,9 @@ const initializeSubscriptions = ({ store }) => {
         ${gartenFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: garten_file_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.garten_file,
           table: 'garten_file',
@@ -249,10 +266,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeGartenFile, onError:', error),
-    })
-  unsubscribe.gv = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved garten_file'),
+    },
+  )
+  unsubscribe.gv = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Gv($where: gv_bool_exp) {
           gv(where: $where) {
             ...GvFields
@@ -261,9 +280,9 @@ const initializeSubscriptions = ({ store }) => {
         ${gvFragment}
       `,
       variables: { where: { _rev_at: { _gt: gv_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.gv,
           table: 'gv',
@@ -271,10 +290,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeGv, onError:', error),
-    })
-  unsubscribe.herkunft = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved gv'),
+    },
+  )
+  unsubscribe.herkunft = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Herkunft($where: herkunft_bool_exp) {
           herkunft(where: $where) {
             ...HerkunftFields
@@ -283,9 +304,9 @@ const initializeSubscriptions = ({ store }) => {
         ${herkunftFragment}
       `,
       variables: { where: { _rev_at: { _gt: herkunft_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.herkunft,
           table: 'herkunft',
@@ -293,10 +314,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeHerkunft, onError:', error),
-    })
-  unsubscribe.herkunft_file = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved herkunft'),
+    },
+  )
+  unsubscribe.herkunft_file = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription HerkunftFile($where: herkunft_file_bool_exp) {
           herkunft_file(where: $where) {
             ...HerkunftFileFields
@@ -305,9 +328,9 @@ const initializeSubscriptions = ({ store }) => {
         ${herkunftFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: herkunft_file_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.herkunft_file,
           table: 'herkunft_file',
@@ -315,10 +338,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeHerkunftFile, onError:', error),
-    })
-  unsubscribe.kultur = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved herkunft_file'),
+    },
+  )
+  unsubscribe.kultur = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Kultur($where: kultur_bool_exp) {
           kultur(where: $where) {
             ...KulturFields
@@ -327,9 +352,9 @@ const initializeSubscriptions = ({ store }) => {
         ${kulturFragment}
       `,
       variables: { where: { _rev_at: { _gt: kultur_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.kultur,
           table: 'kultur',
@@ -337,10 +362,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeKultur, onError:', error),
-    })
-  unsubscribe.kultur_file = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved kultur'),
+    },
+  )
+  unsubscribe.kultur_file = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription KulturFile($where: kultur_file_bool_exp) {
           kultur_file(where: $where) {
             ...KulturFileFields
@@ -349,9 +376,9 @@ const initializeSubscriptions = ({ store }) => {
         ${kulturFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: kultur_file_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.kultur_file,
           table: 'kultur_file',
@@ -359,10 +386,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeKulturFile, onError:', error),
-    })
-  unsubscribe.kultur_option = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved kultur_file'),
+    },
+  )
+  unsubscribe.kultur_option = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription KulturOption($where: kultur_option_bool_exp) {
           kultur_option(where: $where) {
             ...KulturOptionFields
@@ -371,9 +400,9 @@ const initializeSubscriptions = ({ store }) => {
         ${kulturOptionFragment}
       `,
       variables: { where: { _rev_at: { _gt: kultur_option_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.kultur_option,
           table: 'kultur_option',
@@ -381,10 +410,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeKulturOption, onError:', error),
-    })
-  unsubscribe.kultur_qk = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved kultur_option'),
+    },
+  )
+  unsubscribe.kultur_qk = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription KulturQk($where: kultur_qk_bool_exp) {
           kultur_qk(where: $where) {
             ...KulturQkFields
@@ -393,9 +424,9 @@ const initializeSubscriptions = ({ store }) => {
         ${kulturQkFragment}
       `,
       variables: { where: { _rev_at: { _gt: kultur_qk_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.kultur_qk,
           table: 'kultur_qk',
@@ -403,10 +434,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeKulturQk, onError:', error),
-    })
-  unsubscribe.lieferung = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved kultur_qk'),
+    },
+  )
+  unsubscribe.lieferung = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Lieferung($where: lieferung_bool_exp) {
           lieferung(where: $where) {
             ...LieferungFields
@@ -415,9 +448,9 @@ const initializeSubscriptions = ({ store }) => {
         ${lieferungFragment}
       `,
       variables: { where: { _rev_at: { _gt: lieferung_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.lieferung,
           table: 'lieferung',
@@ -425,10 +458,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeLieferung, onError:', error),
-    })
-  unsubscribe.lieferung_file = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved lieferung'),
+    },
+  )
+  unsubscribe.lieferung_file = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription LieferungFile($where: lieferung_file_bool_exp) {
           lieferung_file(where: $where) {
             ...LieferungFileFields
@@ -437,9 +472,9 @@ const initializeSubscriptions = ({ store }) => {
         ${lieferungFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: lieferung_file_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.lieferung_file,
           table: 'lieferung_file',
@@ -447,10 +482,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeLieferungFile, onError:', error),
-    })
-  unsubscribe.person = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved lieferung_file'),
+    },
+  )
+  unsubscribe.person = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Person($where: person_bool_exp) {
           person(where: $where) {
             ...PersonFields
@@ -459,9 +496,9 @@ const initializeSubscriptions = ({ store }) => {
         ${personFragment}
       `,
       variables: { where: { _rev_at: { _gt: person_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.person,
           table: 'person',
@@ -469,10 +506,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribePerson, onError:', error),
-    })
-  unsubscribe.person_file = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved person'),
+    },
+  )
+  unsubscribe.person_file = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription PersonFile($where: person_file_bool_exp) {
           person_file(where: $where) {
             ...PersonFileFields
@@ -481,9 +520,9 @@ const initializeSubscriptions = ({ store }) => {
         ${personFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: person_file_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.person_file,
           table: 'person_file',
@@ -491,10 +530,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribePersonFile, onError:', error),
-    })
-  unsubscribe.person_option = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved person_file'),
+    },
+  )
+  unsubscribe.person_option = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription PersonOption($where: person_option_bool_exp) {
           person_option(where: $where) {
             ...PersonOptionFields
@@ -503,9 +544,9 @@ const initializeSubscriptions = ({ store }) => {
         ${personOptionFragment}
       `,
       variables: { where: { _rev_at: { _gt: person_option_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.person_option,
           table: 'person_option',
@@ -513,10 +554,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribePersonOption, onError:', error),
-    })
-  unsubscribe.sammel_lieferung = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved person_option'),
+    },
+  )
+  unsubscribe.sammel_lieferung = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription SammelLieferung($where: sammel_lieferung_bool_exp) {
           sammel_lieferung(where: $where) {
             ...SammelLieferungFields
@@ -525,9 +568,9 @@ const initializeSubscriptions = ({ store }) => {
         ${sammelLieferungFragment}
       `,
       variables: { where: { _rev_at: { _gt: sammel_lieferung_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.sammel_lieferung,
           table: 'sammel_lieferung',
@@ -536,10 +579,12 @@ const initializeSubscriptions = ({ store }) => {
       },
       error: (error) =>
         console.log('subscribeSammelLieferung, onError:', error),
-    })
-  unsubscribe.sammlung = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved sammel_lieferung'),
+    },
+  )
+  unsubscribe.sammlung = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Sammlung($where: sammlung_bool_exp) {
           sammlung(where: $where) {
             ...SammlungFields
@@ -548,9 +593,9 @@ const initializeSubscriptions = ({ store }) => {
         ${sammlungFragment}
       `,
       variables: { where: { _rev_at: { _gt: sammlung_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.sammlung,
           table: 'sammlung',
@@ -558,10 +603,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeSammlung, onError:', error),
-    })
-  unsubscribe.sammlung_file = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved sammlung'),
+    },
+  )
+  unsubscribe.sammlung_file = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription SammlungFile($where: sammlung_file_bool_exp) {
           sammlung_file(where: $where) {
             ...SammlungFileFields
@@ -570,9 +617,9 @@ const initializeSubscriptions = ({ store }) => {
         ${sammlungFileFragment}
       `,
       variables: { where: { _rev_at: { _gt: sammlung_file_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.sammlung_file,
           table: 'sammlung_file',
@@ -580,10 +627,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeSammlungFile, onError:', error),
-    })
-  unsubscribe.teilkultur = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved sammlung_file'),
+    },
+  )
+  unsubscribe.teilkultur = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Teilkultur($where: teilkultur_bool_exp) {
           teilkultur(where: $where) {
             ...TeilkulturFields
@@ -592,9 +641,9 @@ const initializeSubscriptions = ({ store }) => {
         ${teilkulturFragment}
       `,
       variables: { where: { _rev_at: { _gt: teilkultur_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.teilkultur,
           table: 'teilkultur',
@@ -602,10 +651,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeTeilkultur, onError:', error),
-    })
-  unsubscribe.teilzaehlung = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved teilkultur'),
+    },
+  )
+  unsubscribe.teilzaehlung = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Teilzaehlung($where: teilzaehlung_bool_exp) {
           teilzaehlung(where: $where) {
             ...TeilzaehlungFields
@@ -614,9 +665,9 @@ const initializeSubscriptions = ({ store }) => {
         ${teilzaehlungFragment}
       `,
       variables: { where: { _rev_at: { _gt: teilzaehlung_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.teilzaehlung,
           table: 'teilzaehlung',
@@ -624,10 +675,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeTeilzaehlung, onError:', error),
-    })
-  unsubscribe.user_role = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved teilzaehlung'),
+    },
+  )
+  unsubscribe.user_role = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription UserRole($where: user_role_bool_exp) {
           user_role(where: $where) {
             ...UserRoleFields
@@ -636,9 +689,9 @@ const initializeSubscriptions = ({ store }) => {
         ${userRoleFragment}
       `,
       variables: { where: { _rev_at: { _gt: user_role_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.user_role,
           table: 'user_role',
@@ -646,10 +699,12 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeUserRole, onError:', error),
-    })
-  unsubscribe.zaehlung = store.gqlWsClient
-    .request({
-      query: gql`
+      complete: () => console.log('resolved user_role'),
+    },
+  )
+  unsubscribe.zaehlung = store.gqlWsClient.subscribe(
+    {
+      query: `
         subscription Zaehlung($where: zaehlung_bool_exp) {
           zaehlung(where: $where) {
             ...ZaehlungFields
@@ -658,9 +713,9 @@ const initializeSubscriptions = ({ store }) => {
         ${zaehlungFragment}
       `,
       variables: { where: { _rev_at: { _gt: zaehlung_lastUpdated } } },
-    })
-    .subscribe({
-      next(data) {
+    },
+    {
+      next: (data) => {
         processSubscriptionResult({
           data: data.data.zaehlung,
           table: 'zaehlung',
@@ -668,7 +723,9 @@ const initializeSubscriptions = ({ store }) => {
         })
       },
       error: (error) => console.log('subscribeZaehlung, onError:', error),
-    })
+      complete: () => console.log('resolved zaehlung'),
+    },
+  )
   return unsubscribe
 }
 
