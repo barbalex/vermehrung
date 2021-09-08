@@ -91,7 +91,6 @@ const initializeSubscriptions = ({ store }) => {
     },
     {
       next: (data) => {
-        console.log('initializeSubscriptions, art, data:', data.data.art)
         processSubscriptionResult({
           data: data.data.art,
           table: 'art',
