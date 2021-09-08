@@ -26,8 +26,6 @@ const initiateApp = async () => {
     gqlWsClient = (() => {
       token = getToken()
 
-      console.log('initiateApp, wsClient setting token:', token)
-
       return new SubscriptionClient(constants?.graphQlWsUri, {
         reconnect: true,
         lazy: true,
