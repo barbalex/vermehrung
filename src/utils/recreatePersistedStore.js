@@ -81,7 +81,7 @@ const recreatePersistedStore = async ({ store }) => {
   const auth = getAuth(fbApp)
   setFirebaseAuth(auth)
   unregisterAuthObserver = onAuthStateChanged(auth, async (user) => {
-    console.log('onAuthStateChanged, user: ', user)
+    //console.log('onAuthStateChanged, user: ', user)
     setUser(user)
     // set last activeNodeArray
     // only if top domain was visited
