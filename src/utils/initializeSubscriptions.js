@@ -1,35 +1,4 @@
-import gql from 'graphql-tag'
-
 import processSubscriptionResult from './processSubscriptionResult'
-import {
-  aeArt as aeArtFragment,
-  art as artFragment,
-  artFile as artFileFragment,
-  artQk as artQkFragment,
-  av as avFragment,
-  event as eventFragment,
-  garten as gartenFragment,
-  gartenFile as gartenFileFragment,
-  gv as gvFragment,
-  herkunft as herkunftFragment,
-  herkunftFile as herkunftFileFragment,
-  kultur as kulturFragment,
-  kulturFile as kulturFileFragment,
-  kulturQk as kulturQkFragment,
-  kulturOption as kulturOptionFragment,
-  lieferung as lieferungFragment,
-  lieferungFile as lieferungFileFragment,
-  person as personFragment,
-  personFile as personFileFragment,
-  personOption as personOptionFragment,
-  sammelLieferung as sammelLieferungFragment,
-  sammlung as sammlungFragment,
-  sammlungFile as sammlungFileFragment,
-  teilkultur as teilkulturFragment,
-  teilzaehlung as teilzaehlungFragment,
-  userRole as userRoleFragment,
-  zaehlung as zaehlungFragment,
-} from './fragments'
 
 const initializeSubscriptions = ({ store }) => {
   const {
@@ -65,7 +34,6 @@ const initializeSubscriptions = ({ store }) => {
 
   // TODO:
   // resubscribe in a throttled way when _lastUpdated changes
-  let aeArtResult
   unsubscribe.ae_art = store.gqlWsClient.subscribe(
     {
       query: `
@@ -82,8 +50,6 @@ const initializeSubscriptions = ({ store }) => {
     },
     {
       next: (data) => {
-        console.log('subscription AeArt, next, data:', data)
-        aeArtResult = data.data.ae_art
         processSubscriptionResult({
           data: data.data.ae_art,
           table: 'ae_art',
@@ -99,7 +65,7 @@ const initializeSubscriptions = ({ store }) => {
         // need to retry
         setTimeout(() => store.incrementWsReconnectCount(), 3000)
       },
-      complete: () => console.log('resolved ae_art, aeArtResult:', aeArtResult),
+      complete: () => console.log('resolved ae_art'),
     },
   )
   unsubscribe.art = store.gqlWsClient.subscribe(
