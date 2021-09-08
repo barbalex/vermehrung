@@ -1,4 +1,3 @@
-import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { createClient } from 'urql'
 import { createClient as createWsClient } from 'graphql-ws'
 
@@ -43,48 +42,11 @@ const initiateApp = async () => {
         },
       })
     })()
-    // https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
-    // gqlWsClient = (() => {
-    //   token = getToken()
-
-    //   return new SubscriptionClient(constants?.graphQlWsUri, {
-    //     reconnect: true,
-    //     lazy: true,
-    //     connectionCallback: async (error) => {
-    //       if (error) {
-    //         console.log('gqlWsClient connectionCallback error:', error)
-    //         if (error.toLowerCase().includes('jwt')) {
-    //           await getAuthToken({ store })
-    //           token = getToken()
-    //           window.location.reload(true)
-    //         }
-    //       } else {
-    //         console.log('gqlWsClient connectionCallback worked')
-    //       }
-    //     },
-    //     connectionParams: {
-    //       headers: {
-    //         authorization: `Bearer ${token}`,
-    //       },
-    //     },
-    //   })
-    // })()
-    // gqlWsClient.onConnected(() => console.log('ws client connected'))
-    // gqlWsClient.onDisconnected(() => {
-    //   // TODO: react
-    //   console.log('ws client disconnected')
-    //   store.setShortTermOnline(false)
-    // })
-    // gqlWsClient.onReconnected(() => {
-    //   console.log('ws client re-connected')
-    //   store.setShortTermOnline(true)
-    // })
   }
   // need to renew header any time
   // solutions:
   // https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-307793837
 
-  console.log('initiateApp, gqlWsClient:', gqlWsClient)
   store.setGqlWsClient(gqlWsClient)
 
   const gqlClient = createClient({
