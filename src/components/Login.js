@@ -13,6 +13,11 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import localForage from 'localforage'
+import {
+  signOut,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from 'firebase/auth'
 
 import ErrorBoundary from './shared/ErrorBoundary'
 import StoreContext from '../storeContext'
@@ -39,7 +44,7 @@ const ResetButton = styled(Button)`
 `
 
 const Login = () => {
-  const { firebase, db } = useContext(StoreContext)
+  const { db, firebaseAuth } = useContext(StoreContext)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -62,15 +67,17 @@ const Login = () => {
       const passwordToUse =
         passwordPassed || password || passwordInput.current.value
       // do everything to clean up so no data is left
-      await firebase.auth().signOut()
+      await signOut(firebaseAuth)
       await localForage.clear()
       window.localStorage.removeItem('token')
       await db.write(async () => db.unsafeResetDatabase())
       setTimeout(async () => {
         try {
-          await firebase
-            .auth()
-            .signInWithEmailAndPassword(emailToUse, passwordToUse)
+          await signInWithEmailAndPassword(
+            firebaseAuth,
+            emailToUse,
+            passwordToUse,
+          )
         } catch (error) {
           setEmailErrorText(error.message)
           return setPasswordErrorText(error.message)
@@ -79,7 +86,7 @@ const Login = () => {
         //setTimeout(() => window.location.reload(true))
       })
     },
-    [db, email, firebase, password],
+    [db, email, password, firebaseAuth],
   )
   const onBlurEmail = useCallback(
     (e) => {
@@ -123,7 +130,7 @@ const Login = () => {
     if (!email) setEmailErrorText('Bitte Email-Adresse eingeben')
     setResetTitle('...')
     try {
-      await firebase.auth().sendPasswordResetEmail(email, {
+      await sendPasswordResetEmail(firebaseAuth, email, {
         url: `${constants?.appUri}/Vermehrung`,
         handleCodeInApp: true,
       })
@@ -137,7 +144,7 @@ const Login = () => {
     setTimeout(() => {
       setResetTitle('neues Passwort setzen')
     }, 5000)
-  }, [email, firebase])
+  }, [email, firebaseAuth])
 
   return (
     <ErrorBoundary>

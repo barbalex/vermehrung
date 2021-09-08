@@ -1,7 +1,7 @@
 import localForage from 'localforage'
 import { navigate } from '@reach/router'
-import fb from 'firebase/app'
-import 'firebase/auth'
+import { initializeApp, getApps, getApp } from 'firebase/app'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import persist from 'mst-persist'
 
 import getAuthToken from './getAuthToken'
@@ -20,8 +20,8 @@ const recreatePersistedStore = async ({ store }) => {
   const {
     setUser,
     setGettingAuthUser,
-    setFirebase,
     online,
+    setFirebaseAuth,
     setOnline,
     shortTermOnline,
     setShortTermOnline,
@@ -70,15 +70,18 @@ const recreatePersistedStore = async ({ store }) => {
     jsonify: false,
     blacklist,
   })
+  let fbApp
   // catch app already existing
   // https://stackoverflow.com/a/48686803/712005
-  if (!fb.apps.length) {
-    fb.initializeApp(firebaseConfig)
+  if (!getApps().length) {
+    fbApp = initializeApp(firebaseConfig)
   } else {
-    fb.app() // if already initialized, use that one
+    fbApp = getApp() // if already initialized, use that one
   }
-  setFirebase(fb)
-  unregisterAuthObserver = fb.auth().onAuthStateChanged(async (user) => {
+  const auth = getAuth(fbApp)
+  setFirebaseAuth(auth)
+  unregisterAuthObserver = onAuthStateChanged(auth, async (user) => {
+    //console.log('onAuthStateChanged, user: ', user)
     setUser(user)
     // set last activeNodeArray
     // only if top domain was visited
