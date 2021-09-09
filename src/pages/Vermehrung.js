@@ -146,6 +146,7 @@ const Vermehrung = ({ location }) => {
     }
     return function cleanup() {
       if (unsubscribe && Object.values(unsubscribe)) {
+        // TODO: Uncaught TypeError: value.unsubscribe is not a function
         Object.values(unsubscribe).forEach((value) => value.unsubscribe())
       }
     }
