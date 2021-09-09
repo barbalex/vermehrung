@@ -167,11 +167,11 @@ const GartenForm = ({
         // only if not yet exists
         // do this in garten.edit?
         if (!gvPersonIds.includes(value)) {
-          console.log('Garten, will insert into gvRev:', {
-            garten_id: row.id,
-            person_id: value,
-            gvPersonIds,
-          })
+          // console.log('Garten, will insert into gvRev:', {
+          //   garten_id: row.id,
+          //   person_id: value,
+          //   gvPersonIds,
+          // })
           insertGvRev({ values: { garten_id: row.id, person_id: value } })
         }
       }
