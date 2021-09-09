@@ -246,7 +246,7 @@ const myTypes = types
     )
     return {
       incrementWsReconnectCount() {
-        //self.wsReconnectCount = self.wsReconnectCount + 1
+        self.wsReconnectCount = self.wsReconnectCount + 1
       },
       setInitiallyQuerying(val) {
         self.initiallyQuerying = val
