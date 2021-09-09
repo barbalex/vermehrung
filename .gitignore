@@ -60,7 +60,7 @@ typings/
 .cache/
 #public
 yarn-error.log
-package-lock.json
+#package-lock.json
 
 #my own
 secrets.json
