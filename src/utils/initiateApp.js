@@ -60,6 +60,7 @@ const initiateApp = async () => {
           connected: () => {
             console.log('ws client connected')
             store.setShortTermOnline(true)
+            store.incrementWsReconnectCount()
           },
         },
       })
