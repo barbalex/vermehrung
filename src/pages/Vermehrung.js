@@ -130,7 +130,7 @@ const Vermehrung = ({ location }) => {
 
   useEffect(() => {
     let unsubscribe
-    if (existsUser) {
+    if (existsUser && !gettingAuthUser) {
       // TODO:
       // need to fetch user to get role
       // then pass role to initializeSubscriptions to skip fields
@@ -151,7 +151,7 @@ const Vermehrung = ({ location }) => {
     }
     // wsReconnectCount is made so a subscription can provoke re-subscription on error
     // see initializeSubscriptions, unsubscribe.ae_art
-  }, [existsUser, store, wsReconnectCount])
+  }, [existsUser, store, wsReconnectCount, gettingAuthUser])
 
   if (gettingAuthUser || isIOS) {
     return (
