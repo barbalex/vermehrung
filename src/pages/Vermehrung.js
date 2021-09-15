@@ -146,7 +146,7 @@ const Vermehrung = ({ location }) => {
     }
     return function cleanup() {
       if (unsubscribe && Object.values(unsubscribe)) {
-        Object.values(unsubscribe).forEach((value) => value?.unsubscribe())
+        Object.values(unsubscribe).forEach((value) => value?.unsubscribe?.())
       }
     }
     // wsReconnectCount is made so a subscription can provoke re-subscription on error
