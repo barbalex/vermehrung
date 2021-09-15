@@ -22,10 +22,50 @@ const initiateApp = async () => {
   let gqlWsClient
   let token
   if (typeof window !== 'undefined') {
+    // enable gracefull restart: https://github.com/enisdenjo/graphql-ws#graceful-restart
+    const createRestartableClient = (options) => {
+      let restartRequested = false
+      let restart = () => {
+        restartRequested = true
+      }
+
+      const client = createWsClient({
+        ...options,
+        on: {
+          ...options.on,
+          opened: (socket) => {
+            options.on?.opened?.(socket)
+
+            restart = () => {
+              if (socket.readyState === WebSocket.OPEN) {
+                // if the socket is still open for the restart, do the restart
+                socket.close(4205, 'Client Restart')
+              } else {
+                // otherwise the socket might've closed, indicate that you want
+                // a restart on the next opened event
+                restartRequested = true
+              }
+            }
+
+            // just in case you were eager to restart
+            if (restartRequested) {
+              restartRequested = false
+              restart()
+            }
+          },
+        },
+      })
+
+      return {
+        ...client,
+        restart: () => restart(),
+      }
+    }
+
     gqlWsClient = (() => {
       token = getToken()
 
-      return createWsClient({
+      return createRestartableClient({
         url: constants?.graphQlWsUri,
         connectionParams: {
           headers: {
@@ -42,12 +82,11 @@ const initiateApp = async () => {
         },
       })
     })()
+    store.setGqlWsClient(gqlWsClient)
   }
   // need to renew header any time
   // solutions:
   // https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-307793837
-
-  store.setGqlWsClient(gqlWsClient)
 
   const gqlClient = createClient({
     url: constants?.graphQlUri,
