@@ -25,7 +25,7 @@ const getAuthToken = async ({ store }) => {
     }
     // need to throttle to prevent cycle
     //throttle(regetMe, 5000, { leading: true })
-    setTimeout(() => throttle(regetMe, 5000, { leading: true }))
+    setTimeout(() => throttle(regetMe, 5000, { leading: true }), 300)
     return
   }
   console.log('getAuthToken, user.uid:', user.uid)
@@ -52,6 +52,7 @@ const getAuthToken = async ({ store }) => {
       message: error?.response?.data,
     })
   }
+  console.log('getAuthToken, res?.status:', res?.status)
   if (res?.status === 200) {
     if (!online) {
       setOnline(true)
@@ -59,6 +60,7 @@ const getAuthToken = async ({ store }) => {
     if (!shortTermOnline) {
       setShortTermOnline(true)
     }
+    // TODO: timeout this?
     let token
     try {
       token = await user.getIdToken(true)
@@ -73,15 +75,16 @@ const getAuthToken = async ({ store }) => {
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-348492358
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
-    //console.log('getAuthToken got new token:', token)
+    console.log('getAuthToken setting new token:', token)
     window.localStorage.setItem('token', token)
+    // TODO: do i need to reload window here?
     setAuthorizing(false)
+    return true
   } else {
-    //console.log('getAuthToken, got no new token')
+    console.log('getAuthToken, got no new token')
     setAuthorizing(false)
+    return true
   }
-  setAuthorizing(false)
-  return true
 }
 
 export default getAuthToken
