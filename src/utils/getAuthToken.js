@@ -52,7 +52,6 @@ const getAuthToken = async ({ store }) => {
       message: error?.response?.data,
     })
   }
-  console.log('getAuthToken, res?.status:', res?.status)
   if (res?.status === 200) {
     if (!online) {
       setOnline(true)
