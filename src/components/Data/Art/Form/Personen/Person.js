@@ -66,7 +66,7 @@ const Av = ({ av }) => {
     const subscription = observable.subscribe((person) => {
       setPersonLabel(personLabelFromPerson({ person }))
     })
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [av.person])
 
   if (!av) return null

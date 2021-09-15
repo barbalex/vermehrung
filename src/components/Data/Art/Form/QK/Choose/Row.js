@@ -50,7 +50,7 @@ const ChooseArtQkRow = ({ qk }) => {
       }),
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { userPersonOption, artQkChoosen } = dataState
 

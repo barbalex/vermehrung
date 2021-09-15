@@ -49,7 +49,7 @@ const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { userPersonOption } = dataState
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =

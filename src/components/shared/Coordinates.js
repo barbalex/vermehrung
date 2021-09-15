@@ -93,7 +93,7 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { userPersonOption } = dataState
   const { ga_lat_lng } = userPersonOption ?? {}

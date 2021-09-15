@@ -57,7 +57,7 @@ const EventFormTitle = ({
         setCountState({ totalCount, filteredCount }),
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [
     db,
     kulturIdInActiveNodeArray,

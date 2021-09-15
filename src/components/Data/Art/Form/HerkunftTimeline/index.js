@@ -78,7 +78,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [artId, db, filter.herkunft._deleted])
 
   const [open, setOpen] = useState(false)

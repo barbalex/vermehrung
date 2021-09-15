@@ -64,7 +64,7 @@ const Garten = ({
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))
     })
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, filter.garten, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)

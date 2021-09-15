@@ -258,7 +258,7 @@ const Row = ({ style, node, nodes, userRole }) => {
       setPerson(person),
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, node?.nodeType, node.table, node.url])
 
   const accountId = person?.account_id ?? null

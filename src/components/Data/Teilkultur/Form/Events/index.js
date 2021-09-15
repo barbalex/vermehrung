@@ -53,7 +53,7 @@ const TkEvents = ({ teilkultur }) => {
       const eventsSorted = events.sort(eventSort)
       setEvents(eventsSorted)
     })
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [filter.event._deleted, teilkultur.events])
 
   return (

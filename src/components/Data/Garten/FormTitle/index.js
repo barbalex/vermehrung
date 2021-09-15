@@ -67,7 +67,7 @@ const GartenFormTitle = ({
         setCountState({ totalCount, filteredCount }),
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [
     db,
     personIdInActiveNodeArray,

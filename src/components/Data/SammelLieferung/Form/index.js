@@ -112,7 +112,7 @@ const SammelLieferungForm = ({
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [
     db,
     row.nach_kultur_id,

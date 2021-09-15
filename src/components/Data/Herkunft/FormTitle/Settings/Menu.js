@@ -61,7 +61,7 @@ const SettingsHerkunftMenu = ({ anchorEl, setAnchorEl }) => {
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { userPersonOption } = dataState
 
