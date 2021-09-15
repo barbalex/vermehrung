@@ -178,6 +178,7 @@ const myTypes = types
             // In case a conflict was caused by two EXACT SAME changes,
             // this will bounce because of the same rev. We want to ignore this:
             if (response.error.message.includes('JWT')) {
+              console.log('getting auth token due to jwt error')
               return getAuthToken({ store: self })
             } else if (
               lcMessage.includes('uniqueness violation') &&

@@ -97,6 +97,7 @@ const recreatePersistedStore = async ({ store }) => {
     if (nowOnline !== online) setOnline(nowOnline)
     if (nowOnline !== shortTermOnline) setShortTermOnline(nowOnline)
     if (nowOnline) {
+      console.log('recreatePersistedStore getting auth token')
       await getAuthToken({ store })
     }
     setGettingAuthUser(false)

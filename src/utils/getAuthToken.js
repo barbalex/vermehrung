@@ -12,10 +12,11 @@ const getAuthToken = async ({ store }) => {
   } = store
   if (!user?.uid) {
     console.log('getAuthToken returning because of missing user.uid')
-    //setTimeout(() => getAuthToken({ store }), 200)
-    if (typeof window !== 'undefined') {
-      window.location.reload(true)
-    }
+    setTimeout(() => getAuthToken({ store }), 500)
+    // nope, this causes never ending reloads
+    // if (typeof window !== 'undefined') {
+    //   window.location.reload(true)
+    // }
     return
   }
   /*if (authorizing) {
