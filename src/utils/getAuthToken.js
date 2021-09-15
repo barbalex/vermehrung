@@ -28,7 +28,7 @@ const getAuthToken = async ({ store }) => {
     setTimeout(() => throttle(regetMe, 5000, { leading: true }), 300)
     return
   }
-  console.log('getAuthToken, user.uid:', user.uid)
+  //console.log('getAuthToken, user.uid:', user.uid)
   /*if (authorizing) {
     console.log('getAuthToken returning because authorizing is true')
     return
@@ -74,7 +74,7 @@ const getAuthToken = async ({ store }) => {
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-348492358
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
-    console.log('getAuthToken setting new token:', token)
+    //console.log('getAuthToken setting new token:', token)
     window.localStorage.setItem('token', token)
     // TODO: do i need to reload window here?
     setAuthorizing(false)
