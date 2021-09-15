@@ -14,20 +14,18 @@ const getAuthToken = async ({ store }) => {
   if (!user?.uid) {
     console.log('getAuthToken missing user.uid')
     const regetMe = () => {
-      setTimeout(() => {
-        console.log('getAuthToken recalling itself')
-        getAuthToken({ store })
-        if (typeof window !== 'undefined') {
-          setTimeout(() => {
-            console.log('getAuthToken reloading window')
-            window.location.reload(true)
-          }, 300)
-        }
-      }, 100)
+      console.log('getAuthToken recalling itself')
+      getAuthToken({ store })
+      if (typeof window !== 'undefined') {
+        setTimeout(() => {
+          console.log('getAuthToken reloading window')
+          window.location.reload(true)
+        }, 300)
+      }
     }
     // need to throttle to prevent cycle
-    throttle(regetMe, 5000, { leading: true })
-    //setTimeout(() => throttle(regetMe, 5000, { leading: true }))
+    //throttle(regetMe, 5000, { leading: true })
+    setTimeout(() => throttle(regetMe, 5000, { leading: true }))
     return
   }
   /*if (authorizing) {
