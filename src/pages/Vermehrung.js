@@ -130,6 +130,8 @@ const Vermehrung = ({ location }) => {
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
   useEffect(() => {
+    console.log('vermehrung, subscription effect: authorizing:', authorizing)
+    console.log('vermehrung, subscription effect: existsUser:', existsUser)
     let unsubscribe
     if (existsUser && !authorizing) {
       // TODO:

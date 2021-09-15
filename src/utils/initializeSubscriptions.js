@@ -1,6 +1,7 @@
 import processSubscriptionResult from './processSubscriptionResult'
 
 const initializeSubscriptions = ({ store }) => {
+  console.log('initializing subscriptions')
   const {
     ae_art_lastUpdated,
     art_lastUpdated,
