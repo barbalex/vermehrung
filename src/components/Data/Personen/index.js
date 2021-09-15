@@ -125,7 +125,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
     // need to rerender if any of the values of personFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, ...Object.values(personFilter), personFilter, store])

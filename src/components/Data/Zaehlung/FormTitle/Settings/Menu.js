@@ -42,7 +42,7 @@ const SettingsZaehlungenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
       setKulturOption(kulturOption),
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, kulturId])
   const { z_bemerkungen } = kulturOption ?? {}
 

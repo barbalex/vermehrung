@@ -68,7 +68,7 @@ const SettingsTree = () => {
         }),
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { userPersonOption } = dataState
   const {

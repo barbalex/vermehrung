@@ -219,7 +219,7 @@ const SammlungForm = ({
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [
     db,
     filter.art._deleted,

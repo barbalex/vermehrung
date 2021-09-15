@@ -32,7 +32,7 @@ const HistoryButton = ({ asMenu, id, showHistory, setShowHistory, table }) => {
     const observable = id ? db.get(table).findAndObserve(id) : $of(null)
     const subscription = observable.subscribe((row) => setDataState({ row }))
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [id, db, table])
   const { row } = dataState
 

@@ -53,7 +53,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, kulturId, user.uid])
   const { kulturOption, userPersonOption } = dataState
 

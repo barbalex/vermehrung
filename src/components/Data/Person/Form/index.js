@@ -83,7 +83,7 @@ const Person = ({
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, row.nr, row.user_role, setError, showFilter])
   const { userRoleWerte, userRole } = dataState
 

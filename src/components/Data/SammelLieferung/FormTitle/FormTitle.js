@@ -67,7 +67,7 @@ const SammelLieferungFormTitle = ({
       ([userPersonOption]) => setUserPersonOption(userPersonOption),
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, user])
   const { sl_auto_copy_edits } = userPersonOption ?? {}
 

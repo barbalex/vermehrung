@@ -99,7 +99,7 @@ const Herkunft = ({
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, filter.herkunft, row.nr, setError, showFilter, user])
   const { userPersonOption } = dataState
 

@@ -127,7 +127,7 @@ const ArtPersonen = ({ art }) => {
         setDataState({ avsSorted, personWerte })
       },
     )
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [art.avs, db, filter.person._deleted, filter.person.aktiv])
   const { avsSorted, personWerte } = dataState
 

@@ -69,7 +69,7 @@ const Teilkultur = ({
       })
     })
     return () => {
-      if (subscription) subscription?.unsubscribe()
+      if (subscription) subscription?.unsubscribe?.()
     }
   }, [db, filter.teilkultur, id, showFilter])
   const { row, rawRow } = dataState

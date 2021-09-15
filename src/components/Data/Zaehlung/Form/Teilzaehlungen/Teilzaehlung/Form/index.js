@@ -143,7 +143,7 @@ const TeilzaehlungForm = ({
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [
     db,
     filter.teilkultur._deleted,

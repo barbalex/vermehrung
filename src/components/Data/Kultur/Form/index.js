@@ -263,7 +263,7 @@ const KulturForm = ({
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [
     user.uid,
     row?.garten,
@@ -373,7 +373,7 @@ const KulturForm = ({
       },
     )
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, user, artsToChoose.length, herkunftsToChoose.length])
   const { artWerte, herkunftWerte } = dataState2

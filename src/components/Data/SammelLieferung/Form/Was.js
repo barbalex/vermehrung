@@ -108,7 +108,7 @@ const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
       setArtWerte(artWerte)
     })
 
-    return () => subscription?.unsubscribe()
+    return () => subscription?.unsubscribe?.()
   }, [db, filter.art._deleted, row.art, showFilter])
 
   const openGenVielfaldDocs = useCallback(() => {

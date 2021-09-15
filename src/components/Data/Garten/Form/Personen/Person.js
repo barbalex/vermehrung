@@ -53,7 +53,7 @@ const Gv = ({ gv }) => {
       .observe()
       .subscribe((person) => setPersonLabel(personLabelFromPerson({ person })))
 
-    return () => personSubscription?.unsubscribe()
+    return () => personSubscription?.unsubscribe?.()
   }, [gv.person])
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
