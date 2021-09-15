@@ -15,6 +15,11 @@ const processSubscriptionResult = async ({
   table,
   store,
 }) => {
+  console.log('processSubscriptionResult for table:', table)
+  console.log(
+    'processSubscriptionResult dataToCheck.length:',
+    dataToCheck.length,
+  )
   const { db, setInitiallyQueried, setLastUpdated, setInitiallyQuerying } =
     store
   if (!dataToCheck.length) {
