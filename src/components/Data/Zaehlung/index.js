@@ -68,7 +68,7 @@ const Zaehlung = ({
         rawRow: JSON.stringify(newRow?._raw ?? newRow),
       })
     })
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, filter.zaehlung, id, showFilter])
   const { row, rawRow } = dataState
 

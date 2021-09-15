@@ -136,7 +136,7 @@ const PersonArten = ({ person }) => {
         setDataState({ gvs: gvsSorted, gartenWerte })
       },
     )
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     person.gvs,

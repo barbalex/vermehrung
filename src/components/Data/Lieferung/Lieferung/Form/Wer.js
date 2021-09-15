@@ -113,7 +113,7 @@ const LieferungWer = ({
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     filter.lieferung,

@@ -64,7 +64,7 @@ const Art = ({
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))
     })
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, filter.art, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)

@@ -123,7 +123,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     personIdInActiveNodeArray,

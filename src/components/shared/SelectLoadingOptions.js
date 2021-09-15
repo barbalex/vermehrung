@@ -101,7 +101,7 @@ const SelectLoadingOptions = ({
       }),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, field, labelField, labelTable, row])
 
   const loadOptions = useCallback(

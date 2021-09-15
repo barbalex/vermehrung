@@ -115,7 +115,7 @@ const TeilkulturForm = ({
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     filter.kultur._deleted,

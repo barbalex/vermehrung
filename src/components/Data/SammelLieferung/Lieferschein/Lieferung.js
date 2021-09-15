@@ -62,7 +62,7 @@ const LieferungForLieferschein = ({ lieferung: row }) => {
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, row.art, row.art_id, row.von_kultur_id, row.von_sammlung_id])
   const { artLabel, herkunftLabel } = dataState
 

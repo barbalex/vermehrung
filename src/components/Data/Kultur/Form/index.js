@@ -263,7 +263,7 @@ const KulturForm = ({
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     user.uid,
     row?.garten,
@@ -273,12 +273,8 @@ const KulturForm = ({
     row.garten_id,
     showFilter,
   ])
-  const {
-    gartenWerte,
-    userPersonOption,
-    artsToChoose,
-    herkunftsToChoose,
-  } = dataState
+  const { gartenWerte, userPersonOption, artsToChoose, herkunftsToChoose } =
+    dataState
 
   const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
 
@@ -377,7 +373,7 @@ const KulturForm = ({
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, user, artsToChoose.length, herkunftsToChoose.length])
   const { artWerte, herkunftWerte } = dataState2

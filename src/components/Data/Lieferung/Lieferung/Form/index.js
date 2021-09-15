@@ -121,7 +121,7 @@ const LierferungForm = ({
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     row.nach_kultur_id,
@@ -131,12 +131,8 @@ const LierferungForm = ({
     row.von_sammlung_id,
     user.uid,
   ])
-  const {
-    herkunft,
-    herkunftQuelle,
-    userPersonOption,
-    sammelLieferung,
-  } = dataState
+  const { herkunft, herkunftQuelle, userPersonOption, sammelLieferung } =
+    dataState
 
   const { li_show_sl_felder } = userPersonOption ?? {}
 

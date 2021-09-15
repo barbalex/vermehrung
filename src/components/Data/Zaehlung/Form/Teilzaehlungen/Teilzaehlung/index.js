@@ -74,7 +74,7 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
       })
     })
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, id])
   const { row, rawRow } = dataState
 

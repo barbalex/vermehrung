@@ -130,7 +130,7 @@ const Lieferschein = ({ row }) => {
         }),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, row.lieferungs, row.person, row.von_kultur_id])
   const { lieferungs, vonKulturGarten, person } = dataState
 

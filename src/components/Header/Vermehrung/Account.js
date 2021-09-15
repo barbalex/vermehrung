@@ -51,7 +51,7 @@ const Account = () => {
       setUserPerson(userPerson),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, user])
 
   const [anchorEl, setAnchorEl] = useState(null)

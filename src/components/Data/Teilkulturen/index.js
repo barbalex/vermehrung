@@ -114,7 +114,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
         })
       },
     )
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     // need to rerender if any of the values of teilkulturFilter changes

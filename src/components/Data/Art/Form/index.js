@@ -78,7 +78,7 @@ const ArtForm = ({
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, filter.art._deleted])
   const { artsSorted, aeArts } = dataState
 

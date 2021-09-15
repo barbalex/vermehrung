@@ -70,7 +70,7 @@ const Garten = ({ gv }) => {
 
       setGartenLabel(label)
     })
-    return () => gartenSubscription.unsubscribe()
+    return () => gartenSubscription?.unsubscribe()
   }, [gv.garten])
 
   if (!gv) return null

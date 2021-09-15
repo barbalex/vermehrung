@@ -109,7 +109,7 @@ const Events = ({ filter: showFilter, width, height }) => {
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
     // need to rerender if any of the values of eventFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

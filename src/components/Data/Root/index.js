@@ -114,7 +114,7 @@ const Root = ({ filter: showFilter }) => {
         },
       )
 
-      return () => subscription.unsubscribe()
+      return () => subscription?.unsubscribe()
     },
     // DO NOT ADD activeNodeArray
     // causes maximum update depth exceeded error

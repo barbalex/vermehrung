@@ -57,7 +57,7 @@ const PrognoseMenu = ({
       setZaehlung(zaehlung),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [teilzaehlung.zaehlung, teilzaehlung.zaehlung_id])
   const kulturId = zaehlung?.kultur_id
 

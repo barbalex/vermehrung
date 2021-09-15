@@ -16,12 +16,8 @@ const KulturFormTitleChooser = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const {
-    artIdInActiveNodeArray,
-    db,
-    filter,
-    gartenIdInActiveNodeArray,
-  } = store
+  const { artIdInActiveNodeArray, db, filter, gartenIdInActiveNodeArray } =
+    store
 
   const [countState, setCountState] = useState({
     totalCount: 0,
@@ -77,7 +73,7 @@ const KulturFormTitleChooser = ({
         setCountState({ totalCount, filteredCount }),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     gartenIdInActiveNodeArray,
