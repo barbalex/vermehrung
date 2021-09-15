@@ -13,6 +13,9 @@ const getAuthToken = async ({ store }) => {
   if (!user?.uid) {
     console.log('getAuthToken returning because of missing user.uid')
     //setTimeout(() => getAuthToken({ store }), 200)
+    if (typeof window !== 'undefined') {
+      window.location.reload(true)
+    }
     return
   }
   /*if (authorizing) {
