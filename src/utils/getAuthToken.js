@@ -28,6 +28,7 @@ const getAuthToken = async ({ store }) => {
     setTimeout(() => throttle(regetMe, 5000, { leading: true }))
     return
   }
+  console.log('getAuthToken, user.uid:', user.uid)
   /*if (authorizing) {
     console.log('getAuthToken returning because authorizing is true')
     return
