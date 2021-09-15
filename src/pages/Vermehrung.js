@@ -72,6 +72,7 @@ const Vermehrung = ({ location }) => {
   const {
     activeForm,
     gettingAuthUser,
+    authorizing,
     initialDataQueried,
     initiallyQuerying,
     isPrint,
@@ -130,7 +131,7 @@ const Vermehrung = ({ location }) => {
 
   useEffect(() => {
     let unsubscribe
-    if (existsUser && !gettingAuthUser) {
+    if (existsUser && !authorizing) {
       // TODO:
       // need to fetch user to get role
       // then pass role to initializeSubscriptions to skip fields
@@ -151,7 +152,7 @@ const Vermehrung = ({ location }) => {
     }
     // wsReconnectCount is made so a subscription can provoke re-subscription on error
     // see initializeSubscriptions, unsubscribe.ae_art
-  }, [existsUser, store, wsReconnectCount, gettingAuthUser])
+  }, [existsUser, store, wsReconnectCount, authorizing])
 
   if (gettingAuthUser || isIOS) {
     return (
