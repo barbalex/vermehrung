@@ -184,7 +184,7 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  if (online && authorizing) {
+  if (online && !initialDataQueried) {
     return (
       <ErrorBoundary>
         <Layout>
