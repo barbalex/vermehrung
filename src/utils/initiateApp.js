@@ -55,8 +55,9 @@ const initiateApp = async () => {
           },
           closed: () => {
             console.log('ws client disconnected')
-            store.setShortTermOnline(false)
-            store.incrementWsReconnectCount()
+            //store.setShortTermOnline(false)
+            //store.incrementWsReconnectCount()
+            typeof window !== 'undefined' && window.location.reload(true)
           },
           connected: () => {
             console.log('ws client connected')
