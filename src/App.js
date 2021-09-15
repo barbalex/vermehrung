@@ -63,22 +63,18 @@ const App = ({ element }) => {
   const [database, setDatabase] = useState(null)
 
   useEffect(() => {
-    if (store && !database) {
-      const db = initiateDb(store)
-      setDatabase(db)
-      store.setDb(db)
-    }
-  }, [store, database])
-
-  useEffect(() => {
     let unregister
     initiateApp().then(
       ({ store: storeReturned, unregister: unregisterReturned }) => {
         setStore(storeReturned)
         unregister = unregisterReturned
+        const db = initiateDb(store)
+        setDatabase(db)
+        storeReturned.setDb(db)
       },
     )
     return () => unregister()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // without store bad things happen
