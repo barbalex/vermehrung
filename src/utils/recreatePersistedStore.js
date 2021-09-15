@@ -16,6 +16,7 @@ const firebaseConfig = {
 }
 
 const recreatePersistedStore = async ({ store }) => {
+  console.log('recreatePersistedStore running')
   let unregisterAuthObserver = () => {}
   const {
     setUser,
@@ -81,7 +82,9 @@ const recreatePersistedStore = async ({ store }) => {
   const auth = getAuth(fbApp)
   setFirebaseAuth(auth)
   unregisterAuthObserver = onAuthStateChanged(auth, async (user) => {
-    //console.log('onAuthStateChanged, user: ', user)
+    // BEWARE: this is called at least twice
+    // https://stackoverflow.com/questions/37673616/firebase-android-onauthstatechanged-called-twice
+    if (store.user?.uid) return
     setUser(user)
     // set last activeNodeArray
     // only if top domain was visited
