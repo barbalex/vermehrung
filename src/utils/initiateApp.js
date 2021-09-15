@@ -53,6 +53,14 @@ const initiateApp = async () => {
               restart()
             }
           },
+          closed: () => {
+            console.log('ws client disconnected')
+            store.setShortTermOnline(false)
+          },
+          connected: () => {
+            console.log('ws client connected')
+            store.setShortTermOnline(true)
+          },
         },
       })
 
