@@ -73,7 +73,7 @@ const SammlungFormTitleChooser = ({
         setCountState({ totalCount, filteredCount }),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     artIdInActiveNodeArray,

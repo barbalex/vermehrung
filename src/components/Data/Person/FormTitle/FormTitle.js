@@ -56,7 +56,7 @@ const PersonFormTitle = ({
       setUserRole(userRole),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, user])
 
   if (width < 568) {

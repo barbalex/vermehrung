@@ -50,7 +50,7 @@ const ChooseKulturQkRow = ({ qk }) => {
       }),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, user.uid])
   const { userPersonOption, kulturQkChoosen } = dataState
 

@@ -64,7 +64,7 @@ const Kultur = ({
       setRow(newRow)
       setRawRow(JSON.stringify(newRow._raw))
     })
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, filter.kultur, id, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)

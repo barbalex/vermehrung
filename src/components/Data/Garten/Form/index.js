@@ -126,7 +126,7 @@ const GartenForm = ({
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     filter.person._deleted,

@@ -55,7 +55,7 @@ const TkTeilzaehlung = ({ tz, last }) => {
     const subscription = zaehlungObservable.subscribe((zaehlung) =>
       setZaehlung(zaehlung),
     )
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [tz.zaehlung])
 
   const datum = zaehlung?.datum

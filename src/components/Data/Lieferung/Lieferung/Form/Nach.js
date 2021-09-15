@@ -141,7 +141,7 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
       })
     })
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     filter.kultur._deleted,

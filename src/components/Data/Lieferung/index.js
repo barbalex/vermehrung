@@ -84,7 +84,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
         }),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, filter.lieferung, id, row?.sammel_lieferung, showFilter, user])
   const { row, rawRow, userPersonOption, sammelLieferung } = dataState
   const { li_show_sl } = userPersonOption ?? {}

@@ -217,7 +217,7 @@ const EventForm = ({
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     filter.kultur,

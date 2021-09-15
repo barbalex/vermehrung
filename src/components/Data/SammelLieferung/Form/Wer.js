@@ -104,7 +104,7 @@ const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     filter.sammel_lieferung,

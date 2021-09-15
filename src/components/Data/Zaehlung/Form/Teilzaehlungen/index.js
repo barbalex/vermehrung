@@ -68,7 +68,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
         setDataState({ teilzaehlungs, kulturOption })
       },
     )
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     kulturId,

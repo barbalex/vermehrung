@@ -46,7 +46,7 @@ const KulturNavButtons = ({ row }) => {
       setDataState({ kulturOption }),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [row.kultur_option])
   const { kulturOption } = dataState
 

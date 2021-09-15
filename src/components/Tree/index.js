@@ -174,7 +174,7 @@ const Tree = ({ width, height }) => {
       },
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [buildMyNodesDebounced, db, store, user.uid])
 
   useEffect(() => {

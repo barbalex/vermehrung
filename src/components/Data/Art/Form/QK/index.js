@@ -89,7 +89,7 @@ const ApQk = ({ artId }) => {
         }),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, user.uid])
   const { qks, userPersonOption } = dataState
   const qkChoosens = qks.filter((qk) =>

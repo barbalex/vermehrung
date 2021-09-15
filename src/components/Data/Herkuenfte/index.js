@@ -123,7 +123,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
         setDataState({ herkunfts: herkunfts.sort(herkunftSort), totalCount }),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [
     db,
     sammlungIdInActiveNodeArray,

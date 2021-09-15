@@ -44,7 +44,7 @@ const SettingsEventsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
       setDataState({ kulturOption }),
     )
 
-    return () => subscription.unsubscribe()
+    return () => subscription?.unsubscribe()
   }, [db, kulturId])
   const { kulturOption } = dataState
 

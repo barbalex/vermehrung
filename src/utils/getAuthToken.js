@@ -1,4 +1,5 @@
 import axios from 'redaxios'
+import throttle from 'lodash/throttle'
 
 const getAuthToken = async ({ store }) => {
   const {
@@ -11,12 +12,14 @@ const getAuthToken = async ({ store }) => {
     setShortTermOnline,
   } = store
   if (!user?.uid) {
-    console.log('getAuthToken returning because of missing user.uid')
-    setTimeout(() => getAuthToken({ store }), 500)
-    // nope, this causes never ending reloads
-    // if (typeof window !== 'undefined') {
-    //   window.location.reload(true)
-    // }
+    const regetMe = () => {
+      console.log('getAuthToken missing user.uid')
+      getAuthToken({ store })
+      typeof window !== 'undefined' && window.location.reload(true)
+    }
+    //setTimeout(() => getAuthToken({ store }), 500)
+    // need to throttle to prevent cycle
+    setTimeout(() => throttle(regetMe, 5000, { leading: true }))
     return
   }
   /*if (authorizing) {
