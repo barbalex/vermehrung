@@ -1,7 +1,7 @@
 {
   "name": "vermehrung.ch",
   "description": "breeding endangered plant species",
-  "version": "1.3.22",
+  "version": "1.3.23",
   "license": "ISC",
   "scripts": {
     "dev": "gatsby develop",
@@ -19,11 +19,6 @@
     "blueimp-md5": "2.18.0",
     "browser-update": "3.3.30",
     "date-fns": "2.24.0",
-    "eslint": "7.32.0",
-    "eslint-plugin-import": "2.24.2",
-    "eslint-plugin-react": "7.26.0",
-    "eslint-plugin-react-hooks": "4.2.0",
-    "eslint-webpack-plugin": "3.0.1",
     "exceljs": "4.3.0",
     "file-saver": "2.0.5",
     "firebase": "9.0.2",
@@ -100,12 +95,16 @@
     "babel-eslint": "10.1.0",
     "babel-preset-gatsby": "1.14.0",
     "copyfiles": "2.4.1",
+    "eslint": "7.32.0",
+    "eslint-plugin-import": "2.24.2",
+    "eslint-plugin-react": "7.26.0",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "eslint-webpack-plugin": "3.0.1",
     "gatsby-cli": "3.14.0"
   },
   "dev-comments": {
     "react-contextmenu": "using file copied from own build. When using v2.14.0 get Error in production: https://github.com/vkbansal/react-contextmenu/issues/284, https://github.com/gatsbyjs/gatsby/issues/19618. For better solution see: https://github.com/vkbansal/react-contextmenu/issues/284#issuecomment-670711499",
-    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
-    "md5-hex": "do not upgrade from 3.0.1 to 4.0.0, see: https://github.com/sindresorhus/md5-hex/issues/17"
+    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1"
   },
   "peerDependencies": {
     "@babel/types": "7.x",
