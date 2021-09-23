@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-} from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { Q } from '@nozbe/watermelondb'
@@ -36,10 +30,8 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   padding: 0 10px;
   position: sticky;
-  ${(props) =>
-    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
+  top: 0;
   user-select: none;
-  top: -10px;
   z-index: 1;
   &:first-of-type {
     margin-top: -10px;
@@ -160,27 +152,9 @@ const SammelLieferungNach = ({
   ])
   const { nachKulturWerte } = dataState
 
-  const titleRowRef = useRef(null)
-  const [isSticky, setIsSticky] = useState(false)
-  const scrollHandler = useCallback(() => {
-    const top = titleRowRef?.current?.getBoundingClientRect()?.top
-    if (top < 112 && !isSticky) return setIsSticky(true)
-    if (top > 112 && isSticky) setIsSticky(false)
-  }, [isSticky])
-  useEffect(() => {
-    window.addEventListener('scroll', scrollHandler, true)
-    return () => {
-      window.removeEventListener('scroll', scrollHandler, true)
-    }
-  }, [scrollHandler])
-
   return (
     <>
-      <TitleRow
-        data-filter={showFilter}
-        ref={titleRowRef}
-        data-sticky={isSticky}
-      >
+      <TitleRow data-filter={showFilter}>
         <Title>nach</Title>
       </TitleRow>
       {ifNeeded('nach_kultur_id') && (
