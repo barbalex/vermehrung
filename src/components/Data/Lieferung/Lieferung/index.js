@@ -45,7 +45,7 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const Lieferung = ({ id, showFilter, sammelLieferung = {}, row, rawRow }) => {
+const Lieferung = ({ id, showFilter, row, rawRow }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
 
@@ -98,7 +98,6 @@ const Lieferung = ({ id, showFilter, sammelLieferung = {}, row, rawRow }) => {
               id={id}
               row={row}
               rawRow={rawRow}
-              sammelLieferung={sammelLieferung}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
