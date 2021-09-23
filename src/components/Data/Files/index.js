@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useCallback,
-  useState,
-  useRef,
-  useEffect,
-} from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Lightbox from 'react-image-lightbox'
@@ -21,7 +15,7 @@ import fileSort from '../../../utils/fileSort'
 import mutations from '../../../utils/mutations'
 
 const TitleRow = styled.div`
-  background-color: rgba(237, 230, 244, 1);
+  background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
   height: 48px;
@@ -32,9 +26,7 @@ const TitleRow = styled.div`
   padding: 0 10px;
   user-select: none;
   position: sticky;
-  ${(props) =>
-    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
-  top: -10px;
+  top: 0;
   z-index: 1;
 `
 const Title = styled.div`
@@ -133,24 +125,10 @@ const Files = ({ parentTable, parent }) => {
     [imageIndex, images.length],
   )
 
-  const titleRowRef = useRef(null)
-  const [isSticky, setIsSticky] = useState(false)
-  const scrollHandler = useCallback(() => {
-    const top = titleRowRef?.current?.getBoundingClientRect()?.top
-    if (top < 112 && !isSticky) return setIsSticky(true)
-    if (top > 112 && isSticky) setIsSticky(false)
-  }, [isSticky])
-  useEffect(() => {
-    window.addEventListener('scroll', scrollHandler, true)
-    return () => {
-      window.removeEventListener('scroll', scrollHandler, true)
-    }
-  }, [scrollHandler])
-
   if (!online) {
     return (
       <ErrorBoundary>
-        <TitleRow data-online={online} ref={titleRowRef} data-sticky={isSticky}>
+        <TitleRow data-online={online}>
           <Title>Dateien</Title>
           <Content>Sorry, nur online verfügbar</Content>
         </TitleRow>
@@ -160,12 +138,7 @@ const Files = ({ parentTable, parent }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow
-        data-online={online}
-        data-margin-bottom={!!files.length}
-        ref={titleRowRef}
-        data-sticky={isSticky}
-      >
+      <TitleRow data-online={online} data-margin-bottom={!!files.length}>
         <Title>Dateien</Title>
         <Buttons>
           <Uploader
