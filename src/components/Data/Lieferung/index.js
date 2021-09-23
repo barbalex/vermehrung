@@ -55,7 +55,6 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
     // need raw row because observable does not provoke rerendering of components
     rawRow: undefined,
     userPersonOption: undefined,
-    sammelLieferung: undefined,
   })
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
@@ -67,26 +66,23 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
     const lieferungObservable = showFilter
       ? $of(filter.lieferung)
       : db.get('lieferung').findAndObserve(id)
-    const sammelLieferungObservable =
-      showFilter || !row?.sammel_lieferung ? $of({}) : row.sammel_lieferung
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       lieferungObservable,
-      sammelLieferungObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([userPersonOptions, lieferung, sammelLieferung]) =>
+      async ([userPersonOptions, lieferung]) =>
         setDataState({
           row: lieferung,
           rawRow: JSON.stringify(lieferung?._raw ?? lieferung),
           userPersonOption: userPersonOptions?.[0],
-          sammelLieferung,
         }),
     )
 
     return () => subscription?.unsubscribe?.()
   }, [db, filter.lieferung, id, row?.sammel_lieferung, showFilter, user])
-  const { row, rawRow, userPersonOption, sammelLieferung } = dataState
+
+  const { row, rawRow, userPersonOption } = dataState
   const { li_show_sl } = userPersonOption ?? {}
 
   if (row?.sammel_lieferung_id && li_show_sl) {
@@ -94,13 +90,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
     // show that too
     return (
       <StyledSplitPane split="vertical" size="50%" minSize={200}>
-        <Lieferung
-          showFilter={showFilter}
-          row={row}
-          rawRow={rawRow}
-          sammelLieferung={sammelLieferung}
-          id={id}
-        />
+        <Lieferung showFilter={showFilter} row={row} rawRow={rawRow} id={id} />
         <SammelLieferung
           showFilter={showFilter}
           id={row?.sammel_lieferung_id}
@@ -110,15 +100,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
     )
   }
 
-  return (
-    <Lieferung
-      id={id}
-      row={row}
-      rawRow={rawRow}
-      showFilter={showFilter}
-      sammelLieferung={sammelLieferung}
-    />
-  )
+  return <Lieferung id={id} row={row} rawRow={rawRow} showFilter={showFilter} />
 }
 
 export default observer(LieferungContainer)
