@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useState,
-  useContext,
-  useRef,
-  useEffect,
-} from 'react'
+import React, { useCallback, useState, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -25,7 +19,7 @@ import ErrorBoundary from '../../../../shared/ErrorBoundary'
 const constants = getConstants()
 
 const TitleRow = styled.div`
-  background-color: rgba(237, 230, 244, 1);
+  background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
   height: 48px;
@@ -37,9 +31,7 @@ const TitleRow = styled.div`
   cursor: pointer;
   user-select: none;
   position: sticky;
-  ${(props) =>
-    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
-  top: -10px;
+  top: 0;
   z-index: 1;
   &:first-of-type {
     margin-top: -10px;
@@ -60,20 +52,6 @@ const Body = styled.div`
 const KulturQk = ({ kultur }) => {
   const store = useContext(StoreContext)
   const { db, user } = store
-
-  const titleRowRef = useRef(null)
-  const [isSticky, setIsSticky] = useState(false)
-  const scrollHandler = useCallback(() => {
-    const top = titleRowRef?.current?.getBoundingClientRect()?.top
-    if (top < 112 && !isSticky) return setIsSticky(true)
-    if (top > 112 && isSticky) setIsSticky(false)
-  }, [isSticky])
-  useEffect(() => {
-    window.addEventListener('scroll', scrollHandler, true)
-    return () => {
-      window.removeEventListener('scroll', scrollHandler, true)
-    }
-  }, [scrollHandler])
 
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
@@ -147,12 +125,7 @@ const KulturQk = ({ kultur }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow
-        onClick={onClickToggle}
-        title={open ? 'schliessen' : 'öffnen'}
-        ref={titleRowRef}
-        data-sticky={isSticky}
-      >
+      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
         <Title>Qualitäts-Kontrollen</Title>
         <div>
           <IconButton
