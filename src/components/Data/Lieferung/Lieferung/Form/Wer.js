@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-} from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { Q } from '@nozbe/watermelondb'
@@ -124,29 +118,11 @@ const LieferungWer = ({
   ])
   const { row, personWerte } = dataState
 
-  const titleRowRef = useRef(null)
-  const [isSticky, setIsSticky] = useState(false)
-  const scrollHandler = useCallback(() => {
-    const top = titleRowRef?.current?.getBoundingClientRect()?.top
-    if (top < 112 && !isSticky) return setIsSticky(true)
-    if (top > 112 && isSticky) setIsSticky(false)
-  }, [isSticky])
-  useEffect(() => {
-    window.addEventListener('scroll', scrollHandler, true)
-    return () => {
-      window.removeEventListener('scroll', scrollHandler, true)
-    }
-  }, [scrollHandler])
-
   if (!row) return null
 
   return (
     <>
-      <TitleRow
-        data-filter={showFilter}
-        ref={titleRowRef}
-        data-sticky={isSticky}
-      >
+      <TitleRow data-filter={showFilter}>
         <Title>wer</Title>
       </TitleRow>
       {ifNeeded('person_id') && (
