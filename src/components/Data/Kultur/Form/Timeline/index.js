@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import {
   ComposedChart,
@@ -31,7 +31,7 @@ import buildData from './buildData'
 const constants = getConstants()
 
 const TitleRow = styled.div`
-  background-color: rgba(237, 230, 244, 1);
+  background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
   height: 48px;
@@ -42,10 +42,8 @@ const TitleRow = styled.div`
   padding: 0 10px;
   ${(props) => props['data-active'] && 'cursor: pointer;'}
   position: sticky;
-  ${(props) =>
-    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
+  top: 0;
   user-select: none;
-  top: -10px;
   z-index: 1;
   &:first-of-type {
     margin-top: -10px;
@@ -111,20 +109,6 @@ const KulturTimeline = ({ row, width }) => {
     [anim, open],
   )
 
-  const titleRowRef = useRef(null)
-  const [isSticky, setIsSticky] = useState(false)
-  const scrollHandler = useCallback(() => {
-    const top = titleRowRef?.current?.getBoundingClientRect()?.top
-    if (top && top < 112 && !isSticky) return setIsSticky(true)
-    if (top && top > 112 && isSticky) setIsSticky(false)
-  }, [isSticky])
-  useEffect(() => {
-    window.addEventListener('scroll', scrollHandler, true)
-    return () => {
-      window.removeEventListener('scroll', scrollHandler, true)
-    }
-  }, [scrollHandler])
-
   const showCategory = useCallback(
     (category) =>
       !!allData.map((d) => d[category]).filter((d) => exists(d)).length,
@@ -136,7 +120,7 @@ const KulturTimeline = ({ row, width }) => {
   if (!row || !allData.length) {
     return (
       <ErrorBoundary>
-        <TitleRow data-active={false} ref={titleRowRef} data-sticky={isSticky}>
+        <TitleRow data-active={false}>
           <Title>Zeit-Achse</Title>
           <Content>Sorry, keine Daten verfügbar</Content>
         </TitleRow>
@@ -154,8 +138,6 @@ const KulturTimeline = ({ row, width }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
         data-active={true}
-        ref={titleRowRef}
-        data-sticky={isSticky}
       >
         <Title>Zeit-Achse</Title>
         <div>
