@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
@@ -19,7 +13,7 @@ import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk'
 
 const TitleRow = styled.div`
-  background-color: rgba(237, 230, 244, 1);
+  background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
   height: 48px;
@@ -29,9 +23,7 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   padding: 0 10px;
   position: sticky;
-  ${(props) =>
-    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
-  top: -10px;
+  top: 0;
   z-index: 1;
   user-select: none;
 `
@@ -87,23 +79,9 @@ const Teilzaehlungen = ({ zaehlung }) => {
   const showNew = teilzaehlungs.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'
 
-  const titleRowRef = useRef(null)
-  const [isSticky, setIsSticky] = useState(false)
-  const scrollHandler = useCallback(() => {
-    const top = titleRowRef?.current?.getBoundingClientRect()?.top
-    if (top < 112 && !isSticky) return setIsSticky(true)
-    if (top > 112 && isSticky) setIsSticky(false)
-  }, [isSticky])
-  useEffect(() => {
-    window.addEventListener('scroll', scrollHandler, true)
-    return () => {
-      window.removeEventListener('scroll', scrollHandler, true)
-    }
-  }, [scrollHandler])
-
   return (
     <ErrorBoundary>
-      <TitleRow ref={titleRowRef} data-sticky={isSticky}>
+      <TitleRow>
         <Title>{title}</Title>
         <div>
           {kulturId && <Settings kulturId={kulturId} />}

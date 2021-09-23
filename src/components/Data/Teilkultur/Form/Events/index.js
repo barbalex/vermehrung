@@ -8,7 +8,7 @@ import storeContext from '../../../../../storeContext'
 import Row from './Row'
 
 const TitleRow = styled.div`
-  background-color: rgba(237, 230, 244, 1);
+  background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
   height: 48px;
@@ -18,7 +18,7 @@ const TitleRow = styled.div`
   padding: 0 10px;
   user-select: none;
   position: sticky;
-  top: -10px;
+  top: 0;
   z-index: 1;
   user-select: none;
 `
