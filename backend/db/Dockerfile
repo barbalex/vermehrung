@@ -14,14 +14,22 @@ RUN apt-get -y install cron
 RUN apt-get -y install curl
 RUN apt-get -y install bash
 RUN apt-get -y install nano
+RUN apt-get -y install rclone
 
-# install dropbox uploader
-ADD dropbox_uploader.conf /dropbox_uploader.conf
-RUN curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o dropbox_uploader.sh
-RUN chmod +x dropbox_uploader.sh
+# https://stackoverflow.com/a/51440621/712005
+RUN apt-get -y install cron
+ADD cron /etc/cron.d/cron
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/cron
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+# Symlink the cron to stdout
+RUN ln -sf /dev/stdout /var/log/cron.log
 
 # add the backup script
 ADD backup.sh /backup.sh
 RUN chmod +x /backup.sh
-# see: https://stackoverflow.com/a/37458519/712005
 RUN chmod 0744 /backup.sh
+
+# Run the command on container startup
+CMD cron && tail -F /var/log/cron.log 2>&1

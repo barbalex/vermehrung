@@ -1,0 +1,4 @@
+0 23 \* \* \* /root/vermehrung/db/backup.sh
+
+# test: every minute
+#* * * * * /root/vermehrung/db/backup.sh
