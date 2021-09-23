@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  useContext,
-  useRef,
-} from 'react'
+import React, { useCallback, useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
@@ -22,7 +16,7 @@ import personSort from '../../../../../utils/personSort'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
 
 const TitleRow = styled.div`
-  background-color: rgba(237, 230, 244, 1);
+  background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
   height: 48px;
@@ -33,10 +27,8 @@ const TitleRow = styled.div`
   padding: 0 10px;
   cursor: pointer;
   user-select: none;
-  ${(props) => props['data-open'] && 'position: sticky;'}
-  ${(props) =>
-    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
-  top: -10px;
+  position: sticky;
+  top: 0;
   z-index: 1;
   &:first-of-type {
     margin-top: -10px;
@@ -145,29 +137,9 @@ const GartenPersonen = ({ garten }) => {
     [garten.id, insertGvRev],
   )
 
-  const titleRowRef = useRef(null)
-  const [isSticky, setIsSticky] = useState(false)
-  const scrollHandler = useCallback(() => {
-    const top = titleRowRef?.current?.getBoundingClientRect()?.top
-    if (top < 112 && !isSticky) return setIsSticky(true)
-    if (top > 112 && isSticky) setIsSticky(false)
-  }, [isSticky])
-  useEffect(() => {
-    window.addEventListener('scroll', scrollHandler, true)
-    return () => {
-      window.removeEventListener('scroll', scrollHandler, true)
-    }
-  }, [scrollHandler])
-
   return (
     <ErrorBoundary>
-      <TitleRow
-        onClick={onClickToggle}
-        title={open ? 'schliessen' : 'öffnen'}
-        data-open={open}
-        ref={titleRowRef}
-        data-sticky={isSticky}
-      >
+      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
         <Title>{`Mitarbeitende Personen (${gvsSorted.length})`}</Title>
         <div>
           <IconButton
