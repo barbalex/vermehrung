@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react'
-import Input from '@material-ui/core/Input'
-import InputAdornment from '@material-ui/core/InputAdornment'
+import Input from '@mui/material/Input'
+import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'

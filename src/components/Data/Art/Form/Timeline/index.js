@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 
 import Pflanzen from './Pflanzen'
@@ -80,14 +80,14 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
             onClick={openDocs}
-          >
+            size="large">
             <IoMdInformationCircleOutline />
           </IconButton>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
             onClick={onClickToggle}
-          >
+            size="large">
             {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
@@ -96,7 +96,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
         {open && <Pflanzen key={artId} artId={artId} />}
       </motion.div>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(TimelineArea)

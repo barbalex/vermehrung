@@ -99,42 +99,44 @@ const createGlobalStyleModule = () => createGlobalStyle`
 
   /* uploadcare */
   .uploadcare--button {
-    background-color: #4a148c;
-    background: #4a148c;
-    border: 1px solid #4a148c;
-    color: white;
+    background-color: #4a148c !important;
+    background: #4a148c !important;
+    border: 1px solid #4a148c !important;
+    color: white !important;
   }
   .uploadcare--button:focus {
-    color: #4a148c;
-    outline: 2px solid rgba(74,20,140,.5);
+    outline: 2px solid rgba(74,20,140,.5) !important;
   }
   .uploadcare--button:hover {
-    background: rgba(74,20,140,.8);
-    border-color: rgba(74,20,140,.8);
-    color: white;
+    background: rgba(74,20,140,.8) !important;
+    border-color: rgba(74,20,140,.8) !important;
+    color: white !important;
   }
   .uploadcare--widget__button,
   .uploadcare--widget__button:active,
   .uploadcare--widget__button:focus {
-    background:none;
-    color: black;
-    outline: none;
+    background:none !important;
+    color: black !important;
+    outline: none !important;
   }
   .uploadcare--widget__button,
   .uploadcare--widget__button:focus {
-    color: #4a148c;
-    font-size: 0.875rem;
-    line-height: 24.5px;
-    font-weight: 500;
-    border-radius: 4px;
-    padding: 5px 16px;
+    color: #4a148c !important;
+    font-size: 0.875rem !important;
+    line-height: 24.5px !important;
+    font-weight: 500 !important;
+    border-radius: 4px !important;
+    padding: 5px 16px !important;
   }
   .uploadcare--widget__button:hover {
-    color: #4a148c;
-    font-size: 0.875rem;
-    line-height: 24.5px;
-    font-weight: 500;
-    background-color: rgba(74, 20, 140, 0.08);
+    color: #4a148c !important;
+    font-size: 0.875rem !important;
+    line-height: 24.5px !important;
+    font-weight: 500 !important;
+    background-color: rgba(74, 20, 140, 0.08) !important;
+  }
+  .uploadcare--powered-by, .uploadcare--powered-by__link {
+    display: none !important;
   }
 `
 

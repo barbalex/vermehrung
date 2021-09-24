@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import MenuItem from '@mui/material/MenuItem'
 import { FaHome } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
@@ -44,10 +44,10 @@ const Home = ({ asMenu }) => {
         component={Link}
         to="/"
         title="Home"
-      >
+        size="large">
         <FaHome />
       </IconButton>
-    )
+    );
   }
 
   return (

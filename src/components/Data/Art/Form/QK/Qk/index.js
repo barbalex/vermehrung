@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import Paper from '@material-ui/core/Paper'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
+import Paper from '@mui/material/Paper'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
 
 import StoreContext from '../../../../../../storeContext'
 import createMessageFunctions from './createMessageFunctions'
@@ -94,7 +94,7 @@ const ApQkQk = ({ artId, qkChoosens }) => {
 
   return (
     <Container>
-      <StyledFormControl fullWidth>
+      <StyledFormControl fullWidth variant="standard">
         <InputLabel htmlFor="filter" shrink>
           nach Abschnitts-Titel filtern
         </InputLabel>

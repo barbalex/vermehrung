@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import Menu from '@material-ui/core/Menu'
-import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
+import Menu from '@mui/material/Menu'
+import IconButton from '@mui/material/IconButton'
+import Button from '@mui/material/Button'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
 import { of as $of } from 'rxjs'
@@ -180,7 +180,7 @@ const PrognoseMenu = ({
               aria-label="Anleitung öffnen"
               title="Anleitung öffnen"
               onClick={openDocs}
-            >
+              size="large">
               <IoMdInformationCircleOutline />
             </IconButton>
           </div>
@@ -214,7 +214,7 @@ const PrognoseMenu = ({
         </Buttons>
       </Menu>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(PrognoseMenu)

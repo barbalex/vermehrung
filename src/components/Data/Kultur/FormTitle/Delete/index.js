@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaMinus } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
-import MenuItem from '@material-ui/core/MenuItem'
+import IconButton from '@mui/material/IconButton'
+import MenuItem from '@mui/material/MenuItem'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import Menu from './Menu'
@@ -39,12 +39,12 @@ const KulturDeleteButton = ({ row, asMenu }) => {
         title="Kultur löschen"
         onClick={onClickButton}
         disabled={row._deleted}
-      >
+        size="large">
         <FaMinus />
       </IconButton>
       <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} row={row} />
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(KulturDeleteButton)

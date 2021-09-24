@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import uniq from 'lodash/uniq'
 import uniqBy from 'lodash/uniqBy'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
@@ -547,7 +547,7 @@ const KulturForm = ({
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
                 onClick={openGenVielfaldDocs}
-              >
+                size="large">
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
@@ -597,7 +597,7 @@ const KulturForm = ({
         </Container>
       </SimpleBar>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(KulturForm)

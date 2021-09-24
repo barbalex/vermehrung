@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import { withResizeDetector } from 'react-resize-detector'
@@ -145,14 +145,14 @@ const KulturTimeline = ({ row, width }) => {
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
             onClick={openDocs}
-          >
+            size="large">
             <IoMdInformationCircleOutline />
           </IconButton>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
             onClick={onClickToggle}
-          >
+            size="large">
             {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
@@ -347,7 +347,7 @@ const KulturTimeline = ({ row, width }) => {
         )}
       </motion.div>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default withResizeDetector(observer(KulturTimeline))

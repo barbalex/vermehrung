@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 
 import StoreContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -12,11 +12,15 @@ const ArtAddButton = () => {
 
   return (
     <ErrorBoundary>
-      <IconButton aria-label="neue Art" title="neue Art" onClick={insertArtRev}>
+      <IconButton
+        aria-label="neue Art"
+        title="neue Art"
+        onClick={insertArtRev}
+        size="large">
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(ArtAddButton)

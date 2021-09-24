@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { navigate } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 
 import UpSvg from '../../../svg/to_up.inline.svg'
 
@@ -40,12 +40,12 @@ const DocumentationFormTitle = ({ location }) => {
     <TitleContainer>
       <Title>Dokumentation</Title>
       <TitleSymbols>
-        <IconButton title="zurück" onClick={onClickUp}>
+        <IconButton title="zurück" onClick={onClickUp} size="large">
           <UpSvg />
         </IconButton>
       </TitleSymbols>
     </TitleContainer>
-  )
+  );
 }
 
 export default observer(DocumentationFormTitle)

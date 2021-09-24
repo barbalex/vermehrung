@@ -1,16 +1,16 @@
 import React, { useState, useCallback, useContext, useRef } from 'react'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogActions from '@material-ui/core/DialogActions'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import IconButton from '@material-ui/core/IconButton'
-import Visibility from '@material-ui/icons/Visibility'
-import VisibilityOff from '@material-ui/icons/VisibilityOff'
-import Button from '@material-ui/core/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogActions from '@mui/material/DialogActions'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import InputAdornment from '@mui/material/InputAdornment'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import IconButton from '@mui/material/IconButton'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import Button from '@mui/material/Button'
 import styled from 'styled-components'
 import localForage from 'localforage'
 import {
@@ -155,6 +155,7 @@ const Login = () => {
             error={!!emailErrorText}
             fullWidth
             aria-describedby="emailHelper"
+            variant="standard"
           >
             <InputLabel htmlFor="email">Email</InputLabel>
             <StyledInput
@@ -172,6 +173,7 @@ const Login = () => {
             error={!!passwordErrorText}
             fullWidth
             aria-describedby="passwortHelper"
+            variant="standard"
           >
             <InputLabel htmlFor="passwort">Passwort</InputLabel>
             <StyledInput
@@ -191,6 +193,7 @@ const Login = () => {
                     onClick={onClickShowPass}
                     onMouseDown={onMouseDownShowPass}
                     title={showPass ? 'verstecken' : 'anzeigen'}
+                    size="large"
                   >
                     {showPass ? <VisibilityOff /> : <Visibility />}
                   </IconButton>

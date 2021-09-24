@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import green from '@material-ui/core/colors/green'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import { green } from '@mui/material/colors'
 import styled from 'styled-components'
 import getUrls from 'get-urls'
 import { observer } from 'mobx-react-lite'
@@ -42,9 +42,9 @@ const TextFieldWithUrl = ({
     propsValue || propsValue === 0 ? propsValue : '',
   )
 
-  const onChange = useCallback(event => setStateValue(event.target.value), [])
+  const onChange = useCallback((event) => setStateValue(event.target.value), [])
   const onOpen = useCallback(
-    e => window.open(e.target.dataset.url, '_blank'),
+    (e) => window.open(e.target.dataset.url, '_blank'),
     [],
   )
 
@@ -53,7 +53,7 @@ const TextFieldWithUrl = ({
   }, [propsValue])
 
   const onKeyPress = useCallback(
-    event => {
+    (event) => {
       if (event.key === 'Enter') {
         saveToDb(event)
       }
@@ -70,6 +70,7 @@ const TextFieldWithUrl = ({
         fullWidth
         error={!!error}
         aria-describedby={`${label}ErrorText`}
+        variant="standard"
       >
         <InputLabel htmlFor={label}>
           {`${label} (gültige URL's beginnen mit "https://", "//" oder "www.")`}

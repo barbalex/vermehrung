@@ -1,8 +1,8 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
+import IconButton from '@mui/material/IconButton'
+import Button from '@mui/material/Button'
 import { MdClose as CloseIcon } from 'react-icons/md'
 
 import StoreContext from '../../storeContext'

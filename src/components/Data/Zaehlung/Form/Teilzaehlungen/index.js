@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { FaPlus } from 'react-icons/fa'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
@@ -90,7 +90,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
               aria-label="Neu"
               title="Neue Teil-Zählung"
               onClick={onClickNew}
-            >
+              size="large">
               <FaPlus />
             </IconButton>
           )}
@@ -98,7 +98,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
       </TitleRow>
       <TeilzaehlungenRows kulturId={kulturId} teilzaehlungs={teilzaehlungs} />
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(Teilzaehlungen)
