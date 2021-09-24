@@ -12,8 +12,10 @@
   "dependencies": {
     "@fontsource/roboto": "4.5.0",
     "@fontsource/roboto-mono": "4.5.0",
-    "@material-ui/core": "4.12.3",
-    "@material-ui/icons": "4.11.2",
+    "@mui/icons-material": "5.0.1",
+    "@mui/material": "5.0.1",
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
+    "@mui/styled-engine-sc": "5.0.0",
     "@nozbe/watermelondb": "0.23.0",
     "@reach/router": "1.3.4",
     "blueimp-md5": "2.18.0",
@@ -101,6 +103,9 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "eslint-webpack-plugin": "3.0.1",
     "gatsby-cli": "3.14.0"
+  },
+  "resolutions": {
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
   "dev-comments": {
     "react-contextmenu": "using file copied from own build. When using v2.14.0 get Error in production: https://github.com/vkbansal/react-contextmenu/issues/284, https://github.com/gatsbyjs/gatsby/issues/19618. For better solution see: https://github.com/vkbansal/react-contextmenu/issues/284#issuecomment-670711499",

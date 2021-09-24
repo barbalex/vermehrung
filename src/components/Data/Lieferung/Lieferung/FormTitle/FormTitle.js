@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../../storeContext'
@@ -70,11 +70,11 @@ const LieferungTitleFormTitle = ({
       <TitleContainer>
         <Title>Lieferung</Title>
         <TitleSymbols>
-          <IconButton title="Zur Liste" onClick={onClickUp}>
+          <IconButton title="Zur Liste" onClick={onClickUp} size="large">
             <UpSvg />
           </IconButton>
           {showToKu && (
-            <IconButton title="Zur Kultur" onClick={onClickToKultur}>
+            <IconButton title="Zur Kultur" onClick={onClickToKultur} size="large">
               <KuDownSvg />
             </IconButton>
           )}
@@ -98,18 +98,18 @@ const LieferungTitleFormTitle = ({
           </Menu>
         </TitleSymbols>
       </TitleContainer>
-    )
+    );
   }
 
   return (
     <TitleContainer>
       <Title>Lieferung</Title>
       <TitleSymbols>
-        <IconButton title="Zur Liste" onClick={onClickUp}>
+        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
           <UpSvg />
         </IconButton>
         {showToKu && (
-          <IconButton title="Zur Kultur" onClick={onClickToKultur}>
+          <IconButton title="Zur Kultur" onClick={onClickToKultur} size="large">
             <KuDownSvg />
           </IconButton>
         )}
@@ -126,7 +126,7 @@ const LieferungTitleFormTitle = ({
         <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
-  )
+  );
 }
 
 export default withResizeDetector(observer(LieferungTitleFormTitle))

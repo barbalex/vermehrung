@@ -1,8 +1,8 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import { FaDownload } from 'react-icons/fa'
 import styled from 'styled-components'
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
@@ -73,7 +73,7 @@ const GartenDownload = ({ gartenId }) => {
         aria-haspopup="true"
         title="Daten herunterladen"
         onClick={onClickOpenMenu}
-      >
+        size="large">
         <FaDownload />
       </IconButton>
       <Menu
@@ -91,7 +91,7 @@ const GartenDownload = ({ gartenId }) => {
         >{`Auswertung der Teil-Zählungen`}</MenuItem>
       </Menu>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(GartenDownload)

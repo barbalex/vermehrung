@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
+import IconButton from '@mui/material/IconButton'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
 import { motion, useAnimation } from 'framer-motion'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
@@ -132,14 +132,14 @@ const ApQk = ({ artId }) => {
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
             onClick={openDocs}
-          >
+            size="large">
             <IoMdInformationCircleOutline />
           </IconButton>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
             onClick={onClickToggle}
-          >
+            size="large">
             {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
@@ -174,7 +174,7 @@ const ApQk = ({ artId }) => {
         )}
       </motion.div>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(ApQk)

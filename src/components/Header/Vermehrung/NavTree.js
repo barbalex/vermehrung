@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import NavTree from '../../../svg/nav_tree.inline.svg'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'

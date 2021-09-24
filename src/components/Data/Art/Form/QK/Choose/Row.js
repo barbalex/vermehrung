@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import Checkbox from '@material-ui/core/Checkbox'
+import Checkbox from '@mui/material/Checkbox'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 

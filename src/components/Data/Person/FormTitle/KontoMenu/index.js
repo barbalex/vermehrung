@@ -1,8 +1,8 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import Button from '@material-ui/core/Button'
-import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@mui/material/Button'
+import MenuItem from '@mui/material/MenuItem'
 
 import StoreContext from '../../../../../storeContext'
 import signup from '../../../../../utils/signup'

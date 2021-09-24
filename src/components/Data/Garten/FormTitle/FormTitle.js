@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../storeContext'
@@ -63,10 +63,10 @@ const GartenFormTitle = ({
       <Container>
         <Title>Garten</Title>
         <TitleSymbols>
-          <IconButton title="Zur Liste" onClick={onClickUp}>
+          <IconButton title="Zur Liste" onClick={onClickUp} size="large">
             <UpSvg />
           </IconButton>
-          <IconButton title="Zu den Kulturen" onClick={onClickToKulturen}>
+          <IconButton title="Zu den Kulturen" onClick={onClickToKulturen} size="large">
             <KuDownSvg />
           </IconButton>
           <AddButton />
@@ -89,17 +89,17 @@ const GartenFormTitle = ({
           </Menu>
         </TitleSymbols>
       </Container>
-    )
+    );
   }
 
   return (
     <Container>
       <Title>Garten</Title>
       <TitleSymbols>
-        <IconButton title="Zur Liste" onClick={onClickUp}>
+        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
           <UpSvg />
         </IconButton>
-        <IconButton title="Zu den Kulturen" onClick={onClickToKulturen}>
+        <IconButton title="Zu den Kulturen" onClick={onClickToKulturen} size="large">
           <KuDownSvg />
         </IconButton>
         <AddButton />
@@ -115,7 +115,7 @@ const GartenFormTitle = ({
         <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </Container>
-  )
+  );
 }
 
 export default withResizeDetector(observer(GartenFormTitle))

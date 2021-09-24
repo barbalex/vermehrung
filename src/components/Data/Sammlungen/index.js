@@ -2,7 +2,7 @@ import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
@@ -186,14 +186,14 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
           <TitleContainer>
             <Title>Sammlungen</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp}>
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
               <IconButton
                 aria-label="neue Sammlung"
                 title="neue Sammlung"
                 onClick={add}
-              >
+                size="large">
                 <FaPlus />
               </IconButton>
               <FilterNumbers
@@ -231,7 +231,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default withResizeDetector(observer(Sammlungen))

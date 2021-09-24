@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
 
@@ -68,14 +68,14 @@ const SammlungFormTitle = ({
       <TitleContainer>
         <Title>Sammlung</Title>
         <TitleSymbols>
-          <IconButton title="Zur Sammlungs-Liste" onClick={onClickUp}>
+          <IconButton title="Zur Sammlungs-Liste" onClick={onClickUp} size="large">
             <UpSvg />
           </IconButton>
           {showToHe && (
             <IconButton
               title="Zu den Herkünften dieser Sammlung"
               onClick={onClickToHerkuenfte}
-            >
+              size="large">
               <HeDownSvg />
             </IconButton>
           )}
@@ -83,7 +83,7 @@ const SammlungFormTitle = ({
             <IconButton
               title="Zu den Aus-Lieferungen dieser Sammlung"
               onClick={onClickToLieferungen}
-            >
+              size="large">
               <LiDownSvg />
             </IconButton>
           )}
@@ -106,21 +106,21 @@ const SammlungFormTitle = ({
           </Menu>
         </TitleSymbols>
       </TitleContainer>
-    )
+    );
   }
 
   return (
     <TitleContainer>
       <Title>Sammlung</Title>
       <TitleSymbols>
-        <IconButton title="Zur Sammlungs-Liste" onClick={onClickUp}>
+        <IconButton title="Zur Sammlungs-Liste" onClick={onClickUp} size="large">
           <UpSvg />
         </IconButton>
         {showToHe && (
           <IconButton
             title="Zu den Herkünften dieser Sammlung"
             onClick={onClickToHerkuenfte}
-          >
+            size="large">
             <HeDownSvg />
           </IconButton>
         )}
@@ -128,7 +128,7 @@ const SammlungFormTitle = ({
           <IconButton
             title="Zu den Aus-Lieferungen dieser Sammlung"
             onClick={onClickToLieferungen}
-          >
+            size="large">
             <LiDownSvg />
           </IconButton>
         )}
@@ -144,7 +144,7 @@ const SammlungFormTitle = ({
         <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
-  )
+  );
 }
 
 export default withResizeDetector(observer(SammlungFormTitle))

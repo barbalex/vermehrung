@@ -1,8 +1,8 @@
 import React, { useContext, useCallback, useState, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import { FaRegCopy } from 'react-icons/fa'
 import styled from 'styled-components'
 
@@ -107,7 +107,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
         title="Daten kopieren"
         onClick={onClickConfig}
         disabled={!containsData}
-      >
+        size="large">
         <FaRegCopy />
       </IconButton>
       <Menu
@@ -127,7 +127,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
         <MenuItem onClick={onClickAllLieferung}>in alle Lieferungen</MenuItem>
       </Menu>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(CopySammelLieferungMenu)

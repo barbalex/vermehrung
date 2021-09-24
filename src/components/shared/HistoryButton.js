@@ -1,8 +1,8 @@
 import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaHistory } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
-import MenuItem from '@material-ui/core/MenuItem'
+import IconButton from '@mui/material/IconButton'
+import MenuItem from '@mui/material/MenuItem'
 import styled from 'styled-components'
 import { of as $of } from 'rxjs'
 

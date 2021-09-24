@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
-import Menu from '@material-ui/core/Menu'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
 import { FaBars } from 'react-icons/fa'
 import styled from 'styled-components'
 

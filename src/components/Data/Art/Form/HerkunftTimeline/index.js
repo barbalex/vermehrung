@@ -2,7 +2,7 @@ import React, { useCallback, useState, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import uniq from 'lodash/uniq'
 import { motion, useAnimation } from 'framer-motion'
 import { combineLatest } from 'rxjs'
@@ -103,7 +103,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
             onClick={onClickToggle}
-          >
+            size="large">
             {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
@@ -115,7 +115,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
           ))}
       </motion.div>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(TimelineArea)

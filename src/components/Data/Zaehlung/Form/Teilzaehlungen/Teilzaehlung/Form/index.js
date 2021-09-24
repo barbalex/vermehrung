@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
@@ -364,6 +364,7 @@ const TeilzaehlungForm = ({
               aria-label="löschen"
               title="löschen"
               onClick={onClickDelete}
+              size="large"
             >
               <FaRegTrashAlt />
             </IconButton>
@@ -373,6 +374,7 @@ const TeilzaehlungForm = ({
             title={online ? 'Prognose' : 'Prognose (nur online verfügbar)'}
             onClick={onClickPrognosis}
             disabled={!online}
+            size="large"
           >
             <FaChartLine />
           </IconButton>

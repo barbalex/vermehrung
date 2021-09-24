@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.inline.svg'
 import {

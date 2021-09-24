@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
@@ -157,7 +157,7 @@ const PersonArten = ({ person }) => {
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
             onClick={onClickToggle}
-          >
+            size="large">
             {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
@@ -189,7 +189,7 @@ const PersonArten = ({ person }) => {
         )}
       </motion.div>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(PersonArten)

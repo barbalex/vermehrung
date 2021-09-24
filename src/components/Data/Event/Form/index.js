@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
@@ -391,7 +391,7 @@ const EventForm = ({
                   aria-label="Anleitung öffnen"
                   title="Anleitung öffnen"
                   onClick={openPlanenDocs}
-                >
+                  size="large">
                   <IoMdInformationCircleOutline />
                 </IconButton>
               </div>
@@ -407,7 +407,7 @@ const EventForm = ({
         </FieldsContainer>
       </SimpleBar>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(EventForm)

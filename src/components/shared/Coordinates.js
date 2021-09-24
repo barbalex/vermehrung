@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import IconButton from '@material-ui/core/IconButton'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import IconButton from '@mui/material/IconButton'
 import { FaGlobeEurope } from 'react-icons/fa'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { combineLatest, of as $of } from 'rxjs'
@@ -270,6 +270,7 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
               fullWidth
               error={!!wgs84LatError}
               aria-describedby={`${id}wgs84LatErrorText`}
+              variant="standard"
             >
               <InputLabel htmlFor={`${id}wgs84_long`} shrink>
                 Längengrad
@@ -291,6 +292,7 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
               fullWidth
               error={!!wgs84LongError}
               aria-describedby={`${id}wgs84LongErrorText`}
+              variant="standard"
             >
               <InputLabel htmlFor={`${id}wgs84_lat`} shrink>
                 Breitengrad
@@ -331,6 +333,7 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
             fullWidth
             error={!!xError}
             aria-describedby={`${id}lv95XErrorText`}
+            variant="standard"
           >
             <InputLabel htmlFor={`${id}lv95_x`} shrink>
               X-Koordinate
@@ -360,6 +363,7 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
             fullWidth
             error={!!yError}
             aria-describedby={`${id}lv95YErrorText`}
+            variant="standard"
           >
             <InputLabel htmlFor={`${id}lv95_y`} shrink>
               Y-Koordinate
