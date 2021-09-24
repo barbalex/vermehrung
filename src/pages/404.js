@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import Typography from '@mui/material/Typography'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 import Button from '@mui/material/Button'
 import { graphql } from 'gatsby'
 
@@ -52,7 +52,11 @@ const Index = ({ data }) => {
     <ErrorBoundary>
       <Container>
         <Layout>
-          <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
+          <GatsbyImage
+            image={data.file.childImageSharp.gatsbyImageData}
+            style={bgImageStyle}
+            alt="Pulsatilla vulgaris"
+          />
           <TextContainer>
             <PageTitle align="center" variant="h6">
               Oh je
@@ -80,9 +84,7 @@ export const query = graphql`
   query Query404 {
     file(relativePath: { eq: "puls_vulg.jpg" }) {
       childImageSharp {
-        fluid {
-          ...GatsbyImageSharpFluid
-        }
+        gatsbyImageData(layout: FULL_WIDTH)
       }
     }
   }

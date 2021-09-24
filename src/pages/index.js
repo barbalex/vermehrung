@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography'
 import MaterialCard from '@mui/material/Card'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
-import Img from 'gatsby-image'
+import { GatsbyImage, StaticImage } from 'gatsby-plugin-image'
 import SimpleBar from 'simplebar-react'
 
 import Layout from '../components/Layout'
@@ -112,7 +112,11 @@ const Index = ({ data }) => (
       <StyledSimpleBar>
         <ScrollContainer>
           <Container>
-            <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
+            <GatsbyImage
+              image={data.file.childImageSharp.gatsbyImageData}
+              style={bgImageStyle}
+              alt="Pulsatilla vulgaris"
+            />
             <PageTitle align="center" variant="h6" color="inherit">
               Bedrohte Pflanzen vermehren
             </PageTitle>
@@ -229,9 +233,7 @@ export const query = graphql`
   query Query {
     file(relativePath: { eq: "puls_vulg.jpg" }) {
       childImageSharp {
-        fluid {
-          ...GatsbyImageSharpFluid
-        }
+        gatsbyImageData(layout: FULL_WIDTH)
       }
     }
   }

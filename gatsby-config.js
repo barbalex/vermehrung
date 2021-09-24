@@ -21,8 +21,9 @@ module.exports = {
         name: 'docs-pages',
       },
     },
-    { resolve: 'gatsby-plugin-sharp', options: { failOnError: false } },
-    'gatsby-transformer-sharp',
+    `gatsby-plugin-image`,
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     {
       resolve: 'gatsby-plugin-typography',
       options: {
