@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import FormControl from '@material-ui/core/FormControl'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormHelperText from '@material-ui/core/FormHelperText'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import FormHelperText from '@mui/material/FormHelperText'
 import { DateTime } from 'luxon'
 import DatePicker from 'react-datepicker'
 import { observer } from 'mobx-react-lite'
@@ -22,7 +22,6 @@ const StyledFormControl = styled(FormControl)`
 `
 const Label = styled(InputLabel)`
   font-size: 12px !important;
-  height: 12px !important;
   color: rgb(0, 0, 0, 0.54);
   position: relative !important;
   transform: none !important;
@@ -101,7 +100,7 @@ const DateField = ({
 
   // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
   return (
-    <StyledFormControl>
+    <StyledFormControl variant="standard">
       <Label htmlFor={name}>{label}</Label>
       <StyledDatePicker
         id={name}

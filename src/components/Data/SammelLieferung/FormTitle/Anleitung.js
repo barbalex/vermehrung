@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import MenuItem from '@material-ui/core/MenuItem'
+import MenuItem from '@mui/material/MenuItem'
 
 import getConstants from '../../../../utils/constants'
 
@@ -28,10 +28,10 @@ const SlAnleitung = ({ asMenu }) => {
       aria-label="Anleitung öffnen"
       title="Anleitung öffnen"
       onClick={openDocs}
-    >
+      size="large">
       <IoMdInformationCircleOutline />
     </IconButton>
-  )
+  );
 }
 
 export default observer(SlAnleitung)

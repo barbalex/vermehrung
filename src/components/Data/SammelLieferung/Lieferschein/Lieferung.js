@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
-import TableCell from '@material-ui/core/TableCell'
-import TableRow from '@material-ui/core/TableRow'
+import TableCell from '@mui/material/TableCell'
+import TableRow from '@mui/material/TableRow'
 import styled from 'styled-components'
 import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'

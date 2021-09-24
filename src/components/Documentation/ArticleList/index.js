@@ -1,5 +1,5 @@
 import React from 'react'
-import List from '@material-ui/core/List'
+import List from '@mui/material/List'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'

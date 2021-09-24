@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
@@ -114,95 +114,93 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
     }
   }, [])
 
-  return (
-    <>
-      <TitleRow data-filter={showFilter}>
-        <Title>was</Title>
-      </TitleRow>
-      {ifNeeded('art_id') && (
-        <Select
-          key={`${row.id}art_id`}
-          name="art_id"
-          value={row.art_id}
-          field="art_id"
-          label="Art"
-          options={artWerte}
+  return <>
+    <TitleRow data-filter={showFilter}>
+      <Title>was</Title>
+    </TitleRow>
+    {ifNeeded('art_id') && (
+      <Select
+        key={`${row.id}art_id`}
+        name="art_id"
+        value={row.art_id}
+        field="art_id"
+        label="Art"
+        options={artWerte}
+        saveToDb={saveToDb}
+        error={errors?.lieferung?.art_id}
+      />
+    )}
+    <FieldRow>
+      {ifNeeded('anzahl_pflanzen') && (
+        <TextField
+          key={`${row.id}anzahl_pflanzen`}
+          name="anzahl_pflanzen"
+          label="Anzahl Pflanzen"
+          value={row.anzahl_pflanzen}
           saveToDb={saveToDb}
-          error={errors?.lieferung?.art_id}
+          error={errors?.lieferung?.anzahl_pflanzen}
+          type="number"
         />
       )}
-      <FieldRow>
-        {ifNeeded('anzahl_pflanzen') && (
-          <TextField
-            key={`${row.id}anzahl_pflanzen`}
-            name="anzahl_pflanzen"
-            label="Anzahl Pflanzen"
-            value={row.anzahl_pflanzen}
-            saveToDb={saveToDb}
-            error={errors?.lieferung?.anzahl_pflanzen}
-            type="number"
-          />
-        )}
-        {ifNeeded('anzahl_auspflanzbereit') && (
-          <TextField
-            key={`${row.id}anzahl_auspflanzbereit`}
-            name="anzahl_auspflanzbereit"
-            label="Anzahl auspflanzbereit"
-            value={row.anzahl_auspflanzbereit}
-            saveToDb={saveToDb}
-            error={errors?.lieferung?.anzahl_auspflanzbereit}
-            type="number"
-          />
-        )}
-      </FieldRow>
-      <FieldRow>
-        {ifNeeded('gramm_samen') && (
-          <TextField
-            key={`${row.id}gramm_samen`}
-            name="gramm_samen"
-            label="Gramm Samen"
-            value={row.gramm_samen}
-            saveToDb={saveToDb}
-            error={errors?.lieferung?.gramm_samen}
-            type="number"
-          />
-        )}
-        {ifNeeded('andere_menge') && (
-          <TextField
-            key={`${row.id}andere_menge`}
-            name="andere_menge"
-            label={`Andere Menge (z.B. "3 Zwiebeln")`}
-            value={row.andere_menge}
-            saveToDb={saveToDb}
-            error={errors?.lieferung?.andere_menge}
-            type="text"
-          />
-        )}
-      </FieldRow>
-      {ifNeeded('von_anzahl_individuen') && (
-        <FieldRow>
-          <TextField
-            key={`${row.id}von_anzahl_individuen`}
-            name="von_anzahl_individuen"
-            label="von Anzahl Individuen"
-            value={row.von_anzahl_individuen}
-            saveToDb={saveToDb}
-            error={errors?.lieferung?.von_anzahl_individuen}
-            type="number"
-          />
-          <div>
-            <IconButton
-              aria-label="Anleitung öffnen"
-              title="Anleitung öffnen"
-              onClick={openGenVielfaldDocs}
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
-          </div>
-        </FieldRow>
+      {ifNeeded('anzahl_auspflanzbereit') && (
+        <TextField
+          key={`${row.id}anzahl_auspflanzbereit`}
+          name="anzahl_auspflanzbereit"
+          label="Anzahl auspflanzbereit"
+          value={row.anzahl_auspflanzbereit}
+          saveToDb={saveToDb}
+          error={errors?.lieferung?.anzahl_auspflanzbereit}
+          type="number"
+        />
       )}
-    </>
-  )
+    </FieldRow>
+    <FieldRow>
+      {ifNeeded('gramm_samen') && (
+        <TextField
+          key={`${row.id}gramm_samen`}
+          name="gramm_samen"
+          label="Gramm Samen"
+          value={row.gramm_samen}
+          saveToDb={saveToDb}
+          error={errors?.lieferung?.gramm_samen}
+          type="number"
+        />
+      )}
+      {ifNeeded('andere_menge') && (
+        <TextField
+          key={`${row.id}andere_menge`}
+          name="andere_menge"
+          label={`Andere Menge (z.B. "3 Zwiebeln")`}
+          value={row.andere_menge}
+          saveToDb={saveToDb}
+          error={errors?.lieferung?.andere_menge}
+          type="text"
+        />
+      )}
+    </FieldRow>
+    {ifNeeded('von_anzahl_individuen') && (
+      <FieldRow>
+        <TextField
+          key={`${row.id}von_anzahl_individuen`}
+          name="von_anzahl_individuen"
+          label="von Anzahl Individuen"
+          value={row.von_anzahl_individuen}
+          saveToDb={saveToDb}
+          error={errors?.lieferung?.von_anzahl_individuen}
+          type="number"
+        />
+        <div>
+          <IconButton
+            aria-label="Anleitung öffnen"
+            title="Anleitung öffnen"
+            onClick={openGenVielfaldDocs}
+            size="large">
+            <IoMdInformationCircleOutline />
+          </IconButton>
+        </div>
+      </FieldRow>
+    )}
+  </>;
 }
 
 export default observer(LieferungWas)

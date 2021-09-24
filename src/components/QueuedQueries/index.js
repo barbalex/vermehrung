@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import { FaTimes } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
@@ -80,7 +80,7 @@ const QueuedQueries = () => {
               aria-label={`Dokumentation zu "offline arbeiten" lesen`}
               title={`Dokumentation zu "offline arbeiten" lesen`}
               onClick={openDocs}
-            >
+              size="large">
               <IoMdInformationCircleOutline />
             </IconButton>
             <CloseIcon
@@ -96,7 +96,7 @@ const QueuedQueries = () => {
           Es gibt momentan keine pendenten Operationen
         </NoOpsContainer>
       </Container>
-    )
+    );
   }
 
   return (
@@ -109,7 +109,7 @@ const QueuedQueries = () => {
               aria-label="Anleitung öffnen"
               title="Anleitung öffnen"
               onClick={openDocs}
-            >
+              size="large">
               <IoMdInformationCircleOutline />
             </IconButton>
             <CloseIcon
@@ -139,7 +139,7 @@ const QueuedQueries = () => {
         </OuterContainer>
       </Container>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(QueuedQueries)

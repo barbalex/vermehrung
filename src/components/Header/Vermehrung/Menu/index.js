@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 
-import MenuItem from '@material-ui/core/MenuItem'
+import MenuItem from '@mui/material/MenuItem'
 import { MdMenu } from 'react-icons/md'
 import styled from 'styled-components'
 
@@ -43,12 +43,12 @@ const MenuComponent = ({ asMenu }) => {
         aria-haspopup="true"
         title="Menu"
         onClick={onClickMenu}
-      >
+        size="large">
         <Icon />
       </IconButton>
       <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(MenuComponent)

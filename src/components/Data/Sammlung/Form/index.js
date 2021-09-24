@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
@@ -408,7 +408,7 @@ const SammlungForm = ({
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
                 onClick={openGenVielfaldDocs}
-              >
+                size="large">
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
@@ -441,7 +441,7 @@ const SammlungForm = ({
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
                 onClick={openPlanenDocs}
-              >
+                size="large">
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
@@ -466,7 +466,7 @@ const SammlungForm = ({
         </FieldsContainer>
       </SimpleBar>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(SammlungForm)

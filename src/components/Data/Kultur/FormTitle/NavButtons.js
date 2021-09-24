@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 
 import StoreContext from '../../../../storeContext'
 import ZaDownSvg from '../../../../svg/to_za_down.inline.svg'
@@ -50,36 +50,34 @@ const KulturNavButtons = ({ row }) => {
   }, [row.kultur_option])
   const { kulturOption } = dataState
 
-  return (
-    <>
-      <IconButton title="Zur Kultur-Liste" onClick={onClickToKulturen}>
-        <UpSvg />
+  return <>
+    <IconButton title="Zur Kultur-Liste" onClick={onClickToKulturen} size="large">
+      <UpSvg />
+    </IconButton>
+    {kulturOption?.tk && (
+      <IconButton title="Zu den Teilkulturen" onClick={onClickToTks} size="large">
+        <TkDownSvg />
       </IconButton>
-      {kulturOption?.tk && (
-        <IconButton title="Zu den Teilkulturen" onClick={onClickToTks}>
-          <TkDownSvg />
-        </IconButton>
-      )}
-      <IconButton title="Zu den Zählungen" onClick={onClickToZaehlungen}>
-        <ZaDownSvg />
-      </IconButton>
-      <IconButton
-        title="Zu den An-Lieferungen"
-        onClick={onClickToAnLieferungen}
-      >
-        <AnLiDownSvg />
-      </IconButton>
-      <IconButton
-        title="Zu den Aus-Lieferungen"
-        onClick={onClickToAusLieferungen}
-      >
-        <AusLiDownSvg />
-      </IconButton>
-      <IconButton title="Zu den Events" onClick={onClickToEvents}>
-        <EvDownSvg />
-      </IconButton>
-    </>
-  )
+    )}
+    <IconButton title="Zu den Zählungen" onClick={onClickToZaehlungen} size="large">
+      <ZaDownSvg />
+    </IconButton>
+    <IconButton
+      title="Zu den An-Lieferungen"
+      onClick={onClickToAnLieferungen}
+      size="large">
+      <AnLiDownSvg />
+    </IconButton>
+    <IconButton
+      title="Zu den Aus-Lieferungen"
+      onClick={onClickToAusLieferungen}
+      size="large">
+      <AusLiDownSvg />
+    </IconButton>
+    <IconButton title="Zu den Events" onClick={onClickToEvents} size="large">
+      <EvDownSvg />
+    </IconButton>
+  </>;
 }
 
 export default observer(KulturNavButtons)

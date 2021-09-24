@@ -1,8 +1,8 @@
 import React from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
 import { FaHome } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
@@ -57,7 +57,7 @@ const HeaderDoku = ({ width }) => {
               component={Link}
               to="/"
               title="Home"
-            >
+              size="large">
               <FaHome />
             </IconButton>
           ) : (
@@ -73,7 +73,7 @@ const HeaderDoku = ({ width }) => {
         </Toolbar>
       </AppBar>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default withResizeDetector(HeaderDoku)

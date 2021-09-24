@@ -1,8 +1,8 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
-import MenuItem from '@material-ui/core/MenuItem'
+import IconButton from '@mui/material/IconButton'
+import MenuItem from '@mui/material/MenuItem'
 
 import StoreContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -21,11 +21,11 @@ const KulturAddButton = ({ asMenu }) => {
 
   return (
     <ErrorBoundary>
-      <IconButton aria-label="neue Kultur" title="neue Kultur" onClick={add}>
+      <IconButton aria-label="neue Kultur" title="neue Kultur" onClick={add} size="large">
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(KulturAddButton)

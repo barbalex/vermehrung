@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
-import MenuItem from '@material-ui/core/MenuItem'
+import IconButton from '@mui/material/IconButton'
+import MenuItem from '@mui/material/MenuItem'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 
@@ -35,26 +35,24 @@ const SlPrint = ({ printPreview, setPrintPreview, asMenu }) => {
     )
   }
 
-  return (
-    <>
-      {printPreview && (
-        <IconButton
-          aria-label="Lieferschein drucken"
-          title="Lieferschein drucken"
-          onClick={printLieferschein}
-        >
-          <MdPrint />
-        </IconButton>
-      )}
+  return <>
+    {printPreview && (
       <IconButton
-        aria-label={printPreview ? 'Formular' : 'Lieferschein'}
-        title={printPreview ? 'Formular' : 'Lieferschein'}
-        onClick={showLieferschein}
-      >
-        {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
+        aria-label="Lieferschein drucken"
+        title="Lieferschein drucken"
+        onClick={printLieferschein}
+        size="large">
+        <MdPrint />
       </IconButton>
-    </>
-  )
+    )}
+    <IconButton
+      aria-label={printPreview ? 'Formular' : 'Lieferschein'}
+      title={printPreview ? 'Formular' : 'Lieferschein'}
+      onClick={showLieferschein}
+      size="large">
+      {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
+    </IconButton>
+  </>;
 }
 
 export default observer(SlPrint)

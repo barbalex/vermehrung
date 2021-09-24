@@ -1,8 +1,8 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
-import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
-import IconButton from '@material-ui/core/IconButton'
+import DeleteFilterIcon from '@mui/icons-material/DeleteSweep'
+import DeleteFilterIcon2 from '@mui/icons-material/DeleteSweepOutlined'
+import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext'

@@ -1,10 +1,10 @@
 import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import { combineLatest, of as $of } from 'rxjs'
@@ -97,7 +97,7 @@ const SettingsLieferungMenu = ({ anchorEl, setAnchorEl }) => {
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
             onClick={openSettingsDocs}
-          >
+            size="large">
             <IoMdInformationCircleOutline />
           </IconButton>
         </div>
@@ -134,7 +134,7 @@ const SettingsLieferungMenu = ({ anchorEl, setAnchorEl }) => {
       </MenuItem>
       <Info>Die Wahl gilt für alle Lieferungen.</Info>
     </Menu>
-  )
+  );
 }
 
 export default observer(SettingsLieferungMenu)
