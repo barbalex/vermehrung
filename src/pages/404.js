@@ -2,9 +2,8 @@ import React, { useCallback } from 'react'
 import Typography from '@mui/material/Typography'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
-import { GatsbyImage } from 'gatsby-plugin-image'
+import { StaticImage } from 'gatsby-plugin-image'
 import Button from '@mui/material/Button'
-import { graphql } from 'gatsby'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
@@ -45,17 +44,18 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-const Index = ({ data }) => {
+const Index = () => {
   const onClickBack = useCallback(() => navigate('/'), [])
 
   return (
     <ErrorBoundary>
       <Container>
         <Layout>
-          <GatsbyImage
-            image={data.file.childImageSharp.gatsbyImageData}
+          <StaticImage
+            src="../images/puls_vulg.jpg"
             style={bgImageStyle}
             alt="Pulsatilla vulgaris"
+            layout="fullWidth"
           />
           <TextContainer>
             <PageTitle align="center" variant="h6">
@@ -79,13 +79,3 @@ const Index = ({ data }) => {
 }
 
 export default Index
-
-export const query = graphql`
-  query Query404 {
-    file(relativePath: { eq: "puls_vulg.jpg" }) {
-      childImageSharp {
-        gatsbyImageData(layout: FULL_WIDTH)
-      }
-    }
-  }
-`
