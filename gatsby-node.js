@@ -42,7 +42,6 @@ exports.createPages = async ({ actions, graphql }) => {
   })
 }
 
-// see: https://auth0.com/blog/securing-gatsby-with-auth0/
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
   actions.setWebpackConfig({
     resolve: { fallback: { fs: false } },
