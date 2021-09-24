@@ -1,8 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import { graphql, useStaticQuery } from 'gatsby'
-import Img from 'gatsby-image'
+import { StaticImage } from 'gatsby-plugin-image'
 import { DateTime } from 'luxon'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -146,21 +145,6 @@ const Lieferschein = ({ row }) => {
       })`
     : '(keine Person erfasst)'
 
-  const imageData = useStaticQuery(graphql`
-    query QueryLieferscheinImage {
-      file(relativePath: { eq: "toposLogo.png" }) {
-        childImageSharp {
-          # Specify the image processing specifications right in the query.
-          # Makes it trivial to update as your page's design changes.
-          fixed(width: 500, height: 87) {
-            ...GatsbyImageSharpFixed
-          }
-        }
-      }
-    }
-  `)
-  const image = imageData?.file?.childImageSharp?.fixed ?? {}
-
   const am = row.datum
     ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
     : '(Kein Datum erfasst)'
@@ -176,7 +160,13 @@ const Lieferschein = ({ row }) => {
         }}
       >
         <PageContainer className="querformat printer-content">
-          {image && <Img fixed={image} />}
+          <StaticImage
+            src="../../../../images/toposLogo.png"
+            alt="topos Logo"
+            width={500}
+            height={87}
+            layout="fixed"
+          />
           <Title>Lieferschein</Title>
           <HeaderRow>
             <HaederLabel>Projekt:</HaederLabel>
