@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { DateTime } from 'luxon'
 import { observer } from 'mobx-react-lite'
 import { FaUndoAlt } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 
 import StoreContext from '../../storeContext'
 

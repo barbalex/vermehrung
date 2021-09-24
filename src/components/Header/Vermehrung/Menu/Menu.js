@@ -1,9 +1,9 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
 import { FaChevronRight } from 'react-icons/fa'
 import styled from 'styled-components'
 

@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import StoreContext from '../../../../../storeContext'
@@ -62,55 +62,53 @@ const LieferungWann = ({ showFilter, row, saveToDb, ifNeeded }) => {
     }
   }, [])
 
-  return (
-    <>
-      <TitleRow data-filter={showFilter}>
-        <Title>wann</Title>
-      </TitleRow>
-      {ifNeeded('datum') && (
-        <Date
-          key={`${row.id}datum`}
-          name="datum"
-          label="Datum"
-          value={row.datum}
-          saveToDb={saveToDb}
-          error={errors?.lieferung?.datum}
-        />
-      )}
-      {ifNeeded('geplant') && (
-        <FieldRow>
-          {showFilter ? (
-            <JesNo
-              key={`${row.id}geplant`}
-              label="Geplant"
-              name="geplant"
-              value={row.geplant}
-              saveToDb={saveToDb}
-              error={errors?.lieferung?.geplant}
-            />
-          ) : (
-            <Checkbox2States
-              key={`${row.id}geplant`}
-              label="Geplant"
-              name="geplant"
-              value={row.geplant}
-              saveToDb={saveToDb}
-              error={errors?.lieferung?.geplant}
-            />
-          )}
-          <div>
-            <IconButton
-              aria-label="Anleitung öffnen"
-              title="Anleitung öffnen"
-              onClick={openPlanenDocs}
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
-          </div>
-        </FieldRow>
-      )}
-    </>
-  )
+  return <>
+    <TitleRow data-filter={showFilter}>
+      <Title>wann</Title>
+    </TitleRow>
+    {ifNeeded('datum') && (
+      <Date
+        key={`${row.id}datum`}
+        name="datum"
+        label="Datum"
+        value={row.datum}
+        saveToDb={saveToDb}
+        error={errors?.lieferung?.datum}
+      />
+    )}
+    {ifNeeded('geplant') && (
+      <FieldRow>
+        {showFilter ? (
+          <JesNo
+            key={`${row.id}geplant`}
+            label="Geplant"
+            name="geplant"
+            value={row.geplant}
+            saveToDb={saveToDb}
+            error={errors?.lieferung?.geplant}
+          />
+        ) : (
+          <Checkbox2States
+            key={`${row.id}geplant`}
+            label="Geplant"
+            name="geplant"
+            value={row.geplant}
+            saveToDb={saveToDb}
+            error={errors?.lieferung?.geplant}
+          />
+        )}
+        <div>
+          <IconButton
+            aria-label="Anleitung öffnen"
+            title="Anleitung öffnen"
+            onClick={openPlanenDocs}
+            size="large">
+            <IoMdInformationCircleOutline />
+          </IconButton>
+        </div>
+      </FieldRow>
+    )}
+  </>;
 }
 
 export default observer(LieferungWann)

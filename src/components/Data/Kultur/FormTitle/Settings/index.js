@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 
-import MenuItem from '@material-ui/core/MenuItem'
+import MenuItem from '@mui/material/MenuItem'
 import { FaCog } from 'react-icons/fa'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
@@ -42,12 +42,12 @@ const KulturSettings = ({ asMenu, kulturId }) => {
         aria-haspopup="true"
         title="Optionen wählen"
         onClick={onClickConfig}
-      >
+        size="large">
         <FaCog />
       </IconButton>
       <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} kulturId={kulturId} />
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(KulturSettings)

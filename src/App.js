@@ -5,7 +5,7 @@ import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 
 import { Provider as UrqlProvider } from 'urql'
 
-import { MuiThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
@@ -82,15 +82,17 @@ const App = ({ element }) => {
 
   return (
     <DatabaseProvider database={database}>
-      <MuiThemeProvider theme={materialTheme}>
-        <MobxProvider value={store}>
-          <UrqlProvider value={store.gqlClient}>
-            <GlobalStyle />
-            {element}
-            <Notifications />
-          </UrqlProvider>
-        </MobxProvider>
-      </MuiThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={materialTheme}>
+          <MobxProvider value={store}>
+            <UrqlProvider value={store.gqlClient}>
+              <GlobalStyle />
+              {element}
+              <Notifications />
+            </UrqlProvider>
+          </MobxProvider>
+        </ThemeProvider>
+      </StyledEngineProvider>
     </DatabaseProvider>
   )
 }

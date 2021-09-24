@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 
 import StoreContext from '../../../../storeContext'
 import UpSvg from '../../../../svg/to_up.inline.svg'
@@ -29,22 +29,20 @@ const PersonFormTitleNavButtons = () => {
     [activeNodeArray, setActiveNodeArray],
   )
 
-  return (
-    <>
-      <IconButton title="Zur Liste" onClick={onClickUp}>
-        <UpSvg />
-      </IconButton>
-      <IconButton title="Zu den Sammlungen" onClick={onClickToSammlungen}>
-        <SaDownSvg />
-      </IconButton>
-      <IconButton title="Zu den Gärten" onClick={onClickToGaerten}>
-        <GaDownSvg />
-      </IconButton>
-      <IconButton title="Zu den Lieferungen" onClick={onClickToLieferungen}>
-        <LiDownSvg />
-      </IconButton>
-    </>
-  )
+  return <>
+    <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+      <UpSvg />
+    </IconButton>
+    <IconButton title="Zu den Sammlungen" onClick={onClickToSammlungen} size="large">
+      <SaDownSvg />
+    </IconButton>
+    <IconButton title="Zu den Gärten" onClick={onClickToGaerten} size="large">
+      <GaDownSvg />
+    </IconButton>
+    <IconButton title="Zu den Lieferungen" onClick={onClickToLieferungen} size="large">
+      <LiDownSvg />
+    </IconButton>
+  </>;
 }
 
 export default observer(PersonFormTitleNavButtons)

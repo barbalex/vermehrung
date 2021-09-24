@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 
 import StoreContext from '../../../../storeContext'
 import UpSvg from '../../../../svg/to_up.inline.svg'
@@ -25,25 +25,23 @@ const ArtNavButtons = () => {
     [activeNodeArray, setActiveNodeArray],
   )
 
-  return (
-    <>
-      <IconButton title="Zur Liste" onClick={onClickUp}>
-        <UpSvg />
-      </IconButton>
-      <IconButton
-        title="Zu den Sammlungen dieser Art"
-        onClick={onClickToSammlungen}
-      >
-        <SaDownSvg />
-      </IconButton>
-      <IconButton
-        title="Zu den Kulturen dieser Art"
-        onClick={onClickToKulturen}
-      >
-        <KuDownSvg />
-      </IconButton>
-    </>
-  )
+  return <>
+    <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+      <UpSvg />
+    </IconButton>
+    <IconButton
+      title="Zu den Sammlungen dieser Art"
+      onClick={onClickToSammlungen}
+      size="large">
+      <SaDownSvg />
+    </IconButton>
+    <IconButton
+      title="Zu den Kulturen dieser Art"
+      onClick={onClickToKulturen}
+      size="large">
+      <KuDownSvg />
+    </IconButton>
+  </>;
 }
 
 export default observer(ArtNavButtons)

@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../storeContext'
@@ -57,7 +57,7 @@ const TeilkulturFormTitle = ({
       <TitleContainer>
         <Title>Teilkultur</Title>
         <TitleSymbols>
-          <IconButton title="Zur Liste" onClick={onClickUp}>
+          <IconButton title="Zur Liste" onClick={onClickUp} size="large">
             <UpSvg />
           </IconButton>
           <AddButton />
@@ -80,14 +80,14 @@ const TeilkulturFormTitle = ({
           </Menu>
         </TitleSymbols>
       </TitleContainer>
-    )
+    );
   }
 
   return (
     <TitleContainer>
       <Title>Teilkultur</Title>
       <TitleSymbols>
-        <IconButton title="Zur Liste" onClick={onClickUp}>
+        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
           <UpSvg />
         </IconButton>
         <AddButton />
@@ -103,7 +103,7 @@ const TeilkulturFormTitle = ({
         <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
-  )
+  );
 }
 
 export default withResizeDetector(observer(TeilkulturFormTitle))

@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import CreatableSelect from 'react-select/Creatable'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
-import AddLocation from '@material-ui/icons/AddLocationOutlined'
+import IconButton from '@mui/material/IconButton'
+import AddLocation from '@mui/icons-material/AddLocationOutlined'
 import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`

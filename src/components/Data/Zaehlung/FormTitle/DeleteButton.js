@@ -2,9 +2,9 @@ import React, { useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaMinus } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 
 import StoreContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -66,7 +66,7 @@ const ZaehlungDeleteButton = ({ row }) => {
         title="Zählung löschen"
         onClick={onClickButton}
         disabled={row._deleted}
-      >
+        size="large">
         <FaMinus />
       </IconButton>
       <Menu
@@ -83,7 +83,7 @@ const ZaehlungDeleteButton = ({ row }) => {
         <MenuItem onClick={closeMenu}>Nein, abbrechen!</MenuItem>
       </Menu>
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(ZaehlungDeleteButton)

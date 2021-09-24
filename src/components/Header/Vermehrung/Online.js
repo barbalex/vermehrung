@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react'
-import IconButton from '@material-ui/core/IconButton'
-import Badge from '@material-ui/core/Badge'
+import IconButton from '@mui/material/IconButton'
+import Badge from '@mui/material/Badge'
 import {
   MdCloudDone as NetworkOn,
   MdCloudOff as NetworkOff,

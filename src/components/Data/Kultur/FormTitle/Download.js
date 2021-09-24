@@ -1,10 +1,10 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaDownload } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 // see: https://github.com/guyonroche/exceljs/issues/313
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
-import MenuItem from '@material-ui/core/MenuItem'
+import MenuItem from '@mui/material/MenuItem'
 
 import StoreContext from '../../../../storeContext'
 import buildExceljsWorksheets from './buildExceljsWorksheets'
@@ -28,10 +28,10 @@ const Download = ({ row, asMenu }) => {
       aria-label="Daten herunterladen"
       title="Daten herunterladen"
       onClick={onClickDownload}
-    >
+      size="large">
       <FaDownload />
     </IconButton>
-  )
+  );
 }
 
 export default observer(Download)

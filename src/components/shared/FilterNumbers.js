@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import MenuItem from '@material-ui/core/MenuItem'
+import MenuItem from '@mui/material/MenuItem'
 
 const OuterContainer = styled.div`
   min-width: 48px;
