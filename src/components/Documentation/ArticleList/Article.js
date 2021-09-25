@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { navigate } from 'gatsby'
-import MListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import Divider from '@mui/material/Divider'
 import { FaChevronRight, FaChevronDown } from 'react-icons/fa'
@@ -8,15 +8,8 @@ import { Location } from '@reach/router'
 import styled from 'styled-components'
 import isEqual from 'lodash/isEqual'
 
-const ListItem = styled(MListItem)`
-  display: flex;
-  justify-content: space-between;
-  background-color: ${(props) =>
-    props.active === 'true' ? '#eaeaea' : 'unset'} !important;
-  padding-top: 7px !important;
-  padding-bottom: 7px !important;
-  padding-left: ${(props) =>
-    props.ischild1 === 'true' ? '35px !important' : 'unset'};
+const ListItem = styled(ListItemButton)`
+  ${(props) => props.ischild1 === 'true' && '35px !important'}
 `
 
 const MenuItem = ({ node }) => {
@@ -40,9 +33,9 @@ const MenuItem = ({ node }) => {
         return (
           <>
             <ListItem
-              button
               onClick={onClickMenuItem}
-              active={active.toString()}
+              selected={active}
+              divider
               ischild1={isChild1.toString()}
             >
               <ListItemText onClick={onClickMenuItem}>
