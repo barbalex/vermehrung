@@ -48,9 +48,10 @@ const SettingsOverallMenu = ({
     setGrandParentAnchorEl(null)
   }, [setGrandParentAnchorEl, setParentAnchorEl, store])
 
-  const onClose = useCallback(() => setParentAnchorEl(null), [
-    setParentAnchorEl,
-  ])
+  const onClose = useCallback(
+    () => setParentAnchorEl(null),
+    [setParentAnchorEl],
+  )
 
   return (
     <Menu
@@ -63,6 +64,7 @@ const SettingsOverallMenu = ({
         <TextField
           label="Lieferungen des Jahrs:"
           onChange={onClickLieferungenDesJahrs}
+          variant="standard"
         />
       </FirstMenuItem>
       <MenuItem onClick={onClickKulturenFuerBedarfsplanung}>
