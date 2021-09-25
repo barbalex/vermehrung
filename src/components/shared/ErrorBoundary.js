@@ -55,12 +55,16 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
         <Pre>{componentStack}</Pre>
       </Details>
       <ButtonContainer>
-        <StyledButton variant="outlined" onClick={onReload}>
+        <StyledButton variant="outlined" onClick={onReload} color="inherit">
           neu starten
         </StyledButton>
       </ButtonContainer>
       <ButtonContainer>
-        <StyledButton variant="outlined" onClick={resetErrorBoundary}>
+        <StyledButton
+          variant="outlined"
+          onClick={resetErrorBoundary}
+          color="inherit"
+        >
           Cache leeren und neu starten (neue Anmeldung nötig)
         </StyledButton>
       </ButtonContainer>
