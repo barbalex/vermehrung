@@ -2,14 +2,13 @@ import React, { useCallback } from 'react'
 import { navigate } from 'gatsby'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import Divider from '@mui/material/Divider'
 import { FaChevronRight, FaChevronDown } from 'react-icons/fa'
 import { Location } from '@reach/router'
 import styled from 'styled-components'
 import isEqual from 'lodash/isEqual'
 
 const ListItem = styled(ListItemButton)`
-  ${(props) => props.ischild1 === 'true' && '35px !important'}
+  ${(props) => props.ischild1 === 'true' && 'padding-left: 35px !important;'}
 `
 
 const MenuItem = ({ node }) => {
@@ -44,7 +43,6 @@ const MenuItem = ({ node }) => {
               {isParent1 && isParentOpen && <FaChevronDown />}
               {isParent1 && !isParentOpen && <FaChevronRight />}
             </ListItem>
-            <Divider />
           </>
         )
       }}
