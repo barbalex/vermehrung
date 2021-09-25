@@ -52,10 +52,10 @@ const Conflict = ({
   const store = useContext(StoreContext)
   const { diffConflict, setDiffConflict } = store
 
-  const onClickToggleDiff = useCallback(() => setDiffConflict(!diffConflict), [
-    diffConflict,
-    setDiffConflict,
-  ])
+  const onClickToggleDiff = useCallback(
+    () => setDiffConflict(!diffConflict),
+    [diffConflict, setDiffConflict],
+  )
 
   if (error) {
     return <Container>{error.message}</Container>
@@ -74,6 +74,7 @@ const Conflict = ({
           variant="outlined"
           title="Die widersprüchliche Version wird verworfen, die aktuelle beibehalten. Der Konflikt gilt als gelöst und erscheint nicht mehr"
           startIcon={<FaRegTrashAlt />}
+          color="inherit"
         >
           {diffConflict
             ? 'grüne (= aktuelle) Version übernehmen'
@@ -84,6 +85,7 @@ const Conflict = ({
           variant="outlined"
           title="Die widersprüchliche Version wird übernommen, die aktuelle verworfen. Der Konflikt gilt als gelöst und erscheint nicht mehr"
           startIcon={<FaExchangeAlt />}
+          color="inherit"
         >
           {diffConflict
             ? 'rote (= widersprüchliche) Version übernehmen'
@@ -98,6 +100,7 @@ const Conflict = ({
               : 'Versionen vergleichen'
           }
           startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
+          color="inherit"
         >
           {diffConflict ? 'nicht vergleichen' : 'vergleichen'}
         </StyledButton>
@@ -106,6 +109,7 @@ const Conflict = ({
           variant="outlined"
           title="Die Spalte mit dem Konflikt wird geschlossen. Der Konflikt bleibt erhalten"
           startIcon={<FaTimes />}
+          color="inherit"
         >
           schliessen
         </StyledButton>

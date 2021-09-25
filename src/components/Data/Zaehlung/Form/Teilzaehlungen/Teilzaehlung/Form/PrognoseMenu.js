@@ -180,7 +180,8 @@ const PrognoseMenu = ({
               aria-label="Anleitung öffnen"
               title="Anleitung öffnen"
               onClick={openDocs}
-              size="large">
+              size="large"
+            >
               <IoMdInformationCircleOutline />
             </IconButton>
           </div>
@@ -209,12 +210,16 @@ const PrognoseMenu = ({
           />
         </Field>
         <Buttons>
-          <Button onClick={onClickAbbrechen}>abbrechen</Button>
-          <Button onClick={onClickAbbrechen}>speichern</Button>
+          <Button onClick={onClickAbbrechen} color="inherit">
+            abbrechen
+          </Button>
+          <Button onClick={onClickAbbrechen} color="inherit">
+            speichern
+          </Button>
         </Buttons>
       </Menu>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(PrognoseMenu)

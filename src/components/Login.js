@@ -206,7 +206,11 @@ const Login = () => {
           </FormControl>
         </StyledDiv>
         <DialogActions>
-          {!!email && <ResetButton onClick={reset}>{resetTitle}</ResetButton>}
+          {!!email && (
+            <ResetButton onClick={reset} color="inherit">
+              {resetTitle}
+            </ResetButton>
+          )}
           <Button color="primary" onClick={fetchLogin}>
             anmelden
           </Button>

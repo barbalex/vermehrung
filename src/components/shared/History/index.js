@@ -50,10 +50,10 @@ const History = ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
   const store = useContext(StoreContext)
   const { diffConflict, setDiffConflict } = store
 
-  const onClickToggleDiff = useCallback(() => setDiffConflict(!diffConflict), [
-    diffConflict,
-    setDiffConflict,
-  ])
+  const onClickToggleDiff = useCallback(
+    () => setDiffConflict(!diffConflict),
+    [diffConflict, setDiffConflict],
+  )
   const openDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Historisierung`
     if (typeof window !== 'undefined') {
@@ -86,6 +86,7 @@ const History = ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
           variant="outlined"
           title="Diese Version wiederherstellen"
           startIcon={<FaUndoAlt />}
+          color="inherit"
         >
           {diffConflict ? 'grüne Werte wiederherstellen' : 'wiederherstellen'}
         </StyledButton>
@@ -98,6 +99,7 @@ const History = ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
               : 'Versionen vergleichen'
           }
           startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
+          color="inherit"
         >
           {diffConflict ? 'nicht vergleichen' : 'vergleichen'}
         </StyledButton>
