@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Vermehrung v1.3.27',
+    title: 'Vermehrung v1.3.28',
   },
   plugins: [
     {
@@ -58,9 +58,7 @@ module.exports = {
       resolve: 'gatsby-transformer-remark',
       options: {
         gfm: true,
-        commonmark: false,
         footnotes: true,
-        pedantic: false,
         excerpt_separator: '<!-- end -->',
         plugins: [
           {
