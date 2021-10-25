@@ -19,14 +19,14 @@ const Container = styled.div`
 const StyledSelect = styled(Select)`
   width: 100%;
   .react-select__control:hover {
-    /*background-color: #ddd !important;*/
+    background-color: #6625b5 !important;
   }
   .react-select__control:focus-within {
-    /*background-color: #ddd !important;*/
+    background-color: #6625b5 !important;
     box-shadow: none;
   }
   .react-select__option--is-focused {
-    /*background-color: rgba(74, 20, 140, 0.1) !important;*/
+    background-color: rgba(74, 20, 140, 0.1) !important;
   }
 `
 
@@ -131,7 +131,7 @@ const Search = () => {
       }),
       singleValue: (provided) => ({
         ...provided,
-        color: 'rgba(0, 0, 0, 0.8)',
+        color: '#ac87d0',
       }),
       option: (provided) => ({
         ...provided,
@@ -171,7 +171,7 @@ const Search = () => {
       }),
       placeholder: (provided) => ({
         ...provided,
-        color: 'rgba(0, 0, 0, 0.8)',
+        color: '#ac87d0',
       }),
       indicatorSeparator: (provided) => ({
         ...provided,
@@ -183,7 +183,7 @@ const Search = () => {
       }),
       clearIndicator: (provided) => ({
         ...provided,
-        color: 'rgba(0, 0, 0, 0.8)',
+        color: '#ac87d0',
       }),
     }),
     [maxWidth, singleColumnView],
