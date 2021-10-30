@@ -9,7 +9,6 @@ import Tab from '@mui/material/Tab'
 import { motion, useAnimation } from 'framer-motion'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
-import sortBy from 'lodash/sortBy'
 
 import Qk from './Qk'
 import Choose from './Choose'
@@ -67,7 +66,7 @@ const ApQk = ({ artId }) => {
       : $of({})
     const artQksObservable = db
       .get('art_qk')
-      .query(Q.where('_deleted', false))
+      .query(Q.where('_deleted', false), Q.sortBy('name', Q.asc))
       .observeWithColumns(['name'])
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
@@ -76,7 +75,7 @@ const ApQk = ({ artId }) => {
     const subscription = combinedObservables.subscribe(
       ([userPersonOptions, qks]) =>
         setDataState({
-          qks: sortBy(qks, 'name'),
+          qks,
           userPersonOption: userPersonOptions?.[0],
         }),
     )
@@ -132,14 +131,16 @@ const ApQk = ({ artId }) => {
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
             onClick={openDocs}
-            size="large">
+            size="large"
+          >
             <IoMdInformationCircleOutline />
           </IconButton>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
             onClick={onClickToggle}
-            size="large">
+            size="large"
+          >
             {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
@@ -174,7 +175,7 @@ const ApQk = ({ artId }) => {
         )}
       </motion.div>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(ApQk)
