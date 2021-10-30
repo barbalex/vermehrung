@@ -18,10 +18,11 @@ const buildData = async ({ row }) => {
         Q.where('_deleted', false),
         // following was not included before refactoring but seems a good idea
         //Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+        Q.sortBy('datum', Q.asc),
       )
       .fetch()
   } catch {}
-  const lastZaehlungDone = sortBy(zaehlungenDone, 'datum').slice(-1)[0] ?? {}
+  const lastZaehlungDone = zaehlungenDone.slice(-1)[0] ?? {}
 
   let zaehlungenPlanned = []
   try {
@@ -168,7 +169,8 @@ const buildData = async ({ row }) => {
       return {
         datum: new Date(z.datum).getTime(),
         'Zählung Pflanzen Prognose, ignoriert': anzPflanzen,
-        'Zählung Pflanzen auspflanzbereit Prognose, ignoriert': anzAuspflanzbereit,
+        'Zählung Pflanzen auspflanzbereit Prognose, ignoriert':
+          anzAuspflanzbereit,
         'Zählung Mutterpflanzen Prognose, ignoriert': anzMutterPflanzen,
         'Zählung Prognose': teilzaehlungs
           .map((t) => (t.prognose ? 'ja' : 'nein'))
@@ -295,10 +297,8 @@ const buildData = async ({ row }) => {
       const anzahlenAuspflanzbereitOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_auspflanzbereit)
         .filter((a) => exists(a))
-      const anzAuspflanzbereit = anzahlenAuspflanzbereitOfPreviousZaehlung.reduce(
-        (a, b) => a + b,
-        0,
-      )
+      const anzAuspflanzbereit =
+        anzahlenAuspflanzbereitOfPreviousZaehlung.reduce((a, b) => a + b, 0)
 
       const sumAnzahlPflanzen =
         anzPflanzen +
@@ -358,10 +358,8 @@ const buildData = async ({ row }) => {
       const anzahlenAuspflanzbereitOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_auspflanzbereit)
         .filter((a) => exists(a))
-      const anzAuspflanzbereit = anzahlenAuspflanzbereitOfPreviousZaehlung.reduce(
-        (a, b) => a + b,
-        0,
-      )
+      const anzAuspflanzbereit =
+        anzahlenAuspflanzbereitOfPreviousZaehlung.reduce((a, b) => a + b, 0)
       const sumAnzahlPflanzen =
         anzPflanzen +
         (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
@@ -422,10 +420,8 @@ const buildData = async ({ row }) => {
       const anzahlenAuspflanzbereitOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_auspflanzbereit)
         .filter((a) => exists(a))
-      const anzAuspflanzbereit = anzahlenAuspflanzbereitOfPreviousZaehlung.reduce(
-        (a, b) => a + b,
-        0,
-      )
+      const anzAuspflanzbereit =
+        anzahlenAuspflanzbereitOfPreviousZaehlung.reduce((a, b) => a + b, 0)
       const sumAnzahlPflanzen =
         anzPflanzen +
         (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
@@ -508,10 +504,8 @@ const buildData = async ({ row }) => {
       const anzahlenAuspflanzbereitOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_auspflanzbereit)
         .filter((a) => exists(a))
-      const anzAuspflanzbereit = anzahlenAuspflanzbereitOfPreviousZaehlung.reduce(
-        (a, b) => a + b,
-        0,
-      )
+      const anzAuspflanzbereit =
+        anzahlenAuspflanzbereitOfPreviousZaehlung.reduce((a, b) => a + b, 0)
       const sumAnzahlPflanzen =
         anzPflanzen +
         (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
