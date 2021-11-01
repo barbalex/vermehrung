@@ -1,4 +1,4 @@
-# dumped apflora
+# dumped vermehrung
 # stellt dem Filenamen das Datum voran
 # verschiebt das File auf die dropbox
 echo "creating dump file..."
