@@ -1,7 +1,7 @@
-# dumped vermehrung
-# stellt dem Filenamen das Datum voran
-# verschiebt das File auf die dropbox
-# WENN deren Inhalt geändert hat
+# dumps vermehrung
+# prepends the datetime to filename
+# moves the backup to the correct folder on dropbox
+# if the filesize of the dump changed
 echo "creating dump file..."
 FILENAME=$(date +"%Y-%m-%d_%H-%M-%S_vermehrung.backup")
 PGPASSWORD=$POSTGRES_PASSWORD pg_dump -U postgres -h localhost --file=/sik_data/$FILENAME -Fc -Z9 vermehrung
