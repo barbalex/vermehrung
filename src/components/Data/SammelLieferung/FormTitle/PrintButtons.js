@@ -35,24 +35,28 @@ const SlPrint = ({ printPreview, setPrintPreview, asMenu }) => {
     )
   }
 
-  return <>
-    {printPreview && (
+  return (
+    <>
+      {printPreview && (
+        <IconButton
+          aria-label="Lieferschein drucken"
+          title="Lieferschein drucken"
+          onClick={printLieferschein}
+          size="large"
+        >
+          <MdPrint />
+        </IconButton>
+      )}
       <IconButton
-        aria-label="Lieferschein drucken"
-        title="Lieferschein drucken"
-        onClick={printLieferschein}
-        size="large">
-        <MdPrint />
+        aria-label={printPreview ? 'Formular' : 'Lieferschein'}
+        title={printPreview ? 'Formular' : 'Lieferschein'}
+        onClick={showLieferschein}
+        size="large"
+      >
+        {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
       </IconButton>
-    )}
-    <IconButton
-      aria-label={printPreview ? 'Formular' : 'Lieferschein'}
-      title={printPreview ? 'Formular' : 'Lieferschein'}
-      onClick={showLieferschein}
-      size="large">
-      {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
-    </IconButton>
-  </>;
+    </>
+  )
 }
 
 export default observer(SlPrint)

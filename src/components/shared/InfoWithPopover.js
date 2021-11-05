@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import Popover from '@mui/material/Popover'
 
-import InfoOutlineIcon from '@mui/icons-material/InfoOutlined'
+import { MdInfoOutline as InfoOutlineIcon } from 'react-icons/md'
 import styled from 'styled-components'
 
 const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`
@@ -18,7 +18,7 @@ const InfoWithPopover = ({ children }) => {
   const [popupAnchorEl, changePopupAnchorEl] = useState(null)
 
   const onClickFontIcon = useCallback(
-    event => {
+    (event) => {
       event.preventDefault()
       changePopupOpen(!popupOpen)
       changePopupAnchorEl(event.currentTarget)

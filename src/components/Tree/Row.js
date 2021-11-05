@@ -1,9 +1,11 @@
 import React, { useContext, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import { MdAccountCircle as AccountIcon } from 'react-icons/md'
+import {
+  MdAccountCircle as AccountIcon,
+  MdChevronRight as ChevronRightIcon,
+  MdExpandMore as ExpandMoreIcon,
+  MdMoreHoriz as MoreHorizIcon,
+} from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 //import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
