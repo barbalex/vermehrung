@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import CreatableSelect from 'react-select/Creatable'
 import styled from 'styled-components'
 import IconButton from '@mui/material/IconButton'
-import AddLocation from '@mui/icons-material/AddLocationOutlined'
+import { MdOutlineAddLocation as AddLocationIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
@@ -50,15 +50,15 @@ const StyledSelect = styled(CreatableSelect)`
   }
   .react-select__clear-indicator {
     /* ability to hide caret when not enough space */
-    padding-right: ${props => (props.nocaret ? '0' : '8px')};
+    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
   }
   .react-select__dropdown-indicator {
     /* ability to hide caret when not enough space */
-    display: ${props => (props.nocaret ? 'none' : 'flex')};
+    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
   }
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
-    width: ${props => (props.nocaret ? '0' : '1px')};
+    width: ${(props) => (props.nocaret ? '0' : '1px')};
   }
   input {
     @media print {
@@ -69,7 +69,7 @@ const StyledSelect = styled(CreatableSelect)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
     /* make it open over titlerow (which needs to have z-index 1 to hide text scolling below it)*/
     z-index: 2;
   }
@@ -94,7 +94,7 @@ const SharedSelectCreatable = ({
   const [stateValue, setStateValue] = useState(null)
 
   const onChange = useCallback(
-    option => {
+    (option) => {
       const fakeEvent = {
         target: {
           name,
@@ -105,7 +105,7 @@ const SharedSelectCreatable = ({
     },
     [name, saveToDb],
   )
-  const onInputChange = useCallback(value => setStateValue(value), [])
+  const onInputChange = useCallback((value) => setStateValue(value), [])
   const onBlur = useCallback(() => {
     if (stateValue) {
       const fakeEvent = {
@@ -123,7 +123,7 @@ const SharedSelectCreatable = ({
   }, [value])
 
   // need to add value to options list if it is not yet included
-  const valuesArray = optionsIn.map(o => o.value)
+  const valuesArray = optionsIn.map((o) => o.value)
   const options = [...optionsIn]
   if (value && !valuesArray.includes(value)) {
     options.push({ label: value, value })
@@ -140,7 +140,7 @@ const SharedSelectCreatable = ({
         <StyledSelect
           id={field}
           name={field}
-          value={optionsToUse.find(o => o.value === value)}
+          value={optionsToUse.find((o) => o.value === value)}
           options={optionsToUse}
           onChange={onChange}
           onBlur={onBlur}
@@ -159,7 +159,7 @@ const SharedSelectCreatable = ({
           title="Mit Hilfe der Koordinaten automatisch setzen"
           onClick={onClickLocate}
         >
-          <AddLocation />
+          <AddLocationIcon />
         </StyledIconButton>
       </Field>
       {error && <Error>{error}</Error>}

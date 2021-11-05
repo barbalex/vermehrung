@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import { MdOpenInNew as OpenInNewIcon } from 'react-icons/md'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
