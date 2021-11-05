@@ -1,7 +1,9 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import DeleteFilterIcon from '@mui/icons-material/DeleteSweep'
-import DeleteFilterIcon2 from '@mui/icons-material/DeleteSweepOutlined'
+import {
+  MdDeleteSweep as DeleteFilterIcon,
+  MdOutlineDeleteSweep as DeleteFilterIconOutlined,
+} from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
@@ -31,7 +33,7 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
   cursor: pointer;
   pointer-events: auto;
 `
-const StyledDeleteFilterIcon2 = styled(DeleteFilterIcon2)`
+const StyledDeleteFilterIcon2 = styled(DeleteFilterIconOutlined)`
   cursor: pointer;
   pointer-events: auto;
 `
@@ -43,10 +45,10 @@ const FilterTitle = ({ title, table, totalCount, filteredCount }) => {
   const existsTableFilter = tableIsFiltered({
     table,
   })
-  const onEmptyTable = useCallback(() => emptyTable({ table }), [
-    emptyTable,
-    table,
-  ])
+  const onEmptyTable = useCallback(
+    () => emptyTable({ table }),
+    [emptyTable, table],
+  )
 
   return (
     <Container>
