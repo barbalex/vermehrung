@@ -8,8 +8,10 @@ import InputAdornment from '@mui/material/InputAdornment'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import IconButton from '@mui/material/IconButton'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import {
+  MdVisibility as VisibilityIcon,
+  MdVisibilityOff as VisibilityOffIcon,
+} from 'react-icons/md'
 import Button from '@mui/material/Button'
 import styled from 'styled-components'
 import localForage from 'localforage'
@@ -195,7 +197,7 @@ const Login = () => {
                     title={showPass ? 'verstecken' : 'anzeigen'}
                     size="large"
                   >
-                    {showPass ? <VisibilityOff /> : <Visibility />}
+                    {showPass ? <VisibilityOffIcon /> : <VisibilityIcon />}
                   </IconButton>
                 </InputAdornment>
               }

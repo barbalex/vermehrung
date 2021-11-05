@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import { RiFilterFill, RiFilterLine } from 'react-icons/ri'
-import DeleteFilterIcon from '@mui/icons-material/DeleteSweep'
+import { MdDeleteSweep as DeleteFilterIcon } from 'react-icons/md'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -47,10 +47,10 @@ const Filter = () => {
   const { filter, singleColumnView } = store
   const { show: showFilter, setShow: setShowFilter, filtered, empty } = filter
 
-  const onClickFilter = useCallback(() => setShowFilter(!showFilter), [
-    setShowFilter,
-    showFilter,
-  ])
+  const onClickFilter = useCallback(
+    () => setShowFilter(!showFilter),
+    [setShowFilter, showFilter],
+  )
 
   if (singleColumnView) {
     return (
