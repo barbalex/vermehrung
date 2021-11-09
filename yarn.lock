@@ -72,7 +72,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.15.5":
+"@babel/core@npm:7.16.0, @babel/core@npm:^7.15.5":
   version: 7.16.0
   resolution: "@babel/core@npm:7.16.0"
   dependencies:
@@ -4959,7 +4959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-styled-components@npm:>= 1.12.0, babel-plugin-styled-components@npm:^1.13.3":
+"babel-plugin-styled-components@npm:1.13.3, babel-plugin-styled-components@npm:>= 1.12.0":
   version: 1.13.3
   resolution: "babel-plugin-styled-components@npm:1.13.3"
   dependencies:
@@ -6279,6 +6279,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js@npm:3.19.1, core-js@npm:^3.0.1, core-js@npm:^3.17.2":
+  version: 3.19.1
+  resolution: "core-js@npm:3.19.1"
+  checksum: 2f669061788dc6fea823f0433d871deeaaaacc7d68ef2748859509522a34df5c83e648c3c6a1993fed0ab188081b3cf32b957b2a1f46156a2b20bd775961ade4
+  languageName: node
+  linkType: hard
+
 "core-js@npm:3.6.5":
   version: 3.6.5
   resolution: "core-js@npm:3.6.5"
@@ -6290,13 +6297,6 @@ __metadata:
   version: 2.6.12
   resolution: "core-js@npm:2.6.12"
   checksum: 44fa9934a85f8c78d61e0c8b7b22436330471ffe59ec5076fe7f324d6e8cf7f824b14b1c81ca73608b13bdb0fef035bd820989bf059767ad6fa13123bb8bd016
-  languageName: node
-  linkType: hard
-
-"core-js@npm:^3.0.1, core-js@npm:^3.17.2":
-  version: 3.19.1
-  resolution: "core-js@npm:3.19.1"
-  checksum: 2f669061788dc6fea823f0433d871deeaaaacc7d68ef2748859509522a34df5c83e648c3c6a1993fed0ab188081b3cf32b957b2a1f46156a2b20bd775961ade4
   languageName: node
   linkType: hard
 
@@ -10097,17 +10097,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graphql@npm:16.0.1":
+  version: 16.0.1
+  resolution: "graphql@npm:16.0.1"
+  checksum: e2fbddc78ac93b84af5b1871cdced5ce796102373b91f888983e8bae26856788833aa641f5da15b9e4da05cef2edcc82b744a86a27e7e1ef6c9ce422571ab16c
+  languageName: node
+  linkType: hard
+
 "graphql@npm:^15.4.0, graphql@npm:^15.6.1":
   version: 15.7.2
   resolution: "graphql@npm:15.7.2"
   checksum: eacb746e2981d0c346ef7365601873963af5356f64ce4d890ab89d213c67bf5bc1ae957b93c3902198798774c842b55dff219f38bad858691765e4debc265750
-  languageName: node
-  linkType: hard
-
-"graphql@npm:^16.0.1":
-  version: 16.0.1
-  resolution: "graphql@npm:16.0.1"
-  checksum: e2fbddc78ac93b84af5b1871cdced5ce796102373b91f888983e8bae26856788833aa641f5da15b9e4da05cef2edcc82b744a86a27e7e1ef6c9ce422571ab16c
   languageName: node
   linkType: hard
 
@@ -11610,7 +11610,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jquery@npm:^3.6.0":
+"jquery@npm:3.6.0, jquery@npm:^3.6.0":
   version: 3.6.0
   resolution: "jquery@npm:3.6.0"
   checksum: 8fd5fef4aa48fd374ec716dd1c1df1af407814a228e15c1260ca140de3a697c2a77c30c54ff1d238b6a3ab4ddc445ddeef9adce6c6d28e4869d85eb9d3951c0e
@@ -15533,7 +15533,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.4, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
+"prop-types@npm:15.7.2, prop-types@npm:^15.5.4, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.7.2
   resolution: "prop-types@npm:15.7.2"
   dependencies:
@@ -15935,17 +15935,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-is@npm:17.0.2, react-is@npm:^17.0.2":
+  version: 17.0.2
+  resolution: "react-is@npm:17.0.2"
+  checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.10.2, react-is@npm:^16.12.0, react-is@npm:^16.7.0, react-is@npm:^16.8.1":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
-  languageName: node
-  linkType: hard
-
-"react-is@npm:^17.0.2":
-  version: 17.0.2
-  resolution: "react-is@npm:17.0.2"
-  checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
   languageName: node
   linkType: hard
 
@@ -16845,21 +16845,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rxjs@npm:7.4.0, rxjs@npm:^7.3.0":
+  version: 7.4.0
+  resolution: "rxjs@npm:7.4.0"
+  dependencies:
+    tslib: ~2.1.0
+  checksum: 6b33172a760dcad6882fdc836ee8cf1ebe160dd7eaad95c45a12338ffdaa96eb41e48e6c25bbd3d1fdf45075949ff447954bc17a9d01c688558a67967d09c114
+  languageName: node
+  linkType: hard
+
 "rxjs@npm:^6.6.0":
   version: 6.6.7
   resolution: "rxjs@npm:6.6.7"
   dependencies:
     tslib: ^1.9.0
   checksum: bc334edef1bb8bbf56590b0b25734ba0deaf8825b703256a93714308ea36dff8a11d25533671adf8e104e5e8f256aa6fdfe39b2e248cdbd7a5f90c260acbbd1b
-  languageName: node
-  linkType: hard
-
-"rxjs@npm:^7.3.0":
-  version: 7.4.0
-  resolution: "rxjs@npm:7.4.0"
-  dependencies:
-    tslib: ~2.1.0
-  checksum: 6b33172a760dcad6882fdc836ee8cf1ebe160dd7eaad95c45a12338ffdaa96eb41e48e6c25bbd3d1fdf45075949ff447954bc17a9d01c688558a67967d09c114
   languageName: node
   linkType: hard
 
@@ -17278,7 +17278,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simplebar@npm:^5.3.6":
+"simplebar@npm:5.3.6, simplebar@npm:^5.3.6":
   version: 5.3.6
   resolution: "simplebar@npm:5.3.6"
   dependencies:
@@ -19284,21 +19284,24 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "vermehrung.ch@workspace:."
   dependencies:
+    "@babel/core": 7.16.0
     "@babel/eslint-parser": 7.16.0
     "@babel/plugin-proposal-decorators": 7.16.0
     "@babel/types": 7.x
     "@fontsource/roboto": 4.5.1
     "@fontsource/roboto-mono": 4.5.0
+    "@gatsbyjs/reach-router": ^1.3.6
     "@mui/material": 5.1.0
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
     "@mui/styled-engine-sc": 5.1.0
     "@nozbe/watermelondb": 0.24.0
     "@reach/router": 1.3.4
-    babel-plugin-styled-components: ^1.13.3
+    babel-plugin-styled-components: 1.13.3
     babel-preset-gatsby: 2.1.0
     blueimp-md5: 2.19.0
     browser-update: 3.3.33
     copyfiles: 2.4.1
+    core-js: 3.19.1
     date-fns: 2.25.0
     eslint: 8.2.0
     eslint-plugin-import: 2.25.2
@@ -19333,11 +19336,12 @@ __metadata:
     gatsby-transformer-remark: 5.1.1
     gatsby-transformer-sharp: 4.1.0
     get-urls: 10.0.1
-    graphql: ^16.0.1
+    graphql: 16.0.1
     graphql-tag: 2.12.6
     graphql-ws: 5.5.5
     is-uuid: 1.0.2
     isomorphic-fetch: 3.0.0
+    jquery: 3.6.0
     localforage: 1.10.0
     lodash: 4.17.21
     luxon: 2.1.1
@@ -19350,7 +19354,7 @@ __metadata:
     prettier: 2.4.1
     prismjs: 1.25.0
     proj4: 2.7.5
-    prop-types: ^15.7.2
+    prop-types: 15.7.2
     react: 17.0.2
     react-copy-to-clipboard: 5.0.4
     react-datepicker: 4.3.0
@@ -19360,7 +19364,7 @@ __metadata:
     react-highlight-words: 0.17.0
     react-icons: 4.3.1
     react-image-lightbox: 5.1.4
-    react-is: ^17.0.2
+    react-is: 17.0.2
     react-resize-detector: 6.7.6
     react-select: 5.2.1
     react-slick: 0.28.1
@@ -19370,6 +19374,8 @@ __metadata:
     react-window: 1.8.6
     recharts: 2.1.6
     redaxios: 0.4.1
+    rxjs: 7.4.0
+    simplebar: 5.3.6
     simplebar-react: 2.3.6
     slick-carousel: 1.8.1
     styled-components: 5.3.3
@@ -19378,6 +19384,7 @@ __metadata:
     urql: 2.0.5
     use-debounce: 7.0.1
     uuid: 8.3.2
+    webpack: 5.63.0
   languageName: unknown
   linkType: soft
 
@@ -19523,6 +19530,43 @@ __metadata:
   dependencies:
     debug: ^3.0.0
   checksum: a1c19478a23eaebf4ee1ce7fa0a7a33204624a3676dc12f92f02197fa7ff3ef0007883b2fcc22b0ae2f106d3a4abc42fb9f8da103e9bec3ad82012b745bcf593
+  languageName: node
+  linkType: hard
+
+"webpack@npm:5.63.0":
+  version: 5.63.0
+  resolution: "webpack@npm:5.63.0"
+  dependencies:
+    "@types/eslint-scope": ^3.7.0
+    "@types/estree": ^0.0.50
+    "@webassemblyjs/ast": 1.11.1
+    "@webassemblyjs/wasm-edit": 1.11.1
+    "@webassemblyjs/wasm-parser": 1.11.1
+    acorn: ^8.4.1
+    acorn-import-assertions: ^1.7.6
+    browserslist: ^4.14.5
+    chrome-trace-event: ^1.0.2
+    enhanced-resolve: ^5.8.3
+    es-module-lexer: ^0.9.0
+    eslint-scope: 5.1.1
+    events: ^3.2.0
+    glob-to-regexp: ^0.4.1
+    graceful-fs: ^4.2.4
+    json-parse-better-errors: ^1.0.2
+    loader-runner: ^4.2.0
+    mime-types: ^2.1.27
+    neo-async: ^2.6.2
+    schema-utils: ^3.1.0
+    tapable: ^2.1.1
+    terser-webpack-plugin: ^5.1.3
+    watchpack: ^2.2.0
+    webpack-sources: ^3.2.0
+  peerDependenciesMeta:
+    webpack-cli:
+      optional: true
+  bin:
+    webpack: bin/webpack.js
+  checksum: 8127be3d900d8e57f106f61dc66f8334162d5425d770f46b2110c89057c1607e9be1a20fa37ee53bd6915e3041dc074c5e2aa99665abb18112463b91606946f7
   languageName: node
   linkType: hard
 
