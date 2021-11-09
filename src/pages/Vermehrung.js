@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
-import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
+import CircularProgress from '@mui/material/CircularProgress'
 import { navigate } from 'gatsby'
 
 import StoreContext from '../storeContext'
@@ -161,12 +161,7 @@ const Vermehrung = ({ location }) => {
       <ErrorBoundary>
         <Layout>
           <SpinnerContainer>
-            <Spinner
-              size={50}
-              frontColor="#4a148c"
-              backColor="#4a148c1a"
-              loading={true}
-            />
+            <CircularProgress />
             <SpinnerText>{isIOS ? 'prüfe' : 'autorisiere'}</SpinnerText>
           </SpinnerContainer>
         </Layout>
@@ -191,12 +186,7 @@ const Vermehrung = ({ location }) => {
       <ErrorBoundary>
         <Layout>
           <SpinnerContainer>
-            <Spinner
-              size={50}
-              frontColor="#4a148c"
-              backColor="#4a148c1a"
-              loading={true}
-            />
+            <CircularProgress />
             <SpinnerText>lade Daten für offline-Nutzung</SpinnerText>
             <SpinnerText2>{tableNames(initiallyQuerying)}</SpinnerText2>
           </SpinnerContainer>
