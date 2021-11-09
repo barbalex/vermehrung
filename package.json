@@ -10,6 +10,7 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
+    "@babel/types": "7.x",
     "@fontsource/roboto": "4.5.1",
     "@fontsource/roboto-mono": "4.5.0",
     "@mui/material": "5.1.0",
@@ -17,6 +18,7 @@
     "@mui/styled-engine-sc": "5.1.0",
     "@nozbe/watermelondb": "0.24.0",
     "@reach/router": "1.3.4",
+    "babel-plugin-styled-components": "^1.13.3",
     "blueimp-md5": "2.19.0",
     "browser-update": "3.3.33",
     "date-fns": "2.25.0",
@@ -47,6 +49,7 @@
     "gatsby-transformer-remark": "5.1.1",
     "gatsby-transformer-sharp": "4.1.0",
     "get-urls": "10.0.1",
+    "graphql": "^16.0.1",
     "graphql-tag": "2.12.6",
     "graphql-ws": "5.5.5",
     "is-uuid": "1.0.2",
@@ -63,6 +66,7 @@
     "prettier": "2.4.1",
     "prismjs": "1.25.0",
     "proj4": "2.7.5",
+    "prop-types": "^15.7.2",
     "react": "17.0.2",
     "react-copy-to-clipboard": "5.0.4",
     "react-datepicker": "4.3.0",
@@ -72,10 +76,10 @@
     "react-highlight-words": "0.17.0",
     "react-icons": "4.3.1",
     "react-image-lightbox": "5.1.4",
+    "react-is": "^17.0.2",
     "react-resize-detector": "6.7.6",
     "react-select": "5.2.1",
     "react-slick": "0.28.1",
-    "react-spinners-kit": "git://github.com/barbalex/react-spinners-kit",
     "react-split-pane": "0.1.92",
     "react-stylable-diff": "2.0.0",
     "react-typography": "0.16.20",
@@ -104,19 +108,15 @@
     "gatsby-cli": "4.1.1"
   },
   "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-    "coa": "2.0.2"
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
   "dev-comments": {
     "react-contextmenu": "using file copied from own build. When using v2.14.0 get Error in production: https://github.com/vkbansal/react-contextmenu/issues/284, https://github.com/gatsbyjs/gatsby/issues/19618. For better solution see: https://github.com/vkbansal/react-contextmenu/issues/284#issuecomment-670711499",
-    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
-    "coa": "2.0.2: fixed because of malware attack, see https://github.com/veged/coa/issues/99"
+    "@babel/types": "7.x is peer dep but needed to be put into prod deps due to error in yarn 3",
+    "babel-plugin-styled-components": "is needed by gatsby-plugin-styled-components",
+    "graphql": "is needed by graphql_ws",
+    "react-is": "is needed by styled-components",
+    "prop-types": "is used by react-typography"
   },
-  "peerDependencies": {
-    "@babel/types": "7.x",
-    "babel-plugin-styled-components": "1.x",
-    "graphql": "16.0.1",
-    "prop-types": "15.x",
-    "react-is": "17.0.2"
-  }
+  "packageManager": "yarn@3.1.0"
 }
