@@ -10,7 +10,9 @@ const constants = getConstants()
 
 const Container = styled.div`
   width: 100%;
-  height: calc(100vh - ${constants.appBarHeight}px - 48px);
+  height: calc(
+    100vh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
+  );
   ul {
     margin-top: 0;
   }
@@ -34,7 +36,9 @@ const DokuDate = styled.p`
   color: grey;
 `
 const Body = styled.div`
-  height: calc(100vh - ${constants.appBarHeight}px - 48px);
+  height: calc(
+    100vh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
+  );
   padding: 25px;
 `
 

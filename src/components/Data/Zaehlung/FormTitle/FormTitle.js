@@ -13,6 +13,9 @@ import HistoryButton from '../../../shared/HistoryButton'
 import Menu from '../../../shared/Menu'
 import Anleitung from './Anleitung'
 import UpSvg from '../../../../svg/to_up.inline.svg'
+import getConstants from '../../../../utils/constants'
+
+const constants = getConstants()
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -21,7 +24,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -80,7 +83,7 @@ const ZaehlungFormTitle = ({
           </Menu>
         </TitleSymbols>
       </TitleContainer>
-    );
+    )
   }
 
   return (
@@ -103,7 +106,7 @@ const ZaehlungFormTitle = ({
         <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
-  );
+  )
 }
 
 export default withResizeDetector(observer(ZaehlungFormTitle))

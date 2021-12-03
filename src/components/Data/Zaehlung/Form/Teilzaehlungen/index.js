@@ -11,12 +11,15 @@ import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk'
+import getConstants from '../../../../../utils/constants'
+
+const constants = getConstants()
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
@@ -90,7 +93,8 @@ const Teilzaehlungen = ({ zaehlung }) => {
               aria-label="Neu"
               title="Neue Teil-Zählung"
               onClick={onClickNew}
-              size="large">
+              size="large"
+            >
               <FaPlus />
             </IconButton>
           )}
@@ -98,7 +102,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
       </TitleRow>
       <TeilzaehlungenRows kulturId={kulturId} teilzaehlungs={teilzaehlungs} />
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(Teilzaehlungen)
