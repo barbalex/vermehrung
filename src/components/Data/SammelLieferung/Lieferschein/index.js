@@ -25,7 +25,9 @@ const Container = styled.div`
   background-color: #f8f8f8;
   font-size: 9pt;
   cursor: default;
-  height: calc(100vh - ${constants.appBarHeight}px - 48px);
+  height: calc(
+    100vh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
+  );
   width: 100%;
   /* hide native scrollbar */
   .simplebar-content-wrapper::-webkit-scrollbar {

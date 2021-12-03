@@ -23,7 +23,9 @@ const Container = styled.div`
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - ${constants.appBarHeight}px - 48px) !important;
+  height: calc(
+    100vh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
+  ) !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
