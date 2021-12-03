@@ -4,13 +4,15 @@ import styled from 'styled-components'
 
 import StoreContext from '../../../storeContext'
 import personLabelFromPerson from '../../../utils/personLabelFromPerson'
+import getConstants from '../../../utils/constants'
 
-const singleRowHeight = 48
+const constants = getConstants()
+
 const Row = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: ${singleRowHeight};
+  min-height: ${constants.singleRowHeight};
   border-top: thin solid rgba(74, 20, 140, 0.1);
   border-bottom: ${(props) => (props['data-last'] ? '1px' : 'thin')} solid
     rgba(74, 20, 140, 0.1);
