@@ -182,10 +182,15 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
         )}
         <FieldsContainer>
           {!!width && (
-            <SimpleBar style={{ maxHeight: height, height: height - 48 }}>
+            <SimpleBar
+              style={{
+                maxHeight: height,
+                height: height - constants.titleRowHeight,
+              }}
+            >
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
-                  height={height - 48}
+                  height={height - constants.titleRowHeight}
                   itemCount={zaehlungs.length}
                   itemSize={constants.singleRowHeight}
                   width={width}
