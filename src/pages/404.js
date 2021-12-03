@@ -7,9 +7,12 @@ import Button from '@mui/material/Button'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
+import getConstants from '../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - ${constants.appBarHeight}px);
 `
 const TextContainer = styled.div`
   display: flex;
