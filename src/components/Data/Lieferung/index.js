@@ -10,9 +10,12 @@ import { Q } from '@nozbe/watermelondb'
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
 import StoreContext from '../../../storeContext'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - 64px) !important;
+  height: calc(100vh - ${constants.appBarHeight}px) !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
