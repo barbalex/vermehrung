@@ -14,6 +14,9 @@ import HistoryButton from '../../../shared/HistoryButton'
 import Menu from '../../../shared/Menu'
 import UpSvg from '../../../../svg/to_up.inline.svg'
 import SaDownSvg from '../../../../svg/to_sa_down.inline.svg'
+import getConstants from '../../../../utils/constants'
+
+const constants = getConstants()
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -22,7 +25,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -77,7 +80,11 @@ const Herkunft = ({
             <UpSvg />
           </IconButton>
           {showToSa && (
-            <IconButton title="Zu den Sammlungen" onClick={onClickToSammlungen} size="large">
+            <IconButton
+              title="Zu den Sammlungen"
+              onClick={onClickToSammlungen}
+              size="large"
+            >
               <SaDownSvg />
             </IconButton>
           )}
@@ -105,7 +112,7 @@ const Herkunft = ({
           </Menu>
         </TitleSymbols>
       </TitleContainer>
-    );
+    )
   }
 
   return (
@@ -116,7 +123,11 @@ const Herkunft = ({
           <UpSvg />
         </IconButton>
         {showToSa && (
-          <IconButton title="Zu den Sammlungen" onClick={onClickToSammlungen} size="large">
+          <IconButton
+            title="Zu den Sammlungen"
+            onClick={onClickToSammlungen}
+            size="large"
+          >
             <SaDownSvg />
           </IconButton>
         )}
@@ -137,7 +148,7 @@ const Herkunft = ({
         <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
-  );
+  )
 }
 
 export default withResizeDetector(observer(Herkunft))
