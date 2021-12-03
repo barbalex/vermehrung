@@ -12944,13 +12944,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memoize-one@npm:6.0.0":
-  version: 6.0.0
-  resolution: "memoize-one@npm:6.0.0"
-  checksum: f185ea69f7cceae5d1cb596266dcffccf545e8e7b4106ec6aa93b71ab9d16460dd118ac8b12982c55f6d6322fcc1485de139df07eacffaae94888b9b3ad7675f
-  languageName: node
-  linkType: hard
-
 "memoize-one@npm:>=3.1.1 <6, memoize-one@npm:^5.0.0":
   version: 5.2.1
   resolution: "memoize-one@npm:5.2.1"
@@ -19437,7 +19430,6 @@ __metadata:
     localforage: 1.10.0
     lodash: 4.17.21
     luxon: 2.1.1
-    memoize-one: 6.0.0
     mobx: 6.3.8
     mobx-react-lite: 3.2.2
     mobx-state-tree: 5.0.5
