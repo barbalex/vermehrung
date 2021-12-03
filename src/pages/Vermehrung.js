@@ -19,12 +19,15 @@ import ApiDetector from '../components/ApiDetector'
 import QueuedQueries from '../components/QueuedQueries'
 import isThisIOS from '../utils/isIOS'
 import tableNames from '../utils/tableNames'
+import getConstants from '../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - ${constants.appBarHeight}px);
 `
 const SpinnerContainer = styled.div`
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - ${constants.appBarHeight}px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -40,7 +43,7 @@ const SpinnerText2 = styled.div`
   padding: 0;
 `
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - 64px) !important;
+  height: calc(100vh - ${constants.appBarHeight}px) !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
