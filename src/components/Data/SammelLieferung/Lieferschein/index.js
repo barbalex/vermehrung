@@ -17,12 +17,15 @@ import Lieferung from './Lieferung'
 import StoreContext from '../../../../storeContext'
 import lieferungSort from '../../../../utils/lieferungSort'
 import personFullname from '../../../../utils/personFullname'
+import getConstants from '../../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   background-color: #f8f8f8;
   font-size: 9pt;
   cursor: default;
-  height: calc(100vh - 64px - 48px);
+  height: calc(100vh - ${constants.appBarHeight}px - 48px);
   width: 100%;
   /* hide native scrollbar */
   .simplebar-content-wrapper::-webkit-scrollbar {
