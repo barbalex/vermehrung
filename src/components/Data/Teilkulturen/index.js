@@ -17,6 +17,9 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import tableFilter from '../../../utils/tableFilter'
 import teilkulturSort from '../../../utils/teilkulturSort'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -32,7 +35,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -166,7 +169,8 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
                 aria-label="neue Teilkultur"
                 title="neue Teilkultur"
                 onClick={add}
-                size="large">
+                size="large"
+              >
                 <FaPlus />
               </IconButton>
               <FilterNumbers
@@ -204,7 +208,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default withResizeDetector(observer(Teilkulturen))
