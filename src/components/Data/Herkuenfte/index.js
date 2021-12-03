@@ -17,6 +17,9 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import tableFilter from '../../../utils/tableFilter'
 import herkunftSort from '../../../utils/herkunftSort'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -32,7 +35,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -172,7 +175,8 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
                   aria-label="neue Herkunft"
                   title="neue Herkunft"
                   onClick={add}
-                  size="large">
+                  size="large"
+                >
                   <FaPlus />
                 </IconButton>
               )}
@@ -211,7 +215,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default withResizeDetector(observer(Herkuenfte))
