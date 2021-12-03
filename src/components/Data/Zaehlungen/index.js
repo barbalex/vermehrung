@@ -17,6 +17,9 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import tableFilter from '../../../utils/tableFilter'
 import zaehlungSort from '../../../utils/zaehlungSort'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -32,7 +35,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -164,7 +167,12 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
               <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
-              <IconButton aria-label="neue Zählung" title="neue Zählung" onClick={add} size="large">
+              <IconButton
+                aria-label="neue Zählung"
+                title="neue Zählung"
+                onClick={add}
+                size="large"
+              >
                 <FaPlus />
               </IconButton>
               <FilterNumbers
@@ -202,7 +210,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default withResizeDetector(observer(Zaehlungen))
