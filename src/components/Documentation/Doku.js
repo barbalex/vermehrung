@@ -4,10 +4,13 @@ import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
 import FormTitle from './FormTitle'
+import getConstants from '../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   width: 100%;
-  height: calc(100vh - 64px - 48px);
+  height: calc(100vh - ${constants.appBarHeight}px - 48px);
   ul {
     margin-top: 0;
   }
@@ -31,7 +34,7 @@ const DokuDate = styled.p`
   color: grey;
 `
 const Body = styled.div`
-  height: calc(100vh - 64px - 48px);
+  height: calc(100vh - ${constants.appBarHeight}px - 48px);
   padding: 25px;
 `
 
