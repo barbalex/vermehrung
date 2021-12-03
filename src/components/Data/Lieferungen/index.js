@@ -18,6 +18,9 @@ import exists from '../../../utils/exists'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import tableFilter from '../../../utils/tableFilter'
 import lieferungSort from '../../../utils/lieferungSort'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -33,7 +36,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -243,7 +246,8 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
                 aria-label="neue Lieferung"
                 title="neue Lieferung"
                 onClick={add}
-                size="large">
+                size="large"
+              >
                 <FaPlus />
               </IconButton>
               <FilterNumbers
@@ -281,7 +285,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default withResizeDetector(observer(Lieferungen))
