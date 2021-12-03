@@ -10,6 +10,9 @@ import Conflict from './Conflict'
 import FormTitle from './FormTitle'
 import Form from './Form'
 import History from './History'
+import getConstants from '../../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -18,7 +21,7 @@ const Container = styled.div`
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - 64px - 48px) !important;
+  height: calc(100vh - ${constants.appBarHeight}px - 48px) !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
