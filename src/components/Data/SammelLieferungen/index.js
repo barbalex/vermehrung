@@ -67,8 +67,6 @@ const StyledList = styled(FixedSizeList)`
   }
 `
 
-const singleRowHeight = 48
-
 const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const { insertSammelLieferungRev, db, filter } = store
@@ -179,7 +177,7 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
                 <StyledList
                   height={height - 48}
                   itemCount={sammelLieferungs.length}
-                  itemSize={singleRowHeight}
+                  itemSize={constants.singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
                   outerRef={scrollableNodeRef}
