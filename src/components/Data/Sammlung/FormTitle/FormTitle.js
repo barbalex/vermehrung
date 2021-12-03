@@ -14,6 +14,9 @@ import Menu from '../../../shared/Menu'
 import UpSvg from '../../../../svg/to_up.inline.svg'
 import LiDownSvg from '../../../../svg/to_ausli_down.inline.svg'
 import HeDownSvg from '../../../../svg/to_he_down.inline.svg'
+import getConstants from '../../../../utils/constants'
+
+const constants = getConstants()
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -22,7 +25,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -68,14 +71,19 @@ const SammlungFormTitle = ({
       <TitleContainer>
         <Title>Sammlung</Title>
         <TitleSymbols>
-          <IconButton title="Zur Sammlungs-Liste" onClick={onClickUp} size="large">
+          <IconButton
+            title="Zur Sammlungs-Liste"
+            onClick={onClickUp}
+            size="large"
+          >
             <UpSvg />
           </IconButton>
           {showToHe && (
             <IconButton
               title="Zu den Herkünften dieser Sammlung"
               onClick={onClickToHerkuenfte}
-              size="large">
+              size="large"
+            >
               <HeDownSvg />
             </IconButton>
           )}
@@ -83,7 +91,8 @@ const SammlungFormTitle = ({
             <IconButton
               title="Zu den Aus-Lieferungen dieser Sammlung"
               onClick={onClickToLieferungen}
-              size="large">
+              size="large"
+            >
               <LiDownSvg />
             </IconButton>
           )}
@@ -106,21 +115,26 @@ const SammlungFormTitle = ({
           </Menu>
         </TitleSymbols>
       </TitleContainer>
-    );
+    )
   }
 
   return (
     <TitleContainer>
       <Title>Sammlung</Title>
       <TitleSymbols>
-        <IconButton title="Zur Sammlungs-Liste" onClick={onClickUp} size="large">
+        <IconButton
+          title="Zur Sammlungs-Liste"
+          onClick={onClickUp}
+          size="large"
+        >
           <UpSvg />
         </IconButton>
         {showToHe && (
           <IconButton
             title="Zu den Herkünften dieser Sammlung"
             onClick={onClickToHerkuenfte}
-            size="large">
+            size="large"
+          >
             <HeDownSvg />
           </IconButton>
         )}
@@ -128,7 +142,8 @@ const SammlungFormTitle = ({
           <IconButton
             title="Zu den Aus-Lieferungen dieser Sammlung"
             onClick={onClickToLieferungen}
-            size="large">
+            size="large"
+          >
             <LiDownSvg />
           </IconButton>
         )}
@@ -144,7 +159,7 @@ const SammlungFormTitle = ({
         <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
-  );
+  )
 }
 
 export default withResizeDetector(observer(SammlungFormTitle))
