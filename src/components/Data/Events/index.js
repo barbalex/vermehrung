@@ -17,6 +17,9 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import eventSort from '../../../utils/eventSort'
 import tableFilter from '../../../utils/tableFilter'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -32,7 +35,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -156,7 +159,12 @@ const Events = ({ filter: showFilter, width, height }) => {
               <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
-              <IconButton aria-label="neuer Event" title="neuer Event" onClick={add} size="large">
+              <IconButton
+                aria-label="neuer Event"
+                title="neuer Event"
+                onClick={add}
+                size="large"
+              >
                 <FaPlus />
               </IconButton>
               <FilterNumbers
@@ -194,7 +202,7 @@ const Events = ({ filter: showFilter, width, height }) => {
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default withResizeDetector(observer(Events))

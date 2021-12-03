@@ -14,12 +14,15 @@ import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import gvsSortByPerson from '../../../../../utils/gvsSortByPerson'
 import personSort from '../../../../../utils/personSort'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
+import getConstants from '../../../../../utils/constants'
+
+const constants = getConstants()
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
@@ -146,7 +149,8 @@ const GartenPersonen = ({ garten }) => {
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
             onClick={onClickToggle}
-            size="large">
+            size="large"
+          >
             {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
@@ -178,7 +182,7 @@ const GartenPersonen = ({ garten }) => {
         )}
       </motion.div>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(GartenPersonen)
