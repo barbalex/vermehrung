@@ -207,7 +207,7 @@ const Tree = () => {
     user.uid,
   ])
 
-  console.log('Tree rendering', { openNodes, nodes })
+  //console.log('Tree rendering', { openNodes, nodes })
 
   return (
     <ErrorBoundary>
