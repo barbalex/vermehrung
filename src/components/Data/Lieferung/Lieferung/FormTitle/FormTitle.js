@@ -14,6 +14,9 @@ import HistoryButton from '../../../../shared/HistoryButton'
 import Menu from '../../../../shared/Menu'
 import UpSvg from '../../../../../svg/to_up.inline.svg'
 import KuDownSvg from '../../../../../svg/to_ku_down.inline.svg'
+import getConstants from '../../../../../utils/constants'
+
+const constants = getConstants()
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -22,7 +25,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -74,7 +77,11 @@ const LieferungTitleFormTitle = ({
             <UpSvg />
           </IconButton>
           {showToKu && (
-            <IconButton title="Zur Kultur" onClick={onClickToKultur} size="large">
+            <IconButton
+              title="Zur Kultur"
+              onClick={onClickToKultur}
+              size="large"
+            >
               <KuDownSvg />
             </IconButton>
           )}
@@ -98,7 +105,7 @@ const LieferungTitleFormTitle = ({
           </Menu>
         </TitleSymbols>
       </TitleContainer>
-    );
+    )
   }
 
   return (
@@ -126,7 +133,7 @@ const LieferungTitleFormTitle = ({
         <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </TitleContainer>
-  );
+  )
 }
 
 export default withResizeDetector(observer(LieferungTitleFormTitle))

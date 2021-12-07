@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext'
+import getConstants from '../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -11,7 +14,7 @@ const Container = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `

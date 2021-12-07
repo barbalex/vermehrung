@@ -5,6 +5,9 @@ const constants = () => {
   const hostname = isLocalhost ? 'localhost' : window.location.hostname
 
   return {
+    appBarHeight: 64,
+    titleRowHeight: 48,
+    singleRowHeight: 48,
     graphQlUri: isLocalhost
       ? `http://${hostname}:8080/v1/graphql`
       : 'https://api.vermehrung.ch/v1/graphql',

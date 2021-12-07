@@ -25,7 +25,7 @@ const NoOpsContainer = styled.div`
 `
 const Container = styled.div``
 const OuterContainer = styled.div`
-  height: calc(100vh - 64px - 15px - 23px - 23px);
+  height: calc(100vh - ${constants.appBarHeight}px - 15px - 23px - 23px);
   overflow-x: hidden;
   /* hide native scrollbar */
   .simplebar-content-wrapper::-webkit-scrollbar {
@@ -57,9 +57,10 @@ const QueuedQueries = () => {
   const store = useContext(StoreContext)
   const { queuedQueries, setShowQueuedQueries } = store
 
-  const onClickCloseIcon = useCallback(() => setShowQueuedQueries(false), [
-    setShowQueuedQueries,
-  ])
+  const onClickCloseIcon = useCallback(
+    () => setShowQueuedQueries(false),
+    [setShowQueuedQueries],
+  )
   const openDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/offline`
     if (typeof window !== 'undefined') {
@@ -80,7 +81,8 @@ const QueuedQueries = () => {
               aria-label={`Dokumentation zu "offline arbeiten" lesen`}
               title={`Dokumentation zu "offline arbeiten" lesen`}
               onClick={openDocs}
-              size="large">
+              size="large"
+            >
               <IoMdInformationCircleOutline />
             </IconButton>
             <CloseIcon
@@ -96,7 +98,7 @@ const QueuedQueries = () => {
           Es gibt momentan keine pendenten Operationen
         </NoOpsContainer>
       </Container>
-    );
+    )
   }
 
   return (
@@ -109,7 +111,8 @@ const QueuedQueries = () => {
               aria-label="Anleitung öffnen"
               title="Anleitung öffnen"
               onClick={openDocs}
-              size="large">
+              size="large"
+            >
               <IoMdInformationCircleOutline />
             </IconButton>
             <CloseIcon
@@ -139,7 +142,7 @@ const QueuedQueries = () => {
         </OuterContainer>
       </Container>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(QueuedQueries)

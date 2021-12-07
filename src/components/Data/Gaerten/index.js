@@ -17,6 +17,9 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import tableFilter from '../../../utils/tableFilter'
 import gartensSortedFromGartens from '../../../utils/gartensSortedFromGartens'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -32,7 +35,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -63,8 +66,6 @@ const StyledList = styled(FixedSizeList)`
     box-shadow: none;
   }
 `
-
-const singleRowHeight = 48
 
 const Gaerten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -172,7 +173,12 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
               <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
-              <IconButton aria-label="neuer Garten" title="neuer Garten" onClick={add} size="large">
+              <IconButton
+                aria-label="neuer Garten"
+                title="neuer Garten"
+                onClick={add}
+                size="large"
+              >
                 <FaPlus />
               </IconButton>
               <FilterNumbers
@@ -189,7 +195,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
                 <StyledList
                   height={height - 48}
                   itemCount={gartens.length}
-                  itemSize={singleRowHeight}
+                  itemSize={constants.singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
                   outerRef={scrollableNodeRef}
@@ -210,7 +216,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default withResizeDetector(observer(Gaerten))

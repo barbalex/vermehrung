@@ -5,15 +5,18 @@ import styled from 'styled-components'
 import { Location } from '@reach/router'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
+import getConstants from '../../utils/constants'
+
+const constants = getConstants()
 
 import Home from './Home'
 import Doku from './Doku'
 import Vermehrung from './Vermehrung'
 
 const StyledAppBar = styled(AppBar)`
-  min-height: 64px !important;
+  min-height: ${constants.appBarHeight}px !important;
   .MuiToolbar-root {
-    min-height: 64px !important;
+    min-height: ${constants.appBarHeight}px !important;
     padding-left: 0 !important;
     padding-right: 10px !important;
   }

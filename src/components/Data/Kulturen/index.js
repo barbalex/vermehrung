@@ -17,6 +17,9 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import tableFilter from '../../../utils/tableFilter'
 import kultursSortedFromKulturs from '../../../utils/kultursSortedFromKulturs'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -32,7 +35,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -63,8 +66,6 @@ const StyledList = styled(FixedSizeList)`
     box-shadow: none;
   }
 `
-
-const singleRowHeight = 48
 
 const Kulturen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -188,7 +189,12 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
               <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
-              <IconButton aria-label="neue Kultur" title="neue Kultur" onClick={add} size="large">
+              <IconButton
+                aria-label="neue Kultur"
+                title="neue Kultur"
+                onClick={add}
+                size="large"
+              >
                 <FaPlus />
               </IconButton>
               <FilterNumbers
@@ -200,12 +206,17 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
         )}
         <FieldsContainer>
           {!!width && (
-            <SimpleBar style={{ maxHeight: height, height: height - 48 }}>
+            <SimpleBar
+              style={{
+                maxHeight: height,
+                height: height - constants.titleRowHeight,
+              }}
+            >
               {({ scrollableNodeRef, contentNodeRef }) => (
                 <StyledList
-                  height={height - 48}
+                  height={height - constants.titleRowHeight}
                   itemCount={kulturs.length}
-                  itemSize={singleRowHeight}
+                  itemSize={constants.singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
                   outerRef={scrollableNodeRef}
@@ -226,7 +237,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default withResizeDetector(observer(Kulturen))

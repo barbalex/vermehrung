@@ -17,6 +17,9 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import tableFilter from '../../../utils/tableFilter'
 import artsSortedFromArts from '../../../utils/artsSortedFromArts'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -31,7 +34,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -62,8 +65,6 @@ const StyledList = styled(FixedSizeList)`
     box-shadow: none;
   }
 `
-
-const singleRowHeight = 48
 
 const Arten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
@@ -140,7 +141,12 @@ const Arten = ({ filter: showFilter, width, height }) => {
               <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
-              <IconButton aria-label="neue Art" title="neue Art" onClick={add} size="large">
+              <IconButton
+                aria-label="neue Art"
+                title="neue Art"
+                onClick={add}
+                size="large"
+              >
                 <FaPlus />
               </IconButton>
               <FilterNumbers
@@ -157,7 +163,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
                 <StyledList
                   height={height - 48}
                   itemCount={arts.length}
-                  itemSize={singleRowHeight}
+                  itemSize={constants.singleRowHeight}
                   width={width}
                   innerRef={contentNodeRef}
                   outerRef={scrollableNodeRef}
@@ -178,7 +184,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default withResizeDetector(observer(Arten))

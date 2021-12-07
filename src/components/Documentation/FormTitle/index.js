@@ -5,6 +5,9 @@ import styled from 'styled-components'
 import IconButton from '@mui/material/IconButton'
 
 import UpSvg from '../../../svg/to_up.inline.svg'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -14,7 +17,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
 `
 const Title = styled.div`
@@ -45,7 +48,7 @@ const DocumentationFormTitle = ({ location }) => {
         </IconButton>
       </TitleSymbols>
     </TitleContainer>
-  );
+  )
 }
 
 export default observer(DocumentationFormTitle)
