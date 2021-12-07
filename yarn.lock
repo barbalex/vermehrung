@@ -15657,6 +15657,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-virtualized-auto-sizer@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "react-virtualized-auto-sizer@npm:1.0.6"
+  peerDependencies:
+    react: ^15.3.0 || ^16.0.0-alpha || ^17.0.0
+    react-dom: ^15.3.0 || ^16.0.0-alpha || ^17.0.0
+  checksum: 81270e9d328e9b779515f42b6aa8dea2f21097f69fc776906d6b7d31ada03706d34408a6318baf59531f180402fbf74fdb9928ab65d53442a134b7ee5ba01265
+  languageName: node
+  linkType: hard
+
 "react-window@npm:1.8.6":
   version: 1.8.6
   resolution: "react-window@npm:1.8.6"
@@ -18798,6 +18808,7 @@ __metadata:
     react-split-pane: 0.1.92
     react-stylable-diff: 2.0.0
     react-typography: 0.16.20
+    react-virtualized-auto-sizer: ^1.0.6
     react-window: 1.8.6
     recharts: 2.1.6
     redaxios: 0.4.1
