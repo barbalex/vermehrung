@@ -14,6 +14,9 @@ import UpSvg from '../../../../svg/to_up.inline.svg'
 import KuDownSvg from '../../../../svg/to_ku_down.inline.svg'
 import HistoryButton from '../../../shared/HistoryButton'
 import Menu from '../../../shared/Menu'
+import getConstants from '../../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   background-color:rgba(74, 20, 140, 0.1);
@@ -22,7 +25,7 @@ const Container = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: ${constants.titleRowHeight}px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -66,7 +69,11 @@ const GartenFormTitle = ({
           <IconButton title="Zur Liste" onClick={onClickUp} size="large">
             <UpSvg />
           </IconButton>
-          <IconButton title="Zu den Kulturen" onClick={onClickToKulturen} size="large">
+          <IconButton
+            title="Zu den Kulturen"
+            onClick={onClickToKulturen}
+            size="large"
+          >
             <KuDownSvg />
           </IconButton>
           <AddButton />
@@ -89,7 +96,7 @@ const GartenFormTitle = ({
           </Menu>
         </TitleSymbols>
       </Container>
-    );
+    )
   }
 
   return (
@@ -99,7 +106,11 @@ const GartenFormTitle = ({
         <IconButton title="Zur Liste" onClick={onClickUp} size="large">
           <UpSvg />
         </IconButton>
-        <IconButton title="Zu den Kulturen" onClick={onClickToKulturen} size="large">
+        <IconButton
+          title="Zu den Kulturen"
+          onClick={onClickToKulturen}
+          size="large"
+        >
           <KuDownSvg />
         </IconButton>
         <AddButton />
@@ -115,7 +126,7 @@ const GartenFormTitle = ({
         <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
       </TitleSymbols>
     </Container>
-  );
+  )
 }
 
 export default withResizeDetector(observer(GartenFormTitle))

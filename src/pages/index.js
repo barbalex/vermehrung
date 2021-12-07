@@ -7,10 +7,13 @@ import SimpleBar from 'simplebar-react'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
+import getConstants from '../utils/constants'
+
+const constants = getConstants()
 
 const StyledSimpleBar = styled(SimpleBar)`
-  max-height: calc(100vh - 64px);
-  height: calc(100vh - 64px);
+  max-height: calc(100vh - ${constants.appBarHeight}px);
+  height: calc(100vh - ${constants.appBarHeight}px);
   .simplebar-scrollbar:before {
     /*background: #4a148c !important;
     background: #003e0c !important;*/
@@ -18,7 +21,7 @@ const StyledSimpleBar = styled(SimpleBar)`
   }
 `
 const ScrollContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: calc(100vh - ${constants.appBarHeight}px);
 `
 const Container = styled.div`
   padding: 15px;

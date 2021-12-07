@@ -4,13 +4,15 @@ import styled from 'styled-components'
 
 import StoreContext from '../../../storeContext'
 import tableFilter from '../../../utils/tableFilter'
+import getConstants from '../../../utils/constants'
 
-const singleRowHeight = 48
+const constants = getConstants()
+
 const Row = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: ${singleRowHeight};
+  min-height: ${constants.singleRowHeight};
   border-top: thin solid rgba(74, 20, 140, 0.1);
   border-bottom: ${(props) => (props['data-last'] ? '1px' : 'thin')} solid
     rgba(74, 20, 140, 0.1);
@@ -48,10 +50,10 @@ const RootRow = ({ row, style, last }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, row.table, store, ...Object.values(filter)])
 
-  const onClickRow = useCallback(() => setActiveNodeArray(row.url), [
-    row.url,
-    setActiveNodeArray,
-  ])
+  const onClickRow = useCallback(
+    () => setActiveNodeArray(row.url),
+    [row.url, setActiveNodeArray],
+  )
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>

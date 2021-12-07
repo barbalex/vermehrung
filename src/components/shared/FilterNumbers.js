@@ -1,9 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 import MenuItem from '@mui/material/MenuItem'
+import getConstants from '../../utils/constants'
+
+const constants = getConstants()
 
 const OuterContainer = styled.div`
-  min-width: 48px;
+  min-width: ${constants.titleRowHeight}px;
   display: flex;
   justify-content: center;
 `
@@ -12,7 +15,7 @@ const Container = styled.div`
   flex-direction: column;
   font-size: 0.7em;
   font-weight: 500;
-  min-height: 48px;
+  min-height: ${constants.titleRowHeight}px;
   justify-content: center;
   cursor: default;
   user-select: none;

@@ -14,11 +14,11 @@ import Doku from './Doku'
 const constants = getConstants()
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: calc(100vh - ${constants.appBarHeight}px);
 `
 
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - 64px) !important;
+  height: calc(100vh - ${constants.appBarHeight}px) !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
@@ -50,9 +50,10 @@ const Documentation = ({ data, location, width }) => {
   const { docFilter, setDocsCount, setDocsFilteredCount } = store
   const frontmatter = data?.markdownRemark?.frontmatter
   const html = data?.markdownRemark?.html
-  const edges = useMemo(() => data?.allMarkdownRemark?.edges ?? [], [
-    data.allMarkdownRemark.edges,
-  ])
+  const edges = useMemo(
+    () => data?.allMarkdownRemark?.edges ?? [],
+    [data.allMarkdownRemark.edges],
+  )
 
   const path = location.pathname.split('/').filter((e) => !!e)
 
