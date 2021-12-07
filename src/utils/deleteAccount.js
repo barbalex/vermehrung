@@ -1,8 +1,6 @@
 import axios from 'redaxios'
 
-import getConstants from './constants'
-
-const constants = getConstants()
+import constants from './constants'
 
 const deleteAccount = async ({ store, person }) => {
   const {

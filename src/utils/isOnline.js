@@ -1,10 +1,9 @@
 import axios from 'redaxios'
 
-import getConstants from './constants'
+import constants from './constants'
 
-const constants = getConstants()
 const config = {
-  url: constants?.healthUri,
+  url: constants?.getHealthUri(),
   timeout: 5000, // timeout error happens after 5 seconds
 }
 

@@ -5,9 +5,7 @@ import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
 import Article from './Article'
-import getConstants from '../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../utils/constants'
 
 const Container = styled.div`
   height: calc(100vh - ${constants.appBarHeight}px);

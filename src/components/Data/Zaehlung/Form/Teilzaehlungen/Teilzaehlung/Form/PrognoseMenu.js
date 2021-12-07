@@ -12,11 +12,9 @@ import StoreContext from '../../../../../../../storeContext'
 import TextField from '../../../../../../shared/TextField'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
 import exists from '../../../../../../../utils/exists'
-import getConstants from '../../../../../../../utils/constants'
+import constants from '../../../../../../../utils/constants'
 import zaehlungSort from '../../../../../../../utils/zaehlungSort'
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
-
-const constants = getConstants()
 
 const TitleRow = styled.div`
   display: flex;
@@ -156,7 +154,7 @@ const PrognoseMenu = ({
   )
   const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])
   const openDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Planen`
+    const url = `${constants?.getAppUri()}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

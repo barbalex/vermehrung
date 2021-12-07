@@ -8,9 +8,7 @@ import { motion, useAnimation } from 'framer-motion'
 
 import Pflanzen from './Pflanzen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import getConstants from '../../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
@@ -44,7 +42,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
-    const url = `${constants?.appUri}/Dokumentation/Zeitachse-Art`
+    const url = `${constants?.getAppUri()}/Dokumentation/Zeitachse-Art`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

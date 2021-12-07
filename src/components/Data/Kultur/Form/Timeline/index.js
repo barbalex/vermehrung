@@ -23,12 +23,10 @@ import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
-import getConstants from '../../../../../utils/constants'
+import constants from '../../../../../utils/constants'
 import exists from '../../../../../utils/exists'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import buildData from './buildData'
-
-const constants = getConstants()
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
@@ -71,7 +69,7 @@ const KulturTimeline = ({ row, width }) => {
   }, [row])
 
   const openDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Zeitachse-Kultur`
+    const url = `${constants?.getAppUri()}/Dokumentation/Zeitachse-Kultur`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

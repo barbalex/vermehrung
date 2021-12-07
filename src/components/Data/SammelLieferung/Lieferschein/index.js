@@ -17,9 +17,7 @@ import Lieferung from './Lieferung'
 import StoreContext from '../../../../storeContext'
 import lieferungSort from '../../../../utils/lieferungSort'
 import personFullname from '../../../../utils/personFullname'
-import getConstants from '../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../utils/constants'
 
 const Container = styled.div`
   background-color: #f8f8f8;

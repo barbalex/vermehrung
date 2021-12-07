@@ -10,9 +10,7 @@ import { withResizeDetector } from 'react-resize-detector'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Filter from './Filter'
-import getConstants from '../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../utils/constants'
 
 const SiteTitle = styled(Button)`
   display: none;
@@ -57,7 +55,8 @@ const HeaderDoku = ({ width }) => {
               component={Link}
               to="/"
               title="Home"
-              size="large">
+              size="large"
+            >
               <FaHome />
             </IconButton>
           ) : (
@@ -73,7 +72,7 @@ const HeaderDoku = ({ width }) => {
         </Toolbar>
       </AppBar>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default withResizeDetector(HeaderDoku)

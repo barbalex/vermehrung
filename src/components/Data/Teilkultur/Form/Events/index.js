@@ -6,9 +6,7 @@ import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import eventSort from '../../../../../utils/eventSort'
 import storeContext from '../../../../../storeContext'
 import Row from './Row'
-import getConstants from '../../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);

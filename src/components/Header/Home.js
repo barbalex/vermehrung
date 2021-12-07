@@ -9,9 +9,7 @@ import { Link } from 'gatsby'
 import { withResizeDetector } from 'react-resize-detector'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import getConstants from '../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../utils/constants'
 
 const SiteTitle = styled(Button)`
   display: none;
@@ -60,7 +58,8 @@ const HeaderHome = ({ width, location }) => {
                 component={Link}
                 to="/"
                 title="Home"
-                size="large">
+                size="large"
+              >
                 <FaHome />
               </IconButton>
             )
@@ -79,7 +78,7 @@ const HeaderHome = ({ width, location }) => {
         </Toolbar>
       </AppBar>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default withResizeDetector(HeaderHome)

@@ -18,10 +18,8 @@ import { sendPasswordResetEmail } from 'firebase/auth'
 import StoreContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import logout from '../../../utils/logout'
-import getConstants from '../../../utils/constants'
+import constants from '../../../utils/constants'
 import personFullname from '../../../utils/personFullname'
-
-const constants = getConstants()
 
 const StyledUserIcon = styled(UserIcon)`
   color: white;
@@ -81,7 +79,7 @@ const Account = () => {
     setResetTitle('...')
     try {
       await sendPasswordResetEmail(firebaseAuth, email, {
-        url: `${constants?.appUri}/Vermehrung`,
+        url: `${constants?.getAppUri()}/Vermehrung`,
         handleCodeInApp: true,
       })
     } catch (error) {
@@ -109,7 +107,8 @@ const Account = () => {
           aria-haspopup="true"
           title={`Konto und Daten verwalten`}
           onClick={onClickMenu}
-          size="large">
+          size="large"
+        >
           <StyledUserIcon />
         </IconButton>
         <Menu
@@ -175,7 +174,7 @@ const Account = () => {
         </Dialog>
       </>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(Account)

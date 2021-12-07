@@ -18,9 +18,7 @@ import exists from '../../../utils/exists'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import tableFilter from '../../../utils/tableFilter'
 import lieferungSort from '../../../utils/lieferungSort'
-import getConstants from '../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../utils/constants'
 
 const Container = styled.div`
   height: 100%;

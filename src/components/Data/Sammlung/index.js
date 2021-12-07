@@ -11,9 +11,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'
 import Conflict from './Conflict'
 import History from './History'
-import getConstants from '../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../utils/constants'
 
 const Container = styled.div`
   height: 100%;

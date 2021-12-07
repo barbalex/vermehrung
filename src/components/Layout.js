@@ -10,9 +10,7 @@ import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../storeContext'
-import getConstants from '../utils/constants'
-
-const constants = getConstants()
+import constants from '../utils/constants'
 
 import Header from './Header'
 

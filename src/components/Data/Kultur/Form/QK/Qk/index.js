@@ -7,10 +7,8 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 
 import createMessageFunctions from './createMessageFunctions'
-import getConstants from '../../../../../../utils/constants'
+import constants from '../../../../../../utils/constants'
 import StoreContext from '../../../../../../storeContext'
-
-const constants = getConstants()
 
 const Container = styled.div`
   padding-top: 5px;
@@ -115,7 +113,7 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
                 onClick={() =>
                   typeof window !== 'undefined' &&
                   window.open(
-                    `${constants?.appUri}/Vermehrung/${m.url.join('/')}`,
+                    `${constants?.getAppUri()}/Vermehrung/${m.url.join('/')}`,
                   )
                 }
                 title="in neuem Fenster öffnen"

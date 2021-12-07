@@ -11,10 +11,8 @@ import styled from 'styled-components'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'
-import getConstants from '../../../../../utils/constants'
+import constants from '../../../../../utils/constants'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-
-const constants = getConstants()
 
 const TitleRow = styled.div`
   display: flex;
@@ -71,7 +69,7 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${constants?.appUri}/Dokumentation/Felder-blenden`
+    const url = `${constants?.getAppUri()}/Dokumentation/Felder-blenden`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -95,7 +93,8 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
         aria-haspopup="true"
         title="Felder wählen"
         onClick={onClickConfig}
-        size="large">
+        size="large"
+      >
         <FaCog />
       </IconButton>
       {
@@ -112,7 +111,8 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
                 onClick={openSettingsDocs}
-                size="large">
+                size="large"
+              >
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
@@ -187,7 +187,7 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
         </Menu>
       }
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(SettingsTeilzaehlungen)

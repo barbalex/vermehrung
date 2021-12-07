@@ -4,9 +4,7 @@ import styled from 'styled-components'
 
 import StoreContext from '../../../storeContext'
 import tableFilter from '../../../utils/tableFilter'
-import getConstants from '../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../utils/constants'
 
 const Row = styled.div`
   display: flex;

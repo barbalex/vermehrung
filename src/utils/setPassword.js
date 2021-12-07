@@ -1,8 +1,6 @@
 import { sendPasswordResetEmail } from 'firebase/auth'
 
-import getConstants from './constants'
-
-const constants = getConstants()
+import constants from './constants'
 
 const setPassword = async ({ store, person }) => {
   const { addNotification, firebaseAuth } = store
@@ -10,7 +8,7 @@ const setPassword = async ({ store, person }) => {
   const email = person?.email
   try {
     await sendPasswordResetEmail(firebaseAuth, email, {
-      url: `${constants?.appUri}/Vermehrung`,
+      url: `${constants?.getAppUri()}/Vermehrung`,
       handleCodeInApp: true,
     })
   } catch (error) {

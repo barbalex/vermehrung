@@ -14,9 +14,7 @@ import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import gvsSortByPerson from '../../../../../utils/gvsSortByPerson'
 import personSort from '../../../../../utils/personSort'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
-import getConstants from '../../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);

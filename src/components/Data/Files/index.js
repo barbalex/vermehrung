@@ -13,9 +13,7 @@ import isImageFile from './isImageFile'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import fileSort from '../../../utils/fileSort'
 import mutations from '../../../utils/mutations'
-import getConstants from '../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../utils/constants'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);

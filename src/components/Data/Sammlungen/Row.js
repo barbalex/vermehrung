@@ -4,9 +4,7 @@ import styled from 'styled-components'
 import { first as first$ } from 'rxjs/operators'
 
 import StoreContext from '../../../storeContext'
-import getConstants from '../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../utils/constants'
 
 const Row = styled.div`
   display: flex;

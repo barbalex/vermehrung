@@ -3,9 +3,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext'
-import getConstants from '../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../utils/constants'
 
 const Container = styled.div`
   background-color: rgba(74, 20, 140, 0.1);

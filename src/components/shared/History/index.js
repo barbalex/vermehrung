@@ -9,9 +9,7 @@ import IconButton from '@mui/material/IconButton'
 
 import Data from '../Conflict/Data'
 import StoreContext from '../../../storeContext'
-import getConstants from '../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../utils/constants'
 
 const Container = styled.div`
   padding: 10px;
@@ -55,7 +53,7 @@ const History = ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
     [diffConflict, setDiffConflict],
   )
   const openDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Historisierung`
+    const url = `${constants?.getAppUri()}/Dokumentation/Historisierung`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
