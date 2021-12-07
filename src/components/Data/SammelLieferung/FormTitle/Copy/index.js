@@ -50,7 +50,7 @@ const sammelLieferungFields = [
 ]
 
 const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
-  console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })
+  //console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })
   const store = useContext(StoreContext)
   const { addNotification } = store
 
@@ -107,7 +107,8 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
         title="Daten kopieren"
         onClick={onClickConfig}
         disabled={!containsData}
-        size="large">
+        size="large"
+      >
         <FaRegCopy />
       </IconButton>
       <Menu
@@ -127,7 +128,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
         <MenuItem onClick={onClickAllLieferung}>in alle Lieferungen</MenuItem>
       </Menu>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(CopySammelLieferungMenu)
