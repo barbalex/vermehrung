@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 import { interval, combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
 import StoreContext from '../../storeContext'
 import Settings from './Settings'
@@ -22,7 +22,7 @@ const Container = styled.div`
   height: 100%;
 `
 
-const Tree = ({ width, height }) => {
+const Tree = () => {
   const store = useContext(StoreContext)
   const { db, user } = store
   const {
@@ -118,13 +118,7 @@ const Tree = ({ width, height }) => {
     const zaehlungsObservable = db
       .get('zaehlung')
       .query(...tableFilter({ store, table: 'zaehlung' }))
-      .observeWithColumns([
-        'datum',
-        'prognose',
-        //'anzahl_pflanzen',
-        //'anzahl_auspflanzbereit',
-        //'anzahl_mutterpflanzen',
-      ])
+      .observeWithColumns(['datum', 'prognose'])
     const lieferungsObservable = db
       .get('lieferung')
       .query(...tableFilter({ store, table: 'lieferung' }))
@@ -178,7 +172,7 @@ const Tree = ({ width, height }) => {
   }, [buildMyNodesDebounced, db, store, user.uid])
 
   useEffect(() => {
-    //console.log('Tree second useEffect ordering rebuild')
+    //console.log('Tree second useEffect ordering nodes build')
     buildMyNodesDebounced()
   }, [
     buildMyNodesDebounced,
@@ -213,29 +207,36 @@ const Tree = ({ width, height }) => {
     user.uid,
   ])
 
-  //console.log('Tree rendering, openNodes:', openNodes)
+  //console.log('Tree rendering', { openNodes, nodes })
 
   return (
     <ErrorBoundary>
       <Container>
         <Settings />
-        {!!width && (
-          <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-            {({ scrollableNodeRef, contentNodeRef }) => (
-              <List
-                nodes={nodes}
-                scrollableNodeRef={scrollableNodeRef}
-                contentNodeRef={contentNodeRef}
-                width={width}
-                height={height}
-                userRole={userRole}
-              />
-            )}
-          </SimpleBar>
-        )}
+        <AutoSizer
+          style={{
+            height: '100%',
+            width: '100%',
+          }}
+        >
+          {({ height, width }) => (
+            <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+              {({ scrollableNodeRef, contentNodeRef }) => (
+                <List
+                  nodes={nodes}
+                  scrollableNodeRef={scrollableNodeRef}
+                  contentNodeRef={contentNodeRef}
+                  width={width}
+                  height={height}
+                  userRole={userRole}
+                />
+              )}
+            </SimpleBar>
+          )}
+        </AutoSizer>
       </Container>
     </ErrorBoundary>
   )
 }
 
-export default withResizeDetector(observer(Tree))
+export default observer(Tree)
