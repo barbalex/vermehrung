@@ -14,9 +14,7 @@ import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import gartensSortedFromGartens from '../../../../../utils/gartensSortedFromGartens'
 import gvsSortByGarten from '../../../../../utils/gvsSortByGarten'
-import getConstants from '../../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);

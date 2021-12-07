@@ -16,9 +16,7 @@ import HistoryButton from '../../../shared/HistoryButton'
 import NavButtons from './NavButtons'
 import PrintButtons from './PrintButtons'
 import Anleitung from './Anleitung'
-import getConstants from '../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../utils/constants'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);

@@ -7,11 +7,9 @@ import { observer } from 'mobx-react-lite'
 import Layout from '../Layout'
 import ArticleList from './ArticleList'
 import ErrorBoundary from '../shared/ErrorBoundary'
-import getConstants from '../../utils/constants'
+import constants from '../../utils/constants'
 import StoreContext from '../../storeContext'
 import Doku from './Doku'
-
-const constants = getConstants()
 
 const Container = styled.div`
   height: calc(100vh - ${constants.appBarHeight}px);

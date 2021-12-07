@@ -23,9 +23,7 @@ import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
 import teilkulturSort from '../../../../utils/teilkulturSort'
 import personSort from '../../../../utils/personSort'
-import getConstants from '../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../utils/constants'
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -254,7 +252,7 @@ const EventForm = ({
     [filter, row, showFilter, store],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Planen`
+    const url = `${constants?.getAppUri()}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -391,7 +389,8 @@ const EventForm = ({
                   aria-label="Anleitung öffnen"
                   title="Anleitung öffnen"
                   onClick={openPlanenDocs}
-                  size="large">
+                  size="large"
+                >
                   <IoMdInformationCircleOutline />
                 </IconButton>
               </div>
@@ -407,7 +406,7 @@ const EventForm = ({
         </FieldsContainer>
       </SimpleBar>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(EventForm)

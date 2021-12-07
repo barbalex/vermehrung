@@ -4,13 +4,11 @@ import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import MenuItem from '@mui/material/MenuItem'
 
-import getConstants from '../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../utils/constants'
 
 const SlAnleitung = ({ asMenu }) => {
   const openDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Sammel-Lieferungen`
+    const url = `${constants?.getAppUri()}/Dokumentation/Sammel-Lieferungen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -28,10 +26,11 @@ const SlAnleitung = ({ asMenu }) => {
       aria-label="Anleitung öffnen"
       title="Anleitung öffnen"
       onClick={openDocs}
-      size="large">
+      size="large"
+    >
       <IoMdInformationCircleOutline />
     </IconButton>
-  );
+  )
 }
 
 export default observer(SlAnleitung)

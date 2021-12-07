@@ -14,9 +14,7 @@ import Qk from './Qk'
 import Choose from './Choose'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import StoreContext from '../../../../../storeContext'
-import getConstants from '../../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
@@ -92,7 +90,7 @@ const ApQk = ({ artId }) => {
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
-    const url = `${constants?.appUri}/Dokumentation/Qualitaets-Kontrollen`
+    const url = `${constants?.getAppUri()}/Dokumentation/Qualitaets-Kontrollen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

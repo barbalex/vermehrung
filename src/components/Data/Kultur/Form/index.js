@@ -23,11 +23,9 @@ import QK from './QK'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
-import getConstants from '../../../../utils/constants'
+import constants from '../../../../utils/constants'
 import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens'
 import herkunftSort from '../../../../utils/herkunftSort'
-
-const constants = getConstants()
 
 const Container = styled.div`
   padding: 10px;
@@ -397,7 +395,7 @@ const KulturForm = ({
     [filter, row, showFilter, store],
   )
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
+    const url = `${constants?.getAppUri()}/Dokumentation/Genetische-Vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -547,7 +545,8 @@ const KulturForm = ({
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
                 onClick={openGenVielfaldDocs}
-                size="large">
+                size="large"
+              >
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
@@ -597,7 +596,7 @@ const KulturForm = ({
         </Container>
       </SimpleBar>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(KulturForm)

@@ -4,9 +4,7 @@ import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
 import FormTitle from './FormTitle'
-import getConstants from '../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../utils/constants'
 
 const Container = styled.div`
   width: 100%;

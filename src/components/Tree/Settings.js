@@ -12,10 +12,8 @@ import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../storeContext'
-import getConstants from '../../utils/constants'
+import constants from '../../utils/constants'
 import ErrorBoundary from '../shared/ErrorBoundary'
-
-const constants = getConstants()
 
 const Container = styled.div`
   position: absolute;
@@ -89,7 +87,7 @@ const SettingsTree = () => {
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${constants?.appUri}/Dokumentation/Ordner-blenden`
+    const url = `${constants?.getAppUri()}/Dokumentation/Ordner-blenden`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -114,7 +112,8 @@ const SettingsTree = () => {
           aria-haspopup="true"
           title="Ordner wählen"
           onClick={onClickConfig}
-          size="large">
+          size="large"
+        >
           <FaCog />
         </IconButton>
         <Menu
@@ -130,7 +129,8 @@ const SettingsTree = () => {
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
                 onClick={openSettingsDocs}
-                size="large">
+                size="large"
+              >
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
@@ -216,7 +216,7 @@ const SettingsTree = () => {
         </Menu>
       </Container>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(SettingsTree)

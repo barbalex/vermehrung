@@ -1,9 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import MenuItem from '@mui/material/MenuItem'
-import getConstants from '../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../utils/constants'
 
 const OuterContainer = styled.div`
   min-width: ${constants.titleRowHeight}px;

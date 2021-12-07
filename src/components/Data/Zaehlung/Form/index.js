@@ -17,12 +17,10 @@ import JesNo from '../../../shared/JesNo'
 import Date from '../../../shared/Date'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import Teilzaehlungen from './Teilzaehlungen'
-import getConstants from '../../../../utils/constants'
+import constants from '../../../../utils/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
-
-const constants = getConstants()
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -164,7 +162,7 @@ const ZaehlungForm = ({
     [filter, row, showFilter, store],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Planen`
+    const url = `${constants?.getAppUri()}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -253,7 +251,8 @@ const ZaehlungForm = ({
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
                 onClick={openPlanenDocs}
-                size="large">
+                size="large"
+              >
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
@@ -282,7 +281,7 @@ const ZaehlungForm = ({
         </FieldsContainer>
       </SimpleBar>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(ZaehlungForm)

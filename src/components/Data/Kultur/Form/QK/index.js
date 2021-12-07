@@ -13,10 +13,8 @@ import { combineLatest, of as $of } from 'rxjs'
 import StoreContext from '../../../../../storeContext'
 import Qk from './Qk'
 import Choose from './Choose'
-import getConstants from '../../../../../utils/constants'
+import constants from '../../../../../utils/constants'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-
-const constants = getConstants()
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
@@ -93,7 +91,7 @@ const KulturQk = ({ kultur }) => {
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
-    const url = `${constants?.appUri}/Dokumentation/Qualitaets-Kontrollen`
+    const url = `${constants?.getAppUri()}/Dokumentation/Qualitaets-Kontrollen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

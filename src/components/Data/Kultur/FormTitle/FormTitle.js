@@ -12,9 +12,7 @@ import Menu from '../../../shared/Menu'
 import Download from './Download'
 import Anleitung from './Anleitung'
 import NavButtons from './NavButtons'
-import getConstants from '../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../utils/constants'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);

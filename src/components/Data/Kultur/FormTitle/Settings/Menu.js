@@ -11,9 +11,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../../storeContext'
-import getConstants from '../../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../../utils/constants'
 
 const Title = styled.div`
   padding: 12px 16px;
@@ -81,7 +79,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
   const openOptionDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${constants?.appUri}/Dokumentation/Teilkulturen`
+    const url = `${constants?.getAppUri()}/Dokumentation/Teilkulturen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -117,7 +115,8 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
             onClick={openOptionDocs}
-            size="large">
+            size="large"
+          >
             <IoMdInformationCircleOutline />
           </IconButton>
         </div>
@@ -154,7 +153,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
         />
       </MenuItem>
     </Menu>
-  );
+  )
 }
 
 export default observer(SettingsKulturMenu)

@@ -4,13 +4,11 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
-import getConstants from '../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../utils/constants'
 
 const TeilkulturAnleitung = ({ asMenu }) => {
   const openTeilkulturDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Teilkulturen`
+    const url = `${constants?.getAppUri()}/Dokumentation/Teilkulturen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -28,10 +26,11 @@ const TeilkulturAnleitung = ({ asMenu }) => {
       aria-label="Anleitung öffnen"
       title="Anleitung öffnen"
       onClick={openTeilkulturDocs}
-      size="large">
+      size="large"
+    >
       <IoMdInformationCircleOutline />
     </IconButton>
-  );
+  )
 }
 
 export default observer(TeilkulturAnleitung)

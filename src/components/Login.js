@@ -23,9 +23,7 @@ import {
 
 import ErrorBoundary from './shared/ErrorBoundary'
 import StoreContext from '../storeContext'
-import getConstants from '../utils/constants'
-
-const constants = getConstants()
+import constants from '../utils/constants'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
@@ -133,7 +131,7 @@ const Login = () => {
     setResetTitle('...')
     try {
       await sendPasswordResetEmail(firebaseAuth, email, {
-        url: `${constants?.appUri}/Vermehrung`,
+        url: `${constants?.getAppUri()}/Vermehrung`,
         handleCodeInApp: true,
       })
     } catch (error) {

@@ -5,9 +5,7 @@ import styled from 'styled-components'
 import IconButton from '@mui/material/IconButton'
 
 import UpSvg from '../../../svg/to_up.inline.svg'
-import getConstants from '../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../utils/constants'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);

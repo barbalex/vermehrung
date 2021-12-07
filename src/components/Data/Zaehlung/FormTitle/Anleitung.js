@@ -4,13 +4,11 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
-import getConstants from '../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../utils/constants'
 
 const ZaehlungAnleitung = ({ asMenu }) => {
   const openZaehlungDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Zaehlungen`
+    const url = `${constants?.getAppUri()}/Dokumentation/Zaehlungen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -28,10 +26,11 @@ const ZaehlungAnleitung = ({ asMenu }) => {
       aria-label="Anleitung öffnen"
       title="Anleitung öffnen"
       onClick={openZaehlungDocs}
-      size="large">
+      size="large"
+    >
       <IoMdInformationCircleOutline />
     </IconButton>
-  );
+  )
 }
 
 export default observer(ZaehlungAnleitung)

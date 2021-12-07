@@ -11,9 +11,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../../../storeContext'
-import getConstants from '../../../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../../../utils/constants'
 
 const TitleRow = styled.div`
   display: flex;
@@ -72,7 +70,7 @@ const SettingsLieferungMenu = ({ anchorEl, setAnchorEl }) => {
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${constants?.appUri}/Dokumentation/Felder-blenden`
+    const url = `${constants?.getAppUri()}/Dokumentation/Felder-blenden`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -97,7 +95,8 @@ const SettingsLieferungMenu = ({ anchorEl, setAnchorEl }) => {
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
             onClick={openSettingsDocs}
-            size="large">
+            size="large"
+          >
             <IoMdInformationCircleOutline />
           </IconButton>
         </div>
@@ -134,7 +133,7 @@ const SettingsLieferungMenu = ({ anchorEl, setAnchorEl }) => {
       </MenuItem>
       <Info>Die Wahl gilt für alle Lieferungen.</Info>
     </Menu>
-  );
+  )
 }
 
 export default observer(SettingsLieferungMenu)

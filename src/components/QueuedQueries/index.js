@@ -9,9 +9,7 @@ import SimpleBar from 'simplebar-react'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import StoreContext from '../../storeContext'
 import QueuedQuery from './QueuedQuery'
-import getConstants from '../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../utils/constants'
 
 const TitleRow = styled.div`
   display: flex;
@@ -62,7 +60,7 @@ const QueuedQueries = () => {
     [setShowQueuedQueries],
   )
   const openDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/offline`
+    const url = `${constants?.getAppUri()}/Dokumentation/offline`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

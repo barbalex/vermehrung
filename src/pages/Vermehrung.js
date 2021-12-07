@@ -19,9 +19,7 @@ import ApiDetector from '../components/ApiDetector'
 import QueuedQueries from '../components/QueuedQueries'
 import isThisIOS from '../utils/isIOS'
 import tableNames from '../utils/tableNames'
-import getConstants from '../utils/constants'
-
-const constants = getConstants()
+import constants from '../utils/constants'
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);

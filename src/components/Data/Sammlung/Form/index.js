@@ -18,7 +18,7 @@ import JesNo from '../../../shared/JesNo'
 import Coordinates from '../../../shared/Coordinates'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import Files from '../../Files'
-import getConstants from '../../../../utils/constants'
+import constants from '../../../../utils/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
@@ -27,8 +27,6 @@ import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 import exists from '../../../../utils/exists'
 import personSort from '../../../../utils/personSort'
 import herkunftSort from '../../../../utils/herkunftSort'
-
-const constants = getConstants()
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -265,7 +263,7 @@ const SammlungForm = ({
     [filter, row, showFilter, store],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Planen`
+    const url = `${constants?.getAppUri()}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -274,7 +272,7 @@ const SammlungForm = ({
     }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
+    const url = `${constants?.getAppUri()}/Dokumentation/Genetische-Vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -408,7 +406,8 @@ const SammlungForm = ({
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
                 onClick={openGenVielfaldDocs}
-                size="large">
+                size="large"
+              >
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
@@ -441,7 +440,8 @@ const SammlungForm = ({
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
                 onClick={openPlanenDocs}
-                size="large">
+                size="large"
+              >
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
@@ -466,7 +466,7 @@ const SammlungForm = ({
         </FieldsContainer>
       </SimpleBar>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(SammlungForm)

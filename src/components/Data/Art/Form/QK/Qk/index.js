@@ -8,9 +8,7 @@ import FormControl from '@mui/material/FormControl'
 
 import StoreContext from '../../../../../../storeContext'
 import createMessageFunctions from './createMessageFunctions'
-import getConstants from '../../../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../../../utils/constants'
 
 const Container = styled.div`
   padding-top: 5px;
@@ -115,7 +113,7 @@ const ApQkQk = ({ artId, qkChoosens }) => {
                 onClick={() =>
                   typeof window !== 'undefined' &&
                   window.open(
-                    `${constants?.appUri}/Vermehrung/${m.url.join('/')}`,
+                    `${constants?.getAppUri()}/Vermehrung/${m.url.join('/')}`,
                   )
                 }
                 title="in neuem Fenster öffnen"

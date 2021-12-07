@@ -10,9 +10,7 @@ import { Q } from '@nozbe/watermelondb'
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
 import StoreContext from '../../../storeContext'
-import getConstants from '../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../utils/constants'
 
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - ${constants.appBarHeight}px) !important;

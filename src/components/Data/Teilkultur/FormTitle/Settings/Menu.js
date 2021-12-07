@@ -10,9 +10,7 @@ import styled from 'styled-components'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'
-import getConstants from '../../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.div`
   display: flex;
@@ -60,7 +58,7 @@ const SettingsTeilkulturenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${constants?.appUri}/Dokumentation/Felder-blenden`
+    const url = `${constants?.getAppUri()}/Dokumentation/Felder-blenden`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -85,7 +83,8 @@ const SettingsTeilkulturenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
             onClick={openSettingsDocs}
-            size="large">
+            size="large"
+          >
             <IoMdInformationCircleOutline />
           </IconButton>
         </div>
@@ -111,7 +110,7 @@ const SettingsTeilkulturenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
         Die Wahl gilt (nur) für diese Kultur.
       </Info>
     </Menu>
-  );
+  )
 }
 
 export default observer(SettingsTeilkulturenMenu)

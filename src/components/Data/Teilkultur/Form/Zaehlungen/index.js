@@ -6,9 +6,7 @@ import StoreContext from '../../../../../storeContext'
 import teilzaehlungsSortByZaehlungTk from '../../../../../utils/teilzaehlungsSortByZaehlungTk'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import Teilzaehlungen from './Teilzaehlungen'
-import getConstants from '../../../../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);

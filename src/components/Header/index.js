@@ -5,9 +5,7 @@ import styled from 'styled-components'
 import { Location } from '@reach/router'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import getConstants from '../../utils/constants'
-
-const constants = getConstants()
+import constants from '../../utils/constants'
 
 import Home from './Home'
 import Doku from './Doku'
