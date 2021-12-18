@@ -11,7 +11,6 @@ import Conflict from './Conflict'
 import FormTitle from './FormTitle'
 import Form from './Form'
 import History from './History'
-import constants from '../../../utils/constants'
 
 const Container = styled.div`
   height: 100%;
@@ -19,10 +18,12 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
+const SplitPaneContainer = styled.div`
+  height: 100%;
+  position: relative;
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
+`
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(
-    100vh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
-  ) !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
@@ -109,11 +110,11 @@ const Art = ({
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
-        <Container>
+        <SplitPaneContainer>
           <StyledSplitPane
             split="vertical"
             size={firstPaneWidth}
-            minSize={200}
+            maxSize={-10}
             resizerStyle={resizerStyle}
           >
             <Form
@@ -149,7 +150,7 @@ const Art = ({
               )}
             </>
           </StyledSplitPane>
-        </Container>
+        </SplitPaneContainer>
       </Container>
     </ErrorBoundary>
   )
