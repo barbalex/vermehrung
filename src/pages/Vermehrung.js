@@ -23,6 +23,7 @@ import constants from '../utils/constants'
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
+  position: relative;
 `
 const SpinnerContainer = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
@@ -41,7 +42,6 @@ const SpinnerText2 = styled.div`
   padding: 0;
 `
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - ${constants.appBarHeight}px) !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
@@ -235,7 +235,7 @@ const Vermehrung = ({ location }) => {
           <StyledSplitPane
             split="vertical"
             size={treeWidth}
-            minSize={200}
+            maxSize={-10}
             resizerStyle={resizerStyle}
           >
             <Tree />
