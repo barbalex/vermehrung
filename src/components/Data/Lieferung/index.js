@@ -10,10 +10,8 @@ import { Q } from '@nozbe/watermelondb'
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
 import StoreContext from '../../../storeContext'
-import constants from '../../../utils/constants'
 
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - ${constants.appBarHeight}px) !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
@@ -90,7 +88,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
     // this lieferung is part of a sammel_lieferung
     // show that too
     return (
-      <StyledSplitPane split="vertical" size="50%" minSize={200}>
+      <StyledSplitPane split="vertical" size="50%" maxSize={-10}>
         <Lieferung showFilter={showFilter} row={row} rawRow={rawRow} id={id} />
         <SammelLieferung
           showFilter={showFilter}
