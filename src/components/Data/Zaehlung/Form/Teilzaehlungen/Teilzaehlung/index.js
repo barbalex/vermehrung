@@ -18,6 +18,7 @@ const InnerContainer = styled.div`
 const SplitPaneContainer = styled.div`
   padding-left: 10px;
   height: 650px;
+  position: relative;
 `
 const TopLine = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -27,7 +28,6 @@ const TopLine = styled.div`
   margin-bottom: 10px;
 `
 const StyledSplitPane = styled(SplitPane)`
-  height: 650px !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
@@ -111,7 +111,7 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
             <StyledSplitPane
               split="vertical"
               size={firstPaneWidth}
-              minSize={200}
+              maxSize={-10}
               resizerStyle={resizerStyle}
             >
               <Form

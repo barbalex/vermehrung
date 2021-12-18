@@ -14,9 +14,12 @@ import Doku from './Doku'
 const Container = styled.div`
   height: calc(100vh - ${constants.appBarHeight}px);
 `
+const SplitPaneContainer = styled.div`
+  height: calc(100vh - ${constants.appBarHeight}px);
+  position: relative;
+`
 
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - ${constants.appBarHeight}px) !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
@@ -121,8 +124,8 @@ const Documentation = ({ data, location, width }) => {
   return (
     <ErrorBoundary>
       <Layout>
-        <Container>
-          <StyledSplitPane split="vertical" size="22%" minSize={200}>
+        <SplitPaneContainer>
+          <StyledSplitPane split="vertical" size="22%" maxSize={-10}>
             <ArticleList items={items} />
             {html ? (
               <Doku frontmatter={frontmatter} html={html} location={location} />
@@ -130,7 +133,7 @@ const Documentation = ({ data, location, width }) => {
               <div />
             )}
           </StyledSplitPane>
-        </Container>
+        </SplitPaneContainer>
       </Layout>
     </ErrorBoundary>
   )
