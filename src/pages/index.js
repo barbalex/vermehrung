@@ -147,7 +147,7 @@ const Index = () => (
               </Card>
               <Card>
                 <CardTitle>Teil-Kulturen</CardTitle>
-                {`Gärtnereien organisieren ihre Kulturen oft in Untereinheiten, wie zum Beispiel: "Beete", "Kästen", "Reihen".`}
+                {`Gärtnereien organisieren ihre Kulturen oft in Untereinheiten, wie zum Beispiel: Beete, Kästen, Reihen.`}
               </Card>
               <Card>
                 <CardTitle>Lieferungen</CardTitle>
