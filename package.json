@@ -124,7 +124,7 @@
     "graphql": "is needed by graphql_ws",
     "react-is": "is needed by styled-components",
     "prop-types": "is used by react-typography",
-    "rxjs": "is peer, DO NOT UPGRADE BEYOND 7.4.0: 7.5.1 produces errors",
+    "rxjs": "is peer",
     "jquery": "is peer",
     "simplebar": "is peer",
     "webpack": "is peer",
