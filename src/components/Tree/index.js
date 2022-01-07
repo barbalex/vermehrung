@@ -63,18 +63,16 @@ const Tree = () => {
 
   useEffect(() => {
     // need to rebuild nodes when options change
-    const userPersonOptionsObservable = user.uid
-      ? db
-          .get('person_option')
-          .query(Q.on('person', Q.where('account_id', user.uid)))
-          .observeWithColumns([
-            'tree_kultur',
-            'tree_teilkultur',
-            'tree_zaehlung',
-            'tree_lieferung',
-            'tree_event',
-          ])
-      : $of({})
+    const userPersonOptionsObservable = db
+      .get('person_option')
+      .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
+      .observeWithColumns([
+        'tree_kultur',
+        'tree_teilkultur',
+        'tree_zaehlung',
+        'tree_lieferung',
+        'tree_event',
+      ])
     const userRoleObservable = db
       .get('user_role')
       .query(Q.on('person', Q.where('account_id', user.uid)))
