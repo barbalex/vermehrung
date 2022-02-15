@@ -16,8 +16,11 @@ const ApiDetector = () => {
   const { online, setOnline, shortTermOnline, setShortTermOnline } = store
 
   useEffect(() => {
+    let isActive = true
     const pollingId = setInterval(() => {
       isOnline().then((nowOnline) => {
+        if (!isActive) return
+
         if (online !== nowOnline) {
           setOnline(nowOnline)
         }
@@ -28,6 +31,7 @@ const ApiDetector = () => {
     }, pollInterval)
 
     return () => {
+      isActive = false
       clearInterval(pollingId)
     }
   }, [online, setOnline, setShortTermOnline, shortTermOnline])

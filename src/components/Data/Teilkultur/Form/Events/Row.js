@@ -44,15 +44,21 @@ const Geplant = styled.div`
 const TkEventRow = ({ event, last }) => {
   const [personName, setPersonName] = useState()
   useEffect(() => {
+    let isActive = true
     const run = async () => {
       let person
       try {
         person = event.person.fetch()
       } catch {}
+      if (!isActive) return
 
       setPersonName(personFullname(person))
     }
     run()
+
+    return () => {
+      isActive = false
+    }
   }, [event.person])
 
   const datum = event.datum

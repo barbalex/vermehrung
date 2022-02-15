@@ -35,20 +35,37 @@ const Kulturen = ({ row, style, last }) => {
 
   const [label, setLabel] = useState('')
   useEffect(() => {
+    let isActive = true
     artIdInActiveNodeArray
       ? row.labelUnderArt
           .pipe(first$())
           .toPromise()
-          .then((label) => setLabel(label))
+          .then((label) => {
+            if (!isActive) return
+
+            setLabel(label)
+          })
       : gartenIdInActiveNodeArray
       ? row.labelUnderGarten
           .pipe(first$())
           .toPromise()
-          .then((label) => setLabel(label))
+          .then((label) => {
+            if (!isActive) return
+
+            setLabel(label)
+          })
       : row.label
           .pipe(first$())
           .toPromise()
-          .then((label) => setLabel(label))
+          .then((label) => {
+            if (!isActive) return
+
+            setLabel(label)
+          })
+
+    return () => {
+      isActive = false
+    }
   }, [artIdInActiveNodeArray, gartenIdInActiveNodeArray, row])
 
   const onClickRow = useCallback(

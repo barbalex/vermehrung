@@ -63,9 +63,12 @@ const App = ({ element }) => {
   const [database, setDatabase] = useState(null)
 
   useEffect(() => {
+    let isActive = true
     let unregister
     initiateApp().then(
       ({ store: storeReturned, unregister: unregisterReturned }) => {
+        if (!isActive) return
+
         setStore(storeReturned)
         unregister = unregisterReturned
         const db = initiateDb(store)
@@ -73,7 +76,11 @@ const App = ({ element }) => {
         storeReturned.setDb(db)
       },
     )
-    return () => unregister()
+
+    return () => {
+      isActive = false
+      unregister()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

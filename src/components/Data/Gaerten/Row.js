@@ -34,10 +34,19 @@ const Gaerten = ({ row, style, last }) => {
 
   const [label, setLabel] = useState('')
   useEffect(() => {
+    let isActive = true
     row.label
       .pipe(first$())
       .toPromise()
-      .then((label) => setLabel(label))
+      .then((label) => {
+        if (!isActive) return
+
+        setLabel(label)
+      })
+
+    return () => {
+      isActive = false
+    }
   }, [row])
 
   const onClickRow = useCallback(

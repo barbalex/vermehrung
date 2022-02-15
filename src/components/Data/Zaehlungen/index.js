@@ -114,6 +114,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
         })
       },
     )
+
     return () => subscription?.unsubscribe?.()
   }, [
     db,

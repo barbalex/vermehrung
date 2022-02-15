@@ -51,6 +51,7 @@ const TkZaehlungen = ({ teilkultur }) => {
         setTeilzaehlungs(teilzaehlungsSorted)
       },
     )
+
     return () => subscription?.unsubscribe?.()
   }, [db, teilkultur.kultur_id, teilkultur.zaehlung])
 

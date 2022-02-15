@@ -65,7 +65,16 @@ const KulturTimeline = ({ row, width }) => {
   // need to only run when open
   const [allData, setAllData] = useState([])
   useEffect(() => {
-    buildData({ row }).then((data) => setAllData(data))
+    let isActive = true
+    buildData({ row }).then((data) => {
+      if (!isActive) return
+
+      setAllData(data)
+    })
+
+    return () => {
+      isActive = false
+    }
   }, [row])
 
   const openDocs = useCallback(() => {

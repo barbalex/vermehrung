@@ -72,6 +72,7 @@ const Teilkultur = ({
         rawRow: JSON.stringify(newRow?._raw ?? newRow),
       })
     })
+
     return () => {
       if (subscription) subscription?.unsubscribe?.()
     }

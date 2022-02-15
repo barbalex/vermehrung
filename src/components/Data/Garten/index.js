@@ -68,6 +68,7 @@ const Garten = ({
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))
     })
+
     return () => subscription?.unsubscribe?.()
   }, [db, filter.garten, id, showFilter])
 

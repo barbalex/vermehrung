@@ -66,6 +66,7 @@ const Files = ({ parentTable, parent }) => {
     const subscription = parent.files
       .observeWithColumns(['name'])
       .subscribe((files) => setEvent(files.sort(fileSort)))
+
     return () => subscription?.unsubscribe?.()
   }, [parent.files])
 
