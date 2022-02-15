@@ -113,6 +113,7 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
         })
       },
     )
+
     return () => subscription?.unsubscribe?.()
   }, [
     db,

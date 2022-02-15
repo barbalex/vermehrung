@@ -114,6 +114,7 @@ const PersonArten = ({ person }) => {
       )
       setDataState({ avs: avsSorted, artWerte })
     })
+
     return () => subscription?.unsubscribe?.()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [person.avs, avArtIds.length, db])

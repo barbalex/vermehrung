@@ -57,6 +57,7 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
 
   const [messageGroups, setMessageGroups] = useState(null)
   useEffect(() => {
+    let isActive = true
     createMessageFunctions({
       kulturId: kultur.id,
       db,
@@ -72,8 +73,14 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
               : [],
           })),
       )
+      if (!isActive) return
+
       setMessageGroups(msgGroups.filter((qk) => qk.messages.length))
     })
+
+    return () => {
+      isActive = false
+    }
   }, [kultur.id, qkChoosens, db, store])
 
   const messageGroupsFiltered = messageGroups

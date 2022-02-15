@@ -57,6 +57,7 @@ const ApQkQk = ({ artId, qkChoosens }) => {
 
   const [messageGroups, setMessageGroups] = useState(null)
   useEffect(() => {
+    let isActive = true
     createMessageFunctions({
       artId,
       db,
@@ -72,8 +73,13 @@ const ApQkQk = ({ artId, qkChoosens }) => {
               : [],
           })),
       )
+      if (!isActive) return
+
       setMessageGroups(msgGroups.filter((qk) => qk.messages.length))
     })
+    return () => {
+      isActive = false
+    }
   }, [artId, db, qkChoosens, store])
 
   const messageGroupsFiltered = messageGroups

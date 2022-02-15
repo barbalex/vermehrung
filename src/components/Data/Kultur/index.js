@@ -68,6 +68,7 @@ const Kultur = ({
       setRow(newRow)
       setRawRow(JSON.stringify(newRow._raw))
     })
+
     return () => subscription?.unsubscribe?.()
   }, [db, filter.kultur, id, showFilter])
 

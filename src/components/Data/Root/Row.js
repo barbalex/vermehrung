@@ -37,14 +37,21 @@ const RootRow = ({ row, style, last }) => {
 
   const [count, setCount] = useState(0)
   useEffect(() => {
+    let isActive = true
     const run = async () => {
       const count = await db
         .get(row.table)
         .query(...tableFilter({ store, table: row.table }))
         .fetchCount()
+      if (!isActive) return
+
       setCount(count)
     }
     run()
+
+    return () => {
+      isActive = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, row.table, store, ...Object.values(filter)])
 

@@ -75,6 +75,7 @@ const SammelLieferung = ({
         rawRow: JSON.stringify(newRow?._raw ?? newRow),
       })
     })
+
     return () => subscription?.unsubscribe?.()
   }, [db, filter.sammel_lieferung, id, showFilter])
   const { row, rawRow } = dataState

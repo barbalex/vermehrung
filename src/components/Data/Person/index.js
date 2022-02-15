@@ -71,6 +71,7 @@ const Person = ({
         rawRow: JSON.stringify(newRow?._raw ?? newRow),
       })
     })
+
     return () => subscription?.unsubscribe?.()
   }, [db, filter.person, id, showFilter])
   const { row, rawRow } = dataState

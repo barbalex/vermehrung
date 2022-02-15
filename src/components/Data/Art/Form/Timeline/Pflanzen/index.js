@@ -36,7 +36,15 @@ const ArtTimeline = ({ artId, width }) => {
 
   const [data, setData] = useState(null)
   useEffect(() => {
-    buildData({ db, artId }).then((data) => setData(data))
+    let isActive = true
+    buildData({ db, artId }).then((data) => {
+      if (!isActive) return
+
+      setData(data)
+    })
+    return () => {
+      isActive = false
+    }
   }, [artId, db])
 
   useEffect(() => {

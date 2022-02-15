@@ -70,6 +70,7 @@ const Av = ({ av }) => {
 
       setArtLabel(label)
     })
+
     return () => subscription?.unsubscribe?.()
   }, [av.art])
 
