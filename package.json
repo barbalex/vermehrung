@@ -26,7 +26,7 @@
     "exceljs": "4.3.0",
     "file-saver": "2.0.5",
     "firebase": "9.6.7",
-    "framer-motion": "5.6.0",
+    "framer-motion": "6.2.6",
     "fuse.js": "6.5.3",
     "gatsby": "4.7.2",
     "gatsby-link": "4.7.1",
@@ -124,14 +124,13 @@
     "graphql": "is needed by graphql_ws",
     "react-is": "is needed by styled-components",
     "prop-types": "is used by react-typography",
-    "rxjs": "is peer. Updating from 7.5.2 to 7.5.4 broke",
+    "rxjs": "is peer. BEWARE: Updating from 7.5.2 to 7.5.4 broke",
     "jquery": "is peer",
     "simplebar": "is peer",
     "webpack": "is peer",
     "core-js": "is peer",
     "@babel/core": "is peer",
-    "@gatsbyjs/reach-router": "is peer",
-    "firebase": "do not upgrade from 9.4.1 to 9.5.0: export 'registerVersion' (imported as 'registerVersion') was not found in '@firebase/app' (module has no exports)"
+    "@gatsbyjs/reach-router": "is peer"
   },
   "packageManager": "yarn@3.1.0"
 }
