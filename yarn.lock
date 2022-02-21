@@ -9706,13 +9706,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-urls@npm:10.0.1":
-  version: 10.0.1
-  resolution: "get-urls@npm:10.0.1"
+"get-urls@npm:11.0.0":
+  version: 11.0.0
+  resolution: "get-urls@npm:11.0.0"
   dependencies:
-    normalize-url: ^5.1.0
-    url-regex-safe: ^2.0.2
-  checksum: 3861f11ed8de46f46564469702933d3e9b164076e4a4575cf29edbd4d8ca1e348cfe2d0dc41e8ff6dcd7dacf994b505d3e8564dbba23c38788aae8a2f4083094
+    normalize-url: ^7.0.2
+    re2: ^1.17.2
+    url-regex-safe: ^3.0.0
+  checksum: a4ab44ad1217dc9eca175a62241905468bd74b6ea7007d963e375196213077f4156f6bc818e3c84fc511d5e97c889b2c3059d7bf4933429e523be171a72f6f47
   languageName: node
   linkType: hard
 
@@ -10724,7 +10725,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ip-regex@npm:^4.3.0":
+"ip-regex@npm:4.3.0":
   version: 4.3.0
   resolution: "ip-regex@npm:4.3.0"
   checksum: 7ff904b891221b1847f3fdf3dbb3e6a8660dc39bc283f79eb7ed88f5338e1a3d1104b779bc83759159be266249c59c2160e779ee39446d79d4ed0890dfd06f08
@@ -13363,17 +13364,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"normalize-url@npm:^5.1.0":
-  version: 5.3.1
-  resolution: "normalize-url@npm:5.3.1"
-  checksum: 99dde2f8cbf65f121428fea0768e03f2c30ce14f1f30343fe2bb21f1ce7503ff853380ee48ae7901da31ba205c047e65004c2960207a43555b36cbee4dd7f74f
-  languageName: node
-  linkType: hard
-
 "normalize-url@npm:^6.0.1, normalize-url@npm:^6.1.0":
   version: 6.1.0
   resolution: "normalize-url@npm:6.1.0"
   checksum: 4a4944631173e7d521d6b80e4c85ccaeceb2870f315584fa30121f505a6dfd86439c5e3fdd8cd9e0e291290c41d0c3599f0cb12ab356722ed242584c30348e50
+  languageName: node
+  linkType: hard
+
+"normalize-url@npm:^7.0.2":
+  version: 7.0.3
+  resolution: "normalize-url@npm:7.0.3"
+  checksum: b57f6466cae7c66a274c7a40c7c9b7b81a49fc30872081793f58a885189889b26cac7370f6e049347f33f7e31dbbceb526b1e1cb28083344756c3d82ba4b34eb
   languageName: node
   linkType: hard
 
@@ -15026,14 +15027,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"re2@npm:^1.16.0":
-  version: 1.17.2
-  resolution: "re2@npm:1.17.2"
+"re2@npm:^1.17.2":
+  version: 1.17.3
+  resolution: "re2@npm:1.17.3"
   dependencies:
     install-artifact-from-github: ^1.3.0
     nan: ^2.15.0
     node-gyp: ^8.4.1
-  checksum: df5bf2a4183bedb6e28a5a17fd2ce833369e4c4af0a2ae081a9c36fa814ac60d42dc69ee47c206f7fd64663bac80e2abda3a81cbd8b7e9b56c79becb635e253a
+  checksum: 038e06860677aeff0b1a2ad5d43f59f62113871a29c997ee7a7519f89444edfbc533a528cb7181e37a63e94fe32eae6e59d4d5cc80db844c4171a7f1b006d01a
   languageName: node
   linkType: hard
 
@@ -17469,12 +17470,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tlds@npm:^1.217.0":
-  version: 1.228.0
-  resolution: "tlds@npm:1.228.0"
+"tlds@npm:^1.228.0":
+  version: 1.230.0
+  resolution: "tlds@npm:1.230.0"
   bin:
     tlds: bin.js
-  checksum: 8879d932940bb8aee11a303b75f7daa6cfdd1d5d6cbf69f296963c6cde48e5fd881ef3e0d14aa7f214aa7207c9132e12b9807b561a8763ab4572078c823c86f7
+  checksum: a1aa4e7a8887c197bf7ad4e739bee1672502aa9cb5e6e2c68ba319495988824044a1549332d284420deb14680a745179e955db13ff2ba69eef1d3850a32967ca
   languageName: node
   linkType: hard
 
@@ -18212,14 +18213,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-regex-safe@npm:^2.0.2":
-  version: 2.1.0
-  resolution: "url-regex-safe@npm:2.1.0"
+"url-regex-safe@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "url-regex-safe@npm:3.0.0"
   dependencies:
-    ip-regex: ^4.3.0
-    re2: ^1.16.0
-    tlds: ^1.217.0
-  checksum: 235b2d1d25b63b8041ce2947855160d977d6810da2b291655fe2d5d64fdec2659f8001f17f0fde12b5727f666ccc8b9b9b713007c8d7b33f36527499aacc4620
+    ip-regex: 4.3.0
+    tlds: ^1.228.0
+  peerDependencies:
+    re2: ^1.17.2
+  peerDependenciesMeta:
+    re2:
+      optional: true
+  checksum: 85b45f7436dcdffe3c8caca45a3dedc478dffe308e13637dfec1ad99545ac3b69edb20ba27d33edfca7b1cbc2ad5066e6443518fb363d4f54541bf0d9c1382c8
   languageName: node
   linkType: hard
 
@@ -18412,7 +18417,7 @@ __metadata:
     gatsby-source-filesystem: 4.7.0
     gatsby-transformer-remark: 5.7.0
     gatsby-transformer-sharp: 4.7.0
-    get-urls: 10.0.1
+    get-urls: 11.0.0
     graphql: 16.3.0
     graphql-tag: 2.12.6
     graphql-ws: 5.6.0
