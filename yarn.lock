@@ -4926,15 +4926,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@urql/core@npm:^2.4.1":
-  version: 2.4.1
-  resolution: "@urql/core@npm:2.4.1"
+"@urql/core@npm:^2.4.3":
+  version: 2.4.3
+  resolution: "@urql/core@npm:2.4.3"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     wonka: ^4.0.14
   peerDependencies:
     graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: e4858ae1062639c7a3c9357ddaa745e4757ae708a914630a81f393a8bdf6c37cf97f804f41bf2216686f09ddc8d529017e03cc572b445e6cff50406ca55eda55
+  checksum: 368324171c33a3e9ede22896ac5ba93a34a8aaa22cc3765b23401a94da2c4501c47b334192220ddc3f5f7c139f17a40c1265a3c2efedf40533eaf7a85a8e76e5
   languageName: node
   linkType: hard
 
@@ -8779,6 +8779,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"enhanced-resolve@npm:^5.9.2":
+  version: 5.9.2
+  resolution: "enhanced-resolve@npm:5.9.2"
+  dependencies:
+    graceful-fs: ^4.2.4
+    tapable: ^2.2.0
+  checksum: 792b7a01abb4ee4433b658c71f92d5948675938e0c03cad1732abe843b87395f15cb880ace4f819f78ead94163278283afc79b8be63c0eddca8ab45f7d8c515d
+  languageName: node
+  linkType: hard
+
 "enquire.js@npm:^2.1.6":
   version: 2.1.6
   resolution: "enquire.js@npm:2.1.6"
@@ -11789,12 +11799,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-ws@npm:5.6.0":
-  version: 5.6.0
-  resolution: "graphql-ws@npm:5.6.0"
+"graphql-ws@npm:5.6.2":
+  version: 5.6.2
+  resolution: "graphql-ws@npm:5.6.2"
   peerDependencies:
     graphql: ">=0.11 <=16"
-  checksum: 97acb90531bdfb2ce09b5851c36dec3555569ebda0f45c4e0391372bb484198a7b6434fe73bd629e55423abae41ccd77f35fbf2fa449f66408b99808d76a3cca
+  checksum: 976134edce52b1a4f381f3411760c6e8ed1a431a9c80456f99c71663fad9d39e15a434a965095ae5512967f31b2fa5a86d6abd519e2b1fff6b0999b9261d52cf
   languageName: node
   linkType: hard
 
@@ -14478,10 +14488,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:2.3.0":
-  version: 2.3.0
-  resolution: "luxon@npm:2.3.0"
-  checksum: 3d00e1b812a31082cf0d97e844d7354c93891fbd14795756f396ee5656387e21d2c862edb841516114eb391f8314a6cf3848799acc6d59cf9560c88c909b91f0
+"luxon@npm:2.3.1":
+  version: 2.3.1
+  resolution: "luxon@npm:2.3.1"
+  checksum: ce5eec873a0172a0956618531e28010e8d8319a8b3a836b893d0f92239413a1fc5f77841ca24988e27bd61e8b2748e160e9dfcb13e92d7f031c1e31ad1c8ae91
   languageName: node
   linkType: hard
 
@@ -15260,10 +15270,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx@npm:6.4.1":
-  version: 6.4.1
-  resolution: "mobx@npm:6.4.1"
-  checksum: 97412485e716dd286fe41645c26d99b09d403b60fdade5757d26e18c2e1a723da2afc9b7d0f7161457be812075a90839d998c9bf6af88f01cd92dbab16a484c3
+"mobx@npm:6.4.2":
+  version: 6.4.2
+  resolution: "mobx@npm:6.4.2"
+  checksum: 2cdb0b81ab7fa6209d29a57af0c8c1c4635756f4b93a872be8686d58abcc562a4172f3bd8551c3432322f02cc5a6434daced10e5665d73a533e4099416dd3435
   languageName: node
   linkType: hard
 
@@ -17605,9 +17615,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:4.6.0":
-  version: 4.6.0
-  resolution: "react-datepicker@npm:4.6.0"
+"react-datepicker@npm:4.7.0":
+  version: 4.7.0
+  resolution: "react-datepicker@npm:4.7.0"
   dependencies:
     "@popperjs/core": ^2.9.2
     classnames: ^2.2.6
@@ -17618,7 +17628,7 @@ __metadata:
   peerDependencies:
     react: ^16.9.0 || ^17
     react-dom: ^16.9.0 || ^17
-  checksum: 30c9f04d4223326572ed9399b39834e1e7e3fcda52e4433adc5dc81e84d8d5cf9699bf728889a80098aea76637a7ff759f0a79ec053ccd61b707de0662612adf
+  checksum: e79d9c0c4832f061499296643b8ded4d5ecde3ceca0b3fff1d69669227fcd6418ce7c1c657ab672f76412507c1d47237bb327ed9d3e9b1c38b98c58c81be7aec
   languageName: node
   linkType: hard
 
@@ -21124,17 +21134,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"urql@npm:2.1.3":
-  version: 2.1.3
-  resolution: "urql@npm:2.1.3"
+"urql@npm:2.2.0":
+  version: 2.2.0
+  resolution: "urql@npm:2.2.0"
   dependencies:
-    "@urql/core": ^2.4.1
-    use-sync-external-store: 1.0.0-rc.0 || ^1.0.0
+    "@urql/core": ^2.4.3
     wonka: ^4.0.14
   peerDependencies:
     graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     react: ">= 16.8.0"
-  checksum: 78bdc87d5dac035a282600a5787ce7c1024413155cb52d400fb192371d66a4135ca64f6fe490b5611b47ae1f52914eefd52ae2f283a3589d8cb000222a421f47
+  checksum: e3dad5a7b88f30315b774a8d5eb73a19d57377e76f25416540e0be3a8222a1fca26e1f46f7b241b2f79a270a4227dfda75f5621c632af0e05b39799834a66df7
   languageName: node
   linkType: hard
 
@@ -21144,15 +21153,6 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
   checksum: c5c1c34ccef6c11fe25fecef983a07f5a7260fce77b58f0f648f6ae08693a22a9077b5362b96154896e9ea756e6aaea303eb44550a293456cecb6f15cf87d73b
-  languageName: node
-  linkType: hard
-
-"use-sync-external-store@npm:1.0.0-rc.0 || ^1.0.0":
-  version: 1.0.0-rc.0
-  resolution: "use-sync-external-store@npm:1.0.0-rc.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0-rc
-  checksum: 02d065226538f471ad5924fe6adf486ee2d5ad7167da6ecf0844e2eaff44ee4855ba4fa1a2ef0132b1114bd40098452fc692f19d7a2fa0c52766147f0006ab24
   languageName: node
   linkType: hard
 
@@ -21324,14 +21324,14 @@ __metadata:
     get-urls: 11.0.0
     graphql: 16.3.0
     graphql-tag: 2.12.6
-    graphql-ws: 5.6.0
+    graphql-ws: 5.6.2
     is-uuid: 1.0.2
     isomorphic-fetch: 3.0.0
     jquery: 3.6.0
     localforage: 1.10.0
     lodash: 4.17.21
-    luxon: 2.3.0
-    mobx: 6.4.1
+    luxon: 2.3.1
+    mobx: 6.4.2
     mobx-react-lite: 3.3.0
     mobx-state-tree: 5.1.3
     mst-persist: 0.1.3
@@ -21342,7 +21342,7 @@ __metadata:
     prop-types: 15.8.1
     react: 17.0.2
     react-copy-to-clipboard: 5.0.4
-    react-datepicker: 4.6.0
+    react-datepicker: 4.7.0
     react-dom: 17.0.2
     react-error-boundary: 3.1.4
     react-helmet: 6.1.0
@@ -21367,10 +21367,10 @@ __metadata:
     styled-components: 5.3.3
     typography: 0.16.21
     uploadcare-widget: 3.17.0
-    urql: 2.1.3
+    urql: 2.2.0
     use-debounce: 7.0.1
     uuid: 8.3.2
-    webpack: 5.69.1
+    webpack: 5.70.0
   languageName: unknown
   linkType: soft
 
@@ -21541,9 +21541,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.69.1":
-  version: 5.69.1
-  resolution: "webpack@npm:5.69.1"
+"webpack@npm:5.70.0":
+  version: 5.70.0
+  resolution: "webpack@npm:5.70.0"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^0.0.51
@@ -21554,7 +21554,7 @@ __metadata:
     acorn-import-assertions: ^1.7.6
     browserslist: ^4.14.5
     chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.8.3
+    enhanced-resolve: ^5.9.2
     es-module-lexer: ^0.9.0
     eslint-scope: 5.1.1
     events: ^3.2.0
@@ -21574,7 +21574,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 490a6e9e4cd9d0ed3b6c7ca08015da2628919fda8fcf9c36f0f6c0e3ad71eaaaf4b0d12753109f22a4faf79fe9a9063552d9708e0ee2352cf8568433b8e296a7
+  checksum: 00439884a9cdd5305aed3ce93735635785a15c5464a6d2cfce87e17727a07585de02420913e82aa85ddd2ae7322175d2cfda6ac0878a17f061cb605e6a7db57a
   languageName: node
   linkType: hard
 
