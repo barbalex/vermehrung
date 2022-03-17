@@ -7,7 +7,8 @@
     "dev": "gatsby develop",
     "clean": "gatsby clean",
     "build": "gatsby clean && gatsby build && copyfiles .vercel/* public && copyfiles vercel.json public && copyfiles assetlinks.json public/.well-known",
-    "serve": "gatsby serve"
+    "serve": "gatsby serve",
+    "deploy": "yarn build && yarn firebase deploy"
   },
   "dependencies": {
     "@babel/types": "7.x",
