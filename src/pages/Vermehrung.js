@@ -91,10 +91,11 @@ const Vermehrung = ({ location }) => {
     wsReconnectCount,
   } = store.tree
 
-  const [isIOS, setIsIOS] = useState(false)
-  useEffect(() => {
-    setIsIOS(isThisIOS())
-  }, [])
+  // 2022-03-24: turned off ios nav - seems to work?
+  // const [isIOS, setIsIOS] = useState(false)
+  // useEffect(() => {
+  //   setIsIOS(isThisIOS())
+  // }, [])
 
   // useEffect(() => {
   //   if (isIOS) navigate('/Dokumentation/iOS')
@@ -157,13 +158,15 @@ const Vermehrung = ({ location }) => {
     // see initializeSubscriptions, unsubscribe.ae_art
   }, [existsUser, store, wsReconnectCount, authorizing])
 
-  if (gettingAuthUser || isIOS) {
+  //if (gettingAuthUser || isIOS) {
+  if (gettingAuthUser) {
     return (
       <ErrorBoundary>
         <Layout>
           <SpinnerContainer>
             <CircularProgress />
-            <SpinnerText>{isIOS ? 'prüfe' : 'autorisiere'}</SpinnerText>
+            {/* <SpinnerText>{isIOS ? 'prüfe' : 'autorisiere'}</SpinnerText> */}
+            <SpinnerText>autorisiere</SpinnerText>
           </SpinnerContainer>
         </Layout>
       </ErrorBoundary>
