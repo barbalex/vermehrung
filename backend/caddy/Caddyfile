@@ -5,7 +5,7 @@
   #acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
 }
 
-api.vermehrung.ch {
+api.artenliste.ch {
   reverse_proxy * {
     to v_graphql:8080
     header_down Access-Control-Allow-Origin *
@@ -17,7 +17,7 @@ api.vermehrung.ch {
   }
 }
 
-auth.vermehrung.ch {
+auth.artenliste.ch {
   reverse_proxy * {
     to v_auth:7000
     header_down Access-Control-Allow-Origin *
@@ -29,3 +29,28 @@ auth.vermehrung.ch {
     header_up X-Forwarded-Proto {http.request.scheme}
   }
 }
+
+# api.vermehrung.ch {
+#   reverse_proxy * {
+#     to v_graphql:8080
+#     header_down Access-Control-Allow-Origin *
+#     header_up Host {http.request.host}
+#     header_up X-Real-IP {http.request.remote}
+#     header_up X-Forwarded-For {http.request.remote}
+#     header_up X-Forwarded-Port {http.request.port}
+#     header_up X-Forwarded-Proto {http.request.scheme}
+#   }
+# }
+
+# auth.vermehrung.ch {
+#   reverse_proxy * {
+#     to v_auth:7000
+#     header_down Access-Control-Allow-Origin *
+#     header_down Access-Control-Allow-Methods "HEAD, GET, POST, OPTIONS"
+#     header_up Host {http.request.host}
+#     header_up X-Real-IP {http.request.remote}
+#     header_up X-Forwarded-For {http.request.remote}
+#     header_up X-Forwarded-Port {http.request.port}
+#     header_up X-Forwarded-Proto {http.request.scheme}
+#   }
+# }
