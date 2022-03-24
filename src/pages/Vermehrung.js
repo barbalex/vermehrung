@@ -96,9 +96,9 @@ const Vermehrung = ({ location }) => {
     setIsIOS(isThisIOS())
   }, [])
 
-  useEffect(() => {
-    if (isIOS) navigate('/Dokumentation/iOS')
-  }, [isIOS])
+  // useEffect(() => {
+  //   if (isIOS) navigate('/Dokumentation/iOS')
+  // }, [isIOS])
 
   const existsUser = !!user?.uid
   const showFilter = store.filter.show
