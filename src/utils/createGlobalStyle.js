@@ -10,7 +10,7 @@ const createGlobalStyleModule = () => createGlobalStyle`
    * make them appear on press
    * source: https://stackoverflow.com/a/60660207/712005 
   */
-  @media (pointer: coarse), (hover: none) {
+  @media (pointer: coarse), (hover: none) { 
     [title] {
       position: relative;
       display: inline-flex;
