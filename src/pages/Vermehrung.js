@@ -1,9 +1,8 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import CircularProgress from '@mui/material/CircularProgress'
-import { navigate } from 'gatsby'
 
 import StoreContext from '../storeContext'
 import Layout from '../components/Layout'
@@ -17,7 +16,6 @@ import Login from '../components/Login'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import ApiDetector from '../components/ApiDetector'
 import QueuedQueries from '../components/QueuedQueries'
-import isThisIOS from '../utils/isIOS'
 import tableNames from '../utils/tableNames'
 import constants from '../utils/constants'
 
@@ -90,16 +88,6 @@ const Vermehrung = ({ location }) => {
     widthInPercentOfScreen,
     wsReconnectCount,
   } = store.tree
-
-  // 2022-03-24: turned off ios nav - seems to work?
-  // const [isIOS, setIsIOS] = useState(false)
-  // useEffect(() => {
-  //   setIsIOS(isThisIOS())
-  // }, [])
-
-  // useEffect(() => {
-  //   if (isIOS) navigate('/Dokumentation/iOS')
-  // }, [isIOS])
 
   const existsUser = !!user?.uid
   const showFilter = store.filter.show
