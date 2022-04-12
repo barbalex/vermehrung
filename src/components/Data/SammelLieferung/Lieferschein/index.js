@@ -9,7 +9,6 @@ import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import SimpleBar from 'simplebar-react'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -20,6 +19,7 @@ import personFullname from '../../../../utils/personFullname'
 import constants from '../../../../utils/constants'
 
 const Container = styled.div`
+  overflow: auto;
   background-color: #f8f8f8;
   font-size: 9pt;
   cursor: default;
@@ -27,10 +27,6 @@ const Container = styled.div`
     100vh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
   );
   width: 100%;
-  /* hide native scrollbar */
-  .simplebar-content-wrapper::-webkit-scrollbar {
-    display: none;
-  }
   @media print {
     /* remove grey backgrond set for nice UI */
     background-color: #fff;
@@ -154,62 +150,53 @@ const Lieferschein = ({ row }) => {
 
   return (
     <Container>
-      <SimpleBar
-        style={{
-          maxHeight: '100%',
-          height: '100%',
-          maxWidth: '100%',
-          width: '100%',
-        }}
-      >
-        <PageContainer className="querformat printer-content">
-          <StaticImage
-            src="../../../../images/toposLogo.png"
-            alt="topos Logo"
-            width={500}
-            height={87}
-            layout="fixed"
-          />
-          <Title>Lieferschein</Title>
-          <HeaderRow>
-            <HaederLabel>Projekt:</HaederLabel>
-            <HeaderValue>
-              {
-                'Zwischenvermehrung von seltenen und bedrohten Pflanzenarten im Kanton Zürich'
-              }
-            </HeaderValue>
-          </HeaderRow>
-          <HeaderRow>
-            <HaederLabel>von:</HaederLabel>
-            <HeaderValue>{von}</HeaderValue>
-          </HeaderRow>
-          <HeaderRow>
-            <HaederLabel>an:</HaederLabel>
-            <HeaderValue>{an}</HeaderValue>
-          </HeaderRow>
-          <HeaderRow>
-            <HaederLabel>am:</HaederLabel>
-            <HeaderValue>{am}</HeaderValue>
-          </HeaderRow>
-          <StyledPaper square>
-            <StyledTable size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Art</TableCell>
-                  <TableCell>Herkunft</TableCell>
-                  <TableCell>Was</TableCell>
-                  <TableCell>Bemerkungen</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {lieferungs.map((l) => (
-                  <Lieferung key={l.id} lieferung={l} />
-                ))}
-              </TableBody>
-            </StyledTable>
-          </StyledPaper>
-        </PageContainer>
-      </SimpleBar>
+      <PageContainer className="querformat printer-content">
+        <StaticImage
+          src="../../../../images/toposLogo.png"
+          alt="topos Logo"
+          width={500}
+          height={87}
+          layout="fixed"
+        />
+        <Title>Lieferschein</Title>
+        <HeaderRow>
+          <HaederLabel>Projekt:</HaederLabel>
+          <HeaderValue>
+            {
+              'Zwischenvermehrung von seltenen und bedrohten Pflanzenarten im Kanton Zürich'
+            }
+          </HeaderValue>
+        </HeaderRow>
+        <HeaderRow>
+          <HaederLabel>von:</HaederLabel>
+          <HeaderValue>{von}</HeaderValue>
+        </HeaderRow>
+        <HeaderRow>
+          <HaederLabel>an:</HaederLabel>
+          <HeaderValue>{an}</HeaderValue>
+        </HeaderRow>
+        <HeaderRow>
+          <HaederLabel>am:</HaederLabel>
+          <HeaderValue>{am}</HeaderValue>
+        </HeaderRow>
+        <StyledPaper square>
+          <StyledTable size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Art</TableCell>
+                <TableCell>Herkunft</TableCell>
+                <TableCell>Was</TableCell>
+                <TableCell>Bemerkungen</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {lieferungs.map((l) => (
+                <Lieferung key={l.id} lieferung={l} />
+              ))}
+            </TableBody>
+          </StyledTable>
+        </StyledPaper>
+      </PageContainer>
     </Container>
   )
 }

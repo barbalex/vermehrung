@@ -5,7 +5,6 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
-import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -49,20 +48,6 @@ const TitleSymbols = styled.div`
 `
 const FieldsContainer = styled.div`
   height: 100%;
-`
-const StyledList = styled(FixedSizeList)`
-  /* hide native scrollbar */
-  &::-webkit-scrollbar {
-    width: 0;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-    box-shadow: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    box-shadow: none;
-  }
 `
 
 const Gaerten = ({ filter: showFilter, width, height }) => {
@@ -188,28 +173,22 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
         )}
         <FieldsContainer>
           {!!width && (
-            <SimpleBar style={{ maxHeight: height, height: height - 48 }}>
-              {({ scrollableNodeRef, contentNodeRef }) => (
-                <StyledList
-                  height={height - 48}
-                  itemCount={gartens.length}
-                  itemSize={constants.singleRowHeight}
-                  width={width}
-                  innerRef={contentNodeRef}
-                  outerRef={scrollableNodeRef}
-                >
-                  {({ index, style }) => (
-                    <Row
-                      key={index}
-                      style={style}
-                      index={index}
-                      row={gartens[index]}
-                      last={index === gartens.length - 1}
-                    />
-                  )}
-                </StyledList>
+            <FixedSizeList
+              height={height - 48}
+              itemCount={gartens.length}
+              itemSize={constants.singleRowHeight}
+              width={width}
+            >
+              {({ index, style }) => (
+                <Row
+                  key={index}
+                  style={style}
+                  index={index}
+                  row={gartens[index]}
+                  last={index === gartens.length - 1}
+                />
               )}
-            </SimpleBar>
+            </FixedSizeList>
           )}
         </FieldsContainer>
       </Container>
