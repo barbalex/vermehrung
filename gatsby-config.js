@@ -37,8 +37,6 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        // uncommented scope because of gatsby issue
-        // https://github.com/gatsbyjs/gatsby/issues/27839
         scope: '.',
         name: 'vermehrung.ch',
         short_name: 'vermehrung',
