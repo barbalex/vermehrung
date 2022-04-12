@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import SimpleBar from 'simplebar-react'
 
 import FormTitle from './FormTitle'
 import constants from '../../utils/constants'
@@ -34,6 +33,7 @@ const DokuDate = styled.p`
   color: grey;
 `
 const Body = styled.div`
+  overflow-y: auto;
   height: calc(
     100vh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
   );
@@ -43,13 +43,11 @@ const Body = styled.div`
 const DokuComponent = ({ frontmatter, html, location }) => (
   <Container>
     <FormTitle location={location} />
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-      <Body>
-        <h1>{frontmatter.title}</h1>
-        <DokuDate>{frontmatter.date}</DokuDate>
-        <div dangerouslySetInnerHTML={{ __html: html }} />
-      </Body>
-    </SimpleBar>
+    <Body>
+      <h1>{frontmatter.title}</h1>
+      <DokuDate>{frontmatter.date}</DokuDate>
+      <div dangerouslySetInnerHTML={{ __html: html }} />
+    </Body>
   </Container>
 )
 
