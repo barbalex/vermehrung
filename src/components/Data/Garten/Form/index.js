@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import SimpleBar from 'simplebar-react'
 import { Q } from '@nozbe/watermelondb'
 //import { first as first$ } from 'rxjs/operators'
 import { combineLatest, of as $of } from 'rxjs'
@@ -23,6 +22,7 @@ import ConflictList from '../../../shared/ConflictList'
 const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
+  overflow-y: auto;
 `
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
@@ -183,137 +183,135 @@ const GartenForm = ({
   const showDeleted = filter.garten._deleted !== false || row?._deleted
 
   return (
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-      <FieldsContainer>
-        {(activeConflict || showHistory) && (
-          <CaseConflictTitle>
-            Aktuelle Version<Rev>{row._rev}</Rev>
-          </CaseConflictTitle>
-        )}
-        {showDeleted && (
-          <>
-            {showFilter ? (
-              <JesNo
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors?.garten?._deleted}
-              />
-            ) : (
-              <Checkbox2States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors?.garten?._deleted}
-              />
-            )}
-          </>
-        )}
+    <FieldsContainer>
+      {(activeConflict || showHistory) && (
+        <CaseConflictTitle>
+          Aktuelle Version<Rev>{row._rev}</Rev>
+        </CaseConflictTitle>
+      )}
+      {showDeleted && (
+        <>
+          {showFilter ? (
+            <JesNo
+              key={`${row.id}_deleted`}
+              label="gelöscht"
+              name="_deleted"
+              value={row._deleted}
+              saveToDb={saveToDb}
+              error={errors?.garten?._deleted}
+            />
+          ) : (
+            <Checkbox2States
+              key={`${row.id}_deleted`}
+              label="gelöscht"
+              name="_deleted"
+              value={row._deleted}
+              saveToDb={saveToDb}
+              error={errors?.garten?._deleted}
+            />
+          )}
+        </>
+      )}
+      <TextField
+        key={`${row.id}name`}
+        name="name"
+        label="Name"
+        value={row.name}
+        saveToDb={saveToDb}
+        error={errors?.garten?.name}
+      />
+      <Select
+        key={`${row.id}${row.person_id}person_id`}
+        name="person_id"
+        value={row.person_id}
+        field="person_id"
+        label="Person"
+        options={personWerte}
+        saveToDb={saveToDb}
+        error={errors?.garten?.person_id}
+      />
+      {ga_strasse && (
         <TextField
-          key={`${row.id}name`}
-          name="name"
-          label="Name"
-          value={row.name}
+          key={`${row.id}strasse`}
+          name="strasse"
+          label="Strasse"
+          value={row.strasse}
           saveToDb={saveToDb}
-          error={errors?.garten?.name}
+          error={errors?.garten?.strasse}
         />
-        <Select
-          key={`${row.id}${row.person_id}person_id`}
-          name="person_id"
-          value={row.person_id}
-          field="person_id"
-          label="Person"
-          options={personWerte}
+      )}
+      {ga_plz && (
+        <TextField
+          key={`${row.id}plz`}
+          name="plz"
+          label="PLZ"
+          value={row.plz}
           saveToDb={saveToDb}
-          error={errors?.garten?.person_id}
+          error={errors?.garten?.plz}
+          type="number"
         />
-        {ga_strasse && (
-          <TextField
-            key={`${row.id}strasse`}
-            name="strasse"
-            label="Strasse"
-            value={row.strasse}
-            saveToDb={saveToDb}
-            error={errors?.garten?.strasse}
-          />
-        )}
-        {ga_plz && (
-          <TextField
-            key={`${row.id}plz`}
-            name="plz"
-            label="PLZ"
-            value={row.plz}
-            saveToDb={saveToDb}
-            error={errors?.garten?.plz}
-            type="number"
-          />
-        )}
-        {ga_ort && (
-          <TextField
-            key={`${row.id}ort`}
-            name="ort"
-            label="Ort"
-            value={row.ort}
-            saveToDb={saveToDb}
-            error={errors?.garten?.ort}
-          />
-        )}
-        {!showFilter && ga_geom_point && (
-          <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
-        )}
-        {ga_aktiv && (
-          <>
-            {showFilter ? (
-              <JesNo
-                key={`${row.id}aktiv`}
-                label="aktiv"
-                name="aktiv"
-                value={row.aktiv}
-                saveToDb={saveToDb}
-                error={errors?.garten?.aktiv}
-              />
-            ) : (
-              <Checkbox2States
-                key={`${row.id}aktiv`}
-                label="aktiv"
-                name="aktiv"
-                value={row.aktiv}
-                saveToDb={saveToDb}
-                error={errors?.garten?.aktiv}
-              />
-            )}
-          </>
-        )}
-        {ga_bemerkungen && (
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={errors?.garten?.bemerkungen}
-            multiLine
-          />
-        )}
-        {online && !showFilter && row?._conflicts?.map && (
-          <ConflictList
-            conflicts={row._conflicts}
-            activeConflict={activeConflict}
-            setActiveConflict={setActiveConflict}
-          />
-        )}
-        {!showFilter && (
-          <>
-            <Personen gartenId={row.id} garten={row} />{' '}
-            <Files parentTable="garten" parent={row} />
-          </>
-        )}
-      </FieldsContainer>
-    </SimpleBar>
+      )}
+      {ga_ort && (
+        <TextField
+          key={`${row.id}ort`}
+          name="ort"
+          label="Ort"
+          value={row.ort}
+          saveToDb={saveToDb}
+          error={errors?.garten?.ort}
+        />
+      )}
+      {!showFilter && ga_geom_point && (
+        <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
+      )}
+      {ga_aktiv && (
+        <>
+          {showFilter ? (
+            <JesNo
+              key={`${row.id}aktiv`}
+              label="aktiv"
+              name="aktiv"
+              value={row.aktiv}
+              saveToDb={saveToDb}
+              error={errors?.garten?.aktiv}
+            />
+          ) : (
+            <Checkbox2States
+              key={`${row.id}aktiv`}
+              label="aktiv"
+              name="aktiv"
+              value={row.aktiv}
+              saveToDb={saveToDb}
+              error={errors?.garten?.aktiv}
+            />
+          )}
+        </>
+      )}
+      {ga_bemerkungen && (
+        <TextField
+          key={`${row.id}bemerkungen`}
+          name="bemerkungen"
+          label="Bemerkungen"
+          value={row.bemerkungen}
+          saveToDb={saveToDb}
+          error={errors?.garten?.bemerkungen}
+          multiLine
+        />
+      )}
+      {online && !showFilter && row?._conflicts?.map && (
+        <ConflictList
+          conflicts={row._conflicts}
+          activeConflict={activeConflict}
+          setActiveConflict={setActiveConflict}
+        />
+      )}
+      {!showFilter && (
+        <>
+          <Personen gartenId={row.id} garten={row} />{' '}
+          <Files parentTable="garten" parent={row} />
+        </>
+      )}
+    </FieldsContainer>
   )
 }
 
