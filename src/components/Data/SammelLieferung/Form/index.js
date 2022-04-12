@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import SimpleBar from 'simplebar-react'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -21,6 +20,7 @@ import Wer from './Wer'
 const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
+  overflow-y: auto;
 `
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
@@ -181,99 +181,97 @@ const SammelLieferungForm = ({
 
   return (
     <ErrorBoundary>
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-        <FieldsContainer>
-          {(activeConflict || showHistory) && (
-            <CaseConflictTitle>
-              Aktuelle Version<Rev>{row._rev}</Rev>
-            </CaseConflictTitle>
-          )}
-          {showDeleted && (
-            <>
-              {showFilter ? (
-                <JesNo
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.sammel_lieferung?._deleted}
-                />
-              ) : (
-                <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.sammel_lieferung?._deleted}
-                />
-              )}
-            </>
-          )}
-          {ifSomeNeeded([
-            'art_id',
-            'anzahl_pflanzen',
-            'anzahl_auspflanzbereit',
-            'gramm_samen',
-            'andere_menge',
-            'von_anzahl_individuen',
-          ]) && (
-            <Was
-              showFilter={showFilter}
-              row={row}
-              rawRow={rawRow}
-              ifNeeded={ifNeeded}
-              saveToDb={saveToDb}
-            />
-          )}
-          {ifSomeNeeded(['von_sammlung_id', 'von_kultur_id']) && (
-            <Von
-              showFilter={showFilter}
-              row={row}
-              rawRow={rawRow}
-              ifNeeded={ifNeeded}
-              saveToDb={saveToDb}
-              herkunft={herkunft}
-              herkunftQuelle={herkunftQuelle}
-            />
-          )}
-          {ifSomeNeeded(['nach_kultur_id', 'nach_ausgepflanzt']) && (
-            <Nach
-              showFilter={showFilter}
-              row={row}
-              rawRow={rawRow}
-              ifNeeded={ifNeeded}
-              saveToDb={saveToDb}
-              herkunft={herkunft}
-            />
-          )}
-          {ifSomeNeeded(['datum', 'geplant']) && (
-            <Wann
-              showFilter={showFilter}
-              row={row}
-              rawRow={rawRow}
-              ifNeeded={ifNeeded}
-              saveToDb={saveToDb}
-            />
-          )}
-          {ifSomeNeeded(['person_id', 'bemerkungen']) && (
-            <Wer
-              showFilter={showFilter}
-              id={id}
-              ifNeeded={ifNeeded}
-              saveToDb={saveToDb}
-            />
-          )}
-          {online && !showFilter && row?._conflicts?.map && (
-            <ConflictList
-              conflicts={row._conflicts}
-              activeConflict={activeConflict}
-              setActiveConflict={setActiveConflict}
-            />
-          )}
-        </FieldsContainer>
-      </SimpleBar>
+      <FieldsContainer>
+        {(activeConflict || showHistory) && (
+          <CaseConflictTitle>
+            Aktuelle Version<Rev>{row._rev}</Rev>
+          </CaseConflictTitle>
+        )}
+        {showDeleted && (
+          <>
+            {showFilter ? (
+              <JesNo
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.sammel_lieferung?._deleted}
+              />
+            ) : (
+              <Checkbox2States
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.sammel_lieferung?._deleted}
+              />
+            )}
+          </>
+        )}
+        {ifSomeNeeded([
+          'art_id',
+          'anzahl_pflanzen',
+          'anzahl_auspflanzbereit',
+          'gramm_samen',
+          'andere_menge',
+          'von_anzahl_individuen',
+        ]) && (
+          <Was
+            showFilter={showFilter}
+            row={row}
+            rawRow={rawRow}
+            ifNeeded={ifNeeded}
+            saveToDb={saveToDb}
+          />
+        )}
+        {ifSomeNeeded(['von_sammlung_id', 'von_kultur_id']) && (
+          <Von
+            showFilter={showFilter}
+            row={row}
+            rawRow={rawRow}
+            ifNeeded={ifNeeded}
+            saveToDb={saveToDb}
+            herkunft={herkunft}
+            herkunftQuelle={herkunftQuelle}
+          />
+        )}
+        {ifSomeNeeded(['nach_kultur_id', 'nach_ausgepflanzt']) && (
+          <Nach
+            showFilter={showFilter}
+            row={row}
+            rawRow={rawRow}
+            ifNeeded={ifNeeded}
+            saveToDb={saveToDb}
+            herkunft={herkunft}
+          />
+        )}
+        {ifSomeNeeded(['datum', 'geplant']) && (
+          <Wann
+            showFilter={showFilter}
+            row={row}
+            rawRow={rawRow}
+            ifNeeded={ifNeeded}
+            saveToDb={saveToDb}
+          />
+        )}
+        {ifSomeNeeded(['person_id', 'bemerkungen']) && (
+          <Wer
+            showFilter={showFilter}
+            id={id}
+            ifNeeded={ifNeeded}
+            saveToDb={saveToDb}
+          />
+        )}
+        {online && !showFilter && row?._conflicts?.map && (
+          <ConflictList
+            conflicts={row._conflicts}
+            activeConflict={activeConflict}
+            setActiveConflict={setActiveConflict}
+          />
+        )}
+      </FieldsContainer>
     </ErrorBoundary>
   )
 }

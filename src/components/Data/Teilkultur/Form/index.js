@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import SimpleBar from 'simplebar-react'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
@@ -22,6 +21,7 @@ import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs
 const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
+  overflow-y: auto;
 `
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
@@ -150,104 +150,102 @@ const TeilkulturForm = ({
 
   return (
     <ErrorBoundary>
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-        <FieldsContainer>
-          {(activeConflict || showHistory) && (
-            <CaseConflictTitle>
-              Aktuelle Version<Rev>{row._rev}</Rev>
-            </CaseConflictTitle>
-          )}
-          {showDeleted && (
-            <>
-              {showFilter ? (
-                <JesNo
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.teilkultur?._deleted}
-                />
-              ) : (
-                <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.teilkultur?._deleted}
-                />
-              )}
-            </>
-          )}
-          <Select
-            key={`${row.id}${row.kultur_id}kultur_id`}
-            name="kultur_id"
-            value={row.kultur_id}
-            field="kultur_id"
-            label="Kultur"
-            options={kulturWerte}
-            saveToDb={saveToDb}
-            error={errors?.teilkultur?.kultur_id}
-          />
+      <FieldsContainer>
+        {(activeConflict || showHistory) && (
+          <CaseConflictTitle>
+            Aktuelle Version<Rev>{row._rev}</Rev>
+          </CaseConflictTitle>
+        )}
+        {showDeleted && (
+          <>
+            {showFilter ? (
+              <JesNo
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.teilkultur?._deleted}
+              />
+            ) : (
+              <Checkbox2States
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.teilkultur?._deleted}
+              />
+            )}
+          </>
+        )}
+        <Select
+          key={`${row.id}${row.kultur_id}kultur_id`}
+          name="kultur_id"
+          value={row.kultur_id}
+          field="kultur_id"
+          label="Kultur"
+          options={kulturWerte}
+          saveToDb={saveToDb}
+          error={errors?.teilkultur?.kultur_id}
+        />
+        <TextField
+          key={`${row.id}name`}
+          name="name"
+          label="Name"
+          value={row.name}
+          saveToDb={saveToDb}
+          error={errors?.teilkultur?.name}
+        />
+        <TextField
+          key={`${row.id}ort1`}
+          name="ort1"
+          label="Ort 1"
+          value={row.ort1}
+          saveToDb={saveToDb}
+          error={errors?.teilkultur?.ort1}
+        />
+        <TextField
+          key={`${row.id}ort2`}
+          name="ort2"
+          label="Ort 2"
+          value={row.ort2}
+          saveToDb={saveToDb}
+          error={errors?.teilkultur?.ort2}
+        />
+        <TextField
+          key={`${row.id}ort3`}
+          name="ort3"
+          label="Ort 3"
+          value={row.ort3}
+          saveToDb={saveToDb}
+          error={errors?.teilkultur?.ort3}
+        />
+        {(tk_bemerkungen || showFilter) && (
           <TextField
-            key={`${row.id}name`}
-            name="name"
-            label="Name"
-            value={row.name}
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
             saveToDb={saveToDb}
-            error={errors?.teilkultur?.name}
+            error={errors?.teilkultur?.bemerkungen}
+            multiline
           />
-          <TextField
-            key={`${row.id}ort1`}
-            name="ort1"
-            label="Ort 1"
-            value={row.ort1}
-            saveToDb={saveToDb}
-            error={errors?.teilkultur?.ort1}
+        )}
+        {online && !showFilter && row?._conflicts?.map && (
+          <ConflictList
+            conflicts={row._conflicts}
+            activeConflict={activeConflict}
+            setActiveConflict={setActiveConflict}
           />
-          <TextField
-            key={`${row.id}ort2`}
-            name="ort2"
-            label="Ort 2"
-            value={row.ort2}
-            saveToDb={saveToDb}
-            error={errors?.teilkultur?.ort2}
-          />
-          <TextField
-            key={`${row.id}ort3`}
-            name="ort3"
-            label="Ort 3"
-            value={row.ort3}
-            saveToDb={saveToDb}
-            error={errors?.teilkultur?.ort3}
-          />
-          {(tk_bemerkungen || showFilter) && (
-            <TextField
-              key={`${row.id}bemerkungen`}
-              name="bemerkungen"
-              label="Bemerkungen"
-              value={row.bemerkungen}
-              saveToDb={saveToDb}
-              error={errors?.teilkultur?.bemerkungen}
-              multiline
-            />
-          )}
-          {online && !showFilter && row?._conflicts?.map && (
-            <ConflictList
-              conflicts={row._conflicts}
-              activeConflict={activeConflict}
-              setActiveConflict={setActiveConflict}
-            />
-          )}
-          {!showFilter && row.kultur_id && (
-            <>
-              <Zaehlungen teilkultur={row} />
-              <Events teilkultur={row} />
-            </>
-          )}
-        </FieldsContainer>
-      </SimpleBar>
+        )}
+        {!showFilter && row.kultur_id && (
+          <>
+            <Zaehlungen teilkultur={row} />
+            <Events teilkultur={row} />
+          </>
+        )}
+      </FieldsContainer>
     </ErrorBoundary>
   )
 }

@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import SimpleBar from 'simplebar-react'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -29,6 +28,7 @@ const Container = styled.div`
 
 const FieldsContainer = styled.div`
   height: 100%;
+  overflow-y: auto;
 `
 
 const Root = ({ filter: showFilter }) => {
@@ -218,13 +218,11 @@ const Root = ({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-          <FieldsContainer>
-            {rows.map((row) => (
-              <Row key={row.name} row={row} />
-            ))}
-          </FieldsContainer>
-        </SimpleBar>
+        <FieldsContainer>
+          {rows.map((row) => (
+            <Row key={row.name} row={row} />
+          ))}
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )

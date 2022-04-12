@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import SimpleBar from 'simplebar-react'
 import { interval, combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 import { throttle } from 'rxjs/operators'
@@ -218,18 +217,12 @@ const Tree = () => {
           }}
         >
           {({ height, width }) => (
-            <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-              {({ scrollableNodeRef, contentNodeRef }) => (
-                <List
-                  nodes={nodes}
-                  scrollableNodeRef={scrollableNodeRef}
-                  contentNodeRef={contentNodeRef}
-                  width={width}
-                  height={height}
-                  userRole={userRole}
-                />
-              )}
-            </SimpleBar>
+            <List
+              nodes={nodes}
+              width={width}
+              height={height}
+              userRole={userRole}
+            />
           )}
         </AutoSizer>
       </Container>

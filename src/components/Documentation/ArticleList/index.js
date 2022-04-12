@@ -2,30 +2,23 @@ import React from 'react'
 import List from '@mui/material/List'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import SimpleBar from 'simplebar-react'
 
 import Article from './Article'
 import constants from '../../../utils/constants'
 
 const Container = styled.div`
   height: calc(100vh - ${constants.appBarHeight}px);
+  overflow-y: auto;
 `
 
 const ArticleList = ({ items }) => (
-  <SimpleBar
-    style={{
-      maxHeight: `calc(100vh - ${constants.appBarHeight}px)`,
-      height: `calc(100vh - ${constants.appBarHeight}px)`,
-    }}
-  >
-    <Container>
-      <List component="nav">
-        {items.map(({ node }) => (
-          <Article node={node} key={node.id} />
-        ))}
-      </List>
-    </Container>
-  </SimpleBar>
+  <Container>
+    <List component="nav">
+      {items.map(({ node }) => (
+        <Article node={node} key={node.id} />
+      ))}
+    </List>
+  </Container>
 )
 
 export default observer(ArticleList)

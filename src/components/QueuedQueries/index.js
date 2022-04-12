@@ -4,7 +4,6 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { observer } from 'mobx-react-lite'
-import SimpleBar from 'simplebar-react'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import StoreContext from '../../storeContext'
@@ -25,10 +24,7 @@ const Container = styled.div``
 const OuterContainer = styled.div`
   height: calc(100vh - ${constants.appBarHeight}px - 15px - 23px - 23px);
   overflow-x: hidden;
-  /* hide native scrollbar */
-  .simplebar-content-wrapper::-webkit-scrollbar {
-    display: none;
-  }
+  overflow-y: auto;
 `
 const QueriesContainer = styled.div`
   padding: 0 15px;
@@ -123,20 +119,18 @@ const QueuedQueries = () => {
           </div>
         </TitleRow>
         <OuterContainer>
-          <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-            <QueriesContainer>
-              <Heading>Zeit</Heading>
-              <Heading>Tabelle</Heading>
-              <Heading>ID</Heading>
-              <Heading>Feld / Operation</Heading>
-              <Heading>vorher</Heading>
-              <Heading>nachher</Heading>
-              <RevertHeading>widerrufen</RevertHeading>
-              {[...queuedQueries.values()].reverse().map((qq, i) => (
-                <QueuedQuery key={qq.id} qq={qq} index={i} />
-              ))}
-            </QueriesContainer>
-          </SimpleBar>
+          <QueriesContainer>
+            <Heading>Zeit</Heading>
+            <Heading>Tabelle</Heading>
+            <Heading>ID</Heading>
+            <Heading>Feld / Operation</Heading>
+            <Heading>vorher</Heading>
+            <Heading>nachher</Heading>
+            <RevertHeading>widerrufen</RevertHeading>
+            {[...queuedQueries.values()].reverse().map((qq, i) => (
+              <QueuedQuery key={qq.id} qq={qq} index={i} />
+            ))}
+          </QueriesContainer>
         </OuterContainer>
       </Container>
     </ErrorBoundary>

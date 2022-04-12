@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import SimpleBar from 'simplebar-react'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -23,6 +22,7 @@ import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
+  overflow-y: auto;
 `
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
@@ -127,65 +127,63 @@ const ArtForm = ({
 
   return (
     <ErrorBoundary>
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-        <FieldsContainer>
-          {(activeConflict || showHistory) && (
-            <CaseConflictTitle>
-              Aktuelle Version<Rev>{row._rev}</Rev>
-            </CaseConflictTitle>
-          )}
-          {showDeleted && (
-            <>
-              {showFilter ? (
-                <JesNo
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.art?._deleted}
-                />
-              ) : (
-                <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.art?._deleted}
-                />
-              )}
-            </>
-          )}
-          <SelectLoadingOptions
-            key={`${row.id}${row.ae_id}ae_id`}
-            field="ae_id"
-            label="Art"
-            row={row}
-            saveToDb={saveToDb}
-            error={errors?.art?.ae_id}
-            modelFilter={aeArtsFilter}
-            labelTable="ae_art"
-            labelField="name"
+      <FieldsContainer>
+        {(activeConflict || showHistory) && (
+          <CaseConflictTitle>
+            Aktuelle Version<Rev>{row._rev}</Rev>
+          </CaseConflictTitle>
+        )}
+        {showDeleted && (
+          <>
+            {showFilter ? (
+              <JesNo
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.art?._deleted}
+              />
+            ) : (
+              <Checkbox2States
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.art?._deleted}
+              />
+            )}
+          </>
+        )}
+        <SelectLoadingOptions
+          key={`${row.id}${row.ae_id}ae_id`}
+          field="ae_id"
+          label="Art"
+          row={row}
+          saveToDb={saveToDb}
+          error={errors?.art?.ae_id}
+          modelFilter={aeArtsFilter}
+          labelTable="ae_art"
+          labelField="name"
+        />
+        {online && !showFilter && row?._conflicts?.map && (
+          <ConflictList
+            conflicts={row._conflicts}
+            activeConflict={activeConflict}
+            setActiveConflict={setActiveConflict}
           />
-          {online && !showFilter && row?._conflicts?.map && (
-            <ConflictList
-              conflicts={row._conflicts}
-              activeConflict={activeConflict}
-              setActiveConflict={setActiveConflict}
-            />
-          )}
-          {!showFilter && (
-            <>
-              <Personen art={row} />
-              <Timeline artId={id} />
-              <HerkunftTimeline artId={id} />
-              <QK artId={id} />
-              <Files parent={row} parentTable="art" />
-            </>
-          )}
-        </FieldsContainer>
-      </SimpleBar>
+        )}
+        {!showFilter && (
+          <>
+            <Personen art={row} />
+            <Timeline artId={id} />
+            <HerkunftTimeline artId={id} />
+            <QK artId={id} />
+            <Files parent={row} parentTable="art" />
+          </>
+        )}
+      </FieldsContainer>
     </ErrorBoundary>
   )
 }
