@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
-import SimpleBar from 'simplebar-react'
 import { useQuery } from 'urql'
 
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
@@ -30,6 +29,7 @@ const artRevQuery = gql`
 `
 
 const InnerContainer = styled.div`
+  overflow-y: auto;
   padding: 0 25px;
   height: 100%;
   .slick-prev:before,
@@ -80,21 +80,19 @@ const ArtHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   }
 
   return (
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-      <InnerContainer>
-        <Slider {...sliderSettings}>
-          {revRows.map((r) => (
-            <Row
-              key={row._rev}
-              revRow={r}
-              row={row}
-              rawRow={rawRow}
-              historyTakeoverCallback={historyTakeoverCallback}
-            />
-          ))}
-        </Slider>
-      </InnerContainer>
-    </SimpleBar>
+    <InnerContainer>
+      <Slider {...sliderSettings}>
+        {revRows.map((r) => (
+          <Row
+            key={row._rev}
+            revRow={r}
+            row={row}
+            rawRow={rawRow}
+            historyTakeoverCallback={historyTakeoverCallback}
+          />
+        ))}
+      </Slider>
+    </InnerContainer>
   )
 }
 
