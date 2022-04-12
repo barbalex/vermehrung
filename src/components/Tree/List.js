@@ -17,19 +17,6 @@ import Row from './Row'
 const StyledList = styled(List)`
   margin-top: 5px;
 
-  /* hide native scrollbar */
-  &::-webkit-scrollbar {
-    width: 0;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-    box-shadow: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    box-shadow: none;
-  }
-
   @media print {
     display: none !important;
   }
