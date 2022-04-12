@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import Slider from 'react-slick'
-import SimpleBar from 'simplebar-react'
 import { useQuery } from 'urql'
 
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
@@ -43,6 +42,7 @@ const sammelLieferungRevQuery = gql`
 `
 
 const Container = styled.div`
+  overflow-y: auto;
   padding: 0 25px;
   height: 100%;
   .slick-prev:before,
@@ -81,9 +81,10 @@ const SammelLieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   })
   error && checkForOnlineError({ error, store })
 
-  const revRowsUnsorted = useMemo(() => data?.sammel_lieferung_rev ?? [], [
-    data?.sammel_lieferung_rev,
-  ])
+  const revRowsUnsorted = useMemo(
+    () => data?.sammel_lieferung_rev ?? [],
+    [data?.sammel_lieferung_rev],
+  )
   const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
   if (fetching) {
@@ -95,21 +96,19 @@ const SammelLieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   }
 
   return (
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-      <Container>
-        <Slider {...sliderSettings}>
-          {revRows.map((r) => (
-            <Row
-              key={row._rev}
-              revRow={r}
-              row={row}
-              rawRow={rawRow}
-              historyTakeoverCallback={historyTakeoverCallback}
-            />
-          ))}
-        </Slider>
-      </Container>
-    </SimpleBar>
+    <Container>
+      <Slider {...sliderSettings}>
+        {revRows.map((r) => (
+          <Row
+            key={row._rev}
+            revRow={r}
+            row={row}
+            rawRow={rawRow}
+            historyTakeoverCallback={historyTakeoverCallback}
+          />
+        ))}
+      </Slider>
+    </Container>
   )
 }
 
