@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import SimpleBar from 'simplebar-react'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -18,6 +17,7 @@ import ConflictList from '../../../shared/ConflictList'
 const Container = styled.div`
   padding: 10px;
   height: 100%;
+  overflow-y: auto;
 `
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
@@ -132,104 +132,102 @@ const Herkunft = ({
   const showDeleted = filter.herkunft._deleted !== false || row?._deleted
 
   return (
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-      <Container>
-        {(activeConflict || showHistory) && (
-          <CaseConflictTitle>
-            Aktuelle Version<Rev>{row._rev}</Rev>
-          </CaseConflictTitle>
-        )}
-        {showDeleted && (
-          <>
-            {showFilter ? (
-              <JesNo
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors?.herkunft?._deleted}
-              />
-            ) : (
-              <Checkbox2States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors?.herkunft?._deleted}
-              />
-            )}
-          </>
-        )}
+    <Container>
+      {(activeConflict || showHistory) && (
+        <CaseConflictTitle>
+          Aktuelle Version<Rev>{row._rev}</Rev>
+        </CaseConflictTitle>
+      )}
+      {showDeleted && (
+        <>
+          {showFilter ? (
+            <JesNo
+              key={`${row.id}_deleted`}
+              label="gelöscht"
+              name="_deleted"
+              value={row._deleted}
+              saveToDb={saveToDb}
+              error={errors?.herkunft?._deleted}
+            />
+          ) : (
+            <Checkbox2States
+              key={`${row.id}_deleted`}
+              label="gelöscht"
+              name="_deleted"
+              value={row._deleted}
+              saveToDb={saveToDb}
+              error={errors?.herkunft?._deleted}
+            />
+          )}
+        </>
+      )}
+      <TextField
+        key={`${row.id}nr`}
+        name="nr"
+        label="Nr"
+        value={row.nr}
+        saveToDb={saveToDb}
+        error={errors?.herkunft?.nr}
+      />
+      <TextField
+        key={`${row.id}lokalname`}
+        name="lokalname"
+        label="Lokalname"
+        value={row.lokalname}
+        saveToDb={saveToDb}
+        error={errors?.herkunft?.lokalname}
+      />
+      <TextField
+        key={`${row.id}gemeinde`}
+        name="gemeinde"
+        label="Gemeinde"
+        value={row.gemeinde}
+        saveToDb={saveToDb}
+        error={errors?.herkunft?.gemeinde}
+      />
+      {hk_kanton && (
         <TextField
-          key={`${row.id}nr`}
-          name="nr"
-          label="Nr"
-          value={row.nr}
+          key={`${row.id}kanton`}
+          name="kanton"
+          label="Kanton"
+          value={row.kanton}
           saveToDb={saveToDb}
-          error={errors?.herkunft?.nr}
+          error={errors?.herkunft?.kanton}
         />
+      )}
+      {hk_land && (
         <TextField
-          key={`${row.id}lokalname`}
-          name="lokalname"
-          label="Lokalname"
-          value={row.lokalname}
+          key={`${row.id}land`}
+          name="land"
+          label="Land"
+          value={row.land}
           saveToDb={saveToDb}
-          error={errors?.herkunft?.lokalname}
+          error={errors?.herkunft?.land}
         />
+      )}
+      {!showFilter && hk_geom_point && (
+        <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
+      )}
+      {hk_bemerkungen && (
         <TextField
-          key={`${row.id}gemeinde`}
-          name="gemeinde"
-          label="Gemeinde"
-          value={row.gemeinde}
+          key={`${row.id}bemerkungen`}
+          name="bemerkungen"
+          label="Bemerkungen"
+          value={row.bemerkungen}
           saveToDb={saveToDb}
-          error={errors?.herkunft?.gemeinde}
+          error={errors?.herkunft?.bemerkungen}
+          multiLine
         />
-        {hk_kanton && (
-          <TextField
-            key={`${row.id}kanton`}
-            name="kanton"
-            label="Kanton"
-            value={row.kanton}
-            saveToDb={saveToDb}
-            error={errors?.herkunft?.kanton}
-          />
-        )}
-        {hk_land && (
-          <TextField
-            key={`${row.id}land`}
-            name="land"
-            label="Land"
-            value={row.land}
-            saveToDb={saveToDb}
-            error={errors?.herkunft?.land}
-          />
-        )}
-        {!showFilter && hk_geom_point && (
-          <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
-        )}
-        {hk_bemerkungen && (
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={errors?.herkunft?.bemerkungen}
-            multiLine
-          />
-        )}
-        {online && !showFilter && row?._conflicts?.map && (
-          <ConflictList
-            conflicts={row._conflicts}
-            activeConflict={activeConflict}
-            setActiveConflict={setActiveConflict}
-          />
-        )}
-        {!showFilter && row.id && <Files parentTable="herkunft" parent={row} />}
-      </Container>
-    </SimpleBar>
+      )}
+      {online && !showFilter && row?._conflicts?.map && (
+        <ConflictList
+          conflicts={row._conflicts}
+          activeConflict={activeConflict}
+          setActiveConflict={setActiveConflict}
+        />
+      )}
+      {!showFilter && row.id && <Files parentTable="herkunft" parent={row} />}
+    </Container>
   )
 }
 
