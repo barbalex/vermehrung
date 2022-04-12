@@ -5,7 +5,6 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
-import SimpleBar from 'simplebar-react'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -49,20 +48,6 @@ const TitleSymbols = styled.div`
 `
 const FieldsContainer = styled.div`
   height: 100%;
-`
-const StyledList = styled(FixedSizeList)`
-  /* hide native scrollbar */
-  &::-webkit-scrollbar {
-    width: 0;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-    box-shadow: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    box-shadow: none;
-  }
 `
 
 const Personen = ({ filter: showFilter, width, height }) => {
@@ -181,33 +166,22 @@ const Personen = ({ filter: showFilter, width, height }) => {
         )}
         <FieldsContainer>
           {!!width && (
-            <SimpleBar
-              style={{
-                maxHeight: height,
-                height: height - constants.titleRowHeight,
-              }}
+            <FixedSizeList
+              height={height - constants.titleRowHeight}
+              itemCount={persons.length}
+              itemSize={constants.singleRowHeight}
+              width={width}
             >
-              {({ scrollableNodeRef, contentNodeRef }) => (
-                <StyledList
-                  height={height - constants.titleRowHeight}
-                  itemCount={persons.length}
-                  itemSize={constants.singleRowHeight}
-                  width={width}
-                  innerRef={contentNodeRef}
-                  outerRef={scrollableNodeRef}
-                >
-                  {({ index, style }) => (
-                    <Row
-                      key={index}
-                      style={style}
-                      index={index}
-                      row={persons[index]}
-                      last={index === persons.length - 1}
-                    />
-                  )}
-                </StyledList>
+              {({ index, style }) => (
+                <Row
+                  key={index}
+                  style={style}
+                  index={index}
+                  row={persons[index]}
+                  last={index === persons.length - 1}
+                />
               )}
-            </SimpleBar>
+            </FixedSizeList>
           )}
         </FieldsContainer>
       </Container>
