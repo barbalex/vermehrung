@@ -27,10 +27,6 @@ const Container = styled.div`
     100vh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
   );
   width: 100%;
-  /* hide native scrollbar */
-  .simplebar-content-wrapper::-webkit-scrollbar {
-    display: none;
-  }
   @media print {
     /* remove grey backgrond set for nice UI */
     background-color: #fff;
