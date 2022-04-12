@@ -5,6 +5,10 @@ const createGlobalStyleModule = () => createGlobalStyle`
     overflow: hidden !important;
   }
 
+  #___gatsby{
+  /* works in firefox, not yet in chrome. https://caniuse.com/?search=scrollbar-color */
+  scrollbar-color: #4a148c rgba(0, 0, 0, 0.4);}
+
   /*
    * on mobile titles are invisible
    * make them appear on press
@@ -70,10 +74,6 @@ const createGlobalStyleModule = () => createGlobalStyle`
 
   /* scrollbars */
 
-  .simplebar-scrollbar:before {
-    background: #4a148c !important;
-  }
-
   ::-webkit-scrollbar {
     width: 12px;
     background: rgba(255, 253, 231, 0.1);
@@ -85,11 +85,13 @@ const createGlobalStyleModule = () => createGlobalStyle`
 
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.4);
+    box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.4);
   }
 
   ::-webkit-scrollbar-thumb {
     border-radius: 2px;
-    -webkit-box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: inset 0 0 7px #4a148c;
+    box-shadow: inset 0 0 7px #4a148c;
     background: rgba(85, 85, 85, 0.05);
   }
 
