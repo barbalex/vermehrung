@@ -10,7 +10,7 @@ const toggleNodeSymbol = ({ node, store }) => {
   }
   const { addNotification } = store
   const {
-    addOpenNodes,
+    addOpenNode,
     setActiveNodeArray,
     activeNodeArray,
     removeOpenNodeWithChildren,
@@ -29,7 +29,7 @@ const toggleNodeSymbol = ({ node, store }) => {
       setActiveNodeArray(newActiveNodeArray)
     }
   } else {
-    addOpenNodes([node.url])
+    addOpenNode(node.url)
   }
   setLastTouchedNode(node.url)
 }
