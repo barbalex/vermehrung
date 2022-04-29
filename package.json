@@ -132,7 +132,7 @@
     "webpack": "is peer",
     "core-js": "is peer",
     "@babel/core": "is peer",
-    "@gatsbyjs/reach-router": "is peer"
+    "@gatsbyjs/reach-router": "is peer. Do not upgrade from 1.3.6 to 1.3.7, see: https://github.com/gatsbyjs/gatsby/discussions/35313#discussioncomment-2664028"
   },
   "packageManager": "yarn@3.1.0"
 }
