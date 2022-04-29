@@ -17874,16 +17874,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-highlight-words@npm:0.17.0":
-  version: 0.17.0
-  resolution: "react-highlight-words@npm:0.17.0"
+"react-highlight-words@npm:0.18.0":
+  version: 0.18.0
+  resolution: "react-highlight-words@npm:0.18.0"
   dependencies:
     highlight-words-core: ^1.2.0
     memoize-one: ^4.0.0
     prop-types: ^15.5.8
   peerDependencies:
-    react: ^0.14.0 || ^15.0.0 || ^16.0.0-0 || ^17.0.0-0
-  checksum: 41b3d0e4516cbc12fd4e0b620b72d309eaa3e207f1089a377d76040f99edb717b99a34e0bef5f83d7d28d408542f3138ca3a5c06e08359e4f13f241432327485
+    react: ^0.14.0 || ^15.0.0 || ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+  checksum: ff9759e7ebeb140067854d8cad3021123ba0e3b78bda14d35d9b21dd7890986c858955885ddbcb537e9f88472aebe4a23a1841b7af190989efb0a8ecf7dc2a57
   languageName: node
   linkType: hard
 
@@ -18036,9 +18036,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-slick@npm:0.28.1":
-  version: 0.28.1
-  resolution: "react-slick@npm:0.28.1"
+"react-slick@npm:0.29.0":
+  version: 0.29.0
+  resolution: "react-slick@npm:0.29.0"
   dependencies:
     classnames: ^2.2.5
     enquire.js: ^2.1.6
@@ -18046,9 +18046,9 @@ __metadata:
     lodash.debounce: ^4.0.8
     resize-observer-polyfill: ^1.5.0
   peerDependencies:
-    react: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0
-    react-dom: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0
-  checksum: 399ad43b9e10dfd66a000dd00faf1f476428ff8b9e70705d253056d279a9297b441d08fe7255b5ffea6f6e05ce63fb6c36f86fddcdffd453ee8f47ca9d958f72
+    react: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 67ce4981914da8a76c6efb4bc8ee7ab69e04c33bd4b3517419ab2165679a3c701dae781556149713fe2c542f84188b7ca101ea58883537be5c05756408f48c8b
   languageName: node
   linkType: hard
 
@@ -19282,16 +19282,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simplebar-react@npm:2.3.6":
-  version: 2.3.6
-  resolution: "simplebar-react@npm:2.3.6"
+"simplebar-react@npm:2.3.7":
+  version: 2.3.7
+  resolution: "simplebar-react@npm:2.3.7"
   dependencies:
     prop-types: ^15.6.1
     simplebar: ^5.3.6
   peerDependencies:
-    react: ^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0
-    react-dom: ^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0
-  checksum: 5487200fefd8f9f7aba349637b6f5f777aab4470239bc4f3fcb4e86ff4fa5d12dea68684df80e6cea644d9dffb062fbde7d9504762d9d82f7e5083cc260cf0c1
+    react: ^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0 || ^18.0.0
+    react-dom: ^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0 || ^18.0.0
+  checksum: ab4f2701836d8002193afe8d9690485e4e732f69806b92826da66d05ce657cca665d7879cdae1093220e51172cccf7ac54cfda285a0931895510873fde0b3221
   languageName: node
   linkType: hard
 
@@ -21220,13 +21220,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uploadcare-widget@npm:3.17.1":
-  version: 3.17.1
-  resolution: "uploadcare-widget@npm:3.17.1"
+"uploadcare-widget@npm:3.17.2":
+  version: 3.17.2
+  resolution: "uploadcare-widget@npm:3.17.2"
   dependencies:
     escape-html: ^1.0.3
     jquery: ^3.6.0
-  checksum: aec7620058131a938e1c51d6907b6b4a343fae25971f9cd0ee01c72ab529aed1b1325a8119210b4226528688d094dedd8f84827b13d5a975d9853ba2ddf9e9a1
+  checksum: 03b3928f93b2e60a9036489db43f4af3d517ff9e74bdd9fe103c630948a2c4ee5f93c6d757cc5106fbd8e820f571611fa3f61d579ce66ceb72194f6f93663f71
   languageName: node
   linkType: hard
 
@@ -21506,13 +21506,13 @@ __metadata:
     react-dom: 18.1.0
     react-error-boundary: 3.1.4
     react-helmet: 6.1.0
-    react-highlight-words: 0.17.0
+    react-highlight-words: 0.18.0
     react-icons: 4.3.1
     react-image-lightbox: 5.1.4
     react-is: 18.1.0
     react-resize-detector: 7.0.0
     react-select: 5.3.1
-    react-slick: 0.28.1
+    react-slick: 0.29.0
     react-split-pane: 0.1.92
     react-stylable-diff: 2.0.0
     react-typography: 0.16.20
@@ -21522,11 +21522,11 @@ __metadata:
     redaxios: 0.4.1
     rxjs: 7.5.2
     simplebar: 5.3.6
-    simplebar-react: 2.3.6
+    simplebar-react: 2.3.7
     slick-carousel: 1.8.1
     styled-components: 5.3.5
     typography: 0.16.21
-    uploadcare-widget: 3.17.1
+    uploadcare-widget: 3.17.2
     urql: 2.2.0
     use-debounce: 7.0.1
     uuid: 8.3.2
