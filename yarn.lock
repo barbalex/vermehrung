@@ -2411,10 +2411,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/roboto-mono@npm:4.5.5":
-  version: 4.5.5
-  resolution: "@fontsource/roboto-mono@npm:4.5.5"
-  checksum: 2ce679a6706d993b18e8b574b7c0671277a1a4d64db0f2a1fe9393fe81c6b3facfa3773673e1150fbd3f07e79e30065204679843e3a81e65e2287c32ea4a9a35
+"@fontsource/roboto-mono@npm:4.5.7":
+  version: 4.5.7
+  resolution: "@fontsource/roboto-mono@npm:4.5.7"
+  checksum: 99faea2067d31d726e694f417fc97b54309fc8f79d5a2c59a06a005d7e46d7c70ced738ce1cb591b971b28f838af6444b9e1a845a123af81fb9ac2083d9fc9eb
   languageName: node
   linkType: hard
 
@@ -21324,7 +21324,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": 7.17.8
     "@babel/types": 7.x
     "@fontsource/roboto": 4.5.5
-    "@fontsource/roboto-mono": 4.5.5
+    "@fontsource/roboto-mono": 4.5.7
     "@gatsbyjs/reach-router": 1.3.6
     "@mui/material": 5.5.3
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
