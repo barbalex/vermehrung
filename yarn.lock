@@ -10764,10 +10764,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fuse.js@npm:6.6.0":
-  version: 6.6.0
-  resolution: "fuse.js@npm:6.6.0"
-  checksum: ebabf54309fecbe955e6db2dddfaa7cd781018e1b8f09f3acd5f094d03cbca6aa48cc8cfa09f2a23f7b86b881f5b2fb65a5960dd7a4ee36b01f5e84c091fca0e
+"fuse.js@npm:6.6.2":
+  version: 6.6.2
+  resolution: "fuse.js@npm:6.6.2"
+  checksum: 17ae758ce205276ebd88bd9c9f088a100be0b4896abac9f6b09847151269d1690f41d7f98ff5813d4a58973162dbd99d0072ce807020fee6f9de60170f6b08eb
   languageName: node
   linkType: hard
 
@@ -21732,7 +21732,7 @@ __metadata:
     firebase: 9.7.0
     firebase-tools: 10.7.2
     framer-motion: 6.3.3
-    fuse.js: 6.6.0
+    fuse.js: 6.6.2
     gatsby: 4.13.1
     gatsby-cli: 4.13.0
     gatsby-link: 4.13.0
