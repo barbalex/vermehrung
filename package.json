@@ -97,7 +97,7 @@
     "typography": "0.16.21",
     "uploadcare-widget": "3.17.2",
     "urql": "2.2.0",
-    "use-debounce": "7.0.1",
+    "use-debounce": "8.0.1",
     "uuid": "8.3.2"
   },
   "devDependencies": {
