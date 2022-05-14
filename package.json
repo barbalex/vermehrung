@@ -132,7 +132,8 @@
     "core-js": "is peer",
     "@babel/core": "is peer",
     "rxjs": "is peer. BEWARE: Updating from 7.5.2 to 7.5.4/7.5.5 broke",
-    "@gatsbyjs/reach-router": "is peer. Do not upgrade from 1.3.6 to 1.3.7, see: https://github.com/gatsbyjs/gatsby/discussions/35313#discussioncomment-2664028"
+    "@gatsbyjs/reach-router": "is peer. Do not upgrade from 1.3.6 to 1.3.7, see: https://github.com/gatsbyjs/gatsby/discussions/35313#discussioncomment-2664028",
+    "gatsby": "Do not upgrade from 4.13 > 4.14: https://github.com/gatsbyjs/gatsby/issues/35654"
   },
   "packageManager": "yarn@3.1.0"
 }
