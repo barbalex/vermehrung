@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { MdClose as CloseIcon } from 'react-icons/md'
 import sortBy from 'lodash/sortBy'
 
-const Container = styled.div`
+const Container = styled.div` 
   padding: 5px;
   z-index: 10;
   position: absolute;

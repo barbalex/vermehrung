@@ -365,6 +365,7 @@ const myTypes = types
         setTimeout(() => {
           self.removeNotificationById(val.id)
         }, val.duration)
+        return val.id
       },
       removeNotificationById(id) {
         self.notifications.delete(id)
