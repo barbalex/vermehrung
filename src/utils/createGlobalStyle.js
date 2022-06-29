@@ -74,6 +74,13 @@ const createGlobalStyleModule = () => createGlobalStyle`
 
   /* scrollbars */
 
+  /* newer syntax for firefox */
+  html {
+    scrollbar-color:  #E9D8FE#4a148c;
+    scrollbar-width: thin;
+  }
+
+  /* own syntax for webkit */
   ::-webkit-scrollbar {
     width: 12px;
     background: rgba(255, 253, 231, 0.1);

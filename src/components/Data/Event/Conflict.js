@@ -12,7 +12,7 @@ import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
 import mutations from '../../../utils/mutations'
 
-const eventRevQuery = gql`
+const eventRevQuery = gql` 
   query eventRevForConflictQuery($id: uuid!, $rev: String!) {
     event_rev(where: { event_id: { _eq: $id }, _rev: { _eq: $rev } }) {
       id
