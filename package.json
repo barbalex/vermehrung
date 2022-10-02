@@ -131,7 +131,6 @@
     "webpack": "is peer",
     "core-js": "is peer",
     "@babel/core": "is peer",
-    "rxjs": "is peer. BEWARE: Updating from 7.5.2 to 7.5.4/7.5.5 broke",
     "gatsby-script": "gatsby creates errors when this is not added extra, see: https://github.com/gatsbyjs/gatsby/issues/36565",
     "gatsby-react-router-scroll": "gatsby creates errors when this is not added extra, see: https://github.com/gatsbyjs/gatsby/issues/36565"
   },
