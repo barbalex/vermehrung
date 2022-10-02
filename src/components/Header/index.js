@@ -2,7 +2,6 @@ import React from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import styled from 'styled-components'
-import { Location } from '@reach/router'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import constants from '../../utils/constants'
@@ -23,30 +22,27 @@ const StyledAppBar = styled(AppBar)`
   }
 `
 
-const Header = () => (
-  <Location>
-    {({ location }) => {
-      const { pathname } = location
-      const isHome = pathname === '/'
-      const isVermehrung = pathname.startsWith('/Vermehrung')
+const Header = () => {
+  // const { pathname } = location
+  const pathname = window?.location?.pathname
+  const isHome = pathname === '/'
+  const isVermehrung = pathname.startsWith('/Vermehrung')
 
-      return (
-        <ErrorBoundary>
-          <StyledAppBar position="static">
-            <Toolbar>
-              {isHome ? (
-                <Home location={location} />
-              ) : isVermehrung ? (
-                <Vermehrung />
-              ) : (
-                <Doku />
-              )}
-            </Toolbar>
-          </StyledAppBar>
-        </ErrorBoundary>
-      )
-    }}
-  </Location>
-)
+  return (
+    <ErrorBoundary>
+      <StyledAppBar position="static">
+        <Toolbar>
+          {isHome ? (
+            <Home location={location} />
+          ) : isVermehrung ? (
+            <Vermehrung />
+          ) : (
+            <Doku />
+          )}
+        </Toolbar>
+      </StyledAppBar>
+    </ErrorBoundary>
+  )
+}
 
 export default Header

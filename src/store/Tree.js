@@ -1,6 +1,6 @@
 import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
-import { navigate } from '@reach/router'
+import { navigate } from 'gatsby'
 
 export default types
   .model('Tree', {
