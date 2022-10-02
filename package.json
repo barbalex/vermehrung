@@ -128,9 +128,7 @@
     "simplebar": "is peer",
     "webpack": "is peer",
     "core-js": "is peer",
-    "@babel/core": "is peer",
-    "gatsby-script": "gatsby creates errors when this is not added extra, see: https://github.com/gatsbyjs/gatsby/issues/36565",
-    "gatsby-react-router-scroll": "gatsby creates errors when this is not added extra, see: https://github.com/gatsbyjs/gatsby/issues/36565"
+    "@babel/core": "is peer"
   },
   "packageManager": "yarn@3.1.0"
 }
