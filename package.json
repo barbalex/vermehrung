@@ -94,9 +94,9 @@
     "styled-components": "5.3.6",
     "typography": "0.16.21",
     "uploadcare-widget": "3.19.0",
-    "urql": "2.2.3",
+    "urql": "3.0.3",
     "use-debounce": "8.0.4",
-    "uuid": "8.3.2"
+    "uuid": "9.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.19.3",
