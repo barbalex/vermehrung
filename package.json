@@ -113,7 +113,6 @@
     "firebase-tools": "11.13.0",
     "gatsby-cli": "4.24.0",
     "gatsby-react-router-scroll": "5.24.0",
-    "gatsby-script": "1.9.0",
     "webpack": "5.74.0"
   },
   "resolutions": {
