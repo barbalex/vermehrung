@@ -11317,7 +11317,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gatsby-react-router-scroll@npm:5.24.0, gatsby-react-router-scroll@npm:^5.24.0":
+"gatsby-react-router-scroll@npm:^5.24.0":
   version: 5.24.0
   resolution: "gatsby-react-router-scroll@npm:5.24.0"
   dependencies:
@@ -21425,7 +21425,6 @@ __metadata:
     gatsby-plugin-sharp: 4.24.0
     gatsby-plugin-styled-components: 5.24.0
     gatsby-plugin-typography: 4.24.0
-    gatsby-react-router-scroll: 5.24.0
     gatsby-remark-autolink-headers: 5.24.0
     gatsby-remark-copy-linked-files: 5.24.0
     gatsby-remark-emojis: 0.4.3
