@@ -87,7 +87,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     addNotification,
   ])
 
-  console.log('Art History row', { revRow, row, dataArray })
+  // console.log('Art History row', { revRow, row, dataArray })
 
   return (
     <History
