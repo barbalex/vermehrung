@@ -2076,6 +2076,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.19.0":
+  version: 7.20.1
+  resolution: "@babel/runtime@npm:7.20.1"
+  dependencies:
+    regenerator-runtime: ^0.13.10
+  checksum: 00567a333d3357925742a6f5e39394dcc0af6e6029103fe188158bf7ae8b0b3ee3c6c0f68fccc217f0a6cfa455f6be252298baf56b3f5ff37b34313b170cd9f6
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.16.7":
   version: 7.16.7
   resolution: "@babel/template@npm:7.16.7"
@@ -3879,10 +3888,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/styled-engine-sc@npm:5.8.0":
-  version: 5.8.0
-  resolution: "@mui/styled-engine-sc@npm:5.8.0"
+"@mui/styled-engine-sc@npm:5.10.6":
+  version: 5.10.6
+  resolution: "@mui/styled-engine-sc@npm:5.10.6"
   dependencies:
+    "@babel/runtime": ^7.19.0
     prop-types: ^15.8.1
   peerDependencies:
     "@types/styled-components": ^5.1.14
@@ -3890,7 +3900,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/styled-components":
       optional: true
-  checksum: 7667fd36e2eeb7eba6a6d8c65aea7e1f83b911fb013cd13ccaf82f97c1a35d1f305d944cef785f0415d051b097fd5da90084815054d20c08354c489f4ddbdefa
+  checksum: 37e1bc473e02375306a6e57d11b8b1f045bd71e943a2874438ad706f46508d8af4c6cd0645d2df2b97c56eeaaa31c1e038f480aba029e7d7ec9cdd3e480d61be
   languageName: node
   linkType: hard
 
@@ -18738,6 +18748,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"regenerator-runtime@npm:^0.13.10":
+  version: 0.13.10
+  resolution: "regenerator-runtime@npm:0.13.10"
+  checksum: 09893f5a9e82932642d9a999716b6c626dc53ef2a01307c952ebbf8e011802360163a37c304c18a6c358548be5a72b448e37209954a18696f21e438c81cbb4b9
+  languageName: node
+  linkType: hard
+
 "regenerator-runtime@npm:^0.13.4, regenerator-runtime@npm:^0.13.7":
   version: 0.13.9
   resolution: "regenerator-runtime@npm:0.13.9"
@@ -21715,7 +21732,7 @@ __metadata:
     "@fontsource/roboto-mono": 4.5.8
     "@mui/material": 5.9.0
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
-    "@mui/styled-engine-sc": 5.8.0
+    "@mui/styled-engine-sc": 5.10.6
     "@nozbe/watermelondb": 0.24.0
     babel-plugin-styled-components: 2.0.7
     babel-preset-gatsby: 2.24.0
