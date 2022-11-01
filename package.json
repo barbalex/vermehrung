@@ -20,7 +20,7 @@
     "@nozbe/watermelondb": "0.24.0",
     "babel-plugin-styled-components": "2.0.7",
     "blueimp-md5": "2.19.0",
-    "browser-update": "3.3.40",
+    "browser-update": "3.3.44",
     "date-fns": "2.29.3",
     "exceljs": "4.3.0",
     "file-saver": "2.0.5",
@@ -99,9 +99,9 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
-    "@babel/core": "7.19.3",
+    "@babel/core": "7.19.6",
     "@babel/eslint-parser": "7.19.1",
-    "@babel/plugin-proposal-decorators": "7.19.3",
+    "@babel/plugin-proposal-decorators": "7.20.0",
     "babel-preset-gatsby": "2.24.0",
     "copyfiles": "2.4.1",
     "core-js": "3.25.4",
