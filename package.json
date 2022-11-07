@@ -129,7 +129,7 @@
     "webpack": "is peer",
     "core-js": "is peer",
     "@babel/core": "is peer",
-    "@mui/material": "updating beyond 5.9.0 (5.10.12 most recent tested) causes error"
+    "@mui/material": "updating beyond 5.9.0 (5.10.12 most recent tested) causes webpack error"
   },
   "packageManager": "yarn@3.1.0"
 }
