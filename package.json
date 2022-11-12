@@ -12,9 +12,10 @@
   },
   "dependencies": {
     "@babel/types": "7.x",
+    "@emotion/styled": "^11.10.5",
     "@fontsource/roboto": "4.5.8",
     "@fontsource/roboto-mono": "4.5.8",
-    "@mui/material": "5.9.0",
+    "@mui/material": "5.10.13",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/styled-engine-sc": "5.10.6",
     "@nozbe/watermelondb": "0.24.0",
@@ -130,6 +131,7 @@
     "core-js": "is peer",
     "@babel/core": "is peer",
     "@mui/material": "updating beyond 5.9.0 (5.10.12 most recent tested) causes webpack error",
-    "uploadcare-widget": "3.19.0: updating to 3.20.0 gave error in build"
+    "uploadcare-widget": "3.19.0: updating to 3.20.0 gave error in build",
+    "@emotion/styled": "undeclared (?) dependency of styled-components"
   }
 }
