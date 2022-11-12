@@ -8,7 +8,7 @@
     "clean": "gatsby clean",
     "build": "gatsby clean && gatsby build && copyfiles assetlinks.json public/.well-known",
     "serve": "gatsby serve",
-    "deploy": "yarn build && yarn firebase deploy"
+    "deploy": "npm run build && npm run firebase deploy"
   },
   "dependencies": {
     "@babel/types": "7.x",
@@ -130,6 +130,5 @@
     "core-js": "is peer",
     "@babel/core": "is peer",
     "@mui/material": "updating beyond 5.9.0 (5.10.12 most recent tested) causes webpack error"
-  },
-  "packageManager": "yarn@3.1.0"
+  }
 }
