@@ -2,10 +2,10 @@
  * Cant move Helmet to App
  * because neither StaticQuery nor AppQuery
  * work there :-(
+ * BUT: could now as not using StaticQuery any more
  */
 import React, { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
-import { useStaticQuery, graphql } from 'gatsby'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
 
@@ -17,16 +17,6 @@ import Header from './Header'
 const Container = styled.div`
   height: 100%;
   width: 100%;
-`
-
-const query = graphql`
-  query SiteTitleQuery {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-  }
 `
 
 const Layout = ({ children, width }) => {
@@ -42,12 +32,10 @@ const Layout = ({ children, width }) => {
     }
   }, [setSingleColumnView, singleColumnView, width])
 
-  const data = useStaticQuery(query)
-
   return (
     <Container>
       <Helmet
-        title={data.site.siteMetadata.title}
+        title="Vermehrung v1.3.53"
         meta={[
           {
             name: 'description',

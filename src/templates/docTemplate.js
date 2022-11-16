@@ -8,7 +8,7 @@ const DocTemplate = ({ data, location }) => (
 )
 
 export const pageQuery = graphql`
-  query($path: String!) {
+  query ($path: String!) {
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       html
       frontmatter {
@@ -18,7 +18,8 @@ export const pageQuery = graphql`
       }
     }
     allMarkdownRemark(
-      sort: { order: ASC, fields: [frontmatter___sort1, frontmatter___sort2] }
+      # sort: { order: ASC, fields: [frontmatter___sort1, frontmatter___sort2] }
+      sort: [{ frontmatter: { sort1: ASC } }, { frontmatter: { sort2: ASC } }]
       filter: { fileAbsolutePath: { regex: "/(/docs)/.*.md$/" } }
     ) {
       edges {

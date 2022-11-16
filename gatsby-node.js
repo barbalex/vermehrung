@@ -11,11 +11,11 @@ exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions
 
   const docTemplate = path.resolve(`src/templates/docTemplate.js`)
-
+  // was: sort: { order: ASC, fields: [frontmatter___sort1, frontmatter___sort2] }
   const result = await graphql(`
     {
       allMarkdownRemark(
-        sort: { order: ASC, fields: [frontmatter___sort1, frontmatter___sort2] }
+        sort: [{ frontmatter: { sort1: ASC } }, { frontmatter: { sort2: ASC } }]
         limit: 1000
       ) {
         edges {
