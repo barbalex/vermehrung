@@ -1,24 +1,22 @@
 import React, { useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import CircularProgress from '@mui/material/CircularProgress'
+import { Router } from '@reach/router'
 
-import StoreContext from '../storeContext'
-import Layout from '../components/Layout'
-import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
-import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
-import initializeSubscriptions from '../utils/initializeSubscriptions'
-import Tree from '../components/Tree'
-import Data from '../components/Data'
-import Filter from '../components/Filter'
-import Login from '../components/Login'
-import ErrorBoundary from '../components/shared/ErrorBoundary'
-import ApiDetector from '../components/ApiDetector'
-import QueuedQueries from '../components/QueuedQueries'
-import tableNames from '../utils/tableNames'
-import constants from '../utils/constants'
-import Header from '../components/Head'
+import StoreContext from '../../storeContext'
+import Layout from '../../components/Layout'
+import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
+import openNodesFromActiveNodeArray from '../../utils/openNodesFromActiveNodeArray'
+import initializeSubscriptions from '../../utils/initializeSubscriptions'
+import Login from '../../components/Login'
+import ErrorBoundary from '../../components/shared/ErrorBoundary'
+import ApiDetector from '../../components/ApiDetector'
+import QueuedQueries from '../../components/QueuedQueries'
+import tableNames from '../../utils/tableNames'
+import constants from '../../utils/constants'
+import Header from '../../components/Head'
+import VermehrungComponent from './Vermehrung'
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
@@ -40,45 +38,15 @@ const SpinnerText = styled.div`
 const SpinnerText2 = styled.div`
   padding: 0;
 `
-const StyledSplitPane = styled(SplitPane)`
-  .Resizer {
-    background: rgba(74, 20, 140, 0.1);
-    opacity: 1;
-    z-index: 1;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 7px;
-    cursor: col-resize;
-  }
-  .Resizer:hover {
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    background-color: #fff59d !important;
-  }
-  .Resizer.disabled {
-    cursor: not-allowed;
-  }
-  .Resizer.disabled:hover {
-    border-color: transparent;
-  }
-  .Pane {
-    overflow: hidden;
-  }
-`
 
 const Vermehrung = ({ location }) => {
   const store = useContext(StoreContext)
   const {
-    activeForm,
     gettingAuthUser,
     authorizing,
     initialDataQueried,
     initiallyQuerying,
-    isPrint,
     showQueuedQueries,
-    singleColumnView,
-    showTreeInSingleColumnView,
     user,
     online,
   } = store
@@ -86,21 +54,10 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray,
     setLastTouchedNode,
     setOpenNodes,
-    widthInPercentOfScreen,
     wsReconnectCount,
   } = store.tree
 
   const existsUser = !!user?.uid
-  const showFilter = store.filter.show
-  let treeWidth = singleColumnView
-    ? (!showTreeInSingleColumnView && activeForm) || showFilter
-      ? 0
-      : // if no form is active, show only tree
-        '100%'
-    : `${widthInPercentOfScreen}%`
-  // ensure tree is invisible when printing but still exists
-  // (caused errors to render form without tree while printing)
-  if (isPrint) treeWidth = 0
 
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
@@ -217,23 +174,12 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  // hide resizer when tree is hidden
-  const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
-
   return (
     <ErrorBoundary>
       <Layout>
-        <Container>
-          <StyledSplitPane
-            split="vertical"
-            size={treeWidth}
-            maxSize={-10}
-            resizerStyle={resizerStyle}
-          >
-            <Tree />
-            {showFilter ? <Filter /> : <Data />}
-          </StyledSplitPane>
-        </Container>
+        <Router>
+          <VermehrungComponent path="*" />
+        </Router>
       </Layout>
       <ApiDetector />
     </ErrorBoundary>

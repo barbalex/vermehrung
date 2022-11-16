@@ -1,12 +1,5 @@
 module.exports = {
-  siteMetadata: {
-    title: 'Vermehrung v1.3.53',
-  },
   plugins: [
-    {
-      resolve: 'gatsby-plugin-create-client-paths',
-      options: { prefixes: [`/Vermehrung/*`] },
-    },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
