@@ -8,6 +8,7 @@ import Button from '@mui/material/Button'
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import constants from '../utils/constants'
+import Header from '../components/Head'
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
@@ -84,3 +85,5 @@ const Index = () => {
 }
 
 export default Index
+
+export const Head = () => <Header />

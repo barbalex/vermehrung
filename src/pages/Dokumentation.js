@@ -2,6 +2,7 @@ import React from 'react'
 import { graphql } from 'gatsby'
 
 import Documentation from '../components/Documentation'
+import Header from '../components/Head'
 
 const Dokumentation = ({ data, location }) => (
   <Documentation data={data} location={location} />
@@ -29,3 +30,5 @@ export const pageQuery = graphql`
 `
 
 export default Dokumentation
+
+export const Head = () => <Header />

@@ -7,6 +7,7 @@ import { StaticImage } from 'gatsby-plugin-image'
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import constants from '../utils/constants'
+import Header from '../components/Head'
 
 const ScrollContainer = styled.div`
   height: calc(100vh - ${constants.appBarHeight}px);
@@ -217,3 +218,5 @@ const Index = () => (
 )
 
 export default Index
+
+export const Head = () => <Header />
