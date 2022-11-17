@@ -1,3 +1,6 @@
+// file name need underscore
+// otherwise weird things happen (edits are not registered)
+// see: https://github.com/gatsbyjs/gatsby/issues/26554#issuecomment-677915552
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
