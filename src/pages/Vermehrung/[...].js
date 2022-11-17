@@ -16,7 +16,7 @@ import QueuedQueries from '../../components/QueuedQueries'
 import tableNames from '../../utils/tableNames'
 import constants from '../../utils/constants'
 import Header from '../../components/Head'
-import VermehrungComponent from './Vermehrung'
+import VermehrungComponent from './_Vermehrung'
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
