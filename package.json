@@ -46,7 +46,6 @@
     "gatsby-transformer-remark": "6.0.0",
     "gatsby-transformer-sharp": "5.0.0",
     "get-urls": "11.0.0",
-    "graphql": "16.6.0",
     "graphql-tag": "2.12.6",
     "graphql-ws": "5.11.2",
     "is-uuid": "1.0.2",
@@ -112,7 +111,6 @@
     "react-contextmenu": "using file copied from own build. When using v2.14.0 get Error in production: https://github.com/vkbansal/react-contextmenu/issues/284, https://github.com/gatsbyjs/gatsby/issues/19618. For better solution see: https://github.com/vkbansal/react-contextmenu/issues/284#issuecomment-670711499",
     "@babel/types": "7.x is peer dep but needed to be put into prod deps due to error in yarn 3",
     "babel-plugin-styled-components": "is needed by gatsby-plugin-styled-components",
-    "graphql": "is needed by graphql_ws",
     "simplebar": "is peer",
     "uploadcare-widget": "3.19.0: updating to 3.20.0 gave error in build"
   }
