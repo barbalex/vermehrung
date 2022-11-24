@@ -112,9 +112,6 @@
     "gatsby-cli": "5.0.0",
     "webpack": "5.75.0"
   },
-  "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
-  },
   "overrides": {
     "graphql": "16.6.0"
   },
