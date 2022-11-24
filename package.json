@@ -92,7 +92,6 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
-    "@babel/core": "7.20.2",
     "@babel/eslint-parser": "7.19.1",
     "@babel/plugin-proposal-decorators": "7.20.2",
     "babel-plugin-styled-components": "2.0.7",
@@ -115,9 +114,6 @@
     "babel-plugin-styled-components": "is needed by gatsby-plugin-styled-components",
     "graphql": "is needed by graphql_ws",
     "simplebar": "is peer",
-    "webpack": "is peer",
-    "core-js": "is peer",
-    "@babel/core": "is peer",
     "uploadcare-widget": "3.19.0: updating to 3.20.0 gave error in build"
   }
 }
