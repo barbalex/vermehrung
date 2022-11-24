@@ -130,7 +130,6 @@
     "webpack": "is peer",
     "core-js": "is peer",
     "@babel/core": "is peer",
-    "@mui/material": "updating beyond 5.9.0 (5.10.12 most recent tested) causes webpack error",
     "uploadcare-widget": "3.19.0: updating to 3.20.0 gave error in build",
     "@emotion/styled": "undeclared (?) dependency of styled-components"
   }
