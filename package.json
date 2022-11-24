@@ -79,8 +79,6 @@
     "recharts": "2.1.16",
     "redaxios": "0.5.1",
     "rxjs": "7.5.7",
-    "simplebar": "5.3.9",
-    "simplebar-react": "2.4.3",
     "slick-carousel": "1.8.1",
     "styled-components": "5.3.6",
     "typography": "0.16.21",
@@ -109,7 +107,6 @@
   "dev-comments": {
     "react-contextmenu": "using file copied from own build. When using v2.14.0 get Error in production: https://github.com/vkbansal/react-contextmenu/issues/284, https://github.com/gatsbyjs/gatsby/issues/19618. For better solution see: https://github.com/vkbansal/react-contextmenu/issues/284#issuecomment-670711499",
     "babel-plugin-styled-components": "is needed by gatsby-plugin-styled-components",
-    "simplebar": "is peer",
     "uploadcare-widget": "3.19.0: updating to 3.20.0 gave error in build"
   }
 }
