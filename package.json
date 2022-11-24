@@ -1,7 +1,7 @@
 {
   "name": "vermehrung.ch",
   "description": "breeding endangered plant species",
-  "version": "1.3.54",
+  "version": "1.3.55",
   "license": "ISC",
   "scripts": {
     "dev": "gatsby develop",
