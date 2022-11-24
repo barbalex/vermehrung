@@ -11,7 +11,6 @@
     "deploy": "npm run build && npm run firebase deploy"
   },
   "dependencies": {
-    "@babel/types": "7.x",
     "@fontsource/roboto": "4.5.8",
     "@fontsource/roboto-mono": "4.5.8",
     "@mui/material": "5.10.14",
@@ -109,7 +108,6 @@
   },
   "dev-comments": {
     "react-contextmenu": "using file copied from own build. When using v2.14.0 get Error in production: https://github.com/vkbansal/react-contextmenu/issues/284, https://github.com/gatsbyjs/gatsby/issues/19618. For better solution see: https://github.com/vkbansal/react-contextmenu/issues/284#issuecomment-670711499",
-    "@babel/types": "7.x is peer dep but needed to be put into prod deps due to error in yarn 3",
     "babel-plugin-styled-components": "is needed by gatsby-plugin-styled-components",
     "simplebar": "is peer",
     "uploadcare-widget": "3.19.0: updating to 3.20.0 gave error in build"
