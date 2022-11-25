@@ -8,7 +8,7 @@
     "clean": "gatsby clean",
     "build": "gatsby clean && gatsby build && copyfiles assetlinks.json public/.well-known",
     "serve": "gatsby serve",
-    "deploy": "npm run build && npm run firebase deploy"
+    "deploy": "npm run build && firebase deploy"
   },
   "dependencies": {
     "@fontsource/roboto": "4.5.8",
@@ -100,9 +100,6 @@
     "eslint-webpack-plugin": "3.2.0",
     "firebase-tools": "11.16.1",
     "gatsby-cli": "5.1.0"
-  },
-  "overrides": {
-    "graphql": "16.6.0"
   },
   "dev-comments": {
     "babel-plugin-styled-components": "is needed by gatsby-plugin-styled-components"
