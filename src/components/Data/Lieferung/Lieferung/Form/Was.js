@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'

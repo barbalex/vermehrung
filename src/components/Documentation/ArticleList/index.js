@@ -1,6 +1,6 @@
 import React from 'react'
 import List from '@mui/material/List'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import Article from './Article'

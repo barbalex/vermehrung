@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { navigate } from 'gatsby'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 
 import UpSvg from '../../../svg/to_up.inline.svg'

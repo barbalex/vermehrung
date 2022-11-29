@@ -3,7 +3,7 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import { RiFilterFill, RiFilterLine } from 'react-icons/ri'
 import { MdDeleteSweep as DeleteFilterIcon } from 'react-icons/md'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../../storeContext'

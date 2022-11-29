@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import { Q } from '@nozbe/watermelondb'

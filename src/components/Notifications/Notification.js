@@ -1,6 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import { MdClose as CloseIcon } from 'react-icons/md'
@@ -22,17 +23,7 @@ const Container = styled.div`
   max-width: calc(100% - 10px);
   word-wrap: break-word;
 `
-const StyledIconButton = styled(IconButton)`
-  margin-left: 8px !important;
-`
-const StyledButton = styled(Button)`
-  color: white !important;
-  border-color: white !important;
-  margin-left: 10px;
-  > span {
-    text-transform: none;
-  }
-`
+
 // http://hackingui.com/front-end/a-pure-css-solution-for-multiline-text-truncation/
 const Message = styled.div`
   overflow: hidden;
@@ -70,10 +61,10 @@ const Notification = ({ notification: n }) => {
 
   const color = colorMap[type] ?? 'error'
 
-  const onClickClose = useCallback(() => removeNotificationById(n.id), [
-    n.id,
-    removeNotificationById,
-  ])
+  const onClickClose = useCallback(
+    () => removeNotificationById(n.id),
+    [n.id, removeNotificationById],
+  )
   const onClickAction = useCallback(() => {
     store?.[actionName]?.(actionArgument ?? undefined)
     if (revertTable && revertId && revertField) {
@@ -109,20 +100,34 @@ const Notification = ({ notification: n }) => {
       {!!title && <Title>{`${title}. Fehler-Meldung:`}</Title>}
       <Message>{message}</Message>
       {!!actionName && !!actionLabel && (
-        <StyledButton onClick={onClickAction} variant="outlined">
+        <Button
+          onClick={onClickAction}
+          variant="outlined"
+          css={css`
+            color: white !important;
+            border-color: white !important;
+            margin-left: 10px;
+            > span {
+              text-transform: none;
+            }
+          `}
+        >
           {actionLabel}
-        </StyledButton>
+        </Button>
       )}
-      <StyledIconButton
+      <IconButton
         key="close"
         aria-label="Close"
         color="inherit"
         onClick={onClickClose}
         title="Diese Meldung schliessen"
         size="small"
+        css={css`
+          margin-left: 8px !important;
+        `}
       >
         <CloseIcon />
-      </StyledIconButton>
+      </IconButton>
     </Container>
   )
 }

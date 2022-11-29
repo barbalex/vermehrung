@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import { FaBars } from 'react-icons/fa'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const MenuButton = styled(IconButton)`
   ${(props) => props['data-white'] && 'color: white !important;'}

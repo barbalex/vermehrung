@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useContext, useEffect } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'

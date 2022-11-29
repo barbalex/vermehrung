@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import Select from 'react-select'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const Container = styled.div`
   display: flex;

@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { withResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../storeContext'
