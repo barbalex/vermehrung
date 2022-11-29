@@ -11,12 +11,11 @@
     "deploy": "npm run build && firebase deploy"
   },
   "dependencies": {
+    "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
     "@fontsource/roboto": "4.5.8",
     "@fontsource/roboto-mono": "4.5.8",
     "@mui/material": "5.10.16",
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-    "@mui/styled-engine-sc": "5.10.16",
     "@nozbe/watermelondb": "0.24.0",
     "blueimp-md5": "2.19.0",
     "browser-update": "3.3.44",
@@ -33,7 +32,6 @@
     "gatsby-plugin-offline": "6.2.0",
     "gatsby-plugin-react-svg": "3.3.0",
     "gatsby-plugin-sharp": "5.2.0",
-    "gatsby-plugin-styled-components": "6.2.0",
     "gatsby-plugin-typography": "5.2.0",
     "gatsby-remark-autolink-headers": "6.2.0",
     "gatsby-remark-copy-linked-files": "6.2.0",
@@ -81,7 +79,6 @@
     "redaxios": "0.5.1",
     "rxjs": "7.5.7",
     "slick-carousel": "1.8.1",
-    "styled-components": "5.3.6",
     "typography": "0.16.21",
     "uploadcare-widget": "3.21.0",
     "urql": "3.0.3",
@@ -91,7 +88,6 @@
   "devDependencies": {
     "@babel/eslint-parser": "7.19.1",
     "@babel/plugin-proposal-decorators": "7.20.5",
-    "babel-plugin-styled-components": "2.0.7",
     "babel-preset-gatsby": "3.2.0",
     "copyfiles": "2.4.1",
     "eslint": "8.28.0",
@@ -102,11 +98,7 @@
     "firebase-tools": "11.16.1",
     "gatsby-cli": "5.2.0"
   },
-  "overrides": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
-  },
   "dev-comments": {
-    "babel-plugin-styled-components": "is needed by gatsby-plugin-styled-components",
-    "@emotion/styled": "needed by @mui"
+    "none": "right now"
   }
 }

@@ -15,7 +15,7 @@ import {
 } from 'recharts'
 import { observer } from 'mobx-react-lite'
 import { withResizeDetector } from 'react-resize-detector'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'

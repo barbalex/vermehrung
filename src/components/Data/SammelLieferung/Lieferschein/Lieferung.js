@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'

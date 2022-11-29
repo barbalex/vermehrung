@@ -7,7 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'

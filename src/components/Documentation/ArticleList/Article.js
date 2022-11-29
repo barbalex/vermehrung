@@ -3,7 +3,7 @@ import { navigate } from 'gatsby'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { FaChevronRight, FaChevronDown } from 'react-icons/fa'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import isEqual from 'lodash/isEqual'
 
 const ListItem = styled(ListItemButton)`

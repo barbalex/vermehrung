@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { withResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../storeContext'
