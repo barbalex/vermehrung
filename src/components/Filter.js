@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useContext } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import Art from './Data/Art'
 import Event from './Data/Event'

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { interval, combineLatest } from 'rxjs'

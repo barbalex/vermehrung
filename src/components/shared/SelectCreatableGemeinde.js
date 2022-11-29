@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import CreatableSelect from 'react-select/Creatable'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { MdOutlineAddLocation as AddLocationIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'

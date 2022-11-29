@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import IconButton from '@mui/material/IconButton'
 import NavTree from '../../../svg/nav_tree.inline.svg'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../../storeContext'

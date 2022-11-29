@@ -1,5 +1,5 @@
 import React, { useContext, useCallback } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'

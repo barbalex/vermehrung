@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const OuterContainer = styled.div`
   padding: 0 2px 0 8px;

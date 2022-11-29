@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import uniq from 'lodash/uniq'
 import uniqBy from 'lodash/uniqBy'
 import { IoMdInformationCircleOutline } from 'react-icons/io'

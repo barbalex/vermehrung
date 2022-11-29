@@ -4,7 +4,7 @@
  * listRef.current was always null
  */
 import React, { useContext, useEffect, useRef } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import findIndex from 'lodash/findIndex'

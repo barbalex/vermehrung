@@ -1,6 +1,6 @@
 import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Slider from 'react-slick'
 import { useQuery } from 'urql'
 import gql from 'graphql-tag'
