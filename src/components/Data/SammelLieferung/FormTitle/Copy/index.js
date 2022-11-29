@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaRegCopy } from 'react-icons/fa'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import StoreContext from '../../../../../storeContext'
 import exists from '../../../../../utils/exists'

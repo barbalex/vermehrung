@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import Popover from '@mui/material/Popover'
 
 import { MdInfoOutline as InfoOutlineIcon } from 'react-icons/md'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`
   cursor: pointer;

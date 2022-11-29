@@ -26,8 +26,7 @@ import '@fontsource/roboto/700.css'
 
 import materialTheme from './utils/materialTheme'
 
-import createGlobalStyle from './utils/createGlobalStyle'
-const GlobalStyle = createGlobalStyle()
+import GlobalStyle from './components/GlobalStyle'
 
 import { Provider as MobxProvider } from './storeContext'
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { withResizeDetector } from 'react-resize-detector'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'

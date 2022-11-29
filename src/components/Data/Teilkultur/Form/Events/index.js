@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary'

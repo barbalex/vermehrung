@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Lightbox from 'react-image-lightbox'
 import Button from '@mui/material/Button'
 import { v1 as uuidv1 } from 'uuid'
