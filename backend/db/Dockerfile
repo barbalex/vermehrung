@@ -1,5 +1,6 @@
 # https://registry.hub.docker.com/r/postgis/postgis/tags
-FROM postgis/postgis:14-3.2
+# upgrade to 15-3.3?
+FROM postgis/postgis:14-3.3
 
 # for using cron, see https://www.cloudsavvyit.com/9033/how-to-use-cron-with-your-docker-containers/
 
