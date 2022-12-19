@@ -1,7 +1,7 @@
 ---
-path: "/Dokumentation/Fehler-Ideen"
-date: "2019-09-30"
-title: "Fehler, Ideen, Vorschläge melden"
+slug: 'fehler-ideen'
+date: '2019-09-30'
+title: 'Fehler, Ideen, Vorschläge melden'
 sort1: 20
 ---
 

@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/offline-wie'
+slug: 'offline-wie'
 date: '2020-12-18'
 title: 'Offline: Wie es funktioniert'
 sort1: 25

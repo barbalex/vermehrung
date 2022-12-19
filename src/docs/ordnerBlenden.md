@@ -1,5 +1,5 @@
 ---
-path: "/Dokumentation/Ordner-blenden"
+slug: "ordner-blenden"
 date: "2019-12-28"
 title: "Ordner ein- und ausblenden"
 sort1: 14

@@ -8,7 +8,7 @@ import constants from '../../../../utils/constants'
 
 const KulturAnleitung = ({ asMenu }) => {
   const openKulturDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/Dokumentation/Kulturen`
+    const url = `${constants?.getAppUri()}/kulturen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

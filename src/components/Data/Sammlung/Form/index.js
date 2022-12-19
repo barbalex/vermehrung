@@ -263,7 +263,7 @@ const SammlungForm = ({
     [filter, row, showFilter, store],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/Dokumentation/Planen`
+    const url = `${constants?.getAppUri()}/planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -272,7 +272,7 @@ const SammlungForm = ({
     }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/Dokumentation/Genetische-Vielfalt`
+    const url = `${constants?.getAppUri()}/genetische-vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

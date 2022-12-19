@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/Roadmap'
+slug: 'roadmap'
 date: '2020-07-04'
 title: 'Roadmap'
 sort1: 29

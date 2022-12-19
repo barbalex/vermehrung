@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/iOS'
+slug: 'ios'
 date: '2020-10-22'
 title: 'iPhone/iPad bzw. iOS'
 sort1: 23
@@ -14,7 +14,7 @@ Wollt ihr mehr wissen? Dann müssen wir etwas ausholen:<br/><br/>
 - Apple verdient **jährlich 10 bis 15 Milliarden** mit dem App Store: sie beanspruchen 15-30% jeder Überweisung für sich selbst ([Quelle](https://www.statista.com/chart/9671/developer-earnings-apple-app-store))
 - Das ist ungerechtfertigt und geht nur, weil Apple ihr Monopol ausnützt
 - Eine ganze Reihe von Firmen wehren sich dagegen, auch gerichtlich. Allen voran Epic Games mit Fortnite. Sogar Microsoft hat sich klar dagegen gestellt ([Quelle](https://t3n.de/news/apple-vs-epic-microsoft-seite-1315266/)). In den USA und der EU wird der Sachverhalt von den Wettbewerbsbehörden untersucht ([Quelle](https://www.bbc.com/news/technology-54280982))
-- vermehrung.ch ist eine [Web App](/Dokumentation/PWA)
+- vermehrung.ch ist eine [Web App](/pwa)
 - Web App's brauchen keinen App Store. Man kann sie direkt vom Browser aus installieren. Das passt Apple nicht
 - Web App's können aber nur mit anderen Apps konkurrieren, wenn der Browser die dafür nötigen Fähigkeiten anbietet
 - Apple verbietet auf den eigenen Mobilgeräten (Betriebssystem "iOS") die Installation anderer Browser und setzt dies im App Store durch (die "Browser" von Chrome und Firefox sind auf iOS nur eine Hülle um Safari)

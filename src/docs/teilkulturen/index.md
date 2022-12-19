@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/Teilkulturen'
+slug: 'teilkulturen'
 date: '2019-09-20'
 title: 'Teil-Kulturen'
 sort1: 8
@@ -10,11 +10,11 @@ In vermehrung.ch werden diese Untereinheiten "Teil-Kulturen" genannt.<br/><br/>
 
 ### 1. Ziele
 
-- [Projekt-Ziel](/Dokumentation/Ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt."<br/>
+- [Projekt-Ziel](/ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt."<br/>
   In grossen Kulturen erleichtert eine Unterteilung die Erfassung der Anzahlen
-- [Projekt-Ziel](/Dokumentation/Ziele) 6: "Effiziente und quell-nahe Erfassung und Nutzung."<br/>
+- [Projekt-Ziel](/ziele) 6: "Effiziente und quell-nahe Erfassung und Nutzung."<br/>
   In kleinen Kulturen würden Teil-Kulturen bloss ablenken. Darum sind Teil-Kulturen "opt-in", das heisst sie erscheinen erst, wenn man sie will (siehe unten)
-- [Projekt-Ziel](/Dokumentation/Ziele) 8: "In grossen Gärten haben MitarbeiterInnen die Übersicht über die (räumliche) Organisation der Kulturen."<br/>
+- [Projekt-Ziel](/ziele) 8: "In grossen Gärten haben MitarbeiterInnen die Übersicht über die (räumliche) Organisation der Kulturen."<br/>
   Bei der Kultur kann ein Teilkultur-Plan als Datei angefügt werden. Teil-Kulturen sind so aufgebaut, dass künftig bei Bedarf auch Geometrien erfasst werden könnten.
 
 ### 2. Umsetzung

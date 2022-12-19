@@ -13,7 +13,7 @@ const Container = styled.div`
 
 const ArticleList = ({ items }) => (
   <Container>
-    <List component="nav">
+    <List component="nav" dense>
       {items.map(({ node }) => (
         <Article node={node} key={node.id} />
       ))}

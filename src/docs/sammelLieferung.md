@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/Sammel-Lieferungen'
+slug: 'sammel-lieferungen'
 date: '2019-10-04'
 title: 'Sammel-Lieferungen'
 sort1: 11
@@ -7,7 +7,7 @@ sort1: 11
 
 ### 1 Ziele
 
-- [Projekt-Ziel](/Dokumentation/Ziele) 6: "Effiziente ... Erfassung und Nutzung."<br/>
+- [Projekt-Ziel](/ziele) 6: "Effiziente ... Erfassung und Nutzung."<br/>
   Die gleichzeitige Lieferung aus vielen Kulturen wird effizienter erfasst
 - Es können Lieferscheine mit mehreren Einzelpositionen erstellt werden
 

@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/offline'
+slug: 'offline'
 date: '2021-01-29'
 title: 'Offline arbeiten'
 sort1: 24

@@ -1,19 +1,21 @@
 ---
-path: "/Dokumentation/Zeitachse-Kultur"
-date: "2019-09-20"
-title: "Zeit-Achse für Kulturen"
+slug: 'zeitachse-kultur'
+date: '2019-09-20'
+title: 'Zeit-Achse für Kulturen'
 sort1: 4
 ---
 
 ### Ziele
-- [Projekt-Ziele](/Dokumentation/Ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt".
-- [Projekt-Ziel](/Dokumentation/Ziele) 5: "Wesentliche Vorgänge sind dokumentiert".<br/>
+
+- [Projekt-Ziele](/ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt".
+- [Projekt-Ziel](/ziele) 5: "Wesentliche Vorgänge sind dokumentiert".<br/>
   Auf einer hohen Ebene werden dokumentiert: An- und Aus-Lieferungen, Vermehrung
-- [Projekt-Ziel](/Dokumentation/Ziele) 7: "MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte von Kulturen schaffen"
+- [Projekt-Ziel](/ziele) 7: "MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte von Kulturen schaffen"
 
 Die Übersicht dokumentiert auch auf einer hohen Ebene zentrale Vorgänge (Projekt-Ziel 5).<br/><br/>
 
 ### Was
+
 Dargestellt werden primär die Mengen der für die Planung wesentlichen Einheiten:
 
 - Anzahl Pflanzen
@@ -36,6 +38,7 @@ Von den sekundären, indem man auf der Zeit-Achse über den Zeitpunkten schwebt.
 ### Wie
 
 #### Linien für Anzahlen
+
 Als Grundlage werden verwendet:
 
 - Anzahlen aus durchgeführten Zählungen (nur solche, die in der Vergangenheit liegen)
@@ -50,10 +53,12 @@ Als Grundlage werden verwendet:
 Linien, die geplante Anzahlen darstellen, verwenden dieselbe Farbe wie die Linie für die entsprechende Einheit bei durchgeführten Zählungen. Aber etwas aufgehellt.<br/><br/>
 
 #### Punkte für ignorierte Zählungen
+
 - Geplante Zählungen, nach denen eine Zählung durchgeführt wurde, werden nicht als Teil der Linien berücksichtigt.<br/>
   Stattdessen werden sie in separaten Punkten dargestellt
 
 #### Säulen für Lieferungen
+
 - An-Lieferungen werden als Säulen mit positiven Werten dargestellt,
 - Aus-Lieferungen mit negativen Werten
 - Lieferungen, die nach der letzten durchgeführten Zählung geplant sind, werden etwas aufgehellt dargestellt.<br/>

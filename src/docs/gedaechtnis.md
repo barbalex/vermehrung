@@ -1,7 +1,7 @@
 ---
-path: "/Dokumentation/Gedaechtnis"
-date: "2019-09-30"
-title: "vermehrung erinnert sich"
+slug: 'gedaechtnis'
+date: '2019-09-30'
+title: 'vermehrung erinnert sich'
 sort1: 18
 ---
 

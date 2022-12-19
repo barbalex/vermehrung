@@ -8,7 +8,7 @@ import constants from '../../../../utils/constants'
 
 const EventAnleitung = ({ asMenu }) => {
   const openEventdDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/Dokumentation/Events`
+    const url = `${constants?.getAppUri()}/events`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

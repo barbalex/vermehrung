@@ -11,14 +11,18 @@ const ListItem = styled(ListItemButton)`
 `
 
 const MenuItem = ({ node }) => {
-  const { path, sort2 } = node.frontmatter
+  const { slug, sort2 } = node.frontmatter
+  const activeUrl = `/Dokumentation/${node.frontmatter.slug}`
 
-  const onClickMenuItem = useCallback(() => navigate(`${path}/`), [path])
+  const onClickMenuItem = useCallback(
+    () => navigate(`${activeUrl}/`),
+    [activeUrl],
+  )
 
   const pathname = window?.location?.pathname?.split('/').filter((a) => !!a)
   const isParent1 = sort2 === 0
   const isChild1 = sort2 > 0
-  const pathSplit = path.split('/').filter((a) => !!a)
+  const pathSplit = activeUrl.split('/').filter((a) => !!a)
   const isParentOpen = pathSplit[1] === pathname[1]
   const isChildClosed = isChild1 && pathSplit[1] !== pathname[1]
   let active = isEqual(pathname, pathSplit)

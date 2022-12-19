@@ -395,7 +395,7 @@ const KulturForm = ({
     [filter, row, showFilter, store],
   )
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/Dokumentation/Genetische-Vielfalt`
+    const url = `${constants?.getAppUri()}/genetische-vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

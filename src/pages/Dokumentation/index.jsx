@@ -1,22 +1,15 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 
-import Documentation from '../components/Documentation'
+import Documentation from '../../components/Documentation'
+import Header from '../../components/Head'
 
-const DocTemplate = ({ data, location }) => (
+const Dokumentation = ({ data, location }) => (
   <Documentation data={data} location={location} />
 )
 
 export const pageQuery = graphql`
-  query ($path: String!) {
-    markdownRemark(frontmatter: { path: { eq: $path } }) {
-      html
-      frontmatter {
-        date(formatString: "DD.MM.YYYY")
-        path
-        title
-      }
-    }
+  query {
     allMarkdownRemark(
       # sort: { order: ASC, fields: [frontmatter___sort1, frontmatter___sort2] }
       sort: [{ frontmatter: { sort1: ASC } }, { frontmatter: { sort2: ASC } }]
@@ -26,11 +19,9 @@ export const pageQuery = graphql`
         node {
           id
           frontmatter {
-            date(formatString: "DD.MM.YYYY")
-            path
             title
-            sort1
-            sort2
+            date(formatString: "DD.MM.YYYY")
+            slug
           }
         }
       }
@@ -38,4 +29,6 @@ export const pageQuery = graphql`
   }
 `
 
-export default DocTemplate
+export default Dokumentation
+
+export const Head = () => <Header />

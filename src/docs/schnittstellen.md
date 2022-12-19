@@ -1,5 +1,5 @@
 ---
-path: "/Dokumentation/Schnittstellen"
+slug: "schnittstellen"
 date: "2019-06-15"
 title: "Schnittstellen"
 sort1: 21

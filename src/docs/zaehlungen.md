@@ -1,18 +1,20 @@
 ---
-path: "/Dokumentation/Zaehlungen"
-date: "2020-08-25"
-title: "Zählungen"
+slug: 'zaehlungen'
+date: '2020-08-25'
+title: 'Zählungen'
 sort1: 8
 ---
 
 ### Ziele
-- [Projekt-Ziel](/Dokumentation/Ziele) 3: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden."<br/>
+
+- [Projekt-Ziel](/ziele) 3: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden."<br/>
   Zählungen dokumentieren Anzahlen oder die geplante Vermehrung einer Kultur zu einem bestimmten Zeitpunkt
-- [Projekt-Ziel](/Dokumentation/Ziele) 4: "Anzahl Mutter-Pflanzen ist bekannt"
+- [Projekt-Ziel](/ziele) 4: "Anzahl Mutter-Pflanzen ist bekannt"
 
 ### Umsetzung
 
 Bei einer Zählung erfasst man **den ganzen Bestand** einer Kultur. Es sollen immer die totalen Anzahlen der drei grundlegenden Einheiten erhoben werden:
+
 - Anzahl Pflanzen (Total, inklusive auspflanzungsbereite, Mutter- und Jungpflanzen)
 - Anzahl auspflanz-bereite Pflanzen
 - Anzahl Mutter-Pflanzen
@@ -22,6 +24,7 @@ Ausnahme: Für zukünftige Planung (Prognosen und Ziele) reicht es, die Anzahl a
 **Mutter-Pflanzen** sind Pflanzen, die aus einer Sammlung oder via GAW aus einer Sammlung angeliefert wurden. Daraus vermehrte sind nicht Mutter-Pflanzen.<br/><br/>
 
 **Jungpflanzen** sind noch nicht auspflanzungsbereit und keine Mutter-Pflanzen. Ihre Anzahl berechnet sich somit aus:
+
 - Anzahl Pflanzen
 - minus Anzahl auspflanz-bereite Pflanzen
 - minus Anzahl Mutter-Pflanzen

@@ -1,12 +1,13 @@
 ---
-path: "/Dokumentation/Qualitaets-Kontrollen"
-date: "2020-06-28"
-title: "Qualitäts-Kontrollen"
+slug: 'qualitaets-kontrollen'
+date: '2020-06-28'
+title: 'Qualitäts-Kontrollen'
 sort1: 17
 ---
 
 ### Ziel
-- [Projekt-Ziel](/Dokumentation/Ziele) 11: "Qualitätskontrollen erhöhen die Qualität der Arbeit"<br/>
+
+- [Projekt-Ziel](/ziele) 11: "Qualitätskontrollen erhöhen die Qualität der Arbeit"<br/>
 
 ### Umsetzung
 

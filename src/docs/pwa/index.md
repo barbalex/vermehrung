@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/PWA'
+slug: 'pwa'
 date: '2020-10-22'
 title: 'Progressive Web App'
 sort1: 22
@@ -18,7 +18,7 @@ vermehrung.ch ist eine [**Progressive Web App**](https://developers.google.com/w
   - Auf Android werden Sie von Chrome gefragt, ob sie vermehrung auf dem Startbildschirm platzieren wollen.
 - Danach hat vermehrung eine eigene Verknüpfung und startet ausserhalb des Browsers in einem eigenen Fenster, ohne URL-Zeile.
 - Auch vermehrung-Links sollen bald mit der installierten Version geöffnet werden (funktioniert bereits auf Android)
-- Leider [funktioniert vermehrung.ch auf iOS (iPhone, iPad) nicht](/Dokumentation/iOS)<br/>
+- Leider [funktioniert vermehrung.ch auf iOS (iPhone, iPad) nicht](/ios)<br/>
 
 **Was ist der Unterschied zu einer traditionellen Applikation?**
 
