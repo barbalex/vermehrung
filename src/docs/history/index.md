@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/Historisierung'
+slug: 'historisierung'
 date: '2020-09-11'
 title: 'Daten-Historie'
 sort1: 26

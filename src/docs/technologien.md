@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/Technologien'
+slug: 'technologien'
 date: '2020-09-03'
 title: 'Verwendete Technologien'
 sort1: 27

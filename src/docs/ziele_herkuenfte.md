@@ -1,5 +1,5 @@
 ---
-path: "/Dokumentation/Ziele/Herkuenfte"
+slug: "ziele/herkuenfte"
 date: "2019-10-04"
 title: "Ziel 1: Herkünfte"
 sort1: 1

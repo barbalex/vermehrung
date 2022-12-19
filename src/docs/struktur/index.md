@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/Struktur'
+slug: 'struktur'
 date: '2020-01-20'
 title: 'Daten-Struktur'
 sort1: 28

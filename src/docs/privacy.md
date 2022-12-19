@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/Datenschutz'
+slug: 'datenschutz'
 date: '2020-07-21'
 title: 'Datenschutz'
 sort1: 31

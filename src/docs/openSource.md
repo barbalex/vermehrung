@@ -1,5 +1,5 @@
 ---
-path: "/Dokumentation/Open-Source"
+slug: "open-source"
 date: "2019-06-15"
 title: "Open Source"
 sort1: 19

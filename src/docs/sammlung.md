@@ -1,5 +1,5 @@
 ---
-path: "/Dokumentation/Sammlungen"
+slug: "sammlungen"
 date: "2020-01-17"
 title: "Sammlungen"
 sort1: 6

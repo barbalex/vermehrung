@@ -1,5 +1,5 @@
 ---
-path: '/Dokumentation/Kulturen'
+slug: 'kulturen'
 date: '2021-01-20'
 title: 'Kulturen'
 sort1: 7
@@ -7,13 +7,13 @@ sort1: 7
 
 ### Ziele
 
-- [Projekt-Ziel](/Dokumentation/Ziele) 1: Herkünfte sind bekannt und werden innerhalb von Kulturen nicht vermischt.<br/>
+- [Projekt-Ziel](/ziele) 1: Herkünfte sind bekannt und werden innerhalb von Kulturen nicht vermischt.<br/>
   Darum ist eine Kultur definiert als:
   - eine Art
   - aus einer Herkunft
   - in einem Garten<br/>
     Die Datenbank akzeptiert pro Garten nur eine aktive Kultur derselben Art und Herkunft. Plus ein Zwischenlager, siehe weiter unten
-- [Projekt-Ziel](/Dokumentation/Ziele) 2: Die genetische Vielfalt von Kulturen ist bekannt.<br/>
+- [Projekt-Ziel](/ziele) 2: Die genetische Vielfalt von Kulturen ist bekannt.<br/>
   Indem das Feld "von Anzahl Individuen" bei jeder An-Lieferung nachgeführt wird
 
 ### Aktiv vs. erloschen

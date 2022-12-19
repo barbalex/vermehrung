@@ -53,7 +53,7 @@ const History = ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
     [diffConflict, setDiffConflict],
   )
   const openDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/Dokumentation/Historisierung`
+    const url = `${constants?.getAppUri()}/historisierung`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

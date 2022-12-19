@@ -1,5 +1,5 @@
 ---
-path: "/Dokumentation/Planen"
+slug: "planen"
 date: "2019-11-15"
 title: "Planen"
 sort1: 15

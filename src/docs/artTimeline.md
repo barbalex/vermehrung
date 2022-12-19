@@ -1,19 +1,21 @@
 ---
-path: "/Dokumentation/Zeitachse-Art"
-date: "2019-09-29"
-title: "Zeit-Achse für Arten"
+slug: 'zeitachse-art'
+date: '2019-09-29'
+title: 'Zeit-Achse für Arten'
 sort1: 3
 ---
 
 ### Ziele
-- [Projekt-Ziele](/Dokumentation/Ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt"
-- [Projekt-Ziel](/Dokumentation/Ziele) 5: "Wesentliche Vorgänge sind dokumentiert".<br/>
+
+- [Projekt-Ziele](/ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt"
+- [Projekt-Ziel](/ziele) 5: "Wesentliche Vorgänge sind dokumentiert".<br/>
   Auf einer hohen Ebene werden dokumentiert: Vermehrung, Auspflanzungen
-- [Projekt-Ziel](/Dokumentation/Ziele) 7: "MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte von Arten schaffen"
+- [Projekt-Ziel](/ziele) 7: "MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte von Arten schaffen"
 
 Die Übersicht dokumentiert auch auf einer hohen Ebene zentrale Vorgänge (Projekt-Ziel 5).<br/><br/>
 
 ### Was
+
 Dargestellt werden primär die Mengen der für die Planung wesentlichen Einheiten:
 
 - Anzahl Pflanzen
@@ -35,6 +37,7 @@ Von den sekundären, indem man auf der Zeit-Achse über den Zeitpunkten schwebt.
 ### Wie
 
 #### Linien für (gezählte) Anzahlen
+
 Als Grundlage werden verwendet:
 
 - Anzahlen aus durchgeführten Zählungen
@@ -49,6 +52,7 @@ Als Grundlage werden verwendet:
 Linien, die geplante Anzahlen darstellen, verwenden dieselbe Farbe wie die Linie für die entsprechende Einheit bei durchgeführten Zählungen. Aber etwas aufgehellt.<br/><br/>
 
 #### Säulen für Sammlungen und Auspflanzungen
+
 - Sammlungen werden als Säulen mit positiven Werten dargestellt (nur "Anzahl Pflanzen" - auspflanz-bereite Pflanzen werden nicht gesammelt)
 - Auspflanzungen werden mit negativen Werten dargestellt
 - Sammlungen und Auspflanzungen, die nach der letzten durchgeführten Zählung geplant sind, werden etwas aufgehellt dargestellt.<br/>
