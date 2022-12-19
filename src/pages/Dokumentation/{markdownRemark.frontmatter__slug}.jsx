@@ -18,10 +18,8 @@ export const pageQuery = graphql`
       }
     }
     allMarkdownRemark(
-      # sort: { order: ASC, fields: [frontmatter___sort1, frontmatter___sort2] }
       sort: [{ frontmatter: { sort1: ASC } }, { frontmatter: { sort2: ASC } }]
-    ) # filter: { fileAbsolutePath: { regex: "/(/docs)/.*.md$/" } }
-    {
+    ) {
       edges {
         node {
           id

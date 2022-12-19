@@ -12,7 +12,7 @@ const ListItem = styled(ListItemButton)`
 
 const MenuItem = ({ node }) => {
   const { slug, sort2 } = node.frontmatter
-  const activeUrl = `/Dokumentation/${node.frontmatter.slug}`
+  const activeUrl = `/Dokumentation/${slug}`
 
   const onClickMenuItem = useCallback(
     () => navigate(`${activeUrl}/`),
