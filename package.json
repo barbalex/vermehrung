@@ -60,6 +60,7 @@
     "prettier": "2.8.1",
     "prismjs": "1.29.0",
     "proj4": "2.8.0",
+    "re2": "1.18.0",
     "react": "18.2.0",
     "react-copy-to-clipboard": "5.1.0",
     "react-datepicker": "4.8.0",
@@ -100,6 +101,7 @@
     "gatsby-cli": "5.3.1"
   },
   "dev-comments": {
-    "none": "right now"
+    "none": "right now",
+    "re2": "Someone's dep. Gave errors on install, trying to force newer version. 2023.01.05"
   }
 }
