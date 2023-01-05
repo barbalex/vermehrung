@@ -65,7 +65,7 @@ const ArtTimeline = ({ artId, width }) => {
   // need to disable animation or labels will not show on first render
   // https://github.com/recharts/recharts/issues/806
 
-  console.log('Pflanzen, data:', data)
+  // console.log('Pflanzen, data:', data)
 
   return (
     <ErrorBoundary>
