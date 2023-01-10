@@ -43,6 +43,9 @@ const Title = styled.div`
 const Gvs = styled.div`
   padding-bottom: 8px;
 `
+const StyledMotionDiv = styled(motion.div)`
+  box-sizing: border-box;
+`
 
 const PersonArten = ({ person }) => {
   const store = useContext(StoreContext)
@@ -165,7 +168,10 @@ const PersonArten = ({ person }) => {
           </IconButton>
         </div>
       </TitleRow>
-      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
+      <StyledMotionDiv
+        animate={anim}
+        transition={{ type: 'just', duration: 0.2 }}
+      >
         {open && (
           <>
             <Gvs>
@@ -190,7 +196,7 @@ const PersonArten = ({ person }) => {
             )}
           </>
         )}
-      </motion.div>
+      </StyledMotionDiv>
     </ErrorBoundary>
   )
 }

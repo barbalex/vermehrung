@@ -43,6 +43,9 @@ const Title = styled.div`
 const Aven = styled.div`
   padding-bottom: 8px;
 `
+const StyledMotionDiv = styled(motion.div)`
+  box-sizing: border-box;
+`
 
 const GartenPersonen = ({ garten }) => {
   const store = useContext(StoreContext)
@@ -153,7 +156,10 @@ const GartenPersonen = ({ garten }) => {
           </IconButton>
         </div>
       </TitleRow>
-      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
+      <StyledMotionDiv
+        animate={anim}
+        transition={{ type: 'just', duration: 0.2 }}
+      >
         {open && (
           <>
             <Aven>
@@ -178,7 +184,7 @@ const GartenPersonen = ({ garten }) => {
             )}
           </>
         )}
-      </motion.div>
+      </StyledMotionDiv>
     </ErrorBoundary>
   )
 }
