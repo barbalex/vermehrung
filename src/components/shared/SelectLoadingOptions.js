@@ -33,7 +33,7 @@ const StyledSelect = styled(AsyncSelect)`
     border-bottom-width: 2px;
   }
   .react-select__control:focus-within {
-    border-bottom-color: rgba(28, 80, 31, 1) !important;
+    border-bottom-color: #4a148c !important;
     box-shadow: none;
   }
   .react-select__value-container {
