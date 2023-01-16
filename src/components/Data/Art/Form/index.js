@@ -118,7 +118,7 @@ const ArtForm = ({
     if (val) {
       return aeArts
         .filter((a) => !aeArtIdsNotToShow.includes(a.id))
-        .filter((a) => a.name.toLowerCase().includes(val))
+        .filter((a) => a.name.toLowerCase().includes(val.toLowerCase()))
     }
     return aeArts.filter((a) => !aeArtIdsNotToShow.includes(a.id))
   }
