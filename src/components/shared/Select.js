@@ -132,6 +132,9 @@ const SharedSelect = ({
         maxheight={maxHeight}
         classNamePrefix="react-select"
         nocaret={noCaret}
+        // using portal because sticky headers would otherwise cover the dropdown
+        styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+        menuPortalTarget={document.body}
       />
       {error && <Error>{error}</Error>}
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
