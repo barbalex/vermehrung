@@ -157,6 +157,9 @@ const SelectLoadingOptions = ({
         classNamePrefix="react-select"
         loadOptions={loadOptions}
         openMenuOnFocus
+        // using portal because sticky headers would otherwise cover the dropdown
+        styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+        menuPortalTarget={document.getElementById('___gatsby')}
       />
       {saveToDbError && <Error>{saveToDbError}</Error>}
     </Container>
