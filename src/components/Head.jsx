@@ -3,7 +3,7 @@ import React from 'react'
 
 const Head = () => (
   <>
-    <title>Vermehrung v1.3.59</title>
+    <title>Vermehrung v1.3.60</title>
     <meta name="description" content="Bedrohte Pflanzenarten vermehren" />
     <meta
       name="keywords"
