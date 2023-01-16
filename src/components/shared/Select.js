@@ -134,7 +134,7 @@ const SharedSelect = ({
         nocaret={noCaret}
         // using portal because sticky headers would otherwise cover the dropdown
         styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-        menuPortalTarget={document.body}
+        menuPortalTarget={document.getElementById('___gatsby')}
       />
       {error && <Error>{error}</Error>}
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}

@@ -59,9 +59,12 @@ const App = ({ element }) => {
   const [store, setStore] = useState(null)
   const [database, setDatabase] = useState(null)
 
+  console.log('App rendering')
+
   useEffect(() => {
     let isActive = true
     let unregister
+    console.log('App initiating')
     initiateApp().then(
       ({ store: storeReturned, unregister: unregisterReturned }) => {
         if (!isActive) return
