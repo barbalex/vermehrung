@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
-import { observer } from 'mobx-react-lite'
-import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
+import { BrowserRouter } from 'react-router-dom'
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
@@ -12,8 +10,6 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
 import browserUpdate from 'browser-update'
-
-import Notifications from './components/Notifications'
 
 // see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
 import '@fontsource/roboto-mono'
@@ -65,4 +61,8 @@ console.log('main running')
 const container = document.getElementById('root')
 const root = createRoot(container)
 
-root.render(<App />)
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+)

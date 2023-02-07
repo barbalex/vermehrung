@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { navigate } from 'gatsby'
+import { useNavigate } from 'react-router-dom'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { FaChevronRight, FaChevronDown } from 'react-icons/fa'
@@ -11,12 +11,13 @@ const ListItem = styled(ListItemButton)`
 `
 
 const MenuItem = ({ node }) => {
+  const navigate = useNavigate()
   const { slug, sort2 } = node.frontmatter
   const activeUrl = `/Dokumentation/${slug}`
 
   const onClickMenuItem = useCallback(
     () => navigate(`${activeUrl}/`),
-    [activeUrl],
+    [activeUrl, navigate],
   )
 
   const pathname = window?.location?.pathname?.split('/').filter((a) => !!a)
@@ -25,7 +26,7 @@ const MenuItem = ({ node }) => {
   const pathSplit = activeUrl.split('/').filter((a) => !!a)
   const isParentOpen = pathSplit[1] === pathname[1]
   const isChildClosed = isChild1 && pathSplit[1] !== pathname[1]
-  let active = isEqual(pathname, pathSplit)
+  const active = isEqual(pathname, pathSplit)
 
   if (isChildClosed) return null
 

@@ -1,6 +1,5 @@
 import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
-import { navigate } from 'gatsby'
 
 export default types
   .model('Tree', {
@@ -29,7 +28,7 @@ export default types
     setActiveNodeArray(val, nonavigate) {
       self.activeNodeArray = val
       if (!nonavigate) {
-        navigate(`/Vermehrung/${val.join('/')}`)
+        self.navigate(`/Vermehrung/${val.join('/')}`)
         self.addOpenNode(val)
       }
     },
@@ -49,7 +48,7 @@ export default types
     },
     addOpenNode(url) {
       // add all parent nodes
-      let addedOpenNodes = []
+      const addedOpenNodes = []
       for (let i = 1; i <= url.length; i++) {
         addedOpenNodes.push(url.slice(0, i))
       }

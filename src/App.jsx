@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
+import { useNavigate } from 'react-router-dom'
 
 import { Provider as UrqlProvider } from 'urql'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
-import { registerLocale, setDefaultLocale } from 'react-datepicker'
-import { de } from 'date-fns/locale'
+import { Routes, Route } from 'react-router-dom'
 
 import Notifications from './components/Notifications'
 
@@ -20,7 +20,14 @@ import { Provider as MobxProvider } from './storeContext'
 import initiateApp from './utils/initiateApp'
 import initiateDb from './utils/initiateDb'
 
-const App = ({ element }) => {
+import Home from './routes/index.js'
+import VermehrungIndex from './routes/Vermehrung'
+import Dokumentation from './routes/Dokumentation'
+import FourOhFour from './routes/404'
+
+const App = () => {
+  const navigate = useNavigate()
+
   const [store, setStore] = useState(null)
   const [database, setDatabase] = useState(null)
 
@@ -30,7 +37,7 @@ const App = ({ element }) => {
     let isActive = true
     let unregister
     console.log('App initiating')
-    initiateApp().then(
+    initiateApp({navigate}).then(
       ({ store: storeReturned, unregister: unregisterReturned }) => {
         if (!isActive) return
 
@@ -53,19 +60,24 @@ const App = ({ element }) => {
   if (!store || !database) return null
 
   return (
-    <DatabaseProvider database={database}>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={materialTheme}>
-          <MobxProvider value={store}>
-            <UrqlProvider value={store.gqlClient}>
-              <GlobalStyle />
-              {element}
-              <Notifications />
-            </UrqlProvider>
-          </MobxProvider>
-        </ThemeProvider>
-      </StyledEngineProvider>
-    </DatabaseProvider>
+      <DatabaseProvider database={database}>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={materialTheme}>
+            <MobxProvider value={store}>
+              <UrqlProvider value={store.gqlClient}>
+                <GlobalStyle />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="Dokumentation/*" element={<Dokumentation />} />
+                  <Route path="Vermehrung/*" element={<VermehrungIndex />} />
+                  <Route path="*" element={<FourOhFour />} />
+                </Routes>
+                <Notifications />
+              </UrqlProvider>
+            </MobxProvider>
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </DatabaseProvider>
   )
 }
 

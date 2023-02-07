@@ -6,11 +6,19 @@ const GlobalStyle = () => (
     styles={css`
       html {
         overflow: hidden !important;
+        height: 100%;
       }
 
-      #___gatsby {
+      body {
+        margin: 0;
+        font-family: Roboto, sans-serif, system-ui;
+        height: 100%;
+      }
+
+      #root {
         /* works in firefox, not yet in chrome. https://caniuse.com/?search=scrollbar-color */
         scrollbar-color: #4a148c rgba(0, 0, 0, 0.4);
+        height: 100%;
       }
 
       /*
@@ -64,8 +72,8 @@ const GlobalStyle = () => (
     */
         html,
         body,
-        #___gatsby,
-        #___gatsby > div {
+        #root,
+        #root > div {
           background-color: white !important;
           margin: 0 !important;
           padding: 0 !important;
