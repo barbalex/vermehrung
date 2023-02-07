@@ -50,6 +50,21 @@ const Root = ({ filter: showFilter }) => {
     showTeilkultur: false,
     showZaehlung: false,
   })
+
+  const {
+    showArt,
+    showEvent,
+    showGarten,
+    showHerkunft,
+    showKultur,
+    showLieferung,
+    showPerson,
+    showSammelLieferung,
+    showSammlung,
+    showTeilkultur,
+    showZaehlung,
+  } = dataState
+
   useEffect(
     () => {
       const userPersonOptionsObservable = user.uid
@@ -135,19 +150,6 @@ const Root = ({ filter: showFilter }) => {
       user,
     ],
   )
-  const {
-    showArt,
-    showEvent,
-    showGarten,
-    showHerkunft,
-    showKultur,
-    showLieferung,
-    showPerson,
-    showSammelLieferung,
-    showSammlung,
-    showTeilkultur,
-    showZaehlung,
-  } = dataState
 
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value

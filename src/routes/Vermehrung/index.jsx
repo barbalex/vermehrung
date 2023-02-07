@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import CircularProgress from '@mui/material/CircularProgress'
+import { useLocation } from 'react-router-dom'
 
 import StoreContext from '../../storeContext'
 import Layout from '../../components/Layout'
@@ -50,7 +51,8 @@ async function persist() {
   )
 }
 
-const VermehrungIndex = ({ location }) => {
+const VermehrungIndex = () => {
+  const { pathname } = useLocation()
   const store = useContext(StoreContext)
   const {
     gettingAuthUser,
@@ -74,7 +76,6 @@ const VermehrungIndex = ({ location }) => {
 
   const existsUser = !!user?.uid
 
-  const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
 
   // on first render set openNodes
