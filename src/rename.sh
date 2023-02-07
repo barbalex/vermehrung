@@ -1,0 +1,1 @@
+for x in *.js; do mv "$x" "${x%.js}.jsx"; done

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import 'isomorphic-fetch'
 import { observer } from 'mobx-react-lite'
 import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 
@@ -9,20 +8,8 @@ import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
-import 'react-datepicker/dist/react-datepicker.css'
-
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
 
 import Notifications from './components/Notifications'
-
-// see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
-import '@fontsource/roboto-mono'
-import '@fontsource/roboto-mono/700.css'
-// see: https://github.com/fontsource/fontsource/tree/master/packages/roboto-mono
-import '@fontsource/roboto'
-import '@fontsource/roboto/500.css'
-import '@fontsource/roboto/700.css'
 
 import materialTheme from './utils/materialTheme'
 
@@ -32,28 +19,6 @@ import { Provider as MobxProvider } from './storeContext'
 
 import initiateApp from './utils/initiateApp'
 import initiateDb from './utils/initiateDb'
-
-registerLocale('de', de)
-setDefaultLocale('de')
-
-if (typeof window !== 'undefined') {
-  // inform users of old browsers
-  const browserUpdateConfiguration = {
-    required: { e: -2, f: -2, o: -2, s: -2, c: -2 },
-    text: {
-      msg: 'Ihr Browser ({brow_name}) ist veraltet.',
-      msgmore:
-        'Aktualisieren Sie ihn bitte für mehr Sicherheit, Geschwindigkeit und weil vermehrung.ch das voraussetzt.',
-      bupdate: 'Browser aktualisieren',
-      bignore: 'Ignorieren',
-    },
-    style: 'bottom',
-    //test: true,
-  }
-  import('browser-update').then((module) =>
-    module.default(browserUpdateConfiguration),
-  )
-}
 
 const App = ({ element }) => {
   const [store, setStore] = useState(null)
