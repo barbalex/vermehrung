@@ -14,7 +14,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-const recreatePersistedStore = async ({ store }) => {
+const recreatePersistedStore = async ({ store, navigate }) => {
   console.log('recreatePersistedStore running')
   let unregisterAuthObserver = () => {}
   const {
