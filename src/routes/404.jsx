@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import Typography from '@mui/material/Typography'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 
