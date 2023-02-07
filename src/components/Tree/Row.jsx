@@ -7,7 +7,7 @@ import {
   MdMoreHoriz as MoreHorizIcon,
 } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
-//import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
+import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
 import { of as $of } from 'rxjs'
 
@@ -25,14 +25,6 @@ import deleteDataset from './delete'
 import signup from '../../utils/signup'
 import deleteAccount from '../../utils/deleteAccount'
 import setPassword from '../../utils/setPassword'
-// using file copied from own build
-// When using v2.14.0 get Error in production: https://github.com/vkbansal/react-contextmenu/issues/284, https://github.com/gatsbyjs/gatsby/issues/19618. 
-// For better solution see: https://github.com/vkbansal/react-contextmenu/issues/284#issuecomment-670711499
-import {
-  ContextMenuTrigger,
-  ContextMenu,
-  MenuItem,
-} from '../../utils/react-contextmenu'
 
 const Container = styled.div`
   padding-right: 4px;

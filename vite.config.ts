@@ -76,9 +76,10 @@ export default defineConfig({
     react({
       jsxImportSource: '@emotion/react',
       babel: {
-        parserOpts: {
-          plugins: ['decorators-legacy', 'classProperties'],
-        },
+        plugins: [
+          ['@babel/plugin-proposal-decorators', { legacy: true }],
+          ['@babel/plugin-proposal-class-properties', { loose: true }],
+        ],
       },
     }),
   ],
