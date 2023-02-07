@@ -3,7 +3,7 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import { FaBook } from 'react-icons/fa'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
@@ -40,10 +40,11 @@ const DocuButton = ({ asMenu }) => {
         component={Link}
         to="/Dokumentation/"
         title="Dokumentation"
-        size="large">
+        size="large"
+      >
         <FaBook />
       </IconButton>
-    );
+    )
   }
 
   return (

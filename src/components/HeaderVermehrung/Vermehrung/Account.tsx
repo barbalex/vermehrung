@@ -9,7 +9,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import { FaUserCircle as UserIcon, FaExclamationCircle } from 'react-icons/fa'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -36,7 +36,6 @@ const RiskyButton = styled(Button)`
 const Account = () => {
   const store = useContext(StoreContext)
   const { user, online, queuedQueries, firebaseAuth } = store
-
 
   const userPerson = useLiveQuery(
     async () =>

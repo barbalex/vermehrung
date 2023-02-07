@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { FaChevronRight } from 'react-icons/fa'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import StoreContext from '../../../../storeContext'
 import ExportMenu from './Export'

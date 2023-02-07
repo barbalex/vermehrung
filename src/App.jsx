@@ -20,7 +20,7 @@ import { Provider as MobxProvider } from './storeContext'
 import initiateApp from './utils/initiateApp'
 import initiateDb from './utils/initiateDb'
 
-import Home from './routes/index.js'
+import Home from './routes/index.jsx'
 import VermehrungIndex from './routes/Vermehrung'
 import Dokumentation from './routes/Dokumentation'
 import FourOhFour from './routes/404'
@@ -33,11 +33,12 @@ const App = () => {
 
   console.log('App rendering')
 
+  // TODO: move this to the Vermehrung route as in vermehrung_vite
   useEffect(() => {
     let isActive = true
     let unregister
     console.log('App initiating')
-    initiateApp({navigate}).then(
+    initiateApp({ navigate }).then(
       ({ store: storeReturned, unregister: unregisterReturned }) => {
         if (!isActive) return
 
@@ -60,24 +61,24 @@ const App = () => {
   if (!store || !database) return null
 
   return (
-      <DatabaseProvider database={database}>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={materialTheme}>
-            <MobxProvider value={store}>
-              <UrqlProvider value={store.gqlClient}>
-                <GlobalStyle />
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="Dokumentation/*" element={<Dokumentation />} />
-                  <Route path="Vermehrung/*" element={<VermehrungIndex />} />
-                  <Route path="*" element={<FourOhFour />} />
-                </Routes>
-                <Notifications />
-              </UrqlProvider>
-            </MobxProvider>
-          </ThemeProvider>
-        </StyledEngineProvider>
-      </DatabaseProvider>
+    <DatabaseProvider database={database}>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={materialTheme}>
+          <MobxProvider value={store}>
+            <UrqlProvider value={store.gqlClient}>
+              <GlobalStyle />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="Dokumentation/*" element={<Dokumentation />} />
+                <Route path="Vermehrung/*" element={<VermehrungIndex />} />
+                <Route path="*" element={<FourOhFour />} />
+              </Routes>
+              <Notifications />
+            </UrqlProvider>
+          </MobxProvider>
+        </ThemeProvider>
+      </StyledEngineProvider>
+    </DatabaseProvider>
   )
 }
 

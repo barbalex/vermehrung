@@ -1,11 +1,24 @@
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
-import { VitePWA } from 'vite-plugin-pwa';
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+import { VitePWA } from 'vite-plugin-pwa'
 import svgrPlugin from 'vite-plugin-svgr'
+// import babel from 'vite-plugin-babel'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    // babel({
+    //   babelConfig: {
+    //     babelrc: false,
+    //     configFile: false,
+    //     plugins: [
+    //       [
+    //         '@babel/plugin-proposal-decorators',
+    //         { loose: true, version: '2022-03' },
+    //       ],
+    //     ],
+    //   },
+    // }),
     svgrPlugin({
       svgrOptions: {
         icon: true,
@@ -17,7 +30,12 @@ export default defineConfig({
         sourcemap: true,
       },
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+      includeAssets: [
+        'favicon.svg',
+        'favicon.ico',
+        'robots.txt',
+        'apple-touch-icon.png',
+      ],
       // https://developer.mozilla.org/en-US/docs/Web/Manifest
       manifest: {
         name: 'vermehrung.ch',
@@ -55,6 +73,13 @@ export default defineConfig({
         //enabled: true,
       },
     }),
-    react(),
+    react({
+      jsxImportSource: '@emotion/react',
+      babel: {
+        parserOpts: {
+          plugins: ['decorators-legacy', 'classProperties'],
+        },
+      },
+    }),
   ],
-});
+})

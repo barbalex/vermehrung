@@ -1,7 +1,7 @@
 import React from 'react'
 import Typography from '@mui/material/Typography'
 import MaterialCard from '@mui/material/Card'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import constants from '../utils/constants'

@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import Input from '@mui/material/Input'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes, FaFilter } from 'react-icons/fa'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../../../storeContext'
@@ -38,9 +38,10 @@ const StyledDeleteFilterIcon = styled(FaTimes)`
 const Filter = () => {
   const store = useContext(StoreContext)
   const { docFilter, setDocFilter, docsCount, docsFilteredCount } = store
-  const onChange = useCallback((e) => setDocFilter(e.target.value), [
-    setDocFilter,
-  ])
+  const onChange = useCallback(
+    (e) => setDocFilter(e.target.value),
+    [setDocFilter],
+  )
   const onClickEmptyFilter = useCallback(() => setDocFilter(''), [setDocFilter])
 
   return (

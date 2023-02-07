@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton'
 
 import MenuItem from '@mui/material/MenuItem'
 import { MdMenu } from 'react-icons/md'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Menu from './Menu'
@@ -43,12 +43,13 @@ const MenuComponent = ({ asMenu }) => {
         aria-haspopup="true"
         title="Menu"
         onClick={onClickMenu}
-        size="large">
+        size="large"
+      >
         <Icon />
       </IconButton>
       <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(MenuComponent)
