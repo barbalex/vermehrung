@@ -1,5 +1,4 @@
 import localForage from 'localforage'
-import { navigate } from 'gatsby'
 import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import persist from 'mst-persist'

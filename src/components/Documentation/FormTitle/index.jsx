@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { navigate } from 'gatsby'
+import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -31,11 +31,13 @@ const TitleSymbols = styled.div`
 `
 
 const DocumentationFormTitle = ({ location }) => {
+  const navigate = useNavigate()
+
   const onClickUp = useCallback(() => {
     const path = location.pathname.split('/').filter((e) => !!e)
     const newPath = `/${path.slice(0, -1).join('/')}`
     navigate(newPath)
-  }, [location.pathname])
+  }, [location.pathname, navigate])
 
   return (
     <TitleContainer>

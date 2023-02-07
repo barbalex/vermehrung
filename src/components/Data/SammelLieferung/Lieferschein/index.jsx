@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import { StaticImage } from 'gatsby-plugin-image'
 import { DateTime } from 'luxon'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -17,6 +16,8 @@ import StoreContext from '../../../../storeContext'
 import lieferungSort from '../../../../utils/lieferungSort'
 import personFullname from '../../../../utils/personFullname'
 import constants from '../../../../utils/constants'
+import ProgressiveImg from '../../../shared/ProgressiveImg'
+import image from '../../../../images/toposLogo.png'
 
 const Container = styled.div`
   overflow: auto;
@@ -151,12 +152,12 @@ const Lieferschein = ({ row }) => {
   return (
     <Container>
       <PageContainer className="querformat printer-content">
-        <StaticImage
-          src="../../../../images/toposLogo.png"
+        <ProgressiveImg
+          src={image}
+          placeholderSrc={image}
           alt="topos Logo"
-          width={500}
-          height={87}
-          layout="fixed"
+          width="500px"
+          height="87px"
         />
         <Title>Lieferschein</Title>
         <HeaderRow>
