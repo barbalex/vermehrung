@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from './ErrorBoundary'
 
 const Container = styled.div`
   padding-top: 10px;
