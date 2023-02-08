@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
 import StoreContext from '../../../../storeContext'
-import UpSvg from '../../../../svg/to_up.inline.svg'
-import LiDownSvg from '../../../../svg/to_li_down.inline.svg'
+import { ReactComponent as UpSvg } from '../../../../svg/to_up.inline.svg'
+import { ReactComponent as LiDownSvg } from '../../../../svg/to_li_down.inline.svg'
 
 const SlNavButtons = () => {
   const store = useContext(StoreContext)
@@ -20,14 +20,20 @@ const SlNavButtons = () => {
     [activeNodeArray, setActiveNodeArray],
   )
 
-  return <>
-    <IconButton title="Zur Liste" onClick={onClickUp} size="large">
-      <UpSvg />
-    </IconButton>
-    <IconButton title="Zu den Lieferungen" onClick={onClickToLieferungen} size="large">
-      <LiDownSvg />
-    </IconButton>
-  </>;
+  return (
+    <>
+      <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+        <UpSvg />
+      </IconButton>
+      <IconButton
+        title="Zu den Lieferungen"
+        onClick={onClickToLieferungen}
+        size="large"
+      >
+        <LiDownSvg />
+      </IconButton>
+    </>
+  )
 }
 
 export default observer(SlNavButtons)

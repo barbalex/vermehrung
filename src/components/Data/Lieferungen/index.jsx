@@ -14,7 +14,7 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import FilterNumbers from '../../shared/FilterNumbers'
 import exists from '../../../utils/exists'
-import UpSvg from '../../../svg/to_up.inline.svg'
+import { ReactComponent as UpSvg } from '../../../svg/to_up.inline.svg'
 import tableFilter from '../../../utils/tableFilter'
 import lieferungSort from '../../../utils/lieferungSort'
 import constants from '../../../utils/constants'
@@ -159,7 +159,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
       try {
         sl = await db.get('sammel_lieferung').find(slId)
       } catch {}
-      let additionalValuesToSet = {}
+      const additionalValuesToSet = {}
 
       const entries = Object.entries(sl)
         .filter(
