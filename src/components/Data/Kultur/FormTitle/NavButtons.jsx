@@ -39,7 +39,9 @@ const KulturNavButtons = ({ row }) => {
     [activeNodeArray, setActiveNodeArray],
   )
 
-  const [dataState, setDataState] = useState({ kulturOption })
+  const [dataState, setDataState] = useState({ kulturOption: undefined })
+  const { kulturOption } = dataState
+
   useEffect(() => {
     const kOObservable = row.kultur_option.observe()
     const subscription = kOObservable.subscribe((kulturOption) =>
@@ -48,7 +50,6 @@ const KulturNavButtons = ({ row }) => {
 
     return () => subscription?.unsubscribe?.()
   }, [row.kultur_option])
-  const { kulturOption } = dataState
 
   return (
     <>

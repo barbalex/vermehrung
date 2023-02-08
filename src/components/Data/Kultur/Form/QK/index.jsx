@@ -56,8 +56,10 @@ const KulturQk = ({ kultur }) => {
 
   const [dataState, setDataState] = useState({
     qks: [],
-    userPersonOption,
+    userPersonOption: undefined,
   })
+  const { qks, userPersonOption } = dataState
+
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
@@ -81,7 +83,6 @@ const KulturQk = ({ kultur }) => {
 
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
-  const { qks, userPersonOption } = dataState
   const qkChoosens = qks.filter((qk) =>
     userPersonOption.kultur_qk_choosen.includes(qk.id),
   )
