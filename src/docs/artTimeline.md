@@ -1,10 +1,3 @@
----
-slug: 'zeitachse-art'
-date: '2019-09-29'
-title: 'Zeit-Achse für Arten'
-sort1: 3
----
-
 ### Ziele
 
 - [Projekt-Ziele](/ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt"

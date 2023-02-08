@@ -1,10 +1,3 @@
----
-slug: 'events'
-date: '2019-10-04'
-title: 'Events'
-sort1: 12
----
-
 ### Ziele
 
 - [Projekt-Ziel](/ziele) 5: "Wesentliche Vorgänge sind dokumentiert."
