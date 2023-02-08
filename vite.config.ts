@@ -44,25 +44,7 @@ export default defineConfig({
         background_color: '#2e0c58',
         theme_color: '#2e0c58',
         display: 'minimal-ui',
-        // icon: 'src/images/seedling.png',
-        icons: [
-          {
-            src: 'android-chrome-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: 'android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable',
-          },
-        ],
+        icon: 'src/images/seedling.png',
         include_favicon: true,
         lang: 'de-CH',
         categories: ['business', 'productivity'],
