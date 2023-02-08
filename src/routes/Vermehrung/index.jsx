@@ -5,7 +5,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { useLocation } from 'react-router-dom'
 
 import StoreContext from '../../storeContext'
-import Layout from '../../components/Layout'
 import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../../utils/openNodesFromActiveNodeArray'
 import initializeSubscriptions from '../../utils/initializeSubscriptions'
@@ -118,13 +117,11 @@ const VermehrungIndex = () => {
   if (gettingAuthUser) {
     return (
       <ErrorBoundary>
-        <Layout>
-          <SpinnerContainer>
-            <CircularProgress />
-            {/* <SpinnerText>{isIOS ? 'prüfe' : 'autorisiere'}</SpinnerText> */}
-            <SpinnerText>autorisiere</SpinnerText>
-          </SpinnerContainer>
-        </Layout>
+        <SpinnerContainer>
+          <CircularProgress />
+          {/* <SpinnerText>{isIOS ? 'prüfe' : 'autorisiere'}</SpinnerText> */}
+          <SpinnerText>autorisiere</SpinnerText>
+        </SpinnerContainer>
       </ErrorBoundary>
     )
   }
@@ -132,11 +129,9 @@ const VermehrungIndex = () => {
   if (!existsUser) {
     return (
       <ErrorBoundary>
-        <Layout>
-          <LoginContainer>
-            <Login />
-          </LoginContainer>
-        </Layout>
+        <LoginContainer>
+          <Login />
+        </LoginContainer>
       </ErrorBoundary>
     )
   }
@@ -144,13 +139,11 @@ const VermehrungIndex = () => {
   if (online && !initialDataQueried) {
     return (
       <ErrorBoundary>
-        <Layout>
-          <SpinnerContainer>
-            <CircularProgress />
-            <SpinnerText>lade Daten für offline-Nutzung</SpinnerText>
-            <SpinnerText2>{tableNames(initiallyQuerying)}</SpinnerText2>
-          </SpinnerContainer>
-        </Layout>
+        <SpinnerContainer>
+          <CircularProgress />
+          <SpinnerText>lade Daten für offline-Nutzung</SpinnerText>
+          <SpinnerText2>{tableNames(initiallyQuerying)}</SpinnerText2>
+        </SpinnerContainer>
       </ErrorBoundary>
     )
   }
@@ -174,11 +167,9 @@ const VermehrungIndex = () => {
   if (showQueuedQueries) {
     return (
       <>
-        <Layout>
-          <Container>
-            <QueuedQueries />
-          </Container>
-        </Layout>
+        <Container>
+          <QueuedQueries />
+        </Container>
         <ApiDetector />
       </>
     )
@@ -186,9 +177,7 @@ const VermehrungIndex = () => {
 
   return (
     <ErrorBoundary>
-      <Layout>
-        <VermehrungComponent />
-      </Layout>
+      <VermehrungComponent />
       <ApiDetector />
     </ErrorBoundary>
   )
