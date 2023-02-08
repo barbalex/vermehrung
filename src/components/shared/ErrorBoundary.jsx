@@ -29,11 +29,7 @@ const Pre = styled.pre`
   background-color: rgba(128, 128, 128, 0.09);
 `
 
-const onReload = () => {
-  if (typeof window !== 'undefined') {
-    window.location.reload(true)
-  }
-}
+const onReload = () => window.location.reload(true)
 
 const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   // ISSUE:
