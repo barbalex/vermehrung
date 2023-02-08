@@ -1,10 +1,3 @@
----
-slug: 'datenschutz'
-date: '2020-07-21'
-title: 'Datenschutz'
-sort1: 31
----
-
 Weil eine Datenschutzvereinbarung nötig und rechtlich heikel ist, habe ich nachfolgend den Text aus einer Vorlage kopiert und leicht angepasst. Im Zweifel gilt der vernünftige Menschenverstand.<br/><br/>
 
 This Privacy Policy describes Our policies and procedures on the

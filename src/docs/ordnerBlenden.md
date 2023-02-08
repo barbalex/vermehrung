@@ -1,10 +1,3 @@
----
-slug: "ordner-blenden"
-date: "2019-12-28"
-title: "Ordner ein- und ausblenden"
-sort1: 14
----
-
 ### Wieso
 Nicht jeder nutzt alle Features. Features, die nicht verwendet werden, verringern die Übersicht, lenken ab und können verwirren.<br/><br/>
 
