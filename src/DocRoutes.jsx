@@ -18,6 +18,8 @@ import OrdnerBlenden from './components/Documentation/docs/OrdnerBlenden'
 import Planen from './components/Documentation/docs/Planen'
 import GenetischeVielfalt from './components/Documentation/docs/GenetischeVielfalt'
 import QualitaetsKontrollen from './components/Documentation/docs/QualitatesKontrollen'
+import VermehrungErinnertSich from './components/Documentation/docs/VermehrungErinnertSich'
+import OpenSource from './components/Documentation/docs/OpenSource'
 
 const DocRoutes = () => (
   <>
@@ -42,6 +44,8 @@ const DocRoutes = () => (
     <Route path="planen" element={<Planen />} />
     <Route path="genetische-vielfalt" element={<GenetischeVielfalt />} />
     <Route path="qualitaets-kontrollen" element={<QualitaetsKontrollen />} />
+    <Route path="gedaechtnis" element={<VermehrungErinnertSich />} />
+    <Route path="open-source" element={<OpenSource />} />
   </>
 )
 
