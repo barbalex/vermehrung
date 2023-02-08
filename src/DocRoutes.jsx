@@ -21,6 +21,7 @@ import QualitaetsKontrollen from './components/Documentation/docs/QualitatesKont
 import VermehrungErinnertSich from './components/Documentation/docs/VermehrungErinnertSich'
 import OpenSource from './components/Documentation/docs/OpenSource'
 import FehlerMelden from './components/Documentation/docs/FehlerMelden'
+import Schnittstellen from './components/Documentation/docs/Schnittstellen'
 
 const DocRoutes = () => (
   <>
@@ -48,6 +49,7 @@ const DocRoutes = () => (
     <Route path="gedaechtnis" element={<VermehrungErinnertSich />} />
     <Route path="open-source" element={<OpenSource />} />
     <Route path="fehler-ideen" element={<FehlerMelden />} />
+    <Route path="schnittstellen" element={<Schnittstellen />} />
   </>
 )
 
