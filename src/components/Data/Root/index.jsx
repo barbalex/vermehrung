@@ -150,7 +150,6 @@ const Root = ({ filter: showFilter }) => {
       showTeilkultur,
       showZaehlung,
       user,
-      // activeNodeArray,
     ],
   )
 

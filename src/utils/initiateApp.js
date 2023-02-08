@@ -108,8 +108,6 @@ const initiateApp = async ({ navigate }) => {
     gqlWsClient.dispose()
   }
 
-  store.setNavigate(navigate)
-
   return { store, unregister }
 }
 

@@ -65,7 +65,7 @@ const VermehrungIndex = () => {
   } = store
   const {
     setActiveNodeArray,
-    setLastTouchedNode,
+    setLastActiveNodeArray,
     setOpenNodes,
     wsReconnectCount,
   } = store.tree
@@ -85,13 +85,8 @@ const VermehrungIndex = () => {
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
     // set last touched node in case project is directly opened on it
-    setLastTouchedNode(activeNodeArray)
+    setLastActiveNodeArray(activeNodeArray)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    // user pushed back button > update activeNodeArray
-    setActiveNodeArray(activeNodeArray, 'nonavigate')
-  }, [activeNodeArray, pathname, setActiveNodeArray])
 
   useEffect(() => {
     // console.log('vermehrung, subscription effect: authorizing:', authorizing)

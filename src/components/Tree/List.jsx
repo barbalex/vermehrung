@@ -34,15 +34,15 @@ const Tree = ({
   const {
     singleRowHeight,
     activeNodeArray: aNAProxy,
-    lastTouchedNode: lastTouchedNodeProxy,
+    lastActiveNodeArray: lastTouchedNodeProxy,
   } = store.tree
   const aNA = getSnapshot(aNAProxy)
   const activeNode = nodes.find((n) => isEqual(n.url, aNA))
 
   const listRef = useRef(null)
-  const lastTouchedNode = getSnapshot(lastTouchedNodeProxy)
-  // when loading on url, lastTouchedNode may not be set
-  const urlToFocus = lastTouchedNode.length ? lastTouchedNode : aNA
+  const lastActiveNodeArray = getSnapshot(lastTouchedNodeProxy)
+  // when loading on url, lastActiveNodeArray may not be set
+  const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
   const nodeIndex = findIndex(nodes, (node) => isEqual(node.url, urlToFocus))
   useEffect(() => {
     if (nodeIndex > -1) {
