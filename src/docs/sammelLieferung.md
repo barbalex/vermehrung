@@ -1,10 +1,3 @@
----
-slug: 'sammel-lieferungen'
-date: '2019-10-04'
-title: 'Sammel-Lieferungen'
-sort1: 11
----
-
 ### 1 Ziele
 
 - [Projekt-Ziel](/ziele) 6: "Effiziente ... Erfassung und Nutzung."<br/>
