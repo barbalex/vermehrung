@@ -3,8 +3,8 @@ import { DokuDate } from '..'
 
 const GenetischeVielfalt = () => (
   <>
-    <h1>Herkünfte</h1>
-    <DokuDate>17.01.2020</DokuDate>
+    <h1>Genetische Vielfalt</h1>
+    <DokuDate>04.10.2019</DokuDate>
     <p>
       <Link to="/Dokumentation/ziele">Projekt-Ziel</Link> 2 lautet: &quot;Die
       genetische Vielfalt von Kulturen ist bekannt.&quot;

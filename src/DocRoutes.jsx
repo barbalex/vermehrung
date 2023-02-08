@@ -17,6 +17,7 @@ import FelderBlenden from './components/Documentation/docs/FelderBlenden'
 import OrdnerBlenden from './components/Documentation/docs/OrdnerBlenden'
 import Planen from './components/Documentation/docs/Planen'
 import GenetischeVielfalt from './components/Documentation/docs/GenetischeVielfalt'
+import QualitaetsKontrollen from './components/Documentation/docs/QualitatesKontrollen'
 
 const DocRoutes = () => (
   <>
@@ -40,6 +41,7 @@ const DocRoutes = () => (
     <Route path="ordner-blenden" element={<OrdnerBlenden />} />
     <Route path="planen" element={<Planen />} />
     <Route path="genetische-vielfalt" element={<GenetischeVielfalt />} />
+    <Route path="qualitaets-kontrollen" element={<QualitaetsKontrollen />} />
   </>
 )
 
