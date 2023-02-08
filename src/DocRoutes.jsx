@@ -22,6 +22,10 @@ import VermehrungErinnertSich from './components/Documentation/docs/VermehrungEr
 import OpenSource from './components/Documentation/docs/OpenSource'
 import FehlerMelden from './components/Documentation/docs/FehlerMelden'
 import Schnittstellen from './components/Documentation/docs/Schnittstellen'
+import Pwa from './components/Documentation/docs/Pwa'
+import Ios from './components/Documentation/docs/Ios'
+import Offline from './components/Documentation/docs/Offline'
+import OfflineWie from './components/Documentation/docs/OfflineWie'
 
 const DocRoutes = () => (
   <>
@@ -50,6 +54,10 @@ const DocRoutes = () => (
     <Route path="open-source" element={<OpenSource />} />
     <Route path="fehler-ideen" element={<FehlerMelden />} />
     <Route path="schnittstellen" element={<Schnittstellen />} />
+    <Route path="pwa" element={<Pwa />} />
+    <Route path="ios" element={<Ios />} />
+    <Route path="offline" element={<Offline />} />
+    <Route path="offline-wie" element={<OfflineWie />} />
   </>
 )
 
