@@ -1,10 +1,3 @@
----
-slug: 'herkuenfte'
-date: '2020-01-17'
-title: 'Herkünfte'
-sort1: 5
----
-
 ### Ziele
 
 - [Projekt-Ziel](/ziele) 1: Herkünfte sind bekannt und werden innerhalb von Kulturen nicht vermischt.<br/>
