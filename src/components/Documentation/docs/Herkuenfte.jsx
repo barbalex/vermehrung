@@ -3,8 +3,8 @@ import { DokuDate } from '..'
 
 const Herkuenfte = () => (
   <>
-    <h1>Ziel 1: Herkünfte</h1>
-    <DokuDate>04.10.2019</DokuDate>
+    <h1>Herkünfte</h1>
+    <DokuDate>17.01.2020</DokuDate>
     <h3>Ziele</h3>
     <ul>
       <li>
