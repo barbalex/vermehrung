@@ -9,6 +9,7 @@ import ZeitachseFuerKulturen from './components/Documentation/docs/ZeitachseFuer
 import Sammlungen from './components/Documentation/docs/Sammlungen'
 import Kulturen from './components/Documentation/docs/Kulturen'
 import Zaehlungen from './components/Documentation/docs/Zaehlungen'
+import Teilkulturen from './components/Documentation/docs/Teilkulturen'
 
 const DocRoutes = () => (
   <>
@@ -24,6 +25,7 @@ const DocRoutes = () => (
     <Route path="sammlungen" element={<Sammlungen />} />
     <Route path="kulturen" element={<Kulturen />} />
     <Route path="zaehlungen" element={<Zaehlungen />} />
+    <Route path="teilkulturen" element={<Teilkulturen />} />
   </>
 )
 
