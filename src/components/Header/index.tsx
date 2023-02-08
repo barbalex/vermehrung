@@ -9,6 +9,7 @@ import constants from '../../utils/constants'
 
 import Home from './Home'
 import Doku from './Doku'
+import Vermehrung from './Vermehrung'
 
 const StyledAppBar = styled(AppBar)`
   min-height: ${constants.appBarHeight}px !important;
@@ -26,11 +27,21 @@ const Header = () => {
   const location = useLocation()
   const pathname = location.pathname
   const isHome = pathname === '/'
+  const isVermehrung = pathname.startsWith('/Vermehrung')
+  console.log('Header, pathname:', { pathname, isHome, isVermehrung })
 
   return (
     <ErrorBoundary>
       <StyledAppBar position="static">
-        <Toolbar>{isHome ? <Home location={location} /> : <Doku />}</Toolbar>
+        <Toolbar>
+          {isHome ? (
+            <Home location={location} />
+          ) : isVermehrung ? (
+            <Vermehrung />
+          ) : (
+            <Doku />
+          )}
+        </Toolbar>
       </StyledAppBar>
     </ErrorBoundary>
   )
