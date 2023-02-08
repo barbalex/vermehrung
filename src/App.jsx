@@ -25,6 +25,7 @@ import VermehrungIndex from './routes/Vermehrung'
 import Dokumentation from './routes/Dokumentation'
 import FourOhFour from './routes/404'
 import NavigationSyncController from './components/NavigationSyncController'
+import Layout from './components/Layout'
 
 const App = () => {
   const navigate = useNavigate()
@@ -70,10 +71,12 @@ const App = () => {
             <UrqlProvider value={store.gqlClient}>
               <GlobalStyle />
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="Dokumentation/*" element={<Dokumentation />} />
-                <Route path="Vermehrung/*" element={<VermehrungIndex />} />
-                <Route path="*" element={<FourOhFour />} />
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="Dokumentation/*" element={<Dokumentation />} />
+                  <Route path="Vermehrung/*" element={<VermehrungIndex />} />
+                  <Route path="*" element={<FourOhFour />} />
+                </Route>
               </Routes>
               <NavigationSyncController />
               <Notifications />
