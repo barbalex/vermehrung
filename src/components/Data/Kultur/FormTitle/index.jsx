@@ -23,6 +23,7 @@ const KulturFormTitleChooser = ({
     totalCount: 0,
     filteredCount: 0,
   })
+
   useEffect(() => {
     const hierarchyQuery = gartenIdInActiveNodeArray
       ? [
