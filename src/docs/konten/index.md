@@ -1,10 +1,3 @@
----
-slug: 'konten'
-date: '2020-06-30'
-title: 'Konten und Benutzerrechte'
-sort1: 30
----
-
 ### Begriffe
 
 - **Personen** sind Adressen, welche vielerorts in vermehrung.ch verwendet werden. Zum Beispiel, um den Besitzer eines Gartens zu wählen

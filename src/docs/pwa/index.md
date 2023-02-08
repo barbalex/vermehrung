@@ -1,10 +1,3 @@
----
-slug: 'pwa'
-date: '2020-10-22'
-title: 'Progressive Web App'
-sort1: 22
----
-
 vermehrung.ch ist eine [**Progressive Web App**](https://developers.google.com/web/progressive-web-apps) (PWA).<br/><br/>
 
 "Progressive Web Apps" sind Web-Apps und werden für Browser entwickelt. Weil sie einige zusätzliche Anforderungen erfüllen, können sie je länger je weniger von "normalen" Apps unterschieden werden. Das ist das erklärte Ziel von Google und Microsoft.<br/><br/>
