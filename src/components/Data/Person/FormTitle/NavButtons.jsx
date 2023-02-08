@@ -3,10 +3,10 @@ import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
 import StoreContext from '../../../../storeContext'
-import UpSvg from '../../../../svg/to_up.inline.svg'
-import SaDownSvg from '../../../../svg/to_sa_down.inline.svg'
-import GaDownSvg from '../../../../svg/to_ga_down.inline.svg'
-import LiDownSvg from '../../../../svg/to_li_down.inline.svg'
+import { ReactComponent as UpSvg } from '../../../../svg/to_up.inline.svg'
+import { ReactComponent as SaDownSvg } from '../../../../svg/to_sa_down.inline.svg'
+import { ReactComponent as GaDownSvg } from '../../../../svg/to_ga_down.inline.svg'
+import { ReactComponent as LiDownSvg } from '../../../../svg/to_li_down.inline.svg'
 
 const PersonFormTitleNavButtons = () => {
   const store = useContext(StoreContext)

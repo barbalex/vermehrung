@@ -5,7 +5,7 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
-import UpSvg from '../../../svg/to_up.inline.svg'
+import { ReactComponent as UpSvg } from '../../../svg/to_up.inline.svg'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
