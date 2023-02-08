@@ -15,6 +15,7 @@ import SammelLieferungen from './components/Documentation/docs/SammelLieferungen
 import Events from './components/Documentation/docs/Events'
 import FelderBlenden from './components/Documentation/docs/FelderBlenden'
 import OrdnerBlenden from './components/Documentation/docs/OrdnerBlenden'
+import Planen from './components/Documentation/docs/Planen'
 
 const DocRoutes = () => (
   <>
@@ -36,6 +37,7 @@ const DocRoutes = () => (
     <Route path="events" element={<Events />} />
     <Route path="felder-blenden" element={<FelderBlenden />} />
     <Route path="ordner-blenden" element={<OrdnerBlenden />} />
+    <Route path="planen" element={<Planen />} />
   </>
 )
 
