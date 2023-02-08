@@ -12,6 +12,7 @@ import Zaehlungen from './components/Documentation/docs/Zaehlungen'
 import Teilkulturen from './components/Documentation/docs/Teilkulturen'
 import Lieferungen from './components/Documentation/docs/Lieferungen'
 import SammelLieferungen from './components/Documentation/docs/SammelLieferungen'
+import Events from './components/Documentation/docs/Events'
 
 const DocRoutes = () => (
   <>
@@ -30,6 +31,7 @@ const DocRoutes = () => (
     <Route path="teilkulturen" element={<Teilkulturen />} />
     <Route path="lieferungen" element={<Lieferungen />} />
     <Route path="sammel-lieferungen" element={<SammelLieferungen />} />
+    <Route path="events" element={<Events />} />
   </>
 )
 
