@@ -1,10 +1,3 @@
----
-slug: 'offline-wie'
-date: '2020-12-18'
-title: 'Offline: Wie es funktioniert'
-sort1: 25
----
-
 Zuverlässige Offline-Fähigkeit ist schwer. Nachfolgend das für vermehrung.ch umgesetzte Konzept:<br/><br/>
 
 ### 1. Konflikt-fähige Datenstruktur

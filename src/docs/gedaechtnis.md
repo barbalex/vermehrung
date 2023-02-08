@@ -1,10 +1,3 @@
----
-slug: 'gedaechtnis'
-date: '2019-09-30'
-title: 'vermehrung erinnert sich'
-sort1: 18
----
-
 Beim Arbeiten speichert vermehrung laufend den aktuellen Zustand. Zum Beispiel:
 
 - Welche Äste des Navigations-Baums offen sind

@@ -1,10 +1,3 @@
----
-slug: 'fehler-ideen'
-date: '2019-09-30'
-title: 'Fehler, Ideen, Vorschläge melden'
-sort1: 20
----
-
 Das geht so:
 
 - Auf [GitHub issues](//github.com/barbalex/vermehrung/issues)...
