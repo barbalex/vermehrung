@@ -161,7 +161,7 @@ const KulturForm = ({
           }),
         )
         // only consider kulturen with both art and herkunft chosen
-        let thisGartenKulturs = []
+        const thisGartenKulturs = []
         try {
           await garten.kulturs
             .extend(
@@ -396,12 +396,10 @@ const KulturForm = ({
   )
   const openGenVielfaldDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/genetische-vielfalt`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
 
   const zwischenlagerError = errors.kultur?.zwischenlager?.includes(
