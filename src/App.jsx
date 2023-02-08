@@ -24,6 +24,7 @@ import Home from './routes/index.jsx'
 import VermehrungIndex from './routes/Vermehrung'
 import Dokumentation from './routes/Dokumentation'
 import FourOhFour from './routes/404'
+import NavigationSyncController from './components/NavigationSyncController'
 
 const App = () => {
   const navigate = useNavigate()
@@ -74,6 +75,7 @@ const App = () => {
                 <Route path="Vermehrung/*" element={<VermehrungIndex />} />
                 <Route path="*" element={<FourOhFour />} />
               </Routes>
+              <NavigationSyncController />
               <Notifications />
             </UrqlProvider>
           </MobxProvider>

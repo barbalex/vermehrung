@@ -8,7 +8,7 @@ export default (pathnamePassed) => {
       // need to decode in case of Umlaute
       .map((e) => decodeURIComponent(e))
       // convert numbers to numbers
-      .map((e) => {
+      .map((e) => { 
         if (!isNaN(e)) {
           return +e
         }
