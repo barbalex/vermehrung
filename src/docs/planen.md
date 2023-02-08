@@ -1,10 +1,3 @@
----
-slug: "planen"
-date: "2019-11-15"
-title: "Planen"
-sort1: 15
----
-
 ### Wo
 Die folgenden Vorgänge können geplant werden:
 
