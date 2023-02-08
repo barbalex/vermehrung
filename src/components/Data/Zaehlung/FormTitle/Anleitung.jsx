@@ -9,12 +9,10 @@ import constants from '../../../../utils/constants'
 const ZaehlungAnleitung = ({ asMenu }) => {
   const openZaehlungDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/zaehlungen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
 
   if (asMenu) {
