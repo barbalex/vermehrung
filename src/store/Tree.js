@@ -26,9 +26,10 @@ export default types
       self.widthInPercentOfScreen = val
     },
     setActiveNodeArray(val, nonavigate) {
+      const store = getParent(self, 1)
       self.activeNodeArray = val
       if (!nonavigate) {
-        self.navigate(`/Vermehrung/${val.join('/')}`)
+        store.navigate(`/Vermehrung/${val.join('/')}`)
         self.addOpenNode(val)
       }
     },
