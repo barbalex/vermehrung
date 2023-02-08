@@ -15,6 +15,7 @@ const Row = styled.div`
   border-bottom: ${(props) => (props['data-last'] ? '1px' : 'thin')} solid
     rgba(74, 20, 140, 0.1);
   border-collapse: collapse;
+  box-sizing: border-box;
   margin: -1px 0;
   padding: 10px;
   cursor: pointer;
