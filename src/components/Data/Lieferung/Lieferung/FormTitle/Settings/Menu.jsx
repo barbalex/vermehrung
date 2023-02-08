@@ -71,12 +71,10 @@ const SettingsLieferungMenu = ({ anchorEl, setAnchorEl }) => {
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${constants?.getAppUri()}/felder-blenden`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [setAnchorEl])
 
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
