@@ -118,6 +118,19 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
     setWgs84LongState(wgs84_long || '')
   }, [wgs84_lat, wgs84_long])
 
+  const saveToDb = useCallback(
+    async (geomPoint) => {
+      const fakeEvent = {
+        target: {
+          name: 'geom_point',
+          value: geomPoint,
+        },
+      }
+      originalSaveToDb(fakeEvent)
+    },
+    [originalSaveToDb],
+  )
+
   const saveToDbLv95 = useCallback(
     (x, y) => {
       let geomPoint = null
@@ -219,19 +232,6 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
       }
     },
     [saveToDbWgs84, wgs84LatState, wgs84_long],
-  )
-
-  const saveToDb = useCallback(
-    async (geomPoint) => {
-      const fakeEvent = {
-        target: {
-          name: 'geom_point',
-          value: geomPoint,
-        },
-      }
-      originalSaveToDb(fakeEvent)
-    },
-    [originalSaveToDb],
   )
 
   const [mapMenuAnchorEl, setMapMenuAnchorEl] = React.useState(null)

@@ -49,7 +49,12 @@ const LieferungWer = ({
   const store = useContext(StoreContext)
   const { errors, online, db, filter } = store
 
-  const [dataState, setDataState] = useState({ personWerte: [], row })
+  const [dataState, setDataState] = useState({
+    personWerte: [],
+    row: undefined,
+  })
+  const { row, personWerte } = dataState
+
   useEffect(() => {
     const rowObservable = showFilter
       ? $of(filter.lieferung)
@@ -116,7 +121,6 @@ const LieferungWer = ({
     row?.person_id,
     showFilter,
   ])
-  const { row, personWerte } = dataState
 
   if (!row) return null
 
