@@ -13,6 +13,7 @@ import Teilkulturen from './components/Documentation/docs/Teilkulturen'
 import Lieferungen from './components/Documentation/docs/Lieferungen'
 import SammelLieferungen from './components/Documentation/docs/SammelLieferungen'
 import Events from './components/Documentation/docs/Events'
+import FelderBlenden from './components/Documentation/docs/FelderBlenden'
 
 const DocRoutes = () => (
   <>
@@ -32,6 +33,7 @@ const DocRoutes = () => (
     <Route path="lieferungen" element={<Lieferungen />} />
     <Route path="sammel-lieferungen" element={<SammelLieferungen />} />
     <Route path="events" element={<Events />} />
+    <Route path="felder-blenden" element={<FelderBlenden />} />
   </>
 )
 
