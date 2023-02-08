@@ -28,8 +28,6 @@ const StyledSplitPane = styled(SplitPane)`
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
     z-index: 1;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     width: 7px;
     cursor: col-resize;
