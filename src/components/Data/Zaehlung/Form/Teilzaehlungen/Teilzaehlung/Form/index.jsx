@@ -94,9 +94,11 @@ const TeilzaehlungForm = ({
 
   const [dataState, setDataState] = useState({
     teilkulturWerte: [],
-    kulturOption,
-    row,
+    kulturOption: undefined,
+    row: undefined,
   })
+  const { teilkulturWerte, kulturOption, row } = dataState
+
   useEffect(() => {
     const teilkultursObservable = db
       .get('teilkultur')
@@ -152,7 +154,6 @@ const TeilzaehlungForm = ({
     row?.teilkultur,
     row?.teilkultur_id,
   ])
-  const { teilkulturWerte, kulturOption, row } = dataState
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)

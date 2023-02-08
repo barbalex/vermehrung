@@ -27,7 +27,7 @@ const HistoryButton = ({ asMenu, id, showHistory, setShowHistory, table }) => {
   const store = useContext(StoreContext)
   const { online, db } = store
 
-  const [dataState, setDataState] = useState({ row: {} })
+  const [dataState, setDataState] = useState({ row: undefined })
   useEffect(() => {
     const observable = id ? db.get(table).findAndObserve(id) : $of(null)
     const subscription = observable.subscribe((row) => setDataState({ row }))
