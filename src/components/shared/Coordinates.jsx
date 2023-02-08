@@ -239,11 +239,10 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
 
   const onClickGeoAdmin = useCallback(() => {
     if (lv95_x && lv95_y) {
-      typeof window !== 'undefined' &&
-        window.open(
-          `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${lv95_x}&X=${lv95_y}&zoom=10&crosshair=circle`,
-          'target="_blank"',
-        )
+      window.open(
+        `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${lv95_x}&X=${lv95_y}&zoom=10&crosshair=circle`,
+        'target="_blank"',
+      )
     }
     setMapMenuAnchorEl(null)
   }, [lv95_x, lv95_y])
@@ -252,11 +251,10 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
     if (lv95_x && lv95_y) {
       // BEWARE: maps.zh.ch seems to only work in production
       // nope. Does it only work for certain urls??????
-      lv95_y - typeof window !== 'undefined' &&
-        window.open(
-          `https://maps.zh.ch/?x=${lv95_x}&y=${lv95_y}&scale=3000&markers=ring`,
-          'target="_blank"',
-        )
+      window.open(
+        `https://maps.zh.ch/?x=${lv95_x}&y=${lv95_y}&scale=3000&markers=ring`,
+        'target="_blank"',
+      )
     }
     setMapMenuAnchorEl(null)
   }, [lv95_x, lv95_y])

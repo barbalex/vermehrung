@@ -57,12 +57,10 @@ const QueuedQueries = () => {
   )
   const openDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/offline`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
 
   if (!queuedQueries.size) {
