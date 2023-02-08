@@ -117,7 +117,6 @@ const ApQkQk = ({ artId, qkChoosens }) => {
             <Row key={`${m.text}Index${i}`}>
               <StyledA
                 onClick={() =>
-                  typeof window !== 'undefined' &&
                   window.open(
                     `${constants?.getAppUri()}/Vermehrung/${m.url.join('/')}`,
                   )

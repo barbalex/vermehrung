@@ -91,16 +91,14 @@ const ApQk = ({ artId }) => {
   const openDocs = useCallback((e) => {
     e.stopPropagation()
     const url = `${constants?.getAppUri()}/qualitaets-kontrollen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
 
   const [open, setOpen] = useState(false)
-  let anim = useAnimation()
+  const anim = useAnimation()
   const onClickToggle = useCallback(
     async (e) => {
       e.stopPropagation()
