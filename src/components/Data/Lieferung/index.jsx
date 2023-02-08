@@ -53,6 +53,10 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
     rawRow: undefined,
     userPersonOption: undefined,
   })
+
+  const { row, rawRow, userPersonOption } = dataState
+  const { li_show_sl } = userPersonOption ?? {}
+
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
@@ -78,9 +82,6 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
 
     return () => subscription?.unsubscribe?.()
   }, [db, filter.lieferung, id, row?.sammel_lieferung, showFilter, user])
-
-  const { row, rawRow, userPersonOption } = dataState
-  const { li_show_sl } = userPersonOption ?? {}
 
   if (row?.sammel_lieferung_id && li_show_sl) {
     // this lieferung is part of a sammel_lieferung
