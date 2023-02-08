@@ -9,12 +9,10 @@ import constants from '../../../../utils/constants'
 const KulturAnleitung = ({ asMenu }) => {
   const openHerkunftDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/herkuenfte`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
 
   if (asMenu) {
