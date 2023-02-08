@@ -22,7 +22,6 @@ const ArticleList = ({ articles }) => {
   )
 
   const { pathname } = useLocation()
-  console.log('ArticleList: ', { pathname, articles })
 
   return (
     <Container>
