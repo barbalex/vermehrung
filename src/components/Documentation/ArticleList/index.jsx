@@ -1,24 +1,48 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import List from '@mui/material/List'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
+import { useLocation } from 'react-router-dom'
 
 import Article from './Article'
 import constants from '../../../utils/constants'
+import storeContext from '../../../storeContext'
 
 const Container = styled.div`
   height: calc(100vh - ${constants.appBarHeight}px);
   overflow-y: auto;
 `
 
-const ArticleList = ({ items }) => (
-  <Container>
-    <List component="nav" dense>
-      {items.map(({ node }) => (
-        <Article node={node} key={node.id} />
-      ))}
-    </List>
-  </Container>
-)
+const ArticleList = ({ articles }) => {
+  const store = useContext(storeContext)
+  const { docFilter } = store
+
+  const articlesFiltered = articles.filter(
+    (node) => node.title?.toLowerCase?.()?.includes?.(docFilter) ?? true,
+  )
+
+  const { pathname } = useLocation()
+  console.log('ArticleList: ', { pathname, articles })
+
+  return (
+    <Container>
+      <List component="nav" dense>
+        {articlesFiltered.map((node) => {
+          const isOpen = pathname.includes(node.slug)
+
+          return (
+            <div key={node.slug}>
+              <Article node={node} />
+              {isOpen &&
+                (node.children ?? []).map((child) => (
+                  <Article node={child} key={child.slug} />
+                ))}
+            </div>
+          )
+        })}
+      </List>
+    </Container>
+  )
+}
 
 export default observer(ArticleList)
