@@ -39,6 +39,8 @@ const NavigationSyncController = () => {
 
   // need to update activeNodeArray on every navigation
   useEffect(() => {
+    if (pathname.startsWith('/Dokumentation')) return
+
     const activeNodeArrayFromUrl = getActiveNodeArrayFromUrl(pathname)
 
     if (!isEqual(activeNodeArrayFromUrl, aNA)) {

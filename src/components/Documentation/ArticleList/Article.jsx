@@ -12,7 +12,7 @@ const ListItem = styled(ListItemButton)`
 
 const MenuItem = ({ node }) => {
   const navigate = useNavigate()
-  const { slug, sort2 } = node.frontmatter
+  const { slug, title, children } = node
   const activeUrl = `/Dokumentation/${slug}`
 
   const onClickMenuItem = useCallback(
@@ -21,11 +21,11 @@ const MenuItem = ({ node }) => {
   )
 
   const pathname = window?.location?.pathname?.split('/').filter((a) => !!a)
-  const isParent1 = sort2 === 0
-  const isChild1 = sort2 > 0
+  const isParent = children?.length > 0
+  const isChild = node?.level === 2
   const pathSplit = activeUrl.split('/').filter((a) => !!a)
   const isParentOpen = pathSplit[1] === pathname[1]
-  const isChildClosed = isChild1 && pathSplit[1] !== pathname[1]
+  const isChildClosed = isChild && pathSplit[1] !== pathname[1]
   const active = isEqual(pathname, pathSplit)
 
   if (isChildClosed) return null
@@ -36,13 +36,13 @@ const MenuItem = ({ node }) => {
         onClick={onClickMenuItem}
         selected={active}
         divider
-        ischild1={isChild1.toString()}
+        ischild1={isChild.toString()}
       >
         <ListItemText onClick={onClickMenuItem}>
-          {node?.frontmatter?.title ?? '(Titel fehlt)'}
+          {title ?? '(Titel fehlt)'}
         </ListItemText>
-        {isParent1 && isParentOpen && <FaChevronDown />}
-        {isParent1 && !isParentOpen && <FaChevronRight />}
+        {isParent && isParentOpen && <FaChevronDown />}
+        {isParent && !isParentOpen && <FaChevronRight />}
       </ListItem>
     </>
   )

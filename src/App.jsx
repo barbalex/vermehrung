@@ -22,10 +22,11 @@ import initiateDb from './utils/initiateDb'
 
 import Home from './routes/index.jsx'
 import VermehrungIndex from './routes/Vermehrung'
-import Dokumentation from './routes/Dokumentation'
 import FourOhFour from './routes/404'
 import NavigationSyncController from './components/NavigationSyncController'
 import Layout from './components/Layout'
+import DocRoutes from './DocRoutes'
+import Docs from './components/Documentation'
 
 const App = () => {
   const navigate = useNavigate()
@@ -73,8 +74,10 @@ const App = () => {
               <Routes>
                 <Route element={<Layout />}>
                   <Route path="/" element={<Home />} />
-                  <Route path="Dokumentation/*" element={<Dokumentation />} />
-                  <Route path="Vermehrung/*" element={<VermehrungIndex />} />
+                  <Route path="/Vermehrung/*" element={<VermehrungIndex />} />
+                  <Route path="/Dokumentation/*" element={<Docs />}>
+                    {DocRoutes()}
+                  </Route>
                   <Route path="*" element={<FourOhFour />} />
                 </Route>
               </Routes>
