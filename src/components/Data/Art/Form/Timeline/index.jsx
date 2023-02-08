@@ -38,17 +38,15 @@ const Title = styled.div`
 const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
   const [open, setOpen] = useState(false)
 
-  let anim = useAnimation()
+  const anim = useAnimation()
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
     const url = `${constants?.getAppUri()}/zeitachse-art`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
   const onClickToggle = useCallback(
     async (e) => {
