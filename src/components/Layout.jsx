@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { withResizeDetector } from 'react-resize-detector'
+import { Outlet } from 'react-router-dom'
 
 import StoreContext from '../storeContext'
 import constants from '../utils/constants'
@@ -8,11 +9,12 @@ import constants from '../utils/constants'
 import Header from './Header'
 
 const Container = styled.div`
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 `
 
-const Layout = ({ children, width }) => {
+const Layout = ({ width }) => {
   const store = useContext(StoreContext)
   const { singleColumnView, setSingleColumnView } = store
 
@@ -28,7 +30,7 @@ const Layout = ({ children, width }) => {
   return (
     <Container>
       <Header />
-      {children}
+      <Outlet />
     </Container>
   )
 }
