@@ -1,10 +1,3 @@
----
-slug: 'offline'
-date: '2021-01-29'
-title: 'Offline arbeiten'
-sort1: 24
----
-
 ### Wieso?
 
 Nicht jeder Garten verfügt über WLAN. Nicht jedes Eingabegerät verfügt über mobiles Internet. Zudem gibt es räumliche und manchmal zeitliche Lücken in der Verfügbarkeit von mobilem Internet.<br/><br/>
