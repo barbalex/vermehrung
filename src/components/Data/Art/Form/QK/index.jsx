@@ -54,7 +54,7 @@ const ApQk = ({ artId }) => {
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const [dataState, setDataState] = useState({ qks: [], userPersonOption })
+  const [dataState, setDataState] = useState({ qks: [], userPersonOption: {} })
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
