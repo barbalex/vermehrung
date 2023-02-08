@@ -32,9 +32,11 @@ const ChooseArtQkRow = ({ qk }) => {
   const { user, db } = store
 
   const [dataState, setDataState] = useState({
-    userPersonOption,
+    userPersonOption: undefined,
     artQkChoosen: [],
   })
+  const { userPersonOption, artQkChoosen } = dataState
+
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
@@ -52,7 +54,6 @@ const ChooseArtQkRow = ({ qk }) => {
 
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
-  const { userPersonOption, artQkChoosen } = dataState
 
   const checked = artQkChoosen.includes(qk.id)
 
