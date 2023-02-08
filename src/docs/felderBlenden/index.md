@@ -1,10 +1,3 @@
----
-slug: 'felder-blenden'
-date: '2019-09-20'
-title: 'Felder ein- und ausblenden'
-sort1: 13
----
-
 ### Wieso
 
 Nicht jeder erfasst dieselben Daten. Felder, die nicht verwendet werden, verringern die Übersicht, lenken ab und können verwirren.<br/>

@@ -1,10 +1,3 @@
----
-slug: 'roadmap'
-date: '2020-07-04'
-title: 'Roadmap'
-sort1: 29
----
-
 vermehrung.ch ist (noch) in Entwicklung. Ziel ist, dass ab Juli 2020 damit gearbeitet wird.<br/><br/>
 
 Symbole:
