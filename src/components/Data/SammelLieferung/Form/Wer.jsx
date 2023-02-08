@@ -40,7 +40,12 @@ const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
   const store = useContext(StoreContext)
   const { errors, db, filter } = store
 
-  const [dataState, setDataState] = useState({ personWerte: [], row })
+  const [dataState, setDataState] = useState({
+    personWerte: [],
+    row: undefined,
+  })
+  const { row, personWerte } = dataState
+
   useEffect(() => {
     const rowObservable = showFilter
       ? $of(filter.sammel_lieferung)
@@ -107,7 +112,6 @@ const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
     row?.person_id,
     showFilter,
   ])
-  const { row, personWerte } = dataState
 
   if (!row) return null
 

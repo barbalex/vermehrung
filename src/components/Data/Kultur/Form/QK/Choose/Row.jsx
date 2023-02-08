@@ -32,9 +32,11 @@ const ChooseKulturQkRow = ({ qk }) => {
   const { user, db } = store
 
   const [dataState, setDataState] = useState({
-    userPersonOption,
+    userPersonOption: undefined,
     kulturQkChoosen: [],
   })
+  const { userPersonOption, kulturQkChoosen } = dataState
+
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
@@ -52,7 +54,6 @@ const ChooseKulturQkRow = ({ qk }) => {
 
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
-  const { userPersonOption, kulturQkChoosen } = dataState
 
   const checked = kulturQkChoosen.includes(qk.id)
 
