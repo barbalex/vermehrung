@@ -52,12 +52,10 @@ const LieferungWann = ({ showFilter, row, saveToDb, ifNeeded }) => {
 
   const openPlanenDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/planen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
 
   return (

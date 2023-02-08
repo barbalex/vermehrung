@@ -80,12 +80,10 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const openOptionDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${constants?.getAppUri()}/teilkulturen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [setAnchorEl])
 
   return (
