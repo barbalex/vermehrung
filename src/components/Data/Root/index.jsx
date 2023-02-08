@@ -113,6 +113,8 @@ const Root = ({ filter: showFilter }) => {
             activeNodeArray,
           })
 
+          console.log('Root: useEffect: sArt:', sArt)
+
           setDataState({
             showArt: sArt,
             showEvent: sEvent,
@@ -148,6 +150,7 @@ const Root = ({ filter: showFilter }) => {
       showTeilkultur,
       showZaehlung,
       user,
+      // activeNodeArray,
     ],
   )
 
