@@ -26,6 +26,8 @@ import Pwa from './components/Documentation/docs/Pwa'
 import Ios from './components/Documentation/docs/Ios'
 import Offline from './components/Documentation/docs/Offline'
 import OfflineWie from './components/Documentation/docs/OfflineWie'
+import History from './components/Documentation/docs/History'
+import Technologien from './components/Documentation/docs/Technologien'
 
 const DocRoutes = () => (
   <>
@@ -58,6 +60,8 @@ const DocRoutes = () => (
     <Route path="ios" element={<Ios />} />
     <Route path="offline" element={<Offline />} />
     <Route path="offline-wie" element={<OfflineWie />} />
+    <Route path="historisierung" element={<History />} />
+    <Route path="technologien" element={<Technologien />} />
   </>
 )
 
