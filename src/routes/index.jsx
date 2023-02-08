@@ -9,10 +9,10 @@ import constants from '../utils/constants'
 import image from '../images/puls_vulg.jpg'
 import placeholderSrc from '../images/puls_vulg.jpg' // TODO: build small placeholder
 import ProgressiveImg from '../components/shared/ProgressiveImg'
-import Header from '../components/Header'
 
 const OuterContainer = styled.div`
-  height: calc(100% - ${constants.appBarHeight}px);
+  height: 100%;
+  width: 100%;
   position: relative;
   overflow: hidden;
 `
@@ -103,7 +103,6 @@ const CardTitle = styled.h3`
 
 const Index = () => (
   <>
-    <Header />
     <ErrorBoundary>
       <OuterContainer>
         <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
