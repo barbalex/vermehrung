@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
@@ -9,12 +8,10 @@ import constants from '../../../utils/constants'
 const KulturAnleitung = ({ asMenu }) => {
   const openKulturDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/kulturen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
 
   if (asMenu) {
@@ -33,4 +30,4 @@ const KulturAnleitung = ({ asMenu }) => {
   )
 }
 
-export default observer(KulturAnleitung)
+export default KulturAnleitung
