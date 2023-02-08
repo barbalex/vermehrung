@@ -20,6 +20,7 @@ import GenetischeVielfalt from './components/Documentation/docs/GenetischeVielfa
 import QualitaetsKontrollen from './components/Documentation/docs/QualitatesKontrollen'
 import VermehrungErinnertSich from './components/Documentation/docs/VermehrungErinnertSich'
 import OpenSource from './components/Documentation/docs/OpenSource'
+import FehlerMelden from './components/Documentation/docs/FehlerMelden'
 
 const DocRoutes = () => (
   <>
@@ -46,6 +47,7 @@ const DocRoutes = () => (
     <Route path="qualitaets-kontrollen" element={<QualitaetsKontrollen />} />
     <Route path="gedaechtnis" element={<VermehrungErinnertSich />} />
     <Route path="open-source" element={<OpenSource />} />
+    <Route path="fehler-ideen" element={<FehlerMelden />} />
   </>
 )
 
