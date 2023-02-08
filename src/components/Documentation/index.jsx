@@ -85,7 +85,8 @@ const articles = [
 
 export const DokuDate = styled.p`
   margin-bottom: 15px !important;
-  color: grey;
+  color: #b4b4b4;
+  font-weight: 600;
 `
 const Doku = styled.div`
   width: 100%;
