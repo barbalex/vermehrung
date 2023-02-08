@@ -264,21 +264,17 @@ const SammlungForm = ({
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/planen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/genetische-vielfalt`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
 
   const showDeleted = filter.sammlung._deleted !== false || row?._deleted
