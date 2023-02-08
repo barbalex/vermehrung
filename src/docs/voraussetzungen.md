@@ -1,10 +1,3 @@
----
-slug: 'technische-voraussetzungen'
-date: '2020-10-22'
-title: 'Technische Voraussetzungen'
-sort1: 2
----
-
 Sie brauchen eine aktuelle Version eines modernen **Browsers**.<br/>
 Zum Beispiel (aber nicht abschliessend):
 

@@ -1,10 +1,3 @@
----
-slug: 'zaehlungen'
-date: '2020-08-25'
-title: 'Zählungen'
-sort1: 8
----
-
 ### Ziele
 
 - [Projekt-Ziel](/ziele) 3: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden."<br/>
