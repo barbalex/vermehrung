@@ -5,6 +5,7 @@ import ZieleHerkuenfte from './components/Documentation/docs/ZieleHerkuenfte'
 import Herkuenfte from './components/Documentation/docs/Herkuenfte'
 import TechnischeVoraussetzungen from './components/Documentation/docs/TechnischeVoraussetzungen'
 import ZeitachseFuerArten from './components/Documentation/docs/ZeitachseFuerArten'
+import ZeitachseFuerKulturen from './components/Documentation/docs/ZeitachseFuerKulturen'
 
 const DocRoutes = () => (
   <>
@@ -15,6 +16,7 @@ const DocRoutes = () => (
       element={<TechnischeVoraussetzungen />}
     />
     <Route path="zeitachse-art" element={<ZeitachseFuerArten />} />
+    <Route path="zeitachse-kultur" element={<ZeitachseFuerKulturen />} />
     <Route path="herkuenfte" element={<Herkuenfte />} />
   </>
 )
