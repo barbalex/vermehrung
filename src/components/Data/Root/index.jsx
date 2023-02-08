@@ -113,8 +113,6 @@ const Root = ({ filter: showFilter }) => {
             activeNodeArray,
           })
 
-          console.log('Root: useEffect: sArt:', sArt)
-
           setDataState({
             showArt: sArt,
             showEvent: sEvent,

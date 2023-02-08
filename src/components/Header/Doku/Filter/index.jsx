@@ -38,10 +38,9 @@ const StyledDeleteFilterIcon = styled(FaTimes)`
 const Filter = () => {
   const store = useContext(StoreContext)
   const { docFilter, setDocFilter, docsCount, docsFilteredCount } = store
-  const onChange = useCallback(
-    (e) => setDocFilter(e.target.value),
-    [setDocFilter],
-  )
+  const onChange = useCallback((e) => setDocFilter(e.target.value), [
+    setDocFilter,
+  ])
   const onClickEmptyFilter = useCallback(() => setDocFilter(''), [setDocFilter])
 
   return (

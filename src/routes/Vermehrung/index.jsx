@@ -62,12 +62,7 @@ const VermehrungIndex = () => {
     user,
     online,
   } = store
-  const {
-    setActiveNodeArray,
-    setLastActiveNodeArray,
-    setOpenNodes,
-    wsReconnectCount,
-  } = store.tree
+  const { setLastActiveNodeArray, setOpenNodes, wsReconnectCount } = store.tree
 
   useEffect(() => {
     persist().then((val) => console.log('storage is persisted safely:', val))

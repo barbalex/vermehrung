@@ -1,8 +1,10 @@
 import Fuse from 'fuse.js'
 import { DateTime } from 'luxon'
+import { first as first$ } from 'rxjs/operators'
 
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
 import lieferungLabelFromLieferung from '../../../../utils/lieferungLabelFromLieferung'
+import tableFilter from '../../../../utils/tableFilter'
 import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens'
 import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
 import sammlungsSortedFromSammlungs from '../../../../utils/sammlungsSortedFromSammlungs'
@@ -13,9 +15,7 @@ import herkunftSort from '../../../../utils/herkunftSort'
 import lieferungSort from '../../../../utils/lieferungSort'
 import personSort from '../../../../utils/personSort'
 import zaehlungSort from '../../../../utils/zaehlungSort'
-import { dexie, Kultur, Garten, Art, Event } from '../../../../dexieClient'
-import collectionFromTable from '../../../../utils/collectionFromTable'
-import addTotalCriteriaToWhere from '../../../../utils/addTotalCriteriaToWhere'
+import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 
 const threshold = 0.2
 const distance = 1000 // ensure text in long labels is found
@@ -24,64 +24,96 @@ const formatDateForSearch = (datum) =>
   datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
 const buildOptions = async ({ store, cb, val }) => {
-  const arts = await collectionFromTable({
-    table: 'art',
-    where: addTotalCriteriaToWhere({ table: 'art', store }),
-  }).toArray()
+  const { db } = store
+
+  let arts = []
+  try {
+    arts = await db
+      .get('art')
+      .query(...tableFilter({ store, table: 'art' }))
+      .fetch()
+  } catch {}
   const artsSorted = await artsSortedFromArts(arts)
 
-  const events = await collectionFromTable({
-    table: 'event',
-    where: addTotalCriteriaToWhere({ table: 'event', store }),
-  }).toArray()
+  let events = []
+  try {
+    events = await db
+      .get('event')
+      .query(...tableFilter({ store, table: 'event' }))
+      .fetch()
+  } catch {}
   const eventsSorted = events.sort(eventSort)
 
-  const gartens = await collectionFromTable({
-    table: 'garten',
-    where: addTotalCriteriaToWhere({ table: 'garten', store }),
-  }).toArray()
+  let gartens = []
+  try {
+    gartens = await db
+      .get('garten')
+      .query(...tableFilter({ store, table: 'garten' }))
+      .fetch()
+  } catch {}
   const gartensSorted = await gartensSortedFromGartens(gartens)
 
-  const herkunfts = await collectionFromTable({
-    table: 'herkunft',
-    where: addTotalCriteriaToWhere({ table: 'herkunft', store }),
-  }).toArray()
+  let herkunfts = []
+  try {
+    herkunfts = await db
+      .get('herkunft')
+      .query(...tableFilter({ store, table: 'herkunft' }))
+      .fetch()
+  } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
 
-  const kulturs = await collectionFromTable({
-    table: 'kultur',
-    where: addTotalCriteriaToWhere({ table: 'kultur', store }),
-  }).toArray()
+  let kulturs = []
+  try {
+    kulturs = await db
+      .get('kultur')
+      .query(...tableFilter({ store, table: 'kultur' }))
+      .fetch()
+  } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
 
-  const lieferungs = await collectionFromTable({
-    table: 'lieferung',
-    where: addTotalCriteriaToWhere({ table: 'lieferung', store }),
-  }).toArray()
+  let lieferungs = []
+  try {
+    lieferungs = await db
+      .get('lieferung')
+      .query(...tableFilter({ store, table: 'lieferung' }))
+      .fetch()
+  } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
 
-  const persons = await collectionFromTable({
-    table: 'person',
-    where: addTotalCriteriaToWhere({ table: 'person', store }),
-  }).toArray()
+  let persons = []
+  try {
+    persons = await db
+      .get('person')
+      .query(...tableFilter({ store, table: 'person' }))
+      .fetch()
+  } catch {}
   const personsSorted = persons.sort(personSort)
 
-  const sammlungs = await collectionFromTable({
-    table: 'sammlung',
-    where: addTotalCriteriaToWhere({ table: 'sammlung', store }),
-  }).toArray()
+  let sammlungs = []
+  try {
+    sammlungs = await db
+      .get('sammlung')
+      .query(...tableFilter({ store, table: 'sammlung' }))
+      .fetch()
+  } catch {}
   const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
 
-  const zaehlungs = await collectionFromTable({
-    table: 'zaehlung',
-    where: addTotalCriteriaToWhere({ table: 'zaehlung', store }),
-  }).toArray()
+  let zaehlungs = []
+  try {
+    zaehlungs = await db
+      .get('zaehlung')
+      .query(...tableFilter({ store, table: 'zaehlung' }))
+      .fetch()
+  } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
 
   const options = []
   const searchArtSuggestions = await Promise.all(
     artsSorted.map(async (a) => {
-      const label = await a.label()
+      let label = ''
+      try {
+        label = await a.label.pipe(first$()).toPromise()
+      } catch {}
 
       return {
         value: a.id,
@@ -104,8 +136,14 @@ const buildOptions = async ({ store, cb, val }) => {
   }
   const searchGartenSuggestions = await Promise.all(
     gartensSorted.map(async (g) => {
-      const label = await g.label()
-      const person = await g?.person?.()
+      let label
+      try {
+        label = await g.label.pipe(first$()).toPromise()
+      } catch {}
+      let person
+      try {
+        person = await g.person.fetch()
+      } catch {}
 
       return {
         value: g.id,
@@ -143,7 +181,7 @@ const buildOptions = async ({ store, cb, val }) => {
   }
   const searchHerkunftSuggestions = herkunftsSorted.map((h) => ({
     value: h.id,
-    label: h.label(),
+    label: herkunftLabelFromHerkunft({ herkunft: h }),
     ...h,
     type: 'Herkuenfte',
   }))
@@ -170,10 +208,22 @@ const buildOptions = async ({ store, cb, val }) => {
   }
   const searchKulturSuggestions = await Promise.all(
     kultursSorted.map(async (k) => {
-      const label = await k.label?.()
-      const garten = await k.garten?.()
-      const gartenPerson = await garten?.person?.()
-      const herkunft = await k.herkunft?.()
+      let label
+      try {
+        label = await k.label.pipe(first$()).toPromise()
+      } catch {}
+      let garten
+      try {
+        garten = await k.garten.fetch()
+      } catch {}
+      let gartenPerson
+      try {
+        gartenPerson = await garten.person.fetch()
+      } catch {}
+      let herkunft
+      try {
+        herkunft = await k.herkunft.fetch()
+      } catch {}
 
       return {
         value: k.id,
@@ -204,13 +254,31 @@ const buildOptions = async ({ store, cb, val }) => {
       options: kulturSuggestions,
     })
   }
-  const searchEventSuggestions = eventsSorted.map(async (e: Event) => {
-    const label = await e.label()
-    const kultur: Kultur = await e.kultur()
-    const art: Art = await kultur?.art()
-    const artname = await art?.label?.()
-    const garten: Garten = await kultur?.garten()
-    const gartenPerson = await garten?.person?.()
+  const searchEventSuggestions = eventsSorted.map(async (e) => {
+    let label
+    try {
+      label = await e.label.pipe(first$()).toPromise()
+    } catch {}
+    let kultur
+    try {
+      kultur = await e.kultur?.fetch()
+    } catch {}
+    let art
+    try {
+      art = await kultur?.art?.fetch()
+    } catch {}
+    let artname = ''
+    try {
+      artname = await art?.label?.pipe(first$()).toPromise()
+    } catch {}
+    let garten
+    try {
+      garten = await kultur?.garten?.fetch()
+    } catch {}
+    let gartenPerson
+    try {
+      gartenPerson = await garten?.person?.fetch()
+    } catch {}
 
     return {
       value: e.id,
@@ -243,18 +311,48 @@ const buildOptions = async ({ store, cb, val }) => {
   }
   const searchLieferungSuggestions = await Promise.all(
     lieferungsSorted.map(async (l) => {
-      const person = await l?.person?.()
-      const sammlung = await l.sammlung?.()
-      const sammlungPerson = await sammlung?.person?.()
-      const sammlungHerkunft = await sammlung?.herkunft?.()
-      const vonKultur = await l.vonKultur?.()
-      const vonKulturGarten = await vonKultur?.garten?.()
-      const vonKulturGartenPerson = await vonKulturGarten?.person?.()
-      const nachKultur = await l.nachKultur?.()
-      const nachKulturGarten = await nachKultur?.garten?.()
-      const nachKulturGartenPerson = nachKulturGarten?.person?.()
-      const art = await l.art?.()
-      const artname = (await art?.label?.()) ?? ''
+      let person
+      try {
+        person = await l?.person?.fetch()
+      } catch {}
+      let sammlung
+      try {
+        sammlung = await l?.sammlung?.fetch()
+      } catch {}
+      let sammlungPerson
+      try {
+        sammlungPerson = await sammlung?.person?.fetch()
+      } catch {}
+      let sammlungHerkunft
+      try {
+        sammlungHerkunft = await sammlung?.herkunft?.fetch()
+      } catch {}
+      const vonKultur = kulturs.find((k) => k.id === l.von_kultur_id)
+      let vonKulturGarten
+      try {
+        vonKulturGarten = await vonKultur?.garten?.fetch()
+      } catch {}
+      let vonKulturGartenPerson
+      try {
+        vonKulturGartenPerson = await vonKulturGarten?.person?.fetch()
+      } catch {}
+      const nachKultur = kulturs.find((k) => k.id === l.nach_kultur_id)
+      let nachKulturGarten
+      try {
+        nachKulturGarten = await nachKultur?.garten?.fetch()
+      } catch {}
+      let nachKulturGartenPerson
+      try {
+        nachKulturGartenPerson = await nachKulturGarten?.person?.fetch()
+      } catch {}
+      let art
+      try {
+        art = await l?.art?.fetch()
+      } catch {}
+      let artname
+      try {
+        artname = (await art?.label?.pipe(first$()).toPromise()) ?? ''
+      } catch {}
 
       return {
         value: l.id,
@@ -344,8 +442,14 @@ const buildOptions = async ({ store, cb, val }) => {
   }
   const searchSammlungSuggestions = await Promise.all(
     sammlungsSorted.map(async (s) => {
-      const label = await s.label?.()
-      const herkunft = await s.herkunft?.()
+      let label
+      try {
+        label = await s.label.pipe(first$()).toPromise()
+      } catch {}
+      let herkunft
+      try {
+        herkunft = await s.herkunft.fetch()
+      } catch {}
 
       return {
         value: s.id,
