@@ -161,15 +161,9 @@ const Documentation = ({ width }) => {
     width < constants?.tree?.minimalWindowWidth && path.length > 1
 
   useEffect(() => {
-    const items = articles
-      .filter((n) => !!n && !!n.node)
-      .filter((n) =>
-        docFilter
-          ? (n?.title ?? '(Titel fehlt)')
-              .toLowerCase()
-              .includes(docFilter.toLowerCase())
-          : true,
-      )
+    const items = articles.filter(
+      (n) => n.title?.toLowerCase?.()?.includes?.(docFilter) ?? true,
+    )
     setDocsCount(articles.length)
     setDocsFilteredCount(items.length)
   }, [docFilter, setDocsCount, setDocsFilteredCount])
