@@ -79,12 +79,10 @@ const KulturTimeline = ({ row, width }) => {
 
   const openDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/zeitachse-kultur`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
   }, [])
   useEffect(() => {
     if (width < 1100 && !narrow) {
@@ -96,7 +94,7 @@ const KulturTimeline = ({ row, width }) => {
   }, [narrow, width])
 
   const [open, setOpen] = useState(false)
-  let anim = useAnimation()
+  const anim = useAnimation()
   const onClickToggle = useCallback(
     async (e) => {
       e.stopPropagation()
