@@ -47,6 +47,7 @@ const App = () => {
         const db = initiateDb(store)
         setDatabase(db)
         storeReturned.setDb(db)
+        // console.log('App, effect afterinitating app', { db, storeReturned })
       },
     )
 

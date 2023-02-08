@@ -56,7 +56,7 @@ registerSW({
   },
 })
 
-console.log('main running')
+// console.log('main running')
 
 const container = document.getElementById('root')
 const root = createRoot(container)
