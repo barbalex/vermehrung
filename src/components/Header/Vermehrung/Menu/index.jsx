@@ -43,13 +43,12 @@ const MenuComponent = ({ asMenu }) => {
         aria-haspopup="true"
         title="Menu"
         onClick={onClickMenu}
-        size="large"
-      >
+        size="large">
         <Icon />
       </IconButton>
       <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </ErrorBoundary>
-  )
+  );
 }
 
 export default observer(MenuComponent)

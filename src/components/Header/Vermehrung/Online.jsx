@@ -21,8 +21,12 @@ const StyledBadge = styled(Badge)`
 
 const Online = () => {
   const store = useContext(StoreContext)
-  const { online, queuedQueries, showQueuedQueries, setShowQueuedQueries } =
-    store
+  const {
+    online,
+    queuedQueries,
+    showQueuedQueries,
+    setShowQueuedQueries,
+  } = store
   const title = online
     ? 'Sie sind online'
     : queuedQueries.size

@@ -40,11 +40,10 @@ const DocuButton = ({ asMenu }) => {
         component={Link}
         to="/Dokumentation/"
         title="Dokumentation"
-        size="large"
-      >
+        size="large">
         <FaBook />
       </IconButton>
-    )
+    );
   }
 
   return (

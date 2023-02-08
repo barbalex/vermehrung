@@ -44,7 +44,9 @@ const Title = styled.div`
 `
 
 const Filter = () => {
-  const { activeForm } = useContext(StoreContext)
+  const { activeForm: activeFormPassed } = useContext(StoreContext)
+  // root is a possible value, but MUI wants one of the tabs
+  const activeForm = activeFormPassed === 'root' ? 'art' : activeFormPassed
   // ensure list views are directed to correct filter
   // use exact match or garten will become gart
   // see: https://stackoverflow.com/a/447258/712005
