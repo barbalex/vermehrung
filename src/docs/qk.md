@@ -1,10 +1,3 @@
----
-slug: 'qualitaets-kontrollen'
-date: '2020-06-28'
-title: 'Qualitäts-Kontrollen'
-sort1: 17
----
-
 ### Ziel
 
 - [Projekt-Ziel](/ziele) 11: "Qualitätskontrollen erhöhen die Qualität der Arbeit"<br/>

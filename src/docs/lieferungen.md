@@ -1,10 +1,3 @@
----
-slug: 'lieferungen'
-date: '2020-06-28'
-title: 'Lieferungen'
-sort1: 9
----
-
 ### Ziele
 
 - [Projekt-Ziel](/ziele) 1: "Herkünfte sind bekannt und werden innerhalb von Kulturen nicht vermischt."<br/>

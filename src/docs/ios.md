@@ -1,10 +1,3 @@
----
-slug: 'ios'
-date: '2020-10-22'
-title: 'iPhone/iPad bzw. iOS'
-sort1: 23
----
-
 vermehrung.ch funktioniert nicht auf iOS, d.h. auf iPhones und iPads.<br/><br/>
 
 **Sorry iPhone und iPad BenutzerInnen: Ihr habt für viel Geld ein Gerät gekauft, dass euch von den modernsten Apps ausschliesst. Weil Apple von euch noch mehr Geld will.**<br/><br/>
