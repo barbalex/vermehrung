@@ -16,12 +16,10 @@ const getAuthToken = async ({ store }) => {
     const regetMe = () => {
       console.log('getAuthToken recalling itself')
       getAuthToken({ store })
-      if (typeof window !== 'undefined') {
-        setTimeout(() => {
-          console.log('getAuthToken reloading window')
-          window.location.reload(true)
-        }, 300)
-      }
+      setTimeout(() => {
+        console.log('getAuthToken reloading window')
+        window.location.reload(true)
+      }, 300)
     }
     // need to throttle to prevent cycle
     //throttle(regetMe, 5000, { leading: true })
