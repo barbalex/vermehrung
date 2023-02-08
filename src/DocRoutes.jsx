@@ -28,6 +28,7 @@ import Offline from './components/Documentation/docs/Offline'
 import OfflineWie from './components/Documentation/docs/OfflineWie'
 import History from './components/Documentation/docs/History'
 import Technologien from './components/Documentation/docs/Technologien'
+import Struktur from './components/Documentation/docs/Struktur'
 
 const DocRoutes = () => (
   <>
@@ -62,6 +63,7 @@ const DocRoutes = () => (
     <Route path="offline-wie" element={<OfflineWie />} />
     <Route path="historisierung" element={<History />} />
     <Route path="technologien" element={<Technologien />} />
+    <Route path="struktur" element={<Struktur />} />
   </>
 )
 
