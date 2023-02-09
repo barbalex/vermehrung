@@ -179,6 +179,7 @@ const Documentation = ({ width }) => {
     )
   }
 
+  // TODO: add Dokumentation bar with up arrow above Outlet
   if (showArticle) {
     return (
       <ErrorBoundary>

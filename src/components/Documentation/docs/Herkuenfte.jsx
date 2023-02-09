@@ -30,7 +30,7 @@ const Herkuenfte = () => (
     </p>
     <h3>Abgrenzung</h3>
     <p>
-      Die Abgrenzung genetischer Einheiten von Arten mit unterschiedliche
+      Die Abgrenzung genetischer Einheiten von Arten mit unterschiedlicher
       Ausbreitungs-Biologie sollte sich im Prinzip unterscheiden. Darum kann es
       sinnvoll sein, für unterschiedliche Arten am selben Ort unterschiedliche
       Herkünfte zu generieren. Die App überlässt es den BiologInnen, zu
