@@ -50,7 +50,7 @@ const App = () => {
         const db = initiateDb(store)
         setDatabase(db)
         storeReturned.setDb(db)
-        // console.log('App, effect afterinitating app', { db, storeReturned })
+        // console.log('App, effect after initating app', { db, storeReturned })
       },
     )
 
