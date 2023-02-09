@@ -29,6 +29,9 @@ import OfflineWie from './components/Documentation/docs/OfflineWie'
 import History from './components/Documentation/docs/History'
 import Technologien from './components/Documentation/docs/Technologien'
 import Struktur from './components/Documentation/docs/Struktur'
+import Roadmap from './components/Documentation/docs/Roadmap'
+import Konten from './components/Documentation/docs/Konten'
+import Datenschutz from './components/Documentation/docs/Datenschutz'
 
 const DocRoutes = () => (
   <>
@@ -64,6 +67,9 @@ const DocRoutes = () => (
     <Route path="historisierung" element={<History />} />
     <Route path="technologien" element={<Technologien />} />
     <Route path="struktur" element={<Struktur />} />
+    <Route path="roadmap" element={<Roadmap />} />
+    <Route path="konten" element={<Konten />} />
+    <Route path="datenschutz" element={<Datenschutz />} />
   </>
 )
 
