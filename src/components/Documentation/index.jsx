@@ -9,6 +9,7 @@ import ArticleList from './ArticleList'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import constants from '../../utils/constants'
 import StoreContext from '../../storeContext'
+import FormTitle from './FormTitle'
 
 const Container = styled.div`
   height: calc(100vh - ${constants.appBarHeight}px);
@@ -88,10 +89,14 @@ export const DokuDate = styled.p`
   color: #b4b4b4;
   font-weight: 600;
 `
+const DokuInnerContainer = styled.div`
+  padding: 0 25px 25px 25px;
+`
 const Doku = styled.div`
   width: 100%;
   height: 100%;
-  padding: 25px;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   box-sizing: border-box;
   ul,
@@ -185,7 +190,10 @@ const Documentation = ({ width }) => {
       <ErrorBoundary>
         <Container>
           <Doku>
-            <Outlet />
+            <FormTitle />
+            <DokuInnerContainer>
+              <Outlet />
+            </DokuInnerContainer>
           </Doku>
         </Container>
       </ErrorBoundary>
@@ -198,7 +206,10 @@ const Documentation = ({ width }) => {
         <StyledSplitPane split="vertical" size="22%" maxSize={-10}>
           <ArticleList articles={articles} />
           <Doku>
-            <Outlet />
+            <FormTitle />
+            <DokuInnerContainer>
+              <Outlet />
+            </DokuInnerContainer>
           </Doku>
         </StyledSplitPane>
       </SplitPaneContainer>
