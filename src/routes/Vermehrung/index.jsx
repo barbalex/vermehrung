@@ -83,8 +83,7 @@ const VermehrungIndex = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    // console.log('vermehrung, subscription effect: authorizing:', authorizing)
-    // console.log('vermehrung, subscription effect: existsUser:', existsUser)
+    console.log('vermehrung, subscription effect', { authorizing, existsUser })
     let unsubscribe
     if (existsUser && !authorizing) {
       // TODO:
@@ -131,6 +130,9 @@ const VermehrungIndex = () => {
     )
   }
 
+  // When user started up offline and becomes online
+  // this will also show spinner - NOT GOOD
+  // Even worse: spinner seems to persist - need to reload
   if (online && !initialDataQueried) {
     return (
       <ErrorBoundary>
