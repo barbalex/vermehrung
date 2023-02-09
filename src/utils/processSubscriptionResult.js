@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 import parseComplexFieldsForWm from './parseComplexFieldsForWm'
 
 const stripTypename = (object) => {
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { __typename, ...rest } = object
   return rest
 }
