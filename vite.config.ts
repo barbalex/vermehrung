@@ -44,9 +44,14 @@ export default defineConfig({
         background_color: '#2e0c58',
         theme_color: '#2e0c58',
         display: 'minimal-ui',
-        icon: 'src/images/seedling.png',
-        include_favicon: true,
-        lang: 'de-CH',
+        icons: [
+          {
+            src: '/icon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'maskable any',
+          },
+        ],
         categories: ['business', 'productivity'],
         screenshots: [],
         orientation: 'portrait',
