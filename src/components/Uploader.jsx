@@ -3,7 +3,7 @@ import uploadcare from 'uploadcare-widget'
 
 import { signature, expire } from '../utils/uploadcareSignature'
 
-window.UPLOADCARE_PUBLIC_KEY = import.meta.env.UPLOADCARE_PUBLIC_KEY
+window.UPLOADCARE_PUBLIC_KEY = import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY
 window.UPLOADCARE_LOCALE = 'de'
 window.UPLOADCARE_TABS =
   'file camera url gdrive gphotos dropbox onedrive box instagram'
