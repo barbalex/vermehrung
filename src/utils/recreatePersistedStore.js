@@ -1,5 +1,4 @@
 import localForage from 'localforage'
-import { navigate } from 'gatsby'
 import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import persist from 'mst-persist'
@@ -9,13 +8,13 @@ import isOnline from './isOnline'
 
 // Configure Firebase
 const firebaseConfig = {
-  apiKey: process.env.GATSBY_FIREBASE_API_KEY,
-  authDomain: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.GATSBY_FIREBASE_PROJECT_ID,
-  appId: process.env.GATSBY_FIREBASE_APP_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-const recreatePersistedStore = async ({ store }) => {
+const recreatePersistedStore = async ({ store, navigate }) => {
   console.log('recreatePersistedStore running')
   let unregisterAuthObserver = () => {}
   const {
