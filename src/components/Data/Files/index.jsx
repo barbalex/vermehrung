@@ -1,14 +1,14 @@
 import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import Lightbox from 'react-image-lightbox'
+import ImageGallery from 'react-image-gallery'
 import Button from '@mui/material/Button'
 import { v1 as uuidv1 } from 'uuid'
 
 import StoreContext from '../../../storeContext'
 import Uploader from '../../Uploader'
 import File from './File'
-import 'react-image-lightbox/style.css'
+import 'react-image-gallery/styles/css/image-gallery.css'
 import isImageFile from './isImageFile'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import fileSort from '../../../utils/fileSort'
@@ -57,7 +57,6 @@ const Files = ({ parentTable, parent }) => {
   const store = useContext(StoreContext)
   const { online, gqlClient, addNotification, db } = store
 
-  const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
   // use object with two keys to only render once on setting
@@ -112,19 +111,19 @@ const Files = ({ parentTable, parent }) => {
   )
 
   const images = files.filter((f) => isImageFile(f))
-  const imageUrls = images.map(
-    (f) =>
-      `https://ucarecdn.com/${f.file_id}/-/resize/1200x/-/quality/lightest/${f.name}`,
-  )
-  const onClickLightboxButton = useCallback(() => setLightboxIsOpen(true), [])
-  const onCloseLightboxRequest = useCallback(() => setLightboxIsOpen(false), [])
-  const onMovePrevImageRequest = useCallback(
-    () => setImageIndex((imageIndex + images.length - 1) % images.length),
-    [imageIndex, images.length],
-  )
-  const onMoveNextImageRequest = useCallback(
-    () => setImageIndex((imageIndex + 1) % images.length),
-    [imageIndex, images.length],
+  const imageObjects = images.map((f) => ({
+    original: `https://ucarecdn.com/${f.file_id}/-/resize/1200x/-/quality/lightest/${f.name}`,
+    thumbnail: `https://ucarecdn.com/${f.file_id}/-/resize/250x/-/quality/lightest/${f.name}`,
+    fullscreen: `https://ucarecdn.com/${f.file_id}/-/resize/1800x/-/quality/lightest/${f.name}`,
+    originalAlt: f.beschreibung || '',
+    thumbnailAlt: f.beschreibung || '',
+    description: f.beschreibung || '',
+    originalTitle: f.name || '',
+    thumbnailTitle: f.name || '',
+  }))
+  const onClickLightboxButton = useCallback(
+    () => setLightboxIsOpen(!lightboxIsOpen),
+    [lightboxIsOpen],
   )
 
   if (!online) {
@@ -155,25 +154,18 @@ const Files = ({ parentTable, parent }) => {
               variant="outlined"
               onClick={onClickLightboxButton}
             >
-              Bilder in Gallerie öffnen
+              {lightboxIsOpen
+                ? 'Galerie schliessen'
+                : 'Bilder in Galerie öffnen'}
             </LightboxButton>
           )}
         </Buttons>
       </TitleRow>
       {lightboxIsOpen && (
-        <Lightbox
-          mainSrc={imageUrls[imageIndex]}
-          nextSrc={imageUrls[(imageIndex + 1) % images.length]}
-          prevSrc={imageUrls[(imageIndex + images.length - 1) % images.length]}
-          onCloseRequest={onCloseLightboxRequest}
-          onMovePrevRequest={onMovePrevImageRequest}
-          onMoveNextRequest={onMoveNextImageRequest}
-          imageTitle={images[imageIndex].name || ''}
-          imageCaption={images[imageIndex].beschreibung || ''}
-          wrapperClassName="lightbox"
-          nextLabel="Nächstes Bild"
-          prevLabel="Voriges Bild"
-        />
+        <>
+          <Spacer />
+          <ImageGallery items={imageObjects} showPlayButton={false} />
+        </>
       )}
       {!!files.length && (
         <>
