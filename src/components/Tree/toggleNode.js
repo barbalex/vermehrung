@@ -5,7 +5,7 @@ import isNodeOpen from './isNodeOpen'
 
 const toggleNode = ({ node, nodes, store }) => {
   const { addNotification } = store
-  const { addOpenNode, setLastTouchedNode } = store.tree
+  const { addOpenNode, setLastActiveNodeArray } = store.tree
   if (!node.url) {
     console.log('passsed node has no url:', node)
     return addNotification({
@@ -23,7 +23,7 @@ const toggleNode = ({ node, nodes, store }) => {
     addOpenNode(node.url)
     const newActiveNodeArray = [...node.url]
     setActiveNodeArray(newActiveNodeArray)
-    setLastTouchedNode(node.url)
+    setLastActiveNodeArray(node.url)
   } else if (node.id === activeNode?.id) {
     // the node is open
     // AND it is the active node
@@ -31,14 +31,14 @@ const toggleNode = ({ node, nodes, store }) => {
     const newActiveNodeArray = [...node.url]
     newActiveNodeArray.pop()
     setActiveNodeArray(newActiveNodeArray)
-    setLastTouchedNode(node.url)
+    setLastActiveNodeArray(node.url)
   } else {
     // the node is open
     // but not the active node
     // make it the new active node
     const newActiveNodeArray = [...node.url]
     setActiveNodeArray(newActiveNodeArray)
-    setLastTouchedNode(node.url)
+    setLastActiveNodeArray(node.url)
   }
   store.filter.setShow(false)
 }

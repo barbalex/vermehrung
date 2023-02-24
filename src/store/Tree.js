@@ -1,16 +1,15 @@
 import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
-import { navigate } from 'gatsby'
 
 export default types
   .model('Tree', {
     activeNodeArray: types.array(types.union(types.string, types.number)),
-    // lastTouchedNode is needed to keep the last clicked arrow known
+    // lastActiveNodeArray is needed to keep the last clicked arrow known
     // so it does not jump
     // before using this, activeNodeArray was used instead
     // but then when an arrow out of sight of the active node
     // is clicked, the list jumps back to the active node :-(
-    lastTouchedNode: types.optional(
+    lastActiveNodeArray: types.optional(
       types.array(types.union(types.string, types.number)),
       [],
     ),
@@ -20,16 +19,17 @@ export default types
     widthInPercentOfScreen: types.optional(types.number, 33),
   })
   .actions((self) => ({
-    setLastTouchedNode(val) {
-      self.lastTouchedNode = val
+    setLastActiveNodeArray(val) {
+      self.lastActiveNodeArray = val
     },
     setWidthInPercentOfScreen(val) {
       self.widthInPercentOfScreen = val
     },
     setActiveNodeArray(val, nonavigate) {
+      const store = getParent(self, 1)
       self.activeNodeArray = val
       if (!nonavigate) {
-        navigate(`/Vermehrung/${val.join('/')}`)
+        store.navigate(`/Vermehrung/${val.join('/')}`)
         self.addOpenNode(val)
       }
     },
@@ -49,7 +49,7 @@ export default types
     },
     addOpenNode(url) {
       // add all parent nodes
-      let addedOpenNodes = []
+      const addedOpenNodes = []
       for (let i = 1; i <= url.length; i++) {
         addedOpenNodes.push(url.slice(0, i))
       }
@@ -74,7 +74,7 @@ export default types
 
 export const defaultValue = {
   activeNodeArray: [],
-  lastTouchedNode: [],
+  lastActiveNodeArray: [],
   openNodes: [],
   widthInPercentOfScreen: 33,
 }

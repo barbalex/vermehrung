@@ -1,5 +1,5 @@
 {
-  "resource_version": 4,
+  "resource_version": 5,
   "metadata": {
     "version": 3,
     "sources": [
@@ -9,21 +9,21 @@
         "tables": [
           {
             "table": {
-              "schema": "public",
-              "name": "ae_art"
+              "name": "ae_art",
+              "schema": "public"
             },
             "object_relationships": [
               {
                 "name": "ae_art_art",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "art"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "id": "ae_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "art",
+                      "schema": "public"
                     }
                   }
                 }
@@ -129,21 +129,21 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "art"
+              "name": "art",
+              "schema": "public"
             },
             "object_relationships": [
               {
                 "name": "art_ae_art",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "ae_art"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "ae_id": "id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "ae_art",
+                      "schema": "public"
                     }
                   }
                 }
@@ -156,8 +156,8 @@
                   "foreign_key_constraint_on": {
                     "column": "art_id",
                     "table": {
-                      "schema": "public",
-                      "name": "art_file"
+                      "name": "art_file",
+                      "schema": "public"
                     }
                   }
                 }
@@ -168,8 +168,8 @@
                   "foreign_key_constraint_on": {
                     "column": "art_id",
                     "table": {
-                      "schema": "public",
-                      "name": "art_qk_choosen"
+                      "name": "art_qk_choosen",
+                      "schema": "public"
                     }
                   }
                 }
@@ -180,8 +180,8 @@
                   "foreign_key_constraint_on": {
                     "column": "art_id",
                     "table": {
-                      "schema": "public",
-                      "name": "av"
+                      "name": "av",
+                      "schema": "public"
                     }
                   }
                 }
@@ -192,8 +192,8 @@
                   "foreign_key_constraint_on": {
                     "column": "art_id",
                     "table": {
-                      "schema": "public",
-                      "name": "kultur"
+                      "name": "kultur",
+                      "schema": "public"
                     }
                   }
                 }
@@ -204,8 +204,8 @@
                   "foreign_key_constraint_on": {
                     "column": "art_id",
                     "table": {
-                      "schema": "public",
-                      "name": "lieferung"
+                      "name": "lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -216,8 +216,8 @@
                   "foreign_key_constraint_on": {
                     "column": "art_id",
                     "table": {
-                      "schema": "public",
-                      "name": "sammel_lieferung"
+                      "name": "sammel_lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -228,8 +228,8 @@
                   "foreign_key_constraint_on": {
                     "column": "art_id",
                     "table": {
-                      "schema": "public",
-                      "name": "sammlung"
+                      "name": "sammlung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -258,8 +258,7 @@
                     "_conflicts",
                     "_deleted",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -432,8 +431,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "art_file"
+              "name": "art_file",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -543,8 +542,16 @@
                   "filter": {
                     "art": {
                       "_exists": {
+                        "_table": {
+                          "name": "sammlung",
+                          "schema": "public"
+                        },
                         "_where": {
                           "_exists": {
+                            "_table": {
+                              "name": "lieferung",
+                              "schema": "public"
+                            },
                             "_where": {
                               "kulturByNachKulturId": {
                                 "garten": {
@@ -555,16 +562,8 @@
                                   }
                                 }
                               }
-                            },
-                            "_table": {
-                              "schema": "public",
-                              "name": "lieferung"
                             }
                           }
-                        },
-                        "_table": {
-                          "schema": "public",
-                          "name": "sammlung"
                         }
                       }
                     }
@@ -630,8 +629,16 @@
                   "filter": {
                     "art": {
                       "_exists": {
+                        "_table": {
+                          "name": "sammlung",
+                          "schema": "public"
+                        },
                         "_where": {
                           "_exists": {
+                            "_table": {
+                              "name": "lieferung",
+                              "schema": "public"
+                            },
                             "_where": {
                               "kulturByNachKulturId": {
                                 "garten": {
@@ -642,16 +649,8 @@
                                   }
                                 }
                               }
-                            },
-                            "_table": {
-                              "schema": "public",
-                              "name": "lieferung"
                             }
                           }
-                        },
-                        "_table": {
-                          "schema": "public",
-                          "name": "sammlung"
                         }
                       }
                     }
@@ -698,8 +697,16 @@
                   "filter": {
                     "art": {
                       "_exists": {
+                        "_table": {
+                          "name": "sammlung",
+                          "schema": "public"
+                        },
                         "_where": {
                           "_exists": {
+                            "_table": {
+                              "name": "lieferung",
+                              "schema": "public"
+                            },
                             "_where": {
                               "kulturByNachKulturId": {
                                 "garten": {
@@ -710,16 +717,8 @@
                                   }
                                 }
                               }
-                            },
-                            "_table": {
-                              "schema": "public",
-                              "name": "lieferung"
                             }
                           }
-                        },
-                        "_table": {
-                          "schema": "public",
-                          "name": "sammlung"
                         }
                       }
                     }
@@ -736,8 +735,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "art_qk"
+              "name": "art_qk",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -870,8 +869,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "art_qk_choosen"
+              "name": "art_qk_choosen",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -1148,8 +1147,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "art_qk_choosen_rev"
+              "name": "art_qk_choosen_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -1170,8 +1169,7 @@
                     "choosen",
                     "id",
                     "qk_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -1192,8 +1190,7 @@
                     "choosen",
                     "id",
                     "qk_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -1315,8 +1312,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "art_qk_rev"
+              "name": "art_qk_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -1338,8 +1335,7 @@
                     "changed",
                     "changed_by",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -1450,21 +1446,21 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "art_rev"
+              "name": "art_rev",
+              "schema": "public"
             },
             "object_relationships": [
               {
                 "name": "art_rev_ae_art",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "ae_art"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "ae_id": "id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "ae_art",
+                      "schema": "public"
                     }
                   }
                 }
@@ -1473,13 +1469,13 @@
                 "name": "av",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "av"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "art_id": "art_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "av",
+                      "schema": "public"
                     }
                   }
                 }
@@ -1490,13 +1486,13 @@
                 "name": "avs",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "av"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "art_id": "art_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "av",
+                      "schema": "public"
                     }
                   }
                 }
@@ -1505,13 +1501,13 @@
                 "name": "kulturs",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "kultur"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "art_id": "art_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "kultur",
+                      "schema": "public"
                     }
                   }
                 }
@@ -1520,13 +1516,13 @@
                 "name": "lieferungs",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "lieferung"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "art_id": "art_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -1535,13 +1531,13 @@
                 "name": "sammel_lieferungs",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "sammel_lieferung"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "art_id": "art_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "sammel_lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -1550,13 +1546,13 @@
                 "name": "sammlungs",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "sammlung"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "art_id": "art_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "sammlung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -1579,8 +1575,7 @@
                     "_deleted",
                     "id",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -1599,8 +1594,7 @@
                     "ae_id",
                     "art_id",
                     "id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -1730,8 +1724,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "av"
+              "name": "av",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -1896,8 +1890,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "av_rev"
+              "name": "av_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -1917,8 +1911,7 @@
                     "_depth",
                     "_deleted",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -2020,8 +2013,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "event"
+              "name": "event",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -2490,8 +2483,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "event_rev"
+              "name": "event_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -2515,8 +2508,7 @@
                     "_deleted",
                     "id",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -2540,8 +2532,7 @@
                     "kultur_id",
                     "person_id",
                     "teilkultur_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -2565,8 +2556,7 @@
                     "kultur_id",
                     "person_id",
                     "teilkultur_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -2727,8 +2717,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "garten"
+              "name": "garten",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -2745,8 +2735,8 @@
                   "foreign_key_constraint_on": {
                     "column": "garten_id",
                     "table": {
-                      "schema": "public",
-                      "name": "garten_file"
+                      "name": "garten_file",
+                      "schema": "public"
                     }
                   }
                 }
@@ -2757,8 +2747,8 @@
                   "foreign_key_constraint_on": {
                     "column": "garten_id",
                     "table": {
-                      "schema": "public",
-                      "name": "gv"
+                      "name": "gv",
+                      "schema": "public"
                     }
                   }
                 }
@@ -2769,8 +2759,8 @@
                   "foreign_key_constraint_on": {
                     "column": "garten_id",
                     "table": {
-                      "schema": "public",
-                      "name": "kultur"
+                      "name": "kultur",
+                      "schema": "public"
                     }
                   }
                 }
@@ -2905,8 +2895,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "garten_file"
+              "name": "garten_file",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -3264,8 +3254,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "garten_rev"
+              "name": "garten_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -3291,8 +3281,7 @@
                     "garten_id",
                     "id",
                     "person_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -3318,8 +3307,7 @@
                     "garten_id",
                     "id",
                     "person_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -3345,8 +3333,7 @@
                     "garten_id",
                     "id",
                     "person_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -3519,8 +3506,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "gv"
+              "name": "gv",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -3554,8 +3541,7 @@
                     "_deleted",
                     "_conflicts",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -3664,8 +3650,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "gv_rev"
+              "name": "gv_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -3685,8 +3671,7 @@
                     "_depth",
                     "_deleted",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -3789,8 +3774,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "herkunft"
+              "name": "herkunft",
+              "schema": "public"
             },
             "array_relationships": [
               {
@@ -3799,8 +3784,8 @@
                   "foreign_key_constraint_on": {
                     "column": "herkunft_id",
                     "table": {
-                      "schema": "public",
-                      "name": "herkunft_file"
+                      "name": "herkunft_file",
+                      "schema": "public"
                     }
                   }
                 }
@@ -3811,8 +3796,8 @@
                   "foreign_key_constraint_on": {
                     "column": "herkunft_id",
                     "table": {
-                      "schema": "public",
-                      "name": "kultur"
+                      "name": "kultur",
+                      "schema": "public"
                     }
                   }
                 }
@@ -3823,8 +3808,8 @@
                   "foreign_key_constraint_on": {
                     "column": "herkunft_id",
                     "table": {
-                      "schema": "public",
-                      "name": "sammlung"
+                      "name": "sammlung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -3949,8 +3934,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "herkunft_file"
+              "name": "herkunft_file",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -4115,21 +4100,21 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "herkunft_rev"
+              "name": "herkunft_rev",
+              "schema": "public"
             },
             "array_relationships": [
               {
                 "name": "kulturs",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "kultur"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "herkunft_id": "herkunft_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "kultur",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4138,13 +4123,13 @@
                 "name": "sammlungs",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "sammlung"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "herkunft_id": "herkunft_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "sammlung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4173,8 +4158,7 @@
                     "_deleted",
                     "id",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -4199,8 +4183,7 @@
                     "changed",
                     "herkunft_id",
                     "id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -4341,8 +4324,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "kultur"
+              "name": "kultur",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -4367,13 +4350,13 @@
                 "name": "kultur_option",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "kultur_option"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "id": "id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "kultur_option",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4386,8 +4369,8 @@
                   "foreign_key_constraint_on": {
                     "column": "kultur_id",
                     "table": {
-                      "schema": "public",
-                      "name": "event"
+                      "name": "event",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4398,8 +4381,8 @@
                   "foreign_key_constraint_on": {
                     "column": "kultur_id",
                     "table": {
-                      "schema": "public",
-                      "name": "kultur_file"
+                      "name": "kultur_file",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4410,8 +4393,8 @@
                   "foreign_key_constraint_on": {
                     "column": "kultur_id",
                     "table": {
-                      "schema": "public",
-                      "name": "kultur_qk_choosen"
+                      "name": "kultur_qk_choosen",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4420,13 +4403,13 @@
                 "name": "lieferungsByNachKulturId",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "lieferung"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "id": "nach_kultur_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4437,8 +4420,8 @@
                   "foreign_key_constraint_on": {
                     "column": "von_kultur_id",
                     "table": {
-                      "schema": "public",
-                      "name": "lieferung"
+                      "name": "lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4449,8 +4432,8 @@
                   "foreign_key_constraint_on": {
                     "column": "nach_kultur_id",
                     "table": {
-                      "schema": "public",
-                      "name": "sammel_lieferung"
+                      "name": "sammel_lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4461,8 +4444,8 @@
                   "foreign_key_constraint_on": {
                     "column": "von_kultur_id",
                     "table": {
-                      "schema": "public",
-                      "name": "sammel_lieferung"
+                      "name": "sammel_lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4473,8 +4456,8 @@
                   "foreign_key_constraint_on": {
                     "column": "kultur_id",
                     "table": {
-                      "schema": "public",
-                      "name": "teilkultur"
+                      "name": "teilkultur",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4485,8 +4468,8 @@
                   "foreign_key_constraint_on": {
                     "column": "kultur_id",
                     "table": {
-                      "schema": "public",
-                      "name": "zaehlung"
+                      "name": "zaehlung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -4933,8 +4916,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "kultur_file"
+              "name": "kultur_file",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -5318,8 +5301,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "kultur_option"
+              "name": "kultur_option",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -5828,8 +5811,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "kultur_option_rev"
+              "name": "kultur_option_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -5859,8 +5842,7 @@
                     "changed",
                     "changed_by",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -5890,8 +5872,7 @@
                     "changed",
                     "id",
                     "kultur_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -5921,8 +5902,7 @@
                     "changed",
                     "id",
                     "kultur_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -6118,8 +6098,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "kultur_qk"
+              "name": "kultur_qk",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -6252,8 +6232,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "kultur_qk_choosen"
+              "name": "kultur_qk_choosen",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -6683,8 +6663,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "kultur_qk_choosen_rev"
+              "name": "kultur_qk_choosen_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -6705,8 +6685,7 @@
                     "kultur_id",
                     "kultur_qk_choosen_id",
                     "qk_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -6727,8 +6706,7 @@
                     "kultur_id",
                     "kultur_qk_choosen_id",
                     "qk_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -6749,8 +6727,7 @@
                     "kultur_id",
                     "kultur_qk_choosen_id",
                     "qk_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -6893,8 +6870,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "kultur_qk_rev"
+              "name": "kultur_qk_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -6916,8 +6893,7 @@
                     "_depth",
                     "_deleted",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -7020,8 +6996,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "kultur_rev"
+              "name": "kultur_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -7047,8 +7023,7 @@
                     "_deleted",
                     "id",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -7074,8 +7049,7 @@
                     "herkunft_id",
                     "id",
                     "kultur_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -7101,8 +7075,7 @@
                     "herkunft_id",
                     "id",
                     "kultur_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -7275,8 +7248,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "lieferung"
+              "name": "lieferung",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -7289,13 +7262,13 @@
                 "name": "kulturByNachKulturId",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "kultur"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "nach_kultur_id": "id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "kultur",
+                      "schema": "public"
                     }
                   }
                 }
@@ -7332,8 +7305,8 @@
                   "foreign_key_constraint_on": {
                     "column": "lieferung_id",
                     "table": {
-                      "schema": "public",
-                      "name": "lieferung_file"
+                      "name": "lieferung_file",
+                      "schema": "public"
                     }
                   }
                 }
@@ -8071,8 +8044,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "lieferung_file"
+              "name": "lieferung_file",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -8779,8 +8752,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "lieferung_rev"
+              "name": "lieferung_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -8813,8 +8786,7 @@
                     "_deleted",
                     "id",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -8847,8 +8819,7 @@
                     "sammel_lieferung_id",
                     "von_kultur_id",
                     "von_sammlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -8881,8 +8852,7 @@
                     "sammel_lieferung_id",
                     "von_kultur_id",
                     "von_sammlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -9097,21 +9067,21 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "person"
+              "name": "person",
+              "schema": "public"
             },
             "object_relationships": [
               {
                 "name": "person_option",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "person_option"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "id": "id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "person_option",
+                      "schema": "public"
                     }
                   }
                 }
@@ -9124,8 +9094,8 @@
                   "foreign_key_constraint_on": {
                     "column": "person_id",
                     "table": {
-                      "schema": "public",
-                      "name": "av"
+                      "name": "av",
+                      "schema": "public"
                     }
                   }
                 }
@@ -9136,8 +9106,8 @@
                   "foreign_key_constraint_on": {
                     "column": "person_id",
                     "table": {
-                      "schema": "public",
-                      "name": "event"
+                      "name": "event",
+                      "schema": "public"
                     }
                   }
                 }
@@ -9148,8 +9118,8 @@
                   "foreign_key_constraint_on": {
                     "column": "person_id",
                     "table": {
-                      "schema": "public",
-                      "name": "garten"
+                      "name": "garten",
+                      "schema": "public"
                     }
                   }
                 }
@@ -9160,8 +9130,8 @@
                   "foreign_key_constraint_on": {
                     "column": "person_id",
                     "table": {
-                      "schema": "public",
-                      "name": "gv"
+                      "name": "gv",
+                      "schema": "public"
                     }
                   }
                 }
@@ -9172,8 +9142,8 @@
                   "foreign_key_constraint_on": {
                     "column": "person_id",
                     "table": {
-                      "schema": "public",
-                      "name": "lieferung"
+                      "name": "lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -9184,8 +9154,8 @@
                   "foreign_key_constraint_on": {
                     "column": "person_id",
                     "table": {
-                      "schema": "public",
-                      "name": "person_file"
+                      "name": "person_file",
+                      "schema": "public"
                     }
                   }
                 }
@@ -9196,8 +9166,8 @@
                   "foreign_key_constraint_on": {
                     "column": "person_id",
                     "table": {
-                      "schema": "public",
-                      "name": "sammel_lieferung"
+                      "name": "sammel_lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -9208,8 +9178,8 @@
                   "foreign_key_constraint_on": {
                     "column": "person_id",
                     "table": {
-                      "schema": "public",
-                      "name": "sammlung"
+                      "name": "sammlung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -9308,8 +9278,7 @@
                     "telefon_mobile",
                     "telefon_privat",
                     "vorname"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -9633,8 +9602,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "person_file"
+              "name": "person_file",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -9929,8 +9898,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "person_option"
+              "name": "person_option",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -10394,8 +10363,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "person_option_rev"
+              "name": "person_option_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -10438,8 +10407,7 @@
                     "_rev_at",
                     "art_qk_choosen",
                     "kultur_qk_choosen"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -10482,8 +10450,7 @@
                     "changed",
                     "id",
                     "person_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -10526,8 +10493,7 @@
                     "changed",
                     "id",
                     "person_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -10802,21 +10768,21 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "person_rev"
+              "name": "person_rev",
+              "schema": "public"
             },
             "object_relationships": [
               {
                 "name": "person_option",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "person_option"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "person_id": "id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "person_option",
+                      "schema": "public"
                     }
                   }
                 }
@@ -10827,13 +10793,13 @@
                 "name": "av",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "av"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "person_id": "person_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "av",
+                      "schema": "public"
                     }
                   }
                 }
@@ -10842,13 +10808,13 @@
                 "name": "events",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "event"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "person_id": "person_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "event",
+                      "schema": "public"
                     }
                   }
                 }
@@ -10857,13 +10823,13 @@
                 "name": "gartens",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "garten"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "person_id": "person_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "garten",
+                      "schema": "public"
                     }
                   }
                 }
@@ -10872,13 +10838,13 @@
                 "name": "person_files",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "person_file"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "person_id": "person_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "person_file",
+                      "schema": "public"
                     }
                   }
                 }
@@ -10887,13 +10853,13 @@
                 "name": "sammel_lieferungs",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "sammel_lieferung"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "person_id": "person_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "sammel_lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -10902,13 +10868,13 @@
                 "name": "sammlungs",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "sammlung"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "person_id": "person_id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "sammlung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -10948,8 +10914,7 @@
                     "telefon_privat",
                     "user_role_id",
                     "vorname"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -10985,8 +10950,7 @@
                     "telefon_privat",
                     "user_role_id",
                     "vorname"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -11022,8 +10986,7 @@
                     "telefon_privat",
                     "user_role_id",
                     "vorname"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -11263,8 +11226,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "sammel_lieferung"
+              "name": "sammel_lieferung",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -11277,13 +11240,13 @@
                 "name": "kulturByNachKulturId",
                 "using": {
                   "manual_configuration": {
-                    "remote_table": {
-                      "schema": "public",
-                      "name": "kultur"
-                    },
-                    "insertion_order": null,
                     "column_mapping": {
                       "nach_kultur_id": "id"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "kultur",
+                      "schema": "public"
                     }
                   }
                 }
@@ -11314,8 +11277,8 @@
                   "foreign_key_constraint_on": {
                     "column": "sammel_lieferung_id",
                     "table": {
-                      "schema": "public",
-                      "name": "lieferung"
+                      "name": "lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -12044,8 +12007,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "sammel_lieferung_rev"
+              "name": "sammel_lieferung_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -12077,8 +12040,7 @@
                     "changed_by",
                     "id",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -12110,8 +12072,7 @@
                     "sammel_lieferung_id",
                     "von_kultur_id",
                     "von_sammlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -12143,8 +12104,7 @@
                     "sammel_lieferung_id",
                     "von_kultur_id",
                     "von_sammlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -12353,8 +12313,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "sammlung"
+              "name": "sammlung",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -12383,8 +12343,8 @@
                   "foreign_key_constraint_on": {
                     "column": "von_sammlung_id",
                     "table": {
-                      "schema": "public",
-                      "name": "lieferung"
+                      "name": "lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -12395,8 +12355,8 @@
                   "foreign_key_constraint_on": {
                     "column": "von_sammlung_id",
                     "table": {
-                      "schema": "public",
-                      "name": "sammel_lieferung"
+                      "name": "sammel_lieferung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -12407,8 +12367,8 @@
                   "foreign_key_constraint_on": {
                     "column": "sammlung_id",
                     "table": {
-                      "schema": "public",
-                      "name": "sammlung_file"
+                      "name": "sammlung_file",
+                      "schema": "public"
                     }
                   }
                 }
@@ -12661,8 +12621,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "sammlung_file"
+              "name": "sammlung_file",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -12744,8 +12704,7 @@
                     "file_id",
                     "id",
                     "sammlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -13039,8 +12998,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "sammlung_rev"
+              "name": "sammlung_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -13070,8 +13029,7 @@
                     "_deleted",
                     "id",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -13101,8 +13059,7 @@
                     "id",
                     "person_id",
                     "sammlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -13298,14 +13255,14 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "spatial_ref_sys"
+              "name": "spatial_ref_sys",
+              "schema": "public"
             }
           },
           {
             "table": {
-              "schema": "public",
-              "name": "teilkultur"
+              "name": "teilkultur",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -13322,8 +13279,8 @@
                   "foreign_key_constraint_on": {
                     "column": "teilkultur_id",
                     "table": {
-                      "schema": "public",
-                      "name": "event"
+                      "name": "event",
+                      "schema": "public"
                     }
                   }
                 }
@@ -13334,8 +13291,8 @@
                   "foreign_key_constraint_on": {
                     "column": "teilkultur_id",
                     "table": {
-                      "schema": "public",
-                      "name": "teilzaehlung"
+                      "name": "teilzaehlung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -13804,8 +13761,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "teilkultur_rev"
+              "name": "teilkultur_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -13829,8 +13786,7 @@
                     "_deleted",
                     "id",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -13854,8 +13810,7 @@
                     "id",
                     "kultur_id",
                     "teilkultur_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -13879,8 +13834,7 @@
                     "id",
                     "kultur_id",
                     "teilkultur_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -14041,8 +13995,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "teilzaehlung"
+              "name": "teilzaehlung",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -14071,8 +14025,8 @@
                   "foreign_key_constraint_on": {
                     "column": "prognose_von_tz",
                     "table": {
-                      "schema": "public",
-                      "name": "teilzaehlung"
+                      "name": "teilzaehlung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -14141,8 +14095,7 @@
                     "_conflicts",
                     "_deleted",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -14190,8 +14143,7 @@
                     "prognose_von_tz",
                     "teilkultur_id",
                     "zaehlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -14218,8 +14170,7 @@
                     "prognose_von_tz",
                     "teilkultur_id",
                     "zaehlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -14595,8 +14546,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "teilzaehlung_rev"
+              "name": "teilzaehlung_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -14623,8 +14574,7 @@
                     "_deleted",
                     "id",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -14651,8 +14601,7 @@
                     "teilkultur_id",
                     "teilzaehlung_id",
                     "zaehlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -14679,8 +14628,7 @@
                     "teilkultur_id",
                     "teilzaehlung_id",
                     "zaehlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -14859,8 +14807,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "user_role"
+              "name": "user_role",
+              "schema": "public"
             },
             "select_permissions": [
               {
@@ -14915,8 +14863,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "zaehlung"
+              "name": "zaehlung",
+              "schema": "public"
             },
             "object_relationships": [
               {
@@ -14933,8 +14881,8 @@
                   "foreign_key_constraint_on": {
                     "column": "zaehlung_id",
                     "table": {
-                      "schema": "public",
-                      "name": "teilzaehlung"
+                      "name": "teilzaehlung",
+                      "schema": "public"
                     }
                   }
                 }
@@ -15385,8 +15333,8 @@
           },
           {
             "table": {
-              "schema": "public",
-              "name": "zaehlung_rev"
+              "name": "zaehlung_rev",
+              "schema": "public"
             },
             "insert_permissions": [
               {
@@ -15408,8 +15356,7 @@
                     "_deleted",
                     "id",
                     "_rev_at"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -15431,8 +15378,7 @@
                     "id",
                     "kultur_id",
                     "zaehlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               },
               {
@@ -15454,8 +15400,7 @@
                     "id",
                     "kultur_id",
                     "zaehlung_id"
-                  ],
-                  "backend_only": false
+                  ]
                 }
               }
             ],
@@ -15605,17 +15550,17 @@
         ],
         "configuration": {
           "connection_info": {
-            "use_prepared_statements": true,
             "database_url": {
               "from_env": "HASURA_GRAPHQL_DATABASE_URL"
             },
             "isolation_level": "read-committed",
             "pool_settings": {
               "connection_lifetime": 600,
-              "retries": 1,
               "idle_timeout": 180,
-              "max_connections": 50
-            }
+              "max_connections": 50,
+              "retries": 1
+            },
+            "use_prepared_statements": true
           }
         }
       }

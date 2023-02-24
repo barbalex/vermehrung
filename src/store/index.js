@@ -128,6 +128,7 @@ const myTypes = types
     gqlWsClient: null,
     db: null,
     gqlClient: null,
+    navigate: undefined,
   }))
   .actions((self) => {
     reaction(
@@ -246,6 +247,9 @@ const myTypes = types
       },
     )
     return {
+      setNavigate(val) {
+        return (self.navigate = val)
+      },
       incrementWsReconnectCount() {
         self.wsReconnectCount = self.wsReconnectCount + 1
       },

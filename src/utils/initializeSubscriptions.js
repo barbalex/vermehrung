@@ -61,7 +61,6 @@ const initializeSubscriptions = ({ store }) => {
         // if error.message contains JWT, do what?
         // re-subscribe
         console.log('subscribeAeArt, onError:', error)
-        //typeof window !== 'undefined' && window.location.reload(true)
         // signOut()
         // need to retry
         setTimeout(() => store.incrementWsReconnectCount(), 3000)
