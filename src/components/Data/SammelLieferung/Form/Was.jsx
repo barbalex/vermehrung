@@ -102,7 +102,7 @@ const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
   }, [db, filter.art._deleted, row.art, showFilter])
 
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/genetische-vielfalt`
+    const url = `${constants?.getAppUri()}/Dokumentation/genetische-vielfalt`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
