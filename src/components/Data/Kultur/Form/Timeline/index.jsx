@@ -78,7 +78,7 @@ const KulturTimeline = ({ row, width }) => {
   }, [row])
 
   const openDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/zeitachse-kultur`
+    const url = `${constants?.getAppUri()}/Dokumentation/zeitachse-kultur`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
