@@ -7,7 +7,7 @@ import constants from '../../../../../utils/constants'
 
 const LieferungAnleitung = ({ asMenu }) => {
   const openLieferungDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/lieferungen`
+    const url = `${constants?.getAppUri()}/Dokumentation/lieferungen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }

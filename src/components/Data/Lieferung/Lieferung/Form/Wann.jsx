@@ -51,7 +51,7 @@ const LieferungWann = ({ showFilter, row, saveToDb, ifNeeded }) => {
   const { errors } = store
 
   const openPlanenDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/planen`
+    const url = `${constants?.getAppUri()}/Dokumentation/planen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
