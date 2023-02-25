@@ -56,7 +56,7 @@ const QueuedQueries = () => {
     [setShowQueuedQueries],
   )
   const openDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/offline`
+    const url = `${constants?.getAppUri()}/Dokumentation/offline`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
