@@ -92,7 +92,7 @@ const KulturQk = ({ kultur }) => {
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
-    const url = `${constants?.getAppUri()}/qualitaets-kontrollen`
+    const url = `${constants?.getAppUri()}/Dokumentation/qualitaets-kontrollen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }

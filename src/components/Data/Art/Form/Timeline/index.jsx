@@ -42,7 +42,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
-    const url = `${constants?.getAppUri()}/zeitachse-art`
+    const url = `${constants?.getAppUri()}/Dokumentation/zeitachse-art`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
