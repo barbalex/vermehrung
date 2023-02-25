@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom'
 
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import constants from '../utils/constants'
-import image from '../images/puls_vulg.jpg'
-import placeholderSrc from '../images/puls_vulg.jpg' // TODO: build small placeholder
+import image from '../images/puls_vulg_2500.webp'
+import placeholderSrc from '../images/puls_vulg_500.webp' // TODO: build small placeholder
 import ProgressiveImg from '../components/shared/ProgressiveImg'
 
 const OuterContainer = styled.div`

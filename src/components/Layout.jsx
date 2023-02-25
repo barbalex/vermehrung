@@ -1,10 +1,11 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { withResizeDetector } from 'react-resize-detector'
 import { Outlet } from 'react-router-dom'
 
 import StoreContext from '../storeContext'
 import constants from '../utils/constants'
+import Fallback from './shared/Fallback'
 
 import Header from './Header'
 
@@ -30,7 +31,9 @@ const Layout = ({ width }) => {
   return (
     <Container>
       <Header />
-      <Outlet />
+      <Suspense fallback={<Fallback />}>
+        <Outlet />
+      </Suspense>
     </Container>
   )
 }
