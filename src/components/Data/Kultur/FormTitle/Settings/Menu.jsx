@@ -79,7 +79,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
   const openOptionDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${constants?.getAppUri()}/teilkulturen`
+    const url = `${constants?.getAppUri()}/Dokumentation/teilkulturen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
