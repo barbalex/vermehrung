@@ -7,7 +7,7 @@ import constants from '../../../../utils/constants'
 
 const TeilkulturAnleitung = ({ asMenu }) => {
   const openTeilkulturDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/teilkulturen`
+    const url = `${constants?.getAppUri()}/Dokumentation/teilkulturen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }

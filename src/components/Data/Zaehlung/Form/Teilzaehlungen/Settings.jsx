@@ -70,7 +70,7 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${constants?.getAppUri()}/felder-blenden`
+    const url = `${constants?.getAppUri()}/Dokumentation/felder-blenden`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
