@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, lazy } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -8,13 +8,15 @@ import StoreContext from '../../storeContext'
 import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../../utils/openNodesFromActiveNodeArray'
 import initializeSubscriptions from '../../utils/initializeSubscriptions'
-import Login from '../../components/Login'
-import ErrorBoundary from '../../components/shared/ErrorBoundary'
-import ApiDetector from '../../components/ApiDetector'
-import QueuedQueries from '../../components/QueuedQueries'
+const Login = lazy(() => import('../../components/Login'))
+const ErrorBoundary = lazy(() =>
+  import('../../components/shared/ErrorBoundary'),
+)
+const ApiDetector = lazy(() => import('../../components/ApiDetector'))
+const QueuedQueries = lazy(() => import('../../components/QueuedQueries'))
 import tableNames from '../../utils/tableNames'
 import constants from '../../utils/constants'
-import VermehrungComponent from './Vermehrung'
+const VermehrungComponent = lazy(() => import('./Vermehrung'))
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);

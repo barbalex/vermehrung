@@ -20,13 +20,13 @@ import { Provider as MobxProvider } from './storeContext'
 import initiateApp from './utils/initiateApp'
 import initiateDb from './utils/initiateDb'
 
-import Home from './routes/index.jsx'
-import VermehrungIndex from './routes/Vermehrung'
-import FourOhFour from './routes/404'
+const Home = React.lazy(() => import('./routes/index.jsx'))
+const VermehrungIndex = React.lazy(() => import('./routes/Vermehrung'))
+const FourOhFour = React.lazy(() => import('./routes/404'))
 import NavigationSyncController from './components/NavigationSyncController'
 import Layout from './components/Layout'
+const Docs = React.lazy(() => import('./components/Documentation'))
 import DocRoutes from './DocRoutes'
-import Docs from './components/Documentation'
 
 const App = () => {
   const navigate = useNavigate()

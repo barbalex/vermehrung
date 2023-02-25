@@ -83,3 +83,4 @@ dropbox_uploader.conf
 .yarn
 assetlinks.json
 dist
+dist/

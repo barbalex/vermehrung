@@ -1,14 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext'
-import Tree from '../../components/Tree'
-import Data from '../../components/Data'
-import Filter from '../../components/Filter'
-import ApiDetector from '../../components/ApiDetector'
+const Tree = lazy(() => import('../../components/Tree'))
+const Data = lazy(() => import('../../components/Data'))
+const Filter = lazy(() => import('../../components/Filter'))
+const ApiDetector = lazy(() => import('../../components/ApiDetector'))
 import constants from '../../utils/constants'
+import FallBack from '../../components/shared/FallBack'
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
@@ -61,18 +62,22 @@ const Vermehrung = () => {
 
   return (
     <>
-      <Container>
-        <StyledSplitPane
-          split="vertical"
-          size={treeWidth}
-          maxSize={-10}
-          resizerStyle={resizerStyle}
-        >
-          <Tree />
-          {showFilter ? <Filter /> : <Data />}
-        </StyledSplitPane>
-      </Container>
-      <ApiDetector />
+      <Suspense fallback={<FallBack />}>
+        <Container>
+          <StyledSplitPane
+            split="vertical"
+            size={treeWidth}
+            maxSize={-10}
+            resizerStyle={resizerStyle}
+          >
+            <Tree />
+            <Suspense fallback={<FallBack />}>
+              {showFilter ? <Filter /> : <Data />}
+            </Suspense>
+          </StyledSplitPane>
+        </Container>
+        <ApiDetector />
+      </Suspense>
     </>
   )
 }

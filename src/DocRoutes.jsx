@@ -1,37 +1,80 @@
+import { lazy } from 'react'
 import { Route } from 'react-router-dom'
 
-import Ziele from './components/Documentation/docs/Ziele'
-import ZieleHerkuenfte from './components/Documentation/docs/ZieleHerkuenfte'
-import Herkuenfte from './components/Documentation/docs/Herkuenfte'
-import TechnischeVoraussetzungen from './components/Documentation/docs/TechnischeVoraussetzungen'
-import ZeitachseFuerArten from './components/Documentation/docs/ZeitachseFuerArten'
-import ZeitachseFuerKulturen from './components/Documentation/docs/ZeitachseFuerKulturen'
-import Sammlungen from './components/Documentation/docs/Sammlungen'
-import Kulturen from './components/Documentation/docs/Kulturen'
-import Zaehlungen from './components/Documentation/docs/Zaehlungen'
-import Teilkulturen from './components/Documentation/docs/Teilkulturen'
-import Lieferungen from './components/Documentation/docs/Lieferungen'
-import SammelLieferungen from './components/Documentation/docs/SammelLieferungen'
-import Events from './components/Documentation/docs/Events'
-import FelderBlenden from './components/Documentation/docs/FelderBlenden'
-import OrdnerBlenden from './components/Documentation/docs/OrdnerBlenden'
-import Planen from './components/Documentation/docs/Planen'
-import GenetischeVielfalt from './components/Documentation/docs/GenetischeVielfalt'
-import QualitaetsKontrollen from './components/Documentation/docs/QualitatesKontrollen'
-import VermehrungErinnertSich from './components/Documentation/docs/VermehrungErinnertSich'
-import OpenSource from './components/Documentation/docs/OpenSource'
-import FehlerMelden from './components/Documentation/docs/FehlerMelden'
-import Schnittstellen from './components/Documentation/docs/Schnittstellen'
-import Pwa from './components/Documentation/docs/Pwa'
-import Ios from './components/Documentation/docs/Ios'
-import Offline from './components/Documentation/docs/Offline'
-import OfflineWie from './components/Documentation/docs/OfflineWie'
-import History from './components/Documentation/docs/History'
-import Technologien from './components/Documentation/docs/Technologien'
-import Struktur from './components/Documentation/docs/Struktur'
-import Roadmap from './components/Documentation/docs/Roadmap'
-import Konten from './components/Documentation/docs/Konten'
-import Datenschutz from './components/Documentation/docs/Datenschutz'
+const Ziele = lazy(() => import('./components/Documentation/docs/Ziele'))
+const ZieleHerkuenfte = lazy(() =>
+  import('./components/Documentation/docs/ZieleHerkuenfte'),
+)
+const Herkuenfte = lazy(() =>
+  import('./components/Documentation/docs/Herkuenfte'),
+)
+const TechnischeVoraussetzungen = lazy(() =>
+  import('./components/Documentation/docs/TechnischeVoraussetzungen'),
+)
+const ZeitachseFuerArten = lazy(() =>
+  import('./components/Documentation/docs/ZeitachseFuerArten'),
+)
+const ZeitachseFuerKulturen = lazy(() =>
+  import('./components/Documentation/docs/ZeitachseFuerKulturen'),
+)
+const Sammlungen = lazy(() =>
+  import('./components/Documentation/docs/Sammlungen'),
+)
+const Kulturen = lazy(() => import('./components/Documentation/docs/Kulturen'))
+const Zaehlungen = lazy(() =>
+  import('./components/Documentation/docs/Zaehlungen'),
+)
+const Teilkulturen = lazy(() =>
+  import('./components/Documentation/docs/Teilkulturen'),
+)
+const Lieferungen = lazy(() =>
+  import('./components/Documentation/docs/Lieferungen'),
+)
+const SammelLieferungen = lazy(() =>
+  import('./components/Documentation/docs/SammelLieferungen'),
+)
+const Events = lazy(() => import('./components/Documentation/docs/Events'))
+const FelderBlenden = lazy(() =>
+  import('./components/Documentation/docs/FelderBlenden'),
+)
+const OrdnerBlenden = lazy(() =>
+  import('./components/Documentation/docs/OrdnerBlenden'),
+)
+const Planen = lazy(() => import('./components/Documentation/docs/Planen'))
+const GenetischeVielfalt = lazy(() =>
+  import('./components/Documentation/docs/GenetischeVielfalt'),
+)
+const QualitaetsKontrollen = lazy(() =>
+  import('./components/Documentation/docs/QualitatesKontrollen'),
+)
+const VermehrungErinnertSich = lazy(() =>
+  import('./components/Documentation/docs/VermehrungErinnertSich'),
+)
+const OpenSource = lazy(() =>
+  import('./components/Documentation/docs/OpenSource'),
+)
+const FehlerMelden = lazy(() =>
+  import('./components/Documentation/docs/FehlerMelden'),
+)
+const Schnittstellen = lazy(() =>
+  import('./components/Documentation/docs/Schnittstellen'),
+)
+const Pwa = lazy(() => import('./components/Documentation/docs/Pwa'))
+const Ios = lazy(() => import('./components/Documentation/docs/Ios'))
+const Offline = lazy(() => import('./components/Documentation/docs/Offline'))
+const OfflineWie = lazy(() =>
+  import('./components/Documentation/docs/OfflineWie'),
+)
+const History = lazy(() => import('./components/Documentation/docs/History'))
+const Technologien = lazy(() =>
+  import('./components/Documentation/docs/Technologien'),
+)
+const Struktur = lazy(() => import('./components/Documentation/docs/Struktur'))
+const Roadmap = lazy(() => import('./components/Documentation/docs/Roadmap'))
+const Konten = lazy(() => import('./components/Documentation/docs/Konten'))
+const Datenschutz = lazy(() =>
+  import('./components/Documentation/docs/Datenschutz'),
+)
 
 const DocRoutes = () => (
   <>
