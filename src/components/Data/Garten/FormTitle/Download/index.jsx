@@ -5,7 +5,6 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaDownload } from 'react-icons/fa'
 import styled from '@emotion/styled'
-import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
 import StoreContext from '../../../../../storeContext'
 import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten'
@@ -30,7 +29,8 @@ const GartenDownload = ({ gartenId }) => {
   const store = useContext(StoreContext)
 
   const onClickData = useCallback(async () => {
-    const workbook = new ExcelJs.Workbook()
+    const { Workbook } = await import('exceljs/dist/exceljs.min.js')
+    const workbook = new Workbook()
     await buildExceljsWorksheetsForDaten({
       store,
       garten_id: gartenId,
@@ -44,7 +44,8 @@ const GartenDownload = ({ gartenId }) => {
     setAnchorEl(null)
   }, [gartenId, store])
   const onClickTzSums = useCallback(async () => {
-    const workbook = new ExcelJs.Workbook()
+    const { Workbook } = await import('exceljs/dist/exceljs.min.js')
+    const workbook = new Workbook()
     await buildExceljsWorksheetsForTzSums({
       store,
       garten_id: gartenId,
@@ -73,7 +74,8 @@ const GartenDownload = ({ gartenId }) => {
         aria-haspopup="true"
         title="Daten herunterladen"
         onClick={onClickOpenMenu}
-        size="large">
+        size="large"
+      >
         <FaDownload />
       </IconButton>
       <Menu
@@ -91,7 +93,7 @@ const GartenDownload = ({ gartenId }) => {
         >{`Auswertung der Teil-Zählungen`}</MenuItem>
       </Menu>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(GartenDownload)
