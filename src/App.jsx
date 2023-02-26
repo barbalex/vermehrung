@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 import { useNavigate } from 'react-router-dom'
@@ -9,7 +9,7 @@ import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
 import { Routes, Route } from 'react-router-dom'
 
-import Notifications from './components/Notifications'
+const Notifications = lazy(() => import('./components/Notifications'))
 
 import materialTheme from './utils/materialTheme'
 
@@ -20,12 +20,14 @@ import { Provider as MobxProvider } from './storeContext'
 import initiateApp from './utils/initiateApp'
 import initiateDb from './utils/initiateDb'
 
-const Home = React.lazy(() => import('./routes/index.jsx'))
-const VermehrungIndex = React.lazy(() => import('./routes/Vermehrung'))
-const FourOhFour = React.lazy(() => import('./routes/404'))
-import NavigationSyncController from './components/NavigationSyncController'
+const Home = lazy(() => import('./routes/index.jsx'))
+const VermehrungIndex = lazy(() => import('./routes/Vermehrung'))
+const FourOhFour = lazy(() => import('./routes/404'))
+const NavigationSyncController = lazy(() =>
+  import('./components/NavigationSyncController'),
+)
 import Layout from './components/Layout'
-const Docs = React.lazy(() => import('./components/Documentation'))
+const Docs = lazy(() => import('./components/Documentation'))
 import DocRoutes from './DocRoutes'
 
 const App = () => {
@@ -81,8 +83,10 @@ const App = () => {
                   <Route path="*" element={<FourOhFour />} />
                 </Route>
               </Routes>
-              <NavigationSyncController />
-              <Notifications />
+              <Suspense fallback={null}>
+                <NavigationSyncController />
+                <Notifications />
+              </Suspense>
             </UrqlProvider>
           </MobxProvider>
         </ThemeProvider>
