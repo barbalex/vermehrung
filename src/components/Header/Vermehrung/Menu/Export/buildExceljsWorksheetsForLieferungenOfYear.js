@@ -1,4 +1,3 @@
-import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import { DateTime } from 'luxon'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
@@ -11,7 +10,8 @@ import lieferungSort from '../../../../../utils/lieferungSort'
 
 const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
   const { db } = store
-  const workbook = new ExcelJs.Workbook()
+  const { Workbook } = await import('exceljs/dist/exceljs.min.js')
+  const workbook = new Workbook()
 
   let lieferungs = []
   try {

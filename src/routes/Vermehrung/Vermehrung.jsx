@@ -70,13 +70,17 @@ const Vermehrung = () => {
             maxSize={-10}
             resizerStyle={resizerStyle}
           >
-            <Tree />
+            <Suspense fallback={<FallBack />}>
+              <Tree />
+            </Suspense>
             <Suspense fallback={<FallBack />}>
               {showFilter ? <Filter /> : <Data />}
             </Suspense>
           </StyledSplitPane>
         </Container>
-        <ApiDetector />
+        <Suspense fallback={null}>
+          <ApiDetector />
+        </Suspense>
       </Suspense>
     </>
   )

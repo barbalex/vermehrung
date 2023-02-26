@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
-import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import styled from '@emotion/styled'
 
 import StoreContext from '../../../../../storeContext'
@@ -34,7 +33,8 @@ const SettingsOverallMenu = ({
     [setGrandParentAnchorEl, setParentAnchorEl, store],
   )
   const onClickKulturenFuerBedarfsplanung = useCallback(async () => {
-    const workbook = new ExcelJs.Workbook()
+    const { Workbook } = await import('exceljs/dist/exceljs.min.js')
+    const workbook = new Workbook()
     await buildExceljsWorksheetsForKulturBedarfsplanung({
       store,
       workbook,
