@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom'
 import Article from './Article'
 import constants from '../../../utils/constants'
 import storeContext from '../../../storeContext'
+import IntoViewScroller from './IntoViewScroller'
 
 const Container = styled.div`
   height: calc(100vh - ${constants.appBarHeight}px);
@@ -40,6 +41,7 @@ const ArticleList = ({ articles }) => {
           )
         })}
       </List>
+      <IntoViewScroller />
     </Container>
   )
 }
