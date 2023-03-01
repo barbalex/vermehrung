@@ -37,6 +37,7 @@ const MenuItem = ({ node }) => {
         selected={active}
         divider
         ischild1={isChild.toString()}
+        id={slug}
       >
         <ListItemText onClick={onClickMenuItem}>
           {title ?? '(Titel fehlt)'}
