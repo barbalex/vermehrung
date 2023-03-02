@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, Suspense } from 'react'
 import styled from '@emotion/styled'
-import { withResizeDetector } from 'react-resize-detector'
 import { Outlet } from 'react-router-dom'
 
 import StoreContext from '../storeContext'
@@ -15,9 +14,14 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const Layout = ({ width }) => {
+const Layout = () => {
   const store = useContext(StoreContext)
   const { singleColumnView, setSingleColumnView } = store
+
+  const width =
+    window.innerWidth ??
+    document.documentElement.clientWidth ??
+    document.body.clientWidth
 
   useEffect(() => {
     if (width > constants?.tree?.minimalWindowWidth && singleColumnView) {
@@ -38,4 +42,4 @@ const Layout = ({ width }) => {
   )
 }
 
-export default withResizeDetector(Layout)
+export default Layout
