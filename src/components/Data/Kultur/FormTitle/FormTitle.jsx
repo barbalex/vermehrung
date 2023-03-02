@@ -214,4 +214,8 @@ const KulturFormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(KulturFormTitle))
+export default withResizeDetector(observer(KulturFormTitle), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})

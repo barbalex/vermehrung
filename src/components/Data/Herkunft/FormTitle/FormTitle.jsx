@@ -150,4 +150,8 @@ const Herkunft = ({
   )
 }
 
-export default withResizeDetector(observer(Herkunft))
+export default withResizeDetector(observer(Herkunft), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
