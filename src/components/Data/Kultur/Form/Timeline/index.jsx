@@ -59,8 +59,6 @@ const Content = styled.div`
 `
 
 const KulturTimeline = ({ row, width }) => {
-  const [narrow, setNarrow] = useState(false)
-
   // TODO: calc runs on every render of kultur
   // need to only run when open
   const [allData, setAllData] = useState([])
@@ -84,14 +82,8 @@ const KulturTimeline = ({ row, width }) => {
     }
     window.open(url)
   }, [])
-  useEffect(() => {
-    if (width < 1100 && !narrow) {
-      setNarrow(true)
-    }
-    if (width > 1100 && narrow) {
-      setNarrow(false)
-    }
-  }, [narrow, width])
+
+  const isNarrow = width < 1100
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
@@ -184,7 +176,7 @@ const KulturTimeline = ({ row, width }) => {
                 fontSize={12}
               />
               <Tooltip content={<CustomTooltip />} />
-              {narrow ? (
+              {isNarrow ? (
                 <Legend
                   layout="horizontal"
                   align="center"
@@ -357,4 +349,8 @@ const KulturTimeline = ({ row, width }) => {
   )
 }
 
-export default withResizeDetector(observer(KulturTimeline))
+export default withResizeDetector(observer(KulturTimeline), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
