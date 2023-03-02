@@ -42,7 +42,6 @@ const ArtTimeline = ({ artId }) => {
     refreshOptions: { trailing: true },
   })
   const isNarrow = width < 1100
-  console.log('ArtTimeline', { isNarrow, width })
 
   const [data, setData] = useState(null)
   useEffect(() => {
