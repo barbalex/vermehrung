@@ -213,4 +213,8 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Kulturen))
+export default withResizeDetector(observer(Kulturen), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
