@@ -151,7 +151,6 @@ const Documentation = ({ width }) => {
   const path = pathname.split('/').filter((e) => !!e)
 
   const [mobile, setMobile] = useState(false)
-
   useEffect(() => {
     if (width >= constants?.tree?.minimalWindowWidth && mobile) {
       setMobile(false)
@@ -217,4 +216,8 @@ const Documentation = ({ width }) => {
   )
 }
 
-export default withResizeDetector(observer(Documentation))
+export default withResizeDetector(observer(Documentation), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})

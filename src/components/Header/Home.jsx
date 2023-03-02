@@ -81,4 +81,8 @@ const HeaderHome = ({ width, location }) => {
   )
 }
 
-export default withResizeDetector(HeaderHome)
+export default withResizeDetector(HeaderHome, {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
