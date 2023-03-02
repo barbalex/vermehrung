@@ -292,4 +292,8 @@ const SammelLieferungFormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(SammelLieferungFormTitle))
+export default withResizeDetector(observer(SammelLieferungFormTitle), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
