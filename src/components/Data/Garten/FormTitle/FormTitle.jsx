@@ -128,4 +128,8 @@ const GartenFormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(GartenFormTitle))
+export default withResizeDetector(observer(GartenFormTitle), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
