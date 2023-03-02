@@ -108,4 +108,8 @@ const TeilkulturFormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(TeilkulturFormTitle))
+export default withResizeDetector(observer(TeilkulturFormTitle), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
