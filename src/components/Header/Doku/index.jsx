@@ -75,4 +75,8 @@ const HeaderDoku = ({ width }) => {
   )
 }
 
-export default withResizeDetector(HeaderDoku)
+export default withResizeDetector(HeaderDoku, {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
