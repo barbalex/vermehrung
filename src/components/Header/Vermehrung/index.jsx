@@ -106,4 +106,8 @@ const HeaderVermehrung = ({ width }) => {
   )
 }
 
-export default withResizeDetector(observer(HeaderVermehrung))
+export default withResizeDetector(observer(HeaderVermehrung), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})

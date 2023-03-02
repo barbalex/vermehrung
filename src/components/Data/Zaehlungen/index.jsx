@@ -190,4 +190,8 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Zaehlungen))
+export default withResizeDetector(observer(Zaehlungen), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
