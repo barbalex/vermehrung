@@ -53,6 +53,7 @@ const EventFormTitle = ({
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
   }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+
   if (width < 520) {
     return (
       <TitleContainer>
@@ -107,4 +108,8 @@ const EventFormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(EventFormTitle))
+export default withResizeDetector(observer(EventFormTitle), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
