@@ -179,4 +179,8 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(SammelLieferungen))
+export default withResizeDetector(observer(SammelLieferungen), {
+  refreshMode: 'debounce',
+  refreshRate: 300,
+  refreshOptions: { trailing: true },
+})
