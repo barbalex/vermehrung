@@ -88,8 +88,8 @@ const StyledTable = styled(Table)`
     padding-left: 8px;
     padding-right: 8px;
   }
-  th:first-child,
-  td:first-child {
+  th:first-of-type,
+  td:first-of-type {
     padding-left: 8px;
   }
 `
@@ -110,7 +110,8 @@ const Lieferschein = ({ row }) => {
           .get('garten')
           .query(
             Q.where('_deleted', false),
-            Q.on('kultur', Q.where('id', row.von_kultur_id)),
+            Q.experimentalJoinTables(['kultur']),
+            Q.on('kultur', 'id', row.von_kultur_id),
           )
           .observe()
       : $of({})
