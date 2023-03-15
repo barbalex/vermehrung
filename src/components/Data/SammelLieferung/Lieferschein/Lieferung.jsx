@@ -30,13 +30,13 @@ const LieferungForLieferschein = ({ lieferung: row }) => {
     const vonKulturHerkunftObservable = row.von_kultur_id
       ? db
           .get('herkunft')
-          .query(Q.on('kultur', Q.where('id', row.von_kultur_id)))
+          .query(Q.on('kultur', 'id', row.von_kultur_id))
           .observe()
       : $of({})
     const vonSammlungHerkunftObservable = row.von_sammlung_id
       ? db
           .get('herkunft')
-          .query(Q.on('sammlung', Q.where('id', row.von_sammlung_id)))
+          .query(Q.on('sammlung', 'id', row.von_sammlung_id))
           .observe()
       : $of({})
     const combinedObservables = combineLatest([
