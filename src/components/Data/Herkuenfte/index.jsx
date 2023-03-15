@@ -76,7 +76,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
         ]
       : artIdInActiveNodeArray
       ? [
-          Q.experimentalNestedJoin('sammlung', 'art'),
+          Q.experimentalJoinTables(['sammlung']),
           Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
         ]
       : []
