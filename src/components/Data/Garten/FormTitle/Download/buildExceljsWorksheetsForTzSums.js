@@ -20,7 +20,7 @@ const buildExceljsWorksheetsForTzSums = async ({
       .get('teilzaehlung')
       .query(
         Q.experimentalNestedJoin('zaehlung', 'kultur'),
-        Q.on('zaehlung', Q.on('kultur', Q.where('garten_id', garten_id))),
+        Q.on('zaehlung', Q.on('kultur', 'garten_id', garten_id)),
         Q.where('_deleted', false),
       )
       .fetch()
