@@ -551,10 +551,7 @@ export class Art extends Model {
   )
   @lazy herkunfts = this.collections
     .get('herkunft')
-    .query(
-      Q.experimentalNestedJoin('sammlung', 'art'),
-      Q.on('sammlung', 'art_id', this.id),
-    )
+    .query(Q.on('sammlung', 'art_id', this.id))
 
   @writer async removeConflict(_rev) {
     await this.update((row) => {
