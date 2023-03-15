@@ -10,14 +10,14 @@ const buildData = async ({ artId, herkunftId, db }) => {
       .get('zaehlung')
       .query(
         Q.experimentalJoinTables(['kultur']),
-        Q.experimentalJoinTables(['teilzaehlung']),
         Q.on('kultur', [
           Q.where('art_id', artId),
           Q.where('herkunft_id', herkunftId),
         ]),
         Q.where('prognose', false),
         Q.where('datum', Q.notEq(null)),
-        Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+        Q.experimentalJoinTables(['teilzaehlung']),
+        Q.on('teilzaehlung', 'anzahl_pflanzen', Q.notEq(null)),
         Q.where('_deleted', false),
       )
       .fetch()
@@ -28,14 +28,14 @@ const buildData = async ({ artId, herkunftId, db }) => {
       .get('zaehlung')
       .query(
         Q.experimentalJoinTables(['kultur']),
-        Q.experimentalJoinTables(['teilzaehlung']),
         Q.where('prognose', true),
         Q.where('datum', Q.notEq(null)),
         Q.on('kultur', [
           Q.where('art_id', artId),
           Q.where('herkunft_id', herkunftId),
         ]),
-        Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+        Q.experimentalJoinTables(['teilzaehlung']),
+        Q.on('teilzaehlung', 'anzahl_pflanzen', Q.notEq(null)),
         Q.where('_deleted', false),
       )
       .fetch()
