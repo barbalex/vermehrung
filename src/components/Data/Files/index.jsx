@@ -73,7 +73,7 @@ const Files = ({ parentTable, parent }) => {
       if (file) {
         file.done(async (info) => {
           const newObject = {
-            id: Crypto.randomUUID(),
+            id: window.crypto.randomUUID(),
             file_id: info.uuid,
             file_mime_type: info.mimeType,
             [`${parentTable}_id`]: parent.id,

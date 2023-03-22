@@ -83,7 +83,7 @@ const KulturConflict = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = Crypto.randomUUID()
+    newObject.id = window.crypto.randomUUID()
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
@@ -149,7 +149,7 @@ const KulturConflict = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = Crypto.randomUUID()
+    newObject.id = window.crypto.randomUUID()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = row._revisions
