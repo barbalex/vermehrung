@@ -1,6 +1,5 @@
 import md5 from 'blueimp-md5'
 import { DateTime } from 'luxon'
-import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
 
 import toPgArray from '../../../../../utils/toPgArray'
@@ -95,7 +94,7 @@ const updateLieferung = async ({
   const newObject = {
     ...oldValuesFromL,
     ...newValuesFromSl,
-    id: uuidv1(),
+    id: Crypto.randomUUID(),
     lieferung_id: lieferung.id,
     sammel_lieferung_id: sammelLieferung.id,
   }

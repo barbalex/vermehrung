@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import ImageGallery from 'react-image-gallery'
 import Button from '@mui/material/Button'
-import { v1 as uuidv1 } from 'uuid'
 
 import StoreContext from '../../../storeContext'
 import Uploader from '../../Uploader'
@@ -74,7 +73,7 @@ const Files = ({ parentTable, parent }) => {
       if (file) {
         file.done(async (info) => {
           const newObject = {
-            id: uuidv1(),
+            id: Crypto.randomUUID(),
             file_id: info.uuid,
             file_mime_type: info.mimeType,
             [`${parentTable}_id`]: parent.id,
