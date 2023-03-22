@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useQuery } from 'urql'
@@ -84,7 +83,7 @@ const KulturConflict = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = uuidv1()
+    newObject.id = Crypto.randomUUID()
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
@@ -150,7 +149,7 @@ const KulturConflict = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = uuidv1()
+    newObject.id = Crypto.randomUUID()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = row._revisions
@@ -195,9 +194,10 @@ const KulturConflict = ({
     store,
     user.email,
   ])
-  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
-    setActiveConflict,
-  ])
+  const onClickSchliessen = useCallback(
+    () => setActiveConflict(null),
+    [setActiveConflict],
+  )
 
   console.log('Kultur Conflict', { dataArray, row, revRow })
 

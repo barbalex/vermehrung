@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
 
 import History from '../../../shared/History'
@@ -45,7 +44,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = uuidv1()
+    newObject.id = Crypto.randomUUID()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
