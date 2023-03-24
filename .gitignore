@@ -73,7 +73,6 @@ yarn-error.log
 
 #my own
 secrets.json
-public/
 
 .now
 
