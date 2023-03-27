@@ -10,18 +10,6 @@ export default defineConfig({
     port: 5175,
   },
   plugins: [
-    // babel({
-    //   babelConfig: {
-    //     babelrc: false,
-    //     configFile: false,
-    //     plugins: [
-    //       [
-    //         '@babel/plugin-proposal-decorators',
-    //         { loose: true, version: '2022-03' },
-    //       ],
-    //     ],
-    //   },
-    // }),
     svgrPlugin({
       svgrOptions: {
         icon: true,
