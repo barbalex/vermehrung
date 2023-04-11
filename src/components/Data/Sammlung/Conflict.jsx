@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
+import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useQuery } from 'urql'
@@ -61,10 +62,9 @@ const SammlungConflict = ({
   })
   error && checkForOnlineError({ error, store })
 
-  const revRow = useMemo(
-    () => data?.sammlung_rev?.[0] ?? {},
-    [data?.sammlung_rev],
-  )
+  const revRow = useMemo(() => data?.sammlung_rev?.[0] ?? {}, [
+    data?.sammlung_rev,
+  ])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow }),
@@ -94,7 +94,7 @@ const SammlungConflict = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = Crypto.randomUUID()
+    newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = revRow._revisions
@@ -167,7 +167,7 @@ const SammlungConflict = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = Crypto.randomUUID()
+    newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = row._revisions
@@ -216,10 +216,9 @@ const SammlungConflict = ({
     store,
     user.email,
   ])
-  const onClickSchliessen = useCallback(
-    () => setActiveConflict(null),
-    [setActiveConflict],
-  )
+  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
+    setActiveConflict,
+  ])
 
   //console.log('Sammlung Conflict', { dataArray, row, revRow })
 

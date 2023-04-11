@@ -68,7 +68,8 @@
     "typography": "0.16.21",
     "uploadcare-widget": "3.21.0",
     "urql": "3.0.4",
-    "use-debounce": "9.0.3"
+    "use-debounce": "9.0.3",
+    "uuid": "9.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.21.3",
