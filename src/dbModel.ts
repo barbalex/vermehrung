@@ -110,7 +110,7 @@ export class Herkunft extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new Date().toISOString()
@@ -291,7 +291,7 @@ export class Sammlung extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -466,7 +466,7 @@ export class Lieferung extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -572,7 +572,7 @@ export class Art extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -714,7 +714,7 @@ export class Garten extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -927,7 +927,7 @@ export class Kultur extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -1027,7 +1027,7 @@ export class Teilkultur extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -1171,7 +1171,7 @@ export class Zaehlung extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -1287,7 +1287,7 @@ export class Teilzaehlung extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -1455,7 +1455,7 @@ export class Person extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -1630,7 +1630,7 @@ export class SammelLieferung extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -1761,7 +1761,7 @@ export class Event extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -1867,7 +1867,7 @@ export class Av extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -1976,7 +1976,7 @@ export class Gv extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -2751,7 +2751,7 @@ export class ArtQk extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -2863,7 +2863,7 @@ export class KulturOption extends Model {
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
@@ -2951,7 +2951,7 @@ export class KulturQk extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
@@ -3099,7 +3099,7 @@ export class PersonOption extends Model {
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
