@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
+import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useQuery } from 'urql'
@@ -64,10 +65,9 @@ const LieferungConflict = ({
   })
   error && checkForOnlineError({ error, store })
 
-  const revRow = useMemo(
-    () => data?.lieferung_rev?.[0] ?? {},
-    [data?.lieferung_rev],
-  )
+  const revRow = useMemo(() => data?.lieferung_rev?.[0] ?? {}, [
+    data?.lieferung_rev,
+  ])
 
   const dataArray = useMemo(
     () => createDataArrayForRevComparison({ row, revRow }),
@@ -100,7 +100,7 @@ const LieferungConflict = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = revRow._revisions
@@ -179,7 +179,7 @@ const LieferungConflict = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = row._revisions
@@ -231,10 +231,9 @@ const LieferungConflict = ({
     store,
     user.email,
   ])
-  const onClickSchliessen = useCallback(
-    () => setActiveConflict(null),
-    [setActiveConflict],
-  )
+  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
+    setActiveConflict,
+  ])
 
   //console.log('Lieferung Conflict', { dataArray, row, revRow })
 
