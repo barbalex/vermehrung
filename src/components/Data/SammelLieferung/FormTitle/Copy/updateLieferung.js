@@ -94,7 +94,7 @@ const updateLieferung = async ({
   const newObject = {
     ...oldValuesFromL,
     ...newValuesFromSl,
-    id: window.crypto.randomUUID(),
+    id: Crypto.randomUUID(),
     lieferung_id: lieferung.id,
     sammel_lieferung_id: sammelLieferung.id,
   }

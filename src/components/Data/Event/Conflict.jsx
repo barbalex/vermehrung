@@ -79,7 +79,7 @@ const EventConflict = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = revRow._revisions
@@ -140,7 +140,7 @@ const EventConflict = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = window.crypto.randomUUID()
+    newObject.id = Crypto.randomUUID()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = row._revisions
