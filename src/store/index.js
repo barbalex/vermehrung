@@ -1,6 +1,7 @@
 import { types, destroy } from 'mobx-state-tree'
 import { reaction, flow } from 'mobx'
 import sortBy from 'lodash/sortBy'
+import { v1 as uuidv1 } from 'uuid'
 import md5 from 'blueimp-md5'
 import last from 'lodash/last'
 import set from 'lodash/set'
@@ -344,7 +345,7 @@ const myTypes = types
       addQueuedQuery(valPassed) {
         const val = {
           // set default values
-          id: window.crypto.randomUUID(),
+          id: uuidv1(),
           time: Date.now(),
           // overwrite with passed in ones:
           ...valPassed,
@@ -354,7 +355,7 @@ const myTypes = types
       addNotification(valPassed) {
         const val = {
           // set default values
-          id: window.crypto.randomUUID(),
+          id: uuidv1(),
           time: Date.now(),
           duration: 10000, // standard value: 10000
           dismissable: true,
@@ -381,7 +382,7 @@ const myTypes = types
         const { activeNodeArray, setActiveNodeArray } = self.tree
         const valuesPassed = args?.values ?? {}
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           art_id: id,
@@ -395,7 +396,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -440,7 +441,7 @@ const myTypes = types
         const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           av_id: id,
@@ -455,7 +456,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -500,7 +501,7 @@ const myTypes = types
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           event_id: id,
@@ -520,7 +521,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -568,7 +569,7 @@ const myTypes = types
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           garten_id: id,
@@ -589,7 +590,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -634,7 +635,7 @@ const myTypes = types
         const { user, addQueuedQuery } = self
         const valuesPassed = args?.values ?? {}
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           gv_id: id,
@@ -649,7 +650,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -689,7 +690,7 @@ const myTypes = types
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           herkunft_id: id,
@@ -709,7 +710,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -765,7 +766,7 @@ const myTypes = types
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           kultur_id: id,
@@ -786,7 +787,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -852,7 +853,7 @@ const myTypes = types
           : undefined
         const artIdOfKultur = kultur?.artId
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           lieferung_id: id,
@@ -880,7 +881,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -926,7 +927,7 @@ const myTypes = types
         const { activeNodeArray, setActiveNodeArray } = self.tree
 
         const valuesPassed = args?.values ?? {}
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           person_id: id,
@@ -957,7 +958,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -1014,7 +1015,7 @@ const myTypes = types
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           sammel_lieferung_id: id,
@@ -1041,7 +1042,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -1095,7 +1096,7 @@ const myTypes = types
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           sammlung_id: id,
@@ -1120,7 +1121,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -1169,7 +1170,7 @@ const myTypes = types
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           teilkultur_id: id,
@@ -1188,7 +1189,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -1241,7 +1242,7 @@ const myTypes = types
         } = self
         const valuesPassed = args?.values ?? {}
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           teilzaehlung_id: id,
@@ -1263,7 +1264,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
@@ -1303,7 +1304,7 @@ const myTypes = types
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
-        const id = window.crypto.randomUUID()
+        const id = uuidv1()
         const _depth = 1
         const newObject = {
           zaehlung_id: id,
@@ -1320,7 +1321,7 @@ const myTypes = types
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
-        newObject.id = window.crypto.randomUUID()
+        newObject.id = uuidv1()
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = JSON.stringify([rev])
