@@ -1,4 +1,4 @@
-import { createClient } from 'urql'
+import { createClient, cacheExchange, fetchExchange } from 'urql'
 import { createClient as createWsClient } from 'graphql-ws'
 
 import constants from './constants'
@@ -90,6 +90,7 @@ const initiateApp = async ({ navigate }) => {
 
   const gqlClient = createClient({
     url: constants?.getGraphQlUri(),
+    exchanges: [cacheExchange, fetchExchange],
     fetchOptions: () => {
       const token = getToken()
       return {
