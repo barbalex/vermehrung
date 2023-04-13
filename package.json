@@ -67,7 +67,7 @@
     "slick-carousel": "1.8.1",
     "typography": "0.16.21",
     "uploadcare-widget": "3.21.0",
-    "urql": "3.0.4",
+    "urql": "4.0.0",
     "use-debounce": "9.0.4",
     "uuid": "9.0.0"
   },
@@ -101,6 +101,7 @@
   "dev-comments": {
     "none": "right now",
     "graphql": "is needed by graphql_ws",
-    "re2": "Someone's dep. Gave errors on install, trying to force newer version. 2023.01.05"
+    "re2": "Someone's dep. Gave errors on install, trying to force newer version. 2023.01.05",
+    "urql": "do not uprade from 3.0.4 to 4.0.0, see: https://github.com/urql-graphql/urql/discussions/3145"
   }
 }
