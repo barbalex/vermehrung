@@ -30,7 +30,6 @@
     "graphql-tag": "2.12.6",
     "graphql-ws": "5.12.1",
     "is-uuid": "1.0.2",
-    "isomorphic-fetch": "3.0.0",
     "localforage": "1.10.0",
     "lodash": "4.17.21",
     "luxon": "3.3.0",
