@@ -94,7 +94,6 @@
     "workbox-window": "6.5.4"
   },
   "dev-comments": {
-    "none": "right now",
-    "urql": "do not uprade from 3.0.4 to 4.0.0, see: https://github.com/urql-graphql/urql/discussions/3145"
+    "none": "right now"
   }
 }
