@@ -42,7 +42,6 @@
     "prettier": "2.8.7",
     "prismjs": "1.29.0",
     "proj4": "2.9.0",
-    "re2": "1.18.0",
     "react": "18.2.0",
     "react-contextmenu": "2.14.0",
     "react-copy-to-clipboard": "5.1.0",
@@ -98,8 +97,6 @@
   },
   "dev-comments": {
     "none": "right now",
-    "graphql": "is needed by graphql_ws",
-    "re2": "Someone's dep. Gave errors on install, trying to force newer version. 2023.01.05",
     "urql": "do not uprade from 3.0.4 to 4.0.0, see: https://github.com/urql-graphql/urql/discussions/3145"
   }
 }
