@@ -25,11 +25,8 @@ const Title = styled.div`
 const SammelLieferungDeleteButton = ({ row }) => {
   const store = useContext(StoreContext)
   const { filter } = store
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    removeOpenNodeWithChildren,
-  } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
+    store.tree
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
@@ -65,8 +62,9 @@ const SammelLieferungDeleteButton = ({ row }) => {
         aria-label="Sammel-Lieferung löschen"
         title="Sammel-Lieferung löschen"
         onClick={onClickButton}
-        disabled={row._deleted}
-        size="large">
+        disabled={!!row._deleted}
+        size="large"
+      >
         <FaMinus />
       </IconButton>
       <Menu
@@ -83,7 +81,7 @@ const SammelLieferungDeleteButton = ({ row }) => {
         <MenuItem onClick={closeMenu}>Nein, abbrechen!</MenuItem>
       </Menu>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(SammelLieferungDeleteButton)

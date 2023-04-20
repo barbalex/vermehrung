@@ -1,10 +1,13 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useContext } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
+import { v1 as uuidv1 } from 'uuid'
+import { observer } from 'mobx-react-lite'
 
 import styled from '@emotion/styled'
 
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
+import storeContext from '../../../../../../../storeContext'
 import TypeDialog from './TypeDialog'
 import ChooseDialog from './ChooseDialog'
 
@@ -12,7 +15,10 @@ const StyledButton = styled(IconButton)`
   margin-bottom: 19px;
 `
 
-const Add = ({ saveToDb, disabled, lieferung, herkunft }) => {
+const Add = ({ disabled, lieferung, herkunft }) => {
+  const store = useContext(storeContext)
+  const { insertKulturRev } = store
+
   const [kulturType, setKulturType] = useState()
   const [typeDialogOpen, setTypeDialogOpen] = useState(false)
   const [gardenDialogOpen, setGardenDialogOpen] = useState(false)
@@ -24,19 +30,33 @@ const Add = ({ saveToDb, disabled, lieferung, herkunft }) => {
     setTypeDialogOpen(false)
     setGardenDialogOpen(true)
   }, [])
-  const onChangeGarden = useCallback((option) => {
-    const gartenId = option.value
-    setGardenDialogOpen(false)
-    console.log('Add: onChangeGarden', { gartenId, option })
-    // TODO: erstellt die Kultur (mit: Art, Herkunft, aktiv = ja und Zwischenlager wie gewählt)
-    // TODO: setzt die nach-Kultur
-  }, [])
+  const onChangeGarden = useCallback(
+    async (option) => {
+      const gartenId = option.value
+      setGardenDialogOpen(false)
+      // erstellt die Kultur (mit: Art, Herkunft, aktiv = ja, Zwischenlager wie gewählt)
+      const id = uuidv1()
+      await insertKulturRev({
+        values: {
+          kultur_id: id,
+          art_id: lieferung.art_id,
+          garten_id: gartenId,
+          zwischenlager: kulturType === 'zwischenlager',
+          herkunft_id: herkunft?.id,
+        },
+        nonavigate: true,
+      })
+      setTimeout(async () => {
+        // setzt die nach-Kultur
+        await lieferung.edit({ field: 'nach_kultur_id', value: id, store })
+      }, 1000)
+    },
+    [herkunft?.id, insertKulturRev, kulturType, lieferung, store],
+  )
 
   const add = useCallback(() => {
     setTypeDialogOpen(true)
   }, [])
-
-  console.log('Add', { kulturType, gardenDialogOpen })
 
   return (
     <ErrorBoundary>
@@ -69,4 +89,4 @@ const Add = ({ saveToDb, disabled, lieferung, herkunft }) => {
   )
 }
 
-export default Add
+export default observer(Add)
