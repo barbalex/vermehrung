@@ -41,8 +41,8 @@ const Add = ({ saveToDb, disabled, lieferung, herkunft }) => {
   return (
     <ErrorBoundary>
       <StyledButton
-        aria-label="neuer Kultur in bestehendem Garten liefern"
-        title="neuer Kultur in bestehendem Garten liefern"
+        aria-label="in neue Kultur in bestehendem Garten liefern"
+        title="in neue Kultur in bestehendem Garten liefern"
         onClick={add}
         size="large"
         disabled={disabled}

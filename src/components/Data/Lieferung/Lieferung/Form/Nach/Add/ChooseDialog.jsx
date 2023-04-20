@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
-import Select from 'react-select'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 import { observer } from 'mobx-react-lite'
@@ -108,7 +107,6 @@ const ChooseDialog = ({
           isClearable={true}
           isSearchable
           noOptionsMessage={() => '(keine)'}
-          // maxheight={maxHeight}
           classNamePrefix="react-select"
           nocaret={false}
           // using portal because sticky headers would otherwise cover the dropdown
