@@ -47,8 +47,6 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
 
   const { nachKulturWerte } = useData({ showFilter, row, herkunft, db, filter })
 
-  console.log('LieferungNach', { row, herkunft })
-
   return (
     <>
       <TitleRow data-filter={showFilter}>
