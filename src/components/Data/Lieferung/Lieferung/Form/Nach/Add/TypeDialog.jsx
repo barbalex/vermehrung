@@ -6,12 +6,12 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 
-const TypeDialog = ({ open, onClose, onChangeType }) => (
+const TypeDialog = ({ open, onClose, onChange }) => (
   <Dialog open={open} onClose={onClose}>
     <DialogTitle>Typ der Kultur wählen:</DialogTitle>
     <DialogContent>
       <FormControl>
-        <RadioGroup name="type_waehlen" onChange={onChangeType}>
+        <RadioGroup name="type_waehlen" onChange={onChange}>
           <FormControlLabel
             value="zwischenlager"
             control={<Radio />}
