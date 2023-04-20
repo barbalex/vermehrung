@@ -1,8 +1,14 @@
 import { useCallback } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
+import styled from '@emotion/styled'
 
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
+
+const StyledButton = styled(IconButton)`
+  /* height: 48px; */
+  margin-bottom: 19px;
+`
 
 const Add = () => {
   const add = useCallback(() => {
@@ -11,14 +17,14 @@ const Add = () => {
 
   return (
     <ErrorBoundary>
-      <IconButton
-        aria-label="neue Kultur in bestehendem Garten anlegen"
-        title="neue Kultur in bestehendem Garten anlegen"
+      <StyledButton
+        aria-label="neuer Kultur in bestehendem Garten liefern"
+        title="neuer Kultur in bestehendem Garten liefern"
         onClick={add}
         size="large"
       >
         <FaPlus />
-      </IconButton>
+      </StyledButton>
     </ErrorBoundary>
   )
 }
