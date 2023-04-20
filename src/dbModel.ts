@@ -465,6 +465,22 @@ export class Lieferung extends Model {
       _depth: newDepth,
       _deleted: field === '_deleted' ? value : this._deleted,
     }
+    // catch some edge cases,
+    // ensure data makes sense
+    // and enable updates to use a single mutation
+    if (field === 'nach_kultur_id' && newObject.nach_ausgepflanzt === true) {
+      newObject.nach_ausgepflanzt = false
+    }
+    if (field === 'nach_ausgepflanzt' && newObject.nach_kultur_id) {
+      newObject.nach_kultur_id = null
+    }
+    if (field === 'von_kultur_id' && newObject.von_sammlung_id) {
+      newObject.von_sammlung_id = null
+    }
+    if (field === 'von_sammlung_id' && newObject.von_kultur_id) {
+      newObject.von_kultur_id = null
+    }
+    // revision
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
@@ -505,6 +521,7 @@ export class Lieferung extends Model {
       row.changed_by = newObject.changed_by
       row._revisions = newRevisions
     })
+    return
   }
 
   @writer async delete({ store }) {

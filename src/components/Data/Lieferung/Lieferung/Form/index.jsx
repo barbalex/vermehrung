@@ -181,7 +181,7 @@ const LierferungForm = ({
 
   const showDeleted = filter.lieferung._deleted !== false || row?._deleted
 
-  //console.log('Lieferung, row:', row)
+  // console.log('Lieferung, row:', row)
 
   return (
     <ErrorBoundary>

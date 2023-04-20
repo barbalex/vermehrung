@@ -17,7 +17,7 @@ const Error = styled.div`
   font-size: 12px;
   color: red;
 `
-const StyledSelect = styled(Select)`
+export const StyledSelect = styled(Select)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
     border-bottom-color: rgba(0, 0, 0, 0.1);
