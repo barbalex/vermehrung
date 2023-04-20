@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
@@ -10,7 +10,10 @@ const StyledButton = styled(IconButton)`
   margin-bottom: 19px;
 `
 
-const Add = () => {
+const Add = ({ saveToDb, disabled }) => {
+  const [typeDialogOpen, setTypeDialogOpen] = useState()
+  const [gardenDialogOpen, setGardenDialogOpen] = useState()
+
   const add = useCallback(() => {
     console.log('TODO:')
   }, [])
@@ -22,6 +25,7 @@ const Add = () => {
         title="neuer Kultur in bestehendem Garten liefern"
         onClick={add}
         size="large"
+        disabled={disabled}
       >
         <FaPlus />
       </StyledButton>
