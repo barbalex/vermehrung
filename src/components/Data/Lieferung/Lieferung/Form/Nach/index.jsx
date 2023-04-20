@@ -36,7 +36,9 @@ const TitleRow = styled.div`
 `
 const SelectRow = styled.div`
   display: flex;
-  width: 100%;
+  > div {
+    flex-grow: 1;
+  }
 `
 
 const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
