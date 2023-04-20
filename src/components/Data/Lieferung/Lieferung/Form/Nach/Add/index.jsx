@@ -18,11 +18,18 @@ const Add = ({ saveToDb, disabled, lieferung, herkunft }) => {
   const [gardenDialogOpen, setGardenDialogOpen] = useState(false)
 
   const onCloseTypeDialog = useCallback(() => setTypeDialogOpen(false), [])
-  const onCloseGardeDialog = useCallback(() => setGardenDialogOpen(false), [])
+  const onCloseGardenDialog = useCallback(() => setGardenDialogOpen(false), [])
   const onChangeType = useCallback((event) => {
     setKulturType(event.target.value)
     setTypeDialogOpen(false)
     setGardenDialogOpen(true)
+  }, [])
+  const onChangeGarden = useCallback((option) => {
+    const gartenId = option.value
+    setGardenDialogOpen(false)
+    console.log('Add: onChangeGarden', { gartenId, option })
+    // TODO: erstellt die Kultur (mit: Art, Herkunft, aktiv = ja und Zwischenlager wie gewählt)
+    // TODO: setzt die nach-Kultur
   }, [])
 
   const add = useCallback(() => {
@@ -47,10 +54,12 @@ const Add = ({ saveToDb, disabled, lieferung, herkunft }) => {
         onClose={onCloseTypeDialog}
         onChange={onChangeType}
       />
+      {/* only show when needed to not query unneeded data */}
       {!!herkunft && !!lieferung.art_id && gardenDialogOpen && (
         <ChooseDialog
           open={gardenDialogOpen}
-          onClose={onCloseGardeDialog}
+          onClose={onCloseGardenDialog}
+          onChange={onChangeGarden}
           kulturType={kulturType}
           lieferung={lieferung}
           herkunft={herkunft}

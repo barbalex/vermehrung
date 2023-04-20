@@ -2,12 +2,14 @@ import { useState, useEffect, useContext } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
-import { combineLatest, of as $of } from 'rxjs'
+import Select from 'react-select'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
+import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../storeContext'
 import gartensSortedFromGartens from '../../../../../../../utils/gartensSortedFromGartens'
+import { StyledSelect } from '../../../../../../shared/Select'
 
 const ChooseDialog = ({
   open,
@@ -48,25 +50,12 @@ const ChooseDialog = ({
               : [true, false, null],
           ),
         ),
-        // Q.on(
-        //   'kultur',
-        //   Q.and(
-        //     Q.where('zwischenlager', kulturType === 'zwischenlager'),
-        //     Q.where('herkunft_id', herkunft.id),
-        //     Q.where('art_id', lieferung.art_id),
-        //   ),
-        // ),
       )
       .observe()
     const subscription = gartensObservable.subscribe(async (gartens) => {
-      console.log('ChooseDialog, useEffect: gartens:', gartens)
       const gartensFiltered = []
       for (const garten of gartens) {
         const kulturs = await garten.kulturs.fetch()
-        console.log('ChooseDialog, useEffect: kulturs of garten:', {
-          kulturs,
-          garten,
-        })
         if (
           !kulturs.some(
             (k) =>
@@ -75,10 +64,9 @@ const ChooseDialog = ({
               k.zwischenlager === (kulturType === 'zwischenlager'),
           )
         ) {
-          gartensFiltered.push(kulturs)
+          gartensFiltered.push(garten)
         }
       }
-      console.log('ChooseDialog, useEffect: gartensFiltered:', gartensFiltered)
       const gartensSorted = await gartensSortedFromGartens(gartensFiltered)
       const gartenWerte = await Promise.all(
         gartensSorted.map(async (garten) => {
@@ -109,11 +97,27 @@ const ChooseDialog = ({
   console.log('ChooseDialog: gartens:', gartens)
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>Garten wählen:</DialogTitle>
-      <DialogContent>TODO:</DialogContent>
+      <DialogContent>
+        <StyledSelect
+          options={gartens}
+          onChange={onChange}
+          hideSelectedOptions
+          placeholder=""
+          isClearable={true}
+          isSearchable
+          noOptionsMessage={() => '(keine)'}
+          // maxheight={maxHeight}
+          classNamePrefix="react-select"
+          nocaret={false}
+          // using portal because sticky headers would otherwise cover the dropdown
+          styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+          menuPortalTarget={document.getElementById('root')}
+        />
+      </DialogContent>
     </Dialog>
   )
 }
 
-export default ChooseDialog
+export default observer(ChooseDialog)
