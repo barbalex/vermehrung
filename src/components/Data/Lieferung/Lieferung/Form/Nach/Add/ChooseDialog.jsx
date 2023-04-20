@@ -27,8 +27,6 @@ const ChooseDialog = ({
     const gartensObservable = db
       .get('garten')
       .query(
-        // Zur Auswahl stehen Gärten, die noch nicht eine aktive Kultur dieser Art mit dieser Herkunft haben,
-        // das je nach Wahl Zwischenlager ist oder nicht
         Q.where(
           '_deleted',
           Q.oneOf(
@@ -52,6 +50,8 @@ const ChooseDialog = ({
       )
       .observe()
     const subscription = gartensObservable.subscribe(async (gartens) => {
+      // Zur Auswahl stehen Gärten, die noch nicht eine aktive Kultur dieser Art mit dieser Herkunft haben,
+      // das je nach Wahl Zwischenlager ist oder nicht
       const gartensFiltered = []
       for (const garten of gartens) {
         const kulturs = await garten.kulturs.fetch()
