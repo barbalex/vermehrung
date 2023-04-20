@@ -75,6 +75,8 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
           <Add
             saveToDb={saveToDb}
             disabled={!(row.art_id && herkunft) || row.von_sammlung_id}
+            herkunft={herkunft}
+            lieferung={row}
           />
         </SelectRow>
       )}
