@@ -821,14 +821,17 @@ const myTypes = types
             kulturOptionCollection.prepareCreateFromDirtyRaw({ id }),
           ])
         })
-        setTimeout(() => {
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-        })
+        if (!args?.nonavigate === true) {
+          setTimeout(() => {
+            const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+              ? // slice if last is uuid
+                [...activeNodeArray.slice(0, -1), id]
+              : [...activeNodeArray, id]
+            // update tree status
+            setActiveNodeArray(newActiveNodeArray)
+          })
+        }
+        return
       },
       async insertLieferungRev(args) {
         const {
