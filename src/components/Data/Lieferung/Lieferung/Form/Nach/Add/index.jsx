@@ -12,7 +12,7 @@ const StyledButton = styled(IconButton)`
   margin-bottom: 19px;
 `
 
-const Add = ({ saveToDb, disabled }) => {
+const Add = ({ saveToDb, disabled, lieferung, herkunft }) => {
   const [kulturType, setKulturType] = useState()
   const [typeDialogOpen, setTypeDialogOpen] = useState(false)
   const [gardenDialogOpen, setGardenDialogOpen] = useState(false)
@@ -47,11 +47,15 @@ const Add = ({ saveToDb, disabled }) => {
         onClose={onCloseTypeDialog}
         onChange={onChangeType}
       />
-      <ChooseDialog
-        open={gardenDialogOpen}
-        onClose={onCloseGardeDialog}
-        kulturType={kulturType}
+      {!!herkunft && !!lieferung.art_id && gardenDialogOpen && (
+        <ChooseDialog
+          open={gardenDialogOpen}
+          onClose={onCloseGardeDialog}
+          kulturType={kulturType}
+          lieferung={lieferung}
+          herkunft={herkunft}
         />
+      )}
     </ErrorBoundary>
   )
 }
