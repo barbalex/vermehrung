@@ -8,6 +8,7 @@ import Checkbox2States from '../../../../../shared/Checkbox2States'
 import JesNo from '../../../../../shared/JesNo'
 import exists from '../../../../../../utils/exists'
 import useData from './useData'
+import Add from './Add'
 
 const Title = styled.div`
   font-weight: bold;
@@ -33,6 +34,10 @@ const TitleRow = styled.div`
     margin-top: -10px;
   }
 `
+const SelectRow = styled.div`
+  display: flex;
+  width: 100%;
+`
 
 const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
   const store = useContext(StoreContext)
@@ -46,22 +51,25 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
         <Title>nach</Title>
       </TitleRow>
       {ifNeeded('nach_kultur_id') && (
-        <Select
-          key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
-          name="nach_kultur_id"
-          value={row.nach_kultur_id}
-          field="nach_kultur_id"
-          label={`Kultur${
-            exists(row.art_id)
-              ? ` (Kulturen derselben Art und Herkunft${
-                  row.von_kultur_id ? ', ohne die von-Kultur' : ''
-                })`
-              : ''
-          }`}
-          options={nachKulturWerte}
-          saveToDb={saveToDb}
-          error={errors?.lieferung?.nach_kultur_id}
-        />
+        <SelectRow>
+          <Select
+            key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
+            name="nach_kultur_id"
+            value={row.nach_kultur_id}
+            field="nach_kultur_id"
+            label={`Kultur${
+              exists(row.art_id)
+                ? ` (Kulturen derselben Art und Herkunft${
+                    row.von_kultur_id ? ', ohne die von-Kultur' : ''
+                  })`
+                : ''
+            }`}
+            options={nachKulturWerte}
+            saveToDb={saveToDb}
+            error={errors?.lieferung?.nach_kultur_id}
+          />
+          <Add />
+        </SelectRow>
       )}
       {ifNeeded('nach_ausgepflanzt') && (
         <>
