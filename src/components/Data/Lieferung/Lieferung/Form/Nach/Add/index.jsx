@@ -6,6 +6,7 @@ import styled from '@emotion/styled'
 
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
 import TypeDialog from './TypeDialog'
+import ChooseDialog from './ChooseDialog'
 
 const StyledButton = styled(IconButton)`
   margin-bottom: 19px;
@@ -17,6 +18,7 @@ const Add = ({ saveToDb, disabled }) => {
   const [gardenDialogOpen, setGardenDialogOpen] = useState(false)
 
   const onCloseTypeDialog = useCallback(() => setTypeDialogOpen(false), [])
+  const onCloseGardeDialog = useCallback(() => setGardenDialogOpen(false), [])
   const onChangeType = useCallback((event) => {
     setKulturType(event.target.value)
     setTypeDialogOpen(false)
@@ -43,8 +45,13 @@ const Add = ({ saveToDb, disabled }) => {
       <TypeDialog
         open={typeDialogOpen}
         onClose={onCloseTypeDialog}
-        onChangeType={onChangeType}
+        onChange={onChangeType}
       />
+      <ChooseDialog
+        open={gardenDialogOpen}
+        onClose={onCloseGardeDialog}
+        kulturType={kulturType}
+        />
     </ErrorBoundary>
   )
 }
