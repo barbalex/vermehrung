@@ -72,7 +72,10 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
             saveToDb={saveToDb}
             error={errors?.lieferung?.nach_kultur_id}
           />
-          <Add saveToDb={saveToDb} disabled={!(row.art_id && herkunft)} />
+          <Add
+            saveToDb={saveToDb}
+            disabled={!(row.art_id && herkunft) || row.von_sammlung_id}
+          />
         </SelectRow>
       )}
       {ifNeeded('nach_ausgepflanzt') && (
