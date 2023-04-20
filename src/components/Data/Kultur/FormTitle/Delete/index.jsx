@@ -21,7 +21,7 @@ const KulturDeleteButton = ({ row, asMenu }) => {
         <MenuItem
           aria-haspopup="true"
           onClick={onClickButton}
-          disabled={row._deleted}
+          disabled={!!row._deleted}
         >
           Kultur löschen
         </MenuItem>
@@ -38,13 +38,14 @@ const KulturDeleteButton = ({ row, asMenu }) => {
         aria-label="Kultur löschen"
         title="Kultur löschen"
         onClick={onClickButton}
-        disabled={row._deleted}
-        size="large">
+        disabled={!!row._deleted}
+        size="large"
+      >
         <FaMinus />
       </IconButton>
       <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} row={row} />
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(KulturDeleteButton)
