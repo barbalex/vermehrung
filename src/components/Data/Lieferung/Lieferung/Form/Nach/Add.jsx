@@ -6,7 +6,6 @@ import styled from '@emotion/styled'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
 
 const StyledButton = styled(IconButton)`
-  /* height: 48px; */
   margin-bottom: 19px;
 `
 
