@@ -1,3 +1,5 @@
+import { Q } from '@nozbe/watermelondb'
+
 import { getSnapshot } from 'mobx-state-tree'
 import buildArtSammlungFolder from './art/sammlung/folder'
 import buildArtSammlung from './art/sammlung'
@@ -5,6 +7,8 @@ import buildArtSammlungAuslieferungFolder from './art/sammlung/auslieferung/fold
 import buildArtSammlungAuslieferung from './art/sammlung/auslieferung'
 import buildArtHerkunftFolder from './art/herkunft/folder'
 import buildArtHerkunft from './art/herkunft'
+import buildArtHerkunftSammlungFolder from './art/herkunft/sammlung/folder'
+import buildArtHerkunftSammlung from './art/herkunft/sammlung'
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtKulturTeilkulturFolder from './art/kultur/teilkultur/folder'
@@ -148,62 +152,64 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   let artFolderNodes = []
   let artNodes = []
-  let artHerkunftFolderNodes = []
-  let artHerkunftNodes = []
-  let artKulturFolderNodes = []
-  let artKulturNodes = []
-  let artKulturTeilkulturFolderNodes = []
-  let artKulturTeilkulturNodes = []
-  let artKulturZaehlungFolderNodes = []
-  let artKulturZaehlungNodes = []
-  let artKulturAnlieferungFolderNodes = []
-  let artKulturAnlieferungNodes = []
-  let artKulturAuslieferungFolderNodes = []
-  let artKulturAuslieferungNodes = []
-  let artKulturEventFolderNodes = []
-  let artKulturEventNodes = []
-  let artSammlungFolderNodes = []
-  let artSammlungNodes = []
-  let artSammlungAuslieferungFolderNodes = []
-  let artSammlungAuslieferungNodes = []
+  const artHerkunftFolderNodes = []
+  const artHerkunftNodes = []
+  const artHerkunftSammlungFolderNodes = []
+  const artHerkunftSammlungNodes = []
+  const artKulturFolderNodes = []
+  const artKulturNodes = []
+  const artKulturTeilkulturFolderNodes = []
+  const artKulturTeilkulturNodes = []
+  const artKulturZaehlungFolderNodes = []
+  const artKulturZaehlungNodes = []
+  const artKulturAnlieferungFolderNodes = []
+  const artKulturAnlieferungNodes = []
+  const artKulturAuslieferungFolderNodes = []
+  const artKulturAuslieferungNodes = []
+  const artKulturEventFolderNodes = []
+  const artKulturEventNodes = []
+  const artSammlungFolderNodes = []
+  const artSammlungNodes = []
+  const artSammlungAuslieferungFolderNodes = []
+  const artSammlungAuslieferungNodes = []
   let herkunftFolderNodes = []
   let herkunftNodes = []
-  let herkunftSammlungFolderNodes = []
-  let herkunftSammlungNodes = []
-  let herkunftSammlungAuslieferungFolderNodes = []
-  let herkunftSammlungAuslieferungNodes = []
+  const herkunftSammlungFolderNodes = []
+  const herkunftSammlungNodes = []
+  const herkunftSammlungAuslieferungFolderNodes = []
+  const herkunftSammlungAuslieferungNodes = []
   let sammlungFolderNodes = []
   let sammlungNodes = []
-  let sammlungHerkunftFolderNodes = []
-  let sammlungHerkunftNodes = []
-  let sammlungAuslieferungFolderNodes = []
-  let sammlungAuslieferungNodes = []
+  const sammlungHerkunftFolderNodes = []
+  const sammlungHerkunftNodes = []
+  const sammlungAuslieferungFolderNodes = []
+  const sammlungAuslieferungNodes = []
   let gartenFolderNodes = []
   let gartenNodes = []
-  let gartenKulturFolderNodes = []
-  let gartenKulturNodes = []
-  let gartenKulturTeilkulturFolderNodes = []
-  let gartenKulturTeilkulturNodes = []
-  let gartenKulturZaehlungFolderNodes = []
-  let gartenKulturZaehlungNodes = []
-  let gartenKulturAnlieferungFolderNodes = []
-  let gartenKulturAnlieferungNodes = []
-  let gartenKulturAuslieferungFolderNodes = []
-  let gartenKulturAuslieferungNodes = []
-  let gartenKulturEventFolderNodes = []
-  let gartenKulturEventNodes = []
+  const gartenKulturFolderNodes = []
+  const gartenKulturNodes = []
+  const gartenKulturTeilkulturFolderNodes = []
+  const gartenKulturTeilkulturNodes = []
+  const gartenKulturZaehlungFolderNodes = []
+  const gartenKulturZaehlungNodes = []
+  const gartenKulturAnlieferungFolderNodes = []
+  const gartenKulturAnlieferungNodes = []
+  const gartenKulturAuslieferungFolderNodes = []
+  const gartenKulturAuslieferungNodes = []
+  const gartenKulturEventFolderNodes = []
+  const gartenKulturEventNodes = []
   let kulturFolderNodes = []
   let kulturNodes = []
-  let kulturTeilkulturFolderNodes = []
-  let kulturTeilkulturNodes = []
-  let kulturZaehlungFolderNodes = []
-  let kulturZaehlungNodes = []
-  let kulturAnlieferungFolderNodes = []
-  let kulturAnlieferungNodes = []
-  let kulturAuslieferungFolderNodes = []
-  let kulturAuslieferungNodes = []
-  let kulturEventFolderNodes = []
-  let kulturEventNodes = []
+  const kulturTeilkulturFolderNodes = []
+  const kulturTeilkulturNodes = []
+  const kulturZaehlungFolderNodes = []
+  const kulturZaehlungNodes = []
+  const kulturAnlieferungFolderNodes = []
+  const kulturAnlieferungNodes = []
+  const kulturAuslieferungFolderNodes = []
+  const kulturAuslieferungNodes = []
+  const kulturEventFolderNodes = []
+  const kulturEventNodes = []
   let teilkulturFolderNodes = []
   let teilkulturNodes = []
   let zaehlungFolderNodes = []
@@ -214,28 +220,28 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
   let eventNodes = []
   let personFolderNodes = []
   let personNodes = []
-  let personGartenFolderNodes = []
-  let personGartenNodes = []
-  let personGartenKulturFolderNodes = []
-  let personGartenKulturNodes = []
-  let personGartenKulturAnlieferungFolderNodes = []
-  let personGartenKulturAnlieferungNodes = []
-  let personGartenKulturAuslieferungFolderNodes = []
-  let personGartenKulturAuslieferungNodes = []
-  let personGartenKulturEventFolderNodes = []
-  let personGartenKulturEventNodes = []
-  let personGartenKulturTeilkulturFolderNodes = []
-  let personGartenKulturTeilkulturNodes = []
-  let personGartenKulturZaehlungFolderNodes = []
-  let personGartenKulturZaehlungNodes = []
-  let personLieferungFolderNodes = []
-  let personLieferungNodes = []
-  let personSammlungFolderNodes = []
-  let personSammlungNodes = []
+  const personGartenFolderNodes = []
+  const personGartenNodes = []
+  const personGartenKulturFolderNodes = []
+  const personGartenKulturNodes = []
+  const personGartenKulturAnlieferungFolderNodes = []
+  const personGartenKulturAnlieferungNodes = []
+  const personGartenKulturAuslieferungFolderNodes = []
+  const personGartenKulturAuslieferungNodes = []
+  const personGartenKulturEventFolderNodes = []
+  const personGartenKulturEventNodes = []
+  const personGartenKulturTeilkulturFolderNodes = []
+  const personGartenKulturTeilkulturNodes = []
+  const personGartenKulturZaehlungFolderNodes = []
+  const personGartenKulturZaehlungNodes = []
+  const personLieferungFolderNodes = []
+  const personLieferungNodes = []
+  const personSammlungFolderNodes = []
+  const personSammlungNodes = []
   let sammelLieferungFolderNodes = []
   let sammelLieferungNodes = []
-  let sammelLieferungLieferungFolderNodes = []
-  let sammelLieferungLieferungNodes = []
+  const sammelLieferungLieferungFolderNodes = []
+  const sammelLieferungLieferungNodes = []
 
   // 1 art
   if (showArt) {
@@ -311,6 +317,50 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             ),
           )
           artHerkunftNodes.push(...newArtHerkunftNodes)
+
+          // const artHerkunftIsOpen = openNodes.some(
+          //   (n) =>
+          //     n.length === 4 &&
+          //     n[0] === 'Arten' &&
+          //     n[1] === artId &&
+          //     n[2] === 'Herkuenfte',
+          // )
+          const openArtHerkunftNodes = openNodes.filter(
+            (n) => n[0] === 'Arten' && n[2] === 'Herkuenfte' && n.length === 4,
+          )
+          // TODO:
+          for (const herkunftNode of openArtHerkunftNodes) {
+            const herkunftId = herkunftNode[3]
+            const herkunft = herkunftsSorted.find((a) => a.id === herkunftId)
+            console.log('nodes', {
+              herkunftId,
+              herkunft,
+              herkunftNode,
+              artHerkunftNodes,
+            })
+            if (!herkunft) break
+            const herkunftIndex = artHerkunftNodes.findIndex(
+              (a) => a.id === `${artId}/${herkunftId}`,
+            )
+            const artHerkunftsSammlungsQuery = herkunft.sammlungs.extend(
+              ...tableFilter({
+                table: 'sammlung',
+                store,
+              }),
+              Q.experimentalJoinTables(['art']),
+              Q.on('art', 'id', artId),
+            )
+            const sammlungCount = await artHerkunftsSammlungsQuery.fetchCount()
+            artHerkunftSammlungFolderNodes.push(
+              buildArtHerkunftSammlungFolder({
+                count: sammlungCount,
+                herkunft,
+                herkunftIndex,
+                artId,
+                artIndex,
+              }),
+            )
+          }
         }
 
         // 1.2 art > sammlung
@@ -2131,6 +2181,8 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     ...artSammlungAuslieferungNodes,
     ...artHerkunftFolderNodes,
     ...artHerkunftNodes,
+    ...artHerkunftSammlungFolderNodes,
+    ...artHerkunftSammlungNodes,
     ...artKulturFolderNodes,
     ...artKulturNodes,
     ...artKulturTeilkulturFolderNodes,
