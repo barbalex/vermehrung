@@ -1,6 +1,6 @@
 import lieferungLabelFromLieferung from '../../../../../../../utils/lieferungLabelFromLieferung'
 
-const artKulturAnlieferungNodes = ({
+const artHerkunftKulturAnlieferungNodes = ({
   lieferung,
   lieferungIndex,
   kulturId,
@@ -15,10 +15,19 @@ const artKulturAnlieferungNodes = ({
   table: 'lieferung',
   id: `${artId}/${herkunft.id}/${kulturId}/${lieferung.id}`,
   label: lieferungLabelFromLieferung({ lieferung }),
-  url: ['Arten', artId, 'Herkuenfte', herkunft.id, 'Kulturen', kulturId, 'An-Lieferungen', lieferung.id],
+  url: [
+    'Arten',
+    artId,
+    'Herkuenfte',
+    herkunft.id,
+    'Kulturen',
+    kulturId,
+    'An-Lieferungen',
+    lieferung.id,
+  ],
   sort: [1, artIndex, 1, herkunftIndex, 3, kulturIndex, 3, lieferungIndex],
   hasChildren: false,
   mono: true,
 })
 
-export default artKulturAnlieferungNodes
+export default artHerkunftKulturAnlieferungNodes
