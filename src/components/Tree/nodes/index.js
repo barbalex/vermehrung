@@ -385,6 +385,16 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   n[4] === 'Sammlungen' &&
                   n.length === 6,
               )
+              for (const artHerkunftSammlungNode of openArtHerkunftSammlungNodes) {
+                const sammlungId = artHerkunftSammlungNode[5]
+                const sammlung = artHerkunftSammlungsSorted.find(
+                  (a) => a.id === sammlungId,
+                )
+                if (!sammlung) break
+                const sammlungIndex = artHerkunftNodes.findIndex(
+                  (a) => a.id === `${artId}/${herkunftId}/${sammlungId}`,
+                )
+              }
             }
           }
         }
