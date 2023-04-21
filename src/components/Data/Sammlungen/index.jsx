@@ -66,22 +66,19 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
 
   const [dataState, setDataState] = useState({ sammlungs: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = artIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['art']),
-          Q.on('art', 'id', artIdInActiveNodeArray),
-        ]
-      : herkunftIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['herkunft']),
-          Q.on('herkunft', 'id', herkunftIdInActiveNodeArray),
-        ]
-      : personIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['person']),
-          Q.on('person', 'id', personIdInActiveNodeArray),
-        ]
-      : []
+    const hierarchyQuery = []
+    if (artIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['art']))
+      hierarchyQuery.push(Q.on('art', 'id', artIdInActiveNodeArray))
+    }
+    if (herkunftIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['herkunft']))
+      hierarchyQuery.push(Q.on('herkunft', 'id', herkunftIdInActiveNodeArray))
+    }
+    if (personIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['person']))
+      hierarchyQuery.push(Q.on('person', 'id', personIdInActiveNodeArray))
+    }
     const collection = db.get('sammlung')
     const countObservable = collection
       .query(
@@ -155,6 +152,9 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
   }
   if (activeNodeArray[activeNodeArray.length - 3] === 'Personen') {
     upTitle = 'Zur Person'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Herkuenfte') {
+    upTitle = 'Zur Herkunft'
   }
 
   return (

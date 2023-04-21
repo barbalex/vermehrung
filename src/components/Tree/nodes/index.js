@@ -1,3 +1,5 @@
+import { Q } from '@nozbe/watermelondb'
+
 import { getSnapshot } from 'mobx-state-tree'
 import buildArtSammlungFolder from './art/sammlung/folder'
 import buildArtSammlung from './art/sammlung'
@@ -5,6 +7,22 @@ import buildArtSammlungAuslieferungFolder from './art/sammlung/auslieferung/fold
 import buildArtSammlungAuslieferung from './art/sammlung/auslieferung'
 import buildArtHerkunftFolder from './art/herkunft/folder'
 import buildArtHerkunft from './art/herkunft'
+import buildArtHerkunftSammlungFolder from './art/herkunft/sammlung/folder'
+import buildArtHerkunftSammlung from './art/herkunft/sammlung'
+import buildArtHerkunftSammlungAuslieferungFolder from './art/herkunft/sammlung/auslieferung/folder'
+import buildArtHerkunftSammlungAuslieferung from './art/herkunft/sammlung/auslieferung'
+import buildArtHerkunftKulturFolder from './art/herkunft/kultur/folder'
+import buildArtHerkunftKultur from './art/herkunft/kultur'
+import buildArtHerkunftKulturTeilkulturFolder from './art/herkunft/kultur/teilkultur/folder'
+import buildArtHerkunftKulturTeilkultur from './art/herkunft/kultur/teilkultur'
+import buildArtHerkunftKulturZaehlungFolder from './art/herkunft/kultur/zaehlung/folder'
+import buildArtHerkunftKulturZaehlung from './art/herkunft/kultur/zaehlung'
+import buildArtHerkunftKulturAnlieferungFolder from './art/herkunft/kultur/anlieferung/folder'
+import buildArtHerkunftKulturAnlieferung from './art/herkunft/kultur/anlieferung'
+import buildArtHerkunftKulturAuslieferungFolder from './art/herkunft/kultur/auslieferung/folder'
+import buildArtHerkunftKulturAuslieferung from './art/herkunft/kultur/auslieferung'
+import buildArtHerkunftKulturEventFolder from './art/herkunft/kultur/event/folder'
+import buildArtHerkunftKulturEvent from './art/herkunft/kultur/event'
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtKulturTeilkulturFolder from './art/kultur/teilkultur/folder'
@@ -148,62 +166,78 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   let artFolderNodes = []
   let artNodes = []
-  let artHerkunftFolderNodes = []
-  let artHerkunftNodes = []
-  let artKulturFolderNodes = []
-  let artKulturNodes = []
-  let artKulturTeilkulturFolderNodes = []
-  let artKulturTeilkulturNodes = []
-  let artKulturZaehlungFolderNodes = []
-  let artKulturZaehlungNodes = []
-  let artKulturAnlieferungFolderNodes = []
-  let artKulturAnlieferungNodes = []
-  let artKulturAuslieferungFolderNodes = []
-  let artKulturAuslieferungNodes = []
-  let artKulturEventFolderNodes = []
-  let artKulturEventNodes = []
-  let artSammlungFolderNodes = []
-  let artSammlungNodes = []
-  let artSammlungAuslieferungFolderNodes = []
-  let artSammlungAuslieferungNodes = []
+  const artHerkunftFolderNodes = []
+  const artHerkunftNodes = []
+  const artHerkunftSammlungFolderNodes = []
+  const artHerkunftSammlungNodes = []
+  const artHerkunftSammlungAuslieferungFolderNodes = []
+  const artHerkunftSammlungAuslieferungNodes = []
+  const artHerkunftKulturFolderNodes = []
+  const artHerkunftKulturNodes = []
+  const artHerkunftKulturTeilkulturFolderNodes = []
+  const artHerkunftKulturTeilkulturNodes = []
+  const artHerkunftKulturZaehlungFolderNodes = []
+  const artHerkunftKulturZaehlungNodes = []
+  const artHerkunftKulturAnlieferungFolderNodes = []
+  const artHerkunftKulturAnlieferungNodes = []
+  const artHerkunftKulturAuslieferungFolderNodes = []
+  const artHerkunftKulturAuslieferungNodes = []
+  const artHerkunftKulturEventFolderNodes = []
+  const artHerkunftKulturEventNodes = []
+  const artKulturFolderNodes = []
+  const artKulturNodes = []
+  const artKulturTeilkulturFolderNodes = []
+  const artKulturTeilkulturNodes = []
+  const artKulturZaehlungFolderNodes = []
+  const artKulturZaehlungNodes = []
+  const artKulturAnlieferungFolderNodes = []
+  const artKulturAnlieferungNodes = []
+  const artKulturAuslieferungFolderNodes = []
+  const artKulturAuslieferungNodes = []
+  const artKulturEventFolderNodes = []
+  const artKulturEventNodes = []
+  const artSammlungFolderNodes = []
+  const artSammlungNodes = []
+  const artSammlungAuslieferungFolderNodes = []
+  const artSammlungAuslieferungNodes = []
   let herkunftFolderNodes = []
   let herkunftNodes = []
-  let herkunftSammlungFolderNodes = []
-  let herkunftSammlungNodes = []
-  let herkunftSammlungAuslieferungFolderNodes = []
-  let herkunftSammlungAuslieferungNodes = []
+  const herkunftSammlungFolderNodes = []
+  const herkunftSammlungNodes = []
+  const herkunftSammlungAuslieferungFolderNodes = []
+  const herkunftSammlungAuslieferungNodes = []
   let sammlungFolderNodes = []
   let sammlungNodes = []
-  let sammlungHerkunftFolderNodes = []
-  let sammlungHerkunftNodes = []
-  let sammlungAuslieferungFolderNodes = []
-  let sammlungAuslieferungNodes = []
+  const sammlungHerkunftFolderNodes = []
+  const sammlungHerkunftNodes = []
+  const sammlungAuslieferungFolderNodes = []
+  const sammlungAuslieferungNodes = []
   let gartenFolderNodes = []
   let gartenNodes = []
-  let gartenKulturFolderNodes = []
-  let gartenKulturNodes = []
-  let gartenKulturTeilkulturFolderNodes = []
-  let gartenKulturTeilkulturNodes = []
-  let gartenKulturZaehlungFolderNodes = []
-  let gartenKulturZaehlungNodes = []
-  let gartenKulturAnlieferungFolderNodes = []
-  let gartenKulturAnlieferungNodes = []
-  let gartenKulturAuslieferungFolderNodes = []
-  let gartenKulturAuslieferungNodes = []
-  let gartenKulturEventFolderNodes = []
-  let gartenKulturEventNodes = []
+  const gartenKulturFolderNodes = []
+  const gartenKulturNodes = []
+  const gartenKulturTeilkulturFolderNodes = []
+  const gartenKulturTeilkulturNodes = []
+  const gartenKulturZaehlungFolderNodes = []
+  const gartenKulturZaehlungNodes = []
+  const gartenKulturAnlieferungFolderNodes = []
+  const gartenKulturAnlieferungNodes = []
+  const gartenKulturAuslieferungFolderNodes = []
+  const gartenKulturAuslieferungNodes = []
+  const gartenKulturEventFolderNodes = []
+  const gartenKulturEventNodes = []
   let kulturFolderNodes = []
   let kulturNodes = []
-  let kulturTeilkulturFolderNodes = []
-  let kulturTeilkulturNodes = []
-  let kulturZaehlungFolderNodes = []
-  let kulturZaehlungNodes = []
-  let kulturAnlieferungFolderNodes = []
-  let kulturAnlieferungNodes = []
-  let kulturAuslieferungFolderNodes = []
-  let kulturAuslieferungNodes = []
-  let kulturEventFolderNodes = []
-  let kulturEventNodes = []
+  const kulturTeilkulturFolderNodes = []
+  const kulturTeilkulturNodes = []
+  const kulturZaehlungFolderNodes = []
+  const kulturZaehlungNodes = []
+  const kulturAnlieferungFolderNodes = []
+  const kulturAnlieferungNodes = []
+  const kulturAuslieferungFolderNodes = []
+  const kulturAuslieferungNodes = []
+  const kulturEventFolderNodes = []
+  const kulturEventNodes = []
   let teilkulturFolderNodes = []
   let teilkulturNodes = []
   let zaehlungFolderNodes = []
@@ -214,28 +248,28 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
   let eventNodes = []
   let personFolderNodes = []
   let personNodes = []
-  let personGartenFolderNodes = []
-  let personGartenNodes = []
-  let personGartenKulturFolderNodes = []
-  let personGartenKulturNodes = []
-  let personGartenKulturAnlieferungFolderNodes = []
-  let personGartenKulturAnlieferungNodes = []
-  let personGartenKulturAuslieferungFolderNodes = []
-  let personGartenKulturAuslieferungNodes = []
-  let personGartenKulturEventFolderNodes = []
-  let personGartenKulturEventNodes = []
-  let personGartenKulturTeilkulturFolderNodes = []
-  let personGartenKulturTeilkulturNodes = []
-  let personGartenKulturZaehlungFolderNodes = []
-  let personGartenKulturZaehlungNodes = []
-  let personLieferungFolderNodes = []
-  let personLieferungNodes = []
-  let personSammlungFolderNodes = []
-  let personSammlungNodes = []
+  const personGartenFolderNodes = []
+  const personGartenNodes = []
+  const personGartenKulturFolderNodes = []
+  const personGartenKulturNodes = []
+  const personGartenKulturAnlieferungFolderNodes = []
+  const personGartenKulturAnlieferungNodes = []
+  const personGartenKulturAuslieferungFolderNodes = []
+  const personGartenKulturAuslieferungNodes = []
+  const personGartenKulturEventFolderNodes = []
+  const personGartenKulturEventNodes = []
+  const personGartenKulturTeilkulturFolderNodes = []
+  const personGartenKulturTeilkulturNodes = []
+  const personGartenKulturZaehlungFolderNodes = []
+  const personGartenKulturZaehlungNodes = []
+  const personLieferungFolderNodes = []
+  const personLieferungNodes = []
+  const personSammlungFolderNodes = []
+  const personSammlungNodes = []
   let sammelLieferungFolderNodes = []
   let sammelLieferungNodes = []
-  let sammelLieferungLieferungFolderNodes = []
-  let sammelLieferungLieferungNodes = []
+  const sammelLieferungLieferungFolderNodes = []
+  const sammelLieferungLieferungNodes = []
 
   // 1 art
   if (showArt) {
@@ -311,6 +345,487 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             ),
           )
           artHerkunftNodes.push(...newArtHerkunftNodes)
+          const openArtHerkunftNodes = openNodes.filter(
+            (n) => n[0] === 'Arten' && n[2] === 'Herkuenfte' && n.length === 4,
+          )
+          for (const herkunftNode of openArtHerkunftNodes) {
+            const herkunftId = herkunftNode[3]
+            const herkunft = herkunftsSorted.find((a) => a.id === herkunftId)
+            if (!herkunft) break
+            const herkunftIndex = artHerkunftNodes.findIndex(
+              (a) => a.id === `${artId}/${herkunftId}`,
+            )
+
+            // 1.1.1 art > Herkunft > Sammlung
+            const artHerkunftsSammlungsQuery = herkunft.sammlungs.extend(
+              ...tableFilter({
+                table: 'sammlung',
+                store,
+              }),
+              Q.experimentalJoinTables(['art']),
+              Q.on('art', 'id', artId),
+            )
+            const artHerkunftSammlungCount =
+              await artHerkunftsSammlungsQuery.fetchCount()
+            artHerkunftSammlungFolderNodes.push(
+              buildArtHerkunftSammlungFolder({
+                count: artHerkunftSammlungCount,
+                herkunft,
+                herkunftIndex,
+                artId,
+                artIndex,
+              }),
+            )
+
+            const artHerkunftSammlungFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Arten' &&
+                n[1] === artId &&
+                n[2] === 'Herkuenfte' &&
+                n[3] === herkunftId &&
+                n[4] === 'Sammlungen',
+            )
+
+            if (artHerkunftSammlungFolderIsOpen) {
+              let artHerkunftSammlungs = []
+              try {
+                artHerkunftSammlungs = await artHerkunftsSammlungsQuery.fetch()
+              } catch {}
+              const artHerkunftSammlungsSorted =
+                await sammlungsSortedFromSammlungs(artHerkunftSammlungs)
+              const newArtHerkunftSammlungNodes = await Promise.all(
+                artHerkunftSammlungsSorted.map(
+                  async (sammlung, sammlungIndex) =>
+                    await buildArtHerkunftSammlung({
+                      sammlung,
+                      sammlungIndex,
+                      herkunft,
+                      herkunftIndex,
+                      artId,
+                      artIndex,
+                    }),
+                ),
+              )
+              artHerkunftSammlungNodes.push(...newArtHerkunftSammlungNodes)
+              const openArtHerkunftSammlungNodes = openNodes.filter(
+                (n) =>
+                  n[0] === 'Arten' &&
+                  n[2] === 'Herkuenfte' &&
+                  n[4] === 'Sammlungen' &&
+                  n.length === 6,
+              )
+              for (const artHerkunftSammlungNode of openArtHerkunftSammlungNodes) {
+                const sammlungId = artHerkunftSammlungNode[5]
+                const sammlung = artHerkunftSammlungsSorted.find(
+                  (a) => a.id === sammlungId,
+                )
+                if (!sammlung) break
+                const sammlungIndex = artHerkunftSammlungNodes.findIndex(
+                  (a) => a.id === `${artId}/${herkunftId}/${sammlungId}`,
+                )
+                const artHerkunftsSammlungAuslieferungsQuery =
+                  sammlung.lieferungs.extend(
+                    ...tableFilter({
+                      table: 'lieferung',
+                      store,
+                    }),
+                    Q.experimentalJoinTables(['art']),
+                    Q.on('art', 'id', artId),
+                  )
+                const artHerkunftSammlungCount =
+                  await artHerkunftsSammlungAuslieferungsQuery.fetchCount()
+                artHerkunftSammlungAuslieferungFolderNodes.push(
+                  buildArtHerkunftSammlungAuslieferungFolder({
+                    count: artHerkunftSammlungCount,
+                    sammlung,
+                    sammlungIndex,
+                    herkunft,
+                    herkunftIndex,
+                    artId,
+                    artIndex,
+                  }),
+                )
+                const artHerkunftSammlungAuslieferungFolderIsOpen =
+                  openNodes.some(
+                    (n) =>
+                      n.length === 7 &&
+                      n[0] === 'Arten' &&
+                      n[1] === artId &&
+                      n[2] === 'Herkuenfte' &&
+                      n[3] === herkunftId &&
+                      n[4] === 'Sammlungen' &&
+                      n[5] === sammlungId &&
+                      n[6] === 'Aus-Lieferungen',
+                  )
+                if (artHerkunftSammlungAuslieferungFolderIsOpen) {
+                  let artHerkunftSammlungAuslieferungs = []
+                  try {
+                    artHerkunftSammlungAuslieferungs =
+                      await artHerkunftsSammlungAuslieferungsQuery.fetch()
+                  } catch {}
+                  const artHerkunftSammlungAuslieferungsSorted =
+                    artHerkunftSammlungAuslieferungs.sort(lieferungSort)
+                  const newArtHerkunftSammlungAuslieferungNodes =
+                    await Promise.all(
+                      artHerkunftSammlungAuslieferungsSorted.map(
+                        async (lieferung, lieferungIndex) =>
+                          await buildArtHerkunftSammlungAuslieferung({
+                            lieferung,
+                            lieferungIndex,
+                            sammlung,
+                            sammlungIndex,
+                            herkunft,
+                            herkunftIndex,
+                            artId,
+                            artIndex,
+                          }),
+                      ),
+                    )
+                  artHerkunftSammlungAuslieferungNodes.push(
+                    ...newArtHerkunftSammlungAuslieferungNodes,
+                  )
+                }
+              }
+            }
+
+            // 1.1.2 art > herkunft > kultur
+            const artHerkunftsKultursQuery = db
+              .get('kultur')
+              .query(
+                ...tableFilter({ store, table: 'kultur' }),
+                Q.experimentalJoinTables(['art']),
+                Q.on('art', 'id', artId),
+                Q.experimentalJoinTables(['herkunft']),
+                Q.on('herkunft', 'id', herkunftId),
+              )
+            const artHerkunftKulturCount =
+              await artHerkunftsKultursQuery.fetchCount()
+            artHerkunftKulturFolderNodes.push(
+              buildArtHerkunftKulturFolder({
+                count: artHerkunftKulturCount,
+                herkunft,
+                herkunftIndex,
+                artId,
+                artIndex,
+              }),
+            )
+
+            const artHerkunftKulturFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Arten' &&
+                n[1] === artId &&
+                n[2] === 'Herkuenfte' &&
+                n[3] === herkunftId &&
+                n[4] === 'Kulturen',
+            )
+
+            if (artHerkunftKulturFolderIsOpen) {
+              let artHerkunftKulturs = []
+              try {
+                artHerkunftKulturs = await artHerkunftsKultursQuery.fetch()
+              } catch {}
+              const artHerkunftKultursSorted = await kultursSortedFromKulturs(
+                artHerkunftKulturs,
+              )
+              const newArtHerkunftKulturNodes = await Promise.all(
+                artHerkunftKultursSorted.map(
+                  async (kultur, kulturIndex) =>
+                    await buildArtHerkunftKultur({
+                      kultur,
+                      kulturIndex,
+                      artId,
+                      artIndex,
+                      herkunft,
+                      herkunftIndex,
+                    }),
+                ),
+              )
+              artHerkunftKulturNodes.push(...newArtHerkunftKulturNodes)
+              const openArtHerkunftKulturNodes = openNodes.filter(
+                (n) =>
+                  n[0] === 'Arten' &&
+                  n[1] === artId &&
+                  n[2] === 'Herkuenfte' &&
+                  n[3] === herkunftId &&
+                  n[4] === 'Kulturen' &&
+                  n.length === 6,
+              )
+              for (const artHerkunftKulturNode of openArtHerkunftKulturNodes) {
+                const kulturId = artHerkunftKulturNode[5]
+                const kultur = artHerkunftKultursSorted.find(
+                  (s) => s.id === kulturId,
+                )
+                if (!kultur) break
+                const kulturIndex = newArtHerkunftKulturNodes.findIndex(
+                  (s) => s.id === `${artId}/${herkunftId}/${kulturId}`,
+                )
+
+                // teilkultur nodes
+                let kulturOption
+                try {
+                  kulturOption = await kultur.kultur_option.fetch()
+                } catch {}
+                if (kulturOption?.tk) {
+                  let teilkulturs = []
+                  try {
+                    teilkulturs = await kultur.teilkulturs
+                      .extend(...tableFilter({ store, table: 'teilkultur' }))
+                      .fetch()
+                  } catch {}
+                  artHerkunftKulturTeilkulturFolderNodes.push(
+                    buildArtHerkunftKulturTeilkulturFolder({
+                      kulturId,
+                      kulturIndex,
+                      artId,
+                      artIndex,
+                      herkunft,
+                      herkunftIndex,
+                      count: teilkulturs.length,
+                    }),
+                  )
+                  const artHerkunftKulturTeilkulturFolderIsOpen =
+                    openNodes.some(
+                      (n) =>
+                        n.length === 7 &&
+                        n[0] === 'Arten' &&
+                        n[1] === artId &&
+                        n[2] === 'Herkuenfte' &&
+                        n[3] === herkunftId &&
+                        n[4] === 'Kulturen' &&
+                        n[5] === kulturId &&
+                        n[6] === 'Teilkulturen',
+                    )
+                  if (artHerkunftKulturTeilkulturFolderIsOpen) {
+                    const teilkultursSorted = teilkulturs.sort(teilkulturSort)
+                    const newArtKulturTeilkulturNodes = teilkultursSorted.map(
+                      (teilkultur, teilkulturIndex) =>
+                        buildArtHerkunftKulturTeilkultur({
+                          teilkultur,
+                          teilkulturIndex,
+                          kulturId,
+                          kulturIndex,
+                          artId,
+                          artIndex,
+                          herkunft,
+                          herkunftIndex,
+                        }),
+                    )
+                    artHerkunftKulturTeilkulturNodes.push(
+                      ...newArtKulturTeilkulturNodes,
+                    )
+                  }
+                }
+
+                // zaehlung nodes
+                const artHerkunftKulturZaehlungQuery = kultur.zaehlungs.extend(
+                  ...tableFilter({ store, table: 'zaehlung' }),
+                )
+                const zaehlungsCount =
+                  await artHerkunftKulturZaehlungQuery.fetchCount()
+                artHerkunftKulturZaehlungFolderNodes.push(
+                  buildArtHerkunftKulturZaehlungFolder({
+                    kulturId,
+                    kulturIndex,
+                    artId,
+                    artIndex,
+                    herkunft,
+                    herkunftIndex,
+                    count: zaehlungsCount,
+                  }),
+                )
+                const artHerkunftKulturZaehlungFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 7 &&
+                    n[0] === 'Arten' &&
+                    n[1] === artId &&
+                    n[2] === 'Herkuenfte' &&
+                    n[3] === herkunftId &&
+                    n[4] === 'Kulturen' &&
+                    n[5] === kulturId &&
+                    n[6] === 'Zaehlungen',
+                )
+                if (artHerkunftKulturZaehlungFolderIsOpen) {
+                  let zaehlungs = []
+                  try {
+                    zaehlungs = await artHerkunftKulturZaehlungQuery.fetch()
+                  } catch {}
+                  const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
+                  const newArtHerkunftKulturZaehlungNodes = await Promise.all(
+                    zaehlungsSorted.map(
+                      async (zaehlung, zaehlungIndex) =>
+                        await buildArtHerkunftKulturZaehlung({
+                          zaehlung,
+                          zaehlungIndex,
+                          kulturId,
+                          kulturIndex,
+                          artId,
+                          artIndex,
+                          herkunft,
+                          herkunftIndex,
+                        }),
+                    ),
+                  )
+                  artHerkunftKulturZaehlungNodes.push(
+                    ...newArtHerkunftKulturZaehlungNodes,
+                  )
+                }
+
+                // anlieferung nodes
+                let anlieferungs = []
+                try {
+                  anlieferungs = await kultur.anlieferungs
+                    .extend(...tableFilter({ store, table: 'lieferung' }))
+                    .fetch()
+                } catch {}
+                artHerkunftKulturAnlieferungFolderNodes.push(
+                  buildArtHerkunftKulturAnlieferungFolder({
+                    kulturId,
+                    kulturIndex,
+                    artId,
+                    artIndex,
+                    herkunft,
+                    herkunftIndex,
+                    count: anlieferungs.length,
+                  }),
+                )
+                const artKulturAnlieferungFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 7 &&
+                    n[0] === 'Arten' &&
+                    n[1] === artId &&
+                    n[2] === 'Herkuenfte' &&
+                    n[3] === herkunftId &&
+                    n[4] === 'Kulturen' &&
+                    n[5] === kulturId &&
+                    n[6] === 'An-Lieferungen',
+                )
+                if (artKulturAnlieferungFolderIsOpen) {
+                  const anlieferungsSorted = anlieferungs.sort(lieferungSort)
+                  const newArtHerkunftKulturAnlieferungNodes =
+                    anlieferungsSorted.map((lieferung, lieferungIndex) =>
+                      buildArtHerkunftKulturAnlieferung({
+                        lieferung,
+                        lieferungIndex,
+                        kulturId,
+                        kulturIndex,
+                        artId,
+                        artIndex,
+                        herkunft,
+                        herkunftIndex,
+                      }),
+                    )
+                  artHerkunftKulturAnlieferungNodes.push(
+                    ...newArtHerkunftKulturAnlieferungNodes,
+                  )
+                }
+
+                // auslieferung nodes
+                let auslieferungs = []
+                try {
+                  auslieferungs = await kultur.auslieferungs
+                    .extend(
+                      ...tableFilter({
+                        table: 'lieferung',
+                        store,
+                      }),
+                    )
+                    .fetch()
+                } catch {}
+                artHerkunftKulturAuslieferungFolderNodes.push(
+                  buildArtHerkunftKulturAuslieferungFolder({
+                    kulturId,
+                    kulturIndex,
+                    artId,
+                    artIndex,
+                    herkunft,
+                    herkunftIndex,
+                    count: auslieferungs.length,
+                  }),
+                )
+                const artKulturAuslieferungFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 7 &&
+                    n[0] === 'Arten' &&
+                    n[1] === artId &&
+                    n[2] === 'Herkuenfte' &&
+                    n[3] === herkunftId &&
+                    n[4] === 'Kulturen' &&
+                    n[5] === kulturId &&
+                    n[6] === 'Aus-Lieferungen',
+                )
+                if (artKulturAuslieferungFolderIsOpen) {
+                  const auslieferungsSorted = auslieferungs.sort(lieferungSort)
+                  const newArtHerkunftKulturAuslieferungNodes =
+                    auslieferungsSorted.map((lieferung, lieferungIndex) =>
+                      buildArtHerkunftKulturAuslieferung({
+                        lieferung,
+                        lieferungIndex,
+                        kulturId,
+                        kulturIndex,
+                        artId,
+                        artIndex,
+                        herkunft,
+                        herkunftIndex,
+                      }),
+                    )
+                  artKulturAuslieferungNodes.push(
+                    ...newArtHerkunftKulturAuslieferungNodes,
+                  )
+                }
+
+                // event nodes
+                const eventsQuery = kultur.events.extend(
+                  ...tableFilter({ store, table: 'event' }),
+                )
+                const eventsCount = await eventsQuery.fetchCount()
+                artHerkunftKulturEventFolderNodes.push(
+                  buildArtHerkunftKulturEventFolder({
+                    kulturId,
+                    kulturIndex,
+                    artId,
+                    artIndex,
+                    herkunft,
+                    herkunftIndex,
+                    count: eventsCount,
+                  }),
+                )
+                const artHerkunftKulturEventFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 7 &&
+                    n[0] === 'Arten' &&
+                    n[1] === artId &&
+                    n[2] === 'Herkuenfte' &&
+                    n[3] === herkunftId &&
+                    n[4] === 'Kulturen' &&
+                    n[5] === kulturId &&
+                    n[6] === 'Events',
+                )
+                if (artHerkunftKulturEventFolderIsOpen) {
+                  let events = []
+                  try {
+                    events = await eventsQuery.fetch()
+                  } catch {}
+                  const eventsSorted = events.sort(eventSort)
+                  const newArtHerkunftKulturEventNodes = eventsSorted.map(
+                    (event, eventIndex) =>
+                      buildArtHerkunftKulturEvent({
+                        event,
+                        eventIndex,
+                        kulturId,
+                        kulturIndex,
+                        artId,
+                        artIndex,
+                        herkunft,
+                        herkunftIndex,
+                      }),
+                  )
+                  artKulturEventNodes.push(...newArtHerkunftKulturEventNodes)
+                }
+              }
+            }
+          }
         }
 
         // 1.2 art > sammlung
@@ -2131,6 +2646,22 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     ...artSammlungAuslieferungNodes,
     ...artHerkunftFolderNodes,
     ...artHerkunftNodes,
+    ...artHerkunftSammlungFolderNodes,
+    ...artHerkunftSammlungNodes,
+    ...artHerkunftSammlungAuslieferungFolderNodes,
+    ...artHerkunftSammlungAuslieferungNodes,
+    ...artHerkunftKulturFolderNodes,
+    ...artHerkunftKulturNodes,
+    ...artHerkunftKulturTeilkulturFolderNodes,
+    ...artHerkunftKulturTeilkulturNodes,
+    ...artHerkunftKulturZaehlungFolderNodes,
+    ...artHerkunftKulturZaehlungNodes,
+    ...artHerkunftKulturAnlieferungFolderNodes,
+    ...artHerkunftKulturAnlieferungNodes,
+    ...artHerkunftKulturAuslieferungFolderNodes,
+    ...artHerkunftKulturAuslieferungNodes,
+    ...artHerkunftKulturEventFolderNodes,
+    ...artHerkunftKulturEventNodes,
     ...artKulturFolderNodes,
     ...artKulturNodes,
     ...artKulturTeilkulturFolderNodes,
