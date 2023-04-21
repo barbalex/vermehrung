@@ -432,6 +432,15 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                       n[6] === 'Aus-Lieferungen' &&
                       n[7] === sammlungId,
                   )
+                if (artHerkunftSammlungAuslieferungFolderIsOpen) {
+                  let artHerkunftSammlungAuslieferungs = []
+                  try {
+                    artHerkunftSammlungAuslieferungs =
+                      await artHerkunftsSammlungAuslieferungsQuery.fetch()
+                  } catch {}
+                  const artHerkunftSammlungAuslieferungsSorted =
+                    artHerkunftSammlungAuslieferungs.sort(lieferungSort)
+                }
               }
             }
           }
