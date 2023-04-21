@@ -469,6 +469,24 @@ const activeFormFromActiveNodeArray = (url) => {
   }
   if (
     url.length === 7 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Aus-Lieferungen'
+  ) {
+    return 'lieferungen'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Events'
+  ) {
+    return 'events'
+  }
+  if (
+    url.length === 7 &&
     url[0] === 'Sammlungen' &&
     url[2] === 'Aus-Lieferungen' &&
     url[4] === 'Kulturen' &&
@@ -583,6 +601,24 @@ const activeFormFromActiveNodeArray = (url) => {
     url[6] === 'An-Lieferungen'
   ) {
     return 'lieferung'
+  }
+  if (
+    url.length === 8 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Aus-Lieferungen'
+  ) {
+    return 'lieferung'
+  }
+  if (
+    url.length === 8 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Events'
+  ) {
+    return 'event'
   }
   if (
     url.length === 8 &&
