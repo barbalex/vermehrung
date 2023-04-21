@@ -320,7 +320,6 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           const openArtHerkunftNodes = openNodes.filter(
             (n) => n[0] === 'Arten' && n[2] === 'Herkuenfte' && n.length === 4,
           )
-          // TODO:
           for (const herkunftNode of openArtHerkunftNodes) {
             const herkunftId = herkunftNode[3]
             const herkunft = herkunftsSorted.find((a) => a.id === herkunftId)
@@ -378,15 +377,14 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     }),
                 ),
               )
-              console.log('nodes', {
-                newArtHerkunftSammlungNodes,
-                artHerkunftSammlungsSorted,
-                artId,
-                artIndex,
-                herkunft,
-                herkunftIndex,
-              })
               artHerkunftSammlungNodes.push(...newArtHerkunftSammlungNodes)
+              const openArtHerkunftSammlungNodes = openNodes.filter(
+                (n) =>
+                  n[0] === 'Arten' &&
+                  n[2] === 'Herkuenfte' &&
+                  n[4] === 'Sammlungen' &&
+                  n.length === 6,
+              )
             }
           }
         }
