@@ -41,6 +41,7 @@ const StyledDatePicker = styled(DatePicker)`
   min-height: 36px !important;
   height: 36px !important;
   background-color: transparent;
+  font-size: 1rem;
   &:focus {
     color: #495057;
     background-color: #fff;
