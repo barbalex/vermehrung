@@ -25,7 +25,7 @@ const artHerkunftKulturAuslieferungNodes = ({
     'Aus-Lieferungen',
     lieferung.id,
   ],
-  sort: [1, artIndex, 1, herkunftIndex, 3, kulturIndex, 4, lieferungIndex],
+  sort: [1, artIndex, 1, herkunftIndex, 2, kulturIndex, 4, lieferungIndex],
   hasChildren: false,
   mono: true,
 })

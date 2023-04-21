@@ -25,7 +25,7 @@ const artHerkunftKulturTeilkulturNodes = ({
     'Teilkulturen',
     teilkultur.id,
   ],
-  sort: [1, artIndex, 1, herkunftIndex, 3, kulturIndex, 1, teilkulturIndex],
+  sort: [1, artIndex, 1, herkunftIndex, 2, kulturIndex, 1, teilkulturIndex],
   hasChildren: false,
 })
 

@@ -211,6 +211,14 @@ const activeFormFromActiveNodeArray = (url) => {
   if (
     url.length === 5 &&
     url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen'
+  ) {
+    return 'kulturen'
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
     url[2] === 'Kulturen' &&
     url[4] === 'Events'
   ) {
@@ -317,6 +325,14 @@ const activeFormFromActiveNodeArray = (url) => {
     url[4] === 'Sammlungen'
   ) {
     return 'sammlung'
+  }
+  if (
+    url.length === 6 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen'
+  ) {
+    return 'kultur'
   }
   if (
     url.length === 6 &&
