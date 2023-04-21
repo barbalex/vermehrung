@@ -203,6 +203,22 @@ const activeFormFromActiveNodeArray = (url) => {
   if (
     url.length === 5 &&
     url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Sammlungen'
+  ) {
+    return 'sammlungen'
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen'
+  ) {
+    return 'kulturen'
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
     url[2] === 'Kulturen' &&
     url[4] === 'Events'
   ) {
@@ -301,6 +317,23 @@ const activeFormFromActiveNodeArray = (url) => {
   ) {
     return 'lieferung'
   }
+
+  if (
+    url.length === 6 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Sammlungen'
+  ) {
+    return 'sammlung'
+  }
+  if (
+    url.length === 6 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen'
+  ) {
+    return 'kultur'
+  }
   if (
     url.length === 6 &&
     url[0] === 'Arten' &&
@@ -400,6 +433,60 @@ const activeFormFromActiveNodeArray = (url) => {
 
   if (
     url.length === 7 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Sammlungen' &&
+    url[6] === 'Aus-Lieferungen'
+  ) {
+    return 'lieferungen'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Teilkulturen'
+  ) {
+    return 'teilkulturen'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Zaehlungen'
+  ) {
+    return 'zaehlungen'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'An-Lieferungen'
+  ) {
+    return 'lieferungen'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Aus-Lieferungen'
+  ) {
+    return 'lieferungen'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Events'
+  ) {
+    return 'events'
+  }
+  if (
+    url.length === 7 &&
     url[0] === 'Sammlungen' &&
     url[2] === 'Aus-Lieferungen' &&
     url[4] === 'Kulturen' &&
@@ -479,6 +566,60 @@ const activeFormFromActiveNodeArray = (url) => {
     return 'kultur'
   }
 
+  if (
+    url.length === 8 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Sammlungen' &&
+    url[6] === 'Aus-Lieferungen'
+  ) {
+    return 'lieferung'
+  }
+  if (
+    url.length === 8 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Teilkulturen'
+  ) {
+    return 'teilkultur'
+  }
+  if (
+    url.length === 8 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Zaehlungen'
+  ) {
+    return 'zaehlung'
+  }
+  if (
+    url.length === 8 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'An-Lieferungen'
+  ) {
+    return 'lieferung'
+  }
+  if (
+    url.length === 8 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Aus-Lieferungen'
+  ) {
+    return 'lieferung'
+  }
+  if (
+    url.length === 8 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Events'
+  ) {
+    return 'event'
+  }
   if (
     url.length === 8 &&
     url[0] === 'Personen' &&

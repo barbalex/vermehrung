@@ -69,31 +69,29 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
   const [dataState, setDataState] = useState({ lieferungs: [], totalCount: 0 })
   useEffect(() => {
     let kulturOnField = 'von_kultur_id'
+    const hierarchyQuery = []
     if (kulturIdInActiveNodeArray) {
       const lastAnAElement = activeNodeArray[activeNodeArray.length - 1]
       if (lastAnAElement === 'An-Lieferungen') kulturOnField = 'nach_kultur_id'
+      // this should get kulturen connected by von_kultur_id or nach_kultur_id
+      // depending on activeNodeArray[last] being 'An-Lieferung' or 'Aus-Lieferung'
+      // Q.on did not work because only one association can be declared per table
+      hierarchyQuery.push(Q.where(kulturOnField, kulturIdInActiveNodeArray))
     }
-    const hierarchyQuery = kulturIdInActiveNodeArray
-      ? // this should get kulturen connected by von_kultur_id or nach_kultur_id
-        // depending on activeNodeArray[last] being 'An-Lieferung' or 'Aus-Lieferung'
-        // Q.on did not work because only one association can be declared per table
-        [Q.where(kulturOnField, kulturIdInActiveNodeArray)]
-      : sammelLieferungIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['sammel_lieferung']),
-          Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
-        ]
-      : personIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['person']),
-          Q.on('person', 'id', personIdInActiveNodeArray),
-        ]
-      : sammlungIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['sammlung']),
-          Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
-        ]
-      : []
+    if (sammelLieferungIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['sammel_lieferung']))
+      hierarchyQuery.push(
+        Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
+      )
+    }
+    if (personIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['person']))
+      hierarchyQuery.push(Q.on('person', 'id', personIdInActiveNodeArray))
+    }
+    if (sammlungIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['sammlung']))
+      hierarchyQuery.push(Q.on('sammlung', 'id', sammlungIdInActiveNodeArray))
+    }
     const collection = db.get('lieferung')
     const countObservable = collection
       .query(
