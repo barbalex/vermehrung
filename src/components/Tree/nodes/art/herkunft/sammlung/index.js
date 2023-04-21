@@ -17,7 +17,7 @@ const artHerkunftSammlungNodes = async ({
     nodeType: 'table',
     menuTitle: 'Sammlung',
     table: 'sammlung',
-    id: `${artId}/${sammlung.id}`,
+    id: `${artId}/${herkunft.id}/${sammlung.id}`,
     label,
     url: ['Arten', artId, 'Herkuenfte', herkunft.id, 'Sammlungen', sammlung.id],
     hasChildren: true,

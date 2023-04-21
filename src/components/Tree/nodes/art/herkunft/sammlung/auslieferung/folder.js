@@ -5,12 +5,12 @@ const artSammlungHerkunftAuslieferungFolder = ({
   herkunftIndex,
   artId,
   artIndex,
-  children,
+  count,
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Lieferungen',
   id: `${artId}/${herkunft.id}/${sammlung.id}/LieferungFolder`,
-  label: `Aus-Lieferungen (${children.length})`,
+  label: `Aus-Lieferungen (${count})`,
   url: [
     'Arten',
     artId,
@@ -22,7 +22,7 @@ const artSammlungHerkunftAuslieferungFolder = ({
   ],
   sort: [1, artIndex, 1, herkunftIndex, 1, sammlungIndex, 1],
   hasChildren: true,
-  childrenCount: children.length,
+  childrenCount: count,
 })
 
 export default artSammlungHerkunftAuslieferungFolder

@@ -1,4 +1,4 @@
-import lieferungLabelFromLieferung from '../../../../../../utils/lieferungLabelFromLieferung'
+import lieferungLabelFromLieferung from '../../../../../../../utils/lieferungLabelFromLieferung'
 
 const artSammlungHerkunftAuslieferungNodes = ({
   lieferung,

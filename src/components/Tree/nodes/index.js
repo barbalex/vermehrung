@@ -9,6 +9,8 @@ import buildArtHerkunftFolder from './art/herkunft/folder'
 import buildArtHerkunft from './art/herkunft'
 import buildArtHerkunftSammlungFolder from './art/herkunft/sammlung/folder'
 import buildArtHerkunftSammlung from './art/herkunft/sammlung'
+import buildArtHerkunftSammlungAuslieferungFolder from './art/herkunft/sammlung/auslieferung/folder'
+import buildArtHerkunftSammlungAuslieferung from './art/herkunft/sammlung/auslieferung'
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtKulturTeilkulturFolder from './art/kultur/teilkultur/folder'
@@ -156,6 +158,8 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
   const artHerkunftNodes = []
   const artHerkunftSammlungFolderNodes = []
   const artHerkunftSammlungNodes = []
+  const artHerkunftSammlungAuslieferungFolderNodes = []
+  const artHerkunftSammlungAuslieferungNodes = []
   const artKulturFolderNodes = []
   const artKulturNodes = []
   const artKulturTeilkulturFolderNodes = []
@@ -391,8 +395,30 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   (a) => a.id === sammlungId,
                 )
                 if (!sammlung) break
-                const sammlungIndex = artHerkunftNodes.findIndex(
+                const sammlungIndex = artHerkunftSammlungNodes.findIndex(
                   (a) => a.id === `${artId}/${herkunftId}/${sammlungId}`,
+                )
+                const artHerkunftsSammlungAuslieferungsQuery =
+                  sammlung.lieferungs.extend(
+                    ...tableFilter({
+                      table: 'lieferung',
+                      store,
+                    }),
+                    Q.experimentalJoinTables(['art']),
+                    Q.on('art', 'id', artId),
+                  )
+                const artHerkunftSammlungCount =
+                  await artHerkunftsSammlungAuslieferungsQuery.fetchCount()
+                artHerkunftSammlungAuslieferungFolderNodes.push(
+                  buildArtHerkunftSammlungAuslieferungFolder({
+                    count: artHerkunftSammlungCount,
+                    sammlung,
+                    sammlungIndex,
+                    herkunft,
+                    herkunftIndex,
+                    artId,
+                    artIndex,
+                  }),
                 )
               }
             }
@@ -2219,6 +2245,8 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     ...artHerkunftNodes,
     ...artHerkunftSammlungFolderNodes,
     ...artHerkunftSammlungNodes,
+    ...artHerkunftSammlungAuslieferungFolderNodes,
+    ...artHerkunftSammlungAuslieferungNodes,
     ...artKulturFolderNodes,
     ...artKulturNodes,
     ...artKulturTeilkulturFolderNodes,
