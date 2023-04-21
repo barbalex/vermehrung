@@ -517,7 +517,276 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             )
 
             if (artHerkunftKulturFolderIsOpen) {
-              // TODO:
+              // TODO: begin here
+              let artHerkunftKulturs = []
+              try {
+                artHerkunftKulturs = await artHerkunftsKultursQuery.fetch()
+              } catch {}
+              const artHerkunftKultursSorted = await kultursSortedFromKulturs(
+                artHerkunftKulturs,
+              )
+              const newArtHerkunftKulturNodes = await Promise.all(
+                artHerkunftKultursSorted.map(
+                  async (kultur, kulturIndex) =>
+                    await buildArtHerkunftKultur({
+                      kultur,
+                      kulturIndex,
+                      artId,
+                      artIndex,
+                      herkunft,
+                      herkunftIndex,
+                    }),
+                ),
+              )
+              artHerkunftKulturNodes.push(...newArtHerkunftKulturNodes)
+              const openArtHerkunftKulturNodes = openNodes.filter(
+                (n) =>
+                  n[0] === 'Arten' &&
+                  n[1] === artId &&
+                  n[2] === 'Herkuenfte' &&
+                  n[3] === herkunftId &&
+                  n[4] === 'Kulturen' &&
+                  n.length === 6,
+              )
+              for (const artHerkunftKulturNode of openArtHerkunftKulturNodes) {
+                const kulturId = artHerkunftKulturNode[5]
+                const kultur = artHerkunftKultursSorted.find(
+                  (s) => s.id === kulturId,
+                )
+                if (!kultur) break
+                const kulturIndex = newArtHerkunftKulturNodes.findIndex(
+                  (s) => s.id === `${artId}/${herkunftId}/${kulturId}`,
+                )
+
+                // teilkultur nodes
+                let kulturOption
+                try {
+                  kulturOption = await kultur.kultur_option.fetch()
+                } catch {}
+                if (kulturOption?.tk) {
+                  let teilkulturs = []
+                  try {
+                    teilkulturs = await kultur.teilkulturs
+                      .extend(...tableFilter({ store, table: 'teilkultur' }))
+                      .fetch()
+                  } catch {}
+                  artKulturTeilkulturFolderNodes.push(
+                    buildArtKulturTeilkulturFolder({
+                      kulturId,
+                      kulturIndex,
+                      artId,
+                      artIndex,
+                      children: teilkulturs,
+                    }),
+                  )
+                  const artKulturTeilkulturFolderIsOpen = openNodes.some(
+                    (n) =>
+                      n.length === 5 &&
+                      n[0] === 'Arten' &&
+                      n[1] === artId &&
+                      n[2] === 'Kulturen' &&
+                      n[3] === kulturId &&
+                      n[4] === 'Teilkulturen',
+                  )
+                  if (artKulturTeilkulturFolderIsOpen) {
+                    const teilkultursSorted = teilkulturs.sort(teilkulturSort)
+                    const newArtKulturTeilkulturNodes = teilkultursSorted.map(
+                      (teilkultur, teilkulturIndex) =>
+                        buildArtKulturTeilkultur({
+                          teilkultur,
+                          teilkulturIndex,
+                          kulturId,
+                          kulturIndex,
+                          artId,
+                          artIndex,
+                        }),
+                    )
+                    artKulturTeilkulturNodes.push(
+                      ...newArtKulturTeilkulturNodes,
+                    )
+                  }
+                }
+
+                // zaehlung nodes
+                const artKulturZaehlungQuery = kultur.zaehlungs.extend(
+                  ...tableFilter({ store, table: 'zaehlung' }),
+                )
+                const zaehlungsCount = await artKulturZaehlungQuery.fetchCount()
+                artKulturZaehlungFolderNodes.push(
+                  buildArtKulturZaehlungFolder({
+                    kulturId,
+                    kulturIndex,
+                    artId,
+                    artIndex,
+                    count: zaehlungsCount,
+                  }),
+                )
+                const artKulturZaehlungFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 5 &&
+                    n[0] === 'Arten' &&
+                    n[1] === artId &&
+                    n[2] === 'Kulturen' &&
+                    n[3] === kulturId &&
+                    n[4] === 'Zaehlungen',
+                )
+                if (artKulturZaehlungFolderIsOpen) {
+                  let zaehlungs = []
+                  try {
+                    zaehlungs = await artKulturZaehlungQuery.fetch()
+                  } catch {}
+                  const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
+                  const newArtKulturZaehlungNodes = await Promise.all(
+                    zaehlungsSorted.map(
+                      async (zaehlung, zaehlungIndex) =>
+                        await buildArtKulturZaehlung({
+                          zaehlung,
+                          zaehlungIndex,
+                          kulturId,
+                          kulturIndex,
+                          artId,
+                          artIndex,
+                        }),
+                    ),
+                  )
+                  artKulturZaehlungNodes.push(...newArtKulturZaehlungNodes)
+                }
+
+                // anlieferung nodes
+                let anlieferungs = []
+                try {
+                  anlieferungs = await kultur.anlieferungs
+                    .extend(...tableFilter({ store, table: 'lieferung' }))
+                    .fetch()
+                } catch {}
+                artKulturAnlieferungFolderNodes.push(
+                  buildArtKulturAnlieferungFolder({
+                    kulturId,
+                    kulturIndex,
+                    artId,
+                    artIndex,
+                    children: anlieferungs,
+                  }),
+                )
+                const artKulturAnlieferungFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 5 &&
+                    n[0] === 'Arten' &&
+                    n[1] === artId &&
+                    n[2] === 'Kulturen' &&
+                    n[3] === kulturId &&
+                    n[4] === 'An-Lieferungen',
+                )
+                if (artKulturAnlieferungFolderIsOpen) {
+                  const anlieferungsSorted = anlieferungs.sort(lieferungSort)
+                  const newArtKulturAnlieferungNodes = anlieferungsSorted.map(
+                    (lieferung, lieferungIndex) =>
+                      buildArtKulturAnlieferung({
+                        lieferung,
+                        lieferungIndex,
+                        kulturId,
+                        kulturIndex,
+                        artId,
+                        artIndex,
+                      }),
+                  )
+                  artKulturAnlieferungNodes.push(
+                    ...newArtKulturAnlieferungNodes,
+                  )
+                }
+
+                // auslieferung nodes
+                let auslieferungs = []
+                try {
+                  auslieferungs = await kultur.auslieferungs
+                    .extend(
+                      ...tableFilter({
+                        table: 'lieferung',
+                        store,
+                      }),
+                    )
+                    .fetch()
+                } catch {}
+                artKulturAuslieferungFolderNodes.push(
+                  buildArtKulturAuslieferungFolder({
+                    kulturId,
+                    kulturIndex,
+                    artId,
+                    artIndex,
+                    children: auslieferungs,
+                  }),
+                )
+                const artKulturAuslieferungFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 5 &&
+                    n[0] === 'Arten' &&
+                    n[1] === artId &&
+                    n[2] === 'Kulturen' &&
+                    n[3] === kulturId &&
+                    n[4] === 'Aus-Lieferungen',
+                )
+                if (artKulturAuslieferungFolderIsOpen) {
+                  const auslieferungsSorted = auslieferungs.sort(lieferungSort)
+                  const newArtKulturAuslieferungNodes = auslieferungsSorted.map(
+                    (lieferung, lieferungIndex) =>
+                      buildArtKulturAuslieferung({
+                        lieferung,
+                        lieferungIndex,
+                        kulturId,
+                        kulturIndex,
+                        artId,
+                        artIndex,
+                      }),
+                  )
+                  artKulturAuslieferungNodes.push(
+                    ...newArtKulturAuslieferungNodes,
+                  )
+                }
+
+                // event nodes
+                const eventsQuery = kultur.events.extend(
+                  ...tableFilter({ store, table: 'event' }),
+                )
+                const eventsCount = await eventsQuery.fetchCount()
+                artKulturEventFolderNodes.push(
+                  buildArtKulturEventFolder({
+                    kulturId,
+                    kulturIndex,
+                    artId,
+                    artIndex,
+                    count: eventsCount,
+                  }),
+                )
+                const artKulturEventFolderIsOpen = openNodes.some(
+                  (n) =>
+                    n.length === 5 &&
+                    n[0] === 'Arten' &&
+                    n[1] === artId &&
+                    n[2] === 'Kulturen' &&
+                    n[3] === kulturId &&
+                    n[4] === 'Events',
+                )
+                if (artKulturEventFolderIsOpen) {
+                  let events = []
+                  try {
+                    events = await eventsQuery.fetch()
+                  } catch {}
+                  const eventsSorted = events.sort(eventSort)
+                  const newArtKulturEventNodes = eventsSorted.map(
+                    (event, eventIndex) =>
+                      buildArtKulturEvent({
+                        event,
+                        eventIndex,
+                        kulturId,
+                        kulturIndex,
+                        artId,
+                        artIndex,
+                      }),
+                  )
+                  artKulturEventNodes.push(...newArtKulturEventNodes)
+                }
+              }
+              // TODO: end here
             }
           }
         }
