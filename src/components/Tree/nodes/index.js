@@ -420,6 +420,18 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     artIndex,
                   }),
                 )
+                const artHerkunftSammlungAuslieferungFolderIsOpen =
+                  openNodes.some(
+                    (n) =>
+                      n.length === 5 &&
+                      n[0] === 'Arten' &&
+                      n[1] === artId &&
+                      n[2] === 'Herkuenfte' &&
+                      n[3] === herkunftId &&
+                      n[4] === 'Sammlungen' &&
+                      n[6] === 'Aus-Lieferungen' &&
+                      n[7] === sammlungId,
+                  )
               }
             }
           }
