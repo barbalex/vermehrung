@@ -317,14 +317,6 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             ),
           )
           artHerkunftNodes.push(...newArtHerkunftNodes)
-
-          // const artHerkunftIsOpen = openNodes.some(
-          //   (n) =>
-          //     n.length === 4 &&
-          //     n[0] === 'Arten' &&
-          //     n[1] === artId &&
-          //     n[2] === 'Herkuenfte',
-          // )
           const openArtHerkunftNodes = openNodes.filter(
             (n) => n[0] === 'Arten' && n[2] === 'Herkuenfte' && n.length === 4,
           )
@@ -332,12 +324,6 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
           for (const herkunftNode of openArtHerkunftNodes) {
             const herkunftId = herkunftNode[3]
             const herkunft = herkunftsSorted.find((a) => a.id === herkunftId)
-            console.log('nodes', {
-              herkunftId,
-              herkunft,
-              herkunftNode,
-              artHerkunftNodes,
-            })
             if (!herkunft) break
             const herkunftIndex = artHerkunftNodes.findIndex(
               (a) => a.id === `${artId}/${herkunftId}`,
@@ -350,16 +336,37 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
               Q.experimentalJoinTables(['art']),
               Q.on('art', 'id', artId),
             )
-            const sammlungCount = await artHerkunftsSammlungsQuery.fetchCount()
+            const artHerkunftSammlungCount =
+              await artHerkunftsSammlungsQuery.fetchCount()
             artHerkunftSammlungFolderNodes.push(
               buildArtHerkunftSammlungFolder({
-                count: sammlungCount,
+                count: artHerkunftSammlungCount,
                 herkunft,
                 herkunftIndex,
                 artId,
                 artIndex,
               }),
             )
+
+            const artHerkunftSammlungFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Arten' &&
+                n[1] === artId &&
+                n[2] === 'Herkuenfte' &&
+                n[3] === herkunftId &&
+                n[4] === 'Sammlungen',
+            )
+
+            if (artHerkunftSammlungFolderIsOpen) {
+              let sammlungs = []
+              try {
+                sammlungs = await artHerkunftsSammlungsQuery.fetch()
+              } catch {}
+              const sammlungsSorted = await sammlungsSortedFromSammlungs(
+                sammlungs,
+              )
+            }
           }
         }
 
