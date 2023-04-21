@@ -1,29 +1,33 @@
 import lieferungLabelFromLieferung from '../../../../../../utils/lieferungLabelFromLieferung'
 
-const artSammlungAuslieferungNodes = ({
+const artSammlungHerkunftAuslieferungNodes = ({
   lieferung,
   lieferungIndex,
-  sammlungId,
+  sammlung,
   sammlungIndex,
+  herkunft,
+  herkunftIndex,
   artId,
   artIndex,
 }) => ({
   nodeType: 'table',
   menuTitle: 'Lieferung',
   table: 'lieferung',
-  id: `${artId}${sammlungId}${lieferung.id}`,
+  id: `${artId}${sammlung.id}${lieferung.id}`,
   label: lieferungLabelFromLieferung({ lieferung }),
   url: [
     'Arten',
     artId,
+    'Herkuenfte',
+    herkunft.id,
     'Sammlungen',
-    sammlungId,
+    sammlung.id,
     'Aus-Lieferungen',
     lieferung.id,
   ],
-  sort: [1, artIndex, 2, sammlungIndex, 1, lieferungIndex],
+  sort: [1, artIndex, 1, herkunftIndex, 1, sammlungIndex, 1, lieferungIndex],
   hasChildren: false,
   mono: true,
 })
 
-export default artSammlungAuslieferungNodes
+export default artSammlungHerkunftAuslieferungNodes
