@@ -31,7 +31,7 @@ const artHerkunftKulturZaehlungNodes = async ({
       'Zaehlungen',
       zaehlung.id,
     ],
-    sort: [1, artIndex, 1, herkunftIndex, 3, kulturIndex, 2, zaehlungIndex],
+    sort: [1, artIndex, 1, herkunftIndex, 2, kulturIndex, 2, zaehlungIndex],
     hasChildren: false,
     mono: true,
   }

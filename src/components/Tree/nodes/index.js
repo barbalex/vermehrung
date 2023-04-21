@@ -13,6 +13,8 @@ import buildArtHerkunftSammlungAuslieferungFolder from './art/herkunft/sammlung/
 import buildArtHerkunftSammlungAuslieferung from './art/herkunft/sammlung/auslieferung'
 import buildArtHerkunftKulturFolder from './art/herkunft/kultur/folder'
 import buildArtHerkunftKultur from './art/herkunft/kultur'
+import buildArtHerkunftKulturTeilkulturFolder from './art/herkunft/kultur/teilkultur/folder'
+import buildArtHerkunftKulturTeilkultur from './art/herkunft/kultur/teilkultur'
 import buildArtHerkunftKulturZaehlungFolder from './art/herkunft/kultur/zaehlung/folder'
 import buildArtHerkunftKulturZaehlung from './art/herkunft/kultur/zaehlung'
 import buildArtHerkunftKulturAnlieferungFolder from './art/herkunft/kultur/anlieferung/folder'
@@ -172,6 +174,8 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
   const artHerkunftSammlungAuslieferungNodes = []
   const artHerkunftKulturFolderNodes = []
   const artHerkunftKulturNodes = []
+  const artHerkunftKulturTeilkulturFolderNodes = []
+  const artHerkunftKulturTeilkulturNodes = []
   const artHerkunftKulturZaehlungFolderNodes = []
   const artHerkunftKulturZaehlungNodes = []
   const artHerkunftKulturAnlieferungFolderNodes = []
@@ -570,38 +574,45 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                       .extend(...tableFilter({ store, table: 'teilkultur' }))
                       .fetch()
                   } catch {}
-                  artKulturTeilkulturFolderNodes.push(
-                    buildArtKulturTeilkulturFolder({
+                  artHerkunftKulturTeilkulturFolderNodes.push(
+                    buildArtHerkunftKulturTeilkulturFolder({
                       kulturId,
                       kulturIndex,
                       artId,
                       artIndex,
-                      children: teilkulturs,
+                      herkunft,
+                      herkunftIndex,
+                      count: teilkulturs.length,
                     }),
                   )
-                  const artKulturTeilkulturFolderIsOpen = openNodes.some(
-                    (n) =>
-                      n.length === 5 &&
-                      n[0] === 'Arten' &&
-                      n[1] === artId &&
-                      n[2] === 'Kulturen' &&
-                      n[3] === kulturId &&
-                      n[4] === 'Teilkulturen',
-                  )
-                  if (artKulturTeilkulturFolderIsOpen) {
+                  const artHerkunftKulturTeilkulturFolderIsOpen =
+                    openNodes.some(
+                      (n) =>
+                        n.length === 7 &&
+                        n[0] === 'Arten' &&
+                        n[1] === artId &&
+                        n[2] === 'Herkuenfte' &&
+                        n[3] === herkunftId &&
+                        n[4] === 'Kulturen' &&
+                        n[5] === kulturId &&
+                        n[6] === 'Teilkulturen',
+                    )
+                  if (artHerkunftKulturTeilkulturFolderIsOpen) {
                     const teilkultursSorted = teilkulturs.sort(teilkulturSort)
                     const newArtKulturTeilkulturNodes = teilkultursSorted.map(
                       (teilkultur, teilkulturIndex) =>
-                        buildArtKulturTeilkultur({
+                        buildArtHerkunftKulturTeilkultur({
                           teilkultur,
                           teilkulturIndex,
                           kulturId,
                           kulturIndex,
                           artId,
                           artIndex,
+                          herkunft,
+                          herkunftIndex,
                         }),
                     )
-                    artKulturTeilkulturNodes.push(
+                    artHerkunftKulturTeilkulturNodes.push(
                       ...newArtKulturTeilkulturNodes,
                     )
                   }
@@ -2615,6 +2626,8 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     ...artHerkunftSammlungAuslieferungNodes,
     ...artHerkunftKulturFolderNodes,
     ...artHerkunftKulturNodes,
+    ...artHerkunftKulturTeilkulturFolderNodes,
+    ...artHerkunftKulturTeilkulturNodes,
     ...artHerkunftKulturZaehlungFolderNodes,
     ...artHerkunftKulturZaehlungNodes,
     ...artHerkunftKulturAnlieferungFolderNodes,

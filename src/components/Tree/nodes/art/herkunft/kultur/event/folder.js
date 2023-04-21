@@ -20,7 +20,7 @@ const artHerkunftKulturEventFolder = ({
     kulturId,
     'Events',
   ],
-  sort: [1, artIndex, 1, herkunftIndex, 3, kulturIndex, 5],
+  sort: [1, artIndex, 1, herkunftIndex, 2, kulturIndex, 5],
   hasChildren: true,
   childrenCount: count,
 })

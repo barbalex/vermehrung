@@ -25,7 +25,7 @@ const artHerkunftKulturEventNodes = ({
     'Events',
     event.id,
   ],
-  sort: [1, artIndex, 1, herkunftIndex, 3, kulturIndex, 5, eventIndex],
+  sort: [1, artIndex, 1, herkunftIndex, 2, kulturIndex, 5, eventIndex],
   hasChildren: false,
 })
 
