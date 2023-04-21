@@ -442,6 +442,15 @@ const activeFormFromActiveNodeArray = (url) => {
   }
   if (
     url.length === 7 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Teilkulturen'
+  ) {
+    return 'teilkulturen'
+  }
+  if (
+    url.length === 7 &&
     url[0] === 'Sammlungen' &&
     url[2] === 'Aus-Lieferungen' &&
     url[4] === 'Kulturen' &&
@@ -529,6 +538,15 @@ const activeFormFromActiveNodeArray = (url) => {
     url[6] === 'Aus-Lieferungen'
   ) {
     return 'lieferung'
+  }
+  if (
+    url.length === 8 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Herkuenfte' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Teilkulturen'
+  ) {
+    return 'teilkultur'
   }
   if (
     url.length === 8 &&
