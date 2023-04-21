@@ -359,13 +359,34 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             )
 
             if (artHerkunftSammlungFolderIsOpen) {
-              let sammlungs = []
+              let artHerkunftSammlungs = []
               try {
-                sammlungs = await artHerkunftsSammlungsQuery.fetch()
+                artHerkunftSammlungs = await artHerkunftsSammlungsQuery.fetch()
               } catch {}
-              const sammlungsSorted = await sammlungsSortedFromSammlungs(
-                sammlungs,
+              const artHerkunftSammlungsSorted =
+                await sammlungsSortedFromSammlungs(artHerkunftSammlungs)
+              const newArtHerkunftSammlungNodes = await Promise.all(
+                artHerkunftSammlungsSorted.map(
+                  async (sammlung, sammlungIndex) =>
+                    await buildArtHerkunftSammlung({
+                      sammlung,
+                      sammlungIndex,
+                      herkunft,
+                      herkunftIndex,
+                      artId,
+                      artIndex,
+                    }),
+                ),
               )
+              console.log('nodes', {
+                newArtHerkunftSammlungNodes,
+                artHerkunftSammlungsSorted,
+                artId,
+                artIndex,
+                herkunft,
+                herkunftIndex,
+              })
+              artHerkunftSammlungNodes.push(...newArtHerkunftSammlungNodes)
             }
           }
         }
