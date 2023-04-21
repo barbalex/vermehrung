@@ -1,6 +1,6 @@
 import eventLabelFromEvent from '../../../../../../../utils/eventLabelFromEvent'
 
-const artKulturEventNodes = ({
+const artHerkunftKulturEventNodes = ({
   event,
   eventIndex,
   kulturId,
@@ -15,9 +15,18 @@ const artKulturEventNodes = ({
   table: 'event',
   id: `${artId}/${herkunft.id}/${kulturId}/${event.id}`,
   label: eventLabelFromEvent({ event: event }),
-  url: ['Arten', artId, 'Herkuenfte', herkunft.id, 'Kulturen', kulturId, 'Events', event.id],
+  url: [
+    'Arten',
+    artId,
+    'Herkuenfte',
+    herkunft.id,
+    'Kulturen',
+    kulturId,
+    'Events',
+    event.id,
+  ],
   sort: [1, artIndex, 1, herkunftIndex, 3, kulturIndex, 5, eventIndex],
   hasChildren: false,
 })
 
-export default artKulturEventNodes
+export default artHerkunftKulturEventNodes

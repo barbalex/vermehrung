@@ -1,6 +1,6 @@
 import { first as first$ } from 'rxjs/operators'
 
-const artKulturNode = async ({
+const artHerkunftKulturNode = async ({
   kultur,
   kulturIndex,
   herkunft,
@@ -25,4 +25,4 @@ const artKulturNode = async ({
   }
 }
 
-export default artKulturNode
+export default artHerkunftKulturNode

@@ -11,6 +11,16 @@ import buildArtHerkunftSammlungFolder from './art/herkunft/sammlung/folder'
 import buildArtHerkunftSammlung from './art/herkunft/sammlung'
 import buildArtHerkunftSammlungAuslieferungFolder from './art/herkunft/sammlung/auslieferung/folder'
 import buildArtHerkunftSammlungAuslieferung from './art/herkunft/sammlung/auslieferung'
+import buildArtHerkunftKulturFolder from './art/herkunft/kultur/folder'
+import buildArtHerkunftKultur from './art/herkunft/kultur'
+import buildArtHerkunftKulturZaehlungFolder from './art/herkunft/kultur/zaehlung/folder'
+import buildArtHerkunftKulturZaehlung from './art/herkunft/kultur/zaehlung'
+import buildArtHerkunftKulturAnlieferungFolder from './art/herkunft/kultur/anlieferung/folder'
+import buildArtHerkunftKulturAnlieferung from './art/herkunft/kultur/anlieferung'
+import buildArtHerkunftKulturAuslieferungFolder from './art/herkunft/kultur/auslieferung/folder'
+import buildArtHerkunftKulturAuslieferung from './art/herkunft/kultur/auslieferung'
+import buildArtHerkunftKulturEventFolder from './art/herkunft/kultur/event/folder'
+import buildArtHerkunftKulturEvent from './art/herkunft/kultur/event'
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtKulturTeilkulturFolder from './art/kultur/teilkultur/folder'
@@ -160,6 +170,16 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
   const artHerkunftSammlungNodes = []
   const artHerkunftSammlungAuslieferungFolderNodes = []
   const artHerkunftSammlungAuslieferungNodes = []
+  const artHerkunftKulturFolderNodes = []
+  const artHerkunftKulturNodes = []
+  const artHerkunftKulturZaehlungFolderNodes = []
+  const artHerkunftKulturZaehlungNodes = []
+  const artHerkunftKulturAnlieferungFolderNodes = []
+  const artHerkunftKulturAnlieferungNodes = []
+  const artHerkunftKulturAuslieferungFolderNodes = []
+  const artHerkunftKulturAuslieferungNodes = []
+  const artHerkunftKulturEventFolderNodes = []
+  const artHerkunftKulturEventNodes = []
   const artKulturFolderNodes = []
   const artKulturNodes = []
   const artKulturTeilkulturFolderNodes = []
@@ -331,6 +351,8 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             const herkunftIndex = artHerkunftNodes.findIndex(
               (a) => a.id === `${artId}/${herkunftId}`,
             )
+
+            // 1.1.1 art > Herkunft > Sammlung
             const artHerkunftsSammlungsQuery = herkunft.sammlungs.extend(
               ...tableFilter({
                 table: 'sammlung',
@@ -461,6 +483,41 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   )
                 }
               }
+            }
+
+            // 1.1.2 art > herkunft > kultur
+            const artHerkunftsKultursQuery = db
+              .get('kultur')
+              .query(
+                ...tableFilter({ store, table: 'art' }),
+                Q.experimentalJoinTables(['art']),
+                Q.on('art', 'id', artId),
+                Q.where('herkunft_id', herkunftId),
+              )
+            const artHerkunftKulturCount =
+              await artHerkunftsKultursQuery.fetchCount()
+            artHerkunftKulturFolderNodes.push(
+              buildArtHerkunftKulturFolder({
+                count: artHerkunftKulturCount,
+                herkunft,
+                herkunftIndex,
+                artId,
+                artIndex,
+              }),
+            )
+
+            const artHerkunftKulturFolderIsOpen = openNodes.some(
+              (n) =>
+                n.length === 5 &&
+                n[0] === 'Arten' &&
+                n[1] === artId &&
+                n[2] === 'Herkuenfte' &&
+                n[3] === herkunftId &&
+                n[4] === 'Kulturen',
+            )
+
+            if (artHerkunftKulturFolderIsOpen) {
+              // TODO:
             }
           }
         }
@@ -2287,6 +2344,16 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
     ...artHerkunftSammlungNodes,
     ...artHerkunftSammlungAuslieferungFolderNodes,
     ...artHerkunftSammlungAuslieferungNodes,
+    ...artHerkunftKulturFolderNodes,
+    ...artHerkunftKulturNodes,
+    ...artHerkunftKulturZaehlungFolderNodes,
+    ...artHerkunftKulturZaehlungNodes,
+    ...artHerkunftKulturAnlieferungFolderNodes,
+    ...artHerkunftKulturAnlieferungNodes,
+    ...artHerkunftKulturAuslieferungFolderNodes,
+    ...artHerkunftKulturAuslieferungNodes,
+    ...artHerkunftKulturEventFolderNodes,
+    ...artHerkunftKulturEventNodes,
     ...artKulturFolderNodes,
     ...artKulturNodes,
     ...artKulturTeilkulturFolderNodes,

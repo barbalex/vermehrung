@@ -1,6 +1,6 @@
 import { first as first$ } from 'rxjs/operators'
 
-const artKulturZaehlungNodes = async ({
+const artHerkunftKulturZaehlungNodes = async ({
   zaehlung,
   zaehlungIndex,
   kulturId,
@@ -21,11 +21,20 @@ const artKulturZaehlungNodes = async ({
     table: 'zaehlung',
     id: `/${herkunft.id}/${kulturId}/${zaehlung.id}`,
     label,
-    url: ['Arten', artId, 'Herkuenfte', herkunft.id, 'Kulturen', kulturId, 'Zaehlungen', zaehlung.id],
+    url: [
+      'Arten',
+      artId,
+      'Herkuenfte',
+      herkunft.id,
+      'Kulturen',
+      kulturId,
+      'Zaehlungen',
+      zaehlung.id,
+    ],
     sort: [1, artIndex, 1, herkunftIndex, 3, kulturIndex, 2, zaehlungIndex],
     hasChildren: false,
     mono: true,
   }
 }
 
-export default artKulturZaehlungNodes
+export default artHerkunftKulturZaehlungNodes
