@@ -423,14 +423,14 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 const artHerkunftSammlungAuslieferungFolderIsOpen =
                   openNodes.some(
                     (n) =>
-                      n.length === 5 &&
+                      n.length === 7 &&
                       n[0] === 'Arten' &&
                       n[1] === artId &&
                       n[2] === 'Herkuenfte' &&
                       n[3] === herkunftId &&
                       n[4] === 'Sammlungen' &&
-                      n[6] === 'Aus-Lieferungen' &&
-                      n[7] === sammlungId,
+                      n[5] === sammlungId &&
+                      n[6] === 'Aus-Lieferungen',
                   )
                 if (artHerkunftSammlungAuslieferungFolderIsOpen) {
                   let artHerkunftSammlungAuslieferungs = []
@@ -440,6 +440,25 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   } catch {}
                   const artHerkunftSammlungAuslieferungsSorted =
                     artHerkunftSammlungAuslieferungs.sort(lieferungSort)
+                  const newArtHerkunftSammlungAuslieferungNodes =
+                    await Promise.all(
+                      artHerkunftSammlungAuslieferungsSorted.map(
+                        async (lieferung, lieferungIndex) =>
+                          await buildArtHerkunftSammlungAuslieferung({
+                            lieferung,
+                            lieferungIndex,
+                            sammlung,
+                            sammlungIndex,
+                            herkunft,
+                            herkunftIndex,
+                            artId,
+                            artIndex,
+                          }),
+                      ),
+                    )
+                  artHerkunftSammlungAuslieferungNodes.push(
+                    ...newArtHerkunftSammlungAuslieferungNodes,
+                  )
                 }
               }
             }
