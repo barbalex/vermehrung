@@ -493,10 +493,11 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
             const artHerkunftsKultursQuery = db
               .get('kultur')
               .query(
-                ...tableFilter({ store, table: 'art' }),
+                ...tableFilter({ store, table: 'kultur' }),
                 Q.experimentalJoinTables(['art']),
                 Q.on('art', 'id', artId),
-                Q.where('herkunft_id', herkunftId),
+                Q.experimentalJoinTables(['herkunft']),
+                Q.on('herkunft', 'id', herkunftId),
               )
             const artHerkunftKulturCount =
               await artHerkunftsKultursQuery.fetchCount()

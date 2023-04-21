@@ -58,6 +58,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
     db,
     filter,
     gartenIdInActiveNodeArray,
+    herkunftIdInActiveNodeArray,
     insertKulturRev,
   } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
@@ -65,17 +66,19 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
 
   const [dataState, setDataState] = useState({ kulturs: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = gartenIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['garten']),
-          Q.on('garten', 'id', gartenIdInActiveNodeArray),
-        ]
-      : artIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['art']),
-          Q.on('art', 'id', artIdInActiveNodeArray),
-        ]
-      : []
+    const hierarchyQuery = []
+    if (gartenIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['garten']))
+      hierarchyQuery.push(Q.on('garten', 'id', gartenIdInActiveNodeArray))
+    }
+    if (artIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['art']))
+      hierarchyQuery.push(Q.on('art', 'id', artIdInActiveNodeArray))
+    }
+    if (herkunftIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['herkunft']))
+      hierarchyQuery.push(Q.on('herkunft', 'id', herkunftIdInActiveNodeArray))
+    }
     const collection = db.get('kultur')
     const countObservable = collection
       .query(
@@ -124,15 +127,13 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
     return () => subscription?.unsubscribe?.()
   }, [
     db,
-    // need to rerender if any of the values of kulturFilter changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(kulturFilter),
     kulturFilter,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
     store,
     filter.kultur._deleted,
     filter.kultur.aktiv,
+    herkunftIdInActiveNodeArray,
   ])
 
   const { kulturs, totalCount } = dataState
