@@ -17,7 +17,7 @@
     "@fontsource/roboto": "4.5.8",
     "@fontsource/roboto-mono": "4.5.10",
     "@mui/material": "5.12.3",
-    "@nozbe/watermelondb": "0.25.5",
+    "@nozbe/watermelondb": "0.26.0",
     "blueimp-md5": "2.19.0",
     "browser-update": "3.3.44",
     "date-fns": "2.30.0",
