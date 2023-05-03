@@ -71,7 +71,7 @@ const LieferungNach = ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
             error={errors?.lieferung?.nach_kultur_id}
           />
           <Add
-            disabled={!(row.art_id && herkunft) || !!row.von_sammlung_id}
+            disabled={!(row.art_id && herkunft) || !row.von_sammlung_id}
             herkunft={herkunft}
             lieferung={row}
           />
