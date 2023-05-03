@@ -8,6 +8,7 @@
     "build_ts": "tsc && vite build",
     "build": "vite build",
     "serve": "vite preview",
+    "firebase-login": "firebase login",
     "deploy": "npm run build && firebase deploy --only hosting",
     "deploy_only": "firebase deploy --only hosting"
   },
