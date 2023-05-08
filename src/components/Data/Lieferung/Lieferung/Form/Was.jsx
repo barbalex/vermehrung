@@ -56,21 +56,17 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
 
   const [artWerte, setArtWerte] = useState([])
   useEffect(() => {
-    const artsObservable = db
-      .get('art')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.art._deleted === false
-              ? [false]
-              : filter.art._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .observe()
+    const artDelQuery =
+      filter.art._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.art._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const artsObservable = db.get('art').query(artDelQuery).observe()
     const combinedObservables = combineLatest([artsObservable])
     const subscription = combinedObservables.subscribe(async ([arts]) => {
       let art
