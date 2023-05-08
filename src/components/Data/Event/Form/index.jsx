@@ -70,76 +70,75 @@ const EventForm = ({
     kulturOption: undefined,
   })
   useEffect(() => {
+    const kulturDelQuery =
+      filter.kultur._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.kultur._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const kulturAktivQuery =
+      filter.kultur.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.kultur.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     const kultursObservable = db
       .get('kultur')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.kultur._deleted === false
-              ? [false]
-              : filter.kultur._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.kultur.aktiv === true
-              ? [true]
-              : filter.kultur.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(kulturDelQuery, kulturAktivQuery)
       .observeWithColumns([
         'garten_id',
         'art_id',
         'herkunft_id',
         'zwischenlager',
       ])
+    const tkDelQuery =
+      filter.teilkultur._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.teilkultur._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const teilkulturObservable = db
       .get('teilkultur')
       .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.teilkultur._deleted === false
-              ? [false]
-              : filter.teilkultur._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
+        tkDelQuery,
         ...(showFilter ? [] : [Q.where('kultur_id', kulturId)]),
       )
       .observeWithColumns(['name'])
+    const personDelQuery =
+      filter.person._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.person._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const personAktivQuery =
+      filter.person.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.person.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     const personsObservable = db
       .get('person')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.person._deleted === false
-              ? [false]
-              : filter.person._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.person.aktiv === true
-              ? [true]
-              : filter.person.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(personDelQuery, personAktivQuery)
       .observeWithColumns(['vorname', 'name'])
     const kulturOptionObservable = row?.kultur_id
       ? db.get('kultur_option').findAndObserve(row.kultur_id)
