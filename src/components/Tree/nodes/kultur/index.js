@@ -15,6 +15,7 @@ const kulturNodes = async ({ kultur, index }) => {
     url: ['Kulturen', kultur.id],
     sort: [5, index],
     hasChildren: true,
+    aktiv: kultur.aktiv,
   }
 }
 
