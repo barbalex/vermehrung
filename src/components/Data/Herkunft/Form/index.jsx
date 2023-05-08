@@ -62,24 +62,22 @@ const Herkunft = ({
             'hk_geom_point',
           ])
       : $of({})
+    const delQuery =
+      filter.herkunft._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.herkunft._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const herkunftsNrCountObservable =
       showFilter || !exists(row?.nr)
         ? $of(0)
         : db
             .get('herkunft')
-            .query(
-              Q.where(
-                '_deleted',
-                Q.oneOf(
-                  filter.herkunft._deleted === false
-                    ? [false]
-                    : filter.herkunft._deleted === true
-                    ? [true]
-                    : [true, false, null],
-                ),
-              ),
-              Q.where('nr', row.nr),
-            )
+            .query(delQuery, Q.where('nr', row.nr))
             .observeCount()
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
