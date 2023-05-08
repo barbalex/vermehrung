@@ -69,30 +69,29 @@ const GartenForm = ({
             'ga_bemerkungen',
           ])
       : $of({})
+    const delQuery =
+      filter.person._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.person._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const aktivQuery =
+      filter.person.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.person.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     const personsObservable = db
       .get('person')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.person._deleted === false
-              ? [false]
-              : filter.person._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.person.aktiv === true
-              ? [true]
-              : filter.person.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(delQuery, aktivQuery)
       .observeWithColumns(['vorname', 'name'])
     const personObservable = row.person ? row.person.observe() : $of({})
     const gvsObservable = row.gvs
