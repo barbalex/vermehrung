@@ -51,21 +51,17 @@ const ArtForm = ({
   })
   useEffect(() => {
     const aeArtObservable = db.get('ae_art').query().observe()
-    const artsObservable = db
-      .get('art')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.art._deleted === false
-              ? [false]
-              : filter.art._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .observe()
+    const delQuery =
+      filter.art?._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.art?._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const artsObservable = db.get('art').query(delQuery).observe()
     const combinedObservables = combineLatest([aeArtObservable, artsObservable])
     const subscription = combinedObservables.subscribe(
       async ([aeArts, arts]) => {
