@@ -30,20 +30,18 @@ const TeilkulturFormTitleChooser = ({
         ]
       : []
     const collection = db.get('teilkultur')
+    const teilkulturDelQuery =
+      filter.teilkultur._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.teilkultur._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const totalCountObservable = collection
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.teilkultur._deleted === false
-              ? [false]
-              : filter.teilkultur._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        ...hierarchyQuery,
-      )
+      .query(teilkulturDelQuery, ...hierarchyQuery)
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'teilkultur' }), ...hierarchyQuery)
