@@ -30,30 +30,28 @@ const GartenFormTitle = ({
         ]
       : []
     const collection = db.get('garten')
+    const delQuery =
+      filter.garten._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.garten._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const aktivQuery =
+      filter.garten.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.garten.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     const totalCountObservable = collection
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.garten._deleted === false
-              ? [false]
-              : filter.garten._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.garten.aktiv === true
-              ? [true]
-              : filter.garten.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-        ...hierarchyQuery,
-      )
+      .query(delQuery, aktivQuery, ...hierarchyQuery)
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'garten' }), ...hierarchyQuery)
