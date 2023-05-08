@@ -80,30 +80,28 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
       hierarchyQuery.push(Q.on('herkunft', 'id', herkunftIdInActiveNodeArray))
     }
     const collection = db.get('kultur')
+    const kulturDelQuery =
+      filter.kultur._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.kultur._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const kulturAktivQuery =
+      filter.kultur.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.kultur.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     const countObservable = collection
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.kultur._deleted === false
-              ? [false]
-              : filter.kultur._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.kultur.aktiv === true
-              ? [true]
-              : filter.kultur.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-        ...hierarchyQuery,
-      )
+      .query(kulturDelQuery, kulturAktivQuery, ...hierarchyQuery)
       .observeCount()
     const dataObservable = collection
       .query(...tableFilter({ table: 'kultur', store }), ...hierarchyQuery)

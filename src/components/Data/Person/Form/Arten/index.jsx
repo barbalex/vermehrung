@@ -55,7 +55,7 @@ const PersonArten = ({ person }) => {
   useEffect(() => setErrors({}), [person])
 
   const [open, setOpen] = useState(false)
-  let anim = useAnimation()
+  const anim = useAnimation()
   const onClickToggle = useCallback(
     async (e) => {
       e.stopPropagation()
@@ -82,21 +82,19 @@ const PersonArten = ({ person }) => {
     const avsObservable = person.avs
       .extend(Q.where('_deleted', false))
       .observe()
+    const artDelQuery =
+      filter.art._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.art._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const artsObservable = db
       .get('art')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.art._deleted === false
-              ? [false]
-              : filter.art._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where('id', Q.notIn(avArtIds)),
-      )
+      .query(artDelQuery, Q.where('id', Q.notIn(avArtIds)))
       .observe()
     const combinedObservables = combineLatest([avsObservable, artsObservable])
     const subscription = combinedObservables.subscribe(async ([avs, arts]) => {

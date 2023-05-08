@@ -15,6 +15,7 @@ const gartenNodes = async ({ garten, index }) => {
     url: ['Gaerten', garten.id],
     sort: [4, index],
     hasChildren: true,
+    aktiv: garten.aktiv,
   }
 }
 

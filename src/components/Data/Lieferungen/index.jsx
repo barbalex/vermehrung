@@ -93,20 +93,18 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
       hierarchyQuery.push(Q.on('sammlung', 'id', sammlungIdInActiveNodeArray))
     }
     const collection = db.get('lieferung')
+    const lieferungDelQuery =
+      filter.lieferung._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.lieferung._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const countObservable = collection
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.lieferung._deleted === false
-              ? [false]
-              : filter.lieferung._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        ...hierarchyQuery,
-      )
+      .query(lieferungDelQuery, ...hierarchyQuery)
       .observeCount()
     const dataObservable = collection
       .query(

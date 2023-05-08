@@ -64,29 +64,28 @@ const Personen = ({ filter: showFilter, width, height }) => {
   })
   useEffect(() => {
     const collection = db.get('person')
+    const personDelQuery =
+      filter.person._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.person._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const personAktivQuery =
+      filter.person.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.person.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     const countObservable = collection
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.person._deleted === false
-              ? [false]
-              : filter.person._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.person.aktiv === true
-              ? [true]
-              : filter.person.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(personDelQuery, personAktivQuery)
       .observeCount()
     const dataObservable = collection
       .query(...tableFilter({ table: 'person', store }))

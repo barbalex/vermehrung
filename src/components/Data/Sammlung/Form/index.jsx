@@ -70,79 +70,74 @@ const SammlungForm = ({
     artWerte: [],
   })
   useEffect(() => {
+    const personDelQuery =
+      filter.person._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.person._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const personAktivQuery =
+      filter.person.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.person.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     const personsObservable = db
       .get('person')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.person._deleted === false
-              ? [false]
-              : filter.person._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.person.aktiv === true
-              ? [true]
-              : filter.person.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(personDelQuery, personAktivQuery)
       .observeWithColumns(['vorname', 'name'])
+    const herkunftDelQuery =
+      filter.herkunft._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.herkunft._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const herkunftsObservable = db
       .get('herkunft')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.herkunft._deleted === false
-              ? [false]
-              : filter.herkunft._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(herkunftDelQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+    const artDelQuery =
+      filter.art._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.art._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const artsObservable = db
       .get('art')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.art._deleted === false
-              ? [false]
-              : filter.art._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(artDelQuery)
       .observeWithColumns(['ae_id'])
+    const sammlungDelQuery =
+      filter.sammlung._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.sammlung._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const sammlungsNrCountObservable =
       showFilter || !exists(row?.nr)
         ? $of(0)
         : db
             .get('sammlung')
-            .query(
-              Q.where(
-                '_deleted',
-                Q.oneOf(
-                  filter.sammlung._deleted === false
-                    ? [false]
-                    : filter.sammlung._deleted === true
-                    ? [true]
-                    : [true, false, null],
-                ),
-              ),
-              Q.where('nr', row.nr),
-            )
+            .query(sammlungDelQuery, Q.where('nr', row.nr))
             .observeCount()
     const combinedObservables = combineLatest([
       sammlungsNrCountObservable,

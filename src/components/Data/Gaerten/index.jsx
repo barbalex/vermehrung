@@ -55,7 +55,6 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const { insertGartenRev, personIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-  const { garten: gartenFilter } = store.filter
 
   const [dataState, setDataState] = useState({ gartens: [], totalCount: 0 })
   useEffect(() => {
@@ -66,30 +65,28 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.get('garten')
+    const delQuery =
+      filter.garten._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.garten._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const aktivQuery =
+      filter.garten?.aktiv === true
+        ? Q.where('aktiv', true)
+        : filter.garten?.aktiv === false
+        ? Q.where('aktiv', false)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     const totalCountObservable = collection
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.garten._deleted === false
-              ? [false]
-              : filter.garten._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.garten.aktiv === true
-              ? [true]
-              : filter.garten.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-        ...hierarchyQuery,
-      )
+      .query(delQuery, aktivQuery, ...hierarchyQuery)
       .observeCount()
     const gartenObservable = collection
       .query(...tableFilter({ store, table: 'garten' }), ...hierarchyQuery)
@@ -114,11 +111,9 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
     personIdInActiveNodeArray,
     // need to rerender if any of the values of gartenFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(gartenFilter),
-    gartenFilter,
+    ...Object.values(filter.garten),
+    filter.garten,
     store,
-    filter.garten._deleted,
-    filter.garten.aktiv,
   ])
 
   const { gartens, totalCount } = dataState

@@ -19,6 +19,8 @@ const Row = styled.div`
   margin: -1px 0;
   padding: 10px;
   cursor: pointer;
+  color: ${(props) =>
+    props['data-inaktiv'] ? 'rgba(0, 0, 0, 0.35)' : 'inherit'};
   div {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -75,7 +77,13 @@ const Kulturen = ({ row, style, last }) => {
   )
 
   return (
-    <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
+    <Row
+      key={row.id}
+      onClick={onClickRow}
+      style={style}
+      data-last={last}
+      data-inaktiv={row?.aktiv === false}
+    >
       <div>{label}</div>
     </Row>
   )

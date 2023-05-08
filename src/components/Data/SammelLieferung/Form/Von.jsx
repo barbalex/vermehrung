@@ -65,36 +65,31 @@ const SammelLieferungVon = ({
     sammlungWerte: [],
   })
   useEffect(() => {
+    const kulturDelQuery =
+      filter.kultur._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.kultur._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const sammlungDelQuery =
+      filter.sammlung._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.sammlung._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     // BEWARE: need to include inactive kulturs, persons
-    const kultursObservable = db
-      .get('kultur')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.kultur._deleted === false
-              ? [false]
-              : filter.kultur._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .observe()
+    const kultursObservable = db.get('kultur').query(kulturDelQuery).observe()
     const sammlungsObservable = db
       .get('sammlung')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.sammlung._deleted === false
-              ? [false]
-              : filter.sammlung._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(sammlungDelQuery)
       .observe()
     const combinedObservables = combineLatest([
       kultursObservable,
