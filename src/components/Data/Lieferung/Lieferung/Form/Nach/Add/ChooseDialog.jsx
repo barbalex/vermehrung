@@ -24,30 +24,29 @@ const ChooseDialog = ({
   const [gartens, setGartens] = useState([])
 
   useEffect(() => {
+    const gartenDelQuery =
+      filter.garten._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.garten._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const gartenAktivQuery =
+      filter.garten.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.garten.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     const gartensObservable = db
       .get('garten')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.garten._deleted === false
-              ? [false]
-              : filter.garten._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.garten.aktiv === true
-              ? [true]
-              : filter.garten.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(gartenDelQuery, gartenAktivQuery)
       .observe()
     const subscription = gartensObservable.subscribe(async (gartens) => {
       // Zur Auswahl stehen Gärten, die noch nicht eine aktive Kultur dieser Art mit dieser Herkunft haben,
