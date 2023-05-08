@@ -81,20 +81,18 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.get('herkunft')
+    const delQuery =
+      filter.herkunft._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.herkunft._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const countObservable = collection
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.herkunft._deleted === false
-              ? [false]
-              : filter.herkunft._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        ...hierarchyQuery,
-      )
+      .query(delQuery, ...hierarchyQuery)
       .observeCount()
     const herkunftsObservable = collection
       .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)

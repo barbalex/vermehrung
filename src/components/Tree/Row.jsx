@@ -118,7 +118,11 @@ const StyledNode = styled.div`
   white-space: nowrap;
   user-select: none;
   color: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
+    props['data-nodeisinactivenodepath']
+      ? '#D84315'
+      : props['data-inaktiv']
+      ? 'rgba(0, 0, 0, 0.35)'
+      : 'inherit'};
 `
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   margin-top: -5px !important;
@@ -309,6 +313,7 @@ const Row = ({ style, node, nodes, userRole }) => {
 
   const level =
     node?.url[0] === 'Projekte' ? node?.url?.length - 1 : node?.url?.length
+  const inaktiv = node?.aktiv === false
 
   return (
     <Container style={style}>
@@ -317,6 +322,7 @@ const Row = ({ style, node, nodes, userRole }) => {
           data-level={level}
           data-row-height={singleRowHeight}
           data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+          data-inaktiv={inaktiv}
         >
           {useSymbolIcon && (
             <SymbolDiv onClick={onClickNodeSymbol} data-mobile={isMobile}>

@@ -66,20 +66,18 @@ const Events = ({ filter: showFilter, width, height }) => {
         ]
       : []
     const collection = db.get('event')
+    const delQuery =
+      filter.event._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.event._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const countObservable = collection
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.event._deleted === false
-              ? [false]
-              : filter.event._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        ...hierarchyQuery,
-      )
+      .query(delQuery, ...hierarchyQuery)
       .observeCount()
     const dataObservable = collection
       .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)

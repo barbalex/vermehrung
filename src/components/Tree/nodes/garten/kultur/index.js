@@ -20,6 +20,7 @@ const gartenKulturNodes = async ({
     url: ['Gaerten', gartenId, 'Kulturen', kultur.id],
     sort: [4, gartenIndex, 1, kulturIndex],
     hasChildren: true,
+    aktiv: kultur.aktiv,
   }
 }
 

@@ -9,6 +9,7 @@ const personNodes = ({ person, index }) => ({
   url: ['Personen', person.id],
   sort: [11, index],
   hasChildren: true,
+  aktiv: person.aktiv,
 })
 
 export default personNodes
