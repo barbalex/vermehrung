@@ -26,21 +26,17 @@ const createMessageFunctions = async ({ artId, db, store }) => {
 
   let arts = []
   try {
-    arts = await db
-      .get('art')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.art._deleted === false
-              ? [false]
-              : filter.art._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .fetch()
+    const delQuery =
+      filter.art?._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.art?._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    arts = await db.get('art').query(delQuery).fetch()
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
 
@@ -51,122 +47,106 @@ const createMessageFunctions = async ({ artId, db, store }) => {
 
   let herkunfts = []
   try {
-    herkunfts = await db
-      .get('herkunft')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.herkunft._deleted === false
-              ? [false]
-              : filter.herkunft._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .fetch()
+    const delQuery =
+      filter.herkunft?._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.herkunft?._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    herkunfts = await db.get('herkunft').query(delQuery).fetch()
   } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
 
   let kulturs = []
   try {
+    const delQuery =
+      filter.kultur?._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.kultur?._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const aktivQuery =
+      filter.kultur?.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.kultur?.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     kulturs = await db
       .get('kultur')
-      .query(
-        Q.where('art_id', Q.eq(artId)),
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.kultur._deleted === false
-              ? [false]
-              : filter.kultur._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.kultur.aktiv === true
-              ? [true]
-              : filter.kultur.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(Q.where('art_id', Q.eq(artId)), delQuery, aktivQuery)
       .fetch()
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
 
   let lieferungs = []
   try {
-    lieferungs = await db
-      .get('lieferung')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.lieferung._deleted === false
-              ? [false]
-              : filter.lieferung._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .fetch()
+    const delQuery =
+      filter.lieferung?._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.lieferung?._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    lieferungs = await db.get('lieferung').query(delQuery).fetch()
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
 
   let persons = []
   try {
-    persons = await db
-      .get('person')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.person._deleted === false
-              ? [false]
-              : filter.person._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.person.aktiv === true
-              ? [true]
-              : filter.person.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .fetch()
+    const delQuery =
+      filter.person?._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.person?._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const aktivQuery =
+      filter.person?.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.person?.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
+    persons = await db.get('person').query(delQuery, aktivQuery).fetch()
   } catch {}
   const personsSorted = persons.sort(personSort)
 
   let sammlungsOfArt = []
   try {
+    const delQuery =
+      filter.sammlung?._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.sammlung?._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     sammlungsOfArt = await db
       .get('sammlung')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.sammlung._deleted === false
-              ? [false]
-              : filter.sammlung._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.on('art', 'id', artId),
-      )
+      .query(delQuery, Q.on('art', 'id', artId))
       .fetch()
   } catch {}
   const sammlungsOfArtSorted = await sammlungsSortedFromSammlungs(
@@ -175,21 +155,22 @@ const createMessageFunctions = async ({ artId, db, store }) => {
 
   let zaehlungsOfArt = []
   try {
+    const delQuery =
+      filter.zaehlung?._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.zaehlung?._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     zaehlungsOfArt = await db
       .get('zaehlung')
       .query(
         Q.experimentalNestedJoin('kultur', 'art'),
         Q.on('kultur', Q.on('art', 'id', artId)),
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.zaehlung._deleted === false
-              ? [false]
-              : filter.zaehlung._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
+        delQuery,
       )
       .fetch()
   } catch {}
@@ -210,21 +191,22 @@ const createMessageFunctions = async ({ artId, db, store }) => {
 
   let teilkultursOfArt = []
   try {
+    const delQuery =
+      filter.teilkultur?._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.teilkultur?._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     teilkultursOfArt = await db
       .get('teilkultur')
       .query(
         Q.experimentalNestedJoin('kultur', 'art'),
         Q.on('kultur', Q.on('art', 'id', artId)),
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.teilkultur._deleted === false
-              ? [false]
-              : filter.teilkultur._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
+        delQuery,
       )
       .fetch()
   } catch {}
@@ -232,21 +214,22 @@ const createMessageFunctions = async ({ artId, db, store }) => {
 
   let eventsOfArt = []
   try {
+    const delQuery =
+      filter.event?._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.event?._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     eventsOfArt = await db
       .get('event')
       .query(
         Q.experimentalNestedJoin('kultur', 'art'),
         Q.on('kultur', Q.on('art', 'id', artId)),
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.event._deleted === false
-              ? [false]
-              : filter.event._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
+        delQuery,
       )
       .fetch()
   } catch {}
@@ -606,21 +589,22 @@ const createMessageFunctions = async ({ artId, db, store }) => {
           }),
       ),
     zaehlungsInFutureNotPrognose: async () => {
+      const delQuery =
+        filter.zaehlung?._deleted === false
+          ? Q.where('_deleted', false)
+          : filter.zaehlung?._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
       const zaehlungs = await db
         .get('zaehlung')
         .query(
           Q.experimentalNestedJoin('kultur', 'art'),
           Q.on('kultur', Q.on('art', 'id', artId)),
-          Q.where(
-            '_deleted',
-            Q.oneOf(
-              filter.zaehlung._deleted === false
-                ? [false]
-                : filter.zaehlung._deleted === true
-                ? [true]
-                : [true, false, null],
-            ),
-          ),
+          delQuery,
           Q.where('datum', Q.notEq(null)),
           Q.where('datum', Q.gte(format(new Date(), 'yyyy-mm-dd'))),
         )
@@ -648,21 +632,22 @@ const createMessageFunctions = async ({ artId, db, store }) => {
     zaehlungsWithoutDatum: async () => {
       let zaehlungs = []
       try {
+        const delQuery =
+          filter.zaehlung?._deleted === false
+            ? Q.where('_deleted', false)
+            : filter.zaehlung?._deleted === true
+            ? Q.where('_deleted', true)
+            : Q.or(
+                Q.where('_deleted', false),
+                Q.where('_deleted', true),
+                Q.where('_deleted', null),
+              )
         zaehlungs = await db
           .get('zaehlung')
           .query(
             Q.experimentalNestedJoin('kultur', 'art'),
             Q.on('kultur', Q.on('art', 'id', artId)),
-            Q.where(
-              '_deleted',
-              Q.oneOf(
-                filter.zaehlung._deleted === false
-                  ? [false]
-                  : filter.zaehlung._deleted === true
-                  ? [true]
-                  : [true, false, null],
-              ),
-            ),
+            delQuery,
             Q.where('datum', Q.notEq(null)),
           )
           .fetch()
@@ -795,65 +780,74 @@ const createMessageFunctions = async ({ artId, db, store }) => {
             }
           }),
       ),
-    zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen: async () => {
-      let zaehlungsOfArt = []
-      try {
-        zaehlungsOfArt = await db
-          .get('zaehlung')
-          .query(
-            Q.experimentalNestedJoin('kultur', 'art'),
-            Q.on('kultur', Q.on('art', 'id', artId)),
-            Q.experimentalNestedJoin('kultur', 'kultur_option'),
-            Q.on('kultur', Q.on('kultur_option', 'tk', true)),
-            Q.where(
-              '_deleted',
-              Q.oneOf(
-                filter.zaehlung._deleted === false
-                  ? [false]
-                  : filter.zaehlung._deleted === true
-                  ? [true]
-                  : [true, false, null],
-              ),
-            ),
-          )
-          .fetch()
-      } catch {}
-      const zaehlungsOfArtSorted = zaehlungsOfArt.sort(zaehlungSort)
-      return await Promise.all(
-        zaehlungsOfArtSorted
-          .filter((z) => {
-            const tz = teilzaehlungsOfArt
-              .filter((tz) => tz.zaehlung_id === z.id)
-              .filter((tz) => !tz._deleted)
-            return tz.length && tz.filter((tz) => !tz.teilkultur_id).length
-          })
-          .map(async (z) => {
-            let kultur
-            try {
-              kultur = await z.kultur?.fetch()
-            } catch {}
-            let kulturLabel
-            try {
-              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-            } catch {}
-            const zaehlung = z.datum
-              ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
-              : `Zählung-ID: ${z.id}`
-            const anzTz = teilzaehlungsOfArt
-              .filter((tz) => tz.zaehlung_id === z.id)
-              .filter((tz) => !tz._deleted).length
-            const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-            const text = `${
-              kulturLabel ?? '(keine Kultur)'
-            }, ${zaehlung}${teilzaehlung}`
+    zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen:
+      async () => {
+        let zaehlungsOfArt = []
+        try {
+          const delQuery =
+            filter.zaehlung?._deleted === false
+              ? Q.where('_deleted', false)
+              : filter.zaehlung?._deleted === true
+              ? Q.where('_deleted', true)
+              : Q.or(
+                  Q.where('_deleted', false),
+                  Q.where('_deleted', true),
+                  Q.where('_deleted', null),
+                )
+          zaehlungsOfArt = await db
+            .get('zaehlung')
+            .query(
+              Q.experimentalNestedJoin('kultur', 'art'),
+              Q.on('kultur', Q.on('art', 'id', artId)),
+              Q.experimentalNestedJoin('kultur', 'kultur_option'),
+              Q.on('kultur', Q.on('kultur_option', 'tk', true)),
+              delQuery,
+            )
+            .fetch()
+        } catch {}
+        const zaehlungsOfArtSorted = zaehlungsOfArt.sort(zaehlungSort)
+        return await Promise.all(
+          zaehlungsOfArtSorted
+            .filter((z) => {
+              const tz = teilzaehlungsOfArt
+                .filter((tz) => tz.zaehlung_id === z.id)
+                .filter((tz) => !tz._deleted)
+              return tz.length && tz.filter((tz) => !tz.teilkultur_id).length
+            })
+            .map(async (z) => {
+              let kultur
+              try {
+                kultur = await z.kultur?.fetch()
+              } catch {}
+              let kulturLabel
+              try {
+                kulturLabel = await kultur?.label.pipe(first$()).toPromise()
+              } catch {}
+              const zaehlung = z.datum
+                ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+                : `Zählung-ID: ${z.id}`
+              const anzTz = teilzaehlungsOfArt
+                .filter((tz) => tz.zaehlung_id === z.id)
+                .filter((tz) => !tz._deleted).length
+              const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
+              const text = `${
+                kulturLabel ?? '(keine Kultur)'
+              }, ${zaehlung}${teilzaehlung}`
 
-            return {
-              url: ['Arten', artId, 'Kulturen', kultur?.id, 'Zaehlungen', z.id],
-              text,
-            }
-          }),
-      )
-    },
+              return {
+                url: [
+                  'Arten',
+                  artId,
+                  'Kulturen',
+                  kultur?.id,
+                  'Zaehlungen',
+                  z.id,
+                ],
+                text,
+              }
+            }),
+        )
+      },
     lieferungsWithMultipleVon: async () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
