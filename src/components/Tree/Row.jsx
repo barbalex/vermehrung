@@ -121,7 +121,7 @@ const StyledNode = styled.div`
     props['data-nodeisinactivenodepath']
       ? '#D84315'
       : props['data-inaktiv']
-      ? 'rgba(0, 0, 0, 0.3)'
+      ? 'rgba(0, 0, 0, 0.35)'
       : 'inherit'};
 `
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
