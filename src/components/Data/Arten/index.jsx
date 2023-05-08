@@ -59,20 +59,17 @@ const Arten = ({ filter: showFilter, width, height }) => {
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
     const collection = db.get('art')
-    const totalCountObservable = collection
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.art._deleted === false
-              ? [false]
-              : filter.art._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .observeCount()
+    const delQuery =
+      filter.art._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.art._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const totalCountObservable = collection.query(delQuery).observeCount()
     const artsObservable = collection
       .query(...tableFilter({ store, table: 'art' }))
       .observeWithColumns(['ae_id'])
