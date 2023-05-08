@@ -148,6 +148,8 @@ const GartenForm = ({
     ga_bemerkungen,
   } = userPersonOption ?? {}
 
+  // console.log('Garten, render, Form', { ga_aktiv })
+
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
