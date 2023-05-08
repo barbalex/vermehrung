@@ -19,107 +19,90 @@ const createMessageFunctions = async ({ kulturId, db, store }) => {
 
   let events = []
   try {
-    events = await db
-      .get('event')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.event._deleted === false
-              ? [false]
-              : filter.event._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .fetch()
+    const eventDelQuery =
+      filter.event._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.event._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    events = await db.get('event').query(eventDelQuery).fetch()
   } catch {}
   const eventsSorted = events.sort(eventSort)
   let kulturs = []
   try {
+    const kulturDelQuery =
+      filter.kultur._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.kultur._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const kulturAktivQuery =
+      filter.kultur.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.kultur.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     kulturs = await db
       .get('kultur')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.kultur._deleted === false
-              ? [false]
-              : filter.kultur._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.kultur.aktiv === true
-              ? [true]
-              : filter.kultur.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(kulturDelQuery, kulturAktivQuery)
       .fetch()
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
   let lieferungs = []
   try {
-    lieferungs = await db
-      .get('lieferung')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.lieferung._deleted === false
-              ? [false]
-              : filter.lieferung._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .fetch()
+    const lieferungDelQuery =
+      filter.lieferung._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.lieferung._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    lieferungs = await db.get('lieferung').query(lieferungDelQuery).fetch()
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
   let teilkulturs = []
   try {
-    teilkulturs = await db
-      .get('teilkultur')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.teilkultur._deleted === false
-              ? [false]
-              : filter.teilkultur._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .fetch()
+    const teilkulturDelQuery =
+      filter.teilkultur._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.teilkultur._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    teilkulturs = await db.get('teilkultur').query(teilkulturDelQuery).fetch()
   } catch {}
   const teilkultursSorted = teilkulturs.sort(teilkulturSort)
   let zaehlungs = []
   try {
-    zaehlungs = await db
-      .get('zaehlung')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.zaehlung._deleted === false
-              ? [false]
-              : filter.zaehlung._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-      )
-      .fetch()
+    const zaehlungDelQuery =
+      filter.zaehlung._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.zaehlung._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    zaehlungs = await db.get('zaehlung').query(zaehlungDelQuery).fetch()
   } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
   let teilzaehlungs = []
@@ -416,56 +399,57 @@ const createMessageFunctions = async ({ kulturId, db, store }) => {
             }
           }),
       ),
-    zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen: async () =>
-      await Promise.all(
-        zaehlungsSorted
-          .filter((z) => z.kultur_id === kulturId)
-          .filter(async (z) => {
-            let kulturOption
-            try {
-              kulturOption = await z.kultur_option.fetch()
-            } catch {}
+    zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen:
+      async () =>
+        await Promise.all(
+          zaehlungsSorted
+            .filter((z) => z.kultur_id === kulturId)
+            .filter(async (z) => {
+              let kulturOption
+              try {
+                kulturOption = await z.kultur_option.fetch()
+              } catch {}
 
-            return !!kulturOption?.tk
-          })
-          .filter((z) => {
-            const tzs = teilzaehlungs
-              .filter((tz) => tz.zaehlung_id === z.id)
-              .filter((tz) => !tz._deleted)
-            return tzs.length && tzs.filter((tz) => !tz.teilkultur_id).length
-          })
-          .map(async (z) => {
-            let kultur
-            try {
-              kultur = await z.kultur.fetch()
-            } catch {}
-            let kulturLabel
-            try {
-              kulturLabel = await kultur.label.pipe(first$()).toPromise()
-            } catch {}
-            const zaehlung = z.datum
-              ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
-              : `Zählung-ID: ${z.id}`
-            const anzTz = teilzaehlungs
-              .filter((tz) => tz.zaehlung_id === z.id)
-              .filter((tz) => !tz._deleted).length
-            const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
+              return !!kulturOption?.tk
+            })
+            .filter((z) => {
+              const tzs = teilzaehlungs
+                .filter((tz) => tz.zaehlung_id === z.id)
+                .filter((tz) => !tz._deleted)
+              return tzs.length && tzs.filter((tz) => !tz.teilkultur_id).length
+            })
+            .map(async (z) => {
+              let kultur
+              try {
+                kultur = await z.kultur.fetch()
+              } catch {}
+              let kulturLabel
+              try {
+                kulturLabel = await kultur.label.pipe(first$()).toPromise()
+              } catch {}
+              const zaehlung = z.datum
+                ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+                : `Zählung-ID: ${z.id}`
+              const anzTz = teilzaehlungs
+                .filter((tz) => tz.zaehlung_id === z.id)
+                .filter((tz) => !tz._deleted).length
+              const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
 
-            return {
-              url: [
-                'Arten',
-                kultur?.art_id,
-                'Kulturen',
-                kultur?.id,
-                'Zaehlungen',
-                z.id,
-              ],
-              text: `${
-                kulturLabel ?? '(keine Kultur)'
-              }, ${zaehlung}${teilzaehlung}`,
-            }
-          }),
-      ),
+              return {
+                url: [
+                  'Arten',
+                  kultur?.art_id,
+                  'Kulturen',
+                  kultur?.id,
+                  'Zaehlungen',
+                  z.id,
+                ],
+                text: `${
+                  kulturLabel ?? '(keine Kultur)'
+                }, ${zaehlung}${teilzaehlung}`,
+              }
+            }),
+        ),
     lieferungsWithMultipleVon: async () =>
       lieferungsSorted
         .filter((l) => l.von_kultur_id === kulturId)

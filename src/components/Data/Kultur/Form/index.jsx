@@ -88,47 +88,47 @@ const KulturForm = ({
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
       : $of({})
+    const gartenDelQuery =
+      filter.garten._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.garten._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
+    const gartenAktivQuery =
+      filter.garten.aktiv === false
+        ? Q.where('aktiv', false)
+        : filter.garten.aktiv === true
+        ? Q.where('aktiv', true)
+        : Q.or(
+            Q.where('aktiv', false),
+            Q.where('aktiv', true),
+            Q.where('aktiv', null),
+          )
     const gartensObservable = db
       .get('garten')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.garten._deleted === false
-              ? [false]
-              : filter.garten._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where(
-          'aktiv',
-          Q.oneOf(
-            filter.garten.aktiv === true
-              ? [true]
-              : filter.garten.aktiv === false
-              ? [false]
-              : [true, false, null],
-          ),
-        ),
-      )
+      .query(gartenDelQuery, gartenAktivQuery)
       .observe()
     const gartenObservable = row?.garten
       ? row?.garten?.observe()
       : $of(filter.garten)
+    const sammlungDelQuery =
+      filter.sammlung._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.sammlung._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const sammlungsObservable = db
       .get('sammlung')
       .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.sammlung._deleted === false
-              ? [false]
-              : filter.sammlung._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
+        sammlungDelQuery,
         Q.where('art_id', Q.notEq(null)),
         Q.where('herkunft_id', Q.notEq(null)),
       )
@@ -163,28 +163,30 @@ const KulturForm = ({
         // only consider kulturen with both art and herkunft chosen
         const thisGartenKulturs = []
         try {
+          const kulturDelQuery =
+            filter.kultur._deleted === false
+              ? Q.where('_deleted', false)
+              : filter.kultur._deleted === true
+              ? Q.where('_deleted', true)
+              : Q.or(
+                  Q.where('_deleted', false),
+                  Q.where('_deleted', true),
+                  Q.where('_deleted', null),
+                )
+          const kulturAktivQuery =
+            filter.kultur.aktiv === false
+              ? Q.where('aktiv', false)
+              : filter.kultur.aktiv === true
+              ? Q.where('aktiv', true)
+              : Q.or(
+                  Q.where('aktiv', false),
+                  Q.where('aktiv', true),
+                  Q.where('aktiv', null),
+                )
           await garten.kulturs
             .extend(
-              Q.where(
-                '_deleted',
-                Q.oneOf(
-                  filter.kultur._deleted === false
-                    ? [false]
-                    : filter.kultur._deleted === true
-                    ? [true]
-                    : [true, false, null],
-                ),
-              ),
-              Q.where(
-                'aktiv',
-                Q.oneOf(
-                  filter.kultur.aktiv === true
-                    ? [true]
-                    : filter.kultur.aktiv === false
-                    ? [false]
-                    : [true, false, null],
-                ),
-              ),
+              kulturDelQuery,
+              kulturAktivQuery,
               Q.where('art_id', Q.notEq(null)),
               Q.where('herkunft_id', Q.notEq(null)),
             )
@@ -289,38 +291,37 @@ const KulturForm = ({
     herkunftWerte: [],
   })
   useEffect(() => {
+    const artDelQuery =
+      filter.art._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.art._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const artsObservable = db
       .get('art')
       .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.art._deleted === false
-              ? [false]
-              : filter.art._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
+        artDelQuery,
         Q.where('ae_id', Q.notEq(null)),
         Q.where('id', Q.oneOf(artsToChoose)),
       )
       .observe()
+    const herkunftDelQuery =
+      filter.herkunft._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.herkunft._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const herkunftsObservable = db
       .get('herkunft')
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.herkunft._deleted === false
-              ? [false]
-              : filter.herkunft._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        Q.where('id', Q.oneOf(herkunftsToChoose)),
-      )
+      .query(herkunftDelQuery, Q.where('id', Q.oneOf(herkunftsToChoose)))
       .observe()
     const combinedObservables = combineLatest([
       artsObservable,
