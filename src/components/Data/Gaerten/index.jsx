@@ -66,9 +66,9 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
       : []
     const collection = db.get('garten')
     const delQuery =
-      filter.garten?._deleted === false
+      filter.garten._deleted === false
         ? Q.where('_deleted', false)
-        : filter.garten?._deleted === true
+        : filter.garten._deleted === true
         ? Q.where('_deleted', true)
         : Q.or(
             Q.where('_deleted', false),
