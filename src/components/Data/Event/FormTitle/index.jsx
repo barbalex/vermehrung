@@ -30,20 +30,18 @@ const EventFormTitle = ({
         ]
       : []
     const collection = db.get('event')
+    const dventDelQuery =
+      filter.event._deleted === false
+        ? Q.where('_deleted', false)
+        : filter.event._deleted === true
+        ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
     const totalCountObservable = collection
-      .query(
-        Q.where(
-          '_deleted',
-          Q.oneOf(
-            filter.event._deleted === false
-              ? [false]
-              : filter.event._deleted === true
-              ? [true]
-              : [true, false, null],
-          ),
-        ),
-        ...hierarchyQuery,
-      )
+      .query(dventDelQuery, ...hierarchyQuery)
       .observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)
