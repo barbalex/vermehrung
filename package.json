@@ -9,6 +9,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "firebase-login": "firebase login",
+    "firebase-login-reauth": "firebase login --reauth",
     "deploy": "npm run build && firebase deploy --only hosting",
     "deploy_only": "firebase deploy --only hosting"
   },
@@ -24,7 +25,7 @@
     "date-fns": "2.30.0",
     "exceljs": "4.3.0",
     "file-saver": "2.0.5",
-    "firebase": "9.21.0",
+    "firebase": "9.20.0",
     "framer-motion": "10.12.8",
     "fuse.js": "6.6.2",
     "get-urls": "11.0.0",
