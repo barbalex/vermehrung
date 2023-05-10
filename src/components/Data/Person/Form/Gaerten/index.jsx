@@ -129,6 +129,7 @@ const PersonArten = ({ person }) => {
               value: garten.id,
               label,
               inaktiv: garten.aktiv === false,
+              link: ['Gaerten', garten.id],
             }
           }),
         )

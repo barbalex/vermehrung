@@ -85,6 +85,7 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
           return {
             value: el.id,
             label,
+            link: ['Arten', el.id],
           }
         }),
       )
