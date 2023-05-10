@@ -114,6 +114,13 @@ const SharedSelect = ({
   const optionsToUse = loading && valuePassed ? loadingOptions : options
   const selectValue =
     optionsToUse.find((o) => o.value === valuePassed) || emptyValue
+  const styles = {
+    option: (styles, { data }) => ({
+      ...styles,
+      ...(data.inaktiv ? { color: 'rgba(0,0,0,0.35)' } : {}),
+    }),
+    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+  }
 
   return (
     <Container>
@@ -132,8 +139,8 @@ const SharedSelect = ({
         maxheight={maxHeight}
         classNamePrefix="react-select"
         nocaret={noCaret}
+        styles={styles}
         // using portal because sticky headers would otherwise cover the dropdown
-        styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
         menuPortalTarget={document.getElementById('root')}
       />
       {error && <Error>{error}</Error>}
