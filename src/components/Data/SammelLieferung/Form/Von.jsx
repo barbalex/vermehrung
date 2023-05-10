@@ -143,6 +143,7 @@ const SammelLieferungVon = ({
               value: el.id,
               label,
               inaktiv: el.aktiv === false,
+              link: ['Kulturen', el.id],
             }
           }),
         )
@@ -167,6 +168,7 @@ const SammelLieferungVon = ({
             return {
               value: el.id,
               label,
+              link: ['Sammlungen', el.id],
             }
           }),
         )
