@@ -174,6 +174,7 @@ const EventForm = ({
               value: k.id,
               label,
               inaktiv: k.aktiv === false,
+              link: ['Kulturen', k.id],
             }
           }),
         )
@@ -190,6 +191,7 @@ const EventForm = ({
           .map((t) => ({
             value: t.id,
             label: t.name || '(kein Name)',
+            link: ['Teilkulturen', t.id],
           }))
         // need to show a choosen person even if inactive but not if deleted
         let person
@@ -206,6 +208,7 @@ const EventForm = ({
             value: person.id,
             label: personLabelFromPerson({ person }),
             inaktiv: person.aktiv === false,
+            link: ['Personen', person.id],
           }))
         setDataState({
           kulturWerte,
@@ -225,9 +228,8 @@ const EventForm = ({
     filter.teilkultur._deleted,
     kulturId,
     row,
-    row?.kultur,
-    row?.kultur_option,
-    row?.person,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...[Object.values(row)],
     showFilter,
   ])
   const { kulturWerte, teilkulturWerte, personWerte, kulturOption } = dataState
