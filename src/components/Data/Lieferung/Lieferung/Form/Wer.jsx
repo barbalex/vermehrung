@@ -33,9 +33,6 @@ const TitleRow = styled.div`
   top: 0;
   user-select: none;
   z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
 `
 
 const LieferungWer = ({
@@ -103,6 +100,8 @@ const LieferungWer = ({
           .map((el) => ({
             value: el.id,
             label: personLabelFromPerson({ person: el }),
+            inaktiv: el.aktiv === false,
+            link: ['Personen', el.id],
           }))
 
         setDataState({ personWerte, row })

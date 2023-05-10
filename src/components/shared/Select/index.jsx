@@ -3,6 +3,8 @@ import Select from 'react-select'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
 
+import Link from './Link'
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -16,6 +18,12 @@ const Label = styled.div`
 const Error = styled.div`
   font-size: 12px;
   color: red;
+`
+const SelectRow = styled.div`
+  display: flex;
+  > div {
+    width: 100%;
+  }
 `
 export const StyledSelect = styled(Select)`
   .react-select__control {
@@ -114,28 +122,40 @@ const SharedSelect = ({
   const optionsToUse = loading && valuePassed ? loadingOptions : options
   const selectValue =
     optionsToUse.find((o) => o.value === valuePassed) || emptyValue
+  const styles = {
+    option: (styles, { data }) => ({
+      ...styles,
+      ...(data.inaktiv ? { color: 'rgba(0,0,0,0.35)' } : {}),
+    }),
+    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+  }
+
+  // console.log('SharedSelect', { field, selectValue })
 
   return (
     <Container>
       {label && <Label>{label}</Label>}
-      <StyledSelect
-        id={field}
-        name={field}
-        value={selectValue}
-        options={optionsToUse}
-        onChange={onChange}
-        hideSelectedOptions
-        placeholder=""
-        isClearable={isClearable}
-        isSearchable
-        noOptionsMessage={() => '(keine)'}
-        maxheight={maxHeight}
-        classNamePrefix="react-select"
-        nocaret={noCaret}
-        // using portal because sticky headers would otherwise cover the dropdown
-        styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-        menuPortalTarget={document.getElementById('root')}
-      />
+      <SelectRow>
+        <StyledSelect
+          id={field}
+          name={field}
+          value={selectValue}
+          options={optionsToUse}
+          onChange={onChange}
+          hideSelectedOptions
+          placeholder=""
+          isClearable={isClearable}
+          isSearchable
+          noOptionsMessage={() => '(keine)'}
+          maxheight={maxHeight}
+          classNamePrefix="react-select"
+          nocaret={noCaret}
+          styles={styles}
+          // using portal because sticky headers would otherwise cover the dropdown
+          menuPortalTarget={document.getElementById('root')}
+        />
+        {!!selectValue.link && <Link link={selectValue.link} />}
+      </SelectRow>
       {error && <Error>{error}</Error>}
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
     </Container>
