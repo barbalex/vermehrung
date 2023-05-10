@@ -157,6 +157,7 @@ const KulturForm = ({
             return {
               value: garten.id,
               label,
+              inaktiv: garten.aktiv === false,
             }
           }),
         )

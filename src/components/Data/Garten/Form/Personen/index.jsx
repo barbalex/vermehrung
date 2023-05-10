@@ -121,6 +121,7 @@ const GartenPersonen = ({ garten }) => {
           .map((el) => ({
             value: el.id,
             label: personLabelFromPerson({ person: el }),
+            inaktiv: el.aktiv === false,
           }))
 
         setDataState({ gvsSorted, personWerte })
