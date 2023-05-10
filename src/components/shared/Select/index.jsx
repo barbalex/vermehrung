@@ -3,6 +3,8 @@ import Select from 'react-select'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
 
+import Link from './Link'
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -128,6 +130,8 @@ const SharedSelect = ({
     menuPortal: (base) => ({ ...base, zIndex: 9999 }),
   }
 
+  console.log('SharedSelect', { field, valuePassed, selectValue })
+
   return (
     <Container>
       {label && <Label>{label}</Label>}
@@ -150,6 +154,7 @@ const SharedSelect = ({
           // using portal because sticky headers would otherwise cover the dropdown
           menuPortalTarget={document.getElementById('root')}
         />
+        {!!selectValue.link && <Link link={selectValue.link} />}
       </SelectRow>
       {error && <Error>{error}</Error>}
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
