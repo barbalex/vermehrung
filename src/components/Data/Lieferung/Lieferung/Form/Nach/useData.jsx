@@ -84,6 +84,7 @@ const useData = ({ showFilter, row, herkunft, db, filter }) => {
             value: el.id,
             label,
             inaktiv: el.aktiv === false,
+            link: ['Kulturen', el.id],
           }
         }),
       )
