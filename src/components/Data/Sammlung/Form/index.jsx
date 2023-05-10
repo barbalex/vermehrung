@@ -166,6 +166,7 @@ const SammlungForm = ({
           .map((person) => ({
             value: person.id,
             label: personLabelFromPerson({ person }),
+            inaktiv: person.aktiv === false,
           }))
         let herkunft
         try {
