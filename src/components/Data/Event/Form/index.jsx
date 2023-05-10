@@ -164,15 +164,16 @@ const EventForm = ({
           kultursIncludingChoosen,
         )
         const kulturWerte = await Promise.all(
-          kultursSorted.map(async (t) => {
+          kultursSorted.map(async (k) => {
             let label
             try {
-              label = await t.label.pipe(first$()).toPromise()
+              label = await k.label.pipe(first$()).toPromise()
             } catch {}
 
             return {
-              value: t.id,
+              value: k.id,
               label,
+              inaktiv: k.aktiv === false,
             }
           }),
         )
@@ -204,6 +205,7 @@ const EventForm = ({
           .map((person) => ({
             value: person.id,
             label: personLabelFromPerson({ person }),
+            inaktiv: person.aktiv === false,
           }))
         setDataState({
           kulturWerte,

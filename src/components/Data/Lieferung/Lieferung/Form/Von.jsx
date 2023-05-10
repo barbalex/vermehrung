@@ -139,6 +139,7 @@ const LieferungVon = ({
             return {
               value: el.id,
               label,
+              inaktiv: el.aktiv === false,
             }
           }),
         )
