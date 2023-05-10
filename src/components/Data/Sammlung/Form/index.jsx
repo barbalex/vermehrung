@@ -167,6 +167,7 @@ const SammlungForm = ({
             value: person.id,
             label: personLabelFromPerson({ person }),
             inaktiv: person.aktiv === false,
+            link: ['Personen', person.id],
           }))
         let herkunft
         try {
@@ -181,6 +182,7 @@ const SammlungForm = ({
           .map((herkunft) => ({
             value: herkunft.id,
             label: herkunftLabelFromHerkunft({ herkunft }),
+            link: ['Herkuenfte', herkunft.id],
           }))
         let art
         try {
@@ -201,6 +203,7 @@ const SammlungForm = ({
             return {
               value: art.id,
               label,
+              link: ['Arten', art.id],
             }
           }),
         )
