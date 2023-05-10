@@ -114,6 +114,7 @@ const ZaehlungForm = ({
               value: el.id,
               label,
               inaktiv: el.aktiv === false,
+              link: ['Kulturen', el.id],
             }
           }),
       )

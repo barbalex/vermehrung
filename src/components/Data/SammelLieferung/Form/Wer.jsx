@@ -95,6 +95,7 @@ const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
             value: el.id,
             label: personLabelFromPerson({ person: el }),
             inaktiv: el.aktiv === false,
+            link: ['Personen', el.id],
           }))
 
         setDataState({ personWerte, row })
