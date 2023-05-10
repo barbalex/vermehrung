@@ -128,6 +128,7 @@ const PersonArten = ({ person }) => {
             return {
               value: garten.id,
               label,
+              inaktiv: garten.aktiv === false,
             }
           }),
         )
