@@ -17,6 +17,12 @@ const Error = styled.div`
   font-size: 12px;
   color: red;
 `
+const SelectRow = styled.div`
+  display: flex;
+  > div {
+    width: 100%;
+  }
+`
 export const StyledSelect = styled(Select)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
@@ -125,24 +131,26 @@ const SharedSelect = ({
   return (
     <Container>
       {label && <Label>{label}</Label>}
-      <StyledSelect
-        id={field}
-        name={field}
-        value={selectValue}
-        options={optionsToUse}
-        onChange={onChange}
-        hideSelectedOptions
-        placeholder=""
-        isClearable={isClearable}
-        isSearchable
-        noOptionsMessage={() => '(keine)'}
-        maxheight={maxHeight}
-        classNamePrefix="react-select"
-        nocaret={noCaret}
-        styles={styles}
-        // using portal because sticky headers would otherwise cover the dropdown
-        menuPortalTarget={document.getElementById('root')}
-      />
+      <SelectRow>
+        <StyledSelect
+          id={field}
+          name={field}
+          value={selectValue}
+          options={optionsToUse}
+          onChange={onChange}
+          hideSelectedOptions
+          placeholder=""
+          isClearable={isClearable}
+          isSearchable
+          noOptionsMessage={() => '(keine)'}
+          maxheight={maxHeight}
+          classNamePrefix="react-select"
+          nocaret={noCaret}
+          styles={styles}
+          // using portal because sticky headers would otherwise cover the dropdown
+          menuPortalTarget={document.getElementById('root')}
+        />
+      </SelectRow>
       {error && <Error>{error}</Error>}
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
     </Container>
