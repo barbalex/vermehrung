@@ -87,6 +87,7 @@ const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
           return {
             value: el.id,
             label,
+            link: ['Arten', el.id],
           }
         }),
       )

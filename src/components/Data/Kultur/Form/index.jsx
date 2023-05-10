@@ -157,6 +157,8 @@ const KulturForm = ({
             return {
               value: garten.id,
               label,
+              inaktiv: garten.aktiv === false,
+              link: ['Gaerten', garten.id],
             }
           }),
         )
@@ -347,6 +349,7 @@ const KulturForm = ({
             return {
               value: art.id,
               label,
+              link: ['Arten', art.id],
             }
           }),
         )
@@ -363,6 +366,7 @@ const KulturForm = ({
           .map((herkunft) => ({
             value: herkunft.id,
             label: herkunftLabelFromHerkunft({ herkunft }),
+            link: ['Herkuenfte', herkunft.id],
           }))
 
         setDataState2({

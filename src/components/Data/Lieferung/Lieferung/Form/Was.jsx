@@ -34,9 +34,6 @@ const TitleRow = styled.div`
   top: 0;
   user-select: none;
   z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
 `
 const FieldRow = styled.div`
   display: flex;
@@ -88,6 +85,7 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
           return {
             value: el.id,
             label,
+            link: ['Arten', el.id],
           }
         }),
       )

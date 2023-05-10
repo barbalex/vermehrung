@@ -115,6 +115,8 @@ const GartenForm = ({
           .map((person) => ({
             value: person.id,
             label: personLabelFromPerson({ person }),
+            inaktiv: person.aktiv === false,
+            link: ['Personen', person.id],
           }))
 
         setDataState({

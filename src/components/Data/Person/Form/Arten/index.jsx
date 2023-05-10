@@ -110,6 +110,7 @@ const PersonArten = ({ person }) => {
           return {
             value: art.id,
             label,
+            link: ['Arten', art.id],
           }
         }),
       )

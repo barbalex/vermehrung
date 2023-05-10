@@ -33,9 +33,6 @@ const TitleRow = styled.div`
   top: 0;
   user-select: none;
   z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
 `
 const Herkunft = styled.div`
   height: 54px;
@@ -142,6 +139,8 @@ const LieferungVon = ({
             return {
               value: el.id,
               label,
+              inaktiv: el.aktiv === false,
+              link: ['Kulturen', el.id],
             }
           }),
         )
@@ -166,6 +165,7 @@ const LieferungVon = ({
             return {
               value: el.id,
               label,
+              link: ['Sammlungen', el.id],
             }
           }),
         )
