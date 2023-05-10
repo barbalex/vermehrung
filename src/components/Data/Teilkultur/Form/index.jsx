@@ -106,6 +106,7 @@ const TeilkulturForm = ({
             return {
               value: el.id,
               label,
+              inaktiv: el.aktiv === false,
             }
           }),
         )
