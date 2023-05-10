@@ -138,6 +138,7 @@ const TeilzaehlungForm = ({
           .map((tk) => ({
             value: tk.id,
             label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
+            link: ['Teilkulturen', tk.id],
           }))
         setDataState({ teilkulturWerte, kulturOption, row: teilzaehlung })
       },

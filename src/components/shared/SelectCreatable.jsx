@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext'
+import Link from './Select/Link'
 
 const Container = styled.div`
   display: flex;
@@ -19,6 +20,12 @@ const Label = styled.div`
 const Error = styled.div`
   font-size: 12px;
   color: red;
+`
+const SelectRow = styled.div`
+  display: flex;
+  > div {
+    width: 100%;
+  }
 `
 const StyledSelect = styled(Select)`
   .react-select__control {
@@ -131,22 +138,25 @@ const SelectCreatable = ({
   return (
     <Container>
       {label && <Label>{label}</Label>}
-      <StyledSelect
-        id={field}
-        name={field}
-        value={selectValue}
-        options={optionsToUse}
-        onChange={onChange}
-        hideSelectedOptions
-        placeholder=""
-        isClearable
-        isSearchable
-        noOptionsMessage={() => '(keine)'}
-        maxheight={maxHeight}
-        classNamePrefix="react-select"
-        nocaret={noCaret}
-        formatCreateLabel={(val) => `"${val}" als neue Teilkultur aufnehmen`}
-      />
+      <SelectRow>
+        <StyledSelect
+          id={field}
+          name={field}
+          value={selectValue}
+          options={optionsToUse}
+          onChange={onChange}
+          hideSelectedOptions
+          placeholder=""
+          isClearable
+          isSearchable
+          noOptionsMessage={() => '(keine)'}
+          maxheight={maxHeight}
+          classNamePrefix="react-select"
+          nocaret={noCaret}
+          formatCreateLabel={(val) => `"${val}" als neue Teilkultur aufnehmen`}
+        />
+        {!!selectValue.link && <Link link={selectValue.link} />}
+      </SelectRow>
       {error && <Error>{error}</Error>}
     </Container>
   )
