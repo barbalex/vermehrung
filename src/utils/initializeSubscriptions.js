@@ -1,7 +1,9 @@
 import processSubscriptionResult from './processSubscriptionResult'
 
-const initializeSubscriptions = ({ store }) => {
-  console.log('initializing subscriptions')
+const initializeSubscriptions = ({ store, userRole }) => {
+  const isNoGaertner = userRole !== 'gaertner'
+  console.log('initializing subscriptions', { userRole, isNoGaertner })
+
   const {
     ae_art_lastUpdated,
     art_lastUpdated,
@@ -349,6 +351,7 @@ const initializeSubscriptions = ({ store }) => {
       complete: () => console.log('resolved gv'),
     },
   )
+  // TODO: if user role is gaertner, do not import: lokalname, wgs84_lat, wgs84_long, lv95_x, lv95_y
   unsubscribe.herkunft = store.gqlWsClient.subscribe(
     {
       query: `
@@ -357,16 +360,16 @@ const initializeSubscriptions = ({ store }) => {
             id
             __typename
             nr
-            lokalname
+            ${isNoGaertner ? 'lokalname' : ''}
             gemeinde
             kanton
             land
             bemerkungen
-            geom_point
-            lv95_x
-            lv95_y
-            wgs84_lat
-            wgs84_long
+            ${isNoGaertner ? 'geom_point' : ''}
+            ${isNoGaertner ? 'lv95_x' : ''}
+            ${isNoGaertner ? 'lv95_y' : ''}
+            ${isNoGaertner ? 'wgs84_lat' : ''}
+            ${isNoGaertner ? 'wgs84_long' : ''}
             changed
             changed_by
             _rev
