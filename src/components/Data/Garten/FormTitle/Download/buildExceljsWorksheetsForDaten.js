@@ -93,6 +93,7 @@ const buildExceljsWorksheetsForDaten = async ({
       const newK = {
         id: kultur.id,
         art_id: kultur.art_id,
+        art_set: art?.set ?? '',
         art_ae_id: aeArt?.id ?? '',
         art_ae_name: artLabel,
         herkunft_id: kultur.herkunft_id,
