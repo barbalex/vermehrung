@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useLocation } from 'react-router-dom'
+import gql from 'graphql-tag'
 
 import StoreContext from '../../storeContext'
 import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
@@ -63,6 +64,7 @@ const VermehrungIndex = () => {
     showQueuedQueries,
     user,
     online,
+    gqlClient,
   } = store
   const { setLastActiveNodeArray, setOpenNodes, wsReconnectCount } = store.tree
 
@@ -88,18 +90,34 @@ const VermehrungIndex = () => {
     console.log('vermehrung, subscription effect', { authorizing, existsUser })
     let unsubscribe
     if (existsUser && !authorizing) {
-      // TODO:
       // need to fetch user to get role
       // then pass role to initializeSubscriptions to skip fields
       // this user has no access to
       // would be much nicer if hasura simply passed null values
       // https://github.com/hasura/graphql-engine/issues/6541
-
-      // TODO:
-      // if no data exists yet
-      // set initial data queried false
-      // then true on first data event
-      unsubscribe = initializeSubscriptions({ store })
+      // inherited roles not working as they can not be added to existing users
+      gqlClient
+        .query(
+          gql`
+        query userRoleQuery {
+          person(
+            where: {account_id: {_eq: ${user.uid}}}
+          ) {
+            id
+            person_user_role {
+              id
+              name
+            }
+          }
+        }
+      `,
+        )
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .then(({ data, error }) => {
+          // error not caught > user will get to much data
+          const userRole = data?.person?.[0]?.person_user_role?.name
+          unsubscribe = initializeSubscriptions({ store, userRole })
+        })
     }
     return function cleanup() {
       if (unsubscribe && Object.values(unsubscribe)) {
@@ -108,7 +126,7 @@ const VermehrungIndex = () => {
     }
     // wsReconnectCount is made so a subscription can provoke re-subscription on error
     // see initializeSubscriptions, unsubscribe.ae_art
-  }, [existsUser, store, wsReconnectCount, authorizing])
+  }, [existsUser, store, wsReconnectCount, authorizing, gqlClient, user.uid])
 
   if (gettingAuthUser) {
     return (
