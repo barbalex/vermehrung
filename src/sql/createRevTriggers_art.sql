@@ -1,4 +1,4 @@
-create function art_rev_leaves(art_id uuid) returns setof art_rev as $$
+create or replace function art_rev_leaves(art_id uuid) returns setof art_rev as $$
   select
       *
     from
