@@ -167,12 +167,6 @@ CREATE TABLE art (
   _conflicts text[] DEFAULT NULL
 );
 
--- 2023.05.11: add column set
-alter table art add column set text default null;
-
--- TODO: add permissions in hasura admin ui
--- end 2023.05.11
-
 CREATE INDEX ON art USING btree (id);
 
 CREATE INDEX ON art USING btree (ae_id);
@@ -197,12 +191,6 @@ CREATE TABLE art_rev (
   _depth integer DEFAULT 1,
   _deleted boolean DEFAULT FALSE
 );
-
--- 2023.05.11: add column set
-alter table art_rev add column set text default null;
-
--- TODO: add permissions in hasura admin ui
--- end 2023.05.11
 
 ALTER TABLE ONLY art_rev
   ALTER COLUMN art_id SET DEFAULT NULL;
