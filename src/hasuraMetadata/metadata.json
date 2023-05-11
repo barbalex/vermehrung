@@ -1,5 +1,5 @@
 {
-  "resource_version": 5,
+  "resource_version": 6,
   "metadata": {
     "version": 3,
     "sources": [
@@ -9084,6 +9084,12 @@
                       "schema": "public"
                     }
                   }
+                }
+              },
+              {
+                "name": "person_user_role",
+                "using": {
+                  "foreign_key_constraint_on": "user_role_id"
                 }
               }
             ],
