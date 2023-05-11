@@ -96,7 +96,6 @@ const ArtForm = ({
 
       // only update if value has changed
       const previousValue = ifIsNumericAsNumber(row[field])
-      console.log('ArtForm, saveToDb', { event, field, value, previousValue })
       if (value === previousValue) return
       row.edit({ field, value, store })
     },
@@ -111,12 +110,10 @@ const ArtForm = ({
   const onCreateSet = useCallback(
     ({ name }) => {
       const event = { target: { name: 'set', value: name } }
-      console.log('ArtForm, onCreateSet', { event, name })
       saveToDb(event)
     },
     [saveToDb],
   )
-  console.log('ArtForm, sets:', sets)
 
   const aeArtIdsNotToShow = artsSorted
     .map((a) => a.ae_id)
@@ -180,7 +177,6 @@ const ArtForm = ({
           labelTable="ae_art"
           labelField="name"
         />
-        {/* TODO: add set */}
         <SelectCreatable
           key={`${row.id}${row.set}set`}
           row={row}
@@ -193,7 +189,6 @@ const ArtForm = ({
           onCreateNew={onCreateSet}
           formatCreateLabel={(val) => `"${val}" als neues Set aufnehmen`}
         />
-        <div>{`Set: ${row.set}`}</div>
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList
             conflicts={row._conflicts}
