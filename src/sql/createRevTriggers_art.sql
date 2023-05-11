@@ -1,4 +1,4 @@
-create function art_rev_leaves(art_id uuid) returns setof art_rev as $$
+create or replace function art_rev_leaves(art_id uuid) returns setof art_rev as $$
   select
       *
     from
@@ -59,6 +59,7 @@ begin
     insert into art (
       id,
       ae_id,
+      set,
       changed,
       changed_by,
       _rev,
@@ -127,6 +128,7 @@ begin
     select
       art_rev.art_id,
       art_rev.ae_id,
+      art_rev.set,
       art_rev.changed,
       art_rev.changed_by,
       art_rev._rev,
@@ -154,6 +156,7 @@ begin
     on conflict on constraint art_pkey do update set
       -- do not update the id = pkey
       ae_id = excluded.ae_id,
+      set = excluded.set,
       changed = excluded.changed,
       changed_by = excluded.changed_by,
       _rev = excluded._rev,
@@ -173,6 +176,7 @@ begin
     insert into art (
         id,
         ae_id,
+        set,
         changed,
         changed_by,
         _rev,
@@ -220,6 +224,7 @@ begin
       select
         art_rev.art_id,
         art_rev.ae_id,
+        art_rev.set,
         art_rev.changed,
         art_rev.changed_by,
         art_rev._rev,
@@ -241,6 +246,7 @@ begin
       on conflict on constraint art_pkey do update set
         -- do not update the id = pkey
         ae_id = excluded.ae_id,
+        set = excluded.set,
         changed = excluded.changed,
         changed_by = excluded.changed_by,
         _rev = excluded._rev,

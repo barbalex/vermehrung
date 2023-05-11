@@ -6,6 +6,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
+import SelectCreatable from '../../../shared/SelectCreatable'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import JesNo from '../../../shared/JesNo'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
@@ -101,6 +102,19 @@ const ArtForm = ({
     [filter, row, showFilter, store],
   )
 
+  const sets = artsSorted
+    .map((a) => a.set)
+    .filter((s) => !!s)
+    .sort()
+  const setValues = sets.map((s) => ({ value: s, label: s }))
+  const onCreateSet = useCallback(
+    ({ name }) => {
+      const event = { target: { name: 'set', value: name } }
+      saveToDb(event)
+    },
+    [saveToDb],
+  )
+
   const aeArtIdsNotToShow = artsSorted
     .map((a) => a.ae_id)
     .filter((ae_id) => ae_id !== row.ae_id)
@@ -162,6 +176,18 @@ const ArtForm = ({
           modelFilter={aeArtsFilter}
           labelTable="ae_art"
           labelField="name"
+        />
+        <SelectCreatable
+          key={`${row.id}${row.set}set`}
+          row={row}
+          showFilter={showFilter}
+          table="art"
+          field="set"
+          label="Set"
+          options={setValues}
+          error={errors?.art?.set}
+          onCreateNew={onCreateSet}
+          formatCreateLabel={(val) => `"${val}" als neues Set aufnehmen`}
         />
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList

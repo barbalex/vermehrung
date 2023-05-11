@@ -544,6 +544,7 @@ export class Art extends Model {
 
   @field('id') id
   @field('ae_id') ae_id
+  @field('set') set;
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
@@ -584,6 +585,7 @@ export class Art extends Model {
     const newObject = {
       art_id: this.id,
       ae_id: field === 'ae_id' ? value : this.ae_id,
+      set: field === 'set' ? value : this.set,
       _parent_rev: this._rev,
       _depth: newDepth,
       _deleted: field === '_deleted' ? value : this._deleted,

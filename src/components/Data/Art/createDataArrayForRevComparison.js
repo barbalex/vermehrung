@@ -5,6 +5,11 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'Art (id)',
   },
   {
+    valueInRow: row.set,
+    valueInRev: revRow.set,
+    label: 'Set',
+  },
+  {
     valueInRow: row?.changed,
     valueInRev: revRow?.changed,
     label: 'geändert',

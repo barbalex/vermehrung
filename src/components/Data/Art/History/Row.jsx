@@ -27,6 +27,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     const newObject = {
       art_id: revRow.art_id,
       ae_id: revRow.ae_id,
+      set: revRow.set,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -78,6 +79,7 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     row,
     revRow.art_id,
     revRow.ae_id,
+    revRow.set,
     revRow._deleted,
     user.email,
     gqlClient,

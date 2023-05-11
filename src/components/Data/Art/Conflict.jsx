@@ -19,6 +19,7 @@ const artRevQuery = gql`
       __typename
       art_id
       ae_id
+      set
       changed
       changed_by
       _rev
@@ -64,6 +65,7 @@ const ArtConflict = ({
     const newObject = {
       art_id: revRow.art_id,
       ae_id: revRow.ae_id,
+      set: revRow.set,
       _parent_rev: revRow._rev,
       _depth: newDepth,
       _deleted: true,
@@ -105,6 +107,7 @@ const ArtConflict = ({
     revRow._rev,
     revRow._revisions,
     revRow.ae_id,
+    revRow.set,
     revRow.art_id,
     user.email,
   ])
@@ -115,6 +118,7 @@ const ArtConflict = ({
     const newObject = {
       art_id: revRow.art_id,
       ae_id: revRow.ae_id,
+      set: revRow.set,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -152,6 +156,7 @@ const ArtConflict = ({
     onClickAktuellUebernehmen,
     revRow._deleted,
     revRow.ae_id,
+    revRow.set,
     revRow.art_id,
     row._depth,
     row._rev,
@@ -159,9 +164,10 @@ const ArtConflict = ({
     store,
     user.email,
   ])
-  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
-    setActiveConflict,
-  ])
+  const onClickSchliessen = useCallback(
+    () => setActiveConflict(null),
+    [setActiveConflict],
+  )
 
   return (
     <Conflict
