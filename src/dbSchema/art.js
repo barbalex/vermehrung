@@ -4,6 +4,7 @@ const art = {
   name: 'art',
   columns: [
     { name: 'ae_id', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'set', type: 'string', isOptional: true, isIndexed: true },
     { name: 'changed', type: 'string', isOptional: true },
     { name: 'changed_by', type: 'string', isOptional: true },
     { name: '_rev', type: 'string', isOptional: true },

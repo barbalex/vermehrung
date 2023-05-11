@@ -387,6 +387,7 @@ const myTypes = types
         const newObject = {
           art_id: id,
           ae_id: undefined,
+          set: undefined,
           changed: new window.Date().toISOString(),
           changed_by: user.email,
           _depth,

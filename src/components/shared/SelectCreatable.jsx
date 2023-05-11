@@ -97,7 +97,9 @@ const SelectCreatable = ({
   maxHeight = null,
   noCaret = false,
   onCreateNew,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   callback = () => {},
+  formatCreateLabel = (val) => `"${val}" als neue Teilkultur aufnehmen`,
 }) => {
   const store = useContext(StoreContext)
   const { filter } = store
@@ -153,7 +155,7 @@ const SelectCreatable = ({
           maxheight={maxHeight}
           classNamePrefix="react-select"
           nocaret={noCaret}
-          formatCreateLabel={(val) => `"${val}" als neue Teilkultur aufnehmen`}
+          formatCreateLabel={formatCreateLabel}
         />
         {!!selectValue.link && <Link link={selectValue.link} />}
       </SelectRow>

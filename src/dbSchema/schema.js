@@ -59,6 +59,6 @@ export const tables = [
 ]
 
 export default appSchema({
-  version: 2,
+  version: 3,
   tables,
 })

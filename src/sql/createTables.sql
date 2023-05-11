@@ -155,6 +155,7 @@ DROP TABLE IF EXISTS art CASCADE;
 CREATE TABLE art (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ae_id uuid DEFAULT NULL,
+  set text default null,
   changed timestamp DEFAULT now(),
   changed_by text DEFAULT NULL,
   _rev text DEFAULT NULL,
@@ -180,6 +181,7 @@ CREATE TABLE art_rev (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   art_id uuid DEFAULT NULL,
   ae_id uuid DEFAULT NULL,
+  set text default null,
   changed timestamp DEFAULT now(),
   changed_by text DEFAULT NULL,
   _rev text DEFAULT NULL,
