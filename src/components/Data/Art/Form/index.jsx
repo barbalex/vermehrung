@@ -163,6 +163,7 @@ const ArtForm = ({
           labelTable="ae_art"
           labelField="name"
         />
+        {/* TODO: add set */}
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList
             conflicts={row._conflicts}
