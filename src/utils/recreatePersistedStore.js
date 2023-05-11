@@ -16,6 +16,7 @@ const firebaseConfig = {
 
 const recreatePersistedStore = async ({ store, navigate }) => {
   console.log('recreatePersistedStore running')
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   let unregisterAuthObserver = () => {}
   const {
     setUser,
