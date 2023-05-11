@@ -6,6 +6,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
+import SelectCreatable from '../../../shared/SelectCreatable'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import JesNo from '../../../shared/JesNo'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
@@ -95,11 +96,27 @@ const ArtForm = ({
 
       // only update if value has changed
       const previousValue = ifIsNumericAsNumber(row[field])
+      console.log('ArtForm, saveToDb', { event, field, value, previousValue })
       if (value === previousValue) return
       row.edit({ field, value, store })
     },
     [filter, row, showFilter, store],
   )
+
+  const sets = artsSorted
+    .map((a) => a.set)
+    .filter((s) => !!s)
+    .sort()
+  const setValues = sets.map((s) => ({ value: s, label: s }))
+  const onCreateSet = useCallback(
+    ({ name }) => {
+      const event = { target: { name: 'set', value: name } }
+      console.log('ArtForm, onCreateSet', { event, name })
+      saveToDb(event)
+    },
+    [saveToDb],
+  )
+  console.log('ArtForm, sets:', sets)
 
   const aeArtIdsNotToShow = artsSorted
     .map((a) => a.ae_id)
@@ -164,6 +181,19 @@ const ArtForm = ({
           labelField="name"
         />
         {/* TODO: add set */}
+        <SelectCreatable
+          key={`${row.id}${row.set}set`}
+          row={row}
+          showFilter={showFilter}
+          table="art"
+          field="set"
+          label="Set"
+          options={setValues}
+          error={errors?.art?.set}
+          onCreateNew={onCreateSet}
+          formatCreateLabel={(val) => `"${val}" als neues Set aufnehmen`}
+        />
+        <div>{`Set: ${row.set}`}</div>
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList
             conflicts={row._conflicts}
