@@ -1,5 +1,5 @@
 {
-  "resource_version": 6,
+  "resource_version": 17,
   "metadata": {
     "version": 3,
     "sources": [
@@ -247,17 +247,18 @@
                     }
                   },
                   "columns": [
-                    "id",
-                    "ae_id",
-                    "changed",
-                    "changed_by",
-                    "_rev",
-                    "_parent_rev",
-                    "_revisions",
-                    "_depth",
                     "_conflicts",
+                    "_revisions",
                     "_deleted",
-                    "_rev_at"
+                    "_depth",
+                    "_rev_at",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "set",
+                    "changed",
+                    "ae_id",
+                    "id"
                   ]
                 }
               },
@@ -266,14 +267,15 @@
                 "permission": {
                   "check": {},
                   "columns": [
+                    "_conflicts",
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_conflicts",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "id"
@@ -286,14 +288,15 @@
                 "role": "artverantwortlich",
                 "permission": {
                   "columns": [
+                    "_conflicts",
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_conflicts",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "id"
@@ -312,14 +315,15 @@
                 "role": "gaertner",
                 "permission": {
                   "columns": [
+                    "_conflicts",
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_conflicts",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "id"
@@ -355,14 +359,15 @@
                 "role": "manager",
                 "permission": {
                   "columns": [
+                    "_conflicts",
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_conflicts",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "id"
@@ -377,14 +382,15 @@
                 "role": "artverantwortlich",
                 "permission": {
                   "columns": [
+                    "_conflicts",
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_conflicts",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "id"
@@ -403,14 +409,15 @@
                 "role": "manager",
                 "permission": {
                   "columns": [
+                    "_conflicts",
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_conflicts",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "id"
