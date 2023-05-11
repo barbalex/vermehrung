@@ -78,6 +78,7 @@ const initializeSubscriptions = ({ store, userRole }) => {
             id
             __typename
             ae_id
+            set
             changed
             changed_by
             _rev
