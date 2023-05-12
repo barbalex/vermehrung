@@ -1,5 +1,5 @@
 {
-  "resource_version": 17,
+  "resource_version": 32,
   "metadata": {
     "version": 3,
     "sources": [
@@ -34,12 +34,13 @@
                 "role": "artverantwortlich",
                 "permission": {
                   "columns": [
-                    "id",
+                    "_rev_at",
                     "name",
                     "name_deutsch",
                     "name_latein",
+                    "taxonomy",
                     "changed",
-                    "_rev_at"
+                    "id"
                   ],
                   "filter": {
                     "_or": [
@@ -91,6 +92,7 @@
                     "name",
                     "name_deutsch",
                     "name_latein",
+                    "taxonomy",
                     "changed",
                     "id"
                   ],
@@ -118,6 +120,7 @@
                     "name",
                     "name_deutsch",
                     "name_latein",
+                    "taxonomy",
                     "changed",
                     "id"
                   ],
@@ -233,6 +236,28 @@
                     }
                   }
                 }
+              }
+            ],
+            "remote_relationships": [
+              {
+                "definition": {
+                  "to_remote_schema": {
+                    "lhs_fields": [
+                      "ae_id"
+                    ],
+                    "remote_field": {
+                      "allVVermehrungArtens": {
+                        "arguments": {
+                          "condition": {
+                            "id": "$ae_id"
+                          }
+                        }
+                      }
+                    },
+                    "remote_schema": "ae"
+                  }
+                },
+                "name": "arteigenschaften"
               }
             ],
             "insert_permissions": [
@@ -1571,17 +1596,18 @@
                 "permission": {
                   "check": {},
                   "columns": [
-                    "art_id",
-                    "ae_id",
-                    "changed",
-                    "changed_by",
-                    "_rev",
-                    "_parent_rev",
                     "_revisions",
-                    "_depth",
                     "_deleted",
-                    "id",
-                    "_rev_at"
+                    "_depth",
+                    "_rev_at",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "set",
+                    "changed",
+                    "ae_id",
+                    "art_id",
+                    "id"
                   ]
                 }
               },
@@ -1590,13 +1616,14 @@
                 "permission": {
                   "check": {},
                   "columns": [
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "art_id",
@@ -1610,13 +1637,14 @@
                 "role": "artverantwortlich",
                 "permission": {
                   "columns": [
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "art_id",
@@ -1630,13 +1658,14 @@
                 "role": "gaertner",
                 "permission": {
                   "columns": [
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "art_id",
@@ -1649,13 +1678,14 @@
                 "role": "manager",
                 "permission": {
                   "columns": [
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "art_id",
@@ -1671,13 +1701,14 @@
                 "role": "artverantwortlich",
                 "permission": {
                   "columns": [
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "art_id",
@@ -1691,13 +1722,14 @@
                 "role": "gaertner",
                 "permission": {
                   "columns": [
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "art_id",
@@ -1711,13 +1743,14 @@
                 "role": "manager",
                 "permission": {
                   "columns": [
+                    "_revisions",
                     "_deleted",
                     "_depth",
                     "_rev_at",
-                    "_revisions",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
+                    "set",
                     "changed",
                     "ae_id",
                     "art_id",
@@ -15575,6 +15608,16 @@
             },
             "use_prepared_statements": true
           }
+        }
+      }
+    ],
+    "remote_schemas": [
+      {
+        "name": "ae",
+        "definition": {
+          "url": "https://api.arteigenschaften.ch/graphql",
+          "timeout_seconds": 60,
+          "customization": {}
         }
       }
     ]
