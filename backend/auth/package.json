@@ -11,5 +11,8 @@
     "@hapi/hapi": "20.2.1",
     "firebase-admin": "10.0.2",
     "postgres": "1.0.2"
+  },
+  "dependencies-comments": {
+    "firebase-admin": "no relevant breaking changes to 11.8.0"
   }
 }
