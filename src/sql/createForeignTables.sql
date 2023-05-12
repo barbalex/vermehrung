@@ -30,13 +30,17 @@ OPTIONS (user 'fdw_user', password 'secret');
 
 create table ae_art (
   id uuid primary key,
+  taxonomy text,
   name text,
+  name_latein text,
+  name_deutsch text,
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
 create index on ae_art using btree (id);
 create index on ae_art using btree (name);
 create index on ae_art using btree (_rev_at);
+create index on ae_art using btree (taxonomy);
 
 insert into ae_art (id,name,name_latein,name_deutsch)
 select id, name, name_latein, name_deutsch
