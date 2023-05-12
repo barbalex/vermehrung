@@ -13,6 +13,7 @@ const server = new Hapi.Server({
   port: 7000,
 })
 
+// TODO: check how to add db-url using v3
 const sql = postgres(process.env.HASURA_GRAPHQL_DATABASE_URL)
 
 let firebaseInitializationError = null
