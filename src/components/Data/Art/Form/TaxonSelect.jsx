@@ -1,12 +1,10 @@
-// 2023.05.12: no more used, replaced by TaxonSelect.jsx
 import React, { useCallback, useContext, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../storeContext'
-import artLabelFromAeArt from '../../utils/artLabelFromAeArt'
+import StoreContext from '../../../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -72,38 +70,42 @@ const StyledSelect = styled(AsyncSelect)`
   }
 `
 
+const taxonLabelFromAeArt = (ae_art) => {
+  if (!ae_art) return '(kein Name)'
+
+  const name = ae_art.name ?? '(kein Name)'
+  const taxonomy = ae_art.taxonomy ?? '(keine Taxonomie)'
+
+  return `${taxonomy}: ${name}`
+}
+
 const SelectLoadingOptions = ({
-  field = '',
-  label,
   labelSize = 12,
-  row,
+  art,
   saveToDb,
   error: saveToDbError,
-  modelFilter = () => true,
-  labelTable,
-  labelField,
+  modelFilter,
 }) => {
   const store = useContext(StoreContext)
   const { db } = store
 
   const [stateValue, setStateValue] = useState({
-    value: row[field] || '',
+    value: art.ae_id || '',
     label: '',
   })
   useEffect(() => {
-    const observable =
-      labelTable && row[field]
-        ? db.get(labelTable).findAndObserve(row[field])
-        : $of({})
+    const observable = art.ae_id
+      ? db.get('ae_art').findAndObserve(art.ae_id)
+      : $of({})
     const subscription = observable.subscribe((record) =>
       setStateValue({
-        value: row[field] || '',
-        label: record[labelField] ?? '',
+        value: art.ae_id || '',
+        label: taxonLabelFromAeArt(record),
       }),
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [db, field, labelField, labelTable, row])
+  }, [db, art])
 
   const loadOptions = useCallback(
     (inputValue, cb) => {
@@ -111,7 +113,7 @@ const SelectLoadingOptions = ({
       const options = data.map((o) => {
         return {
           value: o.id,
-          label: artLabelFromAeArt({ ae_art: o }),
+          label: taxonLabelFromAeArt(o),
         }
       })
       cb(options)
@@ -125,22 +127,22 @@ const SelectLoadingOptions = ({
       setStateValue(value ?? '')
       const fakeEvent = {
         target: {
-          name: field,
+          name: 'ae_id',
           value,
         },
       }
       saveToDb(fakeEvent)
     },
-    [field, saveToDb],
+    [saveToDb],
   )
 
   return (
-    <Container data-id={field}>
-      {label && <Label labelsize={labelSize}>{label}</Label>}
+    <Container data-id="ae_id">
+      <Label labelsize={labelSize}>Taxon</Label>
       <StyledSelect
-        id={field}
+        id="ae_id"
         defaultOptions
-        name={field}
+        name="ae_id"
         onChange={onChange}
         value={stateValue}
         hideSelectedOptions

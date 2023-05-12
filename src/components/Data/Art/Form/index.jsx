@@ -5,12 +5,12 @@ import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext'
-import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
+import TaxonSelect from './TaxonSelect'
 import SelectCreatable from '../../../shared/SelectCreatable'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import JesNo from '../../../shared/JesNo'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
-import aeArtSort from '../../../../utils/aeArtSort'
+import aeArtSort from '../../../../utils/aeArtSortWithTaxonomy'
 import Files from '../../Files'
 import Timeline from './Timeline'
 import HerkunftTimeline from './HerkunftTimeline'
@@ -166,16 +166,12 @@ const ArtForm = ({
             )}
           </>
         )}
-        <SelectLoadingOptions
+        <TaxonSelect
           key={`${row.id}${row.ae_id}ae_id`}
-          field="ae_id"
-          label="Art"
-          row={row}
+          art={row}
           saveToDb={saveToDb}
           error={errors?.art?.ae_id}
           modelFilter={aeArtsFilter}
-          labelTable="ae_art"
-          labelField="name"
         />
         <SelectCreatable
           key={`${row.id}${row.set}set`}
