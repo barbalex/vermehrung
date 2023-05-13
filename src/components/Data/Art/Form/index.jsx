@@ -51,7 +51,10 @@ const ArtForm = ({
     aeArts: [],
   })
   useEffect(() => {
-    const aeArtObservable = db.get('ae_art').query().observe()
+    const aeArtObservable = db
+      .get('ae_art')
+      .query(Q.sortBy('taxonomy'), Q.sortBy('name'))
+      .observe()
     const delQuery =
       filter.art?._deleted === false
         ? Q.where('_deleted', false)
@@ -69,7 +72,7 @@ const ArtForm = ({
         const artsSorted = await artsSortedFromArts(arts)
 
         setDataState({
-          aeArts: aeArts.sort(aeArtSort),
+          aeArts,
           artsSorted,
         })
       },
@@ -78,6 +81,8 @@ const ArtForm = ({
     return () => subscription?.unsubscribe?.()
   }, [db, filter.art._deleted])
   const { artsSorted, aeArts } = dataState
+
+  console.log('ArtForm', { aeArts })
 
   useEffect(() => {
     unsetError('art')
