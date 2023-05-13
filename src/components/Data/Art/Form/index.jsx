@@ -82,8 +82,6 @@ const ArtForm = ({
   }, [db, filter.art._deleted])
   const { artsSorted, aeArts } = dataState
 
-  console.log('ArtForm', { aeArts })
-
   useEffect(() => {
     unsetError('art')
   }, [id, unsetError])
