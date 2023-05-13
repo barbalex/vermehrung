@@ -29,7 +29,7 @@ ON CONFLICT ON CONSTRAINT ae_art_pkey
     synonym = EXCLUDED.synonym,
     changed = EXCLUDED.changed,
     _rev_at = EXCLUDED._rev_at;
-
+-- 11'554
 -- no more imported that are not used as art
 -- these seem to be synonyms of other sisf 2005 species
 SELECT
