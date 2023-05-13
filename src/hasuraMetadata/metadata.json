@@ -1,5 +1,5 @@
 {
-  "resource_version": 32,
+  "resource_version": 36,
   "metadata": {
     "version": 3,
     "sources": [
@@ -40,7 +40,8 @@
                     "name_latein",
                     "taxonomy",
                     "changed",
-                    "id"
+                    "id",
+                    "synonym"
                   ],
                   "filter": {
                     "_or": [
@@ -94,7 +95,8 @@
                     "name_latein",
                     "taxonomy",
                     "changed",
-                    "id"
+                    "id",
+                    "synonym"
                   ],
                   "filter": {
                     "ae_art_art": {
@@ -122,7 +124,8 @@
                     "name_latein",
                     "taxonomy",
                     "changed",
-                    "id"
+                    "id",
+                    "synonym"
                   ],
                   "filter": {},
                   "allow_aggregations": true
