@@ -45,6 +45,7 @@ const initializeSubscriptions = ({ store, userRole }) => {
             id
             __typename
             name
+            taxonomy
             changed
           }
         }
