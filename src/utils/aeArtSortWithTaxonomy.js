@@ -1,5 +1,7 @@
-// 2023.05.12: no more used, replaced by aeArtSortWithTaxonomy.js
-const aeArtSort = (a, b) => {
+const aeArtSortWithTaxonomy = (a, b) => {
+  if (a?.taxonomy < b?.taxonomy) return -1
+  if (a?.taxonomy > b?.taxonomy) return 1
+
   const nameA = a?.name?.toLowerCase() ?? ''
   const nameB = b?.name?.toLowerCase() ?? ''
   if (nameA < nameB) return -1
@@ -8,4 +10,4 @@ const aeArtSort = (a, b) => {
   return 0
 }
 
-export default aeArtSort
+export default aeArtSortWithTaxonomy

@@ -647,6 +647,7 @@ export class AeArt extends Model {
 
   @field('id') id
   @field('name') name
+  @field('taxonomy') taxonomy
   @field('changed') changed
 
   @children('art') arts
