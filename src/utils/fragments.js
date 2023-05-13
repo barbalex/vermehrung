@@ -86,6 +86,7 @@ export const aeArt = gql`
     id
     __typename
     name
+    taxonomy
     changed
   }
 `

@@ -9,9 +9,10 @@ grant select on table ae.v_vermehrung_arten to fdw_user;
 
 -- on vermehrung
 CREATE EXTENSION postgres_fdw;
+drop server ae_server cascade;
 CREATE SERVER ae_server
   FOREIGN DATA WRAPPER postgres_fdw
-  OPTIONS (host '207.154.212.35', port '5432', dbname 'ae');
+  OPTIONS (host 'api.arteigenschaften.ch', port '5432', dbname 'ae');
 -- need to use this view
 -- because joining tables is way too slow
 -- BUT: querying from this foreign table takes 2.4s
@@ -19,24 +20,36 @@ CREATE SERVER ae_server
 -- so: insert into own table
 create foreign table ae_art_live (
   id uuid,
-  name text
+  taxonomy text,
+  name text,
+  name_latein text,
+  name_deutsch text,
+  synonym uuid,
+  changed timestamp,
+  _rev_at decimal 
 )
 server ae_server options (schema_name 'ae', table_name 'v_vermehrung_arten');
 
 CREATE USER MAPPING
     FOR postgres
  SERVER ae_server
-OPTIONS (user 'fdw_user', password 'secret');
+OPTIONS (USER 'fdw_user', PASSWORD 'secret');
 
 create table ae_art (
   id uuid primary key,
+  taxonomy text,
   name text,
+  name_latein text,
+  name_deutsch text,
+  synonym uuid,
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
 create index on ae_art using btree (id);
 create index on ae_art using btree (name);
 create index on ae_art using btree (_rev_at);
+create index on ae_art using btree (taxonomy);
+create index on ae_art using btree (synonym);
 
 insert into ae_art (id,name,name_latein,name_deutsch)
 select id, name, name_latein, name_deutsch

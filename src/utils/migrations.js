@@ -28,5 +28,21 @@ export default schemaMigrations({
         }),
       ],
     },
+    {
+      toVersion: 4,
+      steps: [
+        addColumns({
+          table: 'ae_art',
+          columns: [
+            {
+              name: 'taxonomy',
+              type: 'string',
+              isOptional: true,
+              isIndexed: true,
+            },
+          ],
+        }),
+      ],
+    },
   ],
 })
