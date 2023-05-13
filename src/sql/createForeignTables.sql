@@ -34,6 +34,7 @@ create table ae_art (
   name text,
   name_latein text,
   name_deutsch text,
+  synonym uuid,
   changed timestamp default now(),
   _rev_at decimal default extract(epoch from now())
 );
@@ -41,6 +42,9 @@ create index on ae_art using btree (id);
 create index on ae_art using btree (name);
 create index on ae_art using btree (_rev_at);
 create index on ae_art using btree (taxonomy);
+-- 2023.05.13: add synonym
+alter table ae_art add column synonym uuid;
+create index on ae_art using btree (synonym);
 
 insert into ae_art (id,name,name_latein,name_deutsch)
 select id, name, name_latein, name_deutsch
