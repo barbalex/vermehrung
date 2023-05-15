@@ -3,10 +3,9 @@ import removeOrtsangaben from './removeOrtsangaben'
 
 const initializeSubscriptions = ({ store, userRole }) => {
   const isNoGaertner = userRole !== 'gaertner'
-  const isGaertner = userRole === 'gaertner'
-  if (isGaertner) {
+  if (userRole === 'gaertner') {
     // need to remove some data for gaertner in case they had synced them earlier
-    removeOrtsangaben()
+    removeOrtsangaben({ db: store.db })
   }
   console.log('initializing subscriptions', { userRole, isNoGaertner })
 
