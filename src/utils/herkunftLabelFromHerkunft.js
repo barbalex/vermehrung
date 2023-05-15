@@ -11,4 +11,4 @@ const herkunftLabelFromHerkunft = ({ herkunft }) => {
   return label
 }
 
-export default herkunftLabelFromHerkunft
+export default herkunftLabelFromHerkunft 
