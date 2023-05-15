@@ -5,6 +5,8 @@ const initializeSubscriptions = ({ store, userRole }) => {
   const isNoGaertner = userRole !== 'gaertner'
   if (userRole === 'gaertner') {
     // need to remove some data for gaertner in case they had synced them earlier
+    // implemented 2023.05.15
+    // TODO: remove this in a year, 2024.06
     removeOrtsangaben({ db: store.db })
   }
   console.log('initializing subscriptions', { userRole, isNoGaertner })
