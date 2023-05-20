@@ -73,7 +73,6 @@ const articles = [
   { title: 'Fehler, Ideen, Vorschläge melden', slug: 'fehler-ideen' },
   { title: 'Schnittstellen', slug: 'schnittstellen' },
   { title: 'Progressive Web App', slug: 'pwa' },
-  { title: 'iPhone/iPad bzw. iOS', slug: 'ios' },
   { title: 'Offline arbeiten', slug: 'offline' },
   { title: 'Offline: Wie es funktioniert', slug: 'offline-wie' },
   { title: 'Daten-Historie', slug: 'historisierung' },

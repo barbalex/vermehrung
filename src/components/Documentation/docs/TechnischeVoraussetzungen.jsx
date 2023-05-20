@@ -4,7 +4,7 @@ import { DokuDate } from '..'
 const TechnischeVoraussetzungen = () => (
   <>
     <h1>Technische Voraussetzungen</h1>
-    <DokuDate>22.10.2020</DokuDate>
+    <DokuDate>20.05.2023</DokuDate>
     <p>
       Sie brauchen eine aktuelle Version eines modernen{' '}
       <strong>Browsers</strong>.<br />
@@ -15,15 +15,8 @@ const TechnischeVoraussetzungen = () => (
       <li>Edge Chromium</li>
       <li>Firefox</li>
       <li>Opera</li>
+      <li>Safari</li>
     </ul>
-    <p>
-      Etwas weniger gut geeignet ist Safari auf MacOS. Sollte aber
-      funktionieren. Leider{' '}
-      <Link to="/Dokumentation/ios">
-        funktioniert vermehrung.ch auf iOS (iPhone, iPad) nicht
-      </Link>
-      <br />
-    </p>
     <p>
       Nicht geeignet ist der Internet Explorer.
       <br />
@@ -34,7 +27,7 @@ const TechnischeVoraussetzungen = () => (
     </p>
     <p>
       <Link to="/Dokumentation/offline">
-        Um Daten zu erfassen, brauchen Sie keine Internet-Verbindung.
+        Um Daten zu erfassen, brauchen Sie keine Internet-Verbindung
       </Link>
       .
     </p>
