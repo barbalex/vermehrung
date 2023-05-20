@@ -12,7 +12,7 @@ const TechnischeVoraussetzungen = () => (
     </p>
     <ul>
       <li>Chrome</li>
-      <li>Edge Chromium</li>
+      <li>Edge</li>
       <li>Firefox</li>
       <li>Opera</li>
       <li>Safari</li>
@@ -22,13 +22,12 @@ const TechnischeVoraussetzungen = () => (
       <br />
     </p>
     <p>
-      vermehrung.ch funktioniert <strong>auf allen Betriebssystemen</strong>.
-      Mehr dazu <Link to="/Dokumentation/pwa">hier</Link>.<br />
+      vermehrung funktioniert <strong>auf allen Betriebssystemen</strong>.
     </p>
     <p>
-      <Link to="/Dokumentation/offline">
-        Um Daten zu erfassen, brauchen Sie keine Internet-Verbindung
-      </Link>
+      Sie können vermehrung auch{' '}
+      <Link to="/Dokumentation/pwa">installieren</Link> und{' '}
+      <Link to="/Dokumentation/offline">ohne Internet-Verbindung arbeiten</Link>
       .
     </p>
   </>
