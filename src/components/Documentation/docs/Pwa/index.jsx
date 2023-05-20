@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import { DokuDate } from '../..'
-import installieren from './installieren.png'
+import installieren from './installieren.webp'
 
 const Pwa = () => (
   <>
@@ -16,10 +16,7 @@ const Pwa = () => (
       <br />
     </p>
     <p>
-      &quot;Progressive Web Apps&quot; sind Web-Apps und werden für Browser
-      entwickelt. Weil sie einige zusätzliche Anforderungen erfüllen, können sie
-      je länger je weniger von &quot;normalen&quot; Apps unterschieden werden.
-      Das ist das erklärte Ziel von Google und Microsoft.
+      &quot;Progressive Web Apps&quot; sind im Kern Web-Applikationen.
       <br />
     </p>
     <p>
@@ -27,40 +24,25 @@ const Pwa = () => (
     </p>
     <ul>
       <li>
-        <p>
-          Sie können vermehrung auf Desktop/Startseite platzieren bzw.
-          &quot;installieren&quot;.
-        </p>
-        <ul>
-          <li>
-            In Chrome auf PC und Mac öffnen Sie dazu das Menü ganz oben rechts:
-            <br />
-            <img
-              src={installieren}
-              referrerPolicy="no-referrer"
-              alt="installieren"
-            />
-            Ganz rechts in der URL-Zeile gibt es dafür ein +-Symbol.
-          </li>
-          <li>
-            Auf Android werden Sie von Chrome gefragt, ob sie vermehrung auf dem
-            Startbildschirm platzieren wollen.
-          </li>
-        </ul>
+        Sie können vermehrung auf Desktop/Startseite platzieren bzw.
+        &quot;installieren&quot;.
+        <br />
+        In Chrome auf PC und Mac verwenden Sie dazu das Symbol in der URL-Zeile:
+        <br />
+        <img
+          src={installieren}
+          referrerPolicy="no-referrer"
+          alt="installieren"
+          width="200"
+          height="104"
+        />
+        <br />
+        Auf Android werden Sie von Chrome gefragt, ob sie vermehrung auf dem
+        Startbildschirm platzieren wollen.
       </li>
       <li>
         Danach hat vermehrung eine eigene Verknüpfung und startet ausserhalb des
         Browsers in einem eigenen Fenster, ohne URL-Zeile.
-      </li>
-      <li>
-        Auch vermehrung-Links sollen bald mit der installierten Version geöffnet
-        werden (funktioniert bereits auf Android)
-      </li>
-      <li>
-        Leider{' '}
-        <Link to="/Dokumentation/ios">
-          funktioniert vermehrung.ch auf iOS (iPhone, iPad) nicht
-        </Link>
       </li>
     </ul>
     <p>
