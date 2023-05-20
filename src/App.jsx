@@ -88,7 +88,6 @@ const Schnittstellen = lazy(() =>
   import('./components/Documentation/docs/Schnittstellen'),
 )
 const Pwa = lazy(() => import('./components/Documentation/docs/Pwa'))
-const Ios = lazy(() => import('./components/Documentation/docs/Ios'))
 const Offline = lazy(() => import('./components/Documentation/docs/Offline'))
 const OfflineWie = lazy(() =>
   import('./components/Documentation/docs/OfflineWie'),
@@ -199,7 +198,6 @@ const App = () => {
                     <Route path="fehler-ideen" element={<FehlerMelden />} />
                     <Route path="schnittstellen" element={<Schnittstellen />} />
                     <Route path="pwa" element={<Pwa />} />
-                    <Route path="ios" element={<Ios />} />
                     <Route path="offline" element={<Offline />} />
                     <Route path="offline-wie" element={<OfflineWie />} />
                     <Route path="historisierung" element={<History />} />
