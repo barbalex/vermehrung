@@ -21,7 +21,7 @@ import constants from '../../../../../utils/constants'
 // @media (pointer: coarse), (hover: none) [title] {...
 // this breaks some of the properties
 // so added some !important
-const TitleRow = styled.div`
+const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex !important;
