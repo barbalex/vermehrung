@@ -78,11 +78,13 @@ const Root = ({ filter: showFilter }) => {
               'tree_lieferung',
               'tree_event',
             ])
-        : $of({})
-      const userRoleObservable = db
-        .get('user_role')
-        .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
-        .observeWithColumns(['name'])
+        : $of([])
+      const userRoleObservable = user.uid
+        ? db
+            .get('user_role')
+            .query(Q.on('person', Q.where('account_id', user.uid)))
+            .observeWithColumns(['name'])
+        : $of([])
       const combinedObservables = combineLatest([
         userPersonOptionsObservable,
         userRoleObservable,
