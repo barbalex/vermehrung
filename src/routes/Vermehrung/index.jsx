@@ -1,12 +1,9 @@
 import React, { useEffect, useContext, lazy } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useLocation } from 'react-router-dom'
 import gql from 'graphql-tag'
 
 import StoreContext from '../../storeContext'
-import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
-import openNodesFromActiveNodeArray from '../../utils/openNodesFromActiveNodeArray'
 import initializeSubscriptions from '../../utils/initializeSubscriptions'
 const Login = lazy(() => import('../../components/Login'))
 const ErrorBoundary = lazy(() =>
@@ -19,6 +16,7 @@ import constants from '../../utils/constants'
 const VermehrungComponent = lazy(() => import('./Vermehrung'))
 const AuthorizingObserver = lazy(() => import('./AuthorizingObserver'))
 const StoragePersister = lazy(() => import('./StoragePersister'))
+const OpenNodesSetter = lazy(() => import('./OpenNodesSetter'))
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
@@ -29,7 +27,6 @@ const LoginContainer = styled.div`
 `
 
 const VermehrungIndex = () => {
-  const { pathname } = useLocation()
   const store = useContext(StoreContext)
   const {
     gettingAuthUser,
@@ -42,21 +39,9 @@ const VermehrungIndex = () => {
     gqlClient,
     addNotification,
   } = store
-  const { setLastActiveNodeArray, setOpenNodes, wsReconnectCount } = store.tree
+  const { wsReconnectCount } = store.tree
 
   const existsUser = !!user?.uid
-
-  const activeNodeArray = activeNodeArrayFromPathname(pathname)
-
-  // on first render set openNodes
-  // DO NOT add activeNodeArray to useEffet's dependency array or
-  // it will not be possible to open multiple branches in tree
-  // as openNodes is overwritten every time activeNodeArray changes
-  useEffect(() => {
-    setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
-    // set last touched node in case project is directly opened on it
-    setLastActiveNodeArray(activeNodeArray)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     console.log('vermehrung, subscription effect', { authorizing, existsUser })
@@ -149,6 +134,7 @@ const VermehrungIndex = () => {
 
   return (
     <ErrorBoundary>
+      <OpenNodesSetter />
       <StoragePersister />
       <AuthorizingObserver />
       <VermehrungComponent />
