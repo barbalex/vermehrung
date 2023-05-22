@@ -1,5 +1,6 @@
 import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { combineLatest } from 'rxjs'
 import styled from '@emotion/styled'
 
 import StoreContext from '../../../storeContext'
@@ -35,23 +36,20 @@ const RootRow = ({ row, style, last }) => {
 
   const filter = store.filter?.[row.table] ?? {}
 
+  // query needs to be observable
+  // without, on first login, count is (generally) not yet available
+  // because data is still being synced
   const [count, setCount] = useState(0)
   useEffect(() => {
-    let isActive = true
-    const run = async () => {
-      const count = await db
-        .get(row.table)
-        .query(...tableFilter({ store, table: row.table }))
-        .fetchCount()
-      if (!isActive) return
+    const subscription = db
+      .get(row.table)
+      .query(...tableFilter({ store, table: row.table }))
+      .observe()
+      .subscribe((result) => {
+        setCount(result.length)
+      })
 
-      setCount(count)
-    }
-    run()
-
-    return () => {
-      isActive = false
-    }
+    return () => subscription?.unsubscribe?.()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, row.table, store, ...Object.values(filter)])
 
