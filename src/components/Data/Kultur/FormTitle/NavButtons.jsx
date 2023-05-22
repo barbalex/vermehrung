@@ -1,6 +1,7 @@
 import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
+import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../storeContext'
 import { ReactComponent as ZaDownSvg } from '../../../../svg/to_za_down.inline.svg'
@@ -43,7 +44,9 @@ const KulturNavButtons = ({ row }) => {
   const { kulturOption } = dataState
 
   useEffect(() => {
-    const kOObservable = row.kultur_option.observe()
+    const kOObservable = row.kultur_option
+      ? row.kultur_option.observe()
+      : $of({})
     const subscription = kOObservable.subscribe((kulturOption) =>
       setDataState({ kulturOption }),
     )
