@@ -88,7 +88,7 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
     filter.lieferung,
     id,
     initialDataQueried,
-    row.sammel_lieferung,
+    row?.sammel_lieferung,
     showFilter,
     user,
   ])
