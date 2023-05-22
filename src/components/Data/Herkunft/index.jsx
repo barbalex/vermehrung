@@ -73,6 +73,7 @@ const Herkunft = ({
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))
     })
+    console.log('Herkunft, useEffect, subscription', subscription)
 
     return () => subscription?.unsubscribe?.()
   }, [db, filter.herkunft, id, showFilter, initialDataQueried])
