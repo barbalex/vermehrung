@@ -10,7 +10,7 @@ import Pflanzen from './Pflanzen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import constants from '../../../../../utils/constants'
 
-const TitleRow = styled.div`
+const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex !important;
