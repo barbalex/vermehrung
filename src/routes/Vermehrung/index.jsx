@@ -1,4 +1,4 @@
-import React, { useContext, lazy } from 'react'
+import { useContext, lazy } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -44,23 +44,6 @@ const VermehrungIndex = () => {
       </ErrorBoundary>
     )
   }
-
-  /*if (
-    error &&
-    !error.message.includes('Failed to fetch') &&
-    !error.message.includes('JWT')
-  ) {
-    return (
-      <ErrorBoundary>
-        <Layout>
-          <ErrorContainer>{error.message}</ErrorContainer>
-        </Layout>
-      </ErrorBoundary>
-    )
-  }
-  if (error && error.message.includes('JWT')) {
-    checkAuthOnError({ error, store })
-  }*/
 
   return (
     <ErrorBoundary>
