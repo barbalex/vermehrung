@@ -74,7 +74,7 @@ const Tree = () => {
       ])
     const userRoleObservable = db
       .get('user_role')
-      .query(Q.on('person', Q.where('account_id', user.uid)))
+      .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
       .observeWithColumns(['name'])
     // need subscription to all tables that provokes treeBuild on next
     const artsObservable = db
