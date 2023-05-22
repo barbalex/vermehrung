@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext'
 
-const GettingAuthUserObserver = () => {
+const AuthorizingObserver = () => {
   const store = useContext(StoreContext)
   const { gettingAuthUser, addNotification, removeNotificationById } = store
 
@@ -26,4 +26,4 @@ const GettingAuthUserObserver = () => {
   return null
 }
 
-export default observer(GettingAuthUserObserver)
+export default observer(AuthorizingObserver)
