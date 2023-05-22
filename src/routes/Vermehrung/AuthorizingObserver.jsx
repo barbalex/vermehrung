@@ -16,6 +16,7 @@ const AuthorizingObserver = () => {
         type: 'info',
         duration: 200000,
       })
+      return
     }
     if (!gettingAuthUser && authorizingNotificationId.current) {
       removeNotificationById(authorizingNotificationId.current)
