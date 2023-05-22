@@ -35,9 +35,9 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
       : $of({})
-    const kulturOptionObservable = db
-      .get('kultur_option')
-      .findAndObserve(kulturId)
+    const kulturOptionObservable = kulturId
+      ? db.get('kultur_option').findAndObserve(kulturId)
+      : $of({})
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       kulturOptionObservable,
