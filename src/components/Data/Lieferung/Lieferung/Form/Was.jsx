@@ -63,35 +63,37 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
             Q.where('_deleted', true),
             Q.where('_deleted', null),
           )
-    const artsObservable = db.get('art').query(artDelQuery).observe()
-    const combinedObservables = combineLatest([artsObservable])
-    const subscription = combinedObservables.subscribe(async ([arts]) => {
-      let art
-      try {
-        art = await row.art.fetch()
-      } catch {}
-      const artsIncludingChoosen = uniqBy(
-        [...arts, ...(art && !showFilter ? [art] : [])],
-        'id',
-      )
-      const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
-      const artWerte = await Promise.all(
-        artsSorted.map(async (el) => {
-          let label
-          try {
-            label = await el.label.pipe(first$()).toPromise()
-          } catch {}
+    const subscription = db
+      .get('art')
+      .query(artDelQuery)
+      .observe()
+      .subscribe(async (arts) => {
+        let art
+        try {
+          art = await row.art.fetch()
+        } catch {}
+        const artsIncludingChoosen = uniqBy(
+          [...arts, ...(art && !showFilter ? [art] : [])],
+          'id',
+        )
+        const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
+        const artWerte = await Promise.all(
+          artsSorted.map(async (el) => {
+            let label
+            try {
+              label = await el.label.pipe(first$()).toPromise()
+            } catch {}
 
-          return {
-            value: el.id,
-            label,
-            link: ['Arten', el.id],
-          }
-        }),
-      )
+            return {
+              value: el.id,
+              label,
+              link: ['Arten', el.id],
+            }
+          }),
+        )
 
-      setArtWerte(artWerte)
-    })
+        setArtWerte(artWerte)
+      })
 
     return () => subscription?.unsubscribe?.()
   }, [db, filter.art._deleted, row?.art, showFilter])
