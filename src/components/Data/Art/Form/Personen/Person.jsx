@@ -62,8 +62,7 @@ const Av = ({ av }) => {
 
   const [personLabel, setPersonLabel] = useState(null)
   useEffect(() => {
-    const observable = av.person.observe()
-    const subscription = observable.subscribe((person) => {
+    const subscription = av.person.observe().subscribe((person) => {
       setPersonLabel(personLabelFromPerson({ person }))
     })
     return () => subscription?.unsubscribe?.()
