@@ -353,6 +353,12 @@ const myTypes = types
         self.queuedQueries.set(val.id, val)
       },
       addNotification(valPassed) {
+        // do not stack same messages
+        const notificationsWithSameMessage = Array.from(
+          self.notifications.values(),
+        ).filter((n) => n.message === valPassed.message)
+        if (notificationsWithSameMessage.length > 0) return
+
         const val = {
           // set default values
           id: uuidv1(),
