@@ -31,16 +31,16 @@ import buildData from './buildData'
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
-  display: flex;
+  display: flex !important;
   height: ${constants.titleRowHeight}px;
-  justify-content: space-between;
+  justify-content: space-between !important;
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: 10px;
   padding: 0 10px;
   ${(props) => props['data-active'] && 'cursor: pointer;'}
-  position: sticky;
-  top: 0;
+  position: sticky !important;
+  top: -10px;
   user-select: none;
   z-index: 1;
   &:first-of-type {
