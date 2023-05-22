@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
+import { of as $of } from 'rxjs'
 import SplitPane from 'react-split-pane'
 
 import StoreContext from '../../../../../../storeContext'
@@ -54,7 +55,7 @@ const StyledSplitPane = styled(SplitPane)`
 
 const Teilzaehlung = ({ id, kulturId, index }) => {
   const store = useContext(StoreContext)
-  const { online, db } = store
+  const { online, db, initialDataQueried } = store
 
   // TODO: should I subscribe to this row to rerender on updates of history?
 
@@ -64,7 +65,9 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
     rawRow: undefined,
   })
   useEffect(() => {
-    const tzObservable = db.get('teilzaehlung').findAndObserve(id)
+    const tzObservable = initialDataQueried
+      ? db.get('teilzaehlung').findAndObserve(id)
+      : $of({})
     const subscription = tzObservable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -73,7 +76,7 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
     })
 
     return () => subscription?.unsubscribe?.()
-  }, [db, id])
+  }, [db, id, initialDataQueried])
   const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
