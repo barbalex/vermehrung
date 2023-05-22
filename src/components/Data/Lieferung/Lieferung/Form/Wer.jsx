@@ -44,7 +44,7 @@ const LieferungWer = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { errors, online, db, filter } = store
+  const { errors, online, db, filter, initialDataQueried } = store
 
   const [dataState, setDataState] = useState({
     personWerte: [],
@@ -55,7 +55,9 @@ const LieferungWer = ({
   useEffect(() => {
     const rowObservable = showFilter
       ? $of(filter.lieferung)
-      : db.get('lieferung').findAndObserve(id)
+      : initialDataQueried
+      ? db.get('lieferung').findAndObserve(id)
+      : $of({})
     const personDelQuery =
       filter.person._deleted === false
         ? Q.where('_deleted', false)
@@ -115,8 +117,9 @@ const LieferungWer = ({
     filter.person._deleted,
     filter.person.aktiv,
     id,
+    initialDataQueried,
     row,
-    row?.person_id,
+    row.person_id,
     showFilter,
   ])
 

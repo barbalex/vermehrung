@@ -53,7 +53,7 @@ const Teilkultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, db } = store
+  const { filter, online, db, initialDataQueried } = store
 
   const [dataState, setDataState] = useState({
     row: undefined,
@@ -63,7 +63,9 @@ const Teilkultur = ({
   useEffect(() => {
     const observable = showFilter
       ? $of(filter.teilkultur)
-      : db.get('teilkultur').findAndObserve(id)
+      : initialDataQueried
+      ? db.get('teilkultur').findAndObserve(id)
+      : $of({})
     const subscription = observable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -74,7 +76,7 @@ const Teilkultur = ({
     return () => {
       if (subscription) subscription?.unsubscribe?.()
     }
-  }, [db, filter.teilkultur, id, showFilter])
+  }, [db, filter.teilkultur, id, showFilter, initialDataQueried])
   const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
