@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, lazy } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import CircularProgress from '@mui/material/CircularProgress'
 import { useLocation } from 'react-router-dom'
 import gql from 'graphql-tag'
 
@@ -18,26 +17,14 @@ const QueuedQueries = lazy(() => import('../../components/QueuedQueries'))
 import tableNames from '../../utils/tableNames'
 import constants from '../../utils/constants'
 const VermehrungComponent = lazy(() => import('./Vermehrung'))
+const AuthorizingObserver = lazy(() => import('./AuthorizingObserver'))
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
   position: relative;
 `
-const SpinnerContainer = styled.div`
-  min-height: calc(100vh - ${constants.appBarHeight}px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
 const LoginContainer = styled.div`
   margin: 20px;
-`
-const SpinnerText = styled.div`
-  padding-top: 10px;
-`
-const SpinnerText2 = styled.div`
-  padding: 0;
 `
 
 // trying to persist indexedDB
@@ -65,6 +52,7 @@ const VermehrungIndex = () => {
     user,
     online,
     gqlClient,
+    addNotification,
   } = store
   const { setLastActiveNodeArray, setOpenNodes, wsReconnectCount } = store.tree
 
@@ -128,19 +116,7 @@ const VermehrungIndex = () => {
     // see initializeSubscriptions, unsubscribe.ae_art
   }, [existsUser, store, wsReconnectCount, authorizing, gqlClient, user.uid])
 
-  if (gettingAuthUser) {
-    return (
-      <ErrorBoundary>
-        <SpinnerContainer>
-          <CircularProgress />
-          {/* <SpinnerText>{isIOS ? 'prüfe' : 'autorisiere'}</SpinnerText> */}
-          <SpinnerText>autorisiere</SpinnerText>
-        </SpinnerContainer>
-      </ErrorBoundary>
-    )
-  }
-
-  if (!existsUser) {
+  if (!existsUser && !gettingAuthUser) {
     return (
       <ErrorBoundary>
         <LoginContainer>
@@ -150,19 +126,14 @@ const VermehrungIndex = () => {
     )
   }
 
-  // When user started up offline and becomes online
-  // this will also show spinner - NOT GOOD
-  // Even worse: spinner seems to persist - need to reload
   if (online && !initialDataQueried) {
-    return (
-      <ErrorBoundary>
-        <SpinnerContainer>
-          <CircularProgress />
-          <SpinnerText>lade Daten für offline-Nutzung</SpinnerText>
-          <SpinnerText2>{tableNames(initiallyQuerying)}</SpinnerText2>
-        </SpinnerContainer>
-      </ErrorBoundary>
-    )
+    addNotification({
+      message: `lade Daten für offline-Nutzung (${tableNames(
+        initiallyQuerying,
+      )})`,
+      type: 'info',
+      duration: 2000,
+    })
   }
 
   /*if (
@@ -194,6 +165,7 @@ const VermehrungIndex = () => {
 
   return (
     <ErrorBoundary>
+      <AuthorizingObserver />
       <VermehrungComponent />
       <ApiDetector />
     </ErrorBoundary>
