@@ -38,7 +38,7 @@ const StyledSplitPane = styled(SplitPane)`
 
 const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
   const store = useContext(StoreContext)
-  const { filter, db, user } = store
+  const { filter, db, user, initialDataQueried } = store
   const { activeNodeArray } = store.tree
   let id = idPassed
   if (!idPassed) {
@@ -66,7 +66,9 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
       : $of({})
     const lieferungObservable = showFilter
       ? $of(filter.lieferung)
-      : db.get('lieferung').findAndObserve(id)
+      : initialDataQueried
+      ? db.get('lieferung').findAndObserve(id)
+      : $of({})
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       lieferungObservable,
@@ -81,7 +83,15 @@ const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [db, filter.lieferung, id, row?.sammel_lieferung, showFilter, user])
+  }, [
+    db,
+    filter.lieferung,
+    id,
+    initialDataQueried,
+    row.sammel_lieferung,
+    showFilter,
+    user,
+  ])
 
   if (row?.sammel_lieferung_id && li_show_sl) {
     // this lieferung is part of a sammel_lieferung
