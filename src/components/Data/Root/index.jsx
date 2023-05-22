@@ -81,7 +81,7 @@ const Root = ({ filter: showFilter }) => {
         : $of({})
       const userRoleObservable = db
         .get('user_role')
-        .query(Q.on('person', Q.where('account_id', user.uid)))
+        .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
         .observeWithColumns(['name'])
       const combinedObservables = combineLatest([
         userPersonOptionsObservable,
@@ -148,6 +148,7 @@ const Root = ({ filter: showFilter }) => {
       showTeilkultur,
       showZaehlung,
       user,
+      user?.uid,
     ],
   )
 
