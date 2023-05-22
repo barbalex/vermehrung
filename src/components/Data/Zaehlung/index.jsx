@@ -53,7 +53,7 @@ const Zaehlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, db } = store
+  const { filter, online, db, initialDataQueried } = store
 
   const [dataState, setDataState] = useState({
     row: undefined,
@@ -63,7 +63,9 @@ const Zaehlung = ({
   useEffect(() => {
     const observable = showFilter
       ? $of(filter.zaehlung)
-      : db.get('zaehlung').findAndObserve(id)
+      : initialDataQueried
+      ? db.get('zaehlung').findAndObserve(id)
+      : $of({})
     const subscription = observable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -72,7 +74,7 @@ const Zaehlung = ({
     })
 
     return () => subscription?.unsubscribe?.()
-  }, [db, filter.zaehlung, id, showFilter])
+  }, [db, filter.zaehlung, id, showFilter, initialDataQueried])
   const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)

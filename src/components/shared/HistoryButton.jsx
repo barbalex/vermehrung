@@ -25,15 +25,16 @@ const StyledIconButton = styled(IconButton)`
 
 const HistoryButton = ({ asMenu, id, showHistory, setShowHistory, table }) => {
   const store = useContext(StoreContext)
-  const { online, db } = store
+  const { online, db, initialDataQueried } = store
 
   const [dataState, setDataState] = useState({ row: undefined })
   useEffect(() => {
-    const observable = id ? db.get(table).findAndObserve(id) : $of(null)
+    const observable =
+      id && initialDataQueried ? db.get(table).findAndObserve(id) : $of(null)
     const subscription = observable.subscribe((row) => setDataState({ row }))
 
     return () => subscription?.unsubscribe?.()
-  }, [id, db, table])
+  }, [id, db, table, initialDataQueried])
   const { row } = dataState
 
   const existMultipleRevisions =
