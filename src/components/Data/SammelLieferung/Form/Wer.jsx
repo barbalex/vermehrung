@@ -38,7 +38,7 @@ const TitleRow = styled.div`
 
 const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
   const store = useContext(StoreContext)
-  const { errors, db, filter } = store
+  const { errors, db, filter, initialDataQueried } = store
 
   const [dataState, setDataState] = useState({
     personWerte: [],
@@ -49,7 +49,9 @@ const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
   useEffect(() => {
     const rowObservable = showFilter
       ? $of(filter.sammel_lieferung)
-      : db.get('sammel_lieferung').findAndObserve(id)
+      : initialDataQueried
+      ? db.get('sammel_lieferung').findAndObserve(id)
+      : $of({})
     const personDelQuery =
       filter.person._deleted === false
         ? Q.where('_deleted', false)
@@ -112,6 +114,7 @@ const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
     row,
     row?.person_id,
     showFilter,
+    initialDataQueried,
   ])
 
   if (!row) return null

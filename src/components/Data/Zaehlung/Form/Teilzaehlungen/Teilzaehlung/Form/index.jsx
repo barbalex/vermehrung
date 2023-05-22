@@ -90,7 +90,15 @@ const TeilzaehlungForm = ({
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
-  const { insertTeilkulturRev, errors, unsetError, online, filter, db } = store
+  const {
+    insertTeilkulturRev,
+    errors,
+    unsetError,
+    online,
+    filter,
+    db,
+    initialDataQueried,
+  } = store
 
   const [dataState, setDataState] = useState({
     teilkulturWerte: [],
@@ -117,7 +125,9 @@ const TeilzaehlungForm = ({
     const kulturOptionObservable = kulturId
       ? db.get('kultur_option').findAndObserve(kulturId)
       : $of(null)
-    const tzObservable = db.get('teilzaehlung').findAndObserve(id)
+    const tzObservable = initialDataQueried
+      ? db.get('teilzaehlung').findAndObserve(id)
+      : $of({})
     const combinedObservables = combineLatest([
       teilkultursObservable,
       kulturOptionObservable,
@@ -152,6 +162,7 @@ const TeilzaehlungForm = ({
     kulturId,
     row?.teilkultur,
     row?.teilkultur_id,
+    initialDataQueried,
   ])
 
   const [openPrognosis, setOpenPrognosis] = useState(false)

@@ -53,7 +53,7 @@ const Sammlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, db } = store
+  const { filter, online, db, initialDataQueried } = store
 
   const [dataState, setDataState] = useState({
     row: undefined,
@@ -63,7 +63,9 @@ const Sammlung = ({
   useEffect(() => {
     const observable = showFilter
       ? $of(filter.sammlung)
-      : db.get('sammlung').findAndObserve(id)
+      : initialDataQueried
+      ? db.get('sammlung').findAndObserve(id)
+      : $of({})
     const subscription = observable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -72,7 +74,7 @@ const Sammlung = ({
     })
 
     return () => subscription?.unsubscribe?.()
-  }, [db, filter.sammlung, id, showFilter])
+  }, [db, filter.sammlung, id, showFilter, initialDataQueried])
   const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
