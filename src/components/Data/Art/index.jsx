@@ -53,7 +53,7 @@ const Art = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, db } = store
+  const { filter, online, db, initialDataQueried } = store
 
   const [row, setRow] = useState(null)
   // need raw row because observable does not provoke rerendering of components
@@ -61,13 +61,15 @@ const Art = ({
   useEffect(() => {
     const observable = showFilter
       ? $of(filter.art)
-      : db.get('art').findAndObserve(id)
+      : initialDataQueried
+      ? db.get('art').findAndObserve(id)
+      : $of({})
     const subscription = observable.subscribe((newRow) => {
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))
     })
     return () => subscription?.unsubscribe?.()
-  }, [db, filter.art, id, showFilter])
+  }, [db, filter.art, id, initialDataQueried, showFilter])
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = useCallback(
