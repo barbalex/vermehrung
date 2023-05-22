@@ -18,6 +18,7 @@ import tableNames from '../../utils/tableNames'
 import constants from '../../utils/constants'
 const VermehrungComponent = lazy(() => import('./Vermehrung'))
 const AuthorizingObserver = lazy(() => import('./AuthorizingObserver'))
+const StoragePersister = lazy(() => import('./StoragePersister'))
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
@@ -26,19 +27,6 @@ const Container = styled.div`
 const LoginContainer = styled.div`
   margin: 20px;
 `
-
-// trying to persist indexedDB
-// https://dexie.org/docs/StorageManager#controlling-persistence
-// TODO: consider calling this only if user choose it in settings
-// or pop own window to explain as shown in above link
-// because it pops a request window
-async function persist() {
-  return (
-    (await navigator.storage) &&
-    navigator.storage.persist &&
-    navigator.storage.persist()
-  )
-}
 
 const VermehrungIndex = () => {
   const { pathname } = useLocation()
@@ -55,10 +43,6 @@ const VermehrungIndex = () => {
     addNotification,
   } = store
   const { setLastActiveNodeArray, setOpenNodes, wsReconnectCount } = store.tree
-
-  useEffect(() => {
-    persist().then((val) => console.log('storage is persisted safely:', val))
-  }, [])
 
   const existsUser = !!user?.uid
 
@@ -165,6 +149,7 @@ const VermehrungIndex = () => {
 
   return (
     <ErrorBoundary>
+      <StoragePersister />
       <AuthorizingObserver />
       <VermehrungComponent />
       <ApiDetector />
