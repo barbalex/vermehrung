@@ -53,7 +53,7 @@ const Person = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, db } = store
+  const { filter, online, db, initialDataQueried } = store
   const [dataState, setDataState] = useState({
     row: undefined,
     // need raw row because observable does not provoke rerendering of components
@@ -62,7 +62,9 @@ const Person = ({
   useEffect(() => {
     const personObservable = showFilter
       ? $of(filter.person)
-      : db.get('person').findAndObserve(id)
+      : initialDataQueried
+      ? db.get('person').findAndObserve(id)
+      : $of({})
     const subscription = personObservable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -71,7 +73,7 @@ const Person = ({
     })
 
     return () => subscription?.unsubscribe?.()
-  }, [db, filter.person, id, showFilter])
+  }, [db, filter.person, id, showFilter, initialDataQueried])
   const { row, rawRow } = dataState
 
   const [activeConflict, setActiveConflict] = useState(null)
