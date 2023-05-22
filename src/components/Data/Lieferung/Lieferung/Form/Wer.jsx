@@ -119,7 +119,7 @@ const LieferungWer = ({
     id,
     initialDataQueried,
     row,
-    row.person_id,
+    row?.person_id,
     showFilter,
   ])
 
