@@ -2,13 +2,13 @@ import isNodeOpen from './isNodeOpen'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 
 const toggleNodeSymbol = ({ node, store }) => {
+  const { addNotification } = store
   if (!node.url) {
     console.log('passsed node has no url:', node)
     return addNotification({
       message: 'Fehler: Dem Knoten im Navigationsbaum fehlt die url',
     })
   }
-  const { addNotification } = store
   const {
     addOpenNode,
     setActiveNodeArray,
