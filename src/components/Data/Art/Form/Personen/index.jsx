@@ -16,20 +16,25 @@ import personSort from '../../../../../utils/personSort'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
 import constants from '../../../../../utils/constants'
 
+// somehow chrome(?) seems to add the following css sometimes: 
+// (on mobile and when checking styles with devtools)
+// @media (pointer: coarse), (hover: none) [title] {...
+// this breaks some of the properties
+// so added some !important
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
-  display: flex;
+  display: flex !important;
   height: ${constants.titleRowHeight}px;
-  justify-content: space-between;
+  justify-content: space-between !important;
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: 10px;
   padding: 0 10px;
   cursor: pointer;
   user-select: none;
-  position: sticky;
-  top: 0;
+  position: sticky !important;
+  top: -10px;
   z-index: 1;
   &:first-of-type {
     margin-top: -10px;

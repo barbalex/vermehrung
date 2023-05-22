@@ -17,17 +17,17 @@ import constants from '../../../../../utils/constants'
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
-  display: flex;
+  display: flex !important;
   height: ${constants.titleRowHeight}px;
-  justify-content: space-between;
+  justify-content: space-between !important;
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: 10px;
   padding: 0 10px;
   cursor: pointer;
   user-select: none;
-  position: sticky;
-  top: 0;
+  position: sticky !important;
+  top: -10px;
   z-index: 1;
   &:first-of-type {
     margin-top: -10px;
@@ -75,7 +75,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
   }, [artId, db, filter.herkunft._deleted])
 
   const [open, setOpen] = useState(false)
-  let anim = useAnimation()
+  const anim = useAnimation()
   const onClickToggle = useCallback(
     async (e) => {
       e.stopPropagation()

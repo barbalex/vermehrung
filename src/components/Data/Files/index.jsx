@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import ImageGallery from 'react-image-gallery'
 import Button from '@mui/material/Button'
 import { v1 as uuidv1 } from 'uuid'
+import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../storeContext'
 import Uploader from '../../Uploader'
@@ -18,16 +19,16 @@ import constants from '../../../utils/constants'
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
-  display: flex;
+  display: flex !important;
   height: ${constants.titleRowHeight}px;
-  justify-content: space-between;
+  justify-content: space-between !important;
   margin-left: -10px;
   margin-right: -10px;
   ${(props) => props['data-margin-bottom'] && 'margin-bottom: 15px;'}
   padding: 0 10px;
   user-select: none;
-  position: sticky;
-  top: 0;
+  position: sticky !important;
+  top: -10px;
   z-index: 1;
 `
 const Title = styled.div`
@@ -62,9 +63,12 @@ const Files = ({ parentTable, parent }) => {
   // use object with two keys to only render once on setting
   const [files, setEvent] = useState([])
   useEffect(() => {
-    const subscription = parent.files
-      .observeWithColumns(['name'])
-      .subscribe((files) => setEvent(files.sort(fileSort)))
+    const observable = parent.files
+      ? parent.files.observeWithColumns(['name'])
+      : $of([])
+    const subscription = observable.subscribe((files) =>
+      setEvent(files.sort(fileSort)),
+    )
 
     return () => subscription?.unsubscribe?.()
   }, [parent.files])
