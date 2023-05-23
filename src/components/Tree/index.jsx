@@ -210,12 +210,7 @@ const Tree = () => {
     <ErrorBoundary>
       <Container>
         <Settings />
-        <AutoSizer
-          style={{
-            height: '100%',
-            width: '100%',
-          }}
-        >
+        <AutoSizer>
           {({ height, width }) => (
             <List
               nodes={nodes}
