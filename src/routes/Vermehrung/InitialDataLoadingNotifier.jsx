@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext'
@@ -17,15 +17,24 @@ const InitialDataLoadingNotifier = () => {
 
   const existsUser = !!user?.uid
 
-  if (existsUser && !gettingAuthUser && online && !initialDataQueried) {
-    addNotification({
-      message: `lade Daten für offline-Nutzung (${tableNames(
-        initiallyQuerying,
-      )})`,
-      type: 'info',
-      duration: 2000,
-    })
-  }
+  useEffect(() => {
+    if (existsUser && !gettingAuthUser && online && !initialDataQueried) {
+      addNotification({
+        message: `lade Daten für offline-Nutzung (${tableNames(
+          initiallyQuerying,
+        )})`,
+        type: 'info',
+        duration: 2000,
+      })
+    }
+  }, [
+    addNotification,
+    existsUser,
+    gettingAuthUser,
+    initialDataQueried,
+    initiallyQuerying,
+    online,
+  ])
 
   return null
 }
