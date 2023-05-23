@@ -83,3 +83,4 @@ dropbox_uploader.conf
 assetlinks.json
 dist
 dist/
+dist/*
