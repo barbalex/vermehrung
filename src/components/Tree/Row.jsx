@@ -27,7 +27,6 @@ import deleteAccount from '../../utils/deleteAccount'
 import setPassword from '../../utils/setPassword'
 
 const Container = styled.div`
-  padding-right: 4px;
   .react-contextmenu {
     display: flex;
     flex-direction: column;
