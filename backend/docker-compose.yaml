@@ -37,7 +37,7 @@ services:
       - db
       - graphql
   graphql:
-    image: 'hasura/graphql-engine:v2.25.0'
+    image: 'hasura/graphql-engine:v2.25.1'
     container_name: v_graphql
     ports:
       - '8080:8080'
