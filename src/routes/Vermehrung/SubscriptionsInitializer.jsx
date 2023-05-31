@@ -11,11 +11,11 @@ const SubscriptionsInitializer = () => {
   const { wsReconnectCount } = store.tree
 
   useEffect(() => {
-    console.log('vermehrung, subscription effect', {
-      authorizing,
-      userUid: user?.uid,
-      gqlClient,
-    })
+    // console.log('vermehrung, subscription effect', {
+    //   authorizing,
+    //   userUid: user?.uid,
+    //   gqlClient,
+    // })
     let unsubscribe
     if (!!user?.uid && !authorizing) {
       // need to fetch user to get role
@@ -24,7 +24,7 @@ const SubscriptionsInitializer = () => {
       // would be much nicer if hasura simply passed null values
       // https://github.com/hasura/graphql-engine/issues/6541
       // inherited roles not working as they can not be added to existing users
-      console.log('vermehrung, subscription effect, fetch user role')
+      // console.log('vermehrung, subscription effect, fetch user role')
       gqlClient
         .query(
           gql`
@@ -42,13 +42,11 @@ const SubscriptionsInitializer = () => {
         )
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .then(({ data, error }) => {
-          // error not caught > user will get too much data
-          const userRole = data?.person?.[0]?.person_user_role?.name
           if (error) {
             console.log('error getting user role:', error)
-          } else {
-            console.log('got user role:', userRole)
           }
+          // error not caught > user will get too much data
+          const userRole = data?.person?.[0]?.person_user_role?.name
           unsubscribe = initializeSubscriptions({ store, userRole })
         })
         .catch((error) => {
@@ -56,7 +54,6 @@ const SubscriptionsInitializer = () => {
         })
     }
     return function cleanup() {
-      console.log('vermehrung, subscription cleanup')
       if (unsubscribe && Object.values(unsubscribe)) {
         Object.values(unsubscribe).forEach((value) => value?.unsubscribe?.())
       }
