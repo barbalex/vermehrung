@@ -45,11 +45,11 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       } catch {}
       let avs
       try {
-        avs = await art.avs.fetch()
+        avs = await art.avs.extend(Q.where('_deleted', false)).fetch()
       } catch {}
       const avsLabels = []
       try {
-        for (const av of avs.filter((av) => !av._deleted)) {
+        for (const av of avs) {
           const avsLabel = await av.personLabel.pipe(first$()).toPromise()
           if (avsLabel) avsLabels.push(avsLabel)
         }
