@@ -43,6 +43,17 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         artname = await art.label.pipe(first$()).toPromise()
       } catch {}
+      let avs
+      try {
+        avs = await art.avs.fetch()
+      } catch {}
+      const avsLabels = []
+      try {
+        for (const av of avs.filter((av) => !av._deleted)) {
+          const avsLabel = await av.personLabel.pipe(first$()).toPromise()
+          if (avsLabel) avsLabels.push(avsLabel)
+        }
+      } catch {}
       let herkunft
       try {
         herkunft = await kultur.herkunft.fetch()
@@ -55,6 +66,11 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         garten_label = await garten.label.pipe(first$()).toPromise()
       } catch {}
+
+      console.log('buildExceljsWorksheetsForKulturBedarfsplanung, avs:', {
+        avs,
+        avsLabels,
+      })
 
       let ownZaehlungen = []
       try {
@@ -234,6 +250,7 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         label: kulturLabel,
         artname,
         set: art?.set,
+        mitarbeitende: avsLabels.sort().join(', '),
         herkunft_id: kultur.herkunft_id,
         herkunft_nr: herkunft?.nr ?? '',
         herkunft_gemeinde: herkunft?.gemeinde ?? '',
