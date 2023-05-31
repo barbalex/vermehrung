@@ -10,49 +10,60 @@ const SubscriptionsInitializer = () => {
   const { authorizing, user, gqlClient } = store
   const { wsReconnectCount } = store.tree
 
-  const existsUser = !!user?.uid
-
   useEffect(() => {
-    console.log('vermehrung, subscription effect', { authorizing, existsUser })
+    console.log('vermehrung, subscription effect', {
+      authorizing,
+      userUid: user?.uid,
+      gqlClient,
+    })
     let unsubscribe
-    if (existsUser && !authorizing) {
+    if (!!user?.uid && !authorizing) {
       // need to fetch user to get role
       // then pass role to initializeSubscriptions to skip fields
       // this user has no access to
       // would be much nicer if hasura simply passed null values
       // https://github.com/hasura/graphql-engine/issues/6541
       // inherited roles not working as they can not be added to existing users
+      console.log('vermehrung, subscription effect, fetch user role')
       gqlClient
         .query(
           gql`
-        query userRoleQuery {
-          person(
-            where: {account_id: {_eq: ${user.uid}}}
-          ) {
-            id
-            person_user_role {
-              id
-              name
+            query userRoleQuery($uid: String!) {
+              person(where: { account_id: { _eq: $uid } }) {
+                id
+                person_user_role {
+                  id
+                  name
+                }
+              }
             }
-          }
-        }
-      `,
+          `,
+          { uid: user.uid },
         )
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .then(({ data, error }) => {
-          // error not caught > user will get to much data
+          // error not caught > user will get too much data
           const userRole = data?.person?.[0]?.person_user_role?.name
+          if (error) {
+            console.log('error getting user role:', error)
+          } else {
+            console.log('got user role:', userRole)
+          }
           unsubscribe = initializeSubscriptions({ store, userRole })
+        })
+        .catch((error) => {
+          console.log('error caught getting user role:', error)
         })
     }
     return function cleanup() {
+      console.log('vermehrung, subscription cleanup')
       if (unsubscribe && Object.values(unsubscribe)) {
         Object.values(unsubscribe).forEach((value) => value?.unsubscribe?.())
       }
     }
     // wsReconnectCount is made so a subscription can provoke re-subscription on error
     // see initializeSubscriptions, unsubscribe.ae_art
-  }, [existsUser, store, wsReconnectCount, authorizing, gqlClient, user.uid])
+  }, [store, wsReconnectCount, authorizing, gqlClient, user?.uid])
 
   return null
 }
