@@ -81,8 +81,8 @@ const ApQk = ({ artId }) => {
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { qks, userPersonOption } = dataState
-  const qkChoosens = qks.filter((qk) =>
-    userPersonOption.art_qk_choosen.includes(qk.id),
+  const qkChoosens = qks.filter(
+    (qk) => userPersonOption?.art_qk_choosen?.includes?.(qk.id) ?? false,
   )
 
   const qkCount = qks.length
