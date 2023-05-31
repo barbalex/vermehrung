@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
+import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'
 import Person from './Person'
@@ -16,7 +17,7 @@ import personSort from '../../../../../utils/personSort'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
 import constants from '../../../../../utils/constants'
 
-// somehow chrome(?) seems to add the following css sometimes: 
+// somehow chrome(?) seems to add the following css sometimes:
 // (on mobile and when checking styles with devtools)
 // @media (pointer: coarse), (hover: none) [title] {...
 // this breaks some of the properties
@@ -108,7 +109,9 @@ const ArtPersonen = ({ art }) => {
       .get('person')
       .query(delQuery, aktivQuery)
       .observe()
-    const avsObservable = art.avs.extend(Q.where('_deleted', false)).observe()
+    const avsObservable = art.avs
+      ? art.avs.extend(Q.where('_deleted', false)).observe()
+      : $of([])
     const combinedObservables = combineLatest([
       personsObservable,
       avsObservable,
