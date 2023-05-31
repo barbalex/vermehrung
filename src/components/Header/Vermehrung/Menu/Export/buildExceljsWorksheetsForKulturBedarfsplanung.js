@@ -67,11 +67,6 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         garten_label = await garten.label.pipe(first$()).toPromise()
       } catch {}
 
-      console.log('buildExceljsWorksheetsForKulturBedarfsplanung, avs:', {
-        avs,
-        avsLabels,
-      })
-
       let ownZaehlungen = []
       try {
         ownZaehlungen =
