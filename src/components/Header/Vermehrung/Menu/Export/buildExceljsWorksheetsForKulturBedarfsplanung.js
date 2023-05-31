@@ -233,6 +233,7 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         id: kultur.id,
         label: kulturLabel,
         artname,
+        set: art?.set,
         herkunft_id: kultur.herkunft_id,
         herkunft_nr: herkunft?.nr ?? '',
         herkunft_gemeinde: herkunft?.gemeinde ?? '',
