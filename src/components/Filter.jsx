@@ -1,19 +1,19 @@
-import React, { useState, useCallback, useContext, Suspense, lazy } from 'react'
+import React, { useState, useCallback, useContext, Suspense, } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 
-const Art = lazy(() => import('./Data/Art'))
-const Event = lazy(() => import('./Data/Event'))
-const Garten = lazy(() => import('./Data/Garten'))
-const Herkunft = lazy(() => import('./Data/Herkunft'))
-const Kultur = lazy(() => import('./Data/Kultur'))
-const Lieferung = lazy(() => import('./Data/Lieferung'))
-const SammelLieferung = lazy(() => import('./Data/SammelLieferung'))
-const Person = lazy(() => import('./Data/Person'))
-const Sammlung = lazy(() => import('./Data/Sammlung'))
-const Teilkultur = lazy(() => import('./Data/Teilkultur'))
-const Zaehlung = lazy(() => import('./Data/Zaehlung'))
+import Art from './Data/Art'
+import Event from './Data/Event'
+import Garten from './Data/Garten'
+import Herkunft from './Data/Herkunft'
+import Kultur from './Data/Kultur'
+import Lieferung from './Data/Lieferung'
+import SammelLieferung from './Data/SammelLieferung'
+import Person from './Data/Person'
+import Sammlung from './Data/Sammlung'
+import Teilkultur from './Data/Teilkultur'
+import Zaehlung from './Data/Zaehlung'
 import ErrorBoundary from './shared/ErrorBoundary'
 import StoreContext from '../storeContext'
 import Fallback from './shared/Fallback'

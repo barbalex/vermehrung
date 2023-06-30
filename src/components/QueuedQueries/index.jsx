@@ -97,7 +97,7 @@ const QueuedQueries = () => {
     <ErrorBoundary>
       <Container>
         <TitleRow>
-          <Title>Ausstehende Operationen:</Title>
+          <Title>Ausstehende Operationen</Title>
           <div>
             <IconButton
               aria-label="Anleitung öffnen"

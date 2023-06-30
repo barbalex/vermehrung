@@ -1,25 +1,19 @@
-import { useContext, lazy } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext'
-const Login = lazy(() => import('../../components/Login'))
-const ErrorBoundary = lazy(() =>
-  import('../../components/shared/ErrorBoundary'),
-)
-const ApiDetector = lazy(() => import('../../components/ApiDetector'))
-const QueuedQueries = lazy(() => import('../../components/QueuedQueries'))
+import Login from '../../components/Login'
+import ErrorBoundary from '../../components/shared/ErrorBoundary'
+import ApiDetector from '../../components/ApiDetector'
+import QueuedQueries from '../../components/QueuedQueries'
 import constants from '../../utils/constants'
-const VermehrungComponent = lazy(() => import('./Vermehrung'))
-const AuthorizingObserver = lazy(() => import('./AuthorizingObserver'))
-const StoragePersister = lazy(() => import('./StoragePersister'))
-const OpenNodesSetter = lazy(() => import('./OpenNodesSetter'))
-const SubscriptionsInitializer = lazy(() =>
-  import('./SubscriptionsInitializer'),
-)
-const InitialDataLoadingNotifier = lazy(() =>
-  import('./InitialDataLoadingNotifier'),
-)
+import VermehrungComponent from './Vermehrung'
+import AuthorizingObserver from './AuthorizingObserver'
+import StoragePersister from './StoragePersister'
+import OpenNodesSetter from './OpenNodesSetter'
+import SubscriptionsInitializer from './SubscriptionsInitializer'
+import InitialDataLoadingNotifier from './InitialDataLoadingNotifier'
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
