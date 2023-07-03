@@ -5,6 +5,7 @@ export default types.model('Notification', {
   time: types.union(types.number, types.undefined),
   title: types.union(types.string, types.number, types.null, types.undefined),
   message: types.union(types.string, types.number, types.null, types.undefined),
+  info: types.union(types.string, types.number, types.null, types.undefined),
   duration: types.union(types.number, types.undefined),
   dismissable: types.union(types.boolean, types.undefined),
   allDismissable: types.optional(types.boolean, true),

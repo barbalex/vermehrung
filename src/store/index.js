@@ -210,6 +210,9 @@ const myTypes = types
               self.setShortTermOnline(false)
               return
             } else {
+              // Move this operation to the end of the queue
+              // to prevent it from blocking other operations
+              self.deferQueuedQueryById(query.id)
               self.setError({
                 path: `${revertTable}.${revertField}`,
                 value: response.error.message,
@@ -218,6 +221,7 @@ const myTypes = types
                 title:
                   'Eine Operation kann nicht in die Datenbank geschrieben werden',
                 message: response.error.message,
+                info: 'Bei der nächsten Synchronisierung wird wieder versucht, diese Operation auszuführen',
                 actionLabel: 'Operation löschen',
                 actionName: 'removeQueuedQueryById',
                 actionArgument: query.id,
@@ -351,6 +355,11 @@ const myTypes = types
           ...valPassed,
         }
         self.queuedQueries.set(val.id, val)
+      },
+      deferQueuedQueryById(id) {
+        const query = self.queuedQueries.get(id)
+        query.time = Date.now()
+        self.queuedQueries.set(id, query)
       },
       addNotification(valPassed) {
         // do not stack same messages

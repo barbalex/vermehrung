@@ -23,6 +23,7 @@ const Container = styled.div`
   max-width: calc(100% - 10px);
   word-wrap: break-word;
 `
+const TextContainer = styled.div``
 
 // http://hackingui.com/front-end/a-pure-css-solution-for-multiline-text-truncation/
 const Message = styled.div`
@@ -30,6 +31,8 @@ const Message = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  font-weight: 400;
+  font-size: small;
 `
 const Title = styled.div`
   font-weight: 500;
@@ -48,6 +51,7 @@ const Notification = ({ notification: n }) => {
   const {
     title,
     message,
+    info,
     actionLabel,
     actionName,
     actionArgument,
@@ -97,8 +101,11 @@ const Notification = ({ notification: n }) => {
 
   return (
     <Container data-color={color}>
-      {!!title && <Title>{`${title}. Fehler-Meldung:`}</Title>}
-      <Message>{message}</Message>
+      <TextContainer>
+        {!!title && <Title>{title}</Title>}
+        <Message>{`Fehler-Meldung: ${message}`}</Message>
+        {!!info && <Message>{info}</Message>}
+      </TextContainer>
       {!!actionName && !!actionLabel && (
         <Button
           onClick={onClickAction}
