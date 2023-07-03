@@ -189,6 +189,36 @@ begin
     )
     -- again re-calculating the same as I do not know better :-(
     with 
+      deleted_conflicts_of_leaves as (
+      select
+        art_id,
+        _rev,
+        _depth
+      from
+        art_rev
+      where
+        -- leaves
+        not exists (
+          select
+            art_id
+          from
+            art_rev as art_rev_inner
+          where
+            art_rev_inner.art_id = new.art_id
+            and art_rev_inner._parent_rev = art_rev._rev
+        )
+        -- deleted
+        and _deleted is true
+        -- of this record
+        and art_id = new.art_id
+        -- siblings
+        and exists (
+          select art_id from art_rev_leaves(new.art_id) l
+          where 
+            l._parent_rev = art_rev._parent_rev
+            and l._depth = art_rev._depth
+        )
+      ),
       leaves_deleted as (
       select
         art_id,
