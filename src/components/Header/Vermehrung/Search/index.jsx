@@ -192,6 +192,7 @@ const Search = () => {
   return (
     <Container ref={ref}>
       {!singleColumnView && <SearchIcon />}
+      <label className="sr-only">suchen</label>
       <StyledSelect
         styles={customStyles}
         onChange={onChange}

@@ -21,6 +21,18 @@ const GlobalStyle = () => (
         height: 100%;
       }
 
+      /* Hiding class, making content visible only to screen readers but not visually */
+      /* "sr" meaning "screen-reader" */
+      .sr-only:not(:focus):not(:active) {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
+
       /*
    * on mobile titles are invisible
    * make them appear on press
