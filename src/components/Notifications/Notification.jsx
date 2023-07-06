@@ -103,7 +103,7 @@ const Notification = ({ notification: n }) => {
     <Container data-color={color}>
       <TextContainer>
         {!!title && <Title>{title}</Title>}
-        <Message>{`Fehler-Meldung: ${message}`}</Message>
+        <Message>{message}</Message>
         {!!info && <Message>{info}</Message>}
       </TextContainer>
       {!!actionName && !!actionLabel && (
