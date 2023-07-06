@@ -161,6 +161,7 @@ const SelectLoadingOptions = ({
         // using portal because sticky headers would otherwise cover the dropdown
         styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
         menuPortalTarget={document.getElementById('root')}
+        aria-label={label ?? ''}
       />
       {saveToDbError && <Error>{saveToDbError}</Error>}
     </Container>

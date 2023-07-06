@@ -153,6 +153,7 @@ const SharedSelectCreatable = ({
           maxheight={maxHeight}
           classNamePrefix="react-select"
           nocaret={noCaret}
+          aria-label={label ?? ''}
         />
         <StyledIconButton
           aria-label="Mit Hilfe der Koordinaten automatisch setzen"
