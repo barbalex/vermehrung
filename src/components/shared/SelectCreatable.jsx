@@ -156,6 +156,7 @@ const SelectCreatable = ({
           classNamePrefix="react-select"
           nocaret={noCaret}
           formatCreateLabel={formatCreateLabel}
+          aria-label={label ?? ''}
         />
         {!!selectValue.link && <Link link={selectValue.link} />}
       </SelectRow>

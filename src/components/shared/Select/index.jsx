@@ -153,6 +153,7 @@ const SharedSelect = ({
           styles={styles}
           // using portal because sticky headers would otherwise cover the dropdown
           menuPortalTarget={document.getElementById('root')}
+          aria-label={label ?? ''}
         />
         {!!selectValue.link && <Link link={selectValue.link} />}
       </SelectRow>
