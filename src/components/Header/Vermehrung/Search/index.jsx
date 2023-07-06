@@ -192,7 +192,6 @@ const Search = () => {
   return (
     <Container ref={ref}>
       {!singleColumnView && <SearchIcon />}
-      <label className="sr-only">suchen</label>
       <StyledSelect
         styles={customStyles}
         onChange={onChange}
@@ -205,6 +204,7 @@ const Search = () => {
         loadOptions={loadOptions}
         isClearable
         spellCheck={false}
+        aria-label="suchen"
       />
     </Container>
   )

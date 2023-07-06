@@ -23,6 +23,7 @@ const GlobalStyle = () => (
 
       /* Hiding class, making content visible only to screen readers but not visually */
       /* "sr" meaning "screen-reader" */
+      /* not in use */
       .sr-only:not(:focus):not(:active) {
         clip: rect(0 0 0 0);
         clip-path: inset(50%);
