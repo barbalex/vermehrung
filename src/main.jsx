@@ -9,6 +9,9 @@ import 'react-datepicker/dist/react-datepicker.css'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
+import 'allotment/dist/style.css'
+import './index.css'
+
 import browserUpdate from 'browser-update'
 
 // see: https://github.com/fontsource/fontsource/blob/master/packages/roboto

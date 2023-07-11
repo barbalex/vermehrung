@@ -1,0 +1,6 @@
+/* allotment */
+:root {
+  --focus-border: rgba(74, 20, 140, 0.15);
+  --separator-border: rgba(74, 20, 140, 0.1);
+  --sash-hover-size: 8px;
+}
