@@ -117,8 +117,4 @@ const PersonFormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(PersonFormTitle), {
-  refreshMode: 'debounce',
-  refreshRate: 300,
-  refreshOptions: { trailing: true },
-})
+export default withResizeDetector(observer(PersonFormTitle))

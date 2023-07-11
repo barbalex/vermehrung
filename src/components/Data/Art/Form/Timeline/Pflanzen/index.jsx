@@ -36,11 +36,7 @@ const ArtTimeline = ({ artId }) => {
   const store = useContext(StoreContext)
   const { db } = store
 
-  const { width, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 300,
-    refreshOptions: { trailing: true },
-  })
+  const { width, ref } = useResizeDetector()
   const isNarrow = width < 1100
 
   const [data, setData] = useState(null)

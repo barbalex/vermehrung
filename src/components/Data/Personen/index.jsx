@@ -189,8 +189,4 @@ const Personen = ({ filter: showFilter, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Personen), {
-  refreshMode: 'debounce',
-  refreshRate: 300,
-  refreshOptions: { trailing: true },
-})
+export default withResizeDetector(observer(Personen))

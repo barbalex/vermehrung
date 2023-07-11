@@ -88,8 +88,4 @@ const Art = ({
   )
 }
 
-export default withResizeDetector(observer(Art), {
-  refreshMode: 'debounce',
-  refreshRate: 300,
-  refreshOptions: { trailing: true },
-})
+export default withResizeDetector(observer(Art))
