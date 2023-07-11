@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 import SplitPane from 'react-split-pane'
+import { Allotment } from 'allotment'
 
 import StoreContext from '../../../../../../storeContext'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'

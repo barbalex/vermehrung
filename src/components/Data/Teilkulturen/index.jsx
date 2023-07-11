@@ -186,8 +186,4 @@ const Teilkulturen = ({ filter: showFilter, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Teilkulturen), {
-  refreshMode: 'debounce',
-  refreshRate: 300,
-  refreshOptions: { trailing: true },
-})
+export default withResizeDetector(observer(Teilkulturen))

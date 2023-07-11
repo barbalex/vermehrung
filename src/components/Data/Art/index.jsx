@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import SplitPane from 'react-split-pane'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
@@ -23,30 +22,6 @@ const SplitPaneContainer = styled.div`
   height: 100%;
   position: relative;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const StyledSplitPane = styled(SplitPane)`
-  .Resizer {
-    background: rgba(74, 20, 140, 0.1);
-    opacity: 1;
-    z-index: 1;
-    box-sizing: border-box;
-    width: 7px;
-    cursor: col-resize;
-  }
-  .Resizer:hover {
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    background-color: #fff59d !important;
-  }
-  .Resizer.disabled {
-    cursor: not-allowed;
-  }
-  .Resizer.disabled:hover {
-    border-color: transparent;
-  }
-  .Pane {
-    overflow: hidden;
-  }
 `
 
 const Art = ({

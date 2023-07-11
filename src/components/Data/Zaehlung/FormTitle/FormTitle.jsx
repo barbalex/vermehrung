@@ -108,8 +108,4 @@ const ZaehlungFormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(ZaehlungFormTitle), {
-  refreshMode: 'debounce',
-  refreshRate: 300,
-  refreshOptions: { trailing: true },
-})
+export default withResizeDetector(observer(ZaehlungFormTitle))

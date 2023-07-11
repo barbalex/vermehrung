@@ -135,8 +135,4 @@ const LieferungTitleFormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(LieferungTitleFormTitle), {
-  refreshMode: 'debounce',
-  refreshRate: 300,
-  refreshOptions: { trailing: true },
-})
+export default withResizeDetector(observer(LieferungTitleFormTitle))

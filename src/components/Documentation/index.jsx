@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { withResizeDetector } from 'react-resize-detector'
-import SplitPane from 'react-split-pane'
+import { Allotment } from 'allotment'
 import { observer } from 'mobx-react-lite'
 import { Outlet, useLocation } from 'react-router-dom'
 
@@ -17,31 +17,6 @@ const Container = styled.div`
 const SplitPaneContainer = styled.div`
   height: calc(100vh - ${constants.appBarHeight}px);
   position: relative;
-`
-
-const StyledSplitPane = styled(SplitPane)`
-  .Resizer {
-    background: rgba(74, 20, 140, 0.1);
-    opacity: 1;
-    z-index: 1;
-    box-sizing: border-box;
-    width: 7px;
-    cursor: col-resize;
-  }
-  .Resizer:hover {
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    background-color: #fff59d !important;
-  }
-  .Resizer.disabled {
-    cursor: not-allowed;
-  }
-  .Resizer.disabled:hover {
-    border-color: transparent;
-  }
-  .Pane {
-    overflow: hidden;
-  }
 `
 
 const articles = [
@@ -149,20 +124,7 @@ const Documentation = ({ width }) => {
 
   const path = pathname.split('/').filter((e) => !!e)
 
-  const [mobile, setMobile] = useState(false)
-  useEffect(() => {
-    if (width >= constants?.tree?.minimalWindowWidth && mobile) {
-      setMobile(false)
-    }
-    if (width < constants?.tree?.minimalWindowWidth && !mobile) {
-      setMobile(true)
-    }
-  }, [mobile, width])
-
-  const showList =
-    width < constants?.tree?.minimalWindowWidth && path.length === 1
-  const showArticle =
-    width < constants?.tree?.minimalWindowWidth && path.length > 1
+  console.log('Documentation, width:', width)
 
   useEffect(() => {
     const items = articles.filter(
@@ -172,51 +134,40 @@ const Documentation = ({ width }) => {
     setDocsFilteredCount(items.length)
   }, [docFilter, setDocsCount, setDocsFilteredCount])
 
-  if (showList) {
-    return (
-      <ErrorBoundary>
-        <Container>
-          <ArticleList articles={articles} />
-        </Container>
-      </ErrorBoundary>
-    )
-  }
-
-  // TODO: add Dokumentation bar with up arrow above Outlet
-  if (showArticle) {
-    return (
-      <ErrorBoundary>
-        <Container>
-          <Doku>
-            <FormTitle />
-            <DokuInnerContainer>
-              <Outlet />
-            </DokuInnerContainer>
-          </Doku>
-        </Container>
-      </ErrorBoundary>
-    )
-  }
-
   return (
     <ErrorBoundary>
-      <SplitPaneContainer>
-        <StyledSplitPane split="vertical" size="22%" maxSize={-10}>
-          <ArticleList articles={articles} />
-          <Doku>
-            <FormTitle />
-            <DokuInnerContainer>
-              <Outlet />
-            </DokuInnerContainer>
-          </Doku>
-        </StyledSplitPane>
-      </SplitPaneContainer>
+      {width < constants?.tree?.minimalWindowWidth ? (
+        path.length === 1 ? (
+          <Container>
+            <ArticleList articles={articles} />
+          </Container>
+        ) : (
+          <Container>
+            <Doku>
+              <FormTitle />
+              <DokuInnerContainer>
+                <Outlet />
+              </DokuInnerContainer>
+            </Doku>
+          </Container>
+        )
+      ) : (
+        <SplitPaneContainer>
+          <Allotment>
+            <Allotment.Pane preferredSize="22%">
+              <ArticleList articles={articles} />
+            </Allotment.Pane>
+            <Doku>
+              <FormTitle />
+              <DokuInnerContainer>
+                <Outlet />
+              </DokuInnerContainer>
+            </Doku>
+          </Allotment>
+        </SplitPaneContainer>
+      )}
     </ErrorBoundary>
   )
 }
 
-export default withResizeDetector(observer(Documentation), {
-  refreshMode: 'debounce',
-  refreshRate: 300,
-  refreshOptions: { trailing: true },
-})
+export default withResizeDetector(observer(Documentation))

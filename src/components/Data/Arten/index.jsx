@@ -162,8 +162,4 @@ const Arten = ({ filter: showFilter, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Arten), {
-  refreshMode: 'debounce',
-  refreshRate: 300,
-  refreshOptions: { trailing: true },
-})
+export default withResizeDetector(observer(Arten))

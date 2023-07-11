@@ -41,11 +41,9 @@ const ArtTimeline = ({ artId, herkunft }) => {
   const { db } = store
   const herkunftId = herkunft.id
 
-  const { width, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 300,
-    refreshOptions: { trailing: true },
-  })
+  const { width, ref } = useResizeDetector()
+
+  console.log('ArtTimeline, width', width)
 
   const [data, setData] = useState(null)
   useEffect(() => {

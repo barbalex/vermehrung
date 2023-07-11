@@ -349,8 +349,4 @@ const KulturTimeline = ({ row, width }) => {
   )
 }
 
-export default withResizeDetector(observer(KulturTimeline), {
-  refreshMode: 'debounce',
-  refreshRate: 300,
-  refreshOptions: { trailing: true },
-})
+export default withResizeDetector(observer(KulturTimeline))

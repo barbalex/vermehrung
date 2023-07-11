@@ -192,8 +192,4 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Herkuenfte), {
-  refreshMode: 'debounce',
-  refreshRate: 300,
-  refreshOptions: { trailing: true },
-})
+export default withResizeDetector(observer(Herkuenfte))
