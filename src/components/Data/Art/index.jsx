@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import SplitPane from 'react-split-pane'
+import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../storeContext'
@@ -94,10 +95,6 @@ const Art = ({
 
   const paneIsSplit = online && (activeConflict || showHistory)
 
-  const firstPaneWidth = paneIsSplit ? '50%' : '100%'
-  // hide resizer when tree is hidden
-  const resizerStyle = !paneIsSplit ? { width: 0 } : {}
-
   //console.log('Art, row:', row)
 
   return (
@@ -111,12 +108,38 @@ const Art = ({
           setShowHistory={setShowHistory}
         />
         <SplitPaneContainer>
-          <StyledSplitPane
-            split="vertical"
-            size={firstPaneWidth}
-            maxSize={-10}
-            resizerStyle={resizerStyle}
-          >
+          {paneIsSplit ? (
+            <Allotment key={`${activeConflict}/${showHistory}`}>
+              <Form
+                showFilter={showFilter}
+                id={id}
+                row={row}
+                rawRow={rawRow}
+                activeConflict={activeConflict}
+                setActiveConflict={setActiveConflict}
+                showHistory={showHistory}
+              />
+              <>
+                {activeConflict ? (
+                  <Conflict
+                    rev={activeConflict}
+                    id={id}
+                    row={row}
+                    rawRow={rawRow}
+                    conflictDisposalCallback={conflictDisposalCallback}
+                    conflictSelectionCallback={conflictSelectionCallback}
+                    setActiveConflict={setActiveConflict}
+                  />
+                ) : showHistory ? (
+                  <History
+                    row={row}
+                    rawRow={rawRow}
+                    historyTakeoverCallback={historyTakeoverCallback}
+                  />
+                ) : null}
+              </>
+            </Allotment>
+          ) : (
             <Form
               showFilter={showFilter}
               id={id}
@@ -126,30 +149,7 @@ const Art = ({
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
             />
-            <>
-              {online && (
-                <>
-                  {activeConflict ? (
-                    <Conflict
-                      rev={activeConflict}
-                      id={id}
-                      row={row}
-                      rawRow={rawRow}
-                      conflictDisposalCallback={conflictDisposalCallback}
-                      conflictSelectionCallback={conflictSelectionCallback}
-                      setActiveConflict={setActiveConflict}
-                    />
-                  ) : showHistory ? (
-                    <History
-                      row={row}
-                      rawRow={rawRow}
-                      historyTakeoverCallback={historyTakeoverCallback}
-                    />
-                  ) : null}
-                </>
-              )}
-            </>
-          </StyledSplitPane>
+          )}
         </SplitPaneContainer>
       </Container>
     </ErrorBoundary>
