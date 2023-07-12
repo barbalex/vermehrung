@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Events = ({ filter: showFilter, width, height }) => {
+const Events = ({ filter: showFilter = false, width, height }) => {
   const store = useContext(StoreContext)
   const { insertEventRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
