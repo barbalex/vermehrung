@@ -50,6 +50,7 @@ const EventForm = ({
   showFilter,
   id,
   row,
+  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -109,13 +110,15 @@ const EventForm = ({
             Q.where('_deleted', true),
             Q.where('_deleted', null),
           )
-    const teilkulturObservable = db
-      .get('teilkultur')
-      .query(
-        tkDelQuery,
-        ...(showFilter ? [] : [Q.where('kultur_id', kulturId)]),
-      )
-      .observeWithColumns(['name'])
+    const teilkulturObservable = kulturId
+      ? db
+          .get('teilkultur')
+          .query(
+            tkDelQuery,
+            ...(showFilter ? [] : [Q.where('kultur_id', kulturId)]),
+          )
+          .observeWithColumns(['name'])
+      : $of([])
     const personDelQuery =
       filter.person._deleted === false
         ? Q.where('_deleted', false)
@@ -222,14 +225,18 @@ const EventForm = ({
     return () => subscription?.unsubscribe?.()
   }, [
     db,
-    filter.kultur,
+    filter.kultur._deleted,
+    filter.kultur.aktiv,
     filter.person._deleted,
     filter.person.aktiv,
     filter.teilkultur._deleted,
     kulturId,
     row,
+    // TODO: this provokes indefinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...[Object.values(row)],
+    // ...[Object.values(row)],
+    // solution: rawRow
+    rawRow,
     showFilter,
   ])
   const { kulturWerte, teilkulturWerte, personWerte, kulturOption } = dataState
