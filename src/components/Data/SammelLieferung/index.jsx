@@ -51,7 +51,7 @@ const StyledSplitPane = styled(SplitPane)`
 `
 
 const SammelLieferung = ({
-  filter: showFilter,
+  filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
   lieferung,
 }) => {
