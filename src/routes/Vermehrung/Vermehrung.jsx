@@ -43,32 +43,26 @@ const Vermehrung = () => {
   const minSizeTree = treeWidth < 30 ? treeWidth : 30
   const minSizeForm = formWidth < 30 ? formWidth : 30
 
-  // hide resizer when tree is hidden
-  // const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
-
-  console.log('Vermehrung', {
-    singleColumnView,
-    widthInPercentOfScreen,
-    treeWidth,
-    minSize: minSizeTree,
-    formWidth,
-    showTreeInSingleColumnView,
-    activeForm,
-    isPrint,
-  })
-
   // need the key on Allotment or it would only render correctly on second render
   return (
     <>
       <Suspense fallback={<FallBack />}>
         <Container>
           <Allotment key={`${treeWidth}/${formWidth}`}>
-            <Allotment.Pane preferredSize={treeWidth} minSize={minSizeTree}>
+            <Allotment.Pane
+              visible={treeWidth !== 0}
+              preferredSize={treeWidth}
+              minSize={minSizeTree}
+            >
               <Suspense fallback={<FallBack />}>
                 <Tree />
               </Suspense>
             </Allotment.Pane>
-            <Allotment.Pane preferredSize={formWidth} minSize={minSizeForm}>
+            <Allotment.Pane
+              visible={formWidth !== 0}
+              preferredSize={formWidth}
+              minSize={minSizeForm}
+            >
               <Suspense fallback={<FallBack />}>
                 {showFilter ? <Filter /> : <Data />}
               </Suspense>
