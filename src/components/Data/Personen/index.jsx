@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Personen = ({ filter: showFilter, width, height }) => {
+const Personen = ({ filter: showFilter = false, width, height }) => {
   const store = useContext(StoreContext)
   const { insertPersonRev, db, user, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
