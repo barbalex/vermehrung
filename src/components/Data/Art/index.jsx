@@ -62,7 +62,7 @@ const Art = ({
     setActiveConflict(null)
   }, [id])
 
-  const [showHistory, setShowHistory] = useState(null)
+  const [showHistory, setShowHistory] = useState(false)
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   if (!row) return <Spinner />
@@ -83,38 +83,7 @@ const Art = ({
           setShowHistory={setShowHistory}
         />
         <SplitPaneContainer>
-          {paneIsSplit ? (
-            <Allotment key={`${activeConflict}/${showHistory}`}>
-              <Form
-                showFilter={showFilter}
-                id={id}
-                row={row}
-                rawRow={rawRow}
-                activeConflict={activeConflict}
-                setActiveConflict={setActiveConflict}
-                showHistory={showHistory}
-              />
-              <>
-                {activeConflict ? (
-                  <Conflict
-                    rev={activeConflict}
-                    id={id}
-                    row={row}
-                    rawRow={rawRow}
-                    conflictDisposalCallback={conflictDisposalCallback}
-                    conflictSelectionCallback={conflictSelectionCallback}
-                    setActiveConflict={setActiveConflict}
-                  />
-                ) : showHistory ? (
-                  <History
-                    row={row}
-                    rawRow={rawRow}
-                    historyTakeoverCallback={historyTakeoverCallback}
-                  />
-                ) : null}
-              </>
-            </Allotment>
-          ) : (
+          <Allotment key={`${activeConflict}/${showHistory}`}>
             <Form
               showFilter={showFilter}
               id={id}
@@ -124,7 +93,26 @@ const Art = ({
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
             />
-          )}
+            <Allotment.Pane visible={paneIsSplit}>
+              {activeConflict ? (
+                <Conflict
+                  rev={activeConflict}
+                  id={id}
+                  row={row}
+                  rawRow={rawRow}
+                  conflictDisposalCallback={conflictDisposalCallback}
+                  conflictSelectionCallback={conflictSelectionCallback}
+                  setActiveConflict={setActiveConflict}
+                />
+              ) : showHistory ? (
+                <History
+                  row={row}
+                  rawRow={rawRow}
+                  historyTakeoverCallback={historyTakeoverCallback}
+                />
+              ) : null}
+            </Allotment.Pane>
+          </Allotment>
         </SplitPaneContainer>
       </Container>
     </ErrorBoundary>
