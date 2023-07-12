@@ -52,7 +52,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Lieferungen = ({ filter: showFilter, width, height }) => {
+const Lieferungen = ({ filter: showFilter = false, width, height }) => {
   const store = useContext(StoreContext)
   const {
     db,

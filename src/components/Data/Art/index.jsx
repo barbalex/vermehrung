@@ -25,7 +25,7 @@ const SplitPaneContainer = styled.div`
 `
 
 const Art = ({
-  filter: showFilter,
+  filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)

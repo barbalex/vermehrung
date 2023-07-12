@@ -37,7 +37,7 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const LieferungContainer = ({ filter: showFilter, id: idPassed }) => {
+const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
   const store = useContext(StoreContext)
   const { filter, db, user, initialDataQueried } = store
   const { activeNodeArray } = store.tree
