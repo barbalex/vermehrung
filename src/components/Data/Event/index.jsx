@@ -70,15 +70,6 @@ const Event = ({
 
   const paneIsSplit = online && (!!activeConflict || !!showHistory)
 
-  console.log('Event', {
-    row,
-    rawRow,
-    activeConflict,
-    showHistory,
-    paneIsSplit,
-    online,
-  })
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
