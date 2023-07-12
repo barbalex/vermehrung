@@ -1,7 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
-import SplitPane from 'react-split-pane'
 import { Allotment } from 'allotment'
 import isUuid from 'is-uuid'
 import last from 'lodash/last'
@@ -11,31 +9,6 @@ import { Q } from '@nozbe/watermelondb'
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
 import StoreContext from '../../../storeContext'
-
-const StyledSplitPane = styled(SplitPane)`
-  .Resizer {
-    background: rgba(74, 20, 140, 0.1);
-    opacity: 1;
-    z-index: 1;
-    box-sizing: border-box;
-    width: 7px;
-    cursor: col-resize;
-  }
-  .Resizer:hover {
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    background-color: #fff59d !important;
-  }
-  .Resizer.disabled {
-    cursor: not-allowed;
-  }
-  .Resizer.disabled:hover {
-    border-color: transparent;
-  }
-  .Pane {
-    overflow: hidden;
-  }
-`
 
 const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
   const store = useContext(StoreContext)
@@ -98,14 +71,14 @@ const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
     // this lieferung is part of a sammel_lieferung
     // show that too
     return (
-      <StyledSplitPane split="vertical" size="50%" maxSize={-10}>
+      <Allotment vertical>
         <Lieferung showFilter={showFilter} row={row} rawRow={rawRow} id={id} />
         <SammelLieferung
           showFilter={showFilter}
           id={row?.sammel_lieferung_id}
           lieferung={row}
         />
-      </StyledSplitPane>
+      </Allotment>
     )
   }
 
