@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import SplitPane from 'react-split-pane'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
@@ -23,30 +22,6 @@ const SplitPaneContainer = styled.div`
   height: 100%;
   position: relative;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const StyledSplitPane = styled(SplitPane)`
-  .Resizer {
-    background: rgba(74, 20, 140, 0.1);
-    opacity: 1;
-    z-index: 1;
-    box-sizing: border-box;
-    width: 7px;
-    cursor: col-resize;
-  }
-  .Resizer:hover {
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    background-color: #fff59d !important;
-  }
-  .Resizer.disabled {
-    cursor: not-allowed;
-  }
-  .Resizer.disabled:hover {
-    border-color: transparent;
-  }
-  .Pane {
-    overflow: hidden;
-  }
 `
 
 const Teilkultur = ({
@@ -103,10 +78,6 @@ const Teilkultur = ({
 
   const paneIsSplit = online && (activeConflict || showHistory)
 
-  const firstPaneWidth = paneIsSplit ? '50%' : '100%'
-  // hide resizer when tree is hidden
-  const resizerStyle = !paneIsSplit ? { width: 0 } : {}
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -118,12 +89,7 @@ const Teilkultur = ({
           setShowHistory={setShowHistory}
         />
         <SplitPaneContainer>
-          <StyledSplitPane
-            split="vertical"
-            size={firstPaneWidth}
-            maxSize={-10}
-            resizerStyle={resizerStyle}
-          >
+          <Allotment key={`${activeConflict}/${showHistory}`}>
             <Form
               showFilter={showFilter}
               id={id}
@@ -133,7 +99,7 @@ const Teilkultur = ({
               setActiveConflict={setActiveConflict}
               showHistory={showHistory}
             />
-            <>
+            <Allotment.Pane visible={paneIsSplit}>
               {activeConflict ? (
                 <Conflict
                   rev={activeConflict}
@@ -151,8 +117,8 @@ const Teilkultur = ({
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
               ) : null}
-            </>
-          </StyledSplitPane>
+            </Allotment.Pane>
+          </Allotment>
         </SplitPaneContainer>
       </Container>
     </ErrorBoundary>
