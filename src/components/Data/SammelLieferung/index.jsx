@@ -83,8 +83,6 @@ const SammelLieferung = ({
 
   const paneIsSplit = online && (activeConflict || showHistory)
 
-  console.log('SammelLieferung, row:', row)
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
