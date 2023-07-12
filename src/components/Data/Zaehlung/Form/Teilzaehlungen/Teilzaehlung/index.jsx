@@ -95,7 +95,7 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
     setActiveConflict(null)
   }, [id])
 
-  const [showHistory, setShowHistory] = useState(null)
+  const [showHistory, setShowHistory] = useState(false)
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   const paneIsSplit = online && (activeConflict || showHistory)
