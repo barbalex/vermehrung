@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
-import SplitPane from 'react-split-pane'
 import { Allotment } from 'allotment'
 
 import StoreContext from '../../../../../../storeContext'
@@ -28,30 +27,6 @@ const TopLine = styled.div`
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: 10px;
-`
-const StyledSplitPane = styled(SplitPane)`
-  .Resizer {
-    background: rgba(74, 20, 140, 0.1);
-    opacity: 1;
-    z-index: 1;
-    box-sizing: border-box;
-    width: 7px;
-    cursor: col-resize;
-  }
-  .Resizer:hover {
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    background-color: #fff59d !important;
-  }
-  .Resizer.disabled {
-    cursor: not-allowed;
-  }
-  .Resizer.disabled:hover {
-    border-color: transparent;
-  }
-  .Pane {
-    overflow: hidden;
-  }
 `
 
 const Teilzaehlung = ({ id, kulturId, index }) => {
@@ -100,22 +75,13 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
 
   const paneIsSplit = online && (activeConflict || showHistory)
 
-  const firstPaneWidth = paneIsSplit ? '50%' : '100%'
-  // hide resizer when tree is hidden
-  const resizerStyle = !paneIsSplit ? { width: 0 } : {}
-
   if (online && (activeConflict || showHistory)) {
     return (
       <ErrorBoundary>
         <Container>
           {!!index && <TopLine />}
           <SplitPaneContainer>
-            <StyledSplitPane
-              split="vertical"
-              size={firstPaneWidth}
-              maxSize={-10}
-              resizerStyle={resizerStyle}
-            >
+            <Allotment key={`${activeConflict}/${showHistory}`}>
               <Form
                 id={id}
                 kulturId={kulturId}
@@ -124,30 +90,26 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
                 showHistory={showHistory}
                 setShowHistory={setShowHistory}
               />
-              <>
-                {online && (
-                  <>
-                    {activeConflict ? (
-                      <Conflict
-                        rev={activeConflict}
-                        id={id}
-                        row={row}
-                        rawRow={rawRow}
-                        conflictDisposalCallback={conflictDisposalCallback}
-                        conflictSelectionCallback={conflictSelectionCallback}
-                        setActiveConflict={setActiveConflict}
-                      />
-                    ) : showHistory ? (
-                      <History
-                        row={row}
-                        rawRow={rawRow}
-                        historyTakeoverCallback={historyTakeoverCallback}
-                      />
-                    ) : null}
-                  </>
-                )}
-              </>
-            </StyledSplitPane>
+              <Allotment.Pane visible={paneIsSplit}>
+                {activeConflict ? (
+                  <Conflict
+                    rev={activeConflict}
+                    id={id}
+                    row={row}
+                    rawRow={rawRow}
+                    conflictDisposalCallback={conflictDisposalCallback}
+                    conflictSelectionCallback={conflictSelectionCallback}
+                    setActiveConflict={setActiveConflict}
+                  />
+                ) : showHistory ? (
+                  <History
+                    row={row}
+                    rawRow={rawRow}
+                    historyTakeoverCallback={historyTakeoverCallback}
+                  />
+                ) : null}
+              </Allotment.Pane>
+            </Allotment>
           </SplitPaneContainer>
         </Container>
       </ErrorBoundary>
