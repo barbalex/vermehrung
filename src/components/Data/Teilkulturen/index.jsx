@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Teilkulturen = ({ filter: showFilter, width, height }) => {
+const Teilkulturen = ({ filter: showFilter = false, width, height }) => {
   const store = useContext(StoreContext)
   const { insertTeilkulturRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
