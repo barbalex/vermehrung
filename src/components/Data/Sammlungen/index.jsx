@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Sammlungen = ({ filter: showFilter, width, height }) => {
+const Sammlungen = ({ filter: showFilter = false, width, height }) => {
   const store = useContext(StoreContext)
   const {
     insertSammlungRev,
