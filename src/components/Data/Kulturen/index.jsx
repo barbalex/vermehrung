@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Kulturen = ({ filter: showFilter, width, height }) => {
+const Kulturen = ({ filter: showFilter = false, width, height }) => {
   const store = useContext(StoreContext)
   const {
     artIdInActiveNodeArray,
