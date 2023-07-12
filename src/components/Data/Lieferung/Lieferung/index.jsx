@@ -67,7 +67,7 @@ const Lieferung = ({ id, showFilter, row, rawRow }) => {
     setActiveConflict(null)
   }, [id])
 
-  const [showHistory, setShowHistory] = useState(null)
+  const [showHistory, setShowHistory] = useState(false)
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   if (!row) return <Spinner />

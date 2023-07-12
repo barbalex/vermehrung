@@ -100,7 +100,7 @@ const SammelLieferung = ({
   // because during printing page Vermehrung re-renders without tree
   const [printPreview, setPrintPreview] = useState(isPrint && !printPreview)
 
-  const [showHistory, setShowHistory] = useState(null)
+  const [showHistory, setShowHistory] = useState(false)
   const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   if (!row) return <Spinner />
