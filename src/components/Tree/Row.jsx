@@ -7,7 +7,7 @@ import {
   MdMoreHoriz as MoreHorizIcon,
 } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
-import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
+// import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
 import { of as $of } from 'rxjs'
 
@@ -25,6 +25,11 @@ import deleteDataset from './delete'
 import signup from '../../utils/signup'
 import deleteAccount from '../../utils/deleteAccount'
 import setPassword from '../../utils/setPassword'
+import {
+  ContextMenuTrigger,
+  ContextMenu,
+  MenuItem,
+} from '../../utils/react-contextmenu'
 
 const Container = styled.div`
   .react-contextmenu {
