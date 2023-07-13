@@ -65,13 +65,13 @@ const App = () => {
   const [store, setStore] = useState(null)
   const [database, setDatabase] = useState(null)
 
-  console.log('App rendering')
+  // console.log('App rendering')
 
   // TODO: move this to the Vermehrung route as in vermehrung_vite
   useEffect(() => {
     let isActive = true
     let unregister
-    console.log('App initiating')
+    // console.log('App initiating')
     initiateApp({ navigate }).then(
       ({ store: storeReturned, unregister: unregisterReturned }) => {
         if (!isActive) return
