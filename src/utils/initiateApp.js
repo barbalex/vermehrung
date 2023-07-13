@@ -51,7 +51,7 @@ const initiateApp = async ({ navigate }) => {
           window.location.reload(true)
         },
         connected: () => {
-          console.log('ws client connected')
+          // console.log('ws client connected')
           store.setShortTermOnline(true)
         },
       },
