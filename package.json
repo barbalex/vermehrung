@@ -43,7 +43,6 @@
     "observable-hooks": "4.2.2",
     "proj4": "2.9.0",
     "react": "18.2.0",
-    "react-contextmenu": "2.14.0",
     "react-copy-to-clipboard": "5.1.0",
     "react-datepicker": "4.16.0",
     "react-dom": "18.2.0",
@@ -97,6 +96,6 @@
   },
   "dev-comments": {
     "none": "right now",
-    "react-contextmenu": "2.14.0: has upstream dependency conflicts but is archived"
+    "react-contextmenu": "2.14.0: has upstream dependency conflicts but is archived. Copied es6 code from dist folder into utils"
   }
 }
