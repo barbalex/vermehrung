@@ -13,19 +13,29 @@ const InitialDataLoadingNotifier = () => {
     user,
     online,
     addNotification,
+    removeNotificationById,
   } = store
 
   const existsUser = !!user?.uid
 
   useEffect(() => {
+    let id
     if (existsUser && !gettingAuthUser && online && !initialDataQueried) {
-      addNotification({
+      id = addNotification({
         message: `lade Daten für offline-Nutzung (${tableNames(
           initiallyQuerying,
         )})`,
         type: 'info',
         duration: 2000,
       })
+    }
+
+    return () => {
+      if (id) {
+        // TODO: remove log
+        console.log('removing notification on unmount:', id)
+        removeNotificationById(id)
+      }
     }
   }, [
     addNotification,
@@ -34,6 +44,7 @@ const InitialDataLoadingNotifier = () => {
     initialDataQueried,
     initiallyQuerying,
     online,
+    removeNotificationById,
   ])
 
   return null

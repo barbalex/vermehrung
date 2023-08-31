@@ -14,7 +14,7 @@ const AuthorizingObserver = () => {
       authorizingNotificationId.current = addNotification({
         message: `autorisiere`,
         type: 'info',
-        duration: 200000,
+        duration: 100000,
       })
       return
     }
