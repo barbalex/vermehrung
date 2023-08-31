@@ -96,6 +96,7 @@
   },
   "dev-comments": {
     "none": "right now",
-    "react-contextmenu": "2.14.0: has upstream dependency conflicts but is archived. Copied es6 code from dist folder into utils"
+    "react-contextmenu": "2.14.0: has upstream dependency conflicts but is archived. Copied es6 code from dist folder into utils",
+    "@nozbe/watermelondb": "0.26.0: do not upgrade to 0.27.0: breaks app. No changes described"
   }
 }
