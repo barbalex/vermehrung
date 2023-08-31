@@ -57,7 +57,7 @@
     "react-stylable-diff": "2.0.0",
     "react-virtualized-auto-sizer": "1.0.20",
     "react-window": "1.8.9",
-    "recharts": "2.7.3",
+    "recharts": "2.8.0",
     "redaxios": "0.5.1",
     "rxjs": "7.8.1",
     "slick-carousel": "1.8.1",
@@ -67,12 +67,12 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.22.10",
+    "@babel/eslint-parser": "7.22.11",
     "@babel/plugin-proposal-class-properties": "7.18.6",
     "@babel/plugin-proposal-decorators": "7.22.10",
     "@babel/preset-react": "7.22.5",
     "@emotion/babel-plugin": "11.11.0",
-    "@types/react": "18.2.20",
+    "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "@typescript-eslint/eslint-plugin": "6.4.1",
     "@typescript-eslint/parser": "6.4.1",
