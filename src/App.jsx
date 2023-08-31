@@ -1,5 +1,4 @@
 import { useEffect, useState, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
 import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 import { useNavigate } from 'react-router-dom'
 
@@ -178,4 +177,4 @@ const App = () => {
   )
 }
 
-export default observer(App)
+export default App
