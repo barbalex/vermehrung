@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@hapi/hapi": "21.3.2",
-    "firebase-admin": "11.8.0",
-    "postgres": "3.3.4"
+    "firebase-admin": "11.10.1",
+    "postgres": "3.3.5"
   }
 }
