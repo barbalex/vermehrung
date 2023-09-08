@@ -1,7 +1,8 @@
 # see: https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/
-FROM node:lts-alpine as build
-
+FROM node:lts-alpine
 RUN apk add dumb-init
+
+ENV NODE_ENV production
 
 # Create app directory
 WORKDIR /usr/src/auth_app
@@ -14,17 +15,11 @@ RUN npm ci --only=production
 # If you are building your code for production
 # RUN npm ci --only=production
 
-FROM node:lts-alpine as production
-
-# Do not use root to run the app to avoid privilege escalation, container escape, etc.
-USER node
-
-WORKDIR /app
-
-COPY --from=build --chown=node:node . /app
+# Bundle app source
+COPY . .
 
 EXPOSE 7000
 
-ENV NODE_ENV production
+USER node
 
 CMD ["dumb-init", "node", "server.js" ]
