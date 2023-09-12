@@ -1,5 +1,5 @@
 # see: https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/
-FROM node:lts-alpine
+FROM node:slim
 RUN apk add dumb-init
 
 ENV NODE_ENV production
