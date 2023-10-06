@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
 import StoreContext from '../../../../storeContext'
-import { ReactComponent as UpSvg } from '../../../../svg/to_up.inline.svg'
-import { ReactComponent as LiDownSvg } from '../../../../svg/to_li_down.inline.svg'
+import UpSvg from '../../../../svg/to_up.svg?react'
+import LiDownSvg from '../../../../svg/to_li_down.svg?react'
 
 const SlNavButtons = () => {
   const store = useContext(StoreContext)

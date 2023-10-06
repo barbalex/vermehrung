@@ -4,12 +4,12 @@ import IconButton from '@mui/material/IconButton'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../storeContext'
-import { ReactComponent as ZaDownSvg } from '../../../../svg/to_za_down.inline.svg'
-import { ReactComponent as AnLiDownSvg } from '../../../../svg/to_anli_down.inline.svg'
-import { ReactComponent as AusLiDownSvg } from '../../../../svg/to_ausli_down.inline.svg'
-import { ReactComponent as EvDownSvg } from '../../../../svg/to_ev_down.inline.svg'
-import { ReactComponent as TkDownSvg } from '../../../../svg/to_tk_down.inline.svg'
-import { ReactComponent as UpSvg } from '../../../../svg/to_up.inline.svg'
+import ZaDownSvg from '../../../../svg/to_za_down.svg?react'
+import AnLiDownSvg from '../../../../svg/to_anli_down.svg?react'
+import AusLiDownSvg from '../../../../svg/to_ausli_down.svg?react'
+import EvDownSvg from '../../../../svg/to_ev_down.svg?react'
+import TkDownSvg from '../../../../svg/to_tk_down.svg?react'
+import UpSvg from '../../../../svg/to_up.svg?react'
 
 const KulturNavButtons = ({ row }) => {
   const store = useContext(StoreContext)

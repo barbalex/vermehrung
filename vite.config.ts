@@ -26,7 +26,7 @@ export default defineConfig({
       },
       registerType: 'autoUpdate',
       includeAssets: [
-        'favicon.svg',
+        'favicon.svg?react',
         'favicon.ico',
         'robots.txt',
         'favicon_192.png',
@@ -43,7 +43,7 @@ export default defineConfig({
         display: 'minimal-ui',
         icons: [
           {
-            src: '/favicon.svg',
+            src: '/favicon.svg?react',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'maskable any',

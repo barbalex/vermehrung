@@ -3,10 +3,10 @@ import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
 import StoreContext from '../../../../storeContext'
-import { ReactComponent as UpSvg } from '../../../../svg/to_up.inline.svg'
-import { ReactComponent as SaDownSvg } from '../../../../svg/to_sa_down.inline.svg'
-import { ReactComponent as KuDownSvg } from '../../../../svg/to_ku_down.inline.svg'
-import { ReactComponent as HeDownSvg } from '../../../../svg/to_he_down.inline.svg'
+import UpSvg from '../../../../svg/to_up.svg?react'
+import SaDownSvg from '../../../../svg/to_sa_down.svg?react'
+import KuDownSvg from '../../../../svg/to_ku_down.svg?react'
+import HeDownSvg from '../../../../svg/to_he_down.svg?react'
 
 const ArtNavButtons = () => {
   const store = useContext(StoreContext)
