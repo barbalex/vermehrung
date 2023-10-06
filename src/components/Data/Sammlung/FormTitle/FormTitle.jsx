@@ -11,9 +11,9 @@ import Anleitung from './Anleitung'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import HistoryButton from '../../../shared/HistoryButton'
 import Menu from '../../../shared/Menu'
-import { ReactComponent as UpSvg } from '../../../../svg/to_up.inline.svg'
-import { ReactComponent as LiDownSvg } from '../../../../svg/to_ausli_down.inline.svg'
-import { ReactComponent as HeDownSvg } from '../../../../svg/to_he_down.inline.svg'
+import UpSvg from '../../../../svg/to_up.svg?react'
+import LiDownSvg from '../../../../svg/to_ausli_down.svg?react'
+import HeDownSvg from '../../../../svg/to_he_down.svg?react'
 import constants from '../../../../utils/constants'
 
 const TitleContainer = styled.div`

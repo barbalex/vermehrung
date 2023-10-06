@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 
-import { ReactComponent as UpSvg } from '../../../svg/to_up.inline.svg'
+import UpSvg from '../../../svg/to_up.svg?react'
 import constants from '../../../utils/constants'
 
 const TitleContainer = styled.div`

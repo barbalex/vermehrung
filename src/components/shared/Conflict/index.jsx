@@ -2,7 +2,6 @@ import React, { useContext, useCallback } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
-import { ReactComponent as DoubleArrowCrossed } from '../../../svg/double_arrow_crossed.inline.svg'
 import {
   FaTimes,
   FaExchangeAlt,
@@ -10,6 +9,7 @@ import {
   FaArrowsAltH,
 } from 'react-icons/fa'
 
+import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.svg?react'
 import Explainer from './Explainer'
 import Data from './Data'
 import StoreContext from '../../../storeContext'
