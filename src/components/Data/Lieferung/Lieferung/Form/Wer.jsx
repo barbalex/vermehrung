@@ -112,6 +112,7 @@ const LieferungWer = ({
         // Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect,
         // but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render
         // only happens on (re-)load
+        // and only in dev mode!!
       },
     )
 
