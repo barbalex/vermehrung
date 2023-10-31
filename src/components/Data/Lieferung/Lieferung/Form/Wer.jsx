@@ -111,6 +111,7 @@ const LieferungWer = ({
         // reloading on http://localhost:5175/Vermehrung/Lieferungen/afd3e250-2e9f-11ed-af3a-51bb05f7b810 causes:
         // Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect,
         // but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render
+        // only happens on (re-)load
       },
     )
 
