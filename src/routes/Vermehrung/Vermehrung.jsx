@@ -9,7 +9,7 @@ import Data from '../../components/Data'
 import Filter from '../../components/Filter'
 import ApiDetector from '../../components/ApiDetector'
 import constants from '../../utils/constants'
-import FallBack from '../../components/shared/FallBack'
+import FallBack from '../../components/shared/Fallback'
 
 const Container = styled.div`
   min-height: calc(100vh - ${constants.appBarHeight}px);
