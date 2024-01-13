@@ -96,6 +96,7 @@
   },
   "dev-comments": {
     "none": "right now",
+    "react-resize-detector": "9.1.0: to update to v10 need to change all 27 withResizeDetector to useResizeObserver",
     "react-contextmenu": "2.14.0: has upstream dependency conflicts but is archived. Copied es6 code from dist folder into utils",
     "@nozbe/watermelondb": "0.26.0: do not upgrade to 0.27.1: breaks app. No changes described. No issue on github."
   }
