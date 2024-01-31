@@ -32,7 +32,9 @@ const StyledDatePicker = styled(DatePicker)`
   color: #495057;
   background-color: #fff;
   background-clip: padding-box;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   border-top: none;
   border-left: none;
@@ -74,7 +76,7 @@ const DateField = ({
   label,
   saveToDb,
   error,
-  popperPlacement = 'auto',
+  popperPlacement = 'bottom',
 }) => {
   const [stateValue, setStateValue] = useState(valuePassed)
   useEffect(() => {
