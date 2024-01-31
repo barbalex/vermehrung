@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
-import groupBy from 'lodash/groupBy'
 
 import StoreContext from '../../../../storeContext'
 import TaxonSelect from './TaxonSelect'
