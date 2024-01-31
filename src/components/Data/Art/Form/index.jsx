@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
+import groupBy from 'lodash/groupBy'
 
 import StoreContext from '../../../../storeContext'
 import TaxonSelect from './TaxonSelect'
@@ -58,12 +59,12 @@ const ArtForm = ({
       filter.art?._deleted === false
         ? Q.where('_deleted', false)
         : filter.art?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const artsObservable = db.get('art').query(delQuery).observe()
     const combinedObservables = combineLatest([aeArtObservable, artsObservable])
     const subscription = combinedObservables.subscribe(
@@ -104,10 +105,11 @@ const ArtForm = ({
     [filter, row, showFilter, store],
   )
 
-  const sets = artsSorted
+  const setsUngrouped = artsSorted
     .map((a) => a.set)
     .filter((s) => !!s)
     .sort()
+  const sets = [...new Set(setsUngrouped)]
   const setValues = sets.map((s) => ({ value: s, label: s }))
   const onCreateSet = useCallback(
     ({ name }) => {
