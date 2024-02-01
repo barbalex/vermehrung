@@ -160,11 +160,11 @@ const Search = () => {
       }),
       menuList: (provided) => ({
         ...provided,
-        maxHeight: 'calc(100vh - 60px)',
+        maxHeight: 'calc(100dvh - 60px)',
       }),
       menu: (provided) => ({
         ...provided,
-        maxHeight: 'calc(100vh - 60px)',
+        maxHeight: 'calc(100dvh - 60px)',
         width: 'auto',
         maxWidth,
         marginTop: 0,

@@ -22,7 +22,7 @@ const NoOpsContainer = styled.div`
 `
 const Container = styled.div``
 const OuterContainer = styled.div`
-  height: calc(100vh - ${constants.appBarHeight}px - 15px - 23px - 23px);
+  height: calc(100dvh - ${constants.appBarHeight}px - 15px - 23px - 23px);
   overflow-x: hidden;
   overflow-y: auto;
 `

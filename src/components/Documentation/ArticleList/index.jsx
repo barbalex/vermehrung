@@ -10,7 +10,7 @@ import storeContext from '../../../storeContext'
 import IntoViewScroller from './IntoViewScroller'
 
 const Container = styled.div`
-  height: calc(100vh - ${constants.appBarHeight}px);
+  height: calc(100dvh - ${constants.appBarHeight}px);
   overflow-y: auto;
 `
 

@@ -16,7 +16,7 @@ const OuterContainer = styled.div`
   overflow: hidden;
 `
 const ScrollContainer = styled.div`
-  height: calc(100vh - ${constants.appBarHeight}px);
+  height: calc(100dvh - ${constants.appBarHeight}px);
   width: 100%;
   position: absolute;
   top: 0;
@@ -28,7 +28,10 @@ const TextContainer = styled.div`
   display: flex;
   justify-content: center;
   font-weight: 700 !important;
-  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
     -2px 2px 3px white;
 `
 const PageTitle = styled(Typography)`
@@ -42,7 +45,10 @@ const Text = styled(Typography)`
   font-weight: 700 !important;
 `
 const StyledButton = styled(Button)`
-  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
     -2px 2px 3px white;
   border-color: white !important;
   margin-top: 10px !important;

@@ -16,7 +16,7 @@ const OuterContainer = styled.div`
   overflow: hidden;
 `
 const ScrollContainer = styled.div`
-  height: calc(100vh - ${constants.appBarHeight}px);
+  height: calc(100dvh - ${constants.appBarHeight}px);
   width: 100%;
   position: absolute;
   top: 0;
@@ -84,7 +84,10 @@ const PageTitle = styled(Typography)`
   font-size: 2em !important;
   padding-bottom: 15px;
   font-weight: 700 !important;
-  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
     -2px 2px 3px white;
   @media (min-width: 700px) {
     padding-bottom: 20px;
