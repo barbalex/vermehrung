@@ -16,7 +16,7 @@ import SubscriptionsInitializer from './SubscriptionsInitializer'
 import InitialDataLoadingNotifier from './InitialDataLoadingNotifier'
 
 const Container = styled.div`
-  min-height: calc(100vh - ${constants.appBarHeight}px);
+  min-height: calc(100dvh - ${constants.appBarHeight}px);
   position: relative;
 `
 const LoginContainer = styled.div`

@@ -25,7 +25,7 @@ const Container = styled.div`
   font-size: 9pt;
   cursor: default;
   height: calc(
-    100vh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
+    100dvh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
   );
   width: 100%;
   @media print {

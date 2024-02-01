@@ -12,7 +12,7 @@ import constants from '../../utils/constants'
 import FallBack from '../../components/shared/Fallback'
 
 const Container = styled.div`
-  min-height: calc(100vh - ${constants.appBarHeight}px);
+  min-height: calc(100dvh - ${constants.appBarHeight}px);
   position: relative;
 `
 

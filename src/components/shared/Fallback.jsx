@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import constants from '../../utils/constants'
 
 const SpinnerContainer = styled.div`
-  min-height: calc(100vh - ${constants.appBarHeight}px);
+  min-height: calc(100dvh - ${constants.appBarHeight}px);
   display: flex;
   flex-direction: column;
   justify-content: center;

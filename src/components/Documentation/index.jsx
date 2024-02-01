@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react'
+import React, { useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { withResizeDetector } from 'react-resize-detector'
 import { Allotment } from 'allotment'
@@ -12,10 +12,10 @@ import StoreContext from '../../storeContext'
 import FormTitle from './FormTitle'
 
 const Container = styled.div`
-  height: calc(100vh - ${constants.appBarHeight}px);
+  height: calc(100dvh - ${constants.appBarHeight}px);
 `
 const SplitPaneContainer = styled.div`
-  height: calc(100vh - ${constants.appBarHeight}px);
+  height: calc(100dvh - ${constants.appBarHeight}px);
   position: relative;
 `
 

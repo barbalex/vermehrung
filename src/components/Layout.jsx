@@ -9,7 +9,7 @@ import Fallback from './shared/Fallback'
 import Header from './Header'
 
 const Container = styled.div`
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
 `
