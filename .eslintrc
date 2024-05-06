@@ -3,8 +3,8 @@
     "ecmaVersion": "latest",
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true
-    }
+      "jsx": true,
+    },
   },
   "parser": "@typescript-eslint/parser",
   "root": true,
@@ -18,17 +18,27 @@
     "prefer-const": "warn",
     "no-unused-vars": "off",
     "no-empty": ["error", { "allowEmptyCatch": true }],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "import/extensions": [
+      "warn",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never",
+      },
+    ],
   },
   "env": {
     "browser": true,
-    "es2021": true
+    "es2021": true,
   },
-  "plugins": ["@typescript-eslint", "react", "react-hooks"],
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "import"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
   ],
-  "settings": { "react": { "version": "detect" } }
+  "settings": { "react": { "version": "detect" } },
 }
