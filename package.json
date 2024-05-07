@@ -38,7 +38,7 @@
     "luxon": "3.4.4",
     "mobx": "6.12.3",
     "mobx-react-lite": "4.0.7",
-    "mobx-state-tree": "5.4.1",
+    "mobx-state-tree": "6.0.0",
     "mst-persist": "0.1.4",
     "observable-hooks": "4.2.3",
     "proj4": "2.11.0",
