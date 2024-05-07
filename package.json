@@ -3,6 +3,7 @@
   "description": "breeding endangered plant species",
   "version": "1.14.29",
   "license": "ISC",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build_ts": "tsc && vite build",
