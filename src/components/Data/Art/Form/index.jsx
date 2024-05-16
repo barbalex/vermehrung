@@ -5,7 +5,7 @@ import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext.js'
-import TaxonSelect from './TaxonSelect'
+import TaxonSelect from './TaxonSelect.jsx'
 import SelectCreatable from '../../../shared/SelectCreatable'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import JesNo from '../../../shared/JesNo'
