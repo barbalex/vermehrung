@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 
 import StoreContext from '../../../../../storeContext.js'
-import signup from '../../../../../utils/signup'
+import signup from '../../../../../utils/signup.js'
 import Menu from './Menu.jsx'
 
 const StyledButton = styled(Button)`

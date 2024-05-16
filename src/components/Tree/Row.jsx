@@ -22,7 +22,7 @@ import toggleNode from './toggleNode'
 import toggleNodeSymbol from './toggleNodeSymbol'
 import createNew from './createNew'
 import deleteDataset from './delete'
-import signup from '../../utils/signup'
+import signup from '../../utils/signup.js'
 import deleteAccount from '../../utils/deleteAccount'
 import setPassword from '../../utils/setPassword'
 import {
