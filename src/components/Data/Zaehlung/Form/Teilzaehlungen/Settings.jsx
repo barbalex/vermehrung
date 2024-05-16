@@ -12,7 +12,7 @@ import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext'
 import constants from '../../../../../utils/constants'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
   display: flex;

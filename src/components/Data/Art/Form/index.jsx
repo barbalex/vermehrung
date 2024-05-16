@@ -15,7 +15,7 @@ import Timeline from './Timeline'
 import HerkunftTimeline from './HerkunftTimeline'
 import QK from './QK'
 import Personen from './Personen'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 

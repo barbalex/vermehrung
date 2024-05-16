@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 
-import ErrorBoundary from '../components/shared/ErrorBoundary'
+import ErrorBoundary from '../components/shared/ErrorBoundary.jsx'
 import constants from '../utils/constants'
 import image from '../images/puls_vulg_2500.webp'
 import placeholderSrc from '../images/puls_vulg_500.webp' // TODO: build small placeholder

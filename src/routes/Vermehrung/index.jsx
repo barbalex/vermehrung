@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext'
 import Login from '../../components/Login'
-import ErrorBoundary from '../../components/shared/ErrorBoundary'
+import ErrorBoundary from '../../components/shared/ErrorBoundary.jsx'
 import ApiDetector from '../../components/ApiDetector'
 import QueuedQueries from '../../components/QueuedQueries'
 import constants from '../../utils/constants'

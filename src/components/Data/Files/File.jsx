@@ -10,7 +10,7 @@ import StoreContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
 import isImageFile from './isImageFile'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   display: flex;

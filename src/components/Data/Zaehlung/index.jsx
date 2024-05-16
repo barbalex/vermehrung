@@ -5,7 +5,7 @@ import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../storeContext'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner'
 import Conflict from './Conflict'
 import FormTitle from './FormTitle'

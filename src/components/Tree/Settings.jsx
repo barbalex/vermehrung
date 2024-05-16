@@ -13,7 +13,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../storeContext'
 import constants from '../../utils/constants'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   position: absolute;

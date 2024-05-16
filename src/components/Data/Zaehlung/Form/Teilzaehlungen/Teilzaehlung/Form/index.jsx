@@ -24,7 +24,7 @@ import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
 import teilkulturSort from '../../../../../../../utils/teilkulturSort'
 import teilkulturLabelFromTeilkultur from '../../../../../../../utils/teilkulturLabelFromTeilkultur'
 import PrognoseMenu from './PrognoseMenu'
-import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../../../shared/ErrorBoundary.jsx'
 import exists from '../../../../../../../utils/exists'
 
 const FieldContainer = styled.div`

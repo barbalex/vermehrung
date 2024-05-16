@@ -21,7 +21,7 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth'
 
-import ErrorBoundary from './shared/ErrorBoundary'
+import ErrorBoundary from './shared/ErrorBoundary.jsx'
 import StoreContext from '../storeContext'
 import constants from '../utils/constants'
 

@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import Row from './Row'
-import ErrorBoundary from '../../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   display: flex;
