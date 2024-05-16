@@ -8,7 +8,7 @@ import StoreContext from '../../../storeContext.js'
 import FormTitle from './FormTitle'
 import Form from './Form'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
-import Spinner from '../../shared/Spinner'
+import Spinner from '../../shared/Spinner.jsx'
 import Conflict from './Conflict'
 import History from './History'
 

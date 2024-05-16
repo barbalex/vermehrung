@@ -6,7 +6,7 @@ import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
-import Spinner from '../../shared/Spinner'
+import Spinner from '../../shared/Spinner.jsx'
 import Conflict from './Conflict'
 import Form from './Form'
 import FormTitle from './FormTitle'

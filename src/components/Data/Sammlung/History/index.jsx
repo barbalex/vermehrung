@@ -6,7 +6,7 @@ import Slider from 'react-slick'
 import { useQuery } from 'urql'
 
 import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
-import Spinner from '../../../shared/Spinner'
+import Spinner from '../../../shared/Spinner.jsx'
 import StoreContext from '../../../../storeContext.js'
 import Row from './Row'
 
