@@ -7,7 +7,7 @@ import isEqual from 'lodash/isEqual'
 import History from '../../../../shared/History/index.jsx'
 import StoreContext from '../../../../../storeContext.js'
 import checkForOnlineError from '../../../../../utils/checkForOnlineError.js'
-import toPgArray from '../../../../../utils/toPgArray'
+import toPgArray from '../../../../../utils/toPgArray.js'
 import mutations from '../../../../../utils/mutations'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
