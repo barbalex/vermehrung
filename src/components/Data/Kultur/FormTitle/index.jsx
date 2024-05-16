@@ -5,7 +5,7 @@ import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../storeContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle.jsx'
 import tableFilter from '../../../../utils/tableFilter.js'
 
 const KulturFormTitleChooser = ({
@@ -31,32 +31,32 @@ const KulturFormTitleChooser = ({
           Q.on('garten', 'id', gartenIdInActiveNodeArray),
         ]
       : artIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['art']),
-          Q.on('art', 'id', artIdInActiveNodeArray),
-        ]
-      : []
+        ? [
+            Q.experimentalJoinTables(['art']),
+            Q.on('art', 'id', artIdInActiveNodeArray),
+          ]
+        : []
     const collection = db.get('kultur')
     const kulturDelQuery =
       filter.kultur._deleted === false
         ? Q.where('_deleted', false)
         : filter.kultur._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const kulturAktivQuery =
       filter.kultur.aktiv === false
         ? Q.where('aktiv', false)
         : filter.kultur.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const totalCountObservable = collection
       .query(kulturDelQuery, kulturAktivQuery, ...hierarchyQuery)
       .observeCount()
