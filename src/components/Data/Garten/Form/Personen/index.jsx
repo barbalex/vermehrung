@@ -8,10 +8,10 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext.js'
-import Person from './Person'
+import Person from './Person.jsx'
 import Select from '../../../../shared/Select/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import gvsSortByPerson from '../../../../../utils/gvsSortByPerson'
+import gvsSortByPerson from '../../../../../utils/gvsSortByPerson.js'
 import personSort from '../../../../../utils/personSort.js'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
 import constants from '../../../../../utils/constants.js'
@@ -84,22 +84,22 @@ const GartenPersonen = ({ garten }) => {
       filter.person._deleted === false
         ? Q.where('_deleted', false)
         : filter.person._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const aktivQuery =
       filter.person.aktiv === false
         ? Q.where('aktiv', false)
         : filter.person.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const personsObservable = db
       .get('person')
       .query(delQuery, aktivQuery)
