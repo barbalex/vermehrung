@@ -7,7 +7,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 
 import ArticleList from './ArticleList'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-import constants from '../../utils/constants'
+import constants from '../../utils/constants.js'
 import StoreContext from '../../storeContext.js'
 import FormTitle from './FormTitle'
 

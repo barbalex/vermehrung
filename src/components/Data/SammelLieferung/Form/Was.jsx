@@ -11,7 +11,7 @@ import uniqBy from 'lodash/uniqBy'
 import StoreContext from '../../../../storeContext.js'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
-import constants from '../../../../utils/constants'
+import constants from '../../../../utils/constants.js'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 
 const Title = styled.div`

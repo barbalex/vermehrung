@@ -14,7 +14,7 @@ import Qk from './Qk'
 import Choose from './Choose'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import StoreContext from '../../../../../storeContext.js'
-import constants from '../../../../../utils/constants'
+import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);

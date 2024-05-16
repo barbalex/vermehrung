@@ -14,7 +14,7 @@ import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import gvsSortByPerson from '../../../../../utils/gvsSortByPerson'
 import personSort from '../../../../../utils/personSort'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
-import constants from '../../../../../utils/constants'
+import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);

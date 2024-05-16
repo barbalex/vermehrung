@@ -23,7 +23,7 @@ import {
 
 import ErrorBoundary from './shared/ErrorBoundary.jsx'
 import StoreContext from '../storeContext.js'
-import constants from '../utils/constants'
+import constants from '../utils/constants.js'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`

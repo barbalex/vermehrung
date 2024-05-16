@@ -13,7 +13,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import StoreContext from '../../../../../storeContext.js'
 import Qk from './Qk'
 import Choose from './Choose'
-import constants from '../../../../../utils/constants'
+import constants from '../../../../../utils/constants.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.section`

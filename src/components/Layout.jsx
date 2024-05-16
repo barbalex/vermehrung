@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Outlet } from 'react-router-dom'
 
 import StoreContext from '../storeContext.js'
-import constants from '../utils/constants'
+import constants from '../utils/constants.js'
 import Fallback from './shared/Fallback'
 
 import Header from './Header'

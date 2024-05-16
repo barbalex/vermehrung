@@ -22,7 +22,7 @@ import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
 import teilkulturSort from '../../../../utils/teilkulturSort'
 import personSort from '../../../../utils/personSort'
-import constants from '../../../../utils/constants'
+import constants from '../../../../utils/constants.js'
 
 const FieldsContainer = styled.div`
   padding: 10px;

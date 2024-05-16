@@ -16,7 +16,7 @@ import StoreContext from '../../../storeContext.js'
 import UpSvg from '../../../svg/to_up.svg?react'
 import tableFilter from '../../../utils/tableFilter'
 import personSort from '../../../utils/personSort'
-import constants from '../../../utils/constants'
+import constants from '../../../utils/constants.js'
 
 const Container = styled.div`
   height: 100%;

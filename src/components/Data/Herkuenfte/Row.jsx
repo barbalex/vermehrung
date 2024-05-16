@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 
 import StoreContext from '../../../storeContext.js'
 import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft.js'
-import constants from '../../../utils/constants'
+import constants from '../../../utils/constants.js'
 
 const Row = styled.div`
   display: flex;

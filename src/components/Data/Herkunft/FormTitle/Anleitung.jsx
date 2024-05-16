@@ -4,7 +4,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
-import constants from '../../../../utils/constants'
+import constants from '../../../../utils/constants.js'
 
 const KulturAnleitung = ({ asMenu }) => {
   const openHerkunftDocs = useCallback(() => {

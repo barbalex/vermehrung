@@ -12,7 +12,7 @@ import StoreContext from '../../../../../../../storeContext.js'
 import TextField from '../../../../../../shared/TextField'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
 import exists from '../../../../../../../utils/exists'
-import constants from '../../../../../../../utils/constants'
+import constants from '../../../../../../../utils/constants.js'
 import zaehlungSort from '../../../../../../../utils/zaehlungSort'
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary.jsx'
 

@@ -7,7 +7,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 
 import createMessageFunctions from './createMessageFunctions'
-import constants from '../../../../../../utils/constants'
+import constants from '../../../../../../utils/constants.js'
 import StoreContext from '../../../../../../storeContext.js'
 
 const Container = styled.div`

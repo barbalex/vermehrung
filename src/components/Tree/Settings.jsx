@@ -12,7 +12,7 @@ import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../storeContext.js'
-import constants from '../../utils/constants'
+import constants from '../../utils/constants.js'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
