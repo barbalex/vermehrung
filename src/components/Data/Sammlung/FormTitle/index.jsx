@@ -5,7 +5,7 @@ import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../storeContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle.jsx'
 import tableFilter from '../../../../utils/tableFilter.js'
 
 const SammlungFormTitleChooser = ({
@@ -35,27 +35,27 @@ const SammlungFormTitleChooser = ({
           Q.on('art', 'id', artIdInActiveNodeArray),
         ]
       : herkunftIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['herkunft']),
-          Q.on('herkunft', 'id', herkunftIdInActiveNodeArray),
-        ]
-      : personIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['person']),
-          Q.on('person', 'id', personIdInActiveNodeArray),
-        ]
-      : []
+        ? [
+            Q.experimentalJoinTables(['herkunft']),
+            Q.on('herkunft', 'id', herkunftIdInActiveNodeArray),
+          ]
+        : personIdInActiveNodeArray
+          ? [
+              Q.experimentalJoinTables(['person']),
+              Q.on('person', 'id', personIdInActiveNodeArray),
+            ]
+          : []
     const collection = db.get('sammlung')
     const sammlungDelQuery =
       filter.sammlung._deleted === false
         ? Q.where('_deleted', false)
         : filter.sammlung._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const totalCountObservable = collection
       .query(sammlungDelQuery, ...hierarchyQuery)
       .observeCount()

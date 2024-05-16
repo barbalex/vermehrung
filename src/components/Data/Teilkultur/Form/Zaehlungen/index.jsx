@@ -3,9 +3,9 @@ import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../../storeContext.js'
-import teilzaehlungsSortByZaehlungTk from '../../../../../utils/teilzaehlungsSortByZaehlungTk'
+import teilzaehlungsSortByZaehlungTk from '../../../../../utils/teilzaehlungsSortByZaehlungTk.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import Teilzaehlungen from './Teilzaehlungen'
+import Teilzaehlungen from './Teilzaehlungen.jsx'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
@@ -45,9 +45,8 @@ const TkZaehlungen = ({ teilkultur }) => {
       .observeWithColumns(['datum', 'beschreibung', 'geplant'])
     const subscription = teilzaehlungsObservable.subscribe(
       async (teilzaehlungs) => {
-        const teilzaehlungsSorted = await teilzaehlungsSortByZaehlungTk(
-          teilzaehlungs,
-        )
+        const teilzaehlungsSorted =
+          await teilzaehlungsSortByZaehlungTk(teilzaehlungs)
         setTeilzaehlungs(teilzaehlungsSorted)
       },
     )
