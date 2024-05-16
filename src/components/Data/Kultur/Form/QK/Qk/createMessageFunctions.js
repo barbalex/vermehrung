@@ -4,7 +4,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import exists from '../../../../../../utils/exists.js'
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery.js'
-import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromKulturs'
+import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromKulturs.js'
 import eventSort from '../../../../../../utils/eventSort'
 import lieferungSort from '../../../../../../utils/lieferungSort'
 import teilkulturSort from '../../../../../../utils/teilkulturSort'

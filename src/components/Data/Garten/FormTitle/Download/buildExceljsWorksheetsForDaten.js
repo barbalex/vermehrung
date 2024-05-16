@@ -4,7 +4,7 @@ import { first as first$ } from 'rxjs/operators'
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook'
 import buildExceljsWorksheetsForKultur from '../../../Kultur/FormTitle/buildExceljsWorksheets'
 import removeMetadataFromDataset from '../../../../../utils/removeMetadataFromDataset'
-import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs'
+import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs.js'
 
 /**
  * this function cann be used from higher up

@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy'
 import { first as first$ } from 'rxjs/operators'
 
-import gartenLabelFromGarten from './gartenLabelFromGarten'
+import gartenLabelFromGarten from './gartenLabelFromGarten.js'
 
 const kultursSortedFromKulturs = async (kulturs) => {
   const kulturSorters = await Promise.all(

@@ -19,7 +19,7 @@ import Teilzaehlungen from './Teilzaehlungen'
 import constants from '../../../../utils/constants.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList'
-import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
+import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs.js'
 
 const FieldsContainer = styled.div`
   padding: 10px;
