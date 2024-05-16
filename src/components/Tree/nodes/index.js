@@ -109,7 +109,7 @@ import buildSammelLieferungLieferungFolder from './sammelLieferung/lieferung/fol
 import buildSammelLieferungLieferung from './sammelLieferung/lieferung'
 import herkunftSort from '../../../utils/herkunftSort.js'
 import teilkulturSort from '../../../utils/teilkulturSort.js'
-import zaehlungSort from '../../../utils/zaehlungSort'
+import zaehlungSort from '../../../utils/zaehlungSort.js'
 import lieferungSort from '../../../utils/lieferungSort.js'
 import eventSort from '../../../utils/eventSort.js'
 import personSort from '../../../utils/personSort.js'

@@ -6,7 +6,7 @@ import { first as first$ } from 'rxjs/operators'
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook'
 import exists from '../../../../../utils/exists.js'
 import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs.js'
-import zaehlungSort from '../../../../../utils/zaehlungSort'
+import zaehlungSort from '../../../../../utils/zaehlungSort.js'
 import lieferungSort from '../../../../../utils/lieferungSort.js'
 
 const buildExceljsWorksheetsForKulturBedarfsplanung = async ({

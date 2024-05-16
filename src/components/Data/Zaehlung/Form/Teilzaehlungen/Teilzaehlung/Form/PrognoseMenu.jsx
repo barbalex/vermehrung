@@ -13,7 +13,7 @@ import TextField from '../../../../../../shared/TextField'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
 import exists from '../../../../../../../utils/exists.js'
 import constants from '../../../../../../../utils/constants.js'
-import zaehlungSort from '../../../../../../../utils/zaehlungSort'
+import zaehlungSort from '../../../../../../../utils/zaehlungSort.js'
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
