@@ -9,11 +9,11 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext.js'
-import Art from './Art'
+import Art from './Art.jsx'
 import Select from '../../../../shared/Select/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import artsSortedFromArts from '../../../../../utils/artsSortedFromArts.js'
-import avsSortByArt from '../../../../../utils/avsSortByArt'
+import avsSortByArt from '../../../../../utils/avsSortByArt.js'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`
@@ -86,12 +86,12 @@ const PersonArten = ({ person }) => {
       filter.art._deleted === false
         ? Q.where('_deleted', false)
         : filter.art._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const artsObservable = db
       .get('art')
       .query(artDelQuery, Q.where('id', Q.notIn(avArtIds)))
