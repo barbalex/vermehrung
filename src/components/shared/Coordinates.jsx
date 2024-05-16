@@ -13,23 +13,23 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber.js'
-import epsg2056to4326 from '../../utils/epsg2056to4326'
+import epsg2056to4326 from '../../utils/epsg2056to4326.js'
 import {
   isValid as xIsValid,
   message as xMessage,
-} from '../../utils/lv95XIsValid'
+} from '../../utils/lv95XIsValid.js'
 import {
   isValid as yIsValid,
   message as yMessage,
-} from '../../utils/lv95YIsValid'
+} from '../../utils/lv95YIsValid.js'
 import {
   isValid as wgs84LatIsValid,
   message as wgs84LatMessage,
-} from '../../utils/wgs84LatIsValid'
+} from '../../utils/wgs84LatIsValid.js'
 import {
   isValid as wgs84LongIsValid,
   message as wgs84LongMessage,
-} from '../../utils/wgs84LongIsValid'
+} from '../../utils/wgs84LongIsValid.js'
 import StoreContext from '../../storeContext.js'
 
 const StyledFormControl = styled(FormControl)`

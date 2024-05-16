@@ -7,8 +7,8 @@ import Checkbox from '@mui/material/Checkbox'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import InfoWithPopover from './InfoWithPopover'
-import Label from './Label'
+import InfoWithPopover from './InfoWithPopover.jsx'
+import Label from './Label.jsx'
 
 const Container = styled.div`
   display: flex;

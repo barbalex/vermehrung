@@ -3,7 +3,7 @@ import Select from 'react-select'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
 
-import Link from './Link'
+import Link from './Link.jsx'
 
 const Container = styled.div`
   display: flex;
