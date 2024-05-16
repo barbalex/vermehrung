@@ -1,30 +1,30 @@
 import { Q } from '@nozbe/watermelondb'
 
 import { getSnapshot } from 'mobx-state-tree'
-import buildArtSammlungFolder from './art/sammlung/folder'
-import buildArtSammlung from './art/sammlung'
-import buildArtSammlungAuslieferungFolder from './art/sammlung/auslieferung/folder'
-import buildArtSammlungAuslieferung from './art/sammlung/auslieferung'
-import buildArtHerkunftFolder from './art/herkunft/folder'
-import buildArtHerkunft from './art/herkunft'
-import buildArtHerkunftSammlungFolder from './art/herkunft/sammlung/folder'
-import buildArtHerkunftSammlung from './art/herkunft/sammlung'
-import buildArtHerkunftSammlungAuslieferungFolder from './art/herkunft/sammlung/auslieferung/folder'
-import buildArtHerkunftSammlungAuslieferung from './art/herkunft/sammlung/auslieferung'
-import buildArtHerkunftKulturFolder from './art/herkunft/kultur/folder'
-import buildArtHerkunftKultur from './art/herkunft/kultur'
-import buildArtHerkunftKulturTeilkulturFolder from './art/herkunft/kultur/teilkultur/folder'
-import buildArtHerkunftKulturTeilkultur from './art/herkunft/kultur/teilkultur'
-import buildArtHerkunftKulturZaehlungFolder from './art/herkunft/kultur/zaehlung/folder'
-import buildArtHerkunftKulturZaehlung from './art/herkunft/kultur/zaehlung'
-import buildArtHerkunftKulturAnlieferungFolder from './art/herkunft/kultur/anlieferung/folder'
-import buildArtHerkunftKulturAnlieferung from './art/herkunft/kultur/anlieferung'
-import buildArtHerkunftKulturAuslieferungFolder from './art/herkunft/kultur/auslieferung/folder'
-import buildArtHerkunftKulturAuslieferung from './art/herkunft/kultur/auslieferung'
-import buildArtHerkunftKulturEventFolder from './art/herkunft/kultur/event/folder'
-import buildArtHerkunftKulturEvent from './art/herkunft/kultur/event'
-import buildArtKulturFolder from './art/kultur/folder'
-import buildArtKultur from './art/kultur'
+import buildArtSammlungFolder from './art/sammlung/folder.js'
+import buildArtSammlung from './art/sammlung/index.js'
+import buildArtSammlungAuslieferungFolder from './art/sammlung/auslieferung/folder.js'
+import buildArtSammlungAuslieferung from './art/sammlung/auslieferung/index.js'
+import buildArtHerkunftFolder from './art/herkunft/folder.js'
+import buildArtHerkunft from './art/herkunft/index.js'
+import buildArtHerkunftSammlungFolder from './art/herkunft/sammlung/folder.js'
+import buildArtHerkunftSammlung from './art/herkunft/sammlung/index.js'
+import buildArtHerkunftSammlungAuslieferungFolder from './art/herkunft/sammlung/auslieferung/folder.js'
+import buildArtHerkunftSammlungAuslieferung from './art/herkunft/sammlung/auslieferung/index.js'
+import buildArtHerkunftKulturFolder from './art/herkunft/kultur/folder.js'
+import buildArtHerkunftKultur from './art/herkunft/kultur/index.js'
+import buildArtHerkunftKulturTeilkulturFolder from './art/herkunft/kultur/teilkultur/folder.js'
+import buildArtHerkunftKulturTeilkultur from './art/herkunft/kultur/teilkultur/index.js'
+import buildArtHerkunftKulturZaehlungFolder from './art/herkunft/kultur/zaehlung/folder.js'
+import buildArtHerkunftKulturZaehlung from './art/herkunft/kultur/zaehlung/index.js'
+import buildArtHerkunftKulturAnlieferungFolder from './art/herkunft/kultur/anlieferung/folder.js'
+import buildArtHerkunftKulturAnlieferung from './art/herkunft/kultur/anlieferung/index.js'
+import buildArtHerkunftKulturAuslieferungFolder from './art/herkunft/kultur/auslieferung/folder.js'
+import buildArtHerkunftKulturAuslieferung from './art/herkunft/kultur/auslieferung/index.js'
+import buildArtHerkunftKulturEventFolder from './art/herkunft/kultur/event/folder.js'
+import buildArtHerkunftKulturEvent from './art/herkunft/kultur/event/index.js'
+import buildArtKulturFolder from './art/kultur/folder.js'
+import buildArtKultur from './art/kultur/index.js'
 import buildArtKulturTeilkulturFolder from './art/kultur/teilkultur/folder'
 import buildArtKulturTeilkultur from './art/kultur/teilkultur'
 import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
@@ -526,9 +526,8 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
               try {
                 artHerkunftKulturs = await artHerkunftsKultursQuery.fetch()
               } catch {}
-              const artHerkunftKultursSorted = await kultursSortedFromKulturs(
-                artHerkunftKulturs,
-              )
+              const artHerkunftKultursSorted =
+                await kultursSortedFromKulturs(artHerkunftKulturs)
               const newArtHerkunftKulturNodes = await Promise.all(
                 artHerkunftKultursSorted.map(
                   async (kultur, kulturIndex) =>
