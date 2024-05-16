@@ -6,7 +6,7 @@ import { combineLatest } from 'rxjs'
 import StoreContext from '../../../../storeContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
 import FormTitle from './FormTitle'
-import tableFilter from '../../../../utils/tableFilter'
+import tableFilter from '../../../../utils/tableFilter.js'
 
 const SammlungFormTitleChooser = ({
   row,

@@ -12,7 +12,7 @@ import StoreContext from '../../storeContext.js'
 import Settings from './Settings'
 import List from './List'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-import tableFilter from '../../utils/tableFilter'
+import tableFilter from '../../utils/tableFilter.js'
 import notDeletedQuery from '../../utils/notDeletedQuery.js'
 import buildNodes from './nodes'
 
