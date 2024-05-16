@@ -6,8 +6,8 @@ import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 
 import StoreContext from '../../../../../storeContext.js'
-import buildExceljsWorksheetsForLieferungenOfYear from './buildExceljsWorksheetsForLieferungenOfYear'
-import buildExceljsWorksheetsForKulturBedarfsplanung from './buildExceljsWorksheetsForKulturBedarfsplanung'
+import buildExceljsWorksheetsForLieferungenOfYear from './buildExceljsWorksheetsForLieferungenOfYear.js'
+import buildExceljsWorksheetsForKulturBedarfsplanung from './buildExceljsWorksheetsForKulturBedarfsplanung.js'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook.js'
 
 const FirstMenuItem = styled(MenuItem)`
