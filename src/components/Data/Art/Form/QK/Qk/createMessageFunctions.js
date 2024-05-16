@@ -7,7 +7,7 @@ import exists from '../../../../../../utils/exists.js'
 
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery.js'
 import artsSortedFromArts from '../../../../../../utils/artsSortedFromArts.js'
-import gartensSortedFromGartens from '../../../../../../utils/gartensSortedFromGartens'
+import gartensSortedFromGartens from '../../../../../../utils/gartensSortedFromGartens.js'
 import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromKulturs'
 import sammlungsSortedFromSammlungs from '../../../../../../utils/sammlungsSortedFromSammlungs'
 import eventSort from '../../../../../../utils/eventSort'
@@ -30,12 +30,12 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       filter.art?._deleted === false
         ? Q.where('_deleted', false)
         : filter.art?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     arts = await db.get('art').query(delQuery).fetch()
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
@@ -51,12 +51,12 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       filter.herkunft?._deleted === false
         ? Q.where('_deleted', false)
         : filter.herkunft?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     herkunfts = await db.get('herkunft').query(delQuery).fetch()
   } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
@@ -67,22 +67,22 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       filter.kultur?._deleted === false
         ? Q.where('_deleted', false)
         : filter.kultur?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const aktivQuery =
       filter.kultur?.aktiv === false
         ? Q.where('aktiv', false)
         : filter.kultur?.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     kulturs = await db
       .get('kultur')
       .query(Q.where('art_id', Q.eq(artId)), delQuery, aktivQuery)
@@ -96,12 +96,12 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       filter.lieferung?._deleted === false
         ? Q.where('_deleted', false)
         : filter.lieferung?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     lieferungs = await db.get('lieferung').query(delQuery).fetch()
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
@@ -112,22 +112,22 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       filter.person?._deleted === false
         ? Q.where('_deleted', false)
         : filter.person?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const aktivQuery =
       filter.person?.aktiv === false
         ? Q.where('aktiv', false)
         : filter.person?.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     persons = await db.get('person').query(delQuery, aktivQuery).fetch()
   } catch {}
   const personsSorted = persons.sort(personSort)
@@ -138,20 +138,19 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       filter.sammlung?._deleted === false
         ? Q.where('_deleted', false)
         : filter.sammlung?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     sammlungsOfArt = await db
       .get('sammlung')
       .query(delQuery, Q.on('art', 'id', artId))
       .fetch()
   } catch {}
-  const sammlungsOfArtSorted = await sammlungsSortedFromSammlungs(
-    sammlungsOfArt,
-  )
+  const sammlungsOfArtSorted =
+    await sammlungsSortedFromSammlungs(sammlungsOfArt)
 
   let zaehlungsOfArt = []
   try {
@@ -159,12 +158,12 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       filter.zaehlung?._deleted === false
         ? Q.where('_deleted', false)
         : filter.zaehlung?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     zaehlungsOfArt = await db
       .get('zaehlung')
       .query(
@@ -195,12 +194,12 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       filter.teilkultur?._deleted === false
         ? Q.where('_deleted', false)
         : filter.teilkultur?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     teilkultursOfArt = await db
       .get('teilkultur')
       .query(
@@ -218,12 +217,12 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       filter.event?._deleted === false
         ? Q.where('_deleted', false)
         : filter.event?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     eventsOfArt = await db
       .get('event')
       .query(
@@ -593,12 +592,12 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         filter.zaehlung?._deleted === false
           ? Q.where('_deleted', false)
           : filter.zaehlung?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+            ? Q.where('_deleted', true)
+            : Q.or(
+                Q.where('_deleted', false),
+                Q.where('_deleted', true),
+                Q.where('_deleted', null),
+              )
       const zaehlungs = await db
         .get('zaehlung')
         .query(
@@ -636,12 +635,12 @@ const createMessageFunctions = async ({ artId, db, store }) => {
           filter.zaehlung?._deleted === false
             ? Q.where('_deleted', false)
             : filter.zaehlung?._deleted === true
-            ? Q.where('_deleted', true)
-            : Q.or(
-                Q.where('_deleted', false),
-                Q.where('_deleted', true),
-                Q.where('_deleted', null),
-              )
+              ? Q.where('_deleted', true)
+              : Q.or(
+                  Q.where('_deleted', false),
+                  Q.where('_deleted', true),
+                  Q.where('_deleted', null),
+                )
         zaehlungs = await db
           .get('zaehlung')
           .query(
@@ -788,12 +787,12 @@ const createMessageFunctions = async ({ artId, db, store }) => {
             filter.zaehlung?._deleted === false
               ? Q.where('_deleted', false)
               : filter.zaehlung?._deleted === true
-              ? Q.where('_deleted', true)
-              : Q.or(
-                  Q.where('_deleted', false),
-                  Q.where('_deleted', true),
-                  Q.where('_deleted', null),
-                )
+                ? Q.where('_deleted', true)
+                : Q.or(
+                    Q.where('_deleted', false),
+                    Q.where('_deleted', true),
+                    Q.where('_deleted', null),
+                  )
           zaehlungsOfArt = await db
             .get('zaehlung')
             .query(

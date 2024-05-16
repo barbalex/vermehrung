@@ -12,7 +12,7 @@ import StoreContext from '../../../../../storeContext.js'
 import Garten from './Garten'
 import Select from '../../../../shared/Select/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import gartensSortedFromGartens from '../../../../../utils/gartensSortedFromGartens'
+import gartensSortedFromGartens from '../../../../../utils/gartensSortedFromGartens.js'
 import gvsSortByGarten from '../../../../../utils/gvsSortByGarten'
 import constants from '../../../../../utils/constants.js'
 
