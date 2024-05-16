@@ -7,7 +7,7 @@ import { Allotment } from 'allotment'
 import StoreContext from '../../../../../../storeContext.js'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 import Conflict from './Conflict.jsx'
-import Form from './Form'
+import Form from './Form/index.jsx'
 import History from './History'
 
 const Container = styled.div`
