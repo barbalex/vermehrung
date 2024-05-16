@@ -11,7 +11,7 @@ import FilterNumbers from '../../../shared/FilterNumbers.jsx'
 import Menu from '../../../shared/Menu.jsx'
 import Download from './Download.jsx'
 import Anleitung from './Anleitung.jsx'
-import NavButtons from './NavButtons'
+import NavButtons from './NavButtons.jsx'
 import constants from '../../../../utils/constants.js'
 
 const TitleContainer = styled.div`
