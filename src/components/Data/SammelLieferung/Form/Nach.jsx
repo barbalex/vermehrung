@@ -10,7 +10,7 @@ import StoreContext from '../../../../storeContext.js'
 import Select from '../../../shared/Select/index.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import JesNo from '../../../shared/JesNo'
-import exists from '../../../../utils/exists'
+import exists from '../../../../utils/exists.js'
 import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
 
 const Title = styled.div`

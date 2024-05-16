@@ -14,7 +14,7 @@ import Files from '../../Files'
 import Arten from './Arten'
 import Gaerten from './Gaerten'
 import ConflictList from '../../../shared/ConflictList'
-import exists from '../../../../utils/exists'
+import exists from '../../../../utils/exists.js'
 import userRoleSort from '../../../../utils/userRoleSort'
 
 const Container = styled.div`

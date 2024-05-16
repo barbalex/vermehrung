@@ -3,7 +3,7 @@ import groupBy from 'lodash/groupBy'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 
-import exists from '../../../../../../utils/exists'
+import exists from '../../../../../../utils/exists.js'
 
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
 import artsSortedFromArts from '../../../../../../utils/artsSortedFromArts'
