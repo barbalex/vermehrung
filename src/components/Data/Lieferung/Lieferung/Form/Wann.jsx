@@ -7,7 +7,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import StoreContext from '../../../../../storeContext.js'
 import Date from '../../../../shared/Date'
 import Checkbox2States from '../../../../shared/Checkbox2States.jsx'
-import JesNo from '../../../../shared/JesNo'
+import JesNo from '../../../../shared/JesNo.jsx'
 import constants from '../../../../../utils/constants.js'
 
 const Title = styled.div`
