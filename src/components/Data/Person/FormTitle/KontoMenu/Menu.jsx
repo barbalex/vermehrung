@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import StoreContext from '../../../../../storeContext.js'
 import deleteAccount from '../../../../../utils/deleteAccount.js'
-import setPassword from '../../../../../utils/setPassword'
+import setPassword from '../../../../../utils/setPassword.js'
 
 const KontoMenuMenu = ({ row, menuAnchorEl, setMenuAnchorEl, asMenu }) => {
   const store = useContext(StoreContext)

@@ -1,6 +1,6 @@
 import { sendPasswordResetEmail } from 'firebase/auth'
 
-import constants from './constants'
+import constants from './constants.js'
 
 const setPassword = async ({ store, person }) => {
   const { addNotification, firebaseAuth } = store
