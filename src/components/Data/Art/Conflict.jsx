@@ -6,10 +6,10 @@ import gql from 'graphql-tag'
 import { useQuery } from 'urql'
 
 import StoreContext from '../../../storeContext.js'
-import Conflict from '../../shared/Conflict'
+import Conflict from '../../shared/Conflict/index.jsx'
 import checkForOnlineError from '../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../utils/toPgArray.js'
-import mutations from '../../../utils/mutations'
+import mutations from '../../../utils/mutations.js'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison'
 
 const artRevQuery = gql`

@@ -13,7 +13,7 @@ import 'react-image-gallery/styles/css/image-gallery.css'
 import isImageFile from './isImageFile'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import fileSort from '../../../utils/fileSort'
-import mutations from '../../../utils/mutations'
+import mutations from '../../../utils/mutations.js'
 import constants from '../../../utils/constants.js'
 
 const TitleRow = styled.section`

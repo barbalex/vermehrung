@@ -8,7 +8,7 @@ import History from '../../../shared/History/index.jsx'
 import StoreContext from '../../../../storeContext.js'
 import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../../utils/toPgArray.js'
-import mutations from '../../../../utils/mutations'
+import mutations from '../../../../utils/mutations.js'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
