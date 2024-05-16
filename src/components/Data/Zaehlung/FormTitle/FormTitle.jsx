@@ -6,7 +6,7 @@ import { withResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../storeContext.js'
 import Settings from './Settings/index.jsx'
-import AddButton from './AddButton'
+import AddButton from './AddButton.jsx'
 import DeleteButton from './DeleteButton'
 import FilterNumbers from '../../../shared/FilterNumbers.jsx'
 import HistoryButton from '../../../shared/HistoryButton.jsx'
