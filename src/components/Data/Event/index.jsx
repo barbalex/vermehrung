@@ -5,12 +5,12 @@ import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../storeContext.js'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle/index.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
-import Conflict from './Conflict'
-import Form from './Form'
-import History from './History'
+import Conflict from './Conflict.jsx'
+import Form from './Form/index.jsx'
+import History from './History/index.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -38,8 +38,8 @@ const Event = ({
     const observable = showFilter
       ? $of(filter.event)
       : initialDataQueried
-      ? db.get('event').findAndObserve(id)
-      : $of({})
+        ? db.get('event').findAndObserve(id)
+        : $of({})
     const subscription = observable.subscribe((newRow) => {
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))

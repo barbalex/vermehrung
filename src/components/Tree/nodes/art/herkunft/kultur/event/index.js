@@ -1,4 +1,4 @@
-import eventLabelFromEvent from '../../../../../../../utils/eventLabelFromEvent'
+import eventLabelFromEvent from '../../../../../../../utils/eventLabelFromEvent.js'
 
 const artHerkunftKulturEventNodes = ({
   event,

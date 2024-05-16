@@ -10,7 +10,7 @@ import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../storeContext.js'
 import FilterTitle from '../../shared/FilterTitle.jsx'
-import Row from './Row'
+import Row from './Row.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers.jsx'
 import UpSvg from '../../../svg/to_up.svg?react'
@@ -70,12 +70,12 @@ const Events = ({ filter: showFilter = false, width, height }) => {
       filter.event._deleted === false
         ? Q.where('_deleted', false)
         : filter.event._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const countObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()
