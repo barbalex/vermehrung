@@ -12,7 +12,7 @@ import Download from './Download'
 import FilterNumbers from '../../../shared/FilterNumbers.jsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 import KuDownSvg from '../../../../svg/to_ku_down.svg?react'
-import HistoryButton from '../../../shared/HistoryButton'
+import HistoryButton from '../../../shared/HistoryButton.jsx'
 import Menu from '../../../shared/Menu.jsx'
 import constants from '../../../../utils/constants.js'
 
