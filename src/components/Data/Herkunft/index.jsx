@@ -7,7 +7,7 @@ import { of as $of } from 'rxjs'
 import StoreContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
-import Conflict from './Conflict'
+import Conflict from './Conflict.jsx'
 import FormTitle from './FormTitle'
 import Form from './Form'
 import History from './History'
@@ -43,8 +43,8 @@ const Herkunft = ({
     const observable = showFilter
       ? $of(filter.herkunft)
       : initialDataQueried
-      ? db.get('herkunft').findAndObserve(id)
-      : $of({})
+        ? db.get('herkunft').findAndObserve(id)
+        : $of({})
     const subscription = observable.subscribe((newRow) => {
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))
