@@ -10,11 +10,11 @@ import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext.js'
 import Person from './Person.jsx'
-import Select from '../../../../shared/Select'
+import Select from '../../../../shared/Select/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import avsSortByPerson from '../../../../../utils/avsSortByPerson'
-import personSort from '../../../../../utils/personSort'
-import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
+import avsSortByPerson from '../../../../../utils/avsSortByPerson.js'
+import personSort from '../../../../../utils/personSort.js'
+import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
 import constants from '../../../../../utils/constants.js'
 
 // somehow chrome(?) seems to add the following css sometimes:
@@ -89,22 +89,22 @@ const ArtPersonen = ({ art }) => {
       filter.person?._deleted === false
         ? Q.where('_deleted', false)
         : filter.person?._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const aktivQuery =
       filter.person?.aktiv === false
         ? Q.where('aktiv', false)
         : filter.person?.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const personsObservable = db
       .get('person')
       .query(delQuery, aktivQuery)

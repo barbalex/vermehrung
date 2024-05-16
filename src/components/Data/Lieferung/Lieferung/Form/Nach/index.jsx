@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import StoreContext from '../../../../../../storeContext.js'
-import Select from '../../../../../shared/Select'
+import Select from '../../../../../shared/Select/index.jsx'
 import Checkbox2States from '../../../../../shared/Checkbox2States'
 import JesNo from '../../../../../shared/JesNo'
 import exists from '../../../../../../utils/exists'

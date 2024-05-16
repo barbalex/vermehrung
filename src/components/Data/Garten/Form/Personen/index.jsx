@@ -9,11 +9,11 @@ import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext.js'
 import Person from './Person'
-import Select from '../../../../shared/Select'
+import Select from '../../../../shared/Select/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import gvsSortByPerson from '../../../../../utils/gvsSortByPerson'
 import personSort from '../../../../../utils/personSort'
-import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
+import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`

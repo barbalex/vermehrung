@@ -4,7 +4,7 @@ import { first as first$ } from 'rxjs/operators'
 
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook'
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft.js'
-import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
+import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'
 import lieferungSort from '../../../../../utils/lieferungSort'
 

@@ -1,4 +1,4 @@
-import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
+import personLabelFromPerson from '../../../../utils/personLabelFromPerson.js'
 
 const personNodes = ({ person, index }) => ({
   nodeType: 'table',

@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../storeContext.js'
 import gartensSortedFromGartens from '../../../../../../../utils/gartensSortedFromGartens'
-import { StyledSelect } from '../../../../../../shared/Select'
+import { StyledSelect } from '../../../../../../shared/Select/index.jsx'
 
 const ChooseDialog = ({
   open,

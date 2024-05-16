@@ -7,7 +7,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
+import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
 import StoreContext from '../../../../../storeContext.js'
 
 const Container = styled.div`
