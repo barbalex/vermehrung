@@ -7,7 +7,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
 import StoreContext from '../../../storeContext.js'
-import TextField from '../../shared/TextField'
+import TextField from '../../shared/TextField.jsx'
 import isImageFile from './isImageFile'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
