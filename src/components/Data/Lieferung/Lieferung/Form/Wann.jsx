@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import StoreContext from '../../../../../storeContext.js'
-import Date from '../../../../shared/Date'
+import Date from '../../../../shared/Date.jsx'
 import Checkbox2States from '../../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../../shared/JesNo.jsx'
 import constants from '../../../../../utils/constants.js'

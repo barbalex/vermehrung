@@ -7,10 +7,10 @@ import { of as $of } from 'rxjs'
 import StoreContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
-import Conflict from './Conflict'
-import FormTitle from './FormTitle'
-import Form from './Form'
-import History from './History'
+import Conflict from './Conflict.jsx'
+import FormTitle from './FormTitle/index.jsx'
+import Form from './Form/index.jsx'
+import History from './History/index.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -38,8 +38,8 @@ const Art = ({
     const observable = showFilter
       ? $of(filter.art)
       : initialDataQueried
-      ? db.get('art').findAndObserve(id)
-      : $of({})
+        ? db.get('art').findAndObserve(id)
+        : $of({})
     const subscription = observable.subscribe((newRow) => {
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))

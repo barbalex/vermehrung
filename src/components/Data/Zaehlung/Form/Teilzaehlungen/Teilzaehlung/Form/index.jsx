@@ -14,7 +14,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
 import StoreContext from '../../../../../../../storeContext.js'
-import TextField from '../../../../../../shared/TextField'
+import TextField from '../../../../../../shared/TextField.jsx'
 import TextFieldNonUpdatable from '../../../../../../shared/TextFieldNonUpdatable'
 import Checkbox2States from '../../../../../../shared/Checkbox2States.jsx'
 import Select from '../../../../../../shared/SelectCreatable.jsx'

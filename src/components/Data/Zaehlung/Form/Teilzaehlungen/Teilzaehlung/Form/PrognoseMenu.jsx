@@ -9,7 +9,7 @@ import { Q } from '@nozbe/watermelondb'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../../../storeContext.js'
-import TextField from '../../../../../../shared/TextField'
+import TextField from '../../../../../../shared/TextField.jsx'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber.js'
 import exists from '../../../../../../../utils/exists.js'
 import constants from '../../../../../../../utils/constants.js'

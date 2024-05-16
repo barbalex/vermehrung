@@ -10,7 +10,7 @@ import uniqBy from 'lodash/uniqBy'
 
 import StoreContext from '../../../../storeContext.js'
 import Select from '../../../shared/Select/index.jsx'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField.jsx'
 import constants from '../../../../utils/constants.js'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts.js'
 
