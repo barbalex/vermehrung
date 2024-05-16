@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 import teilzaehlungsSortByZaehlungTk from '../../../../../utils/teilzaehlungsSortByZaehlungTk'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Teilzaehlungen from './Teilzaehlungen'

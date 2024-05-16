@@ -26,7 +26,7 @@ import Zaehlungen from './Zaehlungen'
 import Teilkultur from './Teilkultur'
 import Teilkulturen from './Teilkulturen'
 import Root from './Root'
-import StoreContext from '../../storeContext'
+import StoreContext from '../../storeContext.js'
 
 const Data = () => {
   const store = useContext(StoreContext)

@@ -8,7 +8,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 
 const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
   const store = useContext(StoreContext)

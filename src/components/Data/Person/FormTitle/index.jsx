@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
 import tableFilter from '../../../../utils/tableFilter'

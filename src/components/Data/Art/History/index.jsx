@@ -8,7 +8,7 @@ import { useQuery } from 'urql'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
 import Row from './Row'
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 
 const artRevQuery = gql`
   query artRevForHistoryQuery($rev: [String!]) {

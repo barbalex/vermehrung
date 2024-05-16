@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 import { v1 as uuidv1 } from 'uuid'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 import Uploader from '../../Uploader'
 import File from './File'
 import 'react-image-gallery/styles/css/image-gallery.css'

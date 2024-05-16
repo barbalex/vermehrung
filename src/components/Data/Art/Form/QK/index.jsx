@@ -13,7 +13,7 @@ import { Q } from '@nozbe/watermelondb'
 import Qk from './Qk'
 import Choose from './Choose'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.section`

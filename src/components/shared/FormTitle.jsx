@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../storeContext'
+import StoreContext from '../../storeContext.js'
 import constants from '../../utils/constants'
 
 const Container = styled.div`

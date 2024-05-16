@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import isEqual from 'lodash/isEqual'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import storeContext from '../storeContext'
+import storeContext from '../storeContext.js'
 import getActiveNodeArrayFromUrl from '../utils/activeNodeArrayFromPathname'
 
 // syncs activeNodeArray with browser navigation

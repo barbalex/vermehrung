@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import NavTree from '../../../svg/nav_tree.svg?react'
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 
 const StyledNavTree = styled(NavTree)`
   width: 24px;

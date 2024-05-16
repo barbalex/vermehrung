@@ -10,7 +10,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 import constants from '../../../../../utils/constants'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 

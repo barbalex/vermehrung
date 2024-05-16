@@ -5,7 +5,7 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson'

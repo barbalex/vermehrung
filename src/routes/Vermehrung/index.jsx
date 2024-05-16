@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../storeContext'
+import StoreContext from '../../storeContext.js'
 import Login from '../../components/Login'
 import ErrorBoundary from '../../components/shared/ErrorBoundary.jsx'
 import ApiDetector from '../../components/ApiDetector'

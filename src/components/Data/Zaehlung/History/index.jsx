@@ -7,7 +7,7 @@ import { useQuery } from 'urql'
 
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import Row from './Row'
 
 const zaehlungRevQuery = gql`

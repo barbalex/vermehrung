@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import ZaDownSvg from '../../../../svg/to_za_down.svg?react'
 import AnLiDownSvg from '../../../../svg/to_anli_down.svg?react'
 import AusLiDownSvg from '../../../../svg/to_ausli_down.svg?react'

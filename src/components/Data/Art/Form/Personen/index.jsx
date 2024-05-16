@@ -8,7 +8,7 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 import Person from './Person'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'

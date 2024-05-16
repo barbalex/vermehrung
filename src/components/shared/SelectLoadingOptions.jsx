@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../storeContext'
+import StoreContext from '../../storeContext.js'
 import artLabelFromAeArt from '../../utils/artLabelFromAeArt'
 
 const Container = styled.div`

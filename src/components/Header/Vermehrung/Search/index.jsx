@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useDebouncedCallback } from 'use-debounce'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import buildOptions from './buildOptions'
 
 const Container = styled.div`

@@ -8,7 +8,7 @@ import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 import Art from './Art'
 import Select from '../../../../shared/Select'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'

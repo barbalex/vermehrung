@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 import Date from '../../../../shared/Date'
 import Checkbox2States from '../../../../shared/Checkbox2States'
 import JesNo from '../../../../shared/JesNo'

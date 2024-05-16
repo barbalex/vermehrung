@@ -12,7 +12,7 @@ import {
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.svg?react'
 import Explainer from './Explainer'
 import Data from './Data'
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 
 const Container = styled.div`
   padding: 10px;

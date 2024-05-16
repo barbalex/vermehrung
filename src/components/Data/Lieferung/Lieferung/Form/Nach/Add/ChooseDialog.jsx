@@ -6,7 +6,7 @@ import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../../storeContext'
+import storeContext from '../../../../../../../storeContext.js'
 import gartensSortedFromGartens from '../../../../../../../utils/gartensSortedFromGartens'
 import { StyledSelect } from '../../../../../../shared/Select'
 

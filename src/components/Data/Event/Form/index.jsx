@@ -8,7 +8,7 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import Select from '../../../shared/Select'
 import SelectCreatable from '../../../shared/SelectCreatable'
 import TextField from '../../../shared/TextField'

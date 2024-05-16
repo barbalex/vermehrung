@@ -7,7 +7,7 @@ import gql from 'graphql-tag'
 
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
 import Spinner from '../../../shared/Spinner'
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import Row from './Row'
 
 const herkunftRevQuery = gql`

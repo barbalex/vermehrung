@@ -14,7 +14,7 @@ import materialTheme from './utils/materialTheme'
 
 import GlobalStyle from './components/GlobalStyle'
 
-import { Provider as MobxProvider } from './storeContext'
+import { Provider as MobxProvider } from './storeContext.js'
 
 import initiateApp from './utils/initiateApp'
 import initiateDb from './utils/initiateDb'

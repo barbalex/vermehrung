@@ -4,7 +4,7 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 
 const KulturAddButton = ({ asMenu }) => {

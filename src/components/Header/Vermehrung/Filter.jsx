@@ -6,7 +6,7 @@ import { MdDeleteSweep as DeleteFilterIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 
 const StyledButton = styled(Button)`
   color: white !important;
