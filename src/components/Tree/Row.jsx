@@ -23,7 +23,7 @@ import toggleNodeSymbol from './toggleNodeSymbol'
 import createNew from './createNew'
 import deleteDataset from './delete'
 import signup from '../../utils/signup.js'
-import deleteAccount from '../../utils/deleteAccount'
+import deleteAccount from '../../utils/deleteAccount.js'
 import setPassword from '../../utils/setPassword'
 import {
   ContextMenuTrigger,
