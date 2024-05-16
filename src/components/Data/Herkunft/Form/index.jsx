@@ -12,7 +12,7 @@ import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber.js'
 import exists from '../../../../utils/exists.js'
 import Files from '../../Files'
 import Coordinates from '../../../shared/Coordinates'
-import ConflictList from '../../../shared/ConflictList'
+import ConflictList from '../../../shared/ConflictList/index.jsx'
 
 const Container = styled.div`
   padding: 10px;

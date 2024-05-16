@@ -17,7 +17,7 @@ import personSort from '../../../../utils/personSort.js'
 import Files from '../../Files'
 import Coordinates from '../../../shared/Coordinates'
 import Personen from './Personen'
-import ConflictList from '../../../shared/ConflictList'
+import ConflictList from '../../../shared/ConflictList/index.jsx'
 
 const FieldsContainer = styled.div`
   padding: 10px;

@@ -15,7 +15,7 @@ import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber.js'
 import Zaehlungen from './Zaehlungen'
 import Events from './Events'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
-import ConflictList from '../../../shared/ConflictList'
+import ConflictList from '../../../shared/ConflictList/index.jsx'
 import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs.js'
 
 const FieldsContainer = styled.div`
