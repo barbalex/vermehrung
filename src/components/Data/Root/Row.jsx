@@ -4,7 +4,7 @@ import { combineLatest } from 'rxjs'
 import styled from '@emotion/styled'
 
 import StoreContext from '../../../storeContext.js'
-import tableFilter from '../../../utils/tableFilter'
+import tableFilter from '../../../utils/tableFilter.js'
 import constants from '../../../utils/constants.js'
 
 const Row = styled.div`

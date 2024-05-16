@@ -5,8 +5,8 @@ import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
-import FormTitle from './FormTitle'
-import tableFilter from '../../../../utils/tableFilter'
+import FormTitle from './FormTitle.jsx'
+import tableFilter from '../../../../utils/tableFilter.js'
 
 const ArtFormTitleChooser = ({
   row,

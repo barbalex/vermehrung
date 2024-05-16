@@ -14,7 +14,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers.jsx'
 import StoreContext from '../../../storeContext.js'
 import UpSvg from '../../../svg/to_up.svg?react'
-import tableFilter from '../../../utils/tableFilter'
+import tableFilter from '../../../utils/tableFilter.js'
 import personSort from '../../../utils/personSort.js'
 import constants from '../../../utils/constants.js'
 
