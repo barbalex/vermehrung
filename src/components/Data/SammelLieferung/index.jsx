@@ -5,11 +5,11 @@ import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../storeContext.js'
-import Lieferschein from './Lieferschein'
+import Lieferschein from './Lieferschein/index.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 import Conflict from './Conflict.jsx'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle/index.jsx'
 import Form from './Form/index.jsx'
 import History from './History/index.jsx'
 
@@ -43,8 +43,8 @@ const SammelLieferung = ({
     const observable = showFilter
       ? $of(filter.sammel_lieferung)
       : initialDataQueried
-      ? db.get('sammel_lieferung').findAndObserve(id)
-      : $of({})
+        ? db.get('sammel_lieferung').findAndObserve(id)
+        : $of({})
     const subscription = observable.subscribe((newRow) => {
       setDataState({
         row: newRow,

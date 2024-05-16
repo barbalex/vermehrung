@@ -5,7 +5,7 @@ import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../../storeContext.js'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle/index.jsx'
 import Form from './Form/index.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
@@ -40,8 +40,8 @@ const Sammlung = ({
     const observable = showFilter
       ? $of(filter.sammlung)
       : initialDataQueried
-      ? db.get('sammlung').findAndObserve(id)
-      : $of({})
+        ? db.get('sammlung').findAndObserve(id)
+        : $of({})
     const subscription = observable.subscribe((newRow) => {
       setDataState({
         row: newRow,
