@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber.js'
 import epsg2056to4326 from '../../utils/epsg2056to4326'
 import {
   isValid as xIsValid,
