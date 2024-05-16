@@ -5,7 +5,7 @@ import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../storeContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle.jsx'
 import tableFilter from '../../../../utils/tableFilter.js'
 
 const GartenFormTitle = ({
@@ -34,22 +34,22 @@ const GartenFormTitle = ({
       filter.garten._deleted === false
         ? Q.where('_deleted', false)
         : filter.garten._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const aktivQuery =
       filter.garten.aktiv === false
         ? Q.where('aktiv', false)
         : filter.garten.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const totalCountObservable = collection
       .query(delQuery, aktivQuery, ...hierarchyQuery)
       .observeCount()

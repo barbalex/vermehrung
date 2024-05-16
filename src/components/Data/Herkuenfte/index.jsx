@@ -10,7 +10,7 @@ import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../storeContext.js'
 import FilterTitle from '../../shared/FilterTitle.jsx'
-import Row from './Row'
+import Row from './Row.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers.jsx'
 import UpSvg from '../../../svg/to_up.svg?react'
@@ -75,22 +75,22 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
         ]
       : artIdInActiveNodeArray
-      ? [
-          Q.experimentalJoinTables(['sammlung']),
-          Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
-        ]
-      : []
+        ? [
+            Q.experimentalJoinTables(['sammlung']),
+            Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
+          ]
+        : []
     const collection = db.get('herkunft')
     const delQuery =
       filter.herkunft._deleted === false
         ? Q.where('_deleted', false)
         : filter.herkunft._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const countObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()
