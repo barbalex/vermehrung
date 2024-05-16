@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import StoreContext from '../../storeContext.js'
-import QueuedQuery from './QueuedQuery'
+import QueuedQuery from './QueuedQuery.jsx'
 import constants from '../../utils/constants.js'
 
 const TitleRow = styled.div`
