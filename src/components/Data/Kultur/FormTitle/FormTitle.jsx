@@ -10,7 +10,7 @@ import HistoryButton from '../../../shared/HistoryButton.jsx'
 import FilterNumbers from '../../../shared/FilterNumbers.jsx'
 import Menu from '../../../shared/Menu.jsx'
 import Download from './Download.jsx'
-import Anleitung from './Anleitung'
+import Anleitung from './Anleitung.jsx'
 import NavButtons from './NavButtons'
 import constants from '../../../../utils/constants.js'
 
