@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { withResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../storeContext.js'
-import DeleteButton from './DeleteButton'
+import DeleteButton from './DeleteButton.jsx'
 import AddButton from './AddButton.jsx'
 import Anleitung from './Anleitung.jsx'
 import FilterNumbers from '../../../shared/FilterNumbers.jsx'
