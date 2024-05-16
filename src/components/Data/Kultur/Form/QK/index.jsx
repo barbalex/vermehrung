@@ -11,8 +11,8 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext.js'
-import Qk from './Qk'
-import Choose from './Choose'
+import Qk from './Qk/index.jsx'
+import Choose from './Choose/index.jsx'
 import constants from '../../../../../utils/constants.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 

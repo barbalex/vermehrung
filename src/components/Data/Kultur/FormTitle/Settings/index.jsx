@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaCog } from 'react-icons/fa'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import Menu from './Menu'
+import Menu from './Menu.jsx'
 
 const KulturSettings = ({ asMenu, kulturId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -42,12 +42,13 @@ const KulturSettings = ({ asMenu, kulturId }) => {
         aria-haspopup="true"
         title="Optionen wählen"
         onClick={onClickConfig}
-        size="large">
+        size="large"
+      >
         <FaCog />
       </IconButton>
       <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} kulturId={kulturId} />
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(KulturSettings)
