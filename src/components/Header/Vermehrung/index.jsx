@@ -14,7 +14,7 @@ import NavTree from './NavTree'
 import Docu from './Docu'
 import Filter from './Filter'
 import Home from './Home'
-import Menu from '../../shared/Menu'
+import Menu from '../../shared/Menu.jsx'
 
 const Spacer = styled.div`
   flex-grow: 1;
