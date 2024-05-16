@@ -6,7 +6,7 @@ import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext.js'
-import Settings from './Settings'
+import Settings from './Settings/index.jsx'
 import Copy from './Copy'
 import Add from './Add'
 import Delete from './Delete'

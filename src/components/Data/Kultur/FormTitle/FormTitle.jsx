@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { withResizeDetector } from 'react-resize-detector'
 
-import Settings from './Settings'
+import Settings from './Settings/index.jsx'
 import Delete from './Delete'
 import Add from './Add'
 import HistoryButton from '../../../shared/HistoryButton.jsx'
