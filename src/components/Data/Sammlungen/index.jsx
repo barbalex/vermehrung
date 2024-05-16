@@ -9,7 +9,7 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../storeContext.js'
-import FilterTitle from '../../shared/FilterTitle'
+import FilterTitle from '../../shared/FilterTitle.jsx'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers.jsx'

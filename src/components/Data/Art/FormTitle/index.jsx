@@ -4,7 +4,7 @@ import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext.js'
-import FilterTitle from '../../../shared/FilterTitle'
+import FilterTitle from '../../../shared/FilterTitle.jsx'
 import FormTitle from './FormTitle'
 import tableFilter from '../../../../utils/tableFilter'
 
@@ -28,12 +28,12 @@ const ArtFormTitleChooser = ({
       filter.art._deleted === false
         ? Q.where('_deleted', false)
         : filter.art._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const totalCountObservable = collection.query(delQuery).observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'art' }))
