@@ -5,11 +5,11 @@ import { Allotment } from 'allotment'
 import { observer } from 'mobx-react-lite'
 import { Outlet, useLocation } from 'react-router-dom'
 
-import ArticleList from './ArticleList'
+import ArticleList from './ArticleList/index.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import constants from '../../utils/constants.js'
 import StoreContext from '../../storeContext.js'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle/index.jsx'
 
 const Container = styled.div`
   height: calc(100dvh - ${constants.appBarHeight}px);

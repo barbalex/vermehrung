@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { withResizeDetector } from 'react-resize-detector'
 
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
-import Filter from './Filter'
+import Filter from './Filter/index.jsx'
 import constants from '../../../utils/constants.js'
 
 const SiteTitle = styled(Button)`
