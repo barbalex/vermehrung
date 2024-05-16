@@ -8,8 +8,8 @@ import styled from '@emotion/styled'
 
 import StoreContext from '../../../../../storeContext.js'
 import exists from '../../../../../utils/exists.js'
-import updateLieferung from './updateLieferung'
-import updateAllLieferungen from './updateAllLieferungen'
+import updateLieferung from './updateLieferung.js'
+import updateAllLieferungen from './updateAllLieferungen.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
@@ -65,12 +65,12 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
       Object.entries(sammelLieferung)
         .filter(
           // only accept lieferung's fields
-          // eslint-disable-next-line no-unused-vars
+          // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
           ([key, value]) =>
             sammelLieferungFields.filter((f) => f !== 'id').includes(key),
         )
         // only update with existing values
-        // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
         .filter(([key, val]) => exists(val) && val !== false).length > 0,
     [sammelLieferung],
   )
