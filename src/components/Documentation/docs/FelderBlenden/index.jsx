@@ -1,4 +1,4 @@
-import { DokuDate } from '../..'
+import { DokuDate } from '../../index.jsx'
 import felderBlenden from './felderBlenden1.gif'
 
 const FelderBlenden = () => (
