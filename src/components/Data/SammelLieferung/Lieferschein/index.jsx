@@ -13,7 +13,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import Lieferung from './Lieferung'
 import StoreContext from '../../../../storeContext.js'
-import lieferungSort from '../../../../utils/lieferungSort'
+import lieferungSort from '../../../../utils/lieferungSort.js'
 import personFullname from '../../../../utils/personFullname'
 import constants from '../../../../utils/constants.js'
 import ProgressiveImg from '../../../shared/ProgressiveImg'

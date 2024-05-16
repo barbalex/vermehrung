@@ -7,7 +7,7 @@ import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToEx
 import exists from '../../../../../utils/exists.js'
 import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs.js'
 import zaehlungSort from '../../../../../utils/zaehlungSort'
-import lieferungSort from '../../../../../utils/lieferungSort'
+import lieferungSort from '../../../../../utils/lieferungSort.js'
 
 const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
   store,

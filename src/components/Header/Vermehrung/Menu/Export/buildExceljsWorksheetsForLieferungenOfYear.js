@@ -6,7 +6,7 @@ import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToEx
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft.js'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'
-import lieferungSort from '../../../../../utils/lieferungSort'
+import lieferungSort from '../../../../../utils/lieferungSort.js'
 
 const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
   const { db } = store
