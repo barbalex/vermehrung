@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext.js'
-import Link from './Select/Link'
+import Link from './Select/Link.jsx'
 
 const Container = styled.div`
   display: flex;
