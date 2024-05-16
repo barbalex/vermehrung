@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import StoreContext from '../../../storeContext.js'
-import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft'
+import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft.js'
 import constants from '../../../utils/constants'
 
 const Row = styled.div`

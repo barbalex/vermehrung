@@ -23,7 +23,7 @@ import LabelZaehlung from './LabelZaehlung.jsx'
 import CustomAxisTick from './CustomAxisTick.jsx'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 import StoreContext from '../../../../../../storeContext.js'
-import herkunftLabelFromHerkunft from '../../../../../../utils/herkunftLabelFromHerkunft'
+import herkunftLabelFromHerkunft from '../../../../../../utils/herkunftLabelFromHerkunft.js'
 import buildData from './buildData'
 
 const H4 = styled.h4`
