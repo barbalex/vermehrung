@@ -17,7 +17,7 @@ import QK from './QK'
 import Personen from './Personen'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList'
-import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
+import artsSortedFromArts from '../../../../utils/artsSortedFromArts.js'
 
 const FieldsContainer = styled.div`
   padding: 10px;

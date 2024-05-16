@@ -15,7 +15,7 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers'
 import tableFilter from '../../../utils/tableFilter'
-import artsSortedFromArts from '../../../utils/artsSortedFromArts'
+import artsSortedFromArts from '../../../utils/artsSortedFromArts.js'
 import constants from '../../../utils/constants.js'
 
 const Container = styled.div`

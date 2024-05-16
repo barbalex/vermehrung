@@ -12,7 +12,7 @@ import StoreContext from '../../../../../storeContext.js'
 import Select from '../../../../shared/Select/index.jsx'
 import TextField from '../../../../shared/TextField'
 import constants from '../../../../../utils/constants.js'
-import artsSortedFromArts from '../../../../../utils/artsSortedFromArts'
+import artsSortedFromArts from '../../../../../utils/artsSortedFromArts.js'
 
 const Title = styled.div`
   font-weight: bold;

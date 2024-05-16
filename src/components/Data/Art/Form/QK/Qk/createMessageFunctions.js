@@ -6,7 +6,7 @@ import { Q } from '@nozbe/watermelondb'
 import exists from '../../../../../../utils/exists.js'
 
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery.js'
-import artsSortedFromArts from '../../../../../../utils/artsSortedFromArts'
+import artsSortedFromArts from '../../../../../../utils/artsSortedFromArts.js'
 import gartensSortedFromGartens from '../../../../../../utils/gartensSortedFromGartens'
 import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromKulturs'
 import sammlungsSortedFromSammlungs from '../../../../../../utils/sammlungsSortedFromSammlungs'
