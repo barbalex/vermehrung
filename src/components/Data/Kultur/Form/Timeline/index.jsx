@@ -19,14 +19,14 @@ import { observer } from 'mobx-react-lite'
 import { withResizeDetector } from 'react-resize-detector'
 import { motion, useAnimation } from 'framer-motion'
 
-import CustomTooltip from './Tooltip'
-import LabelLieferung from './LabelLieferung'
-import LabelZaehlung from './LabelZaehlung'
-import CustomAxisTick from './CustomAxisTick'
+import CustomTooltip from './Tooltip.jsx'
+import LabelLieferung from './LabelLieferung.jsx'
+import LabelZaehlung from './LabelZaehlung.jsx'
+import CustomAxisTick from './CustomAxisTick.jsx'
 import constants from '../../../../../utils/constants.js'
 import exists from '../../../../../utils/exists.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import buildData from './buildData'
+import buildData from './buildData.js'
 
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);

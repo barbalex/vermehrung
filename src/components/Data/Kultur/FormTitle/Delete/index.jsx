@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import Menu from './Menu'
+import Menu from './Menu.jsx'
 
 const KulturDeleteButton = ({ row, asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
