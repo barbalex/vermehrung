@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 
-import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook'
+import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft.js'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook.js'
