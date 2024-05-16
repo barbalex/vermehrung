@@ -4,10 +4,10 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router-dom'
 
-import Article from './Article'
+import Article from './Article.jsx'
 import constants from '../../../utils/constants.js'
 import storeContext from '../../../storeContext.js'
-import IntoViewScroller from './IntoViewScroller'
+import IntoViewScroller from './IntoViewScroller.jsx'
 
 const Container = styled.div`
   height: calc(100dvh - ${constants.appBarHeight}px);
