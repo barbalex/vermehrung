@@ -8,7 +8,7 @@ import StoreContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 import Conflict from './Conflict.jsx'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle/index.jsx'
 import Form from './Form/index.jsx'
 import History from './History/index.jsx'
 
@@ -38,8 +38,8 @@ const Kultur = ({
     const observable = showFilter
       ? $of(filter.kultur)
       : initialDataQueried
-      ? db.get('kultur').findAndObserve(id)
-      : $of({})
+        ? db.get('kultur').findAndObserve(id)
+        : $of({})
     const subscription = observable.subscribe((newRow) => {
       setRow(newRow)
       setRawRow(JSON.stringify(newRow._raw))

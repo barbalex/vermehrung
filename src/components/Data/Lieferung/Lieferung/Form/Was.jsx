@@ -5,7 +5,6 @@ import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
-import { combineLatest } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
 import StoreContext from '../../../../../storeContext.js'
@@ -57,12 +56,12 @@ const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
       filter.art._deleted === false
         ? Q.where('_deleted', false)
         : filter.art._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const subscription = db
       .get('art')
       .query(artDelQuery)
