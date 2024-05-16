@@ -24,7 +24,7 @@ import CustomAxisTick from './CustomAxisTick.jsx'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 import StoreContext from '../../../../../../storeContext.js'
 import herkunftLabelFromHerkunft from '../../../../../../utils/herkunftLabelFromHerkunft.js'
-import buildData from './buildData'
+import buildData from './buildData.js'
 
 const H4 = styled.h4`
   margin-bottom: 5px;

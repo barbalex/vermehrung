@@ -11,7 +11,7 @@ import sammlungsSortedFromSammlungs from '../../../../utils/sammlungsSortedFromS
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 import personFullname from '../../../../utils/personFullname'
 import eventSort from '../../../../utils/eventSort'
-import herkunftSort from '../../../../utils/herkunftSort'
+import herkunftSort from '../../../../utils/herkunftSort.js'
 import lieferungSort from '../../../../utils/lieferungSort'
 import personSort from '../../../../utils/personSort'
 import zaehlungSort from '../../../../utils/zaehlungSort'

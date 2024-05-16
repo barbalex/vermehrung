@@ -25,7 +25,7 @@ import personLabelFromPerson from '../../../../utils/personLabelFromPerson'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
 import exists from '../../../../utils/exists'
 import personSort from '../../../../utils/personSort'
-import herkunftSort from '../../../../utils/herkunftSort'
+import herkunftSort from '../../../../utils/herkunftSort.js'
 
 const FieldsContainer = styled.div`
   padding: 10px;
