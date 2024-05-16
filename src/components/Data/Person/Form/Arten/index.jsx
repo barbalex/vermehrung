@@ -12,7 +12,7 @@ import StoreContext from '../../../../../storeContext.js'
 import Art from './Art'
 import Select from '../../../../shared/Select/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import artsSortedFromArts from '../../../../../utils/artsSortedFromArts'
+import artsSortedFromArts from '../../../../../utils/artsSortedFromArts.js'
 import avsSortByArt from '../../../../../utils/avsSortByArt'
 import constants from '../../../../../utils/constants.js'
 
