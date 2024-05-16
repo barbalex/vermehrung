@@ -5,7 +5,7 @@ import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../storeContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle.jsx'
 import tableFilter from '../../../../utils/tableFilter.js'
 
 const HerkunftFormTitleChooser = ({
@@ -35,12 +35,12 @@ const HerkunftFormTitleChooser = ({
       filter.herkunft._deleted === false
         ? Q.where('_deleted', false)
         : filter.herkunft._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const totalCountObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()

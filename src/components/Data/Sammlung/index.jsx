@@ -9,7 +9,7 @@ import FormTitle from './FormTitle'
 import Form from './Form'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
-import Conflict from './Conflict'
+import Conflict from './Conflict.jsx'
 import History from './History'
 
 const Container = styled.div`
