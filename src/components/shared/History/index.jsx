@@ -7,7 +7,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.svg?react'
-import Data from '../Conflict/Data'
+import Data from '../Conflict/Data.jsx'
 import StoreContext from '../../../storeContext.js'
 import constants from '../../../utils/constants.js'
 

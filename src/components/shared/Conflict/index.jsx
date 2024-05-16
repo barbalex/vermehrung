@@ -10,8 +10,8 @@ import {
 } from 'react-icons/fa'
 
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.svg?react'
-import Explainer from './Explainer'
-import Data from './Data'
+import Explainer from './Explainer.jsx'
+import Data from './Data.jsx'
 import StoreContext from '../../../storeContext.js'
 
 const Container = styled.div`
