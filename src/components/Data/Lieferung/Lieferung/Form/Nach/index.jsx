@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 
 import StoreContext from '../../../../../../storeContext.js'
 import Select from '../../../../../shared/Select/index.jsx'
-import Checkbox2States from '../../../../../shared/Checkbox2States'
+import Checkbox2States from '../../../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../../../shared/JesNo'
 import exists from '../../../../../../utils/exists.js'
 import useData from './useData'

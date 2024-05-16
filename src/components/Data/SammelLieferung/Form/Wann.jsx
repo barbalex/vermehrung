@@ -6,7 +6,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import StoreContext from '../../../../storeContext.js'
 import Date from '../../../shared/Date'
-import Checkbox2States from '../../../shared/Checkbox2States'
+import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../shared/JesNo'
 import constants from '../../../../utils/constants.js'
 

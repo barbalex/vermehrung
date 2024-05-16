@@ -5,7 +5,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../../storeContext.js'
-import Checkbox2States from '../../../../shared/Checkbox2States'
+import Checkbox2States from '../../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../../shared/JesNo'
 import exists from '../../../../../utils/exists.js'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
