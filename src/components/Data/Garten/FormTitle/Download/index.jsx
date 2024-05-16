@@ -7,9 +7,9 @@ import { FaDownload } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
 import StoreContext from '../../../../../storeContext.js'
-import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten'
-import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums'
-import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'
+import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten.js'
+import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums.js'
+import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`

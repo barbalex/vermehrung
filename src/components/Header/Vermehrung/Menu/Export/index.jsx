@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import StoreContext from '../../../../../storeContext.js'
 import buildExceljsWorksheetsForLieferungenOfYear from './buildExceljsWorksheetsForLieferungenOfYear'
 import buildExceljsWorksheetsForKulturBedarfsplanung from './buildExceljsWorksheetsForKulturBedarfsplanung'
-import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'
+import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook.js'
 
 const FirstMenuItem = styled(MenuItem)`
   margin-top: -5px !important;
