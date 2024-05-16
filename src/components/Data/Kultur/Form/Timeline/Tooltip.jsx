@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 
-import exists from '../../../../../utils/exists'
+import exists from '../../../../../utils/exists.js'
 
 const Popup = styled.div`
   background-color: white;

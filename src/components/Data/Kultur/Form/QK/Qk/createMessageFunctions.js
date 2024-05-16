@@ -2,7 +2,7 @@ import format from 'date-fns/format'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 
-import exists from '../../../../../../utils/exists'
+import exists from '../../../../../../utils/exists.js'
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery'
 import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromKulturs'
 import eventSort from '../../../../../../utils/eventSort'

@@ -8,7 +8,7 @@ import uniqBy from 'lodash/uniqBy'
 
 import StoreContext from '../../../../../storeContext.js'
 import Select from '../../../../shared/Select/index.jsx'
-import exists from '../../../../../utils/exists'
+import exists from '../../../../../utils/exists.js'
 import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs'
 import sammlungsSortedFromSammlungs from '../../../../../utils/sammlungsSortedFromSammlungs'
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft.js'

@@ -7,7 +7,7 @@ import { FaRegCopy } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
 import StoreContext from '../../../../../storeContext.js'
-import exists from '../../../../../utils/exists'
+import exists from '../../../../../utils/exists.js'
 import updateLieferung from './updateLieferung'
 import updateAllLieferungen from './updateAllLieferungen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'

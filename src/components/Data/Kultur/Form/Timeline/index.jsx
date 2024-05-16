@@ -24,7 +24,7 @@ import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import constants from '../../../../../utils/constants.js'
-import exists from '../../../../../utils/exists'
+import exists from '../../../../../utils/exists.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import buildData from './buildData'
 

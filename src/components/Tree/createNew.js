@@ -3,7 +3,7 @@ import camelCase from 'lodash/camelCase'
 import isUuid from 'is-uuid'
 
 import tableFromTitleHash from '../../utils/tableFromTitleHash'
-import exists from '../../utils/exists'
+import exists from '../../utils/exists.js'
 
 const createNew = async ({ node, store }) => {
   // get parent table, parent table id and table from url
@@ -19,7 +19,7 @@ const createNew = async ({ node, store }) => {
   let table = null
   let fkExists = null
   let fkName = null
-  let additionalValuesToSet = {}
+  const additionalValuesToSet = {}
 
   if (nodeType === 'table') {
     tableTitle = url.slice(-2)[0]

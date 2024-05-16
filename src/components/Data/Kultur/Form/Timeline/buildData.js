@@ -4,7 +4,7 @@ import sumBy from 'lodash/sumBy'
 import { Q } from '@nozbe/watermelondb'
 import format from 'date-fns/format'
 
-import exists from '../../../../../utils/exists'
+import exists from '../../../../../utils/exists.js'
 
 const buildData = async ({ row }) => {
   let zaehlungenDone = []

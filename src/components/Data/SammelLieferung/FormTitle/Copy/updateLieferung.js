@@ -4,7 +4,7 @@ import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
 
 import toPgArray from '../../../../../utils/toPgArray'
-import exists from '../../../../../utils/exists'
+import exists from '../../../../../utils/exists.js'
 
 const lieferungRevFields = [
   'id',

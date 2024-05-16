@@ -23,7 +23,7 @@ import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft.js'
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson.js'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts'
-import exists from '../../../../utils/exists'
+import exists from '../../../../utils/exists.js'
 import personSort from '../../../../utils/personSort'
 import herkunftSort from '../../../../utils/herkunftSort.js'
 
