@@ -8,7 +8,7 @@ import StoreContext from '../../../../../../storeContext.js'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 import Conflict from './Conflict.jsx'
 import Form from './Form/index.jsx'
-import History from './History'
+import History from './History/index.jsx'
 
 const Container = styled.div`
   position: relative;
