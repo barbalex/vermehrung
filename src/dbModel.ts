@@ -20,7 +20,7 @@ import { first as first$ } from 'rxjs/operators'
 import gql from 'graphql-tag'
 
 import toStringIfPossible from './utils/toStringIfPossible'
-import personLabelFromPerson from './utils/personLabelFromPerson'
+import personLabelFromPerson from './utils/personLabelFromPerson.js'
 import gartenLabelFromGarten from './utils/gartenLabelFromGarten'
 import eventLabelFromEvent from './utils/eventLabelFromEvent'
 import artLabelFromAeArt from './utils/artLabelFromAeArt'

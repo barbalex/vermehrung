@@ -10,7 +10,7 @@ import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext.js'
 import Art from './Art'
-import Select from '../../../../shared/Select'
+import Select from '../../../../shared/Select/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import artsSortedFromArts from '../../../../../utils/artsSortedFromArts'
 import avsSortByArt from '../../../../../utils/avsSortByArt'

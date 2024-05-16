@@ -11,7 +11,7 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
 import StoreContext from '../../../../storeContext.js'
-import Select from '../../../shared/Select'
+import Select from '../../../shared/Select/index.jsx'
 import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import JesNo from '../../../shared/JesNo'

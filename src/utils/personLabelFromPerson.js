@@ -1,4 +1,4 @@
-import personFullname from './personFullname'
+import personFullname from './personFullname.js'
 
 const personLabelFromPerson = ({ person }) => {
   if (!person) return '(keine Person)'
