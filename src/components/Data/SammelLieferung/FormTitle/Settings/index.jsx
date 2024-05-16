@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaCog } from 'react-icons/fa'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import Menu from './Menu'
+import Menu from './Menu.jsx'
 
 const SettingsSammelLieferung = ({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
