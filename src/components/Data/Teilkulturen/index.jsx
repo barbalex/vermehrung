@@ -15,7 +15,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.svg?react'
 import tableFilter from '../../../utils/tableFilter'
-import teilkulturSort from '../../../utils/teilkulturSort'
+import teilkulturSort from '../../../utils/teilkulturSort.js'
 import constants from '../../../utils/constants.js'
 
 const Container = styled.div`
