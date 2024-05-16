@@ -6,7 +6,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext.js'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
-import JesNo from '../../../shared/JesNo'
+import JesNo from '../../../shared/JesNo.jsx'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import exists from '../../../../utils/exists.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
