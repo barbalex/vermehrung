@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import StoreContext from '../../../../storeContext.js'
 import buildExceljsWorksheets from './buildExceljsWorksheets'
-import downloadExceljsWorkbook from '../../../../utils/downloadExceljsWorkbook'
+import downloadExceljsWorkbook from '../../../../utils/downloadExceljsWorkbook.js'
 
 const Download = ({ row, asMenu }) => {
   const store = useContext(StoreContext)

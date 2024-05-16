@@ -16,7 +16,7 @@ import personLabelFromPerson from '../../../../utils/personLabelFromPerson.js'
 import personSort from '../../../../utils/personSort.js'
 import Files from '../../Files/index.jsx'
 import Coordinates from '../../../shared/Coordinates.jsx'
-import Personen from './Personen'
+import Personen from './Personen/index.jsx'
 import ConflictList from '../../../shared/ConflictList/index.jsx'
 
 const FieldsContainer = styled.div`
