@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
 import StoreContext from '../../../../storeContext.js'
-import buildExceljsWorksheets from './buildExceljsWorksheets'
+import buildExceljsWorksheets from './buildExceljsWorksheets.js'
 import downloadExceljsWorkbook from '../../../../utils/downloadExceljsWorkbook.js'
 
 const Download = ({ row, asMenu }) => {
