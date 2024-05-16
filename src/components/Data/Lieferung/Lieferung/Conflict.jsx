@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import { useQuery } from 'urql'
 
 import StoreContext from '../../../../storeContext.js'
-import checkForOnlineError from '../../../../utils/checkForOnlineError'
+import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../../utils/toPgArray'
 import mutations from '../../../../utils/mutations'
 import Conflict from '../../../shared/Conflict'

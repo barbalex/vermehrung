@@ -5,7 +5,7 @@ import Slider from 'react-slick'
 import { useQuery } from 'urql'
 import gql from 'graphql-tag'
 
-import checkForOnlineError from '../../../../utils/checkForOnlineError'
+import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
 import Spinner from '../../../shared/Spinner'
 import StoreContext from '../../../../storeContext.js'
 import Row from './Row'
