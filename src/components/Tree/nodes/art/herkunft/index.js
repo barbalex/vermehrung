@@ -1,4 +1,4 @@
-import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft'
+import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft.js'
 
 const artHerkunftNode = async ({
   herkunft,
