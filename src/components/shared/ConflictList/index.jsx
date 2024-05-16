@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import Conflict from './Conflict'
+import Conflict from './Conflict.jsx'
 
 const Konflikte = styled.div`
   margin-bottom: 10px;
