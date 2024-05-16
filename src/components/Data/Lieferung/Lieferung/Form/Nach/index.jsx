@@ -7,8 +7,8 @@ import Select from '../../../../../shared/Select/index.jsx'
 import Checkbox2States from '../../../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../../../shared/JesNo.jsx'
 import exists from '../../../../../../utils/exists.js'
-import useData from './useData'
-import Add from './Add'
+import useData from './useData.jsx'
+import Add from './Add/index.jsx'
 
 const Title = styled.div`
   font-weight: bold;

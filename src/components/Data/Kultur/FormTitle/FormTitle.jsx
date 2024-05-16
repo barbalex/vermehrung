@@ -5,7 +5,7 @@ import { withResizeDetector } from 'react-resize-detector'
 
 import Settings from './Settings/index.jsx'
 import Delete from './Delete/index.jsx'
-import Add from './Add'
+import Add from './Add.jsx'
 import HistoryButton from '../../../shared/HistoryButton.jsx'
 import FilterNumbers from '../../../shared/FilterNumbers.jsx'
 import Menu from '../../../shared/Menu.jsx'
