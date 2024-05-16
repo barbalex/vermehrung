@@ -1,4 +1,4 @@
-import teilkulturLabelFromTeilkultur from '../../../../../../../utils/teilkulturLabelFromTeilkultur'
+import teilkulturLabelFromTeilkultur from '../../../../../../../utils/teilkulturLabelFromTeilkultur.js'
 
 const artHerkunftKulturTeilkulturNodes = ({
   teilkultur,
