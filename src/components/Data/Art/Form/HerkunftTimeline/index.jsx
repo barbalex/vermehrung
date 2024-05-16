@@ -10,7 +10,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import Pflanzen from './Pflanzen'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 import herkunftSort from '../../../../../utils/herkunftSort'
 import constants from '../../../../../utils/constants'
 

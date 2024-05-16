@@ -6,7 +6,7 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import Select from '../../../shared/Select'
 import exists from '../../../../utils/exists'
 import sammlungsSortedFromSammlungs from '../../../../utils/sammlungsSortedFromSammlungs'

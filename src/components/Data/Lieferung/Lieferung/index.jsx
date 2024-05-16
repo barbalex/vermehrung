@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Spinner from '../../../shared/Spinner'
 import Conflict from './Conflict'

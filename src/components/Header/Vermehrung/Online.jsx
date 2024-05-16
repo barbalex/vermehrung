@@ -8,7 +8,7 @@ import {
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 
 const OnlineButton = styled(IconButton)`
   /*cursor: default !important;*/

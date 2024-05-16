@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 
 const TitleRow = styled.div`
   display: flex;

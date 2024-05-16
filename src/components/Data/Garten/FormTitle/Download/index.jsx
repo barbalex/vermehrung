@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaDownload } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten'
 import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'

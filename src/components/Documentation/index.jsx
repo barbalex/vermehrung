@@ -8,7 +8,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 import ArticleList from './ArticleList'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import constants from '../../utils/constants'
-import StoreContext from '../../storeContext'
+import StoreContext from '../../storeContext.js'
 import FormTitle from './FormTitle'
 
 const Container = styled.div`

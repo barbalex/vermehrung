@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner'
 import Conflict from './Conflict'

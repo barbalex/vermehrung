@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../../../../storeContext'
+import StoreContext from '../../../../../../storeContext.js'
 import Select from '../../../../../shared/Select'
 import Checkbox2States from '../../../../../shared/Checkbox2States'
 import JesNo from '../../../../../shared/JesNo'

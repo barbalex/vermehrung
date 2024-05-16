@@ -22,7 +22,7 @@ import LabelLieferung from './LabelLieferung.jsx'
 import LabelZaehlung from './LabelZaehlung.jsx'
 import CustomAxisTick from './CustomAxisTick.jsx'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
-import StoreContext from '../../../../../../storeContext'
+import StoreContext from '../../../../../../storeContext.js'
 import herkunftLabelFromHerkunft from '../../../../../../utils/herkunftLabelFromHerkunft'
 import buildData from './buildData'
 

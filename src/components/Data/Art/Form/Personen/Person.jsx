@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;

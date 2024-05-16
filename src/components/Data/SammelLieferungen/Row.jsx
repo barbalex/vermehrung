@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { first as first$ } from 'rxjs/operators'
 
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 import constants from '../../../utils/constants'
 
 const Row = styled.div`

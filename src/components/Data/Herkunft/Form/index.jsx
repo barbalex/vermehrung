@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import JesNo from '../../../shared/JesNo'

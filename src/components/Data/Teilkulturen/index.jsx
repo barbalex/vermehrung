@@ -8,7 +8,7 @@ import { withResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'

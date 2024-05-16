@@ -22,7 +22,7 @@ import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
-import StoreContext from '../../../../../../storeContext'
+import StoreContext from '../../../../../../storeContext.js'
 import buildData from './buildData'
 
 const NoData = styled.div`

@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import TaxonSelect from './TaxonSelect'
 import SelectCreatable from '../../../shared/SelectCreatable'
 import Checkbox2States from '../../../shared/Checkbox2States'

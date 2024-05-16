@@ -4,7 +4,7 @@ import { FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import buildExceljsWorksheets from './buildExceljsWorksheets'
 import downloadExceljsWorkbook from '../../../../utils/downloadExceljsWorkbook'
 

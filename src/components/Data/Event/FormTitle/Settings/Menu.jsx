@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.div`

@@ -7,7 +7,7 @@ import {
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../storeContext'
+import StoreContext from '../../storeContext.js'
 
 const Container = styled.div`
   background-color: #ffe0b2;

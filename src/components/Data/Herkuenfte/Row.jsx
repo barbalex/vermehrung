@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 import herkunftLabelFromHerkunft from '../../../utils/herkunftLabelFromHerkunft'
 import constants from '../../../utils/constants'
 

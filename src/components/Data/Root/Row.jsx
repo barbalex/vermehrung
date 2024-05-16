@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { combineLatest } from 'rxjs'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 import tableFilter from '../../../utils/tableFilter'
 import constants from '../../../utils/constants'
 

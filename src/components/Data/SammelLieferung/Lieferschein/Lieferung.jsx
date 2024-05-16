@@ -6,7 +6,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft'
 
 const StyledTableCell = styled(TableCell)`

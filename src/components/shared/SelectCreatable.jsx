@@ -4,7 +4,7 @@ import Select from 'react-select/creatable'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../storeContext'
+import StoreContext from '../../storeContext.js'
 import Link from './Select/Link'
 
 const Container = styled.div`

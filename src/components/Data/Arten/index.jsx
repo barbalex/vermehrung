@@ -9,7 +9,7 @@ import UpSvg from '../../../svg/to_up.svg?react'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../storeContext'
+import StoreContext from '../../../storeContext.js'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'

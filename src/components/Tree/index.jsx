@@ -8,7 +8,7 @@ import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
-import StoreContext from '../../storeContext'
+import StoreContext from '../../storeContext.js'
 import Settings from './Settings'
 import List from './List'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'

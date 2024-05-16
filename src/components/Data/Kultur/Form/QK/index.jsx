@@ -10,7 +10,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
-import StoreContext from '../../../../../storeContext'
+import StoreContext from '../../../../../storeContext.js'
 import Qk from './Qk'
 import Choose from './Choose'
 import constants from '../../../../../utils/constants'

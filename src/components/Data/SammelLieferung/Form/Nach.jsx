@@ -6,7 +6,7 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import Select from '../../../shared/Select'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import JesNo from '../../../shared/JesNo'

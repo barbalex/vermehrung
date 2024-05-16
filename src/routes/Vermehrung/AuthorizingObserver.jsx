@@ -1,7 +1,7 @@
 import { useEffect, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../storeContext'
+import StoreContext from '../../storeContext.js'
 
 const AuthorizingObserver = () => {
   const store = useContext(StoreContext)

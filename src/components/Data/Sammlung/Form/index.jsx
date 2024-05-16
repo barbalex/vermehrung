@@ -8,7 +8,7 @@ import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import Date from '../../../shared/Date'

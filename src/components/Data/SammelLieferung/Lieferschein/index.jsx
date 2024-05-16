@@ -12,7 +12,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import Lieferung from './Lieferung'
-import StoreContext from '../../../../storeContext'
+import StoreContext from '../../../../storeContext.js'
 import lieferungSort from '../../../../utils/lieferungSort'
 import personFullname from '../../../../utils/personFullname'
 import constants from '../../../../utils/constants'
