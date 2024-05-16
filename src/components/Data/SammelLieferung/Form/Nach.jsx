@@ -11,7 +11,7 @@ import Select from '../../../shared/Select/index.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import JesNo from '../../../shared/JesNo'
 import exists from '../../../../utils/exists.js'
-import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
+import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs.js'
 
 const Title = styled.div`
   font-weight: bold;
