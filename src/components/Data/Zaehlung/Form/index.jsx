@@ -15,7 +15,7 @@ import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../shared/JesNo.jsx'
 import Date from '../../../shared/Date.jsx'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber.js'
-import Teilzaehlungen from './Teilzaehlungen'
+import Teilzaehlungen from './Teilzaehlungen/index.jsx'
 import constants from '../../../../utils/constants.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList/index.jsx'
@@ -64,22 +64,22 @@ const ZaehlungForm = ({
       filter.kultur._deleted === false
         ? Q.where('_deleted', false)
         : filter.kultur._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const kulturAktivQuery =
       filter.kultur.aktiv === false
         ? Q.where('aktiv', false)
         : filter.kultur.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const kultursObservable = db
       .get('kultur')
       .query(kulturDelQuery, kulturAktivQuery)

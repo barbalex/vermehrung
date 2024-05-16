@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Teilzaehlung from './Teilzaehlung'
+import Teilzaehlung from './Teilzaehlung/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const TeilzaehlungenRows = ({ kulturId, teilzaehlungs }) => (
