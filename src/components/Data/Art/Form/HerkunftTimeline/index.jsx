@@ -8,10 +8,10 @@ import { motion, useAnimation } from 'framer-motion'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import Pflanzen from './Pflanzen'
+import Pflanzen from './Pflanzen/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import StoreContext from '../../../../../storeContext.js'
-import herkunftSort from '../../../../../utils/herkunftSort'
+import herkunftSort from '../../../../../utils/herkunftSort.js'
 import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.section`
