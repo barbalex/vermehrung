@@ -5,7 +5,7 @@ import { Q } from '@nozbe/watermelondb'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import eventSort from '../../../../../utils/eventSort.js'
 import storeContext from '../../../../../storeContext.js'
-import Row from './Row'
+import Row from './Row.jsx'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`

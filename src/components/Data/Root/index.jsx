@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import Row from './Row'
+import Row from './Row.jsx'
 import StoreContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import getShowArt from '../../../utils/showArt'

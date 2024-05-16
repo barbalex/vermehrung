@@ -8,7 +8,7 @@ import { useQuery } from 'urql'
 import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
 import Spinner from '../../../shared/Spinner.jsx'
 import StoreContext from '../../../../storeContext.js'
-import Row from './Row'
+import Row from './Row.jsx'
 
 const zaehlungRevQuery = gql`
   query zaehlungRevForHistoryQuery($rev: [String!]) {
