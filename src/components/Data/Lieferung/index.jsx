@@ -6,8 +6,8 @@ import last from 'lodash/last'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import Lieferung from './Lieferung'
-import SammelLieferung from '../SammelLieferung'
+import Lieferung from './Lieferung/index.jsx'
+import SammelLieferung from '../SammelLieferung/index.jsx'
 import StoreContext from '../../../storeContext.js'
 
 const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
@@ -41,8 +41,8 @@ const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
     const lieferungObservable = showFilter
       ? $of(filter.lieferung)
       : initialDataQueried
-      ? db.get('lieferung').findAndObserve(id)
-      : $of({})
+        ? db.get('lieferung').findAndObserve(id)
+        : $of({})
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       lieferungObservable,

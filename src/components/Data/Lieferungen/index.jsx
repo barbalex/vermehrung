@@ -97,12 +97,12 @@ const Lieferungen = ({ filter: showFilter = false, width, height }) => {
       filter.lieferung._deleted === false
         ? Q.where('_deleted', false)
         : filter.lieferung._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const countObservable = collection
       .query(lieferungDelQuery, ...hierarchyQuery)
       .observeCount()
@@ -160,7 +160,7 @@ const Lieferungen = ({ filter: showFilter = false, width, height }) => {
 
       const entries = Object.entries(sl)
         .filter(
-          // eslint-disable-next-line no-unused-vars
+          // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
           ([key, value]) =>
             !key.startsWith('_') &&
             ![
@@ -171,7 +171,7 @@ const Lieferungen = ({ filter: showFilter = false, width, height }) => {
               'sammlung',
             ].includes(key),
         )
-        // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
         .filter(([key, value]) => exists(value))
       for (const [key, value] of entries) {
         const keyToUse = key === 'id' ? 'sammel_lieferung_id' : key
