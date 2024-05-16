@@ -9,11 +9,11 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext.js'
-import Garten from './Garten'
+import Garten from './Garten.jsx'
 import Select from '../../../../shared/Select/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import gartensSortedFromGartens from '../../../../../utils/gartensSortedFromGartens.js'
-import gvsSortByGarten from '../../../../../utils/gvsSortByGarten'
+import gvsSortByGarten from '../../../../../utils/gvsSortByGarten.js'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`
@@ -86,22 +86,22 @@ const PersonArten = ({ person }) => {
       filter.garten._deleted === false
         ? Q.where('_deleted', false)
         : filter.garten._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const gartenAktivQuery =
       filter.garten.aktiv === false
         ? Q.where('aktiv', false)
         : filter.garten.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const gartensObservable = db
       .get('garten')
       .query(

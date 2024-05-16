@@ -1,6 +1,6 @@
 import axios from 'redaxios'
 
-import constants from './constants'
+import constants from './constants.js'
 
 const signup = async ({ person, store }) => {
   const { addNotification, online, setOnline } = store
