@@ -7,7 +7,7 @@ import { useQuery } from 'urql'
 
 import StoreContext from '../../../storeContext.js'
 import Conflict from '../../shared/Conflict/index.jsx'
-import createDataArrayForRevComparison from './createDataArrayForRevComparison'
+import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
 import checkForOnlineError from '../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../utils/toPgArray.js'
 import mutations from '../../../utils/mutations.js'

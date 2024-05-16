@@ -9,7 +9,7 @@ import StoreContext from '../../../../storeContext.js'
 import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
 import mutations from '../../../../utils/mutations.js'
 import toPgArray from '../../../../utils/toPgArray.js'
-import createDataArrayForRevComparison from '../createDataArrayForRevComparison'
+import createDataArrayForRevComparison from '../createDataArrayForRevComparison.js'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)

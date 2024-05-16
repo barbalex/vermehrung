@@ -10,7 +10,7 @@ import checkForOnlineError from '../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../utils/toPgArray.js'
 import mutations from '../../../utils/mutations.js'
 import Conflict from '../../shared/Conflict/index.jsx'
-import createDataArrayForRevComparison from './createDataArrayForRevComparison'
+import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
 
 const zaehlungRevQuery = gql`
   query zaehlungRevForConflictQuery($id: uuid!, $rev: String!) {
