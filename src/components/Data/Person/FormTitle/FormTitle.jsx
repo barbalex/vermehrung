@@ -5,7 +5,7 @@ import { withResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext.js'
-import AddButton from './AddButton'
+import AddButton from './AddButton.jsx'
 import DeleteButton from './DeleteButton'
 import FilterNumbers from '../../../shared/FilterNumbers.jsx'
 import Menu from '../../../shared/Menu.jsx'
