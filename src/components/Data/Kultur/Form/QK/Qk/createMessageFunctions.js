@@ -8,7 +8,7 @@ import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromK
 import eventSort from '../../../../../../utils/eventSort.js'
 import lieferungSort from '../../../../../../utils/lieferungSort.js'
 import teilkulturSort from '../../../../../../utils/teilkulturSort.js'
-import zaehlungSort from '../../../../../../utils/zaehlungSort'
+import zaehlungSort from '../../../../../../utils/zaehlungSort.js'
 
 const createMessageFunctions = async ({ kulturId, db, store }) => {
   const { filter } = store
