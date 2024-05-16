@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import toStringIfPossible from '../../../utils/toStringIfPossible'
 import StoreContext from '../../../storeContext.js'
-import Spinner from '../Spinner'
+import Spinner from '../Spinner.jsx'
 
 const Row = styled.div`
   display: flex;

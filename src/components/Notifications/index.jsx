@@ -17,7 +17,7 @@ const StyledIconButton = styled(IconButton)`
 `
 
 import StoreContext from '../../storeContext.js'
-import Notification from './Notification'
+import Notification from './Notification.jsx'
 
 const Notifications = () => {
   const store = useContext(StoreContext)

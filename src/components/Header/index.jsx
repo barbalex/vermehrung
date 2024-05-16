@@ -7,9 +7,9 @@ import { useLocation } from 'react-router-dom'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import constants from '../../utils/constants.js'
 
-import Home from './Home'
-import Doku from './Doku'
-import Vermehrung from './Vermehrung'
+import Home from './Home.jsx'
+import Doku from './Doku/index.jsx'
+import Vermehrung from './Vermehrung/index.jsx'
 
 const StyledAppBar = styled(AppBar)`
   min-height: ${constants.appBarHeight}px !important;
