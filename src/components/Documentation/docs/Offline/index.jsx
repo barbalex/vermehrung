@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { DokuDate } from '../..'
+import { DokuDate } from '../../index.jsx'
 import one from './001.png'
 import two from './002.png'
 import three from './003.png'

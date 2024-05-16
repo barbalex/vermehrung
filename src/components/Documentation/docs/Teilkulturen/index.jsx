@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { DokuDate } from '../..'
+import { DokuDate } from '../../index.jsx'
 import teilkulturOption from './teilkultur_option.gif'
 import teilkulturNew from './teilkultur_new.gif'
 
