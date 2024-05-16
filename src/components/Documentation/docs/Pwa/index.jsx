@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom'
-
 import { DokuDate } from '../../index.jsx'
 import installieren from './installieren.webp'
 
