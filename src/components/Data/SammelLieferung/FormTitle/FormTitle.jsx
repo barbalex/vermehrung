@@ -15,7 +15,7 @@ import Menu from '../../../shared/Menu.jsx'
 import HistoryButton from '../../../shared/HistoryButton.jsx'
 import NavButtons from './NavButtons'
 import PrintButtons from './PrintButtons'
-import Anleitung from './Anleitung'
+import Anleitung from './Anleitung.jsx'
 import constants from '../../../../utils/constants.js'
 
 const TitleContainer = styled.div`
