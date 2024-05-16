@@ -13,7 +13,7 @@ import sammlungsSortedFromSammlungs from '../../../../../../utils/sammlungsSorte
 import eventSort from '../../../../../../utils/eventSort.js'
 import herkunftSort from '../../../../../../utils/herkunftSort.js'
 import lieferungSort from '../../../../../../utils/lieferungSort.js'
-import personSort from '../../../../../../utils/personSort'
+import personSort from '../../../../../../utils/personSort.js'
 import teilkulturSort from '../../../../../../utils/teilkulturSort'
 import zaehlungSort from '../../../../../../utils/zaehlungSort'
 import personFullname from '../../../../../../utils/personFullname'

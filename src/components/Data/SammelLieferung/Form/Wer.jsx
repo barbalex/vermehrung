@@ -9,7 +9,7 @@ import StoreContext from '../../../../storeContext.js'
 import Select from '../../../shared/Select/index.jsx'
 import TextField from '../../../shared/TextField'
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson.js'
-import personSort from '../../../../utils/personSort'
+import personSort from '../../../../utils/personSort.js'
 
 const Title = styled.div`
   font-weight: bold;
