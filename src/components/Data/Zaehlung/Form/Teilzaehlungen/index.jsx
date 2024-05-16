@@ -10,7 +10,7 @@ import StoreContext from '../../../../../storeContext.js'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk'
+import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk.js'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
