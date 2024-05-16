@@ -10,7 +10,7 @@ import StoreContext from '../../../../../storeContext.js'
 import Select from '../../../../shared/Select/index.jsx'
 import exists from '../../../../../utils/exists.js'
 import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs.js'
-import sammlungsSortedFromSammlungs from '../../../../../utils/sammlungsSortedFromSammlungs'
+import sammlungsSortedFromSammlungs from '../../../../../utils/sammlungsSortedFromSammlungs.js'
 import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft.js'
 
 const Title = styled.div`
