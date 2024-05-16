@@ -5,7 +5,7 @@ import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext.js'
 import FilterTitle from '../../../../shared/FilterTitle.jsx'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle.jsx'
 import tableFilter from '../../../../../utils/tableFilter.js'
 
 const LieferungTitleChooser = ({
@@ -36,35 +36,39 @@ const LieferungTitleChooser = ({
       kulturIdInActiveNodeArray && activeNodeArray.includes('Aus-Lieferungen')
         ? [Q.where('von_kultur_id', kulturIdInActiveNodeArray)]
         : kulturIdInActiveNodeArray &&
-          activeNodeArray.includes('An-Lieferungen')
-        ? [Q.where('nach_kultur_id', kulturIdInActiveNodeArray)]
-        : sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray
-        ? [
-            Q.experimentalJoinTables(['sammel_lieferung']),
-            Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
-          ]
-        : personIdInActiveNodeArray && !kulturIdInActiveNodeArray
-        ? [
-            Q.experimentalJoinTables(['person']),
-            Q.on('person', 'id', personIdInActiveNodeArray),
-          ]
-        : sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray
-        ? [
-            Q.experimentalJoinTables(['sammlung']),
-            Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
-          ]
-        : []
+            activeNodeArray.includes('An-Lieferungen')
+          ? [Q.where('nach_kultur_id', kulturIdInActiveNodeArray)]
+          : sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray
+            ? [
+                Q.experimentalJoinTables(['sammel_lieferung']),
+                Q.on(
+                  'sammel_lieferung',
+                  'id',
+                  sammelLieferungIdInActiveNodeArray,
+                ),
+              ]
+            : personIdInActiveNodeArray && !kulturIdInActiveNodeArray
+              ? [
+                  Q.experimentalJoinTables(['person']),
+                  Q.on('person', 'id', personIdInActiveNodeArray),
+                ]
+              : sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray
+                ? [
+                    Q.experimentalJoinTables(['sammlung']),
+                    Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
+                  ]
+                : []
     const collection = db.get('lieferung')
     const lieferungDelQuery =
       filter.lieferung._deleted === false
         ? Q.where('_deleted', false)
         : filter.lieferung._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const totalCountObservable = collection
       .query(lieferungDelQuery, ...hierarchyQuery)
       .observeCount()
