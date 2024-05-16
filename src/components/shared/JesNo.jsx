@@ -8,7 +8,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import toStringIfPossible from '../../utils/toStringIfPossible'
+import toStringIfPossible from '../../utils/toStringIfPossible.js'
 
 const Container = styled.div`
   display: block;
