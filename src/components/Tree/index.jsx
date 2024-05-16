@@ -9,7 +9,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 import StoreContext from '../../storeContext.js'
-import Settings from './Settings'
+import Settings from './Settings.jsx'
 import List from './List'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import tableFilter from '../../utils/tableFilter.js'

@@ -8,7 +8,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../../storeContext.js'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
-import Settings from './Settings'
+import Settings from './Settings.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk.js'
 import constants from '../../../../../utils/constants.js'

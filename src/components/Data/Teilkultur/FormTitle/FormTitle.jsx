@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../storeContext.js'
-import Settings from './Settings'
+import Settings from './Settings/index.jsx'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Anleitung from './Anleitung'
