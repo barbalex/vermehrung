@@ -10,7 +10,7 @@ import { combineLatest } from 'rxjs'
 
 import StoreContext from '../../../storeContext.js'
 import FilterTitle from '../../shared/FilterTitle.jsx'
-import Row from './Row'
+import Row from './Row.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers.jsx'
 import UpSvg from '../../../svg/to_up.svg?react'
@@ -69,22 +69,22 @@ const Gaerten = ({ filter: showFilter = false, width, height }) => {
       filter.garten._deleted === false
         ? Q.where('_deleted', false)
         : filter.garten._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const aktivQuery =
       filter.garten?.aktiv === true
         ? Q.where('aktiv', true)
         : filter.garten?.aktiv === false
-        ? Q.where('aktiv', false)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+          ? Q.where('aktiv', false)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const totalCountObservable = collection
       .query(delQuery, aktivQuery, ...hierarchyQuery)
       .observeCount()
