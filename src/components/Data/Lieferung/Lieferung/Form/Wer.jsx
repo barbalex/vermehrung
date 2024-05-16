@@ -9,7 +9,7 @@ import StoreContext from '../../../../../storeContext.js'
 import Select from '../../../../shared/Select/index.jsx'
 import TextField from '../../../../shared/TextField'
 import Files from '../../../Files'
-import ConflictList from '../../../../shared/ConflictList'
+import ConflictList from '../../../../shared/ConflictList/index.jsx'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
 import personSort from '../../../../../utils/personSort.js'
 

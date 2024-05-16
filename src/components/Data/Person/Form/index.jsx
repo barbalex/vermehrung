@@ -13,7 +13,7 @@ import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber.js'
 import Files from '../../Files'
 import Arten from './Arten'
 import Gaerten from './Gaerten'
-import ConflictList from '../../../shared/ConflictList'
+import ConflictList from '../../../shared/ConflictList/index.jsx'
 import exists from '../../../../utils/exists.js'
 import userRoleSort from '../../../../utils/userRoleSort'
 
