@@ -118,7 +118,7 @@ import kultursSortedFromKulturs from '../../../utils/kultursSortedFromKulturs.js
 import gartensSortedFromGartens from '../../../utils/gartensSortedFromGartens.js'
 import sammlungsSortedFromSammlungs from '../../../utils/sammlungsSortedFromSammlungs.js'
 import tableFilter from '../../../utils/tableFilter.js'
-import getShowArt from '../../../utils/showArt'
+import getShowArt from '../../../utils/showArt.js'
 import getShowEvent from '../../../utils/showEvent'
 import getShowGarten from '../../../utils/showGarten'
 import getShowHerkunft from '../../../utils/showHerkunft'

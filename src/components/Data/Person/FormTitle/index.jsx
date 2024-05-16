@@ -5,7 +5,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle.jsx'
 import tableFilter from '../../../../utils/tableFilter.js'
 
 const PersonFormTitleChooser = ({
@@ -28,22 +28,22 @@ const PersonFormTitleChooser = ({
       filter.person._deleted === false
         ? Q.where('_deleted', false)
         : filter.person._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const personAktivQuery =
       filter.person.aktiv === false
         ? Q.where('aktiv', false)
         : filter.person.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const totalCountObservable = collection
       .query(personDelQuery, personAktivQuery)
       .observeCount()
