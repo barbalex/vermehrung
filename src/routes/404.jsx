@@ -8,7 +8,7 @@ import ErrorBoundary from '../components/shared/ErrorBoundary.jsx'
 import constants from '../utils/constants.js'
 import image from '../images/puls_vulg_2500.webp'
 import placeholderSrc from '../images/puls_vulg_500.webp' // TODO: build small placeholder
-import ProgressiveImg from '../components/shared/ProgressiveImg'
+import ProgressiveImg from '../components/shared/ProgressiveImg.tsx'
 
 const OuterContainer = styled.div`
   height: calc(100% - ${constants.appBarHeight}px);
