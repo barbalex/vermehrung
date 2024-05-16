@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton'
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.svg?react'
 import Data from '../Conflict/Data'
 import StoreContext from '../../../storeContext.js'
-import constants from '../../../utils/constants'
+import constants from '../../../utils/constants.js'
 
 const Container = styled.div`
   padding: 10px;

@@ -18,7 +18,7 @@ import { sendPasswordResetEmail } from 'firebase/auth'
 import StoreContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import logout from '../../../utils/logout'
-import constants from '../../../utils/constants'
+import constants from '../../../utils/constants.js'
 import personFullname from '../../../utils/personFullname'
 
 const StyledUserIcon = styled(UserIcon)`

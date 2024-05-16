@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl'
 
 import StoreContext from '../../../../../../storeContext.js'
 import createMessageFunctions from './createMessageFunctions'
-import constants from '../../../../../../utils/constants'
+import constants from '../../../../../../utils/constants.js'
 
 const Container = styled.div`
   padding-top: 5px;

@@ -16,7 +16,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.svg?react'
 import tableFilter from '../../../utils/tableFilter'
 import sammlungsSortedFromSammlungs from '../../../utils/sammlungsSortedFromSammlungs'
-import constants from '../../../utils/constants'
+import constants from '../../../utils/constants.js'
 
 const Container = styled.div`
   height: 100%;

@@ -11,7 +11,7 @@ import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk'
-import constants from '../../../../../utils/constants'
+import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);

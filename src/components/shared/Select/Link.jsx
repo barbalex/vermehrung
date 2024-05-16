@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 
-import constants from '../../../utils/constants'
+import constants from '../../../utils/constants.js'
 
 // link is active node array
 const Link = ({ link }) => {

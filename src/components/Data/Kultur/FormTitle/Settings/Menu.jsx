@@ -11,7 +11,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../../storeContext.js'
-import constants from '../../../../../utils/constants'
+import constants from '../../../../../utils/constants.js'
 
 const Title = styled.div`
   padding: 12px 16px;

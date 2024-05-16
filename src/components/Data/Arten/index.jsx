@@ -16,7 +16,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers'
 import tableFilter from '../../../utils/tableFilter'
 import artsSortedFromArts from '../../../utils/artsSortedFromArts'
-import constants from '../../../utils/constants'
+import constants from '../../../utils/constants.js'
 
 const Container = styled.div`
   height: 100%;

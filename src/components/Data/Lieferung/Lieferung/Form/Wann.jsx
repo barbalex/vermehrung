@@ -8,7 +8,7 @@ import StoreContext from '../../../../../storeContext.js'
 import Date from '../../../../shared/Date'
 import Checkbox2States from '../../../../shared/Checkbox2States'
 import JesNo from '../../../../shared/JesNo'
-import constants from '../../../../../utils/constants'
+import constants from '../../../../../utils/constants.js'
 
 const Title = styled.div`
   font-weight: bold;

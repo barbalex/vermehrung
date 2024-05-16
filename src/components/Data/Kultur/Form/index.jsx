@@ -22,7 +22,7 @@ import QK from './QK'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft.js'
-import constants from '../../../../utils/constants'
+import constants from '../../../../utils/constants.js'
 import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens'
 import herkunftSort from '../../../../utils/herkunftSort.js'
 

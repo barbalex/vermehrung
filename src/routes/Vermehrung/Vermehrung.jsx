@@ -8,7 +8,7 @@ import Tree from '../../components/Tree'
 import Data from '../../components/Data'
 import Filter from '../../components/Filter'
 import ApiDetector from '../../components/ApiDetector'
-import constants from '../../utils/constants'
+import constants from '../../utils/constants.js'
 import FallBack from '../../components/shared/Fallback'
 
 const Container = styled.div`

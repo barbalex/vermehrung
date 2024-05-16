@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { useLocation } from 'react-router-dom'
 
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-import constants from '../../utils/constants'
+import constants from '../../utils/constants.js'
 
 import Home from './Home'
 import Doku from './Doku'

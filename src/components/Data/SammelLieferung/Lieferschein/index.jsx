@@ -15,7 +15,7 @@ import Lieferung from './Lieferung'
 import StoreContext from '../../../../storeContext.js'
 import lieferungSort from '../../../../utils/lieferungSort'
 import personFullname from '../../../../utils/personFullname'
-import constants from '../../../../utils/constants'
+import constants from '../../../../utils/constants.js'
 import ProgressiveImg from '../../../shared/ProgressiveImg'
 import image from '../../../../images/toposLogo.png'
 
