@@ -10,7 +10,7 @@ import uniqBy from 'lodash/uniqBy'
 
 import StoreContext from '../../../../storeContext.js'
 import Select from '../../../shared/Select/index.jsx'
-import SelectCreatable from '../../../shared/SelectCreatable'
+import SelectCreatable from '../../../shared/SelectCreatable.jsx'
 import TextField from '../../../shared/TextField'
 import Date from '../../../shared/Date'
 import Checkbox2States from '../../../shared/Checkbox2States'
