@@ -13,7 +13,7 @@ import Settings from './Settings'
 import List from './List'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import tableFilter from '../../utils/tableFilter'
-import notDeletedQuery from '../../utils/notDeletedQuery'
+import notDeletedQuery from '../../utils/notDeletedQuery.js'
 import buildNodes from './nodes'
 
 const Container = styled.div`
