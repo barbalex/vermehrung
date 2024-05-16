@@ -19,7 +19,7 @@ import StoreContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import logout from '../../../utils/logout'
 import constants from '../../../utils/constants.js'
-import personFullname from '../../../utils/personFullname'
+import personFullname from '../../../utils/personFullname.js'
 
 const StyledUserIcon = styled(UserIcon)`
   color: white;

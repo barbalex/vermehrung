@@ -9,7 +9,7 @@ import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens
 import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs.js'
 import sammlungsSortedFromSammlungs from '../../../../utils/sammlungsSortedFromSammlungs.js'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts.js'
-import personFullname from '../../../../utils/personFullname'
+import personFullname from '../../../../utils/personFullname.js'
 import eventSort from '../../../../utils/eventSort.js'
 import herkunftSort from '../../../../utils/herkunftSort.js'
 import lieferungSort from '../../../../utils/lieferungSort.js'
