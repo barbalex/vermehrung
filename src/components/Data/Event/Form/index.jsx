@@ -21,7 +21,7 @@ import ConflictList from '../../../shared/ConflictList'
 import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs.js'
 import personLabelFromPerson from '../../../../utils/personLabelFromPerson.js'
 import teilkulturSort from '../../../../utils/teilkulturSort'
-import personSort from '../../../../utils/personSort'
+import personSort from '../../../../utils/personSort.js'
 import constants from '../../../../utils/constants.js'
 
 const FieldsContainer = styled.div`

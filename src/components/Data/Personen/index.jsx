@@ -15,7 +15,7 @@ import FilterNumbers from '../../shared/FilterNumbers'
 import StoreContext from '../../../storeContext.js'
 import UpSvg from '../../../svg/to_up.svg?react'
 import tableFilter from '../../../utils/tableFilter'
-import personSort from '../../../utils/personSort'
+import personSort from '../../../utils/personSort.js'
 import constants from '../../../utils/constants.js'
 
 const Container = styled.div`

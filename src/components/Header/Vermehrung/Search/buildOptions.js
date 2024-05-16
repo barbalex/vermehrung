@@ -13,7 +13,7 @@ import personFullname from '../../../../utils/personFullname'
 import eventSort from '../../../../utils/eventSort.js'
 import herkunftSort from '../../../../utils/herkunftSort.js'
 import lieferungSort from '../../../../utils/lieferungSort.js'
-import personSort from '../../../../utils/personSort'
+import personSort from '../../../../utils/personSort.js'
 import zaehlungSort from '../../../../utils/zaehlungSort'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft.js'
 
