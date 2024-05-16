@@ -17,13 +17,13 @@ import { observer } from 'mobx-react-lite'
 import { useResizeDetector } from 'react-resize-detector'
 import styled from '@emotion/styled'
 
-import CustomTooltip from './Tooltip'
-import LabelLieferung from './LabelLieferung'
-import LabelZaehlung from './LabelZaehlung'
-import CustomAxisTick from './CustomAxisTick'
+import CustomTooltip from './Tooltip.jsx'
+import LabelLieferung from './LabelLieferung.jsx'
+import LabelZaehlung from './LabelZaehlung.jsx'
+import CustomAxisTick from './CustomAxisTick.jsx'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 import StoreContext from '../../../../../../storeContext.js'
-import buildData from './buildData'
+import buildData from './buildData.js'
 
 const NoData = styled.div`
   padding: 0 10px 10px 10px;
