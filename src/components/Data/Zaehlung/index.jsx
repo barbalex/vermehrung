@@ -8,7 +8,7 @@ import StoreContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 import Conflict from './Conflict.jsx'
-import FormTitle from './FormTitle'
+import FormTitle from './FormTitle/index.jsx'
 import Form from './Form/index.jsx'
 import History from './History/index.jsx'
 
@@ -40,8 +40,8 @@ const Zaehlung = ({
     const observable = showFilter
       ? $of(filter.zaehlung)
       : initialDataQueried
-      ? db.get('zaehlung').findAndObserve(id)
-      : $of({})
+        ? db.get('zaehlung').findAndObserve(id)
+        : $of({})
     const subscription = observable.subscribe((newRow) => {
       setDataState({
         row: newRow,

@@ -15,7 +15,7 @@ import uniqBy from 'lodash/uniqBy'
 
 import StoreContext from '../../../../../../../storeContext.js'
 import TextField from '../../../../../../shared/TextField.jsx'
-import TextFieldNonUpdatable from '../../../../../../shared/TextFieldNonUpdatable'
+import TextFieldNonUpdatable from '../../../../../../shared/TextFieldNonUpdatable.jsx'
 import Checkbox2States from '../../../../../../shared/Checkbox2States.jsx'
 import Select from '../../../../../../shared/SelectCreatable.jsx'
 import ConflictList from '../../../../../../shared/ConflictList/index.jsx'
@@ -23,7 +23,7 @@ import HistoryButton from '../../../../../../shared/HistoryButton.jsx'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber.js'
 import teilkulturSort from '../../../../../../../utils/teilkulturSort.js'
 import teilkulturLabelFromTeilkultur from '../../../../../../../utils/teilkulturLabelFromTeilkultur.js'
-import PrognoseMenu from './PrognoseMenu'
+import PrognoseMenu from './PrognoseMenu.jsx'
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary.jsx'
 import exists from '../../../../../../../utils/exists.js'
 
@@ -112,12 +112,12 @@ const TeilzaehlungForm = ({
       filter.teilkultur._deleted === false
         ? Q.where('_deleted', false)
         : filter.teilkultur._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const teilkultursObservable = db
       .get('teilkultur')
       .query(teilkulturDelQuery, Q.where('kultur_id', kulturId))
