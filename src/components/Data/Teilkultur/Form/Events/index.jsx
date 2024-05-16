@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import eventSort from '../../../../../utils/eventSort'
 import storeContext from '../../../../../storeContext'
 import Row from './Row'

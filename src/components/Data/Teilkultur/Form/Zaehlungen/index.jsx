@@ -4,7 +4,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../../storeContext'
 import teilzaehlungsSortByZaehlungTk from '../../../../../utils/teilzaehlungsSortByZaehlungTk'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Teilzaehlungen from './Teilzaehlungen'
 import constants from '../../../../../utils/constants'
 

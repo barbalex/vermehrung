@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { Outlet, useLocation } from 'react-router-dom'
 
 import ArticleList from './ArticleList'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import constants from '../../utils/constants'
 import StoreContext from '../../storeContext'
 import FormTitle from './FormTitle'

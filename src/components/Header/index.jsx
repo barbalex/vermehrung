@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar'
 import styled from '@emotion/styled'
 import { useLocation } from 'react-router-dom'
 
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import constants from '../../utils/constants'
 
 import Home from './Home'

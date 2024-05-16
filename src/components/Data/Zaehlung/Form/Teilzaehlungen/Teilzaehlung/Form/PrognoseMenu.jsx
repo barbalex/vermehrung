@@ -14,7 +14,7 @@ import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber'
 import exists from '../../../../../../../utils/exists'
 import constants from '../../../../../../../utils/constants'
 import zaehlungSort from '../../../../../../../utils/zaehlungSort'
-import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
   display: flex;

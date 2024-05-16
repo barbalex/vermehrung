@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../storeContext'
-import ErrorBoundary from './ErrorBoundary'
+import ErrorBoundary from './ErrorBoundary.jsx'
 
 const StyledMenuItem = styled(MenuItem)`
   ${(props) =>

@@ -17,7 +17,7 @@ import Date from '../../../shared/Date'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import Teilzaehlungen from './Teilzaehlungen'
 import constants from '../../../../utils/constants'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList'
 import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs'
 

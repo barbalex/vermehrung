@@ -4,7 +4,7 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 
 import StoreContext from '../../../../storeContext'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
 const ZaehlungAddButton = () => {
   const store = useContext(StoreContext)

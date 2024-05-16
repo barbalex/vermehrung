@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 
 import Pflanzen from './Pflanzen'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import constants from '../../../../../utils/constants'
 
 const TitleRow = styled.section`

@@ -14,7 +14,7 @@ import Person from './Data/Person'
 import Sammlung from './Data/Sammlung'
 import Teilkultur from './Data/Teilkultur'
 import Zaehlung from './Data/Zaehlung'
-import ErrorBoundary from './shared/ErrorBoundary'
+import ErrorBoundary from './shared/ErrorBoundary.jsx'
 import StoreContext from '../storeContext'
 import Fallback from './shared/Fallback'
 

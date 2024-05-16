@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson'
 import StoreContext from '../../../../../storeContext'
 

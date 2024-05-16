@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
 import { withResizeDetector } from 'react-resize-detector'
 
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Filter from './Filter'
 import constants from '../../../utils/constants'
 

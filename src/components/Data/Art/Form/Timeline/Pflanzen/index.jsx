@@ -21,7 +21,7 @@ import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
-import ErrorBoundary from '../../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 import StoreContext from '../../../../../../storeContext'
 import buildData from './buildData'
 

@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import { FaCog } from 'react-icons/fa'
 
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Menu from './Menu'
 
 const HerkunftSettingsChooser = ({ asMenu }) => {

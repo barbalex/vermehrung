@@ -10,7 +10,7 @@ import StoreContext from '../../../../../storeContext'
 import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten'
 import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
   display: flex;

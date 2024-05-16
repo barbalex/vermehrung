@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { observer } from 'mobx-react-lite'
 
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import StoreContext from '../../storeContext'
 import QueuedQuery from './QueuedQuery'
 import constants from '../../utils/constants'

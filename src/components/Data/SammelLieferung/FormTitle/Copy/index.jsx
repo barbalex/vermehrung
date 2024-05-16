@@ -10,7 +10,7 @@ import StoreContext from '../../../../../storeContext'
 import exists from '../../../../../utils/exists'
 import updateLieferung from './updateLieferung'
 import updateAllLieferungen from './updateAllLieferungen'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
   display: flex;
