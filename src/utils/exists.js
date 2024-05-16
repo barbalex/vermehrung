@@ -1,1 +1,1 @@
-export default val => val !== undefined && val !== null && val !== ''
+export default (val) => val !== undefined && val !== null && val !== ''
