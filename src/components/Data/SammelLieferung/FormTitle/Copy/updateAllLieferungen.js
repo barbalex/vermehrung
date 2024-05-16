@@ -1,4 +1,4 @@
-import updateLieferung from './updateLieferung'
+import updateLieferung from './updateLieferung.js'
 
 const updateAllLieferungen = async ({ sammelLieferung, store, field }) => {
   // pass field to mark which field should be updated

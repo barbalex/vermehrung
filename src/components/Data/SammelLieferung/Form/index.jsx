@@ -11,11 +11,11 @@ import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber.js'
 import exists from '../../../../utils/exists.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList/index.jsx'
-import Was from './Was'
-import Von from './Von'
-import Nach from './Nach'
-import Wann from './Wann'
-import Wer from './Wer'
+import Was from './Was.jsx'
+import Von from './Von.jsx'
+import Nach from './Nach.jsx'
+import Wann from './Wann.jsx'
+import Wer from './Wer.jsx'
 
 const FieldsContainer = styled.div`
   padding: 10px;
