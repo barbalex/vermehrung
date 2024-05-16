@@ -14,7 +14,7 @@ import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.svg?react'
-import eventSort from '../../../utils/eventSort'
+import eventSort from '../../../utils/eventSort.js'
 import tableFilter from '../../../utils/tableFilter'
 import constants from '../../../utils/constants.js'
 

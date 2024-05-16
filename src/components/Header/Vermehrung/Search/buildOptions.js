@@ -10,7 +10,7 @@ import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs
 import sammlungsSortedFromSammlungs from '../../../../utils/sammlungsSortedFromSammlungs.js'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts.js'
 import personFullname from '../../../../utils/personFullname'
-import eventSort from '../../../../utils/eventSort'
+import eventSort from '../../../../utils/eventSort.js'
 import herkunftSort from '../../../../utils/herkunftSort.js'
 import lieferungSort from '../../../../utils/lieferungSort'
 import personSort from '../../../../utils/personSort'

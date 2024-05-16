@@ -8,7 +8,7 @@ import exists from '../../../../utils/exists.js'
 import teilzaehlungsSortByTk from '../../../../utils/teilzaehlungsSortByTk'
 import zaehlungSort from '../../../../utils/zaehlungSort'
 import lieferungSort from '../../../../utils/lieferungSort'
-import eventSort from '../../../../utils/eventSort'
+import eventSort from '../../../../utils/eventSort.js'
 import personFullname from '../../../../utils/personFullname'
 
 /**

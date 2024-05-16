@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy'
 import { first as first$ } from 'rxjs/operators'
 
-import personFullname from './personFullname'
+import personFullname from './personFullname.js'
 
 const sammlungsSortedFromSammlungs = async (sammlungs) => {
   const sammlungSorters = await Promise.all(

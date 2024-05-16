@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import eventSort from '../../../../../utils/eventSort'
+import eventSort from '../../../../../utils/eventSort.js'
 import storeContext from '../../../../../storeContext.js'
 import Row from './Row'
 import constants from '../../../../../utils/constants.js'
