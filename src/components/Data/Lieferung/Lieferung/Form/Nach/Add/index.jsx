@@ -8,8 +8,8 @@ import styled from '@emotion/styled'
 
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary.jsx'
 import storeContext from '../../../../../../../storeContext.js'
-import TypeDialog from './TypeDialog'
-import ChooseDialog from './ChooseDialog'
+import TypeDialog from './TypeDialog.jsx'
+import ChooseDialog from './ChooseDialog.jsx'
 
 const StyledButton = styled(IconButton)`
   margin-bottom: 19px;
