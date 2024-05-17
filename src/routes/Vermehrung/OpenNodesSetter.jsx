@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router-dom'
 
 import StoreContext from '../../storeContext.js'
-import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
-import openNodesFromActiveNodeArray from '../../utils/openNodesFromActiveNodeArray'
+import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname.js'
+import openNodesFromActiveNodeArray from '../../utils/openNodesFromActiveNodeArray.js'
 
 const OpenNodesSetter = () => {
   const { pathname } = useLocation()
