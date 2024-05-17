@@ -1,5 +1,5 @@
-import processSubscriptionResult from './processSubscriptionResult'
-import removeOrtsangaben from './removeOrtsangaben'
+import processSubscriptionResult from './processSubscriptionResult.js'
+import removeOrtsangaben from './removeOrtsangaben.js'
 
 const initializeSubscriptions = ({ store, userRole }) => {
   const isNoGaertner = userRole !== 'gaertner'
@@ -9,7 +9,7 @@ const initializeSubscriptions = ({ store, userRole }) => {
     // TODO: remove this in a year, 2024.06
     removeOrtsangaben({ db: store.db })
   }
-  console.log('initializing subscriptions', { userRole, isNoGaertner })
+  console.log('initializing subscriptions, userRole:', userRole)
 
   const {
     ae_art_lastUpdated,

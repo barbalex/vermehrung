@@ -1,3 +1,3 @@
-import isNumeric from './isNumeric'
+import isNumeric from './isNumeric.js'
 
-export default value => (isNumeric(value) ? +value : value)
+export default (value) => (isNumeric(value) ? +value : value)
