@@ -1,4 +1,4 @@
-import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
+import getDataArrayFromExportObjects from './getDataArrayFromExportObjects.js'
 
 const addWorksheetToExceljsWorkbook = ({
   workbook,

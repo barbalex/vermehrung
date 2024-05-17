@@ -1,4 +1,4 @@
-import getAuthToken from './getAuthToken'
+import getAuthToken from './getAuthToken.js'
 
 const checkAuthOnError = ({ error, store }) => {
   if (error.message.includes('JWTExpired')) {
