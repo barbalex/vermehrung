@@ -18,8 +18,8 @@ import {
   zaehlung,
   teilzaehlung,
   teilkultur,
-} from './fragments'
-import toPgArray from './toPgArray'
+} from './fragments.js'
+import toPgArray from './toPgArray.js'
 
 const fragments = {
   art,
