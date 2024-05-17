@@ -2,7 +2,7 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import isUuid from 'is-uuid'
 
-import tableFromTitleHash from '../../utils/tableFromTitleHash'
+import tableFromTitleHash from '../../utils/tableFromTitleHash.json'
 import exists from '../../utils/exists.js'
 
 const createNew = async ({ node, store }) => {

@@ -1,4 +1,4 @@
-import tableFromTitleHash from '../../utils/tableFromTitleHash'
+import tableFromTitleHash from '../../utils/tableFromTitleHash.json'
 
 const deleteModule = async ({ node, store }) => {
   const { db } = store
