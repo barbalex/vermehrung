@@ -26,7 +26,7 @@ import {
   teilkulturRev,
   teilzaehlungRev,
   zaehlungRev,
-} from './fragments'
+} from './fragments.js'
 
 const mutations = {
   mutateInsert_herkunft_rev_one: gql`
