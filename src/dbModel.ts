@@ -21,20 +21,20 @@ import gql from 'graphql-tag'
 
 import toStringIfPossible from './utils/toStringIfPossible.js'
 import personLabelFromPerson from './utils/personLabelFromPerson.js'
-import gartenLabelFromGarten from './utils/gartenLabelFromGarten'
+import gartenLabelFromGarten from './utils/gartenLabelFromGarten.js'
 import eventLabelFromEvent from './utils/eventLabelFromEvent.js'
-import artLabelFromAeArt from './utils/artLabelFromAeArt'
+import artLabelFromAeArt from './utils/artLabelFromAeArt.js'
 import lieferungLabelFromLieferung from './utils/lieferungLabelFromLieferung.js'
 import teilkulturLabelFromTeilkultur from './utils/teilkulturLabelFromTeilkultur.js'
-import kulturLabelFromKultur from './utils/kulturLabelFromKultur'
-import kulturLabelFromKulturUnderArt from './utils/kulturLabelFromKulturUnderArt'
-import kulturLabelFromKulturUnderGarten from './utils/kulturLabelFromKulturUnderGarten'
-import sammlungLabelFromSammlung from './utils/sammlungLabelFromSammlung'
-import sammlungLabelFromSammlungUnderHerkunft from './utils/sammlungLabelFromSammlungUnderHerkunft'
-import zaehlungLabelFromZaehlung from './utils/zaehlungLabelFromZaehlung'
+import kulturLabelFromKultur from './utils/kulturLabelFromKultur.js'
+import kulturLabelFromKulturUnderArt from './utils/kulturLabelFromKulturUnderArt.js'
+import kulturLabelFromKulturUnderGarten from './utils/kulturLabelFromKulturUnderGarten.js'
+import sammlungLabelFromSammlung from './utils/sammlungLabelFromSammlung.js'
+import sammlungLabelFromSammlungUnderHerkunft from './utils/sammlungLabelFromSammlungUnderHerkunft.js'
+import zaehlungLabelFromZaehlung from './utils/zaehlungLabelFromZaehlung.js'
 import toPgArray from './utils/toPgArray.js'
 import deleteAccount from './utils/deleteAccount.js'
-import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
+import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen.js'
 import {
   artFile as artFileFragment,
   gartenFile as gartenFileFragment,
@@ -43,7 +43,7 @@ import {
   lieferungFile as lieferungFileFragment,
   personFile as personFileFragment,
   sammlungFile as sammlungFileFragment,
-} from './utils/fragments'
+} from './utils/fragments.js'
 
 const dontSanitize = (val) => val
 /*const sanitizeArrayOfStrings = (val) =>
