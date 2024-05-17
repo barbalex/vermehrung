@@ -1,27 +1,27 @@
 import { types } from 'mobx-state-tree'
-import { type as art, empty as art_empty } from './art'
-import { type as event, empty as event_empty } from './event'
-import { type as garten, empty as garten_empty } from './garten'
-import { type as herkunft, empty as herkunft_empty } from './herkunft'
-import { type as kultur, empty as kultur_empty } from './kultur'
+import { type as art, empty as art_empty } from './art.js'
+import { type as event, empty as event_empty } from './event.js'
+import { type as garten, empty as garten_empty } from './garten.js'
+import { type as herkunft, empty as herkunft_empty } from './herkunft.js'
+import { type as kultur, empty as kultur_empty } from './kultur.js'
 import {
   type as kultur_option,
   empty as kultur_option_empty,
-} from './kultur_option'
-import { type as lieferung, empty as lieferung_empty } from './lieferung'
+} from './kultur_option.js'
+import { type as lieferung, empty as lieferung_empty } from './lieferung.js'
 import {
   type as sammel_lieferung,
   empty as sammel_lieferung_empty,
-} from './sammel_lieferung'
-import { type as person, empty as person_empty } from './person'
-import { type as sammlung, empty as sammlung_empty } from './sammlung'
-import { type as zaehlung, empty as zaehlung_empty } from './zaehlung'
-import { type as teilkultur, empty as teilkultur_empty } from './teilkultur'
+} from './sammel_lieferung.js'
+import { type as person, empty as person_empty } from './person.js'
+import { type as sammlung, empty as sammlung_empty } from './sammlung.js'
+import { type as zaehlung, empty as zaehlung_empty } from './zaehlung.js'
+import { type as teilkultur, empty as teilkultur_empty } from './teilkultur.js'
 import {
   type as teilzaehlung,
   empty as teilzaehlung_empty,
-} from './teilzaehlung'
-import emptyValues from './emptyValues'
+} from './teilzaehlung.js'
+import emptyValues from './emptyValues.js'
 
 const emptyHash = {
   art: art_empty,
