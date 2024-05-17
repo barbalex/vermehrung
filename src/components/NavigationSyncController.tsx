@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import storeContext from '../storeContext.js'
-import getActiveNodeArrayFromUrl from '../utils/activeNodeArrayFromPathname'
+import getActiveNodeArrayFromUrl from '../utils/activeNodeArrayFromPathname.js'
 
 // syncs activeNodeArray with browser navigation
 const NavigationSyncController = () => {
