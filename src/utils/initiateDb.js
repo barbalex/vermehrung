@@ -1,7 +1,7 @@
 import { Database } from '@nozbe/watermelondb'
 import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
 
-import schema from '../dbSchema/schema'
+import schema from '../dbSchema/schema.js'
 import {
   AeArt,
   Art,
