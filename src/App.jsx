@@ -8,16 +8,16 @@ import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
 import { Routes, Route } from 'react-router-dom'
 
-import Notifications from './components/Notifications'
+import Notifications from './components/Notifications/index.jsx'
 
-import materialTheme from './utils/materialTheme'
+import materialTheme from './utils/materialTheme.js'
 
-import GlobalStyle from './components/GlobalStyle'
+import GlobalStyle from './components/GlobalStyle.jsx'
 
 import { Provider as MobxProvider } from './storeContext.js'
 
-import initiateApp from './utils/initiateApp'
-import initiateDb from './utils/initiateDb'
+import initiateApp from './utils/initiateApp.js'
+import initiateDb from './utils/initiateDb.js'
 
 import Home from './routes/index.jsx'
 import VermehrungIndex from './routes/Vermehrung'
