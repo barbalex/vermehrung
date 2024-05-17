@@ -84,7 +84,7 @@ const createNew = async ({ node, store }) => {
     if (!sammelLieferung) return console.log('no sammelLieferung found!')
     const entries = Object.entries(sammelLieferung)
       .filter(
-        // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
         ([key, value]) =>
           !key.startsWith('_') &&
           ![
@@ -95,7 +95,7 @@ const createNew = async ({ node, store }) => {
             'sammlung',
           ].includes(key),
       )
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
       .filter(([key, value]) => exists(value))
     for (const [key, value] of entries) {
       const keyToUse = key === 'id' ? 'sammel_lieferung_id' : key

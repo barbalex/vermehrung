@@ -10,11 +10,11 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 
 import StoreContext from '../../storeContext.js'
 import Settings from './Settings.jsx'
-import List from './List'
+import List from './List.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import tableFilter from '../../utils/tableFilter.js'
 import notDeletedQuery from '../../utils/notDeletedQuery.js'
-import buildNodes from './nodes'
+import buildNodes from './nodes/index.js'
 
 const Container = styled.div`
   width: 100%;
@@ -157,7 +157,7 @@ const Tree = () => {
       kulturOptionsObservable,
     ]).pipe(throttle(() => interval(100)))
     const subscription = combinedObservables.subscribe(
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
       ([[userPersonOption], [userRole], ...rest]) => {
         //console.log('Tree data-useEffect ordering rebuild')
         setDataState({ userPersonOption, userRole })

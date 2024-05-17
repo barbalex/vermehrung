@@ -3,11 +3,11 @@
  * https://hasura.io/docs/1.0/graphql/core/api-reference/health.html
  */
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../storeContext.js'
-import isOnline from '../utils/isOnline'
+import isOnline from '../utils/isOnline.js'
 
 const pollInterval = 5000
 

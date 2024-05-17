@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual'
 
-import isNodeOpen from './isNodeOpen'
+import isNodeOpen from './isNodeOpen.js'
 
 const someChildrenAreOpen = ({ store, nodes, url }) => {
   if (!url) return false
