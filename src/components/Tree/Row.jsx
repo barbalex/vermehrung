@@ -12,16 +12,16 @@ import last from 'lodash/last'
 import { of as $of } from 'rxjs'
 
 import StoreContext from '../../storeContext.js'
-import isNodeInActiveNodePath from './isNodeInActiveNodePath'
-import isNodeOpen from './isNodeOpen'
-import someChildrenAreOpen from './someChildrenAreOpen'
-import someChildrenAreClosed from './someChildrenAreClosed'
-import openAllChildren from './openAllChildren'
-import closeAllChildren from './closeAllChildren'
-import toggleNode from './toggleNode'
-import toggleNodeSymbol from './toggleNodeSymbol'
-import createNew from './createNew'
-import deleteDataset from './delete'
+import isNodeInActiveNodePath from './isNodeInActiveNodePath.js'
+import isNodeOpen from './isNodeOpen.js'
+import someChildrenAreOpen from './someChildrenAreOpen.js'
+import someChildrenAreClosed from './someChildrenAreClosed.js'
+import openAllChildren from './openAllChildren.js'
+import closeAllChildren from './closeAllChildren.js'
+import toggleNode from './toggleNode.js'
+import toggleNodeSymbol from './toggleNodeSymbol.js'
+import createNew from './createNew.js'
+import deleteDataset from './delete.js'
 import signup from '../../utils/signup.js'
 import deleteAccount from '../../utils/deleteAccount.js'
 import setPassword from '../../utils/setPassword.js'
@@ -29,7 +29,7 @@ import {
   ContextMenuTrigger,
   ContextMenu,
   MenuItem,
-} from '../../utils/react-contextmenu'
+} from '../../utils/react-contextmenu/index.js'
 
 const Container = styled.div`
   .react-contextmenu {
