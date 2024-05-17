@@ -1,4 +1,4 @@
-import isNodeOpen from './isNodeOpen'
+import isNodeOpen from './isNodeOpen.js'
 
 const allParentNodesAreOpen = ({ store, url: urlPassed }) => {
   let parentUrls = []
