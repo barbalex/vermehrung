@@ -1,4 +1,4 @@
-import personFullname from './personFullname'
+import personFullname from './personFullname.js'
 
 const personSort = (a, b) => {
   const nameA = personFullname(a)?.toString()?.toLowerCase() ?? ''
