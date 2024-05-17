@@ -1,4 +1,4 @@
-import isNumeric from './isNumeric'
+import isNumeric from './isNumeric.js'
 
-export default val =>
+export default (val) =>
   !isNumeric(val) && typeof val !== 'boolean' && val !== null
