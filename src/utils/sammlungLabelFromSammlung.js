@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import personLabelFromPerson from './personLabelFromPerson'
+import personLabelFromPerson from './personLabelFromPerson.js'
 
 const sammlungLabelFromSammlung = ({
   sammlung,
