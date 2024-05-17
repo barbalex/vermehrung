@@ -4,9 +4,9 @@ import { Outlet } from 'react-router-dom'
 
 import StoreContext from '../storeContext.js'
 import constants from '../utils/constants.js'
-import Fallback from './shared/Fallback'
+import Fallback from './shared/Fallback.jsx'
 
-import Header from './Header'
+import Header from './Header/index.jsx'
 
 const Container = styled.div`
   height: 100dvh;
