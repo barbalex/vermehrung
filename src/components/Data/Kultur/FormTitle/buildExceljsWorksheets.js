@@ -85,9 +85,9 @@ const buildExceljsWorksheets = async ({
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
   const zaehlungen = await Promise.all(
     zaehlungsSorted.map(async (z) => {
-      const tzs = await z.teilzaehlungs
-        ?.extend(Q.where('_deleted', false))
-        ?.fetch()
+      const tzs = z.teilzaehlungs
+        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))?.fetch()
+        : []
       const tzsSorted = await teilzaehlungsSortByTk(tzs)
       const newZ = {
         id: z.id,

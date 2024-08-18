@@ -5,7 +5,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
-import { combineLatest } from 'rxjs'
+import { combineLatest, of as $of } from 'rxjs'
 
 import StoreContext from '../../../../../storeContext.js'
 import Person from './Person.jsx'
@@ -105,8 +105,8 @@ const GartenPersonen = ({ garten }) => {
       .query(delQuery, aktivQuery)
       .observe()
     const gvsObservable = garten?.gvs
-      ?.extend(Q.where('_deleted', false))
-      .observe()
+      ? garten.gvs.extend(Q.where('_deleted', false)).observe()
+      : $of([])
     const combinedObservables = combineLatest([
       gvsObservable,
       personsObservable,

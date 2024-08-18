@@ -46,8 +46,8 @@ const Teilzaehlungen = ({ zaehlung }) => {
   })
   useEffect(() => {
     const teilzaehlungsObservable = zaehlung.teilzaehlungs
-      ?.extend(Q.where('_deleted', false))
-      ?.observe()
+      ? zaehlung.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
+      : $of([])
     const kulturOptionObservable = kulturId
       ? db.get('kultur_option').find(kulturId)
       : $of({})
