@@ -1,5 +1,5 @@
 import { useEffect, useState, Suspense } from 'react'
-import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
+import DatabaseProvider from '@nozbe/watermelondb/react/DatabaseProvider'
 import { useNavigate } from 'react-router-dom'
 
 import { Provider as UrqlProvider } from 'urql'
