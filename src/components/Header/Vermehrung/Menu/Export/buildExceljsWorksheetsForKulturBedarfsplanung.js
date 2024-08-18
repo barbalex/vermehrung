@@ -84,10 +84,11 @@ const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       const lastZaehlung = ownZaehlungenSorted[ownZaehlungenSorted.length - 1]
       let lZTeilzaehlungs = []
       try {
-        lZTeilzaehlungs =
-          (await lastZaehlung?.teilzaehlungs
-            ?.extend(Q.where('_deleted', false))
-            ?.fetch()) ?? []
+        lZTeilzaehlungs = lastZaehlung.teilzaehlungs
+          ? await lastZaehlung?.teilzaehlungs
+              .extend(Q.where('_deleted', false))
+              ?.fetch()
+          : []
       } catch {}
 
       // danger: sumBy returns 0 when field was undefined!

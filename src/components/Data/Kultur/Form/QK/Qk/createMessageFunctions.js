@@ -291,7 +291,9 @@ const createMessageFunctions = async ({ kulturId, db, store }) => {
             const zaehlungLabel = z.datum
               ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
-            const tzs = await z.teilzaehlungs?.extend(notDeletedQuery)?.fetch()
+            const tzs = z.teilzaehlungs
+              ? await z.teilzaehlungs.extend(notDeletedQuery)?.fetch()
+              : []
             const anzTz = tzs.length
             const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
             const text = `${

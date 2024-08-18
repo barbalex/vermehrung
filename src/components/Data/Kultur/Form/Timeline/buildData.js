@@ -2,6 +2,7 @@ import groupBy from 'lodash/groupBy'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { Q } from '@nozbe/watermelondb'
+import { of as $of } from 'rxjs'
 import format from 'date-fns/format'
 
 import exists from '../../../../../utils/exists.js'
@@ -56,9 +57,9 @@ const buildData = async ({ row }) => {
   const zaehlungenForLineReversed = [...zaehlungenForLine].reverse()
   const zaehlungenDoneData = await Promise.all(
     zaehlungenDone.map(async (z) => {
-      const teilzaehlungs = await z.teilzaehlungs?.extend(
-        Q.where('_deleted', false),
-      )
+      const teilzaehlungs = z.teilzaehlungs
+        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))
+        : $of([])
       const anzahlenPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_pflanzen)
         .filter((a) => exists(a))
@@ -100,7 +101,7 @@ const buildData = async ({ row }) => {
   const zaehlungenPlannedIncludedData = await Promise.all(
     zaehlungenPlannedIncluded.map(async (z) => {
       const teilzaehlungs = z.teilzaehlungs
-        ? await z.teilzaehlungs?.extend(Q.where('_deleted', false))
+        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))
         : []
       const anzahlenPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_pflanzen)
@@ -144,9 +145,9 @@ const buildData = async ({ row }) => {
   )
   const zaehlungenPlannedIgnoredData = await Promise.all(
     zaehlungenPlannedIgnored.map(async (z) => {
-      const teilzaehlungs = await z.teilzaehlungs?.extend(
-        Q.where('_deleted', false),
-      )
+      const teilzaehlungs = z.teilzaehlungs
+        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))
+        : []
       const anzahlenPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_pflanzen)
         .filter((a) => exists(a))
@@ -283,9 +284,11 @@ const buildData = async ({ row }) => {
 
       let previousZaehlungTzs = []
       try {
-        previousZaehlungTzs = await previousZaehlung.teilzaehlungs
-          ?.extend(Q.where('_deleted', false))
-          ?.fetch()
+        previousZaehlungTzs = previousZaehlung.teilzaehlungs
+          ? await previousZaehlung.teilzaehlungs
+              .extend(Q.where('_deleted', false))
+              ?.fetch()
+          : []
       } catch {}
       const anzahlenPflanzenOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
@@ -344,9 +347,11 @@ const buildData = async ({ row }) => {
       )
       let previousZaehlungTzs = []
       try {
-        previousZaehlungTzs = await previousZaehlung.teilzaehlungs
-          ?.extend(Q.where('_deleted', false))
-          ?.fetch()
+        previousZaehlungTzs = previousZaehlung.teilzaehlungs
+          ? await previousZaehlung.teilzaehlungs
+              .extend(Q.where('_deleted', false))
+              ?.fetch()
+          : []
       } catch {}
       const anzahlenPflanzenOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
@@ -406,9 +411,11 @@ const buildData = async ({ row }) => {
 
       let previousZaehlungTzs = []
       try {
-        previousZaehlungTzs = await previousZaehlung.teilzaehlungs
-          ?.extend(Q.where('_deleted', false))
-          ?.fetch()
+        previousZaehlungTzs = previousZaehlung.teilzaehlungs
+          ? await previousZaehlung.teilzaehlungs
+              .extend(Q.where('_deleted', false))
+              ?.fetch()
+          : []
       } catch {}
       const anzahlenPflanzenOfPrevoiusZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
@@ -490,9 +497,11 @@ const buildData = async ({ row }) => {
 
       let previousZaehlungTzs = []
       try {
-        previousZaehlungTzs = await previousZaehlung.teilzaehlungs
-          ?.extend(Q.where('_deleted', false))
-          ?.fetch()
+        previousZaehlungTzs = previousZaehlung.teilzaehlungs
+          ? await previousZaehlung.teilzaehlungs
+              .extend(Q.where('_deleted', false))
+              ?.fetch()
+          : []
       } catch {}
       const anzahlenPflanzenOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
