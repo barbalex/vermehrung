@@ -56,7 +56,7 @@ const buildData = async ({ row }) => {
   const zaehlungenForLineReversed = [...zaehlungenForLine].reverse()
   const zaehlungenDoneData = await Promise.all(
     zaehlungenDone.map(async (z) => {
-      const teilzaehlungs = await z.teilzaehlungs.extend(
+      const teilzaehlungs = await z.teilzaehlungs?.extend(
         Q.where('_deleted', false),
       )
       const anzahlenPflanzen = teilzaehlungs
@@ -100,7 +100,7 @@ const buildData = async ({ row }) => {
   const zaehlungenPlannedIncludedData = await Promise.all(
     zaehlungenPlannedIncluded.map(async (z) => {
       const teilzaehlungs = z.teilzaehlungs
-        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))
+        ? await z.teilzaehlungs?.extend(Q.where('_deleted', false))
         : []
       const anzahlenPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_pflanzen)
@@ -144,7 +144,7 @@ const buildData = async ({ row }) => {
   )
   const zaehlungenPlannedIgnoredData = await Promise.all(
     zaehlungenPlannedIgnored.map(async (z) => {
-      const teilzaehlungs = await z.teilzaehlungs.extend(
+      const teilzaehlungs = await z.teilzaehlungs?.extend(
         Q.where('_deleted', false),
       )
       const anzahlenPflanzen = teilzaehlungs
@@ -284,8 +284,8 @@ const buildData = async ({ row }) => {
       let previousZaehlungTzs = []
       try {
         previousZaehlungTzs = await previousZaehlung.teilzaehlungs
-          .extend(Q.where('_deleted', false))
-          .fetch()
+          ?.extend(Q.where('_deleted', false))
+          ?.fetch()
       } catch {}
       const anzahlenPflanzenOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
@@ -345,8 +345,8 @@ const buildData = async ({ row }) => {
       let previousZaehlungTzs = []
       try {
         previousZaehlungTzs = await previousZaehlung.teilzaehlungs
-          .extend(Q.where('_deleted', false))
-          .fetch()
+          ?.extend(Q.where('_deleted', false))
+          ?.fetch()
       } catch {}
       const anzahlenPflanzenOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
@@ -407,8 +407,8 @@ const buildData = async ({ row }) => {
       let previousZaehlungTzs = []
       try {
         previousZaehlungTzs = await previousZaehlung.teilzaehlungs
-          .extend(Q.where('_deleted', false))
-          .fetch()
+          ?.extend(Q.where('_deleted', false))
+          ?.fetch()
       } catch {}
       const anzahlenPflanzenOfPrevoiusZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
@@ -491,8 +491,8 @@ const buildData = async ({ row }) => {
       let previousZaehlungTzs = []
       try {
         previousZaehlungTzs = await previousZaehlung.teilzaehlungs
-          .extend(Q.where('_deleted', false))
-          .fetch()
+          ?.extend(Q.where('_deleted', false))
+          ?.fetch()
       } catch {}
       const anzahlenPflanzenOfPreviousZaehlung = previousZaehlungTzs
         .map((tz) => tz.anzahl_pflanzen)
