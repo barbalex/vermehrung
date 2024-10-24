@@ -25,25 +25,21 @@ const PersonFormTitleChooser = ({
   useEffect(() => {
     const collection = db.get('person')
     const personDelQuery =
-      filter.person._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.person._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.person._deleted === false ? Q.where('_deleted', false)
+      : filter.person._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const personAktivQuery =
-      filter.person.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.person.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      filter.person.aktiv === false ? Q.where('aktiv', false)
+      : filter.person.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const totalCountObservable = collection
       .query(personDelQuery, personAktivQuery)
       .observeCount()
