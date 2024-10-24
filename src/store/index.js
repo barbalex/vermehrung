@@ -165,11 +165,11 @@ const myTypes = types
           if (!mutation) throw new Error('keine Mutation gefunden für: ', name)
           let response
           // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
-          variables
-            ? (response = yield self.gqlClient
-                .mutation(mutation, JSON.parse(variables))
-                .toPromise())
-            : (response = yield self.gqlClient.mutation(mutation).toPromise())
+          variables ?
+            (response = yield self.gqlClient
+              .mutation(mutation, JSON.parse(variables))
+              .toPromise())
+          : (response = yield self.gqlClient.mutation(mutation).toPromise())
           if (response.error) {
             // TODO:
             // use urql difference between networkError and graphQLErrors
@@ -445,8 +445,9 @@ const myTypes = types
           ])
         })
         setTimeout(() => {
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
+          const newActiveNodeArray =
+            isUuid.v1(last(activeNodeArray)) ?
+              // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
           // update tree status
@@ -570,8 +571,9 @@ const myTypes = types
           ])
         })
         setTimeout(() => {
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
+          const newActiveNodeArray =
+            isUuid.v1(last(activeNodeArray)) ?
+              // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
           // update tree status
@@ -639,8 +641,9 @@ const myTypes = types
           ])
         })
         setTimeout(() => {
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
+          const newActiveNodeArray =
+            isUuid.v1(last(activeNodeArray)) ?
+              // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
           // update tree status
@@ -759,8 +762,9 @@ const myTypes = types
           ])
         })
         setTimeout(() => {
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
+          const newActiveNodeArray =
+            isUuid.v1(last(activeNodeArray)) ?
+              // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
           // update tree status
@@ -839,8 +843,9 @@ const myTypes = types
         })
         if (!args?.nonavigate === true) {
           setTimeout(() => {
-            const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-              ? // slice if last is uuid
+            const newActiveNodeArray =
+              isUuid.v1(last(activeNodeArray)) ?
+                // slice if last is uuid
                 [...activeNodeArray.slice(0, -1), id]
               : [...activeNodeArray, id]
             // update tree status
@@ -865,11 +870,12 @@ const myTypes = types
         const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
-        const kultur = kulturIdOfAnLieferungInActiveNodeArray
-          ? self.kulturs?.get(kulturIdOfAnLieferungInActiveNodeArray)
-          : kulturIdOfAusLieferungInActiveNodeArray
-            ? self.kulturs?.get(kulturIdOfAusLieferungInActiveNodeArray)
-            : undefined
+        const kultur =
+          kulturIdOfAnLieferungInActiveNodeArray ?
+            self.kulturs?.get(kulturIdOfAnLieferungInActiveNodeArray)
+          : kulturIdOfAusLieferungInActiveNodeArray ?
+            self.kulturs?.get(kulturIdOfAusLieferungInActiveNodeArray)
+          : undefined
         const artIdOfKultur = kultur?.artId
 
         const id = uuidv1()
@@ -933,8 +939,9 @@ const myTypes = types
           ])
         })
         setTimeout(() => {
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
+          const newActiveNodeArray =
+            isUuid.v1(last(activeNodeArray)) ?
+              // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
           // update tree status
@@ -1012,8 +1019,9 @@ const myTypes = types
           ])
         })
         setTimeout(() => {
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
+          const newActiveNodeArray =
+            isUuid.v1(last(activeNodeArray)) ?
+              // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
           // update tree status
@@ -1094,8 +1102,9 @@ const myTypes = types
           ])
         })
         setTimeout(() => {
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
+          const newActiveNodeArray =
+            isUuid.v1(last(activeNodeArray)) ?
+              // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
           // update tree status
@@ -1172,8 +1181,9 @@ const myTypes = types
           ])
         })
         setTimeout(() => {
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
+          const newActiveNodeArray =
+            isUuid.v1(last(activeNodeArray)) ?
+              // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
           // update tree status
@@ -1242,8 +1252,9 @@ const myTypes = types
         })
         if (!noNavigateInTree) {
           setTimeout(() => {
-            const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-              ? // slice if last is uuid
+            const newActiveNodeArray =
+              isUuid.v1(last(activeNodeArray)) ?
+                // slice if last is uuid
                 [...activeNodeArray.slice(0, -1), id]
               : [...activeNodeArray, id]
             // update tree status
@@ -1373,8 +1384,9 @@ const myTypes = types
           ])
         })
         setTimeout(() => {
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
+          const newActiveNodeArray =
+            isUuid.v1(last(activeNodeArray)) ?
+              // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
           // update tree status
