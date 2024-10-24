@@ -52,7 +52,7 @@ const PersonFormTitle = ({
   useEffect(() => {
     const userRoleObservable = db
       .get('user_role')
-      .query(Q.on('person', Q.where('account_id', user.uid)))
+      .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
       .observeWithColumns(['name'])
     const subscription = userRoleObservable.subscribe(([userRole]) =>
       setUserRole(userRole),
@@ -60,6 +60,8 @@ const PersonFormTitle = ({
 
     return () => subscription?.unsubscribe?.()
   }, [db, user])
+
+  if (!userRole) return null
 
   if (width < 568) {
     return (
@@ -81,7 +83,10 @@ const PersonFormTitle = ({
               setShowHistory={setShowHistory}
               asMenu
             />
-            <KontoMenu row={row} asMenu />
+            <KontoMenu
+              row={row}
+              asMenu
+            />
             <FilterNumbers
               filteredCount={filteredCount}
               totalCount={totalCount}
@@ -111,7 +116,10 @@ const PersonFormTitle = ({
           setShowHistory={setShowHistory}
         />
         <KontoMenu row={row} />
-        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
+        <FilterNumbers
+          filteredCount={filteredCount}
+          totalCount={totalCount}
+        />
       </TitleSymbols>
     </TitleContainer>
   )
