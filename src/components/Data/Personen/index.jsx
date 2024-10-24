@@ -65,25 +65,21 @@ const Personen = ({ filter: showFilter = false, width, height }) => {
   useEffect(() => {
     const collection = db.get('person')
     const personDelQuery =
-      filter.person._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.person._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+      filter.person._deleted === false ? Q.where('_deleted', false)
+      : filter.person._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const personAktivQuery =
-      filter.person.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.person.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+      filter.person.aktiv === false ? Q.where('aktiv', false)
+      : filter.person.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const countObservable = collection
       .query(personDelQuery, personAktivQuery)
       .observeCount()
@@ -92,7 +88,7 @@ const Personen = ({ filter: showFilter = false, width, height }) => {
       .observeWithColumns(['vorname', 'name'])
     const userRoleObservable = db
       .get('user_role')
-      .query(Q.on('person', Q.where('account_id', user.uid)))
+      .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
       .observeWithColumns(['name'])
     const combinedObservables = combineLatest([
       countObservable,
@@ -133,18 +129,21 @@ const Personen = ({ filter: showFilter = false, width, height }) => {
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Person"
             table="person"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <TitleContainer>
+        : <TitleContainer>
             <Title>Personen</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
+              <IconButton
+                title={upTitle}
+                onClick={onClickUp}
+                size="large"
+              >
                 <UpSvg />
               </IconButton>
               {userRole?.name === 'manager' && (
@@ -163,7 +162,7 @@ const Personen = ({ filter: showFilter = false, width, height }) => {
               />
             </TitleSymbols>
           </TitleContainer>
-        )}
+        }
         <FieldsContainer>
           {!!width && (
             <FixedSizeList
