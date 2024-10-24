@@ -1610,7 +1610,7 @@ export class SammelLieferung extends Model {
     try {
       const userPersonOptions = await db
         .get('person_option')
-        .query(Q.on('person', Q.where('account_id', user.uid)))
+        .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
         .fetch()
       if (userPersonOptions?.[0]) userPersonOption = userPersonOptions[0]
     } catch {}
