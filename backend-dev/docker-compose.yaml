@@ -1,0 +1,53 @@
+services:
+  db:
+    # image: db
+    build:
+      context: ./db
+    # specify container name to make it easier to run commands.
+    # for example, you could run docker exec -i postgres psql -U postgres postgres < schema.sql to run an SQL file against the Postgres database
+    container_name: v_db
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      # make the Postgres database accessible from outside the Docker container on port 5432
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - sik_data:/sik_data
+    # hasura needs higher max_locks_per_transaction
+    command: postgres -c max_locks_per_transaction=2000
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
+  auth:
+    build:
+      context: ./auth
+    container_name: v_auth
+    restart: always
+    env_file:
+      - ./.env
+    expose:
+      - '7000'
+    ports:
+      - '7000:7000'
+    depends_on:
+      - db
+      - graphql
+  graphql:
+    image: 'hasura/graphql-engine:2.45.1'
+    container_name: v_graphql
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    restart: always
+    env_file:
+      - ./.env
+    command:
+      - graphql-engine
+      - serve
+volumes:
+  db_data:
+  sik_data:
