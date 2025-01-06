@@ -8,6 +8,9 @@ const config = {
 }
 
 const isOnline = async () => {
+  // if we are on localhost, we are always online
+  if (window?.location?.hostname === 'localhost') return true
+
   let res
   try {
     // based on: https://hasura.io/docs/1.0/graphql/core/api-reference/health.html

@@ -1,8 +1,10 @@
 services:
   db:
-    # image: db
+    image: db
     build:
       context: ./db
+    networks:
+      - network
     # specify container name to make it easier to run commands.
     # for example, you could run docker exec -i postgres psql -U postgres postgres < schema.sql to run an SQL file against the Postgres database
     container_name: v_db
@@ -35,6 +37,8 @@ services:
     depends_on:
       - db
       - graphql
+    networks:
+      - network
   graphql:
     image: 'hasura/graphql-engine:2.45.1'
     container_name: v_graphql
@@ -48,6 +52,10 @@ services:
     command:
       - graphql-engine
       - serve
+    networks:
+      - network
 volumes:
   db_data:
   sik_data:
+networks:
+  network:
