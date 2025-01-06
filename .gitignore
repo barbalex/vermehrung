@@ -74,6 +74,9 @@ yarn-error.log
 #my own
 secrets.json
 
+# db backup files
+.backup
+
 .now
 
 google-application-credentials.json
