@@ -2,6 +2,12 @@
 # TODO: upgrade to 15-3.3?
 FROM postgis/postgis:14-3.4
 
+COPY ./init/ /docker-entrypoint-initdb.d/
+# enable to seed data
+COPY ./vermehrung.backup /sik_data/vermehrung.backup
+
+RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
+
 # for using cron, see https://www.cloudsavvyit.com/9033/how-to-use-cron-with-your-docker-containers/
 
 # Install some helpful stuff
