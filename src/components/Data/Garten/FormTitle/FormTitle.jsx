@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../storeContext.js'
 import Settings from './Settings/index.jsx'
@@ -44,12 +44,13 @@ const GartenFormTitle = ({
   rawRow,
   showHistory,
   setShowHistory,
-  width,
   totalCount,
   filteredCount,
 }) => {
   const store = useContext(StoreContext)
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+
+  const { width, ref } = useResizeDetector()
 
   const onClickUp = useCallback(() => {
     removeOpenNode(activeNodeArray)
@@ -60,24 +61,31 @@ const GartenFormTitle = ({
     [activeNodeArray, setActiveNodeArray],
   )
 
-  if (width < 520) {
-    return (
-      <Container>
-        <Title>Garten</Title>
-        <TitleSymbols>
-          <IconButton title="Zur Liste" onClick={onClickUp} size="large">
-            <UpSvg />
-          </IconButton>
-          <IconButton
-            title="Zu den Kulturen"
-            onClick={onClickToKulturen}
-            size="large"
-          >
-            <KuDownSvg />
-          </IconButton>
-          <AddButton />
-          <DeleteButton row={row} rawRow={rawRow} />
-          <Download gartenId={row.id} />
+  return (
+    <Container ref={ref}>
+      <Title>Garten</Title>
+      <TitleSymbols>
+        <IconButton
+          title="Zur Liste"
+          onClick={onClickUp}
+          size="large"
+        >
+          <UpSvg />
+        </IconButton>
+        <IconButton
+          title="Zu den Kulturen"
+          onClick={onClickToKulturen}
+          size="large"
+        >
+          <KuDownSvg />
+        </IconButton>
+        <AddButton />
+        <DeleteButton
+          row={row}
+          rawRow={rawRow}
+        />
+        <Download gartenId={row.id} />
+        {width < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="garten"
@@ -93,39 +101,23 @@ const GartenFormTitle = ({
               asMenu
             />
           </Menu>
-        </TitleSymbols>
-      </Container>
-    )
-  }
-
-  return (
-    <Container>
-      <Title>Garten</Title>
-      <TitleSymbols>
-        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
-          <UpSvg />
-        </IconButton>
-        <IconButton
-          title="Zu den Kulturen"
-          onClick={onClickToKulturen}
-          size="large"
-        >
-          <KuDownSvg />
-        </IconButton>
-        <AddButton />
-        <DeleteButton row={row} />
-        <Download gartenId={row.id} />
-        <HistoryButton
-          table="garten"
-          id={row.id}
-          showHistory={showHistory}
-          setShowHistory={setShowHistory}
-        />
-        <Settings />
-        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
+        : <>
+            <HistoryButton
+              table="garten"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+            />
+            <Settings />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+            />
+          </>
+        }
       </TitleSymbols>
     </Container>
   )
 }
 
-export default withResizeDetector(observer(GartenFormTitle))
+export default observer(GartenFormTitle)
