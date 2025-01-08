@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import isEqual from 'lodash/isEqual'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 
 import storeContext from '../storeContext.js'
 import getActiveNodeArrayFromUrl from '../utils/activeNodeArrayFromPathname.js'

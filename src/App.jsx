@@ -1,12 +1,12 @@
 import { useEffect, useState, Suspense, lazy } from 'react'
 import DatabaseProvider from '@nozbe/watermelondb/react/DatabaseProvider'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { Provider as UrqlProvider } from 'urql'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router'
 
 import Notifications from './components/Notifications/index.jsx'
 

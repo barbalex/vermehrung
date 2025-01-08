@@ -4,7 +4,7 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { observer } from 'mobx-react-lite'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import StoreContext from '../../storeContext.js'
