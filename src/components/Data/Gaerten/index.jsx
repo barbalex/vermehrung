@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -51,40 +51,39 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Gaerten = ({ filter: showFilter = false, width, height }) => {
+const Gaerten = ({ filter: showFilter = false }) => {
   const store = useContext(StoreContext)
   const { insertGartenRev, personIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
+  const { width, height, ref } = useResizeDetector()
+
   const [dataState, setDataState] = useState({ gartens: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = personIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      personIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['person']),
           Q.on('person', 'id', personIdInActiveNodeArray),
         ]
       : []
     const collection = db.get('garten')
     const delQuery =
-      filter.garten._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.garten._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.garten._deleted === false ? Q.where('_deleted', false)
+      : filter.garten._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const aktivQuery =
-      filter.garten?.aktiv === true
-        ? Q.where('aktiv', true)
-        : filter.garten?.aktiv === false
-          ? Q.where('aktiv', false)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      filter.garten?.aktiv === true ? Q.where('aktiv', true)
+      : filter.garten?.aktiv === false ? Q.where('aktiv', false)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const totalCountObservable = collection
       .query(delQuery, aktivQuery, ...hierarchyQuery)
       .observeCount()
@@ -137,19 +136,25 @@ const Gaerten = ({ filter: showFilter = false, width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
+      <Container
+        showfilter={showFilter}
+        ref={ref}
+      >
+        {showFilter ?
           <FilterTitle
             title="Garten"
             table="garten"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <TitleContainer>
+        : <TitleContainer>
             <Title>Gärten</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
+              <IconButton
+                title={upTitle}
+                onClick={onClickUp}
+                size="large"
+              >
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -166,7 +171,7 @@ const Gaerten = ({ filter: showFilter = false, width, height }) => {
               />
             </TitleSymbols>
           </TitleContainer>
-        )}
+        }
         <FieldsContainer>
           {!!width && (
             <FixedSizeList
@@ -192,4 +197,4 @@ const Gaerten = ({ filter: showFilter = false, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Gaerten))
+export default observer(Gaerten)
