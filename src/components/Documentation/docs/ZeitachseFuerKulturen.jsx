@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { DokuDate } from '../index.jsx'
 
-const ZeitachseFuerKulturen = () => (
+export const ZeitachseFuerKulturen = () => (
   <>
     <h1>Zeit-Achse für Kulturen</h1>
     <DokuDate>20.09.2019</DokuDate>
@@ -127,5 +127,3 @@ const ZeitachseFuerKulturen = () => (
     </ul>
   </>
 )
-
-export default ZeitachseFuerKulturen
