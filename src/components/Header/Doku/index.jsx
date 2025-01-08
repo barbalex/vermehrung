@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { FaHome } from 'react-icons/fa'
 import styled from '@emotion/styled'
 import { Link } from 'react-router'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Filter from './Filter/index.jsx'
@@ -41,14 +41,18 @@ const NavButton = styled(Button)`
   }
 `
 
-const HeaderDoku = ({ width }) => {
+const HeaderDoku = () => {
+  const { width, ref } = useResizeDetector()
   const mobile = width && width < constants?.tree?.minimalWindowWidth
 
   return (
     <ErrorBoundary>
-      <AppBar position="fixed">
+      <AppBar
+        position="fixed"
+        ref={ref}
+      >
         <Toolbar>
-          {mobile ? (
+          {mobile ?
             <IconButton
               color="inherit"
               aria-label="Home"
@@ -59,14 +63,22 @@ const HeaderDoku = ({ width }) => {
             >
               <FaHome />
             </IconButton>
-          ) : (
-            <SiteTitle variant="outlined" component={Link} to="/" title="Home">
+          : <SiteTitle
+              variant="outlined"
+              component={Link}
+              to="/"
+              title="Home"
+            >
               Vermehrung
             </SiteTitle>
-          )}
+          }
           <Spacer />
           <Filter />
-          <NavButton variant="outlined" component={Link} to="/Vermehrung/">
+          <NavButton
+            variant="outlined"
+            component={Link}
+            to="/Vermehrung/"
+          >
             Daten
           </NavButton>
         </Toolbar>
@@ -75,4 +87,4 @@ const HeaderDoku = ({ width }) => {
   )
 }
 
-export default withResizeDetector(HeaderDoku)
+export default HeaderDoku
