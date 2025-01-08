@@ -4,7 +4,7 @@ import { DokuDate } from '../../index.jsx'
 import teilkulturOption from './teilkultur_option.gif'
 import teilkulturNew from './teilkultur_new.gif'
 
-const Teilkulturen = () => (
+export const Teilkulturen = () => (
   <>
     <h1>Teil-Kulturen</h1>
     <DokuDate>20.09.2019</DokuDate>
@@ -127,5 +127,3 @@ const Teilkulturen = () => (
     </p>
   </>
 )
-
-export default Teilkulturen

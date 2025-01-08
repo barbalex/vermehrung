@@ -1,7 +1,7 @@
 import { DokuDate } from '../../index.jsx'
 import felderBlenden from './felderBlenden1.gif'
 
-const FelderBlenden = () => (
+export const FelderBlenden = () => (
   <>
     <h1>Felder ein- und ausblenden</h1>
     <DokuDate>20.09.2019</DokuDate>
@@ -51,5 +51,3 @@ const FelderBlenden = () => (
     </ul>
   </>
 )
-
-export default FelderBlenden
