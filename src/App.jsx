@@ -103,10 +103,22 @@ const App = () => {
               <GlobalStyle />
               <Routes>
                 <Route element={<Layout />}>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/Vermehrung/*" element={<VermehrungIndex />} />
-                  <Route path="/Dokumentation/*" element={<Docs />}>
-                    <Route path="ziele" element={<Ziele />} />
+                  <Route
+                    path="/"
+                    element={<Home />}
+                  />
+                  <Route
+                    path="/Vermehrung/*"
+                    element={<VermehrungIndex />}
+                  />
+                  <Route
+                    path="Dokumentation"
+                    element={<Docs />}
+                  >
+                    <Route
+                      path="ziele"
+                      element={<Ziele />}
+                    />
                     <Route
                       path="ziele/herkuenfte"
                       element={<ZieleHerkuenfte />}
@@ -123,20 +135,50 @@ const App = () => {
                       path="zeitachse-kultur"
                       element={<ZeitachseFuerKulturen />}
                     />
-                    <Route path="herkuenfte" element={<Herkuenfte />} />
-                    <Route path="sammlungen" element={<Sammlungen />} />
-                    <Route path="kulturen" element={<Kulturen />} />
-                    <Route path="zaehlungen" element={<Zaehlungen />} />
-                    <Route path="teilkulturen" element={<Teilkulturen />} />
-                    <Route path="lieferungen" element={<Lieferungen />} />
+                    <Route
+                      path="herkuenfte"
+                      element={<Herkuenfte />}
+                    />
+                    <Route
+                      path="sammlungen"
+                      element={<Sammlungen />}
+                    />
+                    <Route
+                      path="kulturen"
+                      element={<Kulturen />}
+                    />
+                    <Route
+                      path="zaehlungen"
+                      element={<Zaehlungen />}
+                    />
+                    <Route
+                      path="teilkulturen"
+                      element={<Teilkulturen />}
+                    />
+                    <Route
+                      path="lieferungen"
+                      element={<Lieferungen />}
+                    />
                     <Route
                       path="sammel-lieferungen"
                       element={<SammelLieferungen />}
                     />
-                    <Route path="events" element={<Events />} />
-                    <Route path="felder-blenden" element={<FelderBlenden />} />
-                    <Route path="ordner-blenden" element={<OrdnerBlenden />} />
-                    <Route path="planen" element={<Planen />} />
+                    <Route
+                      path="events"
+                      element={<Events />}
+                    />
+                    <Route
+                      path="felder-blenden"
+                      element={<FelderBlenden />}
+                    />
+                    <Route
+                      path="ordner-blenden"
+                      element={<OrdnerBlenden />}
+                    />
+                    <Route
+                      path="planen"
+                      element={<Planen />}
+                    />
                     <Route
                       path="genetische-vielfalt"
                       element={<GenetischeVielfalt />}
@@ -149,20 +191,59 @@ const App = () => {
                       path="gedaechtnis"
                       element={<VermehrungErinnertSich />}
                     />
-                    <Route path="open-source" element={<OpenSource />} />
-                    <Route path="fehler-ideen" element={<FehlerMelden />} />
-                    <Route path="schnittstellen" element={<Schnittstellen />} />
-                    <Route path="pwa" element={<Pwa />} />
-                    <Route path="offline" element={<Offline />} />
-                    <Route path="offline-wie" element={<OfflineWie />} />
-                    <Route path="historisierung" element={<History />} />
-                    <Route path="technologien" element={<Technologien />} />
-                    <Route path="struktur" element={<Struktur />} />
-                    <Route path="roadmap" element={<Roadmap />} />
-                    <Route path="konten" element={<Konten />} />
-                    <Route path="datenschutz" element={<Datenschutz />} />
+                    <Route
+                      path="open-source"
+                      element={<OpenSource />}
+                    />
+                    <Route
+                      path="fehler-ideen"
+                      element={<FehlerMelden />}
+                    />
+                    <Route
+                      path="schnittstellen"
+                      element={<Schnittstellen />}
+                    />
+                    <Route
+                      path="pwa"
+                      element={<Pwa />}
+                    />
+                    <Route
+                      path="offline"
+                      element={<Offline />}
+                    />
+                    <Route
+                      path="offline-wie"
+                      element={<OfflineWie />}
+                    />
+                    <Route
+                      path="historisierung"
+                      element={<History />}
+                    />
+                    <Route
+                      path="technologien"
+                      element={<Technologien />}
+                    />
+                    <Route
+                      path="struktur"
+                      element={<Struktur />}
+                    />
+                    <Route
+                      path="roadmap"
+                      element={<Roadmap />}
+                    />
+                    <Route
+                      path="konten"
+                      element={<Konten />}
+                    />
+                    <Route
+                      path="datenschutz"
+                      element={<Datenschutz />}
+                    />
                   </Route>
-                  <Route path="*" element={<FourOhFour />} />
+                  <Route
+                    path="*"
+                    element={<FourOhFour />}
+                  />
                 </Route>
               </Routes>
               <Suspense fallback={null}>
