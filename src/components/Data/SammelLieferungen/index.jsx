@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -51,11 +51,13 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const SammelLieferungen = ({ filter: showFilter = false, width, height }) => {
+const SammelLieferungen = ({ filter: showFilter = false }) => {
   const store = useContext(StoreContext)
   const { insertSammelLieferungRev, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { sammel_lieferung: sammelLieferungFilter } = store.filter
+
+  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({
     sammelLieferungs: [],
@@ -64,15 +66,13 @@ const SammelLieferungen = ({ filter: showFilter = false, width, height }) => {
   useEffect(() => {
     const collection = db.get('sammel_lieferung')
     const sammelLieferungDelQuery =
-      filter.sammel_lieferung._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.sammel_lieferung._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+      filter.sammel_lieferung._deleted === false ? Q.where('_deleted', false)
+      : filter.sammel_lieferung._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(sammelLieferungDelQuery)
       .observeCount()
@@ -123,19 +123,25 @@ const SammelLieferungen = ({ filter: showFilter = false, width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
+      <Container
+        showfilter={showFilter}
+        ref={ref}
+      >
+        {showFilter ?
           <FilterTitle
             title="Sammel-Lieferung"
             table="sammel_lieferung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <TitleContainer>
+        : <TitleContainer>
             <Title>Sammel-Lieferungen</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
+              <IconButton
+                title={upTitle}
+                onClick={onClickUp}
+                size="large"
+              >
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -152,7 +158,7 @@ const SammelLieferungen = ({ filter: showFilter = false, width, height }) => {
               />
             </TitleSymbols>
           </TitleContainer>
-        )}
+        }
         <FieldsContainer>
           {!!width && (
             <FixedSizeList
@@ -178,4 +184,4 @@ const SammelLieferungen = ({ filter: showFilter = false, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(SammelLieferungen))
+export default observer(SammelLieferungen)
