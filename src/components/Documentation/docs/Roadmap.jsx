@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
 export const Roadmap = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Roadmap</h1>
     <DokuDate>04.07.2020</DokuDate>
     <p>
@@ -134,5 +136,5 @@ export const Roadmap = () => (
         werden. Beliebig weit zurück
       </li>
     </ul>
-  </>
+  </Suspense>
 )

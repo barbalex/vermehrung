@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
+
 import { DokuDate } from '../index.jsx'
 
 export const TechnischeVoraussetzungen = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Technische Voraussetzungen</h1>
     <DokuDate>20.05.2023</DokuDate>
     <p>
@@ -30,5 +32,5 @@ export const TechnischeVoraussetzungen = () => (
       <Link to="/Dokumentation/offline">ohne Internet-Verbindung arbeiten</Link>
       .
     </p>
-  </>
+  </Suspense>
 )

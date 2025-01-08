@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
 
 import { DokuDate } from '../../index.jsx'
@@ -5,7 +6,7 @@ import teilkulturOption from './teilkultur_option.gif'
 import teilkulturNew from './teilkultur_new.gif'
 
 export const Teilkulturen = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Teil-Kulturen</h1>
     <DokuDate>20.09.2019</DokuDate>
     <p>
@@ -125,5 +126,5 @@ export const Teilkulturen = () => (
       ...wozu die Felder &quot;ort1&quot;, &quot;ort2&quot; und &quot;ort3&quot;
       dienen.
     </p>
-  </>
+  </Suspense>
 )

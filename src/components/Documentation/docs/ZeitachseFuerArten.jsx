@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
+
 import { DokuDate } from '../index.jsx'
 
 export const ZeitachseFuerArten = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Zeit-Achse für Arten</h1>
     <DokuDate>29.09.2019</DokuDate>
     <h3>Ziele</h3>
@@ -115,5 +117,5 @@ export const ZeitachseFuerArten = () => (
         Vor diesem Zeitpunkt geplante werden ignoriert.
       </li>
     </ul>
-  </>
+  </Suspense>
 )

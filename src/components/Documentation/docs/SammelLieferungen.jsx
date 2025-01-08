@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
+
 import { DokuDate } from '../index.jsx'
 
 export const SammelLieferungen = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Sammel-Lieferungen</h1>
     <DokuDate>04.10.2019</DokuDate>
     <h3>1 Ziele</h3>
@@ -106,5 +108,5 @@ export const SammelLieferungen = () => (
         </p>
       </li>
     </ul>
-  </>
+  </Suspense>
 )

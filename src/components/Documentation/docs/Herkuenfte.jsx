@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
+
 import { DokuDate } from '../index.jsx'
 
 export const Herkuenfte = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Herkünfte</h1>
     <DokuDate>17.01.2020</DokuDate>
     <h3>Ziele</h3>
@@ -37,5 +39,5 @@ export const Herkuenfte = () => (
       entscheiden, ob dieselbe Herkunft (= geografischer Umriss) für mehrere
       Arten verwendet wird oder nur für eine.
     </p>
-  </>
+  </Suspense>
 )

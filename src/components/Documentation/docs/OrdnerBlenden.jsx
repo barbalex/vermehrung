@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
 export const OrdnerBlenden = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Ordner ein- und ausblenden</h1>
     <DokuDate>28.12.2019</DokuDate>
     <h3>Wieso</h3>
@@ -39,5 +41,5 @@ export const OrdnerBlenden = () => (
       Kulturen/Teilkulturen/Zählungen/Lieferungen/Events, welche den Filter
       erfüllen.
     </p>
-  </>
+  </Suspense>
 )

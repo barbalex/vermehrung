@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
 
 import { DokuDate } from '../../index.jsx'
@@ -5,7 +6,7 @@ import one from './001_button.png'
 import two from './002_version.png'
 
 export const History = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Daten-Historie</h1>
     <DokuDate>11.09.2020</DokuDate>
     <p>
@@ -85,5 +86,5 @@ export const History = () => (
         dieser Dokumentations-Seite
       </li>
     </ul>
-  </>
+  </Suspense>
 )

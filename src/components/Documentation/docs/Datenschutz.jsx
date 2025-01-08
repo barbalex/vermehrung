@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
 export const Datenschutz = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Datenschutz</h1>
     <DokuDate>21.07.2020</DokuDate>
     <DokuDate>
@@ -458,5 +460,5 @@ export const Datenschutz = () => (
       </li>
     </ul>
     <p>&nbsp;</p>
-  </>
+  </Suspense>
 )

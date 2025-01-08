@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
 export const Ziele = () => (

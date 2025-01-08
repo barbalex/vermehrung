@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
 export const Sammlungen = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Sammlungen</h1>
     <DokuDate>17.01.2020</DokuDate>
     <h3>Verortung</h3>
@@ -13,5 +15,5 @@ export const Sammlungen = () => (
     </p>
     <p>Später muss das vermutlich mit Geometrien ergänzt werden.</p>
     <p>&nbsp;</p>
-  </>
+  </Suspense>
 )

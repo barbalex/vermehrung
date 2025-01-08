@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
+
 import { DokuDate } from '../index.jsx'
 
 export const Events = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Events</h1>
     <DokuDate>04.10.2019</DokuDate>
     <h3>Ziele</h3>
@@ -28,5 +30,5 @@ export const Events = () => (
       Events planen ist &quot;opt-in&quot;. Damit das Feld &quot;geplant&quot;
       verfügbar ist, muss man es bei den Optionen einschalten.
     </p>
-  </>
+  </Suspense>
 )

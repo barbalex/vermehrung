@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
+
 import { DokuDate } from '../index.jsx'
 
 export const ZeitachseFuerKulturen = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Zeit-Achse für Kulturen</h1>
     <DokuDate>20.09.2019</DokuDate>
     <h3>Ziele</h3>
@@ -125,5 +127,5 @@ export const ZeitachseFuerKulturen = () => (
         Vor diesem Zeitpunkt geplante werden in abweichenden Farben dargestellt
       </li>
     </ul>
-  </>
+  </Suspense>
 )

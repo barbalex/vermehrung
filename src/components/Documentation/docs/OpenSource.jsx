@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
 export const OpenSource = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Open Source</h1>
     <DokuDate>15.06.2019</DokuDate>
     <p>
@@ -56,5 +58,5 @@ export const OpenSource = () => (
       </a>
       .
     </p>
-  </>
+  </Suspense>
 )

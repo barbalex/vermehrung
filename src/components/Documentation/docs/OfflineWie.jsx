@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
 export const OfflineWie = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Offline: Wie es funktioniert</h1>
     <DokuDate>18.12.2020</DokuDate>
     <p>
@@ -211,5 +213,5 @@ export const OfflineWie = () => (
       würde das wohl halb so lange dauern.
       <br />
     </p>
-  </>
+  </Suspense>
 )
