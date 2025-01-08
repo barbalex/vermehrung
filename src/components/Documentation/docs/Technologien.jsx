@@ -1,13 +1,17 @@
 import { Link } from 'react-router-dom'
 import { DokuDate } from '../index.jsx'
 
-const Technologien = () => (
+export const Technologien = () => (
   <>
     <h1>Verwendete Technologien</h1>
     <DokuDate>03.09.2020</DokuDate>
     <ul>
       <li>
-        <a href="https://www.postgresql.org" target="_blank" rel="noreferrer">
+        <a
+          href="https://www.postgresql.org"
+          target="_blank"
+          rel="noreferrer"
+        >
           PostgreSQL
         </a>{' '}
         als Datenbank
@@ -37,12 +41,20 @@ const Technologien = () => (
           GraphQL
         </a>{' '}
         als Daten-Schnittstelle, in Form von{' '}
-        <a href="https://hasura.io" target="_blank" rel="noreferrer">
+        <a
+          href="https://hasura.io"
+          target="_blank"
+          rel="noreferrer"
+        >
           Hasura
         </a>
       </li>
       <li>
-        <a href="https://mobx.js.org/" target="_blank" rel="noreferrer">
+        <a
+          href="https://mobx.js.org/"
+          target="_blank"
+          rel="noreferrer"
+        >
           MobX
         </a>
         ,{' '}
@@ -67,7 +79,11 @@ const Technologien = () => (
         für die Benutzeroberfläche
       </li>
       <li>
-        <a href="https://vitejs.dev/" target="_blank" rel="noreferrer">
+        <a
+          href="https://vitejs.dev/"
+          target="_blank"
+          rel="noreferrer"
+        >
           Vite
         </a>{' '}
         als Entwicklungs-Umgebung
@@ -75,5 +91,3 @@ const Technologien = () => (
     </ul>
   </>
 )
-
-export default Technologien
