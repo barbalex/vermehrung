@@ -5,9 +5,9 @@ import StoreContext from '../../storeContext.js'
 import Login from '../../components/Login.jsx'
 import ErrorBoundary from '../../components/shared/ErrorBoundary.jsx'
 import ApiDetector from '../../components/ApiDetector.jsx'
-import QueuedQueries from '../../components/QueuedQueries/index.jsx'
+import { QueuedQueries } from '../../components/QueuedQueries/index.jsx'
 import constants from '../../utils/constants.js'
-import VermehrungComponent from './Vermehrung.jsx'
+import { Vermehrung } from './Vermehrung.jsx'
 import AuthorizingObserver from './AuthorizingObserver.jsx'
 import StoragePersister from './StoragePersister.jsx'
 import OpenNodesSetter from './OpenNodesSetter.jsx'
@@ -32,7 +32,7 @@ const VermehrungIndex = () => {
       <AuthorizingObserver />
       {showQueuedQueries ?
         <QueuedQueries />
-      : <VermehrungComponent />}
+      : <Vermehrung />}
       <ApiDetector />
     </ErrorBoundary>
   )
