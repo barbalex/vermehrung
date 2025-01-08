@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { DokuDate } from '../index.jsx'
 
-const Kulturen = () => (
+export const Kulturen = () => (
   <>
     <h1>Kulturen</h1>
     <DokuDate>20.01.2021</DokuDate>
@@ -131,5 +131,3 @@ const Kulturen = () => (
     </ul>
   </>
 )
-
-export default Kulturen

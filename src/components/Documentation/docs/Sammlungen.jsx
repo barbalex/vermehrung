@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const Sammlungen = () => (
+export const Sammlungen = () => (
   <>
     <h1>Sammlungen</h1>
     <DokuDate>17.01.2020</DokuDate>
@@ -15,5 +15,3 @@ const Sammlungen = () => (
     <p>&nbsp;</p>
   </>
 )
-
-export default Sammlungen
