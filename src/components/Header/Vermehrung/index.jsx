@@ -3,7 +3,7 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import Account from './Account.jsx'
 import HamburgerMenu from './Menu/index.jsx'
@@ -20,90 +20,71 @@ const Spacer = styled.div`
   flex-grow: 1;
 `
 
-const HeaderVermehrung = ({ width }) => {
-  if (width < 509) {
-    return (
-      <ErrorBoundary>
-        <AppBar position="fixed">
-          <Toolbar>
-            <NavTree />
-            <Spacer />
-            <Filter />
-            <Search />
-            <Online />
-            <Account />
-            <Menu>
-              <Home asMenu />
-              <Docu asMenu />
-              <HamburgerMenu asMenu />
-            </Menu>
-          </Toolbar>
-        </AppBar>
-      </ErrorBoundary>
-    )
-  }
-
-  if (width < 557) {
-    return (
-      <ErrorBoundary>
-        <AppBar position="fixed">
-          <Toolbar>
-            <NavTree />
-            <Home />
-            <Spacer />
-            <Filter />
-            <Search />
-            <Online />
-            <Account />
-            <Menu>
-              <Docu asMenu />
-              <HamburgerMenu asMenu />
-            </Menu>
-          </Toolbar>
-        </AppBar>
-      </ErrorBoundary>
-    )
-  }
-
-  if (width < 605) {
-    return (
-      <ErrorBoundary>
-        <AppBar position="fixed">
-          <Toolbar>
-            <NavTree />
-            <Home />
-            <Spacer />
-            <Filter />
-            <Search />
-            <Online />
-            <Account />
-            <HamburgerMenu />
-            <Menu>
-              <Docu asMenu />
-            </Menu>
-          </Toolbar>
-        </AppBar>
-      </ErrorBoundary>
-    )
-  }
+const HeaderVermehrung = () => {
+  const { width, ref } = useResizeDetector()
 
   return (
     <ErrorBoundary>
-      <AppBar position="fixed">
+      <AppBar
+        position="fixed"
+        ref={ref}
+      >
         <Toolbar>
           <NavTree />
-          <Home />
-          <Spacer />
-          <Docu />
-          <Filter />
-          <Search />
-          <Online />
-          <Account />
-          <HamburgerMenu />
+          {width < 509 ?
+            <>
+              <Spacer />
+              <Filter />
+              <Search />
+              <Online />
+              <Account />
+              <Menu>
+                <Home asMenu />
+                <Docu asMenu />
+                <HamburgerMenu asMenu />
+              </Menu>
+            </>
+          : width < 557 ?
+            <>
+              <Home />
+              <Spacer />
+              <Filter />
+              <Search />
+              <Online />
+              <Account />
+              <Menu>
+                <Docu asMenu />
+                <HamburgerMenu asMenu />
+              </Menu>
+            </>
+          : width < 605 ?
+            <>
+              <Home />
+              <Spacer />
+              <Filter />
+              <Search />
+              <Online />
+              <Account />
+              <HamburgerMenu />
+              <Menu>
+                <Docu asMenu />
+              </Menu>
+            </>
+          : <>
+              <Home />
+              <Spacer />
+              <Docu />
+              <Filter />
+              <Search />
+              <Online />
+              <Account />
+              <HamburgerMenu />
+            </>
+          }
         </Toolbar>
       </AppBar>
     </ErrorBoundary>
   )
 }
 
-export default withResizeDetector(observer(HeaderVermehrung))
+export default observer(HeaderVermehrung)
