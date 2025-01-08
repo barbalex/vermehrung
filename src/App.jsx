@@ -1,4 +1,4 @@
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useState, Suspense, lazy } from 'react'
 import DatabaseProvider from '@nozbe/watermelondb/react/DatabaseProvider'
 import { useNavigate } from 'react-router-dom'
 
@@ -26,7 +26,10 @@ import NavigationSyncController from './components/NavigationSyncController.tsx'
 import Layout from './components/Layout.jsx'
 import Docs from './components/Documentation/index.jsx'
 
-import { Ziele } from './components/Documentation/docs/Ziele.jsx'
+const Ziele = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Ziele.jsx')).Ziele,
+}))
+// TODO: lazy import all
 import { ZieleHerkuenfte } from './components/Documentation/docs/ZieleHerkuenfte.jsx'
 import { Herkuenfte } from './components/Documentation/docs/Herkuenfte.jsx'
 import { TechnischeVoraussetzungen } from './components/Documentation/docs/TechnischeVoraussetzungen.jsx'

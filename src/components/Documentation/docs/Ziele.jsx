@@ -1,7 +1,8 @@
+import { Suspense } from 'react'
 import { DokuDate } from '../index.jsx'
 
 export const Ziele = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Ziele</h1>
     <DokuDate>04.10.2019</DokuDate>
     <p>Die Ziele dienen als Grundlage:</p>
@@ -57,5 +58,5 @@ export const Ziele = () => (
       <li>Lieferungen auswerten um zu sehen, wer erfolgreich vermehrt</li>
       <li>Vermehrungs-Methodik auswerten</li>
     </ol>
-  </>
+  </Suspense>
 )
