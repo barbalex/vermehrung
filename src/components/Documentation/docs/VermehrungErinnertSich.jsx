@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
 export const VermehrungErinnertSich = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>vermehrung erinnert sich</h1>
     <DokuDate>30.09.2019</DokuDate>
     <p>
@@ -21,5 +23,5 @@ export const VermehrungErinnertSich = () => (
       <br />
     </p>
     <p>Man kann also genau dort weiter arbeiten, wo man aufgehört hat.</p>
-  </>
+  </Suspense>
 )

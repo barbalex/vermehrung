@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
+
 import { DokuDate } from '../index.jsx'
 
 export const Lieferungen = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Lieferungen</h1>
     <DokuDate>28.06.2020</DokuDate>
     <h3>Ziele</h3>
@@ -86,5 +88,5 @@ export const Lieferungen = () => (
         </p>
       </li>
     </ul>
-  </>
+  </Suspense>
 )

@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
 export const Planen = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Planen</h1>
     <DokuDate>15.11.2019</DokuDate>
     <h3>Wo</h3>
@@ -43,5 +45,5 @@ export const Planen = () => (
       <strong>vermehrt</strong> werden. Und Vermehrung ist ja der Kern des
       Projekts 🎯
     </p>
-  </>
+  </Suspense>
 )

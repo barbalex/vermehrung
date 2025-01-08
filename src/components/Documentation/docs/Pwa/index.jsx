@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../../index.jsx'
 import installieren from './installieren.webp'
 
 export const Pwa = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Progressive Web App</h1>
     <DokuDate>22.10.2020</DokuDate>
     <p>
@@ -62,5 +64,5 @@ export const Pwa = () => (
         sie loslegen!
       </li>
     </ul>
-  </>
+  </Suspense>
 )

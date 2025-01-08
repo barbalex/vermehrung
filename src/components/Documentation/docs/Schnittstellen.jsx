@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
 export const Schnittstellen = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Schnittstellen</h1>
     <DokuDate>15.06.2019</DokuDate>
     <p>
@@ -34,5 +36,5 @@ export const Schnittstellen = () => (
       </a>
       .
     </p>
-  </>
+  </Suspense>
 )

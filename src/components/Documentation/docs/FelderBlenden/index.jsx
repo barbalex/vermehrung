@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
+
 import { DokuDate } from '../../index.jsx'
 import felderBlenden from './felderBlenden1.gif'
 
 export const FelderBlenden = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Felder ein- und ausblenden</h1>
     <DokuDate>20.09.2019</DokuDate>
     <h3>Wieso</h3>
@@ -49,5 +51,5 @@ export const FelderBlenden = () => (
       <li>Gärten</li>
       <li>Lieferungen</li>
     </ul>
-  </>
+  </Suspense>
 )

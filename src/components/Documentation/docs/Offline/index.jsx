@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
 
 import { DokuDate } from '../../index.jsx'
@@ -10,7 +11,7 @@ import six from './006.png'
 import seven from './007.png'
 
 export const Offline = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Offline arbeiten</h1>
     <DokuDate>29.01.2021</DokuDate>
     <h3>Wieso?</h3>
@@ -164,5 +165,5 @@ export const Offline = () => (
       Es steckt mehr hinter der offline-Fähigkeit von vermehrung.ch. Neugierige{' '}
       <Link to="/Dokumentation/offline-wie">lesen hier weiter</Link>.
     </p>
-  </>
+  </Suspense>
 )

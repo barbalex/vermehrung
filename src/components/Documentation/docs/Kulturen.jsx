@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
+
 import { DokuDate } from '../index.jsx'
 
 export const Kulturen = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Kulturen</h1>
     <DokuDate>20.01.2021</DokuDate>
     <h3>Ziele</h3>
@@ -129,5 +131,5 @@ export const Kulturen = () => (
         Wenn die Art schon gewählt wurde: In denen diese Art gesammelt wurde
       </li>
     </ul>
-  </>
+  </Suspense>
 )

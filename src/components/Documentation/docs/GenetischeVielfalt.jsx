@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import { Link } from 'react-router'
+
 import { DokuDate } from '../index.jsx'
 
 export const GenetischeVielfalt = () => (
-  <>
+  <Suspense fallback={null}>
     <h1>Genetische Vielfalt</h1>
     <DokuDate>04.10.2019</DokuDate>
     <p>
@@ -24,5 +26,5 @@ export const GenetischeVielfalt = () => (
         Pflanzen stammen. Unabhängig davon, welche Einheiten gezählt wurden.
       </strong>
     </p>
-  </>
+  </Suspense>
 )
