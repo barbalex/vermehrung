@@ -8,7 +8,6 @@ import { MENU_SHOW, MENU_HIDE } from './actions.js'
 import { uniqueId, hasOwnProp, canUseDOM } from './helpers.js'
 
 var GlobalEventListener = function GlobalEventListener() {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
   var _this = this
 
   _classCallCheck(this, GlobalEventListener)
