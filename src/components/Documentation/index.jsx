@@ -124,7 +124,7 @@ const Documentation = ({ width }) => {
 
   const path = pathname.split('/').filter((e) => !!e)
 
-  console.log('Documentation, width:', width)
+  // console.log('Documentation, width:', width)
 
   useEffect(() => {
     const items = articles.filter(
@@ -136,13 +136,12 @@ const Documentation = ({ width }) => {
 
   return (
     <ErrorBoundary>
-      {width < constants?.tree?.minimalWindowWidth ? (
-        path.length === 1 ? (
+      {width < constants?.tree?.minimalWindowWidth ?
+        path.length === 1 ?
           <Container>
             <ArticleList articles={articles} />
           </Container>
-        ) : (
-          <Container>
+        : <Container>
             <Doku>
               <FormTitle />
               <DokuInnerContainer>
@@ -150,9 +149,8 @@ const Documentation = ({ width }) => {
               </DokuInnerContainer>
             </Doku>
           </Container>
-        )
-      ) : (
-        <SplitPaneContainer>
+
+      : <SplitPaneContainer>
           <Allotment>
             <Allotment.Pane preferredSize="22%">
               <ArticleList articles={articles} />
@@ -165,7 +163,7 @@ const Documentation = ({ width }) => {
             </Doku>
           </Allotment>
         </SplitPaneContainer>
-      )}
+      }
     </ErrorBoundary>
   )
 }

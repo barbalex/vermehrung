@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const VermehrungErinnertSich = () => (
+export const VermehrungErinnertSich = () => (
   <>
     <h1>vermehrung erinnert sich</h1>
     <DokuDate>30.09.2019</DokuDate>
@@ -23,5 +23,3 @@ const VermehrungErinnertSich = () => (
     <p>Man kann also genau dort weiter arbeiten, wo man aufgehört hat.</p>
   </>
 )
-
-export default VermehrungErinnertSich

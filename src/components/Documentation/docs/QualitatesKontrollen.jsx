@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { DokuDate } from '../index.jsx'
 
-const QualitaetsKontrollen = () => (
+export const QualitaetsKontrollen = () => (
   <>
     <h1>Qualitäts-Kontrollen</h1>
     <DokuDate>28.06.2020</DokuDate>
@@ -31,5 +31,3 @@ const QualitaetsKontrollen = () => (
     </ul>
   </>
 )
-
-export default QualitaetsKontrollen

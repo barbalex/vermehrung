@@ -1,13 +1,17 @@
 import { DokuDate } from '../index.jsx'
 
-const Schnittstellen = () => (
+export const Schnittstellen = () => (
   <>
     <h1>Schnittstellen</h1>
     <DokuDate>15.06.2019</DokuDate>
     <p>
       Brauchen Sie in anderen Anwendungen Zugriff auf Ihre Daten in
       vermehrung.ch? Kein Problem: vermehrung.ch verfügt über eine öffentliche{' '}
-      <a href="//github.com/facebook/graphql" target="_blank" rel="noreferrer">
+      <a
+        href="//github.com/facebook/graphql"
+        target="_blank"
+        rel="noreferrer"
+      >
         GraphQL
       </a>
       -Schnittstelle.
@@ -32,5 +36,3 @@ const Schnittstellen = () => (
     </p>
   </>
 )
-
-export default Schnittstellen

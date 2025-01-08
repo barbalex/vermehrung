@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { DokuDate } from '../index.jsx'
 
-const GenetischeVielfalt = () => (
+export const GenetischeVielfalt = () => (
   <>
     <h1>Genetische Vielfalt</h1>
     <DokuDate>04.10.2019</DokuDate>
@@ -26,5 +26,3 @@ const GenetischeVielfalt = () => (
     </p>
   </>
 )
-
-export default GenetischeVielfalt

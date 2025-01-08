@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const Planen = () => (
+export const Planen = () => (
   <>
     <h1>Planen</h1>
     <DokuDate>15.11.2019</DokuDate>
@@ -45,5 +45,3 @@ const Planen = () => (
     </p>
   </>
 )
-
-export default Planen
