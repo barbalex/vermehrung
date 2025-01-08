@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import { withResizeDetector } from 'react-resize-detector'
+import { withResizeDetector, useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext.js'
@@ -41,12 +41,13 @@ const PersonFormTitle = ({
   row,
   totalCount,
   filteredCount,
-  width,
   showHistory,
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
   const { user, db } = store
+
+  const { width, ref } = useResizeDetector()
 
   const [userRole, setUserRole] = useState(undefined)
   useEffect(() => {
@@ -63,18 +64,18 @@ const PersonFormTitle = ({
 
   if (!userRole) return null
 
-  if (width < 568) {
-    return (
-      <TitleContainer>
-        <Title>Person</Title>
-        <TitleSymbols>
-          <NavButtons />
-          {userRole?.name === 'manager' && (
-            <>
-              <AddButton />
-              <DeleteButton row={row} />
-            </>
-          )}
+  return (
+    <TitleContainer ref={ref}>
+      <Title>Person</Title>
+      <TitleSymbols>
+        <NavButtons />
+        {userRole?.name === 'manager' && (
+          <>
+            <AddButton />
+            <DeleteButton row={row} />
+          </>
+        )}
+        {width < 568 ?
           <Menu white={false}>
             <HistoryButton
               table="person"
@@ -93,33 +94,20 @@ const PersonFormTitle = ({
               asMenu
             />
           </Menu>
-        </TitleSymbols>
-      </TitleContainer>
-    )
-  }
-
-  return (
-    <TitleContainer>
-      <Title>Person</Title>
-      <TitleSymbols>
-        <NavButtons />
-        {userRole?.name === 'manager' && (
-          <>
-            <AddButton />
-            <DeleteButton row={row} />
+        : <>
+            <HistoryButton
+              table="person"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+            />
+            <KontoMenu row={row} />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+            />
           </>
-        )}
-        <HistoryButton
-          table="person"
-          id={row.id}
-          showHistory={showHistory}
-          setShowHistory={setShowHistory}
-        />
-        <KontoMenu row={row} />
-        <FilterNumbers
-          filteredCount={filteredCount}
-          totalCount={totalCount}
-        />
+        }
       </TitleSymbols>
     </TitleContainer>
   )
