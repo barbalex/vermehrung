@@ -25,6 +25,9 @@ import ErrorBoundary from './shared/ErrorBoundary.jsx'
 import StoreContext from '../storeContext.js'
 import constants from '../utils/constants.js'
 
+const Container = styled.div`
+  margin: 20px;
+`
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
   display: flex;
@@ -148,74 +151,87 @@ const Login = () => {
 
   return (
     <ErrorBoundary>
-      <StyledDialog aria-labelledby="dialog-title" open={true}>
-        <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
-        <StyledDiv>
-          <FormControl
-            error={!!emailErrorText}
-            fullWidth
-            aria-describedby="emailHelper"
-            variant="standard"
-          >
-            <InputLabel htmlFor="email">Email</InputLabel>
-            <StyledInput
-              id="email"
-              className="user-email"
-              defaultValue={email}
-              onBlur={onBlurEmail}
-              autoFocus
-              onKeyPress={onKeyPressEmail}
-              inputRef={emailInput}
-            />
-            <FormHelperText id="emailHelper">{emailErrorText}</FormHelperText>
-          </FormControl>
-          <FormControl
-            error={!!passwordErrorText}
-            fullWidth
-            aria-describedby="passwortHelper"
-            variant="standard"
-          >
-            <InputLabel htmlFor="passwort">Passwort</InputLabel>
-            <StyledInput
-              id="passwort"
-              className="user-passwort"
-              type={showPass ? 'text' : 'password'}
-              defaultValue={password}
-              onBlur={onBlurPassword}
-              onKeyPress={onKeyPressPassword}
-              autoComplete="current-password"
-              autoCorrect="off"
-              spellCheck="false"
-              inputRef={passwordInput}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={onClickShowPass}
-                    onMouseDown={onMouseDownShowPass}
-                    title={showPass ? 'verstecken' : 'anzeigen'}
-                    size="large"
-                  >
-                    {showPass ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-            <FormHelperText id="passwortHelper">
-              {passwordErrorText}
-            </FormHelperText>
-          </FormControl>
-        </StyledDiv>
-        <DialogActions>
-          {!!email && (
-            <ResetButton onClick={reset} color="inherit">
-              {resetTitle}
-            </ResetButton>
-          )}
-          <Button color="primary" onClick={fetchLogin}>
-            anmelden
-          </Button>
-        </DialogActions>
-      </StyledDialog>
+      <Container>
+        <StyledDialog
+          aria-labelledby="dialog-title"
+          open={true}
+        >
+          <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
+          <StyledDiv>
+            <FormControl
+              error={!!emailErrorText}
+              fullWidth
+              aria-describedby="emailHelper"
+              variant="standard"
+            >
+              <InputLabel htmlFor="email">Email</InputLabel>
+              <StyledInput
+                id="email"
+                className="user-email"
+                defaultValue={email}
+                onBlur={onBlurEmail}
+                autoFocus
+                onKeyPress={onKeyPressEmail}
+                inputRef={emailInput}
+              />
+              <FormHelperText id="emailHelper">{emailErrorText}</FormHelperText>
+            </FormControl>
+            <FormControl
+              error={!!passwordErrorText}
+              fullWidth
+              aria-describedby="passwortHelper"
+              variant="standard"
+            >
+              <InputLabel htmlFor="passwort">Passwort</InputLabel>
+              <StyledInput
+                id="passwort"
+                className="user-passwort"
+                type={showPass ? 'text' : 'password'}
+                defaultValue={password}
+                onBlur={onBlurPassword}
+                onKeyPress={onKeyPressPassword}
+                autoComplete="current-password"
+                autoCorrect="off"
+                spellCheck="false"
+                inputRef={passwordInput}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={onClickShowPass}
+                      onMouseDown={onMouseDownShowPass}
+                      title={showPass ? 'verstecken' : 'anzeigen'}
+                      size="large"
+                    >
+                      {showPass ?
+                        <VisibilityOffIcon />
+                      : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+              <FormHelperText id="passwortHelper">
+                {passwordErrorText}
+              </FormHelperText>
+            </FormControl>
+          </StyledDiv>
+          <DialogActions>
+            {!!email && (
+              <ResetButton
+                onClick={reset}
+                color="inherit"
+              >
+                {resetTitle}
+              </ResetButton>
+            )}
+            <Button
+              color="primary"
+              onClick={fetchLogin}
+            >
+              anmelden
+            </Button>
+          </DialogActions>
+        </StyledDialog>
+      </Container>
     </ErrorBoundary>
   )
 }

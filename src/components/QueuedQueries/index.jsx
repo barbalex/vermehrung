@@ -20,7 +20,10 @@ const Title = styled.h3`
 const NoOpsContainer = styled.div`
   padding: 0 15px;
 `
-const Container = styled.div``
+const Container = styled.div`
+  min-height: calc(100dvh - ${constants.appBarHeight}px);
+  position: relative;
+`
 const OuterContainer = styled.div`
   height: calc(100dvh - ${constants.appBarHeight}px - 15px - 23px - 23px);
   overflow-x: hidden;
@@ -126,7 +129,11 @@ const QueuedQueries = () => {
             <Heading>nachher</Heading>
             <RevertHeading>widerrufen</RevertHeading>
             {[...queuedQueries.values()].reverse().map((qq, i) => (
-              <QueuedQuery key={qq.id} qq={qq} index={i} />
+              <QueuedQuery
+                key={qq.id}
+                qq={qq}
+                index={i}
+              />
             ))}
           </QueriesContainer>
         </OuterContainer>
