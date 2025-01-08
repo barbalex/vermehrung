@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import UpSvg from '../../../svg/to_up.svg?react'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
@@ -50,25 +50,25 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Arten = ({ filter: showFilter, width, height }) => {
+const Arten = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
   const { insertArtRev, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { art: artFilter } = store.filter
 
+  const { width, height, ref } = useResizeDetector()
+
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
     const collection = db.get('art')
     const delQuery =
-      filter.art._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.art._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.art._deleted === false ? Q.where('_deleted', false)
+      : filter.art._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection.query(delQuery).observeCount()
     const artsObservable = collection
       .query(...tableFilter({ store, table: 'art' }))
@@ -107,19 +107,25 @@ const Arten = ({ filter: showFilter, width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
+      <Container
+        showfilter={showFilter}
+        ref={ref}
+      >
+        {showFilter ?
           <FilterTitle
             title="Art"
             table="art"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <TitleContainer>
+        : <TitleContainer>
             <Title>Arten</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
+              <IconButton
+                title={upTitle}
+                onClick={onClickUp}
+                size="large"
+              >
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -136,7 +142,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
               />
             </TitleSymbols>
           </TitleContainer>
-        )}
+        }
         <FieldsContainer>
           {!!width && (
             <FixedSizeList
@@ -162,4 +168,4 @@ const Arten = ({ filter: showFilter, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Arten))
+export default observer(Arten)
