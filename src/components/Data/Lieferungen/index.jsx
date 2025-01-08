@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -52,7 +52,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Lieferungen = ({ filter: showFilter = false, width, height }) => {
+const Lieferungen = ({ filter: showFilter = false }) => {
   const store = useContext(StoreContext)
   const {
     db,
@@ -65,6 +65,8 @@ const Lieferungen = ({ filter: showFilter = false, width, height }) => {
   } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { lieferung: lieferungFilter } = store.filter
+
+  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({ lieferungs: [], totalCount: 0 })
   useEffect(() => {
@@ -94,15 +96,13 @@ const Lieferungen = ({ filter: showFilter = false, width, height }) => {
     }
     const collection = db.get('lieferung')
     const lieferungDelQuery =
-      filter.lieferung._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.lieferung._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.lieferung._deleted === false ? Q.where('_deleted', false)
+      : filter.lieferung._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(lieferungDelQuery, ...hierarchyQuery)
       .observeCount()
@@ -205,19 +205,25 @@ const Lieferungen = ({ filter: showFilter = false, width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
+      <Container
+        showfilter={showFilter}
+        ref={ref}
+      >
+        {showFilter ?
           <FilterTitle
             title="Lieferung"
             table="lieferung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <TitleContainer>
+        : <TitleContainer>
             <Title>Lieferungen</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
+              <IconButton
+                title={upTitle}
+                onClick={onClickUp}
+                size="large"
+              >
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -234,7 +240,7 @@ const Lieferungen = ({ filter: showFilter = false, width, height }) => {
               />
             </TitleSymbols>
           </TitleContainer>
-        )}
+        }
         <FieldsContainer>
           {!!width && (
             <FixedSizeList
@@ -260,4 +266,4 @@ const Lieferungen = ({ filter: showFilter = false, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Lieferungen))
+export default observer(Lieferungen)
