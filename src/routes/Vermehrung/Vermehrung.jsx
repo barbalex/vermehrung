@@ -16,7 +16,7 @@ const Container = styled.div`
   position: relative;
 `
 
-const Vermehrung = () => {
+export const Vermehrung = observer(() => {
   const store = useContext(StoreContext)
   const { activeForm, isPrint, singleColumnView, showTreeInSingleColumnView } =
     store
@@ -75,6 +75,5 @@ const Vermehrung = () => {
       </Suspense>
     </>
   )
-}
+})
 
-export default observer(Vermehrung)

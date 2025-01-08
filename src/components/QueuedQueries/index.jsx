@@ -50,7 +50,7 @@ const CloseIcon = styled(IconButton)`
   margin-right: 5px !important;
 `
 
-const QueuedQueries = () => {
+export const QueuedQueries = observer(() => {
   const store = useContext(StoreContext)
   const { queuedQueries, setShowQueuedQueries } = store
 
@@ -140,6 +140,5 @@ const QueuedQueries = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(QueuedQueries)
