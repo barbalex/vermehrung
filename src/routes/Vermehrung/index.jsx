@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import StoreContext from '../../storeContext.js'
@@ -15,14 +14,6 @@ import OpenNodesSetter from './OpenNodesSetter.jsx'
 import SubscriptionsInitializer from './SubscriptionsInitializer.jsx'
 import InitialDataLoadingNotifier from './InitialDataLoadingNotifier.jsx'
 
-const Container = styled.div`
-  min-height: calc(100dvh - ${constants.appBarHeight}px);
-  position: relative;
-`
-const LoginContainer = styled.div`
-  margin: 20px;
-`
-
 const VermehrungIndex = () => {
   const store = useContext(StoreContext)
   const { gettingAuthUser, showQueuedQueries, user } = store
@@ -30,13 +21,7 @@ const VermehrungIndex = () => {
   const existsUser = !!user?.uid
 
   if (!existsUser && !gettingAuthUser) {
-    return (
-      <ErrorBoundary>
-        <LoginContainer>
-          <Login />
-        </LoginContainer>
-      </ErrorBoundary>
-    )
+    return <Login />
   }
 
   return (
@@ -46,13 +31,9 @@ const VermehrungIndex = () => {
       <OpenNodesSetter />
       <StoragePersister />
       <AuthorizingObserver />
-      {showQueuedQueries ? (
-        <Container>
-          <QueuedQueries />
-        </Container>
-      ) : (
-        <VermehrungComponent />
-      )}
+      {showQueuedQueries ?
+        <QueuedQueries />
+      : <VermehrungComponent />}
       <ApiDetector />
     </ErrorBoundary>
   )
