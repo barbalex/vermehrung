@@ -57,6 +57,8 @@ import Struktur from './components/Documentation/docs/Struktur/index.jsx'
 import Roadmap from './components/Documentation/docs/Roadmap.jsx'
 import Konten from './components/Documentation/docs/Konten.jsx'
 import Datenschutz from './components/Documentation/docs/Datenschutz.jsx'
+import { Vermehrung } from './routes/Vermehrung/Vermehrung.jsx'
+import { QueuedQueries } from './components/QueuedQueries/index.jsx'
 
 const App = () => {
   const navigate = useNavigate()
@@ -110,7 +112,16 @@ const App = () => {
                   <Route
                     path="/Vermehrung/*"
                     element={<VermehrungIndex />}
-                  />
+                  >
+                    <Route
+                      path="*"
+                      element={<Vermehrung />}
+                    />
+                    <Route
+                      path="ausstehende-Operationen"
+                      element={<QueuedQueries />}
+                    />
+                  </Route>
                   <Route
                     path="Dokumentation"
                     element={<Docs />}

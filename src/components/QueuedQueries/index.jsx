@@ -4,6 +4,7 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { observer } from 'mobx-react-lite'
+import { useNavigate } from 'react-router-dom'
 
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import StoreContext from '../../storeContext.js'
@@ -52,12 +53,17 @@ const CloseIcon = styled(IconButton)`
 
 export const QueuedQueries = observer(() => {
   const store = useContext(StoreContext)
-  const { queuedQueries, setShowQueuedQueries } = store
+  const navigate = useNavigate()
+  const { queuedQueries } = store
 
-  const onClickCloseIcon = useCallback(
-    () => setShowQueuedQueries(false),
-    [setShowQueuedQueries],
-  )
+  const onClickCloseIcon = useCallback(() => {
+    const canGoBack = location.key !== 'default'
+    if (canGoBack) {
+      navigate(-1)
+    } else {
+      navigate('/Vermehrung', { replace: true })
+    }
+  }, [navigate])
   const openDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/Dokumentation/offline`
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -141,4 +147,3 @@ export const QueuedQueries = observer(() => {
     </ErrorBoundary>
   )
 })
-
