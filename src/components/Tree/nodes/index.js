@@ -1362,7 +1362,6 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
         const sammlungIndex = sammlungNodes.findIndex(
           (a) => a.id === sammlungId,
         )
-        console.log('Tree.nodes sammlung:', sammlung)
 
         // 2.1 sammlung > herkunft
         const sammlungHerkunftQuery = sammlung.herkunft
@@ -1370,7 +1369,6 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
         try {
           herkunft = await sammlungHerkunftQuery.fetch()
         } catch {}
-        console.log('Tree.nodes sammlung herkunft:', herkunft)
         sammlungHerkunftFolderNodes.push(
           buildSammlungHerkunftFolder({
             count: herkunft ? 1 : 0,
