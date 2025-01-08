@@ -97,7 +97,7 @@ const SharedSelect = ({
   noCaret = false,
   saveToDb,
 }) => {
-  const [stateValue, setStateValue] = useState(valuePassed)
+  const [stateValue, setStateValue] = useState(valuePassed ?? '')
   useEffect(() => {
     setStateValue(valuePassed)
   }, [valuePassed])
@@ -117,11 +117,11 @@ const SharedSelect = ({
     [name, saveToDb],
   )
 
-  // show ... whyle options are loading
+  // show ... while options are loading
   const loadingOptions = [{ value: stateValue, label: '...' }]
   const optionsToUse = loading && valuePassed ? loadingOptions : options
   const selectValue =
-    optionsToUse.find((o) => o.value === valuePassed) || emptyValue
+    optionsToUse.find((o) => o.value === (valuePassed ?? '')) || emptyValue
   const styles = {
     option: (styles, { data }) => ({
       ...styles,
@@ -130,7 +130,13 @@ const SharedSelect = ({
     menuPortal: (base) => ({ ...base, zIndex: 9999 }),
   }
 
-  // console.log('SharedSelect', { field, selectValue })
+  console.log('SharedSelect', {
+    field,
+    selectValue,
+    optionsToUse,
+    valuePassed,
+    stateValue,
+  })
 
   return (
     <Container>
