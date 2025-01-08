@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Kulturen = ({ filter: showFilter = false, width, height }) => {
+const Kulturen = ({ filter: showFilter = false }) => {
   const store = useContext(StoreContext)
   const {
     artIdInActiveNodeArray,
@@ -63,6 +63,8 @@ const Kulturen = ({ filter: showFilter = false, width, height }) => {
   } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { kultur: kulturFilter } = store.filter
+
+  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({ kulturs: [], totalCount: 0 })
   useEffect(() => {
@@ -81,25 +83,21 @@ const Kulturen = ({ filter: showFilter = false, width, height }) => {
     }
     const collection = db.get('kultur')
     const kulturDelQuery =
-      filter.kultur._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.kultur._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+      filter.kultur._deleted === false ? Q.where('_deleted', false)
+      : filter.kultur._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const kulturAktivQuery =
-      filter.kultur.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.kultur.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+      filter.kultur.aktiv === false ? Q.where('aktiv', false)
+      : filter.kultur.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const countObservable = collection
       .query(kulturDelQuery, kulturAktivQuery, ...hierarchyQuery)
       .observeCount()
@@ -157,19 +155,25 @@ const Kulturen = ({ filter: showFilter = false, width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
+      <Container
+        showfilter={showFilter}
+        ref={ref}
+      >
+        {showFilter ?
           <FilterTitle
             title="Kultur"
             table="kultur"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <TitleContainer>
+        : <TitleContainer>
             <Title>Kulturen</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
+              <IconButton
+                title={upTitle}
+                onClick={onClickUp}
+                size="large"
+              >
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -186,7 +190,7 @@ const Kulturen = ({ filter: showFilter = false, width, height }) => {
               />
             </TitleSymbols>
           </TitleContainer>
-        )}
+        }
         <FieldsContainer>
           {!!width && (
             <FixedSizeList
@@ -212,4 +216,4 @@ const Kulturen = ({ filter: showFilter = false, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Kulturen))
+export default observer(Kulturen)
