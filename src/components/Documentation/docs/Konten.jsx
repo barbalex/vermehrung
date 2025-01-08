@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const Konten = () => (
+export const Konten = () => (
   <>
     <h1>Konten und Benutzerrechte</h1>
     <DokuDate>30.06.2020</DokuDate>
@@ -106,5 +106,3 @@ const Konten = () => (
     </ol>
   </>
 )
-
-export default Konten

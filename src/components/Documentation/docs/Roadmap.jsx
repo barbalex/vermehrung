@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const Roadmap = () => (
+export const Roadmap = () => (
   <>
     <h1>Roadmap</h1>
     <DokuDate>04.07.2020</DokuDate>
@@ -136,5 +136,3 @@ const Roadmap = () => (
     </ul>
   </>
 )
-
-export default Roadmap

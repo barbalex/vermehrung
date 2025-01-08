@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const Datenschutz = () => (
+export const Datenschutz = () => (
   <>
     <h1>Datenschutz</h1>
     <DokuDate>21.07.2020</DokuDate>
@@ -460,5 +460,3 @@ const Datenschutz = () => (
     <p>&nbsp;</p>
   </>
 )
-
-export default Datenschutz

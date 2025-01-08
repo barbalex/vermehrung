@@ -1,7 +1,7 @@
 import { DokuDate } from '../../index.jsx'
 import structure from './structure.png'
 
-const DatenStruktur = () => (
+export const DatenStruktur = () => (
   <>
     <h1>Daten-Struktur</h1>
     <DokuDate>20.01.2020</DokuDate>
@@ -26,5 +26,3 @@ const DatenStruktur = () => (
     </p>
   </>
 )
-
-export default DatenStruktur
