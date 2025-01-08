@@ -19,10 +19,9 @@ const VermehrungIndex = () => {
   const { gettingAuthUser, showQueuedQueries, user } = store
 
   const existsUser = !!user?.uid
+  const returnLogin = !existsUser && !gettingAuthUser
 
-  if (!existsUser && !gettingAuthUser) {
-    return <Login />
-  }
+  if (returnLogin) return <Login />
 
   return (
     <ErrorBoundary>
