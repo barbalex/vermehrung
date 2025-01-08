@@ -7,7 +7,7 @@ import { withResizeDetector } from 'react-resize-detector'
 
 import Account from './Account.jsx'
 import HamburgerMenu from './Menu/index.jsx'
-import {Online} from './Online.jsx'
+import { Online } from './Online.jsx'
 import Search from './Search/index.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import NavTree from './NavTree.jsx'
