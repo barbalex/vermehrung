@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import List from '@mui/material/List'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
 import Article from './Article.jsx'
 import constants from '../../../utils/constants.js'

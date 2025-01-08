@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { withResizeDetector } from 'react-resize-detector'
 import { Allotment } from 'allotment'
 import { observer } from 'mobx-react-lite'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router'
 
 import ArticleList from './ArticleList/index.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'

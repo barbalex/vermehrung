@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { DokuDate } from '../index.jsx'
 
 export const Technologien = () => (
