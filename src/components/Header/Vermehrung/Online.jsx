@@ -7,6 +7,7 @@ import {
 } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import StoreContext from '../../../storeContext.js'
 
@@ -19,26 +20,38 @@ const StyledBadge = styled(Badge)`
   }
 `
 
-const Online = () => {
+export const Online = observer(() => {
   const store = useContext(StoreContext)
-  const {
-    online,
-    queuedQueries,
-    showQueuedQueries,
-    setShowQueuedQueries,
-  } = store
-  const title = online
-    ? 'Sie sind online'
-    : queuedQueries.size
-    ? `Sie sind offline. ${queuedQueries.size} wartende Operationen`
+  const { online, queuedQueries } = store
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+
+  console.log('Online, pathname:', pathname)
+  const showingQueuedQueries =
+    pathname === '/Vermehrung/ausstehende-Operationen'
+
+  const title =
+    online ? 'Sie sind online'
+    : queuedQueries.size ?
+      `Sie sind offline. ${queuedQueries.size} wartende Operationen`
     : `Sie sind offline`
 
   // TODO:
   // 1. add menu to link to info
   // 2. add menu to list and edit pending queries
   const onClick = useCallback(() => {
-    setShowQueuedQueries(!showQueuedQueries)
-  }, [showQueuedQueries, setShowQueuedQueries])
+    console.log('Online.onClick', { pathname, history: window.history })
+    if (pathname === '/Vermehrung/ausstehende-Operationen') {
+      const canGoBack = location.key !== 'default'
+      if (canGoBack) {
+        navigate(-1)
+      } else {
+        navigate('/Vermehrung', { replace: true })
+      }
+    } else {
+      navigate('/Vermehrung/ausstehende-Operationen')
+    }
+  }, [navigate, pathname])
 
   return (
     <OnlineButton
@@ -47,11 +60,15 @@ const Online = () => {
       title={title}
       onClick={onClick}
     >
-      <StyledBadge color="primary" badgeContent={queuedQueries.size} max={999}>
-        {online ? <NetworkOn /> : <NetworkOff />}
+      <StyledBadge
+        color="primary"
+        badgeContent={queuedQueries.size}
+        max={999}
+      >
+        {online ?
+          <NetworkOn />
+        : <NetworkOff />}
       </StyledBadge>
     </OnlineButton>
   )
-}
-
-export default observer(Online)
+})

@@ -105,11 +105,10 @@ const myTypes = types
     initiallyQuerying: types.optional(types.string, ''),
     /**
      * This is a queue of all queries
-     * When online they they are immediatly executed by the reaction
+     * When online they they are immediately executed by the reaction
      * When offline they remain queued until connectivity is back
      */
     queuedQueries: types.map(QueuedQueryType),
-    showQueuedQueries: types.optional(types.boolean, false),
     notifications: types.map(NotificationType),
     // on startup need to wait with showing data
     // until hasura claims have been added
@@ -298,9 +297,6 @@ const myTypes = types
       },
       setDocsFilteredCount(val) {
         self.docsFilteredCount = val
-      },
-      setShowQueuedQueries(val) {
-        self.showQueuedQueries = val
       },
       setError({ path, value }) {
         set(self.errors, path, value)

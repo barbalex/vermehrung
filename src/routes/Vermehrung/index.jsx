@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { Outlet } from 'react-router-dom'
 
 import StoreContext from '../../storeContext.js'
 import Login from '../../components/Login.jsx'
@@ -16,7 +17,7 @@ import InitialDataLoadingNotifier from './InitialDataLoadingNotifier.jsx'
 
 const VermehrungIndex = () => {
   const store = useContext(StoreContext)
-  const { gettingAuthUser, showQueuedQueries, user } = store
+  const { gettingAuthUser, user } = store
 
   const existsUser = !!user?.uid
   const returnLogin = !existsUser && !gettingAuthUser
@@ -30,9 +31,7 @@ const VermehrungIndex = () => {
       <OpenNodesSetter />
       <StoragePersister />
       <AuthorizingObserver />
-      {showQueuedQueries ?
-        <QueuedQueries />
-      : <Vermehrung />}
+      <Outlet />
       <ApiDetector />
     </ErrorBoundary>
   )
