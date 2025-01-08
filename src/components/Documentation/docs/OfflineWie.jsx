@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const OfflineWie = () => (
+export const OfflineWie = () => (
   <>
     <h1>Offline: Wie es funktioniert</h1>
     <DokuDate>18.12.2020</DokuDate>
@@ -213,5 +213,3 @@ const OfflineWie = () => (
     </p>
   </>
 )
-
-export default OfflineWie
