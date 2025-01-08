@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Herkuenfte = ({ filter: showFilter, width, height }) => {
+const Herkuenfte = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
   const {
     insertHerkunftRev,
@@ -67,30 +67,31 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   } = store.tree
   const activeNodeArray = anaRaw.toJSON()
 
+  const { width, height, ref } = useResizeDetector()
+
   const [dataState, setDataState] = useState({ herkunfts: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = sammlungIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      sammlungIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['sammlung']),
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
         ]
-      : artIdInActiveNodeArray
-        ? [
-            Q.experimentalJoinTables(['sammlung']),
-            Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
-          ]
-        : []
+      : artIdInActiveNodeArray ?
+        [
+          Q.experimentalJoinTables(['sammlung']),
+          Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
+        ]
+      : []
     const collection = db.get('herkunft')
     const delQuery =
-      filter.herkunft._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.herkunft._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.herkunft._deleted === false ? Q.where('_deleted', false)
+      : filter.herkunft._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()
@@ -135,19 +136,25 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
+      <Container
+        showfilter={showFilter}
+        ref={ref}
+      >
+        {showFilter ?
           <FilterTitle
             title="Herkunft"
             table="herkunft"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <TitleContainer>
+        : <TitleContainer>
             <Title>Herkünfte</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
+              <IconButton
+                title={upTitle}
+                onClick={onClickUp}
+                size="large"
+              >
                 <UpSvg />
               </IconButton>
               {showPlus && (
@@ -166,7 +173,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
               />
             </TitleSymbols>
           </TitleContainer>
-        )}
+        }
         <FieldsContainer>
           {!!width && (
             <FixedSizeList
@@ -192,4 +199,4 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Herkuenfte))
+export default observer(Herkuenfte)
