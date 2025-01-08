@@ -1,6 +1,6 @@
 # https://registry.hub.docker.com/r/postgis/postgis/tags
 # TODO: upgrade to 15-3.3?
-FROM postgis/postgis:14-3.4
+FROM postgis/postgis:17-3.5
 
 COPY ./init/ /docker-entrypoint-initdb.d/
 # enable to seed data
