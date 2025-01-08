@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -51,11 +51,13 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Personen = ({ filter: showFilter = false, width, height }) => {
+const Personen = ({ filter: showFilter = false }) => {
   const store = useContext(StoreContext)
   const { insertPersonRev, db, user, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { person: personFilter } = store.filter
+
+  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({
     persons: [],
@@ -128,7 +130,10 @@ const Personen = ({ filter: showFilter = false, width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
+      <Container
+        showfilter={showFilter}
+        ref={ref}
+      >
         {showFilter ?
           <FilterTitle
             title="Person"
@@ -188,4 +193,4 @@ const Personen = ({ filter: showFilter = false, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Personen))
+export default observer(Personen)
