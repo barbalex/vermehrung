@@ -1,3 +1,5 @@
+import React from 'react'
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError('Cannot call a class as a function')
@@ -10,8 +12,8 @@ function _possibleConstructorReturn(self, call) {
       "this hasn't been initialised - super() hasn't been called",
     )
   }
-  return call && (typeof call === 'object' || typeof call === 'function')
-    ? call
+  return call && (typeof call === 'object' || typeof call === 'function') ?
+      call
     : self
 }
 
@@ -31,13 +33,12 @@ function _inherits(subClass, superClass) {
     },
   })
   if (superClass)
-    Object.setPrototypeOf
-      ? Object.setPrototypeOf(subClass, superClass)
-      : (subClass.__proto__ = superClass)
+    Object.setPrototypeOf ?
+      Object.setPrototypeOf(subClass, superClass)
+    : (subClass.__proto__ = superClass)
 }
 
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { Component } from 'react'
 
 import MenuItem from './MenuItem.js'
 
@@ -68,12 +69,7 @@ var AbstractMenu = (function (_Component) {
   return AbstractMenu
 })(Component)
 
-AbstractMenu.propTypes = {
-  children: PropTypes.node.isRequired,
-}
-
 var _initialiseProps = function _initialiseProps() {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
   var _this2 = this
 
   this.handleKeyNavigation = function (e) {

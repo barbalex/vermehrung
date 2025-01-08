@@ -126,8 +126,6 @@ const Documentation = () => {
 
   const path = pathname.split('/').filter((e) => !!e)
 
-  console.log('Documentation, width:', width)
-
   useEffect(() => {
     const items = articles.filter(
       (n) => n.title?.toLowerCase?.()?.includes?.(docFilter) ?? true,
