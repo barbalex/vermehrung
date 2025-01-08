@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import { withResizeDetector, useResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -219,4 +219,4 @@ const SammelLieferungFormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(SammelLieferungFormTitle))
+export default observer(SammelLieferungFormTitle)
