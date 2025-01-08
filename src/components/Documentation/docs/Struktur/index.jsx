@@ -1,7 +1,7 @@
 import { DokuDate } from '../../index.jsx'
 import structure from './structure.png'
 
-export const DatenStruktur = () => (
+export const Struktur = () => (
   <>
     <h1>Daten-Struktur</h1>
     <DokuDate>20.01.2020</DokuDate>

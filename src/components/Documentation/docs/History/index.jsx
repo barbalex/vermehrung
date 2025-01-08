@@ -4,7 +4,7 @@ import { DokuDate } from '../../index.jsx'
 import one from './001_button.png'
 import two from './002_version.png'
 
-const History = () => (
+export const History = () => (
   <>
     <h1>Daten-Historie</h1>
     <DokuDate>11.09.2020</DokuDate>
@@ -87,5 +87,3 @@ const History = () => (
     </ul>
   </>
 )
-
-export default History
