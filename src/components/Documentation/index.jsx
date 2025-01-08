@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { Allotment } from 'allotment'
 import { observer } from 'mobx-react-lite'
 import { Outlet, useLocation } from 'react-router'
@@ -117,14 +117,16 @@ const Doku = styled.div`
   }
 `
 
-const Documentation = ({ width }) => {
+const Documentation = () => {
   const { pathname } = useLocation()
   const store = useContext(StoreContext)
   const { docFilter, setDocsCount, setDocsFilteredCount } = store
 
+  const { width, ref } = useResizeDetector()
+
   const path = pathname.split('/').filter((e) => !!e)
 
-  // console.log('Documentation, width:', width)
+  console.log('Documentation, width:', width)
 
   useEffect(() => {
     const items = articles.filter(
@@ -136,36 +138,38 @@ const Documentation = ({ width }) => {
 
   return (
     <ErrorBoundary>
-      {width < constants?.tree?.minimalWindowWidth ?
-        path.length === 1 ?
-          <Container>
-            <ArticleList articles={articles} />
-          </Container>
-        : <Container>
-            <Doku>
-              <FormTitle />
-              <DokuInnerContainer>
-                <Outlet />
-              </DokuInnerContainer>
-            </Doku>
-          </Container>
-
-      : <SplitPaneContainer>
-          <Allotment>
-            <Allotment.Pane preferredSize="22%">
+      <div ref={ref}>
+        {width < constants?.tree?.minimalWindowWidth ?
+          path.length === 1 ?
+            <Container>
               <ArticleList articles={articles} />
-            </Allotment.Pane>
-            <Doku>
-              <FormTitle />
-              <DokuInnerContainer>
-                <Outlet />
-              </DokuInnerContainer>
-            </Doku>
-          </Allotment>
-        </SplitPaneContainer>
-      }
+            </Container>
+          : <Container>
+              <Doku>
+                <FormTitle />
+                <DokuInnerContainer>
+                  <Outlet />
+                </DokuInnerContainer>
+              </Doku>
+            </Container>
+
+        : <SplitPaneContainer>
+            <Allotment>
+              <Allotment.Pane preferredSize="22%">
+                <ArticleList articles={articles} />
+              </Allotment.Pane>
+              <Doku>
+                <FormTitle />
+                <DokuInnerContainer>
+                  <Outlet />
+                </DokuInnerContainer>
+              </Doku>
+            </Allotment>
+          </SplitPaneContainer>
+        }
+      </div>
     </ErrorBoundary>
   )
 }
 
-export default withResizeDetector(observer(Documentation))
+export default observer(Documentation)
