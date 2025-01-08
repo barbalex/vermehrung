@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { DokuDate } from '../index.jsx'
 
-const FehlerMelden = () => (
+export const FehlerMelden = () => (
   <>
     <h1>Fehler, Ideen, Vorschläge melden</h1>
     <DokuDate>30.09.2019</DokuDate>
@@ -32,5 +32,3 @@ const FehlerMelden = () => (
     </p>
   </>
 )
-
-export default FehlerMelden

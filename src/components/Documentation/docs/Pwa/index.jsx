@@ -1,7 +1,7 @@
 import { DokuDate } from '../../index.jsx'
 import installieren from './installieren.webp'
 
-const Pwa = () => (
+export const Pwa = () => (
   <>
     <h1>Progressive Web App</h1>
     <DokuDate>22.10.2020</DokuDate>
@@ -64,5 +64,3 @@ const Pwa = () => (
     </ul>
   </>
 )
-
-export default Pwa

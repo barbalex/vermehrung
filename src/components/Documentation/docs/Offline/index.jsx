@@ -9,7 +9,7 @@ import five from './005.png'
 import six from './006.png'
 import seven from './007.png'
 
-const Offline = () => (
+export const Offline = () => (
   <>
     <h1>Offline arbeiten</h1>
     <DokuDate>29.01.2021</DokuDate>
@@ -166,5 +166,3 @@ const Offline = () => (
     </p>
   </>
 )
-
-export default Offline
