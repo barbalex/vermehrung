@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import DeleteButton from './DeleteButton.jsx'
 import AddButton from './AddButton.jsx'
@@ -38,18 +38,19 @@ const Art = ({
   row,
   totalCount,
   filteredCount,
-  width,
   showHistory,
   setShowHistory,
 }) => {
-  if (width < 520) {
-    return (
-      <TitleContainer>
-        <Title>Art</Title>
-        <TitleSymbols>
-          <NavButtons />
-          <AddButton />
-          <DeleteButton row={row} />
+  const { width, ref } = useResizeDetector()
+
+  return (
+    <TitleContainer ref={ref}>
+      <Title>Art</Title>
+      <TitleSymbols>
+        <NavButtons />
+        <AddButton />
+        <DeleteButton row={row} />
+        {width < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="art"
@@ -64,28 +65,22 @@ const Art = ({
               asMenu
             />
           </Menu>
-        </TitleSymbols>
-      </TitleContainer>
-    )
-  }
-
-  return (
-    <TitleContainer>
-      <Title>Art</Title>
-      <TitleSymbols>
-        <NavButtons />
-        <AddButton />
-        <DeleteButton row={row} />
-        <HistoryButton
-          table="art"
-          id={row.id}
-          showHistory={showHistory}
-          setShowHistory={setShowHistory}
-        />
-        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
+        : <>
+            <HistoryButton
+              table="art"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+            />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+            />
+          </>
+        }
       </TitleSymbols>
     </TitleContainer>
   )
 }
 
-export default withResizeDetector(observer(Art))
+export default observer(Art)
