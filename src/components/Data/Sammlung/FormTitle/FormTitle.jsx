@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../storeContext.js'
 import DeleteButton from './DeleteButton.jsx'
@@ -43,12 +43,13 @@ const SammlungFormTitle = ({
   row,
   totalCount,
   filteredCount,
-  width,
   showHistory,
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+
+  const { width, ref } = useResizeDetector()
 
   const onClickUp = useCallback(() => {
     removeOpenNode(activeNodeArray)
@@ -65,60 +66,8 @@ const SammlungFormTitle = ({
   const showToHe = activeNodeArray[0] === 'Sammlungen'
   const showToLi = activeNodeArray[0] !== 'Personen'
 
-  if (width < 520) {
-    return (
-      <TitleContainer>
-        <Title>Sammlung</Title>
-        <TitleSymbols>
-          <IconButton
-            title="Zur Sammlungs-Liste"
-            onClick={onClickUp}
-            size="large"
-          >
-            <UpSvg />
-          </IconButton>
-          {showToHe && (
-            <IconButton
-              title="Zu den Herkünften dieser Sammlung"
-              onClick={onClickToHerkuenfte}
-              size="large"
-            >
-              <HeDownSvg />
-            </IconButton>
-          )}
-          {showToLi && (
-            <IconButton
-              title="Zu den Aus-Lieferungen dieser Sammlung"
-              onClick={onClickToLieferungen}
-              size="large"
-            >
-              <LiDownSvg />
-            </IconButton>
-          )}
-          <AddButton />
-          <DeleteButton row={row} />
-          <Menu white={false}>
-            <HistoryButton
-              table="sammlung"
-              id={row.id}
-              showHistory={showHistory}
-              setShowHistory={setShowHistory}
-              asMenu
-            />
-            <Anleitung asMenu />
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-              asMenu
-            />
-          </Menu>
-        </TitleSymbols>
-      </TitleContainer>
-    )
-  }
-
   return (
-    <TitleContainer>
+    <TitleContainer ref={ref}>
       <Title>Sammlung</Title>
       <TitleSymbols>
         <IconButton
@@ -148,17 +97,39 @@ const SammlungFormTitle = ({
         )}
         <AddButton />
         <DeleteButton row={row} />
-        <HistoryButton
-          table="sammlung"
-          id={row.id}
-          showHistory={showHistory}
-          setShowHistory={setShowHistory}
-        />
-        <Anleitung />
-        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
+        {width < 520 ?
+          <Menu white={false}>
+            <HistoryButton
+              table="sammlung"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
+            <Anleitung asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
+          </Menu>
+        : <>
+            <HistoryButton
+              table="sammlung"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+            />
+            <Anleitung />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+            />
+          </>
+        }
       </TitleSymbols>
     </TitleContainer>
   )
 }
 
-export default withResizeDetector(observer(SammlungFormTitle))
+export default observer(SammlungFormTitle)
