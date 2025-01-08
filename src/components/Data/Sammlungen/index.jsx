@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Sammlungen = ({ filter: showFilter = false, width, height }) => {
+const Sammlungen = ({ filter: showFilter = false }) => {
   const store = useContext(StoreContext)
   const {
     insertSammlungRev,
@@ -63,6 +63,8 @@ const Sammlungen = ({ filter: showFilter = false, width, height }) => {
   } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { sammlung: sammlungFilter } = store.filter
+
+  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({ sammlungs: [], totalCount: 0 })
   useEffect(() => {
@@ -81,15 +83,13 @@ const Sammlungen = ({ filter: showFilter = false, width, height }) => {
     }
     const collection = db.get('sammlung')
     const sammlungDelQuery =
-      filter.sammlung._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.sammlung._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+      filter.sammlung._deleted === false ? Q.where('_deleted', false)
+      : filter.sammlung._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(sammlungDelQuery, ...hierarchyQuery)
       .observeCount()
@@ -103,7 +103,7 @@ const Sammlungen = ({ filter: showFilter = false, width, height }) => {
       )
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
 
-    // so need to hackily use merge
+    // so need to hackly use merge
     const combinedObservables = combineLatest([countObservable, dataObservable])
     const subscription = combinedObservables.subscribe(
       async ([totalCount, sammlungs]) => {
@@ -157,19 +157,25 @@ const Sammlungen = ({ filter: showFilter = false, width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
+      <Container
+        showfilter={showFilter}
+        ref={ref}
+      >
+        {showFilter ?
           <FilterTitle
             title="Sammlung"
             table="sammlung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <TitleContainer>
+        : <TitleContainer>
             <Title>Sammlungen</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
+              <IconButton
+                title={upTitle}
+                onClick={onClickUp}
+                size="large"
+              >
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -186,7 +192,7 @@ const Sammlungen = ({ filter: showFilter = false, width, height }) => {
               />
             </TitleSymbols>
           </TitleContainer>
-        )}
+        }
         <FieldsContainer>
           {!!width && (
             <FixedSizeList
@@ -212,4 +218,4 @@ const Sammlungen = ({ filter: showFilter = false, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Sammlungen))
+export default observer(Sammlungen)
