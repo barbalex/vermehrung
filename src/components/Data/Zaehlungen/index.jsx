@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -51,31 +51,32 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Zaehlungen = ({ filter: showFilter = false, width, height }) => {
+const Zaehlungen = ({ filter: showFilter = false }) => {
   const store = useContext(StoreContext)
   const { insertZaehlungRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { zaehlung: zaehlungFilter } = store.filter
 
+  const { width, height, ref } = useResizeDetector()
+
   const [dataState, setDataState] = useState({ zaehlungs: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = kulturIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      kulturIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
     const collection = db.get('zaehlung')
     const zaehlungDelQuery =
-      filter.zaehlung._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.zaehlung._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+      filter.zaehlung._deleted === false ? Q.where('_deleted', false)
+      : filter.zaehlung._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(zaehlungDelQuery, ...hierarchyQuery)
       .observeCount()
@@ -133,19 +134,25 @@ const Zaehlungen = ({ filter: showFilter = false, width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
+      <Container
+        showfilter={showFilter}
+        ref={ref}
+      >
+        {showFilter ?
           <FilterTitle
             title="Zählung"
             table="zaehlung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <TitleContainer>
+        : <TitleContainer>
             <Title>Zählungen</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
+              <IconButton
+                title={upTitle}
+                onClick={onClickUp}
+                size="large"
+              >
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -162,7 +169,7 @@ const Zaehlungen = ({ filter: showFilter = false, width, height }) => {
               />
             </TitleSymbols>
           </TitleContainer>
-        )}
+        }
         <FieldsContainer>
           {!!width && (
             <FixedSizeList
@@ -188,4 +195,4 @@ const Zaehlungen = ({ filter: showFilter = false, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Zaehlungen))
+export default observer(Zaehlungen)
