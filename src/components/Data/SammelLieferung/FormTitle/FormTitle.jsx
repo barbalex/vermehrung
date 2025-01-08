@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import { withResizeDetector } from 'react-resize-detector'
+import { withResizeDetector, useResizeDetector } from 'react-resize-detector'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -49,7 +49,6 @@ const SammelLieferungFormTitle = ({
   lieferung,
   printPreview,
   setPrintPreview,
-  width,
   showHistory,
   setShowHistory,
 }) => {
@@ -57,10 +56,13 @@ const SammelLieferungFormTitle = ({
   const { filter, user, db } = store
   const { activeNodeArray } = store.tree
 
+  const { width, ref } = useResizeDetector()
+
   const [userPersonOption, setUserPersonOption] = useState()
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['sl_auto_copy_edits'])
@@ -78,183 +80,8 @@ const SammelLieferungFormTitle = ({
 
   if (!row || (!showFilter && filter.show)) return null
 
-  if (width < 515) {
-    return (
-      <TitleContainer>
-        <Title>Sammel-Lieferung</Title>
-        <TitleSymbols>
-          {shownAsSammelLieferung && (
-            <>
-              <NavButtons />
-              <Add />
-              <Delete row={row} />
-            </>
-          )}
-          {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferung={lieferung} asMenu />
-          )}
-          <>
-            <Menu white={false}>
-              <PrintButtons
-                printPreview={printPreview}
-                setPrintPreview={setPrintPreview}
-                asMenu
-              />
-              <Anleitung asMenu />
-              <HistoryButton
-                table="sammel_lieferung"
-                id={row.id}
-                showHistory={showHistory}
-                setShowHistory={setShowHistory}
-                asMenu
-              />
-              {row.id && <Settings asMenu />}
-              {shownAsSammelLieferung && (
-                <FilterNumbers
-                  filteredCount={filteredCount}
-                  totalCount={totalCount}
-                  asMenu
-                />
-              )}
-            </Menu>
-          </>
-        </TitleSymbols>
-      </TitleContainer>
-    )
-  }
-
-  if (width < 563) {
-    return (
-      <TitleContainer>
-        <Title>Sammel-Lieferung</Title>
-        <TitleSymbols>
-          {shownAsSammelLieferung && (
-            <>
-              <NavButtons />
-              <Add />
-              <Delete row={row} />
-            </>
-          )}
-          {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferung={lieferung} asMenu />
-          )}
-          <>
-            <PrintButtons
-              printPreview={printPreview}
-              setPrintPreview={setPrintPreview}
-            />
-            <Menu white={false}>
-              <HistoryButton
-                table="sammel_lieferung"
-                id={row.id}
-                showHistory={showHistory}
-                setShowHistory={setShowHistory}
-                asMenu
-              />
-              {row.id && <Settings asMenu />}
-              <Anleitung asMenu />
-              {shownAsSammelLieferung && (
-                <FilterNumbers
-                  filteredCount={filteredCount}
-                  totalCount={totalCount}
-                  asMenu
-                />
-              )}
-            </Menu>
-          </>
-        </TitleSymbols>
-      </TitleContainer>
-    )
-  }
-
-  if (width < 610) {
-    return (
-      <TitleContainer>
-        <Title>Sammel-Lieferung</Title>
-        <TitleSymbols>
-          {shownAsSammelLieferung && (
-            <>
-              <NavButtons />
-              <Add />
-              <Delete row={row} />
-            </>
-          )}
-          {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferung={lieferung} asMenu />
-          )}
-          <PrintButtons
-            printPreview={printPreview}
-            setPrintPreview={setPrintPreview}
-          />
-          <HistoryButton
-            table="sammel_lieferung"
-            id={row.id}
-            showHistory={showHistory}
-            setShowHistory={setShowHistory}
-          />
-          <>
-            <Menu white={false}>
-              {row.id && <Settings asMenu />}
-              <Anleitung asMenu />
-              {shownAsSammelLieferung && (
-                <FilterNumbers
-                  filteredCount={filteredCount}
-                  totalCount={totalCount}
-                  asMenu
-                />
-              )}
-            </Menu>
-          </>
-        </TitleSymbols>
-      </TitleContainer>
-    )
-  }
-
-  if (width < 657) {
-    return (
-      <TitleContainer>
-        <Title>Sammel-Lieferung</Title>
-        <TitleSymbols>
-          {shownAsSammelLieferung && (
-            <>
-              <NavButtons />
-              <Add />
-              <Delete row={row} />
-              <PrintButtons
-                printPreview={printPreview}
-                setPrintPreview={setPrintPreview}
-              />
-            </>
-          )}
-          {!sl_auto_copy_edits && (
-            <Copy sammelLieferung={row} lieferung={lieferung} />
-          )}
-          <HistoryButton
-            table="sammel_lieferung"
-            id={row.id}
-            showHistory={showHistory}
-            setShowHistory={setShowHistory}
-          />
-          {row.id && <Settings />}
-          <>
-            <Menu white={false}>
-              <Anleitung asMenu />
-              {shownAsSammelLieferung && (
-                <FilterNumbers
-                  filteredCount={filteredCount}
-                  totalCount={totalCount}
-                  asMenu
-                />
-              )}
-            </Menu>
-          </>
-        </TitleSymbols>
-      </TitleContainer>
-    )
-  }
-
   return (
-    <TitleContainer>
+    <TitleContainer ref={ref}>
       <Title>Sammel-Lieferung</Title>
       <TitleSymbols>
         {shownAsSammelLieferung && (
@@ -262,30 +89,130 @@ const SammelLieferungFormTitle = ({
             <NavButtons />
             <Add />
             <Delete row={row} />
-            <PrintButtons
-              printPreview={printPreview}
-              setPrintPreview={setPrintPreview}
-            />
           </>
         )}
         {!sl_auto_copy_edits && (
-          <Copy sammelLieferung={row} lieferung={lieferung} />
+          <Copy
+            sammelLieferung={row}
+            lieferung={lieferung}
+            asMenu
+          />
         )}
         <>
-          <HistoryButton
-            table="sammel_lieferung"
-            id={row.id}
-            showHistory={showHistory}
-            setShowHistory={setShowHistory}
-          />
-          {row.id && <Settings />}
-          <Anleitung />
-          {shownAsSammelLieferung && (
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-            />
-          )}
+          {width < 515 ?
+            <Menu white={false}>
+              <PrintButtons
+                printPreview={printPreview}
+                setPrintPreview={setPrintPreview}
+                asMenu
+              />
+              <Anleitung asMenu />
+              <HistoryButton
+                table="sammel_lieferung"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+                asMenu
+              />
+              {row.id && <Settings asMenu />}
+              {shownAsSammelLieferung && (
+                <FilterNumbers
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
+                  asMenu
+                />
+              )}
+            </Menu>
+          : width < 563 ?
+            <>
+              <PrintButtons
+                printPreview={printPreview}
+                setPrintPreview={setPrintPreview}
+              />
+              <Menu white={false}>
+                <HistoryButton
+                  table="sammel_lieferung"
+                  id={row.id}
+                  showHistory={showHistory}
+                  setShowHistory={setShowHistory}
+                  asMenu
+                />
+                {row.id && <Settings asMenu />}
+                <Anleitung asMenu />
+                {shownAsSammelLieferung && (
+                  <FilterNumbers
+                    filteredCount={filteredCount}
+                    totalCount={totalCount}
+                    asMenu
+                  />
+                )}
+              </Menu>
+            </>
+          : width < 610 ?
+            <>
+              <PrintButtons
+                printPreview={printPreview}
+                setPrintPreview={setPrintPreview}
+              />
+              <HistoryButton
+                table="sammel_lieferung"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+              />
+              <>
+                <Menu white={false}>
+                  {row.id && <Settings asMenu />}
+                  <Anleitung asMenu />
+                  {shownAsSammelLieferung && (
+                    <FilterNumbers
+                      filteredCount={filteredCount}
+                      totalCount={totalCount}
+                      asMenu
+                    />
+                  )}
+                </Menu>
+              </>
+            </>
+          : width < 657 ?
+            <>
+              <HistoryButton
+                table="sammel_lieferung"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+              />
+              {row.id && <Settings />}
+              <>
+                <Menu white={false}>
+                  <Anleitung asMenu />
+                  {shownAsSammelLieferung && (
+                    <FilterNumbers
+                      filteredCount={filteredCount}
+                      totalCount={totalCount}
+                      asMenu
+                    />
+                  )}
+                </Menu>
+              </>
+            </>
+          : <>
+              <HistoryButton
+                table="sammel_lieferung"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+              />
+              {row.id && <Settings />}
+              <Anleitung />
+              {shownAsSammelLieferung && (
+                <FilterNumbers
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
+                />
+              )}
+            </>
+          }
         </>
       </TitleSymbols>
     </TitleContainer>
