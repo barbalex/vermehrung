@@ -130,13 +130,13 @@ const SharedSelect = ({
     menuPortal: (base) => ({ ...base, zIndex: 9999 }),
   }
 
-  console.log('SharedSelect', {
-    field,
-    selectValue,
-    optionsToUse,
-    valuePassed,
-    stateValue,
-  })
+  // console.log('SharedSelect', {
+  //   field,
+  //   selectValue,
+  //   optionsToUse,
+  //   valuePassed,
+  //   stateValue,
+  // })
 
   return (
     <Container>
