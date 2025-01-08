@@ -23,24 +23,8 @@ services:
       options:
         max-size: '10m'
         max-file: '3'
-  auth:
-    build:
-      context: ./auth
-    container_name: v_auth
-    restart: always
-    env_file:
-      - ./.env
-    expose:
-      - '7000'
-    ports:
-      - '7000:7000'
-    depends_on:
-      - db
-      - graphql
-    networks:
-      - network
   graphql:
-    image: 'hasura/graphql-engine:2.45.1'
+    image: 'hasura/graphql-engine:v2.45.1'
     container_name: v_graphql
     ports:
       - '8080:8080'
