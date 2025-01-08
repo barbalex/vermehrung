@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { FixedSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -51,31 +51,32 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Events = ({ filter: showFilter = false, width, height }) => {
+const Events = ({ filter: showFilter = false }) => {
   const store = useContext(StoreContext)
   const { insertEventRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { event: eventFilter } = store.filter
 
+  const { width, height, ref } = useResizeDetector()
+
   const [dataState, setDataState] = useState({ events: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = kulturIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      kulturIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
     const collection = db.get('event')
     const delQuery =
-      filter.event._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.event._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.event._deleted === false ? Q.where('_deleted', false)
+      : filter.event._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()
@@ -124,19 +125,25 @@ const Events = ({ filter: showFilter = false, width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
+      <Container
+        showfilter={showFilter}
+        ref={ref}
+      >
+        {showFilter ?
           <FilterTitle
             title="Event"
             table="event"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <TitleContainer>
+        : <TitleContainer>
             <Title>Events</Title>
             <TitleSymbols>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
+              <IconButton
+                title={upTitle}
+                onClick={onClickUp}
+                size="large"
+              >
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -153,7 +160,7 @@ const Events = ({ filter: showFilter = false, width, height }) => {
               />
             </TitleSymbols>
           </TitleContainer>
-        )}
+        }
         <FieldsContainer>
           {!!width && (
             <FixedSizeList
@@ -179,4 +186,4 @@ const Events = ({ filter: showFilter = false, width, height }) => {
   )
 }
 
-export default withResizeDetector(observer(Events))
+export default observer(Events)
