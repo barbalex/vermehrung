@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { DokuDate } from '../index.jsx'
 
-const Lieferungen = () => (
+export const Lieferungen = () => (
   <>
     <h1>Lieferungen</h1>
     <DokuDate>28.06.2020</DokuDate>
@@ -88,5 +88,3 @@ const Lieferungen = () => (
     </ul>
   </>
 )
-
-export default Lieferungen

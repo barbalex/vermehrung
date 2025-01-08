@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const OrdnerBlenden = () => (
+export const OrdnerBlenden = () => (
   <>
     <h1>Ordner ein- und ausblenden</h1>
     <DokuDate>28.12.2019</DokuDate>
@@ -41,5 +41,3 @@ const OrdnerBlenden = () => (
     </p>
   </>
 )
-
-export default OrdnerBlenden
