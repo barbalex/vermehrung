@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../storeContext.js'
 import DeleteButton from './DeleteButton.jsx'
@@ -43,7 +43,6 @@ const Herkunft = ({
   row,
   totalCount,
   filteredCount,
-  width,
   showHistory,
   setShowHistory,
   activeConflict,
@@ -55,6 +54,8 @@ const Herkunft = ({
     removeOpenNode,
   } = store.tree
   const activeNodeArray = anaRaw.toJSON()
+
+  const { width, ref } = useResizeDetector()
 
   const onClickUp = useCallback(() => {
     removeOpenNode(activeNodeArray)
@@ -70,55 +71,15 @@ const Herkunft = ({
   // never enable adding below that
   const editingAllowed = activeNodeArray.length <= 2
 
-  if (width < 520) {
-    return (
-      <TitleContainer>
-        <Title>{`Herkunft${activeConflict ? ': Konflikt lösen' : ''}`}</Title>
-        <TitleSymbols>
-          <IconButton title="Zur Liste" onClick={onClickUp} size="large">
-            <UpSvg />
-          </IconButton>
-          {showToSa && (
-            <IconButton
-              title="Zu den Sammlungen"
-              onClick={onClickToSammlungen}
-              size="large"
-            >
-              <SaDownSvg />
-            </IconButton>
-          )}
-          {editingAllowed && (
-            <>
-              <AddButton />
-              <DeleteButton row={row} />
-            </>
-          )}
-          <Menu white={false}>
-            <HistoryButton
-              table="herkunft"
-              id={row.id}
-              showHistory={showHistory}
-              setShowHistory={setShowHistory}
-              asMenu
-            />
-            <Anleitung asMenu />
-            <Settings asMenu />
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-              asMenu
-            />
-          </Menu>
-        </TitleSymbols>
-      </TitleContainer>
-    )
-  }
-
   return (
-    <TitleContainer>
+    <TitleContainer ref={ref}>
       <Title>{`Herkunft${activeConflict ? ': Konflikt lösen' : ''}`}</Title>
       <TitleSymbols>
-        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+        <IconButton
+          title="Zur Liste"
+          onClick={onClickUp}
+          size="large"
+        >
           <UpSvg />
         </IconButton>
         {showToSa && (
@@ -136,18 +97,41 @@ const Herkunft = ({
             <DeleteButton row={row} />
           </>
         )}
-        <HistoryButton
-          table="herkunft"
-          id={row.id}
-          showHistory={showHistory}
-          setShowHistory={setShowHistory}
-        />
-        <Anleitung />
-        <Settings />
-        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
+        {width < 520 ?
+          <Menu white={false}>
+            <HistoryButton
+              table="herkunft"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
+            <Anleitung asMenu />
+            <Settings asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
+          </Menu>
+        : <>
+            <HistoryButton
+              table="herkunft"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+            />
+            <Anleitung />
+            <Settings />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+            />
+          </>
+        }
       </TitleSymbols>
     </TitleContainer>
   )
 }
 
-export default withResizeDetector(observer(Herkunft))
+export default observer(Herkunft)
