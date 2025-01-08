@@ -19,6 +19,7 @@ import { Provider as MobxProvider } from './storeContext.js'
 import initiateApp from './utils/initiateApp.js'
 import initiateDb from './utils/initiateDb.js'
 
+// TODO: lazy import all routes
 import Home from './routes/index.jsx'
 import VermehrungIndex from './routes/Vermehrung/index.jsx'
 import FourOhFour from './routes/404.jsx'
@@ -29,37 +30,133 @@ import Docs from './components/Documentation/index.jsx'
 const Ziele = lazy(async () => ({
   default: (await import('./components/Documentation/docs/Ziele.jsx')).Ziele,
 }))
-// TODO: lazy import all
-import { ZieleHerkuenfte } from './components/Documentation/docs/ZieleHerkuenfte.jsx'
-import { Herkuenfte } from './components/Documentation/docs/Herkuenfte.jsx'
-import { TechnischeVoraussetzungen } from './components/Documentation/docs/TechnischeVoraussetzungen.jsx'
-import { ZeitachseFuerArten } from './components/Documentation/docs/ZeitachseFuerArten.jsx'
-import { ZeitachseFuerKulturen } from './components/Documentation/docs/ZeitachseFuerKulturen.jsx'
-import { Sammlungen } from './components/Documentation/docs/Sammlungen.jsx'
-import { Kulturen } from './components/Documentation/docs/Kulturen.jsx'
-import { Zaehlungen } from './components/Documentation/docs/Zaehlungen.jsx'
-import { Teilkulturen } from './components/Documentation/docs/Teilkulturen/index.jsx'
-import { Lieferungen } from './components/Documentation/docs/Lieferungen.jsx'
-import { SammelLieferungen } from './components/Documentation/docs/SammelLieferungen.jsx'
-import { Events } from './components/Documentation/docs/Events.jsx'
-import { FelderBlenden } from './components/Documentation/docs/FelderBlenden/index.jsx'
-import { OrdnerBlenden } from './components/Documentation/docs/OrdnerBlenden.jsx'
-import { Planen } from './components/Documentation/docs/Planen.jsx'
-import { GenetischeVielfalt } from './components/Documentation/docs/GenetischeVielfalt.jsx'
-import { QualitaetsKontrollen } from './components/Documentation/docs/QualitatesKontrollen.jsx'
-import { VermehrungErinnertSich } from './components/Documentation/docs/VermehrungErinnertSich.jsx'
-import { OpenSource } from './components/Documentation/docs/OpenSource.jsx'
-import { FehlerMelden } from './components/Documentation/docs/FehlerMelden.jsx'
-import { Schnittstellen } from './components/Documentation/docs/Schnittstellen.jsx'
-import { Pwa } from './components/Documentation/docs/Pwa/index.jsx'
-import { Offline } from './components/Documentation/docs/Offline/index.jsx'
-import { OfflineWie } from './components/Documentation/docs/OfflineWie.jsx'
-import { History } from './components/Documentation/docs/History/index.jsx'
-import { Technologien } from './components/Documentation/docs/Technologien.jsx'
-import { Struktur } from './components/Documentation/docs/Struktur/index.jsx'
-import { Roadmap } from './components/Documentation/docs/Roadmap.jsx'
-import { Konten } from './components/Documentation/docs/Konten.jsx'
-import { Datenschutz } from './components/Documentation/docs/Datenschutz.jsx'
+const ZieleHerkuenfte = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/ZieleHerkuenfte.jsx'))
+    .ZieleHerkuenfte,
+}))
+const Herkuenfte = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Herkuenfte.jsx'))
+    .Herkuenfte,
+}))
+const TechnischeVoraussetzungen = lazy(async () => ({
+  default: (
+    await import(
+      './components/Documentation/docs/TechnischeVoraussetzungen.jsx'
+    )
+  ).TechnischeVoraussetzungen,
+}))
+const ZeitachseFuerArten = lazy(async () => ({
+  default: (
+    await import('./components/Documentation/docs/ZeitachseFuerArten.jsx')
+  ).ZeitachseFuerArten,
+}))
+const ZeitachseFuerKulturen = lazy(async () => ({
+  default: (
+    await import('./components/Documentation/docs/ZeitachseFuerKulturen.jsx')
+  ).ZeitachseFuerKulturen,
+}))
+const Sammlungen = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Sammlungen.jsx'))
+    .Sammlungen,
+}))
+const Kulturen = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Kulturen.jsx'))
+    .Kulturen,
+}))
+const Zaehlungen = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Zaehlungen.jsx'))
+    .Zaehlungen,
+}))
+const Teilkulturen = lazy(async () => ({
+  default: (
+    await import('./components/Documentation/docs/Teilkulturen/index.jsx')
+  ).Teilkulturen,
+}))
+const Lieferungen = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Lieferungen.jsx'))
+    .Lieferungen,
+}))
+const SammelLieferungen = lazy(async () => ({
+  default: (
+    await import('./components/Documentation/docs/SammelLieferungen.jsx')
+  ).SammelLieferungen,
+}))
+const Events = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Events.jsx')).Events,
+}))
+const FelderBlenden = lazy(async () => ({
+  default: (
+    await import('./components/Documentation/docs/FelderBlenden/index.jsx')
+  ).FelderBlenden,
+}))
+const OrdnerBlenden = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/OrdnerBlenden.jsx'))
+    .OrdnerBlenden,
+}))
+const Planen = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Planen.jsx')).Planen,
+}))
+const GenetischeVielfalt = lazy(async () => ({
+  default: (
+    await import('./components/Documentation/docs/GenetischeVielfalt.jsx')
+  ).GenetischeVielfalt,
+}))
+const QualitaetsKontrollen = lazy(async () => ({
+  default: (
+    await import('./components/Documentation/docs/QualitatesKontrollen.jsx')
+  ).QualitaetsKontrollen,
+}))
+const VermehrungErinnertSich = lazy(async () => ({
+  default: (
+    await import('./components/Documentation/docs/VermehrungErinnertSich.jsx')
+  ).VermehrungErinnertSich,
+}))
+const OpenSource = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/OpenSource.jsx'))
+    .OpenSource,
+}))
+const FehlerMelden = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/FehlerMelden.jsx'))
+    .FehlerMelden,
+}))
+const Schnittstellen = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Schnittstellen.jsx'))
+    .Schnittstellen,
+}))
+const Pwa = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Pwa/index.jsx')).Pwa,
+}))
+const Offline = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Offline/index.jsx'))
+    .Offline,
+}))
+const OfflineWie = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/OfflineWie.jsx'))
+    .OfflineWie,
+}))
+const History = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/History/index.jsx'))
+    .History,
+}))
+const Technologien = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Technologien.jsx'))
+    .Technologien,
+}))
+const Struktur = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Struktur/index.jsx'))
+    .Struktur,
+}))
+const Roadmap = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Roadmap.jsx'))
+    .Roadmap,
+}))
+const Konten = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Konten.jsx')).Konten,
+}))
+const Datenschutz = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Datenschutz.jsx'))
+    .Datenschutz,
+}))
 import { Vermehrung } from './routes/Vermehrung/Vermehrung.jsx'
 import { QueuedQueries } from './components/QueuedQueries/index.jsx'
 
