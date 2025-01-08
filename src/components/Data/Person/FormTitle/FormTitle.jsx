@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import { withResizeDetector, useResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 
 import StoreContext from '../../../../storeContext.js'
@@ -113,4 +113,4 @@ const PersonFormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(PersonFormTitle))
+export default observer(PersonFormTitle)
