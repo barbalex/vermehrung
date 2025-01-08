@@ -101,7 +101,7 @@
   },
   "dev-comments": {
     "none": "right now",
-    "react-resize-detector": "9.1.0: to update to v10 need to change all 27 withResizeDetector to useResizeObserver",
+    "react-resize-detector": "9.1.0: to update to v10 need to change all 27 withResizeDetector to useResizeObserver. TODO: needed to ugrade to react v19",
     "react-contextmenu": "2.14.0: has upstream dependency conflicts but is archived. Copied es6 code from dist folder into utils"
   }
 }
