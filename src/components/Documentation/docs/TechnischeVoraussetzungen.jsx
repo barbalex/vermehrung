@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { DokuDate } from '../index.jsx'
 
-const TechnischeVoraussetzungen = () => (
+export const TechnischeVoraussetzungen = () => (
   <>
     <h1>Technische Voraussetzungen</h1>
     <DokuDate>20.05.2023</DokuDate>
@@ -32,5 +32,3 @@ const TechnischeVoraussetzungen = () => (
     </p>
   </>
 )
-
-export default TechnischeVoraussetzungen

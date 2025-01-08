@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const Herkuenfte = () => (
+export const ZieleHerkuenfte = () => (
   <>
     <h1>Ziel 1: Herkünfte</h1>
     <DokuDate>04.10.2019</DokuDate>
@@ -18,5 +18,3 @@ const Herkuenfte = () => (
     <p>&nbsp;</p>
   </>
 )
-
-export default Herkuenfte
