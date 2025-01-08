@@ -26,10 +26,6 @@ export const Online = observer(() => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  console.log('Online, pathname:', pathname)
-  const showingQueuedQueries =
-    pathname === '/Vermehrung/ausstehende-Operationen'
-
   const title =
     online ? 'Sie sind online'
     : queuedQueries.size ?
@@ -40,14 +36,9 @@ export const Online = observer(() => {
   // 1. add menu to link to info
   // 2. add menu to list and edit pending queries
   const onClick = useCallback(() => {
-    console.log('Online.onClick', { pathname, history: window.history })
+    // ISSUE: cant use navigate(-1) as that can navigate to same url and user has to click twice to go back
     if (pathname === '/Vermehrung/ausstehende-Operationen') {
-      const canGoBack = location.key !== 'default'
-      if (canGoBack) {
-        navigate(-1)
-      } else {
-        navigate('/Vermehrung', { replace: true })
-      }
+      navigate('/Vermehrung')
     } else {
       navigate('/Vermehrung/ausstehende-Operationen')
     }

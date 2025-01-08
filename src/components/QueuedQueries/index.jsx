@@ -57,12 +57,8 @@ export const QueuedQueries = observer(() => {
   const { queuedQueries } = store
 
   const onClickCloseIcon = useCallback(() => {
-    const canGoBack = location.key !== 'default'
-    if (canGoBack) {
-      navigate(-1)
-    } else {
-      navigate('/Vermehrung', { replace: true })
-    }
+    // ISSUE: cant use navigate(-1) as that can navigate to same url and user has to click twice to go back
+    navigate('/Vermehrung')
   }, [navigate])
   const openDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/Dokumentation/offline`
