@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import StoreContext from '../../../../storeContext.js'
 import Settings from './Settings/index.jsx'
@@ -42,28 +42,33 @@ const TeilkulturFormTitle = ({
   row,
   totalCount,
   filteredCount,
-  width,
   showHistory,
   setShowHistory,
 }) => {
   const store = useContext(StoreContext)
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
+  const { width, ref } = useResizeDetector()
+
   const onClickUp = useCallback(() => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
   }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
 
-  if (width < 520) {
-    return (
-      <TitleContainer>
-        <Title>Teilkultur</Title>
-        <TitleSymbols>
-          <IconButton title="Zur Liste" onClick={onClickUp} size="large">
-            <UpSvg />
-          </IconButton>
-          <AddButton />
-          <DeleteButton row={row} />
+  return (
+    <TitleContainer ref={ref}>
+      <Title>Teilkultur</Title>
+      <TitleSymbols>
+        <IconButton
+          title="Zur Liste"
+          onClick={onClickUp}
+          size="large"
+        >
+          <UpSvg />
+        </IconButton>
+        <AddButton />
+        <DeleteButton row={row} />
+        {width < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="teilkultur"
@@ -72,7 +77,10 @@ const TeilkulturFormTitle = ({
               setShowHistory={setShowHistory}
               asMenu
             />
-            <Settings kulturId={row.kultur_id} asMenu />
+            <Settings
+              kulturId={row.kultur_id}
+              asMenu
+            />
             <Anleitung asMenu />
             <FilterNumbers
               filteredCount={filteredCount}
@@ -80,32 +88,24 @@ const TeilkulturFormTitle = ({
               asMenu
             />
           </Menu>
-        </TitleSymbols>
-      </TitleContainer>
-    )
-  }
-
-  return (
-    <TitleContainer>
-      <Title>Teilkultur</Title>
-      <TitleSymbols>
-        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
-          <UpSvg />
-        </IconButton>
-        <AddButton />
-        <DeleteButton row={row} />
-        <HistoryButton
-          table="teilkultur"
-          id={row.id}
-          showHistory={showHistory}
-          setShowHistory={setShowHistory}
-        />
-        <Settings kulturId={row.kultur_id} />
-        <Anleitung />
-        <FilterNumbers filteredCount={filteredCount} totalCount={totalCount} />
+        : <>
+            <HistoryButton
+              table="teilkultur"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+            />
+            <Settings kulturId={row.kultur_id} />
+            <Anleitung />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+            />
+          </>
+        }
       </TitleSymbols>
     </TitleContainer>
   )
 }
 
-export default withResizeDetector(observer(TeilkulturFormTitle))
+export default observer(TeilkulturFormTitle)
