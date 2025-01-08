@@ -115,14 +115,16 @@ const App = () => {
                     path="Dokumentation"
                     element={<Docs />}
                   >
-                    <Route
-                      path="ziele"
-                      element={<Ziele />}
-                    />
-                    <Route
-                      path="ziele/herkuenfte"
-                      element={<ZieleHerkuenfte />}
-                    />
+                    <Route path="ziele">
+                      <Route
+                        index
+                        element={<Ziele />}
+                      />
+                      <Route
+                        path="herkuenfte"
+                        element={<ZieleHerkuenfte />}
+                      />
+                    </Route>
                     <Route
                       path="technische-voraussetzungen"
                       element={<TechnischeVoraussetzungen />}
