@@ -19,9 +19,9 @@ import { observer } from 'mobx-react-lite'
 import { useResizeDetector } from 'react-resize-detector'
 import { motion, useAnimation } from 'framer-motion'
 
-import CustomTooltip from './Tooltip.jsx'
-import LabelLieferung from './LabelLieferung.jsx'
-import LabelZaehlung from './LabelZaehlung.jsx'
+import { KulturTooltip } from './Tooltip.jsx'
+import { KulturLabelLieferung as LabelLieferung } from './LabelLieferung.jsx'
+import { KulturLabelZaehlung as LabelZaehlung } from './LabelZaehlung.jsx'
 import { KulturCustomAxisTick as AxisTick } from './CustomAxisTick.jsx'
 import { constants } from '../../../../../utils/constants.js'
 import { exists } from '../../../../../utils/exists.js'
@@ -187,7 +187,7 @@ export const KulturTimeline = observer(({ row }) => {
                     }}
                     fontSize={12}
                   />
-                  <Tooltip content={<CustomTooltip />} />
+                  <Tooltip content={<KulturTooltip />} />
                   {isNarrow ?
                     <Legend
                       layout="horizontal"

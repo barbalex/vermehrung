@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text } from 'recharts'
 
-const LabelLieferung = ({ x, y, stroke, value }) => (
+export const KulturLabelLieferung = ({ x, y, stroke, value }) => (
   <Text
     x={x + 2}
     y={y}
@@ -14,5 +14,3 @@ const LabelLieferung = ({ x, y, stroke, value }) => (
     {value}
   </Text>
 )
-
-export default LabelLieferung
