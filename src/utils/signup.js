@@ -2,7 +2,7 @@ import axios from 'redaxios'
 
 import { constants } from './constants.js'
 
-const signup = async ({ person, store }) => {
+export const signup = async ({ person, store }) => {
   const { addNotification, online, setOnline } = store
 
   // fetch email of this person
@@ -44,5 +44,3 @@ const signup = async ({ person, store }) => {
   }
   person.edit({ field: 'account_id', value: res.data, store })
 }
-
-export default signup

@@ -22,7 +22,7 @@ import toggleNode from './toggleNode.js'
 import toggleNodeSymbol from './toggleNodeSymbol.js'
 import createNew from './createNew.js'
 import deleteDataset from './delete.js'
-import signup from '../../utils/signup.js'
+import { signup } from '../../utils/signup.js'
 import deleteAccount from '../../utils/deleteAccount.js'
 import setPassword from '../../utils/setPassword.js'
 import {
@@ -122,11 +122,9 @@ const StyledNode = styled.div`
   white-space: nowrap;
   user-select: none;
   color: ${(props) =>
-    props['data-nodeisinactivenodepath']
-      ? '#D84315'
-      : props['data-inaktiv']
-      ? 'rgba(0, 0, 0, 0.35)'
-      : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '#D84315'
+    : props['data-inaktiv'] ? 'rgba(0, 0, 0, 0.35)'
+    : 'inherit'};
 `
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   margin-top: -5px !important;
@@ -158,9 +156,9 @@ const StyledMoreHorizIcon = styled(MoreHorizIcon)`
   padding-left: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '1px' : '2px'};
   height: ${(props) =>
-    props['data-nodeisinactivenodepath']
-      ? '26px !important'
-      : '22px !important'};
+    props['data-nodeisinactivenodepath'] ? '26px !important' : (
+      '22px !important'
+    )};
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   width: 26px;
@@ -255,9 +253,9 @@ const Row = ({ style, node, nodes, userRole }) => {
   const [person, setPerson] = useState()
   useEffect(() => {
     const personObservable =
-      node?.nodeType === 'table' && node.table === 'person' && node.url
-        ? db.get('person').findAndObserve(last(node.url))
-        : $of({})
+      node?.nodeType === 'table' && node.table === 'person' && node.url ?
+        db.get('person').findAndObserve(last(node.url))
+      : $of({})
 
     const subscription = personObservable.subscribe((person) =>
       setPerson(person),
@@ -329,7 +327,10 @@ const Row = ({ style, node, nodes, userRole }) => {
           data-inaktiv={inaktiv}
         >
           {useSymbolIcon && (
-            <SymbolDiv onClick={onClickNodeSymbol} data-mobile={isMobile}>
+            <SymbolDiv
+              onClick={onClickNodeSymbol}
+              data-mobile={isMobile}
+            >
               {symbolIcon === 'expandMore' && (
                 <StyledExpandMoreIcon
                   data-nodeisinactivenodepath={nodeIsInActiveNodePath}
