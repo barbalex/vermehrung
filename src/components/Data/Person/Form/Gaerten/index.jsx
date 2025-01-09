@@ -47,7 +47,7 @@ const StyledMotionDiv = styled(motion.div)`
   box-sizing: border-box;
 `
 
-const PersonArten = ({ person }) => {
+export const PersonGaerten = observer(({ person }) => {
   const store = useContext(MobxStoreContext)
   const { insertGvRev, db, filter } = store
 
@@ -83,25 +83,21 @@ const PersonArten = ({ person }) => {
       .extend(Q.where('_deleted', false))
       .observe()
     const gartenDelQuery =
-      filter.garten._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.garten._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.garten._deleted === false ? Q.where('_deleted', false)
+      : filter.garten._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const gartenAktivQuery =
-      filter.garten.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.garten.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      filter.garten.aktiv === false ? Q.where('aktiv', false)
+      : filter.garten.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const gartensObservable = db
       .get('garten')
       .query(
@@ -159,7 +155,10 @@ const PersonArten = ({ person }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+      >
         <Title>{`Mitarbeitend bei ${gvs.length} Gärten`}</Title>
         <div>
           <IconButton
@@ -168,7 +167,9 @@ const PersonArten = ({ person }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </TitleRow>
@@ -203,6 +204,5 @@ const PersonArten = ({ person }) => {
       </StyledMotionDiv>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(PersonArten)
