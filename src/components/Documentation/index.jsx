@@ -117,7 +117,7 @@ const Doku = styled.div`
   }
 `
 
-const Documentation = () => {
+export const Documentation = observer(() => {
   const { pathname } = useLocation()
   const store = useContext(StoreContext)
   const { docFilter, setDocsCount, setDocsFilteredCount } = store
@@ -168,6 +168,5 @@ const Documentation = () => {
       </div>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Documentation)
