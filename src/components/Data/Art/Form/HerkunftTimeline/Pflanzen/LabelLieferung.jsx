@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text } from 'recharts'
 
-const LabelLieferung = ({ x, y, stroke, value }) => {
+export const LabelLieferung = ({ x, y, stroke, value }) => {
   if (value === undefined) return null
   return (
     <Text
@@ -18,5 +18,3 @@ const LabelLieferung = ({ x, y, stroke, value }) => {
     </Text>
   )
 }
-
-export default LabelLieferung
