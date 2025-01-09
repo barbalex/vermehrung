@@ -54,7 +54,7 @@ const StyledButton = styled(Button)`
   margin-top: 10px !important;
 `
 
-const Index = () => {
+export const FourOhFour = () => {
   const navigate = useNavigate()
   const onClickBack = useCallback(() => navigate('/'), [navigate])
 
@@ -90,4 +90,3 @@ const Index = () => {
   )
 }
 
-export default Index
