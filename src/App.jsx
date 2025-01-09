@@ -22,8 +22,13 @@ import initiateDb from './utils/initiateDb.js'
 // TODO: lazy import all routes
 import Home from './routes/index.jsx'
 import VermehrungIndex from './routes/Vermehrung/index.jsx'
-import FourOhFour from './routes/404.jsx'
-import NavigationSyncController from './components/NavigationSyncController.tsx'
+const FourOhFour = lazy(async () => ({
+  default: (await import('./routes/404.jsx')).FourOhFour,
+}))
+const NavigationSyncController = lazy(async () => ({
+  default: (await import('./components/NavigationSyncController.tsx'))
+    .NavigationSyncController,
+}))
 const Layout = lazy(async () => ({
   default: (await import('./components/Layout.jsx')).Layout,
 }))
