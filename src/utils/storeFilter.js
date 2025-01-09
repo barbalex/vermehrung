@@ -1,5 +1,5 @@
 // NOT IN USE
-import types from '../store/Filter/simpleTypes.js'
+import { simpleTypes as types } from '../store/Filter/simpleTypes.js'
 
 const test = ({ val, filterValues, table }) =>
   filterValues.every(([key, filterValue]) => {

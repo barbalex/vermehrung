@@ -11,7 +11,7 @@ import { simpleTypes as zaehlung } from './zaehlung.js'
 import { simpleTypes as teilkultur } from './teilkultur.js'
 import { simpleTypes as teilzaehlung } from './teilzaehlung.js'
 
-export default {
+export const simpleTypes = {
   art,
   event,
   garten,
