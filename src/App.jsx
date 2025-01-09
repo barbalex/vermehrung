@@ -185,6 +185,7 @@ const App = () => {
   // console.log('App rendering')
 
   // TODO: move this to the Vermehrung route as in vermehrung_vite
+  // but docs?
   useEffect(() => {
     let isActive = true
     let unregister

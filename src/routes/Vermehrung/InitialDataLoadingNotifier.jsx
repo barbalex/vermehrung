@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import StoreContext from '../../storeContext.js'
 import tableNames from '../../utils/tableNames.js'
 
-const InitialDataLoadingNotifier = () => {
+export const InitialDataLoadingNotifier = observer(() => {
   const store = useContext(StoreContext)
   const {
     gettingAuthUser,
@@ -48,6 +48,4 @@ const InitialDataLoadingNotifier = () => {
   ])
 
   return null
-}
-
-export default observer(InitialDataLoadingNotifier)
+})
