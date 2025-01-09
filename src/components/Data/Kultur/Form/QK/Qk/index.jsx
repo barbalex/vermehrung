@@ -6,7 +6,7 @@ import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 
-import createMessageFunctions from './createMessageFunctions.js'
+import { createKulturMessageFunctions } from './createMessageFunctions.js'
 import { constants } from '../../../../../../utils/constants.js'
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 
@@ -45,7 +45,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const KulturQkQk = ({ kultur, qkChoosens }) => {
+export const KulturQk = observer(({ kultur, qkChoosens }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
 
@@ -58,7 +58,7 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
   const [messageGroups, setMessageGroups] = useState(null)
   useEffect(() => {
     let isActive = true
-    createMessageFunctions({
+    createKulturMessageFunctions({
       kulturId: kultur.id,
       db,
       store,
@@ -68,9 +68,8 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
           .filter((qk) => !!messageFunctions[qk.name])
           .map(async (qk) => ({
             title: qk?.titel,
-            messages: messageFunctions
-              ? await messageFunctions[qk?.name]()
-              : [],
+            messages:
+              messageFunctions ? await messageFunctions[qk?.name]() : [],
           })),
       )
       if (!isActive) return
@@ -83,24 +82,32 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
     }
   }, [kultur.id, qkChoosens, db, store])
 
-  const messageGroupsFiltered = messageGroups
-    ? messageGroups.filter((messageGroup) => {
+  const messageGroupsFiltered =
+    messageGroups ?
+      messageGroups.filter((messageGroup) => {
         if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
           return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
         }
         return true
       })
     : []
-  const resultTitle = messageGroups
-    ? `${messageGroupsFiltered.length} ${
+  const resultTitle =
+    messageGroups ?
+      `${messageGroupsFiltered.length} ${
         messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
       }:`
     : 'rechne...'
 
   return (
     <Container>
-      <StyledFormControl fullWidth variant="standard">
-        <InputLabel htmlFor="filter" shrink>
+      <StyledFormControl
+        fullWidth
+        variant="standard"
+      >
+        <InputLabel
+          htmlFor="filter"
+          shrink
+        >
           nach Abschnitts-Titel filtern
         </InputLabel>
         <Input
@@ -112,7 +119,10 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
       </StyledFormControl>
       <ResultTitle>{resultTitle}</ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
-        <StyledPaper key={messageGroup.title} elevation={2}>
+        <StyledPaper
+          key={messageGroup.title}
+          elevation={2}
+        >
           <Title>{`${messageGroup.title} (${messageGroup.messages.length})`}</Title>
           {messageGroup.messages.map((m, i) => (
             <Row key={`${m.text}Index${i}`}>
@@ -135,6 +145,4 @@ const KulturQkQk = ({ kultur, qkChoosens }) => {
       )}
     </Container>
   )
-}
-
-export default observer(KulturQkQk)
+})

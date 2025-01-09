@@ -27,7 +27,7 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-const ChooseKulturQkRow = ({ qk }) => {
+export const ChooseKulturQkRow = observer(({ qk }) => {
   const store = useContext(MobxStoreContext)
   const { user, db } = store
 
@@ -38,8 +38,9 @@ const ChooseKulturQkRow = ({ qk }) => {
   const { userPersonOption, kulturQkChoosen } = dataState
 
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['kultur_qk_choosen'])
@@ -58,8 +59,9 @@ const ChooseKulturQkRow = ({ qk }) => {
   const checked = kulturQkChoosen.includes(qk.id)
 
   const onChange = useCallback(() => {
-    const newValue = event.target.checked
-      ? [...kulturQkChoosen, qk.id]
+    const newValue =
+      event.target.checked ?
+        [...kulturQkChoosen, qk.id]
       : kulturQkChoosen.filter((id) => id !== qk.id)
 
     userPersonOption.edit({
@@ -74,12 +76,14 @@ const ChooseKulturQkRow = ({ qk }) => {
   return (
     <Row>
       <Check>
-        <Checkbox checked={checked} onChange={onChange} color="primary" />
+        <Checkbox
+          checked={checked}
+          onChange={onChange}
+          color="primary"
+        />
       </Check>
       <Titel>{qk.titel}</Titel>
       <Beschreibung>{qk.beschreibung}</Beschreibung>
     </Row>
   )
-}
-
-export default observer(ChooseKulturQkRow)
+})
