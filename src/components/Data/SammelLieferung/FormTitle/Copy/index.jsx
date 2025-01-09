@@ -8,8 +8,8 @@ import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { exists } from '../../../../../utils/exists.js'
-import updateLieferung from './updateLieferung.js'
-import updateAllLieferungen from './updateAllLieferungen.js'
+import { updateSammelLieferung } from './updateLieferung.js'
+import { updateAllSammelLieferungen } from './updateAllLieferungen.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
@@ -49,86 +49,86 @@ const sammelLieferungFields = [
   '_deleted',
 ]
 
-const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
-  //console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })
-  const store = useContext(MobxStoreContext)
-  const { addNotification } = store
+export const SammelLieferungCopyMenu = observer(
+  ({ sammelLieferung, lieferung }) => {
+    //console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })
+    const store = useContext(MobxStoreContext)
+    const { addNotification } = store
 
-  const [anchorEl, setAnchorEl] = useState(null)
-  const onClose = useCallback(() => setAnchorEl(null), [])
-  const onClickConfig = useCallback(
-    (event) => setAnchorEl(event.currentTarget),
-    [],
-  )
-  const containsData = useMemo(
-    () =>
-      Object.entries(sammelLieferung)
-        .filter(
-          // only accept lieferung's fields
+    const [anchorEl, setAnchorEl] = useState(null)
+    const onClose = useCallback(() => setAnchorEl(null), [])
+    const onClickConfig = useCallback(
+      (event) => setAnchorEl(event.currentTarget),
+      [],
+    )
+    const containsData = useMemo(
+      () =>
+        Object.entries(sammelLieferung)
+          .filter(
+            // only accept lieferung's fields
+            // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+            ([key, value]) =>
+              sammelLieferungFields.filter((f) => f !== 'id').includes(key),
+          )
+          // only update with existing values
           // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-          ([key, value]) =>
-            sammelLieferungFields.filter((f) => f !== 'id').includes(key),
-        )
-        // only update with existing values
-        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-        .filter(([key, val]) => exists(val) && val !== false).length > 0,
-    [sammelLieferung],
-  )
-  const onClickActiveLieferung = useCallback(async () => {
-    setAnchorEl(null)
-    try {
-      await updateLieferung({
-        lieferung,
+          .filter(([key, val]) => exists(val) && val !== false).length > 0,
+      [sammelLieferung],
+    )
+    const onClickActiveLieferung = useCallback(async () => {
+      setAnchorEl(null)
+      try {
+        await updateSammelLieferung({
+          lieferung,
+          sammelLieferung,
+          store,
+        })
+      } catch (error) {
+        return
+      }
+      addNotification({
+        message: 'Lieferung aktualisiert',
+        type: 'info',
+      })
+    }, [addNotification, lieferung, sammelLieferung, store])
+    const onClickAllLieferung = useCallback(async () => {
+      setAnchorEl(null)
+      updateAllSammelLieferungen({
         sammelLieferung,
         store,
       })
-    } catch (error) {
-      return
-    }
-    addNotification({
-      message: 'Lieferung aktualisiert',
-      type: 'info',
-    })
-  }, [addNotification, lieferung, sammelLieferung, store])
-  const onClickAllLieferung = useCallback(async () => {
-    setAnchorEl(null)
-    updateAllLieferungen({
-      sammelLieferung,
-      store,
-    })
-  }, [sammelLieferung, store])
+    }, [sammelLieferung, store])
 
-  return (
-    <ErrorBoundary>
-      <IconButton
-        aria-label="Daten kopieren"
-        aria-owns={anchorEl ? 'long-menu' : null}
-        aria-haspopup="true"
-        title="Daten kopieren"
-        onClick={onClickConfig}
-        disabled={!containsData}
-        size="large"
-      >
-        <FaRegCopy />
-      </IconButton>
-      <Menu
-        id="long-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={onClose}
-      >
-        <TitleRow>
-          <Title>Die Daten der Sammel-Lieferung kopieren:</Title>
-        </TitleRow>
-        {lieferung && (
-          <MenuItem onClick={onClickActiveLieferung}>
-            in die links angezeigte Lieferung
-          </MenuItem>
-        )}
-        <MenuItem onClick={onClickAllLieferung}>in alle Lieferungen</MenuItem>
-      </Menu>
-    </ErrorBoundary>
-  )
-}
-
-export default observer(CopySammelLieferungMenu)
+    return (
+      <ErrorBoundary>
+        <IconButton
+          aria-label="Daten kopieren"
+          aria-owns={anchorEl ? 'long-menu' : null}
+          aria-haspopup="true"
+          title="Daten kopieren"
+          onClick={onClickConfig}
+          disabled={!containsData}
+          size="large"
+        >
+          <FaRegCopy />
+        </IconButton>
+        <Menu
+          id="long-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={onClose}
+        >
+          <TitleRow>
+            <Title>Die Daten der Sammel-Lieferung kopieren:</Title>
+          </TitleRow>
+          {lieferung && (
+            <MenuItem onClick={onClickActiveLieferung}>
+              in die links angezeigte Lieferung
+            </MenuItem>
+          )}
+          <MenuItem onClick={onClickAllLieferung}>in alle Lieferungen</MenuItem>
+        </Menu>
+      </ErrorBoundary>
+    )
+  },
+)
