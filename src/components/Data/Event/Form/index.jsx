@@ -20,7 +20,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList/index.jsx'
 import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs.js'
 import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.js'
-import teilkulturSort from '../../../../utils/teilkulturSort.js'
+import { teilkulturSort } from '../../../../utils/teilkulturSort.js'
 import { personSort } from '../../../../utils/personSort.js'
 import { constants } from '../../../../utils/constants.js'
 
