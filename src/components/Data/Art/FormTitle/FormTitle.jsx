@@ -9,7 +9,7 @@ import NavButtons from './NavButtons.jsx'
 import FilterNumbers from '../../../shared/FilterNumbers.jsx'
 import Menu from '../../../shared/Menu.jsx'
 import HistoryButton from '../../../shared/HistoryButton.jsx'
-import constants from '../../../../utils/constants.js'
+import { constants } from '../../../../utils/constants.js'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);

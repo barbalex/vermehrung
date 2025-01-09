@@ -12,7 +12,7 @@ import Menu from '../../../shared/Menu.jsx'
 import HistoryButton from '../../../shared/HistoryButton.jsx'
 import KontoMenu from './KontoMenu/index.jsx'
 import NavButtons from './NavButtons.jsx'
-import constants from '../../../../utils/constants.js'
+import { constants } from '../../../../utils/constants.js'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);

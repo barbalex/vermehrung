@@ -14,7 +14,7 @@ import isImageFile from './isImageFile.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import fileSort from '../../../utils/fileSort.js'
 import mutations from '../../../utils/mutations.js'
-import constants from '../../../utils/constants.js'
+import { constants } from '../../../utils/constants.js'
 
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);

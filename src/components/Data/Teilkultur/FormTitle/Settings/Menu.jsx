@@ -10,7 +10,7 @@ import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import constants from '../../../../../utils/constants.js'
+import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
   display: flex;

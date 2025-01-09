@@ -23,7 +23,7 @@ import {
 
 import ErrorBoundary from './shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../mobxStoreContext.js'
-import constants from '../utils/constants.js'
+import { constants } from '../utils/constants.js'
 
 const Container = styled.div`
   margin: 20px;

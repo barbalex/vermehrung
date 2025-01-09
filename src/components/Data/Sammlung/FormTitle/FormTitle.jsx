@@ -14,7 +14,7 @@ import Menu from '../../../shared/Menu.jsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 import LiDownSvg from '../../../../svg/to_ausli_down.svg?react'
 import HeDownSvg from '../../../../svg/to_he_down.svg?react'
-import constants from '../../../../utils/constants.js'
+import { constants } from '../../../../utils/constants.js'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);

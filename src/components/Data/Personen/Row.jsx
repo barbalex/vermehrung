@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import personLabelFromPerson from '../../../utils/personLabelFromPerson.js'
-import constants from '../../../utils/constants.js'
+import { constants } from '../../../utils/constants.js'
 
 const Row = styled.div`
   display: flex;

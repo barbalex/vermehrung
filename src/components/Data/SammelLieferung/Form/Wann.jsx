@@ -8,7 +8,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Date from '../../../shared/Date.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../shared/JesNo.jsx'
-import constants from '../../../../utils/constants.js'
+import { constants } from '../../../../utils/constants.js'
 
 const Title = styled.div`
   font-weight: bold;

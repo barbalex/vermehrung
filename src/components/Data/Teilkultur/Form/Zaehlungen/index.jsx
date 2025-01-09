@@ -6,7 +6,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import teilzaehlungsSortByZaehlungTk from '../../../../../utils/teilzaehlungsSortByZaehlungTk.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Teilzaehlungen from './Teilzaehlungen.jsx'
-import constants from '../../../../../utils/constants.js'
+import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);

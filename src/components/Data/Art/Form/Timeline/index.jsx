@@ -8,7 +8,7 @@ import { motion, useAnimation } from 'framer-motion'
 
 import Pflanzen from './Pflanzen/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import constants from '../../../../../utils/constants.js'
+import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);
