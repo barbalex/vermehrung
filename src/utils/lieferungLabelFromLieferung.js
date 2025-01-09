@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
 
-const lieferungLabelFromLieferung = ({ lieferung }) => {
-  const datumLabel = lieferung.datum
-    ? DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
+export const lieferungLabelFromLieferung = ({ lieferung }) => {
+  const datumLabel =
+    lieferung.datum ?
+      DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
   const anz = (lieferung.anzahl_pflanzen ?? '').toString().padStart(3, '_')
   const anzAb = (lieferung.anzahl_auspflanzbereit ?? '')
@@ -16,5 +17,3 @@ const lieferungLabelFromLieferung = ({ lieferung }) => {
 
   return label
 }
-
-export default lieferungLabelFromLieferung

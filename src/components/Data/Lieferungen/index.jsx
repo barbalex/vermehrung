@@ -10,7 +10,7 @@ import { combineLatest } from 'rxjs'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { FilterTitle } from '../../shared/FilterTitle.jsx'
-import Row from './Row.jsx'
+import { LieferungRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.jsx'
 import { exists } from '../../../utils/exists.js'

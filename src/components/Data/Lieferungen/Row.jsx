@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-import lieferungLabelFromLieferung from '../../../utils/lieferungLabelFromLieferung.js'
+import { lieferungLabelFromLieferung } from '../../../utils/lieferungLabelFromLieferung.js'
 import { constants } from '../../../utils/constants.js'
 
 const Row = styled.div`
@@ -29,7 +29,7 @@ const Row = styled.div`
   }
 `
 
-const EventsRows = ({ row, style, last }) => {
+export const LieferungRow = observer(({ row, style, last }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -39,10 +39,13 @@ const EventsRows = ({ row, style, last }) => {
   )
 
   return (
-    <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
+    <Row
+      key={row.id}
+      onClick={onClickRow}
+      style={style}
+      data-last={last}
+    >
       <div>{lieferungLabelFromLieferung({ lieferung: row })}</div>
     </Row>
   )
-}
-
-export default observer(EventsRows)
+})

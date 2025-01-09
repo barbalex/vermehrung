@@ -1,4 +1,4 @@
-import lieferungLabelFromLieferung from '../../../../../../utils/lieferungLabelFromLieferung.js'
+import { lieferungLabelFromLieferung } from '../../../../../../utils/lieferungLabelFromLieferung.js'
 
 const gartenKulturAnlieferungNodes = ({
   lieferung,
