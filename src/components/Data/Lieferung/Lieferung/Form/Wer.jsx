@@ -9,7 +9,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { Select } from '../../../../shared/Select/index.jsx'
 import TextField from '../../../../shared/TextField.jsx'
 import Files from '../../../Files/index.jsx'
-import ConflictList from '../../../../shared/ConflictList/index.jsx'
+import { ConflictList } from '../../../../shared/ConflictList/index.jsx'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
 import { personSort } from '../../../../../utils/personSort.js'
 

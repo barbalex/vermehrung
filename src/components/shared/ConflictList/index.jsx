@@ -8,17 +8,17 @@ const Konflikte = styled.div`
   margin-bottom: 10px;
 `
 
-const ConflictList = ({ conflicts, activeConflict, setActiveConflict }) => (
-  <Konflikte>
-    {[...conflicts].sort().map((conflict) => (
-      <Conflict
-        key={conflict}
-        conflict={conflict}
-        activeConflict={activeConflict}
-        setActiveConflict={setActiveConflict}
-      />
-    ))}
-  </Konflikte>
+export const ConflictList = observer(
+  ({ conflicts, activeConflict, setActiveConflict }) => (
+    <Konflikte>
+      {[...conflicts].sort().map((conflict) => (
+        <Conflict
+          key={conflict}
+          conflict={conflict}
+          activeConflict={activeConflict}
+          setActiveConflict={setActiveConflict}
+        />
+      ))}
+    </Konflikte>
+  ),
 )
-
-export default observer(ConflictList)
