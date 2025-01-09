@@ -21,7 +21,7 @@ import initiateDb from './utils/initiateDb.js'
 
 // TODO: lazy import all routes
 import Home from './routes/index.jsx'
-import VermehrungIndex from './routes/Vermehrung/index.jsx'
+import { Vermehrung as VermehrungIndex } from './routes/Vermehrung/index.jsx'
 const FourOhFour = lazy(async () => ({
   default: (await import('./routes/404.jsx')).FourOhFour,
 }))
@@ -165,8 +165,12 @@ const Datenschutz = lazy(async () => ({
   default: (await import('./components/Documentation/docs/Datenschutz.jsx'))
     .Datenschutz,
 }))
-import { Vermehrung } from './routes/Vermehrung/Vermehrung.jsx'
-import { QueuedQueries } from './components/QueuedQueries/index.jsx'
+const Vermehrung = lazy(async () => ({
+  default: (await import('./routes/Vermehrung/Vermehrung.jsx')).Vermehrung,
+}))
+const QueuedQueries = lazy(async () => ({
+  default: (await import('./components/QueuedQueries/index.jsx')).QueuedQueries,
+}))
 
 const App = () => {
   const navigate = useNavigate()
