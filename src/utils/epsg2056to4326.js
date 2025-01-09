@@ -5,8 +5,6 @@ proj4.defs(
 )
 proj4.defs('EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
-const epsg2056to4326 = (x, y) =>
+export const epsg2056to4326 = (x, y) =>
   // make sure to pass in numbers, not strings
   proj4('EPSG:2056', 'EPSG:4326', [+x, +y])
-
-export default epsg2056to4326
