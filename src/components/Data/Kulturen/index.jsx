@@ -10,7 +10,7 @@ import { combineLatest } from 'rxjs'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { FilterTitle } from '../../shared/FilterTitle.jsx'
-import Row from './Row.jsx'
+import { KulturRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.jsx'
 import UpSvg from '../../../svg/to_up.svg?react'
@@ -24,7 +24,6 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
-
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
   flex-shrink: 0;
