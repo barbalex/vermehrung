@@ -12,10 +12,10 @@ import { eventSort } from '../../../../utils/eventSort.js'
 import { personFullname } from '../../../../utils/personFullname.js'
 
 /**
- * this function cann be used from higher up
- * that is why it receives a workbook and _can_ recieve calledFromHigherUp
+ * this function can be used from higher up
+ * that is why it receives a workbook and _can_ receive calledFromHigherUp
  */
-const buildExceljsWorksheets = async ({
+export const buildExceljsWorksheetsForKultur = async ({
   store,
   kultur_id,
   kultur_name,
@@ -562,4 +562,3 @@ const buildExceljsWorksheets = async ({
   return
 }
 
-export default buildExceljsWorksheets
