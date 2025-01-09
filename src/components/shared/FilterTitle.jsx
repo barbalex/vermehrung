@@ -38,45 +38,45 @@ const StyledDeleteFilterIcon2 = styled(DeleteFilterIconOutlined)`
   pointer-events: auto;
 `
 
-const FilterTitle = ({ title, table, totalCount, filteredCount }) => {
-  const store = useContext(MobxStoreContext)
-  const { tableIsFiltered, filtered, emptyTable, empty } = store.filter
+export const FilterTitle = observer(
+  ({ title, table, totalCount, filteredCount }) => {
+    const store = useContext(MobxStoreContext)
+    const { tableIsFiltered, filtered, emptyTable, empty } = store.filter
 
-  const existsTableFilter = tableIsFiltered({
-    table,
-  })
-  const onEmptyTable = useCallback(
-    () => emptyTable({ table }),
-    [emptyTable, table],
-  )
+    const existsTableFilter = tableIsFiltered({
+      table,
+    })
+    const onEmptyTable = useCallback(
+      () => emptyTable({ table }),
+      [emptyTable, table],
+    )
 
-  return (
-    <Container>
-      <TitleRow>
-        <FilterNumbers>
-          <span title="gefilterte Anzahl">{filteredCount}</span>/
-          <span title="ungefilterte Anzahl">{totalCount}</span>
-        </FilterNumbers>
-        {existsTableFilter && (
-          <IconButton
-            aria-label={`${title}-Filter entfernen`}
-            title={`${title}-Filter entfernen`}
-            onClick={onEmptyTable}
-            size="medium"
-          >
-            <StyledDeleteFilterIcon2 />
-          </IconButton>
-        )}
-        {filtered && (
-          <StyledDeleteFilterIcon
-            aria-label="Alle Filter entfernen"
-            title="Alle Filter entfernen"
-            onClick={empty}
-          />
-        )}
-      </TitleRow>
-    </Container>
-  )
-}
-
-export default observer(FilterTitle)
+    return (
+      <Container>
+        <TitleRow>
+          <FilterNumbers>
+            <span title="gefilterte Anzahl">{filteredCount}</span>/
+            <span title="ungefilterte Anzahl">{totalCount}</span>
+          </FilterNumbers>
+          {existsTableFilter && (
+            <IconButton
+              aria-label={`${title}-Filter entfernen`}
+              title={`${title}-Filter entfernen`}
+              onClick={onEmptyTable}
+              size="medium"
+            >
+              <StyledDeleteFilterIcon2 />
+            </IconButton>
+          )}
+          {filtered && (
+            <StyledDeleteFilterIcon
+              aria-label="Alle Filter entfernen"
+              title="Alle Filter entfernen"
+              onClick={empty}
+            />
+          )}
+        </TitleRow>
+      </Container>
+    )
+  },
+)
