@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../../utils/constants.js'
 
-const LieferungAnleitung = ({ asMenu }) => {
+export const LieferungAnleitung = ({ asMenu }) => {
   const openLieferungDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/Dokumentation/lieferungen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -29,5 +29,3 @@ const LieferungAnleitung = ({ asMenu }) => {
     </IconButton>
   )
 }
-
-export default LieferungAnleitung
