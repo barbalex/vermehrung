@@ -16,17 +16,18 @@ const Info = styled.div`
   text-align: center;
 `
 
-const ChooseQk = ({ qks }) => (
+export const ChooseKulturQk = observer(({ qks }) => (
   <ErrorBoundary>
     <Container>
       <Info>Diese Wahl gilt für alle Kulturen</Info>
       <FieldsContainer>
         {qks.map((row) => (
-          <Row key={row.id} qk={row} />
+          <Row
+            key={row.id}
+            qk={row}
+          />
         ))}
       </FieldsContainer>
     </Container>
   </ErrorBoundary>
-)
-
-export default observer(ChooseQk)
+))

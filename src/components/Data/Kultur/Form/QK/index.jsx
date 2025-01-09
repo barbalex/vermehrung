@@ -12,7 +12,7 @@ import { combineLatest, of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Qk from './Qk/index.jsx'
-import Choose from './Choose/index.jsx'
+import { ChooseKulturQk as Choose } from './Choose/index.jsx'
 import { constants } from '../../../../../utils/constants.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
@@ -47,7 +47,7 @@ const Body = styled.div`
   padding: 10px 0;
 `
 
-const KulturQk = ({ kultur }) => {
+export const KulturQk = observer(({ kultur }) => {
   const store = useContext(MobxStoreContext)
   const { db, user } = store
 
@@ -61,8 +61,9 @@ const KulturQk = ({ kultur }) => {
   const { qks, userPersonOption } = dataState
 
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['kultur_qk_choosen'])
@@ -122,7 +123,10 @@ const KulturQk = ({ kultur }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+      >
         <Title>Qualitäts-Kontrollen</Title>
         <div>
           <IconButton
@@ -139,11 +143,16 @@ const KulturQk = ({ kultur }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </TitleRow>
-      <motion.div animate={anim} transition={{ type: 'just', duration: 0.5 }}>
+      <motion.div
+        animate={anim}
+        transition={{ type: 'just', duration: 0.5 }}
+      >
         {open && (
           <>
             <StyledTabs
@@ -153,7 +162,11 @@ const KulturQk = ({ kultur }) => {
               textColor="primary"
               centered
             >
-              <Tab label="ausführen" value="qk" data-id="qk" />
+              <Tab
+                label="ausführen"
+                value="qk"
+                data-id="qk"
+              />
               <Tab
                 label={`auswählen${
                   qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
@@ -163,17 +176,16 @@ const KulturQk = ({ kultur }) => {
               />
             </StyledTabs>
             <Body>
-              {tab === 'qk' ? (
-                <Qk kultur={kultur} qkChoosens={qkChoosens} />
-              ) : (
-                <Choose qks={qks} />
-              )}
+              {tab === 'qk' ?
+                <Qk
+                  kultur={kultur}
+                  qkChoosens={qkChoosens}
+                />
+              : <Choose qks={qks} />}
             </Body>
           </>
         )}
       </motion.div>
     </ErrorBoundary>
   )
-}
-
-export default observer(KulturQk)
+})
