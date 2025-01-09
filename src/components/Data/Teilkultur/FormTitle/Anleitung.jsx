@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.js'
 
-const TeilkulturAnleitung = ({ asMenu }) => {
+export const TeilkulturAnleitung = ({ asMenu }) => {
   const openTeilkulturDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/Dokumentation/teilkulturen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -29,5 +29,3 @@ const TeilkulturAnleitung = ({ asMenu }) => {
     </IconButton>
   )
 }
-
-export default TeilkulturAnleitung

@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const TeilkulturAddButton = () => {
+export const TeilkulturAddButton = observer(() => {
   const store = useContext(MobxStoreContext)
   const { insertTeilkulturRev } = store
 
@@ -20,11 +20,10 @@ const TeilkulturAddButton = () => {
         aria-label="neue Teilkultur"
         title="neue Teilkultur"
         onClick={add}
-        size="large">
+        size="large"
+      >
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
-  );
-}
-
-export default observer(TeilkulturAddButton)
+  )
+})
