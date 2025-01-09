@@ -4,7 +4,7 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
 
-import History from '../../../shared/History/index.jsx'
+import { History } from '../../../shared/History/index.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../../utils/toPgArray.js'
@@ -73,9 +73,8 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     historyTakeoverCallback()
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = row._revisions
-      ? [rev, ...row._revisions]
-      : [rev]
+    newObjectForStore._revisions =
+      row._revisions ? [rev, ...row._revisions] : [rev]
     // TODO: is this a good idea?
     newObjectForStore._conflicts = row._conflicts
     // for store: convert rev to winner

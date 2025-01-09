@@ -44,64 +44,64 @@ const StyledButton = styled(Button)`
   }
 `
 
-const History = ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
-  const store = useContext(MobxStoreContext)
-  const { diffConflict, setDiffConflict } = store
+export const History = observer(
+  ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
+    const store = useContext(MobxStoreContext)
+    const { diffConflict, setDiffConflict } = store
 
-  const onClickToggleDiff = useCallback(
-    () => setDiffConflict(!diffConflict),
-    [diffConflict, setDiffConflict],
-  )
-  const openDocs = useCallback(() => {
-    const url = `${constants?.getAppUri()}/Dokumentation/historisierung`
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      return window.open(url, '_blank', 'toolbar=no')
-    }
-    window.open(url)
-  }, [])
+    const onClickToggleDiff = useCallback(
+      () => setDiffConflict(!diffConflict),
+      [diffConflict, setDiffConflict],
+    )
+    const openDocs = useCallback(() => {
+      const url = `${constants?.getAppUri()}/Dokumentation/historisierung`
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        return window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }, [])
 
-  return (
-    <Container>
-      <TitleRow>
-        <Title>
-          Historische Version<Rev>{rev}</Rev>
-        </Title>
-        <StyledIconButton
-          aria-label="Anleitung öffnen"
-          title="Anleitung öffnen"
-          onClick={openDocs}
-          size="small"
-        >
-          <IoMdInformationCircleOutline />
-        </StyledIconButton>
-      </TitleRow>
-      <Data dataArray={dataArray} />
-      <ButtonRow>
-        <StyledButton
-          onClick={onClickWiderspruchUebernehmen}
-          variant="outlined"
-          title="Diese Version wiederherstellen"
-          startIcon={<FaUndoAlt />}
-          color="inherit"
-        >
-          {diffConflict ? 'grüne Werte wiederherstellen' : 'wiederherstellen'}
-        </StyledButton>
-        <StyledButton
-          onClick={onClickToggleDiff}
-          variant="outlined"
-          title={
-            diffConflict ?
-              'Versionen nicht vergleichen'
-            : 'Versionen vergleichen'
-          }
-          startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
-          color="inherit"
-        >
-          {diffConflict ? 'nicht vergleichen' : 'vergleichen'}
-        </StyledButton>
-      </ButtonRow>
-    </Container>
-  )
-}
-
-export default observer(History)
+    return (
+      <Container>
+        <TitleRow>
+          <Title>
+            Historische Version<Rev>{rev}</Rev>
+          </Title>
+          <StyledIconButton
+            aria-label="Anleitung öffnen"
+            title="Anleitung öffnen"
+            onClick={openDocs}
+            size="small"
+          >
+            <IoMdInformationCircleOutline />
+          </StyledIconButton>
+        </TitleRow>
+        <Data dataArray={dataArray} />
+        <ButtonRow>
+          <StyledButton
+            onClick={onClickWiderspruchUebernehmen}
+            variant="outlined"
+            title="Diese Version wiederherstellen"
+            startIcon={<FaUndoAlt />}
+            color="inherit"
+          >
+            {diffConflict ? 'grüne Werte wiederherstellen' : 'wiederherstellen'}
+          </StyledButton>
+          <StyledButton
+            onClick={onClickToggleDiff}
+            variant="outlined"
+            title={
+              diffConflict ?
+                'Versionen nicht vergleichen'
+              : 'Versionen vergleichen'
+            }
+            startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
+            color="inherit"
+          >
+            {diffConflict ? 'nicht vergleichen' : 'vergleichen'}
+          </StyledButton>
+        </ButtonRow>
+      </Container>
+    )
+  },
+)
