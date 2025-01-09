@@ -7,7 +7,7 @@ import format from 'date-fns/format'
 
 import { exists } from '../../../../../utils/exists.js'
 
-const buildData = async ({ row }) => {
+export const buildKulturTimelineData = async ({ row }) => {
   let zaehlungenDone = []
   try {
     zaehlungenDone = await row.zaehlungs
@@ -57,26 +57,30 @@ const buildData = async ({ row }) => {
   const zaehlungenForLineReversed = [...zaehlungenForLine].reverse()
   const zaehlungenDoneData = await Promise.all(
     zaehlungenDone.map(async (z) => {
-      const teilzaehlungs = z.teilzaehlungs
-        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))
+      const teilzaehlungs =
+        z.teilzaehlungs ?
+          await z.teilzaehlungs.extend(Q.where('_deleted', false))
         : $of([])
       const anzahlenPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_pflanzen)
         .filter((a) => exists(a))
-      const anzPflanzen = anzahlenPflanzen.length
-        ? anzahlenPflanzen.reduce((a, b) => a + b, 0)
+      const anzPflanzen =
+        anzahlenPflanzen.length ?
+          anzahlenPflanzen.reduce((a, b) => a + b, 0)
         : undefined
       const anzahlenAuspflanzbereit = teilzaehlungs
         .map((tz) => tz.anzahl_auspflanzbereit)
         .filter((a) => exists(a))
-      const anzAuspflanzbereit = anzahlenAuspflanzbereit.length
-        ? anzahlenAuspflanzbereit.reduce((a, b) => a + b, 0)
+      const anzAuspflanzbereit =
+        anzahlenAuspflanzbereit.length ?
+          anzahlenAuspflanzbereit.reduce((a, b) => a + b, 0)
         : undefined
       const anzahlenMutterPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_mutterpflanzen)
         .filter((a) => exists(a))
-      const anzMutterPflanzen = anzahlenMutterPflanzen.length
-        ? anzahlenMutterPflanzen.reduce((a, b) => a + b, 0)
+      const anzMutterPflanzen =
+        anzahlenMutterPflanzen.length ?
+          anzahlenMutterPflanzen.reduce((a, b) => a + b, 0)
         : undefined
       const datum = new Date(z.datum).getTime()
 
@@ -100,26 +104,30 @@ const buildData = async ({ row }) => {
   )
   const zaehlungenPlannedIncludedData = await Promise.all(
     zaehlungenPlannedIncluded.map(async (z) => {
-      const teilzaehlungs = z.teilzaehlungs
-        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))
+      const teilzaehlungs =
+        z.teilzaehlungs ?
+          await z.teilzaehlungs.extend(Q.where('_deleted', false))
         : []
       const anzahlenPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_pflanzen)
         .filter((a) => exists(a))
-      const anzPflanzen = anzahlenPflanzen.length
-        ? anzahlenPflanzen.reduce((a, b) => a + b, 0)
+      const anzPflanzen =
+        anzahlenPflanzen.length ?
+          anzahlenPflanzen.reduce((a, b) => a + b, 0)
         : undefined
       const anzahlenAuspflanzbereit = teilzaehlungs
         .map((tz) => tz.anzahl_auspflanzbereit)
         .filter((a) => exists(a))
-      const anzAuspflanzbereit = anzahlenAuspflanzbereit.length
-        ? anzahlenAuspflanzbereit.reduce((a, b) => a + b, 0)
+      const anzAuspflanzbereit =
+        anzahlenAuspflanzbereit.length ?
+          anzahlenAuspflanzbereit.reduce((a, b) => a + b, 0)
         : undefined
       const anzahlenMutterPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_mutterpflanzen)
         .filter((a) => exists(a))
-      const anzMutterPflanzen = anzahlenMutterPflanzen.length
-        ? anzahlenMutterPflanzen.reduce((a, b) => a + b, 0)
+      const anzMutterPflanzen =
+        anzahlenMutterPflanzen.length ?
+          anzahlenMutterPflanzen.reduce((a, b) => a + b, 0)
         : undefined
 
       return {
@@ -145,26 +153,30 @@ const buildData = async ({ row }) => {
   )
   const zaehlungenPlannedIgnoredData = await Promise.all(
     zaehlungenPlannedIgnored.map(async (z) => {
-      const teilzaehlungs = z.teilzaehlungs
-        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))
+      const teilzaehlungs =
+        z.teilzaehlungs ?
+          await z.teilzaehlungs.extend(Q.where('_deleted', false))
         : []
       const anzahlenPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_pflanzen)
         .filter((a) => exists(a))
-      const anzPflanzen = anzahlenPflanzen.length
-        ? anzahlenPflanzen.reduce((a, b) => a + b, 0)
+      const anzPflanzen =
+        anzahlenPflanzen.length ?
+          anzahlenPflanzen.reduce((a, b) => a + b, 0)
         : undefined
       const anzahlenAuspflanzbereit = teilzaehlungs
         .map((tz) => tz.anzahl_auspflanzbereit)
         .filter((a) => exists(a))
-      const anzAuspflanzbereit = anzahlenAuspflanzbereit.length
-        ? anzahlenAuspflanzbereit.reduce((a, b) => a + b, 0)
+      const anzAuspflanzbereit =
+        anzahlenAuspflanzbereit.length ?
+          anzahlenAuspflanzbereit.reduce((a, b) => a + b, 0)
         : undefined
       const anzahlenMutterPflanzen = teilzaehlungs
         .map((tz) => tz.anzahl_mutterpflanzen)
         .filter((a) => exists(a))
-      const anzMutterPflanzen = anzahlenMutterPflanzen.length
-        ? anzahlenMutterPflanzen.reduce((a, b) => a + b, 0)
+      const anzMutterPflanzen =
+        anzahlenMutterPflanzen.length ?
+          anzahlenMutterPflanzen.reduce((a, b) => a + b, 0)
         : undefined
 
       return {
@@ -193,10 +205,9 @@ const buildData = async ({ row }) => {
     [...zaehlungenDoneData, ...zaehlungenPlannedIncludedData],
     'datum',
   )
-  const zaehlungenData = Object.entries(
-    zaehlungenDataGroupedByDatum,
-    // eslint-disable-next-line no-unused-vars
-  ).map(([key, value]) => Object.assign({}, ...value))
+  const zaehlungenData = Object.entries(zaehlungenDataGroupedByDatum).map(
+    ([key, value]) => Object.assign({}, ...value),
+  )
 
   let anLieferungenDone = []
   try {
@@ -284,8 +295,9 @@ const buildData = async ({ row }) => {
 
       let previousZaehlungTzs = []
       try {
-        previousZaehlungTzs = previousZaehlung.teilzaehlungs
-          ? await previousZaehlung.teilzaehlungs
+        previousZaehlungTzs =
+          previousZaehlung.teilzaehlungs ?
+            await previousZaehlung.teilzaehlungs
               .extend(Q.where('_deleted', false))
               ?.fetch()
           : []
@@ -347,8 +359,9 @@ const buildData = async ({ row }) => {
       )
       let previousZaehlungTzs = []
       try {
-        previousZaehlungTzs = previousZaehlung.teilzaehlungs
-          ? await previousZaehlung.teilzaehlungs
+        previousZaehlungTzs =
+          previousZaehlung.teilzaehlungs ?
+            await previousZaehlung.teilzaehlungs
               .extend(Q.where('_deleted', false))
               ?.fetch()
           : []
@@ -411,8 +424,9 @@ const buildData = async ({ row }) => {
 
       let previousZaehlungTzs = []
       try {
-        previousZaehlungTzs = previousZaehlung.teilzaehlungs
-          ? await previousZaehlung.teilzaehlungs
+        previousZaehlungTzs =
+          previousZaehlung.teilzaehlungs ?
+            await previousZaehlung.teilzaehlungs
               .extend(Q.where('_deleted', false))
               ?.fetch()
           : []
@@ -497,8 +511,9 @@ const buildData = async ({ row }) => {
 
       let previousZaehlungTzs = []
       try {
-        previousZaehlungTzs = previousZaehlung.teilzaehlungs
-          ? await previousZaehlung.teilzaehlungs
+        previousZaehlungTzs =
+          previousZaehlung.teilzaehlungs ?
+            await previousZaehlung.teilzaehlungs
               .extend(Q.where('_deleted', false))
               ?.fetch()
           : []
@@ -579,5 +594,3 @@ const buildData = async ({ row }) => {
 
   return allData
 }
-
-export default buildData

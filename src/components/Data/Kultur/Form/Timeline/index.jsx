@@ -26,7 +26,7 @@ import CustomAxisTick from './CustomAxisTick.jsx'
 import { constants } from '../../../../../utils/constants.js'
 import { exists } from '../../../../../utils/exists.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import buildData from './buildData.js'
+import { buildKulturTimelineData as buildData } from './buildData.js'
 
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);
@@ -58,7 +58,7 @@ const Content = styled.div`
   justify-content: center;
 `
 
-const KulturTimeline = ({ row }) => {
+export const KulturTimeline = observer(({ row }) => {
   const { width, ref } = useResizeDetector()
   // TODO: calc runs on every render of kultur
   // need to only run when open
@@ -369,6 +369,4 @@ const KulturTimeline = ({ row }) => {
       }
     </div>
   )
-}
-
-export default observer(KulturTimeline)
+})
