@@ -1,4 +1,4 @@
-import eventLabelFromEvent from '../../../../utils/eventLabelFromEvent.js'
+import { eventLabelFromEvent } from '../../../../utils/eventLabelFromEvent.js'
 
 const eventNodes = ({ event, index }) => ({
   nodeType: 'table',
