@@ -1,7 +1,7 @@
 import React from 'react'
 import { DateTime } from 'luxon'
 
-const CustomAxisTick = ({ x, y, payload }) => (
+export const KulturCustomAxisTick = ({ x, y, payload }) => (
   <g transform={`translate(${x},${y})`}>
     <text
       x={0}
@@ -17,4 +17,3 @@ const CustomAxisTick = ({ x, y, payload }) => (
   </g>
 )
 
-export default CustomAxisTick
