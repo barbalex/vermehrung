@@ -1,6 +1,6 @@
 import { Q } from '@nozbe/watermelondb'
 
-const removeOrtsangaben = async ({ db }) => {
+export const removeOrtsangaben = async ({ db }) => {
   // need to remove some data for gaertner in case they had synced them earlier
   // TODO: remove: lokalname, geom_point, lv95_x, lv95_y, wgs84_lat, wgs84_long
   let herkunftsWithOrtsangaben = []
@@ -43,4 +43,3 @@ const removeOrtsangaben = async ({ db }) => {
   }
 }
 
-export default removeOrtsangaben
