@@ -10,7 +10,7 @@ import { QueuedQueries } from '../../components/QueuedQueries/index.jsx'
 import constants from '../../utils/constants.js'
 import AuthorizingObserver from './AuthorizingObserver.jsx'
 import StoragePersister from './StoragePersister.jsx'
-import OpenNodesSetter from './OpenNodesSetter.jsx'
+import { OpenNodesSetter } from './OpenNodesSetter.jsx'
 import { SubscriptionsInitializer } from './SubscriptionsInitializer.jsx'
 import { InitialDataLoadingNotifier } from './InitialDataLoadingNotifier.jsx'
 
