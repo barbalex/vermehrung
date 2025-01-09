@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import signup from '../../../../../utils/signup.js'
+import { signup } from '../../../../../utils/signup.js'
 import { PersonKontoMenu as Menu } from './Menu.jsx'
 
 const StyledButton = styled(Button)`
