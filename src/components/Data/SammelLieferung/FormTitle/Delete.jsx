@@ -22,7 +22,7 @@ const Title = styled.div`
   user-select: none;
 `
 
-const SammelLieferungDeleteButton = ({ row }) => {
+export const SammelLieferungDeleteButton = observer(({ row }) => {
   const store = useContext(MobxStoreContext)
   const { filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
@@ -82,6 +82,4 @@ const SammelLieferungDeleteButton = ({ row }) => {
       </Menu>
     </ErrorBoundary>
   )
-}
-
-export default observer(SammelLieferungDeleteButton)
+})

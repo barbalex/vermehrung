@@ -6,7 +6,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import UpSvg from '../../../../svg/to_up.svg?react'
 import LiDownSvg from '../../../../svg/to_li_down.svg?react'
 
-const SlNavButtons = () => {
+export const SammelLieferungNavButtons = observer(() => {
   const store = useContext(MobxStoreContext)
 
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
@@ -22,7 +22,11 @@ const SlNavButtons = () => {
 
   return (
     <>
-      <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+      <IconButton
+        title="Zur Liste"
+        onClick={onClickUp}
+        size="large"
+      >
         <UpSvg />
       </IconButton>
       <IconButton
@@ -34,6 +38,4 @@ const SlNavButtons = () => {
       </IconButton>
     </>
   )
-}
-
-export default observer(SlNavButtons)
+})
