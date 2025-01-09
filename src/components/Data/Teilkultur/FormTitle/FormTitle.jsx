@@ -38,74 +38,68 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 
-const TeilkulturFormTitle = ({
-  row,
-  totalCount,
-  filteredCount,
-  showHistory,
-  setShowHistory,
-}) => {
-  const store = useContext(MobxStoreContext)
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+export const TeilkulturFormTitle = observer(
+  ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
+    const store = useContext(MobxStoreContext)
+    const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const { width, ref } = useResizeDetector()
+    const { width, ref } = useResizeDetector()
 
-  const onClickUp = useCallback(() => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+    const onClickUp = useCallback(() => {
+      removeOpenNode(activeNodeArray)
+      setActiveNodeArray(activeNodeArray.slice(0, -1))
+    }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
 
-  return (
-    <TitleContainer ref={ref}>
-      <Title>Teilkultur</Title>
-      <TitleSymbols>
-        <IconButton
-          title="Zur Liste"
-          onClick={onClickUp}
-          size="large"
-        >
-          <UpSvg />
-        </IconButton>
-        <AddButton />
-        <DeleteButton row={row} />
-        {width < 520 ?
-          <Menu white={false}>
-            <HistoryButton
-              table="teilkultur"
-              id={row.id}
-              showHistory={showHistory}
-              setShowHistory={setShowHistory}
-              asMenu
-            />
-            <Settings
-              kulturId={row.kultur_id}
-              asMenu
-            />
-            <Anleitung asMenu />
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-              asMenu
-            />
-          </Menu>
-        : <>
-            <HistoryButton
-              table="teilkultur"
-              id={row.id}
-              showHistory={showHistory}
-              setShowHistory={setShowHistory}
-            />
-            <Settings kulturId={row.kultur_id} />
-            <Anleitung />
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-            />
-          </>
-        }
-      </TitleSymbols>
-    </TitleContainer>
-  )
-}
-
-export default observer(TeilkulturFormTitle)
+    return (
+      <TitleContainer ref={ref}>
+        <Title>Teilkultur</Title>
+        <TitleSymbols>
+          <IconButton
+            title="Zur Liste"
+            onClick={onClickUp}
+            size="large"
+          >
+            <UpSvg />
+          </IconButton>
+          <AddButton />
+          <DeleteButton row={row} />
+          {width < 520 ?
+            <Menu white={false}>
+              <HistoryButton
+                table="teilkultur"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+                asMenu
+              />
+              <Settings
+                kulturId={row.kultur_id}
+                asMenu
+              />
+              <Anleitung asMenu />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+                asMenu
+              />
+            </Menu>
+          : <>
+              <HistoryButton
+                table="teilkultur"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+              />
+              <Settings kulturId={row.kultur_id} />
+              <Anleitung />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
+            </>
+          }
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  },
+)
