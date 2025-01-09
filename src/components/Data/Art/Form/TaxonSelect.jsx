@@ -79,95 +79,88 @@ const taxonLabelFromAeArt = (ae_art) => {
   return `${taxonomy}: ${name}`
 }
 
-const SelectLoadingOptions = ({
-  labelSize = 12,
-  art,
-  saveToDb,
-  error: saveToDbError,
-  modelFilter,
-}) => {
-  const store = useContext(MobxStoreContext)
-  const { db } = store
+export const TaxonSelect = observer(
+  ({ labelSize = 12, art, saveToDb, error: saveToDbError, modelFilter }) => {
+    const store = useContext(MobxStoreContext)
+    const { db } = store
 
-  const [stateValue, setStateValue] = useState({
-    value: art.ae_id || '',
-    label: '',
-  })
-  useEffect(() => {
-    const observable = art.ae_id
-      ? db.get('ae_art').findAndObserve(art.ae_id)
-      : $of({})
-    const subscription = observable.subscribe((record) =>
-      setStateValue({
-        value: art.ae_id || '',
-        label: taxonLabelFromAeArt(record),
-      }),
+    const [stateValue, setStateValue] = useState({
+      value: art.ae_id || '',
+      label: '',
+    })
+    useEffect(() => {
+      const observable =
+        art.ae_id ? db.get('ae_art').findAndObserve(art.ae_id) : $of({})
+      const subscription = observable.subscribe((record) =>
+        setStateValue({
+          value: art.ae_id || '',
+          label: taxonLabelFromAeArt(record),
+        }),
+      )
+
+      return () => subscription?.unsubscribe?.()
+    }, [db, art])
+
+    const loadOptions = useCallback(
+      (inputValue, cb) => {
+        const data = modelFilter(inputValue).slice(0, 7)
+        const options = data.map((o) => {
+          return {
+            value: o.id,
+            label: taxonLabelFromAeArt(o),
+          }
+        })
+        cb(options)
+      },
+      [modelFilter],
     )
 
-    return () => subscription?.unsubscribe?.()
-  }, [db, art])
-
-  const loadOptions = useCallback(
-    (inputValue, cb) => {
-      const data = modelFilter(inputValue).slice(0, 7)
-      const options = data.map((o) => {
-        return {
-          value: o.id,
-          label: taxonLabelFromAeArt(o),
+    const onChange = useCallback(
+      (option) => {
+        const value = option && option.value ? option.value : null
+        setStateValue(value ?? '')
+        const fakeEvent = {
+          target: {
+            name: 'ae_id',
+            value,
+          },
         }
-      })
-      cb(options)
-    },
-    [modelFilter],
-  )
+        saveToDb(fakeEvent)
+      },
+      [saveToDb],
+    )
 
-  const onChange = useCallback(
-    (option) => {
-      const value = option && option.value ? option.value : null
-      setStateValue(value ?? '')
-      const fakeEvent = {
-        target: {
-          name: 'ae_id',
-          value,
-        },
-      }
-      saveToDb(fakeEvent)
-    },
-    [saveToDb],
-  )
-
-  return (
-    <Container data-id="ae_id">
-      <Label labelsize={labelSize}>Taxon</Label>
-      <StyledSelect
-        id="ae_id"
-        defaultOptions
-        name="ae_id"
-        onChange={onChange}
-        value={stateValue}
-        hideSelectedOptions
-        placeholder=""
-        isClearable
-        isSearchable
-        // remove as can't select without typing
-        nocaret
-        // don't show a no options message if a value exists
-        noOptionsMessage={() =>
-          stateValue.value ? null : '(Bitte Tippen für Vorschläge)'
-        }
-        // enable deleting typed values
-        backspaceRemovesValue
-        classNamePrefix="react-select"
-        loadOptions={loadOptions}
-        openMenuOnFocus
-        // using portal because sticky headers would otherwise cover the dropdown
-        styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-        menuPortalTarget={document.getElementById('root')}
-        aria-label="Taxon"
-      />
-      {saveToDbError && <Error>{saveToDbError}</Error>}
-    </Container>
-  )
-}
-
-export default observer(SelectLoadingOptions)
+    return (
+      <Container data-id="ae_id">
+        <Label labelsize={labelSize}>Taxon</Label>
+        <StyledSelect
+          id="ae_id"
+          defaultOptions
+          name="ae_id"
+          onChange={onChange}
+          value={stateValue}
+          hideSelectedOptions
+          placeholder=""
+          isClearable
+          isSearchable
+          // remove as can't select without typing
+          nocaret
+          // don't show a no options message if a value exists
+          noOptionsMessage={() =>
+            stateValue.value ? null : '(Bitte Tippen für Vorschläge)'
+          }
+          // enable deleting typed values
+          backspaceRemovesValue
+          classNamePrefix="react-select"
+          loadOptions={loadOptions}
+          openMenuOnFocus
+          // using portal because sticky headers would otherwise cover the dropdown
+          styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+          menuPortalTarget={document.getElementById('root')}
+          aria-label="Taxon"
+        />
+        {saveToDbError && <Error>{saveToDbError}</Error>}
+      </Container>
+    )
+  },
+)
