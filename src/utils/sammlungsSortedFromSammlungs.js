@@ -3,7 +3,7 @@ import { first as first$ } from 'rxjs/operators'
 
 import { personFullname } from './personFullname.js'
 
-const sammlungsSortedFromSammlungs = async (sammlungs) => {
+export const sammlungsSortedFromSammlungs = async (sammlungs) => {
   const sammlungSorters = await Promise.all(
     sammlungs.map(async (sammlung) => {
       const datum = sammlung?.datum ?? ''
@@ -45,5 +45,3 @@ const sammlungsSortedFromSammlungs = async (sammlungs) => {
   )
   return sammlungsSorted
 }
-
-export default sammlungsSortedFromSammlungs
