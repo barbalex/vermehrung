@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import exists from './exists.js'
+import { exists } from './exists.js'
 
 const zaehlungLabelFromZaehlung = ({ zaehlung, teilzaehlungs }) => {
   const datumLabel = zaehlung.datum

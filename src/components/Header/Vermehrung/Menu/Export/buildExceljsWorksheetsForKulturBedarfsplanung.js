@@ -4,7 +4,7 @@ import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
-import exists from '../../../../../utils/exists.js'
+import { exists } from '../../../../../utils/exists.js'
 import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFromKulturs.js'
 import { zaehlungSort } from '../../../../../utils/zaehlungSort.js'
 import { lieferungSort } from '../../../../../utils/lieferungSort.js'

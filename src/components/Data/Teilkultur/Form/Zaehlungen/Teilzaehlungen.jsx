@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
 
-import exists from '../../../../../utils/exists.js'
+import { exists } from '../../../../../utils/exists.js'
 
 const Row = styled.div`
   ${(props) =>

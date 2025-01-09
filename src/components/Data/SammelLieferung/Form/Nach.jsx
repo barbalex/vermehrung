@@ -10,7 +10,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { Select } from '../../../shared/Select/index.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../shared/JesNo.jsx'
-import exists from '../../../../utils/exists.js'
+import { exists } from '../../../../utils/exists.js'
 import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.js'
 
 const Title = styled.div`

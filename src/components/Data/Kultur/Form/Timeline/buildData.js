@@ -5,7 +5,7 @@ import { Q } from '@nozbe/watermelondb'
 import { of as $of } from 'rxjs'
 import format from 'date-fns/format'
 
-import exists from '../../../../../utils/exists.js'
+import { exists } from '../../../../../utils/exists.js'
 
 const buildData = async ({ row }) => {
   let zaehlungenDone = []
