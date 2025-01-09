@@ -1,4 +1,4 @@
-import lieferungLabelFromLieferung from '../../../../../utils/lieferungLabelFromLieferung.js'
+import { lieferungLabelFromLieferung } from '../../../../../utils/lieferungLabelFromLieferung.js'
 
 const personLieferungNodes = ({ lieferung, index, personId, personIndex }) => ({
   nodeType: 'table',
