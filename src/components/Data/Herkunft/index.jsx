@@ -7,7 +7,7 @@ import { of as $of } from 'rxjs'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
-import Conflict from './Conflict.jsx'
+import { HerkunftConflict as Conflict } from './Conflict.jsx'
 import FormTitle from './FormTitle/index.jsx'
 import Form from './Form/index.jsx'
 import History from './History/index.jsx'
@@ -40,11 +40,10 @@ const Herkunft = ({
   // Uncaught Diagnostic error: Record herkunft#baa5e4f0-3877-11eb-be32-f734f6afd51d not found
   // => need to wait for sync to be finished
   useEffect(() => {
-    const observable = showFilter
-      ? $of(filter.herkunft)
-      : initialDataQueried
-        ? db.get('herkunft').findAndObserve(id)
-        : $of({})
+    const observable =
+      showFilter ? $of(filter.herkunft)
+      : initialDataQueried ? db.get('herkunft').findAndObserve(id)
+      : $of({})
     const subscription = observable.subscribe((newRow) => {
       setRow(newRow)
       setRawRow(JSON.stringify(newRow?._raw ?? newRow))
@@ -101,7 +100,7 @@ const Herkunft = ({
               showHistory={showHistory}
             />
             <Allotment.Pane visible={paneIsSplit}>
-              {activeConflict ? (
+              {activeConflict ?
                 <Conflict
                   rev={activeConflict}
                   id={id}
@@ -111,13 +110,13 @@ const Herkunft = ({
                   conflictSelectionCallback={conflictSelectionCallback}
                   setActiveConflict={setActiveConflict}
                 />
-              ) : showHistory ? (
+              : showHistory ?
                 <History
                   row={row}
                   rawRow={rawRow}
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
-              ) : null}
+              : null}
             </Allotment.Pane>
           </Allotment>
         </SplitPaneContainer>
