@@ -18,7 +18,7 @@ import teilkulturSort from '../../../../../../utils/teilkulturSort.js'
 import zaehlungSort from '../../../../../../utils/zaehlungSort.js'
 import { personFullname } from '../../../../../../utils/personFullname.js'
 
-const createMessageFunctions = async ({ artId, db, store }) => {
+export const createMessageFunctions = async ({ artId, db, store }) => {
   const { filter } = store
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}-01-01`
@@ -27,15 +27,13 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   let arts = []
   try {
     const delQuery =
-      filter.art?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.art?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.art?._deleted === false ? Q.where('_deleted', false)
+      : filter.art?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     arts = await db.get('art').query(delQuery).fetch()
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
@@ -48,15 +46,13 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   let herkunfts = []
   try {
     const delQuery =
-      filter.herkunft?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.herkunft?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.herkunft?._deleted === false ? Q.where('_deleted', false)
+      : filter.herkunft?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     herkunfts = await db.get('herkunft').query(delQuery).fetch()
   } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
@@ -64,25 +60,21 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   let kulturs = []
   try {
     const delQuery =
-      filter.kultur?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.kultur?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.kultur?._deleted === false ? Q.where('_deleted', false)
+      : filter.kultur?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const aktivQuery =
-      filter.kultur?.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.kultur?.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      filter.kultur?.aktiv === false ? Q.where('aktiv', false)
+      : filter.kultur?.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     kulturs = await db
       .get('kultur')
       .query(Q.where('art_id', Q.eq(artId)), delQuery, aktivQuery)
@@ -93,15 +85,13 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   let lieferungs = []
   try {
     const delQuery =
-      filter.lieferung?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.lieferung?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.lieferung?._deleted === false ? Q.where('_deleted', false)
+      : filter.lieferung?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     lieferungs = await db.get('lieferung').query(delQuery).fetch()
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
@@ -109,25 +99,21 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   let persons = []
   try {
     const delQuery =
-      filter.person?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.person?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.person?._deleted === false ? Q.where('_deleted', false)
+      : filter.person?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const aktivQuery =
-      filter.person?.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.person?.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      filter.person?.aktiv === false ? Q.where('aktiv', false)
+      : filter.person?.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     persons = await db.get('person').query(delQuery, aktivQuery).fetch()
   } catch {}
   const personsSorted = persons.sort(personSort)
@@ -135,15 +121,13 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   let sammlungsOfArt = []
   try {
     const delQuery =
-      filter.sammlung?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.sammlung?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.sammlung?._deleted === false ? Q.where('_deleted', false)
+      : filter.sammlung?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     sammlungsOfArt = await db
       .get('sammlung')
       .query(delQuery, Q.on('art', 'id', artId))
@@ -155,15 +139,13 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   let zaehlungsOfArt = []
   try {
     const delQuery =
-      filter.zaehlung?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.zaehlung?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.zaehlung?._deleted === false ? Q.where('_deleted', false)
+      : filter.zaehlung?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     zaehlungsOfArt = await db
       .get('zaehlung')
       .query(
@@ -191,15 +173,13 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   let teilkultursOfArt = []
   try {
     const delQuery =
-      filter.teilkultur?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.teilkultur?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.teilkultur?._deleted === false ? Q.where('_deleted', false)
+      : filter.teilkultur?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     teilkultursOfArt = await db
       .get('teilkultur')
       .query(
@@ -214,15 +194,13 @@ const createMessageFunctions = async ({ artId, db, store }) => {
   let eventsOfArt = []
   try {
     const delQuery =
-      filter.event?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.event?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.event?._deleted === false ? Q.where('_deleted', false)
+      : filter.event?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     eventsOfArt = await db
       .get('event')
       .query(
@@ -589,15 +567,13 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       ),
     zaehlungsInFutureNotPrognose: async () => {
       const delQuery =
-        filter.zaehlung?._deleted === false
-          ? Q.where('_deleted', false)
-          : filter.zaehlung?._deleted === true
-            ? Q.where('_deleted', true)
-            : Q.or(
-                Q.where('_deleted', false),
-                Q.where('_deleted', true),
-                Q.where('_deleted', null),
-              )
+        filter.zaehlung?._deleted === false ? Q.where('_deleted', false)
+        : filter.zaehlung?._deleted === true ? Q.where('_deleted', true)
+        : Q.or(
+            Q.where('_deleted', false),
+            Q.where('_deleted', true),
+            Q.where('_deleted', null),
+          )
       const zaehlungs = await db
         .get('zaehlung')
         .query(
@@ -632,15 +608,13 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       let zaehlungs = []
       try {
         const delQuery =
-          filter.zaehlung?._deleted === false
-            ? Q.where('_deleted', false)
-            : filter.zaehlung?._deleted === true
-              ? Q.where('_deleted', true)
-              : Q.or(
-                  Q.where('_deleted', false),
-                  Q.where('_deleted', true),
-                  Q.where('_deleted', null),
-                )
+          filter.zaehlung?._deleted === false ? Q.where('_deleted', false)
+          : filter.zaehlung?._deleted === true ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
         zaehlungs = await db
           .get('zaehlung')
           .query(
@@ -690,8 +664,9 @@ const createMessageFunctions = async ({ artId, db, store }) => {
             try {
               kulturLabel = await kultur.label.pipe(first$()).toPromise()
             } catch {}
-            const zaehlung = z.datum
-              ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+            const zaehlung =
+              z.datum ?
+                `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungsOfArt
               .filter((tz) => tz.zaehlung_id === z.id)
@@ -726,8 +701,9 @@ const createMessageFunctions = async ({ artId, db, store }) => {
             try {
               kulturLabel = await kultur?.label.pipe(first$()).toPromise()
             } catch {}
-            const zaehlung = z.datum
-              ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+            const zaehlung =
+              z.datum ?
+                `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungsOfArt
               .filter((tz) => tz.zaehlung_id === z.id)
@@ -762,8 +738,9 @@ const createMessageFunctions = async ({ artId, db, store }) => {
             try {
               kulturLabel = await kultur?.label.pipe(first$()).toPromise()
             } catch {}
-            const zaehlung = z.datum
-              ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+            const zaehlung =
+              z.datum ?
+                `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungsOfArt
               .filter((tz) => tz.zaehlung_id === z.id)
@@ -784,15 +761,13 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         let zaehlungsOfArt = []
         try {
           const delQuery =
-            filter.zaehlung?._deleted === false
-              ? Q.where('_deleted', false)
-              : filter.zaehlung?._deleted === true
-                ? Q.where('_deleted', true)
-                : Q.or(
-                    Q.where('_deleted', false),
-                    Q.where('_deleted', true),
-                    Q.where('_deleted', null),
-                  )
+            filter.zaehlung?._deleted === false ? Q.where('_deleted', false)
+            : filter.zaehlung?._deleted === true ? Q.where('_deleted', true)
+            : Q.or(
+                Q.where('_deleted', false),
+                Q.where('_deleted', true),
+                Q.where('_deleted', null),
+              )
           zaehlungsOfArt = await db
             .get('zaehlung')
             .query(
@@ -822,8 +797,9 @@ const createMessageFunctions = async ({ artId, db, store }) => {
               try {
                 kulturLabel = await kultur?.label.pipe(first$()).toPromise()
               } catch {}
-              const zaehlung = z.datum
-                ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+              const zaehlung =
+                z.datum ?
+                  `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
                 : `Zählung-ID: ${z.id}`
               const anzTz = teilzaehlungsOfArt
                 .filter((tz) => tz.zaehlung_id === z.id)
@@ -853,9 +829,8 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         .filter((l) => !!l.von_sammlung_id)
         .filter((l) => !!l.von_kultur_id)
         .map((l) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -870,9 +845,8 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         .filter((l) => l.nach_ausgepflanzt)
         .filter((l) => !!l.nach_kultur_id)
         .map((l) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -886,9 +860,8 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         .filter((l) => l.art_id === artId)
         .filter((l) => !exists(l.anzahl_pflanzen))
         .map((l) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -902,9 +875,8 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         .filter((l) => l.art_id === artId)
         .filter((l) => !exists(l.anzahl_auspflanzbereit))
         .map((l) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -918,9 +890,8 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         .filter((l) => l.art_id === artId)
         .filter((l) => !exists(l.von_anzahl_individuen))
         .map((l) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -935,9 +906,8 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         .filter((l) => !l.von_kultur_id)
         .filter((l) => !l.von_sammlung_id)
         .map((l) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -953,9 +923,8 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         .filter((l) => !l.nach_kultur_id)
         .filter((l) => !l.nach_ausgepflanzt)
         .map((l) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -969,9 +938,8 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         .filter((l) => l.art_id === artId)
         .filter((l) => !l.datum)
         .map((l) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -985,9 +953,8 @@ const createMessageFunctions = async ({ artId, db, store }) => {
         .filter((l) => l.art_id === artId)
         .filter((l) => !l.person_id)
         .map((l) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -1040,5 +1007,3 @@ const createMessageFunctions = async ({ artId, db, store }) => {
       ),
   }
 }
-
-export default createMessageFunctions
