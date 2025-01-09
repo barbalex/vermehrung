@@ -7,11 +7,11 @@ import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../mobxStoreContext.js'
-import isOnline from '../utils/isOnline.js'
+import { isOnline } from '../utils/isOnline.js'
 
 const pollInterval = 5000
 
-const ApiDetector = () => {
+export const ApiDetector = observer(() => {
   const store = useContext(MobxStoreContext)
   const { online, setOnline, shortTermOnline, setShortTermOnline } = store
 
@@ -37,6 +37,4 @@ const ApiDetector = () => {
   }, [online, setOnline, setShortTermOnline, shortTermOnline])
 
   return null
-}
-
-export default observer(ApiDetector)
+})

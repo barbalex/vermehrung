@@ -7,7 +7,7 @@ const config = {
   timeout: 5000, // timeout error happens after 5 seconds
 }
 
-const isOnline = async () => {
+export const isOnline = async () => {
   // if we are on localhost, we are always online
   if (window?.location?.hostname === 'localhost') return true
 
@@ -22,5 +22,3 @@ const isOnline = async () => {
   if (res.status === 200) return true
   return false
 }
-
-export default isOnline
