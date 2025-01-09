@@ -6,7 +6,7 @@ import { useLocation } from 'react-router'
 
 import Article from './Article.jsx'
 import constants from '../../../utils/constants.js'
-import storeContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import IntoViewScroller from './IntoViewScroller.jsx'
 
 const Container = styled.div`
@@ -15,7 +15,7 @@ const Container = styled.div`
 `
 
 const ArticleList = ({ articles }) => {
-  const store = useContext(storeContext)
+  const store = useContext(MobxStoreContext)
   const { docFilter } = store
 
   const articlesFiltered = articles.filter(
@@ -26,7 +26,10 @@ const ArticleList = ({ articles }) => {
 
   return (
     <Container>
-      <List component="nav" dense>
+      <List
+        component="nav"
+        dense
+      >
         {articlesFiltered.map((node) => {
           const isOpen = pathname.includes(node.slug)
 
@@ -35,7 +38,10 @@ const ArticleList = ({ articles }) => {
               <Article node={node} />
               {isOpen &&
                 (node.children ?? []).map((child) => (
-                  <Article node={child} key={child.slug} />
+                  <Article
+                    node={child}
+                    key={child.slug}
+                  />
                 ))}
             </div>
           )

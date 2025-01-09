@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import ErrorBoundary from '../../../../../../shared/ErrorBoundary.jsx'
-import storeContext from '../../../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
 import TypeDialog from './TypeDialog.jsx'
 import ChooseDialog from './ChooseDialog.jsx'
 
@@ -16,7 +16,7 @@ const StyledButton = styled(IconButton)`
 `
 
 const Add = ({ disabled, lieferung, herkunft }) => {
-  const store = useContext(storeContext)
+  const store = useContext(MobxStoreContext)
   const { insertKulturRev } = store
 
   const [kulturType, setKulturType] = useState()
