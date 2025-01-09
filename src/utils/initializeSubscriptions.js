@@ -1,7 +1,7 @@
-import processSubscriptionResult from './processSubscriptionResult.js'
-import removeOrtsangaben from './removeOrtsangaben.js'
+import { processSubscriptionResult } from './processSubscriptionResult.js'
+import { removeOrtsangaben } from './removeOrtsangaben.js'
 
-const initializeSubscriptions = ({ store, userRole }) => {
+export const initializeSubscriptions = ({ store, userRole }) => {
   const isNoGaertner = userRole !== 'gaertner'
   if (userRole === 'gaertner') {
     // need to remove some data for gaertner in case they had synced them earlier
@@ -1066,5 +1066,3 @@ const initializeSubscriptions = ({ store, userRole }) => {
   )
   return unsubscribe
 }
-
-export default initializeSubscriptions

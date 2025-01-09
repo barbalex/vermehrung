@@ -10,7 +10,7 @@ const stripTypename = (object) => {
 }
 
 // TODO: do this in worker?
-const processSubscriptionResult = async ({
+export const processSubscriptionResult = async ({
   data: dataToCheck,
   table,
   store,
@@ -96,4 +96,3 @@ const processSubscriptionResult = async ({
   setLastUpdated({ table })
 }
 
-export default processSubscriptionResult
