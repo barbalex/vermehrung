@@ -22,7 +22,7 @@ import { motion, useAnimation } from 'framer-motion'
 import CustomTooltip from './Tooltip.jsx'
 import LabelLieferung from './LabelLieferung.jsx'
 import LabelZaehlung from './LabelZaehlung.jsx'
-import CustomAxisTick from './CustomAxisTick.jsx'
+import { KulturCustomAxisTick as AxisTick } from './CustomAxisTick.jsx'
 import { constants } from '../../../../../utils/constants.js'
 import { exists } from '../../../../../utils/exists.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
@@ -174,7 +174,7 @@ export const KulturTimeline = observer(({ row }) => {
                   />
                   <XAxis
                     dataKey="datum"
-                    tick={CustomAxisTick}
+                    tick={AxisTick}
                     interval={0}
                   />
                   <YAxis
