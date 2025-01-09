@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const HerkunftAddButton = () => {
+export const HerkunftAddButton = observer(() => {
   const store = useContext(MobxStoreContext)
   const { insertHerkunftRev } = store
 
@@ -20,11 +20,10 @@ const HerkunftAddButton = () => {
         aria-label="neue Herkunft"
         title="neue Herkunft"
         onClick={add}
-        size="large">
+        size="large"
+      >
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
-  );
-}
-
-export default observer(HerkunftAddButton)
+  )
+})
