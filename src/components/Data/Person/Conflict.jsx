@@ -10,7 +10,7 @@ import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
 import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
-import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
+import { createDataArrayForPersonRevComparison as createDataArray } from './createDataArrayForRevComparison.js'
 
 const personRevQuery = gql`
   query personRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -70,7 +70,7 @@ const PersonConflict = ({
   const revRow = useMemo(() => data?.person_rev?.[0] ?? {}, [data?.person_rev])
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow }),
+    () => createDataArray({ row, revRow }),
     [revRow, row],
   )
 
@@ -106,8 +106,9 @@ const PersonConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = revRow._revisions
-      ? toPgArray([rev, ...revRow._revisions])
+    newObject._revisions =
+      revRow._revisions ?
+        toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
     addQueuedQuery({
@@ -191,9 +192,8 @@ const PersonConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row._revisions
-      ? toPgArray([rev, ...row._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
     const response = await gqlClient
       .query(mutations.mutateInsert_person_rev_one, {
         object: newObject,
@@ -243,9 +243,10 @@ const PersonConflict = ({
     store,
     user.email,
   ])
-  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
-    setActiveConflict,
-  ])
+  const onClickSchliessen = useCallback(
+    () => setActiveConflict(null),
+    [setActiveConflict],
+  )
 
   return (
     <Conflict
