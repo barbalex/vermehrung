@@ -9,7 +9,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { GartenConflict as Conflict } from './Conflict.jsx'
 import { GartenForm as Form } from './Form/index.jsx'
-import FormTitle from './FormTitle/index.jsx'
+import { GartenFormTitle as FormTitle } from './FormTitle/index.jsx'
 import History from './History/index.jsx'
 
 const Container = styled.div`
