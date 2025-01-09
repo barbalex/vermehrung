@@ -1,4 +1,4 @@
-const zaehlungSort = (a, b) => {
+export const zaehlungSort = (a, b) => {
   const datumA = a?.datum ? new Date(a.datum) : ''
   const datumB = b?.datum ? new Date(b.datum) : ''
   if (datumA < datumB) return -1
@@ -11,5 +11,3 @@ const zaehlungSort = (a, b) => {
 
   return 0
 }
-
-export default zaehlungSort
