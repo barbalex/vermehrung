@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import buildExceljsWorksheets from './buildExceljsWorksheets.js'
+import { buildExceljsWorksheetsForKultur } from './buildExceljsWorksheets.js'
 import { downloadExceljsWorkbook } from '../../../../utils/downloadExceljsWorkbook.js'
 
 const Download = ({ row, asMenu }) => {
@@ -14,7 +14,11 @@ const Download = ({ row, asMenu }) => {
   const onClickDownload = useCallback(async () => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')
     const workbook = new Workbook()
-    await buildExceljsWorksheets({ store, kultur_id: row.id, workbook })
+    await buildExceljsWorksheetsForKultur({
+      store,
+      kultur_id: row.id,
+      workbook,
+    })
     downloadExceljsWorkbook({ store, fileName: `Kultur_${row.id}`, workbook })
   }, [row.id, store])
 

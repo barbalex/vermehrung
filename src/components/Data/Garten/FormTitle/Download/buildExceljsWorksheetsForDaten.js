@@ -2,7 +2,7 @@ import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 
 import { addWorksheetToExceljsWorkbook } from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
-import buildExceljsWorksheetsForKultur from '../../../Kultur/FormTitle/buildExceljsWorksheets.js'
+import { buildExceljsWorksheetsForKultur } from '../../../Kultur/FormTitle/buildExceljsWorksheets.js'
 import { removeMetadataFromDataset } from '../../../../../utils/removeMetadataFromDataset.js'
 import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFromKulturs.js'
 
