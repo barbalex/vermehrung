@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.js'
 
-const KulturAnleitung = ({ asMenu }) => {
+export const HerkunftAnleitung = observer(({ asMenu }) => {
   const openHerkunftDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/Dokumentation/herkuenfte`
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -29,6 +29,4 @@ const KulturAnleitung = ({ asMenu }) => {
       <IoMdInformationCircleOutline />
     </IconButton>
   )
-}
-
-export default observer(KulturAnleitung)
+})
