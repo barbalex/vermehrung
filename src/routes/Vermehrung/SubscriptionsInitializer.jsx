@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 import StoreContext from '../../storeContext.js'
 import initializeSubscriptions from '../../utils/initializeSubscriptions.js'
 
-const SubscriptionsInitializer = () => {
+export const SubscriptionsInitializer = observer(() => {
   const store = useContext(StoreContext)
   const { authorizing, user, gqlClient } = store
   const { wsReconnectCount } = store.tree
@@ -63,6 +63,4 @@ const SubscriptionsInitializer = () => {
   }, [store, wsReconnectCount, authorizing, gqlClient, user?.uid])
 
   return null
-}
-
-export default observer(SubscriptionsInitializer)
+})
