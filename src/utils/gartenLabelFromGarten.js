@@ -1,4 +1,4 @@
-import personFullname from './personFullname.js'
+import { personFullname } from './personFullname.js'
 
 // TODO: remove store
 const gartenLabelFromGarten = ({ garten, person, kein }) => {

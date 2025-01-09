@@ -1,4 +1,4 @@
-const personFullname = (p) => {
+export const personFullname = (p) => {
   if (!p) return undefined
   if (p.vorname && p.name) {
     return `${p.vorname} ${p.name}`
@@ -7,5 +7,3 @@ const personFullname = (p) => {
   if (p.vorname) return p.vorname
   return undefined
 }
-
-export default personFullname
