@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import Lieferung from './Lieferung.jsx'
+import { LieferungForLieferschein as Lieferung } from './Lieferung.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { lieferungSort } from '../../../../utils/lieferungSort.js'
 import { personFullname } from '../../../../utils/personFullname.js'

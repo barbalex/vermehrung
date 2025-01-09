@@ -23,7 +23,7 @@ const SplitPaneContainer = styled.div`
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 
-const Lieferung = ({ id, showFilter, row, rawRow }) => {
+export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
   const store = useContext(MobxStoreContext)
   const { filter, online } = store
 
@@ -72,7 +72,7 @@ const Lieferung = ({ id, showFilter, row, rawRow }) => {
               showHistory={showHistory}
             />
             <Allotment.Pane visible={paneIsSplit}>
-              {activeConflict ? (
+              {activeConflict ?
                 <Conflict
                   rev={activeConflict}
                   id={id}
@@ -82,19 +82,19 @@ const Lieferung = ({ id, showFilter, row, rawRow }) => {
                   conflictSelectionCallback={conflictSelectionCallback}
                   setActiveConflict={setActiveConflict}
                 />
-              ) : showHistory ? (
+              : showHistory ?
                 <History
                   row={row}
                   rawRow={rawRow}
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
-              ) : null}
+              : null}
             </Allotment.Pane>
           </Allotment>
         </SplitPaneContainer>
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Lieferung)
+export default Lieferung
