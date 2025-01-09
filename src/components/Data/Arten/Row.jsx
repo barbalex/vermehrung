@@ -29,7 +29,7 @@ const Row = styled.div`
   }
 `
 
-const ArtenRow = ({ row, style, last }) => {
+export const ArtRow = observer(({ row, style, last }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -55,10 +55,13 @@ const ArtenRow = ({ row, style, last }) => {
   )
 
   return (
-    <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
+    <Row
+      key={row.id}
+      onClick={onClickRow}
+      style={style}
+      data-last={last}
+    >
       <div>{label}</div>
     </Row>
   )
-}
-
-export default observer(ArtenRow)
+})
