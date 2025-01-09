@@ -8,7 +8,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { buildExceljsWorksheetsForKultur } from './buildExceljsWorksheets.js'
 import { downloadExceljsWorkbook } from '../../../../utils/downloadExceljsWorkbook.js'
 
-const Download = ({ row, asMenu }) => {
+export const KulturDownload = observer(({ row, asMenu }) => {
   const store = useContext(MobxStoreContext)
 
   const onClickDownload = useCallback(async () => {
@@ -36,6 +36,4 @@ const Download = ({ row, asMenu }) => {
       <FaDownload />
     </IconButton>
   )
-}
-
-export default observer(Download)
+})
