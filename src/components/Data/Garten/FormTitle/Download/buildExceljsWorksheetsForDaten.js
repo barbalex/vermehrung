@@ -7,10 +7,10 @@ import removeMetadataFromDataset from '../../../../../utils/removeMetadataFromDa
 import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFromKulturs.js'
 
 /**
- * this function cann be used from higher up
- * that is why it receives a workbook and _can_ recieve calledFromHigherUp
+ * this function can be used from higher up
+ * that is why it receives a workbook and _can_ receive calledFromHigherUp
  */
-const buildExceljsWorksheetsForDaten = async ({
+export const buildExceljsWorksheetsForDaten = async ({
   store,
   garten_id,
   workbook,
@@ -143,4 +143,3 @@ const buildExceljsWorksheetsForDaten = async ({
   return
 }
 
-export default buildExceljsWorksheetsForDaten
