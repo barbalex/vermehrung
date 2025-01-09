@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import personLabelFromPerson from './personLabelFromPerson.js'
+import { personLabelFromPerson } from './personLabelFromPerson.js'
 
 const sammlungLabelFromSammlung = ({ sammlung, art, ae_art, person }) => {
   const artLabel = art ? ae_art?.name ?? '(Art ohne Name)' : '(keine Art)'
