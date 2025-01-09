@@ -22,14 +22,11 @@ const Title = styled.div`
   user-select: none;
 `
 
-const PersonDeleteButton = ({ row }) => {
+export const PersonDeleteButton = observer(({ row }) => {
   const store = useContext(MobxStoreContext)
   const { filter } = store
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    removeOpenNodeWithChildren,
-  } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
+    store.tree
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
@@ -65,7 +62,8 @@ const PersonDeleteButton = ({ row }) => {
         aria-label="Person löschen"
         title="Person löschen"
         onClick={onClickDelete}
-        size="large">
+        size="large"
+      >
         <FaMinus />
       </IconButton>
       <Menu
@@ -82,7 +80,5 @@ const PersonDeleteButton = ({ row }) => {
         <MenuItem onClick={closeMenu}>Nein, abbrechen!</MenuItem>
       </Menu>
     </ErrorBoundary>
-  );
-}
-
-export default observer(PersonDeleteButton)
+  )
+})
