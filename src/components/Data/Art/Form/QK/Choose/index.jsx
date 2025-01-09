@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import RowComponent from './Row.jsx'
+import { Row } from './Row.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
@@ -16,17 +16,18 @@ const Info = styled.div`
   text-align: center;
 `
 
-const ChooseQk = ({ qks }) => (
+export const Choose = observer(({ qks }) => (
   <ErrorBoundary>
     <Container>
       <Info>Diese Wahl gilt für alle Arten</Info>
       <FieldsContainer>
         {qks.map((row) => (
-          <RowComponent key={row.id} qk={row} />
+          <Row
+            key={row.id}
+            qk={row}
+          />
         ))}
       </FieldsContainer>
     </Container>
   </ErrorBoundary>
-)
-
-export default observer(ChooseQk)
+))

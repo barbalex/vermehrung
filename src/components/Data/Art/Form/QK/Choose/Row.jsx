@@ -7,7 +7,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 
-const Row = styled.div`
+const RowDiv = styled.div`
   display: flex;
   padding: 5px;
   border-bottom: 1px solid #e8e8e8;
@@ -27,7 +27,7 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-const ChooseArtQkRow = ({ qk }) => {
+export const Row = observer(({ qk }) => {
   const store = useContext(MobxStoreContext)
   const { user, db } = store
 
@@ -38,8 +38,9 @@ const ChooseArtQkRow = ({ qk }) => {
   const { userPersonOption, artQkChoosen } = dataState
 
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['art_qk_choosen'])
@@ -59,8 +60,9 @@ const ChooseArtQkRow = ({ qk }) => {
 
   const onChange = useCallback(
     (event) => {
-      const newValue = event.target.checked
-        ? [...artQkChoosen, qk.id]
+      const newValue =
+        event.target.checked ?
+          [...artQkChoosen, qk.id]
         : artQkChoosen.filter((id) => id !== qk.id)
 
       userPersonOption.edit({
@@ -73,14 +75,16 @@ const ChooseArtQkRow = ({ qk }) => {
   )
 
   return (
-    <Row>
+    <RowDiv>
       <Check>
-        <Checkbox checked={checked} onChange={onChange} color="primary" />
+        <Checkbox
+          checked={checked}
+          onChange={onChange}
+          color="primary"
+        />
       </Check>
       <Titel>{qk?.titel}</Titel>
       {!!qk?.beschreibung && <Beschreibung>{qk?.beschreibung}</Beschreibung>}
-    </Row>
+    </RowDiv>
   )
-}
-
-export default observer(ChooseArtQkRow)
+})
