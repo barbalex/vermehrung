@@ -31,7 +31,7 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsLieferungMenu = ({ anchorEl, setAnchorEl }) => {
+export const LieferungSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
   const store = useContext(MobxStoreContext)
   const { user, db } = store
 
@@ -39,8 +39,9 @@ const SettingsLieferungMenu = ({ anchorEl, setAnchorEl }) => {
     userPersonOption: {},
   })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['li_show_sl_felder', 'li_show_sl'])
@@ -132,6 +133,4 @@ const SettingsLieferungMenu = ({ anchorEl, setAnchorEl }) => {
       <Info>Die Wahl gilt für alle Lieferungen.</Info>
     </Menu>
   )
-}
-
-export default observer(SettingsLieferungMenu)
+})
