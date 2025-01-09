@@ -7,7 +7,7 @@ import notDeletedQuery from '../../../../../../utils/notDeletedQuery.js'
 import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromKulturs.js'
 import eventSort from '../../../../../../utils/eventSort.js'
 import lieferungSort from '../../../../../../utils/lieferungSort.js'
-import teilkulturSort from '../../../../../../utils/teilkulturSort.js'
+import { teilkulturSort } from '../../../../../../utils/teilkulturSort.js'
 import { zaehlungSort } from '../../../../../../utils/zaehlungSort.js'
 
 const createMessageFunctions = async ({ kulturId, db, store }) => {

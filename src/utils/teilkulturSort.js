@@ -1,4 +1,4 @@
-const teilkulturSort = (a, b) => {
+export const teilkulturSort = (a, b) => {
   const nameA = a?.name?.toString()?.toLowerCase() ?? ''
   const nameB = b?.name?.toString()?.toLowerCase() ?? ''
   if (nameA < nameB) return -1
@@ -21,5 +21,3 @@ const teilkulturSort = (a, b) => {
 
   return 0
 }
-
-export default teilkulturSort
