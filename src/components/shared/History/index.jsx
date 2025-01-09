@@ -7,7 +7,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.svg?react'
-import Data from '../Conflict/Data.jsx'
+import { Data } from '../Conflict/Data.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { constants } from '../../../utils/constants.js'
 
@@ -90,9 +90,9 @@ const History = ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
           onClick={onClickToggleDiff}
           variant="outlined"
           title={
-            diffConflict
-              ? 'Versionen nicht vergleichen'
-              : 'Versionen vergleichen'
+            diffConflict ?
+              'Versionen nicht vergleichen'
+            : 'Versionen vergleichen'
           }
           startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
           color="inherit"
