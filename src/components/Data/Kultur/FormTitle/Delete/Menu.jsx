@@ -19,14 +19,11 @@ const Title = styled.div`
   user-select: none;
 `
 
-const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
+export const KulturDeleteMenu = observer(({ row, anchorEl, setAnchorEl }) => {
   const store = useContext(MobxStoreContext)
   const { filter } = store
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    removeOpenNodeWithChildren,
-  } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
+    store.tree
 
   const closeMenu = useCallback(() => {
     setAnchorEl(null)
@@ -65,6 +62,4 @@ const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
       <MenuItem onClick={closeMenu}>Nein, abbrechen!</MenuItem>
     </Menu>
   )
-}
-
-export default observer(KulturDeleteMenu)
+})
