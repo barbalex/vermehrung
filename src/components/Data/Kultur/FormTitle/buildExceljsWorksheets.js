@@ -7,7 +7,7 @@ import removeMetadataFromDataset from '../../../../utils/removeMetadataFromDatas
 import exists from '../../../../utils/exists.js'
 import teilzaehlungsSortByTk from '../../../../utils/teilzaehlungsSortByTk.js'
 import { zaehlungSort } from '../../../../utils/zaehlungSort.js'
-import lieferungSort from '../../../../utils/lieferungSort.js'
+import { lieferungSort } from '../../../../utils/lieferungSort.js'
 import eventSort from '../../../../utils/eventSort.js'
 import { personFullname } from '../../../../utils/personFullname.js'
 
