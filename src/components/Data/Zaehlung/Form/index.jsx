@@ -18,7 +18,7 @@ import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber.js'
 import Teilzaehlungen from './Teilzaehlungen/index.jsx'
 import { constants } from '../../../../utils/constants.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import ConflictList from '../../../shared/ConflictList/index.jsx'
+import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.js'
 
 const FieldsContainer = styled.div`
