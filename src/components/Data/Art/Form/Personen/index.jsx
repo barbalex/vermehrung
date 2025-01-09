@@ -53,7 +53,7 @@ const StyledMotionDiv = styled(motion.div)`
   box-sizing: border-box;
 `
 
-const ArtPersonen = ({ art }) => {
+export const Personen = observer(({ art }) => {
   const store = useContext(MobxStoreContext)
   const { db, insertAvRev, errors, unsetError, filter } = store
 
@@ -188,6 +188,4 @@ const ArtPersonen = ({ art }) => {
       </StyledMotionDiv>
     </ErrorBoundary>
   )
-}
-
-export default observer(ArtPersonen)
+})
