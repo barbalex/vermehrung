@@ -5,7 +5,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
-import FormTitle from './FormTitle.jsx'
+import { FormTitle } from './FormTitle.jsx'
 import { tableFilter } from '../../../../utils/tableFilter.js'
 
 const ArtFormTitleChooser = ({
@@ -25,15 +25,13 @@ const ArtFormTitleChooser = ({
   useEffect(() => {
     const collection = db.get('art')
     const delQuery =
-      filter.art._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.art._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.art._deleted === false ? Q.where('_deleted', false)
+      : filter.art._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection.query(delQuery).observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ store, table: 'art' }))
