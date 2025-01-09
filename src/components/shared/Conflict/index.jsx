@@ -10,7 +10,7 @@ import {
 } from 'react-icons/fa'
 
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.svg?react'
-import Explainer from './Explainer.jsx'
+import { Explainer } from './Explainer.jsx'
 import { Data } from './Data.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
