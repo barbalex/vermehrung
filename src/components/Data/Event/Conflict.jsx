@@ -10,7 +10,7 @@ import Conflict from '../../shared/Conflict/index.jsx'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
 import checkForOnlineError from '../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../utils/toPgArray.js'
-import mutations from '../../../utils/mutations.js'
+import { mutations } from '../../../utils/mutations.js'
 
 const eventRevQuery = gql` 
   query eventRevForConflictQuery($id: uuid!, $rev: String!) {

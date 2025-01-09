@@ -8,7 +8,7 @@ import History from '../../../shared/History/index.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../../utils/toPgArray.js'
-import mutations from '../../../../utils/mutations.js'
+import { mutations } from '../../../../utils/mutations.js'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison.js'
 
 const TeilkulturHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
