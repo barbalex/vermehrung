@@ -57,44 +57,44 @@ const sliderSettings = {
   infinite: false,
 }
 
-const ArtHistory = ({ row, rawRow, historyTakeoverCallback }) => {
-  const store = useContext(MobxStoreContext)
+export const ArtHistory = observer(
+  ({ row, rawRow, historyTakeoverCallback }) => {
+    const store = useContext(MobxStoreContext)
 
-  const priorRevisions = row?._revisions?.slice(1) ?? []
-  const [{ error, data, fetching }] = useQuery({
-    query: artRevQuery,
-    variables: {
-      rev: priorRevisions,
-    },
-  })
-  error && checkForOnlineError({ error, store })
+    const priorRevisions = row?._revisions?.slice(1) ?? []
+    const [{ error, data, fetching }] = useQuery({
+      query: artRevQuery,
+      variables: {
+        rev: priorRevisions,
+      },
+    })
+    error && checkForOnlineError({ error, store })
 
-  const revRowsUnsorted = useMemo(() => data?.art_rev ?? [], [data?.art_rev])
-  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
+    const revRowsUnsorted = useMemo(() => data?.art_rev ?? [], [data?.art_rev])
+    const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
-  if (fetching) {
-    return <Spinner message="lade Versionen" />
-  }
+    if (fetching) {
+      return <Spinner message="lade Versionen" />
+    }
 
-  if (error) {
-    return <ErrorContainer>{error.message}</ErrorContainer>
-  }
+    if (error) {
+      return <ErrorContainer>{error.message}</ErrorContainer>
+    }
 
-  return (
-    <InnerContainer>
-      <Slider {...sliderSettings}>
-        {revRows.map((r) => (
-          <Row
-            key={row._rev}
-            revRow={r}
-            row={row}
-            rawRow={rawRow}
-            historyTakeoverCallback={historyTakeoverCallback}
-          />
-        ))}
-      </Slider>
-    </InnerContainer>
-  )
-}
-
-export default observer(ArtHistory)
+    return (
+      <InnerContainer>
+        <Slider {...sliderSettings}>
+          {revRows.map((r) => (
+            <Row
+              key={row._rev}
+              revRow={r}
+              row={row}
+              rawRow={rawRow}
+              historyTakeoverCallback={historyTakeoverCallback}
+            />
+          ))}
+        </Slider>
+      </InnerContainer>
+    )
+  },
+)
