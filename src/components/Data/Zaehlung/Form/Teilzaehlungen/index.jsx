@@ -6,7 +6,7 @@ import { FaPlus } from 'react-icons/fa'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../storeContext.js'
+import StoreContext from '../../../../../mobxStoreContext.js'
 import TeilzaehlungenRows from './TeilzaehlungenRows.jsx'
 import Settings from './Settings.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'

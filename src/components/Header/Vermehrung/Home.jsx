@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import { Link } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../../storeContext.js'
+import StoreContext from '../../../mobxStoreContext.js'
 
 const SiteTitle = styled(Button)`
   display: none;

@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { useResizeDetector } from 'react-resize-detector'
 
-import StoreContext from '../../../../storeContext.js'
+import StoreContext from '../../../../mobxStoreContext.js'
 import Settings from './Settings/index.jsx'
 import DeleteButton from './DeleteButton.jsx'
 import AddButton from './AddButton.jsx'

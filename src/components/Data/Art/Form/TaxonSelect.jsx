@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../../storeContext.js'
+import StoreContext from '../../../../mobxStoreContext.js'
 
 const Container = styled.div`
   display: flex;

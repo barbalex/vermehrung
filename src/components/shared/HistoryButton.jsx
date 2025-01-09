@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../storeContext.js'
+import StoreContext from '../../mobxStoreContext.js'
 import ErrorBoundary from './ErrorBoundary.jsx'
 
 const StyledMenuItem = styled(MenuItem)`

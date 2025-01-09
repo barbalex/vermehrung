@@ -15,7 +15,7 @@ import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 import { sendPasswordResetEmail } from 'firebase/auth'
 
-import StoreContext from '../../../storeContext.js'
+import StoreContext from '../../../mobxStoreContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import logout from '../../../utils/logout.js'
 import constants from '../../../utils/constants.js'

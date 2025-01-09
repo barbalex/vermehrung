@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../storeContext.js'
+import StoreContext from '../../../../mobxStoreContext.js'
 import AddButton from './AddButton.jsx'
 import DeleteButton from './DeleteButton.jsx'
 import FilterNumbers from '../../../shared/FilterNumbers.jsx'

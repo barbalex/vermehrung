@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../storeContext.js'
+import StoreContext from '../../mobxStoreContext.js'
 import Tree from '../../components/Tree/index.jsx'
 import Data from '../../components/Data/index.jsx'
 import Filter from '../../components/Filter.jsx'

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useQuery } from 'urql'
 
-import StoreContext from '../../../storeContext.js'
+import StoreContext from '../../../mobxStoreContext.js'
 import checkForOnlineError from '../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../utils/toPgArray.js'
 import mutations from '../../../utils/mutations.js'

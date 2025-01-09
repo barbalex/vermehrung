@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useQuery } from 'urql'
 
-import StoreContext from '../../../storeContext.js'
+import StoreContext from '../../../mobxStoreContext.js'
 import Conflict from '../../shared/Conflict/index.jsx'
 import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
 import checkForOnlineError from '../../../utils/checkForOnlineError.js'

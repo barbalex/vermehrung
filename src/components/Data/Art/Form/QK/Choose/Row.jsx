@@ -5,7 +5,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../../storeContext.js'
+import StoreContext from '../../../../../../mobxStoreContext.js'
 
 const Row = styled.div`
   display: flex;

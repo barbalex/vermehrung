@@ -7,7 +7,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { FaChevronRight } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../../storeContext.js'
+import StoreContext from '../../../../mobxStoreContext.js'
 import ExportMenu from './Export/index.jsx'
 
 const StyledMenuItem = styled(MenuItem)`

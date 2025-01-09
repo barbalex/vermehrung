@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../storeContext.js'
+import StoreContext from '../../../../mobxStoreContext.js'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../shared/JesNo.jsx'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber.js'

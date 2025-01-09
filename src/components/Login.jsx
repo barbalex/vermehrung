@@ -22,7 +22,7 @@ import {
 } from 'firebase/auth'
 
 import ErrorBoundary from './shared/ErrorBoundary.jsx'
-import StoreContext from '../storeContext.js'
+import StoreContext from '../mobxStoreContext.js'
 import constants from '../utils/constants.js'
 
 const Container = styled.div`
