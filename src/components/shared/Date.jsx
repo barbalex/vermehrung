@@ -70,51 +70,53 @@ const dateFormat = [
   'dd',
 ]
 
-const DateField = ({
-  value: valuePassed,
-  name,
-  label,
-  saveToDb,
-  error,
-  popperPlacement = 'bottom',
-}) => {
-  const [stateValue, setStateValue] = useState(valuePassed)
-  useEffect(() => {
-    setStateValue(valuePassed)
-  }, [valuePassed])
+export const DateField = observer(
+  ({
+    value: valuePassed,
+    name,
+    label,
+    saveToDb,
+    error,
+    popperPlacement = 'bottom',
+  }) => {
+    const [stateValue, setStateValue] = useState(valuePassed)
+    useEffect(() => {
+      setStateValue(valuePassed)
+    }, [valuePassed])
 
-  const onChangeDatePicker = useCallback(
-    (date) => {
-      const newValue =
-        date === null ? null : DateTime.fromJSDate(date).toFormat('yyyy-LL-dd')
-      setStateValue(newValue)
-      saveToDb({
-        target: {
-          value: newValue,
-          name,
-        },
-      })
-    },
-    [name, saveToDb],
-  )
+    const onChangeDatePicker = useCallback(
+      (date) => {
+        const newValue =
+          date === null ? null : (
+            DateTime.fromJSDate(date).toFormat('yyyy-LL-dd')
+          )
+        setStateValue(newValue)
+        saveToDb({
+          target: {
+            value: newValue,
+            name,
+          },
+        })
+      },
+      [name, saveToDb],
+    )
 
-  const isValid = DateTime.fromSQL(stateValue).isValid
-  const selected = isValid ? new Date(DateTime.fromSQL(stateValue)) : null
+    const isValid = DateTime.fromSQL(stateValue).isValid
+    const selected = isValid ? new Date(DateTime.fromSQL(stateValue)) : null
 
-  // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
-  return (
-    <StyledFormControl variant="standard">
-      <Label htmlFor={name}>{label}</Label>
-      <StyledDatePicker
-        id={name}
-        selected={selected}
-        onChange={onChangeDatePicker}
-        dateFormat={dateFormat}
-        popperPlacement={popperPlacement}
-      />
-      {!!error && <FormHelperText>{error}</FormHelperText>}
-    </StyledFormControl>
-  )
-}
-
-export default observer(DateField)
+    // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
+    return (
+      <StyledFormControl variant="standard">
+        <Label htmlFor={name}>{label}</Label>
+        <StyledDatePicker
+          id={name}
+          selected={selected}
+          onChange={onChangeDatePicker}
+          dateFormat={dateFormat}
+          popperPlacement={popperPlacement}
+        />
+        {!!error && <FormHelperText>{error}</FormHelperText>}
+      </StyledFormControl>
+    )
+  },
+)
