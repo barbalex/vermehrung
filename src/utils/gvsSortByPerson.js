@@ -1,7 +1,7 @@
 import { first as first$ } from 'rxjs/operators'
 import sortBy from 'lodash/sortBy'
 
-const gvsSortByPerson = async (gvs) => {
+export const gvsSortByPerson = async (gvs) => {
   const gvsIdLabel = await Promise.all(
     gvs.map(async (gv) => {
       let label = ''
@@ -17,5 +17,3 @@ const gvsSortByPerson = async (gvs) => {
   )
   return sortBy(gvs, (gv) => gvsIdLabel.find((o) => o.id === gv.id).label)
 }
-
-export default gvsSortByPerson
