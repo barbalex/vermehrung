@@ -9,7 +9,7 @@ import { Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-import constants from '../../utils/constants.js'
+import { constants } from '../../utils/constants.js'
 
 const SiteTitle = styled(Button)`
   display: none;

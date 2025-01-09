@@ -11,7 +11,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import constants from '../../../../../utils/constants.js'
+import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
   display: flex;

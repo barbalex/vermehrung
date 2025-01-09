@@ -10,7 +10,7 @@ import { useResizeDetector } from 'react-resize-detector'
 
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Filter from './Filter/index.jsx'
-import constants from '../../../utils/constants.js'
+import { constants } from '../../../utils/constants.js'
 
 const SiteTitle = styled(Button)`
   display: none;

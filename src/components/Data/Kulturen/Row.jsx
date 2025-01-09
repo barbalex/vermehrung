@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { first as first$ } from 'rxjs/operators'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-import constants from '../../../utils/constants.js'
+import { constants } from '../../../utils/constants.js'
 
 const Row = styled.div`
   display: flex;

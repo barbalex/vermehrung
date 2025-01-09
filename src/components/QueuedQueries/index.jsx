@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import QueuedQuery from './QueuedQuery.jsx'
-import constants from '../../utils/constants.js'
+import { constants } from '../../utils/constants.js'
 
 const TitleRow = styled.div`
   display: flex;

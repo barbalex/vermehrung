@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import MenuItem from '@mui/material/MenuItem'
 
-import constants from '../../../../utils/constants.js'
+import { constants } from '../../../../utils/constants.js'
 
 const SlAnleitung = ({ asMenu }) => {
   const openDocs = useCallback(() => {

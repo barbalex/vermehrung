@@ -7,7 +7,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 
 import createMessageFunctions from './createMessageFunctions.js'
-import constants from '../../../../../../utils/constants.js'
+import { constants } from '../../../../../../utils/constants.js'
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 
 const Container = styled.div`

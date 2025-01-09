@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
-import constants from '../../utils/constants.js'
+import { constants } from '../../utils/constants.js'
 
 const Container = styled.div`
   background-color: rgba(74, 20, 140, 0.1);

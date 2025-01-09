@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import constants from '../../utils/constants.js'
+import { constants } from '../../utils/constants.js'
 
 const SpinnerContainer = styled.div`
   min-height: calc(100dvh - ${constants.appBarHeight}px);

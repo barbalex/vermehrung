@@ -15,7 +15,7 @@ import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import avsSortByPerson from '../../../../../utils/avsSortByPerson.js'
 import personSort from '../../../../../utils/personSort.js'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
-import constants from '../../../../../utils/constants.js'
+import { constants } from '../../../../../utils/constants.js'
 
 // somehow chrome(?) seems to add the following css sometimes:
 // (on mobile and when checking styles with devtools)

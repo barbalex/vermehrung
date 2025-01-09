@@ -4,7 +4,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
-import constants from '../../../../utils/constants.js'
+import { constants } from '../../../../utils/constants.js'
 
 const EventAnleitung = ({ asMenu }) => {
   const openEventdDocs = useCallback(() => {

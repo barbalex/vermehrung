@@ -12,7 +12,7 @@ import Pflanzen from './Pflanzen/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import herkunftSort from '../../../../../utils/herkunftSort.js'
-import constants from '../../../../../utils/constants.js'
+import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);

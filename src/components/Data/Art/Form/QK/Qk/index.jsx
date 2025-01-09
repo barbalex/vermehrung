@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl'
 
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import createMessageFunctions from './createMessageFunctions.js'
-import constants from '../../../../../../utils/constants.js'
+import { constants } from '../../../../../../utils/constants.js'
 
 const Container = styled.div`
   padding-top: 5px;
