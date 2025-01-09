@@ -54,7 +54,7 @@ const Content = styled.div`
   justify-content: center;
 `
 
-const Files = ({ parentTable, parent }) => {
+export const Files = observer(({ parentTable, parent }) => {
   const store = useContext(MobxStoreContext)
   const { online, gqlClient, addNotification, db } = store
 
@@ -63,9 +63,8 @@ const Files = ({ parentTable, parent }) => {
   // use object with two keys to only render once on setting
   const [files, setEvent] = useState([])
   useEffect(() => {
-    const observable = parent.files
-      ? parent.files.observeWithColumns(['name'])
-      : $of([])
+    const observable =
+      parent.files ? parent.files.observeWithColumns(['name']) : $of([])
     const subscription = observable.subscribe((files) =>
       setEvent(files.sort(fileSort)),
     )
@@ -143,7 +142,10 @@ const Files = ({ parentTable, parent }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow data-online={online} data-margin-bottom={!!files.length}>
+      <TitleRow
+        data-online={online}
+        data-margin-bottom={!!files.length}
+      >
         <Title>Dateien</Title>
         <Buttons>
           <Uploader
@@ -158,9 +160,9 @@ const Files = ({ parentTable, parent }) => {
               variant="outlined"
               onClick={onClickLightboxButton}
             >
-              {lightboxIsOpen
-                ? 'Galerie schliessen'
-                : 'Bilder in Galerie öffnen'}
+              {lightboxIsOpen ?
+                'Galerie schliessen'
+              : 'Bilder in Galerie öffnen'}
             </LightboxButton>
           )}
         </Buttons>
@@ -168,19 +170,24 @@ const Files = ({ parentTable, parent }) => {
       {lightboxIsOpen && (
         <>
           <Spacer />
-          <ImageGallery items={imageObjects} showPlayButton={false} />
+          <ImageGallery
+            items={imageObjects}
+            showPlayButton={false}
+          />
         </>
       )}
       {!!files.length && (
         <>
           <Spacer />
           {files.map((file) => (
-            <File key={file.file_id} file={file} parent={parent} />
+            <File
+              key={file.file_id}
+              file={file}
+              parent={parent}
+            />
           ))}
         </>
       )}
     </ErrorBoundary>
   )
-}
-
-export default observer(Files)
+})

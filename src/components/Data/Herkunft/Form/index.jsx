@@ -10,7 +10,7 @@ import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../shared/JesNo.jsx'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber.js'
 import { exists } from '../../../../utils/exists.js'
-import Files from '../../Files/index.jsx'
+import { Files } from '../../Files/index.jsx'
 import Coordinates from '../../../shared/Coordinates.jsx'
 import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 
