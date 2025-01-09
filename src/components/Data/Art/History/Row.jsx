@@ -9,7 +9,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../../utils/toPgArray.js'
 import { mutations } from '../../../../utils/mutations.js'
-import createDataArrayForRevComparison from '../createDataArrayForRevComparison.js'
+import { createDataArrayForRevComparison } from '../createDataArrayForRevComparison.js'
 
 export const Row = observer(({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(MobxStoreContext)
