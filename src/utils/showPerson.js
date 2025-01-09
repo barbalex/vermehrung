@@ -1,3 +1,1 @@
-const showPerson = () => true
-
-export default showPerson
+export const getShowPerson = () => true
