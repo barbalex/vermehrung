@@ -10,7 +10,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import Qk from './Qk/index.jsx'
+import { Qk } from './Qk/index.jsx'
 import { Choose } from './Choose/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'

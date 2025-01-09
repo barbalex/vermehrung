@@ -45,7 +45,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const ApQkQk = ({ artId, qkChoosens }) => {
+export const Qk = observer(({ artId, qkChoosens }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
 
@@ -68,9 +68,8 @@ const ApQkQk = ({ artId, qkChoosens }) => {
           .filter((qk) => !!messageFunctions[qk.name])
           .map(async (qk) => ({
             title: qk?.titel,
-            messages: messageFunctions
-              ? await messageFunctions[qk?.name]()
-              : [],
+            messages:
+              messageFunctions ? await messageFunctions[qk?.name]() : [],
           })),
       )
       if (!isActive) return
@@ -82,24 +81,32 @@ const ApQkQk = ({ artId, qkChoosens }) => {
     }
   }, [artId, db, qkChoosens, store])
 
-  const messageGroupsFiltered = messageGroups
-    ? messageGroups.filter((messageGroup) => {
+  const messageGroupsFiltered =
+    messageGroups ?
+      messageGroups.filter((messageGroup) => {
         if (!!filter && messageGroup?.title?.toLowerCase) {
           return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
         }
         return true
       })
     : []
-  const resultTitle = messageGroups
-    ? `${messageGroupsFiltered.length} ${
+  const resultTitle =
+    messageGroups ?
+      `${messageGroupsFiltered.length} ${
         messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
       }:`
     : 'rechne...'
 
   return (
     <Container>
-      <StyledFormControl fullWidth variant="standard">
-        <InputLabel htmlFor="filter" shrink>
+      <StyledFormControl
+        fullWidth
+        variant="standard"
+      >
+        <InputLabel
+          htmlFor="filter"
+          shrink
+        >
           nach Abschnitts-Titel filtern
         </InputLabel>
         <Input
@@ -111,7 +118,10 @@ const ApQkQk = ({ artId, qkChoosens }) => {
       </StyledFormControl>
       <ResultTitle>{resultTitle}</ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
-        <StyledPaper key={messageGroup.title} elevation={2}>
+        <StyledPaper
+          key={messageGroup.title}
+          elevation={2}
+        >
           <Title>{`${messageGroup.title} (${messageGroup.messages.length})`}</Title>
           {messageGroup.messages.map((m, i) => (
             <Row key={`${m.text}Index${i}`}>
@@ -134,6 +144,4 @@ const ApQkQk = ({ artId, qkChoosens }) => {
       )}
     </Container>
   )
-}
-
-export default observer(ApQkQk)
+})
