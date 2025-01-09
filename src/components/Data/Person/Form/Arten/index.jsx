@@ -12,7 +12,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Art from './Art.jsx'
 import { Select } from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import artsSortedFromArts from '../../../../../utils/artsSortedFromArts.js'
+import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.js'
 import avsSortByArt from '../../../../../utils/avsSortByArt.js'
 import { constants } from '../../../../../utils/constants.js'
 
