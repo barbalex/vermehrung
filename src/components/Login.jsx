@@ -46,7 +46,7 @@ const ResetButton = styled(Button)`
   margin-right: 20px !important;
 `
 
-const Login = () => {
+export const Login = () => {
   const { db, firebaseAuth } = useContext(MobxStoreContext)
 
   const [email, setEmail] = useState('')
@@ -235,5 +235,3 @@ const Login = () => {
     </ErrorBoundary>
   )
 }
-
-export default Login

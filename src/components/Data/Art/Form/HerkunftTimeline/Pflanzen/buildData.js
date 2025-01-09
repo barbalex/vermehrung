@@ -3,7 +3,7 @@ import sum from 'lodash/sum'
 import max from 'lodash/max'
 import { Q } from '@nozbe/watermelondb'
 
-const buildData = async ({ artId, herkunftId, db }) => {
+export const buildData = async ({ artId, herkunftId, db }) => {
   let zaehlungsDone = []
   try {
     zaehlungsDone = await db
@@ -280,18 +280,20 @@ const buildData = async ({ artId, herkunftId, db }) => {
       const zaehlungsCountNow = [...zaehlungsDone, ...zaehlungsPlanned].filter(
         (s) => s.datum === date,
       ).length
-      const zaehlungsTitle = zaehlungsCountNow
-        ? zaehlungsCountNow === 1
-          ? `${zaehlungsCountNow} Zählung`
+      const zaehlungsTitle =
+        zaehlungsCountNow ?
+          zaehlungsCountNow === 1 ?
+            `${zaehlungsCountNow} Zählung`
           : `${zaehlungsCountNow} Zählungen`
         : undefined
 
       const sCount = [...sammlungsDone, ...sammlungsPlanned].filter(
         (s) => s.datum === date,
       ).length
-      const sammlungsTitle = sCount
-        ? sCount === 1
-          ? `${sCount} Sammlung`
+      const sammlungsTitle =
+        sCount ?
+          sCount === 1 ?
+            `${sCount} Sammlung`
           : `${sCount} Sammlungen`
         : undefined
 
@@ -299,9 +301,10 @@ const buildData = async ({ artId, herkunftId, db }) => {
         ...lieferungsDoneOfThisHerkunft,
         ...lieferungsPlanned,
       ].filter((s) => s.datum === date).length
-      const lieferungsTitle = lfCount
-        ? lfCount === 1
-          ? `${lfCount} Auspflanzung`
+      const lieferungsTitle =
+        lfCount ?
+          lfCount === 1 ?
+            `${lfCount} Auspflanzung`
           : `${lfCount} Auspflanzungen`
         : undefined
 
@@ -312,21 +315,25 @@ const buildData = async ({ artId, herkunftId, db }) => {
           sammlungsSince.anzahl_pflanzen -
           lieferungsSince.anzahl_pflanzen,
         Zählung:
-          lastZaehlungs.prognose ||
-          sammlungsSince.geplant ||
-          lieferungsSince.geplant
-            ? undefined
-            : lastZaehlungs.anzahl_pflanzen +
-              sammlungsSince.anzahl_pflanzen -
-              lieferungsSince.anzahl_pflanzen,
+          (
+            lastZaehlungs.prognose ||
+            sammlungsSince.geplant ||
+            lieferungsSince.geplant
+          ) ?
+            undefined
+          : lastZaehlungs.anzahl_pflanzen +
+            sammlungsSince.anzahl_pflanzen -
+            lieferungsSince.anzahl_pflanzen,
         Prognose:
-          lastZaehlungs.prognose ||
-          sammlungsSince.geplant ||
-          lieferungsSince.geplant
-            ? lastZaehlungs.anzahl_pflanzen +
-              sammlungsSince.anzahl_pflanzen -
-              lieferungsSince.anzahl_pflanzen
-            : undefined,
+          (
+            lastZaehlungs.prognose ||
+            sammlungsSince.geplant ||
+            lieferungsSince.geplant
+          ) ?
+            lastZaehlungs.anzahl_pflanzen +
+            sammlungsSince.anzahl_pflanzen -
+            lieferungsSince.anzahl_pflanzen
+          : undefined,
         Sammlung: sammlungNow || undefined,
         'Sammlung geplant': sammlungPlannedNow || undefined,
         Auspflanzung: lieferungNow || undefined,
@@ -339,5 +346,3 @@ const buildData = async ({ artId, herkunftId, db }) => {
     }),
   )
 }
-
-export default buildData

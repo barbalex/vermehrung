@@ -24,7 +24,7 @@ import CustomAxisTick from './CustomAxisTick.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import herkunftLabelFromHerkunft from '../../../../../../utils/herkunftLabelFromHerkunft.js'
-import buildData from './buildData.js'
+import { buildData } from './buildData.js'
 
 const H4 = styled.h4`
   margin-bottom: 5px;
@@ -81,13 +81,23 @@ const ArtTimeline = ({ artId, herkunft }) => {
     <Container ref={ref}>
       <ErrorBoundary>
         <h4>{herkunftLabel}</h4>
-        <ResponsiveContainer width="99%" height={450}>
+        <ResponsiveContainer
+          width="99%"
+          height={450}
+        >
           <ComposedChart
             data={data}
             margin={{ top: 25, right: 0, left: 0, bottom: 45 }}
           >
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-            <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              horizontal={false}
+            />
+            <XAxis
+              dataKey="datum"
+              tick={CustomAxisTick}
+              interval={0}
+            />
             <YAxis
               label={{
                 value: 'Anzahl Pflanzen',
@@ -100,20 +110,22 @@ const ArtTimeline = ({ artId, herkunft }) => {
               fontSize={12}
             />
             <Tooltip content={<CustomTooltip />} />
-            {isNarrow ? (
+            {isNarrow ?
               <Legend
                 layout="horizontal"
                 align="center"
                 wrapperStyle={{ bottom: 0, fontSize: 12 }}
               />
-            ) : (
-              <Legend
+            : <Legend
                 layout="vertical"
                 align="right"
                 wrapperStyle={{ right: -10, bottom: 150, fontSize: 12 }}
               />
-            )}
-            <ReferenceLine y={0} stroke="#000" />
+            }
+            <ReferenceLine
+              y={0}
+              stroke="#000"
+            />
             <Bar
               dataKey="Sammlung"
               fill="orange"
