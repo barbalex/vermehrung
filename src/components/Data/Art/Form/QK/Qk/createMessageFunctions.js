@@ -7,7 +7,7 @@ import exists from '../../../../../../utils/exists.js'
 
 import notDeletedQuery from '../../../../../../utils/notDeletedQuery.js'
 import artsSortedFromArts from '../../../../../../utils/artsSortedFromArts.js'
-import gartensSortedFromGartens from '../../../../../../utils/gartensSortedFromGartens.js'
+import { gartensSortedFromGartens } from '../../../../../../utils/gartensSortedFromGartens.js'
 import { kultursSortedFromKulturs } from '../../../../../../utils/kultursSortedFromKulturs.js'
 import { sammlungsSortedFromSammlungs } from '../../../../../../utils/sammlungsSortedFromSammlungs.js'
 import { eventSort } from '../../../../../../utils/eventSort.js'
