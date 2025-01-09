@@ -11,7 +11,7 @@ import Select from '../../../shared/Select/index.jsx'
 import exists from '../../../../utils/exists.js'
 import sammlungsSortedFromSammlungs from '../../../../utils/sammlungsSortedFromSammlungs.js'
 import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs.js'
-import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft.js'
+import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
 
 const Title = styled.div`
   font-weight: bold;

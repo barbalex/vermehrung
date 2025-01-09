@@ -1,4 +1,4 @@
-import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft.js'
+import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
 
 const herkunftNodes = ({ herkunft, index }) => ({
   nodeType: 'table',

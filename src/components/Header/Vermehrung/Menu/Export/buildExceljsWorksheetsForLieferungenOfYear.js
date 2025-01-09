@@ -3,7 +3,7 @@ import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
-import herkunftLabelFromHerkunft from '../../../../../utils/herkunftLabelFromHerkunft.js'
+import { herkunftLabelFromHerkunft } from '../../../../../utils/herkunftLabelFromHerkunft.js'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook.js'
 import lieferungSort from '../../../../../utils/lieferungSort.js'

@@ -15,7 +15,7 @@ import herkunftSort from '../../../../utils/herkunftSort.js'
 import lieferungSort from '../../../../utils/lieferungSort.js'
 import personSort from '../../../../utils/personSort.js'
 import zaehlungSort from '../../../../utils/zaehlungSort.js'
-import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft.js'
+import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
 
 const threshold = 0.2
 const distance = 1000 // ensure text in long labels is found

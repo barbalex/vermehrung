@@ -1,4 +1,4 @@
-const herkunftLabelFromHerkunft = ({ herkunft }) => {
+export const herkunftLabelFromHerkunft = ({ herkunft }) => {
   if (!herkunft) return 'keine Herkunft'
   if (!herkunft?.id) return 'keine Herkunft'
   // only show lokalname if exist
@@ -10,5 +10,3 @@ const herkunftLabelFromHerkunft = ({ herkunft }) => {
 
   return label
 }
-
-export default herkunftLabelFromHerkunft 

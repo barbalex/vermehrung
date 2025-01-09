@@ -7,7 +7,7 @@ import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft.js'
+import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
 
 const StyledTableCell = styled(TableCell)`
   vertical-align: top !important;
