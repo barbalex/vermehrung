@@ -29,7 +29,7 @@ const Key = styled.div`
   color: rgba(0, 0, 0, 0.54);
 `
 
-const ConflictData = ({ dataArray, loading }) => {
+export const Data = observer(({ dataArray, loading }) => {
   const store = useContext(MobxStoreContext)
   const { diffConflict } = store
 
@@ -50,16 +50,19 @@ const ConflictData = ({ dataArray, loading }) => {
       diffConflict && !['geändert', 'geändert von'].includes(d.label)
 
     return (
-      <Row key={d.label} data-last={index + 1 === dataArray.length}>
+      <Row
+        key={d.label}
+        data-last={index + 1 === dataArray.length}
+      >
         <Key>{`${d.label}:`}</Key>
-        {showDiff ? (
-          <Diff inputA={inputA} inputB={inputB} type="sentences" />
-        ) : (
-          <div>{inputB}</div>
-        )}
+        {showDiff ?
+          <Diff
+            inputA={inputA}
+            inputB={inputB}
+            type="sentences"
+          />
+        : <div>{inputB}</div>}
       </Row>
     )
   })
-}
-
-export default observer(ConflictData)
+})

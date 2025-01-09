@@ -11,7 +11,7 @@ import {
 
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.svg?react'
 import Explainer from './Explainer.jsx'
-import Data from './Data.jsx'
+import { Data } from './Data.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
 const Container = styled.div`
