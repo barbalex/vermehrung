@@ -31,7 +31,7 @@ const Row = styled.div`
   }
 `
 
-const Gaerten = ({ row, style, last }) => {
+export const GartenRow = observer(({ row, style, last }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -68,6 +68,4 @@ const Gaerten = ({ row, style, last }) => {
       <div>{label}</div>
     </Row>
   )
-}
-
-export default observer(Gaerten)
+})
