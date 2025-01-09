@@ -1,4 +1,4 @@
-import personFullname from './personFullname.js'
+import { personFullname } from './personFullname.js'
 
 const kulturLabelFromKultur = ({
   kultur,
