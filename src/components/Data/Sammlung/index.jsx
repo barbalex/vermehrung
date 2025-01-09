@@ -10,7 +10,7 @@ import Form from './Form/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import Conflict from './Conflict.jsx'
-import History from './History/index.jsx'
+import { SammlungHistory as History } from './History/index.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -37,11 +37,10 @@ const Sammlung = ({
     rawRow: undefined,
   })
   useEffect(() => {
-    const observable = showFilter
-      ? $of(filter.sammlung)
-      : initialDataQueried
-        ? db.get('sammlung').findAndObserve(id)
-        : $of({})
+    const observable =
+      showFilter ? $of(filter.sammlung)
+      : initialDataQueried ? db.get('sammlung').findAndObserve(id)
+      : $of({})
     const subscription = observable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -98,7 +97,7 @@ const Sammlung = ({
               showHistory={showHistory}
             />
             <Allotment.Pane visible={paneIsSplit}>
-              {activeConflict ? (
+              {activeConflict ?
                 <Conflict
                   rev={activeConflict}
                   id={id}
@@ -108,13 +107,13 @@ const Sammlung = ({
                   conflictSelectionCallback={conflictSelectionCallback}
                   setActiveConflict={setActiveConflict}
                 />
-              ) : showHistory ? (
+              : showHistory ?
                 <History
                   row={row}
                   rawRow={rawRow}
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
-              ) : null}
+              : null}
             </Allotment.Pane>
           </Allotment>
         </SplitPaneContainer>
