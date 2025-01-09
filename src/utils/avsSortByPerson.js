@@ -1,7 +1,7 @@
 import { first as first$ } from 'rxjs/operators'
 import sortBy from 'lodash/sortBy'
 
-const avsSortByPerson = async (avs) => {
+export const avsSortByPerson = async (avs) => {
   const avsIdLabel = await Promise.all(
     avs.map(async (av) => {
       let label = ''
@@ -17,5 +17,3 @@ const avsSortByPerson = async (avs) => {
   )
   return sortBy(avs, (av) => avsIdLabel.find((o) => o.id === av.id).label)
 }
-
-export default avsSortByPerson
