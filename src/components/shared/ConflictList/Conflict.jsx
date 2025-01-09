@@ -11,28 +11,27 @@ const Konflikt = styled.div`
   }
 `
 
-const Conflict = ({ conflict, activeConflict, setActiveConflict }) => {
-  const onClick = useCallback(() => {
-    setActiveConflict(
-      !activeConflict
-        ? conflict
-        : activeConflict !== conflict
-        ? conflict
+export const Conflict = observer(
+  ({ conflict, activeConflict, setActiveConflict }) => {
+    const onClick = useCallback(() => {
+      setActiveConflict(
+        !activeConflict ? conflict
+        : activeConflict !== conflict ? conflict
         : null,
+      )
+    }, [activeConflict, conflict, setActiveConflict])
+    const title =
+      activeConflict ?
+        'Klicken um den Konflikt zu schliessen'
+      : 'Klicken um den Konflikt zu lösen'
+
+    return (
+      <Konflikt
+        key={conflict}
+        data-active={activeConflict === conflict}
+        onClick={onClick}
+        title={title}
+      >{`Konflikt mit Version ${conflict}`}</Konflikt>
     )
-  }, [activeConflict, conflict, setActiveConflict])
-  const title = activeConflict
-    ? 'Klicken um den Konflikt zu schliessen'
-    : 'Klicken um den Konflikt zu lösen'
-
-  return (
-    <Konflikt
-      key={conflict}
-      data-active={activeConflict === conflict}
-      onClick={onClick}
-      title={title}
-    >{`Konflikt mit Version ${conflict}`}</Konflikt>
-  )
-}
-
-export default observer(Conflict)
+  },
+)
