@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
@@ -30,7 +31,7 @@ const Title = styled.div`
 `
 const Rows = styled.div``
 
-const TkEvents = ({ teilkultur }) => {
+export const TeilkulturEvents = observer(({ teilkultur }) => {
   const store = useContext(MobxStoreContext)
   const { filter } = store
 
@@ -71,6 +72,4 @@ const TkEvents = ({ teilkultur }) => {
       </Rows>
     </ErrorBoundary>
   )
-}
-
-export default TkEvents
+})
