@@ -39,99 +39,99 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 
-const Herkunft = ({
-  row,
-  totalCount,
-  filteredCount,
-  showHistory,
-  setShowHistory,
-  activeConflict,
-}) => {
-  const store = useContext(MobxStoreContext)
-  const {
-    activeNodeArray: anaRaw,
-    setActiveNodeArray,
-    removeOpenNode,
-  } = store.tree
-  const activeNodeArray = anaRaw.toJSON()
+export const HerkunftFormTitle = observer(
+  ({
+    row,
+    totalCount,
+    filteredCount,
+    showHistory,
+    setShowHistory,
+    activeConflict,
+  }) => {
+    const store = useContext(MobxStoreContext)
+    const {
+      activeNodeArray: anaRaw,
+      setActiveNodeArray,
+      removeOpenNode,
+    } = store.tree
+    const activeNodeArray = anaRaw.toJSON()
 
-  const { width, ref } = useResizeDetector()
+    const { width, ref } = useResizeDetector()
 
-  const onClickUp = useCallback(() => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
-  const onClickToSammlungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const showToSa = activeNodeArray[0] === 'Herkuenfte'
+    const onClickUp = useCallback(() => {
+      removeOpenNode(activeNodeArray)
+      setActiveNodeArray(activeNodeArray.slice(0, -1))
+    }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+    const onClickToSammlungen = useCallback(
+      () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
+      [activeNodeArray, setActiveNodeArray],
+    )
+    const showToSa = activeNodeArray[0] === 'Herkuenfte'
 
-  // herkunft is top node
-  // never enable adding below that
-  const editingAllowed = activeNodeArray.length <= 2
+    // herkunft is top node
+    // never enable adding below that
+    const editingAllowed = activeNodeArray.length <= 2
 
-  return (
-    <TitleContainer ref={ref}>
-      <Title>{`Herkunft${activeConflict ? ': Konflikt lösen' : ''}`}</Title>
-      <TitleSymbols>
-        <IconButton
-          title="Zur Liste"
-          onClick={onClickUp}
-          size="large"
-        >
-          <UpSvg />
-        </IconButton>
-        {showToSa && (
+    return (
+      <TitleContainer ref={ref}>
+        <Title>{`Herkunft${activeConflict ? ': Konflikt lösen' : ''}`}</Title>
+        <TitleSymbols>
           <IconButton
-            title="Zu den Sammlungen"
-            onClick={onClickToSammlungen}
+            title="Zur Liste"
+            onClick={onClickUp}
             size="large"
           >
-            <SaDownSvg />
+            <UpSvg />
           </IconButton>
-        )}
-        {editingAllowed && (
-          <>
-            <AddButton />
-            <DeleteButton row={row} />
-          </>
-        )}
-        {width < 520 ?
-          <Menu white={false}>
-            <HistoryButton
-              table="herkunft"
-              id={row.id}
-              showHistory={showHistory}
-              setShowHistory={setShowHistory}
-              asMenu
-            />
-            <Anleitung asMenu />
-            <Settings asMenu />
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-              asMenu
-            />
-          </Menu>
-        : <>
-            <HistoryButton
-              table="herkunft"
-              id={row.id}
-              showHistory={showHistory}
-              setShowHistory={setShowHistory}
-            />
-            <Anleitung />
-            <Settings />
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-            />
-          </>
-        }
-      </TitleSymbols>
-    </TitleContainer>
-  )
-}
-
-export default observer(Herkunft)
+          {showToSa && (
+            <IconButton
+              title="Zu den Sammlungen"
+              onClick={onClickToSammlungen}
+              size="large"
+            >
+              <SaDownSvg />
+            </IconButton>
+          )}
+          {editingAllowed && (
+            <>
+              <AddButton />
+              <DeleteButton row={row} />
+            </>
+          )}
+          {width < 520 ?
+            <Menu white={false}>
+              <HistoryButton
+                table="herkunft"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+                asMenu
+              />
+              <Anleitung asMenu />
+              <Settings asMenu />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+                asMenu
+              />
+            </Menu>
+          : <>
+              <HistoryButton
+                table="herkunft"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+              />
+              <Anleitung />
+              <Settings />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
+            </>
+          }
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  },
+)
