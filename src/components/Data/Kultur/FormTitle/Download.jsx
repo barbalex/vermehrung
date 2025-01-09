@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import buildExceljsWorksheets from './buildExceljsWorksheets.js'
-import downloadExceljsWorkbook from '../../../../utils/downloadExceljsWorkbook.js'
+import { downloadExceljsWorkbook } from '../../../../utils/downloadExceljsWorkbook.js'
 
 const Download = ({ row, asMenu }) => {
   const store = useContext(MobxStoreContext)
