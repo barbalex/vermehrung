@@ -5,7 +5,7 @@ import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-import FormTitle from './FormTitle/index.jsx'
+import { EventFormTitle as FormTitle } from './FormTitle/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { EventConflict as Conflict } from './Conflict.jsx'
