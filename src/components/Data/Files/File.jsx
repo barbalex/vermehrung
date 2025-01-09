@@ -10,7 +10,7 @@ import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import TextField from '../../shared/TextField.jsx'
 import isImageFile from './isImageFile.js'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   display: flex;

@@ -25,7 +25,7 @@ import LabelZaehlung from './LabelZaehlung.jsx'
 import CustomAxisTick from './CustomAxisTick.jsx'
 import { constants } from '../../../../../utils/constants.js'
 import exists from '../../../../../utils/exists.js'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import buildData from './buildData.js'
 
 const TitleRow = styled.section`

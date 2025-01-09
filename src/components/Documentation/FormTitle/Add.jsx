@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 const KulturAddButton = ({ asMenu }) => {
   const store = useContext(StoreContext)

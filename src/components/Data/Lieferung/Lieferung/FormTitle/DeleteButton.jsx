@@ -7,7 +7,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
   display: flex;

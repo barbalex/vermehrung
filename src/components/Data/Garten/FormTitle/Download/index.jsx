@@ -10,7 +10,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten.js'
 import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums.js'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook.js'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
   display: flex;

@@ -10,7 +10,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import exists from '../../../../../utils/exists.js'
 import updateLieferung from './updateLieferung.js'
 import updateAllLieferungen from './updateAllLieferungen.js'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
   display: flex;

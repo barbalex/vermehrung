@@ -14,7 +14,7 @@ import Person from './Data/Person/index.jsx'
 import Sammlung from './Data/Sammlung/index.jsx'
 import Teilkultur from './Data/Teilkultur/index.jsx'
 import Zaehlung from './Data/Zaehlung/index.jsx'
-import ErrorBoundary from './shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../mobxStoreContext.js'
 import Fallback from './shared/Fallback.jsx'
 

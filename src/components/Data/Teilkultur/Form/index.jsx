@@ -14,7 +14,7 @@ import JesNo from '../../../shared/JesNo.jsx'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber.js'
 import Zaehlungen from './Zaehlungen/index.jsx'
 import Events from './Events/index.jsx'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList/index.jsx'
 import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs.js'
 

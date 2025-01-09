@@ -12,7 +12,7 @@ import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
   display: flex;

@@ -9,7 +9,7 @@ import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import Pflanzen from './Pflanzen/index.jsx'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import herkunftSort from '../../../../../utils/herkunftSort.js'
 import { constants } from '../../../../../utils/constants.js'

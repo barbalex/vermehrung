@@ -4,7 +4,7 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const ArtAddButton = () => {
   const store = useContext(MobxStoreContext)

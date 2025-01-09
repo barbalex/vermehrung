@@ -9,7 +9,7 @@ import { Q } from '@nozbe/watermelondb'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import TeilzaehlungenRows from './TeilzaehlungenRows.jsx'
 import Settings from './Settings.jsx'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk.js'
 import { constants } from '../../../../../utils/constants.js'
 
