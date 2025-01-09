@@ -29,7 +29,7 @@ const Row = styled.div`
   }
 `
 
-const EventsRows = ({ row, style, last }) => {
+export const EventRow = observer(({ row, style, last }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -39,10 +39,13 @@ const EventsRows = ({ row, style, last }) => {
   )
 
   return (
-    <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
+    <Row
+      key={row.id}
+      onClick={onClickRow}
+      style={style}
+      data-last={last}
+    >
       <div>{eventLabelFromEvent({ event: row })}</div>
     </Row>
   )
-}
-
-export default observer(EventsRows)
+})
