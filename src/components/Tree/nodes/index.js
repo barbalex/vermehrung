@@ -125,10 +125,10 @@ import { getShowHerkunft } from '../../../utils/showHerkunft.js'
 import { getShowKultur } from '../../../utils/showKultur.js'
 import { getShowLieferung } from '../../../utils/showLieferung.js'
 import { getShowPerson } from '../../../utils/showPerson.js'
-import getShowSammelLieferung from '../../../utils/showSammelLieferung.js'
-import getShowSammlung from '../../../utils/showSammlung.js'
-import getShowTeilkultur from '../../../utils/showTeilkultur.js'
-import getShowZaehlung from '../../../utils/showZaehlung.js'
+import { getShowSammelLieferung } from '../../../utils/showSammelLieferung.js'
+import { getShowSammlung } from '../../../utils/showSammlung.js'
+import { getShowTeilkultur } from '../../../utils/showTeilkultur.js'
+import { getShowZaehlung } from '../../../utils/showZaehlung.js'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
