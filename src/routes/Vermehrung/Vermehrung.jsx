@@ -7,7 +7,6 @@ import { MobxStoreContext } from '../../mobxStoreContext.js'
 import Tree from '../../components/Tree/index.jsx'
 import Data from '../../components/Data/index.jsx'
 import Filter from '../../components/Filter.jsx'
-import ApiDetector from '../../components/ApiDetector.jsx'
 import { constants } from '../../utils/constants.js'
 import FallBack from '../../components/shared/Fallback.jsx'
 
@@ -23,16 +22,18 @@ export const Vermehrung = observer(() => {
   const { widthInPercentOfScreen } = store.tree
 
   const showFilter = store.filter.show
-  let treeWidth = singleColumnView
-    ? (!showTreeInSingleColumnView && activeForm) || showFilter
-      ? 0
-      : // if no form is active, show only tree
-        '100%'
+  let treeWidth =
+    singleColumnView ?
+      (!showTreeInSingleColumnView && activeForm) || showFilter ?
+        0
+        // if no form is active, show only tree
+      : '100%'
     : `${widthInPercentOfScreen}%`
 
-  const formWidth = singleColumnView
-    ? (!showTreeInSingleColumnView && activeForm) || showFilter
-      ? '100%'
+  const formWidth =
+    singleColumnView ?
+      (!showTreeInSingleColumnView && activeForm) || showFilter ?
+        '100%'
       : 0
     : `${100 - widthInPercentOfScreen}%`
   // ensure tree is invisible when printing but still exists
@@ -64,16 +65,14 @@ export const Vermehrung = observer(() => {
               minSize={minSizeForm}
             >
               <Suspense fallback={<FallBack />}>
-                {showFilter ? <Filter /> : <Data />}
+                {showFilter ?
+                  <Filter />
+                : <Data />}
               </Suspense>
             </Allotment.Pane>
           </Allotment>
         </Container>
-        <Suspense fallback={null}>
-          <ApiDetector />
-        </Suspense>
       </Suspense>
     </>
   )
 })
-
