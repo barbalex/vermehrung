@@ -6,7 +6,7 @@ import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.j
 import lieferungLabelFromLieferung from '../../../../utils/lieferungLabelFromLieferung.js'
 import tableFilter from '../../../../utils/tableFilter.js'
 import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens.js'
-import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs.js'
+import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.js'
 import { sammlungsSortedFromSammlungs } from '../../../../utils/sammlungsSortedFromSammlungs.js'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts.js'
 import { personFullname } from '../../../../utils/personFullname.js'

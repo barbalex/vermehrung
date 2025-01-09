@@ -3,7 +3,7 @@ import { first as first$ } from 'rxjs/operators'
 
 import gartenLabelFromGarten from './gartenLabelFromGarten.js'
 
-const kultursSortedFromKulturs = async (kulturs) => {
+export const kultursSortedFromKulturs = async (kulturs) => {
   const kulturSorters = await Promise.all(
     kulturs.map(async (kultur) => {
       let art
@@ -51,5 +51,3 @@ const kultursSortedFromKulturs = async (kulturs) => {
   )
   return kultursSorted
 }
-
-export default kultursSortedFromKulturs

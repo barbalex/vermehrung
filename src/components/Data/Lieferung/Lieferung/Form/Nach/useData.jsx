@@ -4,7 +4,7 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromKulturs.js'
+import { kultursSortedFromKulturs } from '../../../../../../utils/kultursSortedFromKulturs.js'
 
 const useData = ({ showFilter, row, herkunft, db, filter }) => {
   const [dataState, setDataState] = useState({ nachKulturWerte: [] })

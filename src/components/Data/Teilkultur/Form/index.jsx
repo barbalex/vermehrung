@@ -16,7 +16,7 @@ import Zaehlungen from './Zaehlungen/index.jsx'
 import Events from './Events/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList/index.jsx'
-import kultursSortedFromKulturs from '../../../../utils/kultursSortedFromKulturs.js'
+import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.js'
 
 const FieldsContainer = styled.div`
   padding: 10px;
