@@ -9,7 +9,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../../../storeContext.js'
+import StoreContext from '../../../../../mobxStoreContext.js'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`

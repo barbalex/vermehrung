@@ -4,7 +4,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import eventSort from '../../../../../utils/eventSort.js'
-import storeContext from '../../../../../storeContext.js'
+import storeContext from '../../../../../mobxStoreContext.js'
 import Row from './Row.jsx'
 import constants from '../../../../../utils/constants.js'
 

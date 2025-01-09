@@ -13,7 +13,7 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../../../../storeContext.js'
+import StoreContext from '../../../../../../../mobxStoreContext.js'
 import TextField from '../../../../../../shared/TextField.jsx'
 import TextFieldNonUpdatable from '../../../../../../shared/TextFieldNonUpdatable.jsx'
 import Checkbox2States from '../../../../../../shared/Checkbox2States.jsx'

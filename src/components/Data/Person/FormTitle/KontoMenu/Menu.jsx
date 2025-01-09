@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../../../storeContext.js'
+import StoreContext from '../../../../../mobxStoreContext.js'
 import deleteAccount from '../../../../../utils/deleteAccount.js'
 import setPassword from '../../../../../utils/setPassword.js'
 

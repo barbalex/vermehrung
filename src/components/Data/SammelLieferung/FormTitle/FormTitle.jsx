@@ -5,7 +5,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../storeContext.js'
+import StoreContext from '../../../../mobxStoreContext.js'
 import Settings from './Settings/index.jsx'
 import Copy from './Copy/index.jsx'
 import Add from './Add.jsx'

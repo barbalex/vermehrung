@@ -9,7 +9,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useLocation, useNavigate } from 'react-router'
 
-import StoreContext from '../../../storeContext.js'
+import StoreContext from '../../../mobxStoreContext.js'
 
 const OnlineButton = styled(IconButton)`
   /*cursor: default !important;*/

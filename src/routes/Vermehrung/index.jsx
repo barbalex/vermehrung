@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
 
-import StoreContext from '../../storeContext.js'
+import StoreContext from '../../mobxStoreContext.js'
 import Login from '../../components/Login.jsx'
 import ErrorBoundary from '../../components/shared/ErrorBoundary.jsx'
 import ApiDetector from '../../components/ApiDetector.jsx'

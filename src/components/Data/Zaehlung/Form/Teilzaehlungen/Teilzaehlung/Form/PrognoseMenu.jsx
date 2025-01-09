@@ -8,7 +8,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../../../../../storeContext.js'
+import StoreContext from '../../../../../../../mobxStoreContext.js'
 import TextField from '../../../../../../shared/TextField.jsx'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber.js'
 import exists from '../../../../../../../utils/exists.js'

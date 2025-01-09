@@ -5,7 +5,7 @@ import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
 
 import History from '../../../../../../shared/History/index.jsx'
-import StoreContext from '../../../../../../../storeContext.js'
+import StoreContext from '../../../../../../../mobxStoreContext.js'
 import checkForOnlineError from '../../../../../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../../../../../utils/toPgArray.js'
 import mutations from '../../../../../../../utils/mutations.js'

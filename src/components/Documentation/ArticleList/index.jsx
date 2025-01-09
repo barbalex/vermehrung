@@ -6,7 +6,7 @@ import { useLocation } from 'react-router'
 
 import Article from './Article.jsx'
 import constants from '../../../utils/constants.js'
-import storeContext from '../../../storeContext.js'
+import storeContext from '../../../mobxStoreContext.js'
 import IntoViewScroller from './IntoViewScroller.jsx'
 
 const Container = styled.div`

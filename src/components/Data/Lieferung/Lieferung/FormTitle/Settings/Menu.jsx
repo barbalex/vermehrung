@@ -10,7 +10,7 @@ import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../../storeContext.js'
+import StoreContext from '../../../../../../mobxStoreContext.js'
 import constants from '../../../../../../utils/constants.js'
 
 const TitleRow = styled.div`

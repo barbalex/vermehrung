@@ -5,7 +5,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import Row from './Row.jsx'
-import StoreContext from '../../../storeContext.js'
+import StoreContext from '../../../mobxStoreContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import getShowArt from '../../../utils/showArt.js'
 import getShowEvent from '../../../utils/showEvent.js'

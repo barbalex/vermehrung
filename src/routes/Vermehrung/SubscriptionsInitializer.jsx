@@ -2,7 +2,7 @@ import { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 
-import StoreContext from '../../storeContext.js'
+import StoreContext from '../../mobxStoreContext.js'
 import { initializeSubscriptions } from '../../utils/initializeSubscriptions.js'
 
 export const SubscriptionsInitializer = observer(() => {

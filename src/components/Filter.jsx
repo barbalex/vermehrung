@@ -15,7 +15,7 @@ import Sammlung from './Data/Sammlung/index.jsx'
 import Teilkultur from './Data/Teilkultur/index.jsx'
 import Zaehlung from './Data/Zaehlung/index.jsx'
 import ErrorBoundary from './shared/ErrorBoundary.jsx'
-import StoreContext from '../storeContext.js'
+import StoreContext from '../mobxStoreContext.js'
 import Fallback from './shared/Fallback.jsx'
 
 const Container = styled.div`

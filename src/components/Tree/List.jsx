@@ -11,7 +11,7 @@ import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
 
-import StoreContext from '../../storeContext.js'
+import StoreContext from '../../mobxStoreContext.js'
 import Row from './Row.jsx'
 
 const StyledList = styled(List)`

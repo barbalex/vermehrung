@@ -2,7 +2,7 @@ import { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 
-import StoreContext from '../../storeContext.js'
+import StoreContext from '../../mobxStoreContext.js'
 import { getActiveNodeArrayFromPathname } from '../../utils/getActiveNodeArrayFromPathname.js'
 import { openNodesFromActiveNodeArray } from '../../utils/openNodesFromActiveNodeArray.js'
 

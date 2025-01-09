@@ -16,7 +16,7 @@ const StyledIconButton = styled(IconButton)`
   margin-left: 5px !important;
 `
 
-import StoreContext from '../../storeContext.js'
+import StoreContext from '../../mobxStoreContext.js'
 import Notification from './Notification.jsx'
 
 const Notifications = () => {

@@ -2,7 +2,7 @@ import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../storeContext.js'
+import StoreContext from '../../../mobxStoreContext.js'
 import tableFilter from '../../../utils/tableFilter.js'
 import constants from '../../../utils/constants.js'
 

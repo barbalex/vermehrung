@@ -30,7 +30,7 @@ import {
   isValid as wgs84LongIsValid,
   message as wgs84LongMessage,
 } from '../../utils/wgs84LongIsValid.js'
-import StoreContext from '../../storeContext.js'
+import StoreContext from '../../mobxStoreContext.js'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;

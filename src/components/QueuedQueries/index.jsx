@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-import StoreContext from '../../storeContext.js'
+import StoreContext from '../../mobxStoreContext.js'
 import QueuedQuery from './QueuedQuery.jsx'
 import constants from '../../utils/constants.js'
 

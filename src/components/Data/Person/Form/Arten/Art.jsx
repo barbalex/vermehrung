@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { first as first$ } from 'rxjs/operators'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import StoreContext from '../../../../../storeContext.js'
+import StoreContext from '../../../../../mobxStoreContext.js'
 
 const Container = styled.div`
   display: flex;

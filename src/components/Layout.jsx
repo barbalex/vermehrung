@@ -2,7 +2,7 @@ import React, { useContext, useEffect, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 
-import StoreContext from '../storeContext.js'
+import StoreContext from '../mobxStoreContext.js'
 import constants from '../utils/constants.js'
 import Fallback from './shared/Fallback.jsx'
 

@@ -11,7 +11,7 @@ import { observer } from 'mobx-react-lite'
 import last from 'lodash/last'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../storeContext.js'
+import StoreContext from '../../mobxStoreContext.js'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath.js'
 import isNodeOpen from './isNodeOpen.js'
 import someChildrenAreOpen from './someChildrenAreOpen.js'
