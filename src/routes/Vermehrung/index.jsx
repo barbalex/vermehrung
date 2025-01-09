@@ -8,14 +8,13 @@ import ErrorBoundary from '../../components/shared/ErrorBoundary.jsx'
 import ApiDetector from '../../components/ApiDetector.jsx'
 import { QueuedQueries } from '../../components/QueuedQueries/index.jsx'
 import constants from '../../utils/constants.js'
-import { Vermehrung } from './Vermehrung.jsx'
 import AuthorizingObserver from './AuthorizingObserver.jsx'
 import StoragePersister from './StoragePersister.jsx'
 import OpenNodesSetter from './OpenNodesSetter.jsx'
 import SubscriptionsInitializer from './SubscriptionsInitializer.jsx'
 import InitialDataLoadingNotifier from './InitialDataLoadingNotifier.jsx'
 
-const VermehrungIndex = () => {
+export const Vermehrung = observer(() => {
   const store = useContext(StoreContext)
   const { gettingAuthUser, user } = store
 
@@ -35,6 +34,4 @@ const VermehrungIndex = () => {
       <ApiDetector />
     </ErrorBoundary>
   )
-}
-
-export default observer(VermehrungIndex)
+})
