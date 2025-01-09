@@ -6,7 +6,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Checkbox2States from '../../../../shared/Checkbox2States.jsx'
-import JesNo from '../../../../shared/JesNo.jsx'
+import { JesNo } from '../../../../shared/JesNo.jsx'
 import { exists } from '../../../../../utils/exists.js'
 import { ifIsNumericAsNumber } from '../../../../../utils/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
