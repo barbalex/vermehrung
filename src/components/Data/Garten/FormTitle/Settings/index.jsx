@@ -7,7 +7,7 @@ import { FaCog } from 'react-icons/fa'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import Menu from './Menu.jsx'
 
-const SettingsGarten = ({ asMenu }) => {
+export const GartenSettings = observer(({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickConfig = useCallback(
     (event) => setAnchorEl(event.currentTarget),
@@ -24,7 +24,10 @@ const SettingsGarten = ({ asMenu }) => {
         >
           Optionen wählen
         </MenuItem>
-        <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+        <Menu
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+        />
       </>
     )
   }
@@ -41,9 +44,10 @@ const SettingsGarten = ({ asMenu }) => {
       >
         <FaCog />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      <Menu
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+      />
     </ErrorBoundary>
   )
-}
-
-export default observer(SettingsGarten)
+})
