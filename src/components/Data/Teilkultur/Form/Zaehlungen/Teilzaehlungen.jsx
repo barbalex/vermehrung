@@ -47,7 +47,7 @@ const Other = styled.div`
   margin-right: 10px;
 `
 
-const TkTeilzaehlung = ({ tz, last }) => {
+export const TeilkulturTeilzaehlung = ({ tz, last }) => {
   const [zaehlung, setZaehlung] = useState([])
 
   useEffect(() => {
@@ -59,8 +59,9 @@ const TkTeilzaehlung = ({ tz, last }) => {
     return () => subscription?.unsubscribe?.()
   }, [tz.zaehlung])
 
-  const datum = zaehlung?.datum
-    ? format(new Date(zaehlung?.datum), 'yyyy.MM.dd')
+  const datum =
+    zaehlung?.datum ?
+      format(new Date(zaehlung?.datum), 'yyyy.MM.dd')
     : 'Kein Datum'
 
   return (
@@ -71,26 +72,24 @@ const TkTeilzaehlung = ({ tz, last }) => {
         {exists(tz.anzahl_pflanzen) ? `${tz.anzahl_pflanzen} Pflanzen` : ''}
       </Pflanzen>
       <Auspflanzbereit>
-        {exists(tz.anzahl_auspflanzbereit)
-          ? `${tz.anzahl_auspflanzbereit} auspflanzbereit`
-          : ''}
+        {exists(tz.anzahl_auspflanzbereit) ?
+          `${tz.anzahl_auspflanzbereit} auspflanzbereit`
+        : ''}
       </Auspflanzbereit>
       <Auspflanzbereit>
-        {exists(tz.anzahl_mutterpflanzen)
-          ? `${tz.anzahl_mutterpflanzen} Mutterpflanzen`
-          : ''}
+        {exists(tz.anzahl_mutterpflanzen) ?
+          `${tz.anzahl_mutterpflanzen} Mutterpflanzen`
+        : ''}
       </Auspflanzbereit>
       <Auspflanzbereit>
         {exists(tz.andere_menge) ? tz.andere_menge : ''}
       </Auspflanzbereit>
       <Other>
-        {exists(tz.auspflanzebereit_beschreibung)
-          ? tz.auspflanzebereit_beschreibung
-          : ''}
+        {exists(tz.auspflanzebereit_beschreibung) ?
+          tz.auspflanzebereit_beschreibung
+        : ''}
       </Other>
       <Other>{tz.bemerkungen ? tz.bemerkungen : ''}</Other>
     </Row>
   )
 }
-
-export default TkTeilzaehlung

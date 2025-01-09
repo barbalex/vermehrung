@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import teilzaehlungsSortByZaehlungTk from '../../../../../utils/teilzaehlungsSortByZaehlungTk.js'
+import { teilzaehlungsSortByZaehlungTk } from '../../../../../utils/teilzaehlungsSortByZaehlungTk.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import Teilzaehlungen from './Teilzaehlungen.jsx'
+import { TeilkulturTeilzaehlung as Teilzaehlungen } from './Teilzaehlungen.jsx'
 import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
@@ -30,7 +31,7 @@ const Title = styled.div`
 `
 const Rows = styled.div``
 
-const TkZaehlungen = ({ teilkultur }) => {
+export const TeilkulturZaehlungen = observer(({ teilkultur }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
 
@@ -70,6 +71,4 @@ const TkZaehlungen = ({ teilkultur }) => {
       </Rows>
     </ErrorBoundary>
   )
-}
-
-export default TkZaehlungen
+})
