@@ -22,7 +22,7 @@ const Title = styled.div`
   user-select: none;
 `
 
-const HerkunftDeleteButton = ({ row }) => {
+export const HerkunftDeleteButton = observer(({ row }) => {
   const store = useContext(MobxStoreContext)
   const { filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
@@ -82,6 +82,4 @@ const HerkunftDeleteButton = ({ row }) => {
       </Menu>
     </ErrorBoundary>
   )
-}
-
-export default observer(HerkunftDeleteButton)
+})
