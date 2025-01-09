@@ -9,7 +9,7 @@ import Garten from './Data/Garten/index.jsx'
 import Herkunft from './Data/Herkunft/index.jsx'
 import Kultur from './Data/Kultur/index.jsx'
 import Lieferung from './Data/Lieferung/index.jsx'
-import SammelLieferung from './Data/SammelLieferung/index.jsx'
+import { SammelLieferung } from './Data/SammelLieferung/index.jsx'
 import Person from './Data/Person/index.jsx'
 import Sammlung from './Data/Sammlung/index.jsx'
 import Teilkultur from './Data/Teilkultur/index.jsx'
@@ -51,8 +51,9 @@ const Filter = () => {
   // ensure list views are directed to correct filter
   // use exact match or garten will become gart
   // see: https://stackoverflow.com/a/447258/712005
-  const activeTabFromActiveForm = activeForm
-    ? activeForm
+  const activeTabFromActiveForm =
+    activeForm ?
+      activeForm
         .replace(/^events$/, 'event')
         .replace(/^herkuenfte$/, 'herkunft')
         .replace(/^gaerten$/, 'garten')
@@ -64,8 +65,8 @@ const Filter = () => {
         .replace(/^sammlungen$/, 'sammlung')
         .replace(/^teilkulturen$/, 'teilkultur')
         .replace(/^zaehlungen$/, 'zaehlung')
-    : // fallback if no form is active
-      'art'
+      // fallback if no form is active
+    : 'art'
   const [activeTab, setActiveTab] = useState(activeTabFromActiveForm)
 
   const onChangeTab = useCallback((event, value) => setActiveTab(value), [])
@@ -111,17 +112,41 @@ const Filter = () => {
             variant="scrollable"
             scrollButtons="auto"
           >
-            <StyledTab label="Art" value="art" data-id="art" />
-            <StyledTab label="Herkunft" value="herkunft" data-id="herkunft" />
-            <StyledTab label="Sammlung" value="sammlung" data-id="sammlung" />
-            <StyledTab label="Garten" value="garten" data-id="garten" />
-            <StyledTab label="Kultur" value="kultur" data-id="kultur" />
+            <StyledTab
+              label="Art"
+              value="art"
+              data-id="art"
+            />
+            <StyledTab
+              label="Herkunft"
+              value="herkunft"
+              data-id="herkunft"
+            />
+            <StyledTab
+              label="Sammlung"
+              value="sammlung"
+              data-id="sammlung"
+            />
+            <StyledTab
+              label="Garten"
+              value="garten"
+              data-id="garten"
+            />
+            <StyledTab
+              label="Kultur"
+              value="kultur"
+              data-id="kultur"
+            />
             <StyledTab
               label="Teilkultur"
               value="teilkultur"
               data-id="teilkultur"
             />
-            <StyledTab label="Zählung" value="zaehlung" data-id="zaehlung" />
+            <StyledTab
+              label="Zählung"
+              value="zaehlung"
+              data-id="zaehlung"
+            />
             <StyledTab
               label="Lieferung"
               value="lieferung"
@@ -132,8 +157,16 @@ const Filter = () => {
               value="sammel_lieferung"
               data-id="sammel_lieferung"
             />
-            <StyledTab label="Event" value="event" data-id="event" />
-            <StyledTab label="Person" value="person" data-id="person" />
+            <StyledTab
+              label="Event"
+              value="event"
+              data-id="event"
+            />
+            <StyledTab
+              label="Person"
+              value="person"
+              data-id="person"
+            />
           </StyledTabs>
         </TitleRow>
         <Suspense fallback={<Fallback />}>{form}</Suspense>

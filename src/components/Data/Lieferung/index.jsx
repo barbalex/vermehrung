@@ -7,7 +7,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import Lieferung from './Lieferung/index.jsx'
-import SammelLieferung from '../SammelLieferung/index.jsx'
+import { SammelLieferung } from '../SammelLieferung/index.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
 const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
@@ -16,8 +16,9 @@ const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
   const { activeNodeArray } = store.tree
   let id = idPassed
   if (!idPassed) {
-    id = showFilter
-      ? '99999999-9999-9999-9999-999999999999'
+    id =
+      showFilter ?
+        '99999999-9999-9999-9999-999999999999'
       : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   }
 
@@ -32,17 +33,17 @@ const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
   const { li_show_sl } = userPersonOption ?? {}
 
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['li_show_sl'])
       : $of({})
-    const lieferungObservable = showFilter
-      ? $of(filter.lieferung)
-      : initialDataQueried
-        ? db.get('lieferung').findAndObserve(id)
-        : $of({})
+    const lieferungObservable =
+      showFilter ? $of(filter.lieferung)
+      : initialDataQueried ? db.get('lieferung').findAndObserve(id)
+      : $of({})
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       lieferungObservable,
@@ -72,7 +73,12 @@ const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
     // show that too
     return (
       <Allotment vertical>
-        <Lieferung showFilter={showFilter} row={row} rawRow={rawRow} id={id} />
+        <Lieferung
+          showFilter={showFilter}
+          row={row}
+          rawRow={rawRow}
+          id={id}
+        />
         <SammelLieferung
           showFilter={showFilter}
           id={row?.sammel_lieferung_id}
@@ -82,7 +88,14 @@ const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
     )
   }
 
-  return <Lieferung id={id} row={row} rawRow={rawRow} showFilter={showFilter} />
+  return (
+    <Lieferung
+      id={id}
+      row={row}
+      rawRow={rawRow}
+      showFilter={showFilter}
+    />
+  )
 }
 
 export default observer(LieferungContainer)
