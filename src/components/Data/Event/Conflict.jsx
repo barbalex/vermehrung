@@ -7,12 +7,12 @@ import { useQuery } from 'urql'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
-import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
+import { createDataArrayForEventRevComparison } from './createDataArrayForRevComparison.js'
 import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
 import { mutations } from '../../../utils/mutations.js'
 
-const eventRevQuery = gql` 
+const eventRevQuery = gql`
   query eventRevForConflictQuery($id: uuid!, $rev: String!) {
     event_rev(where: { event_id: { _eq: $id }, _rev: { _eq: $rev } }) {
       id
@@ -59,7 +59,7 @@ const EventConflict = ({
   const revRow = useMemo(() => data?.event_rev?.[0] ?? {}, [data?.event_rev])
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow }),
+    () => createDataArrayForEventRevComparison({ row, revRow }),
     [revRow, row],
   )
 
@@ -83,8 +83,9 @@ const EventConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = revRow._revisions
-      ? toPgArray([rev, ...revRow._revisions])
+    newObject._revisions =
+      revRow._revisions ?
+        toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
     addQueuedQuery({
@@ -144,9 +145,8 @@ const EventConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row._revisions
-      ? toPgArray([rev, ...row._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
     const response = await gqlClient
       .query(mutations.mutateInsert_event_rev_one, {
         object: newObject,
@@ -184,9 +184,10 @@ const EventConflict = ({
     store,
     user.email,
   ])
-  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
-    setActiveConflict,
-  ])
+  const onClickSchliessen = useCallback(
+    () => setActiveConflict(null),
+    [setActiveConflict],
+  )
 
   //console.log('Event Conflict', { dataArray, row, revRow })
 

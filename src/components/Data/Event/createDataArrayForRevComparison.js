@@ -1,4 +1,4 @@
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+export const createDataArrayForEventRevComparison = ({ row, revRow }) => [
   {
     valueInRow: row.kultur_id,
     valueInRev: revRow.kultur_id,
@@ -45,5 +45,3 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'gelöscht',
   },
 ]
-
-export default createDataArrayForRevComparison
