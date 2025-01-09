@@ -6,13 +6,13 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import signup from '../../../../../utils/signup.js'
-import Menu from './Menu.jsx'
+import { PersonKontoMenu as Menu } from './Menu.jsx'
 
 const StyledButton = styled(Button)`
   text-transform: none !important;
 `
 
-const KontoMenu = ({ row, asMenu }) => {
+export const PersonKonto = observer(({ row, asMenu }) => {
   const store = useContext(MobxStoreContext)
 
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null)
@@ -28,7 +28,10 @@ const KontoMenu = ({ row, asMenu }) => {
     }
 
     return (
-      <StyledButton color="primary" onClick={createNewAccount}>
+      <StyledButton
+        color="primary"
+        onClick={createNewAccount}
+      >
         Neues Konto
       </StyledButton>
     )
@@ -61,6 +64,4 @@ const KontoMenu = ({ row, asMenu }) => {
       />
     </>
   )
-}
-
-export default observer(KontoMenu)
+})
