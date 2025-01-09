@@ -12,7 +12,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Person from './Person.jsx'
 import Select from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import avsSortByPerson from '../../../../../utils/avsSortByPerson.js'
+import { avsSortByPerson } from '../../../../../utils/avsSortByPerson.js'
 import { personSort } from '../../../../../utils/personSort.js'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
 import { constants } from '../../../../../utils/constants.js'
@@ -86,32 +86,27 @@ const ArtPersonen = ({ art }) => {
   })
   useEffect(() => {
     const delQuery =
-      filter.person?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.person?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.person?._deleted === false ? Q.where('_deleted', false)
+      : filter.person?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const aktivQuery =
-      filter.person?.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.person?.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      filter.person?.aktiv === false ? Q.where('aktiv', false)
+      : filter.person?.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const personsObservable = db
       .get('person')
       .query(delQuery, aktivQuery)
       .observe()
-    const avsObservable = art.avs
-      ? art.avs.extend(Q.where('_deleted', false)).observe()
-      : $of([])
+    const avsObservable =
+      art.avs ? art.avs.extend(Q.where('_deleted', false)).observe() : $of([])
     const combinedObservables = combineLatest([
       personsObservable,
       avsObservable,
@@ -144,7 +139,10 @@ const ArtPersonen = ({ art }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+      >
         <Title>{`Mitarbeitende Personen (${avsSorted.length})`}</Title>
         <div>
           <IconButton
@@ -153,7 +151,9 @@ const ArtPersonen = ({ art }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </TitleRow>
@@ -165,7 +165,10 @@ const ArtPersonen = ({ art }) => {
           <>
             <Aven>
               {avsSorted.map((av, index) => (
-                <Person key={`${av.art_id}/${av.person_id}/${index}`} av={av} />
+                <Person
+                  key={`${av.art_id}/${av.person_id}/${index}`}
+                  av={av}
+                />
               ))}
             </Aven>
             {!!personWerte.length && (
