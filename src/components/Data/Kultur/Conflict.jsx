@@ -10,7 +10,7 @@ import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
 import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
-import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
+import { createDataArrayForKulturRevComparison } from './createDataArrayForRevComparison.js'
 
 const kulturRevQuery = gql`
   query kulturRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -61,7 +61,7 @@ const KulturConflict = ({
   const revRow = useMemo(() => data?.kultur_rev?.[0] ?? {}, [data?.kultur_rev])
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow }),
+    () => createDataArrayForKulturRevComparison({ row, revRow }),
     [revRow, row],
   )
 
@@ -88,8 +88,9 @@ const KulturConflict = ({
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = revRow._revisions
-      ? toPgArray([rev, ...revRow._revisions])
+    newObject._revisions =
+      revRow._revisions ?
+        toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
     addQueuedQuery({
@@ -153,9 +154,8 @@ const KulturConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row._revisions
-      ? toPgArray([rev, ...row._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
     const response = await gqlClient
       .query(mutations.mutateInsert_kultur_rev_one, {
         object: newObject,
@@ -195,9 +195,10 @@ const KulturConflict = ({
     store,
     user.email,
   ])
-  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
-    setActiveConflict,
-  ])
+  const onClickSchliessen = useCallback(
+    () => setActiveConflict(null),
+    [setActiveConflict],
+  )
 
   console.log('Kultur Conflict', { dataArray, row, revRow })
 

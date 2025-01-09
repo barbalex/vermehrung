@@ -1,4 +1,4 @@
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+export const createDataArrayForKulturRevComparison = ({ row, revRow }) => [
   {
     valueInRow: row.art_id,
     valueInRev: revRow.art_id,
@@ -57,4 +57,3 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
   },
 ]
 
-export default createDataArrayForRevComparison
