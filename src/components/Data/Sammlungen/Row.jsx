@@ -29,7 +29,7 @@ const Row = styled.div`
   }
 `
 
-const Arten = ({ row, style, last }) => {
+export const SammlungRow = observer(({ row, style, last }) => {
   const store = useContext(MobxStoreContext)
   const { herkunftIdInActiveNodeArray } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
@@ -37,23 +37,23 @@ const Arten = ({ row, style, last }) => {
   const [label, setLabel] = useState('')
   useEffect(() => {
     let isActive = true
-    herkunftIdInActiveNodeArray
-      ? row.labelUnderHerkunft
-          .pipe(first$())
-          .toPromise()
-          .then((label) => {
-            if (!isActive) return
+    herkunftIdInActiveNodeArray ?
+      row.labelUnderHerkunft
+        .pipe(first$())
+        .toPromise()
+        .then((label) => {
+          if (!isActive) return
 
-            setLabel(label)
-          })
-      : row.label
-          .pipe(first$())
-          .toPromise()
-          .then((label) => {
-            if (!isActive) return
+          setLabel(label)
+        })
+    : row.label
+        .pipe(first$())
+        .toPromise()
+        .then((label) => {
+          if (!isActive) return
 
-            setLabel(label)
-          })
+          setLabel(label)
+        })
 
     return () => {
       isActive = false
@@ -66,10 +66,13 @@ const Arten = ({ row, style, last }) => {
   )
 
   return (
-    <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
+    <Row
+      key={row.id}
+      onClick={onClickRow}
+      style={style}
+      data-last={last}
+    >
       <div>{label}</div>
     </Row>
   )
-}
-
-export default observer(Arten)
+})
