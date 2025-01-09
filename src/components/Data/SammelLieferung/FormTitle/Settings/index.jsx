@@ -5,9 +5,9 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaCog } from 'react-icons/fa'
 
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import Menu from './Menu.jsx'
+import { SettingsSammelLieferungMenu as Menu } from './Menu.jsx'
 
-const SettingsSammelLieferung = ({ asMenu }) => {
+export const SammelLieferungSettings = observer(({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickConfig = useCallback(
     (event) => setAnchorEl(event.currentTarget),
@@ -24,7 +24,10 @@ const SettingsSammelLieferung = ({ asMenu }) => {
         >
           Optionen wählen
         </MenuItem>
-        <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+        <Menu
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+        />
       </>
     )
   }
@@ -37,12 +40,14 @@ const SettingsSammelLieferung = ({ asMenu }) => {
         aria-haspopup="true"
         title="Optionen wählen"
         onClick={onClickConfig}
-        size="large">
+        size="large"
+      >
         <FaCog />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      <Menu
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+      />
     </ErrorBoundary>
-  );
-}
-
-export default observer(SettingsSammelLieferung)
+  )
+})

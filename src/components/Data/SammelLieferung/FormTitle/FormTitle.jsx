@@ -6,7 +6,7 @@ import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import Settings from './Settings/index.jsx'
+import { SammelLieferungSettings as Settings } from './Settings/index.jsx'
 import { SammelLieferungCopyMenu as Copy } from './Copy/index.jsx'
 import { SammelLieferungAddButton as Add } from './Add.jsx'
 import { SammelLieferungDeleteButton as Delete } from './Delete.jsx'
