@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 
-import DeleteButton from './DeleteButton.jsx'
+import { DeleteButton } from './DeleteButton.jsx'
 import { AddButton } from './AddButton.jsx'
 import { NavButtons } from './NavButtons.jsx'
 import { FilterNumbers } from '../../../shared/FilterNumbers.jsx'
