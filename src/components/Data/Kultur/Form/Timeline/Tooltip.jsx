@@ -24,7 +24,11 @@ const Ereignis = styled.span`
 `
 
 // somehow payload sometimes arrives as undefined, so set to []
-const CustomTooltip = ({ payload: payloadPassed = [], label, active }) => {
+export const KulturTooltip = ({
+  payload: payloadPassed = [],
+  label,
+  active,
+}) => {
   // filter out zählung information if ereignis is not zählung
   const payload = [
     ...payloadPassed.filter((p) => {
@@ -118,5 +122,3 @@ const CustomTooltip = ({ payload: payloadPassed = [], label, active }) => {
 
   return null
 }
-
-export default CustomTooltip

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text } from 'recharts'
 
-const LabelZaehlung = ({ x, y, stroke, value }) => (
+export const KulturLabelZaehlung = ({ x, y, stroke, value }) => (
   <Text
     x={x}
     y={y}
@@ -14,5 +14,3 @@ const LabelZaehlung = ({ x, y, stroke, value }) => (
     {value}
   </Text>
 )
-
-export default LabelZaehlung
