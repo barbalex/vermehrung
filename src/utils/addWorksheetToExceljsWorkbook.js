@@ -1,6 +1,6 @@
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects.js'
 
-const addWorksheetToExceljsWorkbook = ({
+export const addWorksheetToExceljsWorkbook = ({
   workbook,
   title,
   data: dataPassed,
@@ -50,5 +50,3 @@ const addWorksheetToExceljsWorkbook = ({
     },
   }
 }
-
-export default addWorksheetToExceljsWorkbook

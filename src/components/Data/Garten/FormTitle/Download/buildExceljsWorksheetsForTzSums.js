@@ -1,6 +1,6 @@
 import { Q } from '@nozbe/watermelondb'
 
-import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
+import { addWorksheetToExceljsWorkbook } from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
 import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByTk.js'
 
 /**
