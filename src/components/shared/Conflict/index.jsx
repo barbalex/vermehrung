@@ -39,83 +39,86 @@ const StyledButton = styled(Button)`
   }
 `
 
-const Conflict = ({
-  name,
-  rev,
-  dataArray,
-  loading,
-  error,
-  onClickAktuellUebernehmen,
-  onClickWiderspruchUebernehmen,
-  onClickSchliessen,
-}) => {
-  const store = useContext(MobxStoreContext)
-  const { diffConflict, setDiffConflict } = store
+export const Conflict = observer(
+  ({
+    name,
+    rev,
+    dataArray,
+    loading,
+    error,
+    onClickAktuellUebernehmen,
+    onClickWiderspruchUebernehmen,
+    onClickSchliessen,
+  }) => {
+    const store = useContext(MobxStoreContext)
+    const { diffConflict, setDiffConflict } = store
 
-  const onClickToggleDiff = useCallback(
-    () => setDiffConflict(!diffConflict),
-    [diffConflict, setDiffConflict],
-  )
+    const onClickToggleDiff = useCallback(
+      () => setDiffConflict(!diffConflict),
+      [diffConflict, setDiffConflict],
+    )
 
-  if (error) {
-    return <Container>{error.message}</Container>
-  }
+    if (error) {
+      return <Container>{error.message}</Container>
+    }
 
-  return (
-    <Container>
-      <Title>
-        Widersprüchliche Version<Rev>{rev}</Rev>
-      </Title>
-      <Explainer name={name} />
-      <Data dataArray={dataArray} loading={loading} />
-      <ButtonRow>
-        <StyledButton
-          onClick={onClickAktuellUebernehmen}
-          variant="outlined"
-          title="Die widersprüchliche Version wird verworfen, die aktuelle beibehalten. Der Konflikt gilt als gelöst und erscheint nicht mehr"
-          startIcon={<FaRegTrashAlt />}
-          color="inherit"
-        >
-          {diffConflict
-            ? 'grüne (= aktuelle) Version übernehmen'
+    return (
+      <Container>
+        <Title>
+          Widersprüchliche Version<Rev>{rev}</Rev>
+        </Title>
+        <Explainer name={name} />
+        <Data
+          dataArray={dataArray}
+          loading={loading}
+        />
+        <ButtonRow>
+          <StyledButton
+            onClick={onClickAktuellUebernehmen}
+            variant="outlined"
+            title="Die widersprüchliche Version wird verworfen, die aktuelle beibehalten. Der Konflikt gilt als gelöst und erscheint nicht mehr"
+            startIcon={<FaRegTrashAlt />}
+            color="inherit"
+          >
+            {diffConflict ?
+              'grüne (= aktuelle) Version übernehmen'
             : 'aktuelle Version übernehmen'}
-        </StyledButton>
-        <StyledButton
-          onClick={onClickWiderspruchUebernehmen}
-          variant="outlined"
-          title="Die widersprüchliche Version wird übernommen, die aktuelle verworfen. Der Konflikt gilt als gelöst und erscheint nicht mehr"
-          startIcon={<FaExchangeAlt />}
-          color="inherit"
-        >
-          {diffConflict
-            ? 'rote (= widersprüchliche) Version übernehmen'
+          </StyledButton>
+          <StyledButton
+            onClick={onClickWiderspruchUebernehmen}
+            variant="outlined"
+            title="Die widersprüchliche Version wird übernommen, die aktuelle verworfen. Der Konflikt gilt als gelöst und erscheint nicht mehr"
+            startIcon={<FaExchangeAlt />}
+            color="inherit"
+          >
+            {diffConflict ?
+              'rote (= widersprüchliche) Version übernehmen'
             : 'widersprüchliche Version übernehmen'}
-        </StyledButton>
-        <StyledButton
-          onClick={onClickToggleDiff}
-          variant="outlined"
-          title={
-            diffConflict
-              ? 'Versionen nicht vergleichen'
+          </StyledButton>
+          <StyledButton
+            onClick={onClickToggleDiff}
+            variant="outlined"
+            title={
+              diffConflict ?
+                'Versionen nicht vergleichen'
               : 'Versionen vergleichen'
-          }
-          startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
-          color="inherit"
-        >
-          {diffConflict ? 'nicht vergleichen' : 'vergleichen'}
-        </StyledButton>
-        <StyledButton
-          onClick={onClickSchliessen}
-          variant="outlined"
-          title="Die Spalte mit dem Konflikt wird geschlossen. Der Konflikt bleibt erhalten"
-          startIcon={<FaTimes />}
-          color="inherit"
-        >
-          schliessen
-        </StyledButton>
-      </ButtonRow>
-    </Container>
-  )
-}
-
-export default observer(Conflict)
+            }
+            startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
+            color="inherit"
+          >
+            {diffConflict ? 'nicht vergleichen' : 'vergleichen'}
+          </StyledButton>
+          <StyledButton
+            onClick={onClickSchliessen}
+            variant="outlined"
+            title="Die Spalte mit dem Konflikt wird geschlossen. Der Konflikt bleibt erhalten"
+            startIcon={<FaTimes />}
+            color="inherit"
+          >
+            schliessen
+          </StyledButton>
+        </ButtonRow>
+      </Container>
+    )
+  },
+)
