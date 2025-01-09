@@ -8,7 +8,7 @@ import { useQuery } from 'urql'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import Conflict from '../../shared/Conflict/index.jsx'
 import checkForOnlineError from '../../../utils/checkForOnlineError.js'
-import toPgArray from '../../../utils/toPgArray.js'
+import { toPgArray } from '../../../utils/toPgArray.js'
 import { mutations } from '../../../utils/mutations.js'
 import { createDataArrayForRevComparison } from './createDataArrayForRevComparison.js'
 
