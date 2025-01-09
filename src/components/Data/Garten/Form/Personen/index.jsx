@@ -12,7 +12,7 @@ import Person from './Person.jsx'
 import Select from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import gvsSortByPerson from '../../../../../utils/gvsSortByPerson.js'
-import personSort from '../../../../../utils/personSort.js'
+import { personSort } from '../../../../../utils/personSort.js'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
 import { constants } from '../../../../../utils/constants.js'
 

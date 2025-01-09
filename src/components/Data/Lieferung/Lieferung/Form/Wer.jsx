@@ -11,7 +11,7 @@ import TextField from '../../../../shared/TextField.jsx'
 import Files from '../../../Files/index.jsx'
 import ConflictList from '../../../../shared/ConflictList/index.jsx'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
-import personSort from '../../../../../utils/personSort.js'
+import { personSort } from '../../../../../utils/personSort.js'
 
 const Title = styled.div`
   font-weight: bold;

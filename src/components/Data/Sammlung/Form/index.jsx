@@ -24,7 +24,7 @@ import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHe
 import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.js'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts.js'
 import exists from '../../../../utils/exists.js'
-import personSort from '../../../../utils/personSort.js'
+import { personSort } from '../../../../utils/personSort.js'
 import { herkunftSort } from '../../../../utils/herkunftSort.js'
 
 const FieldsContainer = styled.div`
