@@ -25,7 +25,7 @@ const Title = styled.div`
   user-select: none;
 `
 
-const GartenDownload = ({ gartenId }) => {
+export const GartenDownload = observer(({ gartenId }) => {
   const store = useContext(MobxStoreContext)
 
   const onClickData = useCallback(async () => {
@@ -94,6 +94,4 @@ const GartenDownload = ({ gartenId }) => {
       </Menu>
     </ErrorBoundary>
   )
-}
-
-export default observer(GartenDownload)
+})
