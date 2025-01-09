@@ -20,8 +20,12 @@ import initiateApp from './utils/initiateApp.js'
 import initiateDb from './utils/initiateDb.js'
 
 // TODO: lazy import all routes
-import Home from './routes/index.jsx'
-import { Vermehrung as VermehrungIndex } from './routes/Vermehrung/index.jsx'
+const Home = lazy(async () => ({
+  default: (await import('./routes/index.jsx')).Home,
+}))
+const VermehrungIndex = lazy(async () => ({
+  default: (await import('./routes/Vermehrung/index.jsx')).VermehrungIndex,
+}))
 const FourOhFour = lazy(async () => ({
   default: (await import('./routes/404.jsx')).FourOhFour,
 }))
