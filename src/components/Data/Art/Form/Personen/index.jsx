@@ -9,7 +9,7 @@ import { combineLatest } from 'rxjs'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import Person from './Person.jsx'
+import { Person } from './Person.jsx'
 import { Select } from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { avsSortByPerson } from '../../../../../utils/avsSortByPerson.js'
