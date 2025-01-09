@@ -31,7 +31,7 @@ const Row = styled.div`
   }
 `
 
-const EventsRows = ({ row, style, last }) => {
+export const PersonRow = observer(({ row, style, last }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -51,6 +51,4 @@ const EventsRows = ({ row, style, last }) => {
       <div>{personLabelFromPerson({ person: row })}</div>
     </Row>
   )
-}
-
-export default observer(EventsRows)
+})
