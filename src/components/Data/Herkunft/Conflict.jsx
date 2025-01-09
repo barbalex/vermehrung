@@ -10,7 +10,7 @@ import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
 import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
-import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
+import { createDataArrayForHerkunftRevComparison } from './createDataArrayForRevComparison.js'
 
 const herkunftRevQuery = gql`
   query herkunftRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -62,7 +62,7 @@ export const HerkunftConflict = observer(
     )
 
     const dataArray = useMemo(
-      () => createDataArrayForRevComparison({ row, revRow, store }),
+      () => createDataArrayForHerkunftRevComparison({ row, revRow, store }),
       [revRow, row, store],
     )
 
