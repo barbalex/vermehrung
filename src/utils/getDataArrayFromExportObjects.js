@@ -1,4 +1,4 @@
-export default (exportObjects) => {
+export const getDataArrayFromExportObjects = (exportObjects) => {
   const dataArray = []
   // first the field names:
   dataArray.push(Object.keys(exportObjects[0]))
