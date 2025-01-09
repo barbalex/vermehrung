@@ -67,7 +67,7 @@ const sliderSettings = {
   infinite: false,
 }
 
-const SammlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
+export const SammlungHistory =observer( ({ row, rawRow, historyTakeoverCallback }) => {
   const store = useContext(MobxStoreContext)
 
   const priorRevisions = row?._revisions?.slice(1) ?? []
@@ -108,6 +108,5 @@ const SammlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
       </Slider>
     </Container>
   )
-}
+})
 
-export default observer(SammlungHistory)
