@@ -8,7 +8,7 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import Person from './Person.jsx'
+import { GartenPerson as Person } from './Person.jsx'
 import { Select } from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { gvsSortByPerson } from '../../../../../utils/gvsSortByPerson.js'
