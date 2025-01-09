@@ -2,7 +2,7 @@ import axios from 'redaxios'
 
 import { constants } from './constants.js'
 
-const deleteAccount = async ({ store, person }) => {
+export const deleteAccount = async ({ store, person }) => {
   const {
     addNotification,
     online,
@@ -48,5 +48,3 @@ const deleteAccount = async ({ store, person }) => {
     })
   }
 }
-
-export default deleteAccount

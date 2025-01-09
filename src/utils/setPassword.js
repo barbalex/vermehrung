@@ -2,7 +2,7 @@ import { sendPasswordResetEmail } from 'firebase/auth'
 
 import { constants } from './constants.js'
 
-const setPassword = async ({ store, person }) => {
+export const setPassword = async ({ store, person }) => {
   const { addNotification, firebaseAuth } = store
   // fetch email of this person
   const email = person?.email
@@ -21,5 +21,3 @@ const setPassword = async ({ store, person }) => {
     type: 'success',
   })
 }
-
-export default setPassword

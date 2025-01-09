@@ -4,8 +4,8 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import deleteAccount from '../../../../../utils/deleteAccount.js'
-import setPassword from '../../../../../utils/setPassword.js'
+import { deleteAccount } from '../../../../../utils/deleteAccount.js'
+import { setPassword } from '../../../../../utils/setPassword.js'
 
 export const PersonKontoMenu = observer(
   ({ row, menuAnchorEl, setMenuAnchorEl, asMenu }) => {
