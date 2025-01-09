@@ -29,7 +29,7 @@ const StyledMenuItem = styled(MenuItem)`
   color: rgba(0, 0, 0, 0.54) !important;
 `
 
-const FilterNumbers = ({ filteredCount, totalCount, asMenu }) => {
+export const FilterNumbers = ({ filteredCount, totalCount, asMenu }) => {
   if (asMenu) {
     return (
       <StyledMenuItem dense>
@@ -48,5 +48,3 @@ const FilterNumbers = ({ filteredCount, totalCount, asMenu }) => {
     </OuterContainer>
   )
 }
-
-export default FilterNumbers
