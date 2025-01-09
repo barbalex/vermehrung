@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-const LieferungAddButton = () => {
+export const LieferungAddButton = observer(() => {
   const store = useContext(MobxStoreContext)
   const { insertLieferungRev } = store
 
@@ -20,11 +20,10 @@ const LieferungAddButton = () => {
         aria-label="neue Lieferung"
         title="neue Lieferung"
         onClick={add}
-        size="large">
+        size="large"
+      >
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
-  );
-}
-
-export default observer(LieferungAddButton)
+  )
+})
