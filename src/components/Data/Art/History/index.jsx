@@ -7,7 +7,7 @@ import { useQuery } from 'urql'
 
 import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
 import Spinner from '../../../shared/Spinner.jsx'
-import Row from './Row.jsx'
+import { Row } from './Row.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 
 const artRevQuery = gql`

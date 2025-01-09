@@ -11,7 +11,7 @@ import toPgArray from '../../../../utils/toPgArray.js'
 import { mutations } from '../../../../utils/mutations.js'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison.js'
 
-const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
+export const Row = observer(({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(MobxStoreContext)
   const { user, addNotification, db, gqlClient } = store
 
@@ -57,9 +57,8 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     historyTakeoverCallback()
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = row._revisions
-      ? [rev, ...row._revisions]
-      : [rev]
+    newObjectForStore._revisions =
+      row._revisions ? [rev, ...row._revisions] : [rev]
     // TODO: is this a good idea?
     newObjectForStore._conflicts = row._conflicts
     // for store: convert rev to winner
@@ -98,6 +97,4 @@ const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
     />
   )
-}
-
-export default observer(HistoryRow)
+})

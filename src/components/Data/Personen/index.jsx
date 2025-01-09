@@ -8,7 +8,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import FilterTitle from '../../shared/FilterTitle.jsx'
+import { FilterTitle } from '../../shared/FilterTitle.jsx'
 import Row from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.jsx'
