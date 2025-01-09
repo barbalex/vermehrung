@@ -29,7 +29,7 @@ const Row = styled.div`
   }
 `
 
-const HerkunftRow = ({ row, style, last }) => {
+export const HerkunftRow = observer(({ row, style, last }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -39,10 +39,13 @@ const HerkunftRow = ({ row, style, last }) => {
   )
 
   return (
-    <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
+    <Row
+      key={row.id}
+      onClick={onClickRow}
+      style={style}
+      data-last={last}
+    >
       <div>{herkunftLabelFromHerkunft({ herkunft: row })}</div>
     </Row>
   )
-}
-
-export default observer(HerkunftRow)
+})
