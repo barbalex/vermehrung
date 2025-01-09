@@ -12,7 +12,7 @@ import { MobxStoreContext } from '../../mobxStoreContext.js'
 import Settings from './Settings.jsx'
 import List from './List.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import tableFilter from '../../utils/tableFilter.js'
+import { tableFilter } from '../../utils/tableFilter.js'
 import { notDeletedQuery } from '../../utils/notDeletedQuery.js'
 import buildNodes from './nodes/index.js'
 

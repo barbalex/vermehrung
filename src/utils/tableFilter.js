@@ -4,14 +4,13 @@ import camelCase from 'lodash/camelCase'
 import types from '../store/Filter/simpleTypes.js'
 import { exists } from './exists.js'
 
-const tableFilter = ({ store, table }) => {
+export const tableFilter = ({ store, table }) => {
   if (!table) throw `no table passed`
   const filter = store.filter[table]
   if (!filter) throw `no filter found for table ${table}`
 
-  const filterEntries = Object.entries(filter).filter(
-    // eslint-disable-next-line no-unused-vars
-    ([key, value]) => exists(value),
+  const filterEntries = Object.entries(filter).filter(([key, value]) =>
+    exists(value),
   )
 
   //console.log('tableFilter', { filter, table, filterEntries })
@@ -47,5 +46,3 @@ const tableFilter = ({ store, table }) => {
 
   return filterArray
 }
-
-export default tableFilter

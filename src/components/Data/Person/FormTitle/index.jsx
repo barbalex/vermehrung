@@ -6,7 +6,7 @@ import { Q } from '@nozbe/watermelondb'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
 import FormTitle from './FormTitle.jsx'
-import tableFilter from '../../../../utils/tableFilter.js'
+import { tableFilter } from '../../../../utils/tableFilter.js'
 
 const PersonFormTitleChooser = ({
   showFilter,
