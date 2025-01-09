@@ -10,7 +10,7 @@ import Conflict from '../../shared/Conflict/index.jsx'
 import checkForOnlineError from '../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../utils/toPgArray.js'
 import { mutations } from '../../../utils/mutations.js'
-import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
+import { createDataArrayForRevComparison } from './createDataArrayForRevComparison.js'
 
 const artRevQuery = gql`
   query artRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -75,8 +75,9 @@ const ArtConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = revRow._revisions
-      ? toPgArray([rev, ...revRow._revisions])
+    newObject._revisions =
+      revRow._revisions ?
+        toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
     addQueuedQuery({
@@ -128,9 +129,8 @@ const ArtConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row._revisions
-      ? toPgArray([rev, ...row._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
     const response = await gqlClient
       .query(mutations.mutateInsert_art_rev_one, {
         object: newObject,
