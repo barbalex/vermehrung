@@ -10,7 +10,7 @@ import { combineLatest } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Garten from './Garten.jsx'
-import Select from '../../../../shared/Select/index.jsx'
+import { Select } from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import gartensSortedFromGartens from '../../../../../utils/gartensSortedFromGartens.js'
 import gvsSortByGarten from '../../../../../utils/gvsSortByGarten.js'

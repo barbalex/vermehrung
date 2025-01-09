@@ -9,7 +9,7 @@ import { Q } from '@nozbe/watermelondb'
 import uniqBy from 'lodash/uniqBy'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import Select from '../../../shared/Select/index.jsx'
+import { Select } from '../../../shared/Select/index.jsx'
 import TextField from '../../../shared/TextField.jsx'
 import Date from '../../../shared/Date.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'

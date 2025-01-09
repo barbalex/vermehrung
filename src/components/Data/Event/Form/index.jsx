@@ -9,8 +9,8 @@ import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import Select from '../../../shared/Select/index.jsx'
-import SelectCreatable from '../../../shared/SelectCreatable.jsx'
+import { Select } from '../../../shared/Select/index.jsx'
+import { SelectCreatable } from '../../../shared/SelectCreatable.jsx'
 import TextField from '../../../shared/TextField.jsx'
 import Date from '../../../shared/Date.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
@@ -72,25 +72,21 @@ const EventForm = ({
   })
   useEffect(() => {
     const kulturDelQuery =
-      filter.kultur._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.kultur._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.kultur._deleted === false ? Q.where('_deleted', false)
+      : filter.kultur._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const kulturAktivQuery =
-      filter.kultur.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.kultur.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      filter.kultur.aktiv === false ? Q.where('aktiv', false)
+      : filter.kultur.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const kultursObservable = db
       .get('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
@@ -101,17 +97,16 @@ const EventForm = ({
         'zwischenlager',
       ])
     const tkDelQuery =
-      filter.teilkultur._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.teilkultur._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
-    const teilkulturObservable = kulturId
-      ? db
+      filter.teilkultur._deleted === false ? Q.where('_deleted', false)
+      : filter.teilkultur._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
+    const teilkulturObservable =
+      kulturId ?
+        db
           .get('teilkultur')
           .query(
             tkDelQuery,
@@ -120,31 +115,28 @@ const EventForm = ({
           .observeWithColumns(['name'])
       : $of([])
     const personDelQuery =
-      filter.person._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.person._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.person._deleted === false ? Q.where('_deleted', false)
+      : filter.person._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const personAktivQuery =
-      filter.person.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.person.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      filter.person.aktiv === false ? Q.where('aktiv', false)
+      : filter.person.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const personsObservable = db
       .get('person')
       .query(personDelQuery, personAktivQuery)
       .observeWithColumns(['vorname', 'name'])
-    const kulturOptionObservable = row?.kultur_id
-      ? db.get('kultur_option').findAndObserve(row.kultur_id)
+    const kulturOptionObservable =
+      row?.kultur_id ?
+        db.get('kultur_option').findAndObserve(row.kultur_id)
       : $of({})
     const combinedObservables = combineLatest([
       kultursObservable,
@@ -295,7 +287,7 @@ const EventForm = ({
         )}
         {showDeleted && (
           <>
-            {showFilter ? (
+            {showFilter ?
               <JesNo
                 key={`${row.id}_deleted`}
                 label="gelöscht"
@@ -304,8 +296,7 @@ const EventForm = ({
                 saveToDb={saveToDb}
                 error={errors?.event?._deleted}
               />
-            ) : (
-              <Checkbox2States
+            : <Checkbox2States
                 key={`${row.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -313,7 +304,7 @@ const EventForm = ({
                 saveToDb={saveToDb}
                 error={errors?.event?._deleted}
               />
-            )}
+            }
           </>
         )}
         <Select
@@ -372,7 +363,7 @@ const EventForm = ({
         )}
         {(ev_geplant || showFilter) && (
           <FieldRow>
-            {showFilter ? (
+            {showFilter ?
               <JesNo
                 key={`${row.id}geplant`}
                 label="geplant"
@@ -381,8 +372,7 @@ const EventForm = ({
                 saveToDb={saveToDb}
                 error={errors?.event?.geplant}
               />
-            ) : (
-              <Checkbox2States
+            : <Checkbox2States
                 key={`${row.id}geplant`}
                 label="geplant"
                 name="geplant"
@@ -390,7 +380,7 @@ const EventForm = ({
                 saveToDb={saveToDb}
                 error={errors?.event?.geplant}
               />
-            )}
+            }
             <div>
               <IconButton
                 aria-label="Anleitung öffnen"

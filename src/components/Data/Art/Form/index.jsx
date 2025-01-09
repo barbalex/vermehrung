@@ -6,7 +6,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import TaxonSelect from './TaxonSelect.jsx'
-import SelectCreatable from '../../../shared/SelectCreatable.jsx'
+import { SelectCreatable } from '../../../shared/SelectCreatable.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../shared/JesNo.jsx'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber.js'
@@ -55,15 +55,13 @@ const ArtForm = ({
       .query(Q.sortBy('taxonomy'), Q.sortBy('name'))
       .observe()
     const delQuery =
-      filter.art?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.art?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.art?._deleted === false ? Q.where('_deleted', false)
+      : filter.art?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const artsObservable = db.get('art').query(delQuery).observe()
     const combinedObservables = combineLatest([aeArtObservable, artsObservable])
     const subscription = combinedObservables.subscribe(
@@ -148,7 +146,7 @@ const ArtForm = ({
         )}
         {showDeleted && (
           <>
-            {showFilter ? (
+            {showFilter ?
               <JesNo
                 key={`${row.id}_deleted`}
                 label="gelöscht"
@@ -157,8 +155,7 @@ const ArtForm = ({
                 saveToDb={saveToDb}
                 error={errors?.art?._deleted}
               />
-            ) : (
-              <Checkbox2States
+            : <Checkbox2States
                 key={`${row.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -166,7 +163,7 @@ const ArtForm = ({
                 saveToDb={saveToDb}
                 error={errors?.art?._deleted}
               />
-            )}
+            }
           </>
         )}
         <TaxonSelect
@@ -201,7 +198,10 @@ const ArtForm = ({
             <Timeline artId={id} />
             <HerkunftTimeline artId={id} />
             <QK artId={id} />
-            <Files parent={row} parentTable="art" />
+            <Files
+              parent={row}
+              parentTable="art"
+            />
           </>
         )}
       </FieldsContainer>

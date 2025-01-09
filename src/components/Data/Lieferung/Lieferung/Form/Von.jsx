@@ -7,7 +7,7 @@ import { combineLatest } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import Select from '../../../../shared/Select/index.jsx'
+import { Select } from '../../../../shared/Select/index.jsx'
 import exists from '../../../../../utils/exists.js'
 import kultursSortedFromKulturs from '../../../../../utils/kultursSortedFromKulturs.js'
 import sammlungsSortedFromSammlungs from '../../../../../utils/sammlungsSortedFromSammlungs.js'
