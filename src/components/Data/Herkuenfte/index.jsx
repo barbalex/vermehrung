@@ -15,7 +15,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers.jsx'
 import UpSvg from '../../../svg/to_up.svg?react'
 import tableFilter from '../../../utils/tableFilter.js'
-import herkunftSort from '../../../utils/herkunftSort.js'
+import { herkunftSort } from '../../../utils/herkunftSort.js'
 import { constants } from '../../../utils/constants.js'
 
 const Container = styled.div`

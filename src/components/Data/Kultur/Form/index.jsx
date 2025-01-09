@@ -24,7 +24,7 @@ import ConflictList from '../../../shared/ConflictList/index.jsx'
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
 import { constants } from '../../../../utils/constants.js'
 import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens.js'
-import herkunftSort from '../../../../utils/herkunftSort.js'
+import { herkunftSort } from '../../../../utils/herkunftSort.js'
 
 const Container = styled.div`
   padding: 10px;

@@ -11,7 +11,7 @@ import gartensSortedFromGartens from '../../../../../../utils/gartensSortedFromG
 import kultursSortedFromKulturs from '../../../../../../utils/kultursSortedFromKulturs.js'
 import sammlungsSortedFromSammlungs from '../../../../../../utils/sammlungsSortedFromSammlungs.js'
 import eventSort from '../../../../../../utils/eventSort.js'
-import herkunftSort from '../../../../../../utils/herkunftSort.js'
+import { herkunftSort } from '../../../../../../utils/herkunftSort.js'
 import lieferungSort from '../../../../../../utils/lieferungSort.js'
 import personSort from '../../../../../../utils/personSort.js'
 import teilkulturSort from '../../../../../../utils/teilkulturSort.js'
