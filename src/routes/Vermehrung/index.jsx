@@ -14,7 +14,7 @@ import OpenNodesSetter from './OpenNodesSetter.jsx'
 import SubscriptionsInitializer from './SubscriptionsInitializer.jsx'
 import InitialDataLoadingNotifier from './InitialDataLoadingNotifier.jsx'
 
-export const Vermehrung = observer(() => {
+export const VermehrungIndex = observer(() => {
   const store = useContext(StoreContext)
   const { gettingAuthUser, user } = store
 

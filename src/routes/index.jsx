@@ -103,14 +103,21 @@ const CardTitle = styled.h3`
   font-weight: 700;
 `
 
-const Index = () => (
+export const Home = () => (
   <>
     <ErrorBoundary>
       <OuterContainer>
-        <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
+        <ProgressiveImg
+          src={image}
+          placeholderSrc={placeholderSrc}
+        />
         <ScrollContainer>
           <Container>
-            <PageTitle align="center" variant="h6" color="inherit">
+            <PageTitle
+              align="center"
+              variant="h6"
+              color="inherit"
+            >
               Bedrohte Pflanzen vermehren
             </PageTitle>
             <CardContainer>
@@ -219,5 +226,3 @@ const Index = () => (
     </ErrorBoundary>
   </>
 )
-
-export default Index
