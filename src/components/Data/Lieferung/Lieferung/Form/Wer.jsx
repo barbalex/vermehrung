@@ -6,7 +6,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import Select from '../../../../shared/Select/index.jsx'
+import { Select } from '../../../../shared/Select/index.jsx'
 import TextField from '../../../../shared/TextField.jsx'
 import Files from '../../../Files/index.jsx'
 import ConflictList from '../../../../shared/ConflictList/index.jsx'

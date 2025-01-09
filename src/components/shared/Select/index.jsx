@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import Select from 'react-select'
+import SelectComponent from 'react-select'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
 
@@ -25,7 +25,7 @@ const SelectRow = styled.div`
     width: 100%;
   }
 `
-export const StyledSelect = styled(Select)`
+export const StyledSelect = styled(SelectComponent)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
     border-bottom-color: rgba(0, 0, 0, 0.1);
@@ -83,7 +83,7 @@ const emptyValue = {
   label: '',
 }
 
-const SharedSelect = ({
+export const Select = ({
   value: valuePassed,
   field = '',
   label,
@@ -168,5 +168,3 @@ const SharedSelect = ({
     </Container>
   )
 }
-
-export default SharedSelect

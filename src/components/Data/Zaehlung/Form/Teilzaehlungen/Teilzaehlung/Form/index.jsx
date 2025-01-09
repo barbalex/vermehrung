@@ -17,7 +17,7 @@ import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
 import TextField from '../../../../../../shared/TextField.jsx'
 import TextFieldNonUpdatable from '../../../../../../shared/TextFieldNonUpdatable.jsx'
 import Checkbox2States from '../../../../../../shared/Checkbox2States.jsx'
-import Select from '../../../../../../shared/SelectCreatable.jsx'
+import { SelectCreatable } from '../../../../../../shared/SelectCreatable.jsx'
 import ConflictList from '../../../../../../shared/ConflictList/index.jsx'
 import HistoryButton from '../../../../../../shared/HistoryButton.jsx'
 import ifIsNumericAsNumber from '../../../../../../../utils/ifIsNumericAsNumber.js'
@@ -109,25 +109,21 @@ const TeilzaehlungForm = ({
 
   useEffect(() => {
     const teilkulturDelQuery =
-      filter.teilkultur._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.teilkultur._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.teilkultur._deleted === false ? Q.where('_deleted', false)
+      : filter.teilkultur._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const teilkultursObservable = db
       .get('teilkultur')
       .query(teilkulturDelQuery, Q.where('kultur_id', kulturId))
       .observeWithColumns(['name'])
-    const kulturOptionObservable = kulturId
-      ? db.get('kultur_option').findAndObserve(kulturId)
-      : $of(null)
-    const tzObservable = initialDataQueried
-      ? db.get('teilzaehlung').findAndObserve(id)
-      : $of({})
+    const kulturOptionObservable =
+      kulturId ? db.get('kultur_option').findAndObserve(kulturId) : $of(null)
+    const tzObservable =
+      initialDataQueried ? db.get('teilzaehlung').findAndObserve(id) : $of({})
     const combinedObservables = combineLatest([
       teilkultursObservable,
       kulturOptionObservable,
@@ -266,7 +262,7 @@ const TeilzaehlungForm = ({
         )}
         {tk && tz_teilkultur_id && (
           <Teilkultur>
-            <Select
+            <SelectCreatable
               key={`${row.id}${row.teilkultur_id}teilkultur_id`}
               row={row}
               field="teilkultur_id"

@@ -85,84 +85,84 @@ const emptyValue = {
   label: '',
 }
 
-const SelectCreatable = ({
-  field = '',
-  label,
-  row,
-  showFilter,
-  table,
-  error,
-  options,
-  loading = false,
-  maxHeight = null,
-  noCaret = false,
-  onCreateNew,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  callback = () => {},
-  formatCreateLabel = (val) => `"${val}" als neue Teilkultur aufnehmen`,
-}) => {
-  const store = useContext(MobxStoreContext)
-  const { filter } = store
+export const SelectCreatable = observer(
+  ({
+    field = '',
+    label,
+    row,
+    showFilter,
+    table,
+    error,
+    options,
+    loading = false,
+    maxHeight = null,
+    noCaret = false,
+    onCreateNew,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    callback = () => {},
+    formatCreateLabel = (val) => `"${val}" als neue Teilkultur aufnehmen`,
+  }) => {
+    const store = useContext(MobxStoreContext)
+    const { filter } = store
 
-  const [stateValue, setStateValue] = useState(row[field])
-  useEffect(() => {
-    setStateValue(row[field])
-  }, [])
+    const [stateValue, setStateValue] = useState(row[field])
+    useEffect(() => {
+      setStateValue(row[field])
+    }, [])
 
-  const onChange = useCallback(
-    (option, actionMeta) => {
-      // if action is create-option
-      // need to create new dataset
-      if (actionMeta.action === 'create-option') {
-        // 1. create new dataset
-        onCreateNew({ name: option.label })
-        return
-      }
-      const newValue = option ? option.value : null
-      setStateValue(newValue)
+    const onChange = useCallback(
+      (option, actionMeta) => {
+        // if action is create-option
+        // need to create new dataset
+        if (actionMeta.action === 'create-option') {
+          // 1. create new dataset
+          onCreateNew({ name: option.label })
+          return
+        }
+        const newValue = option ? option.value : null
+        setStateValue(newValue)
 
-      if (showFilter) {
-        filter.setValue({ table, key: field, value: newValue })
-      } else {
-        row.edit({ field, value: newValue, store })
-      }
-      callback()
-    },
-    [store],
-  )
+        if (showFilter) {
+          filter.setValue({ table, key: field, value: newValue })
+        } else {
+          row.edit({ field, value: newValue, store })
+        }
+        callback()
+      },
+      [store],
+    )
 
-  // show ... whyle options are loading
-  const loadingOptions = [{ value: stateValue, label: '...' }]
-  const optionsToUse = loading && stateValue ? loadingOptions : options
-  const selectValue =
-    optionsToUse.find((o) => o.value === stateValue) || emptyValue
+    // show ... whyle options are loading
+    const loadingOptions = [{ value: stateValue, label: '...' }]
+    const optionsToUse = loading && stateValue ? loadingOptions : options
+    const selectValue =
+      optionsToUse.find((o) => o.value === stateValue) || emptyValue
 
-  return (
-    <Container>
-      {label && <Label>{label}</Label>}
-      <SelectRow>
-        <StyledSelect
-          id={field}
-          name={field}
-          value={selectValue}
-          options={optionsToUse}
-          onChange={onChange}
-          hideSelectedOptions
-          placeholder=""
-          isClearable
-          isSearchable
-          noOptionsMessage={() => '(keine)'}
-          maxheight={maxHeight}
-          classNamePrefix="react-select"
-          nocaret={noCaret}
-          formatCreateLabel={formatCreateLabel}
-          aria-label={label ?? ''}
-        />
-        {!!selectValue.link && <Link link={selectValue.link} />}
-      </SelectRow>
-      {error && <Error>{error}</Error>}
-    </Container>
-  )
-}
-
-export default observer(SelectCreatable)
+    return (
+      <Container>
+        {label && <Label>{label}</Label>}
+        <SelectRow>
+          <StyledSelect
+            id={field}
+            name={field}
+            value={selectValue}
+            options={optionsToUse}
+            onChange={onChange}
+            hideSelectedOptions
+            placeholder=""
+            isClearable
+            isSearchable
+            noOptionsMessage={() => '(keine)'}
+            maxheight={maxHeight}
+            classNamePrefix="react-select"
+            nocaret={noCaret}
+            formatCreateLabel={formatCreateLabel}
+            aria-label={label ?? ''}
+          />
+          {!!selectValue.link && <Link link={selectValue.link} />}
+        </SelectRow>
+        {error && <Error>{error}</Error>}
+      </Container>
+    )
+  },
+)
