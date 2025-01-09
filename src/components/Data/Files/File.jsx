@@ -7,7 +7,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-import TextField from '../../shared/TextField.jsx'
+import { TextField } from '../../shared/TextField.jsx'
 import { isImageFile } from './isImageFile.js'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
