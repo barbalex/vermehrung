@@ -44,7 +44,7 @@ const MenuTitle = styled.h3`
   }
 `
 
-const Gv = ({ gv }) => {
+export const GartenPerson = observer(({ gv }) => {
   const store = useContext(MobxStoreContext)
 
   const [personLabel, setPersonLabel] = useState(null)
@@ -97,6 +97,4 @@ const Gv = ({ gv }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Gv)
+})
