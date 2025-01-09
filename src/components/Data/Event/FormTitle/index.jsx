@@ -5,7 +5,7 @@ import { combineLatest } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import FormTitle from './FormTitle.jsx'
+import { EventFormTitle as FormTitle } from './FormTitle.jsx'
 import { tableFilter } from '../../../../utils/tableFilter.js'
 
 export const EventFormTitle = observer(
