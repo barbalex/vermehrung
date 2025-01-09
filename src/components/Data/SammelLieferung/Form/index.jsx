@@ -13,9 +13,9 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import Was from './Was.jsx'
 import Von from './Von.jsx'
-import Nach from './Nach.jsx'
-import Wann from './Wann.jsx'
-import Wer from './Wer.jsx'
+import { SammelLieferungNach as Nach } from './Nach.jsx'
+import { SammelLieferungWann as Wann } from './Wann.jsx'
+import { SammelLieferungWer as Wer } from './Wer.jsx'
 
 const FieldsContainer = styled.div`
   padding: 10px;
