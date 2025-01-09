@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const SammlungAddButton = () => {
+export const SammlungAddButton = observer(() => {
   const store = useContext(MobxStoreContext)
   const { insertSammlungRev } = store
 
@@ -20,11 +20,10 @@ const SammlungAddButton = () => {
         aria-label="neue Sammlung"
         title="neue Sammlung"
         onClick={add}
-        size="large">
+        size="large"
+      >
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
-  );
-}
-
-export default observer(SammlungAddButton)
+  )
+})
