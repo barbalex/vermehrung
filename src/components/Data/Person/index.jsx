@@ -10,7 +10,7 @@ import { Spinner } from '../../shared/Spinner.jsx'
 import Conflict from './Conflict.jsx'
 import FormTitle from './FormTitle/index.jsx'
 import Form from './Form/index.jsx'
-import History from './History/index.jsx'
+import { PersonHistory as History } from './History/index.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -36,11 +36,10 @@ const Person = ({
     rawRow: undefined,
   })
   useEffect(() => {
-    const personObservable = showFilter
-      ? $of(filter.person)
-      : initialDataQueried
-        ? db.get('person').findAndObserve(id)
-        : $of({})
+    const personObservable =
+      showFilter ? $of(filter.person)
+      : initialDataQueried ? db.get('person').findAndObserve(id)
+      : $of({})
     const subscription = personObservable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -97,7 +96,7 @@ const Person = ({
               showHistory={showHistory}
             />
             <Allotment.Pane visible={paneIsSplit}>
-              {activeConflict ? (
+              {activeConflict ?
                 <Conflict
                   rev={activeConflict}
                   id={id}
@@ -107,13 +106,13 @@ const Person = ({
                   conflictSelectionCallback={conflictSelectionCallback}
                   setActiveConflict={setActiveConflict}
                 />
-              ) : showHistory ? (
+              : showHistory ?
                 <History
                   row={row}
                   rawRow={rawRow}
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
-              ) : null}
+              : null}
             </Allotment.Pane>
           </Allotment>
         </SplitPaneContainer>
