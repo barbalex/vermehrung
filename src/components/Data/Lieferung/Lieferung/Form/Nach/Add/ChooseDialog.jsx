@@ -7,7 +7,7 @@ import { Q } from '@nozbe/watermelondb'
 import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
-import gartensSortedFromGartens from '../../../../../../../utils/gartensSortedFromGartens.js'
+import { gartensSortedFromGartens } from '../../../../../../../utils/gartensSortedFromGartens.js'
 import { StyledSelect } from '../../../../../../shared/Select/index.jsx'
 
 const ChooseDialog = ({

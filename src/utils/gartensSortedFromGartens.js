@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy'
 import { first as first$ } from 'rxjs/operators'
 
-const gartensSortedFromGartens = async (gartens) => {
+export const gartensSortedFromGartens = async (gartens) => {
   const gartenSorters = await Promise.all(
     gartens.map(async (garten) => {
       let label = ''
@@ -19,5 +19,3 @@ const gartensSortedFromGartens = async (gartens) => {
   )
   return gartensSorted
 }
-
-export default gartensSortedFromGartens

@@ -23,7 +23,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList/index.jsx'
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
 import { constants } from '../../../../utils/constants.js'
-import gartensSortedFromGartens from '../../../../utils/gartensSortedFromGartens.js'
+import { gartensSortedFromGartens } from '../../../../utils/gartensSortedFromGartens.js'
 import { herkunftSort } from '../../../../utils/herkunftSort.js'
 
 const Container = styled.div`
