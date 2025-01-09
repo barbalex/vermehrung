@@ -5,9 +5,9 @@ import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import Menu from './Menu.jsx'
+import { KulturDeleteMenu as Menu } from './Menu.jsx'
 
-const KulturDeleteButton = ({ row, asMenu }) => {
+export const KulturDeleteButton = observer(({ row, asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const onClickButton = useCallback(
@@ -25,7 +25,11 @@ const KulturDeleteButton = ({ row, asMenu }) => {
         >
           Kultur löschen
         </MenuItem>
-        <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} row={row} />
+        <Menu
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+          row={row}
+        />
       </>
     )
   }
@@ -43,9 +47,11 @@ const KulturDeleteButton = ({ row, asMenu }) => {
       >
         <FaMinus />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} row={row} />
+      <Menu
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+        row={row}
+      />
     </ErrorBoundary>
   )
-}
-
-export default observer(KulturDeleteButton)
+})
