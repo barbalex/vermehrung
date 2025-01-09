@@ -28,7 +28,7 @@ import {
   zaehlungRev,
 } from './fragments.js'
 
-const mutations = {
+export const mutations = {
   mutateInsert_herkunft_rev_one: gql`
     mutation mutateInsert_herkunft_rev_one(
       $object: herkunft_rev_insert_input!
@@ -357,5 +357,3 @@ const mutations = {
     ${sammlungFile}
   `,
 }
-
-export default mutations

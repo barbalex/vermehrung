@@ -31,7 +31,7 @@ import kulturIdOfAnLieferungInUrl from '../utils/kulturIdOfAnLieferungInUrl.js'
 import kulturIdOfAusLieferungInUrl from '../utils/kulturIdOfAusLieferungInUrl.js'
 import zaehlungIdInUrl from '../utils/zaehlungIdInUrl.js'
 import { getAuthToken } from '../utils/getAuthToken.js'
-import mutations from '../utils/mutations.js'
+import { mutations } from '../utils/mutations.js'
 
 const myTypes = types
   .model({
