@@ -6,32 +6,34 @@ import uniqBy from 'lodash/uniqBy'
 
 import { kultursSortedFromKulturs } from '../../../../../../utils/kultursSortedFromKulturs.js'
 
-const useData = ({ showFilter, row, herkunft, db, filter }) => {
+export const useLieferungNachData = ({
+  showFilter,
+  row,
+  herkunft,
+  db,
+  filter,
+}) => {
   const [dataState, setDataState] = useState({ nachKulturWerte: [] })
 
   useEffect(() => {
     const kulturDelQuery =
-      filter.kultur._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.kultur._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+      filter.kultur._deleted === false ? Q.where('_deleted', false)
+      : filter.kultur._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     // BEWARE: need to include inactive kulturs
     const kultursObservable = db.get('kultur').query(kulturDelQuery).observe()
     const sammlungDelQuery =
-      filter.sammlung._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.sammlung._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+      filter.sammlung._deleted === false ? Q.where('_deleted', false)
+      : filter.sammlung._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const sammlungsObservable = db
       .get('sammlung')
       .query(sammlungDelQuery)
@@ -106,5 +108,3 @@ const useData = ({ showFilter, row, herkunft, db, filter }) => {
 
   return dataState
 }
-
-export default useData
