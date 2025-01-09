@@ -3,19 +3,18 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
-
 import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
-import TypeDialog from './TypeDialog.jsx'
-import ChooseDialog from './ChooseDialog.jsx'
+import { LieferungAddTypeDialog as TypeDialog } from './TypeDialog.jsx'
+import { LieferungAddChooseDialog as ChooseDialog } from './ChooseDialog.jsx'
 
 const StyledButton = styled(IconButton)`
   margin-bottom: 19px;
 `
 
-const Add = ({ disabled, lieferung, herkunft }) => {
+export const LieferungAdd = observer(({ disabled, lieferung, herkunft }) => {
   const store = useContext(MobxStoreContext)
   const { insertKulturRev } = store
 
@@ -87,6 +86,4 @@ const Add = ({ disabled, lieferung, herkunft }) => {
       )}
     </ErrorBoundary>
   )
-}
-
-export default observer(Add)
+})
