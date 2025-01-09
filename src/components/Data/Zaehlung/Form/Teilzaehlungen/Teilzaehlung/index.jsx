@@ -5,7 +5,7 @@ import { of as $of } from 'rxjs'
 import { Allotment } from 'allotment'
 
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
-import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import Conflict from './Conflict.jsx'
 import Form from './Form/index.jsx'
 import History from './History/index.jsx'

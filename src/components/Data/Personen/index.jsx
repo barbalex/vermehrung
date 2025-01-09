@@ -10,7 +10,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import FilterTitle from '../../shared/FilterTitle.jsx'
 import Row from './Row.jsx'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import UpSvg from '../../../svg/to_up.svg?react'

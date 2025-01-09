@@ -15,7 +15,7 @@ import Timeline from './Timeline/index.jsx'
 import HerkunftTimeline from './HerkunftTimeline/index.jsx'
 import QK from './QK/index.jsx'
 import Personen from './Personen/index.jsx'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import ConflictList from '../../../shared/ConflictList/index.jsx'
 import artsSortedFromArts from '../../../../utils/artsSortedFromArts.js'
 

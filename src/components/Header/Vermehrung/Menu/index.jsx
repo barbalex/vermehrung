@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { MdMenu } from 'react-icons/md'
 import styled from '@emotion/styled'
 
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Menu from './Menu.jsx'
 
 const Icon = styled(MdMenu)`

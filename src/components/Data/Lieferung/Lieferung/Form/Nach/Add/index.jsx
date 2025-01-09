@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import styled from '@emotion/styled'
 
-import ErrorBoundary from '../../../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
 import TypeDialog from './TypeDialog.jsx'
 import ChooseDialog from './ChooseDialog.jsx'

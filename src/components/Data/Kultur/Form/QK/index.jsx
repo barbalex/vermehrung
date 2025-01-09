@@ -14,7 +14,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Qk from './Qk/index.jsx'
 import Choose from './Choose/index.jsx'
 import { constants } from '../../../../../utils/constants.js'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);

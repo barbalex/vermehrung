@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography'
 import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'
 
-import ErrorBoundary from '../components/shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../components/shared/ErrorBoundary.jsx'
 import { constants } from '../utils/constants.js'
 import image from '../images/puls_vulg_2500.webp'
 import placeholderSrc from '../images/puls_vulg_500.webp' // TODO: build small placeholder

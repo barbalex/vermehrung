@@ -6,7 +6,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import Row from './Row.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import getShowArt from '../../../utils/showArt.js'
 import getShowEvent from '../../../utils/showEvent.js'
 import getShowGarten from '../../../utils/showGarten.js'
