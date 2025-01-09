@@ -8,7 +8,7 @@ import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { GartenConflict as Conflict } from './Conflict.jsx'
-import Form from './Form/index.jsx'
+import { GartenForm as Form } from './Form/index.jsx'
 import FormTitle from './FormTitle/index.jsx'
 import History from './History/index.jsx'
 

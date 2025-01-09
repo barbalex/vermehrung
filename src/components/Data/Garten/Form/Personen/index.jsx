@@ -47,7 +47,7 @@ const StyledMotionDiv = styled(motion.div)`
   box-sizing: border-box;
 `
 
-const GartenPersonen = ({ garten }) => {
+export const GartenPersonen = observer(({ garten }) => {
   const store = useContext(MobxStoreContext)
   const { db, insertGvRev, filter } = store
 
@@ -81,31 +81,28 @@ const GartenPersonen = ({ garten }) => {
   })
   useEffect(() => {
     const delQuery =
-      filter.person._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.person._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.person._deleted === false ? Q.where('_deleted', false)
+      : filter.person._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const aktivQuery =
-      filter.person.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.person.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      filter.person.aktiv === false ? Q.where('aktiv', false)
+      : filter.person.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const personsObservable = db
       .get('person')
       .query(delQuery, aktivQuery)
       .observe()
-    const gvsObservable = garten?.gvs
-      ? garten.gvs.extend(Q.where('_deleted', false)).observe()
+    const gvsObservable =
+      garten?.gvs ?
+        garten.gvs.extend(Q.where('_deleted', false)).observe()
       : $of([])
     const combinedObservables = combineLatest([
       gvsObservable,
@@ -143,7 +140,10 @@ const GartenPersonen = ({ garten }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+      >
         <Title>{`Mitarbeitende Personen (${gvsSorted.length})`}</Title>
         <div>
           <IconButton
@@ -152,7 +152,9 @@ const GartenPersonen = ({ garten }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </TitleRow>
@@ -187,6 +189,4 @@ const GartenPersonen = ({ garten }) => {
       </StyledMotionDiv>
     </ErrorBoundary>
   )
-}
-
-export default observer(GartenPersonen)
+})
