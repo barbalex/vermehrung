@@ -24,9 +24,12 @@ import Home from './routes/index.jsx'
 import VermehrungIndex from './routes/Vermehrung/index.jsx'
 import FourOhFour from './routes/404.jsx'
 import NavigationSyncController from './components/NavigationSyncController.tsx'
-import Layout from './components/Layout.jsx'
-import Docs from './components/Documentation/index.jsx'
-
+const Layout = lazy(async () => ({
+  default: (await import('./components/Layout.jsx')).Layout,
+}))
+const Documentation = lazy(async () => ({
+  default: (await import('./components/Documentation/index.jsx')).Documentation,
+}))
 const Ziele = lazy(async () => ({
   default: (await import('./components/Documentation/docs/Ziele.jsx')).Ziele,
 }))
@@ -224,7 +227,7 @@ const App = () => {
                   </Route>
                   <Route
                     path="Dokumentation"
-                    element={<Docs />}
+                    element={<Documentation />}
                   >
                     <Route path="ziele">
                       <Route

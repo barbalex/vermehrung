@@ -14,7 +14,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const Layout = () => {
+export const Layout = () => {
   const store = useContext(StoreContext)
   const { singleColumnView, setSingleColumnView } = store
 
@@ -42,4 +42,3 @@ const Layout = () => {
   )
 }
 
-export default Layout
