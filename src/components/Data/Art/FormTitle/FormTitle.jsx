@@ -5,7 +5,7 @@ import { useResizeDetector } from 'react-resize-detector'
 
 import DeleteButton from './DeleteButton.jsx'
 import AddButton from './AddButton.jsx'
-import NavButtons from './NavButtons.jsx'
+import { NavButtons } from './NavButtons.jsx'
 import { FilterNumbers } from '../../../shared/FilterNumbers.jsx'
 import { Menu } from '../../../shared/Menu.jsx'
 import { HistoryButton } from '../../../shared/HistoryButton.jsx'
