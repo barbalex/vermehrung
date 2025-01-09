@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-import teilkulturLabelFromTeilkultur from '../../../utils/teilkulturLabelFromTeilkultur.js'
+import { teilkulturLabelFromTeilkultur } from '../../../utils/teilkulturLabelFromTeilkultur.js'
 import { constants } from '../../../utils/constants.js'
 
 const Row = styled.div`
@@ -29,7 +29,7 @@ const Row = styled.div`
   }
 `
 
-const Teilkulturen = ({ row, style, last }) => {
+export const TeilkulturRow = observer(({ row, style, last }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -39,10 +39,13 @@ const Teilkulturen = ({ row, style, last }) => {
   )
 
   return (
-    <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
+    <Row
+      key={row.id}
+      onClick={onClickRow}
+      style={style}
+      data-last={last}
+    >
       <div>{teilkulturLabelFromTeilkultur({ teilkultur: row })}</div>
     </Row>
   )
-}
-
-export default observer(Teilkulturen)
+})
