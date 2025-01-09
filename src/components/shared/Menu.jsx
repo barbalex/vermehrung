@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
-import Menu from '@mui/material/Menu'
+import MuiMenu from '@mui/material/Menu'
 import { FaBars } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
@@ -9,7 +9,7 @@ const MenuButton = styled(IconButton)`
   ${(props) => props['data-white'] && 'color: white !important;'}
 `
 
-const HeaderMenu = ({ children, title = 'Menu', white = true }) => {
+export const Menu = observer(({ children, title = 'Menu', white = true }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
     setAnchorEl(null)
@@ -31,7 +31,7 @@ const HeaderMenu = ({ children, title = 'Menu', white = true }) => {
       >
         <FaBars />
       </MenuButton>
-      <Menu
+      <MuiMenu
         id="menu"
         anchorEl={anchorEl}
         keepMounted
@@ -39,9 +39,7 @@ const HeaderMenu = ({ children, title = 'Menu', white = true }) => {
         onClose={closeMenu}
       >
         {children}
-      </Menu>
+      </MuiMenu>
     </>
   )
-}
-
-export default observer(HeaderMenu)
+})
