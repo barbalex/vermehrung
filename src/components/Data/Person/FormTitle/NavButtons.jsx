@@ -8,7 +8,7 @@ import SaDownSvg from '../../../../svg/to_sa_down.svg?react'
 import GaDownSvg from '../../../../svg/to_ga_down.svg?react'
 import LiDownSvg from '../../../../svg/to_li_down.svg?react'
 
-const PersonFormTitleNavButtons = () => {
+export const PersonFormTitleNavButtons = observer(() => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
@@ -31,7 +31,11 @@ const PersonFormTitleNavButtons = () => {
 
   return (
     <>
-      <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+      <IconButton
+        title="Zur Liste"
+        onClick={onClickUp}
+        size="large"
+      >
         <UpSvg />
       </IconButton>
       <IconButton
@@ -41,7 +45,11 @@ const PersonFormTitleNavButtons = () => {
       >
         <SaDownSvg />
       </IconButton>
-      <IconButton title="Zu den Gärten" onClick={onClickToGaerten} size="large">
+      <IconButton
+        title="Zu den Gärten"
+        onClick={onClickToGaerten}
+        size="large"
+      >
         <GaDownSvg />
       </IconButton>
       <IconButton
@@ -53,6 +61,4 @@ const PersonFormTitleNavButtons = () => {
       </IconButton>
     </>
   )
-}
-
-export default observer(PersonFormTitleNavButtons)
+})
