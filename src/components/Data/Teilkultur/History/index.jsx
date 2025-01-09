@@ -8,7 +8,7 @@ import { useQuery } from 'urql'
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import Row from './Row.jsx'
+import { TeilkulturHistoryRow as Row } from './Row.jsx'
 
 const teilkulturRevQuery = gql`
   query teilkulturRevForHistoryQuery($rev: [String!]) {
@@ -61,47 +61,47 @@ const sliderSettings = {
   infinite: false,
 }
 
-const TeilkulturHistory = ({ row, rawRow, historyTakeoverCallback }) => {
-  const store = useContext(MobxStoreContext)
+export const TeilkulturHistory = observer(
+  ({ row, rawRow, historyTakeoverCallback }) => {
+    const store = useContext(MobxStoreContext)
 
-  const priorRevisions = row?._revisions?.slice(1) ?? []
-  const [{ error, data, fetching }] = useQuery({
-    query: teilkulturRevQuery,
-    variables: {
-      rev: priorRevisions,
-    },
-  })
-  error && checkForOnlineError({ error, store })
+    const priorRevisions = row?._revisions?.slice(1) ?? []
+    const [{ error, data, fetching }] = useQuery({
+      query: teilkulturRevQuery,
+      variables: {
+        rev: priorRevisions,
+      },
+    })
+    error && checkForOnlineError({ error, store })
 
-  const revRowsUnsorted = useMemo(
-    () => data?.teilkultur_rev ?? [],
-    [data?.teilkultur_rev],
-  )
-  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
+    const revRowsUnsorted = useMemo(
+      () => data?.teilkultur_rev ?? [],
+      [data?.teilkultur_rev],
+    )
+    const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
-  if (fetching) {
-    return <Spinner message="lade Versionen" />
-  }
+    if (fetching) {
+      return <Spinner message="lade Versionen" />
+    }
 
-  if (error) {
-    return <ErrorContainer>{error.message}</ErrorContainer>
-  }
+    if (error) {
+      return <ErrorContainer>{error.message}</ErrorContainer>
+    }
 
-  return (
-    <Container>
-      <Slider {...sliderSettings}>
-        {revRows.map((r) => (
-          <Row
-            key={row._rev}
-            revRow={r}
-            row={row}
-            rawRow={rawRow}
-            historyTakeoverCallback={historyTakeoverCallback}
-          />
-        ))}
-      </Slider>
-    </Container>
-  )
-}
-
-export default observer(TeilkulturHistory)
+    return (
+      <Container>
+        <Slider {...sliderSettings}>
+          {revRows.map((r) => (
+            <Row
+              key={row._rev}
+              revRow={r}
+              row={row}
+              rawRow={rawRow}
+              historyTakeoverCallback={historyTakeoverCallback}
+            />
+          ))}
+        </Slider>
+      </Container>
+    )
+  },
+)
