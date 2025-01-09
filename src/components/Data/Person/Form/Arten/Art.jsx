@@ -44,7 +44,7 @@ const MenuTitle = styled.h3`
   }
 `
 
-const Av = ({ av }) => {
+export const PersonArt = observer(({ av }) => {
   const store = useContext(MobxStoreContext)
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
@@ -111,6 +111,4 @@ const Av = ({ av }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Av)
+})

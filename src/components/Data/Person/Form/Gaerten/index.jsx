@@ -9,11 +9,11 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import Garten from './Garten.jsx'
+import { PersonGarten as Garten } from './Garten.jsx'
 import { Select } from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { gartensSortedFromGartens } from '../../../../../utils/gartensSortedFromGartens.js'
-import gvsSortByGarten from '../../../../../utils/gvsSortByGarten.js'
+import { gvsSortByGarten } from '../../../../../utils/gvsSortByGarten.js'
 import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`
@@ -205,4 +205,3 @@ export const PersonGaerten = observer(({ person }) => {
     </ErrorBoundary>
   )
 })
-

@@ -9,11 +9,11 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import Art from './Art.jsx'
+import { PersonArt as Art } from './Art.jsx'
 import { Select } from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.js'
-import avsSortByArt from '../../../../../utils/avsSortByArt.js'
+import { avsSortByArt } from '../../../../../utils/avsSortByArt.js'
 import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`
@@ -47,7 +47,7 @@ const StyledMotionDiv = styled(motion.div)`
   box-sizing: border-box;
 `
 
-const PersonArten = ({ person }) => {
+export const PersonArten = observer(({ person }) => {
   const store = useContext(MobxStoreContext)
   const { db, insertAvRev, filter } = store
 
@@ -83,15 +83,13 @@ const PersonArten = ({ person }) => {
       .extend(Q.where('_deleted', false))
       .observe()
     const artDelQuery =
-      filter.art._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.art._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.art._deleted === false ? Q.where('_deleted', false)
+      : filter.art._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const artsObservable = db
       .get('art')
       .query(artDelQuery, Q.where('id', Q.notIn(avArtIds)))
@@ -133,7 +131,10 @@ const PersonArten = ({ person }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+      >
         <Title>{`Mitarbeitend bei ${avs.length} Arten`}</Title>
         <div>
           <IconButton
@@ -142,7 +143,9 @@ const PersonArten = ({ person }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </TitleRow>
@@ -154,7 +157,10 @@ const PersonArten = ({ person }) => {
           <>
             <Avs>
               {avs.map((av, index) => (
-                <Art key={`${av.person_id}/${av.art_id}/${index}`} av={av} />
+                <Art
+                  key={`${av.person_id}/${av.art_id}/${index}`}
+                  av={av}
+                />
               ))}
             </Avs>
             {!!artWerte.length && (
@@ -174,6 +180,4 @@ const PersonArten = ({ person }) => {
       </StyledMotionDiv>
     </ErrorBoundary>
   )
-}
-
-export default observer(PersonArten)
+})
