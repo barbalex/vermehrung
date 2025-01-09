@@ -8,7 +8,7 @@ import { v1 as uuidv1 } from 'uuid'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-import Uploader from '../../Uploader.jsx'
+import { Uploader } from '../../Uploader.jsx'
 import { File } from './File.jsx'
 import { isImageFile } from './isImageFile.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'

@@ -29,7 +29,7 @@ window.UPLOADCARE_LOCALE_TRANSLATIONS = {
 window.UPLOADCARE_SECURE_SIGNATURE = signature
 window.UPLOADCARE_SECURE_EXPIRE = expire
 
-class Uploader extends Component {
+export class Uploader extends Component {
   componentDidMount() {
     const widget = uploadcare.Widget(this.uploader)
     const { value, onChange, onUploadComplete } = this.props
@@ -102,5 +102,3 @@ class Uploader extends Component {
     )
   }
 }
-
-export default Uploader
