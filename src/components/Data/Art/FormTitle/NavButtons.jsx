@@ -8,7 +8,7 @@ import SaDownSvg from '../../../../svg/to_sa_down.svg?react'
 import KuDownSvg from '../../../../svg/to_ku_down.svg?react'
 import HeDownSvg from '../../../../svg/to_he_down.svg?react'
 
-const ArtNavButtons = () => {
+export const NavButtons = observer(() => {
   const store = useContext(MobxStoreContext)
   const { tree } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = tree
@@ -32,7 +32,11 @@ const ArtNavButtons = () => {
 
   return (
     <>
-      <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+      <IconButton
+        title="Zur Liste"
+        onClick={onClickUp}
+        size="large"
+      >
         <UpSvg />
       </IconButton>
       <IconButton
@@ -58,6 +62,4 @@ const ArtNavButtons = () => {
       </IconButton>
     </>
   )
-}
-
-export default observer(ArtNavButtons)
+})
