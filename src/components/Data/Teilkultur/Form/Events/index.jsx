@@ -4,7 +4,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import eventSort from '../../../../../utils/eventSort.js'
-import storeContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Row from './Row.jsx'
 import constants from '../../../../../utils/constants.js'
 
@@ -31,21 +31,19 @@ const Title = styled.div`
 const Rows = styled.div``
 
 const TkEvents = ({ teilkultur }) => {
-  const store = useContext(storeContext)
+  const store = useContext(MobxStoreContext)
   const { filter } = store
 
   const [events, setEvents] = useState([])
   useEffect(() => {
     const eventDelQuery =
-      filter.event._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.event._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+      filter.event._deleted === false ? Q.where('_deleted', false)
+      : filter.event._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const eventsObservable = teilkultur.events
       .extend(eventDelQuery)
       .observeWithColumns(['datum', 'beschreibung', 'geplant'])
@@ -64,7 +62,11 @@ const TkEvents = ({ teilkultur }) => {
       </TitleRow>
       <Rows>
         {events.map((ev, i) => (
-          <Row key={ev.id} event={ev} last={i === events.length - 1} />
+          <Row
+            key={ev.id}
+            event={ev}
+            last={i === events.length - 1}
+          />
         ))}
       </Rows>
     </ErrorBoundary>

@@ -6,7 +6,7 @@ import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
 import gartensSortedFromGartens from '../../../../../../../utils/gartensSortedFromGartens.js'
 import { StyledSelect } from '../../../../../../shared/Select/index.jsx'
 
@@ -18,32 +18,28 @@ const ChooseDialog = ({
   lieferung,
   herkunft,
 }) => {
-  const store = useContext(storeContext)
+  const store = useContext(MobxStoreContext)
   const { db, filter } = store
 
   const [gartens, setGartens] = useState([])
 
   useEffect(() => {
     const gartenDelQuery =
-      filter.garten._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.garten._deleted === true
-        ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
+      filter.garten._deleted === false ? Q.where('_deleted', false)
+      : filter.garten._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const gartenAktivQuery =
-      filter.garten.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.garten.aktiv === true
-        ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
+      filter.garten.aktiv === false ? Q.where('aktiv', false)
+      : filter.garten.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const gartensObservable = db
       .get('garten')
       .query(gartenDelQuery, gartenAktivQuery)
@@ -77,7 +73,7 @@ const ChooseDialog = ({
             value: garten.id,
             label,
             inaktiv: garten.aktiv === false,
-            link: ['Gaerten', garten.id]
+            link: ['Gaerten', garten.id],
           }
         }),
       )
@@ -97,7 +93,12 @@ const ChooseDialog = ({
   console.log('ChooseDialog: gartens:', gartens)
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="md"
+    >
       <DialogTitle>Garten wählen:</DialogTitle>
       <DialogContent>
         <StyledSelect
