@@ -17,7 +17,7 @@ import { observer } from 'mobx-react-lite'
 import { useResizeDetector } from 'react-resize-detector'
 import styled from '@emotion/styled'
 
-import CustomTooltip from './Tooltip.jsx'
+import { CustomTooltip } from './Tooltip.jsx'
 import { LabelLieferung } from './LabelLieferung.jsx'
 import { LabelZaehlung } from './LabelZaehlung.jsx'
 import { CustomAxisTick } from './CustomAxisTick.jsx'
@@ -36,14 +36,12 @@ const Container = styled.div`
   width: 100%;
 `
 
-const ArtTimeline = ({ artId, herkunft }) => {
+export const Pflanzen = observer(({ artId, herkunft }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
   const herkunftId = herkunft.id
 
   const { width, ref } = useResizeDetector()
-
-  console.log('ArtTimeline, width', width)
 
   const [data, setData] = useState(null)
   useEffect(() => {
@@ -181,6 +179,4 @@ const ArtTimeline = ({ artId, herkunft }) => {
       </ErrorBoundary>
     </Container>
   )
-}
-
-export default observer(ArtTimeline)
+})

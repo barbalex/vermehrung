@@ -8,7 +8,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import Pflanzen from './Pflanzen/index.jsx'
+import { Pflanzen } from './Pflanzen/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import herkunftSort from '../../../../../utils/herkunftSort.js'
@@ -97,7 +97,10 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+      >
         <Title>{`Zeit-Achsen ${herkunfts.length} Herkünfte`}</Title>
         <div>
           <IconButton
@@ -106,14 +109,23 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </TitleRow>
-      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
+      <motion.div
+        animate={anim}
+        transition={{ type: 'just', duration: 0.2 }}
+      >
         {open &&
           herkunfts.map((herkunft) => (
-            <Pflanzen key={herkunft.id} artId={artId} herkunft={herkunft} />
+            <Pflanzen
+              key={herkunft.id}
+              artId={artId}
+              herkunft={herkunft}
+            />
           ))}
       </motion.div>
     </ErrorBoundary>
