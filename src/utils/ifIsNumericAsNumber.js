@@ -1,3 +1,4 @@
 import isNumeric from './isNumeric.js'
 
-export default (value) => (isNumeric(value) ? +value : value)
+export const ifIsNumericAsNumber = (value) =>
+  isNumeric(value) ? +value : value
