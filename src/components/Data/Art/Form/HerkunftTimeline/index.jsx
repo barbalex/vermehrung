@@ -39,97 +39,97 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
-  const store = useContext(MobxStoreContext)
-  const { db, filter } = store
+export const HerkunftTimeline = observer(
+  ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
+    const store = useContext(MobxStoreContext)
+    const { db, filter } = store
 
-  const [herkunfts, setHerkunfts] = useState([])
-  useEffect(() => {
-    const sammlungsObservable = db
-      .get('sammlung')
-      .query(
-        Q.where('_deleted', false),
-        Q.where('art_id', artId),
-        Q.where('herkunft_id', Q.notEq(null)),
+    const [herkunfts, setHerkunfts] = useState([])
+    useEffect(() => {
+      const sammlungsObservable = db
+        .get('sammlung')
+        .query(
+          Q.where('_deleted', false),
+          Q.where('art_id', artId),
+          Q.where('herkunft_id', Q.notEq(null)),
+        )
+        .observe()
+      const herkunftsObservable = db
+        .get('herkunft')
+        .query(Q.where('_deleted', false))
+        .observe()
+      const combinedObservables = combineLatest([
+        sammlungsObservable,
+        herkunftsObservable,
+      ])
+      const subscription = combinedObservables.subscribe(
+        ([sammlungs, herkunfts]) => {
+          const herkunftIds = uniq(sammlungs.map((s) => s.herkunft_id))
+          const herkunftsSorted = herkunfts
+            .filter((h) => herkunftIds.includes(h.id))
+            .sort(herkunftSort)
+          setHerkunfts(herkunftsSorted)
+        },
       )
-      .observe()
-    const herkunftsObservable = db
-      .get('herkunft')
-      .query(Q.where('_deleted', false))
-      .observe()
-    const combinedObservables = combineLatest([
-      sammlungsObservable,
-      herkunftsObservable,
-    ])
-    const subscription = combinedObservables.subscribe(
-      ([sammlungs, herkunfts]) => {
-        const herkunftIds = uniq(sammlungs.map((s) => s.herkunft_id))
-        const herkunftsSorted = herkunfts
-          .filter((h) => herkunftIds.includes(h.id))
-          .sort(herkunftSort)
-        setHerkunfts(herkunftsSorted)
+
+      return () => subscription?.unsubscribe?.()
+    }, [artId, db, filter.herkunft._deleted])
+
+    const [open, setOpen] = useState(false)
+    const anim = useAnimation()
+    const onClickToggle = useCallback(
+      async (e) => {
+        e.stopPropagation()
+        if (open) {
+          const was = open
+          await anim.start({ opacity: 0 })
+          await anim.start({ height: 0 })
+          setOpen(!was)
+        } else {
+          setOpen(!open)
+          setTimeout(async () => {
+            await anim.start({ height: 'auto' })
+            await anim.start({ opacity: 1 })
+          })
+        }
       },
+      [anim, open],
     )
 
-    return () => subscription?.unsubscribe?.()
-  }, [artId, db, filter.herkunft._deleted])
-
-  const [open, setOpen] = useState(false)
-  const anim = useAnimation()
-  const onClickToggle = useCallback(
-    async (e) => {
-      e.stopPropagation()
-      if (open) {
-        const was = open
-        await anim.start({ opacity: 0 })
-        await anim.start({ height: 0 })
-        setOpen(!was)
-      } else {
-        setOpen(!open)
-        setTimeout(async () => {
-          await anim.start({ height: 'auto' })
-          await anim.start({ opacity: 1 })
-        })
-      }
-    },
-    [anim, open],
-  )
-
-  return (
-    <ErrorBoundary>
-      <TitleRow
-        onClick={onClickToggle}
-        title={open ? 'schliessen' : 'öffnen'}
-      >
-        <Title>{`Zeit-Achsen ${herkunfts.length} Herkünfte`}</Title>
-        <div>
-          <IconButton
-            aria-label={open ? 'schliessen' : 'öffnen'}
-            title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle}
-            size="large"
-          >
-            {open ?
-              <FaChevronUp />
-            : <FaChevronDown />}
-          </IconButton>
-        </div>
-      </TitleRow>
-      <motion.div
-        animate={anim}
-        transition={{ type: 'just', duration: 0.2 }}
-      >
-        {open &&
-          herkunfts.map((herkunft) => (
-            <Pflanzen
-              key={herkunft.id}
-              artId={artId}
-              herkunft={herkunft}
-            />
-          ))}
-      </motion.div>
-    </ErrorBoundary>
-  )
-}
-
-export default observer(TimelineArea)
+    return (
+      <ErrorBoundary>
+        <TitleRow
+          onClick={onClickToggle}
+          title={open ? 'schliessen' : 'öffnen'}
+        >
+          <Title>{`Zeit-Achsen ${herkunfts.length} Herkünfte`}</Title>
+          <div>
+            <IconButton
+              aria-label={open ? 'schliessen' : 'öffnen'}
+              title={open ? 'schliessen' : 'öffnen'}
+              onClick={onClickToggle}
+              size="large"
+            >
+              {open ?
+                <FaChevronUp />
+              : <FaChevronDown />}
+            </IconButton>
+          </div>
+        </TitleRow>
+        <motion.div
+          animate={anim}
+          transition={{ type: 'just', duration: 0.2 }}
+        >
+          {open &&
+            herkunfts.map((herkunft) => (
+              <Pflanzen
+                key={herkunft.id}
+                artId={artId}
+                herkunft={herkunft}
+              />
+            ))}
+        </motion.div>
+      </ErrorBoundary>
+    )
+  },
+)

@@ -47,7 +47,7 @@ const Body = styled.div`
   padding: 10px 0;
 `
 
-const ApQk = ({ artId }) => {
+export const QK = observer(({ artId }) => {
   const store = useContext(MobxStoreContext)
   const { db, user } = store
 
@@ -186,6 +186,4 @@ const ApQk = ({ artId }) => {
       </motion.div>
     </ErrorBoundary>
   )
-}
-
-export default observer(ApQk)
+})
