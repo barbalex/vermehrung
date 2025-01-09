@@ -13,12 +13,10 @@ async function persist() {
   )
 }
 
-const StoragePersister = () => {
+export const StoragePersister = () => {
   useEffect(() => {
     persist().then((val) => console.log('storage is persisted safely:', val))
   }, [])
 
   return null
 }
-
-export default StoragePersister
