@@ -6,9 +6,9 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaCog } from 'react-icons/fa'
 
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import Menu from './Menu.jsx'
+import { KulturSettingsMenu as Menu } from './Menu.jsx'
 
-const KulturSettings = ({ asMenu, kulturId }) => {
+export const KulturSettings = observer(({ asMenu, kulturId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickConfig = useCallback(
     (event) => setAnchorEl(event.currentTarget),
@@ -46,9 +46,11 @@ const KulturSettings = ({ asMenu, kulturId }) => {
       >
         <FaCog />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} kulturId={kulturId} />
+      <Menu
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+        kulturId={kulturId}
+      />
     </ErrorBoundary>
   )
-}
-
-export default observer(KulturSettings)
+})
