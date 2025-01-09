@@ -10,7 +10,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import TeilzaehlungenRows from './TeilzaehlungenRows.jsx'
 import Settings from './Settings.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk.js'
+import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByTk.js'
 import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`

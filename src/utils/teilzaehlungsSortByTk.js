@@ -1,7 +1,7 @@
 import { first as first$ } from 'rxjs/operators'
 import sortBy from 'lodash/sortBy'
 
-const tzsSortByTk = async (tzs) => {
+export const teilzaehlungsSortByTk = async (tzs) => {
   const tzsIdLabel = await Promise.all(
     tzs.map(async (tz) => {
       let label = ''
@@ -17,5 +17,3 @@ const tzsSortByTk = async (tzs) => {
   )
   return sortBy(tzs, (tz) => tzsIdLabel.find((o) => o.id === tz.id).label)
 }
-
-export default tzsSortByTk

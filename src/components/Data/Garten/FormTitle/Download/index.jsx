@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten.js'
-import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums.js'
+import { buildExceljsWorksheetsForTzSums } from './buildExceljsWorksheetsForTzSums.js'
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 

@@ -1,13 +1,13 @@
 import { Q } from '@nozbe/watermelondb'
 
 import addWorksheetToExceljsWorkbook from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
-import teilzaehlungsSortByTk from '../../../../../utils/teilzaehlungsSortByTk.js'
+import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByTk.js'
 
 /**
- * this function cann be used from higher up
- * that is why it receives a workbook and _can_ recieve calledFromHigherUp
+ * this function cnn be used from higher up
+ * that is why it receives a workbook and _can_ receive calledFromHigherUp
  */
-const buildExceljsWorksheetsForTzSums = async ({
+export const buildExceljsWorksheetsForTzSums = async ({
   store,
   garten_id,
   workbook,
@@ -58,5 +58,3 @@ const buildExceljsWorksheetsForTzSums = async ({
 
   return
 }
-
-export default buildExceljsWorksheetsForTzSums
