@@ -3,7 +3,7 @@ import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 
 import { addWorksheetToExceljsWorkbook } from '../../../../utils/addWorksheetToExceljsWorkbook.js'
-import removeMetadataFromDataset from '../../../../utils/removeMetadataFromDataset.js'
+import { removeMetadataFromDataset } from '../../../../utils/removeMetadataFromDataset.js'
 import { exists } from '../../../../utils/exists.js'
 import { teilzaehlungsSortByTk } from '../../../../utils/teilzaehlungsSortByTk.js'
 import { zaehlungSort } from '../../../../utils/zaehlungSort.js'
