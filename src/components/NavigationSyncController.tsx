@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 import { useLocation, useNavigate } from 'react-router'
 
 import storeContext from '../storeContext.js'
-import getActiveNodeArrayFromUrl from '../utils/activeNodeArrayFromPathname.js'
+import { getActiveNodeArrayFromPathname } from '../utils/getActiveNodeArrayFromPathname.js'
 
 // syncs activeNodeArray with browser navigation
 export const NavigationSyncController = observer(() => {
@@ -32,7 +32,7 @@ export const NavigationSyncController = observer(() => {
   // when user clicks back or foward button, need to set lastActiveNodeArray
   useEffect(() => {
     window.onpopstate = () => {
-      setLastActiveNodeArray(getActiveNodeArrayFromUrl(pathname))
+      setLastActiveNodeArray(getActiveNodeArrayFromPathname(pathname))
     }
     // do not need to remove, see: https://stackoverflow.com/a/47997544/712005
   }, [pathname, setLastActiveNodeArray])
@@ -41,7 +41,7 @@ export const NavigationSyncController = observer(() => {
   useEffect(() => {
     if (pathname.startsWith('/Dokumentation')) return
 
-    const activeNodeArrayFromUrl = getActiveNodeArrayFromUrl(pathname)
+    const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname(pathname)
 
     if (!isEqual(activeNodeArrayFromUrl, aNA)) {
       setActiveNodeArray(activeNodeArrayFromUrl)

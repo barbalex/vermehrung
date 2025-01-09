@@ -1,4 +1,4 @@
-export default (pathnamePassed) => {
+export const getActiveNodeArrayFromPathname = (pathnamePassed) => {
   const pathname = pathnamePassed || window.location.pathname
   return (
     pathname
@@ -8,7 +8,7 @@ export default (pathnamePassed) => {
       // need to decode in case of Umlaute
       .map((e) => decodeURIComponent(e))
       // convert numbers to numbers
-      .map((e) => { 
+      .map((e) => {
         if (!isNaN(e)) {
           return +e
         }
