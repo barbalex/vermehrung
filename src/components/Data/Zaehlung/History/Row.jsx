@@ -6,7 +6,7 @@ import isEqual from 'lodash/isEqual'
 
 import History from '../../../shared/History/index.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
+import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { mutations } from '../../../../utils/mutations.js'
 import { toPgArray } from '../../../../utils/toPgArray.js'
 import createDataArrayForRevComparison from '../createDataArrayForRevComparison.js'
