@@ -41,7 +41,7 @@ const Geplant = styled.div`
   margin-right: 10px;
 `
 
-const TkEventRow = ({ event, last }) => {
+export const TeilkulturEventRow = ({ event, last }) => {
   const [personName, setPersonName] = useState()
   useEffect(() => {
     let isActive = true
@@ -61,12 +61,14 @@ const TkEventRow = ({ event, last }) => {
     }
   }, [event.person])
 
-  const datum = event.datum
-    ? format(new Date(event.datum), 'yyyy.MM.dd')
-    : 'Kein Datum'
+  const datum =
+    event.datum ? format(new Date(event.datum), 'yyyy.MM.dd') : 'Kein Datum'
 
   return (
-    <Row key={event.id} data-last={last}>
+    <Row
+      key={event.id}
+      data-last={last}
+    >
       <Datum>{datum}</Datum>
       <Geplant>{event?.geplant ? 'geplant' : ' '}</Geplant>
       <Name>{personName ?? ' '}</Name>
@@ -74,5 +76,3 @@ const TkEventRow = ({ event, last }) => {
     </Row>
   )
 }
-
-export default TkEventRow
