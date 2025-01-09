@@ -34,53 +34,47 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 
-const Art = ({
-  row,
-  totalCount,
-  filteredCount,
-  showHistory,
-  setShowHistory,
-}) => {
-  const { width, ref } = useResizeDetector()
+export const FormTitle = observer(
+  ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
+    const { width, ref } = useResizeDetector()
 
-  return (
-    <TitleContainer ref={ref}>
-      <Title>Art</Title>
-      <TitleSymbols>
-        <NavButtons />
-        <AddButton />
-        <DeleteButton row={row} />
-        {width < 520 ?
-          <Menu white={false}>
-            <HistoryButton
-              table="art"
-              id={row.id}
-              showHistory={showHistory}
-              setShowHistory={setShowHistory}
-              asMenu
-            />
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-              asMenu
-            />
-          </Menu>
-        : <>
-            <HistoryButton
-              table="art"
-              id={row.id}
-              showHistory={showHistory}
-              setShowHistory={setShowHistory}
-            />
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-            />
-          </>
-        }
-      </TitleSymbols>
-    </TitleContainer>
-  )
-}
-
-export default observer(Art)
+    return (
+      <TitleContainer ref={ref}>
+        <Title>Art</Title>
+        <TitleSymbols>
+          <NavButtons />
+          <AddButton />
+          <DeleteButton row={row} />
+          {width < 520 ?
+            <Menu white={false}>
+              <HistoryButton
+                table="art"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+                asMenu
+              />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+                asMenu
+              />
+            </Menu>
+          : <>
+              <HistoryButton
+                table="art"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+              />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
+            </>
+          }
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  },
+)
