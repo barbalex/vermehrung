@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 
-import Settings from './Settings/index.jsx'
+import { KulturSettings as Settings } from './Settings/index.jsx'
 import { KulturDeleteButton as Delete } from './Delete/index.jsx'
 import { KulturAddButton as Add } from './Add.jsx'
 import { HistoryButton } from '../../../shared/HistoryButton.jsx'
