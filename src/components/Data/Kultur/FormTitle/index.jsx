@@ -8,7 +8,7 @@ import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { KulturFormTitle as FormTitle } from './FormTitle.jsx'
 import { tableFilter } from '../../../../utils/tableFilter.js'
 
-const KulturFormTitleChooser = ({
+export const KulturFormTitleChooser = observer( ({
   row,
   rawRow,
   showFilter,
@@ -106,5 +106,4 @@ const KulturFormTitleChooser = ({
     />
   )
 }
-
-export default observer(KulturFormTitleChooser)
+)
