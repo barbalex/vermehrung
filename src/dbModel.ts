@@ -32,7 +32,7 @@ import kulturLabelFromKulturUnderGarten from './utils/kulturLabelFromKulturUnder
 import sammlungLabelFromSammlung from './utils/sammlungLabelFromSammlung.js'
 import sammlungLabelFromSammlungUnderHerkunft from './utils/sammlungLabelFromSammlungUnderHerkunft.js'
 import zaehlungLabelFromZaehlung from './utils/zaehlungLabelFromZaehlung.js'
-import toPgArray from './utils/toPgArray.js'
+import { toPgArray } from './utils/toPgArray.js'
 import deleteAccount from './utils/deleteAccount.js'
 import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen.js'
 import {
