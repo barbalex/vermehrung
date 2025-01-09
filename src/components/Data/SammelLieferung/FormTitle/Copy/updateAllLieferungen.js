@@ -1,6 +1,10 @@
-import updateLieferung from './updateLieferung.js'
+import { updateSammelLieferung } from './updateLieferung.js'
 
-const updateAllLieferungen = async ({ sammelLieferung, store, field }) => {
+export const updateAllSammelLieferungen = async ({
+  sammelLieferung,
+  store,
+  field,
+}) => {
   // pass field to mark which field should be updated
   // even if it has value null
   const lieferungs = sammelLieferung.lieferungs ?? []
@@ -8,7 +12,7 @@ const updateAllLieferungen = async ({ sammelLieferung, store, field }) => {
   let error = null
   for (const lieferung of lieferungs) {
     try {
-      updateLieferung({
+      updateSammelLieferung({
         lieferung,
         sammelLieferung,
         store,
@@ -26,5 +30,3 @@ const updateAllLieferungen = async ({ sammelLieferung, store, field }) => {
     })
   }
 }
-
-export default updateAllLieferungen

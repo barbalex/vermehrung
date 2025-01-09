@@ -34,7 +34,7 @@ import sammlungLabelFromSammlungUnderHerkunft from './utils/sammlungLabelFromSam
 import zaehlungLabelFromZaehlung from './utils/zaehlungLabelFromZaehlung.js'
 import { toPgArray } from './utils/toPgArray.js'
 import deleteAccount from './utils/deleteAccount.js'
-import updateAllLieferungen from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen.js'
+import { updateAllSammelLieferungen } from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen.js'
 import {
   artFile as artFileFragment,
   gartenFile as gartenFileFragment,
@@ -118,9 +118,8 @@ export class Herkunft extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_herkunft_rev_one',
       variables: JSON.stringify({
@@ -280,9 +279,9 @@ export class Sammlung extends Model {
         field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
       gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
       andere_menge:
-        field === 'andere_menge'
-          ? toStringIfPossible(value)
-          : this.andere_menge,
+        field === 'andere_menge' ?
+          toStringIfPossible(value)
+        : this.andere_menge,
       geplant: field === 'geplant' ? value : this.geplant,
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
@@ -299,9 +298,8 @@ export class Sammlung extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_sammlung_rev_one',
       variables: JSON.stringify({
@@ -450,14 +448,14 @@ export class Lieferung extends Model {
       anzahl_pflanzen:
         field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
       anzahl_auspflanzbereit:
-        field === 'anzahl_auspflanzbereit'
-          ? value
-          : this.anzahl_auspflanzbereit,
+        field === 'anzahl_auspflanzbereit' ? value : (
+          this.anzahl_auspflanzbereit
+        ),
       gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
       andere_menge:
-        field === 'andere_menge'
-          ? toStringIfPossible(value)
-          : this.andere_menge,
+        field === 'andere_menge' ?
+          toStringIfPossible(value)
+        : this.andere_menge,
       geplant: field === 'geplant' ? value : this.geplant,
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
@@ -490,9 +488,8 @@ export class Lieferung extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_lieferung_rev_one',
       variables: JSON.stringify({
@@ -599,9 +596,8 @@ export class Art extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_art_rev_one',
       variables: JSON.stringify({
@@ -742,9 +738,8 @@ export class Garten extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_garten_rev_one',
       variables: JSON.stringify({
@@ -955,9 +950,8 @@ export class Kultur extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_kultur_rev_one',
       variables: JSON.stringify({
@@ -1055,9 +1049,8 @@ export class Teilkultur extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_teilkultur_rev_one',
       variables: JSON.stringify({
@@ -1199,9 +1192,8 @@ export class Zaehlung extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_zaehlung_rev_one',
       variables: JSON.stringify({
@@ -1285,19 +1277,19 @@ export class Teilzaehlung extends Model {
       anzahl_pflanzen:
         field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
       anzahl_auspflanzbereit:
-        field === 'anzahl_auspflanzbereit'
-          ? value
-          : this.anzahl_auspflanzbereit,
+        field === 'anzahl_auspflanzbereit' ? value : (
+          this.anzahl_auspflanzbereit
+        ),
       anzahl_mutterpflanzen:
         field === 'anzahl_mutterpflanzen' ? value : this.anzahl_mutterpflanzen,
       andere_menge:
-        field === 'andere_menge'
-          ? toStringIfPossible(value)
-          : this.andere_menge,
+        field === 'andere_menge' ?
+          toStringIfPossible(value)
+        : this.andere_menge,
       auspflanzbereit_beschreibung:
-        field === 'auspflanzbereit_beschreibung'
-          ? toStringIfPossible(value)
-          : this.auspflanzbereit_beschreibung,
+        field === 'auspflanzbereit_beschreibung' ?
+          toStringIfPossible(value)
+        : this.auspflanzbereit_beschreibung,
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
       prognose_von_tz:
@@ -1315,9 +1307,8 @@ export class Teilzaehlung extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_teilzaehlung_rev_one',
       variables: JSON.stringify({
@@ -1442,24 +1433,24 @@ export class Person extends Model {
       vorname: field === 'vorname' ? toStringIfPossible(value) : this.vorname,
       name: field === 'name' ? toStringIfPossible(value) : this.name,
       adresszusatz:
-        field === 'adresszusatz'
-          ? toStringIfPossible(value)
-          : this.adresszusatz,
+        field === 'adresszusatz' ?
+          toStringIfPossible(value)
+        : this.adresszusatz,
       strasse: field === 'strasse' ? toStringIfPossible(value) : this.strasse,
       plz: field === 'plz' ? value : this.plz,
       ort: field === 'ort' ? toStringIfPossible(value) : this.ort,
       telefon_privat:
-        field === 'telefon_privat'
-          ? toStringIfPossible(value)
-          : this.telefon_privat,
+        field === 'telefon_privat' ?
+          toStringIfPossible(value)
+        : this.telefon_privat,
       telefon_geschaeft:
-        field === 'telefon_geschaeft'
-          ? toStringIfPossible(value)
-          : this.telefon_geschaeft,
+        field === 'telefon_geschaeft' ?
+          toStringIfPossible(value)
+        : this.telefon_geschaeft,
       telefon_mobile:
-        field === 'telefon_mobile'
-          ? toStringIfPossible(value)
-          : this.telefon_mobile,
+        field === 'telefon_mobile' ?
+          toStringIfPossible(value)
+        : this.telefon_mobile,
       email: field === 'email' ? toStringIfPossible(value) : this.email,
       kein_email: field === 'kein_email' ? value : this.kein_email,
       bemerkungen:
@@ -1483,9 +1474,8 @@ export class Person extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_person_rev_one',
       variables: JSON.stringify({
@@ -1589,8 +1579,9 @@ export class SammelLieferung extends Model {
         person = await lieferung.person?.fetch()
       } catch {}
       const personLabel = personLabelFromPerson({ person })
-      const datumLabel = lieferung.datum
-        ? DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
+      const datumLabel =
+        lieferung.datum ?
+          DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
         : `Kein Datum. ID: ${lieferung.id}`
       const von = gartenLabel ? `von: ${gartenLabel}` : ''
       const label = [datumLabel, von, personLabel].filter((e) => !!e).join('; ')
@@ -1634,14 +1625,14 @@ export class SammelLieferung extends Model {
       anzahl_pflanzen:
         field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
       anzahl_auspflanzbereit:
-        field === 'anzahl_auspflanzbereit'
-          ? value
-          : this.anzahl_auspflanzbereit,
+        field === 'anzahl_auspflanzbereit' ? value : (
+          this.anzahl_auspflanzbereit
+        ),
       gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
       andere_menge:
-        field === 'andere_menge'
-          ? toStringIfPossible(value)
-          : this.andere_menge,
+        field === 'andere_menge' ?
+          toStringIfPossible(value)
+        : this.andere_menge,
       geplant: field === 'geplant' ? value : this.geplant,
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
@@ -1658,9 +1649,8 @@ export class SammelLieferung extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_sammel_lieferung_rev_one',
       variables: JSON.stringify({
@@ -1698,7 +1688,7 @@ export class SammelLieferung extends Model {
           id: newObject.sammel_lieferung_id,
         }
         delete newSammelLieferung.sammel_lieferung_id
-        updateAllLieferungen({
+        updateAllSammelLieferungen({
           sammelLieferung: newSammelLieferung,
           store,
           field,
@@ -1771,9 +1761,9 @@ export class Event extends Model {
       teilkultur_id: field === 'teilkultur_id' ? value : this.teilkultur_id,
       person_id: field === 'person_id' ? value : this.person_id,
       beschreibung:
-        field === 'beschreibung'
-          ? toStringIfPossible(value)
-          : this.beschreibung,
+        field === 'beschreibung' ?
+          toStringIfPossible(value)
+        : this.beschreibung,
       geplant: field === 'geplant' ? value : this.geplant,
       datum: field === 'datum' ? value : this.datum,
       _parent_rev: this._rev,
@@ -1789,9 +1779,8 @@ export class Event extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_event_rev_one',
       variables: JSON.stringify({
@@ -1895,9 +1884,8 @@ export class Av extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_av_rev_one',
       variables: JSON.stringify({
@@ -2004,9 +1992,8 @@ export class Gv extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_gv_rev_one',
       variables: JSON.stringify({
@@ -2762,9 +2749,9 @@ export class ArtQk extends Model {
       name: field === 'name' ? toStringIfPossible(value) : this.name,
       titel: field === 'titel' ? toStringIfPossible(value) : this.titel,
       beschreibung:
-        field === 'beschreibung'
-          ? toStringIfPossible(value)
-          : this.beschreibung,
+        field === 'beschreibung' ?
+          toStringIfPossible(value)
+        : this.beschreibung,
       sort: field === 'sort' ? value : this.sort,
       _parent_rev: this._rev,
       _depth: newDepth,
@@ -2779,9 +2766,8 @@ export class ArtQk extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_art_qk_rev_one',
       variables: JSON.stringify({
@@ -2866,9 +2852,9 @@ export class KulturOption extends Model {
       tz_andere_menge:
         field === 'tz_andere_menge' ? value : this.tz_andere_menge,
       tz_auspflanzbereit_beschreibung:
-        field === 'tz_auspflanzbereit_beschreibung'
-          ? value
-          : this.tz_auspflanzbereit_beschreibung,
+        field === 'tz_auspflanzbereit_beschreibung' ? value : (
+          this.tz_auspflanzbereit_beschreibung
+        ),
       tz_bemerkungen: field === 'tz_bemerkungen' ? value : this.tz_bemerkungen,
       tk: field === 'tk' ? value : this.tk,
       tk_bemerkungen: field === 'tk_bemerkungen' ? value : this.tk_bemerkungen,
@@ -2890,9 +2876,8 @@ export class KulturOption extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_kultur_option_rev_one',
       variables: JSON.stringify({
@@ -2962,9 +2947,9 @@ export class KulturQk extends Model {
       name: field === 'name' ? toStringIfPossible(value) : this.name,
       titel: field === 'titel' ? toStringIfPossible(value) : this.titel,
       beschreibung:
-        field === 'beschreibung'
-          ? toStringIfPossible(value)
-          : this.beschreibung,
+        field === 'beschreibung' ?
+          toStringIfPossible(value)
+        : this.beschreibung,
       sort: field === 'sort' ? value : this.sort,
       _parent_rev: this._rev,
       _depth: newDepth,
@@ -2979,9 +2964,8 @@ export class KulturQk extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_kultur_qk_rev_one',
       variables: JSON.stringify({
@@ -3095,9 +3079,9 @@ export class PersonOption extends Model {
         field === 'li_show_sl_felder' ? value : this.li_show_sl_felder,
       li_show_sl: field === 'li_show_sl' ? value : this.li_show_sl,
       sl_show_empty_when_next_to_li:
-        field === 'sl_show_empty_when_next_to_li'
-          ? value
-          : this.sl_show_empty_when_next_to_li,
+        field === 'sl_show_empty_when_next_to_li' ? value : (
+          this.sl_show_empty_when_next_to_li
+        ),
       sl_auto_copy_edits:
         field === 'sl_auto_copy_edits' ? value : this.sl_auto_copy_edits,
       tree_kultur: field === 'tree_kultur' ? value : this.tree_kultur,
@@ -3107,13 +3091,13 @@ export class PersonOption extends Model {
       tree_lieferung: field === 'tree_lieferung' ? value : this.tree_lieferung,
       tree_event: field === 'tree_event' ? value : this.tree_event,
       art_qk_choosen:
-        field === 'art_qk_choosen'
-          ? toPgArray(value)
-          : toPgArray(this.art_qk_choosen),
+        field === 'art_qk_choosen' ?
+          toPgArray(value)
+        : toPgArray(this.art_qk_choosen),
       kultur_qk_choosen:
-        field === 'kultur_qk_choosen'
-          ? toPgArray(value)
-          : toPgArray(this.kultur_qk_choosen),
+        field === 'kultur_qk_choosen' ?
+          toPgArray(value)
+        : toPgArray(this.kultur_qk_choosen),
       _parent_rev: this._rev,
       _depth: newDepth,
       _deleted: field === '_deleted' ? value : this._deleted,
@@ -3127,9 +3111,8 @@ export class PersonOption extends Model {
     newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_person_option_rev_one',
       variables: JSON.stringify({
