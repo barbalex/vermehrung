@@ -4,7 +4,7 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import isEqual from 'lodash/isEqual'
 
-import History from '../../../shared/History/index.jsx'
+import { History } from '../../../shared/History/index.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../../utils/toPgArray.js'
