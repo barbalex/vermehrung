@@ -9,7 +9,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Select from '../../../shared/Select/index.jsx'
 import TextField from '../../../shared/TextField.jsx'
 import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.js'
-import personSort from '../../../../utils/personSort.js'
+import { personSort } from '../../../../utils/personSort.js'
 
 const Title = styled.div`
   font-weight: bold;

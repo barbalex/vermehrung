@@ -15,7 +15,7 @@ import FilterNumbers from '../../shared/FilterNumbers.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import UpSvg from '../../../svg/to_up.svg?react'
 import tableFilter from '../../../utils/tableFilter.js'
-import personSort from '../../../utils/personSort.js'
+import { personSort } from '../../../utils/personSort.js'
 import { constants } from '../../../utils/constants.js'
 
 const Container = styled.div`
