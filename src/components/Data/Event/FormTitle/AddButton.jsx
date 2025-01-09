@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const EventAddButton = () => {
+export const EventAddButton = observer(() => {
   const store = useContext(MobxStoreContext)
   const { insertEventRev } = store
 
@@ -16,11 +16,14 @@ const EventAddButton = () => {
 
   return (
     <ErrorBoundary>
-      <IconButton aria-label="neuer Event" title="neuer Event" onClick={add} size="large">
+      <IconButton
+        aria-label="neuer Event"
+        title="neuer Event"
+        onClick={add}
+        size="large"
+      >
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
-  );
-}
-
-export default observer(EventAddButton)
+  )
+})
