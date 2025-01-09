@@ -3,7 +3,7 @@ import { createClient as createWsClient } from 'graphql-ws'
 
 import { constants } from './constants.js'
 import MobxStore from '../store/index.js'
-import getAuthToken from './getAuthToken.js'
+import { getAuthToken } from './getAuthToken.js'
 import recreatePersistedStore from './recreatePersistedStore.js'
 
 const noToken =

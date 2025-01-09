@@ -3,7 +3,7 @@ import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import persist from 'mst-persist'
 
-import getAuthToken from './getAuthToken.js'
+import { getAuthToken } from './getAuthToken.js'
 import { isOnline } from './isOnline.js'
 
 // Configure Firebase

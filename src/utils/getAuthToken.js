@@ -1,7 +1,7 @@
 import axios from 'redaxios'
 import throttle from 'lodash/throttle'
 
-const getAuthToken = async ({ store }) => {
+export const getAuthToken = async ({ store }) => {
   const {
     addNotification,
     setAuthorizing,
