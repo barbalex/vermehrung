@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import Diff from 'react-stylable-diff'
 import { observer } from 'mobx-react-lite'
 
-import toStringIfPossible from '../../../utils/toStringIfPossible.js'
+import { toStringIfPossible } from '../../../utils/toStringIfPossible.js'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import Spinner from '../Spinner.jsx'
 
