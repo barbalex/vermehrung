@@ -20,7 +20,7 @@ const Ereignis = styled.div`
   font-weight: 700;
 `
 
-const CustomTooltip = ({ payload, label, active }) => {
+export const CustomTooltip = ({ payload, label, active }) => {
   if (active) {
     return (
       <Popup>
@@ -35,9 +35,9 @@ const CustomTooltip = ({ payload, label, active }) => {
           ?.map((o) => {
             const label = o.dataKey
             const value =
-              label === 'Auspflanzung' && Math.abs(o.value)
-                ? Math.abs(o.value)
-                : o.value
+              label === 'Auspflanzung' && Math.abs(o.value) ?
+                Math.abs(o.value)
+              : o.value
 
             return <PRow key={label}>{`${label}: ${value}`}</PRow>
           })}
@@ -47,5 +47,3 @@ const CustomTooltip = ({ payload, label, active }) => {
 
   return null
 }
-
-export default CustomTooltip
