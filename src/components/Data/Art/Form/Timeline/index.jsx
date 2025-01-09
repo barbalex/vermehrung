@@ -35,79 +35,79 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
-  const [open, setOpen] = useState(false)
+export const Timeline = observer(
+  ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
+    const [open, setOpen] = useState(false)
 
-  const anim = useAnimation()
+    const anim = useAnimation()
 
-  const openDocs = useCallback((e) => {
-    e.stopPropagation()
-    const url = `${constants?.getAppUri()}/Dokumentation/zeitachse-art`
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      return window.open(url, '_blank', 'toolbar=no')
-    }
-    window.open(url)
-  }, [])
-  const onClickToggle = useCallback(
-    async (e) => {
+    const openDocs = useCallback((e) => {
       e.stopPropagation()
-      if (open) {
-        const was = open
-        await anim.start({ opacity: 0 })
-        await anim.start({ height: 0 })
-        setOpen(!was)
-      } else {
-        setOpen(!open)
-        setTimeout(async () => {
-          await anim.start({ height: 'auto' })
-          await anim.start({ opacity: 1 })
-        })
+      const url = `${constants?.getAppUri()}/Dokumentation/zeitachse-art`
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        return window.open(url, '_blank', 'toolbar=no')
       }
-    },
-    [anim, open],
-  )
+      window.open(url)
+    }, [])
+    const onClickToggle = useCallback(
+      async (e) => {
+        e.stopPropagation()
+        if (open) {
+          const was = open
+          await anim.start({ opacity: 0 })
+          await anim.start({ height: 0 })
+          setOpen(!was)
+        } else {
+          setOpen(!open)
+          setTimeout(async () => {
+            await anim.start({ height: 'auto' })
+            await anim.start({ opacity: 1 })
+          })
+        }
+      },
+      [anim, open],
+    )
 
-  return (
-    <ErrorBoundary>
-      <TitleRow
-        onClick={onClickToggle}
-        title={open ? 'schliessen' : 'öffnen'}
-      >
-        <Title>Zeit-Achse</Title>
-        <div>
-          <IconButton
-            aria-label="Anleitung öffnen"
-            title="Anleitung öffnen"
-            onClick={openDocs}
-            size="large"
-          >
-            <IoMdInformationCircleOutline />
-          </IconButton>
-          <IconButton
-            aria-label={open ? 'schliessen' : 'öffnen'}
-            title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle}
-            size="large"
-          >
-            {open ?
-              <FaChevronUp />
-            : <FaChevronDown />}
-          </IconButton>
-        </div>
-      </TitleRow>
-      <motion.div
-        animate={anim}
-        transition={{ type: 'just', duration: 0.2 }}
-      >
-        {open && (
-          <Pflanzen
-            key={artId}
-            artId={artId}
-          />
-        )}
-      </motion.div>
-    </ErrorBoundary>
-  )
-}
-
-export default observer(TimelineArea)
+    return (
+      <ErrorBoundary>
+        <TitleRow
+          onClick={onClickToggle}
+          title={open ? 'schliessen' : 'öffnen'}
+        >
+          <Title>Zeit-Achse</Title>
+          <div>
+            <IconButton
+              aria-label="Anleitung öffnen"
+              title="Anleitung öffnen"
+              onClick={openDocs}
+              size="large"
+            >
+              <IoMdInformationCircleOutline />
+            </IconButton>
+            <IconButton
+              aria-label={open ? 'schliessen' : 'öffnen'}
+              title={open ? 'schliessen' : 'öffnen'}
+              onClick={onClickToggle}
+              size="large"
+            >
+              {open ?
+                <FaChevronUp />
+              : <FaChevronDown />}
+            </IconButton>
+          </div>
+        </TitleRow>
+        <motion.div
+          animate={anim}
+          transition={{ type: 'just', duration: 0.2 }}
+        >
+          {open && (
+            <Pflanzen
+              key={artId}
+              artId={artId}
+            />
+          )}
+        </motion.div>
+      </ErrorBoundary>
+    )
+  },
+)
