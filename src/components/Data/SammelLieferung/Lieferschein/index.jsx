@@ -94,7 +94,7 @@ const StyledTable = styled(Table)`
   }
 `
 
-const Lieferschein = ({ row }) => {
+export const Lieferschein = observer(({ row }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
 
@@ -105,8 +105,9 @@ const Lieferschein = ({ row }) => {
   })
   useEffect(() => {
     const lieferungsObservable = row.lieferungs.observe()
-    const vonKulturGartenObservable = row.von_kultur_id
-      ? db
+    const vonKulturGartenObservable =
+      row.von_kultur_id ?
+        db
           .get('garten')
           .query(
             Q.where('_deleted', false),
@@ -134,20 +135,23 @@ const Lieferschein = ({ row }) => {
   }, [db, row.lieferungs, row.person, row.von_kultur_id])
   const { lieferungs, vonKulturGarten, person } = dataState
 
-  const von = row.von_kultur_id
-    ? `${vonKulturGarten?.name ?? '(kein Name)'} (${
+  const von =
+    row.von_kultur_id ?
+      `${vonKulturGarten?.name ?? '(kein Name)'} (${
         vonKulturGarten?.ort ?? 'kein Ort'
       })`
     : '(keine von-Kultur erfasst)'
 
-  const an = row.person_id
-    ? `${personFullname(person) ?? '(kein Name)'} (${
+  const an =
+    row.person_id ?
+      `${personFullname(person) ?? '(kein Name)'} (${
         person?.ort ?? 'kein Ort'
       })`
     : '(keine Person erfasst)'
 
-  const am = row.datum
-    ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
+  const am =
+    row.datum ?
+      DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
     : '(Kein Datum erfasst)'
 
   return (
@@ -193,7 +197,10 @@ const Lieferschein = ({ row }) => {
             </TableHead>
             <TableBody>
               {lieferungs.map((l) => (
-                <Lieferung key={l.id} lieferung={l} />
+                <Lieferung
+                  key={l.id}
+                  lieferung={l}
+                />
               ))}
             </TableBody>
           </StyledTable>
@@ -201,6 +208,4 @@ const Lieferschein = ({ row }) => {
       </PageContainer>
     </Container>
   )
-}
-
-export default observer(Lieferschein)
+})
