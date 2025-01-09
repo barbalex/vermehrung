@@ -7,7 +7,7 @@ import { Select } from '../../../../../shared/Select/index.jsx'
 import { Checkbox2States } from '../../../../../shared/Checkbox2States.jsx'
 import { JesNo } from '../../../../../shared/JesNo.jsx'
 import { exists } from '../../../../../../utils/exists.js'
-import useData from './useData.jsx'
+import { useLieferungNachData } from './useData.jsx'
 import { LieferungAdd as Add } from './Add/index.jsx'
 
 const Title = styled.div`
@@ -43,7 +43,7 @@ export const LieferungNach = observer(
     const store = useContext(MobxStoreContext)
     const { errors, db, filter } = store
 
-    const { nachKulturWerte } = useData({
+    const { nachKulturWerte } = useLieferungNachData({
       showFilter,
       row,
       herkunft,
