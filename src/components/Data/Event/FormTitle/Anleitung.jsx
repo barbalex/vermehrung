@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.js'
 
-const EventAnleitung = ({ asMenu }) => {
+export const EventAnleitung = observer(({ asMenu }) => {
   const openEventdDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/Dokumentation/events`
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -29,6 +29,4 @@ const EventAnleitung = ({ asMenu }) => {
       <IoMdInformationCircleOutline />
     </IconButton>
   )
-}
-
-export default observer(EventAnleitung)
+})
