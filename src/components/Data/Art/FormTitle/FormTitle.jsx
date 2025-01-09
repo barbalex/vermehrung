@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 
 import DeleteButton from './DeleteButton.jsx'
-import AddButton from './AddButton.jsx'
+import { AddButton } from './AddButton.jsx'
 import { NavButtons } from './NavButtons.jsx'
 import { FilterNumbers } from '../../../shared/FilterNumbers.jsx'
 import { Menu } from '../../../shared/Menu.jsx'
