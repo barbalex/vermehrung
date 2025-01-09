@@ -1,4 +1,4 @@
-const fileSort = (a, b) => {
+export const fileSort = (a, b) => {
   const nameA = a?.name?.toString()?.toLowerCase() ?? ''
   const nameB = b?.name?.toString()?.toLowerCase() ?? ''
   if (nameA < nameB) return -1
@@ -6,5 +6,3 @@ const fileSort = (a, b) => {
 
   return 0
 }
-
-export default fileSort
