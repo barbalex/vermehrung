@@ -29,7 +29,7 @@ const Ul = styled.ul`
   margin-bottom: 0;
 `
 
-const ConflictExplainer = ({ name }) => (
+export const Explainer = ({ name }) => (
   <OptionalHelp>
     <Summary>Infos und Anleitung</Summary>
     <Details>
@@ -73,5 +73,3 @@ const ConflictExplainer = ({ name }) => (
     </Details>
   </OptionalHelp>
 )
-
-export default ConflictExplainer
