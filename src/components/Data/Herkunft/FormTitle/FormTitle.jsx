@@ -6,7 +6,7 @@ import { useResizeDetector } from 'react-resize-detector'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import DeleteButton from './DeleteButton.jsx'
-import AddButton from './AddButton.jsx'
+import { HerkunftAddButton as AddButton } from './AddButton.jsx'
 import { HerkunftSettings as Settings } from './Settings/index.jsx'
 import { HerkunftAnleitung as Anleitung } from './Anleitung.jsx'
 import { FilterNumbers } from '../../../shared/FilterNumbers.jsx'
