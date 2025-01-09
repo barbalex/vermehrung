@@ -1,4 +1,4 @@
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+export const createDataArrayForHerkunftRevComparison = ({ row, revRow }) => [
   { valueInRow: row?.nr, valueInRev: revRow?.nr, label: 'Nr' },
   {
     valueInRow: row?.lokalname,
@@ -38,5 +38,3 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'gelöscht',
   },
 ]
-
-export default createDataArrayForRevComparison
