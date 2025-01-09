@@ -64,7 +64,7 @@ const MenuTitle = styled.h3`
   }
 `
 
-const File = ({ file, parent }) => {
+export const File = observer(({ file, parent }) => {
   const store = useContext(MobxStoreContext)
   const { errors, unsetError } = store
 
@@ -102,13 +102,11 @@ const File = ({ file, parent }) => {
   return (
     <ErrorBoundary>
       <Container>
-        {isImage ? (
+        {isImage ?
           <Img
             src={`https://ucarecdn.com/${file.file_id}/-/resize/80x/-/quality/lightest/${file.name}`}
           />
-        ) : (
-          <ImgReplacement>...</ImgReplacement>
-        )}
+        : <ImgReplacement>...</ImgReplacement>}
         <DateiTypField>
           <TextField
             key={`${file.id}fileMimeType`}
@@ -147,7 +145,10 @@ const File = ({ file, parent }) => {
             schrinkLabel
           />
         </BeschreibungField>
-        <DownloadIcon title="herunterladen" onClick={onClickDownload}>
+        <DownloadIcon
+          title="herunterladen"
+          onClick={onClickDownload}
+        >
           <FaDownload />
         </DownloadIcon>
         <DelIcon
@@ -178,6 +179,4 @@ const File = ({ file, parent }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(File)
+})
