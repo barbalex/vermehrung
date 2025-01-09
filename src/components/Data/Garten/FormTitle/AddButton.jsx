@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const GartenAddButton = () => {
+export const GartenAddButton = observer(() => {
   const store = useContext(MobxStoreContext)
   const { insertGartenRev } = store
 
@@ -16,11 +16,14 @@ const GartenAddButton = () => {
 
   return (
     <ErrorBoundary>
-      <IconButton aria-label="neuer Garten" title="neuer Garten" onClick={add} size="large">
+      <IconButton
+        aria-label="neuer Garten"
+        title="neuer Garten"
+        onClick={add}
+        size="large"
+      >
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
-  );
-}
-
-export default observer(GartenAddButton)
+  )
+})
