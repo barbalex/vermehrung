@@ -10,7 +10,7 @@ import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
 import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
-import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
+import { createDataArrayForTeilkulturRevComparison as createDataArray } from './createDataArrayForRevComparison.js'
 
 const teilkulturRevQuery = gql`
   query teilkulturRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -58,12 +58,13 @@ const TeilkulturConflict = ({
   })
   error && checkForOnlineError({ error, store })
 
-  const revRow = useMemo(() => data?.teilkultur_rev?.[0] ?? {}, [
-    data?.teilkultur_rev,
-  ])
+  const revRow = useMemo(
+    () => data?.teilkultur_rev?.[0] ?? {},
+    [data?.teilkultur_rev],
+  )
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow }),
+    () => createDataArray({ row, revRow }),
     [revRow, row],
   )
 
@@ -87,8 +88,9 @@ const TeilkulturConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = revRow._revisions
-      ? toPgArray([rev, ...revRow._revisions])
+    newObject._revisions =
+      revRow._revisions ?
+        toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
     addQueuedQuery({
@@ -148,9 +150,8 @@ const TeilkulturConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row._revisions
-      ? toPgArray([rev, ...row._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
     const response = await gqlClient
       .query(mutations.mutateInsert_teilkultur_rev_one, {
         object: newObject,
@@ -188,9 +189,10 @@ const TeilkulturConflict = ({
     store,
     user.email,
   ])
-  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
-    setActiveConflict,
-  ])
+  const onClickSchliessen = useCallback(
+    () => setActiveConflict(null),
+    [setActiveConflict],
+  )
 
   return (
     <Conflict
