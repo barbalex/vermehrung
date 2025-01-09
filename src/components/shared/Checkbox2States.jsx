@@ -27,53 +27,47 @@ const StyledCheckbox = styled(Checkbox)`
   width: 24px;
 `
 
-const Checkbox2States = ({
-  label,
-  name,
-  value: valuePassed,
-  error,
-  saveToDb,
-}) => {
-  const [stateValue, setStateValue] = useState(valuePassed)
-  useEffect(() => {
-    setStateValue(valuePassed)
-  }, [valuePassed])
+export const Checkbox2States = observer(
+  ({ label, name, value: valuePassed, error, saveToDb }) => {
+    const [stateValue, setStateValue] = useState(valuePassed)
+    useEffect(() => {
+      setStateValue(valuePassed)
+    }, [valuePassed])
 
-  const onClickButton = useCallback(() => {
-    const newValue = !stateValue
-    setStateValue(newValue)
-    const fakeEvent = {
-      target: {
-        value: newValue,
-        name,
-      },
-    }
-    saveToDb(fakeEvent)
-  }, [stateValue, name, saveToDb])
+    const onClickButton = useCallback(() => {
+      const newValue = !stateValue
+      setStateValue(newValue)
+      const fakeEvent = {
+        target: {
+          value: newValue,
+          name,
+        },
+      }
+      saveToDb(fakeEvent)
+    }, [stateValue, name, saveToDb])
 
-  const checked = stateValue === true
+    const checked = stateValue === true
 
-  return (
-    <Container>
-      <StyledFormControl
-        component="fieldset"
-        error={!!error}
-        aria-describedby={`${label}ErrorText`}
-        variant="standard"
-      >
-        <StyledFormLabel component="legend">{label}</StyledFormLabel>
-        <StyledCheckbox
-          data-id={name}
-          onClick={onClickButton}
-          color="primary"
-          checked={checked}
-        />
-        {!!error && (
-          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-        )}
-      </StyledFormControl>
-    </Container>
-  )
-}
-
-export default observer(Checkbox2States)
+    return (
+      <Container>
+        <StyledFormControl
+          component="fieldset"
+          error={!!error}
+          aria-describedby={`${label}ErrorText`}
+          variant="standard"
+        >
+          <StyledFormLabel component="legend">{label}</StyledFormLabel>
+          <StyledCheckbox
+            data-id={name}
+            onClick={onClickButton}
+            color="primary"
+            checked={checked}
+          />
+          {!!error && (
+            <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+          )}
+        </StyledFormControl>
+      </Container>
+    )
+  },
+)
