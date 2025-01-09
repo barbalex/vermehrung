@@ -12,8 +12,8 @@ import { ifIsNumericAsNumber } from '../../../../../utils/ifIsNumericAsNumber.js
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import Was from './Was.jsx'
 import Von from './Von.jsx'
-import Nach from './Nach/index.jsx'
-import Wann from './Wann.jsx'
+import { LieferungNach as Nach } from './Nach/index.jsx'
+import { LieferungWann as Wann } from './Wann.jsx'
 import { LieferungWer as Wer } from './Wer.jsx'
 
 const FieldsContainer = styled.div`
