@@ -1,4 +1,7 @@
-const createDataArrayForRevComparison = ({ row: rowPassed, revRow }) => {
+export const createDataArrayForPersonRevComparison = ({
+  row: rowPassed,
+  revRow,
+}) => {
   // need to use raw values here
   const row = rowPassed._raw
 
@@ -97,5 +100,3 @@ const createDataArrayForRevComparison = ({ row: rowPassed, revRow }) => {
     },
   ]
 }
-
-export default createDataArrayForRevComparison
