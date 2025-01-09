@@ -2,7 +2,7 @@ import { Q } from '@nozbe/watermelondb'
 import camelCase from 'lodash/camelCase'
 
 import types from '../store/Filter/simpleTypes.js'
-import exists from './exists.js'
+import { exists } from './exists.js'
 
 const tableFilter = ({ store, table }) => {
   if (!table) throw `no table passed`

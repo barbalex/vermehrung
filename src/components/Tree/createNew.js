@@ -3,7 +3,7 @@ import camelCase from 'lodash/camelCase'
 import isUuid from 'is-uuid'
 
 import tableFromTitleHash from '../../utils/tableFromTitleHash.json'
-import exists from '../../utils/exists.js'
+import { exists } from '../../utils/exists.js'
 
 const createNew = async ({ node, store }) => {
   // get parent table, parent table id and table from url

@@ -25,7 +25,7 @@ import { teilkulturSort } from '../../../../../../../utils/teilkulturSort.js'
 import teilkulturLabelFromTeilkultur from '../../../../../../../utils/teilkulturLabelFromTeilkultur.js'
 import PrognoseMenu from './PrognoseMenu.jsx'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
-import exists from '../../../../../../../utils/exists.js'
+import { exists } from '../../../../../../../utils/exists.js'
 
 const FieldContainer = styled.div`
   display: flex;
