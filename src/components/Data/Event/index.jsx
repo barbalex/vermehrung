@@ -9,7 +9,7 @@ import FormTitle from './FormTitle/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import Conflict from './Conflict.jsx'
-import Form from './Form/index.jsx'
+import { EventForm as Form } from './Form/index.jsx'
 import { EventHistory as History } from './History/index.jsx'
 
 const Container = styled.div`
