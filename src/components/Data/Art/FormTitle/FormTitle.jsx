@@ -8,7 +8,7 @@ import AddButton from './AddButton.jsx'
 import NavButtons from './NavButtons.jsx'
 import FilterNumbers from '../../../shared/FilterNumbers.jsx'
 import Menu from '../../../shared/Menu.jsx'
-import HistoryButton from '../../../shared/HistoryButton.jsx'
+import { HistoryButton } from '../../../shared/HistoryButton.jsx'
 import { constants } from '../../../../utils/constants.js'
 
 const TitleContainer = styled.div`

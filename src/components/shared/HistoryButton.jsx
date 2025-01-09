@@ -23,56 +23,59 @@ const StyledIconButton = styled(IconButton)`
     'box-shadow:inset 0px 0px 0px 1px rgba(0, 0, 0, 0.04);'}
 `
 
-const HistoryButton = ({ asMenu, id, showHistory, setShowHistory, table }) => {
-  const store = useContext(MobxStoreContext)
-  const { online, db, initialDataQueried } = store
+export const HistoryButton = observer(
+  ({ asMenu, id, showHistory, setShowHistory, table }) => {
+    const store = useContext(MobxStoreContext)
+    const { online, db, initialDataQueried } = store
 
-  const [dataState, setDataState] = useState({ row: undefined })
-  useEffect(() => {
-    const observable =
-      id && initialDataQueried ? db.get(table).findAndObserve(id) : $of(null)
-    const subscription = observable.subscribe((row) => setDataState({ row }))
+    const [dataState, setDataState] = useState({ row: undefined })
+    useEffect(() => {
+      const observable =
+        id && initialDataQueried ? db.get(table).findAndObserve(id) : $of(null)
+      const subscription = observable.subscribe((row) => setDataState({ row }))
 
-    return () => subscription?.unsubscribe?.()
-  }, [id, db, table, initialDataQueried])
-  const { row } = dataState
+      return () => subscription?.unsubscribe?.()
+    }, [id, db, table, initialDataQueried])
+    const { row } = dataState
 
-  const existMultipleRevisions =
-    row?._revisions?.length && row?._revisions?.length > 1
-  const disabled = !online || !existMultipleRevisions
+    const existMultipleRevisions =
+      row?._revisions?.length && row?._revisions?.length > 1
+    const disabled = !online || !existMultipleRevisions
 
-  const show = useCallback(() => {
-    if (disabled) return
-    setShowHistory(!showHistory)
-  }, [disabled, setShowHistory, showHistory])
+    const show = useCallback(() => {
+      if (disabled) return
+      setShowHistory(!showHistory)
+    }, [disabled, setShowHistory, showHistory])
 
-  const title = online
-    ? showHistory
-      ? 'Frühere Versionen ausblenden'
-      : 'Frühere Versionen anzeigen'
-    : 'Frühere Versionen sind nur online verfügbar'
+    const title =
+      online ?
+        showHistory ? 'Frühere Versionen ausblenden'
+        : 'Frühere Versionen anzeigen'
+      : 'Frühere Versionen sind nur online verfügbar'
 
-  if (asMenu) {
+    if (asMenu) {
+      return (
+        <StyledMenuItem
+          onClick={show}
+          data-disabled={disabled}
+        >
+          {title}
+        </StyledMenuItem>
+      )
+    }
+
     return (
-      <StyledMenuItem onClick={show} data-disabled={disabled}>
-        {title}
-      </StyledMenuItem>
+      <ErrorBoundary>
+        <StyledIconButton
+          aria-label={title}
+          title={title}
+          onClick={show}
+          disabled={disabled}
+          data-active={showHistory}
+        >
+          <FaHistory />
+        </StyledIconButton>
+      </ErrorBoundary>
     )
-  }
-
-  return (
-    <ErrorBoundary>
-      <StyledIconButton
-        aria-label={title}
-        title={title}
-        onClick={show}
-        disabled={disabled}
-        data-active={showHistory}
-      >
-        <FaHistory />
-      </StyledIconButton>
-    </ErrorBoundary>
-  )
-}
-
-export default observer(HistoryButton)
+  },
+)
