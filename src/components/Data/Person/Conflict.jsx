@@ -46,220 +46,223 @@ const personRevQuery = gql`
   }
 `
 
-const PersonConflict = ({
-  id,
-  rev,
-  row,
-  conflictDisposalCallback,
-  conflictSelectionCallback,
-  setActiveConflict,
-}) => {
-  const store = useContext(MobxStoreContext)
-  const { user, addNotification, addQueuedQuery, db, gqlClient } = store
-
-  // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery({
-    query: personRevQuery,
-    variables: {
-      rev,
-      id,
-    },
-  })
-  error && checkForOnlineError({ error, store })
-
-  const revRow = useMemo(() => data?.person_rev?.[0] ?? {}, [data?.person_rev])
-
-  const dataArray = useMemo(
-    () => createDataArray({ row, revRow }),
-    [revRow, row],
-  )
-
-  const onClickAktuellUebernehmen = useCallback(async () => {
-    // build new object
-    const newDepth = revRow._depth + 1
-    const newObject = {
-      person_id: revRow.person_id,
-      nr: revRow.nr,
-      vorname: revRow.vorname,
-      name: revRow.name,
-      adresszusatz: revRow.adresszusatz,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
-      telefon_privat: revRow.telefon_privat,
-      telefon_geschaeft: revRow.telefon_geschaeft,
-      telefon_mobile: revRow.telefon_mobile,
-      email: revRow.email,
-      kein_email: revRow.kein_email,
-      bemerkungen: revRow.bemerkungen,
-      account_id: revRow.account_id,
-      user_role_id: revRow.user_role_id,
-      kommerziell: revRow.kommerziell,
-      info: revRow.info,
-      aktiv: revRow.aktiv,
-      _parent_rev: revRow._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
-    newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
-    newObject._revisions =
-      revRow._revisions ?
-        toPgArray([rev, ...revRow._revisions])
-      : toPgArray([rev])
-
-    addQueuedQuery({
-      name: 'mutateInsert_person_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'person_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'person',
-      revertId: revRow.person_id,
-      revertField: '_deleted',
-      revertValue: false,
-    })
-    // remove conflict from model
-    try {
-      const model = await db.get('person').find(revRow.person_id)
-      await model.removeConflict(revRow._rev)
-    } catch {}
-    conflictDisposalCallback()
-  }, [
-    addQueuedQuery,
+export const PersonConflict = observer(
+  ({
+    id,
+    rev,
+    row,
     conflictDisposalCallback,
-    db,
-    revRow._depth,
-    revRow._rev,
-    revRow._revisions,
-    revRow.account_id,
-    revRow.adresszusatz,
-    revRow.aktiv,
-    revRow.bemerkungen,
-    revRow.email,
-    revRow.info,
-    revRow.kein_email,
-    revRow.kommerziell,
-    revRow.name,
-    revRow.nr,
-    revRow.ort,
-    revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
-    revRow.telefon_geschaeft,
-    revRow.telefon_mobile,
-    revRow.telefon_privat,
-    revRow.user_role_id,
-    revRow.vorname,
-    user.email,
-  ])
-  const onClickWiderspruchUebernehmen = useCallback(async () => {
-    // need to attach to the winner, that is row
-    // otherwise risk to still have lower depth and thus loosing
-    const newDepth = row._depth + 1
-    const newObject = {
-      person_id: revRow.person_id,
-      nr: revRow.nr,
-      vorname: revRow.vorname,
-      name: revRow.name,
-      adresszusatz: revRow.adresszusatz,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
-      telefon_privat: revRow.telefon_privat,
-      telefon_geschaeft: revRow.telefon_geschaeft,
-      telefon_mobile: revRow.telefon_mobile,
-      email: revRow.email,
-      kein_email: revRow.kein_email,
-      bemerkungen: revRow.bemerkungen,
-      account_id: revRow.account_id,
-      user_role_id: revRow.user_role_id,
-      kommerziell: revRow.kommerziell,
-      info: revRow.info,
-      aktiv: revRow.aktiv,
-      _parent_rev: row._rev,
-      _depth: newDepth,
-      _deleted: revRow._deleted,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
-    newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
-    newObject._revisions =
-      row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
-    const response = await gqlClient
-      .query(mutations.mutateInsert_person_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'person_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error, store })
-      return addNotification({
-        message: response.error.message,
-      })
-    }
-    // now we need to delete the previous conflict
-    onClickAktuellUebernehmen()
-    conflictSelectionCallback()
-  }, [
-    addNotification,
     conflictSelectionCallback,
-    gqlClient,
-    onClickAktuellUebernehmen,
-    revRow._deleted,
-    revRow.account_id,
-    revRow.adresszusatz,
-    revRow.aktiv,
-    revRow.bemerkungen,
-    revRow.email,
-    revRow.info,
-    revRow.kein_email,
-    revRow.kommerziell,
-    revRow.name,
-    revRow.nr,
-    revRow.ort,
-    revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
-    revRow.telefon_geschaeft,
-    revRow.telefon_mobile,
-    revRow.telefon_privat,
-    revRow.user_role_id,
-    revRow.vorname,
-    row._depth,
-    row._rev,
-    row._revisions,
-    store,
-    user.email,
-  ])
-  const onClickSchliessen = useCallback(
-    () => setActiveConflict(null),
-    [setActiveConflict],
-  )
+    setActiveConflict,
+  }) => {
+    const store = useContext(MobxStoreContext)
+    const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
-  return (
-    <Conflict
-      name="Person"
-      rev={rev}
-      dataArray={dataArray}
-      fetching={fetching}
-      error={error}
-      onClickAktuellUebernehmen={onClickAktuellUebernehmen}
-      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
-      onClickSchliessen={onClickSchliessen}
-    />
-  )
-}
+    // need to use this query to ensure that the person's name is queried
+    const [{ error, data, fetching }] = useQuery({
+      query: personRevQuery,
+      variables: {
+        rev,
+        id,
+      },
+    })
+    error && checkForOnlineError({ error, store })
 
-export default observer(PersonConflict)
+    const revRow = useMemo(
+      () => data?.person_rev?.[0] ?? {},
+      [data?.person_rev],
+    )
+
+    const dataArray = useMemo(
+      () => createDataArray({ row, revRow }),
+      [revRow, row],
+    )
+
+    const onClickAktuellUebernehmen = useCallback(async () => {
+      // build new object
+      const newDepth = revRow._depth + 1
+      const newObject = {
+        person_id: revRow.person_id,
+        nr: revRow.nr,
+        vorname: revRow.vorname,
+        name: revRow.name,
+        adresszusatz: revRow.adresszusatz,
+        strasse: revRow.strasse,
+        plz: revRow.plz,
+        ort: revRow.ort,
+        telefon_privat: revRow.telefon_privat,
+        telefon_geschaeft: revRow.telefon_geschaeft,
+        telefon_mobile: revRow.telefon_mobile,
+        email: revRow.email,
+        kein_email: revRow.kein_email,
+        bemerkungen: revRow.bemerkungen,
+        account_id: revRow.account_id,
+        user_role_id: revRow.user_role_id,
+        kommerziell: revRow.kommerziell,
+        info: revRow.info,
+        aktiv: revRow.aktiv,
+        _parent_rev: revRow._rev,
+        _depth: newDepth,
+        _deleted: true,
+      }
+      const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+      newObject._rev = rev
+      newObject.id = uuidv1()
+      newObject.changed = new window.Date().toISOString()
+      newObject.changed_by = user.email
+      newObject._revisions =
+        revRow._revisions ?
+          toPgArray([rev, ...revRow._revisions])
+        : toPgArray([rev])
+
+      addQueuedQuery({
+        name: 'mutateInsert_person_rev_one',
+        variables: JSON.stringify({
+          object: newObject,
+          on_conflict: {
+            constraint: 'person_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        revertTable: 'person',
+        revertId: revRow.person_id,
+        revertField: '_deleted',
+        revertValue: false,
+      })
+      // remove conflict from model
+      try {
+        const model = await db.get('person').find(revRow.person_id)
+        await model.removeConflict(revRow._rev)
+      } catch {}
+      conflictDisposalCallback()
+    }, [
+      addQueuedQuery,
+      conflictDisposalCallback,
+      db,
+      revRow._depth,
+      revRow._rev,
+      revRow._revisions,
+      revRow.account_id,
+      revRow.adresszusatz,
+      revRow.aktiv,
+      revRow.bemerkungen,
+      revRow.email,
+      revRow.info,
+      revRow.kein_email,
+      revRow.kommerziell,
+      revRow.name,
+      revRow.nr,
+      revRow.ort,
+      revRow.person_id,
+      revRow.plz,
+      revRow.strasse,
+      revRow.telefon_geschaeft,
+      revRow.telefon_mobile,
+      revRow.telefon_privat,
+      revRow.user_role_id,
+      revRow.vorname,
+      user.email,
+    ])
+    const onClickWiderspruchUebernehmen = useCallback(async () => {
+      // need to attach to the winner, that is row
+      // otherwise risk to still have lower depth and thus loosing
+      const newDepth = row._depth + 1
+      const newObject = {
+        person_id: revRow.person_id,
+        nr: revRow.nr,
+        vorname: revRow.vorname,
+        name: revRow.name,
+        adresszusatz: revRow.adresszusatz,
+        strasse: revRow.strasse,
+        plz: revRow.plz,
+        ort: revRow.ort,
+        telefon_privat: revRow.telefon_privat,
+        telefon_geschaeft: revRow.telefon_geschaeft,
+        telefon_mobile: revRow.telefon_mobile,
+        email: revRow.email,
+        kein_email: revRow.kein_email,
+        bemerkungen: revRow.bemerkungen,
+        account_id: revRow.account_id,
+        user_role_id: revRow.user_role_id,
+        kommerziell: revRow.kommerziell,
+        info: revRow.info,
+        aktiv: revRow.aktiv,
+        _parent_rev: row._rev,
+        _depth: newDepth,
+        _deleted: revRow._deleted,
+      }
+      const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+      newObject._rev = rev
+      newObject.id = uuidv1()
+      newObject.changed = new window.Date().toISOString()
+      newObject.changed_by = user.email
+      newObject._revisions =
+        row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
+      const response = await gqlClient
+        .query(mutations.mutateInsert_person_rev_one, {
+          object: newObject,
+          on_conflict: {
+            constraint: 'person_rev_pkey',
+            update_columns: ['id'],
+          },
+        })
+        .toPromise()
+      if (response.error) {
+        checkForOnlineError({ error: response.error, store })
+        return addNotification({
+          message: response.error.message,
+        })
+      }
+      // now we need to delete the previous conflict
+      onClickAktuellUebernehmen()
+      conflictSelectionCallback()
+    }, [
+      addNotification,
+      conflictSelectionCallback,
+      gqlClient,
+      onClickAktuellUebernehmen,
+      revRow._deleted,
+      revRow.account_id,
+      revRow.adresszusatz,
+      revRow.aktiv,
+      revRow.bemerkungen,
+      revRow.email,
+      revRow.info,
+      revRow.kein_email,
+      revRow.kommerziell,
+      revRow.name,
+      revRow.nr,
+      revRow.ort,
+      revRow.person_id,
+      revRow.plz,
+      revRow.strasse,
+      revRow.telefon_geschaeft,
+      revRow.telefon_mobile,
+      revRow.telefon_privat,
+      revRow.user_role_id,
+      revRow.vorname,
+      row._depth,
+      row._rev,
+      row._revisions,
+      store,
+      user.email,
+    ])
+    const onClickSchliessen = useCallback(
+      () => setActiveConflict(null),
+      [setActiveConflict],
+    )
+
+    return (
+      <Conflict
+        name="Person"
+        rev={rev}
+        dataArray={dataArray}
+        fetching={fetching}
+        error={error}
+        onClickAktuellUebernehmen={onClickAktuellUebernehmen}
+        onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
+        onClickSchliessen={onClickSchliessen}
+      />
+    )
+  },
+)
