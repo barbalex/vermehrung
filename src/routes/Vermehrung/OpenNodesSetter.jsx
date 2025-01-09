@@ -4,9 +4,9 @@ import { useLocation } from 'react-router'
 
 import StoreContext from '../../storeContext.js'
 import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname.js'
-import openNodesFromActiveNodeArray from '../../utils/openNodesFromActiveNodeArray.js'
+import { openNodesFromActiveNodeArray } from '../../utils/openNodesFromActiveNodeArray.js'
 
-const OpenNodesSetter = () => {
+export const OpenNodesSetter = observer(() => {
   const { pathname } = useLocation()
   const store = useContext(StoreContext)
   const { setLastActiveNodeArray, setOpenNodes } = store.tree
@@ -24,6 +24,4 @@ const OpenNodesSetter = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return null
-}
-
-export default observer(OpenNodesSetter)
+})
