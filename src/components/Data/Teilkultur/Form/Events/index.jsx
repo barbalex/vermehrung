@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import eventSort from '../../../../../utils/eventSort.js'
+import { eventSort } from '../../../../../utils/eventSort.js'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Row from './Row.jsx'
 import { constants } from '../../../../../utils/constants.js'
