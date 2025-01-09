@@ -6,11 +6,11 @@ import last from 'lodash/last'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import Lieferung from './Lieferung/index.jsx'
+import { Lieferung } from './Lieferung/index.jsx'
 import { SammelLieferung } from '../SammelLieferung/index.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
-const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
+export const LieferungContainer = observer( ({ filter: showFilter = false, id: idPassed }) => {
   const store = useContext(MobxStoreContext)
   const { filter, db, user, initialDataQueried } = store
   const { activeNodeArray } = store.tree
@@ -96,6 +96,5 @@ const LieferungContainer = ({ filter: showFilter = false, id: idPassed }) => {
       showFilter={showFilter}
     />
   )
-}
+})
 
-export default observer(LieferungContainer)

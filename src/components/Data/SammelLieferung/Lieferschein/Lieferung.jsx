@@ -15,7 +15,7 @@ const StyledTableCell = styled(TableCell)`
 
 const Zeile = ({ value }) => <div>{value}</div>
 
-const LieferungForLieferschein = ({ lieferung: row }) => {
+export const LieferungForLieferschein = ({ lieferung: row }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
 
@@ -90,4 +90,3 @@ const LieferungForLieferschein = ({ lieferung: row }) => {
   )
 }
 
-export default LieferungForLieferschein
