@@ -11,7 +11,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import Qk from './Qk/index.jsx'
-import Choose from './Choose/index.jsx'
+import { Choose } from './Choose/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
@@ -56,8 +56,9 @@ const ApQk = ({ artId }) => {
 
   const [dataState, setDataState] = useState({ qks: [], userPersonOption: {} })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['art_qk_choosen'])
@@ -120,7 +121,10 @@ const ApQk = ({ artId }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+      >
         <Title>Qualitäts-Kontrollen</Title>
         <div>
           <IconButton
@@ -137,11 +141,16 @@ const ApQk = ({ artId }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </TitleRow>
-      <motion.div animate={anim} transition={{ type: 'just', duration: 0.4 }}>
+      <motion.div
+        animate={anim}
+        transition={{ type: 'just', duration: 0.4 }}
+      >
         {open && (
           <>
             <StyledTabs
@@ -151,7 +160,11 @@ const ApQk = ({ artId }) => {
               textColor="primary"
               centered
             >
-              <Tab label="ausführen" value="qk" data-id="qk" />
+              <Tab
+                label="ausführen"
+                value="qk"
+                data-id="qk"
+              />
               <Tab
                 label={`auswählen${
                   qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
@@ -161,11 +174,12 @@ const ApQk = ({ artId }) => {
               />
             </StyledTabs>
             <Body>
-              {tab === 'qk' ? (
-                <Qk artId={artId} qkChoosens={qkChoosens} />
-              ) : (
-                <Choose qks={qks} />
-              )}
+              {tab === 'qk' ?
+                <Qk
+                  artId={artId}
+                  qkChoosens={qkChoosens}
+                />
+              : <Choose qks={qks} />}
             </Body>
           </>
         )}
