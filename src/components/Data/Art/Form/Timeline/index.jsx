@@ -6,7 +6,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 
-import Pflanzen from './Pflanzen/index.jsx'
+import { Pflanzen } from './Pflanzen/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { constants } from '../../../../../utils/constants.js'
 
@@ -69,7 +69,10 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+      >
         <Title>Zeit-Achse</Title>
         <div>
           <IconButton
@@ -86,12 +89,22 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </TitleRow>
-      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
-        {open && <Pflanzen key={artId} artId={artId} />}
+      <motion.div
+        animate={anim}
+        transition={{ type: 'just', duration: 0.2 }}
+      >
+        {open && (
+          <Pflanzen
+            key={artId}
+            artId={artId}
+          />
+        )}
       </motion.div>
     </ErrorBoundary>
   )
