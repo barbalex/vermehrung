@@ -11,7 +11,7 @@ import EvDownSvg from '../../../../svg/to_ev_down.svg?react'
 import TkDownSvg from '../../../../svg/to_tk_down.svg?react'
 import UpSvg from '../../../../svg/to_up.svg?react'
 
-const KulturNavButtons = ({ row }) => {
+export const KulturNavButtons = observer(({ row }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
@@ -44,9 +44,8 @@ const KulturNavButtons = ({ row }) => {
   const { kulturOption } = dataState
 
   useEffect(() => {
-    const kOObservable = row.kultur_option
-      ? row.kultur_option.observe()
-      : $of({})
+    const kOObservable =
+      row.kultur_option ? row.kultur_option.observe() : $of({})
     const subscription = kOObservable.subscribe((kulturOption) =>
       setDataState({ kulturOption }),
     )
@@ -93,11 +92,13 @@ const KulturNavButtons = ({ row }) => {
       >
         <AusLiDownSvg />
       </IconButton>
-      <IconButton title="Zu den Events" onClick={onClickToEvents} size="large">
+      <IconButton
+        title="Zu den Events"
+        onClick={onClickToEvents}
+        size="large"
+      >
         <EvDownSvg />
       </IconButton>
     </>
   )
-}
-
-export default observer(KulturNavButtons)
+})

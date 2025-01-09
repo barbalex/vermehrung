@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.js'
 
-const KulturAnleitung = ({ asMenu }) => {
+export const KulturAnleitung = ({ asMenu }) => {
   const openKulturDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/Dokumentation/kulturen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -29,5 +29,3 @@ const KulturAnleitung = ({ asMenu }) => {
     </IconButton>
   )
 }
-
-export default KulturAnleitung
