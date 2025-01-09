@@ -10,7 +10,7 @@ import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
 import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
-import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
+import { createDataArrayForSammellieferungRevComparison as createDataArray } from './createDataArrayForRevComparison.js'
 
 const sammelLieferungRevQuery = gql`
   query sammelLieferungRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -66,12 +66,13 @@ const SammelLieferungConflict = ({
   })
   error && checkForOnlineError({ error, store })
 
-  const revRow = useMemo(() => data?.sammel_lieferung_rev?.[0] ?? {}, [
-    data?.sammel_lieferung_rev,
-  ])
+  const revRow = useMemo(
+    () => data?.sammel_lieferung_rev?.[0] ?? {},
+    [data?.sammel_lieferung_rev],
+  )
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow }),
+    () => createDataArray({ row, revRow }),
     [revRow, row],
   )
 
@@ -103,8 +104,9 @@ const SammelLieferungConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = revRow._revisions
-      ? toPgArray([rev, ...revRow._revisions])
+    newObject._revisions =
+      revRow._revisions ?
+        toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
     addQueuedQuery({
@@ -182,9 +184,8 @@ const SammelLieferungConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row._revisions
-      ? toPgArray([rev, ...row._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
     const response = await gqlClient
       .query(mutations.mutateInsert_sammel_lieferung_rev_one, {
         object: newObject,
@@ -230,9 +231,10 @@ const SammelLieferungConflict = ({
     store,
     user.email,
   ])
-  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
-    setActiveConflict,
-  ])
+  const onClickSchliessen = useCallback(
+    () => setActiveConflict(null),
+    [setActiveConflict],
+  )
 
   //console.log('SammelLieferung Conflict', { dataArray, row, revRow })
 

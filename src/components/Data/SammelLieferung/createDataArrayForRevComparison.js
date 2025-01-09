@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+export const createDataArrayForSammellieferungRevComparison = ({ row, revRow }) => [
   {
     valueInRow: row.art_id,
     valueInRev: revRow.art_id,
@@ -92,4 +92,3 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
   },
 ]
 
-export default createDataArrayForRevComparison

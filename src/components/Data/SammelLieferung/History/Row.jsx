@@ -9,7 +9,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../../utils/toPgArray.js'
 import { mutations } from '../../../../utils/mutations.js'
-import createDataArrayForRevComparison from '../createDataArrayForRevComparison.js'
+import { createDataArrayForSammellieferungRevComparison as createDataArray } from '../createDataArrayForRevComparison.js'
 
 export const SammelLieferungHistoryRow = observer(
   ({ row, revRow, historyTakeoverCallback }) => {
@@ -17,7 +17,7 @@ export const SammelLieferungHistoryRow = observer(
     const { user, addNotification, db, gqlClient } = store
 
     const dataArray = useMemo(
-      () => createDataArrayForRevComparison({ row, revRow, store }),
+      () => createDataArray({ row, revRow, store }),
       [revRow, row, store],
     )
     const onClickWiderspruchUebernehmen = useCallback(async () => {
