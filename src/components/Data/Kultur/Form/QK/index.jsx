@@ -11,7 +11,7 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import Qk from './Qk/index.jsx'
+import { KulturQk as Qk } from './Qk/index.jsx'
 import { ChooseKulturQk as Choose } from './Choose/index.jsx'
 import { constants } from '../../../../../utils/constants.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
@@ -47,7 +47,7 @@ const Body = styled.div`
   padding: 10px 0;
 `
 
-export const KulturQk = observer(({ kultur }) => {
+export const KulturQkRouter = observer(({ kultur }) => {
   const store = useContext(MobxStoreContext)
   const { db, user } = store
 
