@@ -4,7 +4,7 @@ import { first as first$ } from 'rxjs/operators'
 
 import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.js'
 import lieferungLabelFromLieferung from '../../../../utils/lieferungLabelFromLieferung.js'
-import tableFilter from '../../../../utils/tableFilter.js'
+import { tableFilter } from '../../../../utils/tableFilter.js'
 import { gartensSortedFromGartens } from '../../../../utils/gartensSortedFromGartens.js'
 import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.js'
 import { sammlungsSortedFromSammlungs } from '../../../../utils/sammlungsSortedFromSammlungs.js'
