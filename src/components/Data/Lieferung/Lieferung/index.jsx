@@ -9,7 +9,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import Conflict from './Conflict.jsx'
 import FormTitle from './FormTitle/index.jsx'
 import Form from './Form/index.jsx'
-import History from './History/index.jsx'
+import { LieferungHistory as History } from './History/index.jsx'
 
 const Container = styled.div`
   height: 100%;

@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+export const createDataArrayForLieferungRevComparison = ({ row, revRow }) => [
   {
     valueInRow: row.art_id,
     valueInRev: revRow.art_id,
@@ -47,11 +47,11 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'Von Kultur (id)',
   },
   {
-    valueInRow: row?.datum
-      ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
-      : null,
-    valueInRev: revRow?.datum
-      ? DateTime.fromSQL(revRow.datum).toFormat('dd.LL.yyyy')
+    valueInRow:
+      row?.datum ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy') : null,
+    valueInRev:
+      revRow?.datum ?
+        DateTime.fromSQL(revRow.datum).toFormat('dd.LL.yyyy')
       : null,
     label: 'Datum',
   },
@@ -91,5 +91,3 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'gelöscht',
   },
 ]
-
-export default createDataArrayForRevComparison
