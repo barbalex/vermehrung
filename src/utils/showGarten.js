@@ -1,3 +1,1 @@
-const showGarten = () => true
-
-export default showGarten
+export const getShowGarten = () => true
