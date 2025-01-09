@@ -12,7 +12,7 @@ import { combineLatest, of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { Select } from '../../../shared/Select/index.jsx'
-import TextField from '../../../shared/TextField.jsx'
+import { TextField } from '../../../shared/TextField.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import { JesNo } from '../../../shared/JesNo.jsx'
 import { ifIsNumericAsNumber } from '../../../../utils/ifIsNumericAsNumber.js'
