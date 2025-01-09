@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useDebouncedCallback } from 'use-debounce'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import buildOptions from './buildOptions.js'
 
 const Container = styled.div`
@@ -44,7 +44,7 @@ const noOptionsMessage = () => null
 const loadingMessage = () => null
 
 const Search = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter, singleColumnView } = store
   const { setActiveNodeArray } = store.tree
 

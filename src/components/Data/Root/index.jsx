@@ -5,7 +5,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import Row from './Row.jsx'
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import getShowArt from '../../../utils/showArt.js'
 import getShowEvent from '../../../utils/showEvent.js'
@@ -32,7 +32,7 @@ const FieldsContainer = styled.div`
 `
 
 const Root = ({ filter: showFilter }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { user, db } = store
   const { activeNodeArray: activeNodeArrayRaw } = store.tree
   const activeNodeArray = activeNodeArrayRaw.toJSON()

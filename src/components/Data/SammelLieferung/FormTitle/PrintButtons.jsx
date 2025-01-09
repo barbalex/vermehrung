@@ -5,10 +5,10 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 
 const SlPrint = ({ printPreview, setPrintPreview, asMenu }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { setIsPrint } = store
 
   const showLieferschein = useCallback(() => {

@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton'
 
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.svg?react'
 import Data from '../Conflict/Data.jsx'
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import constants from '../../../utils/constants.js'
 
 const Container = styled.div`
@@ -45,7 +45,7 @@ const StyledButton = styled(Button)`
 `
 
 const History = ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { diffConflict, setDiffConflict } = store
 
   const onClickToggleDiff = useCallback(

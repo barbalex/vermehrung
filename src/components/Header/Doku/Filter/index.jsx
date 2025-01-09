@@ -5,7 +5,7 @@ import { FaTimes, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Numbers from './Numbers.jsx'
 
 const Container = styled.div`
@@ -36,7 +36,7 @@ const StyledDeleteFilterIcon = styled(FaTimes)`
 `
 
 const Filter = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { docFilter, setDocFilter, docsCount, docsFilteredCount } = store
   const onChange = useCallback(
     (e) => setDocFilter(e.target.value),

@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import TaxonSelect from './TaxonSelect.jsx'
 import SelectCreatable from '../../../shared/SelectCreatable.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
@@ -42,7 +42,7 @@ const ArtForm = ({
   showFilter,
   showHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter, online, errors, unsetError, db } = store
 
   const [dataState, setDataState] = useState({

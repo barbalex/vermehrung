@@ -6,7 +6,7 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Select from '../../../shared/Select/index.jsx'
 import exists from '../../../../utils/exists.js'
 import sammlungsSortedFromSammlungs from '../../../../utils/sammlungsSortedFromSammlungs.js'
@@ -56,7 +56,7 @@ const SammelLieferungVon = ({
   herkunft,
   herkunftQuelle,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db, errors, filter } = store
 
   const [dataState, setDataState] = useState({

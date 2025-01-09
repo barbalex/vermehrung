@@ -8,7 +8,7 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Select from '../../../shared/Select/index.jsx'
 import SelectCreatable from '../../../shared/SelectCreatable.jsx'
 import TextField from '../../../shared/TextField.jsx'
@@ -55,7 +55,7 @@ const EventForm = ({
   setActiveConflict,
   showHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter, online, insertTeilkulturRev, errors, unsetError, db } = store
 
   useEffect(() => {

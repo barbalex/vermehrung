@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import { Link } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
 const StyledButton = styled(Button)`
   color: white !important;
@@ -21,7 +21,7 @@ const StyledButton = styled(Button)`
 `
 
 const DocuButton = ({ asMenu }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { singleColumnView } = store
 
   if (singleColumnView) {

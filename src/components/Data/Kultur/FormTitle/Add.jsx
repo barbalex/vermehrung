@@ -4,11 +4,11 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
 const KulturAddButton = ({ asMenu }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { insertKulturRev } = store
 
   const add = useCallback(() => {

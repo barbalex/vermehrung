@@ -10,7 +10,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import Pflanzen from './Pflanzen/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import herkunftSort from '../../../../../utils/herkunftSort.js'
 import constants from '../../../../../utils/constants.js'
 
@@ -40,7 +40,7 @@ const Title = styled.div`
 `
 
 const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db, filter } = store
 
   const [herkunfts, setHerkunfts] = useState([])

@@ -7,7 +7,7 @@ import { useQuery } from 'urql'
 
 import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
 import Spinner from '../../../shared/Spinner.jsx'
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Row from './Row.jsx'
 
 const zaehlungRevQuery = gql`
@@ -60,7 +60,7 @@ const sliderSettings = {
 }
 
 const ZaehlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const priorRevisions = row?._revisions?.slice(1) ?? []
   const [{ error, data, fetching }] = useQuery({

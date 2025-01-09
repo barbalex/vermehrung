@@ -2,12 +2,12 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import UpSvg from '../../../../svg/to_up.svg?react'
 import LiDownSvg from '../../../../svg/to_li_down.svg?react'
 
 const SlNavButtons = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 

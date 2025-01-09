@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
 const TitleRow = styled.div`
   display: flex;
@@ -24,7 +24,7 @@ const Title = styled.div`
 `
 
 const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { user, db } = store
 
   const [dataState, setDataState] = useState({

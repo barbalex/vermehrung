@@ -6,7 +6,7 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Select from '../../../shared/Select/index.jsx'
 import TextField from '../../../shared/TextField.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
@@ -41,7 +41,7 @@ const TeilkulturForm = ({
   setActiveConflict,
   showHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter, online, db, errors, unsetError } = store
 
   useEffect(() => {

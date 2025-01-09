@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from 'urql'
 import gql from 'graphql-tag'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import checkForOnlineError from '../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../utils/toPgArray.js'
 import mutations from '../../../utils/mutations.js'
@@ -43,7 +43,7 @@ const HerkunftConflict = ({
   conflictSelectionCallback,
   setActiveConflict,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   const [{ error, data, fetching }] = useQuery({

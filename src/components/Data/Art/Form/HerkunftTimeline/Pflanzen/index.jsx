@@ -22,7 +22,7 @@ import LabelLieferung from './LabelLieferung.jsx'
 import LabelZaehlung from './LabelZaehlung.jsx'
 import CustomAxisTick from './CustomAxisTick.jsx'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
-import StoreContext from '../../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import herkunftLabelFromHerkunft from '../../../../../../utils/herkunftLabelFromHerkunft.js'
 import buildData from './buildData.js'
 
@@ -37,7 +37,7 @@ const Container = styled.div`
 `
 
 const ArtTimeline = ({ artId, herkunft }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db } = store
   const herkunftId = herkunft.id
 

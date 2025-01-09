@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 import { v1 as uuidv1 } from 'uuid'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import Uploader from '../../Uploader.jsx'
 import File from './File.jsx'
 import 'react-image-gallery/styles/css/image-gallery.css'
@@ -55,7 +55,7 @@ const Content = styled.div`
 `
 
 const Files = ({ parentTable, parent }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { online, gqlClient, addNotification, db } = store
 
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)

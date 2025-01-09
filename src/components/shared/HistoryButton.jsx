@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import ErrorBoundary from './ErrorBoundary.jsx'
 
 const StyledMenuItem = styled(MenuItem)`
@@ -24,7 +24,7 @@ const StyledIconButton = styled(IconButton)`
 `
 
 const HistoryButton = ({ asMenu, id, showHistory, setShowHistory, table }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { online, db, initialDataQueried } = store
 
   const [dataState, setDataState] = useState({ row: undefined })

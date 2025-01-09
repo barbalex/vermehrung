@@ -7,7 +7,7 @@ import {
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 const Container = styled.div`
   background-color: #ffe0b2;
@@ -39,7 +39,7 @@ const StyledDeleteFilterIcon2 = styled(DeleteFilterIconOutlined)`
 `
 
 const FilterTitle = ({ title, table, totalCount, filteredCount }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { tableIsFiltered, filtered, emptyTable, empty } = store.filter
 
   const existsTableFilter = tableIsFiltered({

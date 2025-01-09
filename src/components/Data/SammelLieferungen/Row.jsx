@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { first as first$ } from 'rxjs/operators'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import constants from '../../../utils/constants.js'
 
 const Row = styled.div`
@@ -30,7 +30,7 @@ const Row = styled.div`
 `
 
 const SLRows = ({ row, style, last }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const onClickRow = useCallback(

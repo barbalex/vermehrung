@@ -4,12 +4,12 @@ import { FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import buildExceljsWorksheets from './buildExceljsWorksheets.js'
 import downloadExceljsWorkbook from '../../../../utils/downloadExceljsWorkbook.js'
 
 const Download = ({ row, asMenu }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const onClickDownload = useCallback(async () => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')

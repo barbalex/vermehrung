@@ -14,7 +14,7 @@ import materialTheme from './utils/materialTheme.js'
 
 import GlobalStyle from './components/GlobalStyle.jsx'
 
-import { Provider as MobxProvider } from './mobxStoreContext.js'
+import { MobxStoreProvider } from './mobxStoreContext.js'
 
 import initiateApp from './utils/initiateApp.js'
 import initiateDb from './utils/initiateDb.js'
@@ -217,7 +217,7 @@ const App = () => {
     <DatabaseProvider database={database}>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={materialTheme}>
-          <MobxProvider value={store}>
+          <MobxStoreProvider value={store}>
             <UrqlProvider value={store.gqlClient}>
               <GlobalStyle />
               <Routes>
@@ -381,7 +381,7 @@ const App = () => {
                 <Notifications />
               </Suspense>
             </UrqlProvider>
-          </MobxProvider>
+          </MobxStoreProvider>
         </ThemeProvider>
       </StyledEngineProvider>
     </DatabaseProvider>

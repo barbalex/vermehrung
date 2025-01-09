@@ -8,7 +8,7 @@ import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Select from '../../../shared/Select/index.jsx'
 import TextField from '../../../shared/TextField.jsx'
 import Date from '../../../shared/Date.jsx'
@@ -61,7 +61,7 @@ const SammlungForm = ({
   setActiveConflict,
   showHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter, online, errors, unsetError, setError, db } = store
 
   const [dataState, setDataState] = useState({

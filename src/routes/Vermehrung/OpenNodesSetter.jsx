@@ -2,13 +2,13 @@ import { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { getActiveNodeArrayFromPathname } from '../../utils/getActiveNodeArrayFromPathname.js'
 import { openNodesFromActiveNodeArray } from '../../utils/openNodesFromActiveNodeArray.js'
 
 export const OpenNodesSetter = observer(() => {
   const { pathname } = useLocation()
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { setLastActiveNodeArray, setOpenNodes } = store.tree
 
   const activeNodeArray = getActiveNodeArrayFromPathname(pathname)

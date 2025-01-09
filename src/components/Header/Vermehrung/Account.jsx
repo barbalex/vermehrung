@@ -15,7 +15,7 @@ import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 import { sendPasswordResetEmail } from 'firebase/auth'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import logout from '../../../utils/logout.js'
 import constants from '../../../utils/constants.js'
@@ -34,7 +34,7 @@ const RiskyButton = styled(Button)`
 `
 
 const Account = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { user, online, db, queuedQueries, firebaseAuth } = store
 
   const [userPerson, setUserPerson] = useState(undefined)

@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import NavTree from '../../../svg/nav_tree.svg?react'
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
 const StyledNavTree = styled(NavTree)`
   width: 24px;
@@ -16,7 +16,7 @@ const StyledIconButton = styled(IconButton)`
 `
 
 const NavTreeButton = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const {
     setShowTreeInSingleColumnView,
     showTreeInSingleColumnView,

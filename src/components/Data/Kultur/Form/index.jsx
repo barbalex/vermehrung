@@ -10,7 +10,7 @@ import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Select from '../../../shared/Select/index.jsx'
 import TextField from '../../../shared/TextField.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
@@ -60,7 +60,7 @@ const KulturForm = ({
   setActiveConflict,
   showHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { errors, filter, online, unsetError, user, db } = store
 
   // From all collected combinations of art and herkunft show only arten of those not present in this garten

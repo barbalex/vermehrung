@@ -5,7 +5,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Settings from './Settings/index.jsx'
 import Copy from './Copy/index.jsx'
 import Add from './Add.jsx'
@@ -52,7 +52,7 @@ const SammelLieferungFormTitle = ({
   showHistory,
   setShowHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter, user, db } = store
   const { activeNodeArray } = store.tree
 

@@ -3,11 +3,11 @@ import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
 const PersonAddButton = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { insertPersonRev } = store
 
   const add = useCallback(() => {

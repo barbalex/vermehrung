@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
 import FormTitle from './FormTitle.jsx'
 import tableFilter from '../../../../utils/tableFilter.js'
@@ -18,7 +18,7 @@ const SammelLieferungFormTitleChooser = ({
   showHistory,
   setShowHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const { filter, db } = store
 

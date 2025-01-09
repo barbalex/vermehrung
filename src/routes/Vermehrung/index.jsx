@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import Login from '../../components/Login.jsx'
 import ErrorBoundary from '../../components/shared/ErrorBoundary.jsx'
 import ApiDetector from '../../components/ApiDetector.jsx'
@@ -15,7 +15,7 @@ import { SubscriptionsInitializer } from './SubscriptionsInitializer.jsx'
 import { InitialDataLoadingNotifier } from './InitialDataLoadingNotifier.jsx'
 
 export const VermehrungIndex = observer(() => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { gettingAuthUser, user } = store
 
   const existsUser = !!user?.uid

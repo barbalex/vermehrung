@@ -7,7 +7,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Person from './Person.jsx'
 import Select from '../../../../shared/Select/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
@@ -48,7 +48,7 @@ const StyledMotionDiv = styled(motion.div)`
 `
 
 const GartenPersonen = ({ garten }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db, insertGvRev, filter } = store
 
   const [errors, setErrors] = useState({})

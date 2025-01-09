@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaDownload } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten.js'
 import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums.js'
 import downloadExceljsWorkbook from '../../../../../utils/downloadExceljsWorkbook.js'
@@ -26,7 +26,7 @@ const Title = styled.div`
 `
 
 const GartenDownload = ({ gartenId }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const onClickData = useCallback(async () => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')

@@ -15,7 +15,7 @@ import Sammlung from './Data/Sammlung/index.jsx'
 import Teilkultur from './Data/Teilkultur/index.jsx'
 import Zaehlung from './Data/Zaehlung/index.jsx'
 import ErrorBoundary from './shared/ErrorBoundary.jsx'
-import StoreContext from '../mobxStoreContext.js'
+import { MobxStoreContext } from '../mobxStoreContext.js'
 import Fallback from './shared/Fallback.jsx'
 
 const Container = styled.div`
@@ -45,7 +45,7 @@ const Title = styled.div`
 `
 
 const Filter = () => {
-  const { activeForm: activeFormPassed } = useContext(StoreContext)
+  const { activeForm: activeFormPassed } = useContext(MobxStoreContext)
   // root is a possible value, but MUI wants one of the tabs
   const activeForm = activeFormPassed === 'root' ? 'art' : activeFormPassed
   // ensure list views are directed to correct filter

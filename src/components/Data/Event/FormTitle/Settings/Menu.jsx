@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
@@ -30,7 +30,7 @@ const Info = styled.div`
 `
 
 const SettingsEventsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db } = store
 
   const [dataState, setDataState] = useState({ kulturOption: undefined })

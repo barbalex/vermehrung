@@ -22,7 +22,7 @@ import {
 } from 'firebase/auth'
 
 import ErrorBoundary from './shared/ErrorBoundary.jsx'
-import StoreContext from '../mobxStoreContext.js'
+import { MobxStoreContext } from '../mobxStoreContext.js'
 import constants from '../utils/constants.js'
 
 const Container = styled.div`
@@ -47,7 +47,7 @@ const ResetButton = styled(Button)`
 `
 
 const Login = () => {
-  const { db, firebaseAuth } = useContext(StoreContext)
+  const { db, firebaseAuth } = useContext(MobxStoreContext)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

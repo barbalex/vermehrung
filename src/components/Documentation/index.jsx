@@ -8,7 +8,7 @@ import { Outlet, useLocation } from 'react-router'
 import ArticleList from './ArticleList/index.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import constants from '../../utils/constants.js'
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import FormTitle from './FormTitle/index.jsx'
 
 const Container = styled.div`
@@ -119,7 +119,7 @@ const Doku = styled.div`
 
 export const Documentation = observer(() => {
   const { pathname } = useLocation()
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { docFilter, setDocsCount, setDocsFilteredCount } = store
 
   const { width, ref } = useResizeDetector()

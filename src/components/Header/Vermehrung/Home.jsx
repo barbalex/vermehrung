@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import { Link } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
 const SiteTitle = styled(Button)`
   display: none;
@@ -25,7 +25,7 @@ const SiteTitle = styled(Button)`
 `
 
 const Home = ({ asMenu }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { singleColumnView } = store
 
   if (asMenu) {

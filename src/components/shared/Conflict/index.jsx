@@ -12,7 +12,7 @@ import {
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.svg?react'
 import Explainer from './Explainer.jsx'
 import Data from './Data.jsx'
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
 const Container = styled.div`
   padding: 10px;
@@ -49,7 +49,7 @@ const Conflict = ({
   onClickWiderspruchUebernehmen,
   onClickSchliessen,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { diffConflict, setDiffConflict } = store
 
   const onClickToggleDiff = useCallback(

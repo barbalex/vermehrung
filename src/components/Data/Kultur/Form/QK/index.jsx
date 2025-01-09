@@ -10,7 +10,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Qk from './Qk/index.jsx'
 import Choose from './Choose/index.jsx'
 import constants from '../../../../../utils/constants.js'
@@ -48,7 +48,7 @@ const Body = styled.div`
 `
 
 const KulturQk = ({ kultur }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db, user } = store
 
   const [tab, setTab] = useState('qk')

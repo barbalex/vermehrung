@@ -12,7 +12,7 @@ import FilterTitle from '../../shared/FilterTitle.jsx'
 import Row from './Row.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import FilterNumbers from '../../shared/FilterNumbers.jsx'
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import UpSvg from '../../../svg/to_up.svg?react'
 import tableFilter from '../../../utils/tableFilter.js'
 import personSort from '../../../utils/personSort.js'
@@ -52,7 +52,7 @@ const FieldsContainer = styled.div`
 `
 
 const Personen = ({ filter: showFilter = false }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { insertPersonRev, db, user, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { person: personFilter } = store.filter

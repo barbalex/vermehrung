@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
 const TitleRow = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ const Title = styled.div`
 `
 
 const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter } = store
   const {
     activeNodeArray,

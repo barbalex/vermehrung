@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import QueuedQuery from './QueuedQuery.jsx'
 import constants from '../../utils/constants.js'
 
@@ -52,7 +52,7 @@ const CloseIcon = styled(IconButton)`
 `
 
 export const QueuedQueries = observer(() => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const navigate = useNavigate()
   const { queuedQueries } = store
 
