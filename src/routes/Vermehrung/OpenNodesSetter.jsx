@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 
 import StoreContext from '../../storeContext.js'
-import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname.js'
+import { getActiveNodeArrayFromPathname } from '../../utils/getActiveNodeArrayFromPathname.js'
 import { openNodesFromActiveNodeArray } from '../../utils/openNodesFromActiveNodeArray.js'
 
 export const OpenNodesSetter = observer(() => {
@@ -11,7 +11,7 @@ export const OpenNodesSetter = observer(() => {
   const store = useContext(StoreContext)
   const { setLastActiveNodeArray, setOpenNodes } = store.tree
 
-  const activeNodeArray = activeNodeArrayFromPathname(pathname)
+  const activeNodeArray = getActiveNodeArrayFromPathname(pathname)
 
   // on first render set openNodes
   // DO NOT add activeNodeArray to useEffet's dependency array or
