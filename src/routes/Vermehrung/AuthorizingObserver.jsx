@@ -1,10 +1,10 @@
 import { useEffect, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 const AuthorizingObserver = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { gettingAuthUser, addNotification, removeNotificationById } = store
 
   const authorizingNotificationId = useRef(null)

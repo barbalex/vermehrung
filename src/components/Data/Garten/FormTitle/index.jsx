@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
 import FormTitle from './FormTitle.jsx'
 import tableFilter from '../../../../utils/tableFilter.js'
@@ -15,7 +15,7 @@ const GartenFormTitle = ({
   showHistory,
   setShowHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { personIdInActiveNodeArray, db, filter } = store
 
   const [countState, setCountState] = useState({

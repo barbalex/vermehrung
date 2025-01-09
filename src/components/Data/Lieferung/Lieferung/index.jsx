@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import Conflict from './Conflict.jsx'
@@ -24,7 +24,7 @@ const SplitPaneContainer = styled.div`
 `
 
 const Lieferung = ({ id, showFilter, row, rawRow }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter, online } = store
 
   const [activeConflict, setActiveConflict] = useState(null)

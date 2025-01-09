@@ -26,10 +26,10 @@ import Zaehlungen from './Zaehlungen/index.jsx'
 import Teilkultur from './Teilkultur/index.jsx'
 import Teilkulturen from './Teilkulturen/index.jsx'
 import Root from './Root/index.jsx'
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 const Data = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { activeForm } = store
   const { activeNodeArray } = store.tree
 

@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Date from '../../../shared/Date.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../shared/JesNo.jsx'
@@ -46,7 +46,7 @@ const FieldRow = styled.div`
 `
 
 const SammelLieferungWann = ({ showFilter, row, ifNeeded, saveToDb }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const { errors } = store
 

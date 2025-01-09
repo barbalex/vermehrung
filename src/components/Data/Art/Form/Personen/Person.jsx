@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import personLabelFromPerson from '../../../../../utils/personLabelFromPerson.js'
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -45,7 +45,7 @@ const MenuTitle = styled.h3`
 `
 
 const Av = ({ av }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)

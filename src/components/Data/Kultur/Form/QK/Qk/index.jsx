@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl'
 
 import createMessageFunctions from './createMessageFunctions.js'
 import constants from '../../../../../../utils/constants.js'
-import StoreContext from '../../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 
 const Container = styled.div`
   padding-top: 5px;
@@ -46,7 +46,7 @@ const StyledFormControl = styled(FormControl)`
 `
 
 const KulturQkQk = ({ kultur, qkChoosens }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db } = store
 
   const [filter, setFilter] = useState('')

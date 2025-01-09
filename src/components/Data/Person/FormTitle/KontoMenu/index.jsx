@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import signup from '../../../../../utils/signup.js'
 import Menu from './Menu.jsx'
 
@@ -13,7 +13,7 @@ const StyledButton = styled(Button)`
 `
 
 const KontoMenu = ({ row, asMenu }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null)
 

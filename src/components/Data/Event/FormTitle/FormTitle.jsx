@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { useResizeDetector } from 'react-resize-detector'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Settings from './Settings/index.jsx'
 import AddButton from './AddButton.jsx'
 import DeleteButton from './DeleteButton.jsx'
@@ -45,7 +45,7 @@ const EventFormTitle = ({
   showHistory,
   setShowHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
   const { width, ref } = useResizeDetector()

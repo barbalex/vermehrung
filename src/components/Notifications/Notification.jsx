@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import { MdClose as CloseIcon } from 'react-icons/md'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -46,7 +46,7 @@ const colorMap = {
 }
 
 const Notification = ({ notification: n }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { removeNotificationById } = store
   const {
     title,

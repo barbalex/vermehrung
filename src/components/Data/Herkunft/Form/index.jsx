@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import TextField from '../../../shared/TextField.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../shared/JesNo.jsx'
@@ -38,7 +38,7 @@ const Herkunft = ({
   setActiveConflict,
   showHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter, online, errors, setError, unsetError, db, user } = store
 
   // ensure that activeConflict is reset

@@ -5,7 +5,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 
 const Row = styled.div`
   display: flex;
@@ -28,7 +28,7 @@ const Beschreibung = styled.div`
 `
 
 const ChooseArtQkRow = ({ qk }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { user, db } = store
 
   const [dataState, setDataState] = useState({

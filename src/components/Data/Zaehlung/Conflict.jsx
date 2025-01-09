@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useQuery } from 'urql'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import checkForOnlineError from '../../../utils/checkForOnlineError.js'
 import toPgArray from '../../../utils/toPgArray.js'
 import mutations from '../../../utils/mutations.js'
@@ -41,7 +41,7 @@ const ZaehlungConflict = ({
   conflictSelectionCallback,
   setActiveConflict,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { user, addNotification, addQueuedQuery, db, gqlClient } = store
 
   // need to use this query to ensure that the person's name is queried

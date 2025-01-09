@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import Lieferschein from './Lieferschein/index.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
@@ -30,7 +30,7 @@ const SammelLieferung = ({
   id = '99999999-9999-9999-9999-999999999999',
   lieferung,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const { filter, isPrint, online, db, initialDataQueried } = store
 

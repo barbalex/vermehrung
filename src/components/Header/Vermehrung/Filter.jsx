@@ -6,7 +6,7 @@ import { MdDeleteSweep as DeleteFilterIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
 const StyledButton = styled(Button)`
   color: white !important;
@@ -43,7 +43,7 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
 `
 
 const Filter = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter, singleColumnView } = store
   const { show: showFilter, setShow: setShowFilter, filtered, empty } = filter
 

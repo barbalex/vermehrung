@@ -8,7 +8,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import FilterTitle from '../../shared/FilterTitle.jsx'
 import Row from './Row.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
@@ -52,7 +52,7 @@ const FieldsContainer = styled.div`
 `
 
 const Events = ({ filter: showFilter = false }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { insertEventRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { event: eventFilter } = store.filter

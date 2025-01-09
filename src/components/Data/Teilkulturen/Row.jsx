@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import teilkulturLabelFromTeilkultur from '../../../utils/teilkulturLabelFromTeilkultur.js'
 import constants from '../../../utils/constants.js'
 
@@ -30,7 +30,7 @@ const Row = styled.div`
 `
 
 const Teilkulturen = ({ row, style, last }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const onClickRow = useCallback(

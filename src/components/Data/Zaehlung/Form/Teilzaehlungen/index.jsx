@@ -6,7 +6,7 @@ import { FaPlus } from 'react-icons/fa'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import TeilzaehlungenRows from './TeilzaehlungenRows.jsx'
 import Settings from './Settings.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
@@ -35,7 +35,7 @@ const Title = styled.div`
 `
 
 const Teilzaehlungen = ({ zaehlung }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { insertTeilzaehlungRev, db } = store
 
   const kulturId = zaehlung.kultur_id

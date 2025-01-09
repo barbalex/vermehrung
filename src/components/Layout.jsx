@@ -2,7 +2,7 @@ import React, { useContext, useEffect, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 
-import StoreContext from '../mobxStoreContext.js'
+import { MobxStoreContext } from '../mobxStoreContext.js'
 import constants from '../utils/constants.js'
 import Fallback from './shared/Fallback.jsx'
 
@@ -15,7 +15,7 @@ const Container = styled.div`
 `
 
 export const Layout = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { singleColumnView, setSingleColumnView } = store
 
   const width =

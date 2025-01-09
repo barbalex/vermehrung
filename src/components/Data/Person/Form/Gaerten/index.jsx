@@ -8,7 +8,7 @@ import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Garten from './Garten.jsx'
 import Select from '../../../../shared/Select/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
@@ -48,7 +48,7 @@ const StyledMotionDiv = styled(motion.div)`
 `
 
 const PersonArten = ({ person }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { insertGvRev, db, filter } = store
 
   const [errors, setErrors] = useState({})

@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
 const TitleRow = styled.div`
@@ -23,7 +23,7 @@ const Title = styled.div`
 `
 
 const ZaehlungDeleteButton = ({ row }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
     store.tree

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { FaUndoAlt } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 // to hover and style row, see: https://stackoverflow.com/a/48109479/712005
 const Value = styled.div`
@@ -58,7 +58,7 @@ const valFromValue = (value) => {
 }
 
 const QueuedQuery = ({ qq, index }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { removeQueuedQueryById } = store
   const {
     id,

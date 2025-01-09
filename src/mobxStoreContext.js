@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Context = React.createContext({})
-export const Provider = Context.Provider
-export const Consumer = Context.Consumer
-export default Context
+export const MobxStoreContext = React.createContext({})
+export const MobxStoreProvider = MobxStoreContext.Provider
+export const Consumer = MobxStoreContext.Consumer
+export default MobxStoreContext

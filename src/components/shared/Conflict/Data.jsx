@@ -4,7 +4,7 @@ import Diff from 'react-stylable-diff'
 import { observer } from 'mobx-react-lite'
 
 import toStringIfPossible from '../../../utils/toStringIfPossible.js'
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import Spinner from '../Spinner.jsx'
 
 const Row = styled.div`
@@ -30,7 +30,7 @@ const Key = styled.div`
 `
 
 const ConflictData = ({ dataArray, loading }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { diffConflict } = store
 
   if (loading) return <Spinner message="lade Daten" />

@@ -8,7 +8,7 @@ import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 import uniqBy from 'lodash/uniqBy'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import Select from '../../../shared/Select/index.jsx'
 import TextField from '../../../shared/TextField.jsx'
 import constants from '../../../../utils/constants.js'
@@ -50,7 +50,7 @@ const FieldRow = styled.div`
 `
 
 const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db, errors, filter } = store
 
   const [artWerte, setArtWerte] = useState([])

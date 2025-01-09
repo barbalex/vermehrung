@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import teilzaehlungsSortByZaehlungTk from '../../../../../utils/teilzaehlungsSortByZaehlungTk.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Teilzaehlungen from './Teilzaehlungen.jsx'
@@ -31,7 +31,7 @@ const Title = styled.div`
 const Rows = styled.div``
 
 const TkZaehlungen = ({ teilkultur }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db } = store
 
   const [teilzaehlungs, setTeilzaehlungs] = useState([])

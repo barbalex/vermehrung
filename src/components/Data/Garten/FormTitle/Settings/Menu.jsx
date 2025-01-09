@@ -10,7 +10,7 @@ import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
@@ -31,7 +31,7 @@ const Info = styled.div`
 `
 
 const SettingsGartenMenu = ({ anchorEl, setAnchorEl }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { user, db } = store
 
   const [dataState, setDataState] = useState({

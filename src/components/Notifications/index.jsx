@@ -16,11 +16,11 @@ const StyledIconButton = styled(IconButton)`
   margin-left: 5px !important;
 `
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import Notification from './Notification.jsx'
 
 const Notifications = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { removeAllNotifications, notifications } = store
 
   const notificationsSorted = sortBy([...notifications.values()], 'time')

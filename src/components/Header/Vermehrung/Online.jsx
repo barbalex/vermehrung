@@ -9,7 +9,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useLocation, useNavigate } from 'react-router'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
 const OnlineButton = styled(IconButton)`
   /*cursor: default !important;*/
@@ -21,7 +21,7 @@ const StyledBadge = styled(Badge)`
 `
 
 export const Online = observer(() => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { online, queuedQueries } = store
   const { pathname } = useLocation()
   const navigate = useNavigate()

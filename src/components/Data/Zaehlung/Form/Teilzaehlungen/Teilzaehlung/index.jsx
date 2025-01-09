@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 import { Allotment } from 'allotment'
 
-import StoreContext from '../../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 import Conflict from './Conflict.jsx'
 import Form from './Form/index.jsx'
@@ -30,7 +30,7 @@ const TopLine = styled.div`
 `
 
 const Teilzaehlung = ({ id, kulturId, index }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { online, db, initialDataQueried } = store
 
   // TODO: should I subscribe to this row to rerender on updates of history?

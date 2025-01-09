@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaRegCopy } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import exists from '../../../../../utils/exists.js'
 import updateLieferung from './updateLieferung.js'
 import updateAllLieferungen from './updateAllLieferungen.js'
@@ -51,7 +51,7 @@ const sammelLieferungFields = [
 
 const CopySammelLieferungMenu = ({ sammelLieferung, lieferung }) => {
   //console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { addNotification } = store
 
   const [anchorEl, setAnchorEl] = useState(null)

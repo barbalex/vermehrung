@@ -7,7 +7,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { FaChevronRight } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import ExportMenu from './Export/index.jsx'
 
 const StyledMenuItem = styled(MenuItem)`
@@ -23,7 +23,7 @@ const SettingsOverallMenu = ({
   anchorEl: parentAnchorEl,
   setAnchorEl: setParentAnchorEl,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter } = store
 
   const onClickShowDeleted = useCallback(

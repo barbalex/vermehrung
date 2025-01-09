@@ -3,12 +3,12 @@ import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import deleteAccount from '../../../../../utils/deleteAccount.js'
 import setPassword from '../../../../../utils/setPassword.js'
 
 const KontoMenuMenu = ({ row, menuAnchorEl, setMenuAnchorEl, asMenu }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const menuOpen = Boolean(menuAnchorEl)
 

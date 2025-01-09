@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import AddButton from './AddButton.jsx'
 import DeleteButton from './DeleteButton.jsx'
 import FilterNumbers from '../../../shared/FilterNumbers.jsx'
@@ -44,7 +44,7 @@ const PersonFormTitle = ({
   showHistory,
   setShowHistory,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { user, db } = store
 
   const { width, ref } = useResizeDetector()

@@ -8,7 +8,7 @@ import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import Settings from './Settings.jsx'
 import List from './List.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
@@ -22,7 +22,7 @@ const Container = styled.div`
 `
 
 const Tree = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db, user } = store
   const {
     art: artFilter,

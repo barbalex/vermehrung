@@ -10,7 +10,7 @@ import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import constants from '../../../../../utils/constants.js'
 
 const Title = styled.div`
@@ -21,7 +21,7 @@ const Title = styled.div`
 `
 
 const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { user, db } = store
 
   const [dataState, setDataState] = useState({

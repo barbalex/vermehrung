@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -86,7 +86,7 @@ const SelectLoadingOptions = ({
   error: saveToDbError,
   modelFilter,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db } = store
 
   const [stateValue, setStateValue] = useState({

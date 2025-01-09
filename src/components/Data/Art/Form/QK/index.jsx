@@ -13,7 +13,7 @@ import { Q } from '@nozbe/watermelondb'
 import Qk from './Qk/index.jsx'
 import Choose from './Choose/index.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`
@@ -48,7 +48,7 @@ const Body = styled.div`
 `
 
 const ApQk = ({ artId }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db, user } = store
 
   const [tab, setTab] = useState('qk')

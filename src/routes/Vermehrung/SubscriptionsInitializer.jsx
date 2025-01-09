@@ -2,11 +2,11 @@ import { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { initializeSubscriptions } from '../../utils/initializeSubscriptions.js'
 
 export const SubscriptionsInitializer = observer(() => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { authorizing, user, gqlClient } = store
   const { wsReconnectCount } = store.tree
 

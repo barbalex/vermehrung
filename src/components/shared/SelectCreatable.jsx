@@ -4,7 +4,7 @@ import Select from 'react-select/creatable'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import Link from './Select/Link.jsx'
 
 const Container = styled.div`
@@ -101,7 +101,7 @@ const SelectCreatable = ({
   callback = () => {},
   formatCreateLabel = (val) => `"${val}" als neue Teilkultur aufnehmen`,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { filter } = store
 
   const [stateValue, setStateValue] = useState(row[field])

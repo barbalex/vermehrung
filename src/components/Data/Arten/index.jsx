@@ -9,7 +9,7 @@ import UpSvg from '../../../svg/to_up.svg?react'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import FilterTitle from '../../shared/FilterTitle.jsx'
 import Row from './Row.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
 `
 
 const Arten = ({ filter: showFilter }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { insertArtRev, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { art: artFilter } = store.filter

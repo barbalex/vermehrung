@@ -8,7 +8,7 @@ import { useQuery } from 'urql'
 import checkForOnlineError from '../../../../utils/checkForOnlineError.js'
 import Spinner from '../../../shared/Spinner.jsx'
 import Row from './Row.jsx'
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 
 const artRevQuery = gql`
   query artRevForHistoryQuery($rev: [String!]) {
@@ -58,7 +58,7 @@ const sliderSettings = {
 }
 
 const ArtHistory = ({ row, rawRow, historyTakeoverCallback }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const priorRevisions = row?._revisions?.slice(1) ?? []
   const [{ error, data, fetching }] = useQuery({

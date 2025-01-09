@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import TextField from '../../shared/TextField.jsx'
 import isImageFile from './isImageFile.js'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
@@ -65,7 +65,7 @@ const MenuTitle = styled.h3`
 `
 
 const File = ({ file, parent }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { errors, unsetError } = store
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)

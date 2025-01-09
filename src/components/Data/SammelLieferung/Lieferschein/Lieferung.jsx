@@ -6,7 +6,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import herkunftLabelFromHerkunft from '../../../../utils/herkunftLabelFromHerkunft.js'
 
 const StyledTableCell = styled(TableCell)`
@@ -16,7 +16,7 @@ const StyledTableCell = styled(TableCell)`
 const Zeile = ({ value }) => <div>{value}</div>
 
 const LieferungForLieferschein = ({ lieferung: row }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db } = store
 
   const [dataState, setDataState] = useState({

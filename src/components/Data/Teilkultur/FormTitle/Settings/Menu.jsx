@@ -9,7 +9,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import constants from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
@@ -31,7 +31,7 @@ const Info = styled.div`
 `
 
 const SettingsTeilkulturenMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db } = store
 
   const [dataState, setDataState] = useState({ kulturOption: undefined })

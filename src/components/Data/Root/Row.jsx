@@ -2,7 +2,7 @@ import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import StoreContext from '../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import tableFilter from '../../../utils/tableFilter.js'
 import constants from '../../../utils/constants.js'
 
@@ -29,7 +29,7 @@ const Row = styled.div`
 `
 
 const RootRow = ({ row, style, last }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { db } = store
   const { setActiveNodeArray } = store.tree
 

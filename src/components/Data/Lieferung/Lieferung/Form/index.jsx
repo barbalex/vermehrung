@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import StoreContext from '../../../../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import Checkbox2States from '../../../../shared/Checkbox2States.jsx'
 import JesNo from '../../../../shared/JesNo.jsx'
 import exists from '../../../../../utils/exists.js'
@@ -41,7 +41,7 @@ const LierferungForm = ({
   showHistory,
 }) => {
   const existsSammelLieferung = !!row?.sammel_lieferung_id
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const { errors, filter, unsetError, user, db } = store
 

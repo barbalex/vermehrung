@@ -30,7 +30,7 @@ import {
   isValid as wgs84LongIsValid,
   message as wgs84LongMessage,
 } from '../../utils/wgs84LongIsValid.js'
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -69,7 +69,7 @@ const MenuTitle = styled.div`
 `
 
 const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const { user, db } = store
 
   const { id, lv95_x, lv95_y, wgs84_lat, wgs84_long } = row

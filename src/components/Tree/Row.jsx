@@ -11,7 +11,7 @@ import { observer } from 'mobx-react-lite'
 import last from 'lodash/last'
 import { of as $of } from 'rxjs'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath.js'
 import isNodeOpen from './isNodeOpen.js'
 import someChildrenAreOpen from './someChildrenAreOpen.js'
@@ -217,7 +217,7 @@ const MenuExplainerItem = styled(MenuItem)`
 `
 
 const Row = ({ style, node, nodes, userRole }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
 
   const { showTreeInSingleColumnView, singleColumnView, tree, db } = store
   const { activeNodeArray, singleRowHeight } = tree

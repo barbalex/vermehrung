@@ -11,7 +11,7 @@ import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
 
-import StoreContext from '../../mobxStoreContext.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 import Row from './Row.jsx'
 
 const StyledList = styled(List)`
@@ -30,7 +30,7 @@ const Tree = ({
   nodes,
   userRole,
 }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxStoreContext)
   const {
     singleRowHeight,
     activeNodeArray: aNAProxy,
