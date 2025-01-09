@@ -31,7 +31,7 @@ const Row = styled.div`
   }
 `
 
-const Kulturen = ({ row, style, last }) => {
+export const KulturRow = observer(({ row, style, last }) => {
   const store = useContext(MobxStoreContext)
   const { artIdInActiveNodeArray, gartenIdInActiveNodeArray } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
@@ -39,32 +39,32 @@ const Kulturen = ({ row, style, last }) => {
   const [label, setLabel] = useState('')
   useEffect(() => {
     let isActive = true
-    artIdInActiveNodeArray
-      ? row.labelUnderArt
-          .pipe(first$())
-          .toPromise()
-          .then((label) => {
-            if (!isActive) return
+    artIdInActiveNodeArray ?
+      row.labelUnderArt
+        .pipe(first$())
+        .toPromise()
+        .then((label) => {
+          if (!isActive) return
 
-            setLabel(label)
-          })
-      : gartenIdInActiveNodeArray
-      ? row.labelUnderGarten
-          .pipe(first$())
-          .toPromise()
-          .then((label) => {
-            if (!isActive) return
+          setLabel(label)
+        })
+    : gartenIdInActiveNodeArray ?
+      row.labelUnderGarten
+        .pipe(first$())
+        .toPromise()
+        .then((label) => {
+          if (!isActive) return
 
-            setLabel(label)
-          })
-      : row.label
-          .pipe(first$())
-          .toPromise()
-          .then((label) => {
-            if (!isActive) return
+          setLabel(label)
+        })
+    : row.label
+        .pipe(first$())
+        .toPromise()
+        .then((label) => {
+          if (!isActive) return
 
-            setLabel(label)
-          })
+          setLabel(label)
+        })
 
     return () => {
       isActive = false
@@ -87,6 +87,4 @@ const Kulturen = ({ row, style, last }) => {
       <div>{label}</div>
     </Row>
   )
-}
-
-export default observer(Kulturen)
+})
