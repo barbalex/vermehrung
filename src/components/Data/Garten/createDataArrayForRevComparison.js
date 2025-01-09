@@ -1,4 +1,4 @@
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+export const createDataArrayForGartenRevComparison = ({ row, revRow }) => [
   {
     valueInRow: row?.name,
     valueInRev: revRow?.name,
@@ -47,5 +47,3 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'gelöscht',
   },
 ]
-
-export default createDataArrayForRevComparison
