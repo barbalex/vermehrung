@@ -1,4 +1,4 @@
-const artSammlungAuslieferungFolder = ({
+export const buildArtSammlungAuslieferungFolder = ({
   sammlungId,
   sammlungIndex,
   artId,
@@ -14,5 +14,3 @@ const artSammlungAuslieferungFolder = ({
   hasChildren: true,
   childrenCount: children.length,
 })
-
-export default artSammlungAuslieferungFolder

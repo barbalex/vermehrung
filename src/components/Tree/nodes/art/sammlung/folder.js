@@ -1,4 +1,4 @@
-const artSammlungFolder = ({ count, artIndex, artId }) => ({
+export const buildArtSammlungFolder = ({ count, artIndex, artId }) => ({
   nodeType: 'folder',
   menuTitle: 'Sammlungen',
   id: `${artId}SammlungFolder`,
@@ -8,5 +8,3 @@ const artSammlungFolder = ({ count, artIndex, artId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default artSammlungFolder
