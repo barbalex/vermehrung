@@ -1,6 +1,6 @@
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
 
-const herkunftNodes = ({ herkunft, index }) => ({
+export const buildHerkunft = ({ herkunft, index }) => ({
   nodeType: 'table',
   menuTitle: 'Herkunft',
   table: 'herkunft',
@@ -10,5 +10,3 @@ const herkunftNodes = ({ herkunft, index }) => ({
   sort: [2, index],
   hasChildren: true,
 })
-
-export default herkunftNodes

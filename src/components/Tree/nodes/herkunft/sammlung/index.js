@@ -1,6 +1,6 @@
 import { first as first$ } from 'rxjs/operators'
 
-const herkunftSammlungNodes = async ({
+export const buildHerkunftSammlung = async ({
   sammlung,
   sammlungIndex,
   herkunftId,
@@ -22,5 +22,3 @@ const herkunftSammlungNodes = async ({
     hasChildren: true,
   }
 }
-
-export default herkunftSammlungNodes

@@ -1,4 +1,4 @@
-const herkunftSammlungAuslieferungFolder = ({
+export const buildHerkunftSammlungAuslieferungFolder = ({
   sammlungId,
   sammlungIndex,
   herkunftId,
@@ -14,5 +14,3 @@ const herkunftSammlungAuslieferungFolder = ({
   hasChildren: true,
   childrenCount: children.length,
 })
-
-export default herkunftSammlungAuslieferungFolder

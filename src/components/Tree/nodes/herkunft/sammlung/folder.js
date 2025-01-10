@@ -1,4 +1,8 @@
-const herkunftSammlungFolder = ({ count, herkunftIndex, herkunftId }) => ({
+export const buildHerkunftSammlungFolder = ({
+  count,
+  herkunftIndex,
+  herkunftId,
+}) => ({
   nodeType: 'folder',
   menuTitle: 'Sammlungen',
   id: `${herkunftId}SammlungFolder`,
@@ -8,5 +12,3 @@ const herkunftSammlungFolder = ({ count, herkunftIndex, herkunftId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default herkunftSammlungFolder
