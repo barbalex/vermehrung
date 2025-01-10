@@ -1,4 +1,8 @@
-const personLieferungFolder = ({ count, personIndex, personId }) => ({
+export const buildPersonLieferungFolder = ({
+  count,
+  personIndex,
+  personId,
+}) => ({
   nodeType: 'folder',
   menuTitle: 'Lieferungen',
   id: `${personId}LieferungFolder`,
@@ -8,5 +12,3 @@ const personLieferungFolder = ({ count, personIndex, personId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default personLieferungFolder
