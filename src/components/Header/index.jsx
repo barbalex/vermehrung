@@ -8,7 +8,7 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../utils/constants.js'
 
 import Home from './Home.jsx'
-import Doku from './Doku/index.jsx'
+import { HeaderDoku as Doku } from './Doku/index.jsx'
 import { HeaderVermehrung as Vermehrung } from './Vermehrung/index.jsx'
 
 const StyledAppBar = styled(AppBar)`

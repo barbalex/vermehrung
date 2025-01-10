@@ -35,7 +35,7 @@ const StyledDeleteFilterIcon = styled(FaTimes)`
   color: ${(props) => (props['data-active'] ? 'white' : '#4a148c')};
 `
 
-const Filter = () => {
+export const DokuFilter = observer(() => {
   const store = useContext(MobxStoreContext)
   const { docFilter, setDocFilter, docsCount, docsFilteredCount } = store
   const onChange = useCallback(
@@ -71,9 +71,10 @@ const Filter = () => {
           </InputAdornment>
         }
       />
-      <Numbers totalCount={docsCount} filteredCount={docsFilteredCount} />
+      <Numbers
+        totalCount={docsCount}
+        filteredCount={docsFilteredCount}
+      />
     </Container>
   )
-}
-
-export default observer(Filter)
+})

@@ -9,7 +9,7 @@ import { Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import Filter from './Filter/index.jsx'
+import { DokuFilter } from './Filter/index.jsx'
 import { constants } from '../../../utils/constants.js'
 
 const SiteTitle = styled(Button)`
@@ -41,7 +41,7 @@ const NavButton = styled(Button)`
   }
 `
 
-const HeaderDoku = () => {
+export const HeaderDoku = () => {
   const { width, ref } = useResizeDetector()
   const mobile = width && width < constants?.tree?.minimalWindowWidth
 
@@ -73,7 +73,7 @@ const HeaderDoku = () => {
             </SiteTitle>
           }
           <Spacer />
-          <Filter />
+          <DokuFilter />
           <NavButton
             variant="outlined"
             component={Link}
@@ -86,5 +86,3 @@ const HeaderDoku = () => {
     </ErrorBoundary>
   )
 }
-
-export default HeaderDoku
