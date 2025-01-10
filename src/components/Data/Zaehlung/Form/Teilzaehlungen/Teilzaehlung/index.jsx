@@ -8,7 +8,7 @@ import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { TeilzaehlungConflict as Conflict } from './Conflict.jsx'
 import { TeilzaehlungForm as Form } from './Form/index.jsx'
-import History from './History/index.jsx'
+import { TeilzaehlungHistory as History } from './History/index.jsx'
 
 const Container = styled.div`
   position: relative;
