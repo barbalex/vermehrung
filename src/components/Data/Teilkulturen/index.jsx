@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Teilkulturen = ({ filter: showFilter = false }) => {
+export const Teilkulturen = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
   const { insertTeilkulturRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
@@ -191,6 +191,4 @@ const Teilkulturen = ({ filter: showFilter = false }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Teilkulturen)
+})
