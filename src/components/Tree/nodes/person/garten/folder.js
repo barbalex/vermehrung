@@ -1,4 +1,4 @@
-const personGartenFolder = ({ count, personIndex, personId }) => ({
+export const buildPersonGartenFolder = ({ count, personIndex, personId }) => ({
   nodeType: 'folder',
   menuTitle: 'Gärten',
   id: `${personId}GartenFolder`,
@@ -8,5 +8,3 @@ const personGartenFolder = ({ count, personIndex, personId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default personGartenFolder
