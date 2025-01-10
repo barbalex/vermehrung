@@ -1,6 +1,6 @@
 import { lieferungLabelFromLieferung } from '../../../../../utils/lieferungLabelFromLieferung.js'
 
-const sammlungAuslieferungNodes = ({
+export const buildSammlungAuslieferung = ({
   lieferung,
   lieferungIndex,
   sammlungId,
@@ -16,4 +16,3 @@ const sammlungAuslieferungNodes = ({
   hasChildren: false,
   mono: true,
 })
-export default sammlungAuslieferungNodes

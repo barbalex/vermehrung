@@ -1,4 +1,8 @@
-const sammlungAuslieferungFolder = ({ count, sammlungIndex, sammlungId }) => ({
+export const buildSammlungAuslieferungFolder = ({
+  count,
+  sammlungIndex,
+  sammlungId,
+}) => ({
   nodeType: 'folder',
   menuTitle: 'Aus-Lieferungen',
   id: `${sammlungId}LieferungFolder`,
@@ -8,5 +12,3 @@ const sammlungAuslieferungFolder = ({ count, sammlungIndex, sammlungId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default sammlungAuslieferungFolder

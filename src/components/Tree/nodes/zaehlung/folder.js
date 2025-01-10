@@ -1,4 +1,4 @@
-const zaehlungFolder = ({ count }) => [
+export const buildZaehlungFolder = ({ count }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Zählungen',
@@ -10,5 +10,3 @@ const zaehlungFolder = ({ count }) => [
     childrenCount: count,
   },
 ]
-
-export default zaehlungFolder
