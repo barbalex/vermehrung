@@ -1,4 +1,4 @@
-const artKulturFolder = ({ count, artIndex, artId }) => ({
+export const buildArtKulturFolder = ({ count, artIndex, artId }) => ({
   nodeType: 'folder',
   menuTitle: 'Kulturen',
   id: `${artId}KulturFolder`,
@@ -8,5 +8,3 @@ const artKulturFolder = ({ count, artIndex, artId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default artKulturFolder

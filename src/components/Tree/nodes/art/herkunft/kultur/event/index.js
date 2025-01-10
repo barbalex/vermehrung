@@ -1,6 +1,6 @@
 import { eventLabelFromEvent } from '../../../../../../../utils/eventLabelFromEvent.js'
 
-const artHerkunftKulturEventNodes = ({
+export const buildArtHerkunftKulturEvent = ({
   event,
   eventIndex,
   kulturId,
@@ -28,5 +28,3 @@ const artHerkunftKulturEventNodes = ({
   sort: [1, artIndex, 1, herkunftIndex, 2, kulturIndex, 5, eventIndex],
   hasChildren: false,
 })
-
-export default artHerkunftKulturEventNodes
