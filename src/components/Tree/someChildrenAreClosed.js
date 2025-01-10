@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import { isNodeOpen } from './isNodeOpen.js'
 
-const someChildrenAreClosed = ({ store, nodes, url }) => {
+export const someChildrenAreClosed = ({ store, nodes, url }) => {
   if (!url) return false
 
   // return false if node itself is closed
@@ -21,5 +21,3 @@ const someChildrenAreClosed = ({ store, nodes, url }) => {
   })
   return childNodes.some((n) => !isNodeOpen({ store, url: n.url }))
 }
-
-export default someChildrenAreClosed
