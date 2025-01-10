@@ -16,7 +16,7 @@ import { GlobalStyle } from './components/GlobalStyle.jsx'
 
 import { MobxStoreProvider } from './mobxStoreContext.js'
 
-import initiateApp from './utils/initiateApp.js'
+import { initiateApp } from './utils/initiateApp.js'
 import initiateDb from './utils/initiateDb.js'
 
 // TODO: lazy import all routes

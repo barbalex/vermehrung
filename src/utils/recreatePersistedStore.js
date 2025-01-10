@@ -14,7 +14,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-const recreatePersistedStore = async ({ store, navigate }) => {
+export const recreatePersistedStore = async ({ store, navigate }) => {
   // console.log('recreatePersistedStore running')
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   let unregisterAuthObserver = () => {}
@@ -107,5 +107,3 @@ const recreatePersistedStore = async ({ store, navigate }) => {
   })
   return unregisterAuthObserver
 }
-
-export default recreatePersistedStore

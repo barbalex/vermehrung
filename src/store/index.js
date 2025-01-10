@@ -33,7 +33,7 @@ import { zaehlungIdInUrl } from '../utils/zaehlungIdInUrl.js'
 import { getAuthToken } from '../utils/getAuthToken.js'
 import { mutations } from '../utils/mutations.js'
 
-const myTypes = types
+export const MobxStore = types
   .model({
     tree: types.optional(Tree, defaultTree),
     filter: types.optional(Filter, initialFilterValues),
@@ -1504,5 +1504,3 @@ const myTypes = types
       return zaehlungIdInUrl(self.tree.activeNodeArray)
     },
   }))
-
-export default myTypes
