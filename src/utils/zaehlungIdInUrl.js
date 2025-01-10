@@ -1,6 +1,6 @@
 import isUuid from 'is-uuid'
 
-const zaehlungIdInUrl = (url) => {
+export const zaehlungIdInUrl = (url) => {
   if (url.includes('Zaehlungen')) {
     const indexOfId = url.indexOf('Zaehlungen') + 1
     if (url.length > indexOfId) {
@@ -10,5 +10,3 @@ const zaehlungIdInUrl = (url) => {
   }
   return undefined
 }
-
-export default zaehlungIdInUrl
