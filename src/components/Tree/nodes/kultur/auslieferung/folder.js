@@ -1,4 +1,8 @@
-const kulturAuslieferungFolder = ({ count, kulturIndex, kulturId }) => ({
+export const buildKulturAuslieferungFolder = ({
+  count,
+  kulturIndex,
+  kulturId,
+}) => ({
   nodeType: 'folder',
   menuTitle: 'Aus-Lieferungen',
   id: `${kulturId}AusLieferungFolder`,
@@ -8,5 +12,3 @@ const kulturAuslieferungFolder = ({ count, kulturIndex, kulturId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default kulturAuslieferungFolder
