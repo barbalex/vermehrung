@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Gaerten = ({ filter: showFilter = false }) => {
+export const Gaerten = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
   const { insertGartenRev, personIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
@@ -195,6 +195,4 @@ const Gaerten = ({ filter: showFilter = false }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Gaerten)
+})
