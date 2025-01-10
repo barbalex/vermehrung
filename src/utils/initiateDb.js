@@ -31,9 +31,9 @@ import {
   UserRole,
   Zaehlung,
 } from '../dbModel'
-import migrations from './migrations'
+import { migrations } from './migrations.js'
 
-const initiateDb = (store) => {
+export const initiateDb = (store) => {
   const adapter = new LokiJSAdapter({
     schema,
     migrations, // optional migrations
@@ -100,5 +100,3 @@ const initiateDb = (store) => {
 
   return database
 }
-
-export default initiateDb
