@@ -7,7 +7,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import TeilzaehlungenRows from './TeilzaehlungenRows.jsx'
+import { TeilzaehlungenRows } from './TeilzaehlungenRows.jsx'
 import { TeilzaehlungenSettings as Settings } from './Settings.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByTk.js'
