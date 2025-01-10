@@ -1,6 +1,6 @@
 import { herkunftLabelFromHerkunft } from '../../../../../utils/herkunftLabelFromHerkunft.js'
 
-const artHerkunftNode = async ({
+export const buildArtHerkunft = async ({
   herkunft,
   herkunftIndex,
   artId,
@@ -18,5 +18,3 @@ const artHerkunftNode = async ({
   menuExplainerText:
     'Herkünfte können nur in ihrem eigenen Ast des Navigationsbaums neu geschaffen und gelöscht werden',
 })
-
-export default artHerkunftNode
