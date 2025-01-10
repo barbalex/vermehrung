@@ -1,6 +1,6 @@
 import { first as first$ } from 'rxjs/operators'
 
-const zaehlungNodes = async ({ zaehlung, index }) => {
+export const buildZaehlung = async ({ zaehlung, index }) => {
   let label = ''
   try {
     label = await zaehlung.label.pipe(first$()).toPromise()
@@ -18,5 +18,3 @@ const zaehlungNodes = async ({ zaehlung, index }) => {
     mono: true,
   }
 }
-
-export default zaehlungNodes

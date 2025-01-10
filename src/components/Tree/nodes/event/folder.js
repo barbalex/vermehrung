@@ -1,4 +1,4 @@
-const eventFolder = ({ count }) => [
+export const buildEventFolder = ({ count }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Events',
@@ -10,5 +10,3 @@ const eventFolder = ({ count }) => [
     childrenCount: count,
   },
 ]
-
-export default eventFolder
