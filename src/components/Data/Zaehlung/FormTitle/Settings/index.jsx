@@ -5,9 +5,9 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaCog } from 'react-icons/fa'
 
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import Menu from './Menu.jsx'
+import { ZaehlungSettingsMenu as Menu } from './Menu.jsx'
 
-const SettingsZaehlungen = ({ asMenu, kulturId }) => {
+export const ZaehlungSettings = observer(({ asMenu, kulturId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickConfig = useCallback(
     (event) => setAnchorEl(event.currentTarget),
@@ -41,12 +41,15 @@ const SettingsZaehlungen = ({ asMenu, kulturId }) => {
         aria-haspopup="true"
         title="Felder wählen"
         onClick={onClickConfig}
-        size="large">
+        size="large"
+      >
         <FaCog />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} kulturId={kulturId} />
+      <Menu
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+        kulturId={kulturId}
+      />
     </ErrorBoundary>
-  );
-}
-
-export default observer(SettingsZaehlungen)
+  )
+})
