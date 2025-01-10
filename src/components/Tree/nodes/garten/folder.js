@@ -1,4 +1,4 @@
-const gartenFolder = ({ count }) => [
+export const buildGartenFolder = ({ count }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Gärten',
@@ -10,5 +10,3 @@ const gartenFolder = ({ count }) => [
     childrenCount: count,
   },
 ]
-
-export default gartenFolder
