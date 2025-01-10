@@ -1,4 +1,4 @@
-const artHerkunftFolder = ({ count, artIndex, artId }) => ({
+export const buildArtHerkunftFolder = ({ count, artIndex, artId }) => ({
   nodeType: 'folder',
   menuTitle: 'Herkünfte',
   id: `${artId}HerkunftFolder`,
@@ -11,5 +11,3 @@ const artHerkunftFolder = ({ count, artIndex, artId }) => ({
   menuExplainerText:
     'Herkünfte können nur in ihrem eigenen Ast des Navigationsbaums neu geschaffen und gelöscht werden',
 })
-
-export default artHerkunftFolder

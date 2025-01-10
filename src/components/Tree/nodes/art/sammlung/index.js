@@ -1,6 +1,6 @@
 import { first as first$ } from 'rxjs/operators'
 
-const artSammlungNodes = async ({
+export const buildArtSammlung = async ({
   sammlung,
   sammlungIndex,
   artId,
@@ -22,5 +22,3 @@ const artSammlungNodes = async ({
     sort: [1, artIndex, 2, sammlungIndex],
   }
 }
-
-export default artSammlungNodes
