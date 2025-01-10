@@ -1,6 +1,6 @@
 import { lieferungLabelFromLieferung } from '../../../../../../../utils/lieferungLabelFromLieferung.js'
 
-const artHerkunftKulturAnlieferungNodes = ({
+export const buildArtHerkunftKulturAnlieferung = ({
   lieferung,
   lieferungIndex,
   kulturId,
@@ -29,5 +29,3 @@ const artHerkunftKulturAnlieferungNodes = ({
   hasChildren: false,
   mono: true,
 })
-
-export default artHerkunftKulturAnlieferungNodes
