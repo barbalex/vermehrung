@@ -1,4 +1,4 @@
-const sammelLieferungLieferungFolder = ({
+export const buildSammelLieferungLieferungFolder = ({
   children,
   sammelLieferungIndex,
   sammelLieferungId,
@@ -12,5 +12,3 @@ const sammelLieferungLieferungFolder = ({
   hasChildren: true,
   childrenCount: children.length,
 })
-
-export default sammelLieferungLieferungFolder
