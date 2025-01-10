@@ -1,6 +1,6 @@
 import { personFullname } from './personFullname.js'
 
-const kulturLabelFromKultur = ({
+export const kulturLabelFromKultur = ({
   kultur,
   garten,
   gartenPerson,
@@ -45,5 +45,3 @@ const kulturLabelFromKultur = ({
 
   return label ?? '(Kultur ohne Art, Herkunft und Garten)'
 }
-
-export default kulturLabelFromKultur

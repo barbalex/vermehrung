@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
-import artLabelFromAeArt from '../../utils/artLabelFromAeArt'
+import { artLabelFromAeArt } from '../../utils/artLabelFromAeArt'
 
 const Container = styled.div`
   display: flex;
@@ -92,9 +92,9 @@ const SelectLoadingOptions = ({
   })
   useEffect(() => {
     const observable =
-      labelTable && row[field]
-        ? db.get(labelTable).findAndObserve(row[field])
-        : $of({})
+      labelTable && row[field] ?
+        db.get(labelTable).findAndObserve(row[field])
+      : $of({})
     const subscription = observable.subscribe((record) =>
       setStateValue({
         value: row[field] || '',
