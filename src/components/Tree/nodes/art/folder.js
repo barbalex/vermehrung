@@ -1,4 +1,4 @@
-const artFolder = ({ count }) => [
+export const buildArtFolder = ({ count }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Arten',
@@ -10,5 +10,3 @@ const artFolder = ({ count }) => [
     childrenCount: count,
   },
 ]
-
-export default artFolder
