@@ -7,13 +7,13 @@ import { MdMenu } from 'react-icons/md'
 import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import Menu from './Menu.jsx'
+import { HeaderHamburgerMenu as Menu } from './Menu.jsx'
 
 const Icon = styled(MdMenu)`
   color: white;
 `
 
-const MenuComponent = ({ asMenu }) => {
+export const HeaderHamburgerMenu = observer(({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickMenu = useCallback(
     (event) => setAnchorEl(event.currentTarget),
@@ -30,7 +30,10 @@ const MenuComponent = ({ asMenu }) => {
         >
           Menu
         </MenuItem>
-        <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+        <Menu
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+        />
       </>
     )
   }
@@ -43,12 +46,14 @@ const MenuComponent = ({ asMenu }) => {
         aria-haspopup="true"
         title="Menu"
         onClick={onClickMenu}
-        size="large">
+        size="large"
+      >
         <Icon />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      <Menu
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+      />
     </ErrorBoundary>
-  );
-}
-
-export default observer(MenuComponent)
+  )
+})

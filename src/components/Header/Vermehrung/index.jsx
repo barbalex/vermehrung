@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { useResizeDetector } from 'react-resize-detector'
 
 import Account from './Account.jsx'
-import HamburgerMenu from './Menu/index.jsx'
+import { HeaderHamburgerMenu as HamburgerMenu } from './Menu/index.jsx'
 import { Online } from './Online.jsx'
 import { HeaderSearch } from './Search/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
