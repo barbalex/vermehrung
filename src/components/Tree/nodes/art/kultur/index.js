@@ -1,6 +1,11 @@
 import { first as first$ } from 'rxjs/operators'
 
-const artKulturNode = async ({ kultur, kulturIndex, artId, artIndex }) => {
+export const buildArtKultur = async ({
+  kultur,
+  kulturIndex,
+  artId,
+  artIndex,
+}) => {
   let label = ''
   try {
     label = await kultur.labelUnderArt.pipe(first$()).toPromise()
@@ -18,5 +23,3 @@ const artKulturNode = async ({ kultur, kulturIndex, artId, artIndex }) => {
     aktiv: kultur.aktiv,
   }
 }
-
-export default artKulturNode
