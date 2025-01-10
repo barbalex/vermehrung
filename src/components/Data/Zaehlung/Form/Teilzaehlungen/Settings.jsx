@@ -32,7 +32,7 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsTeilzaehlungen = ({ kulturId }) => {
+export const TeilzaehlungenSettings = observer(({ kulturId }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
 
@@ -40,9 +40,8 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
     kulturOption: undefined,
   })
   useEffect(() => {
-    const kulturOptionObservable = kulturId
-      ? db.get('kultur_option').findAndObserve(kulturId)
-      : $of({})
+    const kulturOptionObservable =
+      kulturId ? db.get('kultur_option').findAndObserve(kulturId) : $of({})
     const subscription = kulturOptionObservable.subscribe(
       async (kulturOption) => {
         setDataState({ kulturOption })
@@ -187,6 +186,4 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
       }
     </ErrorBoundary>
   )
-}
-
-export default observer(SettingsTeilzaehlungen)
+})
