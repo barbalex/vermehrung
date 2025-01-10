@@ -1,6 +1,6 @@
 import { appSchema } from '@nozbe/watermelondb'
 
-import ae_art from './ae_art'
+import ae_art from './ae_art.js'
 import art from './art'
 import art_file from './art_file'
 import art_qk from './art_qk'
@@ -58,7 +58,7 @@ export const tables = [
   zaehlung,
 ]
 
-export default appSchema({
+export const schema = appSchema({
   version: 4,
   tables,
 })
