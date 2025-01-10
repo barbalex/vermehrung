@@ -17,7 +17,7 @@ const StyledIconButton = styled(IconButton)`
 `
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
-import Notification from './Notification.jsx'
+import { Notification } from './Notification.jsx'
 
 const Notifications = () => {
   const store = useContext(MobxStoreContext)
@@ -38,7 +38,10 @@ const Notifications = () => {
   return (
     <Container>
       {notificationsSorted.map((n) => (
-        <Notification key={n.id} notification={n} />
+        <Notification
+          key={n.id}
+          notification={n}
+        />
       ))}
       {notificationsSorted.length > 2 && (
         <StyledIconButton

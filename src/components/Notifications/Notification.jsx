@@ -45,7 +45,7 @@ const colorMap = {
   warning: 'orange',
 }
 
-const Notification = ({ notification: n }) => {
+export const Notification = observer(({ notification: n }) => {
   const store = useContext(MobxStoreContext)
   const { removeNotificationById } = store
   const {
@@ -137,6 +137,4 @@ const Notification = ({ notification: n }) => {
       </IconButton>
     </Container>
   )
-}
-
-export default observer(Notification)
+})
