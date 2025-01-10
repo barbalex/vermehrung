@@ -8,7 +8,7 @@ import { FaChevronRight } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import ExportMenu from './Export/index.jsx'
+import { HeaderExportMenu as ExportMenu } from './Export/index.jsx'
 
 const StyledMenuItem = styled(MenuItem)`
   display: flex !important;
@@ -19,126 +19,123 @@ const StyledMenuItem = styled(MenuItem)`
   }
 `
 
-const SettingsOverallMenu = ({
-  anchorEl: parentAnchorEl,
-  setAnchorEl: setParentAnchorEl,
-}) => {
-  const store = useContext(MobxStoreContext)
-  const { filter } = store
+export const HeaderHamburgerMenu = observer(
+  ({ anchorEl: parentAnchorEl, setAnchorEl: setParentAnchorEl }) => {
+    const store = useContext(MobxStoreContext)
+    const { filter } = store
 
-  const onClickShowDeleted = useCallback(
-    (event) => {
-      const value = event.target.checked ? false : null
-      filter.setValue({ table: 'art', key: '_deleted', value })
-      filter.setValue({ table: 'event', key: '_deleted', value })
-      filter.setValue({ table: 'garten', key: '_deleted', value })
-      filter.setValue({ table: 'herkunft', key: '_deleted', value })
-      filter.setValue({ table: 'kultur', key: '_deleted', value })
-      filter.setValue({ table: 'lieferung', key: '_deleted', value })
-      filter.setValue({ table: 'person', key: '_deleted', value })
-      filter.setValue({ table: 'sammel_lieferung', key: '_deleted', value })
-      filter.setValue({ table: 'sammlung', key: '_deleted', value })
-      filter.setValue({ table: 'teilkultur', key: '_deleted', value })
-      filter.setValue({ table: 'teilzaehlung', key: '_deleted', value })
-      filter.setValue({ table: 'zaehlung', key: '_deleted', value })
-    },
-    [filter],
-  )
-  const onClickShowActive = useCallback(
-    (event) => {
-      const value = event.target.checked ? true : null
-      filter.setValue({ table: 'garten', key: 'aktiv', value })
-      filter.setValue({ table: 'kultur', key: 'aktiv', value })
-      filter.setValue({ table: 'person', key: 'aktiv', value })
-    },
-    [filter],
-  )
-  const activeValue =
-    filter.garten.aktiv === true &&
-    filter.kultur.aktiv === true &&
-    filter.person.aktiv === true
-  const deletedValue =
-    filter.art._deleted === false &&
-    filter.event._deleted === false &&
-    filter.garten._deleted === false &&
-    filter.herkunft._deleted === false &&
-    filter.kultur._deleted === false &&
-    filter.lieferung._deleted === false &&
-    filter.person._deleted === false &&
-    filter.sammel_lieferung._deleted === false &&
-    filter.sammlung._deleted === false &&
-    filter.teilkultur._deleted === false &&
-    filter.teilzaehlung._deleted === false &&
-    filter.zaehlung._deleted === false
+    const onClickShowDeleted = useCallback(
+      (event) => {
+        const value = event.target.checked ? false : null
+        filter.setValue({ table: 'art', key: '_deleted', value })
+        filter.setValue({ table: 'event', key: '_deleted', value })
+        filter.setValue({ table: 'garten', key: '_deleted', value })
+        filter.setValue({ table: 'herkunft', key: '_deleted', value })
+        filter.setValue({ table: 'kultur', key: '_deleted', value })
+        filter.setValue({ table: 'lieferung', key: '_deleted', value })
+        filter.setValue({ table: 'person', key: '_deleted', value })
+        filter.setValue({ table: 'sammel_lieferung', key: '_deleted', value })
+        filter.setValue({ table: 'sammlung', key: '_deleted', value })
+        filter.setValue({ table: 'teilkultur', key: '_deleted', value })
+        filter.setValue({ table: 'teilzaehlung', key: '_deleted', value })
+        filter.setValue({ table: 'zaehlung', key: '_deleted', value })
+      },
+      [filter],
+    )
+    const onClickShowActive = useCallback(
+      (event) => {
+        const value = event.target.checked ? true : null
+        filter.setValue({ table: 'garten', key: 'aktiv', value })
+        filter.setValue({ table: 'kultur', key: 'aktiv', value })
+        filter.setValue({ table: 'person', key: 'aktiv', value })
+      },
+      [filter],
+    )
+    const activeValue =
+      filter.garten.aktiv === true &&
+      filter.kultur.aktiv === true &&
+      filter.person.aktiv === true
+    const deletedValue =
+      filter.art._deleted === false &&
+      filter.event._deleted === false &&
+      filter.garten._deleted === false &&
+      filter.herkunft._deleted === false &&
+      filter.kultur._deleted === false &&
+      filter.lieferung._deleted === false &&
+      filter.person._deleted === false &&
+      filter.sammel_lieferung._deleted === false &&
+      filter.sammlung._deleted === false &&
+      filter.teilkultur._deleted === false &&
+      filter.teilzaehlung._deleted === false &&
+      filter.zaehlung._deleted === false
 
-  const onClose = useCallback(
-    () => setParentAnchorEl(null),
-    [setParentAnchorEl],
-  )
+    const onClose = useCallback(
+      () => setParentAnchorEl(null),
+      [setParentAnchorEl],
+    )
 
-  const [anchorEl, setAnchorEl] = useState(null)
-  const onClickExporte = useCallback(
-    (event) => setAnchorEl(event.currentTarget),
-    [],
-  )
+    const [anchorEl, setAnchorEl] = useState(null)
+    const onClickExporte = useCallback(
+      (event) => setAnchorEl(event.currentTarget),
+      [],
+    )
 
-  const onClickUptime = useCallback(() => {
-    window.open('https://uptime.vermehrung.ch')
-    setAnchorEl(null)
-  }, [])
+    const onClickUptime = useCallback(() => {
+      window.open('https://uptime.vermehrung.ch')
+      setAnchorEl(null)
+    }, [])
 
-  return (
-    <Menu
-      id="menu"
-      anchorEl={parentAnchorEl}
-      open={Boolean(parentAnchorEl)}
-      onClose={onClose}
-    >
-      <StyledMenuItem
-        aria-owns={anchorEl ? 'menu' : null}
-        aria-haspopup="true"
-        onClick={onClickExporte}
+    return (
+      <Menu
+        id="menu"
+        anchorEl={parentAnchorEl}
+        open={Boolean(parentAnchorEl)}
+        onClose={onClose}
       >
-        Exporte
-        <FaChevronRight />
-      </StyledMenuItem>
-      <ExportMenu
-        anchorEl={anchorEl}
-        setAnchorEl={setAnchorEl}
-        setParentAnchorEl={setParentAnchorEl}
-      />
-      <MenuItem>
-        <FormControlLabel
-          control={
-            <Checkbox
-              color="primary"
-              checked={deletedValue}
-              onChange={onClickShowDeleted}
-            />
-          }
-          label="Gelöschte Datensätze verbergen"
-          labelPlacement="end"
+        <StyledMenuItem
+          aria-owns={anchorEl ? 'menu' : null}
+          aria-haspopup="true"
+          onClick={onClickExporte}
+        >
+          Exporte
+          <FaChevronRight />
+        </StyledMenuItem>
+        <ExportMenu
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+          setParentAnchorEl={setParentAnchorEl}
         />
-      </MenuItem>
-      <MenuItem>
-        <FormControlLabel
-          control={
-            <Checkbox
-              color="primary"
-              checked={activeValue}
-              onChange={onClickShowActive}
-              name="why-is-this-not-working"
-            />
-          }
-          label="Inaktive Gärten, Kulturen und Personen verbergen"
-          labelPlacement="end"
-        />
-      </MenuItem>
-      <MenuItem onClick={onClickUptime}>
-        Verfügbarkeit der Server von vermehrung.ch
-      </MenuItem>
-    </Menu>
-  )
-}
-
-export default observer(SettingsOverallMenu)
+        <MenuItem>
+          <FormControlLabel
+            control={
+              <Checkbox
+                color="primary"
+                checked={deletedValue}
+                onChange={onClickShowDeleted}
+              />
+            }
+            label="Gelöschte Datensätze verbergen"
+            labelPlacement="end"
+          />
+        </MenuItem>
+        <MenuItem>
+          <FormControlLabel
+            control={
+              <Checkbox
+                color="primary"
+                checked={activeValue}
+                onChange={onClickShowActive}
+                name="why-is-this-not-working"
+              />
+            }
+            label="Inaktive Gärten, Kulturen und Personen verbergen"
+            labelPlacement="end"
+          />
+        </MenuItem>
+        <MenuItem onClick={onClickUptime}>
+          Verfügbarkeit der Server von vermehrung.ch
+        </MenuItem>
+      </Menu>
+    )
+  },
+)
