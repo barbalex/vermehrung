@@ -1,7 +1,7 @@
 import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
-export default types
+export const Tree = types
   .model('Tree', {
     activeNodeArray: types.array(types.union(types.string, types.number)),
     // lastActiveNodeArray is needed to keep the last clicked arrow known

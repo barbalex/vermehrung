@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree'
 
-export default types.model('QueuedQuery', {
+export const QueuedQuery = types.model('QueuedQuery', {
   id: types.identifier,
   time: types.union(types.number, types.undefined),
   name: types.string,

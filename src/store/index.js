@@ -7,10 +7,10 @@ import last from 'lodash/last'
 import set from 'lodash/set'
 import isUuid from 'is-uuid'
 
-import Tree, { defaultValue as defaultTree } from './Tree.js'
+import { Tree, defaultValue as defaultTree } from './Tree.js'
 import Filter from './Filter/types.js'
 import initialFilterValues from './Filter/initialValues.js'
-import QueuedQueryType from './QueuedQuery.js'
+import { QueuedQuery } from './QueuedQuery.js'
 import NotificationType from './Notification.js'
 import Errors, { defaultValue as defaultErrors } from './Errors/index.js'
 
@@ -108,7 +108,7 @@ const myTypes = types
      * When online they they are immediately executed by the reaction
      * When offline they remain queued until connectivity is back
      */
-    queuedQueries: types.map(QueuedQueryType),
+    queuedQueries: types.map(QueuedQuery),
     notifications: types.map(NotificationType),
     // on startup need to wait with showing data
     // until hasura claims have been added
