@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import Numbers from './Numbers.jsx'
+import { FilterNumbers as Numbers } from './Numbers.jsx'
 
 const Container = styled.div`
   height: 100%;
