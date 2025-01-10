@@ -24,101 +24,101 @@ const SplitPaneContainer = styled.div`
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 
-const Person = ({
-  filter: showFilter = false,
-  id = '99999999-9999-9999-9999-999999999999',
-}) => {
-  const store = useContext(MobxStoreContext)
-  const { filter, online, db, initialDataQueried } = store
-  const [dataState, setDataState] = useState({
-    row: undefined,
-    // need raw row because observable does not provoke rerendering of components
-    rawRow: undefined,
-  })
-  useEffect(() => {
-    const personObservable =
-      showFilter ? $of(filter.person)
-      : initialDataQueried ? db.get('person').findAndObserve(id)
-      : $of({})
-    const subscription = personObservable.subscribe((newRow) => {
-      setDataState({
-        row: newRow,
-        rawRow: JSON.stringify(newRow?._raw ?? newRow),
-      })
+export const Person = observer(
+  ({
+    filter: showFilter = false,
+    id = '99999999-9999-9999-9999-999999999999',
+  }) => {
+    const store = useContext(MobxStoreContext)
+    const { filter, online, db, initialDataQueried } = store
+    const [dataState, setDataState] = useState({
+      row: undefined,
+      // need raw row because observable does not provoke rerendering of components
+      rawRow: undefined,
     })
+    useEffect(() => {
+      const personObservable =
+        showFilter ? $of(filter.person)
+        : initialDataQueried ? db.get('person').findAndObserve(id)
+        : $of({})
+      const subscription = personObservable.subscribe((newRow) => {
+        setDataState({
+          row: newRow,
+          rawRow: JSON.stringify(newRow?._raw ?? newRow),
+        })
+      })
 
-    return () => subscription?.unsubscribe?.()
-  }, [db, filter.person, id, showFilter, initialDataQueried])
-  const { row, rawRow } = dataState
+      return () => subscription?.unsubscribe?.()
+    }, [db, filter.person, id, showFilter, initialDataQueried])
+    const { row, rawRow } = dataState
 
-  const [activeConflict, setActiveConflict] = useState(null)
-  const conflictDisposalCallback = useCallback(
-    () => setActiveConflict(null),
-    [],
-  )
-  const conflictSelectionCallback = useCallback(
-    () => setActiveConflict(null),
-    [],
-  )
-  // ensure that activeConflict is reset
-  // when changing dataset
-  useEffect(() => {
-    setActiveConflict(null)
-  }, [id])
+    const [activeConflict, setActiveConflict] = useState(null)
+    const conflictDisposalCallback = useCallback(
+      () => setActiveConflict(null),
+      [],
+    )
+    const conflictSelectionCallback = useCallback(
+      () => setActiveConflict(null),
+      [],
+    )
+    // ensure that activeConflict is reset
+    // when changing dataset
+    useEffect(() => {
+      setActiveConflict(null)
+    }, [id])
 
-  const [showHistory, setShowHistory] = useState(false)
-  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
+    const [showHistory, setShowHistory] = useState(false)
+    const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
-  if (!row) return <Spinner />
-  if (!showFilter && filter.show) return null
+    if (!row) return <Spinner />
+    if (!showFilter && filter.show) return null
 
-  const paneIsSplit = online && (activeConflict || showHistory)
+    const paneIsSplit = online && (activeConflict || showHistory)
 
-  return (
-    <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        <FormTitle
-          showFilter={showFilter}
-          row={row}
-          rawRow={rawRow}
-          showHistory={showHistory}
-          setShowHistory={setShowHistory}
-        />
-        <SplitPaneContainer>
-          <Allotment key={`${activeConflict}/${showHistory}`}>
-            <Form
-              showFilter={showFilter}
-              id={id}
-              row={row}
-              rawRow={rawRow}
-              activeConflict={activeConflict}
-              setActiveConflict={setActiveConflict}
-              showHistory={showHistory}
-            />
-            <Allotment.Pane visible={paneIsSplit}>
-              {activeConflict ?
-                <Conflict
-                  rev={activeConflict}
-                  id={id}
-                  row={row}
-                  rawRow={rawRow}
-                  conflictDisposalCallback={conflictDisposalCallback}
-                  conflictSelectionCallback={conflictSelectionCallback}
-                  setActiveConflict={setActiveConflict}
-                />
-              : showHistory ?
-                <History
-                  row={row}
-                  rawRow={rawRow}
-                  historyTakeoverCallback={historyTakeoverCallback}
-                />
-              : null}
-            </Allotment.Pane>
-          </Allotment>
-        </SplitPaneContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-}
-
-export default observer(Person)
+    return (
+      <ErrorBoundary>
+        <Container showfilter={showFilter}>
+          <FormTitle
+            showFilter={showFilter}
+            row={row}
+            rawRow={rawRow}
+            showHistory={showHistory}
+            setShowHistory={setShowHistory}
+          />
+          <SplitPaneContainer>
+            <Allotment key={`${activeConflict}/${showHistory}`}>
+              <Form
+                showFilter={showFilter}
+                id={id}
+                row={row}
+                rawRow={rawRow}
+                activeConflict={activeConflict}
+                setActiveConflict={setActiveConflict}
+                showHistory={showHistory}
+              />
+              <Allotment.Pane visible={paneIsSplit}>
+                {activeConflict ?
+                  <Conflict
+                    rev={activeConflict}
+                    id={id}
+                    row={row}
+                    rawRow={rawRow}
+                    conflictDisposalCallback={conflictDisposalCallback}
+                    conflictSelectionCallback={conflictSelectionCallback}
+                    setActiveConflict={setActiveConflict}
+                  />
+                : showHistory ?
+                  <History
+                    row={row}
+                    rawRow={rawRow}
+                    historyTakeoverCallback={historyTakeoverCallback}
+                  />
+                : null}
+              </Allotment.Pane>
+            </Allotment>
+          </SplitPaneContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  },
+)
