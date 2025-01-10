@@ -11,8 +11,8 @@ import { Online } from './Online.jsx'
 import Search from './Search/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import NavTree from './NavTree.jsx'
-import Docu from './Docu.jsx'
-import { HeaderFilter } from './Filter.jsx'
+import { HeaderDocu as Docu } from './Docu.jsx'
+import { HeaderFilter as Filter } from './Filter.jsx'
 import { HeaderHome as Home } from './Home.jsx'
 import { Menu } from '../../shared/Menu.jsx'
 
@@ -34,7 +34,7 @@ export const HeaderVermehrung = observer(() => {
           {width < 509 ?
             <>
               <Spacer />
-              <HeaderFilter />
+              <Filter />
               <Search />
               <Online />
               <Account />
@@ -48,7 +48,7 @@ export const HeaderVermehrung = observer(() => {
             <>
               <Home />
               <Spacer />
-              <HeaderFilter />
+              <Filter />
               <Search />
               <Online />
               <Account />
@@ -61,7 +61,7 @@ export const HeaderVermehrung = observer(() => {
             <>
               <Home />
               <Spacer />
-              <HeaderFilter />
+              <Filter />
               <Search />
               <Online />
               <Account />
@@ -74,7 +74,7 @@ export const HeaderVermehrung = observer(() => {
               <Home />
               <Spacer />
               <Docu />
-              <HeaderFilter />
+              <Filter />
               <Search />
               <Online />
               <Account />

@@ -20,14 +20,17 @@ const StyledButton = styled(Button)`
   }
 `
 
-const DocuButton = ({ asMenu }) => {
+export const HeaderDocu = observer(({ asMenu }) => {
   const store = useContext(MobxStoreContext)
   const { singleColumnView } = store
 
   if (singleColumnView) {
     if (asMenu) {
       return (
-        <MenuItem component={Link} to="/Dokumentation/">
+        <MenuItem
+          component={Link}
+          to="/Dokumentation/"
+        >
           Dokumentation
         </MenuItem>
       )
@@ -40,17 +43,20 @@ const DocuButton = ({ asMenu }) => {
         component={Link}
         to="/Dokumentation/"
         title="Dokumentation"
-        size="large">
+        size="large"
+      >
         <FaBook />
       </IconButton>
-    );
+    )
   }
 
   return (
-    <StyledButton variant="outlined" component={Link} to="/Dokumentation/">
+    <StyledButton
+      variant="outlined"
+      component={Link}
+      to="/Dokumentation/"
+    >
       Dokumentation
     </StyledButton>
   )
-}
-
-export default observer(DocuButton)
+})
