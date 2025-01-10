@@ -8,7 +8,10 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
 import { lieferungSort } from '../../../../../utils/lieferungSort.js'
 
-const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
+export const buildExceljsWorksheetsForLieferungenOfYear = async ({
+  store,
+  year,
+}) => {
   const { db } = store
   const { Workbook } = await import('exceljs/dist/exceljs.min.js')
   const workbook = new Workbook()
@@ -159,5 +162,3 @@ const buildExceljsWorksheetsForLieferungenOfYear = async ({ store, year }) => {
   }
   downloadExceljsWorkbook({ store, fileName: `Lieferungen_${year}`, workbook })
 }
-
-export default buildExceljsWorksheetsForLieferungenOfYear

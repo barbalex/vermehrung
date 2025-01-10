@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import buildExceljsWorksheetsForLieferungenOfYear from './buildExceljsWorksheetsForLieferungenOfYear.js'
+import { buildExceljsWorksheetsForLieferungenOfYear } from './buildExceljsWorksheetsForLieferungenOfYear.js'
 import { buildExceljsWorksheetsForKulturBedarfsplanung } from './buildExceljsWorksheetsForKulturBedarfsplanung.js'
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
 
