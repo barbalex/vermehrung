@@ -7,7 +7,7 @@ import { useLocation } from 'react-router'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../utils/constants.js'
 
-import Home from './Home.jsx'
+import { HeaderHome as Home } from './Home.jsx'
 import { HeaderDoku as Doku } from './Doku/index.jsx'
 import { HeaderVermehrung as Vermehrung } from './Vermehrung/index.jsx'
 

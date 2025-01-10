@@ -39,7 +39,7 @@ const NavButton = styled(Button)`
   }
 `
 
-const HeaderHome = ({ location }) => {
+export const HeaderHome = ({ location }) => {
   const { width, ref } = useResizeDetector()
   const mobile = width && width < constants?.tree?.minimalWindowWidth
   const { pathname } = location
@@ -95,5 +95,3 @@ const HeaderHome = ({ location }) => {
     </ErrorBoundary>
   )
 }
-
-export default HeaderHome
