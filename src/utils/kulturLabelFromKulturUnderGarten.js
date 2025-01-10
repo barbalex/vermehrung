@@ -1,4 +1,9 @@
-const kulturLabelFromKulturUnderGarten = ({ kultur, art, aeArt, herkunft }) => {
+export const kulturLabelFromKulturUnderGarten = ({
+  kultur,
+  art,
+  aeArt,
+  herkunft,
+}) => {
   if (!kultur) return ''
 
   let artLabel = 'keine Art'
@@ -21,5 +26,3 @@ const kulturLabelFromKulturUnderGarten = ({ kultur, art, aeArt, herkunft }) => {
 
   return label
 }
-
-export default kulturLabelFromKulturUnderGarten
