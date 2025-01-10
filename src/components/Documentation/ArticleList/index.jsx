@@ -7,7 +7,7 @@ import { useLocation } from 'react-router'
 import Article from './Article.jsx'
 import { constants } from '../../../utils/constants.js'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-import IntoViewScroller from './IntoViewScroller.jsx'
+import { IntoViewScroller } from './IntoViewScroller.jsx'
 
 const Container = styled.div`
   height: calc(100dvh - ${constants.appBarHeight}px);
