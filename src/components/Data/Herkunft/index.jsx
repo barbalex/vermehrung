@@ -24,105 +24,105 @@ const SplitPaneContainer = styled.div`
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 
-const Herkunft = ({
-  filter: showFilter = false,
-  id = '99999999-9999-9999-9999-999999999999',
-}) => {
-  const store = useContext(MobxStoreContext)
-  const { filter, online, db, initialDataQueried } = store
+export const Herkunft = observer(
+  ({
+    filter: showFilter = false,
+    id = '99999999-9999-9999-9999-999999999999',
+  }) => {
+    const store = useContext(MobxStoreContext)
+    const { filter, online, db, initialDataQueried } = store
 
-  const [row, setRow] = useState(null)
-  // need raw row because observable does not provoke rerendering of components
-  const [rawRow, setRawRow] = useState(null)
-  // TODO: extend to all forms
-  // Problem if user opens url with id of a dataset that does not yet exist
-  // because it still needs to be synced
-  // Uncaught Diagnostic error: Record herkunft#baa5e4f0-3877-11eb-be32-f734f6afd51d not found
-  // => need to wait for sync to be finished
-  useEffect(() => {
-    const observable =
-      showFilter ? $of(filter.herkunft)
-      : initialDataQueried ? db.get('herkunft').findAndObserve(id)
-      : $of({})
-    const subscription = observable.subscribe((newRow) => {
-      setRow(newRow)
-      setRawRow(JSON.stringify(newRow?._raw ?? newRow))
-    })
+    const [row, setRow] = useState(null)
+    // need raw row because observable does not provoke rerendering of components
+    const [rawRow, setRawRow] = useState(null)
+    // TODO: extend to all forms
+    // Problem if user opens url with id of a dataset that does not yet exist
+    // because it still needs to be synced
+    // Uncaught Diagnostic error: Record herkunft#baa5e4f0-3877-11eb-be32-f734f6afd51d not found
+    // => need to wait for sync to be finished
+    useEffect(() => {
+      const observable =
+        showFilter ? $of(filter.herkunft)
+        : initialDataQueried ? db.get('herkunft').findAndObserve(id)
+        : $of({})
+      const subscription = observable.subscribe((newRow) => {
+        setRow(newRow)
+        setRawRow(JSON.stringify(newRow?._raw ?? newRow))
+      })
 
-    return () => subscription?.unsubscribe?.()
-  }, [db, filter.herkunft, id, showFilter, initialDataQueried])
+      return () => subscription?.unsubscribe?.()
+    }, [db, filter.herkunft, id, showFilter, initialDataQueried])
 
-  const [activeConflict, setActiveConflict] = useState(null)
-  const conflictDisposalCallback = useCallback(
-    () => setActiveConflict(null),
-    [],
-  )
-  const conflictSelectionCallback = useCallback(
-    async () => setActiveConflict(null),
-    [],
-  )
-  // ensure that activeConflict is reset
-  // when changing dataset
-  useEffect(() => {
-    setActiveConflict(null)
-  }, [id])
+    const [activeConflict, setActiveConflict] = useState(null)
+    const conflictDisposalCallback = useCallback(
+      () => setActiveConflict(null),
+      [],
+    )
+    const conflictSelectionCallback = useCallback(
+      async () => setActiveConflict(null),
+      [],
+    )
+    // ensure that activeConflict is reset
+    // when changing dataset
+    useEffect(() => {
+      setActiveConflict(null)
+    }, [id])
 
-  const [showHistory, setShowHistory] = useState(false)
-  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
+    const [showHistory, setShowHistory] = useState(false)
+    const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
-  if (!row) return <Spinner />
-  if (!showFilter && filter.show) return null
+    if (!row) return <Spinner />
+    if (!showFilter && filter.show) return null
 
-  const paneIsSplit = online && (activeConflict || showHistory)
+    const paneIsSplit = online && (activeConflict || showHistory)
 
-  if (!row) return null
+    if (!row) return null
 
-  return (
-    <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        <FormTitle
-          row={row}
-          rawRow={rawRow}
-          showFilter={showFilter}
-          showHistory={showHistory}
-          setShowHistory={setShowHistory}
-          activeConflict={activeConflict}
-        />
-        <SplitPaneContainer>
-          <Allotment key={`${activeConflict}/${showHistory}`}>
-            <Form
-              showFilter={showFilter}
-              id={id}
-              row={row}
-              rawRow={rawRow}
-              activeConflict={activeConflict}
-              setActiveConflict={setActiveConflict}
-              showHistory={showHistory}
-            />
-            <Allotment.Pane visible={paneIsSplit}>
-              {activeConflict ?
-                <Conflict
-                  rev={activeConflict}
-                  id={id}
-                  row={row}
-                  rawRow={rawRow}
-                  conflictDisposalCallback={conflictDisposalCallback}
-                  conflictSelectionCallback={conflictSelectionCallback}
-                  setActiveConflict={setActiveConflict}
-                />
-              : showHistory ?
-                <History
-                  row={row}
-                  rawRow={rawRow}
-                  historyTakeoverCallback={historyTakeoverCallback}
-                />
-              : null}
-            </Allotment.Pane>
-          </Allotment>
-        </SplitPaneContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-}
-
-export default observer(Herkunft)
+    return (
+      <ErrorBoundary>
+        <Container showfilter={showFilter}>
+          <FormTitle
+            row={row}
+            rawRow={rawRow}
+            showFilter={showFilter}
+            showHistory={showHistory}
+            setShowHistory={setShowHistory}
+            activeConflict={activeConflict}
+          />
+          <SplitPaneContainer>
+            <Allotment key={`${activeConflict}/${showHistory}`}>
+              <Form
+                showFilter={showFilter}
+                id={id}
+                row={row}
+                rawRow={rawRow}
+                activeConflict={activeConflict}
+                setActiveConflict={setActiveConflict}
+                showHistory={showHistory}
+              />
+              <Allotment.Pane visible={paneIsSplit}>
+                {activeConflict ?
+                  <Conflict
+                    rev={activeConflict}
+                    id={id}
+                    row={row}
+                    rawRow={rawRow}
+                    conflictDisposalCallback={conflictDisposalCallback}
+                    conflictSelectionCallback={conflictSelectionCallback}
+                    setActiveConflict={setActiveConflict}
+                  />
+                : showHistory ?
+                  <History
+                    row={row}
+                    rawRow={rawRow}
+                    historyTakeoverCallback={historyTakeoverCallback}
+                  />
+                : null}
+              </Allotment.Pane>
+            </Allotment>
+          </SplitPaneContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  },
+)
