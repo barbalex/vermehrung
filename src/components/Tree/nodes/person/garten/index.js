@@ -1,6 +1,11 @@
 import { first as first$ } from 'rxjs/operators'
 
-const personGartenNodes = async ({ garten, index, personId, personIndex }) => {
+export const buildPersonGarten = async ({
+  garten,
+  index,
+  personId,
+  personIndex,
+}) => {
   let label = ''
   try {
     label = await garten.label.pipe(first$()).toPromise()
@@ -18,5 +23,3 @@ const personGartenNodes = async ({ garten, index, personId, personIndex }) => {
     aktiv: garten.aktiv,
   }
 }
-
-export default personGartenNodes

@@ -1,4 +1,4 @@
-const personGartenKulturFolder = ({
+export const buildPersonGartenKulturFolder = ({
   gartenId,
   gartenIndex,
   personId,
@@ -14,5 +14,3 @@ const personGartenKulturFolder = ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default personGartenKulturFolder
