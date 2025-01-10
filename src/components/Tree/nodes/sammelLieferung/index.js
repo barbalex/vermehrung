@@ -1,6 +1,6 @@
 import { first as first$ } from 'rxjs/operators'
 
-const sammelLieferungNodes = async ({ sammelLieferung, index }) => {
+export const buildSammelLieferung = async ({ sammelLieferung, index }) => {
   let label = ''
   try {
     label = await sammelLieferung.label.pipe(first$()).toPromise()
@@ -18,5 +18,3 @@ const sammelLieferungNodes = async ({ sammelLieferung, index }) => {
     mono: true,
   }
 }
-
-export default sammelLieferungNodes
