@@ -1,6 +1,6 @@
 import { lieferungLabelFromLieferung } from '../../../../utils/lieferungLabelFromLieferung.js'
 
-const lieferungNodes = ({ lieferung, index }) => ({
+export const buildLieferung = ({ lieferung, index }) => ({
   nodeType: 'table',
   menuTitle: 'Lieferung',
   table: 'lieferung',
@@ -11,5 +11,3 @@ const lieferungNodes = ({ lieferung, index }) => ({
   hasChildren: false,
   mono: true,
 })
-
-export default lieferungNodes

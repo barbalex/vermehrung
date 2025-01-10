@@ -1,4 +1,4 @@
-const lieferungFolder = ({ count }) => [
+export const buildLieferungFolder = ({ count }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Lieferungen',
@@ -10,5 +10,3 @@ const lieferungFolder = ({ count }) => [
     childrenCount: count,
   },
 ]
-
-export default lieferungFolder
