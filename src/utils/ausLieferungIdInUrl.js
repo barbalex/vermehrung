@@ -1,6 +1,6 @@
 import isUuid from 'is-uuid'
 
-const ausLieferungIdInUrl = (url) => {
+export const ausLieferungIdInUrl = (url) => {
   if (url.includes('Aus-Lieferungen')) {
     const indexOfId = url.indexOf('Aus-Lieferungen') + 1
     if (url.length > indexOfId) {
@@ -10,5 +10,3 @@ const ausLieferungIdInUrl = (url) => {
   }
   return undefined
 }
-
-export default ausLieferungIdInUrl

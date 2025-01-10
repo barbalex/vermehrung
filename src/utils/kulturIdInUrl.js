@@ -1,6 +1,6 @@
 import isUuid from 'is-uuid'
 
-const kulturIdInUrl = (url) => {
+export const kulturIdInUrl = (url) => {
   if (url.includes('Kulturen')) {
     const indexOfId = url.indexOf('Kulturen') + 1
     if (url.length > indexOfId) {
@@ -10,5 +10,3 @@ const kulturIdInUrl = (url) => {
   }
   return undefined
 }
-
-export default kulturIdInUrl
