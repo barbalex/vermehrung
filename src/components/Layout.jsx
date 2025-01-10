@@ -4,7 +4,7 @@ import { Outlet } from 'react-router'
 
 import { MobxStoreContext } from '../mobxStoreContext.js'
 import { constants } from '../utils/constants.js'
-import Fallback from './shared/Fallback.jsx'
+import { Fallback } from './shared/Fallback.jsx'
 
 import Header from './Header/index.jsx'
 
@@ -41,4 +41,3 @@ export const Layout = () => {
     </Container>
   )
 }
-

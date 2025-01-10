@@ -8,7 +8,7 @@ import Tree from '../../components/Tree/index.jsx'
 import Data from '../../components/Data/index.jsx'
 import Filter from '../../components/Filter.jsx'
 import { constants } from '../../utils/constants.js'
-import FallBack from '../../components/shared/Fallback.jsx'
+import { Fallback } from '../../components/shared/Fallback.jsx'
 
 const Container = styled.div`
   min-height: calc(100dvh - ${constants.appBarHeight}px);
@@ -47,7 +47,7 @@ export const Vermehrung = observer(() => {
   // need the key on Allotment or it would only render correctly on second render
   return (
     <>
-      <Suspense fallback={<FallBack />}>
+      <Suspense fallback={<Fallback />}>
         <Container>
           <Allotment key={`${treeWidth}/${formWidth}`}>
             <Allotment.Pane
@@ -55,7 +55,7 @@ export const Vermehrung = observer(() => {
               preferredSize={treeWidth}
               minSize={minSizeTree}
             >
-              <Suspense fallback={<FallBack />}>
+              <Suspense fallback={<Fallback />}>
                 <Tree />
               </Suspense>
             </Allotment.Pane>
@@ -64,7 +64,7 @@ export const Vermehrung = observer(() => {
               preferredSize={formWidth}
               minSize={minSizeForm}
             >
-              <Suspense fallback={<FallBack />}>
+              <Suspense fallback={<Fallback />}>
                 {showFilter ?
                   <Filter />
                 : <Data />}

@@ -12,10 +12,8 @@ const SpinnerContainer = styled.div`
   align-items: center;
 `
 
-const Fallback = () => (
+export const Fallback = () => (
   <SpinnerContainer>
     <CircularProgress />
   </SpinnerContainer>
 )
-
-export default Fallback
