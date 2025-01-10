@@ -57,7 +57,7 @@ const valFromValue = (value) => {
   return value ?? '(leer)'
 }
 
-const QueuedQuery = ({ qq, index }) => {
+export const QueuedQuery = observer(({ qq, index }) => {
   const store = useContext(MobxStoreContext)
   const { removeQueuedQueryById } = store
   const {
@@ -110,18 +110,18 @@ const QueuedQuery = ({ qq, index }) => {
         {isInsert ? 'neuer Datensatz' : revertField}
       </Value>
       <Value bt={index === 0}>
-        {isInsert
-          ? ''
-          : revertField
-          ? valFromValue(revertValue)
-          : JSON.parse(revertValues)}
+        {isInsert ?
+          ''
+        : revertField ?
+          valFromValue(revertValue)
+        : JSON.parse(revertValues)}
       </Value>
       <Value bt={index === 0}>
-        {isInsert
-          ? ''
-          : revertField
-          ? valFromValue(newValue)
-          : JSON.parse(newValue)}
+        {isInsert ?
+          ''
+        : revertField ?
+          valFromValue(newValue)
+        : JSON.parse(newValue)}
       </Value>
       <Icon bt={index === 0}>
         <RevertButton
@@ -135,6 +135,4 @@ const QueuedQuery = ({ qq, index }) => {
       </Icon>
     </>
   )
-}
-
-export default observer(QueuedQuery)
+})
