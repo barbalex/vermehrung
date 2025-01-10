@@ -50,7 +50,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Kulturen = ({ filter: showFilter = false }) => {
+export const Kulturen = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
   const {
     artIdInActiveNodeArray,
@@ -213,6 +213,4 @@ const Kulturen = ({ filter: showFilter = false }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Kulturen)
+})
