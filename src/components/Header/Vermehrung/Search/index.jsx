@@ -7,7 +7,7 @@ import Highlighter from 'react-highlight-words'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import buildOptions from './buildOptions.js'
+import { buildOptions } from './buildOptions.js'
 
 const Container = styled.div`
   border-radius: 3px;
