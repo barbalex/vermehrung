@@ -52,7 +52,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Lieferungen = ({ filter: showFilter = false }) => {
+export const Lieferungen = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
   const {
     db,
@@ -264,6 +264,4 @@ const Lieferungen = ({ filter: showFilter = false }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Lieferungen)
+})
