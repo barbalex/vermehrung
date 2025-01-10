@@ -11,7 +11,7 @@ import DeleteButton from './DeleteButton.jsx'
 import { FilterNumbers } from '../../../shared/FilterNumbers.jsx'
 import { HistoryButton } from '../../../shared/HistoryButton.jsx'
 import { Menu } from '../../../shared/Menu.jsx'
-import Anleitung from './Anleitung.jsx'
+import { ZaehlungAnleitung as Anleitung } from './Anleitung.jsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 import { constants } from '../../../../utils/constants.js'
 
