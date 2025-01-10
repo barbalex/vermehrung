@@ -1,4 +1,4 @@
-const gartenKulturFolder = ({ count, gartenIndex, gartenId }) => ({
+export const buildGartenKulturFolder = ({ count, gartenIndex, gartenId }) => ({
   nodeType: 'folder',
   menuTitle: 'Kulturen',
   id: `${gartenId}KulturFolder`,
@@ -8,5 +8,3 @@ const gartenKulturFolder = ({ count, gartenIndex, gartenId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default gartenKulturFolder

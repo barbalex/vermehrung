@@ -1,6 +1,6 @@
 import { first as first$ } from 'rxjs/operators'
 
-const gartenNodes = async ({ garten, index }) => {
+export const buildGarten = async ({ garten, index }) => {
   let label = ''
   try {
     label = await garten.label.pipe(first$()).toPromise()
@@ -18,5 +18,3 @@ const gartenNodes = async ({ garten, index }) => {
     aktiv: garten.aktiv,
   }
 }
-
-export default gartenNodes
