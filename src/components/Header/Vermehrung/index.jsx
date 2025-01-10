@@ -20,7 +20,7 @@ const Spacer = styled.div`
   flex-grow: 1;
 `
 
-const HeaderVermehrung = () => {
+export const HeaderVermehrung = observer(() => {
   const { width, ref } = useResizeDetector()
 
   return (
@@ -85,6 +85,4 @@ const HeaderVermehrung = () => {
       </AppBar>
     </ErrorBoundary>
   )
-}
-
-export default observer(HeaderVermehrung)
+})
