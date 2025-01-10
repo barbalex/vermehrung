@@ -1,6 +1,6 @@
 import { teilkulturLabelFromTeilkultur } from '../../../../utils/teilkulturLabelFromTeilkultur.js'
 
-const teilkulturNodes = ({ teilkultur, index }) => ({
+export const buildTeilkultur = ({ teilkultur, index }) => ({
   nodeType: 'table',
   menuTitle: 'Teilkultur',
   table: 'teilkultur',
@@ -10,5 +10,3 @@ const teilkulturNodes = ({ teilkultur, index }) => ({
   sort: [6, index],
   hasChildren: false,
 })
-
-export default teilkulturNodes

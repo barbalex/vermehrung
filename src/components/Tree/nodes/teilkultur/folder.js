@@ -1,4 +1,4 @@
-const teilkulturFolder = ({ count }) => [
+export const buildTeilkulturFolder = ({ count }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Teilkulturen',
@@ -10,5 +10,3 @@ const teilkulturFolder = ({ count }) => [
     childrenCount: count,
   },
 ]
-
-export default teilkulturFolder

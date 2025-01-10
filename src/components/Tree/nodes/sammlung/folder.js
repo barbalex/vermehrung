@@ -1,4 +1,4 @@
-const sammlungFolder = ({ count }) => [
+export const buildSammlungFolder = ({ count }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Sammlungen',
@@ -10,5 +10,3 @@ const sammlungFolder = ({ count }) => [
     childrenCount: count,
   },
 ]
-
-export default sammlungFolder
