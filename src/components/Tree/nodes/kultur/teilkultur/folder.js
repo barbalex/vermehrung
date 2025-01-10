@@ -1,4 +1,8 @@
-const kulturTeilkulturFolder = ({ count, kulturIndex, kulturId }) => ({
+export const buildKulturTeilkulturFolder = ({
+  count,
+  kulturIndex,
+  kulturId,
+}) => ({
   nodeType: 'folder',
   menuTitle: 'Teilkulturen',
   id: `${kulturId}TeilkulturFolder`,
@@ -8,5 +12,3 @@ const kulturTeilkulturFolder = ({ count, kulturIndex, kulturId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default kulturTeilkulturFolder

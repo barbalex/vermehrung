@@ -1,4 +1,8 @@
-const kulturZaehlungFolder = ({ count, kulturIndex, kulturId }) => ({
+export const buildKulturZaehlungFolder = ({
+  count,
+  kulturIndex,
+  kulturId,
+}) => ({
   nodeType: 'folder',
   menuTitle: 'Zählungen',
   id: `${kulturId}ZaehlungFolder`,
@@ -8,5 +12,3 @@ const kulturZaehlungFolder = ({ count, kulturIndex, kulturId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default kulturZaehlungFolder
