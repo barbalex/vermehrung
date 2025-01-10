@@ -12,8 +12,8 @@ import Search from './Search/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import NavTree from './NavTree.jsx'
 import Docu from './Docu.jsx'
-import Filter from './Filter.jsx'
-import Home from './Home.jsx'
+import { HeaderFilter } from './Filter.jsx'
+import { HeaderHome as Home } from './Home.jsx'
 import { Menu } from '../../shared/Menu.jsx'
 
 const Spacer = styled.div`
@@ -34,7 +34,7 @@ export const HeaderVermehrung = observer(() => {
           {width < 509 ?
             <>
               <Spacer />
-              <Filter />
+              <HeaderFilter />
               <Search />
               <Online />
               <Account />
@@ -48,7 +48,7 @@ export const HeaderVermehrung = observer(() => {
             <>
               <Home />
               <Spacer />
-              <Filter />
+              <HeaderFilter />
               <Search />
               <Online />
               <Account />
@@ -61,7 +61,7 @@ export const HeaderVermehrung = observer(() => {
             <>
               <Home />
               <Spacer />
-              <Filter />
+              <HeaderFilter />
               <Search />
               <Online />
               <Account />
@@ -74,7 +74,7 @@ export const HeaderVermehrung = observer(() => {
               <Home />
               <Spacer />
               <Docu />
-              <Filter />
+              <HeaderFilter />
               <Search />
               <Online />
               <Account />

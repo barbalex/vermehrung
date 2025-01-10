@@ -42,7 +42,7 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
   margin-left: 10px;
 `
 
-const Filter = () => {
+export const HeaderFilter = observer(() => {
   const store = useContext(MobxStoreContext)
   const { filter, singleColumnView } = store
   const { show: showFilter, setShow: setShowFilter, filtered, empty } = filter
@@ -61,7 +61,9 @@ const Filter = () => {
         title="Filter"
         data-active={showFilter}
       >
-        {filtered ? <RiFilterFill /> : <RiFilterLine />}
+        {filtered ?
+          <RiFilterFill />
+        : <RiFilterLine />}
       </StyledIconButton>
     )
   }
@@ -87,6 +89,4 @@ const Filter = () => {
       )}
     </FilterButton>
   )
-}
-
-export default observer(Filter)
+})
