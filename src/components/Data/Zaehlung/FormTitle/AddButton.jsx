@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const ZaehlungAddButton = () => {
+export const ZaehlungAddButton = observer(() => {
   const store = useContext(MobxStoreContext)
   const { insertZaehlungRev } = store
 
@@ -16,11 +16,14 @@ const ZaehlungAddButton = () => {
 
   return (
     <ErrorBoundary>
-      <IconButton aria-label="neue Zählung" title="neue Zählung" onClick={add} size="large">
+      <IconButton
+        aria-label="neue Zählung"
+        title="neue Zählung"
+        onClick={add}
+        size="large"
+      >
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
-  );
-}
-
-export default observer(ZaehlungAddButton)
+  )
+})
