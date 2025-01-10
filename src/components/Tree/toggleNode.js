@@ -1,7 +1,7 @@
 import { getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
-import isNodeOpen from './isNodeOpen.js'
+import { isNodeOpen } from './isNodeOpen.js'
 
 const toggleNode = ({ node, nodes, store }) => {
   const { addNotification } = store
