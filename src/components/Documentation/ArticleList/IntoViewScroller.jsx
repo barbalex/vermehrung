@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router'
 
-import isElementInViewport from '../../../utils/isElementInViewport.js'
+import { isElementInViewport } from '../../../utils/isElementInViewport.js'
 
 export const IntoViewScroller = () => {
   const { pathname } = useLocation()
