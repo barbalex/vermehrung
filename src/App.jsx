@@ -8,11 +8,11 @@ import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
 import { Routes, Route } from 'react-router'
 
-import Notifications from './components/Notifications/index.jsx'
+import { Notifications } from './components/Notifications/index.jsx'
 
-import materialTheme from './utils/materialTheme.js'
+import { materialTheme } from './utils/materialTheme.js'
 
-import GlobalStyle from './components/GlobalStyle.jsx'
+import { GlobalStyle } from './components/GlobalStyle.jsx'
 
 import { MobxStoreProvider } from './mobxStoreContext.js'
 

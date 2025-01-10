@@ -19,7 +19,7 @@ const StyledIconButton = styled(IconButton)`
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { Notification } from './Notification.jsx'
 
-const Notifications = () => {
+export const Notifications = observer(() => {
   const store = useContext(MobxStoreContext)
   const { removeAllNotifications, notifications } = store
 
@@ -58,6 +58,4 @@ const Notifications = () => {
       )}
     </Container>
   )
-}
-
-export default observer(Notifications)
+})
