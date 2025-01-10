@@ -1,6 +1,6 @@
 import { lieferungLabelFromLieferung } from '../../../../../../utils/lieferungLabelFromLieferung.js'
 
-const gartenKulturAuslieferungNodes = ({
+export const buildGartenKulturAuslieferung = ({
   lieferung,
   lieferungIndex,
   kulturId,
@@ -25,5 +25,3 @@ const gartenKulturAuslieferungNodes = ({
   hasChildren: false,
   mono: true,
 })
-
-export default gartenKulturAuslieferungNodes

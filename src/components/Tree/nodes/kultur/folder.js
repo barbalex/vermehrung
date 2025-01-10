@@ -1,4 +1,4 @@
-const kulturFolder = ({ count }) => [
+export const buildKulturFolder = ({ count }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Kulturen',
@@ -10,5 +10,3 @@ const kulturFolder = ({ count }) => [
     childrenCount: count,
   },
 ]
-
-export default kulturFolder
