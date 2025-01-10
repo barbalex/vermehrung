@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Events = ({ filter: showFilter = false }) => {
+export const Events = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
   const { insertEventRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
@@ -184,6 +184,4 @@ const Events = ({ filter: showFilter = false }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Events)
+})
