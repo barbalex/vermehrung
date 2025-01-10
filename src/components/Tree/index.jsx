@@ -14,7 +14,7 @@ import { TreeList as List } from './List.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { tableFilter } from '../../utils/tableFilter.js'
 import { notDeletedQuery } from '../../utils/notDeletedQuery.js'
-import buildNodes from './nodes/index.js'
+import { buildNodes } from './nodes/index.js'
 
 const Container = styled.div`
   width: 100%;
