@@ -1,4 +1,4 @@
-const gartenKulturEventFolder = ({
+export const buildGartenKulturEventFolder = ({
   kulturId,
   kulturIndex,
   gartenId,
@@ -14,5 +14,3 @@ const gartenKulturEventFolder = ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default gartenKulturEventFolder
