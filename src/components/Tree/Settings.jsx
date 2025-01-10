@@ -39,7 +39,7 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsTree = () => {
+export const TreeSettings = observer(() => {
   const store = useContext(MobxStoreContext)
   const { user, db } = store
 
@@ -47,8 +47,9 @@ const SettingsTree = () => {
     userPersonOption: undefined,
   })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns([
@@ -215,6 +216,4 @@ const SettingsTree = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(SettingsTree)
+})

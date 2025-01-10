@@ -9,7 +9,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
-import Settings from './Settings.jsx'
+import { TreeSettings as Settings } from './Settings.jsx'
 import List from './List.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { tableFilter } from '../../utils/tableFilter.js'
