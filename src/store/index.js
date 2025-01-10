@@ -8,11 +8,11 @@ import set from 'lodash/set'
 import isUuid from 'is-uuid'
 
 import { Tree, defaultValue as defaultTree } from './Tree.js'
-import Filter from './Filter/types.js'
-import initialFilterValues from './Filter/initialValues.js'
+import { Filter } from './Filter/types.js'
+import { initialFilterValues } from './Filter/initialValues.js'
 import { QueuedQuery } from './QueuedQuery.js'
-import NotificationType from './Notification.js'
-import Errors, { defaultValue as defaultErrors } from './Errors/index.js'
+import { Notification } from './Notification.js'
+import { Errors, defaultValue as defaultErrors } from './Errors/index.js'
 
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray.js'
 import artIdInUrl from '../utils/artIdInUrl.js'
@@ -109,7 +109,7 @@ const myTypes = types
      * When offline they remain queued until connectivity is back
      */
     queuedQueries: types.map(QueuedQuery),
-    notifications: types.map(NotificationType),
+    notifications: types.map(Notification),
     // on startup need to wait with showing data
     // until hasura claims have been added
     // this is _after_ user is set so need another variable

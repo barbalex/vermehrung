@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree'
 
-export default types.model('Notification', {
+export const Notification = types.model('Notification', {
   id: types.identifier,
   time: types.union(types.number, types.undefined),
   title: types.union(types.string, types.number, types.null, types.undefined),
