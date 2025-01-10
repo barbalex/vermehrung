@@ -8,7 +8,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import Account from './Account.jsx'
 import HamburgerMenu from './Menu/index.jsx'
 import { Online } from './Online.jsx'
-import Search from './Search/index.jsx'
+import { HeaderSearch } from './Search/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { HeaderNavTree as NavTree } from './NavTree.jsx'
 import { HeaderDocu as Docu } from './Docu.jsx'
@@ -35,7 +35,7 @@ export const HeaderVermehrung = observer(() => {
             <>
               <Spacer />
               <Filter />
-              <Search />
+              <HeaderSearch />
               <Online />
               <Account />
               <Menu>
@@ -49,7 +49,7 @@ export const HeaderVermehrung = observer(() => {
               <Home />
               <Spacer />
               <Filter />
-              <Search />
+              <HeaderSearch />
               <Online />
               <Account />
               <Menu>
@@ -62,7 +62,7 @@ export const HeaderVermehrung = observer(() => {
               <Home />
               <Spacer />
               <Filter />
-              <Search />
+              <HeaderSearch />
               <Online />
               <Account />
               <HamburgerMenu />
@@ -75,7 +75,7 @@ export const HeaderVermehrung = observer(() => {
               <Spacer />
               <Docu />
               <Filter />
-              <Search />
+              <HeaderSearch />
               <Online />
               <Account />
               <HamburgerMenu />
