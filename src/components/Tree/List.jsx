@@ -12,7 +12,7 @@ import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
-import Row from './Row.jsx'
+import { TreeRow } from './Row.jsx'
 
 const StyledList = styled(List)`
   margin-top: 5px;
@@ -55,7 +55,7 @@ export const TreeList = observer(
         outerRef={scrollableNodeRef}
       >
         {({ index, style }) => (
-          <Row
+          <TreeRow
             key={index}
             style={style}
             index={index}

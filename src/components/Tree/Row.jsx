@@ -214,7 +214,7 @@ const MenuExplainerItem = styled(MenuItem)`
   }
 `
 
-const Row = ({ style, node, nodes, userRole }) => {
+export const TreeRow = observer(({ style, node, nodes, userRole }) => {
   const store = useContext(MobxStoreContext)
 
   const { showTreeInSingleColumnView, singleColumnView, tree, db } = store
@@ -432,6 +432,4 @@ const Row = ({ style, node, nodes, userRole }) => {
       )}
     </Container>
   )
-}
-
-export default observer(Row)
+})
