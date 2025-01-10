@@ -139,7 +139,7 @@ const compare = (a, b) => {
   return a - b
 }
 
-const buildNodes = async ({ store, userPersonOption, userRole }) => {
+export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   const { db } = store
   const { openNodes: openNodesRaw, activeNodeArray: activeNodeArrayRaw } =
     store.tree
@@ -2764,5 +2764,3 @@ const buildNodes = async ({ store, userPersonOption, userRole }) => {
   //console.log('buildNodes, nodes:', nodesSorted)
   return nodesSorted
 }
-
-export default buildNodes
