@@ -6,8 +6,8 @@ import { Allotment } from 'allotment'
 
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
-import Conflict from './Conflict.jsx'
-import Form from './Form/index.jsx'
+import { TeilzaehlungConflict as Conflict } from './Conflict.jsx'
+import { TeilzaehlungForm as Form } from './Form/index.jsx'
 import History from './History/index.jsx'
 
 const Container = styled.div`
