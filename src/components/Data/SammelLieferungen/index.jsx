@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const SammelLieferungen = ({ filter: showFilter = false }) => {
+export const SammelLieferungen = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
   const { insertSammelLieferungRev, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
@@ -182,6 +182,4 @@ const SammelLieferungen = ({ filter: showFilter = false }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(SammelLieferungen)
+})
