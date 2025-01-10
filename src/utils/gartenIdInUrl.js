@@ -1,6 +1,6 @@
 import isUuid from 'is-uuid'
 
-const gartenIdInUrl = (url) => {
+export const gartenIdInUrl = (url) => {
   if (url.includes('Gaerten')) {
     const indexOfId = url.indexOf('Gaerten') + 1
     if (url.length > indexOfId) {
@@ -10,5 +10,3 @@ const gartenIdInUrl = (url) => {
   }
   return undefined
 }
-
-export default gartenIdInUrl
