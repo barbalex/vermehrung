@@ -1,5 +1,5 @@
 import isNodeOpen from './isNodeOpen.js'
-import isNodeInActiveNodePath from './isNodeInActiveNodePath.js'
+import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.js'
 
 const toggleNodeSymbol = ({ node, store }) => {
   const { addNotification } = store

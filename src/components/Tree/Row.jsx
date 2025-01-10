@@ -12,7 +12,7 @@ import last from 'lodash/last'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
-import isNodeInActiveNodePath from './isNodeInActiveNodePath.js'
+import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.js'
 import isNodeOpen from './isNodeOpen.js'
 import someChildrenAreOpen from './someChildrenAreOpen.js'
 import someChildrenAreClosed from './someChildrenAreClosed.js'
