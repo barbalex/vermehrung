@@ -28,6 +28,4 @@ const dictionary = {
   zaehlung: 'Zählungen',
 }
 
-const tableNames = (table) => dictionary[table] ?? table
-
-export default tableNames
+export const tableNames = (table) => dictionary[table] ?? table

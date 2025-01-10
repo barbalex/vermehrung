@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
-import tableNames from '../../utils/tableNames.js'
+import { tableNames } from '../../utils/tableNames.js'
 
 export const InitialDataLoadingNotifier = observer(() => {
   const store = useContext(MobxStoreContext)
