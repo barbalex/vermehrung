@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.js'
 
-const ZaehlungAnleitung = ({ asMenu }) => {
+export const ZaehlungAnleitung = observer(({ asMenu }) => {
   const openZaehlungDocs = useCallback(() => {
     const url = `${constants?.getAppUri()}/Dokumentation/zaehlungen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -29,6 +29,4 @@ const ZaehlungAnleitung = ({ asMenu }) => {
       <IoMdInformationCircleOutline />
     </IconButton>
   )
-}
-
-export default observer(ZaehlungAnleitung)
+})
