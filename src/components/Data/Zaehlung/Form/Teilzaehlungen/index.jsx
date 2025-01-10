@@ -8,7 +8,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import TeilzaehlungenRows from './TeilzaehlungenRows.jsx'
-import Settings from './Settings.jsx'
+import { TeilzaehlungenSettings as Settings } from './Settings.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByTk.js'
 import { constants } from '../../../../../utils/constants.js'
@@ -34,7 +34,7 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const Teilzaehlungen = ({ zaehlung }) => {
+export const Teilzaehlungen = observer(({ zaehlung }) => {
   const store = useContext(MobxStoreContext)
   const { insertTeilzaehlungRev, db } = store
 
@@ -45,12 +45,12 @@ const Teilzaehlungen = ({ zaehlung }) => {
     kulturOption: undefined,
   })
   useEffect(() => {
-    const teilzaehlungsObservable = zaehlung.teilzaehlungs
-      ? zaehlung.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
+    const teilzaehlungsObservable =
+      zaehlung.teilzaehlungs ?
+        zaehlung.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
       : $of([])
-    const kulturOptionObservable = kulturId
-      ? db.get('kultur_option').find(kulturId)
-      : $of({})
+    const kulturOptionObservable =
+      kulturId ? db.get('kultur_option').find(kulturId) : $of({})
     const combinedObservables = combineLatest([
       teilzaehlungsObservable,
       kulturOptionObservable,
@@ -99,9 +99,10 @@ const Teilzaehlungen = ({ zaehlung }) => {
           )}
         </div>
       </TitleRow>
-      <TeilzaehlungenRows kulturId={kulturId} teilzaehlungs={teilzaehlungs} />
+      <TeilzaehlungenRows
+        kulturId={kulturId}
+        teilzaehlungs={teilzaehlungs}
+      />
     </ErrorBoundary>
   )
-}
-
-export default observer(Teilzaehlungen)
+})
