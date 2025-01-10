@@ -22,56 +22,49 @@ const StyledList = styled(List)`
   }
 `
 
-const Tree = ({
-  scrollableNodeRef,
-  contentNodeRef,
-  width,
-  height,
-  nodes,
-  userRole,
-}) => {
-  const store = useContext(MobxStoreContext)
-  const {
-    singleRowHeight,
-    activeNodeArray: aNAProxy,
-    lastActiveNodeArray: lastTouchedNodeProxy,
-  } = store.tree
-  const aNA = getSnapshot(aNAProxy)
-  const activeNode = nodes.find((n) => isEqual(n.url, aNA))
+export const TreeList = observer(
+  ({ scrollableNodeRef, contentNodeRef, width, height, nodes, userRole }) => {
+    const store = useContext(MobxStoreContext)
+    const {
+      singleRowHeight,
+      activeNodeArray: aNAProxy,
+      lastActiveNodeArray: lastTouchedNodeProxy,
+    } = store.tree
+    const aNA = getSnapshot(aNAProxy)
+    const activeNode = nodes.find((n) => isEqual(n.url, aNA))
 
-  const listRef = useRef(null)
-  const lastActiveNodeArray = getSnapshot(lastTouchedNodeProxy)
-  // when loading on url, lastActiveNodeArray may not be set
-  const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
-  const nodeIndex = findIndex(nodes, (node) => isEqual(node.url, urlToFocus))
-  useEffect(() => {
-    if (nodeIndex > -1) {
-      listRef.current?.scrollToItem(nodeIndex)
-    }
-  }, [listRef, activeNode?.label, aNA, nodes, nodeIndex])
+    const listRef = useRef(null)
+    const lastActiveNodeArray = getSnapshot(lastTouchedNodeProxy)
+    // when loading on url, lastActiveNodeArray may not be set
+    const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
+    const nodeIndex = findIndex(nodes, (node) => isEqual(node.url, urlToFocus))
+    useEffect(() => {
+      if (nodeIndex > -1) {
+        listRef.current?.scrollToItem(nodeIndex)
+      }
+    }, [listRef, activeNode?.label, aNA, nodes, nodeIndex])
 
-  return (
-    <StyledList
-      height={height - 5}
-      itemCount={nodes.length}
-      itemSize={singleRowHeight}
-      width={width}
-      ref={listRef}
-      innerRef={contentNodeRef}
-      outerRef={scrollableNodeRef}
-    >
-      {({ index, style }) => (
-        <Row
-          key={index}
-          style={style}
-          index={index}
-          node={nodes[index]}
-          nodes={nodes}
-          userRole={userRole}
-        />
-      )}
-    </StyledList>
-  )
-}
-
-export default observer(Tree)
+    return (
+      <StyledList
+        height={height - 5}
+        itemCount={nodes.length}
+        itemSize={singleRowHeight}
+        width={width}
+        ref={listRef}
+        innerRef={contentNodeRef}
+        outerRef={scrollableNodeRef}
+      >
+        {({ index, style }) => (
+          <Row
+            key={index}
+            style={style}
+            index={index}
+            node={nodes[index]}
+            nodes={nodes}
+            userRole={userRole}
+          />
+        )}
+      </StyledList>
+    )
+  },
+)

@@ -10,7 +10,7 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { TreeSettings as Settings } from './Settings.jsx'
-import List from './List.jsx'
+import { TreeList as List } from './List.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { tableFilter } from '../../utils/tableFilter.js'
 import { notDeletedQuery } from '../../utils/notDeletedQuery.js'
