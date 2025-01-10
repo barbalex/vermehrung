@@ -15,7 +15,7 @@ const StyledIconButton = styled(IconButton)`
   ${(props) => props['data-active'] && 'border: 1px solid #9762d9 !important;'}
 `
 
-const NavTreeButton = () => {
+export const HeaderNavTree = observer(() => {
   const store = useContext(MobxStoreContext)
   const {
     setShowTreeInSingleColumnView,
@@ -35,15 +35,13 @@ const NavTreeButton = () => {
       aria-label="Navigations-Baum öffnen"
       onClick={onClickTreeMenu}
       title={
-        showTreeInSingleColumnView
-          ? 'Navigations-Baum schliessen'
-          : 'Navigations-Baum öffnen'
+        showTreeInSingleColumnView ?
+          'Navigations-Baum schliessen'
+        : 'Navigations-Baum öffnen'
       }
       data-active={showTreeInSingleColumnView}
     >
       <StyledNavTree />
     </StyledIconButton>
   )
-}
-
-export default observer(NavTreeButton)
+})
