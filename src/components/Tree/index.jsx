@@ -21,7 +21,7 @@ const Container = styled.div`
   height: 100%;
 `
 
-const Tree = () => {
+export const Tree = observer(() => {
   const store = useContext(MobxStoreContext)
   const { db, user } = store
   const {
@@ -223,6 +223,4 @@ const Tree = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Tree)
+})
