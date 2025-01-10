@@ -1,4 +1,4 @@
-const personGartenKulturTeilkulturNodes = ({
+export const buildPersonGartenKulturTeilkultur = ({
   teilkultur,
   teilkulturIndex,
   kulturId,
@@ -26,5 +26,3 @@ const personGartenKulturTeilkulturNodes = ({
   sort: [11, personIndex, 2, gartenIndex, 1, kulturIndex, 1, teilkulturIndex],
   hasChildren: false,
 })
-
-export default personGartenKulturTeilkulturNodes
