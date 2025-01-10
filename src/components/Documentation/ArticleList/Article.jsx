@@ -10,7 +10,7 @@ const ListItem = styled(ListItemButton)`
   ${(props) => props.ischild1 === 'true' && 'padding-left: 35px !important;'}
 `
 
-const MenuItem = ({ node }) => {
+export const Article = ({ node }) => {
   const navigate = useNavigate()
   const { slug, title, children } = node
   const activeUrl = `/Dokumentation/${slug}`
@@ -48,5 +48,3 @@ const MenuItem = ({ node }) => {
     </>
   )
 }
-
-export default MenuItem
