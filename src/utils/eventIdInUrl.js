@@ -1,6 +1,6 @@
 import isUuid from 'is-uuid'
 
-const eventIdInUrl = (url) => {
+export const eventIdInUrl = (url) => {
   if (url.includes('Events')) {
     const indexOfId = url.indexOf('Events') + 1
     if (url.length > indexOfId) {
@@ -10,5 +10,3 @@ const eventIdInUrl = (url) => {
   }
   return undefined
 }
-
-export default eventIdInUrl
