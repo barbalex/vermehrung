@@ -23,7 +23,7 @@ const distance = 1000 // ensure text in long labels is found
 const formatDateForSearch = (datum) =>
   datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
-const buildOptions = async ({ store, cb, val }) => {
+export const buildOptions = async ({ store, cb, val }) => {
   const { db } = store
 
   let arts = []
@@ -511,5 +511,3 @@ const buildOptions = async ({ store, cb, val }) => {
   }
   cb(options)
 }
-
-export default buildOptions
