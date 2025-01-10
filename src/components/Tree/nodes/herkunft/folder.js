@@ -1,4 +1,4 @@
-const herkunftFolder = ({ count }) => [
+export const buildHerkunftFolder = ({ count }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Herkünfte',
@@ -10,5 +10,3 @@ const herkunftFolder = ({ count }) => [
     childrenCount: count,
   },
 ]
-
-export default herkunftFolder

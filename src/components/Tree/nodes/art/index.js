@@ -1,6 +1,6 @@
 import { first as first$ } from 'rxjs/operators'
 
-const artNodes = async ({ art, index }) => {
+export const buildArt = async ({ art, index }) => {
   let label = ''
   try {
     label = await art.label.pipe(first$()).toPromise()
@@ -17,5 +17,3 @@ const artNodes = async ({ art, index }) => {
     hasChildren: true,
   }
 }
-
-export default artNodes
