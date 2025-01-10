@@ -1,4 +1,4 @@
-const personFolder = ({ count }) => [
+export const buildPersonFolder = ({ count }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Personen',
@@ -10,5 +10,3 @@ const personFolder = ({ count }) => [
     childrenCount: count,
   },
 ]
-
-export default personFolder

@@ -1,6 +1,6 @@
 import { eventLabelFromEvent } from '../../../../utils/eventLabelFromEvent.js'
 
-const eventNodes = ({ event, index }) => ({
+export const buildEvent = ({ event, index }) => ({
   nodeType: 'table',
   menuTitle: 'Event',
   table: 'event',
@@ -10,4 +10,3 @@ const eventNodes = ({ event, index }) => ({
   sort: [10, index],
   hasChildren: false,
 })
-export default eventNodes

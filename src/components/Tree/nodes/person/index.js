@@ -1,6 +1,6 @@
 import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.js'
 
-const personNodes = ({ person, index }) => ({
+export const buildPerson = ({ person, index }) => ({
   nodeType: 'table',
   menuTitle: 'Person',
   table: 'person',
@@ -11,5 +11,3 @@ const personNodes = ({ person, index }) => ({
   hasChildren: true,
   aktiv: person.aktiv,
 })
-
-export default personNodes
