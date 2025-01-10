@@ -9,7 +9,7 @@ import { constants } from '../../utils/constants.js'
 
 import Home from './Home.jsx'
 import Doku from './Doku/index.jsx'
-import Vermehrung from './Vermehrung/index.jsx'
+import { HeaderVermehrung as Vermehrung } from './Vermehrung/index.jsx'
 
 const StyledAppBar = styled(AppBar)`
   min-height: ${constants.appBarHeight}px !important;
@@ -32,13 +32,11 @@ const Header = () => {
     <ErrorBoundary>
       <StyledAppBar position="static">
         <Toolbar>
-          {isHome ? (
+          {isHome ?
             <Home location={location} />
-          ) : isVermehrung ? (
+          : isVermehrung ?
             <Vermehrung />
-          ) : (
-            <Doku />
-          )}
+          : <Doku />}
         </Toolbar>
       </StyledAppBar>
     </ErrorBoundary>
