@@ -50,7 +50,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Arten = ({ filter: showFilter }) => {
+export const Arten = observer(({ filter: showFilter }) => {
   const store = useContext(MobxStoreContext)
   const { insertArtRev, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
@@ -166,6 +166,4 @@ const Arten = ({ filter: showFilter }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Arten)
+})
