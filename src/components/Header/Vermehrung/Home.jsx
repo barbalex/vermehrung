@@ -24,13 +24,16 @@ const SiteTitle = styled(Button)`
   }
 `
 
-const Home = ({ asMenu }) => {
+export const HeaderHome = observer(({ asMenu }) => {
   const store = useContext(MobxStoreContext)
   const { singleColumnView } = store
 
   if (asMenu) {
     return (
-      <MenuItem component={Link} to="/">
+      <MenuItem
+        component={Link}
+        to="/"
+      >
         Home
       </MenuItem>
     )
@@ -52,10 +55,13 @@ const Home = ({ asMenu }) => {
   }
 
   return (
-    <SiteTitle variant="outlined" component={Link} to="/" title="Home">
+    <SiteTitle
+      variant="outlined"
+      component={Link}
+      to="/"
+      title="Home"
+    >
       Vermehrung
     </SiteTitle>
   )
-}
-
-export default observer(Home)
+})
