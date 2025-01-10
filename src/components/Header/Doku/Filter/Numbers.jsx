@@ -23,7 +23,7 @@ const Total = styled.div`
   border-top: 1px solid white;
   text-align: center;
 `
-const FilterNumbers = ({ filteredCount, totalCount }) => (
+export const FilterNumbers = ({ filteredCount, totalCount }) => (
   <OuterContainer>
     <Container>
       <Filtered title="gefilterte Anzahl">{filteredCount}</Filtered>
@@ -31,5 +31,3 @@ const FilterNumbers = ({ filteredCount, totalCount }) => (
     </Container>
   </OuterContainer>
 )
-
-export default FilterNumbers
