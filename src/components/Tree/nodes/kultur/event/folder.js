@@ -1,4 +1,4 @@
-const kulturEventFolder = ({ count, kulturIndex, kulturId }) => ({
+export const buildKulturEventFolder = ({ count, kulturIndex, kulturId }) => ({
   nodeType: 'folder',
   menuTitle: 'Events',
   id: `${kulturId}EventFolder`,
@@ -8,5 +8,3 @@ const kulturEventFolder = ({ count, kulturIndex, kulturId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default kulturEventFolder
