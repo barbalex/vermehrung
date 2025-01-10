@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { constants } from '../../../utils/constants.js'
 
 // link is active node array
-const Link = ({ link }) => {
+export const Link = ({ link }) => {
   const open = useCallback(
     (e) => {
       e.stopPropagation()
@@ -29,5 +29,3 @@ const Link = ({ link }) => {
     </IconButton>
   )
 }
-
-export default Link
