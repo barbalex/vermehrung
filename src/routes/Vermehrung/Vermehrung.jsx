@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { Tree } from '../../components/Tree/index.jsx'
-import Data from '../../components/Data/index.jsx'
+import { Data } from '../../components/Data/index.jsx'
 import { Filter } from '../../components/Filter.jsx'
 import { constants } from '../../utils/constants.js'
 import { Fallback } from '../../components/shared/Fallback.jsx'

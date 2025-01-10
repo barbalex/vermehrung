@@ -28,7 +28,7 @@ import { Teilkulturen } from './Teilkulturen/index.jsx'
 import { Root } from './Root/index.jsx'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-const Data = () => {
+export const Data = observer(() => {
   const store = useContext(MobxStoreContext)
   const { activeForm } = store
   const { activeNodeArray } = store.tree
@@ -108,6 +108,4 @@ const Data = () => {
     default:
       return null
   }
-}
-
-export default observer(Data)
+})
