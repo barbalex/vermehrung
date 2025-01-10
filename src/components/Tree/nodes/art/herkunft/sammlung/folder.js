@@ -1,4 +1,4 @@
-const artHerkunftSammlungFolder = ({
+export const buildArtHerkunftSammlungFolder = ({
   herkunft,
   herkunftIndex,
   artId,
@@ -14,5 +14,3 @@ const artHerkunftSammlungFolder = ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default artHerkunftSammlungFolder
