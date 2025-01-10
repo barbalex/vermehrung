@@ -15,7 +15,7 @@ import uniqBy from 'lodash/uniqBy'
 
 import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
 import { TextField } from '../../../../../../shared/TextField.jsx'
-import TextFieldNonUpdatable from '../../../../../../shared/TextFieldNonUpdatable.jsx'
+import { TextFieldNonUpdatable } from '../../../../../../shared/TextFieldNonUpdatable.jsx'
 import { Checkbox2States } from '../../../../../../shared/Checkbox2States.jsx'
 import { SelectCreatable } from '../../../../../../shared/SelectCreatable.jsx'
 import { ConflictList } from '../../../../../../shared/ConflictList/index.jsx'
