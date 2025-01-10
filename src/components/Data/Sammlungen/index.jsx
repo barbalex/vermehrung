@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Sammlungen = ({ filter: showFilter = false }) => {
+export const Sammlungen = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
   const {
     insertSammlungRev,
@@ -216,6 +216,4 @@ const Sammlungen = ({ filter: showFilter = false }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Sammlungen)
+})
