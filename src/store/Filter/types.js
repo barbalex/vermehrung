@@ -39,7 +39,7 @@ const emptyHash = {
   teilzaehlung: teilzaehlung_empty,
 }
 
-export default types
+export const Filter = types
   .model({
     show: types.optional(types.boolean, false),
     art,

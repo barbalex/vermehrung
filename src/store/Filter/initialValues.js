@@ -12,7 +12,7 @@ import { initial as zaehlung } from './zaehlung.js'
 import { initial as teilkultur } from './teilkultur.js'
 import { initial as teilzaehlung } from './teilzaehlung.js'
 
-export default {
+export const initialFilterValues = {
   show: false,
   art,
   event,

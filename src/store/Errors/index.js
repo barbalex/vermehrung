@@ -18,7 +18,7 @@ import { type as zaehlung } from './zaehlung.js'
  * need this because operations work on top level
  * so errors need to be managed there too
  */
-const model = types.model('Errors', {
+export const Errors = types.model('Errors', {
   art: art,
   event: event,
   garten: garten,
@@ -32,8 +32,6 @@ const model = types.model('Errors', {
   teilzaehlung: teilzaehlung,
   zaehlung: zaehlung,
 })
-
-export default model
 
 export const defaultValue = {
   art: {},
