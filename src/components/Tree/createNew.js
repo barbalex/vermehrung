@@ -5,7 +5,7 @@ import isUuid from 'is-uuid'
 import tableFromTitleHash from '../../utils/tableFromTitleHash.json'
 import { exists } from '../../utils/exists.js'
 
-const createNew = async ({ node, store }) => {
+export const createNew = async ({ node, store }) => {
   // get parent table, parent table id and table from url
   const { nodeType, url } = node
   const { db } = store
@@ -32,9 +32,8 @@ const createNew = async ({ node, store }) => {
     }
     if (parentId && url.length > 3) {
       parentTableTitle = url.slice(-4)[0]
-      parentTable = parentTableTitle
-        ? tableFromTitleHash[parentTableTitle]
-        : null
+      parentTable =
+        parentTableTitle ? tableFromTitleHash[parentTableTitle] : null
     }
   } else if (nodeType === 'folder') {
     tableTitle = url.slice(-1)[0]
@@ -45,9 +44,8 @@ const createNew = async ({ node, store }) => {
     }
     if (parentId && url.length > 2) {
       parentTableTitle = url.slice(-3)[0]
-      parentTable = parentTableTitle
-        ? tableFromTitleHash[parentTableTitle]
-        : null
+      parentTable =
+        parentTableTitle ? tableFromTitleHash[parentTableTitle] : null
     }
   }
   // foreign key to parent should exist if parentTable and it's id exist
@@ -84,7 +82,7 @@ const createNew = async ({ node, store }) => {
     if (!sammelLieferung) return console.log('no sammelLieferung found!')
     const entries = Object.entries(sammelLieferung)
       .filter(
-        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ([key, value]) =>
           !key.startsWith('_') &&
           ![
@@ -95,7 +93,7 @@ const createNew = async ({ node, store }) => {
             'sammlung',
           ].includes(key),
       )
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([key, value]) => exists(value))
     for (const [key, value] of entries) {
       const keyToUse = key === 'id' ? 'sammel_lieferung_id' : key
@@ -123,5 +121,3 @@ const createNew = async ({ node, store }) => {
     }),
   )
 }
-
-export default createNew
