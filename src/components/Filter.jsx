@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 
-import Art from './Data/Art/index.jsx'
+import { Art } from './Data/Art/index.jsx'
 import Event from './Data/Event/index.jsx'
 import Garten from './Data/Garten/index.jsx'
 import Herkunft from './Data/Herkunft/index.jsx'
