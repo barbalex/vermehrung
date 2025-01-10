@@ -1,6 +1,6 @@
 import isUuid from 'is-uuid'
 
-const teilkulturIdInUrl = (url) => {
+export const teilkulturIdInUrl = (url) => {
   if (url.includes('Teilkulturen')) {
     const indexOfId = url.indexOf('Teilkulturen') + 1
     if (url.length > indexOfId) {
@@ -10,5 +10,3 @@ const teilkulturIdInUrl = (url) => {
   }
   return undefined
 }
-
-export default teilkulturIdInUrl
