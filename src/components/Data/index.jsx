@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import last from 'lodash/last'
 import isUuid from 'is-uuid'
 
-import Art from './Art/index.jsx'
+import {Art} from './Art/index.jsx'
 import Arten from './Arten/index.jsx'
 import Event from './Event/index.jsx'
 import Events from './Events/index.jsx'
