@@ -23,7 +23,7 @@ import { HistoryButton } from '../../../../../../shared/HistoryButton.jsx'
 import { ifIsNumericAsNumber } from '../../../../../../../utils/ifIsNumericAsNumber.js'
 import { teilkulturSort } from '../../../../../../../utils/teilkulturSort.js'
 import { teilkulturLabelFromTeilkultur } from '../../../../../../../utils/teilkulturLabelFromTeilkultur.js'
-import PrognoseMenu from './PrognoseMenu.jsx'
+import { PrognoseMenu } from './PrognoseMenu.jsx'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { exists } from '../../../../../../../utils/exists.js'
 
