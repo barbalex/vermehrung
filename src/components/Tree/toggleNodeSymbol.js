@@ -1,4 +1,4 @@
-import isNodeOpen from './isNodeOpen.js'
+import { isNodeOpen } from './isNodeOpen.js'
 import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.js'
 
 const toggleNodeSymbol = ({ node, store }) => {
