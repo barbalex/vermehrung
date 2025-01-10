@@ -3,7 +3,7 @@ import isEqual from 'lodash/isEqual'
 
 import { isNodeOpen } from './isNodeOpen.js'
 
-const toggleNode = ({ node, nodes, store }) => {
+export const toggleNode = ({ node, nodes, store }) => {
   const { addNotification } = store
   const { addOpenNode, setLastActiveNodeArray } = store.tree
   if (!node.url) {
@@ -42,5 +42,3 @@ const toggleNode = ({ node, nodes, store }) => {
   }
   store.filter.setShow(false)
 }
-
-export default toggleNode

@@ -1,7 +1,7 @@
 import { isNodeOpen } from './isNodeOpen.js'
 import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.js'
 
-const toggleNodeSymbol = ({ node, store }) => {
+export const toggleNodeSymbol = ({ node, store }) => {
   const { addNotification } = store
   if (!node.url) {
     console.log('passsed node has no url:', node)
@@ -33,5 +33,3 @@ const toggleNodeSymbol = ({ node, store }) => {
   }
   setLastActiveNodeArray(node.url)
 }
-
-export default toggleNodeSymbol
