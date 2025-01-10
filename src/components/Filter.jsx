@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useContext, Suspense } from 'react'
+import { observer } from 'mobx-react-lite'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
@@ -44,7 +45,7 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-const Filter = () => {
+export const Filter = observer(() => {
   const { activeForm: activeFormPassed } = useContext(MobxStoreContext)
   // root is a possible value, but MUI wants one of the tabs
   const activeForm = activeFormPassed === 'root' ? 'art' : activeFormPassed
@@ -173,6 +174,4 @@ const Filter = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default Filter
+})
