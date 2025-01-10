@@ -10,7 +10,7 @@ import { Spinner } from '../../shared/Spinner.jsx'
 import Conflict from './Conflict.jsx'
 import FormTitle from './FormTitle/index.jsx'
 import Form from './Form/index.jsx'
-import History from './History/index.jsx'
+import { ZaehlungHistory as History } from './History/index.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -37,11 +37,10 @@ const Zaehlung = ({
     rawRow: undefined,
   })
   useEffect(() => {
-    const observable = showFilter
-      ? $of(filter.zaehlung)
-      : initialDataQueried
-        ? db.get('zaehlung').findAndObserve(id)
-        : $of({})
+    const observable =
+      showFilter ? $of(filter.zaehlung)
+      : initialDataQueried ? db.get('zaehlung').findAndObserve(id)
+      : $of({})
     const subscription = observable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -99,7 +98,7 @@ const Zaehlung = ({
                 showHistory={showHistory}
               />
               <Allotment.Pane visible={paneIsSplit}>
-                {activeConflict ? (
+                {activeConflict ?
                   <Conflict
                     rev={activeConflict}
                     id={id}
@@ -109,13 +108,13 @@ const Zaehlung = ({
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
                   />
-                ) : showHistory ? (
+                : showHistory ?
                   <History
                     row={row}
                     rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
-                ) : null}
+                : null}
               </Allotment.Pane>
             </Allotment>
           </SplitPaneContainer>

@@ -1,4 +1,7 @@
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+export const createDataArrayForTeilzaehlungRevComparison = ({
+  row,
+  revRow,
+}) => [
   {
     valueInRow: row?.zaehlung_id,
     valueInRev: revRow?.zaehlung_id,
@@ -55,5 +58,3 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'gelöscht',
   },
 ]
-
-export default createDataArrayForRevComparison

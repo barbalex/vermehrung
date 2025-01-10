@@ -8,7 +8,7 @@ import { useQuery } from 'urql'
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import Row from './Row.jsx'
+import { ZaehlungHistoryRow as Row } from './Row.jsx'
 
 const zaehlungRevQuery = gql`
   query zaehlungRevForHistoryQuery($rev: [String!]) {
@@ -59,47 +59,47 @@ const sliderSettings = {
   infinite: false,
 }
 
-const ZaehlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
-  const store = useContext(MobxStoreContext)
+export const ZaehlungHistory = observer(
+  ({ row, rawRow, historyTakeoverCallback }) => {
+    const store = useContext(MobxStoreContext)
 
-  const priorRevisions = row?._revisions?.slice(1) ?? []
-  const [{ error, data, fetching }] = useQuery({
-    query: zaehlungRevQuery,
-    variables: {
-      rev: priorRevisions,
-    },
-  })
-  error && checkForOnlineError({ error, store })
+    const priorRevisions = row?._revisions?.slice(1) ?? []
+    const [{ error, data, fetching }] = useQuery({
+      query: zaehlungRevQuery,
+      variables: {
+        rev: priorRevisions,
+      },
+    })
+    error && checkForOnlineError({ error, store })
 
-  const revRowsUnsorted = useMemo(
-    () => data?.zaehlung_rev ?? [],
-    [data?.zaehlung_rev],
-  )
-  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
+    const revRowsUnsorted = useMemo(
+      () => data?.zaehlung_rev ?? [],
+      [data?.zaehlung_rev],
+    )
+    const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
-  if (fetching) {
-    return <Spinner message="lade Versionen" />
-  }
+    if (fetching) {
+      return <Spinner message="lade Versionen" />
+    }
 
-  if (error) {
-    return <ErrorContainer>{error.message}</ErrorContainer>
-  }
+    if (error) {
+      return <ErrorContainer>{error.message}</ErrorContainer>
+    }
 
-  return (
-    <Container>
-      <Slider {...sliderSettings}>
-        {revRows.map((r) => (
-          <Row
-            key={row._rev}
-            revRow={r}
-            row={row}
-            rawRow={rawRow}
-            historyTakeoverCallback={historyTakeoverCallback}
-          />
-        ))}
-      </Slider>
-    </Container>
-  )
-}
-
-export default observer(ZaehlungHistory)
+    return (
+      <Container>
+        <Slider {...sliderSettings}>
+          {revRows.map((r) => (
+            <Row
+              key={row._rev}
+              revRow={r}
+              row={row}
+              rawRow={rawRow}
+              historyTakeoverCallback={historyTakeoverCallback}
+            />
+          ))}
+        </Slider>
+      </Container>
+    )
+  },
+)
