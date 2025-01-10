@@ -51,7 +51,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Herkuenfte = ({ filter: showFilter }) => {
+export const Herkuenfte = observer(({ filter: showFilter }) => {
   const store = useContext(MobxStoreContext)
   const {
     insertHerkunftRev,
@@ -197,6 +197,4 @@ const Herkuenfte = ({ filter: showFilter }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Herkuenfte)
+})
