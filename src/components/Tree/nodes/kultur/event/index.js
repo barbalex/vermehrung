@@ -1,6 +1,11 @@
 import { eventLabelFromEvent } from '../../../../../utils/eventLabelFromEvent.js'
 
-const kulturEventNodes = ({ event, eventIndex, kulturId, kulturIndex }) => ({
+export const buildKulturEvent = ({
+  event,
+  eventIndex,
+  kulturId,
+  kulturIndex,
+}) => ({
   nodeType: 'table',
   menuTitle: 'Event',
   table: 'event',
@@ -10,5 +15,3 @@ const kulturEventNodes = ({ event, eventIndex, kulturId, kulturIndex }) => ({
   sort: [5, kulturIndex, 5, eventIndex],
   hasChildren: false,
 })
-
-export default kulturEventNodes
