@@ -5,7 +5,7 @@ import { Allotment } from 'allotment'
 import { observer } from 'mobx-react-lite'
 import { Outlet, useLocation } from 'react-router'
 
-import ArticleList from './ArticleList/index.jsx'
+import { ArticleList } from './ArticleList/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../utils/constants.js'
 import { MobxStoreContext } from '../../mobxStoreContext.js'

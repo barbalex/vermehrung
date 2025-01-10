@@ -14,7 +14,7 @@ const Container = styled.div`
   overflow-y: auto;
 `
 
-const ArticleList = ({ articles }) => {
+export const ArticleList = observer(({ articles }) => {
   const store = useContext(MobxStoreContext)
   const { docFilter } = store
 
@@ -50,6 +50,4 @@ const ArticleList = ({ articles }) => {
       <IntoViewScroller />
     </Container>
   )
-}
-
-export default observer(ArticleList)
+})
