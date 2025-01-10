@@ -38,76 +38,70 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 
-const ZaehlungFormTitle = ({
-  row,
-  totalCount,
-  filteredCount,
-  showHistory,
-  setShowHistory,
-}) => {
-  const store = useContext(MobxStoreContext)
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+export const ZaehlungFormTitle = observer(
+  ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
+    const store = useContext(MobxStoreContext)
+    const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const { width, ref } = useResizeDetector()
+    const { width, ref } = useResizeDetector()
 
-  const onClickUp = useCallback(() => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+    const onClickUp = useCallback(() => {
+      removeOpenNode(activeNodeArray)
+      setActiveNodeArray(activeNodeArray.slice(0, -1))
+    }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
 
-  return (
-    <TitleContainer ref={ref}>
-      <Title>Zählung</Title>
-      <TitleSymbols>
-        <IconButton
-          title="Zur Liste"
-          onClick={onClickUp}
-          size="large"
-        >
-          <UpSvg />
-        </IconButton>
-        <AddButton />
-        <DeleteButton row={row} />
-        {width < 520 ?
-          <Menu white={false}>
-            <HistoryButton
-              table="zaehlung"
-              id={row.id}
-              showHistory={showHistory}
-              setShowHistory={setShowHistory}
-              asMenu
-            />
-            {row.kultur_id && (
-              <Settings
-                kulturId={row.kultur_id}
+    return (
+      <TitleContainer ref={ref}>
+        <Title>Zählung</Title>
+        <TitleSymbols>
+          <IconButton
+            title="Zur Liste"
+            onClick={onClickUp}
+            size="large"
+          >
+            <UpSvg />
+          </IconButton>
+          <AddButton />
+          <DeleteButton row={row} />
+          {width < 520 ?
+            <Menu white={false}>
+              <HistoryButton
+                table="zaehlung"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
                 asMenu
               />
-            )}
-            <Anleitung asMenu />
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-              asMenu
-            />
-          </Menu>
-        : <>
-            <HistoryButton
-              table="zaehlung"
-              id={row.id}
-              showHistory={showHistory}
-              setShowHistory={setShowHistory}
-            />
-            {row.kultur_id && <Settings kulturId={row.kultur_id} />}
-            <Anleitung />
-            <FilterNumbers
-              filteredCount={filteredCount}
-              totalCount={totalCount}
-            />
-          </>
-        }
-      </TitleSymbols>
-    </TitleContainer>
-  )
-}
-
-export default observer(ZaehlungFormTitle)
+              {row.kultur_id && (
+                <Settings
+                  kulturId={row.kultur_id}
+                  asMenu
+                />
+              )}
+              <Anleitung asMenu />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+                asMenu
+              />
+            </Menu>
+          : <>
+              <HistoryButton
+                table="zaehlung"
+                id={row.id}
+                showHistory={showHistory}
+                setShowHistory={setShowHistory}
+              />
+              {row.kultur_id && <Settings kulturId={row.kultur_id} />}
+              <Anleitung />
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
+            </>
+          }
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  },
+)
