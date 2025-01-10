@@ -1,4 +1,8 @@
-const personSammlungFolder = ({ count, personIndex, personId }) => ({
+export const buildPersonSammlungFolder = ({
+  count,
+  personIndex,
+  personId,
+}) => ({
   nodeType: 'folder',
   menuTitle: 'Sammlungen',
   id: `${personId}SammlungFolder`,
@@ -8,5 +12,3 @@ const personSammlungFolder = ({ count, personIndex, personId }) => ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default personSammlungFolder
