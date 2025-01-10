@@ -16,7 +16,7 @@ import { Teilkultur } from './Data/Teilkultur/index.jsx'
 import { Zaehlung } from './Data/Zaehlung/index.jsx'
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../mobxStoreContext.js'
-import Fallback from './shared/Fallback.jsx'
+import { Fallback } from './shared/Fallback.jsx'
 
 const Container = styled.div`
   height: 100%;
