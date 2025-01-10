@@ -3,10 +3,10 @@ import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import NavTree from '../../../svg/nav_tree.svg?react'
+import NavTreeSvg from '../../../svg/nav_tree.svg?react'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
-const StyledNavTree = styled(NavTree)`
+const StyledNavTree = styled(NavTreeSvg)`
   width: 24px;
   height: 24px;
   color: white;

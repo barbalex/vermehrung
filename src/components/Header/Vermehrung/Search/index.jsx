@@ -37,13 +37,16 @@ const SearchIcon = styled(FaSearch)`
 `
 
 const formatOptionLabel = ({ label }, { inputValue }) => (
-  <Highlighter searchWords={[inputValue]} textToHighlight={label} />
+  <Highlighter
+    searchWords={[inputValue]}
+    textToHighlight={label}
+  />
 )
 const formatGroupLabel = (data) => <div>{data.label}</div>
 const noOptionsMessage = () => null
 const loadingMessage = () => null
 
-const Search = () => {
+export const HeaderSearch = observer(() => {
   const store = useContext(MobxStoreContext)
   const { filter, singleColumnView } = store
   const { setActiveNodeArray } = store.tree
@@ -208,6 +211,4 @@ const Search = () => {
       />
     </Container>
   )
-}
-
-export default observer(Search)
+})
