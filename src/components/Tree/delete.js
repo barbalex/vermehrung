@@ -1,12 +1,9 @@
 import tableFromTitleHash from '../../utils/tableFromTitleHash.json'
 
-const deleteModule = async ({ node, store }) => {
+export const deleteDataset = async ({ node, store }) => {
   const { db } = store
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    removeOpenNodeWithChildren,
-  } = store.tree
+  const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
+    store.tree
 
   // get table and id from url
   const title = node.url.slice(-2)[0]
@@ -24,5 +21,3 @@ const deleteModule = async ({ node, store }) => {
   // need to remove openNode from openNodes
   removeOpenNodeWithChildren(node.url)
 }
-
-export default deleteModule
