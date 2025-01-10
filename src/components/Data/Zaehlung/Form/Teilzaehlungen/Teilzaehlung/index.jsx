@@ -29,7 +29,7 @@ const TopLine = styled.div`
   margin-bottom: 10px;
 `
 
-const Teilzaehlung = ({ id, kulturId, index }) => {
+export const Teilzaehlung = observer(({ id, kulturId, index }) => {
   const store = useContext(MobxStoreContext)
   const { online, db, initialDataQueried } = store
 
@@ -41,9 +41,8 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
     rawRow: undefined,
   })
   useEffect(() => {
-    const tzObservable = initialDataQueried
-      ? db.get('teilzaehlung').findAndObserve(id)
-      : $of({})
+    const tzObservable =
+      initialDataQueried ? db.get('teilzaehlung').findAndObserve(id) : $of({})
     const subscription = tzObservable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -91,7 +90,7 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
                 setShowHistory={setShowHistory}
               />
               <Allotment.Pane visible={paneIsSplit}>
-                {activeConflict ? (
+                {activeConflict ?
                   <Conflict
                     rev={activeConflict}
                     id={id}
@@ -101,13 +100,13 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
                   />
-                ) : showHistory ? (
+                : showHistory ?
                   <History
                     row={row}
                     rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
-                ) : null}
+                : null}
               </Allotment.Pane>
             </Allotment>
           </SplitPaneContainer>
@@ -133,6 +132,4 @@ const Teilzaehlung = ({ id, kulturId, index }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Teilzaehlung)
+})
