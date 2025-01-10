@@ -1,4 +1,4 @@
-const artHerkunftKulturZaehlungFolder = ({
+export const buildArtHerkunftKulturZaehlungFolder = ({
   kulturId,
   kulturIndex,
   herkunft,
@@ -24,5 +24,3 @@ const artHerkunftKulturZaehlungFolder = ({
   hasChildren: true,
   childrenCount: count,
 })
-
-export default artHerkunftKulturZaehlungFolder
