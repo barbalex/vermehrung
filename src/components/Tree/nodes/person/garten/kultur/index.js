@@ -1,6 +1,6 @@
 import { first as first$ } from 'rxjs/operators'
 
-const personGartenKulturNodes = async ({
+export const buildPersonGartenKultur = async ({
   kultur,
   kulturIndex,
   gartenId,
@@ -25,5 +25,3 @@ const personGartenKulturNodes = async ({
     aktiv: kultur.aktiv,
   }
 }
-
-export default personGartenKulturNodes
