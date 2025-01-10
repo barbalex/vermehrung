@@ -30,7 +30,7 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 
-const DocumentationFormTitle = () => {
+export const DocumentationFormTitle = observer(() => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
@@ -44,12 +44,14 @@ const DocumentationFormTitle = () => {
     <TitleContainer>
       <Title>Dokumentation</Title>
       <TitleSymbols>
-        <IconButton title="zurück" onClick={onClickUp} size="large">
+        <IconButton
+          title="zurück"
+          onClick={onClickUp}
+          size="large"
+        >
           <UpSvg />
         </IconButton>
       </TitleSymbols>
     </TitleContainer>
   )
-}
-
-export default observer(DocumentationFormTitle)
+})

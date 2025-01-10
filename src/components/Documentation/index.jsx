@@ -9,7 +9,7 @@ import ArticleList from './ArticleList/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../utils/constants.js'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
-import FormTitle from './FormTitle/index.jsx'
+import { DocumentationFormTitle as FormTitle } from './FormTitle/index.jsx'
 
 const Container = styled.div`
   height: calc(100dvh - ${constants.appBarHeight}px);
@@ -169,4 +169,3 @@ export const Documentation = observer(() => {
     </ErrorBoundary>
   )
 })
-
