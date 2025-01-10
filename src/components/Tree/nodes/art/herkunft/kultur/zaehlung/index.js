@@ -1,6 +1,6 @@
 import { first as first$ } from 'rxjs/operators'
 
-const artHerkunftKulturZaehlungNodes = async ({
+export const buildArtHerkunftKulturZaehlung = async ({
   zaehlung,
   zaehlungIndex,
   kulturId,
@@ -36,5 +36,3 @@ const artHerkunftKulturZaehlungNodes = async ({
     mono: true,
   }
 }
-
-export default artHerkunftKulturZaehlungNodes

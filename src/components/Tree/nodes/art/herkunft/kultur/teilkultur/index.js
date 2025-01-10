@@ -1,6 +1,6 @@
 import { teilkulturLabelFromTeilkultur } from '../../../../../../../utils/teilkulturLabelFromTeilkultur.js'
 
-const artHerkunftKulturTeilkulturNodes = ({
+export const buildArtHerkunftKulturTeilkultur = ({
   teilkultur,
   teilkulturIndex,
   kulturId,
@@ -28,5 +28,3 @@ const artHerkunftKulturTeilkulturNodes = ({
   sort: [1, artIndex, 1, herkunftIndex, 2, kulturIndex, 1, teilkulturIndex],
   hasChildren: false,
 })
-
-export default artHerkunftKulturTeilkulturNodes
