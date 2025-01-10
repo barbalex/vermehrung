@@ -31,7 +31,7 @@ const FieldsContainer = styled.div`
   overflow-y: auto;
 `
 
-const Root = ({ filter: showFilter }) => {
+export const Root = observer(({ filter: showFilter }) => {
   const store = useContext(MobxStoreContext)
   const { user, db } = store
   const { activeNodeArray: activeNodeArrayRaw } = store.tree
@@ -236,6 +236,4 @@ const Root = ({ filter: showFilter }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Root)
+})

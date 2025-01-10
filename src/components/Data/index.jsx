@@ -25,7 +25,7 @@ import { Zaehlung } from './Zaehlung/index.jsx'
 import { Zaehlungen } from './Zaehlungen/index.jsx'
 import { Teilkultur } from './Teilkultur/index.jsx'
 import { Teilkulturen } from './Teilkulturen/index.jsx'
-import Root from './Root/index.jsx'
+import { Root } from './Root/index.jsx'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 const Data = () => {
