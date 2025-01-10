@@ -8,7 +8,7 @@ import { ErrorBoundary } from '../components/shared/ErrorBoundary.jsx'
 import { constants } from '../utils/constants.js'
 import image from '../images/puls_vulg_2500.webp'
 import placeholderSrc from '../images/puls_vulg_500.webp' // TODO: build small placeholder
-import ProgressiveImg from '../components/shared/ProgressiveImg.tsx'
+import { ProgressiveImg } from '../components/shared/ProgressiveImg.tsx'
 
 const OuterContainer = styled.div`
   height: calc(100% - ${constants.appBarHeight}px);
@@ -62,15 +62,24 @@ export const FourOhFour = () => {
     <>
       <ErrorBoundary>
         <OuterContainer>
-          <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
+          <ProgressiveImg
+            src={image}
+            placeholderSrc={placeholderSrc}
+          />
           <ScrollContainer>
             <TextContainer>
-              <PageTitle align="center" variant="h6">
+              <PageTitle
+                align="center"
+                variant="h6"
+              >
                 Oh je
               </PageTitle>
             </TextContainer>
             <TextContainer>
-              <Text align="center" variant="h6">
+              <Text
+                align="center"
+                variant="h6"
+              >
                 Diese Seite ist nicht verfügbar.
               </Text>
             </TextContainer>
@@ -89,4 +98,3 @@ export const FourOhFour = () => {
     </>
   )
 }
-

@@ -16,7 +16,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { lieferungSort } from '../../../../utils/lieferungSort.js'
 import { personFullname } from '../../../../utils/personFullname.js'
 import { constants } from '../../../../utils/constants.js'
-import ProgressiveImg from '../../../shared/ProgressiveImg.tsx'
+import { ProgressiveImg } from '../../../shared/ProgressiveImg.tsx'
 import image from '../../../../images/toposLogo.png'
 
 const Container = styled.div`
