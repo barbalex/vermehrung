@@ -1,4 +1,8 @@
-const sammlungHerkunftFolder = ({ count, sammlungIndex, sammlungId }) => ({
+export const buildSammlungHerkunftFolder = ({
+  count,
+  sammlungIndex,
+  sammlungId,
+}) => ({
   nodeType: 'folder',
   menuTitle: 'Herkünfte',
   id: `${sammlungId}HerkunftFolder`,
@@ -11,5 +15,3 @@ const sammlungHerkunftFolder = ({ count, sammlungIndex, sammlungId }) => ({
   menuExplainerText:
     'Herkünfte können nur in ihrem eigenen Ast des Navigationsbaums neu geschaffen und gelöscht werden',
 })
-
-export default sammlungHerkunftFolder

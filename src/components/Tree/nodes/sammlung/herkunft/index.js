@@ -1,6 +1,10 @@
 import { herkunftLabelFromHerkunft } from '../../../../../utils/herkunftLabelFromHerkunft.js'
 
-const sammlungHerkunftNodes = ({ herkunft, sammlungId, sammlungIndex }) => ({
+export const buildSammlungHerkunft = ({
+  herkunft,
+  sammlungId,
+  sammlungIndex,
+}) => ({
   nodeType: 'table',
   menuTitle: 'Herkunft',
   table: 'herkunft',
@@ -13,5 +17,3 @@ const sammlungHerkunftNodes = ({ herkunft, sammlungId, sammlungIndex }) => ({
   menuExplainerText:
     'Herkünfte können nur in ihrem eigenen Ast des Navigationsbaums neu geschaffen und gelöscht werden',
 })
-
-export default sammlungHerkunftNodes
