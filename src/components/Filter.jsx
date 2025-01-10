@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 
 import { Art } from './Data/Art/index.jsx'
 import { Event } from './Data/Event/index.jsx'
-import Garten from './Data/Garten/index.jsx'
+import { Garten } from './Data/Garten/index.jsx'
 import { Herkunft } from './Data/Herkunft/index.jsx'
 import Kultur from './Data/Kultur/index.jsx'
 import { LieferungContainer as Lieferung } from './Data/Lieferung/index.jsx'
