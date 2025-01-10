@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import Settings from './Settings/index.jsx'
+import { ZaehlungSettings as Settings } from './Settings/index.jsx'
 import { ZaehlungAddButton as AddButton } from './AddButton.jsx'
 import { ZaehlungDeleteButton as DeleteButton } from './DeleteButton.jsx'
 import { FilterNumbers } from '../../../shared/FilterNumbers.jsx'
