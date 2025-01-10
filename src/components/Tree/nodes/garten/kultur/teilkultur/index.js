@@ -1,6 +1,6 @@
 import { teilkulturLabelFromTeilkultur } from '../../../../../../utils/teilkulturLabelFromTeilkultur.js'
 
-const gartenKulturTeilkulturNodes = ({
+export const buildGartenKulturTeilkultur = ({
   teilkultur,
   teilkulturIndex,
   kulturId,
@@ -24,5 +24,3 @@ const gartenKulturTeilkulturNodes = ({
   sort: [4, gartenIndex, 1, kulturIndex, 1, teilkulturIndex],
   hasChildren: false,
 })
-
-export default gartenKulturTeilkulturNodes
