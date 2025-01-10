@@ -10,7 +10,7 @@ import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
 import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
-import createDataArrayForRevComparison from './createDataArrayForRevComparison.js'
+import { createDataArrayForZaehlungRevComparison as createDataArray } from './createDataArrayForRevComparison.js'
 
 const zaehlungRevQuery = gql`
   query zaehlungRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -54,12 +54,13 @@ const ZaehlungConflict = ({
   })
   error && checkForOnlineError({ error, store })
 
-  const revRow = useMemo(() => data?.zaehlung_rev?.[0] ?? {}, [
-    data?.zaehlung_rev,
-  ])
+  const revRow = useMemo(
+    () => data?.zaehlung_rev?.[0] ?? {},
+    [data?.zaehlung_rev],
+  )
 
   const dataArray = useMemo(
-    () => createDataArrayForRevComparison({ row, revRow }),
+    () => createDataArray({ row, revRow }),
     [revRow, row],
   )
 
@@ -81,8 +82,9 @@ const ZaehlungConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = revRow._revisions
-      ? toPgArray([rev, ...revRow._revisions])
+    newObject._revisions =
+      revRow._revisions ?
+        toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
     addQueuedQuery({
@@ -138,9 +140,8 @@ const ZaehlungConflict = ({
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row._revisions
-      ? toPgArray([rev, ...row._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
     const response = await gqlClient
       .query(mutations.mutateInsert_zaehlung_rev_one, {
         object: newObject,
@@ -176,9 +177,10 @@ const ZaehlungConflict = ({
     store,
     user.email,
   ])
-  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
-    setActiveConflict,
-  ])
+  const onClickSchliessen = useCallback(
+    () => setActiveConflict(null),
+    [setActiveConflict],
+  )
 
   //console.log('Zaehlung Conflict', { dataArray, row, revRow })
 

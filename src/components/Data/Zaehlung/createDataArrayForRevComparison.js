@@ -1,17 +1,17 @@
 import { DateTime } from 'luxon'
 
-const createDataArrayForRevComparison = ({ row, revRow }) => [
+export const createDataArrayForZaehlungRevComparison = ({ row, revRow }) => [
   {
     valueInRow: row.kultur_id,
     valueInRev: revRow.kultur_id,
     label: 'Kultur (id)',
   },
   {
-    valueInRow: row?.datum
-      ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
-      : null,
-    valueInRev: revRow?.datum
-      ? DateTime.fromSQL(revRow.datum).toFormat('dd.LL.yyyy')
+    valueInRow:
+      row?.datum ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy') : null,
+    valueInRev:
+      revRow?.datum ?
+        DateTime.fromSQL(revRow.datum).toFormat('dd.LL.yyyy')
       : null,
     label: 'Datum',
   },
@@ -41,5 +41,3 @@ const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'gelöscht',
   },
 ]
-
-export default createDataArrayForRevComparison
