@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const teilkultur = {
+export const teilkultur = tableSchema({
   name: 'teilkultur',
   columns: [
     // can not add id here
@@ -20,6 +20,4 @@ const teilkultur = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(teilkultur)
+})

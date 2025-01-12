@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const sammlung = {
+export const sammlung = tableSchema({
   name: 'sammlung',
   columns: [
     // can not add id here
@@ -30,6 +30,4 @@ const sammlung = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(sammlung)
+})
