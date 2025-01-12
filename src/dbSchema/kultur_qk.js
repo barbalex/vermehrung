@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const kultur_qk = {
+export const kultur_qk = tableSchema({
   name: 'kultur_qk',
   columns: [
     { name: 'name', type: 'string', isOptional: true, isIndexed: true },
@@ -16,6 +16,4 @@ const kultur_qk = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(kultur_qk)
+})

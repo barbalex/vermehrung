@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const kultur_option = {
+export const kultur_option = tableSchema({
   name: 'kultur_option',
   columns: [
     { name: 'z_bemerkungen', type: 'boolean', isOptional: true },
@@ -29,6 +29,4 @@ const kultur_option = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(kultur_option)
+})
