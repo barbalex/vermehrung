@@ -1,7 +1,7 @@
 import localForage from 'localforage'
 import { signOut } from 'firebase/auth'
 
-const logout = async ({ store }) => {
+export const logout = async ({ store }) => {
   const { db, firebaseAuth } = store
   console.log('LOGGING OUT')
   await signOut(firebaseAuth)
@@ -11,4 +11,3 @@ const logout = async ({ store }) => {
   window.location.reload(true)
 }
 
-export default logout
