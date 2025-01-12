@@ -1,3 +1,4 @@
+// seems not used
 const aeArtSortWithTaxonomy = (a, b) => {
   if (a?.taxonomy < b?.taxonomy) return -1
   if (a?.taxonomy > b?.taxonomy) return 1

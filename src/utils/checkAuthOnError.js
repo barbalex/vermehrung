@@ -1,3 +1,4 @@
+// seems not used
 import { getAuthToken } from './getAuthToken.js'
 
 const checkAuthOnError = ({ error, store }) => {
