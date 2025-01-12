@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const herkunft = {
+export const herkunft = tableSchema({
   name: 'herkunft',
   columns: [
     // can not add id here
@@ -25,6 +25,4 @@ const herkunft = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(herkunft)
+})
