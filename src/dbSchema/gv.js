@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const gv = {
+export const gv = tableSchema({
   name: 'gv',
   columns: [
     // can not add id here
@@ -15,6 +15,4 @@ const gv = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(gv)
+})

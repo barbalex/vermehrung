@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const garten = {
+export const garten = tableSchema({
   name: 'garten',
   columns: [
     // can not add id here
@@ -26,6 +26,4 @@ const garten = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(garten)
+})
