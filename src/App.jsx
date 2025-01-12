@@ -176,7 +176,7 @@ const QueuedQueries = lazy(async () => ({
   default: (await import('./components/QueuedQueries/index.jsx')).QueuedQueries,
 }))
 
-const App = () => {
+export const App = () => {
   const navigate = useNavigate()
 
   const [store, setStore] = useState(null)
@@ -387,5 +387,3 @@ const App = () => {
     </DatabaseProvider>
   )
 }
-
-export default App
