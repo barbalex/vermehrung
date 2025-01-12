@@ -24,9 +24,9 @@ import { sammel_lieferung } from './sammel_lieferung.js'
 import { sammlung } from './sammlung.js'
 import { sammlung_file } from './sammlung_file.js'
 import { teilkultur } from './teilkultur.js'
-import teilzaehlung from './teilzaehlung.js'
-import user_role from './user_role.js'
-import zaehlung from './zaehlung.js'
+import { teilzaehlung } from './teilzaehlung.js'
+import { user_role } from './user_role.js'
+import { zaehlung } from './zaehlung.js'
 
 export const tables = [
   ae_art,

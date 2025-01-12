@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const teilzaehlung = {
+export const teilzaehlung = tableSchema({
   name: 'teilzaehlung',
   columns: [
     // can not add id here
@@ -32,6 +32,4 @@ const teilzaehlung = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(teilzaehlung)
+})

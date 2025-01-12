@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const user_role = {
+export const user_role = tableSchema({
   name: 'user_role',
   columns: [
     { name: 'name', type: 'string', isOptional: true, isIndexed: true },
@@ -9,6 +9,4 @@ const user_role = {
     { name: 'comment', type: 'string', isOptional: true },
     { name: 'changed', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(user_role)
+})
