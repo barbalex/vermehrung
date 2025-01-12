@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const person_option = {
+export const person_option = tableSchema({
   name: 'person_option',
   columns: [
     { name: 'ar_name_deutsch', type: 'boolean', isOptional: true },
@@ -42,6 +42,4 @@ const person_option = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(person_option)
+})
