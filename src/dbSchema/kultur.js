@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const kultur = {
+export const kultur = tableSchema({
   name: 'kultur',
   columns: [
     // can not add id here
@@ -31,6 +31,4 @@ const kultur = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(kultur)
+})

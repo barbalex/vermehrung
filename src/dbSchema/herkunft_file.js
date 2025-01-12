@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const herkunft_file = {
+export const herkunft_file = tableSchema({
   name: 'herkunft_file',
   columns: [
     { name: 'herkunft_id', type: 'string', isOptional: true, isIndexed: true },
@@ -11,6 +11,4 @@ const herkunft_file = {
     { name: 'changed', type: 'string', isOptional: true },
     { name: '_rev_at', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(herkunft_file)
+})
