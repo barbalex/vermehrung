@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const sammel_lieferung = {
+export const sammel_lieferung = tableSchema({
   name: 'sammel_lieferung',
   columns: [
     // can not add id here
@@ -47,6 +47,4 @@ const sammel_lieferung = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(sammel_lieferung)
+})
