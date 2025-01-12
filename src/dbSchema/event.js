@@ -1,6 +1,6 @@
 import { tableSchema } from '@nozbe/watermelondb'
 
-const event = {
+export const event = tableSchema({
   name: 'event',
   columns: [
     // can not add id here
@@ -24,6 +24,4 @@ const event = {
     { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
     { name: '_conflicts', type: 'string', isOptional: true },
   ],
-}
-
-export default tableSchema(event)
+})
