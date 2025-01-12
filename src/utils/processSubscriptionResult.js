@@ -1,7 +1,7 @@
 import { Q } from '@nozbe/watermelondb'
 import isEqual from 'lodash/isEqual'
 
-import parseComplexFieldsForWm from './parseComplexFieldsForWm.js'
+import { parseComplexFieldsForWm } from './parseComplexFieldsForWm.js'
 
 const stripTypename = (object) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -95,4 +95,3 @@ export const processSubscriptionResult = async ({
   })
   setLastUpdated({ table })
 }
-
