@@ -1,8 +1,8 @@
 import { appSchema } from '@nozbe/watermelondb'
 
-import ae_art from './ae_art.js'
-import art from './art.js'
-import art_file from './art_file.js'
+import { ae_art } from './ae_art.js'
+import { art } from './art.js'
+import { art_file } from './art_file.js'
 import art_qk from './art_qk.js'
 import av from './av.js'
 import event from './event.js'
