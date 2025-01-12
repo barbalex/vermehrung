@@ -17,7 +17,7 @@ import { sendPasswordResetEmail } from 'firebase/auth'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import logout from '../../../utils/logout.js'
+import { logout } from '../../../utils/logout.js'
 import { constants } from '../../../utils/constants.js'
 import { personFullname } from '../../../utils/personFullname.js'
 
@@ -39,8 +39,9 @@ const Account = () => {
 
   const [userPerson, setUserPerson] = useState(undefined)
   useEffect(() => {
-    const userPersonObservable = user.uid
-      ? db
+    const userPersonObservable =
+      user.uid ?
+        db
           .get('person')
           .query(Q.where('account_id', user.uid))
           .observeWithColumns(['vorname', 'name'])
