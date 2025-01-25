@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -11,6 +17,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { SammlungConflict as Conflict } from './Conflict.jsx'
 import { SammlungHistory as History } from './History/index.jsx'
+import { useObservable } from '../../../utils/useObservable.js'
 
 const Container = styled.div`
   height: 100%;
@@ -32,26 +39,14 @@ export const Sammlung = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const [dataState, setDataState] = useState({
-      row: undefined,
-      // need raw row because observable does not provoke rerendering of components
-      rawRow: undefined,
-    })
-    useEffect(() => {
-      const observable =
+    const observable = useMemo(
+      () =>
         showFilter ? $of(filter.sammlung)
         : initialDataQueried ? db.get('sammlung').findAndObserve(id)
-        : $of({})
-      const subscription = observable.subscribe((newRow) => {
-        setDataState({
-          row: newRow,
-          rawRow: JSON.stringify(newRow?._raw ?? newRow),
-        })
-      })
-
-      return () => subscription?.unsubscribe?.()
-    }, [db, filter.sammlung, id, showFilter, initialDataQueried])
-    const { row, rawRow } = dataState
+        : $of({}),
+      [db, filter.sammlung, id, initialDataQueried, showFilter],
+    )
+    const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
@@ -81,7 +76,6 @@ export const Sammlung = observer(
         <Container showfilter={showFilter}>
           <FormTitle
             row={row}
-            rawRow={rawRow}
             showFilter={showFilter}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
@@ -92,7 +86,6 @@ export const Sammlung = observer(
                 showFilter={showFilter}
                 id={id}
                 row={row}
-                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -103,7 +96,6 @@ export const Sammlung = observer(
                     rev={activeConflict}
                     id={id}
                     row={row}
-                    rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
@@ -111,7 +103,6 @@ export const Sammlung = observer(
                 : showHistory ?
                   <History
                     row={row}
-                    rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
                 : null}
