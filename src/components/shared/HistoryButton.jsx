@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useEffect, useState } from 'react'
+import React, { useContext, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaHistory } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -8,6 +8,7 @@ import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
+import { useObservable } from '../../utils/useObservable.js'
 
 const StyledMenuItem = styled(MenuItem)`
   ${(props) =>
@@ -28,15 +29,12 @@ export const HistoryButton = observer(
     const store = useContext(MobxStoreContext)
     const { online, db, initialDataQueried } = store
 
-    const [dataState, setDataState] = useState({ row: undefined })
-    useEffect(() => {
-      const observable =
-        id && initialDataQueried ? db.get(table).findAndObserve(id) : $of(null)
-      const subscription = observable.subscribe((row) => setDataState({ row }))
-
-      return () => subscription?.unsubscribe?.()
-    }, [id, db, table, initialDataQueried])
-    const { row } = dataState
+    const observable = useMemo(
+      () =>
+        id && initialDataQueried ? db.get(table).findAndObserve(id) : $of(null),
+      [db, id, initialDataQueried, table],
+    )
+    const row = useObservable(observable)
 
     const existMultipleRevisions =
       row?._revisions?.length && row?._revisions?.length > 1
