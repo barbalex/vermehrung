@@ -39,7 +39,7 @@ const StyledNode = styled.div`
   margin: 0;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   white-space: nowrap;
   user-select: none;
   color: ${(props) =>
@@ -96,7 +96,6 @@ const SymbolDiv = styled.div`
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  align-items: center;
   align-self: flex-start;
 `
 const SymbolSpan = styled.span`
@@ -109,6 +108,7 @@ const SymbolSpan = styled.span`
     props['data-mobile'] ? '-2px !important' : '-1px !important'};
   font-size: ${(props) =>
     props['data-mobile'] ? '32px !important' : '28px !important'};
+  line-height: 19px;
   width: ${(props) => (props['data-mobile'] ? '12px' : '9px')};
 `
 const TextSpan = styled.span`
