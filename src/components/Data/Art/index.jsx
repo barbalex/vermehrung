@@ -1,5 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useObservable, useObservableEagerState } from 'observable-hooks'
+import { switchMap, switchMap as switchMap$ } from 'rxjs/operators'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
@@ -32,20 +34,47 @@ export const Art = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const [row, setRow] = useState(null)
-    // need raw row because observable does not provoke rerendering of components
-    const [rawRow, setRawRow] = useState(null)
-    useEffect(() => {
-      const observable =
-        showFilter ? $of(filter.art)
-        : initialDataQueried ? db.get('art').findAndObserve(id)
-        : $of({})
-      const subscription = observable.subscribe((newRow) => {
-        setRow(newRow)
-        setRawRow(JSON.stringify(newRow?._raw ?? newRow))
-      })
-      return () => subscription?.unsubscribe?.()
-    }, [db, filter.art, id, initialDataQueried, showFilter])
+    const row = useObservableEagerState(
+      useObservable(
+        (inputs$) =>
+          input$.pipe(
+            switchMap$((id) =>
+              showFilter ? $of(filter.art)
+              : initialDataQueried ? db.get('art').findAndObserve(id)
+              : $of({}),
+            ),
+          ),
+        [id, filter.art, initialDataQueried, showFilter],
+      ),
+    )
+    // const row = useObservableEagerState(
+    //   useObservable(
+    //     (inputs$) =>
+    //       switchMap$(inputs$, (id) =>
+    //         showFilter ? $of(filter.art)
+    //         : initialDataQueried ? db.get('art').findAndObserve(id)
+    //         : $of({}),
+    //       )(inputs$),
+    //     [id, filter.art, initialDataQueried, showFilter],
+    //   ),
+    // )
+
+    // const [row, setRow] = useState(null)
+    // // need raw row because observable does not provoke rerendering of components
+    // const [rawRow, setRawRow] = useState(null)
+    // useEffect(() => {
+    //   const observable =
+    //     showFilter ? $of(filter.art)
+    //     : initialDataQueried ? db.get('art').findAndObserve(id)
+    //     : $of({})
+    //   const subscription = observable.subscribe((newRow) => {
+    //     setRow(newRow)
+    //     setRawRow(JSON.stringify(newRow?._raw ?? newRow))
+    //   })
+    //   return () => subscription?.unsubscribe?.()
+    // }, [db, filter.art, id, initialDataQueried, showFilter])
+
+    console.log('Art, row:', row)
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
