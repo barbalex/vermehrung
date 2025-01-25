@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -11,6 +17,7 @@ import { Spinner } from '../../shared/Spinner.jsx'
 import { EventConflict as Conflict } from './Conflict.jsx'
 import { EventForm as Form } from './Form/index.jsx'
 import { EventHistory as History } from './History/index.jsx'
+import { useObservable } from '../../../utils/useObservable.js'
 
 const Container = styled.div`
   height: 100%;
@@ -32,20 +39,14 @@ export const Event = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const [row, setRow] = useState(null)
-    // need raw row because observable does not provoke rerendering of components
-    const [rawRow, setRawRow] = useState(null)
-    useEffect(() => {
-      const observable =
+    const observable = useMemo(
+      () =>
         showFilter ? $of(filter.event)
         : initialDataQueried ? db.get('event').findAndObserve(id)
-        : $of({})
-      const subscription = observable.subscribe((newRow) => {
-        setRow(newRow)
-        setRawRow(JSON.stringify(newRow?._raw ?? newRow))
-      })
-      return () => subscription?.unsubscribe?.()
-    }, [db, filter.event, id, initialDataQueried, showFilter])
+        : $of({}),
+      [db, filter.event, id, initialDataQueried, showFilter],
+    )
+    const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
@@ -75,7 +76,6 @@ export const Event = observer(
         <Container showfilter={showFilter}>
           <FormTitle
             row={row}
-            rawRow={rawRow}
             showFilter={showFilter}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
@@ -86,7 +86,6 @@ export const Event = observer(
                 showFilter={showFilter}
                 id={id}
                 row={row}
-                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -97,7 +96,6 @@ export const Event = observer(
                     rev={activeConflict}
                     id={id}
                     row={row}
-                    rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
@@ -105,7 +103,6 @@ export const Event = observer(
                 : showHistory ?
                   <History
                     row={row}
-                    rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
                 : null}
