@@ -113,7 +113,7 @@ export const SammelLieferungWer = observer(
       initialDataQueried,
     ])
 
-    if (!row) return null
+    if (!row || !Object.keys(row ?? {})) return null
 
     return (
       <>

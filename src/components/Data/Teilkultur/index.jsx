@@ -73,7 +73,7 @@ export const Teilkultur = observer(
     const [showHistory, setShowHistory] = useState(false)
     const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
-    if (!row) return <Spinner />
+    if (!row || !Object.keys(row ?? {})) return <Spinner />
     if (!showFilter && filter.show) return null
 
     const paneIsSplit = online && (activeConflict || showHistory)
