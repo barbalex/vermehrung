@@ -57,6 +57,7 @@
     "react-slick": "0.30.3",
     "react-stylable-diff": "2.0.0",
     "react-virtualized-auto-sizer": "1.0.25",
+    "react-virtuoso": "^4.12.3",
     "react-window": "1.8.11",
     "recharts": "2.15.0",
     "redaxios": "0.5.1",
