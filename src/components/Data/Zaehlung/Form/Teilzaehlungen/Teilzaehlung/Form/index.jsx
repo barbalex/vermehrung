@@ -239,7 +239,7 @@ export const TeilzaehlungForm = observer(
       row?.anzahl_pflanzen,
     ])
 
-    if (!row) return null
+    if (!row || !Object.keys(row ?? {})) return null
 
     return (
       <ErrorBoundary>

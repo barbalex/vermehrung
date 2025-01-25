@@ -125,7 +125,7 @@ export const LieferungWer = observer(
       showFilter,
     ])
 
-    if (!row) return null
+    if (!row || !Object.keys(row ?? {})) return null
 
     return (
       <>
