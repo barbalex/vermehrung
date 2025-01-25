@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, useState, useEffect } from 'react'
+import React, {
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import ImageGallery from 'react-image-gallery'
@@ -15,6 +21,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { fileSort } from '../../../utils/fileSort.js'
 import { mutations } from '../../../utils/mutations.js'
 import { constants } from '../../../utils/constants.js'
+import { useObservable } from '../../../utils/useObservable.js'
 
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);
@@ -60,17 +67,12 @@ export const Files = observer(({ parentTable, parent }) => {
 
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
-  // use object with two keys to only render once on setting
-  const [files, setEvent] = useState([])
-  useEffect(() => {
-    const observable =
-      parent.files ? parent.files.observeWithColumns(['name']) : $of([])
-    const subscription = observable.subscribe((files) =>
-      setEvent(files.sort(fileSort)),
-    )
-
-    return () => subscription?.unsubscribe?.()
-  }, [parent.files])
+  const observable = useMemo(
+    () => (parent.files ? parent.files.observeWithColumns(['name']) : $of([])),
+    [parent.files],
+  )
+  const files = useObservable(observable) ?? []
+  files?.sort?.(fileSort)
 
   const onChangeUploader = useCallback(
     async (file) => {
