@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -11,6 +17,7 @@ import { HerkunftConflict as Conflict } from './Conflict.jsx'
 import { HerkunftFormTitleChooser as FormTitle } from './FormTitle/index.jsx'
 import { HerkunftForm as Form } from './Form/index.jsx'
 import { HerkunftHistory as History } from './History/index.jsx'
+import { useObservable } from '../../../utils/useObservable.js'
 
 const Container = styled.div`
   height: 100%;
@@ -32,26 +39,14 @@ export const Herkunft = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const [row, setRow] = useState(null)
-    // need raw row because observable does not provoke rerendering of components
-    const [rawRow, setRawRow] = useState(null)
-    // TODO: extend to all forms
-    // Problem if user opens url with id of a dataset that does not yet exist
-    // because it still needs to be synced
-    // Uncaught Diagnostic error: Record herkunft#baa5e4f0-3877-11eb-be32-f734f6afd51d not found
-    // => need to wait for sync to be finished
-    useEffect(() => {
-      const observable =
+    const observable = useMemo(
+      () =>
         showFilter ? $of(filter.herkunft)
         : initialDataQueried ? db.get('herkunft').findAndObserve(id)
-        : $of({})
-      const subscription = observable.subscribe((newRow) => {
-        setRow(newRow)
-        setRawRow(JSON.stringify(newRow?._raw ?? newRow))
-      })
-
-      return () => subscription?.unsubscribe?.()
-    }, [db, filter.herkunft, id, showFilter, initialDataQueried])
+        : $of({}),
+      [db, filter.herkunft, id, initialDataQueried, showFilter],
+    )
+    const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
@@ -81,7 +76,6 @@ export const Herkunft = observer(
         <Container showfilter={showFilter}>
           <FormTitle
             row={row}
-            rawRow={rawRow}
             showFilter={showFilter}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
@@ -93,7 +87,6 @@ export const Herkunft = observer(
                 showFilter={showFilter}
                 id={id}
                 row={row}
-                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -104,7 +97,6 @@ export const Herkunft = observer(
                     rev={activeConflict}
                     id={id}
                     row={row}
-                    rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
@@ -112,7 +104,6 @@ export const Herkunft = observer(
                 : showHistory ?
                   <History
                     row={row}
-                    rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
                 : null}
