@@ -123,6 +123,9 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
           (anzahl_auspflanzbereit ?? 0) -
           (anzahl_mutterpflanzen ?? 0)
         : ''
+      const andere_mengen = lZTeilzaehlungs
+        .map((l) => l.andere_menge)
+        .join(', ')
 
       let lieferungs = []
       try {
@@ -282,6 +285,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         letzte_zaehlung_anzahl_auspflanzbereit: anzahl_auspflanzbereit,
         letzte_zaehlung_anzahl_mutterpflanzen: anzahl_mutterpflanzen,
         letzte_zaehlung_anzahl_jungpflanzen: anzahl_jungpflanzen,
+        letzte_zaehlung_andere_mengen: andere_mengen,
         letzte_lieferung_datum:
           lastAusLieferung ?
             format(new Date(lastAusLieferung.datum), 'yyyy.MM.dd')
