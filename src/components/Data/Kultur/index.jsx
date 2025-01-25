@@ -1,4 +1,10 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react'
+import React, {
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -11,6 +17,7 @@ import { KulturConflict as Conflict } from './Conflict.jsx'
 import { KulturFormTitleChooser as FormTitle } from './FormTitle/index.jsx'
 import { KulturForm as Form } from './Form/index.jsx'
 import { KulturHistory as History } from './History/index.jsx'
+import { useObservable } from '../../../utils/useObservable.js'
 
 const Container = styled.div`
   height: 100%;
@@ -29,21 +36,14 @@ export const Kultur = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const [row, setRow] = useState(null)
-    // need raw row because observable does not provoke rerendering of components
-    const [rawRow, setRawRow] = useState(null)
-    useEffect(() => {
-      const observable =
+    const observable = useMemo(
+      () =>
         showFilter ? $of(filter.kultur)
         : initialDataQueried ? db.get('kultur').findAndObserve(id)
-        : $of({})
-      const subscription = observable.subscribe((newRow) => {
-        setRow(newRow)
-        setRawRow(JSON.stringify(newRow._raw))
-      })
-
-      return () => subscription?.unsubscribe?.()
-    }, [db, filter.kultur, id, initialDataQueried, showFilter])
+        : $of({}),
+      [db, filter.kultur, id, initialDataQueried, showFilter],
+    )
+    const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
@@ -73,7 +73,6 @@ export const Kultur = observer(
         <Container showfilter={showFilter}>
           <FormTitle
             row={row}
-            rawRow={rawRow}
             showFilter={showFilter}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
@@ -84,7 +83,6 @@ export const Kultur = observer(
                 showFilter={showFilter}
                 id={id}
                 row={row}
-                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -95,7 +93,6 @@ export const Kultur = observer(
                     rev={activeConflict}
                     id={id}
                     row={row}
-                    rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
@@ -103,7 +100,6 @@ export const Kultur = observer(
                 : showHistory ?
                   <History
                     row={row}
-                    rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
                 : null}
