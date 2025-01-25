@@ -3,25 +3,15 @@
  * because ref did not work when this was included in it's parent
  * listRef.current was always null
  */
-import React, { useContext, useEffect, useRef } from 'react'
-import styled from '@emotion/styled'
+import { useContext, useEffect, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
-import { FixedSizeList as List } from 'react-window'
 import { Virtuoso } from 'react-virtuoso'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { TreeRow } from './Row.jsx'
-
-const StyledList = styled(List)`
-  margin-top: 5px;
-
-  @media print {
-    display: none !important;
-  }
-`
 
 export const TreeList = observer(
   ({ scrollableNodeRef, contentNodeRef, width, height, nodes, userRole }) => {
@@ -47,8 +37,9 @@ export const TreeList = observer(
 
     return (
       <Virtuoso
-        style={{ height: `${height - 5}px`, width: `${width}px` }}
+        style={{ height: `${height - 5}px`, width: `${width}px`, marginTop: 5 }}
         totalCount={nodes.length}
+        initialTopMostItemIndex={nodeIndex ?? 0}
         itemContent={(index) => (
           <TreeRow
             key={index}
@@ -59,29 +50,6 @@ export const TreeList = observer(
           />
         )}
       />
-    )
-
-    return (
-      <StyledList
-        height={height - 5}
-        itemCount={nodes.length}
-        itemSize={singleRowHeight}
-        width={width}
-        ref={listRef}
-        innerRef={contentNodeRef}
-        outerRef={scrollableNodeRef}
-      >
-        {({ index, style }) => (
-          <TreeRow
-            key={index}
-            style={style}
-            index={index}
-            node={nodes[index]}
-            nodes={nodes}
-            userRole={userRole}
-          />
-        )}
-      </StyledList>
     )
   },
 )
