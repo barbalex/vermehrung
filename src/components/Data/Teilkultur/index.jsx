@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -11,6 +17,7 @@ import { TeilkulturConflict as Conflict } from './Conflict.jsx'
 import { TeilkulturFormTitleChooser as FormTitle } from './FormTitle/index.jsx'
 import { TeilkulturForm as Form } from './Form/index.jsx'
 import { TeilkulturHistory as History } from './History/index.jsx'
+import { useObservable } from '../../../utils/useObservable.js'
 
 const Container = styled.div`
   height: 100%;
@@ -32,28 +39,14 @@ export const Teilkultur = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const [dataState, setDataState] = useState({
-      row: undefined,
-      // need raw row because observable does not provoke rerendering of components
-      rawRow: undefined,
-    })
-    useEffect(() => {
-      const observable =
+    const observable = useMemo(
+      () =>
         showFilter ? $of(filter.teilkultur)
         : initialDataQueried ? db.get('teilkultur').findAndObserve(id)
-        : $of({})
-      const subscription = observable.subscribe((newRow) => {
-        setDataState({
-          row: newRow,
-          rawRow: JSON.stringify(newRow?._raw ?? newRow),
-        })
-      })
-
-      return () => {
-        if (subscription) subscription?.unsubscribe?.()
-      }
-    }, [db, filter.teilkultur, id, showFilter, initialDataQueried])
-    const { row, rawRow } = dataState
+        : $of({}),
+      [db, filter.teilkultur, id, initialDataQueried, showFilter],
+    )
+    const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
@@ -83,7 +76,6 @@ export const Teilkultur = observer(
         <Container showfilter={showFilter}>
           <FormTitle
             row={row}
-            rawRow={rawRow}
             showFilter={showFilter}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
@@ -94,7 +86,6 @@ export const Teilkultur = observer(
                 showFilter={showFilter}
                 id={id}
                 row={row}
-                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -105,7 +96,6 @@ export const Teilkultur = observer(
                     rev={activeConflict}
                     id={id}
                     row={row}
-                    rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
@@ -113,7 +103,6 @@ export const Teilkultur = observer(
                 : showHistory ?
                   <History
                     row={row}
-                    rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
                 : null}
