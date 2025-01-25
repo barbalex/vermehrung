@@ -10,6 +10,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
+import { Virtuoso } from 'react-virtuoso'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { TreeRow } from './Row.jsx'
@@ -43,6 +44,22 @@ export const TreeList = observer(
         listRef.current?.scrollToItem(nodeIndex)
       }
     }, [listRef, activeNode?.label, aNA, nodes, nodeIndex])
+
+    return (
+      <Virtuoso
+        style={{ height: `${height - 5}px`, width: `${width}px` }}
+        totalCount={nodes.length}
+        itemContent={(index) => (
+          <TreeRow
+            key={index}
+            index={index}
+            node={nodes[index]}
+            nodes={nodes}
+            userRole={userRole}
+          />
+        )}
+      />
+    )
 
     return (
       <StyledList
