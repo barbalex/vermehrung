@@ -12,6 +12,7 @@
     "firebase-login": "firebase login",
     "firebase-login-reauth": "firebase login --reauth",
     "deploy": "npm run build && firebase deploy --only hosting",
+    "deploy_preview": "npm run build && firebase hosting:channel:deploy preview",
     "deploy_only": "firebase deploy --only hosting"
   },
   "dependencies": {
