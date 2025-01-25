@@ -1,4 +1,10 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react'
+import React, {
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -11,6 +17,7 @@ import { GartenConflict as Conflict } from './Conflict.jsx'
 import { GartenForm as Form } from './Form/index.jsx'
 import { GartenFormTitle as FormTitle } from './FormTitle/index.jsx'
 import { GartenHistory as History } from './History/index.jsx'
+import { useObservable } from '../../../utils/useObservable.js'
 
 const Container = styled.div`
   height: 100%;
@@ -32,21 +39,14 @@ export const Garten = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const [row, setRow] = useState(null)
-    // need raw row because observable does not provoke rerendering of components
-    const [rawRow, setRawRow] = useState(null)
-    useEffect(() => {
-      const observable =
+    const observable = useMemo(
+      () =>
         showFilter ? $of(filter.garten)
         : initialDataQueried ? db.get('garten').findAndObserve(id)
-        : $of({})
-      const subscription = observable.subscribe((newRow) => {
-        setRow(newRow)
-        setRawRow(JSON.stringify(newRow?._raw ?? newRow))
-      })
-
-      return () => subscription?.unsubscribe?.()
-    }, [db, filter.garten, id, initialDataQueried, showFilter])
+        : $of({}),
+      [showFilter, filter.garten, id, initialDataQueried],
+    )
+    const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
@@ -76,7 +76,6 @@ export const Garten = observer(
         <Container showfilter={showFilter}>
           <FormTitle
             row={row}
-            rawRow={rawRow}
             showFilter={showFilter}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
@@ -87,7 +86,6 @@ export const Garten = observer(
                 showFilter={showFilter}
                 id={id}
                 row={row}
-                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -98,7 +96,6 @@ export const Garten = observer(
                     rev={activeConflict}
                     id={id}
                     row={row}
-                    rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
@@ -106,7 +103,6 @@ export const Garten = observer(
                 : showHistory ?
                   <History
                     row={row}
-                    rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
                 : null}
