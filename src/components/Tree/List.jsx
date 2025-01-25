@@ -35,6 +35,8 @@ export const TreeList = observer(
       }
     }, [listRef, activeNode?.label, aNA, nodes, nodeIndex])
 
+    // using Virtuoso instead of react-virtualized because of white-space: normal on the tree rows
+    // react-virtualized only supports predefined heights
     return (
       <Virtuoso
         style={{ height: `${height - 5}px`, width: `${width}px`, marginTop: 5 }}
