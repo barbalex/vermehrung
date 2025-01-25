@@ -20,6 +20,10 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
 
+  @media print {
+    display: none !important;
+  }
+
   .react-contextmenu {
     display: flex;
     flex-direction: column;
