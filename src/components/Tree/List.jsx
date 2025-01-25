@@ -39,11 +39,10 @@ export const TreeList = observer(
       <Virtuoso
         style={{ height: `${height - 5}px`, width: `${width}px`, marginTop: 5 }}
         totalCount={nodes.length}
-        initialTopMostItemIndex={nodeIndex ?? 0}
+        initialTopMostItemIndex={nodeIndex && nodeIndex > -1 ? nodeIndex : 0}
         itemContent={(index) => (
           <TreeRow
             key={index}
-            index={index}
             node={nodes[index]}
             nodes={nodes}
             userRole={userRole}

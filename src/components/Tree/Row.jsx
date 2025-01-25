@@ -171,6 +171,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
 
   const [person, setPerson] = useState()
   useEffect(() => {
+    if (!node) return
     const personObservable =
       node?.nodeType === 'table' && node.table === 'person' && node.url ?
         db.get('person').findAndObserve(last(node.url))
@@ -181,7 +182,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [db, node?.nodeType, node.table, node.url])
+  }, [db, node?.nodeType, node?.table, node?.url])
 
   const accountId = person?.account_id ?? null
 
