@@ -22,7 +22,7 @@ export const sammlungLabelFromSammlung = ({
       DateTime.fromSQL(sammlung?.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
   const geplantLabel = sammlung?.geplant ? 'geplant' : undefined
-  const label = [datumLabel, herkunftLabel, artLabel, personLabel, geplantLabel]
+  const label = [datumLabel, geplantLabel, herkunftLabel, artLabel, personLabel]
     .filter((e) => !!e)
     .join('; ')
 
