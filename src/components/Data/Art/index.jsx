@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import { useObservable, useObservableEagerState } from 'observable-hooks'
 import { switchMap as switchMap$, map as map$ } from 'rxjs/operators'
@@ -66,17 +72,65 @@ export const Art = observer(
 
     // how to get by id according to: https://github.com/Nozbe/withObservables/issues/16#issuecomment-2081446530
     // TODO: returns {}
-    const row = useObservableEagerState(
-      useObservable(
-        (input$) =>
-          switchMap$(([id]) =>
-            showFilter ? $of(filter.art)
-            : initialDataQueried ? db.get('art').findAndObserve(id)
-            : $of({}),
-          )(input$),
-        [id, filter.art, initialDataQueried, showFilter],
-      ),
-    )
+    // const row = useObservableEagerState(
+    //   useObservable(
+    //     (input$) =>
+    //       switchMap$(([id]) =>
+    //         showFilter ? $of(filter.art)
+    //         : initialDataQueried ? db.get('art').findAndObserve(id)
+    //         : $of({}),
+    //       )(input$),
+    //     [id, filter.art, initialDataQueried, showFilter],
+    //   ),
+    // )
+    // simplified, works (but not for filter)
+    // const row = useObservableEagerState(
+    //   useObservable(
+    //     (input$) =>
+    //       switchMap$(([id]) => db.get('art').findAndObserve(id))(input$),
+    //     [id, filter.art, initialDataQueried, showFilter],
+    //   ),
+    // )
+
+    // simplified, works (but errors before initialDataQueried, because record can not be found)
+    // const row = useObservableEagerState(
+    //   useObservable(
+    //     (input$) =>
+    //       switchMap$(([id]) =>
+    //         showFilter ? $of(filter.art) : db.get('art').findAndObserve(id),
+    //       )(input$),
+    //     [id, filter.art, initialDataQueried, showFilter],
+    //   ),
+    // )
+    // catching error. Would need to re-render component to get record after initialDataQueried
+    // works but not elegant
+    // let row
+    // try {
+    //   row = useObservableEagerState(
+    //     useObservable(
+    //       (input$) =>
+    //         switchMap$(([id]) =>
+    //           showFilter ? $of(filter.art) : db.get('art').findAndObserve(id),
+    //         )(input$),
+    //       [id, filter.art, initialDataQueried, showFilter],
+    //     ),
+    //   )
+    // } catch (error) {
+    //   console.error('Art, error:', error)
+    //   setTimeout(() => window.location.reload(), 1000)
+    // }
+    // returns only {}. Why?
+    // const row = useObservableEagerState(
+    //   useObservable(
+    //     (input$) =>
+    //       switchMap$(([id]) =>
+    //         showFilter ? $of(filter.art)
+    //         : initialDataQueried ? db.get('art').findAndObserve(id)
+    //         : $of({}),
+    //       )(input$),
+    //     [id, filter.art, initialDataQueried, showFilter],
+    //   ),
+    // )
 
     // how to get by id according to: https://github.com/Nozbe/withObservables/issues/16#issuecomment-2133203789
     // TODO: returns {}
@@ -94,22 +148,22 @@ export const Art = observer(
     //   ),
     // )
 
-    // const [row, setRow] = useState(null)
-    // // need raw row because observable does not provoke rerendering of components
-    // const [rawRow, setRawRow] = useState(null)
-    // useEffect(() => {
-    //   const observable =
-    //     showFilter ? $of(filter.art)
-    //     : initialDataQueried ? db.get('art').findAndObserve(id)
-    //     : $of({})
-    //   const subscription = observable.subscribe((newRow) => {
-    //     setRow(newRow)
-    //     setRawRow(JSON.stringify(newRow?._raw ?? newRow))
-    //   })
-    //   return () => subscription?.unsubscribe?.()
-    // }, [db, filter.art, id, initialDataQueried, showFilter])
+    const [row, setRow] = useState(null)
+    // need raw row because observable does not provoke rerendering of components
+    const [rawRow, setRawRow] = useState(null)
+    useEffect(() => {
+      const observable =
+        showFilter ? $of(filter.art)
+        : initialDataQueried ? db.get('art').findAndObserve(id)
+        : $of({})
+      const subscription = observable.subscribe((newRow) => {
+        setRow(newRow)
+        setRawRow(JSON.stringify(newRow?._raw ?? newRow))
+      })
+      return () => subscription?.unsubscribe?.()
+    }, [db, filter.art, id, initialDataQueried, showFilter])
 
-    console.log('Art, row:', row)
+    console.log('Art', { row, initialDataQueried, showFilter })
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
@@ -129,7 +183,7 @@ export const Art = observer(
     const [showHistory, setShowHistory] = useState(false)
     const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
-    if (!row) return <Spinner />
+    if (!row || !Object.keys(row ?? {}).length) return <Spinner />
     if (!showFilter && filter.show) return null
 
     const paneIsSplit = online && (activeConflict || showHistory)
@@ -141,7 +195,7 @@ export const Art = observer(
         <Container showfilter={showFilter}>
           <FormTitle
             row={row}
-            // rawRow={rawRow}
+            rawRow={rawRow}
             showFilter={showFilter}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
@@ -152,7 +206,7 @@ export const Art = observer(
                 showFilter={showFilter}
                 id={id}
                 row={row}
-                // rawRow={rawRow}
+                rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -163,7 +217,7 @@ export const Art = observer(
                     rev={activeConflict}
                     id={id}
                     row={row}
-                    // rawRow={rawRow}
+                    rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
@@ -171,7 +225,7 @@ export const Art = observer(
                 : showHistory ?
                   <History
                     row={row}
-                    // rawRow={rawRow}
+                    rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
                 : null}
