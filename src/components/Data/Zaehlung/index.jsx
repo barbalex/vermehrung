@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -11,6 +17,7 @@ import { ZaehlungConflict as Conflict } from './Conflict.jsx'
 import { ZaehlungFormTitleChooser as FormTitle } from './FormTitle/index.jsx'
 import { ZaehlungForm as Form } from './Form/index.jsx'
 import { ZaehlungHistory as History } from './History/index.jsx'
+import { useObservable } from '../../../utils/useObservable.js'
 
 const Container = styled.div`
   height: 100%;
@@ -32,26 +39,14 @@ export const Zaehlung = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const [dataState, setDataState] = useState({
-      row: undefined,
-      // need raw row because observable does not provoke rerendering of components
-      rawRow: undefined,
-    })
-    useEffect(() => {
-      const observable =
+    const observable = useMemo(
+      () =>
         showFilter ? $of(filter.zaehlung)
         : initialDataQueried ? db.get('zaehlung').findAndObserve(id)
-        : $of({})
-      const subscription = observable.subscribe((newRow) => {
-        setDataState({
-          row: newRow,
-          rawRow: JSON.stringify(newRow?._raw ?? newRow),
-        })
-      })
-
-      return () => subscription?.unsubscribe?.()
-    }, [db, filter.zaehlung, id, showFilter, initialDataQueried])
-    const { row, rawRow } = dataState
+        : $of({}),
+      [db, filter.zaehlung, id, initialDataQueried, showFilter],
+    )
+    const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
@@ -82,7 +77,6 @@ export const Zaehlung = observer(
           <Container showfilter={showFilter}>
             <FormTitle
               row={row}
-              rawRow={rawRow}
               showFilter={showFilter}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
@@ -93,7 +87,6 @@ export const Zaehlung = observer(
                   showFilter={showFilter}
                   id={id}
                   row={row}
-                  rawRow={rawRow}
                   activeConflict={activeConflict}
                   setActiveConflict={setActiveConflict}
                   showHistory={showHistory}
@@ -104,7 +97,6 @@ export const Zaehlung = observer(
                       rev={activeConflict}
                       id={id}
                       row={row}
-                      rawRow={rawRow}
                       conflictDisposalCallback={conflictDisposalCallback}
                       conflictSelectionCallback={conflictSelectionCallback}
                       setActiveConflict={setActiveConflict}
@@ -112,7 +104,6 @@ export const Zaehlung = observer(
                   : showHistory ?
                     <History
                       row={row}
-                      rawRow={rawRow}
                       historyTakeoverCallback={historyTakeoverCallback}
                     />
                   : null}

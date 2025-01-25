@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -12,6 +18,7 @@ import { SammelLieferungConflict as Conflict } from './Conflict.jsx'
 import { SammelLieferungFormTitleChooser as FormTitle } from './FormTitle/index.jsx'
 import { SammelLieferungForm as Form } from './Form/index.jsx'
 import { SammelLieferungHistory as History } from './History/index.jsx'
+import { useObservable } from '../../../utils/useObservable.js'
 
 const Container = styled.div`
   height: 100%;
@@ -35,26 +42,14 @@ export const SammelLieferung = observer(
 
     const { filter, isPrint, online, db, initialDataQueried } = store
 
-    const [dataState, setDataState] = useState({
-      row: undefined,
-      // need raw row because observable does not provoke rerendering of components
-      rawRow: undefined,
-    })
-    useEffect(() => {
-      const observable =
+    const observable = useMemo(
+      () =>
         showFilter ? $of(filter.sammel_lieferung)
         : initialDataQueried ? db.get('sammel_lieferung').findAndObserve(id)
-        : $of({})
-      const subscription = observable.subscribe((newRow) => {
-        setDataState({
-          row: newRow,
-          rawRow: JSON.stringify(newRow?._raw ?? newRow),
-        })
-      })
-
-      return () => subscription?.unsubscribe?.()
-    }, [db, filter.sammel_lieferung, id, showFilter, initialDataQueried])
-    const { row, rawRow } = dataState
+        : $of({}),
+      [db, filter.sammel_lieferung, id, initialDataQueried, showFilter],
+    )
+    const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
@@ -89,7 +84,6 @@ export const SammelLieferung = observer(
           <FormTitle
             showFilter={showFilter}
             row={row}
-            rawRow={rawRow}
             lieferung={lieferung}
             printPreview={printPreview}
             setPrintPreview={setPrintPreview}
@@ -97,17 +91,13 @@ export const SammelLieferung = observer(
             setShowHistory={setShowHistory}
           />
           {printPreview ?
-            <Lieferschein
-              row={row}
-              rawRow={rawRow}
-            />
+            <Lieferschein row={row} />
           : <SplitPaneContainer>
               <Allotment key={`${activeConflict}/${showHistory}`}>
                 <Form
                   showFilter={showFilter}
                   id={id}
                   row={row}
-                  rawRow={rawRow}
                   activeConflict={activeConflict}
                   setActiveConflict={setActiveConflict}
                   showHistory={showHistory}
@@ -118,7 +108,6 @@ export const SammelLieferung = observer(
                       rev={activeConflict}
                       id={id}
                       row={row}
-                      rawRow={rawRow}
                       conflictDisposalCallback={conflictDisposalCallback}
                       conflictSelectionCallback={conflictSelectionCallback}
                       setActiveConflict={setActiveConflict}
@@ -126,7 +115,6 @@ export const SammelLieferung = observer(
                   : showHistory ?
                     <History
                       row={row}
-                      rawRow={rawRow}
                       historyTakeoverCallback={historyTakeoverCallback}
                     />
                   : null}
