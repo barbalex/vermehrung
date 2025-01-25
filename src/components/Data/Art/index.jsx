@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useObservable, useObservableEagerState } from 'observable-hooks'
-import { switchMap, switchMap as switchMap$ } from 'rxjs/operators'
+import { switchMap as switchMap$, map as map$ } from 'rxjs/operators'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
@@ -34,27 +34,62 @@ export const Art = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const row = useObservableEagerState(
-      useObservable(
-        (inputs$) =>
-          input$.pipe(
-            switchMap$((id) =>
-              showFilter ? $of(filter.art)
-              : initialDataQueried ? db.get('art').findAndObserve(id)
-              : $of({}),
-            ),
-          ),
-        [id, filter.art, initialDataQueried, showFilter],
-      ),
-    )
+    // const row = useObservableEagerState(
+    //   useObservable(
+    //     (input$) =>
+    //       input$.pipe(
+    //         switchMap$((id) =>
+    //           showFilter ? $of(filter.art)
+    //           : initialDataQueried ? db.get('art').findAndObserve(id)
+    //           : $of({}),
+    //         ),
+    //       ),
+    //     [id, filter.art, initialDataQueried, showFilter],
+    //   ),
+    // )
+
+    // get one out of list
     // const row = useObservableEagerState(
     //   useObservable(
     //     (inputs$) =>
-    //       switchMap$(inputs$, (id) =>
-    //         showFilter ? $of(filter.art)
-    //         : initialDataQueried ? db.get('art').findAndObserve(id)
-    //         : $of({}),
-    //       )(inputs$),
+    //       inputs$.pipe(
+    //         switchMap$((id) =>
+    //           showFilter ? $of(filter.art)
+    //           : initialDataQueried ? db.get('art').findAndObserve(id)
+    //           : $of({}),
+    //         ),
+    //         map$((posts) => posts[0]),
+    //       ),
+    //     [id, filter.art, initialDataQueried, showFilter],
+    //   ),
+    // )
+
+    // how to get by id according to: https://github.com/Nozbe/withObservables/issues/16#issuecomment-2081446530
+    // TODO: returns {}
+    const row = useObservableEagerState(
+      useObservable(
+        (input$) =>
+          switchMap$(([id]) =>
+            showFilter ? $of(filter.art)
+            : initialDataQueried ? db.get('art').findAndObserve(id)
+            : $of({}),
+          )(input$),
+        [id, filter.art, initialDataQueried, showFilter],
+      ),
+    )
+
+    // how to get by id according to: https://github.com/Nozbe/withObservables/issues/16#issuecomment-2133203789
+    // TODO: returns {}
+    // const row = useObservableEagerState(
+    //   useObservable(
+    //     (input$) =>
+    //       input$.pipe(
+    //         switchMap$(([id]) =>
+    //           showFilter ? $of(filter.art)
+    //           : initialDataQueried ? db.get('art').findAndObserve(id)
+    //           : $of({}),
+    //         ),
+    //       ),
     //     [id, filter.art, initialDataQueried, showFilter],
     //   ),
     // )
@@ -106,7 +141,7 @@ export const Art = observer(
         <Container showfilter={showFilter}>
           <FormTitle
             row={row}
-            rawRow={rawRow}
+            // rawRow={rawRow}
             showFilter={showFilter}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
@@ -117,7 +152,7 @@ export const Art = observer(
                 showFilter={showFilter}
                 id={id}
                 row={row}
-                rawRow={rawRow}
+                // rawRow={rawRow}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
@@ -128,7 +163,7 @@ export const Art = observer(
                     rev={activeConflict}
                     id={id}
                     row={row}
-                    rawRow={rawRow}
+                    // rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
@@ -136,7 +171,7 @@ export const Art = observer(
                 : showHistory ?
                   <History
                     row={row}
-                    rawRow={rawRow}
+                    // rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
                 : null}
