@@ -6,6 +6,7 @@ import {
   json,
   lazy,
   relation,
+  immutableRelation,
 } from '@nozbe/watermelondb/decorators'
 import { Q } from '@nozbe/watermelondb'
 import {
@@ -531,6 +532,7 @@ export class Art extends Model {
   static table = 'art'
   static associations = {
     ae_art: { type: 'belongs_to', key: 'ae_id' },
+    // apflora_av: { type: 'belongs_to', key: 'ae_id' },
     sammlung: { type: 'has_many', foreignKey: 'art_id' },
     sammel_lieferung: { type: 'has_many', foreignKey: 'art_id' },
     lieferung: { type: 'has_many', foreignKey: 'art_id' },
@@ -552,6 +554,7 @@ export class Art extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @relation('ae_art', 'ae_id') ae_art
+  @immutableRelation('apflora_av', 'ae_id') apflora_av
 
   @children('sammlung') sammlungs
   @children('sammel_lieferung') sammel_lieferungs
@@ -567,6 +570,20 @@ export class Art extends Model {
   @lazy herkunfts = this.collections
     .get('herkunft')
     .query(Q.on('sammlung', 'art_id', this.id))
+  // @lazy av = this.collections.get('apflora_av').find(this.ae_id)
+  // @lazy apflora_av = this.collections
+  //   .get('apflora_av')
+  //   .query(Q.where('ae_id', this.ae_id))
+  //   .fetch()
+  // @lazy apflora_av = this.observe().pipe(
+  //   map$(async (art) => {
+  //     let apfloraAv
+  //     try {
+  //       apfloraAv = await art.collections.get('apflora_av').find(art.ae_art.id)
+  //     } catch {}
+  //     return apfloraAv
+  //   }),
+  // )
 
   @writer async removeConflict(_rev) {
     await this.update((row) => {
@@ -635,11 +652,24 @@ export class Art extends Model {
   }
 }
 
+export class ApfloraAv extends Model {
+  static table = 'apflora_av'
+  static associations = {
+    ae_art: { type: 'belongs_to', foreignKey: 'ae_id' },
+  }
+
+  @field('id') id
+  @field('ae_id') ae_id
+  @field('av') av
+}
+
 export class AeArt extends Model {
   static table = 'ae_art'
   static associations = {
     art: { type: 'has_many', foreignKey: 'ae_id' },
   }
+
+  @immutableRelation('apflora_av', 'ae_id') apflora_av
 
   @field('id') id
   @field('name') name
