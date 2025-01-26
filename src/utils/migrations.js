@@ -1,6 +1,7 @@
 import {
   schemaMigrations,
   addColumns,
+  createTable,
 } from '@nozbe/watermelondb/Schema/migrations'
 
 export const migrations = schemaMigrations({
@@ -40,6 +41,18 @@ export const migrations = schemaMigrations({
               isOptional: true,
               isIndexed: true,
             },
+          ],
+        }),
+      ],
+    },
+    {
+      toVersion: 5,
+      steps: [
+        createTable({
+          name: 'apflora_av',
+          columns: [
+            { name: 'ae_id', type: 'string', isIndexed: true },
+            { name: 'av', type: 'string' },
           ],
         }),
       ],
