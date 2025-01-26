@@ -49,6 +49,7 @@ export const MobxStore = types
     // why? so data to be updated can be efficiently extracted
     // from the live queries
     ae_art_lastUpdated: types.optional(types.number, 0),
+    apflora_av_lastUpdated: types.optional(types.number, 0),
     art_lastUpdated: types.optional(types.number, 0),
     art_file_lastUpdated: types.optional(types.number, 0),
     art_qk_lastUpdated: types.optional(types.number, 0),

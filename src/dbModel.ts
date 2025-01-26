@@ -571,10 +571,10 @@ export class Art extends Model {
     .get('herkunft')
     .query(Q.on('sammlung', 'art_id', this.id))
   // @lazy av = this.collections.get('apflora_av').find(this.ae_id)
-  // @lazy apflora_av = this.collections
-  //   .get('apflora_av')
-  //   .query(Q.where('ae_id', this.ae_id))
-  //   .fetch()
+  @lazy av = this.collections
+    .get('apflora_av')
+    .query(Q.where('ae_id', this.ae_id))
+    .fetch()
   // @lazy apflora_av = this.observe().pipe(
   //   map$(async (art) => {
   //     let apfloraAv
