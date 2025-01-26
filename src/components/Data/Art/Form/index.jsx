@@ -18,6 +18,7 @@ import { Personen } from './Personen/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import { artsSortedFromArts } from '../../../../utils/artsSortedFromArts.js'
+import { Av } from './Av.jsx'
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -76,13 +77,6 @@ export const ArtForm = observer(
     }, [db, filter.art._deleted])
     const { artsSorted, aeArts } = dataState
 
-    const [av, setAv] = useState(null)
-    useEffect(() => {
-      if (!row) return
-      if (av) return
-      row.av.then((avArray) => setAv(avArray?.[0]))
-    }, [row])
-
     useEffect(() => {
       unsetError('art')
     }, [id, unsetError])
@@ -140,11 +134,6 @@ export const ArtForm = observer(
 
     const showDeleted = filter.art._deleted !== false || row?._deleted
 
-    console.log('ArtForm', {
-      row,
-      av,
-    })
-
     return (
       <ErrorBoundary>
         <FieldsContainer>
@@ -194,6 +183,7 @@ export const ArtForm = observer(
             onCreateNew={onCreateSet}
             formatCreateLabel={(val) => `"${val}" als neues Set aufnehmen`}
           />
+          <Av row={row} />
           {online && !showFilter && row?._conflicts?.map && (
             <ConflictList
               conflicts={row._conflicts}
