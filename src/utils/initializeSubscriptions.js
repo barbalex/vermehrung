@@ -13,6 +13,7 @@ export const initializeSubscriptions = ({ store, userRole }) => {
 
   const {
     ae_art_lastUpdated,
+    apflora_av_lastUpdated,
     art_lastUpdated,
     art_file_lastUpdated,
     art_qk_lastUpdated,
@@ -76,6 +77,38 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         setTimeout(() => store.incrementWsReconnectCount(), 3000)
       },
       complete: () => console.log('resolved ae_art'),
+    },
+  )
+  unsubscribe.apflora_av = store.gqlWsClient.subscribe(
+    {
+      query: `
+        subscription AeArt($where: apflora_av_bool_exp) {
+          apflora_av {
+            id
+            __typename
+            ae_id
+            av
+          }
+        }
+      `,
+    },
+    {
+      next: (data) => {
+        processSubscriptionResult({
+          data: data.data.apflora_av,
+          table: 'apflora_av',
+          store,
+        })
+      },
+      error: (error) => {
+        // if error.message contains JWT, do what?
+        // re-subscribe
+        console.log('subscribeAeArt, onError:', error)
+        // signOut()
+        // need to retry
+        setTimeout(() => store.incrementWsReconnectCount(), 3000)
+      },
+      complete: () => console.log('resolved apflora_av'),
     },
   )
   unsubscribe.art = store.gqlWsClient.subscribe(

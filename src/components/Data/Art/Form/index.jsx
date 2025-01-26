@@ -76,6 +76,13 @@ export const ArtForm = observer(
     }, [db, filter.art._deleted])
     const { artsSorted, aeArts } = dataState
 
+    const [av, setAv] = useState(null)
+    useEffect(() => {
+      if (!row) return
+      if (av) return
+      row.av.then((avArray) => setAv(avArray?.[0]))
+    }, [row])
+
     useEffect(() => {
       unsetError('art')
     }, [id, unsetError])
@@ -135,8 +142,7 @@ export const ArtForm = observer(
 
     console.log('ArtForm', {
       row,
-      apflora_av: row.apflora_av,
-      av: row.av,
+      av,
     })
 
     return (
