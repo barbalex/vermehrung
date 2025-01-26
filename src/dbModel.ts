@@ -575,13 +575,16 @@ export class Art extends Model {
     .get('apflora_av')
     .query(Q.where('ae_id', this.ae_id))
     .fetch()
-  // @lazy apflora_av = this.observe().pipe(
+  // @lazy av = this.observe().pipe(
   //   map$(async (art) => {
-  //     let apfloraAv
+  //     let avArray
   //     try {
-  //       apfloraAv = await art.collections.get('apflora_av').find(art.ae_art.id)
+  //       avArray = await art.collections
+  //         .get('apflora_av')
+  //         .query(Q.where('ae_id', this.ae_id))
+  //         .fetch()
   //     } catch {}
-  //     return apfloraAv
+  //     return avArray?.[0]
   //   }),
   // )
 
