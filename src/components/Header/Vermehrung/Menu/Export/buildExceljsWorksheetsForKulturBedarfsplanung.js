@@ -8,6 +8,7 @@ import { exists } from '../../../../../utils/exists.js'
 import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFromKulturs.js'
 import { zaehlungSort } from '../../../../../utils/zaehlungSort.js'
 import { lieferungSort } from '../../../../../utils/lieferungSort.js'
+import { apflora_av } from '../../../../../dbSchema/apflora_av.js'
 
 export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
   store,
@@ -38,6 +39,11 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       let art
       try {
         art = await kultur.art.fetch()
+      } catch {}
+      let av
+      try {
+        const apfloraAv = await art.av
+        av = apfloraAv?.[0]?.av
       } catch {}
       let artname
       try {
@@ -261,6 +267,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         artname,
         set: art?.set,
         mitarbeitende: avsLabels.sort().join(', '),
+        apflora_artverantwortlich: av,
         herkunft_id: kultur.herkunft_id,
         herkunft_nr: herkunft?.nr ?? '',
         herkunft_gemeinde: herkunft?.gemeinde ?? '',
