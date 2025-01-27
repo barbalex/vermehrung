@@ -22,7 +22,7 @@ const StyledSwitch = styled(Switch)`
 export const ApFilter = memo(
   observer(({ color }) => {
     const store = useContext(MobxStoreContext)
-    const { apFilter, setApFilter } = store.tree
+    const { apFilter, setApFilter } = store
 
     const onChange = useCallback(async () => {
       setApFilter(!apFilter)
