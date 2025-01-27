@@ -4,7 +4,7 @@ import camelCase from 'lodash/camelCase'
 import { simpleTypes as types } from '../store/Filter/simpleTypes.js'
 import { exists } from './exists.js'
 
-export const tableFilter = ({ store, table }) => {
+export const tableFilter = ({ store, table, apFilter }) => {
   if (!table) throw `no table passed`
   const filter = store.filter[table]
   if (!filter) throw `no filter found for table ${table}`
@@ -33,6 +33,10 @@ export const tableFilter = ({ store, table }) => {
     }
     return Q.where(key, Q.eq(filterValue))
   })
+
+  if (apFilter) {
+    filterArray.push(Q.where('apflora_ap', Q.eq(true)))
+  }
 
   // if a url is opened, a dataset should always show
   // even if it was filtered away

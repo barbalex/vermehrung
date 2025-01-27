@@ -58,8 +58,6 @@ export const Arten = observer(({ filter: showFilter }) => {
 
   const { width, height, ref } = useResizeDetector()
 
-  console.log('Arten, apFilter:', apFilter)
-
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
     const collection = db.get('art')
@@ -73,7 +71,7 @@ export const Arten = observer(({ filter: showFilter }) => {
         )
     const totalCountObservable = collection.query(delQuery).observeCount()
     const artsObservable = collection
-      .query(...tableFilter({ store, table: 'art' }))
+      .query(...tableFilter({ store, table: 'art', apFilter }))
       .observeWithColumns(['ae_id', 'set', 'apflora_ap', 'apflora_av'])
     const combinedObservables = combineLatest([
       totalCountObservable,
@@ -89,7 +87,7 @@ export const Arten = observer(({ filter: showFilter }) => {
     return () => subscription?.unsubscribe?.()
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db, ...Object.values(artFilter), artFilter, store])
+  }, [db, ...Object.values(artFilter), artFilter, store, apFilter])
 
   const { arts, totalCount } = dataState
   const filteredCount = arts.length
