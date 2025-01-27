@@ -532,7 +532,6 @@ export class Art extends Model {
   static table = 'art'
   static associations = {
     ae_art: { type: 'belongs_to', key: 'ae_id' },
-    // apflora_av: { type: 'belongs_to', key: 'ae_id' },
     sammlung: { type: 'has_many', foreignKey: 'art_id' },
     sammel_lieferung: { type: 'has_many', foreignKey: 'art_id' },
     lieferung: { type: 'has_many', foreignKey: 'art_id' },
@@ -570,23 +569,10 @@ export class Art extends Model {
   @lazy herkunfts = this.collections
     .get('herkunft')
     .query(Q.on('sammlung', 'art_id', this.id))
-  // @lazy av = this.collections.get('apflora_av').find(this.ae_id)
   @lazy av = this.collections
     .get('apflora_av')
     .query(Q.where('ae_id', this.ae_id))
     .fetch()
-  // @lazy av = this.observe().pipe(
-  //   map$(async (art) => {
-  //     let avArray
-  //     try {
-  //       avArray = await art.collections
-  //         .get('apflora_av')
-  //         .query(Q.where('ae_id', this.ae_id))
-  //         .fetch()
-  //     } catch {}
-  //     return avArray?.[0]
-  //   }),
-  // )
 
   @writer async removeConflict(_rev) {
     await this.update((row) => {
