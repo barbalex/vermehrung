@@ -2,6 +2,7 @@
 SELECT
   '' AS id,
   tax.id AS ae_id,
+  (ap.bearbeitung in (1,2,3)) as ap,
   -- tax.tax_art_name,
   adresse.name AS av
 FROM
@@ -16,6 +17,7 @@ CREATE TABLE apflora_av(
   -- need the id for WatermelonDB
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   ae_id uuid DEFAULT NULL,
+  ap boolean DEFAULT NULL,
   av text DEFAULT NULL
 );
 
