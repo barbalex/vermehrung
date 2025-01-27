@@ -10,6 +10,16 @@ export const createDataArrayForRevComparison = ({ row, revRow }) => [
     label: 'Set',
   },
   {
+    valueInRow: row.apflora_av,
+    valueInRev: revRow.apflora_av,
+    label: 'Apflora Artverantwortlich',
+  },
+  {
+    valueInRow: row.ap,
+    valueInRev: revRow.ap,
+    label: 'AP',
+  },
+  {
     valueInRow: row?.changed,
     valueInRev: revRow?.changed,
     label: 'geändert',

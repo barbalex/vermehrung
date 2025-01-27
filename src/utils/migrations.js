@@ -66,5 +66,17 @@ export const migrations = schemaMigrations({
         }),
       ],
     },
+    {
+      toVersion: 7,
+      steps: [
+        addColumns({
+          table: 'art',
+          columns: [
+            { name: 'av', type: 'string', isOptional: true },
+            { name: 'ap', type: 'boolean', isOptional: true },
+          ],
+        }),
+      ],
+    },
   ],
 })

@@ -72,7 +72,7 @@ export const Arten = observer(({ filter: showFilter }) => {
     const totalCountObservable = collection.query(delQuery).observeCount()
     const artsObservable = collection
       .query(...tableFilter({ store, table: 'art' }))
-      .observeWithColumns(['ae_id', 'set'])
+      .observeWithColumns(['ae_id', 'set', 'apflora_ap', 'apflora_av'])
     const combinedObservables = combineLatest([
       totalCountObservable,
       artsObservable,

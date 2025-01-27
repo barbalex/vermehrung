@@ -94,6 +94,8 @@ export const buildExceljsWorksheetsForDaten = async ({
         id: kultur.id,
         art_id: kultur.art_id,
         art_set: art?.set ?? '',
+        art_apflora_av: art?.apflora_av ?? '',
+        art_apflora_ap: art?.apflora_ap ?? '',
         art_ae_id: aeArt?.id ?? '',
         art_ae_name: artLabel,
         herkunft_id: kultur.herkunft_id,

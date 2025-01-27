@@ -1,298 +1,280 @@
-create or replace function art_rev_leaves(art_id uuid) returns setof art_rev as $$
-  select
-      *
-    from
-      art_rev
-    where
-      -- leaves
-      not exists (
-        select
-          art_id
-        from
-          art_rev as node
-        where
-          node.art_id = $1
-          and node._parent_rev = art_rev._rev
-      )
-      -- on undeleted
-      and _deleted = false
-      -- of this record
-      and art_id = $1;
-$$ LANGUAGE sql;
+CREATE OR REPLACE FUNCTION art_rev_leaves(art_id uuid)
+  RETURNS SETOF art_rev
+  AS $$
+  SELECT
+    *
+  FROM
+    art_rev
+  WHERE
+    -- leaves
+    NOT EXISTS(
+      SELECT
+        art_id
+      FROM
+        art_rev AS node
+      WHERE
+        node.art_id = $1
+        AND node._parent_rev = art_rev._rev)
+    -- on undeleted
+    AND _deleted = FALSE
+    -- of this record
+    AND art_id = $1;
+$$
+LANGUAGE sql;
 
 --select * from art_rev_leaves('f65dd840-f6aa-11ea-868c-25e28837c601')
-
-create or replace function art_rev_set_winning_revision ()
-  returns trigger
-  as $body$
-begin
+CREATE OR REPLACE FUNCTION art_rev_set_winning_revision()
+  RETURNS TRIGGER
+  AS $body$
+BEGIN
   -- 1.a: check if non deleted winner exists
   --      (if not: choose a deleted one)
-  if exists(
+  IF EXISTS(
     -- find max depth, as only revisions with max depth can win
-    with max_depths as (
-      select
-        max(_depth) as max_depth
-      from
+    WITH max_depths AS(
+      SELECT
+        max(_depth) AS max_depth
+      FROM
         --leaves
-        art_rev_leaves(new.art_id)
-    ),
-    -- the revision with max depth and max rev wins
-    winning_revisions as (
-      select
-        -- this is the couchdb way of ensuring, every db chooses the same winner
-        -- thus does not need to communicate with other db instances 
-        -- in a master-master replication system
-        -- winners could be choosen differently of course,
-        -- for instance: last writer wins
-        max(leaves._rev) as _rev
-      from
-        art_rev_leaves(new.art_id) as leaves
-        -- only consider revisions with max depth
-        join max_depths on leaves._depth = max_depths.max_depth
-    )
-    select * from art_rev
-    join winning_revisions on art_rev._rev = winning_revisions._rev
-  ) then
-    -- 1.b: we know that a non deleted winner exists
-    --      insert or update the winner table
-    insert into art (
-      id,
-      ae_id,
-      set,
-      changed,
-      changed_by,
-      _rev,
-      _rev_at,
-      _revisions,
-      _parent_rev,
-      _depth,
-      _deleted,
-      _conflicts
-  )
-  -- recalculating the winner here 
-  -- as I did not know how to re-use the exact same calculation from above :-(
-  with 
-    -- the deletion itself could be a conflict
-    -- so to list conflicts, need to get a list of deleted siblings
-    deleted_conflicts_of_leaves as (
-      select
-        art_id,
-        _rev,
-        _depth
-      from
-        art_rev
-      where
-        -- leaves
-        not exists (
-          select
-            art_id
-          from
-            art_rev as art_rev_inner
-          where
-            art_rev_inner.art_id = new.art_id
-            and art_rev_inner._parent_rev = art_rev._rev
-        )
-        -- deleted
-        and _deleted is true
-        -- of this record
-        and art_id = new.art_id
-        -- siblings
-        and exists (
-          select art_id from art_rev_leaves(new.art_id) l
-          where 
-            l._parent_rev = art_rev._parent_rev
-            and l._depth = art_rev._depth
-        )
-    ),
-    -- find max depth, as only revisions with max depth can win
-    max_depths as (
-      select
-        max(_depth) as max_depth
-      from
-        art_rev_leaves(new.art_id)
-    ),
-    -- the revision with max depth and max rev wins
-    winning_revisions as (
-      select
-        -- this is the couchdb way of ensuring, every db chooses the same winner
-        -- thus does not need to communicate with other db instances 
-        -- in a master-master replication system
-        -- winners could be choosen differently of course,
-        -- for instance: last writer wins
-        max(leaves._rev) as _rev
-      from
-        art_rev_leaves(new.art_id) as leaves
-        join max_depths on leaves._depth = max_depths.max_depth
-    )
-    select
-      art_rev.art_id,
-      art_rev.ae_id,
-      art_rev.set,
-      art_rev.changed,
-      art_rev.changed_by,
-      art_rev._rev,
-      art_rev._rev_at,
-      art_rev._revisions,
-      art_rev._parent_rev,
-      art_rev._depth,
-      art_rev._deleted,
-      (select array(
-        select _rev from art_rev_leaves(new.art_id)
-        where 
+        art_rev_leaves(NEW.art_id)),
+      -- the revision with max depth and max rev wins
+      winning_revisions AS(
+        SELECT
+          -- this is the couchdb way of ensuring, every db chooses the same winner
+          -- thus does not need to communicate with other db instances
+          -- in a master-master replication system
+          -- winners could be choosen differently of course,
+          -- for instance: last writer wins
+          max(leaves._rev) AS _rev
+        FROM
+          art_rev_leaves(NEW.art_id) AS leaves
+          -- only consider revisions with max depth
+          JOIN max_depths ON leaves._depth = max_depths.max_depth
+)
+        SELECT
+          *
+        FROM
+          art_rev
+          JOIN winning_revisions ON art_rev._rev = winning_revisions._rev) THEN
+        -- 1.b: we know that a non deleted winner exists
+        --      insert or update the winner table
+        INSERT INTO art(id, ae_id, set, apflora_av, apflora_ap, changed, changed_by, _rev, _rev_at, _revisions, _parent_rev, _depth, _deleted, _conflicts)
+          -- recalculating the winner here
+          -- as I did not know how to re-use the exact same calculation from above :-(
+          WITH
+          -- the deletion itself could be a conflict
+          -- so to list conflicts, need to get a list of deleted siblings
+          deleted_conflicts_of_leaves AS(
+            SELECT
+              art_id,
+              _rev,
+              _depth
+            FROM
+              art_rev
+            WHERE
+              -- leaves
+              NOT EXISTS(
+                SELECT
+                  art_id
+                FROM
+                  art_rev AS art_rev_inner
+                WHERE
+                  art_rev_inner.art_id = NEW.art_id
+                  AND art_rev_inner._parent_rev = art_rev._rev)
+                -- deleted
+                AND _deleted IS TRUE
+                -- of this record
+                AND art_id = NEW.art_id
+                -- siblings
+                AND EXISTS(
+                  SELECT
+                    art_id
+                  FROM
+                    art_rev_leaves(NEW.art_id) l
+                  WHERE
+                    l._parent_rev = art_rev._parent_rev
+                    AND l._depth = art_rev._depth)
+),
+-- find max depth, as only revisions with max depth can win
+max_depths AS(
+  SELECT
+    max(_depth) AS max_depth
+  FROM
+    art_rev_leaves(NEW.art_id)
+),
+-- the revision with max depth and max rev wins
+winning_revisions AS(
+  SELECT
+    -- this is the couchdb way of ensuring, every db chooses the same winner
+    -- thus does not need to communicate with other db instances
+    -- in a master-master replication system
+    -- winners could be choosen differently of course,
+    -- for instance: last writer wins
+    max(leaves._rev) AS _rev
+FROM
+  art_rev_leaves(NEW.art_id) AS leaves
+  JOIN max_depths ON leaves._depth = max_depths.max_depth
+)
+SELECT
+  art_rev.art_id,
+  art_rev.ae_id,
+  art_rev.set,
+  art_rev.apflora_av,
+  art_rev.apflora_ap,
+  art_rev.changed,
+  art_rev.changed_by,
+  art_rev._rev,
+  art_rev._rev_at,
+  art_rev._revisions,
+  art_rev._parent_rev,
+  art_rev._depth,
+  art_rev._deleted,
+(
+    SELECT
+      ARRAY(
+        SELECT
+          _rev
+        FROM
+          art_rev_leaves(NEW.art_id)
+        WHERE
           -- whose data is different from this record
           _rev <> art_rev._rev
           -- and is not an ancester of this record?
           -- to be honest: I am not sure why this condition is here
-          and _rev <> ANY(art_rev._revisions)
-        -- add deletions, making the deletion itself the conflict
-        union select _rev from deleted_conflicts_of_leaves
-        -- should I not ensure here too that data is different?
-      )) as _conflicts
-    from
-      art_rev
-      join winning_revisions on art_rev._rev = winning_revisions._rev
-    -- if the winner record already exists, update it
-    on conflict on constraint art_pkey do update set
-      -- do not update the id = pkey
-      ae_id = excluded.ae_id,
-      set = excluded.set,
-      changed = excluded.changed,
-      changed_by = excluded.changed_by,
-      _rev = excluded._rev,
-      _rev_at = excluded._rev_at,
-      _revisions = excluded._revisions,
-      _parent_rev = excluded._parent_rev,
-      _depth = excluded._depth,
-      _deleted = excluded._deleted,
-      _conflicts = excluded._conflicts;
-  else
-    -- 2. so there is no non deleted winner
-    --    choose winner of deleted datasets
-    --    this is probably not very important
-    --    as the only important part is that
-    --    the winning revision gets _deleted = true
-    --    so the client can delete the record
-    insert into art (
-        id,
-        ae_id,
-        set,
-        changed,
-        changed_by,
-        _rev,
-        _rev_at,
-        _revisions,
-        _parent_rev,
-        _depth,
-        _deleted,
-        _conflicts
-    )
+          AND _rev <> ANY(art_rev._revisions)
+          -- add deletions, making the deletion itself the conflict
+        UNION
+        SELECT
+          _rev
+        FROM
+          deleted_conflicts_of_leaves
+          -- should I not ensure here too that data is different?
+)) AS _conflicts
+FROM
+  art_rev
+  JOIN winning_revisions ON art_rev._rev = winning_revisions._rev
+  -- if the winner record already exists, update it
+ON CONFLICT ON CONSTRAINT art_pkey
+  DO UPDATE SET
+    -- do not update the id = pkey
+    ae_id = excluded.ae_id,
+    set = excluded.set, apflora_av = excluded.apflora_av, apflora_ap = excluded.apflora_ap, changed = excluded.changed, changed_by = excluded.changed_by, _rev = excluded._rev, _rev_at = excluded._rev_at, _revisions = excluded._revisions, _parent_rev = excluded._parent_rev, _depth = excluded._depth, _deleted = excluded._deleted, _conflicts = excluded._conflicts;
+ELSE
+  -- 2. so there is no non deleted winner
+  --    choose winner of deleted datasets
+  --    this is probably not very important
+  --    as the only important part is that
+  --    the winning revision gets _deleted = true
+  --    so the client can delete the record
+  INSERT INTO art(id, ae_id, set, apflora_av, apflora_ap, changed, changed_by, _rev, _rev_at, _revisions, _parent_rev, _depth, _deleted, _conflicts)
     -- again re-calculating the same as I do not know better :-(
-    with 
-      deleted_conflicts_of_leaves as (
-      select
+    WITH deleted_conflicts_of_leaves AS(
+      SELECT
         art_id,
         _rev,
         _depth
-      from
+      FROM
         art_rev
-      where
+      WHERE
         -- leaves
-        not exists (
-          select
+        NOT EXISTS(
+          SELECT
             art_id
-          from
-            art_rev as art_rev_inner
-          where
-            art_rev_inner.art_id = new.art_id
-            and art_rev_inner._parent_rev = art_rev._rev
-        )
-        -- deleted
-        and _deleted is true
-        -- of this record
-        and art_id = new.art_id
-        -- siblings
-        and exists (
-          select art_id from art_rev_leaves(new.art_id) l
-          where 
-            l._parent_rev = art_rev._parent_rev
-            and l._depth = art_rev._depth
-        )
-      ),
-      leaves_deleted as (
-      select
-        art_id,
-        _rev,
-        _depth
-      from
-        art_rev
-      where
-        not exists (
-          select
-            art_id
-          from
-            art_rev as t
-          where
-            t.art_id = new.art_id
-            and t._parent_rev = art_rev._rev)
-          --and _deleted = false
-          and art_id = new.art_id
-      ),
-      max_depths as (
-        select
-          max(_depth) as max_depth
-        from
-          leaves_deleted
-      ),
-      winning_revisions as (
-        select
-          max(leaves_deleted._rev) as _rev
-        from
-          leaves_deleted
-          join max_depths on leaves_deleted._depth = max_depths.max_depth
-      )
-      select
-        art_rev.art_id,
-        art_rev.ae_id,
-        art_rev.set,
-        art_rev.changed,
-        art_rev.changed_by,
-        art_rev._rev,
-        art_rev._rev_at,
-        art_rev._revisions,
-        art_rev._parent_rev,
-        art_rev._depth,
-        art_rev._deleted,
-        (select array(
-          select _rev from art_rev_leaves(new.art_id)
-          where 
-            _rev <> art_rev._rev
-            and _rev <> ANY(art_rev._revisions)
-        union select _rev from deleted_conflicts_of_leaves
-        )) as _conflicts
-      from
-        art_rev
-        join winning_revisions on art_rev._rev = winning_revisions._rev
-      on conflict on constraint art_pkey do update set
-        -- do not update the id = pkey
-        ae_id = excluded.ae_id,
-        set = excluded.set,
-        changed = excluded.changed,
-        changed_by = excluded.changed_by,
-        _rev = excluded._rev,
-        _rev_at = excluded._rev_at,
-        _revisions = excluded._revisions,
-        _parent_rev = excluded._parent_rev,
-        _depth = excluded._depth,
-        _deleted = excluded._deleted,
-        _conflicts = excluded._conflicts;
-  end if;
-  return new;
-end;
+          FROM
+            art_rev AS art_rev_inner
+          WHERE
+            art_rev_inner.art_id = NEW.art_id
+            AND art_rev_inner._parent_rev = art_rev._rev)
+          -- deleted
+          AND _deleted IS TRUE
+          -- of this record
+          AND art_id = NEW.art_id
+          -- siblings
+          AND EXISTS(
+            SELECT
+              art_id
+            FROM
+              art_rev_leaves(NEW.art_id) l
+            WHERE
+              l._parent_rev = art_rev._parent_rev
+              AND l._depth = art_rev._depth)
+),
+leaves_deleted AS(
+  SELECT
+    art_id,
+    _rev,
+    _depth
+  FROM
+    art_rev
+  WHERE
+    NOT EXISTS(
+      SELECT
+        art_id
+      FROM
+        art_rev AS t
+      WHERE
+        t.art_id = NEW.art_id
+        AND t._parent_rev = art_rev._rev)
+      --and _deleted = false
+      AND art_id = NEW.art_id
+),
+max_depths AS(
+  SELECT
+    max(_depth) AS max_depth
+  FROM
+    leaves_deleted
+),
+winning_revisions AS(
+  SELECT
+    max(leaves_deleted._rev) AS _rev
+  FROM
+    leaves_deleted
+    JOIN max_depths ON leaves_deleted._depth = max_depths.max_depth
+)
+SELECT
+  art_rev.art_id,
+  art_rev.ae_id,
+  art_rev.set,
+  art_rev.apflora_av,
+  art_rev.apflora_ap,
+  art_rev.changed,
+  art_rev.changed_by,
+  art_rev._rev,
+  art_rev._rev_at,
+  art_rev._revisions,
+  art_rev._parent_rev,
+  art_rev._depth,
+  art_rev._deleted,
+(
+    SELECT
+      ARRAY(
+        SELECT
+          _rev
+        FROM
+          art_rev_leaves(NEW.art_id)
+        WHERE
+          _rev <> art_rev._rev
+          AND _rev <> ANY(art_rev._revisions)
+        UNION
+        SELECT
+          _rev
+        FROM
+          deleted_conflicts_of_leaves)) AS _conflicts
+FROM
+  art_rev
+  JOIN winning_revisions ON art_rev._rev = winning_revisions._rev
+ON CONFLICT ON CONSTRAINT art_pkey
+  DO UPDATE SET
+    -- do not update the id = pkey
+    ae_id = excluded.ae_id,
+    set = excluded.set, apflora_av = excluded.apflora_av, apflora_ap = excluded.apflora_ap, changed = excluded.changed, changed_by = excluded.changed_by, _rev = excluded._rev, _rev_at = excluded._rev_at, _revisions = excluded._revisions, _parent_rev = excluded._parent_rev, _depth = excluded._depth, _deleted = excluded._deleted, _conflicts = excluded._conflicts;
+END IF;
+  RETURN new;
+END;
 $body$
-language plpgsql;
+LANGUAGE plpgsql;
 
-create trigger trigger_art_rev_set_winning_revision
-  after insert on art_rev
-  for each row
-  execute procedure art_rev_set_winning_revision ()
+CREATE TRIGGER trigger_art_rev_set_winning_revision
+  AFTER INSERT ON art_rev
+  FOR EACH ROW
+  EXECUTE PROCEDURE art_rev_set_winning_revision()

@@ -85,8 +85,9 @@ export const buildExceljsWorksheetsForKultur = async ({
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
   const zaehlungen = await Promise.all(
     zaehlungsSorted.map(async (z) => {
-      const tzs = z.teilzaehlungs
-        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))?.fetch()
+      const tzs =
+        z.teilzaehlungs ?
+          await z.teilzaehlungs.extend(Q.where('_deleted', false))?.fetch()
         : []
       const tzsSorted = await teilzaehlungsSortByTk(tzs)
       const newZ = {
@@ -134,9 +135,8 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (zaehlungen.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title: calledFromHigherUp
-        ? `Kultur_${kultur_name}_Zaehlungen`
-        : 'Zaehlungen',
+      title:
+        calledFromHigherUp ? `Kultur_${kultur_name}_Zaehlungen` : 'Zaehlungen',
       data: zaehlungen,
     })
   }
@@ -170,8 +170,9 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (teilzaehlungData.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title: calledFromHigherUp
-        ? `Kultur_${kultur_name}_Teilzaehlungen`
+      title:
+        calledFromHigherUp ?
+          `Kultur_${kultur_name}_Teilzaehlungen`
         : 'Teilzaehlungen',
       data: teilzaehlungData,
     })
@@ -259,6 +260,8 @@ export const buildExceljsWorksheetsForKultur = async ({
         }),
         art_id: l.art_id,
         art_set: art?.set,
+        art_apflora_av: art?.apflora_av,
+        art_apflora_ap: art?.apflora_ap,
         art_ae_id: aeArt?.id,
         art_ae_name: artName,
         person_id: l.person_id,
@@ -337,8 +340,9 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (anlieferungData.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title: calledFromHigherUp
-        ? `Kultur_${kultur_name}_Anlieferungen`
+      title:
+        calledFromHigherUp ?
+          `Kultur_${kultur_name}_Anlieferungen`
         : 'Anlieferungen',
       data: anlieferungData,
     })
@@ -429,6 +433,8 @@ export const buildExceljsWorksheetsForKultur = async ({
         }),
         art_id: l.art_id,
         art_set: art?.set,
+        art_apflora_av: art?.apflora_av,
+        art_apflora_ap: art?.apflora_ap,
         art_ae_id: aeArt?.id,
         art_ae_name: artName,
         person_id: l.person_id,
@@ -501,8 +507,9 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (auslieferungen.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title: calledFromHigherUp
-        ? `Kultur_${kultur_name}_Auslieferungen`
+      title:
+        calledFromHigherUp ?
+          `Kultur_${kultur_name}_Auslieferungen`
         : 'Auslieferungen',
       data: auslieferungen,
     })
@@ -561,4 +568,3 @@ export const buildExceljsWorksheetsForKultur = async ({
   }
   return
 }
-

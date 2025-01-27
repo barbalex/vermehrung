@@ -330,6 +330,9 @@ type art {
   _rev_at: numeric
   _revisions: _text
   ae_id: uuid
+  set: String
+  apflora_av: String
+  apflora_ap: Boolean
 
   # An object relationship
   art_ae_art: ae_art
@@ -801,6 +804,9 @@ input art_bool_exp {
   _rev_at: numeric_comparison_exp
   _revisions: _text_comparison_exp
   ae_id: uuid_comparison_exp
+  set: String_comparison_exp
+  apflora_av: String_comparison_exp
+  apflora_ap: Boolean_comparison_exp
   art_ae_art: ae_art_bool_exp
   art_files: art_file_bool_exp
   art_qk_choosens: art_qk_choosen_bool_exp
@@ -1171,6 +1177,9 @@ input art_insert_input {
   _rev_at: numeric
   _revisions: _text
   ae_id: uuid
+  set: String
+  apflora_av: String
+  apflora_ap: Boolean
   art_ae_art: ae_art_obj_rel_insert_input
   art_files: art_file_arr_rel_insert_input
   art_qk_choosens: art_qk_choosen_arr_rel_insert_input
@@ -1195,6 +1204,9 @@ type art_max_fields {
   _rev: String
   _rev_at: numeric
   ae_id: uuid
+  set: String
+  apflora_av: String
+  apflora_ap: Boolean
   changed: timestamp
   changed_by: String
   id: ID
@@ -1207,6 +1219,9 @@ input art_max_order_by {
   _rev: order_by
   _rev_at: order_by
   ae_id: order_by
+  set: order_by
+  apflora_av: order_by
+  apflora_ap: order_by
   changed: order_by
   changed_by: order_by
   id: order_by
@@ -1219,6 +1234,9 @@ type art_min_fields {
   _rev: String
   _rev_at: numeric
   ae_id: uuid
+  set: String
+  apflora_av: String
+  apflora_ap: Boolean
   changed: timestamp
   changed_by: String
   id: ID
@@ -1231,6 +1249,9 @@ input art_min_order_by {
   _rev: order_by
   _rev_at: order_by
   ae_id: order_by
+  set: order_by
+  apflora_av: order_by
+  apflora_ap: order_by
   changed: order_by
   changed_by: order_by
   id: order_by
@@ -1268,6 +1289,9 @@ input art_order_by {
   _rev_at: order_by
   _revisions: order_by
   ae_id: order_by
+  set: order_by
+  apflora_av: order_by
+  apflora_ap: order_by
   art_ae_art: ae_art_order_by
   art_files_aggregate: art_file_aggregate_order_by
   art_qk_choosens_aggregate: art_qk_choosen_aggregate_order_by
@@ -3000,13 +3024,13 @@ type art_rev {
   _rev_at: numeric
   _revisions: _text
   ae_id: uuid
+  set: String
+  apflora_av: String
+  apflora_ap: Boolean
   art_id: uuid!
 
   # An object relationship
   art_rev_ae_art: ae_art
-
-  # An object relationship
-  av: av
 
   # An array relationship
   avs(
@@ -3258,9 +3282,11 @@ input art_rev_bool_exp {
   _rev_at: numeric_comparison_exp
   _revisions: _text_comparison_exp
   ae_id: uuid_comparison_exp
+  set: String_comparison_exp
+  apflora_av: String_comparison_exp
+  apflora_ap: Boolean_comparison_exp
   art_id: uuid_comparison_exp
   art_rev_ae_art: ae_art_bool_exp
-  av: av_bool_exp
   avs: av_bool_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
@@ -3292,9 +3318,11 @@ input art_rev_insert_input {
   _rev_at: numeric
   _revisions: _text
   ae_id: uuid
+  set: String
+  apflora_av: String
+  apflora_ap: Boolean
   art_id: uuid
   art_rev_ae_art: ae_art_obj_rel_insert_input
-  av: av_obj_rel_insert_input
   avs: av_arr_rel_insert_input
   changed: timestamp
   changed_by: String
@@ -3312,6 +3340,8 @@ type art_rev_max_fields {
   _rev: String
   _rev_at: numeric
   ae_id: uuid
+  set: String
+  apflora_av: String
   art_id: uuid
   changed: timestamp
   changed_by: String
@@ -3325,6 +3355,8 @@ input art_rev_max_order_by {
   _rev: order_by
   _rev_at: order_by
   ae_id: order_by
+  set: order_by
+  apflora_av: order_by
   art_id: order_by
   changed: order_by
   changed_by: order_by
@@ -3338,6 +3370,8 @@ type art_rev_min_fields {
   _rev: String
   _rev_at: numeric
   ae_id: uuid
+  set: String
+  apflora_av: String
   art_id: uuid
   changed: timestamp
   changed_by: String
@@ -3351,6 +3385,8 @@ input art_rev_min_order_by {
   _rev: order_by
   _rev_at: order_by
   ae_id: order_by
+  set: order_by
+  apflora_av: order_by
   art_id: order_by
   changed: order_by
   changed_by: order_by
@@ -3388,9 +3424,11 @@ input art_rev_order_by {
   _rev_at: order_by
   _revisions: order_by
   ae_id: order_by
+  set: order_by
+  apflora_av: order_by
+  apflora_ap: order_by
   art_id: order_by
   art_rev_ae_art: ae_art_order_by
-  av: av_order_by
   avs_aggregate: av_aggregate_order_by
   changed: order_by
   changed_by: order_by
@@ -3429,6 +3467,12 @@ enum art_rev_select_column {
   # column name
   ae_id
 
+  set
+
+  apflora_av
+
+  apflora_ap
+
   # column name
   art_id
 
@@ -3451,6 +3495,9 @@ input art_rev_set_input {
   _rev_at: numeric
   _revisions: _text
   ae_id: uuid
+  set: String
+  apflora_av: String
+  apflora_ap: Boolean
   art_id: uuid
   changed: timestamp
   changed_by: String
@@ -3527,6 +3574,9 @@ enum art_rev_update_column {
 
   # column name
   ae_id
+  set
+  apflora_av
+  apflora_ap
 
   # column name
   art_id
@@ -3602,6 +3652,9 @@ enum art_select_column {
 
   # column name
   ae_id
+  set
+  apflora_av
+  apflora_ap
 
   # column name
   changed
@@ -3623,6 +3676,9 @@ input art_set_input {
   _rev_at: numeric
   _revisions: _text
   ae_id: uuid
+  set: String
+  apflora_av: String
+  apflora_ap: Boolean
   changed: timestamp
   changed_by: String
   id: ID
@@ -3701,6 +3757,9 @@ enum art_update_column {
 
   # column name
   ae_id
+  set
+  apflora_av
+  apflora_ap
 
   # column name
   changed

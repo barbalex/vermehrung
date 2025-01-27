@@ -20,6 +20,8 @@ const artRevQuery = gql`
       art_id
       ae_id
       set
+      apflora_av
+      apflora_ap
       changed
       changed_by
       _rev
@@ -67,6 +69,8 @@ export const ArtConflict = observer(
         art_id: revRow.art_id,
         ae_id: revRow.ae_id,
         set: revRow.set,
+        apflora_av: revRow.apflora_av,
+        apflora_ap: revRow.apflora_ap,
         _parent_rev: revRow._rev,
         _depth: newDepth,
         _deleted: true,
@@ -110,6 +114,8 @@ export const ArtConflict = observer(
       revRow._revisions,
       revRow.ae_id,
       revRow.set,
+      revRow.apflora_av,
+      revRow.apflora_ap,
       revRow.art_id,
       user.email,
     ])
@@ -121,6 +127,8 @@ export const ArtConflict = observer(
         art_id: revRow.art_id,
         ae_id: revRow.ae_id,
         set: revRow.set,
+        apflora_av: revRow.apflora_av,
+        apflora_ap: revRow.apflora_ap,
         _parent_rev: row._rev,
         _depth: newDepth,
         _deleted: revRow._deleted,
@@ -158,6 +166,8 @@ export const ArtConflict = observer(
       revRow._deleted,
       revRow.ae_id,
       revRow.set,
+      revRow.apflora_av,
+      revRow.apflora_ap,
       revRow.art_id,
       row._depth,
       row._rev,

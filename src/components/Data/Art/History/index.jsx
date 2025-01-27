@@ -18,6 +18,8 @@ const artRevQuery = gql`
       art_id
       ae_id
       set
+      apflora_av
+      apflora_ap
       changed
       changed_by
       _rev

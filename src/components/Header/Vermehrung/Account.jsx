@@ -13,11 +13,12 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
-import { sendPasswordResetEmail } from 'firebase/auth'
+import { reload, sendPasswordResetEmail } from 'firebase/auth'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { logout } from '../../../utils/logout.js'
+import { reloadData } from '../../../utils/reloadData.js'
 import { constants } from '../../../utils/constants.js'
 import { personFullname } from '../../../utils/personFullname.js'
 
@@ -66,7 +67,6 @@ const Account = () => {
     useState(false)
   const onClickLogout = useCallback(async () => {
     setAnchorEl(null)
-    // TODO:
     // if exist pending operations
     // ask user if willing to loose them
     if (queuedQueries.size) {
@@ -74,6 +74,17 @@ const Account = () => {
     }
     logout({ store })
   }, [queuedQueries.size, store])
+
+  const [reloadDataDialogOpen, setReloadDataDialogOpen] = useState(false)
+  const onClickReloadData = useCallback(() => {
+    setAnchorEl(null)
+    // if exist pending operations
+    // ask user if willing to loose them
+    if (queuedQueries.size) {
+      return setReloadDataDialogOpen(true)
+    }
+    reloadData({ store })
+  }, [])
 
   const { email } = user || {}
 
@@ -131,6 +142,9 @@ const Account = () => {
             personFullname(userPerson) ?? ''
           } abmelden`}</MenuItem>
           <MenuItem onClick={onClickResetPassword}>{resetTitle}</MenuItem>
+          <MenuItem onClick={onClickReloadData}>
+            Lokale Daten verwerfen, dann vom Server neu laden
+          </MenuItem>
         </Menu>
         <Dialog
           open={pendingOperationsDialogOpen}
@@ -170,6 +184,44 @@ const Account = () => {
               startIcon={<FaExclamationCircle />}
             >
               Ich will abmelden, obwohl ich die ausstehenden Operationen
+              verliere
+            </RiskyButton>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={reloadDataDialogOpen}
+          onClose={() => setReloadDataDialogOpen(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth="md"
+        >
+          <DialogTitle id="alert-dialog-title">{'Wirklich?'}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {`Es gibt noch ${queuedQueries.size} ausstehende
+              Operationen. Wenn Sie jetzt die Daten verwerfen und neu laden, gehen diese verloren.
+              Vermutlich warten Sie besser, bis diese Operationen an den Server
+              übermittelt wurden.`}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <StyledButton
+              onClick={() => setReloadDataDialogOpen(false)}
+              color="primary"
+              autoFocus
+              variant="outlined"
+            >
+              Ich verzichte, um die ausstehenden Operationen nicht zu verlieren
+            </StyledButton>
+            <RiskyButton
+              onClick={() => {
+                setReloadDataDialogOpen(false)
+                reloadData({ store })
+              }}
+              variant="outlined"
+              startIcon={<FaExclamationCircle />}
+            >
+              Ich lade die Daten neu, obwohl ich die ausstehenden Operationen
               verliere
             </RiskyButton>
           </DialogActions>
