@@ -141,8 +141,11 @@ const compare = (a, b) => {
 
 export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   const { db, apFilter } = store
-  const { openNodes: openNodesRaw, activeNodeArray: activeNodeArrayRaw } =
-    store.tree
+  const {
+    openNodes: openNodesRaw,
+    activeNodeArray: activeNodeArrayRaw,
+    removeOpenNodeWithChildren,
+  } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
   const activeNodeArray = activeNodeArrayRaw.toJSON()
 
@@ -298,13 +301,15 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
       const openArtNodes = openNodes.filter(
         (n) => n[0] === 'Arten' && n.length === 2,
       )
-      console.log('openArtNodes:', openArtNodes)
-      // TODO: when apFilter is set to true, need to remove all open art nodes for non ap arts
       for (const artNode of openArtNodes) {
         const artId = artNode[1]
         const art = artsSorted.find((a) => a.id === artId)
         if (!art) break
-        if (apFilter && !art.apflora_ap) break
+        if (apFilter && !art.apflora_ap) {
+          // remove from openNodes
+          removeOpenNodeWithChildren(artNode)
+          break
+        }
 
         const artIndex = artNodes.findIndex((a) => a.id === artId)
 

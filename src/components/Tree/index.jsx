@@ -141,6 +141,13 @@ export const Tree = observer(() => {
     setNodes(nodes)
   }, [store, userPersonOption, userRole])
 
+  // useEffect(() => {
+  //   // when apFilter changes to true, remove all open ap nodes from openNodes
+  //   const openArtNodes = openNodes.filter(
+  //     (n) => n[0] === 'Arten' && n.length === 2,
+  //   )
+  // }, [apFilter, openNodes])
+
   const buildMyNodesDebounced = useDebouncedCallback(buildMyNodes, 100)
 
   useEffect(() => {
