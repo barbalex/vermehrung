@@ -37,6 +37,7 @@ export const MobxStore = types
   .model({
     tree: types.optional(Tree, defaultTree),
     filter: types.optional(Filter, initialFilterValues),
+    apFilter: types.optional(types.boolean, true),
     docFilter: types.optional(types.union(types.string, types.number), ''),
     docsCount: types.maybeNull(types.number, null),
     docsFilteredCount: types.maybeNull(types.number, null),
@@ -250,6 +251,9 @@ export const MobxStore = types
       },
     )
     return {
+      setApFilter(val) {
+        self.apFilter = val
+      },
       setNavigate(val) {
         return (self.navigate = val)
       },
