@@ -44,7 +44,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         const apfloraAv = await art.av
         av = apfloraAv?.[0]?.av
-        ap = apfloraAv?.[0]?.ap
+        ap = apfloraAv?.[0]?.ap ?? false
       } catch {}
       let artname
       try {
@@ -368,6 +368,8 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       return row
     }),
   )
+
+  // console.log('kultursData:', kultursData)
 
   addWorksheetToExceljsWorkbook({
     workbook,

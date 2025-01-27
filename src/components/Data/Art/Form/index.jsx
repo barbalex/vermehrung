@@ -19,6 +19,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import { artsSortedFromArts } from '../../../../utils/artsSortedFromArts.js'
 import { Av } from './Av.jsx'
+import { Ap } from './Ap.jsx'
 
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -185,7 +186,7 @@ export const ArtForm = observer(
             onCreateNew={onCreateSet}
             formatCreateLabel={(val) => `"${val}" als neues Set aufnehmen`}
           />
-          <Av row={row} />
+          {!showFilter && <Av row={row} />}
           {online && !showFilter && row?._conflicts?.map && (
             <ConflictList
               conflicts={row._conflicts}
