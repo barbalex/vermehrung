@@ -399,6 +399,8 @@ export const MobxStore = types
           art_id: id,
           ae_id: undefined,
           set: undefined,
+          apflora_av: undefined,
+          apflora_ap: undefined,
           changed: new window.Date().toISOString(),
           changed_by: user.email,
           _depth,

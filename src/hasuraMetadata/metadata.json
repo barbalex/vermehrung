@@ -1,5 +1,5 @@
 {
-  "resource_version": 43,
+  "resource_version": 80,
   "metadata": {
     "version": 3,
     "sources": [
@@ -23,21 +23,6 @@
                     "insertion_order": null,
                     "remote_table": {
                       "name": "art",
-                      "schema": "public"
-                    }
-                  }
-                }
-              },
-              {
-                "name": "ae_art_av",
-                "using": {
-                  "manual_configuration": {
-                    "column_mapping": {
-                      "id": "ae_id"
-                    },
-                    "insertion_order": null,
-                    "remote_table": {
-                      "name": "apflora_av",
                       "schema": "public"
                     }
                   }
@@ -145,67 +130,6 @@
                   "filter": {},
                   "allow_aggregations": true
                 }
-              }
-            ]
-          },
-          {
-            "table": {
-              "name": "apflora_av",
-              "schema": "public"
-            },
-            "object_relationships": [
-              {
-                "name": "av_ae_art",
-                "using": {
-                  "manual_configuration": {
-                    "column_mapping": {
-                      "ae_id": "id"
-                    },
-                    "insertion_order": null,
-                    "remote_table": {
-                      "name": "ae_art",
-                      "schema": "public"
-                    }
-                  }
-                }
-              }
-            ],
-            "select_permissions": [
-              {
-                "role": "artverantwortlich",
-                "permission": {
-                  "columns": [
-                    "av",
-                    "ae_id"
-                  ],
-                  "filter": {},
-                  "allow_aggregations": true
-                },
-                "comment": ""
-              },
-              {
-                "role": "gaertner",
-                "permission": {
-                  "columns": [
-                    "av",
-                    "ae_id"
-                  ],
-                  "filter": {},
-                  "allow_aggregations": true
-                },
-                "comment": ""
-              },
-              {
-                "role": "manager",
-                "permission": {
-                  "columns": [
-                    "av",
-                    "ae_id"
-                  ],
-                  "filter": {},
-                  "allow_aggregations": true
-                },
-                "comment": ""
               }
             ]
           },
@@ -394,9 +318,11 @@
                   "columns": [
                     "_conflicts",
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -421,9 +347,11 @@
                   "columns": [
                     "_conflicts",
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -465,9 +393,11 @@
                   "columns": [
                     "_conflicts",
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -488,9 +418,11 @@
                   "columns": [
                     "_conflicts",
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -515,9 +447,11 @@
                   "columns": [
                     "_conflicts",
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -1676,9 +1610,11 @@
                   "check": {},
                   "columns": [
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -1696,9 +1632,11 @@
                   "check": {},
                   "columns": [
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -1717,9 +1655,11 @@
                 "permission": {
                   "columns": [
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -1738,9 +1678,11 @@
                 "permission": {
                   "columns": [
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -1758,9 +1700,11 @@
                 "permission": {
                   "columns": [
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -1781,9 +1725,11 @@
                 "permission": {
                   "columns": [
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -1802,9 +1748,11 @@
                 "permission": {
                   "columns": [
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",
@@ -1823,9 +1771,11 @@
                 "permission": {
                   "columns": [
                     "_revisions",
+                    "apflora_ap",
                     "_deleted",
                     "_depth",
                     "_rev_at",
+                    "apflora_av",
                     "changed_by",
                     "_parent_rev",
                     "_rev",

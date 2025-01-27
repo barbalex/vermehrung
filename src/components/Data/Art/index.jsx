@@ -71,8 +71,6 @@ export const Art = observer(
 
     const paneIsSplit = online && (activeConflict || showHistory)
 
-    //console.log('Art, row:', row)
-
     return (
       <ErrorBoundary>
         <Container showfilter={showFilter}>

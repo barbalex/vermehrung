@@ -39,13 +39,6 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         art = await kultur.art.fetch()
       } catch {}
-      let av
-      let ap
-      try {
-        const apfloraAv = await art.av
-        av = apfloraAv?.[0]?.av
-        ap = apfloraAv?.[0]?.ap ?? false
-      } catch {}
       let artname
       try {
         artname = await art.label.pipe(first$()).toPromise()
@@ -268,8 +261,8 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         artname,
         set: art?.set,
         mitarbeitende: avsLabels.sort().join(', '),
-        apflora_artverantwortlich: av,
-        aktionsplan_art: ap,
+        apflora_artverantwortlich: art?.apflora_av,
+        aktionsplan_art: art?.apflora_ap,
         herkunft_id: kultur.herkunft_id,
         herkunft_nr: herkunft?.nr ?? '',
         herkunft_gemeinde: herkunft?.gemeinde ?? '',

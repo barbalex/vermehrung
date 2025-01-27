@@ -543,6 +543,8 @@ export class Art extends Model {
   @field('id') id
   @field('ae_id') ae_id
   @field('set') set;
+  @field('apflora_av') apflora_av
+  @field('apflora_ap') apflora_ap
   @field('changed') changed
   @field('changed_by') changed_by
   @field('_rev') _rev
@@ -553,7 +555,6 @@ export class Art extends Model {
   @json('_conflicts', dontSanitize) _conflicts
 
   @relation('ae_art', 'ae_id') ae_art
-  @immutableRelation('apflora_av', 'ae_id') apflora_av
 
   @children('sammlung') sammlungs
   @children('sammel_lieferung') sammel_lieferungs
@@ -569,10 +570,6 @@ export class Art extends Model {
   @lazy herkunfts = this.collections
     .get('herkunft')
     .query(Q.on('sammlung', 'art_id', this.id))
-  @lazy av = this.collections
-    .get('apflora_av')
-    .query(Q.where('ae_id', this.ae_id))
-    .fetch()
 
   @writer async removeConflict(_rev) {
     await this.update((row) => {
@@ -641,25 +638,11 @@ export class Art extends Model {
   }
 }
 
-export class ApfloraAv extends Model {
-  static table = 'apflora_av'
-  static associations = {
-    ae_art: { type: 'belongs_to', foreignKey: 'ae_id' },
-  }
-
-  @field('id') id
-  @field('ae_id') ae_id
-  @field('av') av
-  @field('ap') ap
-}
-
 export class AeArt extends Model {
   static table = 'ae_art'
   static associations = {
     art: { type: 'has_many', foreignKey: 'ae_id' },
   }
-
-  @immutableRelation('apflora_av', 'ae_id') apflora_av
 
   @field('id') id
   @field('name') name

@@ -5,6 +5,8 @@ export const art = tableSchema({
   columns: [
     { name: 'ae_id', type: 'string', isOptional: true, isIndexed: true },
     { name: 'set', type: 'string', isOptional: true, isIndexed: true },
+    { name: 'apflora_av', type: 'string', isOptional: true },
+    { name: 'apflora_ap', type: 'boolean', isOptional: true },
     { name: 'changed', type: 'string', isOptional: true },
     { name: 'changed_by', type: 'string', isOptional: true },
     { name: '_rev', type: 'string', isOptional: true },

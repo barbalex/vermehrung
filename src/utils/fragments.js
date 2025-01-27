@@ -6,6 +6,8 @@ export const art = gql`
     __typename
     ae_id
     set
+    apflora_av
+    apflora_ap
     changed
     changed_by
     _rev
@@ -23,6 +25,8 @@ export const artRev = gql`
     art_id
     ae_id
     set
+    apflora_av
+    apflora_ap
     changed
     changed_by
     _rev
