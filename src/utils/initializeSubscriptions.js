@@ -13,7 +13,6 @@ export const initializeSubscriptions = ({ store, userRole }) => {
 
   const {
     ae_art_lastUpdated,
-    apflora_av_lastUpdated,
     art_lastUpdated,
     art_file_lastUpdated,
     art_qk_lastUpdated,
@@ -88,6 +87,7 @@ export const initializeSubscriptions = ({ store, userRole }) => {
             __typename
             ae_id
             av
+            ap
           }
         }
       `,

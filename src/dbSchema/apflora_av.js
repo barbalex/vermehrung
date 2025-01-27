@@ -4,6 +4,7 @@ export const apflora_av = tableSchema({
   name: 'apflora_av',
   columns: [
     { name: 'ae_id', type: 'string', isIndexed: true },
+    { name: 'ap', type: 'boolean' },
     { name: 'av', type: 'string' },
   ],
 })

@@ -10,6 +10,8 @@ export const Av = memo(({ row }) => {
     row.av.then((avArray) => setApfloraAv(avArray?.[0]))
   }, [row])
 
+  console.log('Av', { row, apfloraAv })
+
   if (!apfloraAv) return null
 
   return (

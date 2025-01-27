@@ -134,6 +134,8 @@ export const ArtForm = observer(
 
     const showDeleted = filter.art._deleted !== false || row?._deleted
 
+    console.log('ArtForm, row:', row)
+
     return (
       <ErrorBoundary>
         <FieldsContainer>
