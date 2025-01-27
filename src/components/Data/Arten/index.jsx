@@ -52,11 +52,13 @@ const FieldsContainer = styled.div`
 
 export const Arten = observer(({ filter: showFilter }) => {
   const store = useContext(MobxStoreContext)
-  const { insertArtRev, db, filter } = store
+  const { insertArtRev, db, filter, apFilter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { art: artFilter } = store.filter
 
   const { width, height, ref } = useResizeDetector()
+
+  console.log('Arten, apFilter:', apFilter)
 
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
