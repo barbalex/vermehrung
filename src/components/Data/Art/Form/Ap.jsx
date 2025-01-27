@@ -3,7 +3,7 @@ import { memo, useEffect, useState } from 'react'
 import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.jsx'
 import { Checkbox2StatesNonUpdatable } from '../../../shared/Checkbox2StatesNonUpdatable.jsx'
 
-export const Av = memo(({ row }) => {
+export const Ap = memo(({ row }) => {
   const [apfloraAv, setApfloraAv] = useState(null)
   useEffect(() => {
     if (!row) return

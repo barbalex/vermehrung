@@ -32,19 +32,18 @@ export const Checkbox2StatesNonUpdatable = observer(
     label,
     name,
     value: valuePassed,
-    error,
-    message = 'Dieser Wert ist nicht veränderbar',
+    message: messagePassed = 'Dieser Wert ist nicht veränderbar',
   }) => {
     const [stateValue, setStateValue] = useState(valuePassed)
     useEffect(() => {
       setStateValue(valuePassed)
     }, [valuePassed])
 
-    const [error, setError] = useState(null)
+    const [message, setMessage] = useState(messagePassed)
     const onClickButton = useCallback(() => {
-      setError(message)
+      setMessage(message)
       // can fire after component was unmounted...
-      setTimeout(() => setError(null), 10000)
+      setTimeout(() => setMessage(null), 10000)
     }, [message])
 
     const checked = stateValue === true
@@ -53,8 +52,8 @@ export const Checkbox2StatesNonUpdatable = observer(
       <Container>
         <StyledFormControl
           component="fieldset"
-          error={!!error}
-          aria-describedby={`${label}ErrorText`}
+          error={!!message}
+          aria-describedby={`${label}MessageText`}
           variant="standard"
         >
           <StyledFormLabel component="legend">{label}</StyledFormLabel>
@@ -64,8 +63,10 @@ export const Checkbox2StatesNonUpdatable = observer(
             color="primary"
             checked={checked}
           />
-          {!!error && (
-            <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+          {!!message && (
+            <FormHelperText id={`${label}MessageText`}>
+              {message}
+            </FormHelperText>
           )}
         </StyledFormControl>
       </Container>
