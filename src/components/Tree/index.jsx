@@ -106,7 +106,7 @@ const Container = styled.div`
 
 export const Tree = observer(() => {
   const store = useContext(MobxStoreContext)
-  const { db, user } = store
+  const { db, user, apFilter } = store
   const {
     art: artFilter,
     herkunft: herkunftFilter,
@@ -285,6 +285,7 @@ export const Tree = observer(() => {
     openNodes,
     openNodes.length,
     user.uid,
+    apFilter,
   ])
 
   //console.log('Tree rendering', { openNodes, nodes })

@@ -140,7 +140,7 @@ const compare = (a, b) => {
 }
 
 export const buildNodes = async ({ store, userPersonOption, userRole }) => {
-  const { db } = store
+  const { db, apFilter } = store
   const { openNodes: openNodesRaw, activeNodeArray: activeNodeArrayRaw } =
     store.tree
   const openNodes = getSnapshot(openNodesRaw)
@@ -275,7 +275,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   if (showArt) {
     const artQuery = db
       .get('art')
-      .query(...tableFilter({ store, table: 'art' }))
+      .query(...tableFilter({ store, table: 'art', apFilter }))
     const artCount = await artQuery.fetchCount()
     artFolderNodes = buildArtFolder({ count: artCount })
     const artFolderIsOpen = openNodes.some(
