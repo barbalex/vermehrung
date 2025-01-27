@@ -5,8 +5,8 @@ import { ApFilter } from '../shared/ApFilter.jsx'
 
 const Container = styled.div`
   position: absolute;
-  top: 0;
-  right: 45px;
+  top: -1px;
+  right: 50px;
   z-index: 1;
 `
 
