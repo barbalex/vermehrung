@@ -28,8 +28,8 @@ export const TextFieldNonUpdatable = observer(
       setTimeout(() => setError(null), 10000)
     }, [message])
 
-    // once schrink is set, need to manually control it
-    // schrink if value exists or schrinkLabel was passed
+    // once shrink is set, need to manually control it
+    // shrink if value exists or shrinkLabel was passed
     const schrink = schrinkLabel || !!value || value === 0
 
     return (

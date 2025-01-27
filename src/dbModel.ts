@@ -650,6 +650,7 @@ export class ApfloraAv extends Model {
   @field('id') id
   @field('ae_id') ae_id
   @field('av') av
+  @field('ap') ap
 }
 
 export class AeArt extends Model {

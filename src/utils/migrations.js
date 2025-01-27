@@ -57,5 +57,14 @@ export const migrations = schemaMigrations({
         }),
       ],
     },
+    {
+      toVersion: 6,
+      steps: [
+        addColumns({
+          table: 'apflora_av',
+          columns: [{ name: 'ap', type: 'boolean' }],
+        }),
+      ],
+    },
   ],
 })
