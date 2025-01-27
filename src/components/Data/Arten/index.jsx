@@ -17,6 +17,7 @@ import { FilterNumbers } from '../../shared/FilterNumbers.jsx'
 import { tableFilter } from '../../../utils/tableFilter.js'
 import { artsSortedFromArts } from '../../../utils/artsSortedFromArts.js'
 import { constants } from '../../../utils/constants.js'
+import { ApFilter } from '../../shared/ApFilter.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -48,6 +49,9 @@ const TitleSymbols = styled.div`
 `
 const FieldsContainer = styled.div`
   height: 100%;
+`
+const ApFilterContainer = styled.div`
+  margin-top: -3px;
 `
 
 export const Arten = observer(({ filter: showFilter }) => {
@@ -121,6 +125,9 @@ export const Arten = observer(({ filter: showFilter }) => {
         : <TitleContainer>
             <Title>Arten</Title>
             <TitleSymbols>
+              <ApFilterContainer>
+                <ApFilter />
+              </ApFilterContainer>
               <IconButton
                 title={upTitle}
                 onClick={onClickUp}
