@@ -10,6 +10,7 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { TreeSettings as Settings } from './Settings.jsx'
+import { ApFilterContainer } from './ApFilter.jsx'
 import { TreeList as List } from './List.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { tableFilter } from '../../utils/tableFilter.js'
@@ -291,6 +292,7 @@ export const Tree = observer(() => {
   return (
     <ErrorBoundary>
       <Container>
+        <ApFilterContainer />
         <Settings />
         <AutoSizer>
           {({ height, width }) => (
