@@ -1,5 +1,5 @@
 {
-  "resource_version": 80,
+  "resource_version": 83,
   "metadata": {
     "version": 3,
     "sources": [
@@ -130,6 +130,28 @@
                   "filter": {},
                   "allow_aggregations": true
                 }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "apflora_ap",
+              "schema": "public"
+            },
+            "select_permissions": [
+              {
+                "role": "manager",
+                "permission": {
+                  "columns": [
+                    "ap",
+                    "av",
+                    "ae_id",
+                    "id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                },
+                "comment": ""
               }
             ]
           },
