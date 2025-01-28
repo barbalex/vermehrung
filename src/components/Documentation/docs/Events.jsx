@@ -17,13 +17,15 @@ export const Events = () => (
     </ul>
     <h3>Umsetzung</h3>
     <p>
-      Für das Projekt wesentliche werden als Events dokumentiert.
+      Für das Projekt wesentliche Vorgänge, die weder Sammlungen, noch
+      Vermehrung oder Lieferungen entsprechen, können als Events dokumentiert
+      werden.
       <br />
     </p>
     <p>
       Auch als Events werden Aufgaben erfasst: Das sind einfach geplante Events.
       Sind sie erledigt, wird das Attribut &quot;geplant&quot; entfernt. Und
-      schon sind sie als Event dokumentiert.
+      schon sind sie dokumentiert.
       <br />
     </p>
     <p>
