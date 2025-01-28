@@ -6,7 +6,7 @@ export const Planen = () => (
   <Suspense fallback={null}>
     <h1>Planen</h1>
     <DokuDate>28.01.2025</DokuDate>
-    <h3>Wo</h3>
+    <h3>Was</h3>
     <p>Die folgenden Vorgänge können geplant werden:</p>
     <ul>
       <li>Sammlungen</li>
@@ -22,30 +22,7 @@ export const Planen = () => (
         oder allenfalls übernächsten Jahr zur Verfügung stehen
       </li>
     </ul>
-    <h3>Wie</h3>
-    <p>
-      In Sammlungen, Lieferungen und Events gibt es ein Feld
-      &quot;geplant&quot;.
-      <br />
-      Zählungen werden (von der Artverantwortlichen/Projektleitung) als
-      &quot;Ziel&quot; oder (vom Gärtner) als &quot;Prognose&quot; markiert.
-      <br />
-    </p>
-    <h3>Wozu Zählungen planen?</h3>
-    <p>
-      Sammlungen, Lieferungen und Events planen ist einleuchtend. Wozu aber
-      Zählungen planen?
-      <br />
-    </p>
-    <p>
-      Eine geplante Zählung ist nichts anderes als die Aussage, dass an dem
-      festgelegten Datum damit gerechnet wird, über so viele (auspflanz-bereite)
-      Pflanzen zu verfügen. In dieser Zahl werden nicht nur Lieferungen
-      berücksichtigt. Vor allem wird geschätzt, wie viele Pflanzen{' '}
-      <strong>vermehrt</strong> werden. Und Vermehrung ist ja der Kern des
-      Projekts 🎯
-    </p>
-    <h3>Wozu dient welche Planung?</h3>
+    <h4>Genauer:</h4>
     <ul>
       <li>
         Eine geplante <strong>Sammlung</strong> stellt dar, dass die geplante
@@ -68,5 +45,14 @@ export const Planen = () => (
         sind) und nicht grafisch ausgewertet werden sollen.
       </li>
     </ul>
+    <h3>Wie</h3>
+    <p>
+      In Sammlungen, Lieferungen und Events gibt es ein Feld
+      &quot;geplant&quot;.
+      <br />
+      Zählungen werden (von der Artverantwortlichen/Projektleitung) als
+      &quot;Ziel&quot; oder (vom Gärtner) als &quot;Prognose&quot; markiert.
+      <br />
+    </p>
   </Suspense>
 )
