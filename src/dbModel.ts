@@ -576,19 +576,33 @@ export class Art extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
+  // values is meant to enable updating multiple fields at once
+  @writer async edit({ field, value, values, store }) {
     const { addQueuedQuery, user, unsetError } = store
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
+    }
 
     unsetError(`art.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
     const newObject = {
       art_id: this.id,
-      ae_id: field === 'ae_id' ? value : this.ae_id,
-      set: field === 'set' ? value : this.set,
+      ae_id: this.ae_id,
+      set: this.set,
+      apflora_av: this.apflora_av,
+      apflora_ap: this.apflora_ap,
       _parent_rev: this._rev,
       _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+      _deleted: this._deleted,
+    }
+    if (field) {
+      newObject[field] = value
+    }
+    if (values) {
+      Object.entries(values).forEach(([key, value]) => {
+        newObject[key] = value
+      })
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
