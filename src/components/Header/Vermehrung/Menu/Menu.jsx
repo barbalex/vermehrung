@@ -10,7 +10,7 @@ import styled from '@emotion/styled'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { HeaderExportMenu as ExportMenu } from './Export/index.jsx'
 
-const StyledMenuItem = styled(MenuItem)`
+export const StyledMenuItem = styled(MenuItem)`
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
@@ -79,15 +79,9 @@ export const HeaderHamburgerMenu = observer(
       [setParentAnchorEl],
     )
 
-    const [anchorEl, setAnchorEl] = useState(null)
-    const onClickExporte = useCallback(
-      (event) => setAnchorEl(event.currentTarget),
-      [],
-    )
-
     const onClickUptime = useCallback(() => {
       window.open('https://uptime.vermehrung.ch')
-      setAnchorEl(null)
+      setParentAnchorEl(null)
     }, [])
 
     return (
@@ -97,19 +91,7 @@ export const HeaderHamburgerMenu = observer(
         open={Boolean(parentAnchorEl)}
         onClose={onClose}
       >
-        <StyledMenuItem
-          aria-owns={anchorEl ? 'menu' : null}
-          aria-haspopup="true"
-          onClick={onClickExporte}
-        >
-          Exporte
-          <FaChevronRight />
-        </StyledMenuItem>
-        <ExportMenu
-          anchorEl={anchorEl}
-          setAnchorEl={setAnchorEl}
-          setParentAnchorEl={setParentAnchorEl}
-        />
+        <ExportMenu setParentAnchorEl={setParentAnchorEl} />
         <MenuItem>
           <FormControlLabel
             control={

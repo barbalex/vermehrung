@@ -1,37 +1,41 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
+import { FaChevronRight } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { buildExceljsWorksheetsForLieferungenOfYear } from './buildExceljsWorksheetsForLieferungenOfYear.js'
 import { buildExceljsWorksheetsForKulturBedarfsplanung } from './buildExceljsWorksheetsForKulturBedarfsplanung.js'
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
+import { StyledMenuItem } from '../Menu.jsx'
 
 const FirstMenuItem = styled(MenuItem)`
   margin-top: -5px !important;
 `
 
 export const HeaderExportMenu = observer(
-  ({
-    anchorEl: parentAnchorEl,
-    setAnchorEl: setParentAnchorEl,
-    setParentAnchorEl: setGrandParentAnchorEl,
-  }) => {
+  ({ setParentAnchorEl: setGrandParentAnchorEl }) => {
     const store = useContext(MobxStoreContext)
+
+    const [anchorEl, setAnchorEl] = useState(null)
+    const onClickExporte = useCallback(
+      (event) => setAnchorEl(event.currentTarget),
+      [],
+    )
 
     const onClickLieferungenDesJahrs = useCallback(
       (event) => {
         const year = event.target.value
         if (year.length === 4) {
           buildExceljsWorksheetsForLieferungenOfYear({ year, store })
-          setParentAnchorEl(null)
+          setAnchorEl(null)
           setGrandParentAnchorEl(null)
         }
       },
-      [setGrandParentAnchorEl, setParentAnchorEl, store],
+      [setGrandParentAnchorEl, setAnchorEl, store],
     )
     const onClickKulturenFuerBedarfsplanung = useCallback(async () => {
       const { Workbook } = await import('exceljs/dist/exceljs.min.js')
@@ -45,33 +49,40 @@ export const HeaderExportMenu = observer(
         fileName: `kulturenFuerBedarfsplanung`,
         workbook,
       })
-      setParentAnchorEl(null)
+      setAnchorEl(null)
       setGrandParentAnchorEl(null)
-    }, [setGrandParentAnchorEl, setParentAnchorEl, store])
+    }, [setGrandParentAnchorEl, setAnchorEl, store])
 
-    const onClose = useCallback(
-      () => setParentAnchorEl(null),
-      [setParentAnchorEl],
-    )
+    const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
 
     return (
-      <Menu
-        id="menuExport"
-        anchorEl={parentAnchorEl}
-        open={Boolean(parentAnchorEl)}
-        onClose={onClose}
-      >
-        <FirstMenuItem>
-          <TextField
-            label="Lieferungen des Jahrs:"
-            onChange={onClickLieferungenDesJahrs}
-            variant="standard"
-          />
-        </FirstMenuItem>
-        <MenuItem onClick={onClickKulturenFuerBedarfsplanung}>
-          aktueller Stand Kulturen für die Bedarfsplanung
-        </MenuItem>
-      </Menu>
+      <>
+        <StyledMenuItem
+          aria-owns={anchorEl ? 'menu' : null}
+          aria-haspopup="true"
+          onClick={onClickExporte}
+        >
+          Exporte
+          <FaChevronRight />
+        </StyledMenuItem>
+        <Menu
+          id="menuExport"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={onClose}
+        >
+          <FirstMenuItem>
+            <TextField
+              label="Lieferungen des Jahrs:"
+              onChange={onClickLieferungenDesJahrs}
+              variant="standard"
+            />
+          </FirstMenuItem>
+          <MenuItem onClick={onClickKulturenFuerBedarfsplanung}>
+            aktueller Stand Kulturen für die Bedarfsplanung
+          </MenuItem>
+        </Menu>
+      </>
     )
   },
 )
