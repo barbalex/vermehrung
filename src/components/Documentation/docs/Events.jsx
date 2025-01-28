@@ -6,7 +6,7 @@ import { DokuDate } from '../index.jsx'
 export const Events = () => (
   <Suspense fallback={null}>
     <h1>Events</h1>
-    <DokuDate>04.10.2019</DokuDate>
+    <DokuDate>28.01.2025</DokuDate>
     <h3>Ziele</h3>
     <ul>
       <li>
