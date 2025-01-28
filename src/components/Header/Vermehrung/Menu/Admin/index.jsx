@@ -2,7 +2,6 @@ import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import TextField from '@mui/material/TextField'
 import { FaChevronRight } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
@@ -11,10 +10,6 @@ import { buildExceljsWorksheetsForLieferungenOfYear } from './buildExceljsWorksh
 import { buildExceljsWorksheetsForKulturBedarfsplanung } from './buildExceljsWorksheetsForKulturBedarfsplanung.js'
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
 import { StyledMenuItem } from '../Menu.jsx'
-
-const FirstMenuItem = styled(MenuItem)`
-  margin-top: -5px !important;
-`
 
 export const HeaderAdminMenu = observer(
   ({ setParentAnchorEl: setGrandParentAnchorEl }) => {
@@ -26,29 +21,10 @@ export const HeaderAdminMenu = observer(
       [],
     )
 
-    const onClickLieferungenDesJahrs = useCallback(
-      (event) => {
-        const year = event.target.value
-        if (year.length === 4) {
-          buildExceljsWorksheetsForLieferungenOfYear({ year, store })
-          setAnchorEl(null)
-          setGrandParentAnchorEl(null)
-        }
-      },
-      [setGrandParentAnchorEl, setAnchorEl, store],
-    )
-    const onClickKulturenFuerBedarfsplanung = useCallback(async () => {
-      const { Workbook } = await import('exceljs/dist/exceljs.min.js')
-      const workbook = new Workbook()
-      await buildExceljsWorksheetsForKulturBedarfsplanung({
-        store,
-        workbook,
-      })
-      downloadExceljsWorkbook({
-        store,
-        fileName: `kulturenFuerBedarfsplanung`,
-        workbook,
-      })
+    const onClickImportApData = useCallback(async () => {
+      // fetch all art and apflora_ap
+
+      // close menus
       setAnchorEl(null)
       setGrandParentAnchorEl(null)
     }, [setGrandParentAnchorEl, setAnchorEl, store])
@@ -71,15 +47,8 @@ export const HeaderAdminMenu = observer(
           open={Boolean(anchorEl)}
           onClose={onClose}
         >
-          <FirstMenuItem>
-            <TextField
-              label="Lieferungen des Jahrs:"
-              onChange={onClickLieferungenDesJahrs}
-              variant="standard"
-            />
-          </FirstMenuItem>
-          <MenuItem onClick={onClickKulturenFuerBedarfsplanung}>
-            aktueller Stand Kulturen für die Bedarfsplanung
+          <MenuItem onClick={onClickImportApData}>
+            AP-Daten (re-)importieren (Stand: 25.1.2025)
           </MenuItem>
         </Menu>
       </>

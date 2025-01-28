@@ -1,6 +1,7 @@
 import { appSchema } from '@nozbe/watermelondb'
 
 import { ae_art } from './ae_art.js'
+import { apflora_ap } from './apflora_ap.js'
 import { art } from './art.js'
 import { art_file } from './art_file.js'
 import { art_qk } from './art_qk.js'
@@ -30,6 +31,7 @@ import { zaehlung } from './zaehlung.js'
 
 export const tables = [
   ae_art,
+  apflora_ap,
   art,
   art_file,
   art_qk,
@@ -59,6 +61,6 @@ export const tables = [
 ]
 
 export const schema = appSchema({
-  version: 7,
+  version: 8,
   tables,
 })

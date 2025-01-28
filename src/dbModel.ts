@@ -652,6 +652,18 @@ export class Art extends Model {
   }
 }
 
+export class ApfloraAp extends Model {
+  static table = 'apflora_ap'
+  static associations = {
+    ae_art: { type: 'belongs_to', key: 'ae_id' },
+  }
+
+  @field('id') id
+  @field('ae_id') ae_id
+  @field('ap') ap
+  @field('av') av
+}
+
 export class AeArt extends Model {
   static table = 'ae_art'
   static associations = {

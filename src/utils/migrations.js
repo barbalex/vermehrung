@@ -78,5 +78,18 @@ export const migrations = schemaMigrations({
         }),
       ],
     },
+    {
+      toVersion: 8,
+      steps: [
+        createTable({
+          name: 'apflora_ap',
+          columns: [
+            { name: 'ae_id', type: 'string', isIndexed: true },
+            { name: 'ap', type: 'boolean', isOptional: true },
+            { name: 'av', type: 'string', isOptional: true },
+          ],
+        }),
+      ],
+    },
   ],
 })

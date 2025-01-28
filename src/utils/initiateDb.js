@@ -4,6 +4,7 @@ import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
 import { schema } from '../dbSchema/schema.js'
 import {
   AeArt,
+  ApfloraAp,
   Art,
   ArtFile,
   ArtQk,
@@ -69,6 +70,7 @@ export const initiateDb = (store) => {
     adapter,
     modelClasses: [
       AeArt,
+      ApfloraAp,
       Art,
       ArtFile,
       ArtQk,
