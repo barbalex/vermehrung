@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react'
+import { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -6,9 +6,12 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { FaChevronRight } from 'react-icons/fa'
 import styled from '@emotion/styled'
+import { interval, combineLatest } from 'rxjs'
+import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { HeaderExportMenu as ExportMenu } from './Export/index.jsx'
+import { HeaderAdminMenu as AdminMenu } from './Admin/index.jsx'
 
 export const StyledMenuItem = styled(MenuItem)`
   display: flex !important;
@@ -27,7 +30,20 @@ const Version = styled.div`
 export const HeaderHamburgerMenu = observer(
   ({ anchorEl: parentAnchorEl, setAnchorEl: setParentAnchorEl }) => {
     const store = useContext(MobxStoreContext)
-    const { filter } = store
+    const { filter, user, db } = store
+
+    const [userRole, setUserRole] = useState(null)
+    useEffect(() => {
+      const userRoleObservable = db
+        .get('user_role')
+        .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
+        .observeWithColumns(['name'])
+      const subscription = userRoleObservable.subscribe(([userRole]) => {
+        setUserRole(userRole)
+      })
+
+      return () => subscription?.unsubscribe?.()
+    }, [db, store, user.uid])
 
     const onClickShowDeleted = useCallback(
       (event) => {
@@ -84,6 +100,8 @@ export const HeaderHamburgerMenu = observer(
       setParentAnchorEl(null)
     }, [])
 
+    const isManager = userRole?.name === 'manager'
+
     return (
       <Menu
         id="menu"
@@ -92,6 +110,7 @@ export const HeaderHamburgerMenu = observer(
         onClose={onClose}
       >
         <ExportMenu setParentAnchorEl={setParentAnchorEl} />
+        {isManager && <AdminMenu setParentAnchorEl={setParentAnchorEl} />}
         <MenuItem>
           <FormControlLabel
             control={
