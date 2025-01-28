@@ -38,6 +38,7 @@ export const Planen = () => (
         Eine geplante <strong>Zählung</strong> besagt, dass mit den aktuellen
         Mengen unter Berücksichtigung der Vermehrung, Sammlungen und Lieferungen
         erwartet wird, zur geplanten Zeit über die geplante Menge zu verfügen
+        (erwartetes Lager)
       </li>
       <li>
         Mit <strong>Events</strong> können Vorgänge geplant werden, die nicht
