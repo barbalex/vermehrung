@@ -615,7 +615,7 @@ export class Art extends Model {
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions =
       this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
-    addQueuedQuery({
+    const queuedQuery = {
       name: 'mutateInsert_art_rev_one',
       variables: JSON.stringify({
         object: newObject,
@@ -629,13 +629,39 @@ export class Art extends Model {
       revertField: field,
       revertValue: this[field],
       newValue: value,
+    }
+    if (field) {
+      queuedQuery.revertField = field
+      queuedQuery.revertValue = this[field]
+      queuedQuery.newValue = value
+    }
+    if (values) {
+      queuedQuery.revertValues = JSON.stringify(newObject)
+    }
+    addQueuedQuery({
+      name: 'mutateInsert_art_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'art_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'art',
+      revertId: this.id,
     })
     // do not stringify revisions for store
     // as _that_ is a real array
     const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
     // optimistically update store
+
     await this.update((row) => {
-      row[field] = value
+      if (field) row[field] = value
+      if (values) {
+        Object.entries(values).forEach(([key, value]) => {
+          row[key] = value
+        })
+      }
       row._depth = newObject._depth
       row._rev = newObject._rev
       row._parent_rev = newObject._parent_rev
