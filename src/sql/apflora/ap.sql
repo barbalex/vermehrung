@@ -48,3 +48,5 @@ WHERE
   art.ae_id = apflora_av.ae_id;
 
 -- TODO: how create art_rev to force syncing?
+ALTER TABLE IF EXISTS apflora_av
+RENAME TO apflora_ap;
