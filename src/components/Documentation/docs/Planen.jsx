@@ -5,7 +5,7 @@ import { DokuDate } from '../index.jsx'
 export const Planen = () => (
   <Suspense fallback={null}>
     <h1>Planen</h1>
-    <DokuDate>15.11.2019</DokuDate>
+    <DokuDate>28.01.2025</DokuDate>
     <h3>Wo</h3>
     <p>Die folgenden Vorgänge können geplant werden:</p>
     <ul>
