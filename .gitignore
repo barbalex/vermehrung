@@ -76,8 +76,8 @@ secrets.json
 
 # db backup files
 .backup
+vermehrung.backup
 
-.now
 
 google-application-credentials.json
 firebase_credentials.json
