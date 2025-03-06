@@ -44,6 +44,8 @@ const StyledNode = styled.div`
     : props['data-inaktiv'] ? 'rgba(0, 0, 0, 0.35)'
     : 'inherit'};
   line-height: 1.3rem;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 21px;
 `
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   margin-top: -5px !important;
