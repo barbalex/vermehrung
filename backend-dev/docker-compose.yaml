@@ -24,7 +24,7 @@ services:
         max-size: '10m'
         max-file: '3'
   graphql:
-    image: 'hasura/graphql-engine:v2.45.1'
+    image: 'hasura/graphql-engine:v2.47.0'
     container_name: v_graphql
     ports:
       - '8080:8080'
