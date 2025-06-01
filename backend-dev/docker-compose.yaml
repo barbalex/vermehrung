@@ -23,6 +23,7 @@ services:
       options:
         max-size: '10m'
         max-file: '3'
+    platform: linux/amd64
   graphql:
     image: 'hasura/graphql-engine:v2.47.0'
     container_name: v_graphql
