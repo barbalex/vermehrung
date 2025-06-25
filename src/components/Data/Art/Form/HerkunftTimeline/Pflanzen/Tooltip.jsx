@@ -32,14 +32,16 @@ export const CustomTooltip = ({ payload, label, active }) => {
           // Zählung and Prognose are only used for the optics,
           // do not want them in the tooltip
           ?.filter((p) => !['Zählung', 'Prognose'].includes(p.dataKey))
-          ?.map((o) => {
+          ?.map((o, i) => {
             const label = o.dataKey
             const value =
               label === 'Auspflanzung' && Math.abs(o.value) ?
                 Math.abs(o.value)
               : o.value
 
-            return <PRow key={label}>{`${label}: ${value}`}</PRow>
+            return (
+              <PRow key={`${label}${value}${i}`}>{`${label}: ${value}`}</PRow>
+            )
           })}
       </Popup>
     )
