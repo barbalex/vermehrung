@@ -60,7 +60,7 @@
     "react-virtualized-auto-sizer": "1.0.26",
     "react-virtuoso": "4.13.0",
     "react-window": "1.8.11",
-    "recharts": "2.15.4",
+    "recharts": "3.0.0",
     "redaxios": "0.5.1",
     "rxjs": "7.8.2",
     "slick-carousel": "1.8.1",
