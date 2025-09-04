@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import { FixedSizeList } from 'react-window'
+import { List } from 'react-window'
 import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
@@ -192,7 +192,7 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           {!!width && (
-            <FixedSizeList
+            <List
               height={height - constants.titleRowHeight}
               itemCount={kulturs.length}
               itemSize={constants.singleRowHeight}
@@ -207,7 +207,7 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
                   last={index === kulturs.length - 1}
                 />
               )}
-            </FixedSizeList>
+            </List>
           )}
         </FieldsContainer>
       </Container>

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import { FixedSizeList } from 'react-window'
+import { List } from 'react-window'
 import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
@@ -174,7 +174,7 @@ export const Gaerten = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           {!!width && (
-            <FixedSizeList
+            <List
               height={height - 48}
               itemCount={gartens.length}
               itemSize={constants.singleRowHeight}
@@ -189,7 +189,7 @@ export const Gaerten = observer(({ filter: showFilter = false }) => {
                   last={index === gartens.length - 1}
                 />
               )}
-            </FixedSizeList>
+            </List>
           )}
         </FieldsContainer>
       </Container>
