@@ -167,18 +167,11 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           <List
-            itemCount={teilkulturs.length}
-            itemSize={constants.singleRowHeight}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                row={teilkulturs[index]}
-              />
-            )}
-          </List>
+            rowComponent={Row}
+            rowCount={teilkulturs.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: teilkulturs }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

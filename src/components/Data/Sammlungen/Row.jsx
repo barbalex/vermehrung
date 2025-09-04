@@ -11,8 +11,7 @@ const Row = styled.div`
   flex-direction: column;
   justify-content: center;
   min-height: ${constants.singleRowHeight};
-  border-top: thin solid rgba(74, 20, 140, 0.1);
-  border-bottom: thin solid rgba(74, 20, 140, 0.1);
+  border-bottom: 1px solid rgba(74, 20, 140, 0.2);
   border-collapse: collapse;
   box-sizing: border-box;
   margin: -1px 0;
