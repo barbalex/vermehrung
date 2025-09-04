@@ -28,10 +28,12 @@ const Row = styled.div`
   }
 `
 
-export const SammlungRow = observer(({ row, style }) => {
+export const SammlungRow = observer(({ style, index, rows }) => {
   const store = useContext(MobxStoreContext)
   const { herkunftIdInActiveNodeArray } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
+
+  const row = rows[index]
 
   const [label, setLabel] = useState('')
   useEffect(() => {

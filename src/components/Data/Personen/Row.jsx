@@ -30,9 +30,11 @@ const Row = styled.div`
   }
 `
 
-export const PersonRow = observer(({ row, style }) => {
+export const PersonRow = observer(({ style, index, rows }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
+
+  const row = rows[index]
 
   const onClickRow = useCallback(
     () => setActiveNodeArray([...activeNodeArray, row.id]),
