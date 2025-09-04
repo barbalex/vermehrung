@@ -171,18 +171,11 @@ export const Gaerten = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           <List
-            itemCount={gartens.length}
-            itemSize={constants.singleRowHeight}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                row={gartens[index]}
-              />
-            )}
-          </List>
+            rowComponent={Row}
+            rowCount={gartens.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: gartens }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
