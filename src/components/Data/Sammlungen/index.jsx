@@ -3,8 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import { FixedSizeList } from 'react-window'
-import { useResizeDetector } from 'react-resize-detector'
+import { List } from 'react-window'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -48,7 +47,10 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 const FieldsContainer = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
 `
 
 export const Sammlungen = observer(({ filter: showFilter = false }) => {
@@ -63,8 +65,6 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
   } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { sammlung: sammlungFilter } = store.filter
-
-  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({ sammlungs: [], totalCount: 0 })
   useEffect(() => {
@@ -157,10 +157,7 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container
-        showfilter={showFilter}
-        ref={ref}
-      >
+      <Container showfilter={showFilter}>
         {showFilter ?
           <FilterTitle
             title="Sammlung"
@@ -194,24 +191,12 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
           </TitleContainer>
         }
         <FieldsContainer>
-          {!!width && (
-            <FixedSizeList
-              height={height - constants.titleRowHeight}
-              itemCount={sammlungs.length}
-              itemSize={constants.singleRowHeight}
-              width={width}
-            >
-              {({ index, style }) => (
-                <Row
-                  key={index}
-                  style={style}
-                  index={index}
-                  row={sammlungs[index]}
-                  last={index === sammlungs.length - 1}
-                />
-              )}
-            </FixedSizeList>
-          )}
+          <List
+            rowComponent={Row}
+            rowCount={sammlungs.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: sammlungs }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

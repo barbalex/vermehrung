@@ -11,9 +11,7 @@ const Row = styled.div`
   flex-direction: column;
   justify-content: center;
   min-height: ${constants.singleRowHeight};
-  border-top: thin solid rgba(74, 20, 140, 0.1);
-  border-bottom: ${(props) => (props['data-last'] ? '1px' : 'thin')} solid
-    rgba(74, 20, 140, 0.1);
+  border-bottom: 1px solid rgba(74, 20, 140, 0.2);
   border-collapse: collapse;
   box-sizing: border-box;
   margin: -1px 0;
@@ -29,9 +27,11 @@ const Row = styled.div`
   }
 `
 
-export const ZaehlungRow = observer(({ row, style, last }) => {
+export const ZaehlungRow = observer(({ style, index, rows }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
+
+  const row = rows[index]
 
   const [label, setLabel] = useState('')
   useEffect(() => {
@@ -60,7 +60,6 @@ export const ZaehlungRow = observer(({ row, style, last }) => {
       key={row.id}
       onClick={onClickRow}
       style={style}
-      data-last={last}
     >
       <div>{label}</div>
     </Row>

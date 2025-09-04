@@ -3,8 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import { FixedSizeList } from 'react-window'
-import { useResizeDetector } from 'react-resize-detector'
+import { List } from 'react-window'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -48,15 +47,16 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 const FieldsContainer = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
 `
 
 export const Gaerten = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
   const { insertGartenRev, personIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-
-  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({ gartens: [], totalCount: 0 })
   useEffect(() => {
@@ -136,10 +136,7 @@ export const Gaerten = observer(({ filter: showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container
-        showfilter={showFilter}
-        ref={ref}
-      >
+      <Container showfilter={showFilter}>
         {showFilter ?
           <FilterTitle
             title="Garten"
@@ -173,24 +170,12 @@ export const Gaerten = observer(({ filter: showFilter = false }) => {
           </TitleContainer>
         }
         <FieldsContainer>
-          {!!width && (
-            <FixedSizeList
-              height={height - 48}
-              itemCount={gartens.length}
-              itemSize={constants.singleRowHeight}
-              width={width}
-            >
-              {({ index, style }) => (
-                <Row
-                  key={index}
-                  style={style}
-                  index={index}
-                  row={gartens[index]}
-                  last={index === gartens.length - 1}
-                />
-              )}
-            </FixedSizeList>
-          )}
+          <List
+            rowComponent={Row}
+            rowCount={gartens.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: gartens }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
