@@ -105,6 +105,7 @@ export const ArtConflict = observer(
         await model.removeConflict(revRow._rev)
       } catch {}
       conflictDisposalCallback()
+      window.location.reload()
     }, [
       addQueuedQuery,
       conflictDisposalCallback,

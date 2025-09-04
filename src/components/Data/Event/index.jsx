@@ -50,6 +50,7 @@ export const Event = observer(
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = useCallback(
+      // TODO: should resync
       () => setActiveConflict(null),
       [],
     )

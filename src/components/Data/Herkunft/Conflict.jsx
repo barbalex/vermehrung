@@ -111,7 +111,10 @@ export const HerkunftConflict = observer(
         const model = await db.get('herkunft').find(revRow.herkunft_id)
         await model.removeConflict(revRow._rev)
       } catch {}
-      setTimeout(() => conflictDisposalCallback())
+      setTimeout(() => {
+        conflictDisposalCallback()
+        window.location.reload()
+      })
     }, [
       addQueuedQuery,
       conflictDisposalCallback,
