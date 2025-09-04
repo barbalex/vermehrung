@@ -11,8 +11,7 @@ const Row = styled.div`
   flex-direction: column;
   justify-content: center;
   min-height: ${constants.singleRowHeight};
-  border-top: thin solid rgba(74, 20, 140, 0.1);
-  border-bottom: thin solid rgba(74, 20, 140, 0.1);
+  border-bottom: 1px solid rgba(74, 20, 140, 0.1);
   border-collapse: collapse;
   margin: -1px 0;
   padding: 10px;
@@ -27,12 +26,10 @@ const Row = styled.div`
   }
 `
 
-export const RootRow = observer(({ style, index, rows }) => {
+export const RootRow = observer(({ style, row }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
   const { setActiveNodeArray } = store.tree
-
-  const row = rows[index]
 
   const filter = store.filter?.[row.table] ?? {}
 
