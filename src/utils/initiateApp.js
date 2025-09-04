@@ -108,6 +108,7 @@ export const initiateApp = async ({ navigate }) => {
         headers: { authorization: token ? `Bearer ${token}` : '' },
       }
     },
+    preferGetMethod: false,
   })
   store.setGqlClient(gqlClient)
 

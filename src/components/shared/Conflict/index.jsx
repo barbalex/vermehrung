@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import { useContext, useCallback } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
@@ -59,6 +59,7 @@ export const Conflict = observer(
     )
 
     if (error) {
+      console.log('shared/Conflict/index.jsx error:', error)
       return <Container>{error.message}</Container>
     }
 
