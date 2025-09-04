@@ -182,7 +182,6 @@ export const Personen = observer(({ filter: showFilter = false }) => {
                   style={style}
                   index={index}
                   row={persons[index]}
-                  last={index === persons.length - 1}
                 />
               )}
             </List>

@@ -173,7 +173,6 @@ export const SammelLieferungen = observer(({ filter: showFilter = false }) => {
                   style={style}
                   index={index}
                   row={sammelLieferungs[index]}
-                  last={index === sammelLieferungs.length - 1}
                 />
               )}
             </List>

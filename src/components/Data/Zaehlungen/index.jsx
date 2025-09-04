@@ -184,7 +184,6 @@ export const Zaehlungen = observer(({ filter: showFilter = false }) => {
                   style={style}
                   index={index}
                   row={zaehlungs[index]}
-                  last={index === zaehlungs.length - 1}
                 />
               )}
             </List>

@@ -204,7 +204,6 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
                   style={style}
                   index={index}
                   row={kulturs[index]}
-                  last={index === kulturs.length - 1}
                 />
               )}
             </List>

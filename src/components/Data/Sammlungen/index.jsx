@@ -207,7 +207,6 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
                   style={style}
                   index={index}
                   row={sammlungs[index]}
-                  last={index === sammlungs.length - 1}
                 />
               )}
             </List>
