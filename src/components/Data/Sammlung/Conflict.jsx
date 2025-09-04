@@ -124,6 +124,7 @@ export const SammlungConflict = observer(
         await model.removeConflict(revRow._rev)
       } catch {}
       conflictDisposalCallback()
+      window.location.reload()
     }, [
       addQueuedQuery,
       conflictDisposalCallback,
