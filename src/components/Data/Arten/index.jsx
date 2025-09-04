@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
-import { useResizeDetector } from 'react-resize-detector'
 import UpSvg from '../../../svg/to_up.svg?react'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
@@ -63,8 +62,6 @@ export const Arten = observer(({ filter: showFilter }) => {
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { art: artFilter } = store.filter
 
-  const { width, height, ref } = useResizeDetector()
-
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
     const collection = db.get('art')
@@ -114,10 +111,7 @@ export const Arten = observer(({ filter: showFilter }) => {
 
   return (
     <ErrorBoundary>
-      <Container
-        showfilter={showFilter}
-        ref={ref}
-      >
+      <Container showfilter={showFilter}>
         {showFilter ?
           <FilterTitle
             title="Art"
@@ -154,24 +148,20 @@ export const Arten = observer(({ filter: showFilter }) => {
           </TitleContainer>
         }
         <FieldsContainer>
-          {!!width && (
-            <List
-              height={height - 48}
-              itemCount={arts.length}
-              itemSize={constants.singleRowHeight}
-              width={width}
-            >
-              {({ index, style }) => (
-                <Row
-                  key={index}
-                  style={style}
-                  index={index}
-                  row={arts[index]}
-                  last={index === arts.length - 1}
-                />
-              )}
-            </List>
-          )}
+          <List
+            itemCount={arts.length}
+            itemSize={constants.singleRowHeight}
+          >
+            {({ index, style }) => (
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                row={arts[index]}
+                last={index === arts.length - 1}
+              />
+            )}
+          </List>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
