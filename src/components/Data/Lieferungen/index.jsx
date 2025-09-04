@@ -255,7 +255,6 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
                   style={style}
                   index={index}
                   row={lieferungs[index]}
-                  last={index === lieferungs.length - 1}
                 />
               )}
             </List>

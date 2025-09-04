@@ -182,7 +182,6 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
                   style={style}
                   index={index}
                   row={teilkulturs[index]}
-                  last={index === teilkulturs.length - 1}
                 />
               )}
             </List>

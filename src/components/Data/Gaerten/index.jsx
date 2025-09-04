@@ -186,7 +186,6 @@ export const Gaerten = observer(({ filter: showFilter = false }) => {
                   style={style}
                   index={index}
                   row={gartens[index]}
-                  last={index === gartens.length - 1}
                 />
               )}
             </List>

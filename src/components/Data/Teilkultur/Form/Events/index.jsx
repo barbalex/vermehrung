@@ -66,7 +66,6 @@ export const TeilkulturEvents = observer(({ teilkultur }) => {
           <Row
             key={ev.id}
             event={ev}
-            last={i === events.length - 1}
           />
         ))}
       </Rows>

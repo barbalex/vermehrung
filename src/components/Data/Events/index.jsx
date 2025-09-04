@@ -175,7 +175,6 @@ export const Events = observer(({ filter: showFilter = false }) => {
                   style={style}
                   index={index}
                   row={events[index]}
-                  last={index === events.length - 1}
                 />
               )}
             </List>
