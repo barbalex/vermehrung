@@ -45,7 +45,7 @@ export const EventHistoryRow = observer(
       const newObjectForStore = { ...newObject }
       //console.log('Event History', { row, revRow, newObject })
       const response = await gqlClient
-        .query(mutations.mutateInsert_event_rev_one, {
+        .mutation(mutations.mutateInsert_event_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'event_rev_pkey',

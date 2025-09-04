@@ -199,7 +199,7 @@ export const PersonConflict = observer(
       newObject._revisions =
         row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
       const response = await gqlClient
-        .query(mutations.mutateInsert_person_rev_one, {
+        .mutation(mutations.mutateInsert_person_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'person_rev_pkey',

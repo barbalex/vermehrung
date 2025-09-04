@@ -160,7 +160,7 @@ export const GartenConflict = observer(
         row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
       //console.log('Garten Conflict', { row, revRow, newObject })
       const response = await gqlClient
-        .query(mutations.mutateInsert_garten_rev_one, {
+        .mutation(mutations.mutateInsert_garten_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'garten_rev_pkey',

@@ -188,7 +188,7 @@ export const LieferungConflict = observer(
       newObject._revisions =
         row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
       const response = await gqlClient
-        .query(mutations.mutateInsert_lieferung_rev_one, {
+        .mutation(mutations.mutateInsert_lieferung_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'lieferung_rev_pkey',

@@ -46,7 +46,7 @@ export const KulturHistoryRow = observer(
       newObject._revisions = toPgArray([rev, ...row._revisions])
       const newObjectForStore = { ...newObject }
       const response = await gqlClient
-        .query(mutations.mutateInsert_kultur_rev_one, {
+        .mutation(mutations.mutateInsert_kultur_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'kultur_rev_pkey',

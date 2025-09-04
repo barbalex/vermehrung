@@ -141,7 +141,7 @@ export const ArtConflict = observer(
       newObject._revisions =
         row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
       const response = await gqlClient
-        .query(mutations.mutateInsert_art_rev_one, {
+        .mutation(mutations.mutateInsert_art_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'art_rev_pkey',
