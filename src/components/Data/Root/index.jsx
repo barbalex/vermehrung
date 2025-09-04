@@ -27,8 +27,10 @@ const Container = styled.div`
 `
 
 const FieldsContainer = styled.div`
-  height: 100%;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
 `
 
 export const Root = observer(({ filter: showFilter }) => {

@@ -30,10 +30,12 @@ const Row = styled.div`
   }
 `
 
-export const KulturRow = observer(({ row, style }) => {
+export const KulturRow = observer(({ style, index, rows }) => {
   const store = useContext(MobxStoreContext)
   const { artIdInActiveNodeArray, gartenIdInActiveNodeArray } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
+
+  const row = rows[index]
 
   const [label, setLabel] = useState('')
   useEffect(() => {

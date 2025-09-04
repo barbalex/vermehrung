@@ -33,7 +33,6 @@ export const HerkunftRow = observer(({ style, index, rows }) => {
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const row = rows[index]
-  const last = rows.length - 1 === index
 
   const onClickRow = useCallback(
     () => setActiveNodeArray([...activeNodeArray, row.id]),

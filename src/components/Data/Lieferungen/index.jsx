@@ -49,7 +49,10 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 const FieldsContainer = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
 `
 
 export const Lieferungen = observer(({ filter: showFilter = false }) => {

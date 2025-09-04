@@ -40,14 +40,17 @@ const Geplant = styled.div`
   margin-right: 10px;
 `
 
-export const TeilkulturEventRow = ({ event }) => {
+export const TeilkulturEventRow = ({ style, index, rows }) => {
+
+  const row = rows[index]
+
   const [personName, setPersonName] = useState()
   useEffect(() => {
     let isActive = true
     const run = async () => {
       let person
       try {
-        person = event.person.fetch()
+        person = row.person.fetch()
       } catch {}
       if (!isActive) return
 
@@ -58,17 +61,17 @@ export const TeilkulturEventRow = ({ event }) => {
     return () => {
       isActive = false
     }
-  }, [event.person])
+  }, [row.person])
 
   const datum =
-    event.datum ? format(new Date(event.datum), 'yyyy.MM.dd') : 'Kein Datum'
+    row.datum ? format(new Date(row.datum), 'yyyy.MM.dd') : 'Kein Datum'
 
   return (
-    <Row key={event.id}>
+    <Row key={row.id}>
       <Datum>{datum}</Datum>
-      <Geplant>{event?.geplant ? 'geplant' : ' '}</Geplant>
+      <Geplant>{row?.geplant ? 'geplant' : ' '}</Geplant>
       <Name>{personName ?? ' '}</Name>
-      <Beschreibung>{event?.beschreibung ?? ' '}</Beschreibung>
+      <Beschreibung>{row?.beschreibung ?? ' '}</Beschreibung>
     </Row>
   )
 }

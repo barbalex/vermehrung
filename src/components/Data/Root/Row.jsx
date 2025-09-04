@@ -27,10 +27,12 @@ const Row = styled.div`
   }
 `
 
-export const RootRow = observer(({ row, style }) => {
+export const RootRow = observer(({ style, index, rows }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
   const { setActiveNodeArray } = store.tree
+
+  const row = rows[index]
 
   const filter = store.filter?.[row.table] ?? {}
 

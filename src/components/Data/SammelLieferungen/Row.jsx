@@ -28,9 +28,11 @@ const Row = styled.div`
   }
 `
 
-export const SammelLieferungRow = observer(({ row, style }) => {
+export const SammelLieferungRow = observer(({ style, index, rows }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
+
+  const row = rows[index]
 
   const onClickRow = useCallback(
     () => setActiveNodeArray([...activeNodeArray, row.id]),
