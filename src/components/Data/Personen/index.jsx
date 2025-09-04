@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
-import { useResizeDetector } from 'react-resize-detector'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -59,8 +58,6 @@ export const Personen = observer(({ filter: showFilter = false }) => {
   const { insertPersonRev, db, user, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { person: personFilter } = store.filter
-
-  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({
     persons: [],
@@ -133,10 +130,7 @@ export const Personen = observer(({ filter: showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container
-        showfilter={showFilter}
-        ref={ref}
-      >
+      <Container showfilter={showFilter}>
         {showFilter ?
           <FilterTitle
             title="Person"
@@ -172,23 +166,19 @@ export const Personen = observer(({ filter: showFilter = false }) => {
           </TitleContainer>
         }
         <FieldsContainer>
-          {!!width && (
-            <List
-              height={height - constants.titleRowHeight}
-              itemCount={persons.length}
-              itemSize={constants.singleRowHeight}
-              width={width}
-            >
-              {({ index, style }) => (
-                <Row
-                  key={index}
-                  style={style}
-                  index={index}
-                  row={persons[index]}
-                />
-              )}
-            </List>
-          )}
+          <List
+            itemCount={persons.length}
+            itemSize={constants.singleRowHeight}
+          >
+            {({ index, style }) => (
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                row={persons[index]}
+              />
+            )}
+          </List>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
-import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -65,8 +64,6 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
   } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { kultur: kulturFilter } = store.filter
-
-  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({ kulturs: [], totalCount: 0 })
   useEffect(() => {
@@ -157,10 +154,7 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container
-        showfilter={showFilter}
-        ref={ref}
-      >
+      <Container showfilter={showFilter}>
         {showFilter ?
           <FilterTitle
             title="Kultur"
@@ -194,23 +188,19 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
           </TitleContainer>
         }
         <FieldsContainer>
-          {!!width && (
-            <List
-              height={height - constants.titleRowHeight}
-              itemCount={kulturs.length}
-              itemSize={constants.singleRowHeight}
-              width={width}
-            >
-              {({ index, style }) => (
-                <Row
-                  key={index}
-                  style={style}
-                  index={index}
-                  row={kulturs[index]}
-                />
-              )}
-            </List>
-          )}
+          <List
+            itemCount={kulturs.length}
+            itemSize={constants.singleRowHeight}
+          >
+            {({ index, style }) => (
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                row={kulturs[index]}
+              />
+            )}
+          </List>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
