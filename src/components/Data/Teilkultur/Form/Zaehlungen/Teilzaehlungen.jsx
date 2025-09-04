@@ -5,8 +5,7 @@ import format from 'date-fns/format'
 import { exists } from '../../../../../utils/exists.js'
 
 const Row = styled.div`
-  ${(props) =>
-    !props['data-last'] && 'border-bottom: thin solid rgba(74, 20, 140, 0.1);'}
+  border-bottom: thin solid rgba(74, 20, 140, 0.1);
   border-collapse: collapse;
   padding: 10px;
   display: flex;
@@ -47,7 +46,7 @@ const Other = styled.div`
   margin-right: 10px;
 `
 
-export const TeilkulturTeilzaehlung = ({ tz, last }) => {
+export const TeilkulturTeilzaehlung = ({ tz }) => {
   const [zaehlung, setZaehlung] = useState([])
 
   useEffect(() => {
@@ -65,7 +64,7 @@ export const TeilkulturTeilzaehlung = ({ tz, last }) => {
     : 'Kein Datum'
 
   return (
-    <Row data-last={last}>
+    <Row>
       <Datum>{datum}</Datum>
       <Prognose>{zaehlung.prognose ? 'Prognose' : ' '}</Prognose>
       <Pflanzen>

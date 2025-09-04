@@ -173,9 +173,9 @@ export const Zaehlungen = observer(({ filter: showFilter = false }) => {
         <FieldsContainer>
           {!!width && (
             <List
-              height={height - constants.titleRowHeight}
-              itemCount={zaehlungs.length}
-              itemSize={constants.singleRowHeight}
+              // height={height - constants.titleRowHeight}
+              rowCount={zaehlungs.length}
+              rowHeight={constants.singleRowHeight}
               width={width}
             >
               {({ index, style }) => (
