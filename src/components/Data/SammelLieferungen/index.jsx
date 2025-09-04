@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import { FixedSizeList } from 'react-window'
+import { List } from 'react-window'
 import { useResizeDetector } from 'react-resize-detector'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
@@ -161,7 +161,7 @@ export const SammelLieferungen = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           {!!width && (
-            <FixedSizeList
+            <List
               height={height - constants.titleRowHeight}
               itemCount={sammelLieferungs.length}
               itemSize={constants.singleRowHeight}
@@ -176,7 +176,7 @@ export const SammelLieferungen = observer(({ filter: showFilter = false }) => {
                   last={index === sammelLieferungs.length - 1}
                 />
               )}
-            </FixedSizeList>
+            </List>
           )}
         </FieldsContainer>
       </Container>

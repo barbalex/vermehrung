@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import { FixedSizeList } from 'react-window'
+import { List } from 'react-window'
 import { useResizeDetector } from 'react-resize-detector'
 import UpSvg from '../../../svg/to_up.svg?react'
 import { combineLatest } from 'rxjs'
@@ -152,7 +152,7 @@ export const Arten = observer(({ filter: showFilter }) => {
         }
         <FieldsContainer>
           {!!width && (
-            <FixedSizeList
+            <List
               height={height - 48}
               itemCount={arts.length}
               itemSize={constants.singleRowHeight}
@@ -167,7 +167,7 @@ export const Arten = observer(({ filter: showFilter }) => {
                   last={index === arts.length - 1}
                 />
               )}
-            </FixedSizeList>
+            </List>
           )}
         </FieldsContainer>
       </Container>
