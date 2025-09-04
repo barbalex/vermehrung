@@ -169,18 +169,11 @@ export const Zaehlungen = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           <List
+            rowComponent={Row}
             rowCount={zaehlungs.length}
             rowHeight={constants.singleRowHeight}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                row={zaehlungs[index]}
-              />
-            )}
-          </List>
+            rowProps={{ rows: zaehlungs }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

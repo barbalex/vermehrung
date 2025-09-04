@@ -160,18 +160,11 @@ export const Events = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           <List
-            itemCount={events.length}
-            itemSize={constants.singleRowHeight}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                row={events[index]}
-              />
-            )}
-          </List>
+            rowComponent={Row}
+            rowCount={events.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: events }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

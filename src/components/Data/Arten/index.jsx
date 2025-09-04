@@ -149,19 +149,11 @@ export const Arten = observer(({ filter: showFilter }) => {
         }
         <FieldsContainer>
           <List
-            itemCount={arts.length}
-            itemSize={constants.singleRowHeight}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                row={arts[index]}
-                last={index === arts.length - 1}
-              />
-            )}
-          </List>
+            rowComponent={Row}
+            rowCount={arts.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: arts }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
