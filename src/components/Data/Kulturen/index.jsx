@@ -189,18 +189,11 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           <List
-            itemCount={kulturs.length}
-            itemSize={constants.singleRowHeight}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                row={kulturs[index]}
-              />
-            )}
-          </List>
+            rowComponent={Row}
+            rowCount={kulturs.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: kulturs }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
