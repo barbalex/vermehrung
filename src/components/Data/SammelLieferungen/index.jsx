@@ -158,18 +158,11 @@ export const SammelLieferungen = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           <List
-            itemCount={sammelLieferungs.length}
-            itemSize={constants.singleRowHeight}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                row={sammelLieferungs[index]}
-              />
-            )}
-          </List>
+            rowComponent={Row}
+            rowCount={sammelLieferungs.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: sammelLieferungs }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

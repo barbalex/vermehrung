@@ -192,18 +192,11 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           <List
-            itemCount={sammlungs.length}
-            itemSize={constants.singleRowHeight}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                row={sammlungs[index]}
-              />
-            )}
-          </List>
+            rowComponent={Row}
+            rowCount={sammlungs.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: sammlungs }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

@@ -5,7 +5,7 @@ import format from 'date-fns/format'
 import { personFullname } from '../../../../../utils/personFullname.js'
 
 const Row = styled.div`
-  border-bottom: thin solid rgba(74, 20, 140, 0.1);
+  border-bottom: 1px solid rgba(74, 20, 140, 0.2);
   border-collapse: collapse;
   padding: 10px;
   display: flex;
@@ -41,7 +41,6 @@ const Geplant = styled.div`
 `
 
 export const TeilkulturEventRow = ({ style, index, rows }) => {
-
   const row = rows[index]
 
   const [personName, setPersonName] = useState()
