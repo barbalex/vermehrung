@@ -25,7 +25,7 @@ services:
         max-file: '3'
     platform: linux/amd64
   graphql:
-    image: 'hasura/graphql-engine:v2.47.0'
+    image: 'hasura/graphql-engine:v2.48.4'
     container_name: v_graphql
     ports:
       - '8080:8080'

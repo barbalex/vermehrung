@@ -22,6 +22,7 @@
     "@fontsource/roboto-mono": "5.2.6",
     "@mui/material": "7.3.2",
     "@nozbe/watermelondb": "0.28.0",
+    "@urql/exchange-persisted": "5.0.1",
     "allotment": "1.20.4",
     "blueimp-md5": "2.19.0",
     "browser-update": "3.3.60",

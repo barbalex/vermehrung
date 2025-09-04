@@ -46,6 +46,7 @@ export const SubscriptionsInitializer = observer(() => {
             console.log('error getting user role:', error)
           }
           // error not caught > user will get too much data
+          // console.log('got user role, initializing subscriptions, data:', data)
           const userRole = data?.person?.[0]?.person_user_role?.name
           unsubscribe = initializeSubscriptions({ store, userRole })
         })
