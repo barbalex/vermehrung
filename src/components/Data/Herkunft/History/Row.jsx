@@ -46,7 +46,7 @@ export const HerkunftHistoryRow = observer(
       const newObjectForStore = { ...newObject }
       //console.log('Herkunft History', { row, revRow, newObject })
       const response = await gqlClient
-        .query(mutations.mutateInsert_herkunft_rev_one, {
+        .mutation(mutations.mutateInsert_herkunft_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'herkunft_rev_pkey',

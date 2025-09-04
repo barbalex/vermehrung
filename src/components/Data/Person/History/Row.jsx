@@ -57,7 +57,7 @@ export const PersonHistoryRow = observer(
       newObject._revisions = toPgArray([rev, ...row._revisions])
       const newObjectForStore = { ...newObject }
       const response = await gqlClient
-        .query(mutations.mutateInsert_person_rev_one, {
+        .mutation(mutations.mutateInsert_person_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'person_rev_pkey',

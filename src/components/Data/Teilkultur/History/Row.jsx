@@ -44,7 +44,7 @@ export const TeilkulturHistoryRow = observer(
       newObject._revisions = toPgArray([rev, ...row._revisions])
       const newObjectForStore = { ...newObject }
       const response = await gqlClient
-        .query(mutations.mutateInsert_teilkultur_rev_one, {
+        .mutation(mutations.mutateInsert_teilkultur_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'teilkultur_rev_pkey',

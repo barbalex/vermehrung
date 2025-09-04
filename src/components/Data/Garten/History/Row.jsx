@@ -47,7 +47,7 @@ export const GartenHistoryRow = observer(
       const newObjectForStore = { ...newObject }
       //console.log('Kultur History', { row, revRow, newObject })
       const response = await gqlClient
-        .query(mutations.mutateInsert_garten_rev_one, {
+        .mutation(mutations.mutateInsert_garten_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'garten_rev_pkey',
