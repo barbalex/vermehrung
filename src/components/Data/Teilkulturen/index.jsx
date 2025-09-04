@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
-import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
@@ -59,8 +58,6 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
   const { insertTeilkulturRev, kulturIdInActiveNodeArray, db, filter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { teilkultur: teilkulturFilter } = store.filter
-
-  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({ teilkulturs: [], totalCount: 0 })
   useEffect(() => {
@@ -135,10 +132,7 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container
-        showfilter={showFilter}
-        ref={ref}
-      >
+      <Container showfilter={showFilter}>
         {showFilter ?
           <FilterTitle
             title="Teilkultur"
@@ -172,23 +166,19 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
           </TitleContainer>
         }
         <FieldsContainer>
-          {!!width && (
-            <List
-              height={height - constants.titleRowHeight}
-              itemCount={teilkulturs.length}
-              itemSize={constants.singleRowHeight}
-              width={width}
-            >
-              {({ index, style }) => (
-                <Row
-                  key={index}
-                  style={style}
-                  index={index}
-                  row={teilkulturs[index]}
-                />
-              )}
-            </List>
-          )}
+          <List
+            itemCount={teilkulturs.length}
+            itemSize={constants.singleRowHeight}
+          >
+            {({ index, style }) => (
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                row={teilkulturs[index]}
+              />
+            )}
+          </List>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
