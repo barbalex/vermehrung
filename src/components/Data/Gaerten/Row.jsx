@@ -12,8 +12,7 @@ const Row = styled.div`
   justify-content: center;
   min-height: ${constants.singleRowHeight};
   border-top: thin solid rgba(74, 20, 140, 0.1);
-  border-bottom: ${(props) => (props['data-last'] ? '1px' : 'thin')} solid
-    rgba(74, 20, 140, 0.1);
+  border-bottom: thin solid rgba(74, 20, 140, 0.1);
   border-collapse: collapse;
   box-sizing: border-box;
   margin: -1px 0;
@@ -31,7 +30,7 @@ const Row = styled.div`
   }
 `
 
-export const GartenRow = observer(({ row, style, last }) => {
+export const GartenRow = observer(({ row, style }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -62,7 +61,6 @@ export const GartenRow = observer(({ row, style, last }) => {
       key={row.id}
       onClick={onClickRow}
       style={style}
-      data-last={last}
       data-inaktiv={row?.aktiv === false}
     >
       <div>{label}</div>

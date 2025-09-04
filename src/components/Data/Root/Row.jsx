@@ -12,8 +12,7 @@ const Row = styled.div`
   justify-content: center;
   min-height: ${constants.singleRowHeight};
   border-top: thin solid rgba(74, 20, 140, 0.1);
-  border-bottom: ${(props) => (props['data-last'] ? '1px' : 'thin')} solid
-    rgba(74, 20, 140, 0.1);
+  border-bottom: thin solid rgba(74, 20, 140, 0.1);
   border-collapse: collapse;
   margin: -1px 0;
   padding: 10px;
@@ -28,7 +27,7 @@ const Row = styled.div`
   }
 `
 
-export const RootRow = observer(({ row, style, last }) => {
+export const RootRow = observer(({ row, style }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
   const { setActiveNodeArray } = store.tree
@@ -62,7 +61,6 @@ export const RootRow = observer(({ row, style, last }) => {
       key={row.id}
       onClick={onClickRow}
       style={style}
-      data-last={last}
     >
       <div>{`${row.name} (${count})`}</div>
     </Row>

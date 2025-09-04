@@ -5,8 +5,7 @@ import format from 'date-fns/format'
 import { personFullname } from '../../../../../utils/personFullname.js'
 
 const Row = styled.div`
-  ${(props) =>
-    !props['data-last'] && 'border-bottom: thin solid rgba(74, 20, 140, 0.1);'}
+  border-bottom: thin solid rgba(74, 20, 140, 0.1);
   border-collapse: collapse;
   padding: 10px;
   display: flex;
@@ -41,7 +40,7 @@ const Geplant = styled.div`
   margin-right: 10px;
 `
 
-export const TeilkulturEventRow = ({ event, last }) => {
+export const TeilkulturEventRow = ({ event }) => {
   const [personName, setPersonName] = useState()
   useEffect(() => {
     let isActive = true
@@ -65,10 +64,7 @@ export const TeilkulturEventRow = ({ event, last }) => {
     event.datum ? format(new Date(event.datum), 'yyyy.MM.dd') : 'Kein Datum'
 
   return (
-    <Row
-      key={event.id}
-      data-last={last}
-    >
+    <Row key={event.id}>
       <Datum>{datum}</Datum>
       <Geplant>{event?.geplant ? 'geplant' : ' '}</Geplant>
       <Name>{personName ?? ' '}</Name>
