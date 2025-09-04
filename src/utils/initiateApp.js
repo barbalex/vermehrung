@@ -1,4 +1,5 @@
 import { createClient, cacheExchange, fetchExchange } from 'urql'
+import { persistedExchange } from '@urql/exchange-persisted'
 import { createClient as createWsClient } from 'graphql-ws'
 
 import { constants } from './constants.js'
@@ -90,7 +91,17 @@ export const initiateApp = async ({ navigate }) => {
 
   const gqlClient = createClient({
     url: constants?.getGraphQlUri(),
-    exchanges: [cacheExchange, fetchExchange],
+    exchanges: [
+      // seems this is only needed if the backend does not support get queries
+      // see: https://github.com/urql-graphql/urql/pull/3789
+      // problem is: hasura does not support (GET for?) persisted queries, only in "EE" version
+      // https://github.com/hasura/graphql-engine/issues/273#issuecomment-3253498784
+      persistedExchange({
+        preferGetForPersistedQueries: false,
+      }),
+      cacheExchange,
+      fetchExchange,
+    ],
     fetchOptions: () => {
       const token = getToken()
       return {
