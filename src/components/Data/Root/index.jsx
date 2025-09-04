@@ -31,6 +31,7 @@ const FieldsContainer = styled.div`
   flex-direction: column;
   flex-grow: 1;
   overflow: auto;
+  border-collapse: collapse;
 `
 
 export const Root = observer(({ filter: showFilter }) => {

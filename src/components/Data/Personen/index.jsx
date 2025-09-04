@@ -167,18 +167,11 @@ export const Personen = observer(({ filter: showFilter = false }) => {
         }
         <FieldsContainer>
           <List
-            itemCount={persons.length}
-            itemSize={constants.singleRowHeight}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                row={persons[index]}
-              />
-            )}
-          </List>
+            rowComponent={Row}
+            rowCount={persons.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: persons }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
