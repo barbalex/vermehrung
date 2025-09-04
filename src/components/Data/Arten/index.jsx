@@ -3,8 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import { FixedSizeList } from 'react-window'
-import { useResizeDetector } from 'react-resize-detector'
+import { List } from 'react-window'
 import UpSvg from '../../../svg/to_up.svg?react'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
@@ -48,7 +47,10 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 const FieldsContainer = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
 `
 const ApFilterContainer = styled.div`
   margin-top: -3px;
@@ -59,8 +61,6 @@ export const Arten = observer(({ filter: showFilter }) => {
   const { insertArtRev, db, filter, apFilter } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
   const { art: artFilter } = store.filter
-
-  const { width, height, ref } = useResizeDetector()
 
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
@@ -111,10 +111,7 @@ export const Arten = observer(({ filter: showFilter }) => {
 
   return (
     <ErrorBoundary>
-      <Container
-        showfilter={showFilter}
-        ref={ref}
-      >
+      <Container showfilter={showFilter}>
         {showFilter ?
           <FilterTitle
             title="Art"
@@ -151,24 +148,12 @@ export const Arten = observer(({ filter: showFilter }) => {
           </TitleContainer>
         }
         <FieldsContainer>
-          {!!width && (
-            <FixedSizeList
-              height={height - 48}
-              itemCount={arts.length}
-              itemSize={constants.singleRowHeight}
-              width={width}
-            >
-              {({ index, style }) => (
-                <Row
-                  key={index}
-                  style={style}
-                  index={index}
-                  row={arts[index]}
-                  last={index === arts.length - 1}
-                />
-              )}
-            </FixedSizeList>
-          )}
+          <List
+            rowComponent={Row}
+            rowCount={arts.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: arts }}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

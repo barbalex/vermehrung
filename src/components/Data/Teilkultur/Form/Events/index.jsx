@@ -29,7 +29,12 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
-const Rows = styled.div``
+const Rows = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
+`
 
 export const TeilkulturEvents = observer(({ teilkultur }) => {
   const store = useContext(MobxStoreContext)
@@ -66,7 +71,6 @@ export const TeilkulturEvents = observer(({ teilkultur }) => {
           <Row
             key={ev.id}
             event={ev}
-            last={i === events.length - 1}
           />
         ))}
       </Rows>
