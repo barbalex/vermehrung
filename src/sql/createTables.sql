@@ -1016,7 +1016,7 @@ CREATE TABLE zaehlung(
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   kultur_id uuid DEFAULT NULL REFERENCES kultur(id) ON DELETE CASCADE ON UPDATE CASCADE,
   datum date DEFAULT NULL,
-  prognose boolean DEFAULT FALSE,
+  bedarf boolean DEFAULT FALSE,
   bemerkungen text DEFAULT NULL,
   changed timestamp DEFAULT now(),
   changed_by text DEFAULT NULL,
@@ -1035,7 +1035,7 @@ CREATE INDEX ON zaehlung USING btree(kultur_id);
 
 CREATE INDEX ON zaehlung USING btree(datum);
 
-CREATE INDEX ON zaehlung USING btree(prognose);
+CREATE INDEX ON zaehlung USING btree(bedarf);
 
 CREATE INDEX ON zaehlung USING btree(_deleted);
 
@@ -1048,7 +1048,7 @@ CREATE TABLE zaehlung_rev(
   zaehlung_id uuid DEFAULT NULL,
   kultur_id uuid DEFAULT NULL,
   datum date DEFAULT NULL,
-  prognose boolean DEFAULT FALSE,
+  bedarf boolean DEFAULT FALSE,
   bemerkungen text DEFAULT NULL,
   changed timestamp DEFAULT now(),
   changed_by text DEFAULT NULL,

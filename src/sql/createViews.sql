@@ -1,5 +1,5 @@
 -- 1. create datasets with:
---    art_id, action, prognose, partitioner, datum, anzahl_pflanzen, sum_anzahl_pflanzen
+--    art_id, action, bedarf, partitioner, datum, anzahl_pflanzen, sum_anzahl_pflanzen
 --    from: sammlung, auspflanzung, zaehlung
 --    partitioner is the id of last zaehlung done
 -- 2. union them
@@ -13,7 +13,7 @@ with
       k.art_id,
       z.id as partitioner,
       z.datum,
-      z.prognose,
+      z.bedarf,
       sum(tz.anzahl_pflanzen) as anzahl_pflanzen,
       sum(tz.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
       sum(tz.anzahl_mutterpflanzen) as anzahl_mutterpflanzen,
@@ -31,7 +31,7 @@ with
     where
       z.datum is not null
       and (
-        z.prognose is false
+        z.bedarf is false
         or
         (
           -- zaehlung is after last count done for this art_id
@@ -46,7 +46,7 @@ with
                 on a2.id = k2.art_id
             where
               k2.art_id = k.art_id
-              and z2.prognose is false
+              and z2.bedarf is false
               and z2.datum is not null
             order by
               a2.id,
@@ -77,7 +77,7 @@ with
         where
           case
             when s.geplant is false then 
-              z2.prognose is false
+              z2.bedarf is false
               and k2.art_id = s.art_id
               and z2.datum is not null
               and z2.datum <= s.datum
@@ -121,7 +121,7 @@ with
                 on a2.id = k2.art_id
             where
               k2.art_id = s.art_id
-              and z2.prognose is false
+              and z2.bedarf is false
               and z2.datum is not null
             order by
               a2.id,
@@ -145,7 +145,7 @@ with
         where
           case
             when l.geplant is false then 
-              z2.prognose is false
+              z2.bedarf is false
               and k2.art_id = l.art_id
               and z2.datum is not null
               and z2.datum <= l.datum
@@ -189,7 +189,7 @@ with
                 on a2.id = k2.art_id
             where
               k2.art_id = l.art_id
-              and z2.prognose is false
+              and z2.bedarf is false
               and z2.datum is not null
             order by
               a2.id,
@@ -210,7 +210,7 @@ select
   concat(art_id, datum) id,
   art_id,
   action,
-  prognose,
+  bedarf,
   partitioner,
   datum,
   anzahl_pflanzen,
@@ -238,7 +238,7 @@ with
       k.herkunft_id,
       z.id as partitioner,
       z.datum,
-      z.prognose,
+      z.bedarf,
       sum(tz.anzahl_pflanzen) as anzahl_pflanzen,
       sum(tz.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
       sum(tz.anzahl_mutterpflanzen) as anzahl_mutterpflanzen,
@@ -256,7 +256,7 @@ with
     where
       z.datum is not null
       and (
-        z.prognose is false
+        z.bedarf is false
         or
         (
           -- zaehlung is after last count done for this art_id
@@ -269,7 +269,7 @@ with
             where
               k2.art_id = k.art_id
               and k2.herkunft_id = k.herkunft_id
-              and z2.prognose is false
+              and z2.bedarf is false
               and z2.datum is not null
             order by
               k2.art_id,
@@ -300,7 +300,7 @@ with
         where
           case
             when s.geplant is false then 
-              z2.prognose is false
+              z2.bedarf is false
               and k2.art_id = s.art_id
               and k2.herkunft_id = s.herkunft_id
               and z2.datum is not null
@@ -345,7 +345,7 @@ with
             where
               k2.art_id = s.art_id
               and k2.herkunft_id = s.herkunft_id
-              and z2.prognose is false
+              and z2.bedarf is false
               and z2.datum is not null
             order by
               k2.art_id,
@@ -368,7 +368,7 @@ with
         where
           case
             when l.geplant is false then 
-              z2.prognose is false
+              z2.bedarf is false
               and k2.art_id = l.art_id
               and k2.herkunft_id = ku.herkunft_id
               and z2.datum is not null
@@ -414,7 +414,7 @@ with
             where
               k2.art_id = l.art_id
               and k2.herkunft_id = ku.herkunft_id
-              and z2.prognose is false
+              and z2.bedarf is false
               and z2.datum is not null
             order by
               k2.art_id,
@@ -438,7 +438,7 @@ select
   art_id,
   herkunft_id,
   action,
-  prognose,
+  bedarf,
   partitioner,
   datum,
   anzahl_pflanzen,
