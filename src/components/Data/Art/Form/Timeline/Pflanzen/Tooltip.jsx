@@ -29,9 +29,9 @@ export const CustomTooltip = ({ payload, label, active }) => {
           <Ereignis>{payload?.[0]?.payload?.title ?? ''}</Ereignis>
         </PTitle>
         {payload
-          // Zählung and Prognose are only used for the optics,
+          // Zählung and Bedarf are only used for the optics,
           // do not want them in the tooltip
-          ?.filter((p) => !['Zählung', 'Prognose'].includes(p.dataKey))
+          ?.filter((p) => !['Zählung', 'Bedarf'].includes(p.dataKey))
           ?.map((o, i) => {
             const label = o.dataKey
             const value =
