@@ -20,7 +20,7 @@ const zaehlungRevQuery = gql`
       zaehlung_id
       kultur_id
       datum
-      prognose
+      bedarf
       bemerkungen
       changed
       changed_by
@@ -72,7 +72,7 @@ export const ZaehlungConflict = observer(
         zaehlung_id: revRow.zaehlung_id,
         kultur_id: revRow.kultur_id,
         datum: revRow.datum,
-        prognose: revRow.prognose,
+        bedarf: revRow.bedarf,
         bemerkungen: revRow.bemerkungen,
         _parent_rev: revRow._rev,
         _depth: newDepth,
@@ -119,7 +119,7 @@ export const ZaehlungConflict = observer(
       revRow.bemerkungen,
       revRow.datum,
       revRow.kultur_id,
-      revRow.prognose,
+      revRow.bedarf,
       revRow.zaehlung_id,
       user.email,
     ])
@@ -131,7 +131,7 @@ export const ZaehlungConflict = observer(
         zaehlung_id: revRow.zaehlung_id,
         kultur_id: revRow.kultur_id,
         datum: revRow.datum,
-        prognose: revRow.prognose,
+        bedarf: revRow.bedarf,
         bemerkungen: revRow.bemerkungen,
         _parent_rev: row._rev,
         _depth: newDepth,
@@ -171,7 +171,7 @@ export const ZaehlungConflict = observer(
       revRow.bemerkungen,
       revRow.datum,
       revRow.kultur_id,
-      revRow.prognose,
+      revRow.bedarf,
       revRow.zaehlung_id,
       row._depth,
       row._rev,

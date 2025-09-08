@@ -66,7 +66,7 @@ export const TeilkulturTeilzaehlung = ({ tz }) => {
   return (
     <Row>
       <Datum>{datum}</Datum>
-      <Prognose>{zaehlung.prognose ? 'Prognose' : ' '}</Prognose>
+      <Prognose>{zaehlung.bedarf ? 'Prognose' : ' '}</Prognose>
       <Pflanzen>
         {exists(tz.anzahl_pflanzen) ? `${tz.anzahl_pflanzen} Pflanzen` : ''}
       </Pflanzen>

@@ -1154,7 +1154,7 @@ export class Zaehlung extends Model {
   @field('id') id
   @field('kultur_id') kultur_id
   @field('datum') datum
-  @field('prognose') prognose
+  @field('bedarf') bedarf
   @field('bemerkungen') bemerkungen
   @field('changed') changed
   @field('changed_by') changed_by
@@ -1231,7 +1231,7 @@ export class Zaehlung extends Model {
       zaehlung_id: this.id,
       kultur_id: field === 'kultur_id' ? value : this.kultur_id,
       datum: field === 'datum' ? value : this.datum,
-      prognose: field === 'prognose' ? value : this.prognose,
+      bedarf: field === 'bedarf' ? value : this.bedarf,
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
       _parent_rev: this._rev,

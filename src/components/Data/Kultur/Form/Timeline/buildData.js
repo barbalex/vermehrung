@@ -13,7 +13,7 @@ export const buildKulturTimelineData = async ({ row }) => {
     zaehlungenDone = await row.zaehlungs
       .extend(
         Q.experimentalJoinTables(['teilzaehlung']),
-        Q.where('prognose', false),
+        Q.where('bedarf', false),
         Q.where('datum', Q.notEq(null)),
         Q.where('datum', Q.lte(format(new Date(), 'yyyy-mm-dd'))),
         Q.where('_deleted', false),
@@ -30,7 +30,7 @@ export const buildKulturTimelineData = async ({ row }) => {
     zaehlungenPlanned = await row.zaehlungs
       .extend(
         Q.experimentalJoinTables(['teilzaehlung']),
-        Q.where('prognose', true),
+        Q.where('bedarf', true),
         Q.where('datum', Q.notEq(null)),
         Q.where('_deleted', false),
         //Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
@@ -136,7 +136,7 @@ export const buildKulturTimelineData = async ({ row }) => {
         'Zählung Pflanzen auspflanzbereit Prognose': anzAuspflanzbereit,
         'Zählung Mutterpflanzen Prognose': anzMutterPflanzen,
         'Zählung Prognose': teilzaehlungs
-          .map((t) => (t.prognose ? 'ja' : 'nein'))
+          .map((t) => (t.bedarf ? 'ja' : 'nein'))
           .join(', '),
         'Zählung andere Mengen': teilzaehlungs
           .map((t) => t.andere_menge)
@@ -186,7 +186,7 @@ export const buildKulturTimelineData = async ({ row }) => {
           anzAuspflanzbereit,
         'Zählung Mutterpflanzen Prognose, ignoriert': anzMutterPflanzen,
         'Zählung Prognose': teilzaehlungs
-          .map((t) => (t.prognose ? 'ja' : 'nein'))
+          .map((t) => (t.bedarf ? 'ja' : 'nein'))
           .join(', '),
         'Zählung andere Mengen': teilzaehlungs
           .map((t) => t.andere_menge)

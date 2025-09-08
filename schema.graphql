@@ -32956,7 +32956,7 @@ type zaehlung {
   # An object relationship
   kultur: kultur
   kultur_id: uuid
-  prognose: Boolean
+  bedarf: Boolean
 
   # An array relationship
   teilzaehlung_revs(
@@ -33104,7 +33104,7 @@ input zaehlung_bool_exp {
   id: uuid_comparison_exp
   kultur: kultur_bool_exp
   kultur_id: uuid_comparison_exp
-  prognose: Boolean_comparison_exp
+  bedarf: Boolean_comparison_exp
   teilzaehlung_revs: teilzaehlung_rev_bool_exp
   teilzaehlungs: teilzaehlung_bool_exp
 }
@@ -33137,7 +33137,7 @@ input zaehlung_insert_input {
   id: ID
   kultur: kultur_obj_rel_insert_input
   kultur_id: uuid
-  prognose: Boolean
+  bedarf: Boolean
   teilzaehlung_revs: teilzaehlung_rev_arr_rel_insert_input
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
 }
@@ -33236,7 +33236,7 @@ input zaehlung_order_by {
   id: order_by
   kultur: kultur_order_by
   kultur_id: order_by
-  prognose: order_by
+  bedarf: order_by
   teilzaehlung_revs_aggregate: teilzaehlung_rev_aggregate_order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
 }
@@ -33263,7 +33263,7 @@ type zaehlung_rev {
   # An object relationship
   kultur: kultur
   kultur_id: uuid
-  prognose: Boolean
+  bedarf: Boolean
 
   # An array relationship
   teilzaehlungs(
@@ -33375,7 +33375,7 @@ input zaehlung_rev_bool_exp {
   id: uuid_comparison_exp
   kultur: kultur_bool_exp
   kultur_id: uuid_comparison_exp
-  prognose: Boolean_comparison_exp
+  bedarf: Boolean_comparison_exp
   teilzaehlungs: teilzaehlung_bool_exp
   zaehlung_id: uuid_comparison_exp
 }
@@ -33407,7 +33407,7 @@ input zaehlung_rev_insert_input {
   id: ID
   kultur: kultur_obj_rel_insert_input
   kultur_id: uuid
-  prognose: Boolean
+  bedarf: Boolean
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
   zaehlung_id: uuid
 }
@@ -33509,7 +33509,7 @@ input zaehlung_rev_order_by {
   id: order_by
   kultur: kultur_order_by
   kultur_id: order_by
-  prognose: order_by
+  bedarf: order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
   zaehlung_id: order_by
 }
@@ -33558,7 +33558,7 @@ enum zaehlung_rev_select_column {
   kultur_id
 
   # column name
-  prognose
+  bedarf
 
   # column name
   zaehlung_id
@@ -33578,7 +33578,7 @@ input zaehlung_rev_set_input {
   datum: date
   id: ID
   kultur_id: uuid
-  prognose: Boolean
+  bedarf: Boolean
   zaehlung_id: uuid
 }
 
@@ -33669,7 +33669,7 @@ enum zaehlung_rev_update_column {
   kultur_id
 
   # column name
-  prognose
+  bedarf
 
   # column name
   zaehlung_id
@@ -33753,7 +33753,7 @@ enum zaehlung_select_column {
   kultur_id
 
   # column name
-  prognose
+  bedarf
 }
 
 # input type for updating data in table "zaehlung"
@@ -33771,7 +33771,7 @@ input zaehlung_set_input {
   datum: date
   id: ID
   kultur_id: uuid
-  prognose: Boolean
+  bedarf: Boolean
 }
 
 # aggregate stddev on columns
@@ -33864,7 +33864,7 @@ enum zaehlung_update_column {
   kultur_id
 
   # column name
-  prognose
+  bedarf
 }
 
 # aggregate var_pop on columns

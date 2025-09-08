@@ -14,7 +14,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
           Q.where('art_id', artId),
           Q.where('herkunft_id', herkunftId),
         ]),
-        Q.where('prognose', false),
+        Q.where('bedarf', false),
         Q.where('datum', Q.notEq(null)),
         Q.experimentalJoinTables(['teilzaehlung']),
         Q.on('teilzaehlung', 'anzahl_pflanzen', Q.notEq(null)),
@@ -28,7 +28,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
       .get('zaehlung')
       .query(
         Q.experimentalJoinTables(['kultur']),
-        Q.where('prognose', true),
+        Q.where('bedarf', true),
         Q.where('datum', Q.notEq(null)),
         Q.on('kultur', [
           Q.where('art_id', artId),
@@ -178,7 +178,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
   } catch {}
   // 3. for every date get:
   //    - sum of last zaehlung
-  //    - whether last zahlung includes prognose
+  //    - whether last zaehlung includes bedarf
   return await Promise.all(
     dates.map(async (date) => {
       const sammlungNow = sum(
@@ -206,7 +206,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
       const lastZaehlungsByKultur = await Promise.all(
         kultursOfArt.map(async (k) => {
           // for every kultur return
-          // last zaehlung and whether it is prognose
+          // last zaehlung and whether it is bedarf
           const zaehlungs = await k.zaehlungs.fetch(
             Q.experimentalJoinTables(['teilzaehlung']),
             Q.where('_deleted', false),
@@ -232,7 +232,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
 
           return {
             anzahl_pflanzen: sum(lastTzAnzahls),
-            prognose: lastZaehlungsOfKultur.some((z) => z.prognose),
+            bedarf: lastZaehlungsOfKultur.some((z) => z.bedarf),
           }
         }),
       )
@@ -240,7 +240,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
         anzahl_pflanzen: sum(
           lastZaehlungsByKultur.map((z) => z.anzahl_pflanzen),
         ),
-        prognose: lastZaehlungsByKultur.some((z) => z.prognose),
+        bedarf: lastZaehlungsByKultur.some((z) => z.bedarf),
       }
 
       // need to return old date in case no zaehlung exists
@@ -316,7 +316,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
           lieferungsSince.anzahl_pflanzen,
         Zählung:
           (
-            lastZaehlungs.prognose ||
+            lastZaehlungs.bedarf ||
             sammlungsSince.geplant ||
             lieferungsSince.geplant
           ) ?
@@ -326,7 +326,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
             lieferungsSince.anzahl_pflanzen,
         Prognose:
           (
-            lastZaehlungs.prognose ||
+            lastZaehlungs.bedarf ||
             sammlungsSince.geplant ||
             lieferungsSince.geplant
           ) ?
