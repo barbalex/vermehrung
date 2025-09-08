@@ -16,8 +16,8 @@ export const createDataArrayForZaehlungRevComparison = ({ row, revRow }) => [
     label: 'Datum',
   },
   {
-    valueInRow: row?.prognose == true,
-    valueInRev: revRow?.prognose == true,
+    valueInRow: row?.bedarf == true,
+    valueInRev: revRow?.bedarf == true,
     label: 'Prognose',
   },
   {

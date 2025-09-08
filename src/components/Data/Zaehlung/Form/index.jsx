@@ -223,20 +223,20 @@ export const ZaehlungForm = observer(
           <FieldRow>
             {showFilter ?
               <JesNo
-                key={`${row.id}prognose`}
+                key={`${row.id}bedarf`}
                 label="Prognose"
-                name="prognose"
-                value={row.prognose}
+                name="bedarf"
+                value={row.bedarf}
                 saveToDb={saveToDb}
-                error={errors?.zaehlung?.prognose}
+                error={errors?.zaehlung?.bedarf}
               />
             : <Checkbox2States
-                key={`${row.id}prognose`}
+                key={`${row.id}bedarf`}
                 label="Prognose"
-                name="prognose"
-                value={row.prognose}
+                name="bedarf"
+                value={row.bedarf}
                 saveToDb={saveToDb}
-                error={errors?.zaehlung?.prognose}
+                error={errors?.zaehlung?.bedarf}
               />
             }
             <div>

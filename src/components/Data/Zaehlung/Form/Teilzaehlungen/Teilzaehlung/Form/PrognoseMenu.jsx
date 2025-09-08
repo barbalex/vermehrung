@@ -92,7 +92,7 @@ export const PrognoseMenu = observer(
             .get('zaehlung')
             .query(
               Q.where('_deleted', false),
-              Q.where('prognose', true),
+              Q.where('bedarf', true),
               Q.where('datum', dateOfZaehlung),
               Q.where('kultur_id', kulturId),
             )
@@ -109,7 +109,7 @@ export const PrognoseMenu = observer(
             values: {
               kultur_id: kulturId,
               datum: dateOfZaehlung,
-              prognose: true,
+              bedarf: true,
             },
           })
         }

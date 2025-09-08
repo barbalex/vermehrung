@@ -18,7 +18,7 @@ const zaehlungRevQuery = gql`
       zaehlung_id
       kultur_id
       datum
-      prognose
+      bedarf
       bemerkungen
       changed
       changed_by
