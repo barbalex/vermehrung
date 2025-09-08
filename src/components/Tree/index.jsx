@@ -205,7 +205,7 @@ export const Tree = observer(() => {
     const zaehlungsObservable = db
       .get('zaehlung')
       .query(...tableFilter({ store, table: 'zaehlung' }))
-      .observeWithColumns(['datum', 'prognose'])
+      .observeWithColumns(['datum', 'bedarf'])
     const lieferungsObservable = db
       .get('lieferung')
       .query(...tableFilter({ store, table: 'lieferung' }))

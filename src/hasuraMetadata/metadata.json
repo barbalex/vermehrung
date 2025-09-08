@@ -142,12 +142,7 @@
               {
                 "role": "manager",
                 "permission": {
-                  "columns": [
-                    "ap",
-                    "av",
-                    "ae_id",
-                    "id"
-                  ],
+                  "columns": ["ap", "av", "ae_id", "id"],
                   "filter": {},
                   "allow_aggregations": true
                 },
@@ -267,9 +262,7 @@
               {
                 "definition": {
                   "to_remote_schema": {
-                    "lhs_fields": [
-                      "ae_id"
-                    ],
+                    "lhs_fields": ["ae_id"],
                     "remote_field": {
                       "allVVermehrungArtens": {
                         "arguments": {
@@ -1287,9 +1280,7 @@
               {
                 "role": "gaertner",
                 "permission": {
-                  "columns": [
-                    "id"
-                  ],
+                  "columns": ["id"],
                   "filter": {}
                 }
               },
@@ -15028,7 +15019,7 @@
                     "id",
                     "kultur_id",
                     "datum",
-                    "prognose",
+                    "bedarf",
                     "bemerkungen",
                     "changed",
                     "changed_by",
@@ -15067,7 +15058,7 @@
                   },
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15089,7 +15080,7 @@
                   "check": {},
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15112,7 +15103,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15169,7 +15160,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15211,7 +15202,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15236,7 +15227,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15293,7 +15284,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15347,7 +15338,7 @@
                     "datum",
                     "id",
                     "kultur_id",
-                    "prognose"
+                    "bedarf"
                   ],
                   "filter": {},
                   "check": null
@@ -15442,7 +15433,7 @@
                     "zaehlung_id",
                     "kultur_id",
                     "datum",
-                    "prognose",
+                    "bedarf",
                     "bemerkungen",
                     "changed",
                     "changed_by",
@@ -15462,7 +15453,7 @@
                   "check": {},
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15484,7 +15475,7 @@
                   "check": {},
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15507,7 +15498,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15530,7 +15521,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15553,7 +15544,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15578,7 +15569,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15601,7 +15592,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",
@@ -15624,7 +15615,7 @@
                 "permission": {
                   "columns": [
                     "_deleted",
-                    "prognose",
+                    "bedarf",
                     "datum",
                     "_depth",
                     "_rev_at",

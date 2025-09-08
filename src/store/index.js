@@ -1342,7 +1342,7 @@ export const MobxStore = types
           zaehlung_id: id,
           kultur_id: kulturIdInActiveNodeArray,
           datum: undefined,
-          prognose: undefined,
+          bedarf: undefined,
           bemerkungen: undefined,
           changed: new window.Date().toISOString(),
           changed_by: user.email,

@@ -6,7 +6,7 @@ export const zaehlung = tableSchema({
     // can not add id here
     { name: 'kultur_id', type: 'string', isOptional: true, isIndexed: true },
     { name: 'datum', type: 'string', isOptional: true, isIndexed: true },
-    { name: 'prognose', type: 'boolean', isOptional: true },
+    { name: 'bedarf', type: 'boolean', isOptional: true },
     { name: 'bemerkungen', type: 'string', isOptional: true },
     { name: 'changed', type: 'string', isOptional: true },
     { name: 'changed_by', type: 'string', isOptional: true },

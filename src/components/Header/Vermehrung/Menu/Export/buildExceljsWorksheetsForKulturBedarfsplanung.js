@@ -281,7 +281,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
           lastZaehlung ?
             format(new Date(lastZaehlung.datum), 'yyyy.MM.dd')
           : '',
-        letzte_zaehlung_prognose: lastZaehlung?.prognose ?? '',
+        letzte_zaehlung_prognose: lastZaehlung?.bedarf ?? '',
         letzte_zaehlung_bemerkungen: lastZaehlung?.bemerkungen ?? '',
         letzte_zaehlung_anzahl_pflanzen: anzahl_pflanzen,
         letzte_zaehlung_anzahl_auspflanzbereit: anzahl_auspflanzbereit,
