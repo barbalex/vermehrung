@@ -906,7 +906,7 @@ export const zaehlung = gql`
     __typename
     kultur_id
     datum
-    prognose
+    bedarf
     bemerkungen
     changed
     changed_by
@@ -925,7 +925,7 @@ export const zaehlungRev = gql`
     #__typename
     kultur_id
     datum
-    prognose
+    bedarf
     bemerkungen
     changed
     changed_by

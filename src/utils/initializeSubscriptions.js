@@ -1039,7 +1039,7 @@ export const initializeSubscriptions = ({ store, userRole }) => {
             __typename
             kultur_id
             datum
-            prognose
+            bedarf
             bemerkungen
             changed
             changed_by

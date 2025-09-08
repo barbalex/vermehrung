@@ -13,7 +13,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  prognose: types.optional(types.maybeNull(types.boolean), null),
+  bedarf: types.optional(types.maybeNull(types.boolean), null),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -25,7 +25,7 @@ export const initial = {
   id: null,
   kultur_id: null,
   datum: null,
-  prognose: null,
+  bedarf: null,
   bemerkungen: null,
   _deleted: false,
 }
@@ -34,7 +34,7 @@ export const empty = {
   id: null,
   kultur_id: null,
   datum: null,
-  prognose: null,
+  bedarf: null,
   bemerkungen: null,
   _deleted: false,
 }
@@ -43,7 +43,7 @@ export const simpleTypes = {
   id: 'uuid',
   kultur_id: 'uuid',
   datum: 'date',
-  prognose: 'boolean',
+  bedarf: 'boolean',
   bemerkungen: 'string',
   _deleted: 'boolean',
 }

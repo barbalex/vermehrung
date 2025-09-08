@@ -94,7 +94,7 @@ export const buildExceljsWorksheetsForKultur = async ({
         id: z.id,
         kultur_id: z.kultur_id,
         datum: z.datum,
-        prognose: z.prognose,
+        bedarf: z.bedarf,
         bemerkungen: z.bemerkungen,
         teilzaehlungen_anzahl: tzsSorted
           .map((tz) => tz.anzahl_pflanzen)
