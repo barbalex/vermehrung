@@ -224,7 +224,7 @@ export const ZaehlungForm = observer(
             {showFilter ?
               <JesNo
                 key={`${row.id}bedarf`}
-                label="Prognose"
+                label="Bedarf"
                 name="bedarf"
                 value={row.bedarf}
                 saveToDb={saveToDb}
@@ -232,7 +232,7 @@ export const ZaehlungForm = observer(
               />
             : <Checkbox2States
                 key={`${row.id}bedarf`}
-                label="Prognose"
+                label="Bedarf"
                 name="bedarf"
                 value={row.bedarf}
                 saveToDb={saveToDb}

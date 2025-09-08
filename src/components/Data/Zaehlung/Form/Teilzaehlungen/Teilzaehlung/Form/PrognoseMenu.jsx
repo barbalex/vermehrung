@@ -129,7 +129,7 @@ export const PrognoseMenu = observer(
               store,
             })
             addNotification({
-              message: 'Die Prognose wurde gespeichert',
+              message: 'Der Bedarf wurde gespeichert',
               type: 'info',
             })
           }
@@ -166,7 +166,7 @@ export const PrognoseMenu = observer(
           onClose={onClosePrognosis}
         >
           <TitleRow>
-            <Title>Prognose für diese Teil-Zählung:</Title>
+            <Title>Bedarf für diese Teil-Zählung:</Title>
             <div>
               <IconButton
                 aria-label="Anleitung öffnen"

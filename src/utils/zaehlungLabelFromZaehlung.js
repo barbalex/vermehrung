@@ -38,7 +38,7 @@ export const zaehlungLabelFromZaehlung = ({ zaehlung, teilzaehlungs }) => {
 
   const numbers = `${anzPflanzen}/${anzAb}/${anzMu}`
 
-  const bedarf = zaehlung.bedarf ? 'Prognose' : ''
+  const bedarf = zaehlung.bedarf ? 'Bedarf' : ''
   const label = [datumLabel, numbers, bedarf].filter((e) => !!e).join('; ')
 
   return label
