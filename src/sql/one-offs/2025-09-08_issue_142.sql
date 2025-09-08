@@ -1,14 +1,10 @@
--- TODO: test locally first
-drop function zaehlung_rev_set_winning_revision ();
-create function zaehlung_rev_set_winning_revision ();
-
 -- rename prognose in table zahlung to bedarf
-alter table zahlung rename column prognose to bedarf;
+alter table zaehlung rename column prognose to bedarf;
 -- rename prognose in table zaehlung_rev to bedarf
 alter table zaehlung_rev rename column prognose to bedarf;
 
-drop view if exists art_sums;
--- TODO: create or replace view art_sums, see in createViews.sql;
+drop trigger trigger_zaehlung_rev_set_winning_revision on zaehlung_rev;
+drop function zaehlung_rev_set_winning_revision ();
 
-drop view if exists herkunft_sums;
--- TODO: create or replace view herkunft_sums, see in createViews.sql;
+-- TODO: create function zaehlung_rev_set_winning_revision, see: createRevTriggers_zaehlung.sql
+-- TODO: create trigger trigger_zaehlung_rev_set_winning_revision, see: createRevTriggers_zaehlung.sql
