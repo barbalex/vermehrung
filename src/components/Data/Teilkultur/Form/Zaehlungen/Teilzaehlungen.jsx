@@ -33,7 +33,7 @@ const Auspflanzbereit = styled.div`
   flex-grow: 0;
   margin-right: 10px;
 `
-const Prognose = styled.div`
+const Bedarf = styled.div`
   flex-basis: 72px;
   flex-shrink: 0;
   flex-grow: 0;
@@ -66,7 +66,7 @@ export const TeilkulturTeilzaehlung = ({ tz }) => {
   return (
     <Row>
       <Datum>{datum}</Datum>
-      <Prognose>{zaehlung.bedarf ? 'Prognose' : ' '}</Prognose>
+      <Bedarf>{zaehlung.bedarf ? 'Bedarf' : ' '}</Bedarf>
       <Pflanzen>
         {exists(tz.anzahl_pflanzen) ? `${tz.anzahl_pflanzen} Pflanzen` : ''}
       </Pflanzen>

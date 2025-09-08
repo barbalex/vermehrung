@@ -132,10 +132,10 @@ export const buildKulturTimelineData = async ({ row }) => {
 
       return {
         datum: new Date(z.datum).getTime(),
-        'Zählung Pflanzen Prognose': anzPflanzen,
-        'Zählung Pflanzen auspflanzbereit Prognose': anzAuspflanzbereit,
-        'Zählung Mutterpflanzen Prognose': anzMutterPflanzen,
-        'Zählung Prognose': teilzaehlungs
+        'Zählung Pflanzen Bedarf': anzPflanzen,
+        'Zählung Pflanzen auspflanzbereit Bedarf': anzAuspflanzbereit,
+        'Zählung Mutterpflanzen Bedarf': anzMutterPflanzen,
+        'Zählung Bedarf': teilzaehlungs
           .map((t) => (t.bedarf ? 'ja' : 'nein'))
           .join(', '),
         'Zählung andere Mengen': teilzaehlungs
@@ -181,11 +181,11 @@ export const buildKulturTimelineData = async ({ row }) => {
 
       return {
         datum: new Date(z.datum).getTime(),
-        'Zählung Pflanzen Prognose, ignoriert': anzPflanzen,
-        'Zählung Pflanzen auspflanzbereit Prognose, ignoriert':
+        'Zählung Pflanzen Bedarf, ignoriert': anzPflanzen,
+        'Zählung Pflanzen auspflanzbereit Bedarf, ignoriert':
           anzAuspflanzbereit,
-        'Zählung Mutterpflanzen Prognose, ignoriert': anzMutterPflanzen,
-        'Zählung Prognose': teilzaehlungs
+        'Zählung Mutterpflanzen Bedarf, ignoriert': anzMutterPflanzen,
+        'Zählung Bedarf': teilzaehlungs
           .map((t) => (t.bedarf ? 'ja' : 'nein'))
           .join(', '),
         'Zählung andere Mengen': teilzaehlungs
@@ -469,9 +469,9 @@ export const buildKulturTimelineData = async ({ row }) => {
         data['Zählung Pflanzen auspflanzbereit'] =
           sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit ?? undefined
       } else {
-        data['Zählung Pflanzen Prognose'] =
+        data['Zählung Pflanzen Bedarf'] =
           sumAnzahlPflanzen + l.anzahl_pflanzen ?? undefined
-        data['Zählung Pflanzen auspflanzbereit Prognose'] =
+        data['Zählung Pflanzen auspflanzbereit Bedarf'] =
           sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit ?? undefined
       }
       return data
@@ -556,9 +556,9 @@ export const buildKulturTimelineData = async ({ row }) => {
         data['Zählung Pflanzen auspflanzbereit'] =
           sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit ?? undefined
       } else {
-        data['Zählung Pflanzen Prognose'] =
+        data['Zählung Pflanzen Bedarf'] =
           sumAnzahlPflanzen - l.anzahl_pflanzen ?? undefined
-        data['Zählung Pflanzen auspflanzbereit Prognose'] =
+        data['Zählung Pflanzen auspflanzbereit Bedarf'] =
           sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit ?? undefined
       }
       return data
