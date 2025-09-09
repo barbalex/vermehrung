@@ -378,8 +378,8 @@ export const TeilzaehlungForm = observer(
               </IconButton>
             )}
             <IconButton
-              aria-label="Prognose"
-              title={online ? 'Prognose' : 'Prognose (nur online verfügbar)'}
+              aria-label="Bedarf"
+              title={online ? 'Bedarf' : 'Bedarf (nur online verfügbar)'}
               onClick={onClickPrognosis}
               disabled={!online}
               size="large"

@@ -67,10 +67,10 @@ export const KulturTooltip = ({
                     key={`${o.dataKey}1`}
                   >{`Gramm Samen: ${o.payload['Lieferung Gramm Samen']}`}</PRow>
                 )}
-                {exists(o.payload['Zählung Prognose']) && (
+                {exists(o.payload['Bedarf']) && (
                   <PRow
                     key={`${o.dataKey}10`}
-                  >{`Prognose: ${o.payload['Zählung Prognose']}`}</PRow>
+                  >{`Bedarf: ${o.payload['Bedarf']}`}</PRow>
                 )}
                 {exists(o.payload['Zählung andere Mengen']) && (
                   <PRow
