@@ -168,7 +168,7 @@ export const Pflanzen = observer(({ artId, herkunft }) => {
               isAnimationActive={false}
             ></Scatter>
             <Scatter
-              dataKey="Prognose"
+              dataKey="Bedarf"
               stroke="#e0e0ff"
               fill="#e0e0ff"
               strokeWidth={3}

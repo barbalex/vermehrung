@@ -324,7 +324,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
           : lastZaehlungs.anzahl_pflanzen +
             sammlungsSince.anzahl_pflanzen -
             lieferungsSince.anzahl_pflanzen,
-        Prognose:
+        Bedarf:
           (
             lastZaehlungs.prognose ||
             sammlungsSince.geplant ||

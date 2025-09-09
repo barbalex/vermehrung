@@ -267,21 +267,21 @@ export const KulturTimeline = observer(({ row }) => {
                       isAnimationActive={false}
                     />
                   )}
-                  {showCategory('Zählung Pflanzen Prognose') && (
+                  {showCategory('Pflanzen Bedarf') && (
                     <Line
                       type="monotone"
                       connectNulls={true}
-                      dataKey="Zählung Pflanzen Prognose"
+                      dataKey="Pflanzen Bedarf"
                       stroke="#e0e0ff"
                       strokeWidth={3}
                       label={<LabelZaehlung />}
                       isAnimationActive={false}
                     />
                   )}
-                  {showCategory('Zählung Pflanzen Prognose, ignoriert') && (
+                  {showCategory('Pflanzen Bedarf, ignoriert') && (
                     <Line
                       type="basis"
-                      dataKey="Zählung Pflanzen Prognose, ignoriert"
+                      dataKey="Pflanzen Bedarf, ignoriert"
                       legendType="circle"
                       stroke="#ebebf9"
                       strokeWidth={3}
@@ -301,12 +301,12 @@ export const KulturTimeline = observer(({ row }) => {
                     />
                   )}
                   {showCategory(
-                    'Zählung Pflanzen auspflanzbereit Prognose',
+                    'Pflanzen auspflanzbereit Bedarf',
                   ) && (
                     <Line
                       type="monotone"
                       connectNulls={true}
-                      dataKey="Zählung Pflanzen auspflanzbereit Prognose"
+                      dataKey="Pflanzen auspflanzbereit Bedarf"
                       stroke="#9cffc0"
                       strokeWidth={3}
                       label={<LabelZaehlung />}
@@ -314,11 +314,11 @@ export const KulturTimeline = observer(({ row }) => {
                     />
                   )}
                   {showCategory(
-                    'Zählung Pflanzen auspflanzbereit Prognose, ignoriert',
+                    'Pflanzen auspflanzbereit Bedarf, ignoriert',
                   ) && (
                     <Line
                       type="basis"
-                      dataKey="Zählung Pflanzen auspflanzbereit Prognose, ignoriert"
+                      dataKey="Pflanzen auspflanzbereit Bedarf, ignoriert"
                       legendType="circle"
                       stroke="#e6ffef"
                       strokeWidth={3}
@@ -337,11 +337,11 @@ export const KulturTimeline = observer(({ row }) => {
                       isAnimationActive={false}
                     />
                   )}
-                  {showCategory('Zählung Mutterpflanzen Prognose') && (
+                  {showCategory('Mutterpflanzen Bedarf') && (
                     <Line
                       type="monotone"
                       connectNulls={true}
-                      dataKey="Zählung Mutterpflanzen Prognose"
+                      dataKey="Mutterpflanzen Bedarf"
                       stroke="#ffb3b3"
                       strokeWidth={3}
                       label={<LabelZaehlung />}
@@ -349,11 +349,11 @@ export const KulturTimeline = observer(({ row }) => {
                     />
                   )}
                   {showCategory(
-                    'Zählung Mutterpflanzen Prognose, ignoriert',
+                    'Mutterpflanzen Bedarf, ignoriert',
                   ) && (
                     <Line
                       type="basis"
-                      dataKey="Zählung Mutterpflanzen Prognose, ignoriert"
+                      dataKey="Mutterpflanzen Bedarf, ignoriert"
                       legendType="circle"
                       stroke="#ffe6e6"
                       strokeWidth={3}

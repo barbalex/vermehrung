@@ -52,7 +52,7 @@ export const Planen = () => (
       &quot;geplant&quot;.
       <br />
       Zählungen werden (von der Artverantwortlichen/Projektleitung) als
-      &quot;Ziel&quot; oder (vom Gärtner) als &quot;Prognose&quot; markiert.
+      &quot;Ziel&quot; oder (vom Gärtner) als &quot;Bedarf&quot; markiert.
       <br />
     </p>
   </Suspense>
