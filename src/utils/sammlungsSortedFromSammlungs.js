@@ -6,6 +6,6 @@ export const sammlungsSortedFromSammlungs = async (sammlungs) => {
   const sammlungIdsSorted = await sammlungIdsSortedFromSammlungs(sammlungs)
 
   return sortBy(sammlungs, (sammlung) =>
-    sammlungIdsSorted.findIndex((s) => s.id === sammlung.id),
+    sammlungIdsSorted.findIndex((s) => s === sammlung.id),
   )
 }
