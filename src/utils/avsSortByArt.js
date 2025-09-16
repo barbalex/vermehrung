@@ -1,5 +1,5 @@
 import { first as first$ } from 'rxjs/operators'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 
 export const avsSortByArt = async (avs) => {
   const avsIdLabel = await Promise.all(
@@ -15,5 +15,5 @@ export const avsSortByArt = async (avs) => {
       }
     }),
   )
-  return sortBy(avs, (av) => avsIdLabel.find((o) => o.id === av.id).label)
+  return sortBy(avs, [(av) => avsIdLabel.find((o) => o.id === av.id).label])
 }
