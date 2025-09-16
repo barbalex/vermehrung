@@ -1,5 +1,4 @@
-import { uniq } from 'es-toolkit'
-import { sum } from 'es-toolkit'
+import { uniq, sum } from 'es-toolkit'
 import { Q } from '@nozbe/watermelondb'
 
 export const buildData = async ({ artId, db }) => {
