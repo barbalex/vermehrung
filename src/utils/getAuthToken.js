@@ -1,5 +1,5 @@
 import axios from 'redaxios'
-import throttle from 'lodash/throttle'
+import { throttle } from 'es-toolkit'
 
 export const getAuthToken = async ({ store }) => {
   const {

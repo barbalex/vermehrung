@@ -3,7 +3,7 @@ import { reaction, flow } from 'mobx'
 import { sortBy } from 'es-toolkit'
 import { v1 as uuidv1 } from 'uuid'
 import md5 from 'blueimp-md5'
-import set from 'lodash/set'
+import { set } from 'es-toolkit/compat'
 import isUuid from 'is-uuid'
 
 import { Tree, defaultValue as defaultTree } from './Tree.js'
