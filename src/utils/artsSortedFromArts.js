@@ -1,4 +1,4 @@
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { first as first$ } from 'rxjs/operators'
 
 export const artsSortedFromArts = async (arts) => {
@@ -12,9 +12,8 @@ export const artsSortedFromArts = async (arts) => {
       return { id: art.id, label: label?.toString()?.toLowerCase() }
     }),
   )
-  const artsSorted = sortBy(
-    arts,
+  const artsSorted = sortBy(arts, [
     (art) => artSorters.find((s) => s.id === art.id).label,
-  )
+  ])
   return artsSorted
 }
