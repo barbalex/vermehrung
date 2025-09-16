@@ -1,4 +1,4 @@
-import groupBy from 'lodash/groupBy'
+import { groupBy } from 'es-toolkit'
 import { sortBy } from 'es-toolkit'
 import sumBy from 'lodash/sumBy'
 import { Q } from '@nozbe/watermelondb'
@@ -202,9 +202,10 @@ export const buildKulturTimelineData = async ({ row }) => {
   )
   const zaehlungenDataGroupedByDatum = groupBy(
     [...zaehlungenDoneData, ...zaehlungenPlannedIncludedData],
-    'datum',
+    (e) => e.datum,
   )
   const zaehlungenData = Object.entries(zaehlungenDataGroupedByDatum).map(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ([key, value]) => Object.assign({}, ...value),
   )
 
