@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { MdClose as CloseIcon } from 'react-icons/md'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 
 const Container = styled.div`
   padding: 5px;
@@ -23,7 +23,7 @@ export const Notifications = observer(() => {
   const store = useContext(MobxStoreContext)
   const { removeAllNotifications, notifications } = store
 
-  const notificationsSorted = sortBy([...notifications.values()], 'time')
+  const notificationsSorted = sortBy([...notifications.values()], ['time'])
     .reverse()
     // limit to 5
     .slice(0, 4)

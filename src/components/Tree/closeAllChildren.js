@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 export const closeAllChildren = ({ node, store }) => {
   const { setOpenNodes, openNodes } = store.tree

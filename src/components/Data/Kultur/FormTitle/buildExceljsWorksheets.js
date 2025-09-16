@@ -1,4 +1,4 @@
-import sum from 'lodash/sum'
+import { sum } from 'es-toolkit'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 

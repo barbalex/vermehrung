@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 import { History } from '../../../../../../shared/History/index.jsx'
 import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'

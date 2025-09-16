@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { Select } from '../../../shared/Select/index.jsx'
@@ -150,7 +150,7 @@ export const SammlungForm = observer(
           } catch {}
           const personsIncludingChoosen = uniqBy(
             [...persons, ...(person && !showFilter ? [person] : [])],
-            'id',
+            (e) => e.id,
           )
           const personWerte = personsIncludingChoosen
             .sort(personSort)
@@ -166,7 +166,7 @@ export const SammlungForm = observer(
           } catch {}
           const herkunftsIncludingChoosen = uniqBy(
             [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
-            'id',
+            (e) => e.id,
           )
           const herkunftWerte = herkunftsIncludingChoosen
             .sort(herkunftSort)
@@ -181,7 +181,7 @@ export const SammlungForm = observer(
           } catch {}
           const artsIncludingChoosen = uniqBy(
             [...arts, ...(art && !showFilter ? [art] : [])],
-            'id',
+            (e) => e.id,
           )
           const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
           const artWerte = await Promise.all(

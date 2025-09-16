@@ -1,5 +1,5 @@
 import { first as first$ } from 'rxjs/operators'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 
 export const teilzaehlungsSortByTk = async (tzs) => {
   const tzsIdLabel = await Promise.all(
@@ -15,5 +15,5 @@ export const teilzaehlungsSortByTk = async (tzs) => {
       }
     }),
   )
-  return sortBy(tzs, (tz) => tzsIdLabel.find((o) => o.id === tz.id).label)
+  return sortBy(tzs, [(tz) => tzsIdLabel.find((o) => o.id === tz.id).label])
 }
