@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 //import { first as first$ } from 'rxjs/operators'
 import { combineLatest, of as $of } from 'rxjs'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { Select } from '../../../shared/Select/index.jsx'
@@ -105,7 +105,7 @@ export const GartenForm = observer(
           // need to show a choosen person even if inactive but not if deleted
           const personsIncludingChoosen = uniqBy(
             [...persons, ...(person?.id && !showFilter ? [person] : [])],
-            'id',
+            (e) => e.id,
           )
           const personWerte = personsIncludingChoosen
             .sort(personSort)

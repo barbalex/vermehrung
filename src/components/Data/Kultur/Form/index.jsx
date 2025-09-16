@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { uniq } from 'es-toolkit'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import { first as first$ } from 'rxjs/operators'
@@ -140,7 +140,7 @@ export const KulturForm = observer(
           // need to show a choosen garten even if inactive but not if deleted
           const gartensIncludingChoosen = uniqBy(
             [...gartensSorted, ...(garten && !showFilter ? [garten] : [])],
-            'id',
+            (e) => e.id,
           )
           const gartenWerte = await Promise.all(
             gartensIncludingChoosen.map(async (garten) => {
@@ -324,7 +324,7 @@ export const KulturForm = observer(
           } catch {}
           const artsIncludingChoosen = uniqBy(
             [...arts, ...(art && !showFilter ? [art] : [])],
-            'id',
+            (e) => e.id,
           )
           const artWerte = await Promise.all(
             artsIncludingChoosen.map(async (art) => {
@@ -346,7 +346,7 @@ export const KulturForm = observer(
           } catch {}
           const herkunftsIncludingChoosen = uniqBy(
             [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
-            'id',
+            (e) => e.id,
           )
           const herkunftWerte = herkunftsIncludingChoosen
             .sort(herkunftSort)

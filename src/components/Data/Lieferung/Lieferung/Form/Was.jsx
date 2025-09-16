@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { Select } from '../../../../shared/Select/index.jsx'
@@ -72,7 +72,7 @@ export const LieferungWas = observer(
           } catch {}
           const artsIncludingChoosen = uniqBy(
             [...arts, ...(art && !showFilter ? [art] : [])],
-            'id',
+            (e) => e.id,
           )
           const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
           const artWerte = await Promise.all(
