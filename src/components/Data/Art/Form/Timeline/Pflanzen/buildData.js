@@ -1,6 +1,5 @@
 import { uniq } from 'es-toolkit'
 import { sum } from 'es-toolkit'
-import max from 'lodash/max'
 import { Q } from '@nozbe/watermelondb'
 
 export const buildData = async ({ artId, db }) => {
@@ -174,8 +173,8 @@ export const buildData = async ({ artId, db }) => {
             Q.where('datum', Q.notEq(null)),
             Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
           )
-          const lastZaehlungDatum = max(
-            zaehlungs.map((z) => z.datum).filter((d) => d <= date),
+          const lastZaehlungDatum = Math.max(
+            ...zaehlungs.map((z) => z.datum).filter((d) => d <= date),
           )
           const lastZaehlungsOfKultur = await Promise.all(
             zaehlungs.filter((z) => z.datum === lastZaehlungDatum),
@@ -205,8 +204,8 @@ export const buildData = async ({ artId, db }) => {
 
       // need to return old date in case no zaehlung exists
       const lastZaehlungDatum =
-        max(
-          [...zaehlungsDone, ...zaehlungsPlanned]
+        Math.max(
+          ...[...zaehlungsDone, ...zaehlungsPlanned]
             .map((z) => z.datum)
             .filter((d) => !!d)
             .filter((d) => d <= date),
