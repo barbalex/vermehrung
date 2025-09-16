@@ -1,6 +1,6 @@
 import { types, destroy } from 'mobx-state-tree'
 import { reaction, flow } from 'mobx'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { v1 as uuidv1 } from 'uuid'
 import md5 from 'blueimp-md5'
 import last from 'lodash/last'
@@ -1462,7 +1462,7 @@ export const MobxStore = types
       return activeFormFromActiveNodeArray(self.tree.activeNodeArray)
     },
     get queuedQueriesSorted() {
-      return sortBy([...self.queuedQueries.values()], 'time')
+      return sortBy([...self.queuedQueries.values()], ['time'])
     },
     get artIdInActiveNodeArray() {
       return artIdInUrl(self.tree.activeNodeArray)
