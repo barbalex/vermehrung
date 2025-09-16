@@ -1,5 +1,5 @@
 import { getSnapshot } from 'mobx-state-tree'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 export const openAllChildren = ({ node, store, nodes }) => {
   const { setOpenNodes, openNodes: openNodesRaw } = store.tree

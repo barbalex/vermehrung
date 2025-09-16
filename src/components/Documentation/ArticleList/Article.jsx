@@ -4,7 +4,7 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { FaChevronRight, FaChevronDown } from 'react-icons/fa'
 import styled from '@emotion/styled'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 const ListItem = styled(ListItemButton)`
   ${(props) => props.ischild1 === 'true' && 'padding-left: 35px !important;'}
