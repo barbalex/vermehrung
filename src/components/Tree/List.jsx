@@ -7,7 +7,7 @@ import { useContext, useEffect, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import findIndex from 'lodash/findIndex'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 import { Virtuoso } from 'react-virtuoso'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'

@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 import { useLocation, useNavigate } from 'react-router'
 
 import { MobxStoreContext } from '../mobxStoreContext.js'

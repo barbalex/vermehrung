@@ -1,7 +1,7 @@
 import md5 from 'blueimp-md5'
 import { DateTime } from 'luxon'
 import { v1 as uuidv1 } from 'uuid'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 import { toPgArray } from '../../../../../utils/toPgArray.js'
 import { exists } from '../../../../../utils/exists.js'
