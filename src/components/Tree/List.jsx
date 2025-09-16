@@ -6,7 +6,6 @@
 import { useContext, useEffect, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import findIndex from 'lodash/findIndex'
 import { isEqual } from 'es-toolkit'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -28,7 +27,7 @@ export const TreeList = observer(
     const lastActiveNodeArray = getSnapshot(lastTouchedNodeProxy)
     // when loading on url, lastActiveNodeArray may not be set
     const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
-    const nodeIndex = findIndex(nodes, (node) => isEqual(node.url, urlToFocus))
+    const nodeIndex = nodes.findIndex((node) => isEqual(node.url, urlToFocus))
     useEffect(() => {
       if (nodeIndex > -1) {
         listRef.current?.scrollToItem(nodeIndex)
