@@ -1,6 +1,5 @@
 import { groupBy } from 'es-toolkit'
-import { sortBy } from 'es-toolkit'
-import sumBy from 'lodash/sumBy'
+import { sortBy, sumBy } from 'es-toolkit'
 import { Q } from '@nozbe/watermelondb'
 import { of as $of } from 'rxjs'
 import format from 'date-fns/format'
@@ -317,12 +316,12 @@ export const buildKulturTimelineData = async ({ row }) => {
 
       const sumAnzahlPflanzen =
         anzPflanzen +
-        (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
-        (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
+        (sumBy(anLieferungenSince, (e) => e.anzahl_pflanzen) || 0) -
+        (sumBy(ausLieferungenSince, (e) => e.anzahl_pflanzen) || 0)
       const sumAnzahlAuspflanzbereit =
         anzAuspflanzbereit +
-        (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
-        (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
+        (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit) || 0) -
+        (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit) || 0)
 
       return {
         datum: new Date(l.datum).getTime(),
@@ -445,12 +444,12 @@ export const buildKulturTimelineData = async ({ row }) => {
         anzahlenAuspflanzbereitOfPreviousZaehlung.reduce((a, b) => a + b, 0)
       const sumAnzahlPflanzen =
         anzPflanzen +
-        (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
-        (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
+        (sumBy(anLieferungenSince, (e) => e.anzahl_pflanzen) || 0) -
+        (sumBy(ausLieferungenSince, (e) => e.anzahl_pflanzen) || 0)
       const sumAnzahlAuspflanzbereit =
         anzAuspflanzbereit +
-        (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
-        (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
+        (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit) || 0) -
+        (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit) || 0)
 
       const data = {
         datum: new Date(l.datum).getTime(),
@@ -532,12 +531,12 @@ export const buildKulturTimelineData = async ({ row }) => {
         anzahlenAuspflanzbereitOfPreviousZaehlung.reduce((a, b) => a + b, 0)
       const sumAnzahlPflanzen =
         anzPflanzen +
-        (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
-        (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
+        (sumBy(anLieferungenSince, (e) => e.anzahl_pflanzen) || 0) -
+        (sumBy(ausLieferungenSince, (e) => e.anzahl_pflanzen) || 0)
       const sumAnzahlAuspflanzbereit =
         anzAuspflanzbereit +
-        (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
-        (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
+        (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit) || 0) -
+        (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit) || 0)
 
       const data = {
         datum: new Date(l.datum).getTime(),
