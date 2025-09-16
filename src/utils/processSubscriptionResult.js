@@ -1,5 +1,5 @@
 import { Q } from '@nozbe/watermelondb'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 import { parseComplexFieldsForWm } from './parseComplexFieldsForWm.js'
 

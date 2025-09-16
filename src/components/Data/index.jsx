@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import last from 'lodash/last'
 import isUuid from 'is-uuid'
 
 import { Art } from './Art/index.jsx'
@@ -33,7 +32,7 @@ export const Data = observer(() => {
   const { activeForm } = store
   const { activeNodeArray } = store.tree
 
-  const id = last(activeNodeArray.filter((e) => isUuid.v1(e)))
+  const id = activeNodeArray.filter((e) => isUuid.v1(e)).at(-1)
 
   switch (activeForm) {
     case 'root': {

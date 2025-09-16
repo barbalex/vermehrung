@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { Select } from '../../../shared/Select/index.jsx'
@@ -82,7 +82,7 @@ export const TeilkulturForm = observer(
           // need to show a choosen kultur even if inactive but not if deleted
           const kultursIncludingChoosen = uniqBy(
             [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
-            'id',
+            (e) => e.id,
           )
           const kultursSorted = await kultursSortedFromKulturs(
             kultursIncludingChoosen,

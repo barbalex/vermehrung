@@ -1,5 +1,5 @@
 import format from 'date-fns/format'
-import sumBy from 'lodash/sumBy'
+import { sumBy } from 'es-toolkit'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 
@@ -98,21 +98,24 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       )
       const anzahl_pflanzen =
         tzsToSumAnzahlPflanzen.length ?
-          sumBy(tzsToSumAnzahlPflanzen, 'anzahl_pflanzen')
+          sumBy(tzsToSumAnzahlPflanzen, (e) => e.anzahl_pflanzen)
         : ''
       const tzsToSumAnzahlAuspflanzungsbereit = lZTeilzaehlungs.filter((l) =>
         exists(l.anzahl_auspflanzbereit),
       )
       const anzahl_auspflanzbereit =
         tzsToSumAnzahlAuspflanzungsbereit.length ?
-          sumBy(tzsToSumAnzahlAuspflanzungsbereit, 'anzahl_auspflanzbereit')
+          sumBy(
+            tzsToSumAnzahlAuspflanzungsbereit,
+            (e) => e.anzahl_auspflanzbereit,
+          )
         : ''
       const tzsToSumAnzahlMutterpflanzen = lZTeilzaehlungs.filter((l) =>
         exists(l.anzahl_mutterpflanzen),
       )
       const anzahl_mutterpflanzen =
         tzsToSumAnzahlMutterpflanzen.length ?
-          sumBy(tzsToSumAnzahlMutterpflanzen, 'anzahl_mutterpflanzen')
+          sumBy(tzsToSumAnzahlMutterpflanzen, (e) => e.anzahl_mutterpflanzen)
         : ''
       const anzahl_jungpflanzen =
         (
@@ -188,7 +191,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         .filter((l) => exists(l.anzahl_pflanzen))
       const auslSinceAnzahlPflanzen =
         auslSinceLastZaehlung.length ?
-          sumBy(auslSinceLastZaehlung, 'anzahl_pflanzen')
+          sumBy(auslSinceLastZaehlung, (e) => e.anzahl_pflanzen)
         : ''
       const auslSinceWithAnzahlAuspflanzungsbereit =
         auslSinceLastZaehlung.filter((l) => exists(l.anzahl_auspflanzbereit))
@@ -196,7 +199,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         auslSinceWithAnzahlAuspflanzungsbereit.length ?
           sumBy(
             auslSinceWithAnzahlAuspflanzungsbereit,
-            'anzahl_auspflanzbereit',
+            (e) => e.anzahl_auspflanzbereit,
           )
         : ''
       const auslSinceWithAnzahlMutterpflanzen = lZTeilzaehlungs.filter((l) =>
@@ -204,7 +207,10 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       )
       const auslSinceAnzahlMutterpflanzen =
         auslSinceWithAnzahlMutterpflanzen.length ?
-          sumBy(auslSinceWithAnzahlMutterpflanzen, 'anzahl_mutterpflanzen')
+          sumBy(
+            auslSinceWithAnzahlMutterpflanzen,
+            (e) => e.anzahl_mutterpflanzen,
+          )
         : ''
       const auslSinceAnzahlJungpflanzen =
         (
@@ -228,21 +234,27 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         .filter((l) => exists(l.anzahl_pflanzen))
       const anlSinceAnzahlPflanzen =
         anlSinceLastZaehlung.length ?
-          sumBy(anlSinceLastZaehlung, 'anzahl_pflanzen')
+          sumBy(anlSinceLastZaehlung, (e) => e.anzahl_pflanzen)
         : ''
       const anlSinceWithAnzahlAuspflanzungsbereit = anlSinceLastZaehlung.filter(
         (l) => exists(l.anzahl_auspflanzbereit),
       )
       const anlSinceAnzahlAuspflanzbereit =
         anlSinceWithAnzahlAuspflanzungsbereit.length ?
-          sumBy(anlSinceWithAnzahlAuspflanzungsbereit, 'anzahl_auspflanzbereit')
+          sumBy(
+            anlSinceWithAnzahlAuspflanzungsbereit,
+            (e) => e.anzahl_auspflanzbereit,
+          )
         : ''
       const anlSinceWithAnzahlMutterpflanzen = lZTeilzaehlungs.filter((l) =>
         exists(l.anzahl_mutterpflanzen),
       )
       const anlSinceAnzahlMutterpflanzen =
         anlSinceWithAnzahlMutterpflanzen.length ?
-          sumBy(anlSinceWithAnzahlMutterpflanzen, 'anzahl_mutterpflanzen')
+          sumBy(
+            anlSinceWithAnzahlMutterpflanzen,
+            (e) => e.anzahl_mutterpflanzen,
+          )
         : ''
       const anlSinceAnzahlJungpflanzen =
         (

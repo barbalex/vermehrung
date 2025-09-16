@@ -1,10 +1,9 @@
 import { types, destroy } from 'mobx-state-tree'
 import { reaction, flow } from 'mobx'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { v1 as uuidv1 } from 'uuid'
 import md5 from 'blueimp-md5'
-import last from 'lodash/last'
-import set from 'lodash/set'
+import { set } from 'es-toolkit/compat'
 import isUuid from 'is-uuid'
 
 import { Tree, defaultValue as defaultTree } from './Tree.js'
@@ -448,7 +447,7 @@ export const MobxStore = types
         })
         setTimeout(() => {
           const newActiveNodeArray =
-            isUuid.v1(last(activeNodeArray)) ?
+            isUuid.v1(activeNodeArray.at(-1)) ?
               // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
@@ -574,7 +573,7 @@ export const MobxStore = types
         })
         setTimeout(() => {
           const newActiveNodeArray =
-            isUuid.v1(last(activeNodeArray)) ?
+            isUuid.v1(activeNodeArray.at(-1)) ?
               // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
@@ -644,7 +643,7 @@ export const MobxStore = types
         })
         setTimeout(() => {
           const newActiveNodeArray =
-            isUuid.v1(last(activeNodeArray)) ?
+            isUuid.v1(activeNodeArray.at(-1)) ?
               // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
@@ -765,7 +764,7 @@ export const MobxStore = types
         })
         setTimeout(() => {
           const newActiveNodeArray =
-            isUuid.v1(last(activeNodeArray)) ?
+            isUuid.v1(activeNodeArray.at(-1)) ?
               // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
@@ -846,7 +845,7 @@ export const MobxStore = types
         if (!args?.nonavigate === true) {
           setTimeout(() => {
             const newActiveNodeArray =
-              isUuid.v1(last(activeNodeArray)) ?
+              isUuid.v1(activeNodeArray.at(-1)) ?
                 // slice if last is uuid
                 [...activeNodeArray.slice(0, -1), id]
               : [...activeNodeArray, id]
@@ -942,7 +941,7 @@ export const MobxStore = types
         })
         setTimeout(() => {
           const newActiveNodeArray =
-            isUuid.v1(last(activeNodeArray)) ?
+            isUuid.v1(activeNodeArray.at(-1)) ?
               // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
@@ -1022,7 +1021,7 @@ export const MobxStore = types
         })
         setTimeout(() => {
           const newActiveNodeArray =
-            isUuid.v1(last(activeNodeArray)) ?
+            isUuid.v1(activeNodeArray.at(-1)) ?
               // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
@@ -1105,7 +1104,7 @@ export const MobxStore = types
         })
         setTimeout(() => {
           const newActiveNodeArray =
-            isUuid.v1(last(activeNodeArray)) ?
+            isUuid.v1(activeNodeArray.at(-1)) ?
               // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
@@ -1184,7 +1183,7 @@ export const MobxStore = types
         })
         setTimeout(() => {
           const newActiveNodeArray =
-            isUuid.v1(last(activeNodeArray)) ?
+            isUuid.v1(activeNodeArray.at(-1)) ?
               // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
@@ -1255,7 +1254,7 @@ export const MobxStore = types
         if (!noNavigateInTree) {
           setTimeout(() => {
             const newActiveNodeArray =
-              isUuid.v1(last(activeNodeArray)) ?
+              isUuid.v1(activeNodeArray.at(-1)) ?
                 // slice if last is uuid
                 [...activeNodeArray.slice(0, -1), id]
               : [...activeNodeArray, id]
@@ -1387,7 +1386,7 @@ export const MobxStore = types
         })
         setTimeout(() => {
           const newActiveNodeArray =
-            isUuid.v1(last(activeNodeArray)) ?
+            isUuid.v1(activeNodeArray.at(-1)) ?
               // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
             : [...activeNodeArray, id]
@@ -1462,7 +1461,7 @@ export const MobxStore = types
       return activeFormFromActiveNodeArray(self.tree.activeNodeArray)
     },
     get queuedQueriesSorted() {
-      return sortBy([...self.queuedQueries.values()], 'time')
+      return sortBy([...self.queuedQueries.values()], ['time'])
     },
     get artIdInActiveNodeArray() {
       return artIdInUrl(self.tree.activeNodeArray)

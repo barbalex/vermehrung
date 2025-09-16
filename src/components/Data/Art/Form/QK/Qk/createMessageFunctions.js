@@ -1,5 +1,5 @@
 import format from 'date-fns/format'
-import groupBy from 'lodash/groupBy'
+import { groupBy } from 'es-toolkit'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 

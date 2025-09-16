@@ -1,4 +1,4 @@
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { first as first$ } from 'rxjs/operators'
 
 import { gartenLabelFromGarten } from './gartenLabelFromGarten.js'
@@ -45,9 +45,8 @@ export const kultursSortedFromKulturs = async (kulturs) => {
       return { id: kultur.id, sort }
     }),
   )
-  const kultursSorted = sortBy(
-    kulturs,
+  const kultursSorted = sortBy(kulturs, [
     (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
-  )
+  ])
   return kultursSorted
 }
