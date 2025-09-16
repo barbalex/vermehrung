@@ -7,7 +7,6 @@ import {
   MdMoreHoriz as MoreHorizIcon,
 } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
-import last from 'lodash/last'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
@@ -176,7 +175,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
     if (!node) return
     const personObservable =
       node?.nodeType === 'table' && node.table === 'person' && node.url ?
-        db.get('person').findAndObserve(last(node.url))
+        db.get('person').findAndObserve(node.url.at(-1))
       : $of({})
 
     const subscription = personObservable.subscribe((person) =>
