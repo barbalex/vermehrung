@@ -1,5 +1,5 @@
 import groupBy from 'lodash/groupBy'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import sumBy from 'lodash/sumBy'
 import { Q } from '@nozbe/watermelondb'
 import { of as $of } from 'rxjs'
@@ -52,7 +52,7 @@ export const buildKulturTimelineData = async ({ row }) => {
 
   const zaehlungenForLine = sortBy(
     [...zaehlungenDone, ...zaehlungenPlannedIncluded],
-    'datum',
+    ['datum'],
   )
   const zaehlungenForLineReversed = [...zaehlungenForLine].reverse()
   const zaehlungenDoneData = await Promise.all(
@@ -182,10 +182,9 @@ export const buildKulturTimelineData = async ({ row }) => {
       return {
         datum: new Date(z.datum).getTime(),
         'Pflanzen Bedarf, ignoriert': anzPflanzen,
-        'Pflanzen auspflanzbereit Bedarf, ignoriert':
-          anzAuspflanzbereit,
+        'Pflanzen auspflanzbereit Bedarf, ignoriert': anzAuspflanzbereit,
         'Mutterpflanzen Bedarf, ignoriert': anzMutterPflanzen,
-        'Bedarf': teilzaehlungs
+        Bedarf: teilzaehlungs
           .map((t) => (t.prognose ? 'ja' : 'nein'))
           .join(', '),
         'Zählung andere Mengen': teilzaehlungs
@@ -239,7 +238,7 @@ export const buildKulturTimelineData = async ({ row }) => {
   )
   const anLieferungenForLine = sortBy(
     [...anLieferungenDone, ...anLieferungenPlannedIncluded],
-    'datum',
+    ['datum'],
   )
 
   let ausLieferungenDone = []
@@ -272,7 +271,7 @@ export const buildKulturTimelineData = async ({ row }) => {
   )
   const ausLieferungenForLine = sortBy(
     [...ausLieferungenDone, ...ausLieferungenPlannedIncluded],
-    'datum',
+    ['datum'],
   )
   const anLieferungenDoneData = await Promise.all(
     anLieferungenDone.map(async (l) => {
@@ -589,7 +588,7 @@ export const buildKulturTimelineData = async ({ row }) => {
       ...zaehlungenData,
       ...zaehlungenPlannedIgnoredData,
     ],
-    'datum',
+    ['datum'],
   )
 
   return allData
