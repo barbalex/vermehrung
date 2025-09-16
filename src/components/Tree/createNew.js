@@ -1,5 +1,4 @@
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
+import { upperFirst, camelCase } from 'es-toolkit'
 import isUuid from 'is-uuid'
 
 import tableFromTitleHash from '../../utils/tableFromTitleHash.json'

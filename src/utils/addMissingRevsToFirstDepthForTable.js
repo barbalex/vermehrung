@@ -5,7 +5,7 @@
  */
 import md5 from 'blueimp-md5'
 import gql from 'graphql-tag'
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 
 import {
   art,
