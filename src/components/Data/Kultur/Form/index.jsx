@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import uniq from 'lodash/uniq'
+import { uniq } from 'es-toolkit'
 import uniqBy from 'lodash/uniqBy'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
