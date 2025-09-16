@@ -1,5 +1,5 @@
 import { uniq } from 'es-toolkit'
-import sum from 'lodash/sum'
+import { sum } from 'es-toolkit'
 import max from 'lodash/max'
 import { Q } from '@nozbe/watermelondb'
 
