@@ -6,7 +6,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { Select } from '../../../shared/Select/index.jsx'
@@ -90,7 +90,7 @@ export const ZaehlungForm = observer(
         } catch {}
         const kultursIncludingChoosen = uniqBy(
           [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
-          'id',
+          (e) => e.id,
         )
         const kultursSorted = await kultursSortedFromKulturs(
           kultursIncludingChoosen,

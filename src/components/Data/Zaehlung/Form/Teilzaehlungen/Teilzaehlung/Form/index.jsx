@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 
 import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
 import { TextField } from '../../../../../../shared/TextField.jsx'
@@ -138,7 +138,7 @@ export const TeilzaehlungForm = observer(
           } catch {}
           const teilkultursIncludingChoosen = uniqBy(
             [...teilkulturs, ...(teilkultur ? [teilkultur] : [])],
-            'id',
+            (e) => e.id,
           )
           const teilkulturWerte = teilkultursIncludingChoosen
             .sort(teilkulturSort)

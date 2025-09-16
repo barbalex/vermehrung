@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { Select } from '../../../shared/Select/index.jsx'
@@ -85,7 +85,7 @@ export const SammelLieferungWer = observer(
           } catch {}
           const personsIncludingChoosen = uniqBy(
             [...persons, ...(person && !showFilter ? [person] : [])],
-            'id',
+            (e) => e.id,
           )
           const personWerte = personsIncludingChoosen
             .sort(personSort)
