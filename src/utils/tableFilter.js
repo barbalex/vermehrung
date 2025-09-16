@@ -1,5 +1,5 @@
 import { Q } from '@nozbe/watermelondb'
-import camelCase from 'lodash/camelCase'
+import { camelCase } from 'es-toolkit'
 
 import { simpleTypes as types } from '../store/Filter/simpleTypes.js'
 import { exists } from './exists.js'
