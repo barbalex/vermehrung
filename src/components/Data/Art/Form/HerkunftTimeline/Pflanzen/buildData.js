@@ -1,4 +1,4 @@
-import uniq from 'lodash/uniq'
+import { uniq } from 'es-toolkit'
 import sum from 'lodash/sum'
 import max from 'lodash/max'
 import { Q } from '@nozbe/watermelondb'
