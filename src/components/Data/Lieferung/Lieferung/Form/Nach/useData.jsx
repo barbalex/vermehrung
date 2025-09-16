@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 
 import { kultursSortedFromKulturs } from '../../../../../../utils/kultursSortedFromKulturs.js'
 
@@ -70,7 +70,7 @@ export const useLieferungNachData = ({
       } catch {}
       const kultursIncludingChoosen = uniqBy(
         [...kultursFiltered, ...(kultur && !showFilter ? [kultur] : [])],
-        'id',
+        (e) => e.id,
       )
       const kultursSorted = await kultursSortedFromKulturs(
         kultursIncludingChoosen,
