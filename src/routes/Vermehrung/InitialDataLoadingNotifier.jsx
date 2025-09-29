@@ -14,6 +14,7 @@ export const InitialDataLoadingNotifier = observer(() => {
     online,
     addNotification,
     removeNotificationById,
+    removeAllNotifications,
   } = store
 
   const existsUser = !!user?.uid
@@ -46,6 +47,15 @@ export const InitialDataLoadingNotifier = observer(() => {
     online,
     removeNotificationById,
   ])
+
+  // ensure all initial loading notifications are removed after 8s
+  useEffect(() => {
+    if (!initialDataQueried) return
+    setTimeout(() => {
+      console.log('initial data queried, removing all notifications')
+      removeAllNotifications()
+    }, 5000)
+  }, [removeAllNotifications, initialDataQueried])
 
   return null
 })
