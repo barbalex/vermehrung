@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "how-to-install-using-sfw": "sfw npm install -f --package-lock-only"
+    "how-to-install-using-sfw": "sfw npm install -f --package-lock-only",
+    "ncu using cooldown": "ncu -c 5 -i"
   },
   "dependencies": {
     "@hapi/hapi": "21.4.3",
