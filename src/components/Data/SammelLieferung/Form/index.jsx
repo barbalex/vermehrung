@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
@@ -138,50 +138,43 @@ export const SammelLieferungForm = observer(
       }
     }, [id, setWidthInPercentOfScreen])
 
-    const saveToDb = useCallback(
-      (event) => {
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
-        const previousValue = ifIsNumericAsNumber(row[field])
+    const saveToDb = (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
+      const previousValue = ifIsNumericAsNumber(row[field])
 
-        if (showFilter) {
-          return filter.setValue({
-            table: 'sammel_lieferung',
-            key: field,
-            value,
-          })
-        }
+      if (showFilter) {
+        return filter.setValue({
+          table: 'sammel_lieferung',
+          key: field,
+          value,
+        })
+      }
 
-        // only update if value has changed
-        if (value === previousValue) return
-        row.edit({ field, value, store })
-      },
-      [filter, row, showFilter, store],
-    )
+      // only update if value has changed
+      if (value === previousValue) return
+      row.edit({ field, value, store })
+    }
+
     const shownAsSammelLieferung =
       activeNodeArray.length === 2 &&
       activeNodeArray[0] === 'Sammel-Lieferungen'
 
-    const ifNeeded = useCallback(
-      (field) => {
-        if (sl_show_empty_when_next_to_li) return true
-        if (shownAsSammelLieferung) return true
-        if (
-          id &&
-          !sl_show_empty_when_next_to_li &&
-          (!exists(row[field]) || row[field] === false)
-        )
-          return false
-        return true
-      },
-      [id, row, shownAsSammelLieferung, sl_show_empty_when_next_to_li],
-    )
-    const ifSomeNeeded = useCallback(
-      (fields) => fields.some((f) => ifNeeded(f)),
-      [ifNeeded],
-    )
+    const ifNeeded = (field) => {
+      if (sl_show_empty_when_next_to_li) return true
+      if (shownAsSammelLieferung) return true
+      if (
+        id &&
+        !sl_show_empty_when_next_to_li &&
+        (!exists(row[field]) || row[field] === false)
+      )
+        return false
+      return true
+    }
+
+    const ifSomeNeeded = (fields) => fields.some((f) => ifNeeded(f))
 
     const showDeleted =
       filter.sammel_lieferung._deleted !== false || row?._deleted
