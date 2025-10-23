@@ -1,10 +1,4 @@
-import {
-  useContext,
-  useCallback,
-  useState,
-  useEffect,
-  useMemo,
-} from 'react'
+import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import ImageGallery from 'react-image-gallery'
@@ -74,46 +68,43 @@ export const Files = observer(({ parentTable, parent }) => {
   const files = useObservable(observable) ?? []
   files?.sort?.(fileSort)
 
-  const onChangeUploader = useCallback(
-    async (file) => {
-      if (file) {
-        file.done(async (info) => {
-          const newObject = {
-            id: uuidv1(),
-            file_id: info.uuid,
-            file_mime_type: info.mimeType,
-            [`${parentTable}_id`]: parent.id,
-            name: info.name,
-          }
-          await db.write(async () => {
-            const collection = db.get(`${parentTable}_file`)
-            // using batch because can create from raw
-            // which enables overriding watermelons own id
-            await db.batch([collection.prepareCreateFromDirtyRaw(newObject)])
-          })
-          // TODO: need to add mutations for all file-tables
-          const mutation = mutations[`mutateInsert_${parentTable}_file_one`]
-          const variables = {
-            object: newObject,
-            on_conflict: {
-              constraint: `${parentTable}_file_pkey`,
-              update_columns: ['id'],
-            },
-          }
-          const response = await gqlClient
-            .mutation(mutation, variables)
-            .toPromise()
-          if (response.error) {
-            console.log(response.error)
-            return addNotification({
-              message: response.error.message,
-            })
-          }
+  const onChangeUploader = async (file) => {
+    if (file) {
+      file.done(async (info) => {
+        const newObject = {
+          id: uuidv1(),
+          file_id: info.uuid,
+          file_mime_type: info.mimeType,
+          [`${parentTable}_id`]: parent.id,
+          name: info.name,
+        }
+        await db.write(async () => {
+          const collection = db.get(`${parentTable}_file`)
+          // using batch because can create from raw
+          // which enables overriding watermelons own id
+          await db.batch([collection.prepareCreateFromDirtyRaw(newObject)])
         })
-      }
-    },
-    [parentTable, parent.id, db, gqlClient, addNotification],
-  )
+        // TODO: need to add mutations for all file-tables
+        const mutation = mutations[`mutateInsert_${parentTable}_file_one`]
+        const variables = {
+          object: newObject,
+          on_conflict: {
+            constraint: `${parentTable}_file_pkey`,
+            update_columns: ['id'],
+          },
+        }
+        const response = await gqlClient
+          .mutation(mutation, variables)
+          .toPromise()
+        if (response.error) {
+          console.log(response.error)
+          return addNotification({
+            message: response.error.message,
+          })
+        }
+      })
+    }
+  }
 
   const images = files.filter((f) => isImageFile(f))
   const imageObjects = images.map((f) => ({
@@ -126,10 +117,8 @@ export const Files = observer(({ parentTable, parent }) => {
     originalTitle: f.name || '',
     thumbnailTitle: f.name || '',
   }))
-  const onClickLightboxButton = useCallback(
-    () => setLightboxIsOpen(!lightboxIsOpen),
-    [lightboxIsOpen],
-  )
+
+  const onClickLightboxButton = () => setLightboxIsOpen(!lightboxIsOpen)
 
   if (!online) {
     return (
