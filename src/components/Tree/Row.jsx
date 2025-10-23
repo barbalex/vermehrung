@@ -1,4 +1,4 @@
-import { useContext, useCallback, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import {
   MdAccountCircle as AccountIcon,
@@ -187,51 +187,23 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
 
   const accountId = person?.account_id ?? null
 
-  const onClickNode = useCallback(
-    () =>
-      toggleNode({
-        nodes,
-        node,
-        store,
-      }),
-    [node, nodes, store],
-  )
-  const onClickNodeSymbol = useCallback(
-    () => toggleNodeSymbol({ node, store }),
-    [node, store],
-  )
-  const onClickNeu = useCallback(
-    () => createNew({ node, store }),
-    [node, store],
-  )
-  const onClickDelete = useCallback(
-    () => deleteDataset({ node, store }),
-    [node, store],
-  )
+  const onClickNode = () =>
+    toggleNode({
+      nodes,
+      node,
+      store,
+    })
 
-  const onClickSetPassword = useCallback(
-    () => setPassword({ store, person }),
-    [person, store],
-  )
-  const onClickDeleteAccout = useCallback(
-    () => deleteAccount({ store, person }),
-    [person, store],
-  )
-  const onClickSignup = useCallback(
-    () => signup({ store, person }),
-    [person, store],
-  )
+  const onClickNodeSymbol = () => toggleNodeSymbol({ node, store })
+  const onClickNeu = () => createNew({ node, store })
+  const onClickDelete = () => deleteDataset({ node, store })
+  const onClickSetPassword = () => setPassword({ store, person })
+  const onClickDeleteAccout = () => deleteAccount({ store, person })
+  const onClickSignup = () => signup({ store, person })
+  const onClickOpenAllChildren = () => openAllChildren({ node, store, nodes })
+  const onClickCloseAllChildren = () => closeAllChildren({ node, store })
 
-  const onClickOpenAllChildren = useCallback(
-    () => openAllChildren({ node, store, nodes }),
-    [node, store, nodes],
-  )
-  const onClickCloseAllChildren = useCallback(
-    () => closeAllChildren({ node, store }),
-    [node, store],
-  )
-
-  // for unknows reaseon this happens momentarily when new art is created
+  // for unknown reason this happens momentarily when new art is created
   if (!node?.url) return null
 
   const level =
