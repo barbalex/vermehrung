@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
@@ -9,10 +9,7 @@ import { LieferungSettingsMenu as Menu } from './Menu.jsx'
 
 export const LieferungSettings = observer(({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
-  const onClickConfig = useCallback(
-    (event) => setAnchorEl(event.currentTarget),
-    [],
-  )
+  const onClickConfig = (event) => setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (

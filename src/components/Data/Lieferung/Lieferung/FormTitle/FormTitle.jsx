@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -46,20 +46,18 @@ export const LieferungFormTitle = observer(
 
     const { width, ref } = useResizeDetector()
 
-    const onClickUp = useCallback(() => {
+    const onClickUp = () => {
       removeOpenNode(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
-    }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+    }
+
     const nachKulturId = row?.nach_kultur_id
-    const onClickToKultur = useCallback(
-      () =>
-        setActiveNodeArray([
-          ...activeNodeArray.filter((n) => n !== 'Kulturen'),
-          'Kulturen',
-          nachKulturId,
-        ]),
-      [activeNodeArray, nachKulturId, setActiveNodeArray],
-    )
+    const onClickToKultur = () =>
+      setActiveNodeArray([
+        ...activeNodeArray.filter((n) => n !== 'Kulturen'),
+        'Kulturen',
+        nachKulturId,
+      ])
     // to kulturen is not implemented in nodes, so turned off
     const showToKu = false && activeNodeArray[0] === 'Sammlungen'
 
