@@ -1,8 +1,8 @@
-import { useContext, useMemo, useRef } from 'react'
+import { useContext, useRef } from 'react'
+import { observer } from 'mobx-react-lite'
 import { FaSearch } from 'react-icons/fa'
 import styled from '@emotion/styled'
 import Select from 'react-select/async'
-import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useDebouncedCallback } from 'use-debounce'
 
