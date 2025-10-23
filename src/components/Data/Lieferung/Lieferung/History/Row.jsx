@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
@@ -16,10 +16,7 @@ export const LieferungHistoryRow = observer(
     const store = useContext(MobxStoreContext)
     const { user, addNotification, db, gqlClient } = store
 
-    const dataArray = useMemo(
-      () => createDataArray({ row, revRow, store }),
-      [revRow, row, store],
-    )
+    const dataArray = createDataArray({ row, revRow, store })
 
     const onClickWiderspruchUebernehmen = async () => {
       // need to attach to the winner, that is row
