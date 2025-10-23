@@ -1,4 +1,4 @@
-import { useContext, useCallback, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
@@ -107,14 +107,11 @@ export const Events = observer(({ filter: showFilter = false }) => {
   const { events, totalCount } = dataState
   const filteredCount = events.length
 
-  const add = useCallback(() => {
-    insertEventRev()
-  }, [insertEventRev])
-
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+  }
+
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Events') {
     upTitle = 'Zu allen Listen'
@@ -146,7 +143,7 @@ export const Events = observer(({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neuer Event"
                 title="neuer Event"
-                onClick={add}
+                onClick={insertEventRev}
                 size="large"
               >
                 <FaPlus />
