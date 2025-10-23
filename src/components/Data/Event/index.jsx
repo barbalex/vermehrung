@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -33,11 +33,13 @@ export const Event = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const observable =
-      showFilter ? $of(filter.event)
-      : initialDataQueried ? db.get('event').findAndObserve(id)
-      : $of({})
-
+    const observable = useMemo(
+      () =>
+        showFilter ? $of(filter.event)
+        : initialDataQueried ? db.get('event').findAndObserve(id)
+        : $of({}),
+      [db, filter.event, id, initialDataQueried, showFilter],
+    )
     const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)
