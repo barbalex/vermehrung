@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import {
   MdDeleteSweep as DeleteFilterIcon,
@@ -46,10 +46,7 @@ export const FilterTitle = observer(
     const existsTableFilter = tableIsFiltered({
       table,
     })
-    const onEmptyTable = useCallback(
-      () => emptyTable({ table }),
-      [emptyTable, table],
-    )
+    const onEmptyTable = () => emptyTable({ table })
 
     return (
       <Container>

@@ -1,5 +1,4 @@
-import { useState, useCallback } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import { FaBars } from 'react-icons/fa'
@@ -9,15 +8,10 @@ const MenuButton = styled(IconButton)`
   ${(props) => props['data-white'] && 'color: white !important;'}
 `
 
-export const Menu = observer(({ children, title = 'Menu', white = true }) => {
+export const Menu = ({ children, title = 'Menu', white = true }) => {
   const [anchorEl, setAnchorEl] = useState(null)
-  const closeMenu = useCallback(() => {
-    setAnchorEl(null)
-  }, [])
-  const onClickButton = useCallback(
-    (event) => setAnchorEl(event.currentTarget),
-    [],
-  )
+  const closeMenu = () => setAnchorEl(null)
+  const onClickButton = (event) => setAnchorEl(event.currentTarget)
 
   return (
     <>
@@ -42,4 +36,4 @@ export const Menu = observer(({ children, title = 'Menu', white = true }) => {
       </MuiMenu>
     </>
   )
-})
+}
