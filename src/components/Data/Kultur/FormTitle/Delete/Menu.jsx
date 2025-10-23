@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import Menu from '@mui/material/Menu'
@@ -25,11 +25,9 @@ export const KulturDeleteMenu = observer(({ row, anchorEl, setAnchorEl }) => {
   const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
     store.tree
 
-  const closeMenu = useCallback(() => {
-    setAnchorEl(null)
-  }, [setAnchorEl])
+  const closeMenu = () => setAnchorEl(null)
 
-  const remove = useCallback(async () => {
+  const remove = async () => {
     await row.delete({ store })
     setAnchorEl(null)
     if (filter.kultur.delete === false) {
@@ -37,15 +35,7 @@ export const KulturDeleteMenu = observer(({ row, anchorEl, setAnchorEl }) => {
       removeOpenNodeWithChildren(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
     }
-  }, [
-    activeNodeArray,
-    filter.kultur.delete,
-    removeOpenNodeWithChildren,
-    row,
-    setActiveNodeArray,
-    setAnchorEl,
-    store,
-  ])
+  }
 
   return (
     <Menu
