@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -101,34 +101,28 @@ export const TaxonSelect = observer(
       return () => subscription?.unsubscribe?.()
     }, [db, art])
 
-    const loadOptions = useCallback(
-      (inputValue, cb) => {
-        const data = modelFilter(inputValue).slice(0, 7)
-        const options = data.map((o) => {
-          return {
-            value: o.id,
-            label: taxonLabelFromAeArt(o),
-          }
-        })
-        cb(options)
-      },
-      [modelFilter],
-    )
-
-    const onChange = useCallback(
-      (option) => {
-        const value = option && option.value ? option.value : null
-        setStateValue(value ?? '')
-        const fakeEvent = {
-          target: {
-            name: 'ae_id',
-            value,
-          },
+    const loadOptions = (inputValue, cb) => {
+      const data = modelFilter(inputValue).slice(0, 7)
+      const options = data.map((o) => {
+        return {
+          value: o.id,
+          label: taxonLabelFromAeArt(o),
         }
-        saveToDb(fakeEvent)
-      },
-      [saveToDb],
-    )
+      })
+      cb(options)
+    }
+
+    const onChange = (option) => {
+      const value = option && option.value ? option.value : null
+      setStateValue(value ?? '')
+      const fakeEvent = {
+        target: {
+          name: 'ae_id',
+          value,
+        },
+      }
+      saveToDb(fakeEvent)
+    }
 
     return (
       <Container data-id="ae_id">

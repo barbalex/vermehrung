@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { combineLatest } from 'rxjs'
@@ -81,24 +81,21 @@ export const ArtForm = observer(
       unsetError('art')
     }, [id, unsetError])
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
+    const saveToDb = async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
 
-        if (showFilter) {
-          return filter.setValue({ table: 'art', key: field, value })
-        }
+      if (showFilter) {
+        return filter.setValue({ table: 'art', key: field, value })
+      }
 
-        // only update if value has changed
-        const previousValue = ifIsNumericAsNumber(row[field])
-        if (value === previousValue) return
-        row.edit({ field, value, store })
-      },
-      [filter, row, showFilter, store],
-    )
+      // only update if value has changed
+      const previousValue = ifIsNumericAsNumber(row[field])
+      if (value === previousValue) return
+      row.edit({ field, value, store })
+    }
 
     const setsUngrouped = artsSorted
       .map((a) => a.set)
@@ -106,13 +103,10 @@ export const ArtForm = observer(
       .sort()
     const sets = [...new Set(setsUngrouped)]
     const setValues = sets.map((s) => ({ value: s, label: s }))
-    const onCreateSet = useCallback(
-      ({ name }) => {
-        const event = { target: { name: 'set', value: name } }
-        saveToDb(event)
-      },
-      [saveToDb],
-    )
+    const onCreateSet = ({ name }) => {
+      const event = { target: { name: 'set', value: name } }
+      saveToDb(event)
+    }
 
     const aeArtIdsNotToShow = artsSorted
       .map((a) => a.ae_id)
