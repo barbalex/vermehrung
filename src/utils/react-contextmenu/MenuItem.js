@@ -1,4 +1,4 @@
-import React from 'react'
+import { createElement } from 'react'
 
 var _extends =
   Object.assign ||
@@ -181,7 +181,7 @@ var MenuItem = (function (_Component) {
           _cx),
         )
 
-        return React.createElement(
+        return createElement(
           'div',
           _extends({}, attributes, {
             className: menuItemClassNames,

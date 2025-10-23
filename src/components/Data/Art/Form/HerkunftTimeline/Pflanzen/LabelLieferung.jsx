@@ -1,4 +1,3 @@
-import React from 'react'
 import { Text } from 'recharts'
 
 export const LabelLieferung = ({ x, y, stroke, value }) => {

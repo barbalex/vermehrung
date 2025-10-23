@@ -1,4 +1,3 @@
-import React from 'react'
 import { Text } from 'recharts'
 
 export const KulturLabelZaehlung = ({ x, y, stroke, value }) => (

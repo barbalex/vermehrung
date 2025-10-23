@@ -1,4 +1,3 @@
-import React from 'react'
 import { DateTime } from 'luxon'
 
 export const CustomAxisTick = ({ x, y, payload }) => (

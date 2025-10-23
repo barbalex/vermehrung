@@ -1,4 +1,3 @@
-import React from 'react'
 import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
