@@ -1,4 +1,4 @@
-import { useMemo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from '@emotion/styled'
@@ -76,10 +76,7 @@ export const TeilzaehlungHistory = observer(
     })
     error && checkForOnlineError({ error, store })
 
-    const revRowsUnsorted = useMemo(
-      () => data?.teilzaehlung_rev ?? [],
-      [data?.teilzaehlung_rev],
-    )
+    const revRowsUnsorted = data?.teilzaehlung_rev ?? []
     const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
     if (fetching) {

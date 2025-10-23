@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
@@ -15,7 +15,7 @@ const StyledButton = styled(Button)`
 export const PersonKonto = observer(({ row, asMenu }) => {
   const store = useContext(MobxStoreContext)
 
-  const [menuAnchorEl, setMenuAnchorEl] = React.useState(null)
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null)
 
   const createNewAccount = () => {
     signup({ store, person: row })
