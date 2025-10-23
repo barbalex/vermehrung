@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
@@ -147,7 +147,7 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
   const { lieferungs, totalCount } = dataState
   const filteredCount = lieferungs.length
 
-  const add = useCallback(async () => {
+  const add = async () => {
     const isSammelLieferung =
       activeNodeArray.length >= 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
     if (isSammelLieferung) {
@@ -183,12 +183,13 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
       })
     }
     insertLieferungRev()
-  }, [activeNodeArray, db, insertLieferungRev])
+  }
 
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+  }
+
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Lieferungen') {
     upTitle = 'Zu allen Listen'

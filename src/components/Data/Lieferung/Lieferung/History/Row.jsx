@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
@@ -20,7 +20,8 @@ export const LieferungHistoryRow = observer(
       () => createDataArray({ row, revRow, store }),
       [revRow, row, store],
     )
-    const onClickWiderspruchUebernehmen = useCallback(async () => {
+
+    const onClickWiderspruchUebernehmen = async () => {
       // need to attach to the winner, that is row
       // otherwise risk to still have lower depth and thus loosing
       const newDepth = row._depth + 1
@@ -87,32 +88,7 @@ export const LieferungHistoryRow = observer(
           })
         })
       })
-    }, [
-      row,
-      revRow.lieferung_id,
-      revRow.sammel_lieferung_id,
-      revRow.art_id,
-      revRow.person_id,
-      revRow.von_sammlung_id,
-      revRow.von_kultur_id,
-      revRow.datum,
-      revRow.nach_kultur_id,
-      revRow.nach_ausgepflanzt,
-      revRow.von_anzahl_individuen,
-      revRow.anzahl_pflanzen,
-      revRow.anzahl_auspflanzbereit,
-      revRow.gramm_samen,
-      revRow.andere_menge,
-      revRow.geplant,
-      revRow.bemerkungen,
-      revRow._deleted,
-      user.email,
-      gqlClient,
-      historyTakeoverCallback,
-      db,
-      store,
-      addNotification,
-    ])
+    }
 
     return (
       <History
