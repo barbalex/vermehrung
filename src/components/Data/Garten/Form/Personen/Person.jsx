@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaTimes } from 'react-icons/fa'
@@ -59,7 +59,7 @@ export const GartenPerson = observer(({ gv }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = useCallback(() => gv.delete({ store }), [gv, store])
+  const onClickDelete = () => gv.delete({ store })
 
   if (!gv) return null
 
