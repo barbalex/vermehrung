@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/Creatable'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -93,20 +93,19 @@ const SharedSelectCreatable = ({
 }) => {
   const [stateValue, setStateValue] = useState(null)
 
-  const onChange = useCallback(
-    (option) => {
-      const fakeEvent = {
-        target: {
-          name,
-          value: option ? option.value : null,
-        },
-      }
-      saveToDb(fakeEvent)
-    },
-    [name, saveToDb],
-  )
-  const onInputChange = useCallback((value) => setStateValue(value), [])
-  const onBlur = useCallback(() => {
+  const onChange = (option) => {
+    const fakeEvent = {
+      target: {
+        name,
+        value: option ? option.value : null,
+      },
+    }
+    saveToDb(fakeEvent)
+  }
+
+  const onInputChange = (value) => setStateValue(value)
+
+  const onBlur = () => {
     if (stateValue) {
       const fakeEvent = {
         target: {
@@ -116,7 +115,7 @@ const SharedSelectCreatable = ({
       }
       saveToDb(fakeEvent)
     }
-  }, [stateValue, name, saveToDb])
+  }
 
   useEffect(() => {
     setStateValue(value)

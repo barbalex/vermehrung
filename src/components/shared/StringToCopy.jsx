@@ -1,8 +1,7 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
@@ -46,15 +45,15 @@ const StyledLabel = styled.div`
   padding-bottom: 8px;
 `
 
-const StringToCopy = ({ text, label }) => {
+export const StringToCopy = ({ text, label }) => {
   const [copied, setCopied] = useState(false)
-  const onCopy = useCallback(() => {
+  const onCopy = () => {
     setCopied(true)
     // can fire after component was unmounted...
     setTimeout(() => {
       setCopied(false)
     }, 3000)
-  }, [])
+  }
 
   return (
     <ErrorBoundary>
@@ -63,8 +62,14 @@ const StringToCopy = ({ text, label }) => {
         <StringToCopyContainer>
           <GuidContainer>{text}</GuidContainer>
           <CopyButtonContainer>
-            <CopyToClipboard text={text} onCopy={onCopy}>
-              <Button color="primary" onCopy={onCopy}>
+            <CopyToClipboard
+              text={text}
+              onCopy={onCopy}
+            >
+              <Button
+                color="primary"
+                onCopy={onCopy}
+              >
                 {copied ? `${label} kopiert` : `${label} kopieren`}
               </Button>
             </CopyToClipboard>
@@ -74,5 +79,3 @@ const StringToCopy = ({ text, label }) => {
     </ErrorBoundary>
   )
 }
-
-export default observer(StringToCopy)
