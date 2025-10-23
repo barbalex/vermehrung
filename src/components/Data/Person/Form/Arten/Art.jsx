@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useContext } from 'react'
+import { useCallback, useEffect, useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaTimes } from 'react-icons/fa'

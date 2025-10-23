@@ -1,5 +1,5 @@
 // 2023.05.12: no more used, replaced by TaxonSelect.jsx
-import React, { useCallback, useContext, useState, useEffect } from 'react'
+import { useCallback, useContext, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'

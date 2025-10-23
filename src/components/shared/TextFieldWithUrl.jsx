@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { MdOpenInNew as OpenInNewIcon } from 'react-icons/md'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'

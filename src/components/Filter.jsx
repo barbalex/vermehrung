@@ -1,4 +1,4 @@
-import React, { useState, useContext, Suspense } from 'react'
+import { useState, useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react'
+import { useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'

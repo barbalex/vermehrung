@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import Input from '@mui/material/Input'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes, FaFilter } from 'react-icons/fa'

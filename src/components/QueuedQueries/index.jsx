@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import { useContext, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'

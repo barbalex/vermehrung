@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Allotment } from 'allotment'
 import isUuid from 'is-uuid'

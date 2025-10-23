@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { Allotment } from 'allotment'

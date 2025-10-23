@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useState, useEffect, useContext } from 'react'
+import { useCallback, useState, useEffect, useContext } from 'react'
 import Select from 'react-select/creatable'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'

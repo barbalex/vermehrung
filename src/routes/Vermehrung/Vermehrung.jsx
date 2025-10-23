@@ -1,4 +1,4 @@
-import React, { useContext, Suspense } from 'react'
+import { useContext, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { observer } from 'mobx-react-lite'
