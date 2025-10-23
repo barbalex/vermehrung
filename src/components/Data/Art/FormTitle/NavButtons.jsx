@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
@@ -13,22 +13,16 @@ export const NavButtons = observer(() => {
   const { tree } = store
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = tree
 
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
-  const onClickToHerkuenfte = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Herkuenfte']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToSammlungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToKulturen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Kulturen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  }
+  const onClickToHerkuenfte = () =>
+    setActiveNodeArray([...activeNodeArray, 'Herkuenfte'])
+  const onClickToSammlungen = () =>
+    setActiveNodeArray([...activeNodeArray, 'Sammlungen'])
+  const onClickToKulturen = () =>
+    setActiveNodeArray([...activeNodeArray, 'Kulturen'])
 
   return (
     <>
