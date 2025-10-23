@@ -1,4 +1,4 @@
-import { useContext, useCallback, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
@@ -133,14 +133,11 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
   const { sammlungs, totalCount } = dataState
   const filteredCount = sammlungs.length
 
-  const add = useCallback(() => {
-    insertSammlungRev()
-  }, [insertSammlungRev])
-
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+  }
+
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Sammlungen') {
     upTitle = 'Zu allen Listen'
@@ -178,7 +175,7 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neue Sammlung"
                 title="neue Sammlung"
-                onClick={add}
+                onClick={insertSammlungRev}
                 size="large"
               >
                 <FaPlus />
