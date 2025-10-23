@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
@@ -16,12 +16,10 @@ export const EventHistoryRow = observer(
     const store = useContext(MobxStoreContext)
     const { user, addNotification, db, gqlClient } = store
 
-    const dataArray = createDataArrayForEventRevComparison({
-      row,
-      revRow,
-      store,
-    })
-
+    const dataArray = useMemo(
+      () => createDataArrayForEventRevComparison({ row, revRow, store }),
+      [revRow, row, store],
+    )
     const onClickWiderspruchUebernehmen = async () => {
       // need to attach to the winner, that is row
       // otherwise risk to still have lower depth and thus loosing

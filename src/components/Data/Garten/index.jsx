@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -33,10 +33,13 @@ export const Garten = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
-    const observable =
-      showFilter ? $of(filter.garten)
-      : initialDataQueried ? db.get('garten').findAndObserve(id)
-      : $of({})
+    const observable = useMemo(
+      () =>
+        showFilter ? $of(filter.garten)
+        : initialDataQueried ? db.get('garten').findAndObserve(id)
+        : $of({}),
+      [showFilter, filter.garten, id, initialDataQueried],
+    )
     const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)

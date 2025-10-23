@@ -1,7 +1,7 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useQuery } from 'urql'
 
@@ -58,9 +58,15 @@ export const GartenConflict = observer(
     })
     error && checkForOnlineError({ error, store })
 
-    const revRow = data?.garten_rev?.[0] ?? {}
+    const revRow = useMemo(
+      () => data?.garten_rev?.[0] ?? {},
+      [data?.garten_rev],
+    )
 
-    const dataArray = createDataArrayForGartenRevComparison({ row, revRow })
+    const dataArray = useMemo(
+      () => createDataArrayForGartenRevComparison({ row, revRow }),
+      [revRow, row],
+    )
 
     const onClickAktuellUebernehmen = async () => {
       // build new object
