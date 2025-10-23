@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
@@ -53,10 +53,7 @@ export const Conflict = observer(
     const store = useContext(MobxStoreContext)
     const { diffConflict, setDiffConflict } = store
 
-    const onClickToggleDiff = useCallback(
-      () => setDiffConflict(!diffConflict),
-      [diffConflict, setDiffConflict],
-    )
+    const onClickToggleDiff = () => setDiffConflict(!diffConflict)
 
     if (error) {
       console.log('shared/Conflict/index.jsx error:', error)
