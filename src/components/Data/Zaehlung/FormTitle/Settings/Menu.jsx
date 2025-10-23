@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -45,24 +45,22 @@ export const ZaehlungSettingsMenu = observer(
     }, [db, kulturId])
     const { z_bemerkungen } = kulturOption ?? {}
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = event.target.value === 'false'
-        kulturOption.edit({ field, value, store })
-      },
-      [kulturOption, store],
-    )
-    const openSettingsDocs = useCallback(() => {
+    const saveToDb = async (event) => {
+      const field = event.target.name
+      const value = event.target.value === 'false'
+      kulturOption.edit({ field, value, store })
+    }
+
+    const openSettingsDocs = () => {
       setAnchorEl(null)
       const url = `${constants?.getAppUri()}/Dokumentation/felder-blenden`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [setAnchorEl])
+    }
 
-    const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
+    const onClose = () => setAnchorEl(null)
 
     return (
       <Menu
