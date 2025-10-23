@@ -29,6 +29,7 @@ export const HistoryButton = observer(
     const store = useContext(MobxStoreContext)
     const { online, db, initialDataQueried } = store
 
+    // removing useMemo causes: Maximum update depth exceeded
     const observable = useMemo(
       () =>
         id && initialDataQueried ? db.get(table).findAndObserve(id) : $of(null),
