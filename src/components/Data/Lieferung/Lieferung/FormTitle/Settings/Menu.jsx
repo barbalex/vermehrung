@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -61,24 +61,22 @@ export const LieferungSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
 
   const { li_show_sl_felder, li_show_sl } = userPersonOption ?? {}
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = event.target.value === 'false'
-      userPersonOption.edit({ field, value, store })
-    },
-    [store, userPersonOption],
-  )
-  const openSettingsDocs = useCallback(() => {
+  const saveToDb = (event) => {
+    const field = event.target.name
+    const value = event.target.value === 'false'
+    userPersonOption.edit({ field, value, store })
+  }
+
+  const openSettingsDocs = () => {
     setAnchorEl(null)
     const url = `${constants?.getAppUri()}/Dokumentation/felder-blenden`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
     window.open(url)
-  }, [setAnchorEl])
+  }
 
-  const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
+  const onClose = () => setAnchorEl(null)
 
   return (
     <Menu
