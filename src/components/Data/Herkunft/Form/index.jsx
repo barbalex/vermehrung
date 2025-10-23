@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
@@ -108,24 +108,21 @@ export const HerkunftForm = observer(
       unsetError('herkunft')
     }, [id, unsetError])
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
+    const saveToDb = async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
 
-        if (showFilter) {
-          return filter.setValue({ table: 'herkunft', key: field, value })
-        }
+      if (showFilter) {
+        return filter.setValue({ table: 'herkunft', key: field, value })
+      }
 
-        const previousValue = ifIsNumericAsNumber(row._raw[field])
-        // only update if value has changed
-        if (value === previousValue) return
-        await row.edit({ field, value, store })
-      },
-      [filter, row, showFilter, store],
-    )
+      const previousValue = ifIsNumericAsNumber(row._raw[field])
+      // only update if value has changed
+      if (value === previousValue) return
+      await row.edit({ field, value, store })
+    }
 
     const showDeleted = filter.herkunft._deleted !== false || row?._deleted
 
