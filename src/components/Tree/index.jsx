@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -131,7 +131,7 @@ export const Tree = observer(() => {
   })
   const { userPersonOption, userRole } = dataState
 
-  const buildMyNodes = useCallback(async () => {
+  const buildMyNodes = async () => {
     //console.log('buildNodes building tree nodes')
     const nodes = await buildNodes({
       store,
@@ -139,7 +139,7 @@ export const Tree = observer(() => {
       userRole,
     })
     setNodes(nodes)
-  }, [store, userPersonOption, userRole])
+  }
 
   // useEffect(() => {
   //   // when apFilter changes to true, remove all open ap nodes from openNodes

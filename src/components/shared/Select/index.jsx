@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import SelectComponent from 'react-select'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
@@ -102,20 +102,17 @@ export const Select = ({
     setStateValue(valuePassed)
   }, [valuePassed])
 
-  const onChange = useCallback(
-    (option) => {
-      const newValue = option ? option.value : null
-      setStateValue(newValue)
-      const fakeEvent = {
-        target: {
-          name,
-          value: newValue,
-        },
-      }
-      saveToDb(fakeEvent)
-    },
-    [name, saveToDb],
-  )
+  const onChange = (option) => {
+    const newValue = option ? option.value : null
+    setStateValue(newValue)
+    const fakeEvent = {
+      target: {
+        name,
+        value: newValue,
+      },
+    }
+    saveToDb(fakeEvent)
+  }
 
   // show ... while options are loading
   const loadingOptions = [{ value: stateValue, label: '...' }]

@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
@@ -56,7 +55,7 @@ const StyledButton = styled(Button)`
 
 export const FourOhFour = () => {
   const navigate = useNavigate()
-  const onClickBack = useCallback(() => navigate('/'), [navigate])
+  const onClickBack = () => navigate('/')
 
   return (
     <>
