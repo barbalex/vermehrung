@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
@@ -114,14 +114,11 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
   const { teilkulturs, totalCount } = dataState
   const filteredCount = teilkulturs.length
 
-  const add = useCallback(() => {
-    insertTeilkulturRev()
-  }, [insertTeilkulturRev])
-
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+  }
+
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Teilkulturen') {
     upTitle = 'Zu allen Listen'
@@ -153,7 +150,7 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neue Teilkultur"
                 title="neue Teilkultur"
-                onClick={add}
+                onClick={insertTeilkulturRev}
                 size="large"
               >
                 <FaPlus />

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -74,10 +74,6 @@ export const Teilzaehlungen = observer(({ zaehlung }) => {
 
   const { tk } = kulturOption ?? {}
 
-  const onClickNew = useCallback(() => {
-    insertTeilzaehlungRev()
-  }, [insertTeilzaehlungRev])
-
   const showNew = teilzaehlungs.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'
 
@@ -91,7 +87,7 @@ export const Teilzaehlungen = observer(({ zaehlung }) => {
             <IconButton
               aria-label="Neu"
               title="Neue Teil-Zählung"
-              onClick={onClickNew}
+              onClick={insertTeilzaehlungRev}
               size="large"
             >
               <FaPlus />
