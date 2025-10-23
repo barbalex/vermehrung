@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@mui/material/Checkbox'
@@ -58,21 +58,18 @@ export const Row = observer(({ qk }) => {
 
   const checked = artQkChoosen.includes(qk.id)
 
-  const onChange = useCallback(
-    (event) => {
-      const newValue =
-        event.target.checked ?
-          [...artQkChoosen, qk.id]
-        : artQkChoosen.filter((id) => id !== qk.id)
+  const onChange = (event) => {
+    const newValue =
+      event.target.checked ?
+        [...artQkChoosen, qk.id]
+      : artQkChoosen.filter((id) => id !== qk.id)
 
-      userPersonOption.edit({
-        field: 'art_qk_choosen',
-        value: newValue,
-        store,
-      })
-    },
-    [artQkChoosen, qk.id, store, userPersonOption],
-  )
+    userPersonOption.edit({
+      field: 'art_qk_choosen',
+      value: newValue,
+      store,
+    })
+  }
 
   return (
     <RowDiv>

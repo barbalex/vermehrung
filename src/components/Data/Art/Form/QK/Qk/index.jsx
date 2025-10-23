@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Paper from '@mui/material/Paper'
@@ -50,10 +50,7 @@ export const Qk = observer(({ artId, qkChoosens }) => {
   const { db } = store
 
   const [filter, setFilter] = useState('')
-  const onChangeFilter = useCallback(
-    (event) => setFilter(event.target.value),
-    [],
-  )
+  const onChangeFilter = (event) => setFilter(event.target.value)
 
   const [messageGroups, setMessageGroups] = useState(null)
   useEffect(() => {
