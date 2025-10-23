@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaMinus } from 'react-icons/fa'
@@ -29,15 +29,12 @@ export const ZaehlungDeleteButton = observer(({ row }) => {
     store.tree
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const closeMenu = useCallback(() => {
-    setAnchorEl(null)
-  }, [])
 
-  const onClickButton = useCallback(
-    (event) => setAnchorEl(event.currentTarget),
-    [],
-  )
-  const remove = useCallback(() => {
+  const closeMenu = () => setAnchorEl(null)
+
+  const onClickButton = (event) => setAnchorEl(event.currentTarget)
+
+  const remove = () => {
     row.delete({ store })
     setAnchorEl(null)
     if (filter.zaehlung._deleted === false) {
@@ -45,14 +42,7 @@ export const ZaehlungDeleteButton = observer(({ row }) => {
       removeOpenNodeWithChildren(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
     }
-  }, [
-    row,
-    store,
-    filter.zaehlung._deleted,
-    removeOpenNodeWithChildren,
-    activeNodeArray,
-    setActiveNodeArray,
-  ])
+  }
 
   return (
     <ErrorBoundary>
