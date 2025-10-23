@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -241,45 +241,39 @@ export const EventForm = observer(
 
     const { tk, ev_datum, ev_geplant, ev_person_id } = kulturOption ?? {}
 
-    const saveToDb = useCallback(
-      (event) => {
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
+    const saveToDb = (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
 
-        if (showFilter) {
-          return filter.setValue({ table: 'event', key: field, value })
-        }
+      if (showFilter) {
+        return filter.setValue({ table: 'event', key: field, value })
+      }
 
-        const previousValue = ifIsNumericAsNumber(row?.[field])
-        // only update if value has changed
-        if (value === previousValue) return
-        row.edit({ field, value, store })
-      },
-      [filter, row, showFilter, store],
-    )
-    const openPlanenDocs = useCallback(() => {
+      const previousValue = ifIsNumericAsNumber(row?.[field])
+      // only update if value has changed
+      if (value === previousValue) return
+      row.edit({ field, value, store })
+    }
+    const openPlanenDocs = () => {
       const url = `${constants?.getAppUri()}/Dokumentation/planen`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [])
+    }
 
-    const onCreateNewTeilkultur = useCallback(
-      async ({ name }) => {
-        const teilkultur_id = await insertTeilkulturRev({
-          noNavigateInTree: true,
-          values: {
-            name,
-            kultur_id: row.kultur_id,
-          },
-        })
-        row.edit({ field: 'teilkultur_id', value: teilkultur_id, store })
-      },
-      [insertTeilkulturRev, row, store],
-    )
+    const onCreateNewTeilkultur = async ({ name }) => {
+      const teilkultur_id = await insertTeilkulturRev({
+        noNavigateInTree: true,
+        values: {
+          name,
+          kultur_id: row.kultur_id,
+        },
+      })
+      row.edit({ field: 'teilkultur_id', value: teilkultur_id, store })
+    }
 
     const showDeleted = filter.event._deleted !== false || row?._deleted
 

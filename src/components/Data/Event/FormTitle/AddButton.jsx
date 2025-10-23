@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -10,16 +10,12 @@ export const EventAddButton = observer(() => {
   const store = useContext(MobxStoreContext)
   const { insertEventRev } = store
 
-  const add = useCallback(() => {
-    insertEventRev()
-  }, [insertEventRev])
-
   return (
     <ErrorBoundary>
       <IconButton
         aria-label="neuer Event"
         title="neuer Event"
-        onClick={add}
+        onClick={insertEventRev}
         size="large"
       >
         <FaPlus />
