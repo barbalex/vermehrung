@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
@@ -78,7 +78,7 @@ export const PersonConflict = observer(
       [revRow, row],
     )
 
-    const onClickAktuellUebernehmen = useCallback(async () => {
+    const onClickAktuellUebernehmen = async () => {
       // build new object
       const newDepth = revRow._depth + 1
       const newObject = {
@@ -136,35 +136,9 @@ export const PersonConflict = observer(
       } catch {}
       conflictDisposalCallback()
       window.location.reload()
-    }, [
-      addQueuedQuery,
-      conflictDisposalCallback,
-      db,
-      revRow._depth,
-      revRow._rev,
-      revRow._revisions,
-      revRow.account_id,
-      revRow.adresszusatz,
-      revRow.aktiv,
-      revRow.bemerkungen,
-      revRow.email,
-      revRow.info,
-      revRow.kein_email,
-      revRow.kommerziell,
-      revRow.name,
-      revRow.nr,
-      revRow.ort,
-      revRow.person_id,
-      revRow.plz,
-      revRow.strasse,
-      revRow.telefon_geschaeft,
-      revRow.telefon_mobile,
-      revRow.telefon_privat,
-      revRow.user_role_id,
-      revRow.vorname,
-      user.email,
-    ])
-    const onClickWiderspruchUebernehmen = useCallback(async () => {
+    }
+
+    const onClickWiderspruchUebernehmen = async () => {
       // need to attach to the winner, that is row
       // otherwise risk to still have lower depth and thus loosing
       const newDepth = row._depth + 1
@@ -217,41 +191,9 @@ export const PersonConflict = observer(
       // now we need to delete the previous conflict
       onClickAktuellUebernehmen()
       conflictSelectionCallback()
-    }, [
-      addNotification,
-      conflictSelectionCallback,
-      gqlClient,
-      onClickAktuellUebernehmen,
-      revRow._deleted,
-      revRow.account_id,
-      revRow.adresszusatz,
-      revRow.aktiv,
-      revRow.bemerkungen,
-      revRow.email,
-      revRow.info,
-      revRow.kein_email,
-      revRow.kommerziell,
-      revRow.name,
-      revRow.nr,
-      revRow.ort,
-      revRow.person_id,
-      revRow.plz,
-      revRow.strasse,
-      revRow.telefon_geschaeft,
-      revRow.telefon_mobile,
-      revRow.telefon_privat,
-      revRow.user_role_id,
-      revRow.vorname,
-      row._depth,
-      row._rev,
-      row._revisions,
-      store,
-      user.email,
-    ])
-    const onClickSchliessen = useCallback(
-      () => setActiveConflict(null),
-      [setActiveConflict],
-    )
+    }
+
+    const onClickSchliessen = () => setActiveConflict(null)
 
     return (
       <Conflict
