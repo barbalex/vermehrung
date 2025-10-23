@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
@@ -33,10 +33,7 @@ export const HerkunftRow = observer(({ style, index, rows }) => {
 
   const row = rows[index]
 
-  const onClickRow = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, row.id]),
-    [activeNodeArray, row.id, setActiveNodeArray],
-  )
+  const onClickRow = () => setActiveNodeArray([...activeNodeArray, row.id])
 
   return (
     <Row

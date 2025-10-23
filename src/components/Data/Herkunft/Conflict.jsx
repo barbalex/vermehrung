@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
@@ -66,7 +66,7 @@ export const HerkunftConflict = observer(
       [revRow, row, store],
     )
 
-    const onClickAktuellUebernehmen = useCallback(async () => {
+    const onClickAktuellUebernehmen = async () => {
       // build new object
       const newDepth = revRow._depth + 1
       const newObject = {
@@ -115,24 +115,9 @@ export const HerkunftConflict = observer(
         conflictDisposalCallback()
         window.location.reload()
       })
-    }, [
-      addQueuedQuery,
-      conflictDisposalCallback,
-      db,
-      revRow._depth,
-      revRow._rev,
-      revRow._revisions,
-      revRow.bemerkungen,
-      revRow.gemeinde,
-      revRow.geom_point,
-      revRow.herkunft_id,
-      revRow.kanton,
-      revRow.land,
-      revRow.lokalname,
-      revRow.nr,
-      user.email,
-    ])
-    const onClickWiderspruchUebernehmen = useCallback(async () => {
+    }
+
+    const onClickWiderspruchUebernehmen = async () => {
       // need to attach to the winner, that is row
       // otherwise risk to still have lower depth and thus loosing
       const newDepth = row._depth + 1
@@ -174,30 +159,9 @@ export const HerkunftConflict = observer(
       // now we need to delete the previous conflict
       onClickAktuellUebernehmen()
       conflictSelectionCallback()
-    }, [
-      addNotification,
-      conflictSelectionCallback,
-      gqlClient,
-      onClickAktuellUebernehmen,
-      revRow._deleted,
-      revRow.bemerkungen,
-      revRow.gemeinde,
-      revRow.geom_point,
-      revRow.herkunft_id,
-      revRow.kanton,
-      revRow.land,
-      revRow.lokalname,
-      revRow.nr,
-      row._depth,
-      row._rev,
-      row._revisions,
-      store,
-      user.email,
-    ])
-    const onClickSchliessen = useCallback(
-      () => setActiveConflict(null),
-      [setActiveConflict],
-    )
+    }
+
+    const onClickSchliessen = () => setActiveConflict(null)
 
     return (
       <Conflict
