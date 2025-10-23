@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -45,10 +45,10 @@ export const TeilkulturFormTitle = observer(
 
     const { width, ref } = useResizeDetector()
 
-    const onClickUp = useCallback(() => {
+    const onClickUp = () => {
       removeOpenNode(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
-    }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+    }
 
     return (
       <TitleContainer ref={ref}>
