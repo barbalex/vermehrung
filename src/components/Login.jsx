@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext, useRef } from 'react'
+import React, { useState, useContext, useRef } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogActions from '@mui/material/DialogActions'
@@ -58,78 +58,66 @@ export const Login = () => {
   const emailInput = useRef(null)
   const passwordInput = useRef(null)
 
-  const fetchLogin = useCallback(
-    // callbacks pass email or password
-    // because state is not up to date yet
-    async ({ email: emailPassed, password: passwordPassed }) => {
-      // need to fetch values from ref
-      // why? password-managers enter values but do not blur/change
-      // if password-manager enters values and user clicks "Anmelden"
-      // it will not work without previous blurring
-      const emailToUse = emailPassed || email || emailInput.current.value
-      const passwordToUse =
-        passwordPassed || password || passwordInput.current.value
-      // do everything to clean up so no data is left
-      await signOut(firebaseAuth)
-      await localForage.clear()
-      window.localStorage.removeItem('token')
-      await db.write(async () => db.unsafeResetDatabase())
-      setTimeout(async () => {
-        try {
-          await signInWithEmailAndPassword(
-            firebaseAuth,
-            emailToUse,
-            passwordToUse,
-          )
-        } catch (error) {
-          setEmailErrorText(error.message)
-          return setPasswordErrorText(error.message)
-        }
-        // 2020.12.19 trying to go without reloading
-        //setTimeout(() => window.location.reload(true))
-      })
-    },
-    [db, email, password, firebaseAuth],
-  )
-  const onBlurEmail = useCallback(
-    (e) => {
-      setEmailErrorText('')
-      const email = e.target.value
-      setEmail(email)
-      if (!email) {
-        setEmailErrorText('Bitte Email-Adresse eingeben')
-      } else if (password) {
-        fetchLogin({ email })
+  // callbacks pass email or password
+  // because state is not up to date yet
+  const fetchLogin = async ({
+    email: emailPassed,
+    password: passwordPassed,
+  }) => {
+    // need to fetch values from ref
+    // why? password-managers enter values but do not blur/change
+    // if password-manager enters values and user clicks "Anmelden"
+    // it will not work without previous blurring
+    const emailToUse = emailPassed || email || emailInput.current.value
+    const passwordToUse =
+      passwordPassed || password || passwordInput.current.value
+    // do everything to clean up so no data is left
+    await signOut(firebaseAuth)
+    await localForage.clear()
+    window.localStorage.removeItem('token')
+    await db.write(async () => db.unsafeResetDatabase())
+    setTimeout(async () => {
+      try {
+        await signInWithEmailAndPassword(
+          firebaseAuth,
+          emailToUse,
+          passwordToUse,
+        )
+      } catch (error) {
+        setEmailErrorText(error.message)
+        return setPasswordErrorText(error.message)
       }
-    },
-    [fetchLogin, password],
-  )
-  const onBlurPassword = useCallback(
-    (e) => {
-      setPasswordErrorText('')
-      const password = e.target.value
-      setPassword(password)
-      if (!password) {
-        setPasswordErrorText('Bitte Passwort eingeben')
-      } else if (email) {
-        fetchLogin({ password })
-      }
-    },
-    [fetchLogin, email],
-  )
-  const onKeyPressEmail = useCallback(
-    (e) => e.key === 'Enter' && onBlurEmail(e),
-    [onBlurEmail],
-  )
-  const onKeyPressPassword = useCallback(
-    (e) => e.key === 'Enter' && onBlurPassword(e),
-    [onBlurPassword],
-  )
-  const onClickShowPass = useCallback(() => setShowPass(!showPass), [showPass])
-  const onMouseDownShowPass = useCallback((e) => e.preventDefault(), [])
+      // 2020.12.19 trying to go without reloading
+      //setTimeout(() => window.location.reload(true))
+    })
+  }
+  const onBlurEmail = (e) => {
+    setEmailErrorText('')
+    const email = e.target.value
+    setEmail(email)
+    if (!email) {
+      setEmailErrorText('Bitte Email-Adresse eingeben')
+    } else if (password) {
+      fetchLogin({ email })
+    }
+  }
+  const onBlurPassword = (e) => {
+    setPasswordErrorText('')
+    const password = e.target.value
+    setPassword(password)
+    if (!password) {
+      setPasswordErrorText('Bitte Passwort eingeben')
+    } else if (email) {
+      fetchLogin({ password })
+    }
+  }
+  const onKeyPressEmail = (e) => e.key === 'Enter' && onBlurEmail(e)
+  const onKeyPressPassword = (e) => e.key === 'Enter' && onBlurPassword(e)
+  const onClickShowPass = () => setShowPass(!showPass)
+  const onMouseDownShowPass = (e) => e.preventDefault()
 
   const [resetTitle, setResetTitle] = useState('neues Passwort setzen')
-  const reset = useCallback(async () => {
+  const reset = async () => {
     if (!email) setEmailErrorText('Bitte Email-Adresse eingeben')
     setResetTitle('...')
     try {
@@ -147,7 +135,7 @@ export const Login = () => {
     setTimeout(() => {
       setResetTitle('neues Passwort setzen')
     }, 5000)
-  }, [email, firebaseAuth])
+  }
 
   return (
     <ErrorBoundary>
