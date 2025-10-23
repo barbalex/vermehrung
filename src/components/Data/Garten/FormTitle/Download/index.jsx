@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState } from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -28,7 +28,7 @@ const Title = styled.div`
 export const GartenDownload = observer(({ gartenId }) => {
   const store = useContext(MobxStoreContext)
 
-  const onClickData = useCallback(async () => {
+  const onClickData = async () => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')
     const workbook = new Workbook()
     await buildExceljsWorksheetsForDaten({
@@ -42,8 +42,9 @@ export const GartenDownload = observer(({ gartenId }) => {
       workbook,
     })
     setAnchorEl(null)
-  }, [gartenId, store])
-  const onClickTzSums = useCallback(async () => {
+  }
+
+  const onClickTzSums = async () => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')
     const workbook = new Workbook()
     await buildExceljsWorksheetsForTzSums({
@@ -57,14 +58,11 @@ export const GartenDownload = observer(({ gartenId }) => {
       workbook,
     })
     setAnchorEl(null)
-  }, [gartenId, store])
+  }
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const onClose = useCallback(() => setAnchorEl(null), [])
-  const onClickOpenMenu = useCallback(
-    (event) => setAnchorEl(event.currentTarget),
-    [],
-  )
+  const onClose = () => setAnchorEl(null)
+  const onClickOpenMenu = (event) => setAnchorEl(event.currentTarget)
 
   return (
     <ErrorBoundary>
