@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
@@ -46,18 +46,17 @@ export const SammlungFormTitle = observer(
 
     const { width, ref } = useResizeDetector()
 
-    const onClickUp = useCallback(() => {
+    const onClickUp = () => {
       removeOpenNode(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
-    }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
-    const onClickToLieferungen = useCallback(
-      () => setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen']),
-      [activeNodeArray, setActiveNodeArray],
-    )
-    const onClickToHerkuenfte = useCallback(
-      () => setActiveNodeArray([...activeNodeArray, 'Herkuenfte']),
-      [activeNodeArray, setActiveNodeArray],
-    )
+    }
+
+    const onClickToLieferungen = () =>
+      setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen'])
+
+    const onClickToHerkuenfte = () =>
+      setActiveNodeArray([...activeNodeArray, 'Herkuenfte'])
+
     const showToHe = activeNodeArray[0] === 'Sammlungen'
     const showToLi = activeNodeArray[0] !== 'Personen'
 

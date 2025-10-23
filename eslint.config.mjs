@@ -1,9 +1,6 @@
 import reactRefresh from 'eslint-plugin-react-refresh'
-import typescriptEslint from '@typescript-eslint/eslint-plugin'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
 import _import from 'eslint-plugin-import'
-import { fixupPluginRules, fixupConfigRules } from '@eslint/compat'
+import { fixupConfigRules } from '@eslint/compat'
 import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
 import path from 'node:path'
@@ -31,12 +28,14 @@ export default [
       '**/.yarn',
     ],
   },
-  ...compat.extends(
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/stylistic',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
+  ...fixupConfigRules(
+    compat.extends(
+      'eslint:recommended',
+      'plugin:@typescript-eslint/recommended',
+      'plugin:@typescript-eslint/stylistic',
+      'plugin:react/recommended',
+      'plugin:react-hooks/recommended',
+    ),
   ),
   {
     plugins: {
@@ -60,11 +59,7 @@ export default [
       },
     },
 
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
+    settings: { react: { version: 'detect' } },
 
     rules: {
       strict: 0,
