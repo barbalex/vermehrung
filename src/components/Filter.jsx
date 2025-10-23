@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext, Suspense } from 'react'
+import React, { useState, useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -70,7 +70,7 @@ export const Filter = observer(() => {
     : 'art'
   const [activeTab, setActiveTab] = useState(activeTabFromActiveForm)
 
-  const onChangeTab = useCallback((event, value) => setActiveTab(value), [])
+  const onChangeTab = (event, value) => setActiveTab(value)
 
   const formObject = {
     art: <Art filter />,
