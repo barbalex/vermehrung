@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -119,126 +119,111 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
     setWgs84LongState(wgs84_long || '')
   }, [wgs84_lat, wgs84_long])
 
-  const saveToDb = useCallback(
-    async (geomPoint) => {
-      const fakeEvent = {
-        target: {
-          name: 'geom_point',
-          value: geomPoint,
-        },
-      }
-      originalSaveToDb(fakeEvent)
-    },
-    [originalSaveToDb],
-  )
+  const saveToDb = (geomPoint) => {
+    const fakeEvent = {
+      target: {
+        name: 'geom_point',
+        value: geomPoint,
+      },
+    }
+    originalSaveToDb(fakeEvent)
+  }
 
-  const saveToDbLv95 = useCallback(
-    (x, y) => {
-      let geomPoint = null
-      if (x && y) {
-        geomPoint = {
-          type: 'Point',
-          coordinates: epsg2056to4326(x, y),
-          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
-        }
+  const saveToDbLv95 = (x, y) => {
+    let geomPoint = null
+    if (x && y) {
+      geomPoint = {
+        type: 'Point',
+        coordinates: epsg2056to4326(x, y),
+        crs: { type: 'name', properties: { name: 'EPSG:4326' } },
       }
-      saveToDb(geomPoint, 'lv95')
-    },
-    [saveToDb],
-  )
+    }
+    saveToDb(geomPoint, 'lv95')
+  }
 
-  const onChangeX = useCallback((event) => {
+  const onChangeX = (event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95XState(value)
-  }, [])
-  const onBlurX = useCallback(
-    (event) => {
-      const value = ifIsNumericAsNumber(event.target.value)
-      const isValid = xIsValid(value)
-      if (!isValid) return setXError(xMessage)
-      setXError('')
-      // only save if changed
-      if (value === lv95_x) return
-      if ((value && lv95YState) || (!value && !lv95YState)) {
-        saveToDbLv95(value, lv95YState)
-      }
-    },
-    [lv95YState, lv95_x, saveToDbLv95],
-  )
-  const onChangeY = useCallback((event) => {
+  }
+
+  const onBlurX = (event) => {
+    const value = ifIsNumericAsNumber(event.target.value)
+    const isValid = xIsValid(value)
+    if (!isValid) return setXError(xMessage)
+    setXError('')
+    // only save if changed
+    if (value === lv95_x) return
+    if ((value && lv95YState) || (!value && !lv95YState)) {
+      saveToDbLv95(value, lv95YState)
+    }
+  }
+
+  const onChangeY = (event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95YState(value)
-  }, [])
-  const onBlurY = useCallback(
-    (event) => {
-      const value = ifIsNumericAsNumber(event.target.value)
-      const isValid = yIsValid(value)
-      if (!isValid) return setYError(yMessage)
-      setYError('')
-      // only save if changed
-      if (value === lv95_y) return
-      if ((value && lv95XState) || (!value && !lv95XState))
-        saveToDbLv95(lv95XState, value)
-    },
-    [lv95XState, lv95_y, saveToDbLv95],
-  )
+  }
 
-  const saveToDbWgs84 = useCallback(
-    (lat, long) => {
-      let geomPoint = null
-      if (lat && long) {
-        geomPoint = {
-          type: 'Point',
-          coordinates: [long, lat],
-          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
-        }
+  const onBlurY = (event) => {
+    const value = ifIsNumericAsNumber(event.target.value)
+    const isValid = yIsValid(value)
+    if (!isValid) return setYError(yMessage)
+    setYError('')
+    // only save if changed
+    if (value === lv95_y) return
+    if ((value && lv95XState) || (!value && !lv95XState))
+      saveToDbLv95(lv95XState, value)
+  }
+
+  const saveToDbWgs84 = (lat, long) => {
+    let geomPoint = null
+    if (lat && long) {
+      geomPoint = {
+        type: 'Point',
+        coordinates: [long, lat],
+        crs: { type: 'name', properties: { name: 'EPSG:4326' } },
       }
-      saveToDb(geomPoint, 'wgs84')
-    },
-    [saveToDb],
-  )
+    }
+    saveToDb(geomPoint, 'wgs84')
+  }
 
-  const onChangeWgs84Lat = useCallback((event) => {
+  const onChangeWgs84Lat = (event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LatState(value)
-  }, [])
-  const onBlurWgs84Lat = useCallback(
-    (event) => {
-      const value = ifIsNumericAsNumber(event.target.value)
-      const isValid = wgs84LatIsValid(value)
-      if (!isValid) return setWgs84LatError(wgs84LatMessage)
-      setWgs84LatError('')
-      // only save if changed
-      if (value === wgs84_lat) return
-      if ((value && wgs84LongState) || (!value && !wgs84LongState)) {
-        saveToDbWgs84(value, wgs84LongState)
-      }
-    },
-    [saveToDbWgs84, wgs84LongState, wgs84_lat],
-  )
-  const onChangeWgs84Long = useCallback((event) => {
+  }
+
+  const onBlurWgs84Lat = (event) => {
+    const value = ifIsNumericAsNumber(event.target.value)
+    const isValid = wgs84LatIsValid(value)
+    if (!isValid) return setWgs84LatError(wgs84LatMessage)
+    setWgs84LatError('')
+    // only save if changed
+    if (value === wgs84_lat) return
+    if ((value && wgs84LongState) || (!value && !wgs84LongState)) {
+      saveToDbWgs84(value, wgs84LongState)
+    }
+  }
+
+  const onChangeWgs84Long = (event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LongState(value)
-  }, [])
-  const onBlurWgs84Long = useCallback(
-    (event) => {
-      const value = ifIsNumericAsNumber(event.target.value)
-      const isValid = wgs84LongIsValid(value)
-      if (!isValid) return setWgs84LongError(wgs84LongMessage)
-      setWgs84LongError('')
-      // only save if changed
-      if (value === wgs84_long) return
-      if ((value && wgs84LatState) || (!value && !wgs84LatState)) {
-        saveToDbWgs84(wgs84LatState, value)
-      }
-    },
-    [saveToDbWgs84, wgs84LatState, wgs84_long],
-  )
+  }
+
+  const onBlurWgs84Long = (event) => {
+    const value = ifIsNumericAsNumber(event.target.value)
+    const isValid = wgs84LongIsValid(value)
+    if (!isValid) return setWgs84LongError(wgs84LongMessage)
+    setWgs84LongError('')
+    // only save if changed
+    if (value === wgs84_long) return
+    if ((value && wgs84LatState) || (!value && !wgs84LatState)) {
+      saveToDbWgs84(wgs84LatState, value)
+    }
+  }
 
   const [mapMenuAnchorEl, setMapMenuAnchorEl] = React.useState(null)
   const mapMenuOpen = Boolean(mapMenuAnchorEl)
 
-  const onClickGeoAdmin = useCallback(() => {
+  const onClickGeoAdmin = () => {
     if (lv95_x && lv95_y) {
       window.open(
         `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${lv95_x}&X=${lv95_y}&zoom=10&crosshair=circle`,
@@ -246,9 +231,9 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
       )
     }
     setMapMenuAnchorEl(null)
-  }, [lv95_x, lv95_y])
+  }
 
-  const onClickMapsZhCh = useCallback(() => {
+  const onClickMapsZhCh = () => {
     if (lv95_x && lv95_y) {
       // BEWARE: maps.zh.ch seems to only work in production
       // nope. Does it only work for certain urls??????
@@ -258,7 +243,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
       )
     }
     setMapMenuAnchorEl(null)
-  }, [lv95_x, lv95_y])
+  }
 
   return (
     <Container>

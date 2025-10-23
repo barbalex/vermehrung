@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import Switch from '@mui/material/Switch'
 import { observer } from 'mobx-react-lite'
@@ -23,9 +23,7 @@ export const ApFilter = observer(({ color }) => {
   const store = useContext(MobxStoreContext)
   const { apFilter, setApFilter } = store
 
-  const onChange = useCallback(async () => {
-    setApFilter(!apFilter)
-  }, [apFilter, setApFilter])
+  const onChange = () => setApFilter(!apFilter)
 
   return (
     <ErrorBoundary>

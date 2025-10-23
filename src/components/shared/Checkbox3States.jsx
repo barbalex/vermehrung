@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
@@ -48,7 +48,7 @@ const Checkbox3States = ({
     setStateValue(valuePassed)
   }, [valuePassed])
 
-  const onClickButton = useCallback(() => {
+  const onClickButton = () => {
     let newValue = null
     if (stateValue === true) newValue = false
     if (stateValue === false) newValue = null
@@ -61,18 +61,18 @@ const Checkbox3States = ({
       },
     }
     saveToDb(fakeEvent)
-  }, [stateValue, name, saveToDb])
+  }
 
   const indeterminate = stateValue === null
   const checked = stateValue === true
   const asideText =
-    stateValue === true ? `Ja` : stateValue === false ? `Nein` : `Unbestimmt`
+    stateValue === true ? `Ja`
+    : stateValue === false ? `Nein`
+    : `Unbestimmt`
   const asideComment =
-    stateValue === true
-      ? `(nach nächstem Klick 'Nein')`
-      : stateValue === false
-      ? `(nach nächstem Klick 'Unbestimmt')`
-      : `(nach nächstem Klick 'Ja')`
+    stateValue === true ? `(nach nächstem Klick 'Nein')`
+    : stateValue === false ? `(nach nächstem Klick 'Unbestimmt')`
+    : `(nach nächstem Klick 'Ja')`
 
   return (
     <Container>
