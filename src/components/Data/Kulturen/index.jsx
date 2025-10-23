@@ -1,4 +1,4 @@
-import { useContext, useCallback, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
@@ -134,10 +134,11 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
   const { kulturs, totalCount } = dataState
   const filteredCount = kulturs.length
 
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+  }
+
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Kulturen') {
     upTitle = 'Zu allen Listen'
@@ -148,9 +149,6 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
   if (activeNodeArray[activeNodeArray.length - 3] === 'Gaerten') {
     upTitle = 'Zum Garten'
   }
-  const add = useCallback(() => {
-    insertKulturRev()
-  }, [insertKulturRev])
 
   return (
     <ErrorBoundary>
@@ -175,7 +173,7 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neue Kultur"
                 title="neue Kultur"
-                onClick={add}
+                onClick={insertKulturRev}
                 size="large"
               >
                 <FaPlus />
