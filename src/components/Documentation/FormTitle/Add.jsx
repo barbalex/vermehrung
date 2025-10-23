@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -11,21 +11,22 @@ const KulturAddButton = ({ asMenu }) => {
   const store = useContext(StoreContext)
   const { insertKulturRev } = store
 
-  const add = useCallback(() => {
-    insertKulturRev()
-  }, [insertKulturRev])
-
   if (asMenu) {
-    return <MenuItem onClick={add}>neue Kultur</MenuItem>
+    return <MenuItem onClick={ainsertKulturRevd}>neue Kultur</MenuItem>
   }
 
   return (
     <ErrorBoundary>
-      <IconButton aria-label="neue Kultur" title="neue Kultur" onClick={add} size="large">
+      <IconButton
+        aria-label="neue Kultur"
+        title="neue Kultur"
+        onClick={insertKulturRev}
+        size="large"
+      >
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
-  );
+  )
 }
 
 export default observer(KulturAddButton)

@@ -12,7 +12,7 @@ export const KulturAddButton = observer(({ asMenu }) => {
   const { insertKulturRev } = store
 
   if (asMenu) {
-    return <MenuItem onClick={add}>neue Kultur</MenuItem>
+    return <MenuItem onClick={insertKulturRev}>neue Kultur</MenuItem>
   }
 
   return (
