@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -11,7 +11,7 @@ import { downloadExceljsWorkbook } from '../../../../utils/downloadExceljsWorkbo
 export const KulturDownload = observer(({ row, asMenu }) => {
   const store = useContext(MobxStoreContext)
 
-  const onClickDownload = useCallback(async () => {
+  const onClickDownload = async () => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')
     const workbook = new Workbook()
     await buildExceljsWorksheetsForKultur({
@@ -20,7 +20,7 @@ export const KulturDownload = observer(({ row, asMenu }) => {
       workbook,
     })
     downloadExceljsWorkbook({ store, fileName: `Kultur_${row.id}`, workbook })
-  }, [row.id, store])
+  }
 
   if (asMenu) {
     return <MenuItem onClick={onClickDownload}>Daten herunterladen</MenuItem>
