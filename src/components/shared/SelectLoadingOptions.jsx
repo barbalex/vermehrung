@@ -1,5 +1,5 @@
 // 2023.05.12: no more used, replaced by TaxonSelect.jsx
-import { useCallback, useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -105,34 +105,28 @@ const SelectLoadingOptions = ({
     return () => subscription?.unsubscribe?.()
   }, [db, field, labelField, labelTable, row])
 
-  const loadOptions = useCallback(
-    (inputValue, cb) => {
-      const data = modelFilter(inputValue).slice(0, 7)
-      const options = data.map((o) => {
-        return {
-          value: o.id,
-          label: artLabelFromAeArt({ ae_art: o }),
-        }
-      })
-      cb(options)
-    },
-    [modelFilter],
-  )
-
-  const onChange = useCallback(
-    (option) => {
-      const value = option && option.value ? option.value : null
-      setStateValue(value ?? '')
-      const fakeEvent = {
-        target: {
-          name: field,
-          value,
-        },
+  const loadOptions = (inputValue, cb) => {
+    const data = modelFilter(inputValue).slice(0, 7)
+    const options = data.map((o) => {
+      return {
+        value: o.id,
+        label: artLabelFromAeArt({ ae_art: o }),
       }
-      saveToDb(fakeEvent)
-    },
-    [field, saveToDb],
-  )
+    })
+    cb(options)
+  }
+
+  const onChange = (option) => {
+    const value = option && option.value ? option.value : null
+    setStateValue(value ?? '')
+    const fakeEvent = {
+      target: {
+        name: field,
+        value,
+      },
+    }
+    saveToDb(fakeEvent)
+  }
 
   return (
     <Container data-id={field}>

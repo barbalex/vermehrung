@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -37,22 +37,16 @@ export const TextField = observer(
     useEffect(() => {
       setStateValue(value || value === 0 ? value : '')
     }, [value])
-    const onChange = useCallback(
-      (event) => setStateValue(event.target.value),
-      [],
-    )
+    const onChange = (event) => setStateValue(event.target.value)
 
-    const onKeyPress = useCallback(
-      (event) => {
-        if (event.key === 'Enter') {
-          saveToDb(event)
-        }
-      },
-      [saveToDb],
-    )
+    const onKeyPress = (event) => {
+      if (event.key === 'Enter') {
+        saveToDb(event)
+      }
+    }
 
-    // once schrink is set, need to manually control ist
-    // schrink if value exists or schrinkLabel was passed
+    // once shrink is set, need to manually control ist
+    // shrink if value exists or shrinkLabel was passed
     const schrink = schrinkLabel || !!value || value === 0
 
     return (

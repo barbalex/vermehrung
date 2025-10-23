@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Select from 'react-select/creatable'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -110,29 +110,26 @@ export const SelectCreatable = observer(
       setStateValue(row[field])
     }, [])
 
-    const onChange = useCallback(
-      (option, actionMeta) => {
-        // if action is create-option
-        // need to create new dataset
-        if (actionMeta.action === 'create-option') {
-          // 1. create new dataset
-          onCreateNew({ name: option.label })
-          return
-        }
-        const newValue = option ? option.value : null
-        setStateValue(newValue)
+    const onChange = (option, actionMeta) => {
+      // if action is create-option
+      // need to create new dataset
+      if (actionMeta.action === 'create-option') {
+        // 1. create new dataset
+        onCreateNew({ name: option.label })
+        return
+      }
+      const newValue = option ? option.value : null
+      setStateValue(newValue)
 
-        if (showFilter) {
-          filter.setValue({ table, key: field, value: newValue })
-        } else {
-          row.edit({ field, value: newValue, store })
-        }
-        callback()
-      },
-      [store],
-    )
+      if (showFilter) {
+        filter.setValue({ table, key: field, value: newValue })
+      } else {
+        row.edit({ field, value: newValue, store })
+      }
+      callback()
+    }
 
-    // show ... whyle options are loading
+    // show ... while options are loading
     const loadingOptions = [{ value: stateValue, label: '...' }]
     const optionsToUse = loading && stateValue ? loadingOptions : options
     const selectValue =
