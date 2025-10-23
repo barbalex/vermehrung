@@ -61,6 +61,7 @@ export const Files = observer(({ parentTable, parent }) => {
 
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
+  // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
     () => (parent.files ? parent.files.observeWithColumns(['name']) : $of([])),
     [parent.files],
