@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import { observer } from 'mobx-react-lite'
@@ -72,7 +72,7 @@ export const QueuedQuery = observer(({ qq, index }) => {
     isInsert,
   } = qq
 
-  const onClickRevert = useCallback(() => {
+  const onClickRevert = () => {
     if (revertTable && revertId && revertField) {
       store.updateModelValue({
         table: revertTable,
@@ -88,16 +88,7 @@ export const QueuedQuery = observer(({ qq, index }) => {
       })
     }
     removeQueuedQueryById(id)
-  }, [
-    id,
-    removeQueuedQueryById,
-    revertField,
-    revertId,
-    revertTable,
-    revertValue,
-    revertValues,
-    store,
-  ])
+  }
 
   return (
     <>

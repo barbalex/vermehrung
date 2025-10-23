@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState } from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -21,23 +21,19 @@ export const HeaderExportMenu = observer(
     const store = useContext(MobxStoreContext)
 
     const [anchorEl, setAnchorEl] = useState(null)
-    const onClickExporte = useCallback(
-      (event) => setAnchorEl(event.currentTarget),
-      [],
-    )
 
-    const onClickLieferungenDesJahrs = useCallback(
-      (event) => {
-        const year = event.target.value
-        if (year.length === 4) {
-          buildExceljsWorksheetsForLieferungenOfYear({ year, store })
-          setAnchorEl(null)
-          setGrandParentAnchorEl(null)
-        }
-      },
-      [setGrandParentAnchorEl, setAnchorEl, store],
-    )
-    const onClickKulturenFuerBedarfsplanung = useCallback(async () => {
+    const onClickExporte = (event) => setAnchorEl(event.currentTarget)
+
+    const onClickLieferungenDesJahrs = (event) => {
+      const year = event.target.value
+      if (year.length === 4) {
+        buildExceljsWorksheetsForLieferungenOfYear({ year, store })
+        setAnchorEl(null)
+        setGrandParentAnchorEl(null)
+      }
+    }
+
+    const onClickKulturenFuerBedarfsplanung = async () => {
       const { Workbook } = await import('exceljs/dist/exceljs.min.js')
       const workbook = new Workbook()
       await buildExceljsWorksheetsForKulturBedarfsplanung({
@@ -51,9 +47,9 @@ export const HeaderExportMenu = observer(
       })
       setAnchorEl(null)
       setGrandParentAnchorEl(null)
-    }, [setGrandParentAnchorEl, setAnchorEl, store])
+    }
 
-    const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
+    const onClose = () => setAnchorEl(null)
 
     return (
       <>
