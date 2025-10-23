@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
@@ -55,12 +55,9 @@ export const ArtConflict = observer(
     })
     error && checkForOnlineError({ error, store })
 
-    const revRow = useMemo(() => data?.art_rev?.[0] ?? {}, [data?.art_rev])
+    const revRow = () => data?.art_rev?.[0] ?? {}
 
-    const dataArray = useMemo(
-      () => createDataArrayForRevComparison({ row, revRow, store }),
-      [revRow, row, store],
-    )
+    const dataArray = createDataArrayForRevComparison({ row, revRow, store })
 
     const onClickAktuellUebernehmen = async () => {
       // build new object
