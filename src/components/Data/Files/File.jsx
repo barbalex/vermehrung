@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback } from 'react'
+import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaTimes, FaDownload } from 'react-icons/fa'
@@ -73,27 +73,18 @@ export const File = observer(({ file, parent }) => {
 
   useEffect(() => unsetError(`${parent}_file`), [file, parent, unsetError])
 
-  const onClickDelete = useCallback(
-    async () =>
-      // TODO: need to add delete to all file models
-      file.delete({ store }),
-    [file, store],
-  )
-  const onClickDownload = useCallback(
-    () => window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`),
-    [file],
-  )
+  // TODO: need to add delete to all file models
+  const onClickDelete = () => file.delete({ store })
+  const onClickDownload = () =>
+    window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`)
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = event.target.value || null
-      // TODO: need to add edit to all file models
-      await file.edit({ field, value, store })
-      unsetError(`${parent}_file`)
-    },
-    [file, parent, store, unsetError],
-  )
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = event.target.value || null
+    // TODO: need to add edit to all file models
+    await file.edit({ field, value, store })
+    unsetError(`${parent}_file`)
+  }
 
   if (!file) return null
 
