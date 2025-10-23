@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
@@ -56,24 +56,21 @@ export const PersonArten = observer(({ person }) => {
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = useCallback(
-    async (e) => {
-      e.stopPropagation()
-      if (open) {
-        const was = open
-        await anim.start({ opacity: 0 })
-        await anim.start({ height: 0 })
-        setOpen(!was)
-      } else {
-        setOpen(!open)
-        setTimeout(async () => {
-          await anim.start({ height: 'auto' })
-          await anim.start({ opacity: 1 })
-        })
-      }
-    },
-    [anim, open],
-  )
+  const onClickToggle = async (e) => {
+    e.stopPropagation()
+    if (open) {
+      const was = open
+      await anim.start({ opacity: 0 })
+      await anim.start({ height: 0 })
+      setOpen(!was)
+    } else {
+      setOpen(!open)
+      setTimeout(async () => {
+        await anim.start({ height: 'auto' })
+        await anim.start({ opacity: 1 })
+      })
+    }
+  }
 
   const [dataState, setDataState] = useState({ avs: [], artWerte: [] })
   const { avs, artWerte } = dataState
@@ -119,15 +116,12 @@ export const PersonArten = observer(({ person }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [person.avs, avArtIds.length, db])
 
-  const saveToDb = useCallback(
-    async (event) => {
-      insertAvRev({
-        values: { person_id: person.id, art_id: event.target.value },
-      })
-      setErrors({})
-    },
-    [insertAvRev, person.id],
-  )
+  const saveToDb = (event) => {
+    insertAvRev({
+      values: { person_id: person.id, art_id: event.target.value },
+    })
+    setErrors({})
+  }
 
   return (
     <ErrorBoundary>
