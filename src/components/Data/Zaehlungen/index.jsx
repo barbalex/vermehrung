@@ -1,4 +1,4 @@
-import { useContext, useCallback, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
@@ -115,14 +115,10 @@ export const Zaehlungen = observer(({ filter: showFilter = false }) => {
   const { zaehlungs, totalCount } = dataState
   const filteredCount = zaehlungs.length
 
-  const add = useCallback(() => {
-    insertZaehlungRev()
-  }, [insertZaehlungRev])
-
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+  }
 
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Zaehlungen') {
@@ -155,7 +151,7 @@ export const Zaehlungen = observer(({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neue Zählung"
                 title="neue Zählung"
-                onClick={add}
+                onClick={insertZaehlungRev}
                 size="large"
               >
                 <FaPlus />

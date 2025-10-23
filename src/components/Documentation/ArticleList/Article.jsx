@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { useNavigate } from 'react-router'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
@@ -15,10 +14,7 @@ export const Article = ({ node }) => {
   const { slug, title, children } = node
   const activeUrl = `/Dokumentation/${slug}`
 
-  const onClickMenuItem = useCallback(
-    () => navigate(`${activeUrl}/`),
-    [activeUrl, navigate],
-  )
+  const onClickMenuItem = () => navigate(`${activeUrl}/`)
 
   const pathname = window?.location?.pathname?.split('/').filter((a) => !!a)
   const isParent = children?.length > 0

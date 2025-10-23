@@ -96,8 +96,6 @@ export const Arten = observer(({ filter: showFilter }) => {
   const { arts, totalCount } = dataState
   const filteredCount = arts.length
 
-  const add = () => insertArtRev()
-
   const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
@@ -134,7 +132,7 @@ export const Arten = observer(({ filter: showFilter }) => {
               <IconButton
                 aria-label="neue Art"
                 title="neue Art"
-                onClick={add}
+                onClick={insertArtRev}
                 size="large"
               >
                 <FaPlus />
