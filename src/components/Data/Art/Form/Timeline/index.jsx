@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -41,32 +41,29 @@ export const Timeline = observer(
 
     const anim = useAnimation()
 
-    const openDocs = useCallback((e) => {
+    const openDocs = (e) => {
       e.stopPropagation()
       const url = `${constants?.getAppUri()}/Dokumentation/zeitachse-art`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [])
-    const onClickToggle = useCallback(
-      async (e) => {
-        e.stopPropagation()
-        if (open) {
-          const was = open
-          await anim.start({ opacity: 0 })
-          await anim.start({ height: 0 })
-          setOpen(!was)
-        } else {
-          setOpen(!open)
-          setTimeout(async () => {
-            await anim.start({ height: 'auto' })
-            await anim.start({ opacity: 1 })
-          })
-        }
-      },
-      [anim, open],
-    )
+    }
+    const onClickToggle = async (e) => {
+      e.stopPropagation()
+      if (open) {
+        const was = open
+        await anim.start({ opacity: 0 })
+        await anim.start({ height: 0 })
+        setOpen(!was)
+      } else {
+        setOpen(!open)
+        setTimeout(async () => {
+          await anim.start({ height: 'auto' })
+          await anim.start({ opacity: 1 })
+        })
+      }
+    }
 
     return (
       <ErrorBoundary>
