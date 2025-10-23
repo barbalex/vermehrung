@@ -81,7 +81,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             .fetch()) ?? []
       } catch {}
       const ownZaehlungenSorted = ownZaehlungen.sort(zaehlungSort)
-      const lastZaehlung = ownZaehlungenSorted[ownZaehlungenSorted.length - 1]
+      const lastZaehlung = ownZaehlungenSorted[0]
       let lZTeilzaehlungs = []
       try {
         lZTeilzaehlungs =
