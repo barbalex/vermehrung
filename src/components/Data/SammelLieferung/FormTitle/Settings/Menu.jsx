@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -57,16 +57,13 @@ export const SettingsSammelLieferungMenu = observer(
     const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
       userPersonOption ?? {}
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = event.target.value === 'false'
-        userPersonOption.edit({ field, value, store })
-      },
-      [store, userPersonOption],
-    )
+    const saveToDb = (event) => {
+      const field = event.target.name
+      const value = event.target.value === 'false'
+      userPersonOption.edit({ field, value, store })
+    }
 
-    const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
+    const onClose = () => setAnchorEl(null)
 
     return (
       <Menu
