@@ -1,7 +1,7 @@
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useQuery } from 'urql'
 
@@ -66,15 +66,9 @@ export const LieferungConflict = observer(
     })
     error && checkForOnlineError({ error, store })
 
-    const revRow = useMemo(
-      () => data?.lieferung_rev?.[0] ?? {},
-      [data?.lieferung_rev],
-    )
+    const revRow = data?.lieferung_rev?.[0] ?? {}
 
-    const dataArray = useMemo(
-      () => createDataArray({ row, revRow }),
-      [revRow, row],
-    )
+    const dataArray = createDataArray({ row, revRow })
 
     const onClickAktuellUebernehmen = async () => {
       // build new object
