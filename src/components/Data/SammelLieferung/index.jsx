@@ -36,6 +36,7 @@ export const SammelLieferung = observer(
 
     const { filter, isPrint, online, db, initialDataQueried } = store
 
+    // removing useMemo causes: Maximum update depth exceeded
     const observable = useMemo(
       () =>
         showFilter ? $of(filter.sammel_lieferung)
