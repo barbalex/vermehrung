@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -45,33 +45,29 @@ export const HeaderHamburgerMenu = observer(
       return () => subscription?.unsubscribe?.()
     }, [db, store, user.uid])
 
-    const onClickShowDeleted = useCallback(
-      (event) => {
-        const value = event.target.checked ? false : null
-        filter.setValue({ table: 'art', key: '_deleted', value })
-        filter.setValue({ table: 'event', key: '_deleted', value })
-        filter.setValue({ table: 'garten', key: '_deleted', value })
-        filter.setValue({ table: 'herkunft', key: '_deleted', value })
-        filter.setValue({ table: 'kultur', key: '_deleted', value })
-        filter.setValue({ table: 'lieferung', key: '_deleted', value })
-        filter.setValue({ table: 'person', key: '_deleted', value })
-        filter.setValue({ table: 'sammel_lieferung', key: '_deleted', value })
-        filter.setValue({ table: 'sammlung', key: '_deleted', value })
-        filter.setValue({ table: 'teilkultur', key: '_deleted', value })
-        filter.setValue({ table: 'teilzaehlung', key: '_deleted', value })
-        filter.setValue({ table: 'zaehlung', key: '_deleted', value })
-      },
-      [filter],
-    )
-    const onClickShowActive = useCallback(
-      (event) => {
-        const value = event.target.checked ? true : null
-        filter.setValue({ table: 'garten', key: 'aktiv', value })
-        filter.setValue({ table: 'kultur', key: 'aktiv', value })
-        filter.setValue({ table: 'person', key: 'aktiv', value })
-      },
-      [filter],
-    )
+    const onClickShowDeleted = (event) => {
+      const value = event.target.checked ? false : null
+      filter.setValue({ table: 'art', key: '_deleted', value })
+      filter.setValue({ table: 'event', key: '_deleted', value })
+      filter.setValue({ table: 'garten', key: '_deleted', value })
+      filter.setValue({ table: 'herkunft', key: '_deleted', value })
+      filter.setValue({ table: 'kultur', key: '_deleted', value })
+      filter.setValue({ table: 'lieferung', key: '_deleted', value })
+      filter.setValue({ table: 'person', key: '_deleted', value })
+      filter.setValue({ table: 'sammel_lieferung', key: '_deleted', value })
+      filter.setValue({ table: 'sammlung', key: '_deleted', value })
+      filter.setValue({ table: 'teilkultur', key: '_deleted', value })
+      filter.setValue({ table: 'teilzaehlung', key: '_deleted', value })
+      filter.setValue({ table: 'zaehlung', key: '_deleted', value })
+    }
+
+    const onClickShowActive = (event) => {
+      const value = event.target.checked ? true : null
+      filter.setValue({ table: 'garten', key: 'aktiv', value })
+      filter.setValue({ table: 'kultur', key: 'aktiv', value })
+      filter.setValue({ table: 'person', key: 'aktiv', value })
+    }
+
     const activeValue =
       filter.garten.aktiv === true &&
       filter.kultur.aktiv === true &&
@@ -90,15 +86,12 @@ export const HeaderHamburgerMenu = observer(
       filter.teilzaehlung._deleted === false &&
       filter.zaehlung._deleted === false
 
-    const onClose = useCallback(
-      () => setParentAnchorEl(null),
-      [setParentAnchorEl],
-    )
+    const onClose = () => setParentAnchorEl(null)
 
-    const onClickUptime = useCallback(() => {
+    const onClickUptime = () => {
       window.open('https://uptime.vermehrung.ch')
       setParentAnchorEl(null)
-    }, [])
+    }
 
     const isManager = userRole?.name === 'manager'
 
