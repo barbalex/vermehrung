@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import ImageGallery from 'react-image-gallery'
@@ -61,8 +61,10 @@ export const Files = observer(({ parentTable, parent }) => {
 
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
-  const observable =
-    parent.files ? parent.files.observeWithColumns(['name']) : $of([])
+  const observable = useMemo(
+    () => (parent.files ? parent.files.observeWithColumns(['name']) : $of([])),
+    [parent.files],
+  )
   const files = useObservable(observable) ?? []
   files?.sort?.(fileSort)
 
