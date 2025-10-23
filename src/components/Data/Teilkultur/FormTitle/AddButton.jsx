@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -10,16 +10,12 @@ export const TeilkulturAddButton = observer(() => {
   const store = useContext(MobxStoreContext)
   const { insertTeilkulturRev } = store
 
-  const add = useCallback(() => {
-    insertTeilkulturRev()
-  }, [insertTeilkulturRev])
-
   return (
     <ErrorBoundary>
       <IconButton
         aria-label="neue Teilkultur"
         title="neue Teilkultur"
-        onClick={add}
+        onClick={insertTeilkulturRev}
         size="large"
       >
         <FaPlus />

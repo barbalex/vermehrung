@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { first as first$ } from 'rxjs/operators'
@@ -120,24 +120,22 @@ export const TeilkulturForm = observer(
 
     const { tk_bemerkungen } = kulturOption ?? {}
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
+    const saveToDb = async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
 
-        if (showFilter) {
-          return filter.setValue({ table: 'teilkultur', key: field, value })
-        }
+      if (showFilter) {
+        return filter.setValue({ table: 'teilkultur', key: field, value })
+      }
 
-        const previousValue = ifIsNumericAsNumber(row[field])
-        // only update if value has changed
-        if (value === previousValue) return
-        row.edit({ field, value, store })
-      },
-      [filter, row, showFilter, store],
-    )
+      const previousValue = ifIsNumericAsNumber(row[field])
+      // only update if value has changed
+      if (value === previousValue) return
+      row.edit({ field, value, store })
+    }
+
     const showDeleted = filter.teilkultur._deleted !== false || row?._deleted
 
     return (
