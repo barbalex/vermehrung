@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import {
   ComposedChart,
@@ -76,42 +76,36 @@ export const KulturTimeline = observer(({ row }) => {
     }
   }, [row])
 
-  const openDocs = useCallback(() => {
+  const openDocs = () => {
     const url = `${constants?.getAppUri()}/Dokumentation/zeitachse-kultur`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
     window.open(url)
-  }, [])
+  }
 
   const isNarrow = width < 1100
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = useCallback(
-    async (e) => {
-      e.stopPropagation()
-      if (open) {
-        const was = open
-        await anim.start({ opacity: 0 })
-        await anim.start({ height: 0 })
-        setOpen(!was)
-      } else {
-        setOpen(!open)
-        setTimeout(async () => {
-          await anim.start({ height: 'auto' })
-          await anim.start({ opacity: 1 })
-        })
-      }
-    },
-    [anim, open],
-  )
+  const onClickToggle = async (e) => {
+    e.stopPropagation()
+    if (open) {
+      const was = open
+      await anim.start({ opacity: 0 })
+      await anim.start({ height: 0 })
+      setOpen(!was)
+    } else {
+      setOpen(!open)
+      setTimeout(async () => {
+        await anim.start({ height: 'auto' })
+        await anim.start({ opacity: 1 })
+      })
+    }
+  }
 
-  const showCategory = useCallback(
-    (category) =>
-      !!allData.map((d) => d[category]).filter((d) => exists(d)).length,
-    [allData],
-  )
+  const showCategory = (category) =>
+    !!allData.map((d) => d[category]).filter((d) => exists(d)).length
 
   // need to disable animation or labels will not show on first render
   // https://github.com/recharts/recharts/issues/806
@@ -300,9 +294,7 @@ export const KulturTimeline = observer(({ row }) => {
                       isAnimationActive={false}
                     />
                   )}
-                  {showCategory(
-                    'Pflanzen auspflanzbereit Bedarf',
-                  ) && (
+                  {showCategory('Pflanzen auspflanzbereit Bedarf') && (
                     <Line
                       type="monotone"
                       connectNulls={true}
@@ -348,9 +340,7 @@ export const KulturTimeline = observer(({ row }) => {
                       isAnimationActive={false}
                     />
                   )}
-                  {showCategory(
-                    'Mutterpflanzen Bedarf, ignoriert',
-                  ) && (
+                  {showCategory('Mutterpflanzen Bedarf, ignoriert') && (
                     <Line
                       type="basis"
                       dataKey="Mutterpflanzen Bedarf, ignoriert"
