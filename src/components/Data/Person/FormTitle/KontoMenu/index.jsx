@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
@@ -17,10 +17,10 @@ export const PersonKonto = observer(({ row, asMenu }) => {
 
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null)
 
-  const createNewAccount = useCallback(() => {
+  const createNewAccount = () => {
     signup({ store, person: row })
     setMenuAnchorEl(null)
-  }, [row, store])
+  }
 
   if (!row.account_id) {
     if (asMenu) {

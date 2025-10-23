@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -13,14 +13,15 @@ export const PersonKontoMenu = observer(
 
     const menuOpen = Boolean(menuAnchorEl)
 
-    const onClickResetPassword = useCallback(() => {
+    const onClickResetPassword = () => {
       setPassword({ store, person: row })
       setMenuAnchorEl(null)
-    }, [row, setMenuAnchorEl, store])
-    const onClickDeleteAccount = useCallback(() => {
+    }
+
+    const onClickDeleteAccount = () => {
       deleteAccount({ store, person: row })
       setMenuAnchorEl(null)
-    }, [row, setMenuAnchorEl, store])
+    }
 
     if (asMenu) {
       return (
