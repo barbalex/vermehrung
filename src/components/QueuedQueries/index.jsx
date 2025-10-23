@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -56,17 +56,16 @@ export const QueuedQueries = observer(() => {
   const navigate = useNavigate()
   const { queuedQueries } = store
 
-  const onClickCloseIcon = useCallback(() => {
-    // ISSUE: cant use navigate(-1) as that can navigate to same url and user has to click twice to go back
-    navigate('/Vermehrung')
-  }, [navigate])
-  const openDocs = useCallback(() => {
+  // ISSUE: cant use navigate(-1) as that can navigate to same url and user has to click twice to go back
+  const onClickCloseIcon = () => navigate('/Vermehrung')
+
+  const openDocs = () => {
     const url = `${constants?.getAppUri()}/Dokumentation/offline`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
     window.open(url)
-  }, [])
+  }
 
   if (!queuedQueries.size) {
     return (

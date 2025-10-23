@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
@@ -65,11 +65,9 @@ export const Notification = observer(({ notification: n }) => {
 
   const color = colorMap[type] ?? 'error'
 
-  const onClickClose = useCallback(
-    () => removeNotificationById(n.id),
-    [n.id, removeNotificationById],
-  )
-  const onClickAction = useCallback(() => {
+  const onClickClose = () => removeNotificationById(n.id)
+
+  const onClickAction = () => {
     store?.[actionName]?.(actionArgument ?? undefined)
     if (revertTable && revertId && revertField) {
       store.updateModelValue({
@@ -86,18 +84,7 @@ export const Notification = observer(({ notification: n }) => {
       })
     }
     removeNotificationById(n.id)
-  }, [
-    actionArgument,
-    actionName,
-    n.id,
-    removeNotificationById,
-    revertField,
-    revertId,
-    revertTable,
-    revertValue,
-    revertValues,
-    store,
-  ])
+  }
 
   return (
     <Container data-color={color}>

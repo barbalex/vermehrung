@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useRef } from 'react'
+import { useContext, useMemo, useRef } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import styled from '@emotion/styled'
 import Select from 'react-select/async'
@@ -51,67 +51,59 @@ export const HeaderSearch = observer(() => {
   const { filter, singleColumnView } = store
   const { setActiveNodeArray } = store.tree
 
-  const onChange = useCallback(
-    (option) => {
-      if (!option) return
-      if (option?.val === 'none') return
-      let newActiveNodeArray
-      // use option.value to set url
-      switch (option?.type) {
-        case 'Arten':
-        case 'Gaerten':
-        case 'Herkuenfte':
-        case 'Lieferungen':
-        case 'Personen':
-        case 'Sammlungen':
-        case 'Kulturen':
+  const onChange = (option) => {
+    if (!option) return
+    if (option?.val === 'none') return
+    let newActiveNodeArray
+    // use option.value to set url
+    switch (option?.type) {
+      case 'Arten':
+      case 'Gaerten':
+      case 'Herkuenfte':
+      case 'Lieferungen':
+      case 'Personen':
+      case 'Sammlungen':
+      case 'Kulturen':
+        newActiveNodeArray = [option?.type, option?.value]
+        break
+      case 'Events': {
+        if (option?.parent) {
+          newActiveNodeArray = [
+            'Kulturen',
+            option?.parent,
+            option?.type,
+            option?.value,
+          ]
+        } else if (!option.parent) {
           newActiveNodeArray = [option?.type, option?.value]
-          break
-        case 'Events': {
-          if (option?.parent) {
-            newActiveNodeArray = [
-              'Kulturen',
-              option?.parent,
-              option?.type,
-              option?.value,
-            ]
-          } else if (!option.parent) {
-            newActiveNodeArray = [option?.type, option?.value]
-          }
-          break
         }
-        case 'Zaehlungen': {
-          if (option?.parent) {
-            newActiveNodeArray = [
-              'Kulturen',
-              option?.parent,
-              option?.type,
-              option?.value,
-            ]
-          } else if (!option.parent) {
-            newActiveNodeArray = [option?.type, option?.value]
-          }
-          break
-        }
-        default: {
-          // do nothing
-        }
+        break
       }
-      filter.setShow(false)
-      setActiveNodeArray(newActiveNodeArray)
-    },
-    [setActiveNodeArray, filter],
-  )
+      case 'Zaehlungen': {
+        if (option?.parent) {
+          newActiveNodeArray = [
+            'Kulturen',
+            option?.parent,
+            option?.type,
+            option?.value,
+          ]
+        } else if (!option.parent) {
+          newActiveNodeArray = [option?.type, option?.value]
+        }
+        break
+      }
+      default: {
+        // do nothing
+      }
+    }
+    filter.setShow(false)
+    setActiveNodeArray(newActiveNodeArray)
+  }
 
   const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
     buildOptions({ store, cb, val })
   }, 600)
-  const loadOptions = useCallback(
-    (val, cb) => {
-      buildOptionsDebounced({ cb, val })
-    },
-    [buildOptionsDebounced],
-  )
+  const loadOptions = (val, cb) => buildOptionsDebounced({ cb, val })
 
   const ref = useRef(null)
   const ownWidth = ref?.current?.getBoundingClientRect()?.width

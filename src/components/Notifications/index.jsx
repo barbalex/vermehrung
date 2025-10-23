@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -28,11 +28,6 @@ export const Notifications = observer(() => {
     // limit to 5
     .slice(0, 4)
 
-  const onClickClose = useCallback(
-    () => removeAllNotifications(),
-    [removeAllNotifications],
-  )
-
   if (notificationsSorted.length === 0) return null
 
   return (
@@ -48,7 +43,7 @@ export const Notifications = observer(() => {
           key="close"
           aria-label="Close"
           color="secondary"
-          onClick={onClickClose}
+          onClick={removeAllNotifications}
           title="Alle Meldungen schliessen"
           size="small"
           edge="start"
