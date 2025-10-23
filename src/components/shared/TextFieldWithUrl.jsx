@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { MdOpenInNew as OpenInNewIcon } from 'react-icons/md'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
@@ -42,24 +42,18 @@ const TextFieldWithUrl = ({
     propsValue || propsValue === 0 ? propsValue : '',
   )
 
-  const onChange = useCallback((event) => setStateValue(event.target.value), [])
-  const onOpen = useCallback(
-    (e) => window.open(e.target.dataset.url, '_blank'),
-    [],
-  )
+  const onChange = (event) => setStateValue(event.target.value)
+  const onOpen = (e) => window.open(e.target.dataset.url, '_blank')
 
   useEffect(() => {
     setStateValue(propsValue || propsValue === 0 ? propsValue : '')
   }, [propsValue])
 
-  const onKeyPress = useCallback(
-    (event) => {
-      if (event.key === 'Enter') {
-        saveToDb(event)
-      }
-    },
-    [saveToDb],
-  )
+  const onKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      saveToDb(event)
+    }
+  }
 
   const urls = stateValue ? getUrls(stateValue) : []
 
@@ -94,8 +88,14 @@ const TextFieldWithUrl = ({
         )}
       </StyledFormControl>
       {Array.from(urls).map((url, index) => (
-        <div key={index} title={`${url} öffnen`}>
-          <StyledOpenInNewIcon onClick={onOpen} data-url={url} />
+        <div
+          key={index}
+          title={`${url} öffnen`}
+        >
+          <StyledOpenInNewIcon
+            onClick={onOpen}
+            data-url={url}
+          />
         </div>
       ))}
     </Container>

@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
@@ -49,17 +49,15 @@ export const History = observer(
     const store = useContext(MobxStoreContext)
     const { diffConflict, setDiffConflict } = store
 
-    const onClickToggleDiff = useCallback(
-      () => setDiffConflict(!diffConflict),
-      [diffConflict, setDiffConflict],
-    )
-    const openDocs = useCallback(() => {
+    const onClickToggleDiff = () => setDiffConflict(!diffConflict)
+
+    const openDocs = () => {
       const url = `${constants?.getAppUri()}/Dokumentation/historisierung`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [])
+    }
 
     return (
       <Container>
