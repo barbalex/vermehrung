@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -58,14 +58,13 @@ export const HerkunftFormTitle = observer(
 
     const { width, ref } = useResizeDetector()
 
-    const onClickUp = useCallback(() => {
+    const onClickUp = () => {
       removeOpenNode(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
-    }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
-    const onClickToSammlungen = useCallback(
-      () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
-      [activeNodeArray, setActiveNodeArray],
-    )
+    }
+
+    const onClickToSammlungen = () =>
+      setActiveNodeArray([...activeNodeArray, 'Sammlungen'])
     const showToSa = activeNodeArray[0] === 'Herkuenfte'
 
     // herkunft is top node
