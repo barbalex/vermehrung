@@ -1,4 +1,4 @@
-import { useContext, useCallback, useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaHistory } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -40,10 +40,10 @@ export const HistoryButton = observer(
       row?._revisions?.length && row?._revisions?.length > 1
     const disabled = !online || !existMultipleRevisions
 
-    const show = useCallback(() => {
+    const show = () => {
       if (disabled) return
       setShowHistory(!showHistory)
-    }, [disabled, setShowHistory, showHistory])
+    }
 
     const title =
       online ?

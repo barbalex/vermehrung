@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -84,22 +84,17 @@ export const DateField = observer(
       setStateValue(valuePassed)
     }, [valuePassed])
 
-    const onChangeDatePicker = useCallback(
-      (date) => {
-        const newValue =
-          date === null ? null : (
-            DateTime.fromJSDate(date).toFormat('yyyy-LL-dd')
-          )
-        setStateValue(newValue)
-        saveToDb({
-          target: {
-            value: newValue,
-            name,
-          },
-        })
-      },
-      [name, saveToDb],
-    )
+    const onChangeDatePicker = (date) => {
+      const newValue =
+        date === null ? null : DateTime.fromJSDate(date).toFormat('yyyy-LL-dd')
+      setStateValue(newValue)
+      saveToDb({
+        target: {
+          value: newValue,
+          name,
+        },
+      })
+    }
 
     const isValid = DateTime.fromSQL(stateValue).isValid
     const selected = isValid ? new Date(DateTime.fromSQL(stateValue)) : null

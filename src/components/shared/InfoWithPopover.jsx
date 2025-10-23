@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Popover from '@mui/material/Popover'
 import { MdInfoOutline as InfoOutlineIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
@@ -16,15 +16,13 @@ export const InfoWithPopover = ({ children }) => {
   const [popupOpen, changePopupOpen] = useState(false)
   const [popupAnchorEl, changePopupAnchorEl] = useState(null)
 
-  const onClickFontIcon = useCallback(
-    (event) => {
-      event.preventDefault()
-      changePopupOpen(!popupOpen)
-      changePopupAnchorEl(event.currentTarget)
-    },
-    [popupOpen],
-  )
-  const onRequestClosePopover = useCallback(() => changePopupOpen(false), [])
+  const onClickFontIcon = (event) => {
+    event.preventDefault()
+    changePopupOpen(!popupOpen)
+    changePopupAnchorEl(event.currentTarget)
+  }
+
+  const onRequestClosePopover = () => changePopupOpen(false)
 
   return (
     <>
