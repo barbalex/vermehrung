@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
@@ -77,24 +77,21 @@ export const HerkunftTimeline = observer(
 
     const [open, setOpen] = useState(false)
     const anim = useAnimation()
-    const onClickToggle = useCallback(
-      async (e) => {
-        e.stopPropagation()
-        if (open) {
-          const was = open
-          await anim.start({ opacity: 0 })
-          await anim.start({ height: 0 })
-          setOpen(!was)
-        } else {
-          setOpen(!open)
-          setTimeout(async () => {
-            await anim.start({ height: 'auto' })
-            await anim.start({ opacity: 1 })
-          })
-        }
-      },
-      [anim, open],
-    )
+    const onClickToggle = async (e) => {
+      e.stopPropagation()
+      if (open) {
+        const was = open
+        await anim.start({ opacity: 0 })
+        await anim.start({ height: 0 })
+        setOpen(!was)
+      } else {
+        setOpen(!open)
+        setTimeout(async () => {
+          await anim.start({ height: 'auto' })
+          await anim.start({ opacity: 1 })
+        })
+      }
+    }
 
     return (
       <ErrorBoundary>
