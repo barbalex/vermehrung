@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -48,13 +48,13 @@ export const LieferungWann = observer(
 
     const { errors } = store
 
-    const openPlanenDocs = useCallback(() => {
+    const openPlanenDocs = () => {
       const url = `${constants?.getAppUri()}/Dokumentation/planen`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [])
+    }
 
     return (
       <>

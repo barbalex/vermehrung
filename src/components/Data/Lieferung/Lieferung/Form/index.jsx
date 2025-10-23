@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
@@ -137,48 +137,40 @@ export const LierferungForm = observer(
 
     const { li_show_sl_felder } = userPersonOption ?? {}
 
-    const ifNeeded = useCallback(
-      (field) => {
-        if (existsSammelLieferung && li_show_sl_felder) return true
-        if (
-          !exists(sammelLieferung?.[field]) ||
-          sammelLieferung?.[field] === false
-        ) {
-          return true
-        } else if (sammelLieferung?.[field] !== row[field]) {
-          return true
-        }
-        return false
-      },
-      [existsSammelLieferung, li_show_sl_felder, row, sammelLieferung],
-    )
-    const ifSomeNeeded = useCallback(
-      (fields) => fields.some((f) => ifNeeded(f)),
-      [ifNeeded],
-    )
+    const ifNeeded = (field) => {
+      if (existsSammelLieferung && li_show_sl_felder) return true
+      if (
+        !exists(sammelLieferung?.[field]) ||
+        sammelLieferung?.[field] === false
+      ) {
+        return true
+      } else if (sammelLieferung?.[field] !== row[field]) {
+        return true
+      }
+      return false
+    }
+
+    const ifSomeNeeded = (fields) => fields.some((f) => ifNeeded(f))
 
     useEffect(() => {
       unsetError('lieferung')
     }, [id, unsetError])
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
+    const saveToDb = (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
 
-        if (showFilter) {
-          return filter.setValue({ table: 'lieferung', key: field, value })
-        }
+      if (showFilter) {
+        return filter.setValue({ table: 'lieferung', key: field, value })
+      }
 
-        // only update if value has changed
-        const previousValue = ifIsNumericAsNumber(row[field])
-        if (value === previousValue) return
-        row.edit({ field, value, store })
-      },
-      [filter, row, showFilter, store],
-    )
+      // only update if value has changed
+      const previousValue = ifIsNumericAsNumber(row[field])
+      if (value === previousValue) return
+      row.edit({ field, value, store })
+    }
 
     const showDeleted = filter.lieferung._deleted !== false || row?._deleted
 
