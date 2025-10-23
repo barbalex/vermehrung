@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -52,7 +52,7 @@ export const KulturQkRouter = observer(({ kultur }) => {
   const { db, user } = store
 
   const [tab, setTab] = useState('qk')
-  const onChangeTab = useCallback((event, value) => setTab(value), [])
+  const onChangeTab = (event, value) => setTab(value)
 
   const [dataState, setDataState] = useState({
     qks: [],
@@ -91,35 +91,32 @@ export const KulturQkRouter = observer(({ kultur }) => {
   const qkCount = qks.length
   const qkChoosenCount = qkChoosens.length
 
-  const openDocs = useCallback((e) => {
+  const openDocs = (e) => {
     e.stopPropagation()
     const url = `${constants?.getAppUri()}/Dokumentation/qualitaets-kontrollen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
     window.open(url)
-  }, [])
+  }
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = useCallback(
-    async (e) => {
-      e.stopPropagation()
-      if (open) {
-        const was = open
-        await anim.start({ opacity: 0 })
-        await anim.start({ height: 0 })
-        setOpen(!was)
-      } else {
-        setOpen(!open)
-        setTimeout(async () => {
-          await anim.start({ height: 'auto' })
-          await anim.start({ opacity: 1 })
-        })
-      }
-    },
-    [anim, open],
-  )
+  const onClickToggle = async (e) => {
+    e.stopPropagation()
+    if (open) {
+      const was = open
+      await anim.start({ opacity: 0 })
+      await anim.start({ height: 0 })
+      setOpen(!was)
+    } else {
+      setOpen(!open)
+      setTimeout(async () => {
+        await anim.start({ height: 'auto' })
+        await anim.start({ opacity: 1 })
+      })
+    }
+  }
 
   return (
     <ErrorBoundary>

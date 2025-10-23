@@ -1,10 +1,4 @@
-import {
-  useContext,
-  useState,
-  useCallback,
-  useEffect,
-  useMemo,
-} from 'react'
+import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
@@ -46,14 +40,8 @@ export const Kultur = observer(
     const row = useObservable(observable)
 
     const [activeConflict, setActiveConflict] = useState(null)
-    const conflictDisposalCallback = useCallback(
-      () => setActiveConflict(null),
-      [],
-    )
-    const conflictSelectionCallback = useCallback(
-      () => setActiveConflict(null),
-      [],
-    )
+    const conflictDisposalCallback = () => setActiveConflict(null)
+    const conflictSelectionCallback = () => setActiveConflict(null)
     // ensure that activeConflict is reset
     // when changing dataset
     useEffect(() => {
@@ -61,7 +49,7 @@ export const Kultur = observer(
     }, [id])
 
     const [showHistory, setShowHistory] = useState(false)
-    const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
+    const historyTakeoverCallback = () => setShowHistory(null)
 
     if (!row || !Object.keys(row ?? {})) return <Spinner />
     if (!showFilter && filter.show) return null

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useCallback, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { uniq, uniqBy } from 'es-toolkit'
@@ -367,31 +367,29 @@ export const KulturForm = observer(
     }, [db, user, artsToChoose.length, herkunftsToChoose.length])
     const { artWerte, herkunftWerte } = dataState2
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
+    const saveToDb = (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
 
-        if (showFilter) {
-          return filter.setValue({ table: 'kultur', key: field, value })
-        }
+      if (showFilter) {
+        return filter.setValue({ table: 'kultur', key: field, value })
+      }
 
-        const previousValue = ifIsNumericAsNumber(row[field])
-        // only update if value has changed
-        if (value === previousValue) return
-        row.edit({ field, value, store })
-      },
-      [filter, row, showFilter, store],
-    )
-    const openGenVielfaldDocs = useCallback(() => {
+      const previousValue = ifIsNumericAsNumber(row[field])
+      // only update if value has changed
+      if (value === previousValue) return
+      row.edit({ field, value, store })
+    }
+
+    const openGenVielfaldDocs = () => {
       const url = `${constants?.getAppUri()}/Dokumentation/genetische-vielfalt`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [])
+    }
 
     const zwischenlagerError =
       errors.kultur?.zwischenlager?.includes('Unique-Constraint') ?
