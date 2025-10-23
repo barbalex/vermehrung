@@ -1,7 +1,7 @@
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import { observer } from 'mobx-react-lite'
 import { useQuery } from 'urql'
 import gql from 'graphql-tag'
 
@@ -56,15 +56,13 @@ export const HerkunftConflict = observer(
     })
     error && checkForOnlineError({ error, store })
 
-    const revRow = useMemo(
-      () => data?.herkunft_rev?.[0] ?? {},
-      [data?.herkunft_rev],
-    )
+    const revRow = data?.herkunft_rev?.[0] ?? {}
 
-    const dataArray = useMemo(
-      () => createDataArrayForHerkunftRevComparison({ row, revRow, store }),
-      [revRow, row, store],
-    )
+    const dataArray = createDataArrayForHerkunftRevComparison({
+      row,
+      revRow,
+      store,
+    })
 
     const onClickAktuellUebernehmen = async () => {
       // build new object

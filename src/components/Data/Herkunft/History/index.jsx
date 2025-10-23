@@ -1,4 +1,4 @@
-import { useMemo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import Slider from 'react-slick'
@@ -75,10 +75,7 @@ export const HerkunftHistory = observer(
     })
     error && checkForOnlineError({ error, store })
 
-    const revRowsUnsorted = useMemo(
-      () => data?.herkunft_rev ?? [],
-      [data?.herkunft_rev],
-    )
+    const revRowsUnsorted = data?.herkunft_rev ?? []
     const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
     if (fetching) {
