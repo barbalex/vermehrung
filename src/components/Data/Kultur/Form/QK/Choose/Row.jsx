@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@mui/material/Checkbox'
@@ -58,7 +58,7 @@ export const ChooseKulturQkRow = observer(({ qk }) => {
 
   const checked = kulturQkChoosen.includes(qk.id)
 
-  const onChange = useCallback(() => {
+  const onChange = () => {
     const newValue =
       event.target.checked ?
         [...kulturQkChoosen, qk.id]
@@ -69,7 +69,7 @@ export const ChooseKulturQkRow = observer(({ qk }) => {
       value: newValue,
       store,
     })
-  }, [kulturQkChoosen, qk.id, store, userPersonOption])
+  }
 
   if (!kulturQkChoosen) return null
 
