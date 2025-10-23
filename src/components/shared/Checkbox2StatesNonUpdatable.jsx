@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
@@ -40,11 +40,11 @@ export const Checkbox2StatesNonUpdatable = observer(
     }, [valuePassed])
 
     const [message, setMessage] = useState(messagePassed)
-    const onClickButton = useCallback(() => {
+    const onClickButton = () => {
       setMessage(message)
       // can fire after component was unmounted...
       setTimeout(() => setMessage(null), 10000)
-    }, [message])
+    }
 
     const checked = stateValue === true
 

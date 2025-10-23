@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
@@ -34,7 +34,7 @@ export const Checkbox2States = observer(
       setStateValue(valuePassed)
     }, [valuePassed])
 
-    const onClickButton = useCallback(() => {
+    const onClickButton = () => {
       const newValue = !stateValue
       setStateValue(newValue)
       const fakeEvent = {
@@ -44,7 +44,7 @@ export const Checkbox2States = observer(
         },
       }
       saveToDb(fakeEvent)
-    }, [stateValue, name, saveToDb])
+    }
 
     const checked = stateValue === true
 
