@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
@@ -11,14 +11,13 @@ export const SammelLieferungNavButtons = observer(() => {
 
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
-  const onClickToLieferungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Lieferungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  }
+
+  const onClickToLieferungen = () =>
+    setActiveNodeArray([...activeNodeArray, 'Lieferungen'])
 
   return (
     <>

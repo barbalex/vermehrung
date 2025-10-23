@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
@@ -12,16 +12,15 @@ export const SammelLieferungPrint = observer(
     const store = useContext(MobxStoreContext)
     const { setIsPrint } = store
 
-    const showLieferschein = useCallback(() => {
-      setPrintPreview(!printPreview)
-    }, [printPreview, setPrintPreview])
-    const printLieferschein = useCallback(() => {
+    const showLieferschein = () => setPrintPreview(!printPreview)
+
+    const printLieferschein = () => {
       setIsPrint(true)
       setTimeout(() => {
         window.print()
         setIsPrint(false)
       })
-    }, [setIsPrint])
+    }
 
     if (asMenu) {
       return (

@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useMemo } from 'react'
+import { useContext, useState, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -56,11 +56,9 @@ export const SammelLieferungCopyMenu = observer(
     const { addNotification } = store
 
     const [anchorEl, setAnchorEl] = useState(null)
-    const onClose = useCallback(() => setAnchorEl(null), [])
-    const onClickConfig = useCallback(
-      (event) => setAnchorEl(event.currentTarget),
-      [],
-    )
+    const onClose = () => setAnchorEl(null)
+    const onClickConfig = (event) => setAnchorEl(event.currentTarget)
+
     const containsData = useMemo(
       () =>
         Object.entries(sammelLieferung)
@@ -75,7 +73,8 @@ export const SammelLieferungCopyMenu = observer(
           .filter(([key, val]) => exists(val) && val !== false).length > 0,
       [sammelLieferung],
     )
-    const onClickActiveLieferung = useCallback(async () => {
+
+    const onClickActiveLieferung = async () => {
       setAnchorEl(null)
       try {
         await updateSammelLieferung({
@@ -90,14 +89,15 @@ export const SammelLieferungCopyMenu = observer(
         message: 'Lieferung aktualisiert',
         type: 'info',
       })
-    }, [addNotification, lieferung, sammelLieferung, store])
-    const onClickAllLieferung = useCallback(async () => {
+    }
+
+    const onClickAllLieferung = () => {
       setAnchorEl(null)
       updateAllSammelLieferungen({
         sammelLieferung,
         store,
       })
-    }, [sammelLieferung, store])
+    }
 
     return (
       <ErrorBoundary>
