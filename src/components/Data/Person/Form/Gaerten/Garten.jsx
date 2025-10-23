@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaTimes } from 'react-icons/fa'
@@ -50,15 +50,13 @@ export const PersonGarten = observer(({ gv }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClose = useCallback(() => setDelMenuAnchorEl(null), [])
-  const onClickDeleteIcon = useCallback(
-    (event) => setDelMenuAnchorEl(event.currentTarget),
-    [],
-  )
-  const onClickDelete = useCallback(() => {
+  const onClose = () => setDelMenuAnchorEl(null)
+  const onClickDeleteIcon = (event) => setDelMenuAnchorEl(event.currentTarget)
+
+  const onClickDelete = () => {
     gv.delete({ store })
     setDelMenuAnchorEl(null)
-  }, [gv, store])
+  }
 
   const [gartenLabel, setGartenLabel] = useState(null)
   useEffect(() => {
@@ -112,4 +110,3 @@ export const PersonGarten = observer(({ gv }) => {
     </ErrorBoundary>
   )
 })
-

@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
@@ -56,24 +56,21 @@ export const PersonGaerten = observer(({ person }) => {
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = useCallback(
-    async (e) => {
-      e.stopPropagation()
-      if (open) {
-        const was = open
-        await anim.start({ opacity: 0 })
-        await anim.start({ height: 0 })
-        setOpen(!was)
-      } else {
-        setOpen(!open)
-        setTimeout(async () => {
-          await anim.start({ height: 'auto' })
-          await anim.start({ opacity: 1 })
-        })
-      }
-    },
-    [anim, open],
-  )
+  const onClickToggle = async (e) => {
+    e.stopPropagation()
+    if (open) {
+      const was = open
+      await anim.start({ opacity: 0 })
+      await anim.start({ height: 0 })
+      setOpen(!was)
+    } else {
+      setOpen(!open)
+      setTimeout(async () => {
+        await anim.start({ height: 'auto' })
+        await anim.start({ opacity: 1 })
+      })
+    }
+  }
 
   const [dataState, setDataState] = useState({ gvs: [], gartenWerte: [] })
   const { gvs, gartenWerte } = dataState
@@ -143,15 +140,12 @@ export const PersonGaerten = observer(({ person }) => {
     filter.garten.aktiv,
   ])
 
-  const saveToDb = useCallback(
-    async (event) => {
-      insertGvRev({
-        values: { garten_id: event.target.value, person_id: person.id },
-      })
-      setErrors({})
-    },
-    [insertGvRev, person.id],
-  )
+  const saveToDb = (event) => {
+    insertGvRev({
+      values: { garten_id: event.target.value, person_id: person.id },
+    })
+    setErrors({})
+  }
 
   return (
     <ErrorBoundary>
