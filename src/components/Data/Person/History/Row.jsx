@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
@@ -17,11 +17,9 @@ export const PersonHistoryRow = observer(
     const { user, addNotification, db, gqlClient } = store
 
     // need to extract raw value?
-    const dataArray = useMemo(
-      () => createDataArray({ row, revRow, store }),
-      [revRow, row, store],
-    )
-    const onClickWiderspruchUebernehmen = useCallback(async () => {
+    const dataArray = createDataArray({ row, revRow, store })
+
+    const onClickWiderspruchUebernehmen = async () => {
       // need to attach to the winner, that is row
       // otherwise risk to still have lower depth and thus loosing
       const newDepth = row._depth + 1
@@ -91,35 +89,7 @@ export const PersonHistoryRow = observer(
           })
         })
       })
-    }, [
-      row,
-      revRow.person_id,
-      revRow.nr,
-      revRow.vorname,
-      revRow.name,
-      revRow.adresszusatz,
-      revRow.strasse,
-      revRow.plz,
-      revRow.ort,
-      revRow.telefon_privat,
-      revRow.telefon_geschaeft,
-      revRow.telefon_mobile,
-      revRow.email,
-      revRow.kein_email,
-      revRow.bemerkungen,
-      revRow.account_id,
-      revRow.user_role_id,
-      revRow.kommerziell,
-      revRow.info,
-      revRow.aktiv,
-      revRow._deleted,
-      user.email,
-      gqlClient,
-      historyTakeoverCallback,
-      db,
-      store,
-      addNotification,
-    ])
+    }
 
     return (
       <History

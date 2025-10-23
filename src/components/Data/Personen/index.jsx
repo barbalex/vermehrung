@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
@@ -115,14 +115,11 @@ export const Personen = observer(({ filter: showFilter = false }) => {
   const { persons, totalCount, userRole } = dataState
   const filteredCount = persons.length
 
-  const add = useCallback(() => {
-    insertPersonRev()
-  }, [insertPersonRev])
-
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+  }
+
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Personen') {
     upTitle = 'Zu allen Listen'
@@ -152,7 +149,7 @@ export const Personen = observer(({ filter: showFilter = false }) => {
                 <IconButton
                   aria-label="neue Person"
                   title="neue Person"
-                  onClick={add}
+                  onClick={insertPersonRev}
                   size="large"
                 >
                   <FaPlus />
