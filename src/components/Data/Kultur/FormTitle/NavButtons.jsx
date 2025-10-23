@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import { of as $of } from 'rxjs'
@@ -15,30 +15,25 @@ export const KulturNavButtons = observer(({ row }) => {
   const store = useContext(MobxStoreContext)
   const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
 
-  const onClickToKulturen = useCallback(() => {
+  const onClickToKulturen = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
-  const onClickToZaehlungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Zaehlungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToAnLieferungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'An-Lieferungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToAusLieferungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToEvents = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Events']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToTks = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Teilkulturen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
+  }
+
+  const onClickToZaehlungen = () =>
+    setActiveNodeArray([...activeNodeArray, 'Zaehlungen'])
+
+  const onClickToAnLieferungen = () =>
+    setActiveNodeArray([...activeNodeArray, 'An-Lieferungen'])
+
+  const onClickToAusLieferungen = () =>
+    setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen'])
+
+  const onClickToEvents = () =>
+    setActiveNodeArray([...activeNodeArray, 'Events'])
+
+  const onClickToTks = () =>
+    setActiveNodeArray([...activeNodeArray, 'Teilkulturen'])
 
   const [dataState, setDataState] = useState({ kulturOption: undefined })
   const { kulturOption } = dataState

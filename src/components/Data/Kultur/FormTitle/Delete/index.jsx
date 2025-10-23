@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaMinus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -10,10 +10,7 @@ import { KulturDeleteMenu as Menu } from './Menu.jsx'
 export const KulturDeleteButton = observer(({ row, asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const onClickButton = useCallback(
-    (event) => setAnchorEl(event.currentTarget),
-    [],
-  )
+  const onClickButton = (event) => setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (

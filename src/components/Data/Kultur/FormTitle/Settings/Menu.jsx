@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -59,33 +59,28 @@ export const KulturSettingsMenu = observer(
     const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
     const { tk } = kulturOption ?? {}
 
-    const saveToDbKulturOption = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = event.target.value === 'false'
-        kulturOption.edit({ field, value, store })
-      },
-      [kulturOption, store],
-    )
+    const saveToDbKulturOption = async (event) => {
+      const field = event.target.name
+      const value = event.target.value === 'false'
+      kulturOption.edit({ field, value, store })
+    }
 
-    const saveToDbPersonOption = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = event.target.value === 'false'
-        userPersonOption.edit({ field, value, store })
-      },
-      [store, userPersonOption],
-    )
+    const saveToDbPersonOption = async (event) => {
+      const field = event.target.name
+      const value = event.target.value === 'false'
+      userPersonOption.edit({ field, value, store })
+    }
 
-    const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
-    const openOptionDocs = useCallback(() => {
+    const onClose = () => setAnchorEl(null)
+
+    const openOptionDocs = () => {
       setAnchorEl(null)
       const url = `${constants?.getAppUri()}/Dokumentation/teilkulturen`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [setAnchorEl])
+    }
 
     return (
       <Menu
