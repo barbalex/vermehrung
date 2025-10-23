@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo } from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -59,20 +59,17 @@ export const SammelLieferungCopyMenu = observer(
     const onClose = () => setAnchorEl(null)
     const onClickConfig = (event) => setAnchorEl(event.currentTarget)
 
-    const containsData = useMemo(
-      () =>
-        Object.entries(sammelLieferung)
-          .filter(
-            // only accept lieferung's fields
-            // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-            ([key, value]) =>
-              sammelLieferungFields.filter((f) => f !== 'id').includes(key),
-          )
-          // only update with existing values
+    const containsData =
+      Object.entries(sammelLieferung)
+        .filter(
+          // only accept lieferung's fields
           // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-          .filter(([key, val]) => exists(val) && val !== false).length > 0,
-      [sammelLieferung],
-    )
+          ([key, value]) =>
+            sammelLieferungFields.filter((f) => f !== 'id').includes(key),
+        )
+        // only update with existing values
+        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+        .filter(([key, val]) => exists(val) && val !== false).length > 0
 
     const onClickActiveLieferung = async () => {
       setAnchorEl(null)
