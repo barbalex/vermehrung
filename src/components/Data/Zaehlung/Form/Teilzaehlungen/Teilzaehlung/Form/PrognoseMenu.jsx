@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import Menu from '@mui/material/Menu'
@@ -62,100 +62,89 @@ export const PrognoseMenu = observer(
       setErrors({})
     }, [])
 
-    const saveToDb = useCallback(
-      async (event) => {
+    const saveToDb = async (event) => {
+      setErrors({})
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
+      // type is always number so no need to use 'valueToSet'
+      // only do something if both values exist
+      field === 'anzahl_auspflanzbereit' ? setAnz(value) : setJahr(value)
+      const anzAuspflanzbereit =
+        field === 'anzahl_auspflanzbereit' ? value : anz
+      const yearToUse = field === 'jahr' ? value : jahr
+      if (!exists(yearToUse)) return
+      if (!(yearToUse > 1900 && yearToUse < 2200)) {
+        return setErrors({
+          jahr: 'Das Jahr muss zwischen 1900 und 2200 liegen',
+        })
+      }
+      if (!exists(value)) return
+      if (!exists(anzAuspflanzbereit)) return
+      // we have both values. Let's go on
+      // check if zaehlung with date of 15.09. of year exist
+      const dateOfZaehlung = `${yearToUse}-09-15`
+      let existingZaehlungData = []
+      try {
+        existingZaehlungData = await db
+          .get('zaehlung')
+          .query(
+            Q.where('_deleted', false),
+            Q.where('prognose', true),
+            Q.where('datum', dateOfZaehlung),
+            Q.where('kultur_id', kulturId),
+          )
+          .fetch()
+      } catch {}
+      const existingZaehlungDataSorted = existingZaehlungData.sort(zaehlungSort)
+      const existingZaehlung = existingZaehlungDataSorted?.[0]
+      // if not: create it first
+      let newZaehlungId
+      // if not: create it first
+      if (!existingZaehlung) {
+        newZaehlungId = await insertZaehlungRev({
+          values: {
+            kultur_id: kulturId,
+            datum: dateOfZaehlung,
+            prognose: true,
+          },
+        })
+      }
+      const zaehlungId = existingZaehlung?.id ?? newZaehlungId
+      // fetch teilzaehlungen with zaehlung_id === newZaehlungId, then update that
+      // if inserting there will be two teilzaehlungs because of server trigger
+      const interval = setInterval(async () => {
+        const newTzs = await db
+          .get('teilzaehlung')
+          .query(Q.where('zaehlung_id', zaehlungId))
+        const newTz = newTzs?.[0]
+        if (newTz) {
+          clearInterval(interval)
+          await newTz.edit({
+            field: 'anzahl_auspflanzbereit',
+            value: anzAuspflanzbereit,
+            store,
+          })
+          addNotification({
+            message: 'Der Bedarf wurde gespeichert',
+            type: 'info',
+          })
+        }
+        setAnchorEl(null)
         setErrors({})
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
-        // type is always number so no need to use 'valueToSet'
-        // only do something if both values exist
-        field === 'anzahl_auspflanzbereit' ? setAnz(value) : setJahr(value)
-        const anzAuspflanzbereit =
-          field === 'anzahl_auspflanzbereit' ? value : anz
-        const yearToUse = field === 'jahr' ? value : jahr
-        if (!exists(yearToUse)) return
-        if (!(yearToUse > 1900 && yearToUse < 2200)) {
-          return setErrors({
-            jahr: 'Das Jahr muss zwischen 1900 und 2200 liegen',
-          })
-        }
-        if (!exists(value)) return
-        if (!exists(anzAuspflanzbereit)) return
-        // we have both values. Let's go on
-        // check if zaehlung with date of 15.09. of year exist
-        const dateOfZaehlung = `${yearToUse}-09-15`
-        let existingZaehlungData = []
-        try {
-          existingZaehlungData = await db
-            .get('zaehlung')
-            .query(
-              Q.where('_deleted', false),
-              Q.where('prognose', true),
-              Q.where('datum', dateOfZaehlung),
-              Q.where('kultur_id', kulturId),
-            )
-            .fetch()
-        } catch {}
-        const existingZaehlungDataSorted =
-          existingZaehlungData.sort(zaehlungSort)
-        const existingZaehlung = existingZaehlungDataSorted?.[0]
-        // if not: create it first
-        let newZaehlungId
-        // if not: create it first
-        if (!existingZaehlung) {
-          newZaehlungId = await insertZaehlungRev({
-            values: {
-              kultur_id: kulturId,
-              datum: dateOfZaehlung,
-              prognose: true,
-            },
-          })
-        }
-        const zaehlungId = existingZaehlung?.id ?? newZaehlungId
-        // fetch teilzaehlungen with zaehlung_id === newZaehlungId, then update that
-        // if inserting there will be two teilzaehlungs because of server trigger
-        const interval = setInterval(async () => {
-          const newTzs = await db
-            .get('teilzaehlung')
-            .query(Q.where('zaehlung_id', zaehlungId))
-          const newTz = newTzs?.[0]
-          if (newTz) {
-            clearInterval(interval)
-            await newTz.edit({
-              field: 'anzahl_auspflanzbereit',
-              value: anzAuspflanzbereit,
-              store,
-            })
-            addNotification({
-              message: 'Der Bedarf wurde gespeichert',
-              type: 'info',
-            })
-          }
-          setAnchorEl(null)
-          setErrors({})
-        }, 200)
-      },
-      [
-        addNotification,
-        anz,
-        insertZaehlungRev,
-        jahr,
-        kulturId,
-        setAnchorEl,
-        store,
-        db,
-      ],
-    )
-    const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])
-    const openDocs = useCallback(() => {
+      }, 200)
+    }
+
+    const onClickAbbrechen = () => setAnchorEl(null)
+
+    const openDocs = () => {
       const url = `${constants?.getAppUri()}/Dokumentation/planen`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [])
+    }
 
     return (
       <ErrorBoundary>

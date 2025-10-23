@@ -1,10 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-  useMemo,
-} from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -164,15 +158,17 @@ export const TeilzaehlungForm = observer(
 
     const [openPrognosis, setOpenPrognosis] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
-    const onClosePrognosis = useCallback((event, reason) => {
+
+    const onClosePrognosis = (event, reason) => {
       if (reason === 'escapeKeyDown') {
         setAnchorEl(null)
       }
-    }, [])
-    const onClickPrognosis = useCallback((event) => {
+    }
+
+    const onClickPrognosis = (event) => {
       setOpenPrognosis(true)
       setAnchorEl(event.currentTarget)
-    }, [])
+    }
 
     const {
       tk,
@@ -182,62 +178,47 @@ export const TeilzaehlungForm = observer(
       tz_bemerkungen,
     } = kulturOption ?? {}
 
-    const onCreateNewTeilkultur = useCallback(
-      async ({ name }) => {
-        const teilkultur_id = await insertTeilkulturRev({
-          noNavigateInTree: true,
-          values: {
-            name,
-            kultur_id: kulturId,
-          },
-        })
-        row.edit({ field: 'teilkultur_id', value: teilkultur_id, store })
-      },
-      [insertTeilkulturRev, kulturId, row, store],
-    )
+    const onCreateNewTeilkultur = async ({ name }) => {
+      const teilkultur_id = await insertTeilkulturRev({
+        noNavigateInTree: true,
+        values: {
+          name,
+          kultur_id: kulturId,
+        },
+      })
+      row.edit({ field: 'teilkultur_id', value: teilkultur_id, store })
+    }
 
     useEffect(() => {
       unsetError('teilzaehlung')
     }, [id, unsetError])
 
-    const saveToDb = useCallback(
-      (event) => {
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
-        const previousValue = ifIsNumericAsNumber(row[field])
-        // only update if value has changed
-        if (value === previousValue) return
+    const saveToDb = (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
+      const previousValue = ifIsNumericAsNumber(row[field])
+      // only update if value has changed
+      if (value === previousValue) return
 
-        row.edit({ field, value, store })
-      },
-      [row, store],
-    )
-    const onClickDelete = useCallback(() => {
-      row.delete({ store })
-    }, [row, store])
+      row.edit({ field, value, store })
+    }
+
+    const onClickDelete = () => row.delete({ store })
 
     const showDeleted = row?._deleted || filter.teilzaehlung._deleted !== false
 
-    const anzahl_jungpflanzen = useMemo(() => {
-      if (
+    const anzahl_jungpflanzen =
+      (
         exists(row?.anzahl_pflanzen) &&
         exists(row?.anzahl_auspflanzbereit) &&
         exists(row?.anzahl_mutterpflanzen)
-      ) {
-        return (
-          row?.anzahl_pflanzen -
-          row?.anzahl_auspflanzbereit -
-          row?.anzahl_mutterpflanzen
-        )
-      }
-      return null
-    }, [
-      row?.anzahl_auspflanzbereit,
-      row?.anzahl_mutterpflanzen,
-      row?.anzahl_pflanzen,
-    ])
+      ) ?
+        row?.anzahl_pflanzen -
+        row?.anzahl_auspflanzbereit -
+        row?.anzahl_mutterpflanzen
+      : null
 
     if (!row || !Object.keys(row ?? {})) return null
 
