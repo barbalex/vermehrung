@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { first as first$ } from 'rxjs/operators'
@@ -49,10 +49,7 @@ export const ArtRow = observer(({ style, index, rows }) => {
     }
   }, [row])
 
-  const onClickRow = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, row.id]),
-    [activeNodeArray, row.id, setActiveNodeArray],
-  )
+  const onClickRow = () => setActiveNodeArray([...activeNodeArray, row.id])
 
   return (
     <Row
