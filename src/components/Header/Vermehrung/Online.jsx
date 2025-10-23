@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Badge from '@mui/material/Badge'
 import {
@@ -35,14 +35,14 @@ export const Online = observer(() => {
   // TODO:
   // 1. add menu to link to info
   // 2. add menu to list and edit pending queries
-  const onClick = useCallback(() => {
+  const onClick = () => {
     // ISSUE: cant use navigate(-1) as that can navigate to same url and user has to click twice to go back
     if (pathname === '/Vermehrung/ausstehende-Operationen') {
       navigate('/Vermehrung')
     } else {
       navigate('/Vermehrung/ausstehende-Operationen')
     }
-  }, [navigate, pathname])
+  }
 
   return (
     <OnlineButton

@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -23,9 +23,8 @@ export const HeaderNavTree = observer(() => {
     singleColumnView,
   } = store
 
-  const onClickTreeMenu = useCallback(() => {
+  const onClickTreeMenu = () =>
     setShowTreeInSingleColumnView(!showTreeInSingleColumnView)
-  }, [setShowTreeInSingleColumnView, showTreeInSingleColumnView])
 
   if (!singleColumnView) return null
 

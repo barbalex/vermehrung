@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState } from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -39,13 +39,10 @@ export const HeaderAdminMenu = observer(
     const client = useClient()
 
     const [anchorEl, setAnchorEl] = useState(null)
-    const onClickExporte = useCallback(
-      (event) => setAnchorEl(event.currentTarget),
-      [],
-    )
+    const onClickExporte = (event) => setAnchorEl(event.currentTarget)
 
     const [progress, setProgress] = useState(0)
-    const onClickImportApData = useCallback(async () => {
+    const onClickImportApData = async () => {
       // fetch all art and apflora_ap
       const arts = await db.get('art').query().fetch()
       const data = await client.query(apfloraApQuery).toPromise()
@@ -80,9 +77,9 @@ export const HeaderAdminMenu = observer(
       setGrandParentAnchorEl(null)
       // ensure full numbers are shown
       setTimeout(window.location.reload(), 500)
-    }, [setGrandParentAnchorEl, setAnchorEl, store])
+    }
 
-    const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
+    const onClose = () => setAnchorEl(null)
 
     return (
       <>

@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import { RiFilterFill, RiFilterLine } from 'react-icons/ri'
@@ -47,10 +47,7 @@ export const HeaderFilter = observer(() => {
   const { filter, singleColumnView } = store
   const { show: showFilter, setShow: setShowFilter, filtered, empty } = filter
 
-  const onClickFilter = useCallback(
-    () => setShowFilter(!showFilter),
-    [setShowFilter, showFilter],
-  )
+  const onClickFilter = () => setShowFilter(!showFilter)
 
   if (singleColumnView) {
     return (

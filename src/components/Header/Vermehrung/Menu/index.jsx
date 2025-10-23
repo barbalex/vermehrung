@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
@@ -15,10 +15,7 @@ const Icon = styled(MdMenu)`
 
 export const HeaderHamburgerMenu = observer(({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
-  const onClickMenu = useCallback(
-    (event) => setAnchorEl(event.currentTarget),
-    [],
-  )
+  const onClickMenu = (event) => setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (
