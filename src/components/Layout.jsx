@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, Suspense } from 'react'
+import { useContext, useEffect, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 

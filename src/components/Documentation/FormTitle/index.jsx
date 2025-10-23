@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'

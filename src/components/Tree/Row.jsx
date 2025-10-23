@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useEffect, useState } from 'react'
+import { useContext, useCallback, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import {
   MdAccountCircle as AccountIcon,

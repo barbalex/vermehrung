@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef } from 'react'
+import { useCallback, useContext, useMemo, useRef } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import styled from '@emotion/styled'
 import Select from 'react-select/async'
