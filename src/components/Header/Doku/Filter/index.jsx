@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import Input from '@mui/material/Input'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes, FaFilter } from 'react-icons/fa'
@@ -38,11 +38,8 @@ const StyledDeleteFilterIcon = styled(FaTimes)`
 export const DokuFilter = observer(() => {
   const store = useContext(MobxStoreContext)
   const { docFilter, setDocFilter, docsCount, docsFilteredCount } = store
-  const onChange = useCallback(
-    (e) => setDocFilter(e.target.value),
-    [setDocFilter],
-  )
-  const onClickEmptyFilter = useCallback(() => setDocFilter(''), [setDocFilter])
+  const onChange = (e) => setDocFilter(e.target.value)
+  const onClickEmptyFilter = () => setDocFilter('')
 
   return (
     <Container>

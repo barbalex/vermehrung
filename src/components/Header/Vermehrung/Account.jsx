@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
@@ -57,15 +57,14 @@ const Account = () => {
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
-  const onClickMenu = useCallback(
-    (event) => setAnchorEl(event.currentTarget),
-    [],
-  )
-  const onCloseMenu = useCallback(() => setAnchorEl(null), [])
+
+  const onClickMenu = (event) => setAnchorEl(event.currentTarget)
+
+  const onCloseMenu = () => setAnchorEl(null)
 
   const [pendingOperationsDialogOpen, setPendingOperationsDialogOpen] =
     useState(false)
-  const onClickLogout = useCallback(async () => {
+  const onClickLogout = () => {
     setAnchorEl(null)
     // if exist pending operations
     // ask user if willing to loose them
@@ -73,10 +72,10 @@ const Account = () => {
       return setPendingOperationsDialogOpen(true)
     }
     logout({ store })
-  }, [queuedQueries.size, store])
+  }
 
   const [reloadDataDialogOpen, setReloadDataDialogOpen] = useState(false)
-  const onClickReloadData = useCallback(() => {
+  const onClickReloadData = () => {
     setAnchorEl(null)
     // if exist pending operations
     // ask user if willing to loose them
@@ -84,11 +83,11 @@ const Account = () => {
       return setReloadDataDialogOpen(true)
     }
     reloadData({ store })
-  }, [])
+  }
 
   const { email } = user || {}
 
-  const onClickResetPassword = useCallback(async () => {
+  const onClickResetPassword = async () => {
     setResetTitle('...')
     try {
       await sendPasswordResetEmail(firebaseAuth, email, {
@@ -107,7 +106,7 @@ const Account = () => {
       setResetTitle('Passwort zurücksetzen')
       setAnchorEl(null)
     }, 5000)
-  }, [email, firebaseAuth])
+  }
 
   if (!online) return null
 
