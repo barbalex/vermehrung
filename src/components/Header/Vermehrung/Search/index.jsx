@@ -109,80 +109,77 @@ export const HeaderSearch = observer(() => {
   const ownWidth = ref?.current?.getBoundingClientRect()?.width
   const maxWidth = (ownWidth ?? 250) + 48 + 48 + 48
 
-  const customStyles = useMemo(
-    () => ({
-      control: (provided) => ({
-        ...provided,
-        border: 'none',
-        borderRadius: '3px',
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-        marginLeft: 0,
-        paddingLeft: singleColumnView ? '2px' : '25px',
-      }),
-      valueContainer: (provided) => ({
-        ...provided,
-        borderRadius: '3px',
-        paddingLeft: 0,
-      }),
-      singleValue: (provided) => ({
-        ...provided,
-        color: '#ac87d0',
-      }),
-      option: (provided) => ({
-        ...provided,
-        color: 'rgba(0,0,0,0.8)',
-        fontSize: '0.8em',
-        paddingTop: '3px',
-        paddingBottom: '3px',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-      }),
-      groupHeading: (provided) => ({
-        ...provided,
-        lineHeight: '1em',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        color: 'rgba(0, 0, 0, 0.8)',
-        fontWeight: '700',
-        userSelect: 'none',
-        textTransform: 'none',
-      }),
-      input: (provided) => ({
-        ...provided,
-        color: 'white',
-      }),
-      menuList: (provided) => ({
-        ...provided,
-        maxHeight: 'calc(100dvh - 60px)',
-      }),
-      menu: (provided) => ({
-        ...provided,
-        maxHeight: 'calc(100dvh - 60px)',
-        width: 'auto',
-        maxWidth,
-        marginTop: 0,
-      }),
-      placeholder: (provided) => ({
-        ...provided,
-        color: '#ac87d0',
-      }),
-      indicatorSeparator: (provided) => ({
-        ...provided,
-        display: 'none',
-      }),
-      dropdownIndicator: (provided) => ({
-        ...provided,
-        display: 'none',
-      }),
-      clearIndicator: (provided) => ({
-        ...provided,
-        color: '#ac87d0',
-      }),
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      border: 'none',
+      borderRadius: '3px',
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      marginLeft: 0,
+      paddingLeft: singleColumnView ? '2px' : '25px',
     }),
-    [maxWidth, singleColumnView],
-  )
+    valueContainer: (provided) => ({
+      ...provided,
+      borderRadius: '3px',
+      paddingLeft: 0,
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: '#ac87d0',
+    }),
+    option: (provided) => ({
+      ...provided,
+      color: 'rgba(0,0,0,0.8)',
+      fontSize: '0.8em',
+      paddingTop: '3px',
+      paddingBottom: '3px',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    }),
+    groupHeading: (provided) => ({
+      ...provided,
+      lineHeight: '1em',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      color: 'rgba(0, 0, 0, 0.8)',
+      fontWeight: '700',
+      userSelect: 'none',
+      textTransform: 'none',
+    }),
+    input: (provided) => ({
+      ...provided,
+      color: 'white',
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      maxHeight: 'calc(100dvh - 60px)',
+    }),
+    menu: (provided) => ({
+      ...provided,
+      maxHeight: 'calc(100dvh - 60px)',
+      width: 'auto',
+      maxWidth,
+      marginTop: 0,
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: '#ac87d0',
+    }),
+    indicatorSeparator: (provided) => ({
+      ...provided,
+      display: 'none',
+    }),
+    dropdownIndicator: (provided) => ({
+      ...provided,
+      display: 'none',
+    }),
+    clearIndicator: (provided) => ({
+      ...provided,
+      color: '#ac87d0',
+    }),
+  }
 
   return (
     <Container ref={ref}>
