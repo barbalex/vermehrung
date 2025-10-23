@@ -33,6 +33,7 @@ export const Event = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, db, initialDataQueried } = store
 
+    // removing useMemo causes: Maximum update depth exceeded
     const observable = useMemo(
       () =>
         showFilter ? $of(filter.event)
