@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -10,16 +10,12 @@ export const SammlungAddButton = observer(() => {
   const store = useContext(MobxStoreContext)
   const { insertSammlungRev } = store
 
-  const add = useCallback(() => {
-    insertSammlungRev()
-  }, [insertSammlungRev])
-
   return (
     <ErrorBoundary>
       <IconButton
         aria-label="neue Sammlung"
         title="neue Sammlung"
-        onClick={add}
+        onClick={insertSammlungRev}
         size="large"
       >
         <FaPlus />

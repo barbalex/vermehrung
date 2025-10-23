@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -234,38 +234,37 @@ export const SammlungForm = observer(
       unsetError('sammlung')
     }, [id, unsetError])
 
-    const saveToDb = useCallback(
-      (event) => {
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
+    const saveToDb = (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
 
-        if (showFilter) {
-          return filter.setValue({ table: 'sammlung', key: field, value })
-        }
+      if (showFilter) {
+        return filter.setValue({ table: 'sammlung', key: field, value })
+      }
 
-        // only update if value has changed
-        const previousValue = ifIsNumericAsNumber(row[field])
-        if (value === previousValue) return
-        row.edit({ field, value, store })
-      },
-      [filter, row, showFilter, store],
-    )
-    const openPlanenDocs = useCallback(() => {
+      // only update if value has changed
+      const previousValue = ifIsNumericAsNumber(row[field])
+      if (value === previousValue) return
+      row.edit({ field, value, store })
+    }
+
+    const openPlanenDocs = () => {
       const url = `${constants?.getAppUri()}/Dokumentation/planen`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [])
-    const openGenVielfaldDocs = useCallback(() => {
+    }
+
+    const openGenVielfaldDocs = () => {
       const url = `${constants?.getAppUri()}/Dokumentation/genetische-vielfalt`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [])
+    }
 
     const showDeleted = filter.sammlung._deleted !== false || row?._deleted
 
