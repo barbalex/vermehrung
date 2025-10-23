@@ -1,6 +1,4 @@
-import { useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 
@@ -30,15 +28,15 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 
-export const DocumentationFormTitle = observer(() => {
+export const DocumentationFormTitle = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     const path = pathname.split('/').filter((e) => !!e)
     const newPath = `/${path.slice(0, -1).join('/')}`
     navigate(newPath)
-  }, [pathname, navigate])
+  }
 
   return (
     <TitleContainer>
@@ -54,4 +52,4 @@ export const DocumentationFormTitle = observer(() => {
       </TitleSymbols>
     </TitleContainer>
   )
-})
+}
