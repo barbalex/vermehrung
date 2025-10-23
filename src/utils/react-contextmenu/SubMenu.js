@@ -1,3 +1,5 @@
+import { createElement } from 'react'
+
 var _extends =
   Object.assign ||
   function (target) {
@@ -81,7 +83,6 @@ function _inherits(subClass, superClass) {
     : (subClass.__proto__ = superClass)
 }
 
-import React from 'react'
 import cx from 'classnames'
 import assign from 'object-assign'
 
@@ -385,19 +386,15 @@ var SubMenu = (function (_AbstractMenu) {
           className: cx(cssClasses.menu, this.props.className ?? ''),
         }
 
-        return React.createElement(
+        return createElement(
           'nav',
           _extends({}, menuProps, {
             role: 'menuitem',
             tabIndex: '-1',
             'aria-haspopup': 'true',
           }),
-          React.createElement(
-            'div',
-            _extends({}, attributes, menuItemProps),
-            title,
-          ),
-          React.createElement(
+          createElement('div', _extends({}, attributes, menuItemProps), title),
+          createElement(
             'nav',
             _extends({}, subMenuProps, { role: 'menu', tabIndex: '-1' }),
             this.renderChildren(children),

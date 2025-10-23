@@ -1,4 +1,3 @@
-import React from 'react'
 
 import { Documentation } from '../components/Documentation/index.jsx'
 

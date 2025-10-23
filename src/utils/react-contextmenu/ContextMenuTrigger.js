@@ -1,4 +1,4 @@
-import React from 'react'
+import { createElement } from 'react'
 
 var _createClass = (function () {
   function defineProperties(target, props) {
@@ -222,7 +222,7 @@ var ContextMenuTrigger = (function (_Component) {
           ref: this.elemRef,
         })
 
-        return React.createElement(renderTag, newAttrs, children)
+        return createElement(renderTag, newAttrs, children)
       },
     },
   ])

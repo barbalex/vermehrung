@@ -1,3 +1,5 @@
+import { createElement } from 'react'
+
 var _createClass = (function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
@@ -67,7 +69,6 @@ function _inherits(subClass, superClass) {
     : (subClass.__proto__ = superClass)
 }
 
-import React from 'react'
 import cx from 'classnames'
 import assign from 'object-assign'
 
@@ -344,7 +345,7 @@ var ContextMenu = (function (_AbstractMenu) {
           _defineProperty({}, cssClasses.menuVisible, isVisible),
         )
 
-        return React.createElement(
+        return createElement(
           'nav',
           {
             role: 'menu',

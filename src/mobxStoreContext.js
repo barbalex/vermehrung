@@ -1,5 +1,5 @@
-import React from 'react'
+import { createContext } from 'react'
 
-export const MobxStoreContext = React.createContext({})
+export const MobxStoreContext = createContext({})
 export const MobxStoreProvider = MobxStoreContext.Provider
 export const Consumer = MobxStoreContext.Consumer
