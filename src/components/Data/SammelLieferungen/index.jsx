@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
@@ -108,14 +108,11 @@ export const SammelLieferungen = observer(({ filter: showFilter = false }) => {
   const { sammelLieferungs, totalCount } = dataState
   const filteredCount = sammelLieferungs.length
 
-  const add = useCallback(() => {
-    insertSammelLieferungRev()
-  }, [insertSammelLieferungRev])
-
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+  }
+
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Sammel-Lieferungen') {
     upTitle = 'Zu allen Listen'
@@ -144,7 +141,7 @@ export const SammelLieferungen = observer(({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neue Sammel-Lieferung"
                 title="neue Sammel-Lieferung"
-                onClick={add}
+                onClick={insertSammelLieferungRev}
                 size="large"
               >
                 <FaPlus />

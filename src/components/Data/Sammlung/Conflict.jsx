@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
@@ -73,7 +73,7 @@ export const SammlungConflict = observer(
       [revRow, row],
     )
 
-    const onClickAktuellUebernehmen = useCallback(async () => {
+    const onClickAktuellUebernehmen = async () => {
       // build new object
       const newDepth = revRow._depth + 1
       const newObject = {
@@ -125,29 +125,9 @@ export const SammlungConflict = observer(
       } catch {}
       conflictDisposalCallback()
       window.location.reload()
-    }, [
-      addQueuedQuery,
-      conflictDisposalCallback,
-      db,
-      revRow._depth,
-      revRow._rev,
-      revRow._revisions,
-      revRow.andere_menge,
-      revRow.anzahl_pflanzen,
-      revRow.art_id,
-      revRow.bemerkungen,
-      revRow.datum,
-      revRow.geom_point,
-      revRow.geplant,
-      revRow.gramm_samen,
-      revRow.herkunft_id,
-      revRow.nr,
-      revRow.person_id,
-      revRow.sammlung_id,
-      revRow.von_anzahl_individuen,
-      user.email,
-    ])
-    const onClickWiderspruchUebernehmen = useCallback(async () => {
+    }
+
+    const onClickWiderspruchUebernehmen = async () => {
       // need to attach to the winner, that is row
       // otherwise risk to still have lower depth and thus loosing
       const newDepth = row._depth + 1
@@ -194,37 +174,9 @@ export const SammlungConflict = observer(
       // now we need to delete the previous conflict
       onClickAktuellUebernehmen()
       conflictSelectionCallback()
-    }, [
-      addNotification,
-      conflictSelectionCallback,
-      gqlClient,
-      onClickAktuellUebernehmen,
-      revRow._deleted,
-      revRow.andere_menge,
-      revRow.anzahl_pflanzen,
-      revRow.art_id,
-      revRow.bemerkungen,
-      revRow.datum,
-      revRow.geom_point,
-      revRow.geplant,
-      revRow.gramm_samen,
-      revRow.herkunft_id,
-      revRow.nr,
-      revRow.person_id,
-      revRow.sammlung_id,
-      revRow.von_anzahl_individuen,
-      row._depth,
-      row._rev,
-      row._revisions,
-      store,
-      user.email,
-    ])
-    const onClickSchliessen = useCallback(
-      () => setActiveConflict(null),
-      [setActiveConflict],
-    )
+    }
 
-    //console.log('Sammlung Conflict', { dataArray, row, revRow })
+    const onClickSchliessen = () => setActiveConflict(null)
 
     return (
       <Conflict
