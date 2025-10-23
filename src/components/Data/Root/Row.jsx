@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
@@ -50,10 +50,7 @@ export const RootRow = observer(({ style, row }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, row.table, store, ...Object.values(filter)])
 
-  const onClickRow = useCallback(
-    () => setActiveNodeArray(row.url),
-    [row.url, setActiveNodeArray],
-  )
+  const onClickRow = () => setActiveNodeArray(row.url)
 
   return (
     <Row
