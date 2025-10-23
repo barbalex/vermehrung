@@ -1,4 +1,4 @@
-import { useContext, useCallback, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
@@ -119,12 +119,11 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
   const { herkunfts, totalCount } = dataState
   const filteredCount = herkunfts.length
 
-  const add = useCallback(() => insertHerkunftRev(), [insertHerkunftRev])
-
-  const onClickUp = useCallback(() => {
+  const onClickUp = () => {
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
+  }
+
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Herkuenfte') {
     upTitle = 'Zu allen Listen'
@@ -163,7 +162,7 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
                 <IconButton
                   aria-label="neue Herkunft"
                   title="neue Herkunft"
-                  onClick={add}
+                  onClick={insertHerkunftRev}
                   size="large"
                 >
                   <FaPlus />
