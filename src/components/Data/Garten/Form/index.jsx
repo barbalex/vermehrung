@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
@@ -148,37 +148,33 @@ export const GartenForm = observer(
 
     // console.log('Garten, render, Form', { ga_aktiv })
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        let value = ifIsNumericAsNumber(event.target.value)
-        if (event.target.value === undefined) value = null
-        if (event.target.value === '') value = null
+    const saveToDb = async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
 
-        if (showFilter) {
-          return filter.setValue({ table: 'garten', key: field, value })
+      if (showFilter) {
+        return filter.setValue({ table: 'garten', key: field, value })
+      }
+      const previousValue = ifIsNumericAsNumber(row[field])
+      // only update if value has changed
+      if (value === previousValue) return
+      //console.log('Garten, will edit row:', { field, value })
+      row.edit({ field, value, store })
+      if (field === 'person_id') {
+        // only if not yet exists
+        // do this in garten.edit?
+        if (!gvPersonIds.includes(value)) {
+          // console.log('Garten, will insert into gvRev:', {
+          //   garten_id: row.id,
+          //   person_id: value,
+          //   gvPersonIds,
+          // })
+          insertGvRev({ values: { garten_id: row.id, person_id: value } })
         }
-        const previousValue = ifIsNumericAsNumber(row[field])
-        // only update if value has changed
-        if (value === previousValue) return
-        //console.log('Garten, will edit row:', { field, value })
-        row.edit({ field, value, store })
-        if (field === 'person_id') {
-          // only if not yet exists
-          // do this in garten.edit?
-          if (!gvPersonIds.includes(value)) {
-            // console.log('Garten, will insert into gvRev:', {
-            //   garten_id: row.id,
-            //   person_id: value,
-            //   gvPersonIds,
-            // })
-            insertGvRev({ values: { garten_id: row.id, person_id: value } })
-          }
-        }
-      },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [filter, gvPersonIds.length, insertGvRev, row, showFilter, store],
-    )
+      }
+    }
 
     const showDeleted = filter.garten._deleted !== false || row?._deleted
 
