@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -46,14 +46,13 @@ export const GartenFormTitle = observer(
 
     const { width, ref } = useResizeDetector()
 
-    const onClickUp = useCallback(() => {
+    const onClickUp = () => {
       removeOpenNode(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
-    }, [activeNodeArray, removeOpenNode, setActiveNodeArray])
-    const onClickToKulturen = useCallback(
-      () => setActiveNodeArray([...activeNodeArray, 'Kulturen']),
-      [activeNodeArray, setActiveNodeArray],
-    )
+    }
+
+    const onClickToKulturen = () =>
+      setActiveNodeArray([...activeNodeArray, 'Kulturen'])
 
     return (
       <Container ref={ref}>
