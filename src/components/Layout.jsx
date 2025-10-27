@@ -1,4 +1,5 @@
 import { useContext, useEffect, Suspense } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 
@@ -14,7 +15,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-export const Layout = () => {
+export const Layout = observer(() => {
   const store = useContext(MobxStoreContext)
   const { singleColumnView, setSingleColumnView } = store
 
@@ -40,4 +41,4 @@ export const Layout = () => {
       </Suspense>
     </Container>
   )
-}
+})
