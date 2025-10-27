@@ -1,4 +1,5 @@
 import { useState, useContext, useRef } from 'react'
+import { observer } from 'mobx-react-lite'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogActions from '@mui/material/DialogActions'
@@ -46,7 +47,7 @@ const ResetButton = styled(Button)`
   margin-right: 20px !important;
 `
 
-export const Login = () => {
+export const Login = observer(() => {
   const { db, firebaseAuth } = useContext(MobxStoreContext)
 
   const [email, setEmail] = useState('')
@@ -222,4 +223,4 @@ export const Login = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
