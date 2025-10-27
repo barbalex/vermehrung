@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import styled from '@emotion/styled'
@@ -15,7 +16,7 @@ const StyledTableCell = styled(TableCell)`
 
 const Zeile = ({ value }) => <div>{value}</div>
 
-export const LieferungForLieferschein = ({ lieferung: row }) => {
+export const LieferungForLieferschein = observer(({ lieferung: row }) => {
   const store = useContext(MobxStoreContext)
   const { db } = store
 
@@ -24,17 +25,18 @@ export const LieferungForLieferschein = ({ lieferung: row }) => {
     herkunftLabel: '',
   })
   useEffect(() => {
-    const artObservable = row.art_id
-      ? db.get('art').findAndObserve(row.art_id)
-      : $of({})
-    const vonKulturHerkunftObservable = row.von_kultur_id
-      ? db
+    const artObservable =
+      row.art_id ? db.get('art').findAndObserve(row.art_id) : $of({})
+    const vonKulturHerkunftObservable =
+      row.von_kultur_id ?
+        db
           .get('herkunft')
           .query(Q.on('kultur', 'id', row.von_kultur_id))
           .observe()
       : $of({})
-    const vonSammlungHerkunftObservable = row.von_sammlung_id
-      ? db
+    const vonSammlungHerkunftObservable =
+      row.von_sammlung_id ?
+        db
           .get('herkunft')
           .query(Q.on('sammlung', 'id', row.von_sammlung_id))
           .observe()
@@ -50,12 +52,13 @@ export const LieferungForLieferschein = ({ lieferung: row }) => {
         try {
           artLabel = await art.label.pipe(first$()).toPromise()
         } catch {}
-        const herkunftLabel = vonKulturHerkunft
-          ? herkunftLabelFromHerkunft({
+        const herkunftLabel =
+          vonKulturHerkunft ?
+            herkunftLabelFromHerkunft({
               herkunft: vonKulturHerkunft,
             })
-          : vonSammlungHerkunft
-          ? herkunftLabelFromHerkunft({ herkunft: vonSammlungHerkunft })
+          : vonSammlungHerkunft ?
+            herkunftLabelFromHerkunft({ herkunft: vonSammlungHerkunft })
           : ''
 
         setDataState({ artLabel, herkunftLabel })
@@ -82,11 +85,13 @@ export const LieferungForLieferschein = ({ lieferung: row }) => {
       <StyledTableCell>{herkunftLabel}</StyledTableCell>
       <StyledTableCell>
         {wasArray.map((w, i) => (
-          <Zeile key={i} value={w} />
+          <Zeile
+            key={i}
+            value={w}
+          />
         ))}
       </StyledTableCell>
       <StyledTableCell>{bemerkungen}</StyledTableCell>
     </TableRow>
   )
-}
-
+})
