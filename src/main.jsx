@@ -50,12 +50,7 @@ const container = document.getElementById('root')
 const root = createRoot(container)
 
 root.render(
-  <BrowserRouter
-    future={{
-      v7_relativeSplatPath: true,
-      v7_startTransition: true,
-    }}
-  >
+  <BrowserRouter>
     <App />
   </BrowserRouter>,
 )
