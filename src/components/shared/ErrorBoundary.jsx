@@ -1,6 +1,11 @@
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
+
+import { logout } from '../../utils/logout.js'
+import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 const Container = styled.div`
   padding: 15px;
@@ -71,11 +76,19 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   )
 }
 
-export const ErrorBoundary = ({ children }) => (
-  <ErrorBoundaryComponent
-    FallbackComponent={ErrorFallback}
-    onReset={onReload}
-  >
-    {children}
-  </ErrorBoundaryComponent>
-)
+export const ErrorBoundary = ({ children }) => {
+  const store = useContext(MobxStoreContext)
+
+  const onReset = () => logout({ store })
+
+  console.log('ErrorBoundary rendering')
+
+  return (
+    <ErrorBoundaryComponent
+      FallbackComponent={ErrorFallback}
+      onReset={onReload}
+    >
+      {children}
+    </ErrorBoundaryComponent>
+  )
+}
