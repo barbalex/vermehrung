@@ -11,8 +11,9 @@ const NavigationSyncController = lazy(async () => ({
   default: (await import('./NavigationSyncController.tsx'))
     .NavigationSyncController,
 }))
-// TODO: import lazily
-import { Notifications } from './Notifications/index.jsx'
+const Notifications = lazy(async () => ({
+  default: (await import('./Notifications/index.jsx')).Notifications,
+}))
 
 import Header from './Header/index.jsx'
 
@@ -46,10 +47,8 @@ export const Layout = observer(() => {
       <Suspense fallback={<Fallback />}>
         <Outlet />
       </Suspense>
-      <Suspense fallback={null}>
-        <NavigationSyncController />
-        <Notifications />
-      </Suspense>
+      <NavigationSyncController />
+      <Notifications />
     </Container>
   )
 })
