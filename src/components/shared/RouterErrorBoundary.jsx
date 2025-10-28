@@ -17,20 +17,8 @@ const ButtonContainer = styled.div`
 const StyledButton = styled(Button)`
   text-transform: none !important;
 `
-const Details = styled.details`
-  margin-bottom: 25px;
-`
-const Summary = styled.summary`
-  user-select: none;
-  &:focus {
-    outline: none !important;
-  }
-`
 const PreWrapping = styled.pre`
   white-space: normal;
-`
-const Pre = styled.pre`
-  background-color: rgba(128, 128, 128, 0.09);
 `
 
 const onReload = () => window.location.reload(true)
@@ -47,10 +35,6 @@ export const RouterErrorBoundary = observer(({ children }) => {
     <Container>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
       <PreWrapping>{error.message}</PreWrapping>
-      <Details>
-        <Summary>Mehr Informationen</Summary>
-        <Pre>{componentStack}</Pre>
-      </Details>
       <ButtonContainer>
         <StyledButton
           variant="outlined"

@@ -1,6 +1,5 @@
 import { createRoot } from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
-import { BrowserRouter } from 'react-router'
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
@@ -49,8 +48,4 @@ registerSW({ immediate: true })
 const container = document.getElementById('root')
 const root = createRoot(container)
 
-root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-)
+root.render(<App />)
