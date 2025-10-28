@@ -9,6 +9,7 @@ import { Data } from '../../components/Data/index.jsx'
 import { Filter } from '../../components/Filter.jsx'
 import { constants } from '../../utils/constants.js'
 import { Fallback } from '../../components/shared/Fallback.jsx'
+import { ErrorBoundary } from '../../components/shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   min-height: calc(100dvh - ${constants.appBarHeight}px);
@@ -46,33 +47,33 @@ export const Vermehrung = observer(() => {
 
   // need the key on Allotment or it would only render correctly on second render
   return (
-    <>
-      <Suspense fallback={<Fallback />}>
-        <Container>
-          <Allotment key={`${treeWidth}/${formWidth}`}>
-            <Allotment.Pane
-              visible={treeWidth !== 0}
-              preferredSize={treeWidth}
-              minSize={minSizeTree}
-            >
-              <Suspense fallback={<Fallback />}>
-                <Tree />
-              </Suspense>
-            </Allotment.Pane>
-            <Allotment.Pane
-              visible={formWidth !== 0}
-              preferredSize={formWidth}
-              minSize={minSizeForm}
-            >
-              <Suspense fallback={<Fallback />}>
-                {showFilter ?
-                  <Filter />
-                : <Data />}
-              </Suspense>
-            </Allotment.Pane>
-          </Allotment>
-        </Container>
-      </Suspense>
-    </>
+    <Container>
+      <Allotment key={`${treeWidth}/${formWidth}`}>
+        <Allotment.Pane
+          visible={treeWidth !== 0}
+          preferredSize={treeWidth}
+          minSize={minSizeTree}
+        >
+          <Suspense fallback={<Fallback />}>
+            <ErrorBoundary>
+              <Tree />
+            </ErrorBoundary>
+          </Suspense>
+        </Allotment.Pane>
+        <Allotment.Pane
+          visible={formWidth !== 0}
+          preferredSize={formWidth}
+          minSize={minSizeForm}
+        >
+          <Suspense fallback={<Fallback />}>
+            <ErrorBoundary>
+              {showFilter ?
+                <Filter />
+              : <Data />}
+            </ErrorBoundary>
+          </Suspense>
+        </Allotment.Pane>
+      </Allotment>
+    </Container>
   )
 })
