@@ -1,26 +1,14 @@
-import { useEffect, useState, Suspense, lazy } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import DatabaseProvider from '@nozbe/watermelondb/react/DatabaseProvider'
 
 import { Provider as UrqlProvider } from 'urql'
-
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
-
 import { materialTheme } from './utils/materialTheme.js'
-
 import { GlobalStyle } from './components/GlobalStyle.jsx'
-
 import { MobxStoreProvider } from './mobxStoreContext.js'
-
 import { initiateApp } from './utils/initiateApp.js'
 import { initiateDb } from './utils/initiateDb.js'
-
 import { Router } from './Router.jsx'
-
-
-
-const Documentation = lazy(async () => ({
-  default: (await import('./components/Documentation/index.jsx')).Documentation,
-}))
 
 export const App = () => {
   const [store, setStore] = useState(null)
