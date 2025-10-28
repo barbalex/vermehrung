@@ -172,7 +172,6 @@ export const Router = () => {
         <Route
           path="/"
           element={<Home />}
-          errorElement={<RouterErrorBoundary />}
         />
         <Route
           path="/Vermehrung/*"
