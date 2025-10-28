@@ -2,6 +2,7 @@ import localForage from 'localforage'
 import { signOut } from 'firebase/auth'
 
 export const logout = async ({ store }) => {
+  console.log('logout called')
   const { db, firebaseAuth } = store
   console.log('LOGGING OUT')
   await signOut(firebaseAuth)
@@ -10,4 +11,3 @@ export const logout = async ({ store }) => {
   window.localStorage.removeItem('token')
   window.location.reload(true)
 }
-
