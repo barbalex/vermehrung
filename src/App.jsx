@@ -175,6 +175,10 @@ const Vermehrung = lazy(async () => ({
 const QueuedQueries = lazy(async () => ({
   default: (await import('./components/QueuedQueries/index.jsx')).QueuedQueries,
 }))
+const RouterErrorBoundary = lazy(async () => ({
+  default: (await import('./components/shared/RouterErrorBoundary.jsx'))
+    .RouterErrorBoundary,
+}))
 
 export const App = () => {
   const navigate = useNavigate()
@@ -225,23 +229,28 @@ export const App = () => {
                   <Route
                     path="/"
                     element={<Home />}
+                    errorElement={<RouterErrorBoundary />}
                   />
                   <Route
                     path="/Vermehrung/*"
                     element={<VermehrungIndex />}
+                    errorElement={<RouterErrorBoundary />}
                   >
                     <Route
                       path="*"
                       element={<Vermehrung />}
+                      errorElement={<RouterErrorBoundary />}
                     />
                     <Route
                       path="ausstehende-Operationen"
                       element={<QueuedQueries />}
+                      errorElement={<RouterErrorBoundary />}
                     />
                   </Route>
                   <Route
                     path="Dokumentation"
                     element={<Documentation />}
+                    errorElement={<RouterErrorBoundary />}
                   >
                     <Route path="ziele">
                       <Route
