@@ -81,8 +81,6 @@ export const ErrorBoundary = ({ children }) => {
 
   const onReset = () => logout({ store })
 
-  console.log('ErrorBoundary rendering')
-
   return (
     <ErrorBoundaryComponent
       FallbackComponent={ErrorFallback}
