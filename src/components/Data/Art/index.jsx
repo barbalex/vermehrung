@@ -55,8 +55,6 @@ export const Art = observer(
     const [showHistory, setShowHistory] = useState(false)
     const historyTakeoverCallback = () => setShowHistory(null)
 
-    throw new Error('art error test')
-
     if (!row || !Object.keys(row ?? {}).length) return <Spinner />
     if (!showFilter && filter.show) return null
 
