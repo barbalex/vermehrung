@@ -29,8 +29,6 @@ export const RouterErrorBoundary = observer(({ children }) => {
 
   const onReset = () => logout({ store })
 
-  console.log('RouterErrorBoundary caught error:', error)
-
   return (
     <Container>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
