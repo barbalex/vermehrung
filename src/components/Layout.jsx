@@ -1,4 +1,4 @@
-import { useContext, useEffect, Suspense } from 'react'
+import { useContext, useEffect, Suspense, lazy } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
@@ -6,6 +6,14 @@ import { Outlet } from 'react-router'
 import { MobxStoreContext } from '../mobxStoreContext.js'
 import { constants } from '../utils/constants.js'
 import { Fallback } from './shared/Fallback.jsx'
+
+const NavigationSyncController = lazy(async () => ({
+  default: (await import('./NavigationSyncController.tsx'))
+    .NavigationSyncController,
+}))
+const Notifications = lazy(async () => ({
+  default: (await import('./Notifications/index.jsx')).Notifications,
+}))
 
 import Header from './Header/index.jsx'
 
@@ -39,6 +47,8 @@ export const Layout = observer(() => {
       <Suspense fallback={<Fallback />}>
         <Outlet />
       </Suspense>
+      <NavigationSyncController />
+      <Notifications />
     </Container>
   )
 })

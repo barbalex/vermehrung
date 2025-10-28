@@ -14,7 +14,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-export const recreatePersistedStore = async ({ store, navigate }) => {
+export const recreatePersistedStore = async (store) => {
   // console.log('recreatePersistedStore running')
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   let unregisterAuthObserver = () => {}
@@ -93,7 +93,7 @@ export const recreatePersistedStore = async ({ store, navigate }) => {
     const visitedTopDomain = window.location.pathname === '/'
     if (!!user && visitedTopDomain) {
       setTimeout(() => {
-        navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
+        store.navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
       }, 200)
     }
     const nowOnline = await isOnline()

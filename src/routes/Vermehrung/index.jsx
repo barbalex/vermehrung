@@ -30,8 +30,8 @@ export const VermehrungIndex = observer(() => {
       <OpenNodesSetter />
       <StoragePersister />
       <AuthorizingObserver />
-      <Outlet />
       <ApiDetector />
+      <Outlet />
     </ErrorBoundary>
   )
 })
