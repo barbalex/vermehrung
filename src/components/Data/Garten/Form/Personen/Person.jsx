@@ -56,7 +56,7 @@ export const GartenPerson = observer(({ gv }) => {
     return () => personSubscription?.unsubscribe?.()
   }, [gv.person])
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = () => gv.delete({ store })

@@ -47,7 +47,7 @@ const MenuTitle = styled.h3`
 export const Person = observer(({ av }) => {
   const store = useContext(MobxStoreContext)
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClose = () => setDelMenuAnchorEl(null)

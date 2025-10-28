@@ -220,7 +220,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
     }
   }
 
-  const [mapMenuAnchorEl, setMapMenuAnchorEl] = React.useState(null)
+  const [mapMenuAnchorEl, setMapMenuAnchorEl] = useState(null)
   const mapMenuOpen = Boolean(mapMenuAnchorEl)
 
   const onClickGeoAdmin = () => {

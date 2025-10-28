@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaTimes, FaDownload } from 'react-icons/fa'
@@ -68,7 +68,7 @@ export const File = observer(({ file, parent }) => {
   const store = useContext(MobxStoreContext)
   const { errors, unsetError } = store
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   useEffect(() => unsetError(`${parent}_file`), [file, parent, unsetError])
