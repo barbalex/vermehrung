@@ -128,8 +128,6 @@ export const ArtForm = observer(
 
     const showDeleted = filter.art._deleted !== false || row?._deleted
 
-    // throw new Error('art error test')
-
     return (
       <ErrorBoundary>
         <FieldsContainer>
