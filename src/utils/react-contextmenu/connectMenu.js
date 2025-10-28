@@ -1,3 +1,4 @@
+import { createElement } from 'react'
 
 var _extends =
   Object.assign ||
@@ -161,7 +162,7 @@ export default function (menuId) {
         {
           key: 'render',
           value: function render() {
-            return React.createElement(
+            return createElement(
               Child,
               _extends({}, this.props, {
                 id: menuId,
