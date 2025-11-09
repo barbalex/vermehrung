@@ -6,9 +6,7 @@ import svgrPlugin from 'vite-plugin-svgr'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  server: {
-    port: 5175,
-  },
+  server: { port: 5175 },
   plugins: [
     svgrPlugin({
       svgrOptions: {
@@ -83,4 +81,11 @@ export default defineConfig({
       },
     }),
   ],
+  css: {
+    modules: {
+      // enable using named exports for css classes
+      // https://vite.dev/guide/features.html#css-modules
+      localsConvention: 'camelCaseOnly',
+    },
+  },
 })
