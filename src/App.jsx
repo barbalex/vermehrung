@@ -4,7 +4,6 @@ import DatabaseProvider from '@nozbe/watermelondb/react/DatabaseProvider'
 import { Provider as UrqlProvider } from 'urql'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { materialTheme } from './utils/materialTheme.js'
-import { GlobalStyle } from './components/GlobalStyle.jsx'
 import { MobxStoreProvider } from './mobxStoreContext.js'
 import { initiateApp } from './utils/initiateApp.js'
 import { initiateDb } from './utils/initiateDb.js'
@@ -51,7 +50,6 @@ export const App = () => {
         <ThemeProvider theme={materialTheme}>
           <MobxStoreProvider value={store}>
             <UrqlProvider value={store.gqlClient}>
-              <GlobalStyle />
               <Suspense fallback={null}>
                 <Router />
               </Suspense>
