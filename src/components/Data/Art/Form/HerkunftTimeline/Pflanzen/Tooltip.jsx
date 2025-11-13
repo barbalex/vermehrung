@@ -1,32 +1,15 @@
-import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 
-const Popup = styled.div`
-  background-color: white;
-  border: 1px solid rgba(74, 20, 140, 0.9);
-  opacity: 0.8;
-  padding: 8px;
-`
-const PRow = styled.div`
-  font-size: 0.8em;
-  font-weight: 400;
-`
-const PTitle = styled.div`
-  font-size: 0.8em;
-  font-weight: 700;
-`
-const Ereignis = styled.div`
-  font-weight: 700;
-`
+import { popup, pRow, pTitle, ereignis } from './Tooltip.module.css'
 
 export const CustomTooltip = ({ payload, label, active }) => {
   if (active) {
     return (
-      <Popup>
-        <PTitle>
+      <div className={popup}>
+        <div className={pTitle}>
           <div>{DateTime.fromSQL(label).toFormat('yyyy.LL.dd')}</div>
-          <Ereignis>{payload?.[0]?.payload?.title ?? ''}</Ereignis>
-        </PTitle>
+          <div className={ereignis}>{payload?.[0]?.payload?.title ?? ''}</div>
+        </div>
         {payload
           // Zählung and Bedarf are only used for the optics,
           // do not want them in the tooltip
@@ -39,10 +22,13 @@ export const CustomTooltip = ({ payload, label, active }) => {
               : o.value
 
             return (
-              <PRow key={`${label}${value}${i}`}>{`${label}: ${value}`}</PRow>
+              <div
+                className={pRow}
+                key={`${label}${value}${i}`}
+              >{`${label}: ${value}`}</div>
             )
           })}
-      </Popup>
+      </div>
     )
   }
 
