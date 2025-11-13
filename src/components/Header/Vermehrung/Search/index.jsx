@@ -9,6 +9,8 @@ import { useDebouncedCallback } from 'use-debounce'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { buildOptions } from './buildOptions.js'
 
+import './index.css'
+
 const Container = styled.div`
   border-radius: 3px;
   margin-right: 5px;
@@ -18,16 +20,6 @@ const Container = styled.div`
 `
 const StyledSelect = styled(Select)`
   width: 100%;
-  .react-select__control:hover {
-    background-color: #6625b5 !important;
-  }
-  .react-select__control:focus-within {
-    background-color: #6625b5 !important;
-    box-shadow: none;
-  }
-  .react-select__option--is-focused {
-    background-color: rgba(74, 20, 140, 0.1) !important;
-  }
 `
 
 const SearchIcon = styled(FaSearch)`
@@ -155,6 +147,7 @@ export const HeaderSearch = observer(() => {
     menuList: (provided) => ({
       ...provided,
       maxHeight: 'calc(100dvh - 60px)',
+      scrollbarWidth: 'thin',
     }),
     menu: (provided) => ({
       ...provided,
@@ -192,7 +185,7 @@ export const HeaderSearch = observer(() => {
         placeholder="suchen"
         noOptionsMessage={noOptionsMessage}
         loadingMessage={loadingMessage}
-        classNamePrefix="react-select"
+        classNamePrefix="react-select-search"
         loadOptions={loadOptions}
         isClearable
         spellCheck={false}
