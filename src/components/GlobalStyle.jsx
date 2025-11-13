@@ -3,37 +3,6 @@ import { Global, css } from '@emotion/react'
 export const GlobalStyle = () => (
   <Global
     styles={css`
-      html {
-        overflow: hidden !important;
-        height: 100%;
-      }
-
-      body {
-        margin: 0;
-        font-family: Roboto, sans-serif, system-ui;
-        height: 100%;
-      }
-
-      #root {
-        /* works in firefox, not yet in chrome. https://caniuse.com/?search=scrollbar-color */
-        scrollbar-color: #4a148c rgba(0, 0, 0, 0.4);
-        height: 100%;
-      }
-
-      /* Hiding class, making content visible only to screen readers but not visually */
-      /* "sr" meaning "screen-reader" */
-      /* not in use */
-      .sr-only:not(:focus):not(:active) {
-        clip: rect(0 0 0 0);
-        clip-path: inset(50%);
-        height: 1px;
-        overflow: hidden;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
-      }
-
-      /*
    * on mobile titles are invisible
    * make them appear on press
    * source: https://stackoverflow.com/a/60660207/712005 
@@ -95,82 +64,7 @@ export const GlobalStyle = () => (
         }
       }
 
-      /* scrollbars */
 
-      /* newer syntax for firefox */
-      html {
-        scrollbar-color: #E9D8FE#4a148c;
-        scrollbar-width: thin;
-      }
-
-      /* own syntax for webkit */
-      ::-webkit-scrollbar {
-        width: 12px;
-        background: rgba(255, 253, 231, 0.1);
-      }
-
-      ::-webkit-scrollbar:horizontal {
-        height: 12px;
-      }
-
-      ::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.4);
-        box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.4);
-      }
-
-      ::-webkit-scrollbar-thumb {
-        border-radius: 2px;
-        -webkit-box-shadow: inset 0 0 7px #4a148c;
-        box-shadow: inset 0 0 7px #4a148c;
-        background: rgba(85, 85, 85, 0.05);
-      }
-
-      ::-webkit-scrollbar-corner {
-        background: rgba(0, 0, 0, 0);
-      }
-
-      /* uploadcare */
-      .uploadcare--button {
-        background-color: #4a148c !important;
-        background: #4a148c !important;
-        border: 1px solid #4a148c !important;
-        color: white !important;
-      }
-      .uploadcare--button:focus {
-        outline: 2px solid rgba(74, 20, 140, 0.5) !important;
-      }
-      .uploadcare--button:hover {
-        background: rgba(74, 20, 140, 0.8) !important;
-        border-color: rgba(74, 20, 140, 0.8) !important;
-        color: white !important;
-      }
-      .uploadcare--widget__button,
-      .uploadcare--widget__button:active,
-      .uploadcare--widget__button:focus {
-        background: none !important;
-        color: black !important;
-        outline: none !important;
-      }
-      .uploadcare--widget__button,
-      .uploadcare--widget__button:focus {
-        color: #4a148c !important;
-        font-size: 0.875rem !important;
-        line-height: 24.5px !important;
-        font-weight: 500 !important;
-        border-radius: 4px !important;
-        padding: 5px 16px !important;
-      }
-      .uploadcare--widget__button:hover {
-        color: #4a148c !important;
-        font-size: 0.875rem !important;
-        line-height: 24.5px !important;
-        font-weight: 500 !important;
-        background-color: rgba(74, 20, 140, 0.08) !important;
-      }
-      .uploadcare--powered-by,
-      .uploadcare--powered-by__link {
-        display: none !important;
-      }
     `}
   />
 )
