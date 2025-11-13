@@ -21,6 +21,7 @@ const Container = styled.div`
   padding: 10px;
   height: 100%;
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
