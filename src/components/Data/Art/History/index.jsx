@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import styled from '@emotion/styled'
 import Slider from 'react-slick'
 import { useQuery } from 'urql'
 
@@ -9,6 +8,8 @@ import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Row } from './Row.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+
+import { container, errorContainer } from './index.module.css'
 
 const artRevQuery = gql`
   query artRevForHistoryQuery($rev: [String!]) {
@@ -29,30 +30,6 @@ const artRevQuery = gql`
       _deleted
     }
   }
-`
-
-const InnerContainer = styled.div`
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 0 25px;
-  height: 100%;
-  .slick-prev:before,
-  .slick-next:before,
-  .slick-dots li button:before {
-    color: #4a148c;
-  }
-  .slick-prev {
-    left: -20px;
-  }
-  .slick-next {
-    right: -20px;
-  }
-  .slick-dots {
-    bottom: -10px;
-  }
-`
-const ErrorContainer = styled.div`
-  padding: 25px;
 `
 
 const sliderSettings = {
@@ -81,11 +58,11 @@ export const ArtHistory = observer(
     }
 
     if (error) {
-      return <ErrorContainer>{error.message}</ErrorContainer>
+      return <div className={errorContainer}>{error.message}</div>
     }
 
     return (
-      <InnerContainer>
+      <div className={container}>
         <Slider {...sliderSettings}>
           {revRows.map((r) => (
             <Row
@@ -97,7 +74,7 @@ export const ArtHistory = observer(
             />
           ))}
         </Slider>
-      </InnerContainer>
+      </div>
     )
   },
 )
