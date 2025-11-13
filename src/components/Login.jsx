@@ -29,7 +29,6 @@ import { constants } from '../utils/constants.js'
 const Container = styled.div`
   margin: 20px;
 `
-const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -141,7 +140,7 @@ export const Login = observer(() => {
   return (
     <ErrorBoundary>
       <Container>
-        <StyledDialog
+        <Dialog
           aria-labelledby="dialog-title"
           open={true}
         >
@@ -219,7 +218,7 @@ export const Login = observer(() => {
               anmelden
             </Button>
           </DialogActions>
-        </StyledDialog>
+        </Dialog>
       </Container>
     </ErrorBoundary>
   )
