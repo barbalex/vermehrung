@@ -21,6 +21,7 @@ import image from '../../../../images/toposLogo.png'
 
 const Container = styled.div`
   overflow: auto;
+  scrollbar-width: thin;
   background-color: #f8f8f8;
   font-size: 9pt;
   cursor: default;
