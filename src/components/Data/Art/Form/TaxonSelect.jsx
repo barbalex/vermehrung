@@ -5,20 +5,8 @@ import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import { container, labelClass, errorClass } from './TaxonSelect.module.css'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 12px;
-`
-const Label = styled.div`
-  font-size: ${(props) => `${props.labelsize}px`};
-  color: rgb(0, 0, 0, 0.54);
-`
-const Error = styled.div`
-  font-size: 12px;
-  color: red;
-`
 const StyledSelect = styled(AsyncSelect)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
@@ -118,8 +106,16 @@ export const TaxonSelect = observer(
     }
 
     return (
-      <Container data-id="ae_id">
-        <Label labelsize={labelSize}>Taxon</Label>
+      <div
+        className={container}
+        data-id="ae_id"
+      >
+        <div
+          className={labelClass}
+          style={{ fontSize: labelSize }}
+        >
+          Taxon
+        </div>
         <StyledSelect
           id="ae_id"
           defaultOptions
@@ -146,8 +142,8 @@ export const TaxonSelect = observer(
           menuPortalTarget={document.getElementById('root')}
           aria-label="Taxon"
         />
-        {saveToDbError && <Error>{saveToDbError}</Error>}
-      </Container>
+        {saveToDbError && <div className={errorClass}>{saveToDbError}</div>}
+      </div>
     )
   },
 )
