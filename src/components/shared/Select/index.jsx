@@ -5,26 +5,13 @@ import styled from '@emotion/styled'
 
 import { Link } from './Link.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 19px;
-`
-const Label = styled.div`
-  font-size: 12px;
-  height: 12px !important;
-  color: rgb(0, 0, 0, 0.54);
-`
-const Error = styled.div`
-  font-size: 12px;
-  color: red;
-`
-const SelectRow = styled.div`
-  display: flex;
-  > div {
-    width: 100%;
-  }
-`
+import {
+  container,
+  labelClass,
+  errorClass,
+  selectRow,
+} from './index.module.css'
+
 export const StyledSelect = styled(SelectComponent)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
@@ -136,9 +123,9 @@ export const Select = ({
   // })
 
   return (
-    <Container>
-      {label && <Label>{label}</Label>}
-      <SelectRow>
+    <div className={container}>
+      {label && <div className={labelClass}>{label}</div>}
+      <div className={selectRow}>
         <StyledSelect
           id={field}
           name={field}
@@ -159,9 +146,9 @@ export const Select = ({
           aria-label={label ?? ''}
         />
         {!!selectValue.link && <Link link={selectValue.link} />}
-      </SelectRow>
-      {error && <Error>{error}</Error>}
+      </div>
+      {error && <div className={errorClass}>{error}</div>}
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
-    </Container>
+    </div>
   )
 }
