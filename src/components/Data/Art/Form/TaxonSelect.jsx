@@ -45,28 +45,21 @@ const StyledSelect = styled(AsyncSelect)`
   }
   .react-select__clear-indicator {
     /* ability to hide caret when not enough space */
-    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
+    padding-right: 0;
   }
   .react-select__dropdown-indicator {
     /* ability to hide caret when not enough space */
-    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
+    display: none;
   }
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
-    width: ${(props) => (props.nocaret ? '0' : '1px')};
+    width: 0;
   }
   input {
     @media print {
       padding-top: 3px;
       padding-bottom: 0;
     }
-  }
-  .react-select__menu,
-  .react-select__menu-list {
-    height: 130px;
-    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
-    /* make it open over titlerow (which needs to have z-index 1 to hide text scolling below it)*/
-    z-index: 2;
   }
 `
 
