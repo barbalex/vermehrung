@@ -134,11 +134,6 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
   // never enable adding below that
   const showPlus = activeNodeArray.length < 2
 
-  console.log('render Herkuenfte', {
-    herkunftsLength: herkunfts.length,
-    singleRowHeight: constants.singleRowHeight,
-  })
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
