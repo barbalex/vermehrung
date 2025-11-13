@@ -2,7 +2,6 @@ import { useState, useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from '@emotion/styled'
 
 import { Art } from './Data/Art/index.jsx'
 import { Event } from './Data/Event/index.jsx'
@@ -19,31 +18,7 @@ import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../mobxStoreContext.js'
 import { Fallback } from './shared/Fallback.jsx'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff3e0;
-`
-const StyledTabs = styled(Tabs)`
-  [role='tab'][aria-selected='false'],
-  svg {
-    color: white !important;
-  }
-`
-const StyledTab = styled(Tab)`
-  min-width: 70px !important;
-  text-transform: none !important;
-`
-const TitleRow = styled.div`
-  background-color: #e65100;
-  user-select: none;
-`
-const Title = styled.div`
-  padding: 10px 10px 0 10px;
-  color: white;
-  font-weight: bold;
-`
+import { container, tabs, tab, titleRow, title } from './Filter.module.css'
 
 export const Filter = observer(() => {
   const { activeForm: activeFormPassed } = useContext(MobxStoreContext)
@@ -102,76 +77,93 @@ export const Filter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <TitleRow>
-          <Title data-id="form-title">{titleObject[activeTab]}</Title>
-          <StyledTabs
+      <div className={container}>
+        <div className={titleRow}>
+          <div
+            className={title}
+            data-id="form-title"
+          >
+            {titleObject[activeTab]}
+          </div>
+          <Tabs
             value={activeTab}
             onChange={onChangeTab}
             indicatorColor="primary"
             textColor="primary"
             variant="scrollable"
             scrollButtons="auto"
+            className={tabs}
           >
-            <StyledTab
+            <Tab
+              className={tab}
               label="Art"
               value="art"
               data-id="art"
             />
-            <StyledTab
+            <Tab
+              className={tab}
               label="Herkunft"
               value="herkunft"
               data-id="herkunft"
             />
-            <StyledTab
+            <Tab
+              className={tab}
               label="Sammlung"
               value="sammlung"
               data-id="sammlung"
             />
-            <StyledTab
+            <Tab
+              className={tab}
               label="Garten"
               value="garten"
               data-id="garten"
             />
-            <StyledTab
+            <Tab
+              className={tab}
               label="Kultur"
               value="kultur"
               data-id="kultur"
             />
-            <StyledTab
+            <Tab
+              className={tab}
               label="Teilkultur"
               value="teilkultur"
               data-id="teilkultur"
             />
-            <StyledTab
+            <Tab
+              className={tab}
               label="Zählung"
               value="zaehlung"
               data-id="zaehlung"
             />
-            <StyledTab
+            <Tab
+              className={tab}
               label="Lieferung"
               value="lieferung"
               data-id="lieferung"
             />
-            <StyledTab
+            <Tab
+              className={tab}
               label="Sammel-Lieferung"
               value="sammel_lieferung"
               data-id="sammel_lieferung"
             />
-            <StyledTab
+            <Tab
+              className={tab}
               label="Event"
               value="event"
               data-id="event"
             />
-            <StyledTab
+            <Tab
+              className={tab}
               label="Person"
               value="person"
               data-id="person"
             />
-          </StyledTabs>
-        </TitleRow>
+          </Tabs>
+        </div>
         <Suspense fallback={<Fallback />}>{form}</Suspense>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
