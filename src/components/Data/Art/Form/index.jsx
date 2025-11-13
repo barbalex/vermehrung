@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -20,20 +19,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import { artsSortedFromArts } from '../../../../utils/artsSortedFromArts.js'
 
-const FieldsContainer = styled.div`
-  padding: 10px;
-  height: 100%;
-  overflow-y: auto;
-`
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
+import { fieldsContainer, caseConflictTitle, rev } from './index.module.css'
 
 export const ArtForm = observer(
   ({ activeConflict, id, row, setActiveConflict, showFilter, showHistory }) => {
@@ -130,11 +116,11 @@ export const ArtForm = observer(
 
     return (
       <ErrorBoundary>
-        <FieldsContainer>
+        <div className={fieldsContainer}>
           {(activeConflict || showHistory) && (
-            <CaseConflictTitle>
-              Aktuelle Version<Rev>{row._rev}</Rev>
-            </CaseConflictTitle>
+            <h4 className={caseConflictTitle}>
+              Aktuelle Version<span className={rev}>{row._rev}</span>
+            </h4>
           )}
           {showDeleted && (
             <>
@@ -222,7 +208,7 @@ export const ArtForm = observer(
               />
             </>
           )}
-        </FieldsContainer>
+        </div>
       </ErrorBoundary>
     )
   },
