@@ -1,0 +1,22 @@
+.container {
+  margin: 20px;
+}
+
+.div {
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+}
+
+.input {
+  &:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+.resetButton {
+  text-transform: none !important;
+  font-weight: 400 !important;
+  margin-left: 8px !important;
+  margin-right: 20px !important;
+}

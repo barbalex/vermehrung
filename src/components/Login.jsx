@@ -14,7 +14,6 @@ import {
   MdVisibilityOff as VisibilityOffIcon,
 } from 'react-icons/md'
 import Button from '@mui/material/Button'
-import styled from '@emotion/styled'
 import localForage from 'localforage'
 import {
   signOut,
@@ -26,25 +25,7 @@ import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../mobxStoreContext.js'
 import { constants } from '../utils/constants.js'
 
-const Container = styled.div`
-  margin: 20px;
-`
-const StyledDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0 24px;
-`
-const StyledInput = styled(Input)`
-  &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const ResetButton = styled(Button)`
-  text-transform: none !important;
-  font-weight: 400 !important;
-  margin-left: 8px !important;
-  margin-right: 20px !important;
-`
+import { container, div, input, resetButton } from './Login.module.css'
 
 export const Login = observer(() => {
   const { db, firebaseAuth } = useContext(MobxStoreContext)
@@ -139,13 +120,13 @@ export const Login = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <Dialog
           aria-labelledby="dialog-title"
           open={true}
         >
           <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
-          <StyledDiv>
+          <div className={div}>
             <FormControl
               error={!!emailErrorText}
               fullWidth
@@ -153,9 +134,9 @@ export const Login = observer(() => {
               variant="standard"
             >
               <InputLabel htmlFor="email">Email</InputLabel>
-              <StyledInput
+              <Input
                 id="email"
-                className="user-email"
+                className={`user-email ${input}`}
                 defaultValue={email}
                 onBlur={onBlurEmail}
                 autoFocus
@@ -171,9 +152,9 @@ export const Login = observer(() => {
               variant="standard"
             >
               <InputLabel htmlFor="passwort">Passwort</InputLabel>
-              <StyledInput
+              <Input
                 id="passwort"
-                className="user-passwort"
+                className={`user-passwort ${input}`}
                 type={showPass ? 'text' : 'password'}
                 defaultValue={password}
                 onBlur={onBlurPassword}
@@ -201,15 +182,16 @@ export const Login = observer(() => {
                 {passwordErrorText}
               </FormHelperText>
             </FormControl>
-          </StyledDiv>
+          </div>
           <DialogActions>
             {!!email && (
-              <ResetButton
+              <Button
                 onClick={reset}
                 color="inherit"
+                className={resetButton}
               >
                 {resetTitle}
-              </ResetButton>
+              </Button>
             )}
             <Button
               color="primary"
@@ -219,7 +201,7 @@ export const Login = observer(() => {
             </Button>
           </DialogActions>
         </Dialog>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
