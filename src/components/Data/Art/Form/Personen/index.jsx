@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -15,43 +14,8 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { avsSortByPerson } from '../../../../../utils/avsSortByPerson.js'
 import { personSort } from '../../../../../utils/personSort.js'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
-import { constants } from '../../../../../utils/constants.js'
 
-// somehow chrome(?) seems to add the following css sometimes:
-// (on mobile and when checking styles with devtools)
-// @media (pointer: coarse), (hover: none) [title] {...
-// this breaks some of the properties
-// so added some !important
-const TitleRow = styled.section`
-  background-color: rgba(248, 243, 254, 1);
-  flex-shrink: 0;
-  display: flex !important;
-  height: ${constants.titleRowHeight}px;
-  justify-content: space-between !important;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  cursor: pointer;
-  user-select: none;
-  position: sticky !important;
-  top: -10px;
-  z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const Aven = styled.div`
-  padding-bottom: 8px;
-`
-const StyledMotionDiv = styled(motion.div)`
-  box-sizing: border-box;
-`
+import { titleRow, title, aven, motionDiv } from './index.module.css'
 
 export const Personen = observer(({ art }) => {
   const store = useContext(MobxStoreContext)
@@ -132,11 +96,14 @@ export const Personen = observer(({ art }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow
+      <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
+        className={titleRow}
       >
-        <Title>{`Mitarbeitende Personen (${avsSorted.length})`}</Title>
+        <div
+          className={title}
+        >{`Mitarbeitende Personen (${avsSorted.length})`}</div>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -149,21 +116,22 @@ export const Personen = observer(({ art }) => {
             : <FaChevronDown />}
           </IconButton>
         </div>
-      </TitleRow>
-      <StyledMotionDiv
+      </section>
+      <motion.div
         animate={anim}
         transition={{ type: 'just', duration: 0.2 }}
+        className={motionDiv}
       >
         {open && (
           <>
-            <Aven>
+            <div className={aven}>
               {avsSorted.map((av, index) => (
                 <Person
                   key={`${av.art_id}/${av.person_id}/${index}`}
                   av={av}
                 />
               ))}
-            </Aven>
+            </div>
             {!!personWerte.length && (
               <Select
                 name="person_id"
@@ -178,7 +146,7 @@ export const Personen = observer(({ art }) => {
             )}
           </>
         )}
-      </StyledMotionDiv>
+      </motion.div>
     </ErrorBoundary>
   )
 })
