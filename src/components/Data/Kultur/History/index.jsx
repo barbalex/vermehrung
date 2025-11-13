@@ -40,20 +40,6 @@ const Container = styled.div`
   scrollbar-width: thin;
   padding: 0 25px;
   height: 100%;
-  .slick-prev:before,
-  .slick-next:before,
-  .slick-dots li button:before {
-    color: #4a148c;
-  }
-  .slick-prev {
-    left: -20px;
-  }
-  .slick-next {
-    right: -20px;
-  }
-  .slick-dots {
-    bottom: -10px;
-  }
 `
 const ErrorContainer = styled.div`
   padding: 25px;
