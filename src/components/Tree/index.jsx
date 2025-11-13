@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { interval, combineLatest } from 'rxjs'
@@ -17,15 +16,7 @@ import { tableFilter } from '../../utils/tableFilter.js'
 import { notDeletedQuery } from '../../utils/notDeletedQuery.js'
 import { buildNodes } from './nodes/index.js'
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-
-  @media print {
-    display: none !important;
-  }
-
-`
+import { container } from './index.module.css'
 
 export const Tree = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -222,7 +213,7 @@ export const Tree = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container className="tree-root">
+      <div className={`tree-root ${container}`}>
         <ApFilterContainer />
         <Settings />
         <AutoSizer>
@@ -235,7 +226,7 @@ export const Tree = observer(() => {
             />
           )}
         </AutoSizer>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
