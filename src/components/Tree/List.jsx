@@ -38,7 +38,12 @@ export const TreeList = observer(
     // react-virtualized only supports predefined heights
     return (
       <Virtuoso
-        style={{ height: `${height - 5}px`, width: `${width}px`, marginTop: 5 }}
+        style={{
+          height: `${height - 5}px`,
+          width: `${width}px`,
+          marginTop: 5,
+          scrollbarWidth: 'thin',
+        }}
         totalCount={nodes.length}
         initialTopMostItemIndex={nodeIndex && nodeIndex > -1 ? nodeIndex : 0}
         itemContent={(index) => (
