@@ -15,7 +15,6 @@ import {
 } from 'recharts'
 import { observer } from 'mobx-react-lite'
 import { useResizeDetector } from 'react-resize-detector'
-import styled from '@emotion/styled'
 
 import { CustomTooltip } from './Tooltip.jsx'
 import { LabelLieferung } from './LabelLieferung.jsx'
@@ -25,12 +24,7 @@ import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import { buildData } from './buildData.js'
 
-const NoData = styled.div`
-  padding: 0 10px 10px 10px;
-`
-const Container = styled.div`
-  width: 100%;
-`
+import { container, noData } from './index.module.css'
 
 export const Pflanzen = observer(({ artId }) => {
   const store = useContext(MobxStoreContext)
@@ -55,7 +49,9 @@ export const Pflanzen = observer(({ artId }) => {
   if (!data) return null
 
   if (data && !data.length) {
-    return <NoData>Keine Daten verfügbar für Anzahl Pflanzen</NoData>
+    return (
+      <div className={noData}>Keine Daten verfügbar für Anzahl Pflanzen</div>
+    )
   }
 
   // need to disable animation or labels will not show on first render
@@ -64,7 +60,10 @@ export const Pflanzen = observer(({ artId }) => {
   // console.log('Pflanzen, data:', data)
 
   return (
-    <Container ref={ref}>
+    <div
+      className={container}
+      ref={ref}
+    >
       <ErrorBoundary>
         <ResponsiveContainer
           width="99%"
@@ -164,6 +163,6 @@ export const Pflanzen = observer(({ artId }) => {
           </ComposedChart>
         </ResponsiveContainer>
       </ErrorBoundary>
-    </Container>
+    </div>
   )
 })
