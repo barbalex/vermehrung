@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
@@ -10,30 +9,7 @@ import { Pflanzen } from './Pflanzen/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { constants } from '../../../../../utils/constants.js'
 
-const TitleRow = styled.section`
-  background-color: rgba(248, 243, 254, 1);
-  flex-shrink: 0;
-  display: flex !important;
-  height: ${constants.titleRowHeight}px;
-  justify-content: space-between !important;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  cursor: pointer;
-  user-select: none;
-  position: sticky !important;
-  top: -10px;
-  z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import { titleRow, title } from './index.module.css'
 
 export const Timeline = observer(
   ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
@@ -67,11 +43,12 @@ export const Timeline = observer(
 
     return (
       <ErrorBoundary>
-        <TitleRow
+        <section
           onClick={onClickToggle}
           title={open ? 'schliessen' : 'öffnen'}
+          className={titleRow}
         >
-          <Title>Zeit-Achse</Title>
+          <div className={title}>Zeit-Achse</div>
           <div>
             <IconButton
               aria-label="Anleitung öffnen"
@@ -92,7 +69,7 @@ export const Timeline = observer(
               : <FaChevronDown />}
             </IconButton>
           </div>
-        </TitleRow>
+        </section>
         <motion.div
           animate={anim}
           transition={{ type: 'just', duration: 0.2 }}
