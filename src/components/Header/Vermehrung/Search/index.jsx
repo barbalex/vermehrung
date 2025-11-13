@@ -1,7 +1,6 @@
 import { useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaSearch } from 'react-icons/fa'
-import styled from '@emotion/styled'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
 import { useDebouncedCallback } from 'use-debounce'
@@ -10,23 +9,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { buildOptions } from './buildOptions.js'
 
 import './index.css'
-
-const Container = styled.div`
-  border-radius: 3px;
-  margin-right: 5px;
-  width: 250px;
-  display: flex;
-  justify-content: space-between;
-`
-const StyledSelect = styled(Select)`
-  width: 100%;
-`
-
-const SearchIcon = styled(FaSearch)`
-  margin: auto 5px;
-  margin-right: -25px;
-  z-index: 1;
-`
+import { container, select, searchIcon } from './index.module.css'
 
 const formatOptionLabel = ({ label }, { inputValue }) => (
   <Highlighter
@@ -175,9 +158,12 @@ export const HeaderSearch = observer(() => {
   }
 
   return (
-    <Container ref={ref}>
-      {!singleColumnView && <SearchIcon />}
-      <StyledSelect
+    <div
+      className={container}
+      ref={ref}
+    >
+      {!singleColumnView && <FaSearch className={searchIcon} />}
+      <Select
         styles={customStyles}
         onChange={onChange}
         formatGroupLabel={formatGroupLabel}
@@ -190,7 +176,8 @@ export const HeaderSearch = observer(() => {
         isClearable
         spellCheck={false}
         aria-label="suchen"
+        className={select}
       />
-    </Container>
+    </div>
   )
 })
