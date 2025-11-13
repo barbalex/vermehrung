@@ -37,6 +37,7 @@ const kulturRevQuery = gql`
 
 const Container = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
   padding: 0 25px;
   height: 100%;
   .slick-prev:before,
