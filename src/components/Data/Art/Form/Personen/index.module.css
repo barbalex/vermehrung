@@ -1,0 +1,38 @@
+/* somehow chrome(?) seems to add the following css sometimes: */
+/* (on mobile and when checking styles with devtools) */
+/* @media (pointer: coarse), (hover: none) [title] {... */
+/* this breaks some of the properties */
+/* so added some !important */
+.titleRow {
+  background-color: rgba(248, 243, 254, 1);
+  flex-shrink: 0;
+  display: flex !important;
+  height: 48px;
+  justify-content: space-between !important;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  cursor: pointer;
+  user-select: none;
+  position: sticky !important;
+  top: -10px;
+  z-index: 1;
+  &:first-of-type {
+    margin-top: -10px;
+  }
+}
+
+.title {
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.aven {
+  padding-bottom: 8px;
+}
+
+.motionDiv {
+  box-sizing: border-box;
+}
