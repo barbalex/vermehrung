@@ -72,6 +72,7 @@ const Doku = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  scrollbar-width: thin;
   box-sizing: border-box;
   ul,
   ol {
