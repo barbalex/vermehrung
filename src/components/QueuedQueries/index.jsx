@@ -29,6 +29,7 @@ const OuterContainer = styled.div`
   height: calc(100dvh - ${constants.appBarHeight}px - 15px - 23px - 23px);
   overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const QueriesContainer = styled.div`
   padding: 0 15px;

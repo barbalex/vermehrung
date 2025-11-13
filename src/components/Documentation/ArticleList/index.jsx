@@ -12,6 +12,7 @@ import { IntoViewScroller } from './IntoViewScroller.jsx'
 const Container = styled.div`
   height: calc(100dvh - ${constants.appBarHeight}px);
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 
 export const ArticleList = observer(({ articles }) => {
