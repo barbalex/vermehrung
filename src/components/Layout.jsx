@@ -1,6 +1,5 @@
 import { useContext, useEffect, Suspense, lazy } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 
 import { MobxStoreContext } from '../mobxStoreContext.js'
@@ -17,11 +16,7 @@ const Notifications = lazy(async () => ({
 
 import Header from './Header/index.jsx'
 
-const Container = styled.div`
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-`
+import { container } from './Layout.module.css'
 
 export const Layout = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -42,13 +37,13 @@ export const Layout = observer(() => {
   }, [setSingleColumnView, singleColumnView, width])
 
   return (
-    <Container>
+    <div className={container}>
       <Header />
       <Suspense fallback={<Fallback />}>
         <Outlet />
       </Suspense>
       <NavigationSyncController />
       <Notifications />
-    </Container>
+    </div>
   )
 })
