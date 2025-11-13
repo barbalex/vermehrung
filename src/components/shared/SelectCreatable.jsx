@@ -7,26 +7,13 @@ import { observer } from 'mobx-react-lite'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { Link } from './Select/Link.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 12px;
-`
-const Label = styled.div`
-  font-size: 12px;
-  height: 12px !important;
-  color: rgb(0, 0, 0, 0.54);
-`
-const Error = styled.div`
-  font-size: 12px;
-  color: red;
-`
-const SelectRow = styled.div`
-  display: flex;
-  > div {
-    width: 100%;
-  }
-`
+import {
+  container,
+  labelClass,
+  errorClass,
+  selectRow,
+} from './SelectCreatable.module.css'
+
 const StyledSelect = styled(Select)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
@@ -136,9 +123,9 @@ export const SelectCreatable = observer(
       optionsToUse.find((o) => o.value === stateValue) || emptyValue
 
     return (
-      <Container>
-        {label && <Label>{label}</Label>}
-        <SelectRow>
+      <div className={container}>
+        {label && <div className={labelClass}>{label}</div>}
+        <div className={selectRow}>
           <StyledSelect
             id={field}
             name={field}
@@ -157,9 +144,9 @@ export const SelectCreatable = observer(
             aria-label={label ?? ''}
           />
           {!!selectValue.link && <Link link={selectValue.link} />}
-        </SelectRow>
-        {error && <Error>{error}</Error>}
-      </Container>
+        </div>
+        {error && <div className={errorClass}>{error}</div>}
+      </div>
     )
   },
 )
