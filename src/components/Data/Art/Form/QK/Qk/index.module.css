@@ -1,0 +1,40 @@
+.container {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.paper {
+  padding: 10px;
+  margin-bottom: 12px !important;
+  background-color: transparent !important;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.a {
+  color: inherit;
+  font-weight: normal;
+  font-size: 12px;
+  text-decoration-line: underline;
+  cursor: pointer;
+  margin-bottom: 0;
+  padding: 2px 0;
+}
+
+.row {
+  display: flex;
+}
+
+.resultTitleClass {
+  padding-left: 10px;
+  margin-bottom: 7px;
+}
+
+.formControl {
+  padding-bottom: 10px !important;
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
