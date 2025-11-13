@@ -20,6 +20,7 @@ const ScrollContainer = styled.div`
   position: absolute;
   top: 0;
   overflow-y: auto;
+  scrollbar-width: thin;
   /* prevent layout shift when scrollbar appears */
   scrollbar-gutter: stable;
 `

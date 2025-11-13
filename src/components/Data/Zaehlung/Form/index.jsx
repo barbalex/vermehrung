@@ -25,6 +25,7 @@ const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const FieldRow = styled.div`
   display: flex;

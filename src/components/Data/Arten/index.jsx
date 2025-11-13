@@ -51,6 +51,7 @@ const FieldsContainer = styled.div`
   flex-direction: column;
   flex-grow: 1;
   overflow: auto;
+  scrollbar-width: thin;
 `
 const ApFilterContainer = styled.div`
   margin-top: -3px;
