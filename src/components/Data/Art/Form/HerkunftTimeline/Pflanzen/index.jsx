@@ -15,7 +15,6 @@ import {
 } from 'recharts'
 import { observer } from 'mobx-react-lite'
 import { useResizeDetector } from 'react-resize-detector'
-import styled from '@emotion/styled'
 
 import { CustomTooltip } from './Tooltip.jsx'
 import { LabelLieferung } from './LabelLieferung.jsx'
@@ -26,15 +25,7 @@ import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import { herkunftLabelFromHerkunft } from '../../../../../../utils/herkunftLabelFromHerkunft.js'
 import { buildData } from './buildData.js'
 
-const H4 = styled.h4`
-  margin-bottom: 5px;
-`
-const NoData = styled.div`
-  padding: 0 10px 15px 0;
-`
-const Container = styled.div`
-  width: 100%;
-`
+import { h4, noData, container } from './index.module.css'
 
 export const Pflanzen = observer(({ artId, herkunft }) => {
   const store = useContext(MobxStoreContext)
@@ -66,8 +57,10 @@ export const Pflanzen = observer(({ artId, herkunft }) => {
   if (data && !data.length) {
     return (
       <>
-        <H4>{herkunftLabel}</H4>
-        <NoData>{`Keine Daten für die Anzahl Pflanzen verfügbar`}</NoData>
+        <h4 className={h4}>{herkunftLabel}</h4>
+        <div
+          className={noData}
+        >{`Keine Daten für die Anzahl Pflanzen verfügbar`}</div>
       </>
     )
   }
@@ -76,7 +69,10 @@ export const Pflanzen = observer(({ artId, herkunft }) => {
   // https://github.com/recharts/recharts/issues/806
 
   return (
-    <Container ref={ref}>
+    <div
+      className={container}
+      ref={ref}
+    >
       <ErrorBoundary>
         <h4>{herkunftLabel}</h4>
         <ResponsiveContainer
@@ -177,6 +173,6 @@ export const Pflanzen = observer(({ artId, herkunft }) => {
           </ComposedChart>
         </ResponsiveContainer>
       </ErrorBoundary>
-    </Container>
+    </div>
   )
 })
