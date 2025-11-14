@@ -10,7 +10,6 @@ const Row = styled.div`
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
   &:hover {
     background-color: rgba(74, 20, 140, 0.03);
   }
@@ -40,16 +39,14 @@ const Geplant = styled.div`
   margin-right: 10px;
 `
 
-export const TeilkulturEventRow = ({ style, index, rows }) => {
-  const row = rows[index]
-
+export const TeilkulturEventRow = ({ event }) => {
   const [personName, setPersonName] = useState()
   useEffect(() => {
     let isActive = true
     const run = async () => {
       let person
       try {
-        person = row.person.fetch()
+        person = event.person.fetch()
       } catch {}
       if (!isActive) return
 
@@ -60,17 +57,17 @@ export const TeilkulturEventRow = ({ style, index, rows }) => {
     return () => {
       isActive = false
     }
-  }, [row.person])
+  }, [event.person])
 
   const datum =
-    row.datum ? format(new Date(row.datum), 'yyyy.MM.dd') : 'Kein Datum'
+    event.datum ? format(new Date(event.datum), 'yyyy.MM.dd') : 'Kein Datum'
 
   return (
-    <Row key={row.id}>
+    <Row key={event.id}>
       <Datum>{datum}</Datum>
-      <Geplant>{row?.geplant ? 'geplant' : ' '}</Geplant>
+      <Geplant>{event?.geplant ? 'geplant' : ' '}</Geplant>
       <Name>{personName ?? ' '}</Name>
-      <Beschreibung>{row?.beschreibung ?? ' '}</Beschreibung>
+      <Beschreibung>{event?.beschreibung ?? ' '}</Beschreibung>
     </Row>
   )
 }
