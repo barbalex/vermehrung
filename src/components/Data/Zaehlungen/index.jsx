@@ -50,7 +50,9 @@ const FieldsContainer = styled.div`
   flex-direction: column;
   flex-grow: 1;
   overflow: auto;
-  scrollbar-width: thin;
+  > div {
+    scrollbar-width: thin;
+  }
 `
 
 export const Zaehlungen = observer(({ filter: showFilter = false }) => {
