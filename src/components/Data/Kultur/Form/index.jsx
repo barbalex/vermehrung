@@ -25,12 +25,12 @@ import { constants } from '../../../../utils/constants.js'
 import { gartensSortedFromGartens } from '../../../../utils/gartensSortedFromGartens.js'
 import { herkunftSort } from '../../../../utils/herkunftSort.js'
 
-const Container = styled.div`
-  padding: 10px;
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
+import {
+  container,
+  caseConflictTitle,
+  rev,
+} from '../../Art/Form/index.module.css'
+
 const FieldRow = styled.div`
   display: flex;
   justify-content: space-between;
@@ -40,15 +40,6 @@ const FieldRow = styled.div`
   > div > button {
     margin-top: 8px;
   }
-`
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
 `
 
 export const KulturForm = observer(
@@ -411,11 +402,11 @@ export const KulturForm = observer(
 
     return (
       <ErrorBoundary>
-        <Container>
+        <div className={container}>
           {(activeConflict || showHistory) && (
-            <CaseConflictTitle>
-              Aktuelle Version<Rev>{row._rev}</Rev>
-            </CaseConflictTitle>
+            <h4 className={caseConflictTitle}>
+              Aktuelle Version<span className={rev}>{row._rev}</span>
+            </h4>
           )}
           {showDeleted && (
             <>
@@ -581,7 +572,7 @@ export const KulturForm = observer(
               />
             </>
           )}
-        </Container>
+        </div>
       </ErrorBoundary>
     )
   },
