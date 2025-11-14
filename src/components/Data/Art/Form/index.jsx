@@ -19,7 +19,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import { artsSortedFromArts } from '../../../../utils/artsSortedFromArts.js'
 
-import { fieldsContainer, caseConflictTitle, rev } from './index.module.css'
+import { container, caseConflictTitle, rev } from './index.module.css'
 
 export const ArtForm = observer(
   ({ activeConflict, id, row, setActiveConflict, showFilter, showHistory }) => {
@@ -116,7 +116,7 @@ export const ArtForm = observer(
 
     return (
       <ErrorBoundary>
-        <div className={fieldsContainer}>
+        <div className={container}>
           {(activeConflict || showHistory) && (
             <h4 className={caseConflictTitle}>
               Aktuelle Version<span className={rev}>{row._rev}</span>
