@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
@@ -26,14 +25,7 @@ import {
   caseConflictTitle,
   rev,
 } from '../../Art/Form/index.module.css'
-
-const FieldRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > div > button {
-    margin-top: 8px;
-  }
-`
+import { fieldRow } from './index.module.css'
 
 export const ZaehlungForm = observer(
   ({
@@ -208,7 +200,7 @@ export const ZaehlungForm = observer(
             saveToDb={saveToDb}
             error={errors?.zaehlung?.datum}
           />
-          <FieldRow>
+          <div className={fieldRow}>
             {showFilter ?
               <JesNo
                 key={`${row.id}prognose`}
@@ -237,7 +229,7 @@ export const ZaehlungForm = observer(
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
-          </FieldRow>
+          </div>
           {(z_bemerkungen || showFilter) && (
             <TextField
               key={`${row.id}bemerkungen`}
