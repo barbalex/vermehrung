@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import ImageGallery from 'react-image-gallery'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import Button from '@mui/material/Button'
@@ -16,43 +15,14 @@ import { fileSort } from '../../../utils/fileSort.js'
 import { mutations } from '../../../utils/mutations.js'
 import { useObservable } from '../../../utils/useObservable.js'
 
-const TitleRow = styled.section`
-  background-color: rgba(248, 243, 254, 1);
-  flex-shrink: 0;
-  display: flex !important;
-  height: 48px;
-  justify-content: space-between !important;
-  margin-left: -10px;
-  margin-right: -10px;
-  ${(props) => props['data-margin-bottom'] && 'margin-bottom: 15px;'}
-  padding: 0 10px;
-  user-select: none;
-  position: sticky !important;
-  top: -10px;
-  z-index: 1;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-// center buttons
-const Buttons = styled.div`
-  margin-top: 7px;
-`
-const Spacer = styled.div`
-  height: 10px;
-`
-const LightboxButton = styled(Button)`
-  margin-left: 10px !important;
-  text-transform: none !important;
-  border: none !important;
-`
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`
+import {
+  titleRow,
+  title,
+  buttons,
+  spacer,
+  lightboxButton,
+  content,
+} from './index.module.css'
 
 export const Files = observer(({ parentTable, parent }) => {
   const store = useContext(MobxStoreContext)
@@ -123,22 +93,22 @@ export const Files = observer(({ parentTable, parent }) => {
   if (!online) {
     return (
       <ErrorBoundary>
-        <TitleRow data-online={online}>
-          <Title>Dateien</Title>
-          <Content>Sorry, nur online verfügbar</Content>
-        </TitleRow>
+        <section className={titleRow}>
+          <div className={title}>Dateien</div>
+          <div className={content}>Sorry, nur online verfügbar</div>
+        </section>
       </ErrorBoundary>
     )
   }
 
   return (
     <ErrorBoundary>
-      <TitleRow
-        data-online={online}
-        data-margin-bottom={!!files.length}
+      <section
+        className={titleRow}
+        style={{ ...(files.length ? { marginBottom: 15 } : {}) }}
       >
-        <Title>Dateien</Title>
-        <Buttons>
+        <div className={title}>Dateien</div>
+        <div className={buttons}>
           <Uploader
             id="file"
             name="file"
@@ -146,21 +116,22 @@ export const Files = observer(({ parentTable, parent }) => {
             content="test"
           />
           {!!images.length && (
-            <LightboxButton
+            <Button
               color="primary"
               variant="outlined"
               onClick={onClickLightboxButton}
+              className={lightboxButton}
             >
               {lightboxIsOpen ?
                 'Galerie schliessen'
               : 'Bilder in Galerie öffnen'}
-            </LightboxButton>
+            </Button>
           )}
-        </Buttons>
-      </TitleRow>
+        </div>
+      </section>
       {lightboxIsOpen && (
         <>
-          <Spacer />
+          <div className={spacer} />
           <ImageGallery
             items={imageObjects}
             showPlayButton={false}
@@ -169,7 +140,7 @@ export const Files = observer(({ parentTable, parent }) => {
       )}
       {!!files.length && (
         <>
-          <Spacer />
+          <div className={spacer} />
           {files.map((file) => (
             <File
               key={file.file_id}
