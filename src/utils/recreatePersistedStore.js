@@ -15,7 +15,7 @@ const firebaseConfig = {
 }
 
 export const recreatePersistedStore = async (store) => {
-  // console.log('recreatePersistedStore running')
+  // console.log('recreatePersistedStore, store:', store)
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   let unregisterAuthObserver = () => {}
   const {
@@ -91,9 +91,9 @@ export const recreatePersistedStore = async (store) => {
     // TODO:
     // without timeout and with timeout too low this errors before page Vermehrung logs
     const visitedTopDomain = window.location.pathname === '/'
-    if (!!user && visitedTopDomain) {
+    if (!!user && visitedTopDomain && store?.navigate) {
       setTimeout(() => {
-        store.navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
+        store.navigate?.(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
       }, 200)
     }
     const nowOnline = await isOnline()
