@@ -15,7 +15,6 @@ import { LieferungForLieferschein as Lieferung } from './Lieferung.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { lieferungSort } from '../../../../utils/lieferungSort.js'
 import { personFullname } from '../../../../utils/personFullname.js'
-import { constants } from '../../../../utils/constants.js'
 import { ProgressiveImg } from '../../../shared/ProgressiveImg.tsx'
 import image from '../../../../images/toposLogo.png'
 
@@ -25,12 +24,10 @@ const Container = styled.div`
   background-color: #f8f8f8;
   font-size: 9pt;
   cursor: default;
-  height: calc(
-    100dvh - ${constants.appBarHeight}px - ${constants.titleRowHeight}px
-  );
+  height: calc(100dvh - 64px - 48px);
   width: 100%;
   @media print {
-    /* remove grey backgrond set for nice UI */
+    /* remove grey background set for nice UI */
     background-color: #fff;
     /* with overflow auto an empty page is inserted between each page */
     overflow-y: visible;
