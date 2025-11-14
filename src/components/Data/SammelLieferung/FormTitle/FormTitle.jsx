@@ -27,7 +27,6 @@ const TitleContainer = styled.div`
   }
   height: ${constants.titleRowHeight}px;
   justify-content: space-between;
-  padding 0 10px;
 `
 const Title = styled.div`
   font-weight: bold;
