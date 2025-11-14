@@ -5,6 +5,8 @@ import { first as first$ } from 'rxjs/operators'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
+import { container } from '../Arten/Row.module.css'
+
 const Row = styled.div`
   display: flex;
   flex-direction: column;
@@ -16,8 +18,6 @@ const Row = styled.div`
   margin: -1px 0;
   padding: 10px;
   cursor: pointer;
-  color: ${(props) =>
-    props['data-inaktiv'] ? 'rgba(0, 0, 0, 0.35)' : 'inherit'};
   div {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -76,8 +76,10 @@ export const KulturRow = observer(({ style, index, rows }) => {
     <Row
       key={row.id}
       onClick={onClickRow}
-      style={style}
-      data-inaktiv={row?.aktiv === false}
+      style={{
+        ...style,
+        color: row?.aktiv === false ? 'rgba(0, 0, 0, 0.35)' : 'inherit',
+      }}
     >
       <div>{label}</div>
     </Row>
