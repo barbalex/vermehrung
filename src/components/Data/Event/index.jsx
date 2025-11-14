@@ -54,7 +54,6 @@ export const Event = observer(
       <ErrorBoundary>
         <div
           className={container}
-          showfilter={showFilter}
           style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
         >
           <FormTitle
