@@ -10,7 +10,7 @@ const Row = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: ${constants.singleRowHeight};
+  min-height: 48px;
   border-bottom: 1px solid rgba(74, 20, 140, 0.2);
   border-collapse: collapse;
   box-sizing: border-box;
