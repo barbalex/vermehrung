@@ -131,7 +131,7 @@ export const HeaderHamburgerMenu = observer(
             labelPlacement="end"
           />
         </MenuItem>
-        <Version>Version: 1.21.15 vom 13.11.2025</Version>
+        <Version>Version: 1.21.16 vom 14.11.2025</Version>
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von vermehrung.ch
         </MenuItem>
