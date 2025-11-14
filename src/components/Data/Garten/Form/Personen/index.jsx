@@ -14,13 +14,12 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { gvsSortByPerson } from '../../../../../utils/gvsSortByPerson.js'
 import { personSort } from '../../../../../utils/personSort.js'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
-import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex !important;
-  height: ${constants.titleRowHeight}px;
+  height: 48px;
   justify-content: space-between !important;
   margin-left: -10px;
   margin-right: -10px;
