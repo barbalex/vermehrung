@@ -1,0 +1,23 @@
+.container {
+  background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  @media print {
+    display: none !important;
+  }
+  height: 48px;
+  justify-content: space-between;
+}
+
+.title {
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 10px;
+}
+
+.symbols {
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+}
