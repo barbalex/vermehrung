@@ -17,7 +17,7 @@ import { Menu } from '../../../shared/Menu.jsx'
 import { constants } from '../../../../utils/constants.js'
 
 const Container = styled.div`
-  background-color:rgba(74, 20, 140, 0.1);
+  background-color: rgba(74, 20, 140, 0.1);
   flex-shrink: 0;
   display: flex;
   @media print {
@@ -25,7 +25,6 @@ const Container = styled.div`
   }
   height: ${constants.titleRowHeight}px;
   justify-content: space-between;
-  padding 0 10px;
 `
 const Title = styled.div`
   font-weight: bold;
