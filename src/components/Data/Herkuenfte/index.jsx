@@ -21,7 +21,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 
 const TitleContainer = styled.div`
@@ -137,7 +136,7 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
+      <Container style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}>
         {showFilter ?
           <FilterTitle
             title="Herkunft"
