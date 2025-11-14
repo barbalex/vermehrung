@@ -5,6 +5,8 @@ import styled from '@emotion/styled'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { tableFilter } from '../../../utils/tableFilter.js'
 
+import { container } from '../Arten/Row.module.css'
+
 const Row = styled.div`
   display: flex;
   flex-direction: column;
