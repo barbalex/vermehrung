@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { eventLabelFromEvent } from '../../../utils/eventLabelFromEvent.js'
 
-import { row as rowClass } from './Row.module.css'
+import { container } from '../Arten/Row.module.css'
 
 export const EventRow = observer(({ style, index, rows }) => {
   const store = useContext(MobxStoreContext)
@@ -16,7 +16,7 @@ export const EventRow = observer(({ style, index, rows }) => {
 
   return (
     <div
-      className={rowClass}
+      className={container}
       key={row.id}
       onClick={onClickRow}
       style={style}
