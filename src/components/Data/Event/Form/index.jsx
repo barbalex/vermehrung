@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
@@ -24,28 +23,7 @@ import { teilkulturSort } from '../../../../utils/teilkulturSort.js'
 import { personSort } from '../../../../utils/personSort.js'
 import { constants } from '../../../../utils/constants.js'
 
-const FieldsContainer = styled.div`
-  padding: 10px;
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const FieldRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > div > button {
-    margin-top: 8px;
-  }
-`
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
+import { container, fieldRow, caseConflictTitle, rev } from './index.module.css'
 
 export const EventForm = observer(
   ({
@@ -280,11 +258,11 @@ export const EventForm = observer(
 
     return (
       <ErrorBoundary>
-        <FieldsContainer>
+        <div className={container}>
           {(activeConflict || showHistory) && (
-            <CaseConflictTitle>
-              Aktuelle Version<Rev>{row._rev}</Rev>
-            </CaseConflictTitle>
+            <h4 className={caseConflictTitle}>
+              Aktuelle Version<span className={rev}>{row._rev}</span>
+            </h4>
           )}
           {showDeleted && (
             <>
@@ -363,7 +341,7 @@ export const EventForm = observer(
             />
           )}
           {(ev_geplant || showFilter) && (
-            <FieldRow>
+            <div className={fieldRow}>
               {showFilter ?
                 <JesNo
                   key={`${row.id}geplant`}
@@ -392,7 +370,7 @@ export const EventForm = observer(
                   <IoMdInformationCircleOutline />
                 </IconButton>
               </div>
-            </FieldRow>
+            </div>
           )}
           {online && !showFilter && row?._conflicts?.map && (
             <ConflictList
@@ -401,7 +379,7 @@ export const EventForm = observer(
               setActiveConflict={setActiveConflict}
             />
           )}
-        </FieldsContainer>
+        </div>
       </ErrorBoundary>
     )
   },
