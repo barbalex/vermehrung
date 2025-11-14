@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 
 import UpSvg from '../../../svg/to_up.svg?react'
-import { constants } from '../../../utils/constants.js'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -13,7 +12,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: ${constants.titleRowHeight}px;
+  height: 48px;
   justify-content: space-between;
 `
 const Title = styled.div`
