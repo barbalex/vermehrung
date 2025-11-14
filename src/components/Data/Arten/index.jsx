@@ -22,7 +22,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -31,7 +30,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: ${constants.titleRowHeight}px;
+  height: 48px;
   justify-content: space-between;
   padding 0 10px;
 `
@@ -109,7 +108,7 @@ export const Arten = observer(({ filter: showFilter }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
+      <Container style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}>
         {showFilter ?
           <FilterTitle
             title="Art"
