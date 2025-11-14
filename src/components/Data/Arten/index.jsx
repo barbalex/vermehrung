@@ -18,6 +18,15 @@ import { artsSortedFromArts } from '../../../utils/artsSortedFromArts.js'
 import { constants } from '../../../utils/constants.js'
 import { ApFilter } from '../../shared/ApFilter.jsx'
 
+import {
+  container,
+  titleContainer,
+  title,
+  titleSymbols,
+  fieldsContainer,
+  apFilterContainer,
+} from './index.module.css'
+
 const Container = styled.div`
   height: 100%;
   display: flex;
