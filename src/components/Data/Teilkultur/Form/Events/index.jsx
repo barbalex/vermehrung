@@ -7,13 +7,12 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { eventSort } from '../../../../../utils/eventSort.js'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { TeilkulturEventRow as Row } from './Row.jsx'
-import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
-  height: ${constants.titleRowHeight}px;
+  height: 48px;
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
