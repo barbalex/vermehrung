@@ -34,4 +34,7 @@
   flex-grow: 1;
   overflow: auto;
   scrollbar-width: thin;
+  > div {
+    scrollbar-width: thin;
+  }
 }
