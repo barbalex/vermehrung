@@ -15,7 +15,6 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
   width: 100%;
 `
 const Img = styled.img`
