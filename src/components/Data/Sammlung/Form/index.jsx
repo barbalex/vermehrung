@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
@@ -32,17 +31,7 @@ import {
   caseConflictTitle,
   rev,
 } from '../../Art/Form/index.module.css'
-
-const FieldRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > div:not(:last-of-type) {
-    padding-right: 8px;
-  }
-  > div > button {
-    margin-top: 8px;
-  }
-`
+import { fieldRow } from './index.module.css'
 
 export const SammlungForm = observer(
   ({
@@ -346,7 +335,7 @@ export const SammlungForm = observer(
             error={errors?.sammlung?.anzahl_pflanzen}
             type="number"
           />
-          <FieldRow>
+          <div className={fieldRow}>
             <TextField
               key={`${row.id}gramm_samen`}
               name="gramm_samen"
@@ -365,8 +354,8 @@ export const SammlungForm = observer(
               error={errors?.sammlung?.andere_menge}
               type="text"
             />
-          </FieldRow>
-          <FieldRow>
+          </div>
+          <div className={fieldRow}>
             <TextField
               key={`${row.id}von_anzahl_individuen`}
               name="von_anzahl_individuen"
@@ -386,7 +375,7 @@ export const SammlungForm = observer(
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
-          </FieldRow>
+          </div>
           {!showFilter && (
             <Coordinates
               row={row}
@@ -394,7 +383,7 @@ export const SammlungForm = observer(
               saveToDb={saveToDb}
             />
           )}
-          <FieldRow>
+          <div className={fieldRow}>
             {showFilter ?
               <JesNo
                 key={`${row.id}geplant`}
@@ -423,7 +412,7 @@ export const SammlungForm = observer(
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
-          </FieldRow>
+          </div>
           <TextField
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
