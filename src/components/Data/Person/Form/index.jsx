@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -17,21 +16,11 @@ import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import { exists } from '../../../../utils/exists.js'
 import { userRoleSort } from '../../../../utils/userRoleSort.js'
 
-const Container = styled.div`
-  padding: 10px;
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
+import {
+  container,
+  caseConflictTitle,
+  rev,
+} from '../../Art/Form/index.module.css'
 
 export const PersonForm = observer(
   ({ showFilter, id, row, activeConflict, setActiveConflict, showHistory }) => {
@@ -104,11 +93,11 @@ export const PersonForm = observer(
     const showDeleted = filter.person._deleted !== false || row?._deleted
 
     return (
-      <Container>
+      <div className={container}>
         {(activeConflict || showHistory) && (
-          <CaseConflictTitle>
-            Aktuelle Version<Rev>{row._rev}</Rev>
-          </CaseConflictTitle>
+          <h4 className={caseConflictTitle}>
+            Aktuelle Version<span className={rev}>{row._rev}</span>
+          </h4>
         )}
         {showDeleted && (
           <>
@@ -330,7 +319,7 @@ export const PersonForm = observer(
             parent={row}
           />
         )}
-      </Container>
+      </div>
     )
   },
 )
