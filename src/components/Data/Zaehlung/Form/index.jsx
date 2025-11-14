@@ -21,27 +21,18 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.js'
 
-const FieldsContainer = styled.div`
-  padding: 10px;
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
+import {
+  container,
+  caseConflictTitle,
+  rev,
+} from '../../Art/Form/index.module.css'
+
 const FieldRow = styled.div`
   display: flex;
   justify-content: space-between;
   > div > button {
     margin-top: 8px;
   }
-`
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
 `
 
 export const ZaehlungForm = observer(
@@ -170,11 +161,11 @@ export const ZaehlungForm = observer(
 
     return (
       <ErrorBoundary>
-        <FieldsContainer>
+        <div className={container}>
           {(activeConflict || showHistory) && (
-            <CaseConflictTitle>
-              Aktuelle Version<Rev>{row._rev}</Rev>
-            </CaseConflictTitle>
+            <h4 className={caseConflictTitle}>
+              Aktuelle Version<span className={rev}>{row._rev}</span>
+            </h4>
           )}
           {showDeleted && (
             <>
@@ -272,7 +263,7 @@ export const ZaehlungForm = observer(
               rawRow={rawRow}
             />
           )}
-        </FieldsContainer>
+        </div>
       </ErrorBoundary>
     )
   },
