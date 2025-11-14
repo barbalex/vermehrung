@@ -14,7 +14,6 @@ import { HistoryButton } from '../../../../shared/HistoryButton.jsx'
 import { Menu } from '../../../../shared/Menu.jsx'
 import UpSvg from '../../../../../svg/to_up.svg?react'
 import KuDownSvg from '../../../../../svg/to_ku_down.svg?react'
-import { constants } from '../../../../../utils/constants.js'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -23,7 +22,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: ${constants.titleRowHeight}px;
+  height: 48px;
   justify-content: space-between;
 `
 const Title = styled.div`
