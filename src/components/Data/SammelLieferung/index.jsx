@@ -18,12 +18,10 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const SplitPaneContainer = styled.div`
   height: 100%;
   position: relative;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 
 export const SammelLieferung = observer(
@@ -70,7 +68,9 @@ export const SammelLieferung = observer(
 
     return (
       <ErrorBoundary>
-        <Container showfilter={showFilter}>
+        <Container
+          style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+        >
           <FormTitle
             showFilter={showFilter}
             row={row}
