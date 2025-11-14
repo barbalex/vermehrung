@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -16,21 +15,11 @@ import { LieferungNach as Nach } from './Nach/index.jsx'
 import { LieferungWann as Wann } from './Wann.jsx'
 import { LieferungWer as Wer } from './Wer.jsx'
 
-const FieldsContainer = styled.div`
-  padding: 10px;
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
+import {
+  container,
+  caseConflictTitle,
+  rev,
+} from '../../../Art/Form/index.module.css'
 
 export const LierferungForm = observer(
   ({
@@ -179,11 +168,11 @@ export const LierferungForm = observer(
 
     return (
       <ErrorBoundary>
-        <FieldsContainer>
+        <div className={container}>
           {(activeConflict || showHistory) && (
-            <CaseConflictTitle>
-              Aktuelle Version<Rev>{row._rev}</Rev>
-            </CaseConflictTitle>
+            <h4 className={caseConflictTitle}>
+              Aktuelle Version<span className={rev}>{row._rev}</span>
+            </h4>
           )}
           {showDeleted && (
             <>
@@ -263,7 +252,7 @@ export const LierferungForm = observer(
               setActiveConflict={setActiveConflict}
             />
           )}
-        </FieldsContainer>
+        </div>
       </ErrorBoundary>
     )
   },
