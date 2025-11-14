@@ -6,6 +6,8 @@ import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { lieferungLabelFromLieferung } from '../../../utils/lieferungLabelFromLieferung.js'
 import { constants } from '../../../utils/constants.js'
 
+import { container } from '../Arten/Row.module.css'
+
 const Row = styled.div`
   display: flex;
   flex-direction: column;
