@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
@@ -13,17 +12,7 @@ import { EventForm as Form } from './Form/index.jsx'
 import { EventHistory as History } from './History/index.jsx'
 import { useObservable } from '../../../utils/useObservable.js'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const SplitPaneContainer = styled.div`
-  height: 100%;
-  position: relative;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
+import { container, splitPaneContainer } from './index.module.css'
 
 export const Event = observer(
   ({
@@ -63,14 +52,18 @@ export const Event = observer(
 
     return (
       <ErrorBoundary>
-        <Container showfilter={showFilter}>
+        <div
+          className={container}
+          showfilter={showFilter}
+          style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+        >
           <FormTitle
             row={row}
             showFilter={showFilter}
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
-          <SplitPaneContainer>
+          <div className={splitPaneContainer}>
             <Allotment key={`${activeConflict}/${showHistory}`}>
               <Form
                 showFilter={showFilter}
@@ -98,8 +91,8 @@ export const Event = observer(
                 : null}
               </Allotment.Pane>
             </Allotment>
-          </SplitPaneContainer>
-        </Container>
+          </div>
+        </div>
       </ErrorBoundary>
     )
   },
