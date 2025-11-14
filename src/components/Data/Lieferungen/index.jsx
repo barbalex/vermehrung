@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
@@ -18,42 +17,13 @@ import { tableFilter } from '../../../utils/tableFilter.js'
 import { lieferungSort } from '../../../utils/lieferungSort.js'
 import { constants } from '../../../utils/constants.js'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 10px;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const FieldsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: auto;
-  > div {
-    scrollbar-width: thin;
-  }
-`
+import {
+  container,
+  titleContainer,
+  title,
+  titleSymbols,
+  fieldsContainer,
+} from '../Arten/index.module.css'
 
 export const Lieferungen = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
@@ -207,7 +177,10 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}>
+      <div
+        className={container}
+        style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+      >
         {showFilter ?
           <FilterTitle
             title="Lieferung"
@@ -215,9 +188,9 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <TitleContainer>
-            <Title>Lieferungen</Title>
-            <TitleSymbols>
+        : <div className={titleContainer}>
+            <div className={title}>Lieferungen</div>
+            <div className={titleSymbols}>
               <IconButton
                 title={upTitle}
                 onClick={onClickUp}
@@ -237,18 +210,18 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
                 filteredCount={filteredCount}
                 totalCount={totalCount}
               />
-            </TitleSymbols>
-          </TitleContainer>
+            </div>
+          </div>
         }
-        <FieldsContainer>
+        <div className={fieldsContainer}>
           <List
             rowComponent={Row}
             rowCount={lieferungs.length}
             rowHeight={constants.singleRowHeight}
             rowProps={{ rows: lieferungs }}
           />
-        </FieldsContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
