@@ -21,9 +21,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
-
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
   flex-shrink: 0;
@@ -123,7 +121,7 @@ export const Events = observer(({ filter: showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
+      <Container style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}>
         {showFilter ?
           <FilterTitle
             title="Event"
