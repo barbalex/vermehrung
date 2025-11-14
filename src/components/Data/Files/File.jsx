@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -12,56 +11,18 @@ import { isImageFile } from './isImageFile.js'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-`
-const Img = styled.img`
-  margin-right: 10px;
-  width: 80px;
-  height: 50px;
-  object-fit: contain;
-  margin-bottom: 1rem;
-`
-const ImgReplacement = styled.div`
-  min-width: 80px;
-  margin-right: 10px;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.38);
-  font-size: 1rem;
-  padding-top: 19px;
-`
-const DelIcon = styled(IconButton)`
-  margin-bottom: 20px !important;
-`
-const DownloadIcon = styled(IconButton)`
-  margin-bottom: 20px !important;
-`
-const Spacer = styled.div`
-  min-width: 12px;
-`
-const DateiTypField = styled.div`
-  min-width: 200px;
-  flex-grow: 0;
-`
-const DateiNameField = styled.div`
-  min-width: 215px;
-  flex-grow: 0;
-`
-const BeschreibungField = styled.div`
-  flex-grow: 1;
-`
-const MenuTitle = styled.h3`
-  padding-top: 8px;
-  padding-left: 15px;
-  padding-right: 16px;
-  padding-bottom: 0;
-  margin-bottom: 3px;
-  &:focus {
-    outline: none;
-  }
-`
+import {
+  container,
+  img,
+  imgReplacement,
+  delIcon,
+  downloadIcon,
+  spacer,
+  dateiTypField,
+  dateiNameField,
+  beschreibungField,
+  menuTitle,
+} from './File.module.css'
 
 export const File = observer(({ file, parent }) => {
   const store = useContext(MobxStoreContext)
@@ -91,13 +52,14 @@ export const File = observer(({ file, parent }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         {isImage ?
-          <Img
+          <img
             src={`https://ucarecdn.com/${file.file_id}/-/resize/80x/-/quality/lightest/${file.name}`}
+            className={img}
           />
-        : <ImgReplacement>...</ImgReplacement>}
-        <DateiTypField>
+        : <div className={imgReplacement}>...</div>}
+        <div className={dateiTypField}>
           <TextField
             key={`${file.id}fileMimeType`}
             name="fileMimeType"
@@ -108,9 +70,9 @@ export const File = observer(({ file, parent }) => {
             disabled
             schrinkLabel
           />
-        </DateiTypField>
-        <Spacer />
-        <DateiNameField>
+        </div>
+        <div className={spacer} />
+        <div className={dateiNameField}>
           <TextField
             key={`${file.id}name`}
             name="name"
@@ -121,9 +83,9 @@ export const File = observer(({ file, parent }) => {
             disabled
             schrinkLabel
           />
-        </DateiNameField>
-        <Spacer />
-        <BeschreibungField>
+        </div>
+        <div className={spacer} />
+        <div className={beschreibungField}>
           <TextField
             key={`${file.id}beschreibung`}
             name="beschreibung"
@@ -134,22 +96,24 @@ export const File = observer(({ file, parent }) => {
             multiLine
             schrinkLabel
           />
-        </BeschreibungField>
-        <DownloadIcon
+        </div>
+        <IconButton
           title="herunterladen"
           onClick={onClickDownload}
+          className={downloadIcon}
         >
           <FaDownload />
-        </DownloadIcon>
-        <DelIcon
+        </IconButton>
+        <IconButton
           title="löschen"
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
           onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+          className={delIcon}
         >
           <FaTimes />
-        </DelIcon>
+        </IconButton>
         <Menu
           id="delMenu"
           anchorEl={delMenuAnchorEl}
@@ -162,11 +126,11 @@ export const File = observer(({ file, parent }) => {
             },
           }}
         >
-          <MenuTitle>löschen?</MenuTitle>
+          <h3 className={menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
         </Menu>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
