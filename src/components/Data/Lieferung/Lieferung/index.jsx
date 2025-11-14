@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
@@ -11,15 +10,7 @@ import { LieferungTitleChooser as FormTitle } from './FormTitle/index.jsx'
 import { LierferungForm as Form } from './Form/index.jsx'
 import { LieferungHistory as History } from './History/index.jsx'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-const SplitPaneContainer = styled.div`
-  height: 100%;
-  position: relative;
-`
+import { container, splitPaneContainer } from '../../Art/index.module.css'
 
 export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
   const store = useContext(MobxStoreContext)
@@ -45,7 +36,10 @@ export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
 
   return (
     <ErrorBoundary>
-      <Container style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}>
+      <div
+        className={container}
+        style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+      >
         <FormTitle
           row={row}
           rawRow={rawRow}
@@ -53,7 +47,7 @@ export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
-        <SplitPaneContainer>
+        <div className={splitPaneContainer}>
           <Allotment key={`${activeConflict}/${showHistory}`}>
             <Form
               showFilter={showFilter}
@@ -84,8 +78,8 @@ export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
               : null}
             </Allotment.Pane>
           </Allotment>
-        </SplitPaneContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
