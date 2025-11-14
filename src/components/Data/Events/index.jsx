@@ -31,7 +31,6 @@ const TitleContainer = styled.div`
   }
   height: 48px;
   justify-content: space-between;
-  padding 0 10px;
 `
 const Title = styled.div`
   font-weight: bold;
