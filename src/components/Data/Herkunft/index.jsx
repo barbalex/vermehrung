@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
@@ -13,15 +12,7 @@ import { HerkunftForm as Form } from './Form/index.jsx'
 import { HerkunftHistory as History } from './History/index.jsx'
 import { useObservable } from '../../../utils/useObservable.js'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-const SplitPaneContainer = styled.div`
-  height: 100%;
-  position: relative;
-`
+import { container, splitPaneContainer } from '../Art/index.module.css'
 
 export const Herkunft = observer(
   ({
@@ -60,7 +51,8 @@ export const Herkunft = observer(
 
     return (
       <ErrorBoundary>
-        <Container
+        <div
+          className={container}
           style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
         >
           <FormTitle
@@ -70,7 +62,7 @@ export const Herkunft = observer(
             setShowHistory={setShowHistory}
             activeConflict={activeConflict}
           />
-          <SplitPaneContainer>
+          <div className={splitPaneContainer}>
             <Allotment key={`${activeConflict}/${showHistory}`}>
               <Form
                 showFilter={showFilter}
@@ -98,8 +90,8 @@ export const Herkunft = observer(
                 : null}
               </Allotment.Pane>
             </Allotment>
-          </SplitPaneContainer>
-        </Container>
+          </div>
+        </div>
       </ErrorBoundary>
     )
   },
