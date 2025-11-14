@@ -11,13 +11,12 @@ import { TeilzaehlungenRows } from './TeilzaehlungenRows.jsx'
 import { TeilzaehlungenSettings as Settings } from './Settings.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByTk.js'
-import { constants } from '../../../../../utils/constants.js'
 
 const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
-  height: ${constants.titleRowHeight}px;
+  height: 48px;
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
