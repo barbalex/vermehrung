@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
@@ -14,15 +13,7 @@ import { SammelLieferungForm as Form } from './Form/index.jsx'
 import { SammelLieferungHistory as History } from './History/index.jsx'
 import { useObservable } from '../../../utils/useObservable.js'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-const SplitPaneContainer = styled.div`
-  height: 100%;
-  position: relative;
-`
+import { container, splitPaneContainer } from '../Art/index.module.css'
 
 export const SammelLieferung = observer(
   ({
@@ -68,7 +59,8 @@ export const SammelLieferung = observer(
 
     return (
       <ErrorBoundary>
-        <Container
+        <div
+          className={container}
           style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
         >
           <FormTitle
@@ -82,7 +74,7 @@ export const SammelLieferung = observer(
           />
           {printPreview ?
             <Lieferschein row={row} />
-          : <SplitPaneContainer>
+          : <div className={splitPaneContainer}>
               <Allotment key={`${activeConflict}/${showHistory}`}>
                 <Form
                   showFilter={showFilter}
@@ -110,9 +102,9 @@ export const SammelLieferung = observer(
                   : null}
                 </Allotment.Pane>
               </Allotment>
-            </SplitPaneContainer>
+            </div>
           }
-        </Container>
+        </div>
       </ErrorBoundary>
     )
   },
