@@ -22,7 +22,7 @@ import {
   title,
   titleSymbols,
   fieldsContainer,
-} from './index.module.css'
+} from '../Arten/index.module.css'
 
 export const Events = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
