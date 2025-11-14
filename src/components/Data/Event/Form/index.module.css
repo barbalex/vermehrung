@@ -1,25 +1,7 @@
-.container {
-  padding: 10px;
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: thin;
-}
-
 .fieldRow {
   display: flex;
   justify-content: space-between;
   > div > button {
     margin-top: 8px;
   }
-}
-
-.caseConflictTitle {
-  margin-bottom: 10px;
-}
-
-.rev {
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
 }

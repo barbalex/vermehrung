@@ -23,7 +23,12 @@ import { teilkulturSort } from '../../../../utils/teilkulturSort.js'
 import { personSort } from '../../../../utils/personSort.js'
 import { constants } from '../../../../utils/constants.js'
 
-import { container, fieldRow, caseConflictTitle, rev } from './index.module.css'
+import { fieldRow } from './index.module.css'
+import {
+  container,
+  caseConflictTitle,
+  rev,
+} from '../../Art/Form/index.module.css'
 
 export const EventForm = observer(
   ({
