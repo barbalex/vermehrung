@@ -31,7 +31,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: ${constants.titleRowHeight}px;
+  height: 48px;
   justify-content: space-between;
   padding 0 10px;
 `
