@@ -12,7 +12,7 @@ import { EventForm as Form } from './Form/index.jsx'
 import { EventHistory as History } from './History/index.jsx'
 import { useObservable } from '../../../utils/useObservable.js'
 
-import { container, splitPaneContainer } from './index.module.css'
+import { container, splitPaneContainer } from '../Art/index.module.css'
 
 export const Event = observer(
   ({
