@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { uniq, uniqBy } from 'es-toolkit'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
@@ -30,17 +29,7 @@ import {
   caseConflictTitle,
   rev,
 } from '../../Art/Form/index.module.css'
-
-const FieldRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > div:not(:last-of-type) {
-    padding-right: 8px;
-  }
-  > div > button {
-    margin-top: 8px;
-  }
-`
+import { fieldRow } from './index.module.css'
 
 export const KulturForm = observer(
   ({
@@ -57,8 +46,8 @@ export const KulturForm = observer(
 
     // From all collected combinations of art and herkunft show only arten of those not present in this garten
     // => find all combinations of art and herkunft in sammlungen
-    // => substract the ones existing in this garden
-    // => substract the ones with two existing in this garden?
+    // => subtract the ones existing in this garden
+    // => subtract the ones with two existing in this garden?
     // => present arten of the rest
 
     const art_id = row?.art_id
@@ -504,7 +493,7 @@ export const KulturForm = observer(
               }
             </>
           )}
-          <FieldRow>
+          <div className={fieldRow}>
             <TextField
               key={`${row.id}von_anzahl_individuen`}
               name="von_anzahl_individuen"
@@ -524,7 +513,7 @@ export const KulturForm = observer(
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
-          </FieldRow>
+          </div>
           {showFilter ?
             <JesNo
               key={`${row.id}aktiv`}
