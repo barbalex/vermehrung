@@ -1,10 +1,8 @@
 import styled from '@emotion/styled'
 import MenuItem from '@mui/material/MenuItem'
 
-import { constants } from '../../utils/constants.js'
-
 const OuterContainer = styled.div`
-  min-width: ${constants.titleRowHeight}px;
+  min-width: 48px;
   display: flex;
   justify-content: center;
 `
@@ -13,7 +11,7 @@ const Container = styled.div`
   flex-direction: column;
   font-size: 0.7em;
   font-weight: 500;
-  min-height: ${constants.titleRowHeight}px;
+  min-height: 48px;
   justify-content: center;
   cursor: default;
   user-select: none;
