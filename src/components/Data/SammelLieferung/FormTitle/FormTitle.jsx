@@ -16,7 +16,6 @@ import { HistoryButton } from '../../../shared/HistoryButton.jsx'
 import { SammelLieferungNavButtons as NavButtons } from './NavButtons.jsx'
 import { SammelLieferungPrint as PrintButtons } from './PrintButtons.jsx'
 import { SammelLieferungAnleitung as Anleitung } from './Anleitung.jsx'
-import { constants } from '../../../../utils/constants.js'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -25,7 +24,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: ${constants.titleRowHeight}px;
+  height: 48px;
   justify-content: space-between;
 `
 const Title = styled.div`
