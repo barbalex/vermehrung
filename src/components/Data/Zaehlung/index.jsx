@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
@@ -13,15 +12,7 @@ import { ZaehlungForm as Form } from './Form/index.jsx'
 import { ZaehlungHistory as History } from './History/index.jsx'
 import { useObservable } from '../../../utils/useObservable.js'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-const SplitPaneContainer = styled.div`
-  height: 100%;
-  position: relative;
-`
+import { container, splitPaneContainer } from '../Art/index.module.css'
 
 export const Zaehlung = observer(
   ({
@@ -62,7 +53,8 @@ export const Zaehlung = observer(
     return (
       <ErrorBoundary>
         <>
-          <Container
+          <div
+            className={container}
             style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
           >
             <FormTitle
@@ -71,7 +63,7 @@ export const Zaehlung = observer(
               showHistory={showHistory}
               setShowHistory={setShowHistory}
             />
-            <SplitPaneContainer>
+            <div className={splitPaneContainer}>
               <Allotment key={`${activeConflict}/${showHistory}`}>
                 <Form
                   showFilter={showFilter}
@@ -99,8 +91,8 @@ export const Zaehlung = observer(
                   : null}
                 </Allotment.Pane>
               </Allotment>
-            </SplitPaneContainer>
-          </Container>
+            </div>
+          </div>
         </>
       </ErrorBoundary>
     )
