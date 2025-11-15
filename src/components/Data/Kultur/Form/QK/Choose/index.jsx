@@ -1,32 +1,20 @@
-import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
-
 import { ChooseKulturQkRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-const FieldsContainer = styled.div`
-  padding: 10px 0;
-`
-const Info = styled.div`
-  text-align: center;
-`
+import { container, fieldsContainer, info } from './index.module.css'
 
-export const ChooseKulturQk = observer(({ qks }) => (
+export const ChooseKulturQk = ({ qks }) => (
   <ErrorBoundary>
-    <Container>
-      <Info>Diese Wahl gilt für alle Kulturen</Info>
-      <FieldsContainer>
+    <div className={container}>
+      <div className={info}>Diese Wahl gilt für alle Kulturen</div>
+      <div className={fieldsContainer}>
         {qks.map((row) => (
           <Row
             key={row.id}
             qk={row}
           />
         ))}
-      </FieldsContainer>
-    </Container>
+      </div>
+    </div>
   </ErrorBoundary>
-))
+)
