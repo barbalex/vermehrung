@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import Slider from 'react-slick'
 import { useQuery } from 'urql'
 import gql from 'graphql-tag'
@@ -9,6 +8,8 @@ import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { HerkunftHistoryRow as Row } from './Row.jsx'
+
+import { container, errorContainer } from '../../Art/History/index.module.css'
 
 const herkunftRevQuery = gql`
   query herkunftRevForHistoryQuery($rev: [String!]) {
@@ -32,16 +33,6 @@ const herkunftRevQuery = gql`
       _deleted
     }
   }
-`
-
-const Container = styled.div`
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 0 25px;
-  height: 100%;
-`
-const ErrorContainer = styled.div`
-  padding: 25px;
 `
 
 const sliderSettings = {
@@ -70,11 +61,11 @@ export const HerkunftHistory = observer(
     }
 
     if (error) {
-      return <ErrorContainer>{error.message}</ErrorContainer>
+      return <div className={errorContainer}>{error.message}</div>
     }
 
     return (
-      <Container>
+      <div className={container}>
         <Slider {...sliderSettings}>
           {revRows.map((r) => (
             <Row
@@ -86,7 +77,7 @@ export const HerkunftHistory = observer(
             />
           ))}
         </Slider>
-      </Container>
+      </div>
     )
   },
 )
