@@ -4,24 +4,15 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-right: 16px;
-  user-select: none;
-`
-const Title = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 700;
-  user-select: none;
-`
+import {
+  titleRow,
+  title,
+} from '../../../Lieferung/Lieferung/FormTitle/Settings/Menu.module.css'
 
 export const SettingsSammelLieferungMenu = observer(
   ({ anchorEl, setAnchorEl }) => {
@@ -72,9 +63,9 @@ export const SettingsSammelLieferungMenu = observer(
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <TitleRow>
-          <Title>Optionen für Sammel-Lieferungen wählen:</Title>
-        </TitleRow>
+        <div className={titleRow}>
+          <div className={title}>Optionen für Sammel-Lieferungen wählen:</div>
+        </div>
         <MenuItem>
           <FormControlLabel
             value={sl_show_empty_when_next_to_li === true ? 'true' : 'false'}
