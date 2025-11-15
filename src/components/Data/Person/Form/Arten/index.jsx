@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -15,36 +14,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.js'
 import { avsSortByArt } from '../../../../../utils/avsSortByArt.js'
 
-const TitleRow = styled.section`
-  background-color: rgba(248, 243, 254, 1);
-  flex-shrink: 0;
-  display: flex !important;
-  height: 48px;
-  justify-content: space-between !important;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  cursor: pointer;
-  user-select: none;
-  position: sticky !important;
-  top: -10px;
-  z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const Avs = styled.div`
-  padding-bottom: 8px;
-`
-const StyledMotionDiv = styled(motion.div)`
-  box-sizing: border-box;
-`
+import { titleRow, title, avsClass, motionDiv } from './index.module.css'
 
 export const PersonArten = observer(({ person }) => {
   const store = useContext(MobxStoreContext)
@@ -124,11 +94,12 @@ export const PersonArten = observer(({ person }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow
+      <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
+        className={titleRow}
       >
-        <Title>{`Mitarbeitend bei ${avs.length} Arten`}</Title>
+        <div className={title}>{`Mitarbeitend bei ${avs.length} Arten`}</div>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -141,21 +112,22 @@ export const PersonArten = observer(({ person }) => {
             : <FaChevronDown />}
           </IconButton>
         </div>
-      </TitleRow>
-      <StyledMotionDiv
+      </section>
+      <motion.div
         animate={anim}
         transition={{ type: 'just', duration: 0.2 }}
+        className={motionDiv}
       >
         {open && (
           <>
-            <Avs>
+            <div className={avsClass}>
               {avs.map((av, index) => (
                 <Art
                   key={`${av.person_id}/${av.art_id}/${index}`}
                   av={av}
                 />
               ))}
-            </Avs>
+            </div>
             {!!artWerte.length && (
               <Select
                 name="art_id"
@@ -170,7 +142,7 @@ export const PersonArten = observer(({ person }) => {
             )}
           </>
         )}
-      </StyledMotionDiv>
+      </motion.div>
     </ErrorBoundary>
   )
 })
