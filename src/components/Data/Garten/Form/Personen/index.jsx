@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -15,36 +14,7 @@ import { gvsSortByPerson } from '../../../../../utils/gvsSortByPerson.js'
 import { personSort } from '../../../../../utils/personSort.js'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
 
-const TitleRow = styled.section`
-  background-color: rgba(248, 243, 254, 1);
-  flex-shrink: 0;
-  display: flex !important;
-  height: 48px;
-  justify-content: space-between !important;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  cursor: pointer;
-  user-select: none;
-  position: sticky !important;
-  top: -10px;
-  z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const Aven = styled.div`
-  padding-bottom: 8px;
-`
-const StyledMotionDiv = styled(motion.div)`
-  box-sizing: border-box;
-`
+import { titleRow, title, aven, motionDiv } from './index.module.css'
 
 export const GartenPersonen = observer(({ garten }) => {
   const store = useContext(MobxStoreContext)
@@ -133,11 +103,14 @@ export const GartenPersonen = observer(({ garten }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow
+      <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
+        className={titleRow}
       >
-        <Title>{`Mitarbeitende Personen (${gvsSorted.length})`}</Title>
+        <div
+          className={title}
+        >{`Mitarbeitende Personen (${gvsSorted.length})`}</div>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -150,21 +123,22 @@ export const GartenPersonen = observer(({ garten }) => {
             : <FaChevronDown />}
           </IconButton>
         </div>
-      </TitleRow>
-      <StyledMotionDiv
+      </section>
+      <motion.div
         animate={anim}
         transition={{ type: 'just', duration: 0.2 }}
+        className={motionDiv}
       >
         {open && (
           <>
-            <Aven>
+            <div className={aven}>
               {gvsSorted.map((gv, index) => (
                 <Person
                   key={`${gv.garten_id}/${gv.person_id}/${index}`}
                   gv={gv}
                 />
               ))}
-            </Aven>
+            </div>
             {!!personWerte.length && (
               <Select
                 name="person_id"
@@ -179,7 +153,7 @@ export const GartenPersonen = observer(({ garten }) => {
             )}
           </>
         )}
-      </StyledMotionDiv>
+      </motion.div>
     </ErrorBoundary>
   )
 })
