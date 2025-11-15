@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { Q } from '@nozbe/watermelondb'
 
@@ -13,27 +12,11 @@ import { HistoryButton } from '../../../shared/HistoryButton.jsx'
 import { PersonKonto as KontoMenu } from './KontoMenu/index.jsx'
 import { PersonFormTitleNavButtons as NavButtons } from './NavButtons.jsx'
 
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 10px;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import {
+  container,
+  title,
+  symbols,
+} from '../../Art/FormTitle/FormTitle.module.css'
 
 export const PersonFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
@@ -58,9 +41,12 @@ export const PersonFormTitle = observer(
     if (!userRole) return null
 
     return (
-      <TitleContainer ref={ref}>
-        <Title>Person</Title>
-        <TitleSymbols>
+      <div
+        className={container}
+        ref={ref}
+      >
+        <div className={title}>Person</div>
+        <div className={symbols}>
           <NavButtons />
           {userRole?.name === 'manager' && (
             <>
@@ -101,8 +87,8 @@ export const PersonFormTitle = observer(
               />
             </>
           }
-        </TitleSymbols>
-      </TitleContainer>
+        </div>
+      </div>
     )
   },
 )
