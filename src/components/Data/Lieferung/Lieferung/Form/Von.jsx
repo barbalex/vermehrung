@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
@@ -13,37 +12,12 @@ import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFrom
 import { sammlungsSortedFromSammlungs } from '../../../../../utils/sammlungsSortedFromSammlungs.js'
 import { herkunftLabelFromHerkunft } from '../../../../../utils/herkunftLabelFromHerkunft.js'
 
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleRow = styled.div`
-  background-color: ${(props) =>
-    props['data-filter'] ? '#ffe0b2' : 'rgba(248, 243, 254, 1)'};
-  flex-shrink: 0;
-  display: flex;
-  height: 40px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  position: sticky;
-  top: 0;
-  user-select: none;
-  z-index: 1;
-`
-const Herkunft = styled.div`
-  height: 54px;
-  user-select: none;
-  ${(props) => !props['data-active'] && 'color: #c1c1c1;'}
-`
-const HerkunftLabel = styled.div`
-  color: rgb(0, 0, 0, 0.54);
-  font-size: 12px;
-  padding-bottom: 2px;
-`
+import {
+  title,
+  titleRow,
+  herkunftClass,
+  herkunftLabelClass,
+} from './Von.module.css'
 
 export const LieferungVon = observer(
   ({ showFilter, row, saveToDb, ifNeeded, herkunft, herkunftQuelle }) => {
@@ -184,9 +158,14 @@ export const LieferungVon = observer(
 
     return (
       <>
-        <TitleRow data-filter={showFilter}>
-          <Title>von</Title>
-        </TitleRow>
+        <div
+          className={titleRow}
+          style={{
+            backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
+          }}
+        >
+          <div className={title}>von</div>
+        </div>
         {ifNeeded('von_sammlung_id') && (
           <Select
             key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
@@ -215,12 +194,15 @@ export const LieferungVon = observer(
             error={errors?.lieferung?.von_kultur_id}
           />
         )}
-        <Herkunft data-active={!!herkunft}>
-          <HerkunftLabel>
+        <div
+          className={herkunftClass}
+          style={{ ...(herkunft ? { color: '#c1c1c1' } : {}) }}
+        >
+          <div className={herkunftLabelClass}>
             {herkunft ? `Herkunft (aus ${herkunftQuelle})` : 'Herkunft'}
-          </HerkunftLabel>
+          </div>
           {herkunftLabel}
-        </Herkunft>
+        </div>
       </>
     )
   },
