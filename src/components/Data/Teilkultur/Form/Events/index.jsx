@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
@@ -8,33 +7,7 @@ import { eventSort } from '../../../../../utils/eventSort.js'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { TeilkulturEventRow as Row } from './Row.jsx'
 
-const TitleRow = styled.div`
-  background-color: rgba(248, 243, 254, 1);
-  flex-shrink: 0;
-  display: flex;
-  height: 48px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  padding: 0 10px;
-  user-select: none;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  user-select: none;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const Rows = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: auto;
-  scrollbar-width: thin;
-`
+import { titleRow, title, rows } from './index.module.css'
 
 export const TeilkulturEvents = observer(({ teilkultur }) => {
   const store = useContext(MobxStoreContext)
@@ -63,17 +36,17 @@ export const TeilkulturEvents = observer(({ teilkultur }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow>
-        <Title>Events</Title>
-      </TitleRow>
-      <Rows>
+      <div className={titleRow}>
+        <div className={title}>Events</div>
+      </div>
+      <div className={rows}>
         {events.map((ev, i) => (
           <Row
             key={ev.id}
             event={ev}
           />
         ))}
-      </Rows>
+      </div>
     </ErrorBoundary>
   )
 })
