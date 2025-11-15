@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { KulturSettings as Settings } from './Settings/index.jsx'
@@ -12,36 +11,23 @@ import { KulturDownload as Download } from './Download.jsx'
 import { KulturAnleitung as Anleitung } from './Anleitung.jsx'
 import { KulturNavButtons as NavButtons } from './NavButtons.jsx'
 
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  padding: 0 10px;
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import {
+  container,
+  title,
+  symbols,
+} from '../../Art/FormTitle/FormTitle.module.css'
 
 export const KulturFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
     const { width, ref } = useResizeDetector()
 
     return (
-      <TitleContainer ref={ref}>
-        <Title>Kultur</Title>
-        <TitleSymbols>
+      <div
+        className={container}
+        ref={ref}
+      >
+        <div className={title}>Kultur</div>
+        <div className={symbols}>
           <NavButtons row={row} />
           {width < 520 ?
             <Menu white={false}>
@@ -188,8 +174,8 @@ export const KulturFormTitle = observer(
               />
             </>
           }
-        </TitleSymbols>
-      </TitleContainer>
+        </div>
+      </div>
     )
   },
 )
