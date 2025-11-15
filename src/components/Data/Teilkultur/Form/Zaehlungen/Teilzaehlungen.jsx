@@ -1,50 +1,15 @@
 import { useState, useEffect } from 'react'
-import styled from '@emotion/styled'
 import format from 'date-fns/format'
 
 import { exists } from '../../../../../utils/exists.js'
-
-const Row = styled.div`
-  border-bottom: thin solid rgba(74, 20, 140, 0.1);
-  border-collapse: collapse;
-  padding: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  &:hover {
-    background-color: rgba(74, 20, 140, 0.03);
-  }
-`
-const Datum = styled.div`
-  flex-basis: 85px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  margin-right: 10px;
-`
-const Pflanzen = styled.div`
-  flex-basis: 110px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  margin-right: 10px;
-`
-const Auspflanzbereit = styled.div`
-  flex-basis: 170px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  margin-right: 10px;
-`
-const Prognose = styled.div`
-  flex-basis: 72px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  margin-right: 10px;
-`
-const Other = styled.div`
-  flex-basis: 210px;
-  flex-shrink: 5;
-  flex-grow: 1;
-  margin-right: 10px;
-`
+import {
+  row,
+  datumClass,
+  pflanzen,
+  auspflanzbereit,
+  prognose,
+  other,
+} from './Teilzaehlungen.module.css'
 
 export const TeilkulturTeilzaehlung = ({ tz }) => {
   const [zaehlung, setZaehlung] = useState([])
@@ -64,31 +29,31 @@ export const TeilkulturTeilzaehlung = ({ tz }) => {
     : 'Kein Datum'
 
   return (
-    <Row>
-      <Datum>{datum}</Datum>
-      <Prognose>{zaehlung.prognose ? 'Bedarf' : ' '}</Prognose>
-      <Pflanzen>
+    <div className={row}>
+      <div className={datumClass}>{datum}</div>
+      <div className={prognose}>{zaehlung.prognose ? 'Bedarf' : ' '}</div>
+      <div className={pflanzen}>
         {exists(tz.anzahl_pflanzen) ? `${tz.anzahl_pflanzen} Pflanzen` : ''}
-      </Pflanzen>
-      <Auspflanzbereit>
+      </div>
+      <div className={auspflanzbereit}>
         {exists(tz.anzahl_auspflanzbereit) ?
           `${tz.anzahl_auspflanzbereit} auspflanzbereit`
         : ''}
-      </Auspflanzbereit>
-      <Auspflanzbereit>
+      </div>
+      <div className={auspflanzbereit}>
         {exists(tz.anzahl_mutterpflanzen) ?
           `${tz.anzahl_mutterpflanzen} Mutterpflanzen`
         : ''}
-      </Auspflanzbereit>
-      <Auspflanzbereit>
+      </div>
+      <div className={auspflanzbereit}>
         {exists(tz.andere_menge) ? tz.andere_menge : ''}
-      </Auspflanzbereit>
-      <Other>
+      </div>
+      <div className={other}>
         {exists(tz.auspflanzebereit_beschreibung) ?
           tz.auspflanzebereit_beschreibung
         : ''}
-      </Other>
-      <Other>{tz.bemerkungen ? tz.bemerkungen : ''}</Other>
-    </Row>
+      </div>
+      <div className={other}>{tz.bemerkungen ? tz.bemerkungen : ''}</div>
+    </div>
   )
 }

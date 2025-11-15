@@ -1,0 +1,46 @@
+.row {
+  border-bottom: thin solid rgba(74, 20, 140, 0.1);
+  border-collapse: collapse;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  &:hover {
+    background-color: rgba(74, 20, 140, 0.03);
+  }
+}
+
+.datumClass {
+  flex-basis: 85px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin-right: 10px;
+}
+
+.pflanzen {
+  flex-basis: 110px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin-right: 10px;
+}
+
+.auspflanzbereit {
+  flex-basis: 170px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin-right: 10px;
+}
+
+.prognose {
+  flex-basis: 72px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin-right: 10px;
+}
+
+.other {
+  flex-basis: 210px;
+  flex-shrink: 5;
+  flex-grow: 1;
+  margin-right: 10px;
+}
