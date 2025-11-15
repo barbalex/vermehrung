@@ -1,0 +1,24 @@
+.titleRow {
+  background-color: rgba(248, 243, 254, 1);
+  flex-shrink: 0;
+  display: flex;
+  height: 48px;
+  justify-content: space-between;
+  margin-left: -10px;
+  margin-right: -10px;
+  padding: 0 10px;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.title {
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.listContainer {
+  margin-top: -10px;
+}
