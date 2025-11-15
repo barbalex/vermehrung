@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
@@ -8,27 +7,7 @@ import { teilzaehlungsSortByZaehlungTk } from '../../../../../utils/teilzaehlung
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { TeilkulturTeilzaehlung as Teilzaehlungen } from './Teilzaehlungen.jsx'
 
-const TitleRow = styled.div`
-  background-color: rgba(248, 243, 254, 1);
-  flex-shrink: 0;
-  display: flex;
-  height: 48px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  ${(props) => !props['data-has-data'] && 'margin-bottom: 10px;'}
-  padding: 0 10px;
-  user-select: none;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const Rows = styled.div``
+import { titleRow, title, listContainer } from './index.module.css'
 
 export const TeilkulturZaehlungen = observer(({ teilkultur }) => {
   const store = useContext(MobxStoreContext)
@@ -56,10 +35,13 @@ export const TeilkulturZaehlungen = observer(({ teilkultur }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow data-has-data={!!teilzaehlungs.length}>
-        <Title>Zählungen</Title>
-      </TitleRow>
-      <Rows>
+      <div
+        className={titleRow}
+        style={{ ...(teilzaehlungs.length ? { marginBottom: 10 } : {}) }}
+      >
+        <div className={title}>Zählungen</div>
+      </div>
+      <div className={listContainer}>
         {teilzaehlungs.map((tz, i) => (
           <Teilzaehlungen
             key={tz.id}
@@ -67,7 +49,7 @@ export const TeilkulturZaehlungen = observer(({ teilkultur }) => {
             last={i === teilzaehlungs.length - 1}
           />
         ))}
-      </Rows>
+      </div>
     </ErrorBoundary>
   )
 })
