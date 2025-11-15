@@ -1,14 +1,13 @@
-import { Suspense } from 'react'
 import { Link } from 'react-router'
 
-import { DokuDate } from '../../index.jsx'
+import { dokuDate } from '../../index.module.css'
 import teilkulturOption from './teilkultur_option.gif'
 import teilkulturNew from './teilkultur_new.gif'
 
 export const Teilkulturen = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Teil-Kulturen</h1>
-    <DokuDate>20.09.2019</DokuDate>
+    <p className={dokuDate}>20.09.2019</p>
     <p>
       Grössere Gärten oder gärtnerische Betriebe organisieren ihre Kulturen oft
       in Untereinheiten, wie zum Beispiel: &quot;Beete&quot;,
@@ -126,5 +125,5 @@ export const Teilkulturen = () => (
       ...wozu die Felder &quot;ort1&quot;, &quot;ort2&quot; und &quot;ort3&quot;
       dienen.
     </p>
-  </Suspense>
+  </>
 )
