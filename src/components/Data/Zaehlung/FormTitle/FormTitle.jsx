@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { useResizeDetector } from 'react-resize-detector'
 
@@ -14,27 +13,11 @@ import { Menu } from '../../../shared/Menu.jsx'
 import { ZaehlungAnleitung as Anleitung } from './Anleitung.jsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 10px;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import {
+  container,
+  title,
+  symbols,
+} from '../../Art/FormTitle/FormTitle.module.css'
 
 export const ZaehlungFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
@@ -49,9 +32,12 @@ export const ZaehlungFormTitle = observer(
     }
 
     return (
-      <TitleContainer ref={ref}>
-        <Title>Zählung</Title>
-        <TitleSymbols>
+      <div
+        className={container}
+        ref={ref}
+      >
+        <div className={title}>Zählung</div>
+        <div className={symbols}>
           <IconButton
             title="Zur Liste"
             onClick={onClickUp}
@@ -98,8 +84,8 @@ export const ZaehlungFormTitle = observer(
               />
             </>
           }
-        </TitleSymbols>
-      </TitleContainer>
+        </div>
+      </div>
     )
   },
 )
