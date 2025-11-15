@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.teilkulturClass {
+  flex-basis: 230px;
+  flex-shrink: 1;
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.anzahl {
+  flex-basis: 170px;
+  flex-shrink: 0;
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.other {
+  flex-basis: 250px;
+  flex-shrink: 5;
+  flex-grow: 2;
+  margin-right: 10px;
+}
+
+.auspflanzbereit {
+  flex-basis: 350px;
+  flex-shrink: 2;
+  flex-grow: 30;
+  margin-right: 10px;
+}
+
+.last {
+  flex-basis: 350px;
+  flex-shrink: 2;
+  flex-grow: 30;
+}
+
+.caseConflictTitle {
+  margin-bottom: 10px;
+  flex-grow: 1;
+}
+
+.rev {
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
+}
+
+.conflictListContainer {
+  align-self: center;
+}
+
+.deletedContainer {
+  padding-right: 5px;
+  position: relative;
+  margin-top: -8px;
+}

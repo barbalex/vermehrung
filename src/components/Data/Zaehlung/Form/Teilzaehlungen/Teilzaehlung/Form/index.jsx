@@ -21,40 +21,19 @@ import { PrognoseMenu } from './PrognoseMenu.jsx'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { exists } from '../../../../../../../utils/exists.js'
 
-const FieldContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-`
-const Teilkultur = styled.div`
-  flex-basis: 230px;
-  flex-shrink: 1;
-  flex-grow: 1;
-  margin-right: 10px;
-`
-const Anzahl = styled.div`
-  flex-basis: 170px;
-  flex-shrink: 0;
-  flex-grow: 1;
-  margin-right: 10px;
-`
-const Other = styled.div`
-  flex-basis: 250px;
-  flex-shrink: 5;
-  flex-grow: 2;
-  margin-right: 10px;
-`
-const Auspflanzbereit = styled.div`
-  flex-basis: 350px;
-  flex-shrink: 2;
-  flex-grow: 30;
-  margin-right: 10px;
-`
-const Last = styled.div`
-  flex-basis: 350px;
-  flex-shrink: 2;
-  flex-grow: 30;
-`
+import {
+  container,
+  teilkulturClass,
+  anzahl,
+  other,
+  auspflanzbereit,
+  last,
+  caseConflictTitle,
+  rev,
+  conflictListContainer,
+  deletedContainer,
+} from './index.module.css'
+
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
   flex-grow: 1;
@@ -224,7 +203,7 @@ export const TeilzaehlungForm = observer(
 
     return (
       <ErrorBoundary>
-        <FieldContainer>
+        <div className={container}>
           {(activeConflict || showHistory) && (
             <CaseConflictTitle>
               Aktuelle Version<Rev>{row._rev}</Rev>
@@ -243,7 +222,7 @@ export const TeilzaehlungForm = observer(
             </DeletedContainer>
           )}
           {tk && tz_teilkultur_id && (
-            <Teilkultur>
+            <div className={teilkulturClass}>
               <SelectCreatable
                 key={`${row.id}${row.teilkultur_id}teilkultur_id`}
                 row={row}
@@ -253,9 +232,9 @@ export const TeilzaehlungForm = observer(
                 error={errors?.teilzaehlung?.teilkultur_id}
                 onCreateNew={onCreateNewTeilkultur}
               />
-            </Teilkultur>
+            </div>
           )}
-          <Anzahl>
+          <div className={anzahl}>
             <TextField
               key={`${row.id}anzahl_pflanzen`}
               labelWeight={700}
@@ -266,8 +245,8 @@ export const TeilzaehlungForm = observer(
               error={errors?.teilzaehlung?.anzahl_pflanzen}
               type="number"
             />
-          </Anzahl>
-          <Anzahl>
+          </div>
+          <div className={anzahl}>
             <TextField
               key={`${row.id}anzahl_auspflanzbereit`}
               name="anzahl_auspflanzbereit"
@@ -277,8 +256,8 @@ export const TeilzaehlungForm = observer(
               error={errors?.teilzaehlung?.anzahl_auspflanzbereit}
               type="number"
             />
-          </Anzahl>
-          <Anzahl>
+          </div>
+          <div className={anzahl}>
             <TextField
               key={`${row.id}anzahl_mutterpflanzen`}
               name="anzahl_mutterpflanzen"
@@ -288,8 +267,8 @@ export const TeilzaehlungForm = observer(
               error={errors?.teilzaehlung?.anzahl_mutterpflanzen}
               type="number"
             />
-          </Anzahl>
-          <Anzahl>
+          </div>
+          <div className={anzahl}>
             <TextFieldNonUpdatable
               key={`${row.id}anzahl_jungpflanzen`}
               label="Anzahl Jungpflanzen"
@@ -298,9 +277,9 @@ export const TeilzaehlungForm = observer(
               type="number"
               message="Wird berechnet aus: Anzahl Pflanzen - auspflanzbereit - Mutterpflanzen"
             />
-          </Anzahl>
+          </div>
           {tz_andere_menge && (
-            <Other>
+            <div className={other}>
               <TextField
                 key={`${row.id}andere_menge`}
                 name="andere_menge"
@@ -311,10 +290,10 @@ export const TeilzaehlungForm = observer(
                 error={errors?.teilzaehlung?.andere_menge}
                 type="text"
               />
-            </Other>
+            </div>
           )}
           {tz_auspflanzbereit_beschreibung && (
-            <Auspflanzbereit>
+            <div className={auspflanzbereit}>
               <TextField
                 key={`${row.id}auspflanzbereit_beschreibung`}
                 name="auspflanzbereit_beschreibung"
@@ -325,10 +304,10 @@ export const TeilzaehlungForm = observer(
                 error={errors?.teilzaehlung?.auspflanzbereit_beschreibung}
                 type="text"
               />
-            </Auspflanzbereit>
+            </div>
           )}
           {tz_bemerkungen && (
-            <Last>
+            <div className={last}>
               <TextField
                 key={`${row.id}bemerkungen`}
                 name="bemerkungen"
@@ -339,7 +318,7 @@ export const TeilzaehlungForm = observer(
                 error={errors?.teilzaehlung?.bemerkungen}
                 multiLine
               />
-            </Last>
+            </div>
           )}
           <div>
             <HistoryButton
@@ -385,7 +364,7 @@ export const TeilzaehlungForm = observer(
               />
             </ConflictListContainer>
           )}
-        </FieldContainer>
+        </div>
       </ErrorBoundary>
     )
   },
