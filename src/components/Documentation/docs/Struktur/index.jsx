@@ -1,12 +1,10 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../../index.jsx'
+import { dokuDate } from '../../index.module.css'
 import structure from './structure.png'
 
 export const Struktur = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Daten-Struktur</h1>
-    <DokuDate>20.01.2020</DokuDate>
+    <p className={dokuDate}>20.01.2020</p>
     <p>
       <img
         src={structure}
@@ -26,5 +24,5 @@ export const Struktur = () => (
       </a>
       .
     </p>
-  </Suspense>
+  </>
 )
