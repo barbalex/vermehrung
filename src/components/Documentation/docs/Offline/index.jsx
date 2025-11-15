@@ -1,7 +1,6 @@
-import { Suspense } from 'react'
 import { Link } from 'react-router'
 
-import { DokuDate } from '../../index.jsx'
+import { dokuDate } from '../../index.module.css'
 import one from './001.png'
 import two from './002.png'
 import three from './003.png'
@@ -11,9 +10,9 @@ import six from './006.png'
 import seven from './007.png'
 
 export const Offline = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Offline arbeiten</h1>
-    <DokuDate>29.01.2021</DokuDate>
+    <p className={dokuDate}>29.01.2021</p>
     <h3>Wieso?</h3>
     <p>
       Nicht jeder Garten verfügt über WLAN. Nicht jedes Eingabegerät verfügt
@@ -165,5 +164,5 @@ export const Offline = () => (
       Es steckt mehr hinter der offline-Fähigkeit von vermehrung.ch. Neugierige{' '}
       <Link to="/Dokumentation/offline-wie">lesen hier weiter</Link>.
     </p>
-  </Suspense>
+  </>
 )
