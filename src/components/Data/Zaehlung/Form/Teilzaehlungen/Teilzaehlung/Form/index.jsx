@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import { Q } from '@nozbe/watermelondb'
@@ -33,26 +32,6 @@ import {
   conflictListContainer,
   deletedContainer,
 } from './index.module.css'
-
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-  flex-grow: 1;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
-const ConflictListContainer = styled.div`
-  align-self: center;
-`
-const DeletedContainer = styled.div`
-  padding-right: 5px;
-  position: relative;
-  margin-top: -8px;
-}
-`
 
 export const TeilzaehlungForm = observer(
   ({
@@ -205,12 +184,12 @@ export const TeilzaehlungForm = observer(
       <ErrorBoundary>
         <div className={container}>
           {(activeConflict || showHistory) && (
-            <CaseConflictTitle>
-              Aktuelle Version<Rev>{row._rev}</Rev>
-            </CaseConflictTitle>
+            <h4 className={caseConflictTitle}>
+              Aktuelle Version<span className={rev}>{row._rev}</span>
+            </h4>
           )}
           {showDeleted && (
-            <DeletedContainer>
+            <div className={deletedContainer}>
               <Checkbox2States
                 key={`${row.id}_deleted`}
                 label="gelöscht"
@@ -219,7 +198,7 @@ export const TeilzaehlungForm = observer(
                 saveToDb={saveToDb}
                 error={errors?.teilzaehlung?._deleted}
               />
-            </DeletedContainer>
+            </div>
           )}
           {tk && tz_teilkultur_id && (
             <div className={teilkulturClass}>
@@ -356,13 +335,13 @@ export const TeilzaehlungForm = observer(
             )}
           </div>
           {online && row?._conflicts?.map && (
-            <ConflictListContainer>
+            <div className={conflictListContainer}>
               <ConflictList
                 conflicts={row._conflicts}
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
               />
-            </ConflictListContainer>
+            </div>
           )}
         </div>
       </ErrorBoundary>
