@@ -1,0 +1,21 @@
+.popup {
+  background-color: white;
+  border: 1px solid rgba(74, 20, 140, 0.9);
+  opacity: 0.8;
+  padding: 8px;
+}
+
+.pRow {
+  font-size: 0.8em;
+  font-weight: 400;
+}
+
+.pTitle {
+  font-size: 0.8em;
+  font-weight: 700;
+}
+
+.ereignisClass {
+  font-weight: 700;
+  padding-left: 5px;
+}
