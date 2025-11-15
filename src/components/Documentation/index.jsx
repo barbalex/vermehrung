@@ -11,52 +11,7 @@ import { constants } from '../../utils/constants.js'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { DocumentationFormTitle as FormTitle } from './FormTitle/index.jsx'
 
-const Container = styled.div`
-  height: calc(100dvh - ${constants.appBarHeight}px);
-`
-const SplitPaneContainer = styled.div`
-  height: calc(100dvh - ${constants.appBarHeight}px);
-  position: relative;
-`
-
-const articles = [
-  {
-    title: 'Ziele',
-    slug: 'ziele',
-    children: [
-      { title: 'Ziel 1: Herkünfte', slug: 'ziele/herkuenfte', level: 2 },
-    ],
-  },
-  { title: 'Technische Voraussetzungen', slug: 'technische-voraussetzungen' },
-  { title: 'Zeit-Achse für Arten', slug: 'zeitachse-art' },
-  { title: 'Zeit-Achse für Kulturen', slug: 'zeitachse-kultur' },
-  { title: 'Herkünfte', slug: 'herkuenfte' },
-  { title: 'Sammlungen', slug: 'sammlungen' },
-  { title: 'Kulturen', slug: 'kulturen' },
-  { title: 'Zählungen', slug: 'zaehlungen' },
-  { title: 'Teil-Kulturen', slug: 'teilkulturen' },
-  { title: 'Lieferungen', slug: 'lieferungen' },
-  { title: 'Sammel-Lieferungen', slug: 'sammel-lieferungen' },
-  { title: 'Events', slug: 'events' },
-  { title: 'Felder ein- und ausblenden', slug: 'felder-blenden' },
-  { title: 'Ordner ein- und ausblenden', slug: 'ordner-blenden' },
-  { title: 'Planen', slug: 'planen' },
-  { title: 'Genetische Vielfalt', slug: 'genetische-vielfalt' },
-  { title: 'Qualitäts-Kontrollen', slug: 'qualitaets-kontrollen' },
-  { title: 'vermehrung erinnert sich', slug: 'gedaechtnis' },
-  { title: 'Open Source', slug: 'open-source' },
-  { title: 'Fehler, Ideen, Vorschläge melden', slug: 'fehler-ideen' },
-  { title: 'Schnittstellen', slug: 'schnittstellen' },
-  { title: 'Progressive Web App', slug: 'pwa' },
-  { title: 'Offline arbeiten', slug: 'offline' },
-  { title: 'Offline: Wie es funktioniert', slug: 'offline-wie' },
-  { title: 'Daten-Historie', slug: 'historisierung' },
-  { title: 'Verwendete Technologien', slug: 'technologien' },
-  { title: 'Daten-Struktur', slug: 'struktur' },
-  { title: 'Roadmap', slug: 'roadmap' },
-  { title: 'Konten und Benutzerrechte', slug: 'konten' },
-  { title: 'Datenschutz', slug: 'datenschutz' },
-]
+import { container, splitPaneContainer } from './index.module.css'
 
 export const DokuDate = styled.p`
   margin-bottom: 15px !important;
@@ -118,6 +73,45 @@ const Doku = styled.div`
   }
 `
 
+const articles = [
+  {
+    title: 'Ziele',
+    slug: 'ziele',
+    children: [
+      { title: 'Ziel 1: Herkünfte', slug: 'ziele/herkuenfte', level: 2 },
+    ],
+  },
+  { title: 'Technische Voraussetzungen', slug: 'technische-voraussetzungen' },
+  { title: 'Zeit-Achse für Arten', slug: 'zeitachse-art' },
+  { title: 'Zeit-Achse für Kulturen', slug: 'zeitachse-kultur' },
+  { title: 'Herkünfte', slug: 'herkuenfte' },
+  { title: 'Sammlungen', slug: 'sammlungen' },
+  { title: 'Kulturen', slug: 'kulturen' },
+  { title: 'Zählungen', slug: 'zaehlungen' },
+  { title: 'Teil-Kulturen', slug: 'teilkulturen' },
+  { title: 'Lieferungen', slug: 'lieferungen' },
+  { title: 'Sammel-Lieferungen', slug: 'sammel-lieferungen' },
+  { title: 'Events', slug: 'events' },
+  { title: 'Felder ein- und ausblenden', slug: 'felder-blenden' },
+  { title: 'Ordner ein- und ausblenden', slug: 'ordner-blenden' },
+  { title: 'Planen', slug: 'planen' },
+  { title: 'Genetische Vielfalt', slug: 'genetische-vielfalt' },
+  { title: 'Qualitäts-Kontrollen', slug: 'qualitaets-kontrollen' },
+  { title: 'vermehrung erinnert sich', slug: 'gedaechtnis' },
+  { title: 'Open Source', slug: 'open-source' },
+  { title: 'Fehler, Ideen, Vorschläge melden', slug: 'fehler-ideen' },
+  { title: 'Schnittstellen', slug: 'schnittstellen' },
+  { title: 'Progressive Web App', slug: 'pwa' },
+  { title: 'Offline arbeiten', slug: 'offline' },
+  { title: 'Offline: Wie es funktioniert', slug: 'offline-wie' },
+  { title: 'Daten-Historie', slug: 'historisierung' },
+  { title: 'Verwendete Technologien', slug: 'technologien' },
+  { title: 'Daten-Struktur', slug: 'struktur' },
+  { title: 'Roadmap', slug: 'roadmap' },
+  { title: 'Konten und Benutzerrechte', slug: 'konten' },
+  { title: 'Datenschutz', slug: 'datenschutz' },
+]
+
 export const Documentation = observer(() => {
   const { pathname } = useLocation()
   const store = useContext(MobxStoreContext)
@@ -140,19 +134,19 @@ export const Documentation = observer(() => {
       <div ref={ref}>
         {width < constants?.tree?.minimalWindowWidth ?
           path.length === 1 ?
-            <Container>
+            <div className={container}>
               <ArticleList articles={articles} />
-            </Container>
-          : <Container>
+            </div>
+          : <div className={container}>
               <Doku>
                 <FormTitle />
                 <DokuInnerContainer>
                   <Outlet />
                 </DokuInnerContainer>
               </Doku>
-            </Container>
+            </div>
 
-        : <SplitPaneContainer>
+        : <div className={splitPaneContainer}>
             <Allotment>
               <Allotment.Pane preferredSize="22%">
                 <ArticleList articles={articles} />
@@ -164,7 +158,7 @@ export const Documentation = observer(() => {
                 </DokuInnerContainer>
               </Doku>
             </Allotment>
-          </SplitPaneContainer>
+          </div>
         }
       </div>
     </ErrorBoundary>
