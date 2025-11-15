@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
@@ -13,30 +12,7 @@ import { JesNo } from '../../../shared/JesNo.jsx'
 import { exists } from '../../../../utils/exists.js'
 import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.js'
 
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleRow = styled.div`
-  background-color: ${(props) =>
-    props['data-filter'] ? '#ffe0b2' : 'rgba(248, 243, 254, 1)'};
-  flex-shrink: 0;
-  display: flex;
-  height: 40px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  position: sticky;
-  top: 0;
-  user-select: none;
-  z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
-`
+import { title, titleRow } from '../../Lieferung/Lieferung/Form/Wann.module.css'
 
 export const SammelLieferungNach = observer(
   ({ showFilter, row, ifNeeded, saveToDb, herkunft }) => {
@@ -142,9 +118,14 @@ export const SammelLieferungNach = observer(
 
     return (
       <>
-        <TitleRow data-filter={showFilter}>
-          <Title>nach</Title>
-        </TitleRow>
+        <div
+          className={titleRow}
+          style={{
+            backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
+          }}
+        >
+          <div className={title}>nach</div>
+        </div>
         {ifNeeded('nach_kultur_id') && (
           <Select
             key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
