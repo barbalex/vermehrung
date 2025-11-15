@@ -1,12 +1,11 @@
-import { Suspense } from 'react'
 import { Link } from 'react-router'
 
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const GenetischeVielfalt = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Genetische Vielfalt</h1>
-    <DokuDate>04.10.2019</DokuDate>
+    <p className={dokuDate}>04.10.2019</p>
     <p>
       <Link to="/Dokumentation/ziele">Projekt-Ziel</Link> 2 lautet: &quot;Die
       genetische Vielfalt von Kulturen ist bekannt.&quot;
@@ -26,5 +25,5 @@ export const GenetischeVielfalt = () => (
         Pflanzen stammen. Unabhängig davon, welche Einheiten gezählt wurden.
       </strong>
     </p>
-  </Suspense>
+  </>
 )
