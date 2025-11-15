@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
@@ -16,36 +15,7 @@ import { ChooseKulturQk as Choose } from './Choose/index.jsx'
 import { constants } from '../../../../../utils/constants.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-const TitleRow = styled.section`
-  background-color: rgba(248, 243, 254, 1);
-  flex-shrink: 0;
-  display: flex !important;
-  height: 48px;
-  justify-content: space-between !important;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  cursor: pointer;
-  user-select: none;
-  position: sticky !important;
-  top: -10px;
-  z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const StyledTabs = styled(Tabs)`
-  margin-top: -10px;
-`
-const Body = styled.div`
-  padding: 10px 0;
-`
+import { titleRow, title, tabs, body } from './index.module.css'
 
 export const KulturQkRouter = observer(({ kultur }) => {
   const store = useContext(MobxStoreContext)
@@ -120,11 +90,12 @@ export const KulturQkRouter = observer(({ kultur }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow
+      <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
+        className={titleRow}
       >
-        <Title>Qualitäts-Kontrollen</Title>
+        <div className={title}>Qualitäts-Kontrollen</div>
         <div>
           <IconButton
             aria-label="Anleitung öffnen"
@@ -145,19 +116,20 @@ export const KulturQkRouter = observer(({ kultur }) => {
             : <FaChevronDown />}
           </IconButton>
         </div>
-      </TitleRow>
+      </section>
       <motion.div
         animate={anim}
         transition={{ type: 'just', duration: 0.5 }}
       >
         {open && (
           <>
-            <StyledTabs
+            <Tabs
               value={tab}
               onChange={onChangeTab}
               indicatorColor="primary"
               textColor="primary"
               centered
+              className={tabs}
             >
               <Tab
                 label="ausführen"
@@ -171,15 +143,15 @@ export const KulturQkRouter = observer(({ kultur }) => {
                 value="waehlen"
                 data-id="waehlen"
               />
-            </StyledTabs>
-            <Body>
+            </Tabs>
+            <div className={body}>
               {tab === 'qk' ?
                 <Qk
                   kultur={kultur}
                   qkChoosens={qkChoosens}
                 />
               : <Choose qks={qks} />}
-            </Body>
+            </div>
           </>
         )}
       </motion.div>
