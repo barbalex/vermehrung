@@ -1,0 +1,21 @@
+.container {
+  position: relative;
+}
+
+.innerContainer {
+  padding-left: 10px;
+}
+
+.splitPaneContainer {
+  padding-left: 10px;
+  height: 650px;
+  position: relative;
+}
+
+.topLine {
+  background-color: rgba(74, 20, 140, 0.1);
+  height: 4px;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: 10px;
+}

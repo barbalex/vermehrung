@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 import { Allotment } from 'allotment'
 
@@ -10,24 +9,12 @@ import { TeilzaehlungConflict as Conflict } from './Conflict.jsx'
 import { TeilzaehlungForm as Form } from './Form/index.jsx'
 import { TeilzaehlungHistory as History } from './History/index.jsx'
 
-const Container = styled.div`
-  position: relative;
-`
-const InnerContainer = styled.div`
-  padding-left: 10px;
-`
-const SplitPaneContainer = styled.div`
-  padding-left: 10px;
-  height: 650px;
-  position: relative;
-`
-const TopLine = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  height: 4px;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-`
+import {
+  container,
+  innerContainer,
+  splitPaneContainer,
+  topLine,
+} from './index.module.css'
 
 export const Teilzaehlung = observer(({ id, kulturId, index }) => {
   const store = useContext(MobxStoreContext)
@@ -72,9 +59,9 @@ export const Teilzaehlung = observer(({ id, kulturId, index }) => {
   if (online && (activeConflict || showHistory)) {
     return (
       <ErrorBoundary>
-        <Container>
-          {!!index && <TopLine />}
-          <SplitPaneContainer>
+        <div className={container}>
+          {!!index && <div className={topLine} />}
+          <div className={splitPaneContainer}>
             <Allotment key={`${activeConflict}/${showHistory}`}>
               <Form
                 id={id}
@@ -104,17 +91,17 @@ export const Teilzaehlung = observer(({ id, kulturId, index }) => {
                 : null}
               </Allotment.Pane>
             </Allotment>
-          </SplitPaneContainer>
-        </Container>
+          </div>
+        </div>
       </ErrorBoundary>
     )
   }
 
   return (
     <ErrorBoundary>
-      <Container>
-        {!!index && <TopLine />}
-        <InnerContainer>
+      <div className={container}>
+        {!!index && <div className={topLine} />}
+        <div className={innerContainer}>
           <Form
             id={id}
             kulturId={kulturId}
@@ -123,8 +110,8 @@ export const Teilzaehlung = observer(({ id, kulturId, index }) => {
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
-        </InnerContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
