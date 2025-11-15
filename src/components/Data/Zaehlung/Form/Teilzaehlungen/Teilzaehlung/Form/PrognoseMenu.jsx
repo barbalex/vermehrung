@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import Menu from '@mui/material/Menu'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
@@ -16,26 +15,7 @@ import { constants } from '../../../../../../../utils/constants.js'
 import { zaehlungSort } from '../../../../../../../utils/zaehlungSort.js'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-right: 16px;
-  user-select: none;
-`
-const Title = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 700;
-  user-select: none;
-`
-const Field = styled.div`
-  padding: 0 16px;
-`
-const Buttons = styled.div`
-  padding: 0 16px;
-  display: flex;
-  justify-content: flex-end;
-`
+import { titleRow, title, fieldClass, buttons } from './PrognoseMenu.module.css'
 
 export const PrognoseMenu = observer(
   ({ onClosePrognosis, anchorEl, setAnchorEl, teilzaehlung }) => {
@@ -154,8 +134,8 @@ export const PrognoseMenu = observer(
           open={Boolean(anchorEl)}
           onClose={onClosePrognosis}
         >
-          <TitleRow>
-            <Title>Bedarf für diese Teil-Zählung:</Title>
+          <div className={titleRow}>
+            <div className={title}>Bedarf für diese Teil-Zählung:</div>
             <div>
               <IconButton
                 aria-label="Anleitung öffnen"
@@ -166,8 +146,8 @@ export const PrognoseMenu = observer(
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
-          </TitleRow>
-          <Field>
+          </div>
+          <div className={fieldClass}>
             <TextField
               key="jahr"
               name="jahr"
@@ -178,8 +158,8 @@ export const PrognoseMenu = observer(
               type="number"
               autoFocus
             />
-          </Field>
-          <Field>
+          </div>
+          <div className={fieldClass}>
             <TextField
               key="anzahl_auspflanzbereit"
               name="anzahl_auspflanzbereit"
@@ -189,8 +169,8 @@ export const PrognoseMenu = observer(
               error={errors.anzahl_auspflanzbereit}
               type="number"
             />
-          </Field>
-          <Buttons>
+          </div>
+          <div className={buttons}>
             <Button
               onClick={onClickAbbrechen}
               color="inherit"
@@ -203,7 +183,7 @@ export const PrognoseMenu = observer(
             >
               speichern
             </Button>
-          </Buttons>
+          </div>
         </Menu>
       </ErrorBoundary>
     )

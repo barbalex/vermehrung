@@ -1,0 +1,23 @@
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 16px;
+  user-select: none;
+}
+
+.title {
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 700;
+  user-select: none;
+}
+
+.fieldClass {
+  padding: 0 16px;
+}
+
+.buttons {
+  padding: 0 16px;
+  display: flex;
+  justify-content: flex-end;
+}
