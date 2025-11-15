@@ -6,3 +6,53 @@
   height: calc(100dvh - 64px);
   position: relative;
 }
+
+/* exported as DokuDate = styled.p */
+.dokuDate {
+  margin-bottom: 15px !important;
+  color: #b4b4b4;
+  font-weight: 600;
+}
+
+.dokuInnerContainer {
+  padding: 0 25px 25px 25px;
+}
+
+.doku {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  box-sizing: border-box;
+  ul,
+  ol {
+    margin-top: 0;
+    padding-inline-start: 20px;
+  }
+  ol {
+    padding-inline-start: 25px;
+  }
+  p,
+  li {
+    margin-bottom: 3px;
+    line-height: 1.5em;
+  }
+  h1,
+  h3,
+  ol {
+    margin-bottom: 10px;
+  }
+  h2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  td {
+    text-align: right;
+  }
+  td,
+  th {
+    padding: 0 5px 0 0;
+  }
+}
