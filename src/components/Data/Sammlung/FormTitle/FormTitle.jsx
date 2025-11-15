@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
-import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
@@ -15,27 +14,11 @@ import UpSvg from '../../../../svg/to_up.svg?react'
 import LiDownSvg from '../../../../svg/to_ausli_down.svg?react'
 import HeDownSvg from '../../../../svg/to_he_down.svg?react'
 
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 10px;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import {
+  container,
+  title,
+  symbols,
+} from '../../Art/FormTitle/FormTitle.module.css'
 
 export const SammlungFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
@@ -59,9 +42,12 @@ export const SammlungFormTitle = observer(
     const showToLi = activeNodeArray[0] !== 'Personen'
 
     return (
-      <TitleContainer ref={ref}>
-        <Title>Sammlung</Title>
-        <TitleSymbols>
+      <div
+        className={container}
+        ref={ref}
+      >
+        <div className={title}>Sammlung</div>
+        <div className={symbols}>
           <IconButton
             title="Zur Sammlungs-Liste"
             onClick={onClickUp}
@@ -119,8 +105,8 @@ export const SammlungFormTitle = observer(
               />
             </>
           }
-        </TitleSymbols>
-      </TitleContainer>
+        </div>
+      </div>
     )
   },
 )
