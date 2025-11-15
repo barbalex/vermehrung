@@ -1,12 +1,10 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../../index.jsx'
+import { dokuDate } from '../../index.module.css'
 import felderBlenden from './felderBlenden1.gif'
 
 export const FelderBlenden = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Felder ein- und ausblenden</h1>
-    <DokuDate>20.09.2019</DokuDate>
+    <p className={dokuDate}>20.09.2019</p>
     <h3>Wieso</h3>
     <p>
       Nicht jeder erfasst dieselben Daten. Felder, die nicht verwendet werden,
@@ -51,5 +49,5 @@ export const FelderBlenden = () => (
       <li>Gärten</li>
       <li>Lieferungen</li>
     </ul>
-  </Suspense>
+  </>
 )
