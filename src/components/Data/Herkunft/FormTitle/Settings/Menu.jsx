@@ -6,30 +6,13 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
 
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-right: 16px;
-  user-select: none;
-`
-const Title = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 700;
-  user-select: none;
-`
-const Info = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.4);
-  user-select: none;
-`
+import { titleRow, title, info } from './Menu.module.css'
 
 export const HerkunftSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
   const store = useContext(MobxStoreContext)
@@ -91,8 +74,8 @@ export const HerkunftSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
       open={Boolean(anchorEl)}
       onClose={onClose}
     >
-      <TitleRow>
-        <Title>Felder für Herkünfte wählen:</Title>
+      <div className={titleRow}>
+        <div className={title}>Felder für Herkünfte wählen:</div>
         <div>
           <IconButton
             aria-label="Anleitung öffnen"
@@ -103,7 +86,7 @@ export const HerkunftSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
             <IoMdInformationCircleOutline />
           </IconButton>
         </div>
-      </TitleRow>
+      </div>
       <MenuItem>
         <FormControlLabel
           value={hk_kanton === true ? 'true' : 'false'}
@@ -164,11 +147,11 @@ export const HerkunftSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
           labelPlacement="end"
         />
       </MenuItem>
-      <Info>
+      <div className={info}>
         Zwingende Felder sind nicht aufgelistet.
         <br />
         Die Wahl gilt für alle Herkünfte.
-      </Info>
+      </div>
     </Menu>
   )
 })
