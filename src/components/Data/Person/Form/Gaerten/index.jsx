@@ -15,6 +15,8 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { gartensSortedFromGartens } from '../../../../../utils/gartensSortedFromGartens.js'
 import { gvsSortByGarten } from '../../../../../utils/gvsSortByGarten.js'
 
+import { titleRow, title, gvsClass, motionDiv } from './index.module.css'
+
 const TitleRow = styled.section`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
@@ -148,9 +150,10 @@ export const PersonGaerten = observer(({ person }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow
+      <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
+        className={titleRow}
       >
         <Title>{`Mitarbeitend bei ${gvs.length} Gärten`}</Title>
         <div>
@@ -165,7 +168,7 @@ export const PersonGaerten = observer(({ person }) => {
             : <FaChevronDown />}
           </IconButton>
         </div>
-      </TitleRow>
+      </section>
       <StyledMotionDiv
         animate={anim}
         transition={{ type: 'just', duration: 0.2 }}
