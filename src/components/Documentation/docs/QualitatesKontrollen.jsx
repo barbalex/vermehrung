@@ -1,12 +1,11 @@
-import { Suspense } from 'react'
 import { Link } from 'react-router'
 
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const QualitaetsKontrollen = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Qualitäts-Kontrollen</h1>
-    <DokuDate>28.06.2020</DokuDate>
+    <p className={dokuDate}>28.06.2020</p>
     <h3>Ziel</h3>
     <ul>
       <li>
@@ -31,5 +30,5 @@ export const QualitaetsKontrollen = () => (
         automatisch selbst
       </li>
     </ul>
-  </Suspense>
+  </>
 )

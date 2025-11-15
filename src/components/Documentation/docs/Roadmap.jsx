@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const Roadmap = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Roadmap</h1>
-    <DokuDate>04.07.2020</DokuDate>
+    <p className={dokuDate}>04.07.2020</p>
     <p>
       vermehrung.ch ist (noch) in Entwicklung. Ziel ist, dass ab Juli 2020 damit
       gearbeitet wird.
@@ -136,5 +134,5 @@ export const Roadmap = () => (
         werden. Beliebig weit zurück
       </li>
     </ul>
-  </Suspense>
+  </>
 )
