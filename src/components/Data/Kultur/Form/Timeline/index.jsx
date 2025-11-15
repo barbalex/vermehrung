@@ -28,7 +28,12 @@ import { exists } from '../../../../../utils/exists.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { buildKulturTimelineData as buildData } from './buildData.js'
 
-const TitleRow = styled.section`
+const Container = styled.section`
+  &:first-of-type {
+    margin-top: -10px;
+  }
+`
+const TitleRow = styled.div`
   background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex !important;
@@ -43,9 +48,6 @@ const TitleRow = styled.section`
   top: -10px;
   user-select: none;
   z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
 `
 const Title = styled.div`
   font-weight: bold;
@@ -110,7 +112,7 @@ export const KulturTimeline = observer(({ row }) => {
   // need to disable animation or labels will not show on first render
   // https://github.com/recharts/recharts/issues/806
   return (
-    <div ref={ref}>
+    <Container ref={ref}>
       {!allData ?
         null
       : !row || !allData.length ?
@@ -357,6 +359,6 @@ export const KulturTimeline = observer(({ row }) => {
           </motion.div>
         </ErrorBoundary>
       }
-    </div>
+    </Container>
   )
 })
