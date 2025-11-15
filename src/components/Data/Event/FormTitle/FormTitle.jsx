@@ -13,7 +13,7 @@ import { HistoryButton } from '../../../shared/HistoryButton.jsx'
 import { Menu } from '../../../shared/Menu.jsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 
-import { container, title, symbols } from './FormTitle.module.css'
+import { container, title, symbols } from '../../Art/FormTitle/FormTitle.module.css'
 
 export const EventFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
