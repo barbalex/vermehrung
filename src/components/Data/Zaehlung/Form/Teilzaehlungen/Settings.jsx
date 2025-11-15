@@ -7,30 +7,13 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-right: 16px;
-  user-select: none;
-`
-const Title = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 700;
-  user-select: none;
-`
-const Info = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.4);
-  user-select: none;
-`
+import { titleRow, title, info } from './Settings.module.css'
 
 export const TeilzaehlungenSettings = observer(({ kulturId }) => {
   const store = useContext(MobxStoreContext)
@@ -97,8 +80,8 @@ export const TeilzaehlungenSettings = observer(({ kulturId }) => {
           open={Boolean(anchorEl)}
           onClose={onClose}
         >
-          <TitleRow>
-            <Title>Felder für Teil-Zählungen wählen:</Title>
+          <div className={titleRow}>
+            <div className={title}>Felder für Teil-Zählungen wählen:</div>
             <div>
               <IconButton
                 aria-label="Anleitung öffnen"
@@ -109,7 +92,7 @@ export const TeilzaehlungenSettings = observer(({ kulturId }) => {
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
-          </TitleRow>
+          </div>
           <MenuItem>
             <FormControlLabel
               value={tz_teilkultur_id === true ? 'true' : 'false'}
@@ -172,11 +155,11 @@ export const TeilzaehlungenSettings = observer(({ kulturId }) => {
               labelPlacement="end"
             />
           </MenuItem>
-          <Info>
+          <div className={info}>
             Zwingende Felder sind nicht aufgelistet.
             <br />
             Die Wahl gilt (nur) für diese Kultur.
-          </Info>
+          </div>
         </Menu>
       }
     </ErrorBoundary>
