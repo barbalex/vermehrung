@@ -11,53 +11,17 @@ import { constants } from '../../utils/constants.js'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { DocumentationFormTitle as FormTitle } from './FormTitle/index.jsx'
 
-import { container, splitPaneContainer } from './index.module.css'
+import {
+  container,
+  splitPaneContainer,
+  dokuInnerContainer,
+  doku,
+} from './index.module.css'
 
 export const DokuDate = styled.p`
   margin-bottom: 15px !important;
   color: #b4b4b4;
   font-weight: 600;
-`
-const DokuInnerContainer = styled.div`
-  padding: 0 25px 25px 25px;
-`
-const Doku = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  box-sizing: border-box;
-  ul,
-  ol {
-    margin-top: 0;
-    padding-inline-start: 20px;
-  }
-  ol {
-    padding-inline-start: 25px;
-  }
-  p,
-  li {
-    margin-bottom: 3px;
-    line-height: 1.5em;
-  }
-  h1,
-  h3,
-  ol {
-    margin-bottom: 10px;
-  }
-  h2 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  td {
-    text-align: right;
-  }
-  td,
-  th {
-    padding: 0 5px 0 0;
-  }
 `
 
 const articles = [
@@ -128,12 +92,12 @@ export const Documentation = observer(() => {
               <ArticleList articles={articles} />
             </div>
           : <div className={container}>
-              <Doku>
+              <div className={doku}>
                 <FormTitle />
-                <DokuInnerContainer>
+                <div className={dokuInnerContainer}>
                   <Outlet />
-                </DokuInnerContainer>
-              </Doku>
+                </div>
+              </div>
             </div>
 
         : <div className={splitPaneContainer}>
@@ -141,12 +105,12 @@ export const Documentation = observer(() => {
               <Allotment.Pane preferredSize="22%">
                 <ArticleList articles={articles} />
               </Allotment.Pane>
-              <Doku>
+              <div className={doku}>
                 <FormTitle />
-                <DokuInnerContainer>
+                <div className={dokuInnerContainer}>
                   <Outlet />
-                </DokuInnerContainer>
-              </Doku>
+                </div>
+              </div>
             </Allotment>
           </div>
         }
