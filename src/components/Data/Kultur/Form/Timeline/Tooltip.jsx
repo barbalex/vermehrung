@@ -1,26 +1,7 @@
-import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 
 import { exists } from '../../../../../utils/exists.js'
-
-const Popup = styled.div`
-  background-color: white;
-  border: 1px solid rgba(74, 20, 140, 0.9);
-  opacity: 0.8;
-  padding: 8px;
-`
-const PRow = styled.div`
-  font-size: 0.8em;
-  font-weight: 400;
-`
-const PTitle = styled.div`
-  font-size: 0.8em;
-  font-weight: 700;
-`
-const Ereignis = styled.span`
-  font-weight: 700;
-  padding-left: 5px;
-`
+import { popup, pRow, pTitle, ereignisClass } from './Tooltip.module.css'
 
 // somehow payload sometimes arrives as undefined, so set to []
 export const KulturTooltip = ({
@@ -46,11 +27,11 @@ export const KulturTooltip = ({
     const title = DateTime.fromMillis(label).toFormat('yyyy.LL.dd')
 
     return (
-      <Popup>
-        <PTitle>
+      <div className={popup}>
+        <div className={pTitle}>
           {title}
-          <Ereignis>{ereignis}</Ereignis>
-        </PTitle>
+          <div className={ereignisClass}>{ereignis}</div>
+        </div>
         {payload?.map((o, i) => {
           // do not repeat Zählung/Lieferung all over the place
           const label = o.dataKey
@@ -60,62 +41,79 @@ export const KulturTooltip = ({
           if (i === payload.length - 1) {
             return (
               <div key={`${o.dataKey}0`}>
-                <PRow key={o.dataKey}>{`${label}: ${o.value}`}</PRow>
+                <div
+                  className={pRow}
+                  key={o.dataKey}
+                >{`${label}: ${o.value}`}</div>
                 {exists(o.payload['Lieferung Gramm Samen']) && (
-                  <PRow
+                  <div
+                    className={pRow}
                     key={`${o.dataKey}1`}
-                  >{`Gramm Samen: ${o.payload['Lieferung Gramm Samen']}`}</PRow>
+                  >{`Gramm Samen: ${o.payload['Lieferung Gramm Samen']}`}</div>
                 )}
                 {exists(o.payload['Bedarf']) && (
-                  <PRow
+                  <div
+                    className={pRow}
                     key={`${o.dataKey}10`}
-                  >{`Bedarf: ${o.payload['Bedarf']}`}</PRow>
+                  >{`Bedarf: ${o.payload['Bedarf']}`}</div>
                 )}
                 {exists(o.payload['Zählung andere Mengen']) && (
-                  <PRow
+                  <div
+                    className={pRow}
                     key={`${o.dataKey}2`}
-                  >{`andere Mengen: ${o.payload['Zählung andere Mengen']}`}</PRow>
+                  >{`andere Mengen: ${o.payload['Zählung andere Mengen']}`}</div>
                 )}
                 {exists(o.payload['Lieferung andere Mengen']) && (
-                  <PRow
+                  <div
+                    className={pRow}
                     key={`${o.dataKey}3`}
-                  >{`andere Mengen: ${o.payload['Lieferung andere Mengen']}`}</PRow>
+                  >{`andere Mengen: ${o.payload['Lieferung andere Mengen']}`}</div>
                 )}
                 {exists(o.payload['Lieferung von Anzahl Individuen']) && (
-                  <PRow
+                  <div
+                    className={pRow}
                     key={`${o.dataKey}4`}
-                  >{`von Anzahl Individuen: ${o.payload['Lieferung von Anzahl Individuen']}`}</PRow>
+                  >{`von Anzahl Individuen: ${o.payload['Lieferung von Anzahl Individuen']}`}</div>
                 )}
                 {exists(
                   o.payload['Zählung Beschreibung auspflanzbereite Pflanzen'],
                 ) && (
-                  <PRow
+                  <div
+                    className={pRow}
                     key={`${o.dataKey}5`}
-                  >{`Beschreibung auspflanzbereite Pflanzen: ${o.payload['Zählung Beschreibung auspflanzbereite Pflanzen']}`}</PRow>
+                  >{`Beschreibung auspflanzbereite Pflanzen: ${o.payload['Zählung Beschreibung auspflanzbereite Pflanzen']}`}</div>
                 )}
                 {exists(
                   o.payload['Lieferung Beschreibung auspflanzbereite Pflanzen'],
                 ) && (
-                  <PRow
+                  <div
+                    className={pRow}
                     key={`${o.dataKey}6`}
-                  >{`Beschreibung auspflanzbereite Pflanzen: ${o.payload['Lieferung Beschreibung auspflanzbereite Pflanzen']}`}</PRow>
+                  >{`Beschreibung auspflanzbereite Pflanzen: ${o.payload['Lieferung Beschreibung auspflanzbereite Pflanzen']}`}</div>
                 )}
                 {exists(o.payload['Zählung Bemerkungen']) && (
-                  <PRow
+                  <div
+                    className={pRow}
                     key={`${o.dataKey}7`}
-                  >{`Bemerkungen: ${o.payload['Zählung Bemerkungen']}`}</PRow>
+                  >{`Bemerkungen: ${o.payload['Zählung Bemerkungen']}`}</div>
                 )}
                 {exists(o.payload['Lieferung Bemerkungen']) && (
-                  <PRow
+                  <div
+                    className={pRow}
                     key={`${o.dataKey}8`}
-                  >{`Bemerkungen: ${o.payload['Lieferung Bemerkungen']}`}</PRow>
+                  >{`Bemerkungen: ${o.payload['Lieferung Bemerkungen']}`}</div>
                 )}
               </div>
             )
           }
-          return <PRow key={o.dataKey}>{`${label}: ${o.value}`}</PRow>
+          return (
+            <div
+              className={pRow}
+              key={o.dataKey}
+            >{`${label}: ${o.value}`}</div>
+          )
         })}
-      </Popup>
+      </div>
     )
   }
 
