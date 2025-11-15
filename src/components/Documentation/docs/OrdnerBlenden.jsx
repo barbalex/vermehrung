@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const OrdnerBlenden = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Ordner ein- und ausblenden</h1>
-    <DokuDate>28.12.2019</DokuDate>
+    <p className={dokuDate}>28.12.2019</p>
     <h3>Wieso</h3>
     <p>
       Nicht jeder nutzt alle Features. Features, die nicht verwendet werden,
@@ -41,5 +39,5 @@ export const OrdnerBlenden = () => (
       Kulturen/Teilkulturen/Zählungen/Lieferungen/Events, welche den Filter
       erfüllen.
     </p>
-  </Suspense>
+  </>
 )
