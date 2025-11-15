@@ -1,17 +1,15 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const Datenschutz = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Datenschutz</h1>
-    <DokuDate>21.07.2020</DokuDate>
-    <DokuDate>
+    <p className={dokuDate}>21.07.2020</p>
+    <p>
       Weil eine Datenschutzvereinbarung nötig und rechtlich heikel ist, habe ich
       nachfolgend den Text aus einer Vorlage kopiert und leicht angepasst. Im
       Zweifel gilt der vernünftige Menschenverstand.
       <br />
-    </DokuDate>
+    </p>
     <p>
       This Privacy Policy describes Our policies and procedures on the
       collection, use and disclosure of Your information when You use the
@@ -460,5 +458,5 @@ export const Datenschutz = () => (
       </li>
     </ul>
     <p>&nbsp;</p>
-  </Suspense>
+  </>
 )

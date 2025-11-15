@@ -1,12 +1,11 @@
-import { Suspense } from 'react'
 import { Link } from 'react-router'
 
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const FehlerMelden = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Fehler, Ideen, Vorschläge melden</h1>
-    <DokuDate>30.09.2019</DokuDate>
+    <p className={dokuDate}>30.09.2019</p>
     <p>Das geht so:</p>
     <ul>
       <li>
@@ -32,5 +31,5 @@ export const FehlerMelden = () => (
       <Link to="/Dokumentationmailto:alex@gabriel-software.ch">email</Link>{' '}
       melden.
     </p>
-  </Suspense>
+  </>
 )

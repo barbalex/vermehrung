@@ -1,5 +1,4 @@
 import { useEffect, useContext } from 'react'
-import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { Allotment } from 'allotment'
 import { observer } from 'mobx-react-lite'
@@ -17,12 +16,6 @@ import {
   dokuInnerContainer,
   doku,
 } from './index.module.css'
-
-export const DokuDate = styled.p`
-  margin-bottom: 15px !important;
-  color: #b4b4b4;
-  font-weight: 600;
-`
 
 const articles = [
   {
