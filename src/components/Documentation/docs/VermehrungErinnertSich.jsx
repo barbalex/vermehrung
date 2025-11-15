@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const VermehrungErinnertSich = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>vermehrung erinnert sich</h1>
-    <DokuDate>30.09.2019</DokuDate>
+    <p className={dokuDate}>30.09.2019</p>
     <p>
       Beim Arbeiten speichert vermehrung laufend den aktuellen Zustand. Zum
       Beispiel:
@@ -23,5 +21,5 @@ export const VermehrungErinnertSich = () => (
       <br />
     </p>
     <p>Man kann also genau dort weiter arbeiten, wo man aufgehört hat.</p>
-  </Suspense>
+  </>
 )
