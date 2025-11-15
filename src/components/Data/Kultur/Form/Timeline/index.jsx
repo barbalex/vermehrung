@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import styled from '@emotion/styled'
 import {
   ComposedChart,
   Bar,
@@ -28,37 +27,7 @@ import { exists } from '../../../../../utils/exists.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { buildKulturTimelineData as buildData } from './buildData.js'
 
-const Container = styled.section`
-  &:first-of-type {
-    margin-top: -10px;
-  }
-`
-const TitleRow = styled.div`
-  background-color: rgba(248, 243, 254, 1);
-  flex-shrink: 0;
-  display: flex !important;
-  height: 48px;
-  justify-content: space-between !important;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  ${(props) => props['data-active'] && 'cursor: pointer;'}
-  position: sticky !important;
-  top: -10px;
-  user-select: none;
-  z-index: 1;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`
+import { container, titleRow, title, content } from './index.module.css'
 
 export const KulturTimeline = observer(({ row }) => {
   const { width, ref } = useResizeDetector()
@@ -112,24 +81,27 @@ export const KulturTimeline = observer(({ row }) => {
   // need to disable animation or labels will not show on first render
   // https://github.com/recharts/recharts/issues/806
   return (
-    <Container ref={ref}>
+    <section
+      ref={ref}
+      className={container}
+    >
       {!allData ?
         null
       : !row || !allData.length ?
         <ErrorBoundary>
-          <TitleRow data-active={false}>
-            <Title>Zeit-Achse</Title>
-            <Content>Sorry, keine Daten verfügbar</Content>
-          </TitleRow>
+          <div className={titleRow}>
+            <div className={title}>Zeit-Achse</div>
+            <div className={content}>Sorry, keine Daten verfügbar</div>
+          </div>
         </ErrorBoundary>
       : <ErrorBoundary>
-          <TitleRow
+          <div
+            className={titleRow}
             onClick={onClickToggle}
             title={open ? 'schliessen' : 'öffnen'}
-            data-open={open}
-            data-active={true}
+            style={{ cursor: 'pointer' }}
           >
-            <Title>Zeit-Achse</Title>
+            <div className={title}>Zeit-Achse</div>
             <div>
               <IconButton
                 aria-label="Anleitung öffnen"
@@ -150,7 +122,7 @@ export const KulturTimeline = observer(({ row }) => {
                 : <FaChevronDown />}
               </IconButton>
             </div>
-          </TitleRow>
+          </div>
           <motion.div
             animate={anim}
             transition={{ type: 'just', duration: 0.2 }}
@@ -359,6 +331,6 @@ export const KulturTimeline = observer(({ row }) => {
           </motion.div>
         </ErrorBoundary>
       }
-    </Container>
+    </section>
   )
 })
