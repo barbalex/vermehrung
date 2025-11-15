@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { FaPlus } from 'react-icons/fa'
 import { combineLatest, of as $of } from 'rxjs'
@@ -12,26 +11,7 @@ import { TeilzaehlungenSettings as Settings } from './Settings.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByTk.js'
 
-const TitleRow = styled.div`
-  background-color: rgba(248, 243, 254, 1);
-  flex-shrink: 0;
-  display: flex;
-  height: 48px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  user-select: none;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import { titleRow, titleClass } from './index.module.css'
 
 export const Teilzaehlungen = observer(({ zaehlung }) => {
   const store = useContext(MobxStoreContext)
@@ -78,8 +58,8 @@ export const Teilzaehlungen = observer(({ zaehlung }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow>
-        <Title>{title}</Title>
+      <div className={titleRow}>
+        <div className={titleClass}>{title}</div>
         <div>
           {kulturId && <Settings kulturId={kulturId} />}
           {showNew && (
@@ -93,7 +73,7 @@ export const Teilzaehlungen = observer(({ zaehlung }) => {
             </IconButton>
           )}
         </div>
-      </TitleRow>
+      </div>
       <TeilzaehlungenRows
         kulturId={kulturId}
         teilzaehlungs={teilzaehlungs}
