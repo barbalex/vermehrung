@@ -39,6 +39,7 @@ const MenuTitle = styled.h3`
   padding-right: 16px;
   padding-bottom: 0;
   margin-bottom: 3px;
+  margin-top: 0;
   &:focus {
     outline: none;
   }
