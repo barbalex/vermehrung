@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { useResizeDetector } from 'react-resize-detector'
 
@@ -15,27 +14,11 @@ import { Menu } from '../../../../shared/Menu.jsx'
 import UpSvg from '../../../../../svg/to_up.svg?react'
 import KuDownSvg from '../../../../../svg/to_ku_down.svg?react'
 
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 10px;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import {
+  container,
+  title,
+  symbols,
+} from '../../../Art/FormTitle/FormTitle.module.css'
 
 export const LieferungFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
@@ -60,9 +43,12 @@ export const LieferungFormTitle = observer(
     const showToKu = false && activeNodeArray[0] === 'Sammlungen'
 
     return (
-      <TitleContainer ref={ref}>
-        <Title>Lieferung</Title>
-        <TitleSymbols>
+      <div
+        className={container}
+        ref={ref}
+      >
+        <div className={title}>Lieferung</div>
+        <div className={symbols}>
           <IconButton
             title="Zur Liste"
             onClick={onClickUp}
@@ -113,8 +99,8 @@ export const LieferungFormTitle = observer(
               />
             </>
           }
-        </TitleSymbols>
-      </TitleContainer>
+        </div>
+      </div>
     )
   },
 )
