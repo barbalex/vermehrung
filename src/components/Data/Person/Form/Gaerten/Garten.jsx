@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -10,40 +9,7 @@ import { first as first$ } from 'rxjs/operators'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
-const Container = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  padding-left: 10px;
-  padding-right: 13px;
-  border-bottom: thin solid #0000001c;
-  &:hover {
-    background-color: rgba(74, 20, 140, 0.03);
-  }
-`
-const Text = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`
-const DelIcon = styled(IconButton)`
-  svg {
-    font-size: 1.1rem;
-  }
-`
-const MenuTitle = styled.h3`
-  padding-top: 8px;
-  padding-left: 15px;
-  padding-right: 16px;
-  padding-bottom: 0;
-  margin-bottom: 3px;
-  margin-top: 0;
-  &:focus {
-    outline: none;
-  }
-`
+import { container, text, delIcon, menuTitle } from './Garten.module.css'
 
 export const PersonGarten = observer(({ gv }) => {
   const store = useContext(MobxStoreContext)
@@ -78,19 +44,20 @@ export const PersonGarten = observer(({ gv }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <Text>
+      <div className={container}>
+        <div className={text}>
           <div>{gartenLabel}</div>
-        </Text>
-        <DelIcon
+        </div>
+        <IconButton
           title="löschen"
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
           onClick={onClickDeleteIcon}
+          className={delIcon}
         >
           <FaTimes />
-        </DelIcon>
+        </IconButton>
         <Menu
           id="delMenu"
           anchorEl={delMenuAnchorEl}
@@ -103,11 +70,11 @@ export const PersonGarten = observer(({ gv }) => {
             },
           }}
         >
-          <MenuTitle>löschen?</MenuTitle>
+          <h3 className={menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={onClose}>nein</MenuItem>
         </Menu>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
