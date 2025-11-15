@@ -1,0 +1,6 @@
+.selectRow {
+  display: flex;
+  > div {
+    flex-grow: 1;
+  }
+}

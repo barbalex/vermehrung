@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import { Select } from '../../../../../shared/Select/index.jsx'
@@ -10,33 +9,8 @@ import { exists } from '../../../../../../utils/exists.js'
 import { useLieferungNachData } from './useData.jsx'
 import { LieferungAdd as Add } from './Add/index.jsx'
 
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleRow = styled.div`
-  background-color: ${(props) =>
-    props['data-filter'] ? '#ffe0b2' : 'rgba(248, 243, 254, 1)'};
-  flex-shrink: 0;
-  display: flex;
-  height: 40px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  position: sticky;
-  top: 0;
-  user-select: none;
-  z-index: 1;
-`
-const SelectRow = styled.div`
-  display: flex;
-  > div {
-    flex-grow: 1;
-  }
-`
+import { title, titleRow } from '../Wann.module.css'
+import { selectRow } from './index.module.css'
 
 export const LieferungNach = observer(
   ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
@@ -53,11 +27,16 @@ export const LieferungNach = observer(
 
     return (
       <>
-        <TitleRow data-filter={showFilter}>
-          <Title>nach</Title>
-        </TitleRow>
+        <div
+          className={titleRow}
+          style={{
+            backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
+          }}
+        >
+          <div className={title}>nach</div>
+        </div>
         {ifNeeded('nach_kultur_id') && (
-          <SelectRow>
+          <div className={selectRow}>
             <Select
               key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
               name="nach_kultur_id"
@@ -79,7 +58,7 @@ export const LieferungNach = observer(
               herkunft={herkunft}
               lieferung={row}
             />
-          </SelectRow>
+          </div>
         )}
         {ifNeeded('nach_ausgepflanzt') && (
           <>
