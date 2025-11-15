@@ -1,0 +1,9 @@
+.infoOutlineIcon {
+  cursor: pointer;
+  pointer-events: auto;
+  padding-left: 5px;
+}
+
+.popover {
+  border-radius: 4px;
+}
