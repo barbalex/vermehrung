@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const Konten = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Konten und Benutzerrechte</h1>
-    <DokuDate>30.06.2020</DokuDate>
+    <p className={dokuDate}>30.06.2020</p>
     <h3>Begriffe</h3>
     <ul>
       <li>
@@ -106,5 +104,5 @@ export const Konten = () => (
       <li>Sobald email ankommt, dem Link folgen und ein Passwort setzen</li>
       <li>In vermehrung.ch damit anmelden</li>
     </ol>
-  </Suspense>
+  </>
 )
