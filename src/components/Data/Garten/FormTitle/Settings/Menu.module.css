@@ -1,0 +1,18 @@
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.title {
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 700;
+  user-select: none;
+}
+
+.info {
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.4);
+  user-select: none;
+}
