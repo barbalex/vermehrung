@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { Q } from '@nozbe/watermelondb'
@@ -13,37 +12,7 @@ import { TextField } from '../../../../shared/TextField.jsx'
 import { constants } from '../../../../../utils/constants.js'
 import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.js'
 
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleRow = styled.div`
-  background-color: ${(props) =>
-    props['data-filter'] ? '#ffe0b2' : 'rgba(248, 243, 254, 1)'};
-  flex-shrink: 0;
-  display: flex;
-  height: 40px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  position: sticky;
-  top: 0;
-  user-select: none;
-  z-index: 1;
-`
-const FieldRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > div:not(:last-of-type) {
-    padding-right: 8px;
-  }
-  > div > button {
-    margin-top: 8px;
-  }
-`
+import { title, titleRow, fieldRow } from './Wann.module.css'
 
 export const LieferungWas = observer(
   ({ showFilter, row, saveToDb, ifNeeded }) => {
@@ -106,9 +75,14 @@ export const LieferungWas = observer(
 
     return (
       <>
-        <TitleRow data-filter={showFilter}>
-          <Title>was</Title>
-        </TitleRow>
+        <div
+          className={titleRow}
+          style={{
+            backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
+          }}
+        >
+          <div className={title}>was</div>
+        </div>
         {ifNeeded('art_id') && (
           <Select
             key={`${row.id}art_id`}
@@ -121,7 +95,7 @@ export const LieferungWas = observer(
             error={errors?.lieferung?.art_id}
           />
         )}
-        <FieldRow>
+        <div className={fieldRow}>
           {ifNeeded('anzahl_pflanzen') && (
             <TextField
               key={`${row.id}anzahl_pflanzen`}
@@ -144,8 +118,8 @@ export const LieferungWas = observer(
               type="number"
             />
           )}
-        </FieldRow>
-        <FieldRow>
+        </div>
+        <div className={fieldRow}>
           {ifNeeded('gramm_samen') && (
             <TextField
               key={`${row.id}gramm_samen`}
@@ -168,9 +142,9 @@ export const LieferungWas = observer(
               type="text"
             />
           )}
-        </FieldRow>
+        </div>
         {ifNeeded('von_anzahl_individuen') && (
-          <FieldRow>
+          <div className={fieldRow}>
             <TextField
               key={`${row.id}von_anzahl_individuen`}
               name="von_anzahl_individuen"
@@ -190,7 +164,7 @@ export const LieferungWas = observer(
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
-          </FieldRow>
+          </div>
         )}
       </>
     )
