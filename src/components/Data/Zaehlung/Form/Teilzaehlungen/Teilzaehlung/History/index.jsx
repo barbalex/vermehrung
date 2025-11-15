@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import styled from '@emotion/styled'
 import Slider from 'react-slick'
 import { useQuery } from 'urql'
 
@@ -9,6 +8,8 @@ import { checkForOnlineError } from '../../../../../../../utils/checkForOnlineEr
 import { Spinner } from '../../../../../../shared/Spinner.jsx'
 import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
 import { TeilzaehlungHistoryRow as Row } from './Row.jsx'
+
+import { container, errorContainer } from './index.module.css'
 
 const teilzaehlungRevQuery = gql`
   query teilzaehlungRevForHistoryQuery($rev: [String!]) {
@@ -34,14 +35,6 @@ const teilzaehlungRevQuery = gql`
       _deleted
     }
   }
-`
-
-const Container = styled.div`
-  padding: 0 25px;
-  height: 100%;
-`
-const ErrorContainer = styled.div`
-  padding: 25px;
 `
 
 const sliderSettings = {
@@ -70,11 +63,11 @@ export const TeilzaehlungHistory = observer(
     }
 
     if (error) {
-      return <ErrorContainer>{error.message}</ErrorContainer>
+      return <div className={errorContainer}>{error.message}</div>
     }
 
     return (
-      <Container>
+      <div className={container}>
         <Slider {...sliderSettings}>
           {revRows.map((r) => (
             <Row
@@ -86,7 +79,7 @@ export const TeilzaehlungHistory = observer(
             />
           ))}
         </Slider>
-      </Container>
+      </div>
     )
   },
 )
