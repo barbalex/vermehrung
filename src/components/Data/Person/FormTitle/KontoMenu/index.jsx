@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 
@@ -8,9 +7,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { signup } from '../../../../../utils/signup.js'
 import { PersonKontoMenu as Menu } from './Menu.jsx'
 
-const StyledButton = styled(Button)`
-  text-transform: none !important;
-`
+import { button } from './index.module.css'
 
 export const PersonKonto = observer(({ row, asMenu }) => {
   const store = useContext(MobxStoreContext)
@@ -28,12 +25,13 @@ export const PersonKonto = observer(({ row, asMenu }) => {
     }
 
     return (
-      <StyledButton
+      <Button
+        className={button}
         color="primary"
         onClick={createNewAccount}
       >
         Neues Konto
-      </StyledButton>
+      </Button>
     )
   }
 
@@ -51,12 +49,13 @@ export const PersonKonto = observer(({ row, asMenu }) => {
 
   return (
     <>
-      <StyledButton
+      <Button
+        className={button}
         color="primary"
         onClick={(event) => setMenuAnchorEl(event.currentTarget)}
       >
         Konto
-      </StyledButton>
+      </Button>
       <Menu
         row={row}
         menuAnchorEl={menuAnchorEl}
