@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
@@ -17,27 +16,11 @@ import { SammelLieferungNavButtons as NavButtons } from './NavButtons.jsx'
 import { SammelLieferungPrint as PrintButtons } from './PrintButtons.jsx'
 import { SammelLieferungAnleitung as Anleitung } from './Anleitung.jsx'
 
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 10px;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import {
+  container,
+  title,
+  symbols,
+} from '../../Art/FormTitle/FormTitle.module.css'
 
 export const SammelLieferungFormTitle = observer(
   ({
@@ -81,9 +64,12 @@ export const SammelLieferungFormTitle = observer(
     if (!row || (!showFilter && filter.show)) return null
 
     return (
-      <TitleContainer ref={ref}>
-        <Title>Sammel-Lieferung</Title>
-        <TitleSymbols>
+      <div
+        className={container}
+        ref={ref}
+      >
+        <div className={title}>Sammel-Lieferung</div>
+        <div className={symbols}>
           {shownAsSammelLieferung && (
             <>
               <NavButtons />
@@ -214,8 +200,8 @@ export const SammelLieferungFormTitle = observer(
               </>
             }
           </>
-        </TitleSymbols>
-      </TitleContainer>
+        </div>
+      </div>
     )
   },
 )
