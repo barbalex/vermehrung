@@ -3,16 +3,13 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
 import { LieferungAddTypeDialog as TypeDialog } from './TypeDialog.jsx'
 import { LieferungAddChooseDialog as ChooseDialog } from './ChooseDialog.jsx'
 
-const StyledButton = styled(IconButton)`
-  margin-bottom: 19px;
-`
+import { button } from './index.module.css'
 
 export const LieferungAdd = observer(({ disabled, lieferung, herkunft }) => {
   const store = useContext(MobxStoreContext)
@@ -56,15 +53,16 @@ export const LieferungAdd = observer(({ disabled, lieferung, herkunft }) => {
 
   return (
     <ErrorBoundary>
-      <StyledButton
+      <IconButton
         aria-label="in neue Kultur in bestehendem Garten liefern"
         title="in neue Kultur in bestehendem Garten liefern"
         onClick={add}
         size="large"
         disabled={disabled}
+        className={button}
       >
         <FaPlus />
-      </StyledButton>
+      </IconButton>
       <TypeDialog
         open={typeDialogOpen}
         onClose={onCloseTypeDialog}
