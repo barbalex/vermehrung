@@ -4,7 +4,6 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaDownload } from 'react-icons/fa'
-import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { buildExceljsWorksheetsForDaten } from './buildExceljsWorksheetsForDaten.js'
@@ -12,18 +11,7 @@ import { buildExceljsWorksheetsForTzSums } from './buildExceljsWorksheetsForTzSu
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-right: 16px;
-  user-select: none;
-`
-const Title = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 700;
-  user-select: none;
-`
+import { titleRow, title } from './index.module.css'
 
 export const GartenDownload = observer(({ gartenId }) => {
   const store = useContext(MobxStoreContext)
@@ -82,9 +70,9 @@ export const GartenDownload = observer(({ gartenId }) => {
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <TitleRow>
-          <Title>herunterladen:</Title>
-        </TitleRow>
+        <div className={titleRow}>
+          <div className={title}>herunterladen:</div>
+        </div>
         <MenuItem onClick={onClickData}>{`(Roh-)Daten`}</MenuItem>
         <MenuItem
           onClick={onClickTzSums}
