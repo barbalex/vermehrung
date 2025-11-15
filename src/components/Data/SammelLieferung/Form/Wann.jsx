@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
@@ -10,40 +9,11 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { JesNo } from '../../../shared/JesNo.jsx'
 import { constants } from '../../../../utils/constants.js'
 
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleRow = styled.div`
-  background-color: ${(props) =>
-    props['data-filter'] ? '#ffe0b2' : 'rgba(248, 243, 254, 1)'};
-  flex-shrink: 0;
-  display: flex;
-  height: 40px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  position: sticky;
-  top: 0;
-  user-select: none;
-  z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
-`
-const FieldRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > div:not(:last-of-type) {
-    padding-right: 8px;
-  }
-  > div > button {
-    margin-top: 8px;
-  }
-`
+import {
+  title,
+  titleRow,
+  fieldRow,
+} from '../../Lieferung/Lieferung/Form/Wann.module.css'
 
 export const SammelLieferungWann = observer(
   ({ showFilter, row, ifNeeded, saveToDb }) => {
@@ -61,9 +31,14 @@ export const SammelLieferungWann = observer(
 
     return (
       <>
-        <TitleRow data-filter={showFilter}>
-          <Title>wann</Title>
-        </TitleRow>
+        <div
+          className={titleRow}
+          style={{
+            backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
+          }}
+        >
+          <div className={title}>wann</div>
+        </div>
         {ifNeeded('datum') && (
           <Date
             key={`${row.id}datum`}
@@ -75,7 +50,7 @@ export const SammelLieferungWann = observer(
           />
         )}
         {ifNeeded('geplant') && (
-          <FieldRow>
+          <div className={fieldRow}>
             {showFilter ?
               <JesNo
                 key={`${row.id}geplant`}
@@ -104,7 +79,7 @@ export const SammelLieferungWann = observer(
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
-          </FieldRow>
+          </div>
         )}
       </>
     )
