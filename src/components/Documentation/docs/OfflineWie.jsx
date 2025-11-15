@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const OfflineWie = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Offline: Wie es funktioniert</h1>
-    <DokuDate>18.12.2020</DokuDate>
+    <p className={dokuDate}>18.12.2020</p>
     <p>
       Zuverlässige Offline-Fähigkeit ist schwer. Nachfolgend das für
       vermehrung.ch umgesetzte Konzept:
@@ -213,5 +211,5 @@ export const OfflineWie = () => (
       würde das wohl halb so lange dauern.
       <br />
     </p>
-  </Suspense>
+  </>
 )

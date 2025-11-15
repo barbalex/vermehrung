@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const OpenSource = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Open Source</h1>
-    <DokuDate>15.06.2019</DokuDate>
+    <p className={dokuDate}>15.06.2019</p>
     <p>
       vermehrung.ch wird von{' '}
       <a
@@ -58,5 +56,5 @@ export const OpenSource = () => (
       </a>
       .
     </p>
-  </Suspense>
+  </>
 )

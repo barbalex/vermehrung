@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const Planen = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Planen</h1>
-    <DokuDate>28.01.2025</DokuDate>
+    <p className={dokuDate}>28.01.2025</p>
     <h3>Was</h3>
     <p>Die folgenden Vorgänge können geplant werden:</p>
     <ul>
@@ -55,5 +53,5 @@ export const Planen = () => (
       &quot;Ziel&quot; oder (vom Gärtner) als &quot;Bedarf&quot; markiert.
       <br />
     </p>
-  </Suspense>
+  </>
 )
