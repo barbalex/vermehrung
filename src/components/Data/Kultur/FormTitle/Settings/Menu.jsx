@@ -6,19 +6,13 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
 
-const Title = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 700;
-  user-select: none;
-`
+import { title } from './Menu.module.css'
 
 export const KulturSettingsMenu = observer(
   ({ anchorEl, setAnchorEl, kulturId }) => {
@@ -89,7 +83,7 @@ export const KulturSettingsMenu = observer(
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <Title>Optionen für diese Kultur:</Title>
+        <div className={title}>Optionen für diese Kultur:</div>
         <MenuItem>
           <FormControlLabel
             value={tk === true ? 'true' : 'false'}
@@ -115,7 +109,9 @@ export const KulturSettingsMenu = observer(
             </IconButton>
           </div>
         </MenuItem>
-        <Title>Optionale Felder wählen (für alle Kulturen):</Title>
+        <div className={title}>
+          Optionale Felder wählen (für alle Kulturen):
+        </div>
         <MenuItem>
           <FormControlLabel
             value={ku_zwischenlager === true ? 'true' : 'false'}
