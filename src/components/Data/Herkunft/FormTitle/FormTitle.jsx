@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { useResizeDetector } from 'react-resize-detector'
 
@@ -15,27 +14,11 @@ import { Menu } from '../../../shared/Menu.jsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 import SaDownSvg from '../../../../svg/to_sa_down.svg?react'
 
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 10px;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import {
+  container,
+  title,
+  symbols,
+} from '../../Art/FormTitle/FormTitle.module.css'
 
 export const HerkunftFormTitle = observer(
   ({
@@ -70,9 +53,14 @@ export const HerkunftFormTitle = observer(
     const editingAllowed = activeNodeArray.length <= 2
 
     return (
-      <TitleContainer ref={ref}>
-        <Title>{`Herkunft${activeConflict ? ': Konflikt lösen' : ''}`}</Title>
-        <TitleSymbols>
+      <div
+        className={container}
+        ref={ref}
+      >
+        <div
+          className={title}
+        >{`Herkunft${activeConflict ? ': Konflikt lösen' : ''}`}</div>
+        <div className={symbols}>
           <IconButton
             title="Zur Liste"
             onClick={onClickUp}
@@ -127,8 +115,8 @@ export const HerkunftFormTitle = observer(
               />
             </>
           }
-        </TitleSymbols>
-      </TitleContainer>
+        </div>
+      </div>
     )
   },
 )
