@@ -1,12 +1,11 @@
-import { Suspense } from 'react'
 import { Link } from 'react-router'
 
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const Technologien = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Verwendete Technologien</h1>
-    <DokuDate>03.09.2020</DokuDate>
+    <p className={dokuDate}>03.09.2020</p>
     <ul>
       <li>
         <a
@@ -91,5 +90,5 @@ export const Technologien = () => (
         als Entwicklungs-Umgebung
       </li>
     </ul>
-  </Suspense>
+  </>
 )

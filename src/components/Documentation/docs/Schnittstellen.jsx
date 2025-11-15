@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const Schnittstellen = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Schnittstellen</h1>
-    <DokuDate>15.06.2019</DokuDate>
+    <p className={dokuDate}>15.06.2019</p>
     <p>
       Brauchen Sie in anderen Anwendungen Zugriff auf Ihre Daten in
       vermehrung.ch? Kein Problem: vermehrung.ch verfügt über eine öffentliche{' '}
@@ -36,5 +34,5 @@ export const Schnittstellen = () => (
       </a>
       .
     </p>
-  </Suspense>
+  </>
 )

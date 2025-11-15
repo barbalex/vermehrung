@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const Sammlungen = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Sammlungen</h1>
-    <DokuDate>17.01.2020</DokuDate>
+    <p className={dokuDate}>17.01.2020</p>
     <h3>Verortung</h3>
     <p>
       Im Gegensatz zur Herkunft (welche eine genetische Einheit abgrenzt),
@@ -15,5 +13,5 @@ export const Sammlungen = () => (
     </p>
     <p>Später muss das vermutlich mit Geometrien ergänzt werden.</p>
     <p>&nbsp;</p>
-  </Suspense>
+  </>
 )
