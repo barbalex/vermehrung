@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 import { uniqBy } from 'es-toolkit'
@@ -13,27 +12,7 @@ import { ConflictList } from '../../../../shared/ConflictList/index.jsx'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
 import { personSort } from '../../../../../utils/personSort.js'
 
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleRow = styled.div`
-  background-color: ${(props) =>
-    props['data-filter'] ? '#ffe0b2' : 'rgba(248, 243, 254, 1)'};
-  flex-shrink: 0;
-  display: flex;
-  height: 40px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  position: sticky;
-  top: 0;
-  user-select: none;
-  z-index: 1;
-`
+import { title, titleRow } from './Wann.module.css'
 
 export const LieferungWer = observer(
   ({
@@ -129,9 +108,14 @@ export const LieferungWer = observer(
 
     return (
       <>
-        <TitleRow data-filter={showFilter}>
-          <Title>wer</Title>
-        </TitleRow>
+        <div
+          className={titleRow}
+          style={{
+            backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
+          }}
+        >
+          <div className={title}>wer</div>
+        </div>
         {ifNeeded('person_id') && (
           <Select
             key={`${row.id}person_id`}
