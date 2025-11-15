@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -19,20 +18,7 @@ import { getShowSammlung } from '../../../utils/showSammlung.js'
 import { getShowTeilkultur } from '../../../utils/showTeilkultur.js'
 import { getShowZaehlung } from '../../../utils/showZaehlung.js'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-
-const FieldsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: auto;
-  scrollbar-width: thin;
-  border-collapse: collapse;
-`
+import { container, fieldsContainer } from './index.module.css'
 
 export const Root = observer(({ filter: showFilter }) => {
   const store = useContext(MobxStoreContext)
@@ -227,16 +213,19 @@ export const Root = observer(({ filter: showFilter }) => {
 
   return (
     <ErrorBoundary>
-      <Container style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}>
-        <FieldsContainer>
+      <div
+        className={container}
+        style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+      >
+        <div className={fieldsContainer}>
           {rows.map((row) => (
             <Row
               key={row.name}
               row={row}
             />
           ))}
-        </FieldsContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
