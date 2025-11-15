@@ -73,7 +73,6 @@ const HaederLabel = styled.div`
   flex-basis: 50px;
   flex-grow: 0;
 `
-const HeaderValue = styled.div``
 const StyledPaper = styled(Paper)`
   margin-top: 15px;
   box-shadow: none !important;
@@ -165,23 +164,23 @@ export const Lieferschein = observer(({ row }) => {
         <Title>Lieferschein</Title>
         <HeaderRow>
           <HaederLabel>Projekt:</HaederLabel>
-          <HeaderValue>
+          <div>
             {
               'Zwischenvermehrung von seltenen und bedrohten Pflanzenarten im Kanton Zürich'
             }
-          </HeaderValue>
+          </div>
         </HeaderRow>
         <HeaderRow>
           <HaederLabel>von:</HaederLabel>
-          <HeaderValue>{von}</HeaderValue>
+          <div>{von}</div>
         </HeaderRow>
         <HeaderRow>
           <HaederLabel>an:</HaederLabel>
-          <HeaderValue>{an}</HeaderValue>
+          <div>{an}</div>
         </HeaderRow>
         <HeaderRow>
           <HaederLabel>am:</HaederLabel>
-          <HeaderValue>{am}</HeaderValue>
+          <div>{am}</div>
         </HeaderRow>
         <StyledPaper square>
           <StyledTable size="small">
