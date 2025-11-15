@@ -30,7 +30,7 @@ export const Tree = observer(() => {
     teilkultur: teilkulturFilter,
     zaehlung: zaehlungFilter,
     lieferung: lieferungFilter,
-    sammel_lieferung: sammelLieferungFilter,
+    // sammel_lieferung: sammelLieferungFilter,
     event: eventFilter,
     person: personFilter,
   } = store.filter
@@ -128,10 +128,10 @@ export const Tree = observer(() => {
         'anzahl_pflanzen',
         'anzahl_auspflanzbereit',
       ])
-    const sammelLieferungsObservable = db
-      .get('sammel_lieferung')
-      .query(...tableFilter({ store, table: 'sammel_lieferung' }))
-      .observeWithColumns(['datum', 'anzahl_pflanzen'])
+    // const sammelLieferungsObservable = db
+    //   .get('sammel_lieferung')
+    //   .query(...tableFilter({ store, table: 'sammel_lieferung' }))
+    //   .observeWithColumns(['datum', 'anzahl_pflanzen'])
     const eventsObservable = db
       .get('event')
       .query(...tableFilter({ store, table: 'event' }))
@@ -154,7 +154,7 @@ export const Tree = observer(() => {
       kultursObservable,
       lieferungsObservable,
       personsObservable,
-      sammelLieferungsObservable,
+      // sammelLieferungsObservable,
       sammlungsObservable,
       teilkultursObservable,
       zaehlungsObservable,
@@ -195,7 +195,7 @@ export const Tree = observer(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(lieferungFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(sammelLieferungFilter),
+    // ...Object.values(sammelLieferungFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(eventFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps

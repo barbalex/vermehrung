@@ -103,10 +103,10 @@ import { buildPersonLieferungFolder } from './person/lieferung/folder.js'
 import { buildPersonLieferung } from './person/lieferung/index.js'
 import { buildPersonSammlungFolder } from './person/sammlung/folder.js'
 import { buildPersonSammlung } from './person/sammlung/index.js'
-import { buildSammelLieferungFolder } from './sammelLieferung/folder.js'
-import { buildSammelLieferung } from './sammelLieferung/index.js'
-import { buildSammelLieferungLieferungFolder } from './sammelLieferung/lieferung/folder.js'
-import { buildSammelLieferungLieferung } from './sammelLieferung/lieferung/index.js'
+// import { buildSammelLieferungFolder } from './sammelLieferung/folder.js'
+// import { buildSammelLieferung } from './sammelLieferung/index.js'
+// import { buildSammelLieferungLieferungFolder } from './sammelLieferung/lieferung/folder.js'
+// import { buildSammelLieferungLieferung } from './sammelLieferung/lieferung/index.js'
 import { herkunftSort } from '../../../utils/herkunftSort.js'
 import { teilkulturSort } from '../../../utils/teilkulturSort.js'
 import { zaehlungSort } from '../../../utils/zaehlungSort.js'
@@ -125,7 +125,7 @@ import { getShowHerkunft } from '../../../utils/showHerkunft.js'
 import { getShowKultur } from '../../../utils/showKultur.js'
 import { getShowLieferung } from '../../../utils/showLieferung.js'
 import { getShowPerson } from '../../../utils/showPerson.js'
-import { getShowSammelLieferung } from '../../../utils/showSammelLieferung.js'
+// import { getShowSammelLieferung } from '../../../utils/showSammelLieferung.js'
 import { getShowSammlung } from '../../../utils/showSammlung.js'
 import { getShowTeilkultur } from '../../../utils/showTeilkultur.js'
 import { getShowZaehlung } from '../../../utils/showZaehlung.js'
@@ -156,10 +156,10 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   const showKultur = getShowKultur({ userPersonOption, activeNodeArray })
   const showLieferung = getShowLieferung({ userPersonOption, activeNodeArray })
   const showPerson = getShowPerson()
-  const showSammelLieferung = getShowSammelLieferung({
-    userPersonOption,
-    activeNodeArray,
-  })
+  // const showSammelLieferung = getShowSammelLieferung({
+  //   userPersonOption,
+  //   activeNodeArray,
+  // })
   const showSammlung = getShowSammlung({ userRole, activeNodeArray })
   const showTeilkultur = getShowTeilkultur({
     userPersonOption,
@@ -269,10 +269,10 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   const personLieferungNodes = []
   const personSammlungFolderNodes = []
   const personSammlungNodes = []
-  let sammelLieferungFolderNodes = []
-  let sammelLieferungNodes = []
-  const sammelLieferungLieferungFolderNodes = []
-  const sammelLieferungLieferungNodes = []
+  // const sammelLieferungFolderNodes = []
+  // const sammelLieferungNodes = []
+  // const sammelLieferungLieferungFolderNodes = []
+  // const sammelLieferungLieferungNodes = []
 
   // 1 art
   if (showArt) {
@@ -2048,85 +2048,85 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   }
 
   // 9 sammelLieferung
-  if (showSammelLieferung) {
-    const sammelLieferungQuery = db
-      .get('sammel_lieferung')
-      .query(...tableFilter({ store, table: 'sammel_lieferung' }))
-    const sammelLieferungCount = await sammelLieferungQuery.fetchCount()
-    sammelLieferungFolderNodes = buildSammelLieferungFolder({
-      count: sammelLieferungCount,
-    })
-    if (
-      openNodes.some((n) => n.length === 1 && n[0] === 'Sammel-Lieferungen')
-    ) {
-      let sammelLieferungs = []
-      try {
-        sammelLieferungs = await sammelLieferungQuery.fetch()
-      } catch {}
-      const sammelLieferungsSorted = sammelLieferungs.sort(lieferungSort)
-      sammelLieferungNodes = await Promise.all(
-        sammelLieferungsSorted.map(
-          async (sammelLieferung, index) =>
-            await buildSammelLieferung({
-              sammelLieferung,
-              index,
-            }),
-        ),
-      )
+  // if (showSammelLieferung) {
+  //   const sammelLieferungQuery = db
+  //     .get('sammel_lieferung')
+  //     .query(...tableFilter({ store, table: 'sammel_lieferung' }))
+  //   const sammelLieferungCount = await sammelLieferungQuery.fetchCount()
+  //   sammelLieferungFolderNodes = buildSammelLieferungFolder({
+  //     count: sammelLieferungCount,
+  //   })
+  //   if (
+  //     openNodes.some((n) => n.length === 1 && n[0] === 'Sammel-Lieferungen')
+  //   ) {
+  //     let sammelLieferungs = []
+  //     try {
+  //       sammelLieferungs = await sammelLieferungQuery.fetch()
+  //     } catch {}
+  //     const sammelLieferungsSorted = sammelLieferungs.sort(lieferungSort)
+  //     sammelLieferungNodes = await Promise.all(
+  //       sammelLieferungsSorted.map(
+  //         async (sammelLieferung, index) =>
+  //           await buildSammelLieferung({
+  //             sammelLieferung,
+  //             index,
+  //           }),
+  //       ),
+  //     )
 
-      // on to child nodes
-      const openSammelLieferungNodes = openNodes.filter(
-        (n) => n.length === 2 && n[0] === 'Sammel-Lieferungen',
-      )
-      for (const sammelLieferungNode of openSammelLieferungNodes) {
-        const sammelLieferungId = sammelLieferungNode[1]
-        const sammelLieferung = sammelLieferungsSorted.find(
-          (a) => a.id === sammelLieferungId,
-        )
-        if (!sammelLieferung) break
-        const sammelLieferungIndex = sammelLieferungNodes.findIndex(
-          (a) => a.id === sammelLieferungId,
-        )
+  //     // on to child nodes
+  //     const openSammelLieferungNodes = openNodes.filter(
+  //       (n) => n.length === 2 && n[0] === 'Sammel-Lieferungen',
+  //     )
+  //     for (const sammelLieferungNode of openSammelLieferungNodes) {
+  //       const sammelLieferungId = sammelLieferungNode[1]
+  //       const sammelLieferung = sammelLieferungsSorted.find(
+  //         (a) => a.id === sammelLieferungId,
+  //       )
+  //       if (!sammelLieferung) break
+  //       const sammelLieferungIndex = sammelLieferungNodes.findIndex(
+  //         (a) => a.id === sammelLieferungId,
+  //       )
 
-        // 2.1 sammelLieferung > lieferung
-        let lieferungs = []
-        try {
-          lieferungs = await sammelLieferung.lieferungs
-            .extend(...tableFilter({ store, table: 'lieferung' }))
-            .fetch()
-        } catch {}
-        const lieferungsSorted = lieferungs.sort(lieferungSort)
-        sammelLieferungLieferungFolderNodes.push(
-          buildSammelLieferungLieferungFolder({
-            children: lieferungsSorted,
-            sammelLieferungIndex,
-            sammelLieferungId,
-          }),
-        )
-        const sammelLieferungLieferungFolderIsOpen = openNodes.some(
-          (n) =>
-            n.length === 3 &&
-            n[0] === 'Sammel-Lieferungen' &&
-            n[1] === sammelLieferungId &&
-            n[2] === 'Lieferungen',
-        )
-        if (sammelLieferungLieferungFolderIsOpen) {
-          const newSammelLieferungLieferungNodes = lieferungsSorted.map(
-            (lieferung, lieferungIndex) =>
-              buildSammelLieferungLieferung({
-                lieferung,
-                lieferungIndex,
-                sammelLieferungId,
-                sammelLieferungIndex,
-              }),
-          )
-          sammelLieferungLieferungNodes.push(
-            ...newSammelLieferungLieferungNodes,
-          )
-        }
-      }
-    }
-  }
+  //       // 2.1 sammelLieferung > lieferung
+  //       let lieferungs = []
+  //       try {
+  //         lieferungs = await sammelLieferung.lieferungs
+  //           .extend(...tableFilter({ store, table: 'lieferung' }))
+  //           .fetch()
+  //       } catch {}
+  //       const lieferungsSorted = lieferungs.sort(lieferungSort)
+  //       sammelLieferungLieferungFolderNodes.push(
+  //         buildSammelLieferungLieferungFolder({
+  //           children: lieferungsSorted,
+  //           sammelLieferungIndex,
+  //           sammelLieferungId,
+  //         }),
+  //       )
+  //       const sammelLieferungLieferungFolderIsOpen = openNodes.some(
+  //         (n) =>
+  //           n.length === 3 &&
+  //           n[0] === 'Sammel-Lieferungen' &&
+  //           n[1] === sammelLieferungId &&
+  //           n[2] === 'Lieferungen',
+  //       )
+  //       if (sammelLieferungLieferungFolderIsOpen) {
+  //         const newSammelLieferungLieferungNodes = lieferungsSorted.map(
+  //           (lieferung, lieferungIndex) =>
+  //             buildSammelLieferungLieferung({
+  //               lieferung,
+  //               lieferungIndex,
+  //               sammelLieferungId,
+  //               sammelLieferungIndex,
+  //             }),
+  //         )
+  //         sammelLieferungLieferungNodes.push(
+  //           ...newSammelLieferungLieferungNodes,
+  //         )
+  //       }
+  //     }
+  //   }
+  // }
 
   // 10 event
   if (showEvent) {
@@ -2750,10 +2750,10 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
     ...personLieferungNodes,
     ...personSammlungFolderNodes,
     ...personSammlungNodes,
-    ...sammelLieferungFolderNodes,
-    ...sammelLieferungNodes,
-    ...sammelLieferungLieferungFolderNodes,
-    ...sammelLieferungLieferungNodes,
+    // ...sammelLieferungFolderNodes,
+    // ...sammelLieferungNodes,
+    // ...sammelLieferungLieferungFolderNodes,
+    // ...sammelLieferungLieferungNodes,
   ]
 
   const nodesSorted = nodes.sort(

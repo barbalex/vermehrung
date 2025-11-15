@@ -14,7 +14,7 @@ import { getShowHerkunft } from '../../../utils/showHerkunft.js'
 import { getShowKultur } from '../../../utils/showKultur.js'
 import { getShowLieferung } from '../../../utils/showLieferung.js'
 import { getShowPerson } from '../../../utils/showPerson.js'
-import { getShowSammelLieferung } from '../../../utils/showSammelLieferung.js'
+// import { getShowSammelLieferung } from '../../../utils/showSammelLieferung.js'
 import { getShowSammlung } from '../../../utils/showSammlung.js'
 import { getShowTeilkultur } from '../../../utils/showTeilkultur.js'
 import { getShowZaehlung } from '../../../utils/showZaehlung.js'
@@ -48,7 +48,7 @@ export const Root = observer(({ filter: showFilter }) => {
     showKultur: false,
     showLieferung: false,
     showPerson: false,
-    showSammelLieferung: false,
+    // showSammelLieferung: false,
     showSammlung: false,
     showTeilkultur: false,
     showZaehlung: false,
@@ -62,7 +62,7 @@ export const Root = observer(({ filter: showFilter }) => {
     showKultur,
     showLieferung,
     showPerson,
-    showSammelLieferung,
+    // showSammelLieferung,
     showSammlung,
     showTeilkultur,
     showZaehlung,
@@ -106,10 +106,10 @@ export const Root = observer(({ filter: showFilter }) => {
             activeNodeArray,
           })
           const sPerson = getShowPerson()
-          const sSammelLieferung = getShowSammelLieferung({
-            userPersonOption,
-            activeNodeArray,
-          })
+          // const sSammelLieferung = getShowSammelLieferung({
+          //   userPersonOption,
+          //   activeNodeArray,
+          // })
           const sSammlung = getShowSammlung({ userRole, activeNodeArray })
           const sTeilkultur = getShowTeilkultur({
             userPersonOption,
@@ -128,7 +128,7 @@ export const Root = observer(({ filter: showFilter }) => {
             showKultur: sKultur,
             showLieferung: sLieferung,
             showPerson: sPerson,
-            showSammelLieferung: sSammelLieferung,
+            // showSammelLieferung: sSammelLieferung,
             showSammlung: sSammlung,
             showTeilkultur: sTeilkultur,
             showZaehlung: sZaehlung,
@@ -150,7 +150,7 @@ export const Root = observer(({ filter: showFilter }) => {
       showKultur,
       showLieferung,
       showPerson,
-      showSammelLieferung,
+      // showSammelLieferung,
       showSammlung,
       showTeilkultur,
       showZaehlung,
@@ -207,16 +207,16 @@ export const Root = observer(({ filter: showFilter }) => {
         },
       ]
     : []),
-    ...(showSammelLieferung ?
-      [
-        {
-          name: 'Sammel-Lieferungen',
-          url: ['Sammel-Lieferungen'],
-          table: 'sammel_lieferung',
-          sort: 9,
-        },
-      ]
-    : []),
+    // ...(showSammelLieferung ?
+    //   [
+    //     {
+    //       name: 'Sammel-Lieferungen',
+    //       url: ['Sammel-Lieferungen'],
+    //       table: 'sammel_lieferung',
+    //       sort: 9,
+    //     },
+    //   ]
+    // : []),
     ...(showEvent ?
       [{ name: 'Events', url: ['Events'], table: 'event', sort: 10 }]
     : []),
