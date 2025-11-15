@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
-
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const ZieleHerkuenfte = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Ziel 1: Herkünfte</h1>
-    <DokuDate>04.10.2019</DokuDate>
+    <p className={dokuDate}>04.10.2019</p>
     <p>
       Ziel 1 lautet: &quot;Herkünfte sind bekannt und werden innerhalb von
       Kulturen nicht vermischt.&quot;
@@ -18,5 +16,5 @@ export const ZieleHerkuenfte = () => (
       <br />
     </p>
     <p>&nbsp;</p>
-  </Suspense>
+  </>
 )

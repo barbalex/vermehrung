@@ -1,14 +1,13 @@
-import { Suspense } from 'react'
 import { Link } from 'react-router'
 
-import { DokuDate } from '../../index.jsx'
+import { dokuDate } from '../../index.module.css'
 import one from './001_button.png'
 import two from './002_version.png'
 
 export const History = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Daten-Historie</h1>
-    <DokuDate>11.09.2020</DokuDate>
+    <p className={dokuDate}>11.09.2020</p>
     <p>
       Die Historisierung zeigt alle bisherigen Versionen eines Datensatzes an.
       Und sie ermöglicht, jeden dieser Zustände wieder herzustellen.
@@ -86,5 +85,5 @@ export const History = () => (
         dieser Dokumentations-Seite
       </li>
     </ul>
-  </Suspense>
+  </>
 )
