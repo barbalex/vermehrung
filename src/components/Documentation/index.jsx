@@ -51,19 +51,6 @@ const Doku = styled.div`
     margin-top: 10px;
     margin-bottom: 10px;
   }
-  .video-responsive {
-    overflow: hidden;
-    padding-bottom: 56.25%;
-    position: relative;
-    height: 0;
-  }
-  .video-responsive iframe {
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-  }
   td {
     text-align: right;
   }
@@ -131,7 +118,10 @@ export const Documentation = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div ref={ref}>
+      <div
+        ref={ref}
+        className="docs"
+      >
         {width < constants?.tree?.minimalWindowWidth ?
           path.length === 1 ?
             <div className={container}>
