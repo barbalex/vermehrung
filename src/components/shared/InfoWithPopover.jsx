@@ -1,16 +1,8 @@
 import { useState } from 'react'
 import Popover from '@mui/material/Popover'
 import { MdInfoOutline as InfoOutlineIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 
-const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`
-  cursor: pointer;
-  pointer-events: auto;
-  padding-left: 5px;
-`
-const StyledPopover = styled(Popover)`
-  border-radius: 4px;
-`
+import { infoOutlineIcon, popover } from './InfoWithPopover.module.css'
 
 export const InfoWithPopover = ({ children }) => {
   const [popupOpen, changePopupOpen] = useState(false)
@@ -26,16 +18,20 @@ export const InfoWithPopover = ({ children }) => {
 
   return (
     <>
-      <StyledInfoOutlineIcon onClick={onClickFontIcon} />
-      <StyledPopover
+      <InfoOutlineIcon
+        onClick={onClickFontIcon}
+        className={infoOutlineIcon}
+      />
+      <Popover
         open={popupOpen}
         anchorEl={popupAnchorEl}
         anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
         transformOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         onClose={onRequestClosePopover}
+        className={popover}
       >
         {children}
-      </StyledPopover>
+      </Popover>
     </>
   )
 }
