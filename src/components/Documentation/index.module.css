@@ -1,0 +1,8 @@
+.container {
+  height: calc(100dvh - 64px);
+}
+
+.splitPaneContainer {
+  height: calc(100dvh - 64px);
+  position: relative;
+}
