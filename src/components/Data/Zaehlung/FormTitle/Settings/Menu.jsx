@@ -6,28 +6,11 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
 
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-right: 16px;
-  user-select: none;
-`
-const Title = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 700;
-  user-select: none;
-`
-const Info = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.4);
-  user-select: none;
-`
+import { titleRow, title, info } from './Menu.module.css'
 
 export const ZaehlungSettingsMenu = observer(
   ({ anchorEl, setAnchorEl, kulturId }) => {
@@ -69,8 +52,8 @@ export const ZaehlungSettingsMenu = observer(
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <TitleRow>
-          <Title>Felder für Zählungen wählen:</Title>
+        <div className={titleRow}>
+          <div className={title}>Felder für Zählungen wählen:</div>
           <div>
             <IconButton
               aria-label="Anleitung öffnen"
@@ -81,7 +64,7 @@ export const ZaehlungSettingsMenu = observer(
               <IoMdInformationCircleOutline />
             </IconButton>
           </div>
-        </TitleRow>
+        </div>
         <MenuItem>
           <FormControlLabel
             value={z_bemerkungen === true ? 'true' : 'false'}
@@ -97,11 +80,11 @@ export const ZaehlungSettingsMenu = observer(
             labelPlacement="end"
           />
         </MenuItem>
-        <Info>
+        <div className={info}>
           Zwingende Felder sind nicht aufgelistet.
           <br />
           Die Wahl gilt (nur) für diese Kultur.
-        </Info>
+        </div>
       </Menu>
     )
   },
