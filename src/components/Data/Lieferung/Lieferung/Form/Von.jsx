@@ -13,11 +13,10 @@ import { sammlungsSortedFromSammlungs } from '../../../../../utils/sammlungsSort
 import { herkunftLabelFromHerkunft } from '../../../../../utils/herkunftLabelFromHerkunft.js'
 
 import {
-  title,
-  titleRow,
   herkunftClass,
   herkunftLabelClass,
 } from './Von.module.css'
+import { title, titleRow,  } from './Wann.module.css'
 
 export const LieferungVon = observer(
   ({ showFilter, row, saveToDb, ifNeeded, herkunft, herkunftQuelle }) => {
