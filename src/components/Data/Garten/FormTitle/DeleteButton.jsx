@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-import { titleRow, title } from './DeleteButton.module.css'
+import { titleRow, title } from '../../Art/FormTitle/DeleteButton.module.css'
 
 export const GartenDeleteButton = observer(({ row }) => {
   const store = useContext(MobxStoreContext)
