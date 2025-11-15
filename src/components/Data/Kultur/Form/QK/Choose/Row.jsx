@@ -1,31 +1,11 @@
 import { useContext, useState, useEffect } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@mui/material/Checkbox'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
-
-const Row = styled.div`
-  display: flex;
-  padding: 5px;
-  border-bottom: 1px solid #e8e8e8;
-  min-height: 52px;
-`
-const Check = styled.div`
-  padding: 0 5px;
-`
-const Titel = styled.div`
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-`
-const Beschreibung = styled.div`
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-`
+import { row, check, titel, beschreibung } from './Row.module.css'
 
 export const ChooseKulturQkRow = observer(({ qk }) => {
   const store = useContext(MobxStoreContext)
@@ -74,16 +54,16 @@ export const ChooseKulturQkRow = observer(({ qk }) => {
   if (!kulturQkChoosen) return null
 
   return (
-    <Row>
-      <Check>
+    <div className={row}>
+      <div className={check}>
         <Checkbox
           checked={checked}
           onChange={onChange}
           color="primary"
         />
-      </Check>
-      <Titel>{qk.titel}</Titel>
-      <Beschreibung>{qk.beschreibung}</Beschreibung>
-    </Row>
+      </div>
+      <div className={titel}>{qk.titel}</div>
+      <div className={beschreibung}>{qk.beschreibung}</div>
+    </div>
   )
 })
