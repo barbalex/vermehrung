@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import styled from '@emotion/styled'
 import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
@@ -10,9 +9,7 @@ import { Q } from '@nozbe/watermelondb'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
 
-const StyledTableCell = styled(TableCell)`
-  vertical-align: top !important;
-`
+import { tableCell } from './Lieferung.module.css'
 
 const Zeile = ({ value }) => <div>{value}</div>
 
@@ -81,17 +78,17 @@ export const LieferungForLieferschein = observer(({ lieferung: row }) => {
 
   return (
     <TableRow>
-      <StyledTableCell>{artLabel}</StyledTableCell>
-      <StyledTableCell>{herkunftLabel}</StyledTableCell>
-      <StyledTableCell>
+      <TableCell className={tableCell}>{artLabel}</TableCell>
+      <TableCell className={tableCell}>{herkunftLabel}</TableCell>
+      <TableCell className={tableCell}>
         {wasArray.map((w, i) => (
           <Zeile
             key={i}
             value={w}
           />
         ))}
-      </StyledTableCell>
-      <StyledTableCell>{bemerkungen}</StyledTableCell>
+      </TableCell>
+      <TableCell className={tableCell}>{bemerkungen}</TableCell>
     </TableRow>
   )
 })
