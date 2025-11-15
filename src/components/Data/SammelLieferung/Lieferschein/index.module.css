@@ -1,0 +1,78 @@
+.container {
+  overflow: auto;
+  scrollbar-width: thin;
+  background-color: #f8f8f8;
+  font-size: 9pt;
+  cursor: default;
+  height: calc(100dvh - 64px - 48px);
+  width: 100%;
+  @media print {
+    /* remove grey background set for nice UI */
+    background-color: #fff;
+    /* with overflow auto an empty page is inserted between each page */
+    overflow-y: visible;
+  }
+}
+
+.pageContainer {
+  /* this part is for when page preview is shown */
+  /* Divide single pages with some space and center all pages horizontally */
+  /* will be removed in @media print */
+  margin: 1cm auto;
+  /* Define a white paper background that sticks out from the darker overall background */
+  background: #fff;
+  /* Show a drop shadow beneath each page */
+  box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  /*justify-content: space-between;*/
+
+  /* set dimensions */
+  width: 29.7cm;
+  height: 21cm;
+  padding: 1.5cm;
+
+  @media print {
+    height: 100%;
+    width: 100%;
+
+    margin: 0 !important;
+    padding: 0.5cm !important;
+    overflow-y: hidden !important;
+  }
+}
+
+.title {
+  padding-top: 15px;
+  margin-bottom: 0.4rem;
+}
+
+.headerRow {
+  display: flex;
+  font-size: small;
+}
+
+.haederLabel {
+  flex-basis: 50px;
+  flex-grow: 0;
+}
+
+.paper {
+  margin-top: 15px;
+  box-shadow: none !important;
+}
+
+.table {
+  margin-bottom: 0;
+  td,
+  th {
+    font-size: 0.75rem;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  th:first-of-type,
+  td:first-of-type {
+    padding-left: 8px;
+  }
+}

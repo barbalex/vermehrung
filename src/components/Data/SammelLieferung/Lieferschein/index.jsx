@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -18,78 +17,15 @@ import { personFullname } from '../../../../utils/personFullname.js'
 import { ProgressiveImg } from '../../../shared/ProgressiveImg.tsx'
 import image from '../../../../images/toposLogo.png'
 
-const Container = styled.div`
-  overflow: auto;
-  scrollbar-width: thin;
-  background-color: #f8f8f8;
-  font-size: 9pt;
-  cursor: default;
-  height: calc(100dvh - 64px - 48px);
-  width: 100%;
-  @media print {
-    /* remove grey background set for nice UI */
-    background-color: #fff;
-    /* with overflow auto an empty page is inserted between each page */
-    overflow-y: visible;
-  }
-`
-const PageContainer = styled.div`
-  /* this part is for when page preview is shown */
-  /* Divide single pages with some space and center all pages horizontally */
-  /* will be removed in @media print */
-  margin: 1cm auto;
-  /* Define a white paper background that sticks out from the darker overall background */
-  background: #fff;
-  /* Show a drop shadow beneath each page */
-  box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
-
-  display: flex;
-  flex-direction: column;
-  /*justify-content: space-between;*/
-
-  /* set dimensions */
-  width: 29.7cm;
-  height: 21cm;
-  padding: 1.5cm;
-
-  @media print {
-    height: 100%;
-    width: 100%;
-
-    margin: 0 !important;
-    padding: 0.5cm !important;
-    overflow-y: hidden !important;
-  }
-`
-const Title = styled.h3`
-  padding-top: 15px;
-  margin-bottom: 0.4rem;
-`
-const HeaderRow = styled.div`
-  display: flex;
-  font-size: small;
-`
-const HaederLabel = styled.div`
-  flex-basis: 50px;
-  flex-grow: 0;
-`
-const StyledPaper = styled(Paper)`
-  margin-top: 15px;
-  box-shadow: none !important;
-`
-const StyledTable = styled(Table)`
-  margin-bottom: 0;
-  td,
-  th {
-    font-size: 0.75rem;
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-  th:first-of-type,
-  td:first-of-type {
-    padding-left: 8px;
-  }
-`
+import {
+  container,
+  pageContainer,
+  title,
+  headerRow,
+  haederLabel,
+  paper,
+  table,
+} from './index.module.css'
 
 export const Lieferschein = observer(({ row }) => {
   const store = useContext(MobxStoreContext)
@@ -152,8 +88,8 @@ export const Lieferschein = observer(({ row }) => {
     : '(Kein Datum erfasst)'
 
   return (
-    <Container>
-      <PageContainer className="querformat printer-content">
+    <div className={container}>
+      <div className={`querformat printer-content ${pageContainer}`}>
         <ProgressiveImg
           src={image}
           placeholderSrc={image}
@@ -161,29 +97,35 @@ export const Lieferschein = observer(({ row }) => {
           width="500px"
           height="87px"
         />
-        <Title>Lieferschein</Title>
-        <HeaderRow>
-          <HaederLabel>Projekt:</HaederLabel>
+        <h3 className={title}>Lieferschein</h3>
+        <div className={headerRow}>
+          <div className={haederLabel}>Projekt:</div>
           <div>
             {
               'Zwischenvermehrung von seltenen und bedrohten Pflanzenarten im Kanton Zürich'
             }
           </div>
-        </HeaderRow>
-        <HeaderRow>
-          <HaederLabel>von:</HaederLabel>
+        </div>
+        <div className={headerRow}>
+          <div className={haederLabel}>von:</div>
           <div>{von}</div>
-        </HeaderRow>
-        <HeaderRow>
-          <HaederLabel>an:</HaederLabel>
+        </div>
+        <div className={headerRow}>
+          <div className={haederLabel}>an:</div>
           <div>{an}</div>
-        </HeaderRow>
-        <HeaderRow>
-          <HaederLabel>am:</HaederLabel>
+        </div>
+        <div className={headerRow}>
+          <div className={haederLabel}>am:</div>
           <div>{am}</div>
-        </HeaderRow>
-        <StyledPaper square>
-          <StyledTable size="small">
+        </div>
+        <Paper
+          square
+          className={paper}
+        >
+          <Table
+            size="small"
+            className={table}
+          >
             <TableHead>
               <TableRow>
                 <TableCell>Art</TableCell>
@@ -200,9 +142,9 @@ export const Lieferschein = observer(({ row }) => {
                 />
               ))}
             </TableBody>
-          </StyledTable>
-        </StyledPaper>
-      </PageContainer>
-    </Container>
+          </Table>
+        </Paper>
+      </div>
+    </div>
   )
 })
