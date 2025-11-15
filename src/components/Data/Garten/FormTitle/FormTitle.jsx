@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { useResizeDetector } from 'react-resize-detector'
 
@@ -15,27 +14,11 @@ import KuDownSvg from '../../../../svg/to_ku_down.svg?react'
 import { HistoryButton } from '../../../shared/HistoryButton.jsx'
 import { Menu } from '../../../shared/Menu.jsx'
 
-const Container = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 10px;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import {
+  container,
+  title,
+  symbols,
+} from '../../Art/FormTitle/FormTitle.module.css'
 
 export const GartenFormTitle = observer(
   ({ row, rawRow, showHistory, setShowHistory, totalCount, filteredCount }) => {
@@ -53,9 +36,12 @@ export const GartenFormTitle = observer(
       setActiveNodeArray([...activeNodeArray, 'Kulturen'])
 
     return (
-      <Container ref={ref}>
-        <Title>Garten</Title>
-        <TitleSymbols>
+      <div
+        className={container}
+        ref={ref}
+      >
+        <div className={title}>Garten</div>
+        <div className={symbols}>
           <IconButton
             title="Zur Liste"
             onClick={onClickUp}
@@ -106,8 +92,8 @@ export const GartenFormTitle = observer(
               />
             </>
           }
-        </TitleSymbols>
-      </Container>
+        </div>
+      </div>
     )
   },
 )
