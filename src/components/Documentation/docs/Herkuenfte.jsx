@@ -1,12 +1,11 @@
-import { Suspense } from 'react'
 import { Link } from 'react-router'
 
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 export const Herkuenfte = () => (
-  <Suspense fallback={null}>
+  <>
     <h1>Herkünfte</h1>
-    <DokuDate>17.01.2020</DokuDate>
+    <p className={dokuDate}>17.01.2020</p>
     <h3>Ziele</h3>
     <ul>
       <li>
@@ -39,5 +38,5 @@ export const Herkuenfte = () => (
       entscheiden, ob dieselbe Herkunft (= geografischer Umriss) für mehrere
       Arten verwendet wird oder nur für eine.
     </p>
-  </Suspense>
+  </>
 )
