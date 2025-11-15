@@ -1,23 +1,11 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-right: 16px;
-  user-select: none;
-`
-const Title = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 700;
-  user-select: none;
-`
+import { titleRow, title } from '../../../Art/FormTitle/DeleteButton.module.css'
 
 export const KulturDeleteMenu = observer(({ row, anchorEl, setAnchorEl }) => {
   const store = useContext(MobxStoreContext)
@@ -45,9 +33,9 @@ export const KulturDeleteMenu = observer(({ row, anchorEl, setAnchorEl }) => {
       open={Boolean(anchorEl)}
       onClose={closeMenu}
     >
-      <TitleRow>
-        <Title>Wirklich löschen?</Title>
-      </TitleRow>
+      <div className={titleRow}>
+        <div className={title}>Wirklich löschen?</div>
+      </div>
       <MenuItem onClick={remove}>Ja, weg damit!</MenuItem>
       <MenuItem onClick={closeMenu}>Nein, abbrechen!</MenuItem>
     </Menu>
