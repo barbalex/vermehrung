@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Paper from '@mui/material/Paper'
 import Input from '@mui/material/Input'
@@ -10,40 +9,15 @@ import { createKulturMessageFunctions } from './createMessageFunctions.js'
 import { constants } from '../../../../../../utils/constants.js'
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 
-const Container = styled.div`
-  padding-top: 5px;
-  padding-bottom: 5px;
-`
-const StyledPaper = styled(Paper)`
-  padding: 10px;
-  margin-bottom: 12px !important;
-  background-color: transparent !important;
-`
-const Title = styled.div`
-  font-weight: bold;
-`
-const StyledA = styled.p`
-  color: inherit;
-  font-weight: normal;
-  font-size: 12px;
-  text-decoration-line: underline;
-  cursor: pointer;
-  margin-bottom: 0;
-  padding: 2px 0;
-`
-const Row = styled.div`
-  display: flex;
-`
-const ResultTitle = styled.div`
-  padding-left: 10px;
-  margin-bottom: 7px;
-`
-const StyledFormControl = styled(FormControl)`
-  padding-bottom: 10px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
+import {
+  container,
+  paper,
+  title,
+  a,
+  row,
+  resultTitleClass,
+  formControl,
+} from './index.module.css'
 
 export const KulturQk = observer(({ kultur, qkChoosens }) => {
   const store = useContext(MobxStoreContext)
@@ -96,10 +70,11 @@ export const KulturQk = observer(({ kultur, qkChoosens }) => {
     : 'rechne...'
 
   return (
-    <Container>
-      <StyledFormControl
+    <div className={container}>
+      <FormControl
         fullWidth
         variant="standard"
+        className={formControl}
       >
         <InputLabel
           htmlFor="filter"
@@ -113,33 +88,40 @@ export const KulturQk = observer(({ kultur, qkChoosens }) => {
           onChange={onChangeFilter}
           spellCheck={false}
         />
-      </StyledFormControl>
-      <ResultTitle>{resultTitle}</ResultTitle>
+      </FormControl>
+      <div className={resultTitleClass}>{resultTitle}</div>
       {messageGroupsFiltered.map((messageGroup) => (
-        <StyledPaper
+        <Paper
           key={messageGroup.title}
           elevation={2}
+          className={paper}
         >
-          <Title>{`${messageGroup.title} (${messageGroup.messages.length})`}</Title>
+          <div
+            className={title}
+          >{`${messageGroup.title} (${messageGroup.messages.length})`}</div>
           {messageGroup.messages.map((m, i) => (
-            <Row key={`${m.text}Index${i}`}>
-              <StyledA
+            <div
+              className={row}
+              key={`${m.text}Index${i}`}
+            >
+              <p
                 onClick={() =>
                   window.open(
                     `${constants?.getAppUri()}/Vermehrung/${m.url.join('/')}`,
                   )
                 }
                 title="in neuem Fenster öffnen"
+                className={a}
               >
                 {m.text}
-              </StyledA>
-            </Row>
+              </p>
+            </div>
           ))}
-        </StyledPaper>
+        </Paper>
       ))}
       {messageGroups?.length === 0 && (
         <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
       )}
-    </Container>
+    </div>
   )
 })
