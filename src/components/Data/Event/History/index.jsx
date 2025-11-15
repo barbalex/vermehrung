@@ -9,7 +9,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { EventHistoryRow as Row } from './Row.jsx'
 
-import { container, errorContainer } from './index.module.css'
+import { container, errorContainer } from '../../Art/History/index.module.css'
 
 const eventRevQuery = gql`
   query eventRevForHistoryQuery($rev: [String!]) {
