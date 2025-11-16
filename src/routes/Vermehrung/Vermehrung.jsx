@@ -1,5 +1,4 @@
 import { useContext, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { Allotment } from 'allotment'
 import { observer } from 'mobx-react-lite'
 
@@ -10,10 +9,7 @@ import { Filter } from '../../components/Filter.jsx'
 import { Fallback } from '../../components/shared/Fallback.jsx'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  min-height: calc(100dvh - var(--app-bar-height));
-  position: relative;
-`
+import { container } from './Vermehrung.module.css'
 
 export const Vermehrung = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -46,7 +42,7 @@ export const Vermehrung = observer(() => {
 
   // need the key on Allotment or it would only render correctly on second render
   return (
-    <Container>
+    <div className={container}>
       <Allotment key={`${treeWidth}/${formWidth}`}>
         <Allotment.Pane
           visible={treeWidth !== 0}
@@ -73,6 +69,6 @@ export const Vermehrung = observer(() => {
           </Suspense>
         </Allotment.Pane>
       </Allotment>
-    </Container>
+    </div>
   )
 })
