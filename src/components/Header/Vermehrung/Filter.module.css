@@ -2,3 +2,37 @@
 .showBorder {
   border-width: 1px !important;
 }
+
+.button {
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-width: 0 !important;
+  text-transform: none !important;
+  margin-right: 5px !important;
+  height: 34px !important;
+  &:hover {
+    border-width: 1px !important;
+  }
+}
+
+.iconButton {
+  font-size: 2rem !important;
+  &:hover {
+    border-width: 1px !important;
+  }
+}
+
+.iconDiv {
+  svg {
+    height: 34px;
+    vertical-align: middle;
+  }
+}
+
+.deleteFilterIcon {
+  cursor: pointer;
+  pointer-events: auto;
+  color: white;
+  font-size: 1.3rem !important;
+  margin-left: 10px;
+}
