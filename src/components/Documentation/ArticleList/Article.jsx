@@ -2,12 +2,7 @@ import { useNavigate } from 'react-router'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { FaChevronRight, FaChevronDown } from 'react-icons/fa'
-import styled from '@emotion/styled'
 import { isEqual } from 'es-toolkit'
-
-const ListItem = styled(ListItemButton)`
-  ${(props) => props.ischild1 === 'true' && 'padding-left: 35px !important;'}
-`
 
 export const Article = ({ node }) => {
   const navigate = useNavigate()
@@ -27,20 +22,18 @@ export const Article = ({ node }) => {
   if (isChildClosed) return null
 
   return (
-    <>
-      <ListItem
-        onClick={onClickMenuItem}
-        selected={active}
-        divider
-        ischild1={isChild.toString()}
-        id={slug}
-      >
-        <ListItemText onClick={onClickMenuItem}>
-          {title ?? '(Titel fehlt)'}
-        </ListItemText>
-        {isParent && isParentOpen && <FaChevronDown />}
-        {isParent && !isParentOpen && <FaChevronRight />}
-      </ListItem>
-    </>
+    <ListItemButton
+      onClick={onClickMenuItem}
+      selected={active}
+      divider
+      id={slug}
+      style={{ ...(isChild ? { paddingLeft: 35 } : {}) }}
+    >
+      <ListItemText onClick={onClickMenuItem}>
+        {title ?? '(Titel fehlt)'}
+      </ListItemText>
+      {isParent && isParentOpen && <FaChevronDown />}
+      {isParent && !isParentOpen && <FaChevronRight />}
+    </ListItemButton>
   )
 }
