@@ -3,26 +3,12 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import { FaHome } from 'react-icons/fa'
-import styled from '@emotion/styled'
 import { Link } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
-const SiteTitle = styled(Button)`
-  display: none;
-  color: white !important;
-  font-size: 20px !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  border-width: 0 !important;
-  text-transform: unset !important;
-  @media (min-width: 700px) {
-    display: block;
-  }
-  &:hover {
-    border-width: 1px !important;
-  }
-`
+import { siteTitle } from './Home.module.css'
 
 export const HeaderHome = observer(({ asMenu }) => {
   const store = useContext(MobxStoreContext)
@@ -55,13 +41,14 @@ export const HeaderHome = observer(({ asMenu }) => {
   }
 
   return (
-    <SiteTitle
+    <Button
       variant="outlined"
       component={Link}
       to="/"
       title="Home"
+      className={siteTitle}
     >
       Vermehrung
-    </SiteTitle>
+    </Button>
   )
 })

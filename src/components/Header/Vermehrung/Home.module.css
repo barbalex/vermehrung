@@ -1,0 +1,16 @@
+.siteTitle {
+  display: none;
+  color: white !important;
+  font-size: 20px !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-width: 0 !important;
+  text-transform: unset !important;
+
+  @media (min-width: 700px) {
+    display: block;
+  }
+
+  &:hover {
+    border-width: 1px !important;
+  }
+}
