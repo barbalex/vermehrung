@@ -1,10 +1,8 @@
 import styled from '@emotion/styled'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { constants } from '../../utils/constants.js'
-
 const SpinnerContainer = styled.div`
-  min-height: calc(100dvh - ${constants.appBarHeight}px);
+  min-height: calc(100dvh - var(--app-bar-height));
   display: flex;
   flex-direction: column;
   justify-content: center;
