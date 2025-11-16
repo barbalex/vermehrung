@@ -1,0 +1,24 @@
+.container {
+  background-color: rgba(74, 20, 140, 0.1);
+  padding: 0 10px;
+  flex-shrink: 0;
+  display: flex;
+  @media print {
+    display: none !important;
+  }
+  height: var(--title-row-height);
+  justify-content: space-between;
+}
+
+.title {
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-left: 10px;
+}
+
+.symbols {
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+}
