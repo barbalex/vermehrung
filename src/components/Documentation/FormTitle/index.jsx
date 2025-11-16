@@ -1,31 +1,8 @@
 import { useNavigate, useLocation } from 'react-router'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 
 import UpSvg from '../../../svg/to_up.svg?react'
-
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  padding: 0 10px;
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: var(--title-row-height);
-  justify-content: space-between;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-left: 10px;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
+import { container, title, symbols } from './index.module.css'
 
 export const DocumentationFormTitle = () => {
   const navigate = useNavigate()
@@ -38,9 +15,9 @@ export const DocumentationFormTitle = () => {
   }
 
   return (
-    <TitleContainer>
-      <Title>Dokumentation</Title>
-      <TitleSymbols>
+    <div className={container}>
+      <div className={title}>Dokumentation</div>
+      <div className={symbols}>
         <IconButton
           title="zurück"
           onClick={onClickUp}
@@ -48,7 +25,7 @@ export const DocumentationFormTitle = () => {
         >
           <UpSvg />
         </IconButton>
-      </TitleSymbols>
-    </TitleContainer>
+      </div>
+    </div>
   )
 }
