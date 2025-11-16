@@ -9,7 +9,6 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import { FaUserCircle as UserIcon, FaExclamationCircle } from 'react-icons/fa'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
@@ -22,17 +21,7 @@ import { reloadData } from '../../../utils/reloadData.js'
 import { constants } from '../../../utils/constants.js'
 import { personFullname } from '../../../utils/personFullname.js'
 
-const StyledUserIcon = styled(UserIcon)`
-  color: white;
-`
-const StyledButton = styled(Button)`
-  text-transform: none !important;
-`
-const RiskyButton = styled(Button)`
-  text-transform: none !important;
-  color: #d84315 !important;
-  border-color: #d84315 !important;
-`
+import { userIcon, button, riskyButton } from './Account.module.css'
 
 const Account = () => {
   const store = useContext(MobxStoreContext)
@@ -121,7 +110,7 @@ const Account = () => {
           onClick={onClickMenu}
           size="large"
         >
-          <StyledUserIcon />
+          <UserIcon className={userIcon} />
         </IconButton>
         <Menu
           id="menu-appbar"
@@ -165,26 +154,28 @@ const Account = () => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <StyledButton
+            <Button
               onClick={() => setPendingOperationsDialogOpen(false)}
               color="primary"
               autoFocus
               variant="outlined"
+              className={button}
             >
               Ich bleibe angemeldet, um die ausstehenden Operationen nicht zu
               verlieren
-            </StyledButton>
-            <RiskyButton
+            </Button>
+            <Button
               onClick={() => {
                 setPendingOperationsDialogOpen(false)
                 logout({ store })
               }}
               variant="outlined"
               startIcon={<FaExclamationCircle />}
+              className={riskyButton}
             >
               Ich will abmelden, obwohl ich die ausstehenden Operationen
               verliere
-            </RiskyButton>
+            </Button>
           </DialogActions>
         </Dialog>
         <Dialog
@@ -204,25 +195,27 @@ const Account = () => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <StyledButton
+            <Button
               onClick={() => setReloadDataDialogOpen(false)}
               color="primary"
               autoFocus
               variant="outlined"
+              className={button}
             >
               Ich verzichte, um die ausstehenden Operationen nicht zu verlieren
-            </StyledButton>
-            <RiskyButton
+            </Button>
+            <Button
               onClick={() => {
                 setReloadDataDialogOpen(false)
                 reloadData({ store })
               }}
               variant="outlined"
               startIcon={<FaExclamationCircle />}
+              className={riskyButton}
             >
               Ich lade die Daten neu, obwohl ich die ausstehenden Operationen
               verliere
-            </RiskyButton>
+            </Button>
           </DialogActions>
         </Dialog>
       </>

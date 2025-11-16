@@ -1,0 +1,13 @@
+.userIcon {
+  color: white;
+}
+
+.button {
+  text-transform: none !important;
+}
+
+.riskyButton {
+  text-transform: none !important;
+  color: #d84315 !important;
+  border-color: #d84315 !important;
+}
