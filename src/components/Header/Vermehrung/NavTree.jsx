@@ -1,13 +1,8 @@
 import { useContext } from 'react'
 import IconButton from '@mui/material/IconButton'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-
-const StyledIconButton = styled(IconButton)`
-  ${(props) => props['data-active'] && 'border: 1px solid #9762d9 !important;'}
-`
 
 export const HeaderNavTree = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -23,7 +18,7 @@ export const HeaderNavTree = observer(() => {
   if (!singleColumnView) return null
 
   return (
-    <StyledIconButton
+    <IconButton
       color="inherit"
       aria-label="Navigations-Baum öffnen"
       onClick={onClickTreeMenu}
@@ -33,6 +28,7 @@ export const HeaderNavTree = observer(() => {
         : 'Navigations-Baum öffnen'
       }
       data-active={showTreeInSingleColumnView}
+      style={showTreeInSingleColumnView ? { border: '1px solid #9762d9' } : {}}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -81,6 +77,6 @@ export const HeaderNavTree = observer(() => {
           d="M334.39 319.59h147.34"
         />
       </svg>
-    </StyledIconButton>
+    </IconButton>
   )
 })
