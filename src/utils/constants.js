@@ -1,5 +1,4 @@
 export const constants = {
-  appBarHeight: 64,
   titleRowHeight: 48,
   singleRowHeight: 48,
   getGraphQlUri: () =>
