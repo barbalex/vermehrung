@@ -3,40 +3,13 @@ import Toolbar from '@mui/material/Toolbar'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import { FaHome } from 'react-icons/fa'
-import styled from '@emotion/styled'
 import { Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../utils/constants.js'
 
-const SiteTitle = styled(Button)`
-  display: none;
-  color: white !important;
-  font-size: 20px !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  border-width: 0 !important;
-  text-transform: unset !important;
-  @media (min-width: 700px) {
-    display: block;
-  }
-  &:hover {
-    border-width: 1px !important;
-  }
-`
-const Spacer = styled.div`
-  flex-grow: 1;
-`
-
-const NavButton = styled(Button)`
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  border-width: 0 !important;
-  text-transform: none !important;
-  &:hover {
-    border-width: 1px !important;
-  }
-`
+import { siteTitle, spacer, navButton } from './Home.module.css'
 
 export const HeaderHome = ({ location }) => {
   const { width, ref } = useResizeDetector()
@@ -65,30 +38,33 @@ export const HeaderHome = ({ location }) => {
                 <FaHome />
               </IconButton>
 
-          : <SiteTitle
+          : <Button
               variant="outlined"
               component={Link}
               to="/"
               title="Home"
+              className={siteTitle}
             >
               Vermehrung
-            </SiteTitle>
+            </Button>
           }
-          <Spacer />
-          <NavButton
+          <div className={spacer} />
+          <Button
             variant="outlined"
             component={Link}
             to="/Dokumentation/"
+            className={navButton}
           >
             Dokumentation
-          </NavButton>
-          <NavButton
+          </Button>
+          <Button
             variant="outlined"
             component={Link}
             to="/Vermehrung/"
+            className={navButton}
           >
             Daten
-          </NavButton>
+          </Button>
         </Toolbar>
       </AppBar>
     </ErrorBoundary>
