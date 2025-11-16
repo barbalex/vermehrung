@@ -8,6 +8,8 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
+import { showBorder } from './Filter.module.css'
+
 const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
@@ -20,13 +22,16 @@ const StyledButton = styled(Button)`
   }
 `
 const FilterButton = styled(StyledButton)`
-  border-width: ${(props) =>
-    props['data-active'] ? '1px !important' : '0 !important'};
   height: 34px !important;
+  &:hover {
+    border-width: 1px !important;
+  }
 `
 const StyledIconButton = styled(IconButton)`
-  ${(props) => props['data-active'] && 'border: 1px solid #9762d9 !important;'}
   font-size: 2rem !important;
+  &:hover {
+    border-width: 1px !important;
+  }
 `
 const IconDiv = styled.div`
   svg {
@@ -56,7 +61,7 @@ export const HeaderFilter = observer(() => {
         aria-label="Filter"
         onClick={onClickFilter}
         title="Filter"
-        data-active={showFilter}
+        className={`${showFilter ? showBorder : ''}`}
       >
         {filtered ?
           <RiFilterFill />
@@ -69,7 +74,7 @@ export const HeaderFilter = observer(() => {
     <FilterButton
       variant="outlined"
       onClick={onClickFilter}
-      data-active={showFilter}
+      className={`${showFilter ? showBorder : ''}`}
     >
       Filter
       {filtered && (

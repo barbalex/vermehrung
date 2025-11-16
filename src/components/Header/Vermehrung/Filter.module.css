@@ -1,0 +1,4 @@
+/* need to add this as class, as adding inside style does not override mui styling */
+.showBorder {
+  border-width: 1px !important;
+}
