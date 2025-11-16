@@ -1,0 +1,5 @@
+.container {
+  height: calc(100dvh - var(--app-bar-height));
+  overflow-y: auto;
+  scrollbar-width: thin;
+}

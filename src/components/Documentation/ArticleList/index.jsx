@@ -1,19 +1,13 @@
 import { useContext } from 'react'
 import List from '@mui/material/List'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 
 import { Article } from './Article.jsx'
-import { constants } from '../../../utils/constants.js'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 
-const Container = styled.div`
-  height: calc(100dvh - ${constants.appBarHeight}px);
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
+import { container } from './index.module.css'
 
 export const ArticleList = observer(({ articles }) => {
   const store = useContext(MobxStoreContext)
@@ -26,7 +20,7 @@ export const ArticleList = observer(({ articles }) => {
   const { pathname } = useLocation()
 
   return (
-    <Container>
+    <div className={container}>
       <List
         component="nav"
         dense
@@ -49,6 +43,6 @@ export const ArticleList = observer(({ articles }) => {
         })}
       </List>
       <IntoViewScroller />
-    </Container>
+    </div>
   )
 })
