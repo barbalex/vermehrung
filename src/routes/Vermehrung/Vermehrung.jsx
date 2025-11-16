@@ -7,12 +7,11 @@ import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { Tree } from '../../components/Tree/index.jsx'
 import { Data } from '../../components/Data/index.jsx'
 import { Filter } from '../../components/Filter.jsx'
-import { constants } from '../../utils/constants.js'
 import { Fallback } from '../../components/shared/Fallback.jsx'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
-  min-height: calc(100dvh - ${constants.appBarHeight}px);
+  min-height: calc(100dvh - var(--app-bar-height));
   position: relative;
 `
 
