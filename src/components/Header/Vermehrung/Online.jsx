@@ -11,9 +11,7 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
-const OnlineButton = styled(IconButton)`
-  /*cursor: default !important;*/
-`
+// keep this use of styled
 const StyledBadge = styled(Badge)`
   .MuiBadge-badge {
     background-color: rgba(0, 0, 0, 0);
@@ -45,7 +43,7 @@ export const Online = observer(() => {
   }
 
   return (
-    <OnlineButton
+    <IconButton
       color="inherit"
       aria-label={title}
       title={title}
@@ -60,6 +58,6 @@ export const Online = observer(() => {
           <NetworkOn />
         : <NetworkOff />}
       </StyledBadge>
-    </OnlineButton>
+    </IconButton>
   )
 })
