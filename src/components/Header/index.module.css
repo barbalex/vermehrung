@@ -1,0 +1,11 @@
+.appBar {
+  min-height: var(--app-bar-height) !important;
+  .MuiToolbar-root {
+    min-height: var(--app-bar-height) !important;
+    padding-left: 0 !important;
+    padding-right: 10px !important;
+  }
+  @media print {
+    display: none !important;
+  }
+}
