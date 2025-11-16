@@ -4,7 +4,7 @@
   background-color: #f8f8f8;
   font-size: 9pt;
   cursor: default;
-  height: calc(100dvh - 64px - 48px);
+  height: calc(100dvh - var(--app-bar-height) - 48px);
   width: 100%;
   @media print {
     /* remove grey background set for nice UI */

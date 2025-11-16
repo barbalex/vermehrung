@@ -1,9 +1,9 @@
 .container {
-  height: calc(100dvh - 64px);
+  height: calc(100dvh - var(--app-bar-height));
 }
 
 .splitPaneContainer {
-  height: calc(100dvh - 64px);
+  height: calc(100dvh - var(--app-bar-height));
   position: relative;
 }
 
