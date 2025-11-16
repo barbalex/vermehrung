@@ -22,11 +22,11 @@ const NoOpsContainer = styled.div`
   padding: 0 15px;
 `
 const Container = styled.div`
-  min-height: calc(100dvh - ${constants.appBarHeight}px);
+  min-height: calc(100dvh - var(--app-bar-height));
   position: relative;
 `
 const OuterContainer = styled.div`
-  height: calc(100dvh - ${constants.appBarHeight}px - 15px - 23px - 23px);
+  height: calc(100dvh - var(--app-bar-height) - 15px - 23px - 23px);
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
