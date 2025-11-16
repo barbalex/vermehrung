@@ -1,5 +1,4 @@
 export const constants = {
-  titleRowHeight: 48,
   singleRowHeight: 48,
   getGraphQlUri: () =>
     window?.location?.hostname === 'localhost' ?
