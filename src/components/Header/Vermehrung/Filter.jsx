@@ -8,19 +8,30 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
-import {
-  showBorder,
-  button,
-  iconButton,
-  iconDiv,
-  deleteFilterIcon,
-} from './Filter.module.css'
+// tried to convert this to css modules
+// but mui somehow prevents the border of the button / iconButton from showing when showFilter is true
+// worked neither as style props nor as classes
+// cost me an hour of fighting against dragons, so I gave up
 
-const StyledIconButton = styled(IconButton)`
-  font-size: 2rem !important;
+const StyledButton = styled(Button)`
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-width: 0 !important;
+  text-transform: none !important;
+  margin-right: 5px !important;
+  height: 34px !important;
   &:hover {
     border-width: 1px !important;
   }
+`
+const FilterButton = styled(StyledButton)`
+  border-width: ${(props) =>
+    props['data-active'] ? '1px !important' : '0 !important'};
+  height: 34px !important;
+`
+const StyledIconButton = styled(IconButton)`
+  ${(props) => props['data-active'] && 'border: 1px solid #9762d9 !important;'}
+  font-size: 2rem !important;
 `
 const IconDiv = styled.div`
   svg {
@@ -50,7 +61,7 @@ export const HeaderFilter = observer(() => {
         aria-label="Filter"
         onClick={onClickFilter}
         title="Filter"
-        className={`${showFilter ? showBorder : ''}`}
+        data-active={showFilter}
       >
         {filtered ?
           <RiFilterFill />
@@ -60,10 +71,10 @@ export const HeaderFilter = observer(() => {
   }
 
   return (
-    <Button
+    <FilterButton
       variant="outlined"
       onClick={onClickFilter}
-      className={`${button} ${showFilter ? showBorder : ''}`}
+      data-active={showFilter}
     >
       Filter
       {filtered && (
@@ -78,6 +89,6 @@ export const HeaderFilter = observer(() => {
           <StyledDeleteFilterIcon />
         </IconDiv>
       )}
-    </Button>
+    </FilterButton>
   )
 })
