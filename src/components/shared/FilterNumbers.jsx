@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import MenuItem from '@mui/material/MenuItem'
 
 const OuterContainer = styled.div`
-  min-width: 48px;
+  min-width: var(--title-row-height);
   display: flex;
   justify-content: center;
 `
@@ -11,7 +11,7 @@ const Container = styled.div`
   flex-direction: column;
   font-size: 0.7em;
   font-weight: 500;
-  min-height: 48px;
+  min-height: var(--title-row-height);
   justify-content: center;
   cursor: default;
   user-select: none;
