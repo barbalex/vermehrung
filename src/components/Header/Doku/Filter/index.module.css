@@ -1,0 +1,23 @@
+.container {
+  height: 100%;
+  padding: 3px 6px;
+  display: flex;
+  border-radius: 3px;
+  background-color: #6625b5 !important;
+}
+
+.input {
+  color: white !important;
+  div hr {
+    width: calc(100% - 20px) !important;
+  }
+  &:before,
+  &:after {
+    border-bottom: none !important;
+  }
+}
+
+.filterIcon {
+  color: white;
+  cursor: default;
+}
