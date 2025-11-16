@@ -11,7 +11,7 @@ const Container = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: var(--title-row-height);
   justify-content: space-between;
 `
 const Title = styled.div`
@@ -31,7 +31,7 @@ const FilterNumbers = styled.div`
   padding-right: 5px;
   margin-top: auto;
   margin-bottom: auto;
-  min-width: 48px;
+  min-width: var(--title-row-height);
   text-align: center;
 `
 
