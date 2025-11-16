@@ -12,7 +12,7 @@ const TitleContainer = styled.div`
   @media print {
     display: none !important;
   }
-  height: 48px;
+  height: var(--title-row-height);
   justify-content: space-between;
 `
 const Title = styled.div`
