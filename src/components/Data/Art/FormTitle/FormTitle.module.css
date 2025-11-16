@@ -2,7 +2,7 @@
   background-color: rgba(74, 20, 140, 0.1);
   flex-shrink: 0;
   display: flex;
-  height: 48px;
+  height: var(--title-row-height);
   justify-content: space-between;
   @media print {
     display: none !important;
