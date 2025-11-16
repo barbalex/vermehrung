@@ -1,7 +1,5 @@
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 import { useResizeDetector } from 'react-resize-detector'
 
 import Account from './Account.jsx'
@@ -15,11 +13,10 @@ import { HeaderFilter as Filter } from './Filter.jsx'
 import { HeaderHome as Home } from './Home.jsx'
 import { Menu } from '../../shared/Menu.jsx'
 
-const Spacer = styled.div`
-  flex-grow: 1;
-`
+import { spacer } from './index.module.css'
 
-export const HeaderVermehrung = observer(() => {
+// TODO: use media queries instead of resize detector?
+export const HeaderVermehrung = () => {
   const { width, ref } = useResizeDetector()
 
   return (
@@ -32,7 +29,7 @@ export const HeaderVermehrung = observer(() => {
           <NavTree />
           {width < 509 ?
             <>
-              <Spacer />
+              <div className={spacer} />
               <Filter />
               <HeaderSearch />
               <Online />
@@ -46,7 +43,7 @@ export const HeaderVermehrung = observer(() => {
           : width < 557 ?
             <>
               <Home />
-              <Spacer />
+              <div className={spacer} />
               <Filter />
               <HeaderSearch />
               <Online />
@@ -59,7 +56,7 @@ export const HeaderVermehrung = observer(() => {
           : width < 605 ?
             <>
               <Home />
-              <Spacer />
+              <div className={spacer} />
               <Filter />
               <HeaderSearch />
               <Online />
@@ -71,7 +68,7 @@ export const HeaderVermehrung = observer(() => {
             </>
           : <>
               <Home />
-              <Spacer />
+              <div className={spacer} />
               <Docu />
               <Filter />
               <HeaderSearch />
@@ -84,4 +81,4 @@ export const HeaderVermehrung = observer(() => {
       </AppBar>
     </ErrorBoundary>
   )
-})
+}
