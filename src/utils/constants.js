@@ -17,13 +17,7 @@ export const constants = {
     window?.location?.hostname === 'localhost' ?
       `http://${window.location.host}`
     : 'https://vermehrung.ch',
-  testArten: ['1ab6bbb1-979a-4232-a5d8-62efb5cb984a'],
   tree: {
-    minimalWidth: 331,
-    minimalWindowWidth: 1000,
-  },
-  sidebar: {
-    width: 420,
     minimalWindowWidth: 1000,
   },
 }
