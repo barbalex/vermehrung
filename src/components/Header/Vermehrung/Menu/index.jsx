@@ -1,19 +1,15 @@
 import { useState } from 'react'
-import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
 import MenuItem from '@mui/material/MenuItem'
 import { MdMenu } from 'react-icons/md'
-import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { HeaderHamburgerMenu as Menu } from './Menu.jsx'
 
-const Icon = styled(MdMenu)`
-  color: white;
-`
+import { icon } from './index.module.css'
 
-export const HeaderHamburgerMenu = observer(({ asMenu }) => {
+export const HeaderHamburgerMenu = ({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickMenu = (event) => setAnchorEl(event.currentTarget)
 
@@ -45,7 +41,7 @@ export const HeaderHamburgerMenu = observer(({ asMenu }) => {
         onClick={onClickMenu}
         size="large"
       >
-        <Icon />
+        <MdMenu className={icon} />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -53,4 +49,4 @@ export const HeaderHamburgerMenu = observer(({ asMenu }) => {
       />
     </ErrorBoundary>
   )
-})
+}
