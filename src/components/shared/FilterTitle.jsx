@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import {
   MdDeleteSweep as DeleteFilterIcon,
   MdOutlineDeleteSweep as DeleteFilterIconOutlined,
@@ -9,34 +8,13 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-const Container = styled.div`
-  background-color: #ffe0b2;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  @media print {
-    display: none !important;
-  }
-`
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-`
-const FilterNumbers = styled.div`
-  padding-right: 8px;
-  cursor: default;
-  user-select: none;
-`
-const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
-  cursor: pointer;
-  pointer-events: auto;
-`
-const StyledDeleteFilterIcon2 = styled(DeleteFilterIconOutlined)`
-  cursor: pointer;
-  pointer-events: auto;
-`
+import {
+  container,
+  titleRow,
+  filterNumbers,
+  deleteFilterIcon,
+  deleteFilterIcon2,
+} from './FilterTitle.module.css'
 
 export const FilterTitle = observer(
   ({ title, table, totalCount, filteredCount }) => {
@@ -49,12 +27,12 @@ export const FilterTitle = observer(
     const onEmptyTable = () => emptyTable({ table })
 
     return (
-      <Container>
-        <TitleRow>
-          <FilterNumbers>
+      <div className={container}>
+        <div className={titleRow}>
+          <div className={filterNumbers}>
             <span title="gefilterte Anzahl">{filteredCount}</span>/
             <span title="ungefilterte Anzahl">{totalCount}</span>
-          </FilterNumbers>
+          </div>
           {existsTableFilter && (
             <IconButton
               aria-label={`${title}-Filter entfernen`}
@@ -62,18 +40,19 @@ export const FilterTitle = observer(
               onClick={onEmptyTable}
               size="medium"
             >
-              <StyledDeleteFilterIcon2 />
+              <DeleteFilterIconOutlined className={deleteFilterIcon2} />
             </IconButton>
           )}
           {filtered && (
-            <StyledDeleteFilterIcon
+            <DeleteFilterIcon
               aria-label="Alle Filter entfernen"
               title="Alle Filter entfernen"
               onClick={empty}
+              className={deleteFilterIcon}
             />
           )}
-        </TitleRow>
-      </Container>
+        </div>
+      </div>
     )
   },
 )
