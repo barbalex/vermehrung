@@ -3,29 +3,14 @@ import Checkbox from '@mui/material/Checkbox'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-// without slight padding radio is slightly cut off!
-const Container = styled.div`
-  display: block;
-`
-const StyledFormControl = styled(FormControl)`
-  padding-left: 1px !important;
-  padding-bottom: 15px !important;
-`
-const StyledFormLabel = styled(FormLabel)`
-  padding-top: 10px !important;
-  padding-bottom: 8px !important;
-  font-size: 12px !important;
-  cursor: text;
-  user-select: none;
-  pointer-events: none;
-`
-const StyledCheckbox = styled(Checkbox)`
-  height: 2px !important;
-  width: 24px;
-`
+import {
+  container,
+  formControl,
+  formLabel,
+  checkbox,
+} from './Checkbox2States.module.css'
 
 export const Checkbox2States = observer(
   ({ label, name, value: valuePassed, error, saveToDb }) => {
@@ -49,25 +34,32 @@ export const Checkbox2States = observer(
     const checked = stateValue === true
 
     return (
-      <Container>
-        <StyledFormControl
+      <div className={container}>
+        <FormControl
           component="fieldset"
           error={!!error}
           aria-describedby={`${label}ErrorText`}
           variant="standard"
+          className={formControl}
         >
-          <StyledFormLabel component="legend">{label}</StyledFormLabel>
-          <StyledCheckbox
+          <FormLabel
+            component="legend"
+            className={formLabel}
+          >
+            {label}
+          </FormLabel>
+          <Checkbox
             data-id={name}
             onClick={onClickButton}
             color="primary"
             checked={checked}
+            className={checkbox}
           />
           {!!error && (
             <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
           )}
-        </StyledFormControl>
-      </Container>
+        </FormControl>
+      </div>
     )
   },
 )
