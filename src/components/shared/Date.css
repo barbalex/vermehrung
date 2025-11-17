@@ -1,0 +1,11 @@
+.date-field {
+  .react-datepicker-popper {
+    z-index: 2;
+  }
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
+  .react-datepicker__header {
+    background-color: rgba(74, 20, 140, 0.1) !important;
+  }
+}
