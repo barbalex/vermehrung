@@ -1,20 +1,10 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { MdClose as CloseIcon } from 'react-icons/md'
 import { sortBy } from 'es-toolkit'
 
-const Container = styled.div`
-  padding: 5px;
-  z-index: 10;
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-`
-const StyledIconButton = styled(IconButton)`
-  margin-left: 5px !important;
-`
+import { container, iconButton } from './index.module.css'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { Notification } from './Notification.jsx'
@@ -31,7 +21,7 @@ export const Notifications = observer(() => {
   if (notificationsSorted.length === 0) return null
 
   return (
-    <Container>
+    <div className={container}>
       {notificationsSorted.map((n) => (
         <Notification
           key={n.id}
@@ -39,7 +29,7 @@ export const Notifications = observer(() => {
         />
       ))}
       {notificationsSorted.length > 2 && (
-        <StyledIconButton
+        <IconButton
           key="close"
           aria-label="Close"
           color="secondary"
@@ -47,10 +37,11 @@ export const Notifications = observer(() => {
           title="Alle Meldungen schliessen"
           size="small"
           edge="start"
+          className={iconButton}
         >
           <CloseIcon />
-        </StyledIconButton>
+        </IconButton>
       )}
-    </Container>
+    </div>
   )
 })
