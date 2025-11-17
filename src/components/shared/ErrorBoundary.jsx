@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
-import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
 import { logout } from '../../utils/logout.js'
@@ -17,30 +16,11 @@ import {
   pre,
 } from './ErrorBoundary.module.css'
 
-const StyledButton = styled(Button)`
-  text-transform: none !important;
-`
-const Details = styled.details`
-  margin-bottom: 25px;
-`
-const Summary = styled.summary`
-  user-select: none;
-  &:focus {
-    outline: none !important;
-  }
-`
-const PreWrapping = styled.pre`
-  white-space: normal;
-`
-const Pre = styled.pre`
-  background-color: rgba(128, 128, 128, 0.09);
-`
-
 const onReload = () => window.location.reload(true)
 
 const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   // ISSUE:
-  // watermelondb throws error when record not found
+  // WatermelonDB throws error when record not found
   // this can happen when data is loaded first time and url is direct link to a dataset
   // turned off as using own ErrorBoundary to catch this
   /*const lcMessage = error.message.toLowerCase()
@@ -52,28 +32,30 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   return (
     <div className={container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <PreWrapping>{error.message}</PreWrapping>
-      <Details>
-        <Summary>Mehr Informationen</Summary>
-        <Pre>{componentStack}</Pre>
-      </Details>
+      <pre className={preWrapping}>{error.message}</pre>
+      <details className={details}>
+        <summary className={summary}>Mehr Informationen</summary>
+        <pre className={pre}>{componentStack}</pre>
+      </details>
       <div className={buttonContainer}>
-        <StyledButton
+        <Button
           variant="outlined"
           onClick={onReload}
           color="inherit"
+          className={button}
         >
           neu starten
-        </StyledButton>
+        </Button>
       </div>
       <div className={buttonContainer}>
-        <StyledButton
+        <Button
           variant="outlined"
           onClick={resetErrorBoundary}
           color="inherit"
+          className={button}
         >
           Cache leeren und neu starten (neue Anmeldung nötig)
-        </StyledButton>
+        </Button>
       </div>
     </div>
   )
