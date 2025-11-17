@@ -32,21 +32,16 @@ import {
 } from '../../utils/wgs84LongIsValid.js'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const FieldContainer = styled.div`
-  flex-grow: 4;
-`
-const LeftFormControl = styled(StyledFormControl)`
-  padding-right: 8px !important;
-`
-const Row = styled.div`
-  display: flex;
-`
+import {
+  formControl,
+  fieldContainer,
+  leftFormControl,
+  rowClass,
+  container,
+  buttonContainer,
+  menuTitle,
+} from './Coordinates.module.css'
+
 const Container = styled.div`
   display: flex;
 `
@@ -54,7 +49,6 @@ const ButtonContainer = styled.div`
   align-self: center;
   flex-shrink: 2;
 `
-const MapButton = styled(IconButton)``
 const MenuTitle = styled.div`
   padding-top: 6px;
   padding-left: 15px;
@@ -247,14 +241,15 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
 
   return (
     <Container>
-      <FieldContainer>
+      <div className={fieldContainer}>
         {ga_lat_lng && (
-          <Row>
-            <LeftFormControl
+          <div className={rowClass}>
+            <FormControl
               fullWidth
               error={!!wgs84LatError}
               aria-describedby={`${id}wgs84LatErrorText`}
               variant="standard"
+              className={leftFormControl}
             >
               <InputLabel
                 htmlFor={`${id}wgs84_long`}
@@ -274,12 +269,13 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
                 autoCorrect="off"
                 autoCapitalize="off"
               />
-            </LeftFormControl>
-            <StyledFormControl
+            </FormControl>
+            <FormControl
               fullWidth
               error={!!wgs84LongError}
               aria-describedby={`${id}wgs84LongErrorText`}
               variant="standard"
+              className={formControl}
             >
               <InputLabel
                 htmlFor={`${id}wgs84_lat`}
@@ -315,15 +311,16 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
                   {wgs84LongError}
                 </FormHelperText>
               )}
-            </StyledFormControl>
-          </Row>
+            </FormControl>
+          </div>
         )}
-        <Row>
-          <LeftFormControl
+        <div className={rowClass}>
+          <FormControl
             fullWidth
             error={!!xError}
             aria-describedby={`${id}lv95XErrorText`}
             variant="standard"
+            className={leftFormControl}
           >
             <InputLabel
               htmlFor={`${id}lv95_x`}
@@ -351,12 +348,13 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
                 {xError}
               </FormHelperText>
             )}
-          </LeftFormControl>
-          <StyledFormControl
+          </FormControl>
+          <FormControl
             fullWidth
             error={!!yError}
             aria-describedby={`${id}lv95YErrorText`}
             variant="standard"
+            className={formControl}
           >
             <InputLabel
               htmlFor={`${id}lv95_y`}
@@ -384,11 +382,11 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
                 {yError}
               </FormHelperText>
             )}
-          </StyledFormControl>
-        </Row>
-      </FieldContainer>
+          </FormControl>
+        </div>
+      </div>
       <ButtonContainer>
-        <MapButton
+        <IconButton
           aria-label="Öffnen in map.geo.admin.ch"
           title="Öffnen in map.geo.admin.ch"
           //onClick={(event) => setMapMenuAnchorEl(event.currentTarget)}
@@ -398,7 +396,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
           disabled={!(lv95_x && lv95_y)}
         >
           <FaGlobeEurope />
-        </MapButton>
+        </IconButton>
         <Menu
           id="mapMenu"
           anchorEl={mapMenuAnchorEl}
