@@ -4,21 +4,10 @@ import Checkbox from '@mui/material/Checkbox'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { container, formLabel, checkbox } from './Checkbox2States.module.css'
-
-const Aside = styled.div`
-  position: relative;
-  bottom: 20px;
-  left: 28px;
-`
-const AsideComment = styled.span`
-  padding-left: 6px;
-  font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.54);
-`
+import { aside, asideCommentClass } from './Checkbox3States.module.css'
 
 const Checkbox3States = ({
   label,
@@ -80,10 +69,10 @@ const Checkbox3States = ({
           indeterminate={indeterminate}
           className={checkbox}
         />
-        <Aside>
+        <div className={aside}>
           {asideText}
-          <AsideComment>{asideComment}</AsideComment>
-        </Aside>
+          <span className={asideCommentClass}>{asideComment}</span>
+        </div>
         {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
         )}

@@ -1,0 +1,11 @@
+.aside {
+  position: relative;
+  bottom: 20px;
+  left: 28px;
+}
+
+.asideCommentClass {
+  padding-left: 6px;
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.54);
+}
