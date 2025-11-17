@@ -1,13 +1,3 @@
-import styled from '@emotion/styled'
+import { labelClass } from './Label.module.css'
 
-const StyledLabel = styled.div`
-  margin-top: 10px;
-  cursor: text;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.5);
-  pointer-events: none;
-  user-select: none;
-  padding-bottom: 8px;
-`
-
-export const Label = ({ label }) => <StyledLabel>{label}</StyledLabel>
+export const Label = ({ label }) => <div className={labelClass}>{label}</div>
