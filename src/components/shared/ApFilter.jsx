@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import Switch from '@mui/material/Switch'
 import { observer } from 'mobx-react-lite'
 
@@ -7,17 +6,7 @@ import { Label } from './Label.jsx'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-right: 5px;
-  min-width: 40px;
-  margin-bottom: -14px;
-`
-const StyledSwitch = styled(Switch)`
-  margin-left: -13px;
-  margin-top: -15px;
-`
+import { container, switchClass } from './ApFilter.module.css'
 
 export const ApFilter = observer(({ color }) => {
   const store = useContext(MobxStoreContext)
@@ -27,18 +16,19 @@ export const ApFilter = observer(({ color }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <Label
           label="nur AP"
           color={color}
         />
-        <StyledSwitch
+        <Switch
           data-id="ap-filter"
           checked={apFilter}
           onChange={onChange}
           color="primary"
+          className={switchClass}
         />
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
