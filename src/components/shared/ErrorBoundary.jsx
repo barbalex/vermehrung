@@ -7,13 +7,16 @@ import Button from '@mui/material/Button'
 import { logout } from '../../utils/logout.js'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-const Container = styled.div`
-  padding: 15px;
-`
-const ButtonContainer = styled.div`
-  margin-right: 10px;
-  margin-bottom: 10px;
-`
+import {
+  container,
+  buttonContainer,
+  button,
+  details,
+  summary,
+  preWrapping,
+  pre,
+} from './ErrorBoundary.module.css'
+
 const StyledButton = styled(Button)`
   text-transform: none !important;
 `
@@ -47,14 +50,14 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   }*/
 
   return (
-    <Container>
+    <div className={container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
       <PreWrapping>{error.message}</PreWrapping>
       <Details>
         <Summary>Mehr Informationen</Summary>
         <Pre>{componentStack}</Pre>
       </Details>
-      <ButtonContainer>
+      <div className={buttonContainer}>
         <StyledButton
           variant="outlined"
           onClick={onReload}
@@ -62,8 +65,8 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
         >
           neu starten
         </StyledButton>
-      </ButtonContainer>
-      <ButtonContainer>
+      </div>
+      <div className={buttonContainer}>
         <StyledButton
           variant="outlined"
           onClick={resetErrorBoundary}
@@ -71,8 +74,8 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
         >
           Cache leeren und neu starten (neue Anmeldung nötig)
         </StyledButton>
-      </ButtonContainer>
-    </Container>
+      </div>
+    </div>
   )
 }
 
