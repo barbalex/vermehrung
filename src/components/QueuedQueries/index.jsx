@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -11,46 +10,17 @@ import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { QueuedQuery } from './QueuedQuery.jsx'
 import { constants } from '../../utils/constants.js'
 
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-const Title = styled.h3`
-  padding: 15px 15px 0 15px;
-`
-const NoOpsContainer = styled.div`
-  padding: 0 15px;
-`
-const Container = styled.div`
-  min-height: calc(100dvh - var(--app-bar-height));
-  position: relative;
-`
-const OuterContainer = styled.div`
-  height: calc(100dvh - var(--app-bar-height) - 15px - 23px - 23px);
-  overflow-x: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const QueriesContainer = styled.div`
-  padding: 0 15px;
-  display: grid;
-  grid-template-columns: 180px auto auto auto auto auto 100px;
-  column-gap: 5px;
-  > * {
-    position: relative;
-  }
-  overflow: hidden;
-`
-const Heading = styled.div`
-  font-weight: 700;
-`
-const RevertHeading = styled.div`
-  font-weight: 700;
-  justify-self: center;
-`
-const CloseIcon = styled(IconButton)`
-  margin-right: 5px !important;
-`
+import {
+  titleRow,
+  title,
+  noOpsContainer,
+  container,
+  outerContainer,
+  queriesContainer,
+  heading,
+  revertHeading,
+  closeIcon,
+} from './index.module.css'
 
 export const QueuedQueries = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -70,9 +40,9 @@ export const QueuedQueries = observer(() => {
 
   if (!queuedQueries.size) {
     return (
-      <Container>
-        <TitleRow>
-          <Title>Ausstehende Operationen</Title>
+      <div className={container}>
+        <div className={titleRow}>
+          <h3 className={title}>Ausstehende Operationen</h3>
           <div>
             <IconButton
               aria-label={`Dokumentation zu "offline arbeiten" lesen`}
@@ -82,27 +52,28 @@ export const QueuedQueries = observer(() => {
             >
               <IoMdInformationCircleOutline />
             </IconButton>
-            <CloseIcon
+            <IconButton
               title="schliessen"
               aria-label="schliessen"
               onClick={onClickCloseIcon}
+              className={closeIcon}
             >
               <FaTimes />
-            </CloseIcon>
+            </IconButton>
           </div>
-        </TitleRow>
-        <NoOpsContainer>
+        </div>
+        <div className={noOpsContainer}>
           Es gibt momentan keine pendenten Operationen
-        </NoOpsContainer>
-      </Container>
+        </div>
+      </div>
     )
   }
 
   return (
     <ErrorBoundary>
-      <Container>
-        <TitleRow>
-          <Title>Ausstehende Operationen</Title>
+      <div className={container}>
+        <div className={titleRow}>
+          <h3 className={title}>Ausstehende Operationen</h3>
           <div>
             <IconButton
               aria-label="Anleitung öffnen"
@@ -112,24 +83,25 @@ export const QueuedQueries = observer(() => {
             >
               <IoMdInformationCircleOutline />
             </IconButton>
-            <CloseIcon
+            <IconButton
               title="schliessen"
               aria-label="schliessen"
               onClick={onClickCloseIcon}
+              className={closeIcon}
             >
               <FaTimes />
-            </CloseIcon>
+            </IconButton>
           </div>
-        </TitleRow>
-        <OuterContainer>
-          <QueriesContainer>
-            <Heading>Zeit</Heading>
-            <Heading>Tabelle</Heading>
-            <Heading>ID</Heading>
-            <Heading>Feld / Operation</Heading>
-            <Heading>vorher</Heading>
-            <Heading>nachher</Heading>
-            <RevertHeading>widerrufen</RevertHeading>
+        </div>
+        <div className={outerContainer}>
+          <div className={queriesContainer}>
+            <div className={heading}>Zeit</div>
+            <div className={heading}>Tabelle</div>
+            <div className={heading}>ID</div>
+            <div className={heading}>Feld / Operation</div>
+            <div className={heading}>vorher</div>
+            <div className={heading}>nachher</div>
+            <div className={revertHeading}>widerrufen</div>
             {[...queuedQueries.values()].reverse().map((qq, i) => (
               <QueuedQuery
                 key={qq.id}
@@ -137,9 +109,9 @@ export const QueuedQueries = observer(() => {
                 index={i}
               />
             ))}
-          </QueriesContainer>
-        </OuterContainer>
-      </Container>
+          </div>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
