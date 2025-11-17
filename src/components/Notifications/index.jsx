@@ -11,7 +11,21 @@ import { Notification } from './Notification.jsx'
 
 export const Notifications = observer(() => {
   const store = useContext(MobxStoreContext)
-  const { removeAllNotifications, notifications } = store
+  const {
+    removeAllNotifications,
+    notifications,
+    // addNotification
+  } = store
+
+  // uncomment for testing
+  // addNotification({
+  //   title: 'title',
+  //   message:
+  //     'hi from test, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, we will try writing a very long message, ',
+  //   actionName: 'doThis',
+  //   actionLabel: 'do this',
+  //   duration: 1000000,
+  // })
 
   const notificationsSorted = sortBy([...notifications.values()], ['time'])
     .reverse()
