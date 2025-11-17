@@ -7,7 +7,6 @@ import IconButton from '@mui/material/IconButton'
 import { FaGlobeEurope } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
@@ -41,26 +40,6 @@ import {
   buttonContainer,
   menuTitle,
 } from './Coordinates.module.css'
-
-const Container = styled.div`
-  display: flex;
-`
-const ButtonContainer = styled.div`
-  align-self: center;
-  flex-shrink: 2;
-`
-const MenuTitle = styled.div`
-  padding-top: 6px;
-  padding-left: 15px;
-  padding-right: 16px;
-  padding-bottom: 0;
-  margin-bottom: 3px;
-  font-size: 0.8em;
-  font-weight: 500;
-  &:focus {
-    outline: none;
-  }
-`
 
 export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
   const store = useContext(MobxStoreContext)
@@ -240,7 +219,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
   }
 
   return (
-    <Container>
+    <div className={container}>
       <div className={fieldContainer}>
         {ga_lat_lng && (
           <div className={rowClass}>
@@ -385,7 +364,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
           </FormControl>
         </div>
       </div>
-      <ButtonContainer>
+      <div className={buttonContainer}>
         <IconButton
           aria-label="Öffnen in map.geo.admin.ch"
           title="Öffnen in map.geo.admin.ch"
@@ -403,11 +382,11 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
           open={mapMenuOpen}
           onClose={() => setMapMenuAnchorEl(null)}
         >
-          <MenuTitle>Öffnen in:</MenuTitle>
+          <div className={menuTitle}>Öffnen in:</div>
           <MenuItem onClick={onClickGeoAdmin}>map.geo.admin.ch</MenuItem>
           <MenuItem onClick={onClickMapsZhCh}>maps.zh.ch</MenuItem>
         </Menu>
-      </ButtonContainer>
-    </Container>
+      </div>
+    </div>
   )
 })
