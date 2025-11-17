@@ -5,7 +5,6 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { FaChevronRight } from 'react-icons/fa'
-import styled from '@emotion/styled'
 import { interval, combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
