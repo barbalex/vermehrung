@@ -1,0 +1,32 @@
+.container {
+  background-color: #ffe0b2;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  @media print {
+    display: none !important;
+  }
+}
+
+.titleRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.filterNumbers {
+  padding-right: 8px;
+  cursor: default;
+  user-select: none;
+}
+
+.deleteFilterIcon {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.deleteFilterIcon2 {
+  cursor: pointer;
+  pointer-events: auto;
+}
