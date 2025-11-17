@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+}
+
+.formControl {
+  padding-bottom: 15px !important;
+}
+
+.formControlLabel {
+  margin-top: -10px;
+}

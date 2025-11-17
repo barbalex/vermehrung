@@ -1,31 +1,18 @@
+// not in use
 import FormGroup from '@mui/material/FormGroup'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Checkbox from '@mui/material/Checkbox'
-import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 import { Label } from './Label.jsx'
 
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-  }
-`
-// without slight padding radio is slightly cut off!
-const StyledFormControl = styled(FormControl)`
-  padding-left: 1px !important;
-  padding-bottom: 15px !important;
-`
-const StyledFormControlLabel = styled(FormControlLabel)`
-  margin-top: -10px;
-`
+import {
+  container,
+  formControl,
+  formControlLabel,
+} from './CheckboxWithInfo.module.css'
 
 export const CheckboxWithInfo = ({
   value = null,
@@ -37,16 +24,17 @@ export const CheckboxWithInfo = ({
   const onCheck = (e, val) => saveToDb(val)
 
   return (
-    <Container>
-      <StyledFormControl
+    <div className={container}>
+      <FormControl
         component="fieldset"
         error={!!error}
         aria-describedby={`${label}ErrorText`}
         variant="standard"
+        className={formControl}
       >
         <FormGroup>
           <Label label={label} />
-          <StyledFormControlLabel
+          <FormControlLabel
             control={
               <Checkbox
                 checked={value}
@@ -55,15 +43,16 @@ export const CheckboxWithInfo = ({
                 color="primary"
               />
             }
+            className={formControlLabel}
           />
         </FormGroup>
         {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
         )}
-      </StyledFormControl>
+      </FormControl>
       <div>
         <InfoWithPopover>{popover}</InfoWithPopover>
       </div>
-    </Container>
+    </div>
   )
 }
