@@ -4,7 +4,6 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import { FaChevronRight } from 'react-icons/fa'
-import styled from '@emotion/styled'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { buildExceljsWorksheetsForLieferungenOfYear } from './buildExceljsWorksheetsForLieferungenOfYear.js'
@@ -12,10 +11,7 @@ import { buildExceljsWorksheetsForKulturBedarfsplanung } from './buildExceljsWor
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
 
 import { menuItem } from '../Menu.module.css'
-
-const FirstMenuItem = styled(MenuItem)`
-  margin-top: -5px !important;
-`
+import { firstMenuItem } from './index.module.css'
 
 export const HeaderExportMenu = observer(
   ({ setParentAnchorEl: setGrandParentAnchorEl }) => {
@@ -69,13 +65,13 @@ export const HeaderExportMenu = observer(
           open={Boolean(anchorEl)}
           onClose={onClose}
         >
-          <FirstMenuItem>
+          <MenuItem className={firstMenuItem}>
             <TextField
               label="Lieferungen des Jahrs:"
               onChange={onClickLieferungenDesJahrs}
               variant="standard"
             />
-          </FirstMenuItem>
+          </MenuItem>
           <MenuItem onClick={onClickKulturenFuerBedarfsplanung}>
             aktueller Stand Kulturen für die Bedarfsplanung
           </MenuItem>
