@@ -10,7 +10,8 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { buildExceljsWorksheetsForLieferungenOfYear } from './buildExceljsWorksheetsForLieferungenOfYear.js'
 import { buildExceljsWorksheetsForKulturBedarfsplanung } from './buildExceljsWorksheetsForKulturBedarfsplanung.js'
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
-import { StyledMenuItem } from '../Menu.jsx'
+
+import { menuItem } from '../Menu.module.css'
 
 const FirstMenuItem = styled(MenuItem)`
   margin-top: -5px !important;
@@ -53,14 +54,15 @@ export const HeaderExportMenu = observer(
 
     return (
       <>
-        <StyledMenuItem
+        <MenuItem
           aria-owns={anchorEl ? 'menu' : null}
           aria-haspopup="true"
           onClick={onClickExporte}
+          className={menuItem}
         >
           Exporte
           <FaChevronRight />
-        </StyledMenuItem>
+        </MenuItem>
         <Menu
           id="menuExport"
           anchorEl={anchorEl}
