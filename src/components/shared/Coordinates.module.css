@@ -1,0 +1,44 @@
+.formControl {
+  padding-bottom: 19px !important;
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+.fieldContainer {
+  flex-grow: 4;
+}
+
+.leftFormControl {
+  padding-right: 8px !important;
+  padding-bottom: 19px !important;
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+.rowClass {
+  display: flex;
+}
+
+.container {
+  display: flex;
+}
+
+.buttonContainer {
+  align-self: center;
+  flex-shrink: 2;
+}
+
+.menuTitle {
+  padding-top: 6px;
+  padding-left: 15px;
+  padding-right: 16px;
+  padding-bottom: 0;
+  margin-bottom: 3px;
+  font-size: 0.8em;
+  font-weight: 500;
+  &:focus {
+    outline: none;
+  }
+}
