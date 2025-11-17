@@ -1,0 +1,33 @@
+.container {
+  background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  @media print {
+    display: none !important;
+  }
+  height: var(--title-row-height);
+  justify-content: space-between;
+}
+
+.titleClass {
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.symbols {
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.filterNumbers {
+  padding-right: 8px;
+  cursor: default;
+  user-select: none;
+  padding-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-width: var(--title-row-height);
+  text-align: center;
+}
