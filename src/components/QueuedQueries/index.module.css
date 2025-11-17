@@ -1,0 +1,48 @@
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  padding: 15px 15px 0 15px;
+}
+
+.noOpsContainer {
+  padding: 0 15px;
+}
+
+.container {
+  min-height: calc(100dvh - var(--app-bar-height));
+  position: relative;
+}
+
+.outerContainer {
+  height: calc(100dvh - var(--app-bar-height) - 15px - 23px - 23px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.queriesContainer {
+  padding: 0 15px;
+  display: grid;
+  grid-template-columns: 180px auto auto auto auto auto 100px;
+  column-gap: 5px;
+  > * {
+    position: relative;
+  }
+  overflow: hidden;
+}
+
+.heading {
+  font-weight: 700;
+}
+
+.revertHeading {
+  font-weight: 700;
+  justify-self: center;
+}
+
+.closeIcon {
+  margin-right: 5px !important;
+}
