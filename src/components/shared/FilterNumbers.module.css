@@ -1,0 +1,29 @@
+.outerContainer {
+  min-width: var(--title-row-height);
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.7em;
+  font-weight: 500;
+  min-height: var(--title-row-height);
+  justify-content: center;
+  cursor: default;
+  user-select: none;
+}
+
+.filtered {
+  text-align: center;
+}
+
+.total {
+  border-top: 1px solid rgba(0, 0, 0, 0.54);
+  text-align: center;
+}
+
+.menuItem {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
