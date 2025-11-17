@@ -9,7 +9,8 @@ import { useQuery, useClient } from 'urql'
 import gql from 'graphql-tag'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
-import { StyledMenuItem } from '../Menu.jsx'
+
+import { menuItem } from '../Menu.module.css'
 
 const StyledOtherMenuItem = styled(MenuItem)`
   .MuiLinearProgress-bar {
@@ -83,14 +84,15 @@ export const HeaderAdminMenu = observer(
 
     return (
       <>
-        <StyledMenuItem
+        <MenuItem
           aria-owns={anchorEl ? 'menu' : null}
           aria-haspopup="true"
           onClick={onClickExporte}
+          className={menuItem}
         >
           Administration
           <FaChevronRight />
-        </StyledMenuItem>
+        </MenuItem>
         <Menu
           id="menuExport"
           anchorEl={anchorEl}

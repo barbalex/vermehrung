@@ -13,19 +13,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { HeaderExportMenu as ExportMenu } from './Export/index.jsx'
 import { HeaderAdminMenu as AdminMenu } from './Admin/index.jsx'
 
-export const StyledMenuItem = styled(MenuItem)`
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  svg {
-    color: #4a148c;
-  }
-`
-const Version = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.5);
-  user-select: none;
-`
+import { version } from './Menu.module.css'
 
 export const HeaderHamburgerMenu = observer(
   ({ anchorEl: parentAnchorEl, setAnchorEl: setParentAnchorEl }) => {
@@ -131,7 +119,7 @@ export const HeaderHamburgerMenu = observer(
             labelPlacement="end"
           />
         </MenuItem>
-        <Version>Version: 1.21.18 vom 17.11.2025</Version>
+        <div className={version}>Version: 1.21.18 vom 17.11.2025</div>
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von vermehrung.ch
         </MenuItem>
