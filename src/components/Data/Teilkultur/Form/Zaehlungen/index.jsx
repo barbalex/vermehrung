@@ -35,12 +35,12 @@ export const TeilkulturZaehlungen = observer(({ teilkultur }) => {
 
   return (
     <ErrorBoundary>
-      <div
+      <section
         className={titleRow}
         style={{ ...(teilzaehlungs.length ? { marginBottom: 10 } : {}) }}
       >
         <div className={title}>Zählungen</div>
-      </div>
+      </section>
       <div className={listContainer}>
         {teilzaehlungs.map((tz, i) => (
           <Teilzaehlungen
