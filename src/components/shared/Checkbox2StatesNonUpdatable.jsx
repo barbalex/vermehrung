@@ -6,12 +6,7 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import { observer } from 'mobx-react-lite'
 
-import {
-  container,
-  formControl,
-  formLabel,
-  checkbox,
-} from './Checkbox2States.module.css'
+import { container, formLabel, checkbox } from './Checkbox2States.module.css'
 
 export const Checkbox2StatesNonUpdatable = observer(
   ({
@@ -41,7 +36,6 @@ export const Checkbox2StatesNonUpdatable = observer(
           error={!!message}
           aria-describedby={`${label}MessageText`}
           variant="standard"
-          className={formControl}
         >
           <FormLabel
             component="legend"
