@@ -1,16 +1,9 @@
-import styled from '@emotion/styled'
 import CircularProgress from '@mui/material/CircularProgress'
 
-const SpinnerContainer = styled.div`
-  min-height: calc(100dvh - var(--app-bar-height));
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
+import { spinnerContainer } from './Fallback.module.css'
 
 export const Fallback = () => (
-  <SpinnerContainer>
+  <div className={spinnerContainer}>
     <CircularProgress />
-  </SpinnerContainer>
+  </div>
 )

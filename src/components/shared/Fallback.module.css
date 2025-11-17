@@ -1,0 +1,7 @@
+.spinnerContainer {
+  min-height: calc(100dvh - var(--app-bar-height));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
