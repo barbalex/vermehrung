@@ -36,9 +36,9 @@ export const TeilkulturEvents = observer(({ teilkultur }) => {
 
   return (
     <ErrorBoundary>
-      <div className={titleRow}>
+      <section className={titleRow}>
         <div className={title}>Events</div>
-      </div>
+      </section>
       <div className={rows}>
         {events.map((ev, i) => (
           <Row
