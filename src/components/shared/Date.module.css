@@ -1,0 +1,39 @@
+.formControl {
+  margin-bottom: 19px !important;
+  width: 100%;
+}
+
+.labelClass {
+  font-size: 12px !important;
+  color: rgb(0, 0, 0, 0.54);
+  position: relative !important;
+  transform: none !important;
+}
+
+.datePicker {
+  width: 100%;
+  padding: 0.25rem 0;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  min-height: 36px !important;
+  height: 36px !important;
+  background-color: transparent;
+  font-size: 1rem;
+  &:focus {
+    color: #495057;
+    background-color: #fff;
+    outline: 0;
+    border-bottom: 2px solid #4a148c;
+    box-shadow: none;
+    background-color: transparent;
+  }
+}
