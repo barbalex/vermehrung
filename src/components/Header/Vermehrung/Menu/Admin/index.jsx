@@ -12,6 +12,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
 import { menuItem } from '../Menu.module.css'
 
+// keep due to @mui
 const StyledOtherMenuItem = styled(MenuItem)`
   .MuiLinearProgress-bar {
     transition: none;
