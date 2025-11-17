@@ -3,26 +3,13 @@ import { observer } from 'mobx-react-lite'
 import { FaHistory } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
-import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 import { useObservable } from '../../utils/useObservable.js'
 
-const StyledMenuItem = styled(MenuItem)`
-  ${(props) =>
-    props['data-disabled'] && 'color: rgba(0, 0, 0, 0.54) !important;'}
-  ${(props) => props['data-disabled'] && 'cursor: not-allowed !important;'}
-`
-const StyledIconButton = styled(IconButton)`
-  box-sizing: border-box;
-  ${(props) =>
-    props['data-active'] && 'background-color: rgba(0, 0, 0, 0.04) !important;'}
-  ${(props) =>
-    props['data-active'] &&
-    'box-shadow:inset 0px 0px 0px 1px rgba(0, 0, 0, 0.04);'}
-`
+import { iconButton } from './HistoryButton.module.css'
 
 export const HistoryButton = observer(
   ({ asMenu, id, showHistory, setShowHistory, table }) => {
@@ -53,27 +40,38 @@ export const HistoryButton = observer(
       : 'Frühere Versionen sind nur online verfügbar'
 
     if (asMenu) {
+      const style =
+        disabled ? { color: 'rgba(0, 0, 0, 0.54)', cursor: 'not-allowed' } : {}
       return (
-        <StyledMenuItem
+        <MenuItem
           onClick={show}
-          data-disabled={disabled}
+          style={style}
         >
           {title}
-        </StyledMenuItem>
+        </MenuItem>
       )
     }
 
+    const style =
+      showHistory ?
+        {
+          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+          boxShadow: 'inset 0px 0px 0px 1px rgba(0, 0, 0, 0.04)',
+        }
+      : {}
+
     return (
       <ErrorBoundary>
-        <StyledIconButton
+        <IconButton
           aria-label={title}
           title={title}
           onClick={show}
           disabled={disabled}
-          data-active={showHistory}
+          style={style}
+          className={iconButton}
         >
           <FaHistory />
-        </StyledIconButton>
+        </IconButton>
       </ErrorBoundary>
     )
   },
