@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
@@ -8,35 +7,12 @@ import { MdClose as CloseIcon } from 'react-icons/md'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 5px;
-  padding: 10px;
-  border-radius: 3px;
-  background-color: ${(props) => props['data-color']};
-  color: white;
-  font-weight: 500;
-  min-height: 18px;
-  max-width: calc(100% - 10px);
-  word-wrap: break-word;
-`
-const TextContainer = styled.div``
-
-// http://hackingui.com/front-end/a-pure-css-solution-for-multiline-text-truncation/
-const Message = styled.div`
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  font-weight: 400;
-  font-size: small;
-`
-const Title = styled.div`
-  font-weight: 500;
-`
+import {
+  container,
+  messageClass,
+  titleClass,
+  text,
+} from './Notification.module.css'
 
 const colorMap = {
   error: '#D84315',
@@ -87,12 +63,15 @@ export const Notification = observer(({ notification: n }) => {
   }
 
   return (
-    <Container data-color={color}>
-      <TextContainer>
-        {!!title && <Title>{title}</Title>}
-        <Message>{message}</Message>
-        {!!info && <Message>{info}</Message>}
-      </TextContainer>
+    <div
+      className={container}
+      style={{ backgroundColor: color }}
+    >
+      <div className={text}>
+        {!!title && <div className={titleClass}>{title}</div>}
+        <div className={messageClass}>{message}</div>
+        {!!info && <div className={messageClass}>{info}</div>}
+      </div>
       {!!actionName && !!actionLabel && (
         <Button
           onClick={onClickAction}
@@ -122,6 +101,6 @@ export const Notification = observer(({ notification: n }) => {
       >
         <CloseIcon />
       </IconButton>
-    </Container>
+    </div>
   )
 })
