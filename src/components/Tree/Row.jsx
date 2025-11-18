@@ -30,7 +30,6 @@ import {
 } from '../../utils/react-contextmenu/index.js'
 
 const StyledNode = styled.div`
-  padding-left: ${(props) => `${Number(props['data-level']) * 17 - 10}px`};
   box-sizing: border-box;
   margin: 0;
   display: flex;
@@ -38,10 +37,6 @@ const StyledNode = styled.div`
   align-items: center;
   white-space: nowrap;
   user-select: none;
-  color: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '#D84315'
-    : props['data-inaktiv'] ? 'rgba(0, 0, 0, 0.35)'
-    : 'inherit'};
   line-height: 1.3rem;
   content-visibility: auto;
   contain-intrinsic-size: auto 21px;
@@ -210,15 +205,18 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
     node?.url[0] === 'Projekte' ? node?.url?.length - 1 : node?.url?.length
   const inaktiv = node?.aktiv === false
 
+  const nodeStyle = {
+    paddingLeft: level * 17 - 10,
+    color:
+      nodeIsInActiveNodePath ? '#D84315'
+      : inaktiv ? 'rgba(0, 0, 0, 0.35)'
+      : 'inherit',
+  }
+
   return (
     <>
       <ContextMenuTrigger id={`cm${node?.id}`}>
-        <StyledNode
-          data-level={level}
-          data-row-height={singleRowHeight}
-          data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-          data-inaktiv={inaktiv}
-        >
+        <StyledNode style={nodeStyle}>
           {useSymbolIcon && (
             <SymbolDiv
               onClick={onClickNodeSymbol}
