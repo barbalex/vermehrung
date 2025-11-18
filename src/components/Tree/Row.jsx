@@ -79,16 +79,7 @@ const SymbolDiv = styled.div`
   height: 1.4em;
 `
 const SymbolSpan = styled.span`
-  padding-right: ${(props) =>
-    props['data-mobile'] ? '13px !important' : '11px !important'};
   padding-left: 9px;
-  font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
-  margin-top: ${(props) =>
-    props['data-mobile'] ? '-2px !important' : '-1px !important'};
-  font-size: ${(props) =>
-    props['data-mobile'] ? '32px !important' : '28px !important'};
-  width: ${(props) => (props['data-mobile'] ? '12px' : '9px')};
 `
 const TextSpan = styled.span`
   margin-left: 0;
@@ -235,6 +226,13 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
             <SymbolSpan
               data-nodeisinactivenodepath={nodeIsInActiveNodePath}
               data-mobile={isMobile}
+              style={{
+                paddingRight: isMobile ? 13 : 11,
+                fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
+                marginTop: isMobile ? -2 : -1,
+                fontSize: isMobile ? 32 : 28,
+                width: isMobile ? 12 : 9,
+              }}
             >
               {'-'}
             </SymbolSpan>
