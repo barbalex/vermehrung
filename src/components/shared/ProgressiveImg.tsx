@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react'
-import styled from '@emotion/styled'
 
-const Img = styled.img`
-  display: block;
-  object-fit: cover;
-`
+import { imgClass } from './ProgressiveImg.module.css'
 
 export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
   const [imgSrc, setImgSrc] = useState(placeholderSrc || src)
@@ -33,12 +29,12 @@ export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
    * https://uploadcare.com/docs/delivery/adaptive-delivery/#adaptive-delivery
    */
   return (
-    <Img
+    <img
       {...{ src: imgSrc, ...props }}
       alt={props.alt || ''}
       height={props.height ?? '100%'}
       width={props.width ?? '100%'}
-      className={`image ${customClass}`}
+      className={`image ${customClass} ${imgClass}`}
       style={style}
     />
   )
