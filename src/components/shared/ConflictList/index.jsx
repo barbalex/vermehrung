@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { Conflict } from './Conflict.jsx'
 
 const Konflikte = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `
 
 export const ConflictList = observer(
