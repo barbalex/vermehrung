@@ -41,19 +41,9 @@ const StyledNode = styled.div`
   content-visibility: auto;
   contain-intrinsic-size: auto 21px;
 `
-// TODO: this icon uses more vertical height
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   margin-top: -5px !important;
-  margin-left: ${(props) => (props['data-nodeisopen'] ? '-1px !important' : 0)};
-  margin-right: ${(props) =>
-    props['data-nodeisopen'] ? '-5px !important' : 0};
-  padding-left: ${(props) => (props['data-nodeisopen'] ? '2px' : '2px')};
-  height: ${(props) =>
-    props['data-nodeisopen'] ? '30px !important' : '22px !important'};
-  width: ${(props) =>
-    props['data-nodeisopen'] ? '30px !important' : '26px !important'};
-  color: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
+  padding-left: 2px;
   cursor: pointer;
   &:hover {
     color: #f57c00 !important;
@@ -230,6 +220,13 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 <StyledExpandMoreIcon
                   data-nodeisinactivenodepath={nodeIsInActiveNodePath}
                   data-nodeisopen={nodeIsOpen}
+                  style={{
+                    marginLeft: nodeIsOpen ? -1 : 0,
+                    marginRight: nodeIsOpen ? -5 : 0,
+                    height: nodeIsOpen ? 30 : 22,
+                    width: nodeIsOpen ? 30 : 26,
+                    color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+                  }}
                 />
               )}
               {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
