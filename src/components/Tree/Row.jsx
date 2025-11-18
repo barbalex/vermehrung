@@ -42,10 +42,6 @@ import {
   menuExplainerItem,
 } from './Row.module.css'
 
-const StyledAccountIcon = styled(AccountIcon)`
-  margin-top: 3px;
-  font-size: 1.1em;
-`
 const SymbolDiv = styled.div`
   cursor: pointer;
   display: flex;
@@ -224,7 +220,12 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
           >
             {node?.label ?? '(kein Label)'}
           </TextSpan>
-          {accountId && <StyledAccountIcon title="hat ein Konto" />}
+          {accountId && (
+            <AccountIcon
+              title="hat ein Konto"
+              className={accountIcon}
+            />
+          )}
         </div>
       </ContextMenuTrigger>
       {['table', 'folder'].includes(node?.nodeType) && (
