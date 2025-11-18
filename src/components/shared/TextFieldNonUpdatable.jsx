@@ -3,14 +3,9 @@ import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
 
-const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
+import { formControl } from './TextField.module.css'
+
 const inputProps = { tabIndex: -1 }
 
 export const TextFieldNonUpdatable = ({
@@ -31,11 +26,12 @@ export const TextFieldNonUpdatable = ({
   const schrink = schrinkLabel || !!value || value === 0
 
   return (
-    <StyledFormControl
+    <FormControl
       error={!!error}
       fullWidth
       aria-describedby={`${label}-helper`}
       variant="standard"
+      className={formControl}
     >
       <InputLabel
         htmlFor={label}
@@ -52,6 +48,6 @@ export const TextFieldNonUpdatable = ({
       {!!error && (
         <FormHelperText id={`${label}-helper`}>{error}</FormHelperText>
       )}
-    </StyledFormControl>
+    </FormControl>
   )
 }
