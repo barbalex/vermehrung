@@ -239,10 +239,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 userRole?.name === 'manager' &&
                 !accountId && (
                   <>
-                    <div
-                      className={menuSubtitle}
-                      className="react-contextmenu-title"
-                    >
+                    <div className={`react-contextmenu-title ${menuSubtitle}`}>
                       Konto
                     </div>
                     <MenuItem onClick={onClickSignup}>neu</MenuItem>
@@ -253,10 +250,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 userRole?.name === 'manager' &&
                 accountId && (
                   <>
-                    <div
-                      className={menuSubtitle}
-                      className="react-contextmenu-title"
-                    >
+                    <div className={`react-contextmenu-title ${menuSubtitle}`}>
                       Konto
                     </div>
                     <MenuItem onClick={onClickSetPassword}>
