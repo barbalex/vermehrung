@@ -7,6 +7,8 @@ import { of as $of } from 'rxjs'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { container, labelClass, errorClass } from './TaxonSelect.module.css'
 
+// leave this styled use due to css modules not able to nest classes
+// and different stylings existing for selects
 const StyledSelect = styled(AsyncSelect)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
