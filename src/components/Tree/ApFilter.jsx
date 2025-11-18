@@ -1,16 +1,9 @@
-import styled from '@emotion/styled'
-
 import { ApFilter } from '../shared/ApFilter.jsx'
 
-const Container = styled.div`
-  position: absolute;
-  top: -1px;
-  right: 50px;
-  z-index: 1;
-`
+import { container } from './ApFilter.module.css'
 
 export const ApFilterContainer = () => (
-  <Container>
+  <div className={container}>
     <ApFilter color="inherit" />
-  </Container>
+  </div>
 )
