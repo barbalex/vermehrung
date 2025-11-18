@@ -4,7 +4,6 @@ import Checkbox from '@mui/material/Checkbox'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import { observer } from 'mobx-react-lite'
 
 import { container, formLabel, checkbox } from './Checkbox2States.module.css'
 import { aside, asideCommentClass } from './Checkbox3States.module.css'
