@@ -1,29 +1,16 @@
+// seems not in use
 import { useState, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 
-const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const PopoverContentRow = styled.div`
-  padding: 2px 5px 2px 5px;
-  display: flex;
-  border-color: grey;
-  border-width: thin;
-  border-style: solid;
-  border-radius: 4px;
-`
+import { formControl } from './TextField.module.css'
+import { popoverContentRow } from './TextFieldWithInfo.module.css'
 
-const TextFieldWithInfo = ({
+export const TextFieldWithInfo = ({
   value: propsValue,
   label,
   name,
@@ -50,12 +37,13 @@ const TextFieldWithInfo = ({
   }
 
   return (
-    <StyledFormControl
+    <FormControl
       fullWidth
       disabled={disabled}
       error={!!error}
       aria-describedby={`${label}ErrorText`}
       variant="standard"
+      className={formControl}
     >
       <InputLabel htmlFor={label}>{label}</InputLabel>
       <Input
@@ -70,15 +58,13 @@ const TextFieldWithInfo = ({
         placeholder={hintText}
         endAdornment={
           <InfoWithPopover>
-            <PopoverContentRow>{popover}</PopoverContentRow>
+            <div className={popoverContentRow}>{popover}</div>
           </InfoWithPopover>
         }
       />
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
-    </StyledFormControl>
+    </FormControl>
   )
 }
-
-export default observer(TextFieldWithInfo)
