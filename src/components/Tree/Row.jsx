@@ -59,14 +59,6 @@ const StyledChevronRightIcon = styled(ChevronRightIcon)`
   }
 `
 const StyledMoreHorizIcon = styled(MoreHorizIcon)`
-  padding-left: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '1px' : '2px'};
-  height: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '26px !important' : (
-      '22px !important'
-    )};
-  color: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   width: 26px;
   cursor: pointer;
   &:hover {
@@ -230,7 +222,11 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
               {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
               {symbolIcon === 'moreHoriz' && (
                 <StyledMoreHorizIcon
-                  data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+                  style={{
+                    paddingLeft: nodeIsInActiveNodePath ? 1 : 2,
+                    height: nodeIsInActiveNodePath ? 26 : 22,
+                    color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+                  }}
                 />
               )}
             </SymbolDiv>
