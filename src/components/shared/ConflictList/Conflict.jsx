@@ -1,13 +1,4 @@
-import styled from '@emotion/styled'
-
-const Konflikt = styled.div`
-  color: #d84315;
-  font-weight: ${(props) => (props['data-active'] ? 500 : 400)};
-  &:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-`
+import { conflictClass } from './Conflict.module.css'
 
 export const Conflict = ({ conflict, activeConflict, setActiveConflict }) => {
   const onClick = () =>
@@ -21,13 +12,16 @@ export const Conflict = ({ conflict, activeConflict, setActiveConflict }) => {
     activeConflict ?
       'Klicken um den Konflikt zu schliessen'
     : 'Klicken um den Konflikt zu lösen'
+  const isActive = activeConflict === conflict
+  const style = { fontWeight: isActive ? 500 : 400 }
 
   return (
-    <Konflikt
+    <div
+      className={conflictClass}
       key={conflict}
-      data-active={activeConflict === conflict}
       onClick={onClick}
       title={title}
-    >{`Konflikt mit Version ${conflict}`}</Konflikt>
+      style={style}
+    >{`Konflikt mit Version ${conflict}`}</div>
   )
 }
