@@ -7,7 +7,6 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import styled from '@emotion/styled'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -15,29 +14,7 @@ import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { constants } from '../../utils/constants.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  position: absolute;
-  top: 2px;
-  right: 12px;
-  z-index: 1;
-`
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-right: 16px;
-  user-select: none;
-`
-const Title = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 700;
-  user-select: none;
-`
-const Info = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.4);
-  user-select: none;
-`
+import { container, titleRow, title, info } from './Settings.module.css'
 
 export const TreeSettings = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -98,7 +75,7 @@ export const TreeSettings = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <IconButton
           aria-label="Ordner wählen"
           aria-owns={anchorEl ? 'long-menu' : null}
@@ -115,8 +92,8 @@ export const TreeSettings = observer(() => {
           open={Boolean(anchorEl)}
           onClose={onClose}
         >
-          <TitleRow>
-            <Title>Fakultative Ordner wählen:</Title>
+          <div className={titleRow}>
+            <div className={title}>Fakultative Ordner wählen:</div>
             <div>
               <IconButton
                 aria-label="Anleitung öffnen"
@@ -127,7 +104,7 @@ export const TreeSettings = observer(() => {
                 <IoMdInformationCircleOutline />
               </IconButton>
             </div>
-          </TitleRow>
+          </div>
           <MenuItem>
             <FormControlLabel
               value={tree_kultur === true ? 'true' : 'false'}
@@ -203,11 +180,11 @@ export const TreeSettings = observer(() => {
               labelPlacement="end"
             />
           </MenuItem>
-          <Info>
+          <div className={info}>
             Für die Navigation zwingende Ordner sind nicht aufgelistet.
-          </Info>
+          </div>
         </Menu>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })

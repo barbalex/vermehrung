@@ -1,0 +1,26 @@
+.container {
+  position: absolute;
+  top: 2px;
+  right: 12px;
+  z-index: 1;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 16px;
+  user-select: none;
+}
+
+.title {
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 700;
+  user-select: none;
+}
+
+.info {
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.4);
+  user-select: none;
+}
