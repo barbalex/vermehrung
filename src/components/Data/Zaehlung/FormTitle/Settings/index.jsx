@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import { FaCog } from 'react-icons/fa'
@@ -7,7 +6,7 @@ import { FaCog } from 'react-icons/fa'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { ZaehlungSettingsMenu as Menu } from './Menu.jsx'
 
-export const ZaehlungSettings = observer(({ asMenu, kulturId }) => {
+export const ZaehlungSettings = ({ asMenu, kulturId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickConfig = (event) => setAnchorEl(event.currentTarget)
 
@@ -49,4 +48,4 @@ export const ZaehlungSettings = observer(({ asMenu, kulturId }) => {
       />
     </ErrorBoundary>
   )
-})
+}
