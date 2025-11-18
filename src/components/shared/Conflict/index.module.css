@@ -1,0 +1,28 @@
+.container {
+  padding: 10px;
+}
+
+.title {
+  margin-bottom: 10px;
+}
+
+.revClass {
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
+}
+
+.buttonRow {
+  padding: 15px 0;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.button {
+  margin: 5px !important;
+  > span {
+    text-transform: none;
+  }
+}
