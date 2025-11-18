@@ -84,10 +84,6 @@ const SymbolSpan = styled.span`
 const TextSpan = styled.span`
   margin-left: 0;
   padding-right: 4px;
-  font-family: ${(props) => (props['data-mono'] ? 'Roboto Mono' : 'Roboto')};
-  font-size: ${(props) => `${props['data-font-size']}px !important`};
-  font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   white-space: normal;
   cursor: pointer;
   &:hover {
@@ -224,8 +220,6 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
           )}
           {useSymbolSpan && (
             <SymbolSpan
-              data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-              data-mobile={isMobile}
               style={{
                 paddingRight: isMobile ? 13 : 11,
                 fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
@@ -238,11 +232,13 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
             </SymbolSpan>
           )}
           <TextSpan
-            data-nodeisinactivenodepath={nodeIsInActiveNodePath}
             node={node}
             onClick={onClickNode}
-            data-mono={!!node?.mono}
-            data-font-size={fontSize}
+            style={{
+              fontFamily: node?.mono ? 'Roboto Mono' : 'Roboto',
+              fontSize,
+              fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
+            }}
           >
             {node?.label ?? '(kein Label)'}
           </TextSpan>
