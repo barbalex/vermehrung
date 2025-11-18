@@ -1,6 +1,5 @@
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
-import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../components/shared/ErrorBoundary.jsx'
 import image from '../images/puls_vulg_2500.webp'
@@ -17,29 +16,6 @@ import {
   cardTitle,
 } from './index.module.css'
 
-const PageTitle = styled(Typography)`
-  font-size: 2em !important;
-  padding-bottom: 15px;
-  font-weight: 700 !important;
-  text-shadow:
-    2px 2px 3px white,
-    -2px -2px 3px white,
-    2px -2px 3px white,
-    -2px 2px 3px white;
-  @media (min-width: 700px) {
-    padding-bottom: 20px;
-  }
-  @media (min-width: 1200px) {
-    padding-bottom: 25px;
-  }
-  @media (min-width: 1700px) {
-    padding-bottom: 30px;
-  }
-`
-const CardTitle = styled.h3`
-  font-weight: 700;
-`
-
 export const Home = () => (
   <>
     <ErrorBoundary>
@@ -50,43 +26,44 @@ export const Home = () => (
         />
         <div className={scrollContainer}>
           <div className={container}>
-            <PageTitle
+            <Typography
               align="center"
               variant="h6"
               color="inherit"
+              className={pageTitle}
             >
               Bedrohte Pflanzen vermehren
-            </PageTitle>
+            </Typography>
             <div className={cardContainer}>
               <Card className={card}>
-                <CardTitle>Arten</CardTitle>
+                <h3 className={cardTitle}>Arten</h3>
                 Vom Aussterben bedrohte Pflanzen-Arten werden gesammelt,
                 vermehrt und wieder ausgesetzt.
               </Card>
               <Card className={card}>
-                <CardTitle>Herkünfte</CardTitle>
+                <h3 className={cardTitle}>Herkünfte</h3>
                 Hier gibt es noch ursprüngliche Bestände der Arten.
               </Card>
               <Card className={card}>
-                <CardTitle>Sammlungen</CardTitle>
+                <h3 className={cardTitle}>Sammlungen</h3>
                 ...beschreiben das Sammeln an Herkunfts-Orten.
               </Card>
               <Card className={card}>
-                <CardTitle>Gärten</CardTitle>
+                <h3 className={cardTitle}>Gärten</h3>
                 In Gärten und Gärtnereien werden die Arten in Kultur vermehrt
                 und auf das Aussetzen vorbereitet.
               </Card>
               <Card className={card}>
-                <CardTitle>Kulturen</CardTitle>
+                <h3 className={cardTitle}>Kulturen</h3>
                 Pflanzen einer Art und einer Herkunft in einem Garten bilden
                 eine Kultur.
               </Card>
               <Card className={card}>
-                <CardTitle>Teil-Kulturen</CardTitle>
+                <h3 className={cardTitle}>Teil-Kulturen</h3>
                 {`Gärtnereien organisieren ihre Kulturen oft in Untereinheiten, wie zum Beispiel: Beete, Kästen, Reihen.`}
               </Card>
               <Card className={card}>
-                <CardTitle>Lieferungen</CardTitle>
+                <h3 className={cardTitle}>Lieferungen</h3>
                 <p>Sammlungen werden an Kulturen geliefert.</p>
                 <p>
                   Aus Kulturen werden Pflanzen an andere Kulturen geliefert.
@@ -94,7 +71,7 @@ export const Home = () => (
                 </p>
               </Card>
               <Card className={card}>
-                <CardTitle>Zählungen</CardTitle>
+                <h3 className={cardTitle}>Zählungen</h3>
                 <p>
                   Regelmässig wird der Bestand der Kulturen erfasst und die
                   Vermehrung geplant.
@@ -102,16 +79,16 @@ export const Home = () => (
                 <p>So können Sammlungen und Aussetzungen geplant werden.</p>
               </Card>
               <Card className={card}>
-                <CardTitle>Events und Aufgaben</CardTitle>
+                <h3 className={cardTitle}>Events und Aufgaben</h3>
                 ...erleichtern Verwaltung und Dokumentation des Projekts.
               </Card>
               <Card className={card}>
-                <CardTitle>Personen</CardTitle>
+                <h3 className={cardTitle}>Personen</h3>
                 Die am Projekt beteiligten. Zum Beispiel Freiwillige, die in
                 ihren Gärten Kulturen pflegen.
               </Card>
               <Card className={card}>
-                <CardTitle>Wer organisiert das Projekt?</CardTitle>
+                <h3 className={cardTitle}>Wer organisiert das Projekt?</h3>
                 <a
                   href="//toposmm.ch"
                   target="_blank"
@@ -130,7 +107,7 @@ export const Home = () => (
                 .
               </Card>
               <Card className={card}>
-                <CardTitle>Interessiert?</CardTitle>
+                <h3 className={cardTitle}>Interessiert?</h3>
                 <p>
                   Sie haben einen Garten und möchten bedrohte Pflanzen
                   vermehren? Fragen Sie&nbsp;
