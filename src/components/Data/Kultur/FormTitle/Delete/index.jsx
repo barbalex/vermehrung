@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { observer } from 'mobx-react-lite'
 import { FaMinus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
@@ -7,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { KulturDeleteMenu as Menu } from './Menu.jsx'
 
-export const KulturDeleteButton = observer(({ row, asMenu }) => {
+export const KulturDeleteButton = ({ row, asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const onClickButton = (event) => setAnchorEl(event.currentTarget)
@@ -51,4 +50,4 @@ export const KulturDeleteButton = observer(({ row, asMenu }) => {
       />
     </ErrorBoundary>
   )
-})
+}
