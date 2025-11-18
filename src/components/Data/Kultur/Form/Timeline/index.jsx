@@ -14,7 +14,6 @@ import {
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
-import { observer } from 'mobx-react-lite'
 import { useResizeDetector } from 'react-resize-detector'
 import { motion, useAnimation } from 'framer-motion'
 
@@ -29,7 +28,7 @@ import { buildKulturTimelineData as buildData } from './buildData.js'
 
 import { container, titleRow, title, content } from './index.module.css'
 
-export const KulturTimeline = observer(({ row }) => {
+export const KulturTimeline = ({ row }) => {
   const { width, ref } = useResizeDetector()
   // TODO: calc runs on every render of kultur
   // need to only run when open
@@ -333,4 +332,4 @@ export const KulturTimeline = observer(({ row }) => {
       }
     </section>
   )
-})
+}
