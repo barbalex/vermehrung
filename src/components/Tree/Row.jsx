@@ -199,18 +199,18 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
     node?.url[0] === 'Projekte' ? node?.url?.length - 1 : node?.url?.length
   const inaktiv = node?.aktiv === false
 
-  const nodeStyle = {
-    paddingLeft: level * 17 - 10,
-    color:
-      nodeIsInActiveNodePath ? '#D84315'
-      : inaktiv ? 'rgba(0, 0, 0, 0.35)'
-      : 'inherit',
-  }
-
   return (
     <>
       <ContextMenuTrigger id={`cm${node?.id}`}>
-        <StyledNode style={nodeStyle}>
+        <StyledNode
+          style={{
+            paddingLeft: level * 17 - 10,
+            color:
+              nodeIsInActiveNodePath ? '#D84315'
+              : inaktiv ? 'rgba(0, 0, 0, 0.35)'
+              : 'inherit',
+          }}
+        >
           {useSymbolIcon && (
             <SymbolDiv
               onClick={onClickNodeSymbol}
@@ -218,8 +218,6 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
             >
               {symbolIcon === 'expandMore' && (
                 <StyledExpandMoreIcon
-                  data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-                  data-nodeisopen={nodeIsOpen}
                   style={{
                     marginLeft: nodeIsOpen ? -1 : 0,
                     marginRight: nodeIsOpen ? -5 : 0,
