@@ -41,6 +41,7 @@ const StyledNode = styled.div`
   content-visibility: auto;
   contain-intrinsic-size: auto 21px;
 `
+// TODO: this icon uses more vertical height
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   margin-top: -5px !important;
   margin-left: ${(props) => (props['data-nodeisopen'] ? '-1px !important' : 0)};
@@ -91,6 +92,9 @@ const SymbolDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-self: flex-start;
+  // this height is important to keep all nodes at same height
+  // otherwise expandMore will be higher than others
+  height: 1.4em;
 `
 const SymbolSpan = styled.span`
   padding-right: ${(props) =>
