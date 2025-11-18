@@ -7,27 +7,28 @@ import { toStringIfPossible } from '../../../utils/toStringIfPossible.js'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { Spinner } from '../Spinner.jsx'
 
+import { key } from './Data.module.css'
+
+// keep this styled usage because css modules
+// can't deal with child classes
 const Row = styled.div`
   display: flex;
   padding-top: 5px;
   padding-bottom: 5px;
+
   border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: ${(props) =>
-    props['data-last'] ? '1px solid rgba(0, 0, 0, 0.1)' : 'none'};
   .Difference > del {
     background-color: rgb(201, 238, 211);
     text-decoration: none;
   }
+
   .Difference > ins {
     padding-left: 2px;
     background-color: rgba(216, 67, 21, 0.2);
     text-decoration: none;
   }
 `
-const Key = styled.div`
-  width: 130px;
-  color: rgba(0, 0, 0, 0.54);
-`
+
 const styles = {
   added: {
     color: 'green',
@@ -56,13 +57,17 @@ export const Data = observer(({ dataArray, loading }) => {
 
     const showDiff =
       diffConflict && !['geändert', 'geändert von'].includes(d.label)
+    const isLast = index + 1 === dataArray.length
+    const rowStyle = {
+      borderBottom: isLast ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
+    }
 
     return (
       <Row
         key={d.label}
-        data-last={index + 1 === dataArray.length}
+        style={rowStyle}
       >
-        <Key>{`${d.label}:`}</Key>
+        <div className={key}>{`${d.label}:`}</div>
         {showDiff ?
           <>
             {(diffSentences(inputB, inputA) ?? []).map((group) => (
