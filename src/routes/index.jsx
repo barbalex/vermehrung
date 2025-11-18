@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography'
-import MaterialCard from '@mui/material/Card'
+import Card from '@mui/material/Card'
 import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../components/shared/ErrorBoundary.jsx'
@@ -7,78 +7,16 @@ import image from '../images/puls_vulg_2500.webp'
 import placeholderSrc from '../images/puls_vulg_500.webp' // TODO: build small placeholder
 import { ProgressiveImg } from '../components/shared/ProgressiveImg.tsx'
 
-const OuterContainer = styled.div`
-  height: 100%;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-`
-const ScrollContainer = styled.div`
-  height: calc(100dvh - var(--app-bar-height));
-  width: 100%;
-  position: absolute;
-  top: 0;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  /* prevent layout shift when scrollbar appears */
-  scrollbar-gutter: stable;
-`
-const Container = styled.div`
-  height: 100%;
-  box-sizing: border-box;
-  padding-top: 25px;
-`
-const CardContainer = styled.div`
-  color: black !important;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-column-gap: 15px;
-  grid-row-gap: 15px;
-  padding: 15px;
-  @media (min-width: 700px) {
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 20px;
-    grid-row-gap: 20px;
-    padding: 20px;
-  }
-  @media (min-width: 1200px) {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 25px;
-    grid-row-gap: 25px;
-    padding: 25px;
-  }
-  @media (min-width: 1700px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-column-gap: 30px;
-    grid-row-gap: 30px;
-    padding: 30px;
-  }
-  p {
-    margin-bottom: 10px !important;
-  }
-  p:last-of-type {
-    margin-bottom: 0 !important;
-    margin-top: 10px !important;
-  }
-`
-const Card = styled(MaterialCard)`
-  color: black !important;
-  padding: 30px;
-  background-color: rgba(255, 255, 255, 0.65) !important;
-  font-weight: 500;
-  ul {
-    margin-bottom: 0;
-  }
-  li:last-of-type {
-    margin-bottom: 0;
-  }
-  li {
-    font-weight: 500;
-  }
-  h3 {
-    margin-top: 0;
-  }
-`
+import {
+  outerContainer,
+  scrollContainer,
+  container,
+  cardContainer,
+  card,
+  pageTitle,
+  cardTitle,
+} from './index.module.css'
+
 const PageTitle = styled(Typography)`
   font-size: 2em !important;
   padding-bottom: 15px;
@@ -105,13 +43,13 @@ const CardTitle = styled.h3`
 export const Home = () => (
   <>
     <ErrorBoundary>
-      <OuterContainer>
+      <div className={outerContainer}>
         <ProgressiveImg
           src={image}
           placeholderSrc={placeholderSrc}
         />
-        <ScrollContainer>
-          <Container>
+        <div className={scrollContainer}>
+          <div className={container}>
             <PageTitle
               align="center"
               variant="h6"
@@ -119,35 +57,35 @@ export const Home = () => (
             >
               Bedrohte Pflanzen vermehren
             </PageTitle>
-            <CardContainer>
-              <Card>
+            <div className={cardContainer}>
+              <Card className={card}>
                 <CardTitle>Arten</CardTitle>
                 Vom Aussterben bedrohte Pflanzen-Arten werden gesammelt,
                 vermehrt und wieder ausgesetzt.
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Herkünfte</CardTitle>
                 Hier gibt es noch ursprüngliche Bestände der Arten.
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Sammlungen</CardTitle>
                 ...beschreiben das Sammeln an Herkunfts-Orten.
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Gärten</CardTitle>
                 In Gärten und Gärtnereien werden die Arten in Kultur vermehrt
                 und auf das Aussetzen vorbereitet.
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Kulturen</CardTitle>
                 Pflanzen einer Art und einer Herkunft in einem Garten bilden
                 eine Kultur.
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Teil-Kulturen</CardTitle>
                 {`Gärtnereien organisieren ihre Kulturen oft in Untereinheiten, wie zum Beispiel: Beete, Kästen, Reihen.`}
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Lieferungen</CardTitle>
                 <p>Sammlungen werden an Kulturen geliefert.</p>
                 <p>
@@ -155,7 +93,7 @@ export const Home = () => (
                   Oder in geeigneten Lebensräumen ausgesetzt.
                 </p>
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Zählungen</CardTitle>
                 <p>
                   Regelmässig wird der Bestand der Kulturen erfasst und die
@@ -163,16 +101,16 @@ export const Home = () => (
                 </p>
                 <p>So können Sammlungen und Aussetzungen geplant werden.</p>
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Events und Aufgaben</CardTitle>
                 ...erleichtern Verwaltung und Dokumentation des Projekts.
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Personen</CardTitle>
                 Die am Projekt beteiligten. Zum Beispiel Freiwillige, die in
                 ihren Gärten Kulturen pflegen.
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Wer organisiert das Projekt?</CardTitle>
                 <a
                   href="//toposmm.ch"
@@ -191,7 +129,7 @@ export const Home = () => (
                 </a>
                 .
               </Card>
-              <Card>
+              <Card className={card}>
                 <CardTitle>Interessiert?</CardTitle>
                 <p>
                   Sie haben einen Garten und möchten bedrohte Pflanzen
@@ -218,10 +156,10 @@ export const Home = () => (
                   .
                 </p>
               </Card>
-            </CardContainer>
-          </Container>
-        </ScrollContainer>
-      </OuterContainer>
+            </div>
+          </div>
+        </div>
+      </div>
     </ErrorBoundary>
   </>
 )
