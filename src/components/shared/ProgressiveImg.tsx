@@ -3,13 +3,7 @@ import styled from '@emotion/styled'
 
 const Img = styled.img`
   display: block;
-  height: ${(props) => props.height};
-  width: ${(props) => props.width};
   object-fit: cover;
-  filter: ${(props) => (props.loading ? 'blur(10px)' : 'blur(0px)')};
-  /* filter: contrast(0.4) brightness(2); */
-  ${(props) => props.loading && 'clip-path: inset(0);'}
-  ${(props) => props.loaded && 'transition: filter 0.5s linear;'}
 `
 
 export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
@@ -26,6 +20,12 @@ export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
   const customClass =
     placeholderSrc && imgSrc === placeholderSrc ? 'loading' : 'loaded'
 
+  const style = {
+    filter: props.loading ? 'blur(10px)' : 'blur(0px)',
+    ...(props.loading ? { clipPath: 'inset(0)' } : {}),
+    ...(props.loaded ? { transition: 'filter 0.5s linear' } : {}),
+  }
+
   /**
    * TODO:
    * use picture element: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
@@ -39,6 +39,7 @@ export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
       height={props.height ?? '100%'}
       width={props.width ?? '100%'}
       className={`image ${customClass}`}
+      style={style}
     />
   )
 }
