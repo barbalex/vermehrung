@@ -1,17 +1,10 @@
-import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
-
+// seems not in use
 import { RadioButtonGroup } from './RadioButtonGroup.jsx'
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  break-inside: avoid;
-`
+import { container } from './RadioButtonGroupWithInfo.module.css'
 
-const RadioButtonGroupWithInfo = ({
+export const RadioButtonGroupWithInfo = ({
   label,
   name,
   value = '',
@@ -20,7 +13,7 @@ const RadioButtonGroupWithInfo = ({
   saveToDb,
   popover,
 }) => (
-  <Container>
+  <div className={container}>
     <RadioButtonGroup
       value={value}
       name={name}
@@ -30,7 +23,5 @@ const RadioButtonGroupWithInfo = ({
       error={error}
     />
     <InfoWithPopover>{popover}</InfoWithPopover>
-  </Container>
+  </div>
 )
-
-export default observer(RadioButtonGroupWithInfo)
