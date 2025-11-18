@@ -71,6 +71,9 @@ const Teilkulturen = lazy(async () => ({
 const Root = lazy(async () => ({
   default: (await import('./Root/index.jsx')).Root,
 }))
+const FourOhFour = lazy(async () => ({
+  default: (await import('../../routes/404.jsx')).FourOhFour,
+}))
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 export const Data = observer(() => {
@@ -128,6 +131,6 @@ export const Data = observer(() => {
     case 'zaehlungen':
       return <Zaehlungen />
     default:
-      return null
+      return <FourOhFour />
   }
 })
