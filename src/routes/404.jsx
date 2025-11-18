@@ -1,5 +1,4 @@
 import Typography from '@mui/material/Typography'
-import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router'
 
@@ -16,16 +15,6 @@ import {
   text,
   button,
 } from './404.module.css'
-
-const StyledButton = styled(Button)`
-  text-shadow:
-    2px 2px 3px white,
-    -2px -2px 3px white,
-    2px -2px 3px white,
-    -2px 2px 3px white;
-  border-color: white !important;
-  margin-top: 10px !important;
-`
 
 export const FourOhFour = () => {
   const navigate = useNavigate()
