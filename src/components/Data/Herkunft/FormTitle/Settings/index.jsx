@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
 import MenuItem from '@mui/material/MenuItem'
@@ -8,7 +7,7 @@ import { FaCog } from 'react-icons/fa'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { HerkunftSettingsMenu as Menu } from './Menu.jsx'
 
-export const HerkunftSettings = observer(({ asMenu }) => {
+export const HerkunftSettings = ({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickConfig = (event) => setAnchorEl(event.currentTarget)
 
@@ -48,4 +47,4 @@ export const HerkunftSettings = observer(({ asMenu }) => {
       />
     </ErrorBoundary>
   )
-})
+}
