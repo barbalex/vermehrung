@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react'
-import styled from '@emotion/styled'
 import {
   MdAccountCircle as AccountIcon,
   MdChevronRight as ChevronRightIcon,
@@ -41,39 +40,6 @@ import {
   menuSubtitle,
   menuExplainerItem,
 } from './Row.module.css'
-
-const SymbolDiv = styled.div`
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-self: flex-start;
-  // this height is important to keep all nodes at same height
-  // otherwise expandMore will be higher than others
-  height: 1.4em;
-`
-const SymbolSpan = styled.span`
-  padding-left: 9px;
-`
-const TextSpan = styled.span`
-  margin-left: 0;
-  padding-right: 4px;
-  white-space: normal;
-  cursor: pointer;
-  &:hover {
-    color: #f57c00;
-  }
-`
-const MenuSubtitle = styled.div`
-  padding-top: 7px;
-`
-const MenuExplainerItem = styled(MenuItem)`
-  white-space: normal !important;
-  cursor: auto !important;
-  &:hover {
-    color: white !important;
-    border-color: rgb(255, 255, 255) !important;
-  }
-`
 
 export const TreeRow = observer(({ style, node, nodes, userRole }) => {
   const store = useContext(MobxStoreContext)
@@ -165,7 +131,8 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
           }}
         >
           {useSymbolIcon && (
-            <SymbolDiv
+            <div
+              className={symbolDiv}
               onClick={onClickNodeSymbol}
               data-mobile={isMobile}
             >
@@ -194,10 +161,10 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                   className={moreHorizIcon}
                 />
               )}
-            </SymbolDiv>
+            </div>
           )}
           {useSymbolSpan && (
-            <SymbolSpan
+            <span
               style={{
                 paddingRight: isMobile ? 13 : 11,
                 fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
@@ -205,11 +172,12 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 fontSize: isMobile ? 32 : 28,
                 width: isMobile ? 12 : 9,
               }}
+              className={symbolSpan}
             >
               {'-'}
-            </SymbolSpan>
+            </span>
           )}
-          <TextSpan
+          <span
             node={node}
             onClick={onClickNode}
             style={{
@@ -217,9 +185,10 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
               fontSize,
               fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
             }}
+            className={textSpan}
           >
             {node?.label ?? '(kein Label)'}
-          </TextSpan>
+          </span>
           {accountId && (
             <AccountIcon
               title="hat ein Konto"
@@ -232,7 +201,9 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
         <ContextMenu id={`cm${node?.id}`}>
           <div className="react-contextmenu-title">{node?.menuTitle}</div>
           {node?.menuExplainerText && (
-            <MenuExplainerItem>{node?.menuExplainerText}</MenuExplainerItem>
+            <MenuItem className={menuExplainerItem}>
+              {node?.menuExplainerText}
+            </MenuItem>
           )}
           {!(node?.hasMenu === false) && (
             <>
@@ -268,9 +239,12 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 userRole?.name === 'manager' &&
                 !accountId && (
                   <>
-                    <MenuSubtitle className="react-contextmenu-title">
+                    <div
+                      className={menuSubtitle}
+                      className="react-contextmenu-title"
+                    >
                       Konto
-                    </MenuSubtitle>
+                    </div>
                     <MenuItem onClick={onClickSignup}>neu</MenuItem>
                   </>
                 )}
@@ -279,9 +253,12 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 userRole?.name === 'manager' &&
                 accountId && (
                   <>
-                    <MenuSubtitle className="react-contextmenu-title">
+                    <div
+                      className={menuSubtitle}
+                      className="react-contextmenu-title"
+                    >
                       Konto
-                    </MenuSubtitle>
+                    </div>
                     <MenuItem onClick={onClickSetPassword}>
                       Email schicken, um ein Passwort zu setzen (Achtung: Ist
                       nur ca. 2 Stunden gültig)
