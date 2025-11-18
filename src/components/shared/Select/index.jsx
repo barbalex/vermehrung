@@ -12,6 +12,8 @@ import {
   selectRow,
 } from './index.module.css'
 
+// leave this styled use as css modules can't deal with nested classes
+// and multiple selects are styled differently
 export const StyledSelect = styled(SelectComponent)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
