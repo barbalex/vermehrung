@@ -30,8 +30,6 @@ export const HeaderFilter = observer(() => {
 
   const onClickFilter = () => setShowFilter(!showFilter)
 
-  console.log('Filter', { singleColumnView, showFilter })
-
   if (singleColumnView) {
     const StyledIconButton = styled(IconButton)({
       border:
