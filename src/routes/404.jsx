@@ -8,41 +8,15 @@ import image from '../images/puls_vulg_2500.webp'
 import placeholderSrc from '../images/puls_vulg_500.webp' // TODO: build small placeholder
 import { ProgressiveImg } from '../components/shared/ProgressiveImg.tsx'
 
-const OuterContainer = styled.div`
-  height: calc(100dvh - var(--app-bar-height));
-  position: relative;
-  overflow: hidden;
-`
-const ScrollContainer = styled.div`
-  height: calc(100dvh - var(--app-bar-height));
-  width: 100%;
-  position: absolute;
-  top: 0;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  /* prevent layout shift when scrollbar appears */
-  scrollbar-gutter: stable;
-`
-const TextContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  font-weight: 700 !important;
-  text-shadow:
-    2px 2px 3px white,
-    -2px -2px 3px white,
-    2px -2px 3px white,
-    -2px 2px 3px white;
-`
-const PageTitle = styled(Typography)`
-  font-size: 2em !important;
-  padding: 15px;
-  font-weight: 700 !important;
-`
-const Text = styled(Typography)`
-  font-size: 1.5em !important;
-  padding: 15px;
-  font-weight: 700 !important;
-`
+import {
+  outerContainer,
+  scrollContainer,
+  textContainer,
+  pageTitle,
+  text,
+  button,
+} from './404.module.css'
+
 const StyledButton = styled(Button)`
   text-shadow:
     2px 2px 3px white,
@@ -60,39 +34,42 @@ export const FourOhFour = () => {
   return (
     <>
       <ErrorBoundary>
-        <OuterContainer>
+        <div className={outerContainer}>
           <ProgressiveImg
             src={image}
             placeholderSrc={placeholderSrc}
           />
-          <ScrollContainer>
-            <TextContainer>
-              <PageTitle
+          <div className={scrollContainer}>
+            <div className={textContainer}>
+              <Typography
                 align="center"
                 variant="h6"
+                className={pageTitle}
               >
                 Oh je
-              </PageTitle>
-            </TextContainer>
-            <TextContainer>
-              <Text
+              </Typography>
+            </div>
+            <div className={textContainer}>
+              <Typography
                 align="center"
                 variant="h6"
+                className={text}
               >
-                Diese Seite ist nicht verfügbar.
-              </Text>
-            </TextContainer>
-            <TextContainer>
-              <StyledButton
+                Diese Seite ist nicht verfügbar
+              </Typography>
+            </div>
+            <div className={textContainer}>
+              <Button
                 variant="outlined"
                 onClick={onClickBack}
                 color="inherit"
+                className={button}
               >
                 Zurück zur Startseite
-              </StyledButton>
-            </TextContainer>
-          </ScrollContainer>
-        </OuterContainer>
+              </Button>
+            </div>
+          </div>
+        </div>
       </ErrorBoundary>
     </>
   )
