@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 import {
@@ -14,30 +13,13 @@ import { Explainer } from './Explainer.jsx'
 import { Data } from './Data.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
-const Container = styled.div`
-  padding: 10px;
-`
-const Title = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
-const ButtonRow = styled.div`
-  padding: 15px 0;
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-`
-const StyledButton = styled(Button)`
-  margin: 5px !important;
-  > span {
-    text-transform: none;
-  }
-`
+import {
+  container,
+  title,
+  revClass,
+  button,
+  buttonRow,
+} from './index.module.css'
 
 export const Conflict = observer(
   ({
@@ -57,21 +39,22 @@ export const Conflict = observer(
 
     if (error) {
       console.log('shared/Conflict/index.jsx error:', error)
-      return <Container>{error.message}</Container>
+      return <div className={container}>{error.message}</div>
     }
 
     return (
-      <Container>
-        <Title>
-          Widersprüchliche Version<Rev>{rev}</Rev>
-        </Title>
+      <div className={container}>
+        <h4 className={title}>
+          Widersprüchliche Version<span className={revClass}>{rev}</span>
+        </h4>
         <Explainer name={name} />
         <Data
           dataArray={dataArray}
           loading={loading}
         />
-        <ButtonRow>
-          <StyledButton
+        <div className={buttonRow}>
+          <Button
+            className={button}
             onClick={onClickAktuellUebernehmen}
             variant="outlined"
             title="Die widersprüchliche Version wird verworfen, die aktuelle beibehalten. Der Konflikt gilt als gelöst und erscheint nicht mehr"
@@ -81,8 +64,9 @@ export const Conflict = observer(
             {diffConflict ?
               'grüne (= aktuelle) Version übernehmen'
             : 'aktuelle Version übernehmen'}
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
+            className={button}
             onClick={onClickWiderspruchUebernehmen}
             variant="outlined"
             title="Die widersprüchliche Version wird übernommen, die aktuelle verworfen. Der Konflikt gilt als gelöst und erscheint nicht mehr"
@@ -92,8 +76,9 @@ export const Conflict = observer(
             {diffConflict ?
               'rote (= widersprüchliche) Version übernehmen'
             : 'widersprüchliche Version übernehmen'}
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
+            className={button}
             onClick={onClickToggleDiff}
             variant="outlined"
             title={
@@ -105,8 +90,9 @@ export const Conflict = observer(
             color="inherit"
           >
             {diffConflict ? 'nicht vergleichen' : 'vergleichen'}
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
+            className={button}
             onClick={onClickSchliessen}
             variant="outlined"
             title="Die Spalte mit dem Konflikt wird geschlossen. Der Konflikt bleibt erhalten"
@@ -114,9 +100,9 @@ export const Conflict = observer(
             color="inherit"
           >
             schliessen
-          </StyledButton>
-        </ButtonRow>
-      </Container>
+          </Button>
+        </div>
+      </div>
     )
   },
 )
