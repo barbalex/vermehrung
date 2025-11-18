@@ -1,0 +1,8 @@
+.conflictClass {
+  color: #d84315;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
