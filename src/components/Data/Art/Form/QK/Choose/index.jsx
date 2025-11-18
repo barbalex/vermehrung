@@ -1,11 +1,9 @@
-import { observer } from 'mobx-react-lite'
-
 import { Row } from './Row.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import { container, fieldsContainer, info } from './index.module.css'
 
-export const Choose = observer(({ qks }) => (
+export const Choose = ({ qks }) => (
   <ErrorBoundary>
     <div className={container}>
       <div className={info}>Diese Wahl gilt für alle Arten</div>
@@ -19,4 +17,4 @@ export const Choose = observer(({ qks }) => (
       </div>
     </div>
   </ErrorBoundary>
-))
+)
