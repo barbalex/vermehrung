@@ -9,7 +9,7 @@ import placeholderSrc from '../images/puls_vulg_500.webp' // TODO: build small p
 import { ProgressiveImg } from '../components/shared/ProgressiveImg.tsx'
 
 const OuterContainer = styled.div`
-  height: calc(100% - var(--app-bar-height));
+  height: calc(100dvh - var(--app-bar-height));
   position: relative;
   overflow: hidden;
 `
