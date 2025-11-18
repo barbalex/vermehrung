@@ -29,42 +29,19 @@ import {
   MenuItem,
 } from '../../utils/react-contextmenu/index.js'
 
-const StyledNode = styled.div`
-  box-sizing: border-box;
-  margin: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  white-space: nowrap;
-  user-select: none;
-  line-height: 1.3rem;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 21px;
-`
-const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
-  margin-top: -5px !important;
-  padding-left: 2px;
-  cursor: pointer;
-  &:hover {
-    color: #f57c00 !important;
-  }
-`
-const StyledChevronRightIcon = styled(ChevronRightIcon)`
-  padding-left: 2px;
-  height: 22px !important;
-  width: 26px;
-  cursor: pointer;
-  &:hover {
-    color: #f57c00 !important;
-  }
-`
-const StyledMoreHorizIcon = styled(MoreHorizIcon)`
-  width: 26px;
-  cursor: pointer;
-  &:hover {
-    color: #f57c00 !important;
-  }
-`
+import {
+  nodeClass,
+  expandMoreIcon,
+  chevronRightIcon,
+  moreHorizIcon,
+  accountIcon,
+  symbolDiv,
+  symbolSpan,
+  textSpan,
+  menuSubtitle,
+  menuExplainerItem,
+} from './Row.module.css'
+
 const StyledAccountIcon = styled(AccountIcon)`
   margin-top: 3px;
   font-size: 1.1em;
@@ -181,7 +158,8 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
   return (
     <>
       <ContextMenuTrigger id={`cm${node?.id}`}>
-        <StyledNode
+        <div
+          className={nodeClass}
           style={{
             paddingLeft: level * 17 - 10,
             color:
@@ -196,7 +174,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
               data-mobile={isMobile}
             >
               {symbolIcon === 'expandMore' && (
-                <StyledExpandMoreIcon
+                <ExpandMoreIcon
                   style={{
                     marginLeft: nodeIsOpen ? -1 : 0,
                     marginRight: nodeIsOpen ? -5 : 0,
@@ -204,16 +182,20 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                     width: nodeIsOpen ? 30 : 26,
                     color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
                   }}
+                  className={expandMoreIcon}
                 />
               )}
-              {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
+              {symbolIcon === 'chevronRight' && (
+                <ChevronRightIcon className={chevronRightIcon} />
+              )}
               {symbolIcon === 'moreHoriz' && (
-                <StyledMoreHorizIcon
+                <MoreHorizIcon
                   style={{
                     paddingLeft: nodeIsInActiveNodePath ? 1 : 2,
                     height: nodeIsInActiveNodePath ? 26 : 22,
                     color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
                   }}
+                  className={moreHorizIcon}
                 />
               )}
             </SymbolDiv>
@@ -243,7 +225,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
             {node?.label ?? '(kein Label)'}
           </TextSpan>
           {accountId && <StyledAccountIcon title="hat ein Konto" />}
-        </StyledNode>
+        </div>
       </ContextMenuTrigger>
       {['table', 'folder'].includes(node?.nodeType) && (
         <ContextMenu id={`cm${node?.id}`}>
