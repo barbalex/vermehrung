@@ -1,44 +1,22 @@
-import styled from '@emotion/styled'
-
-const ExplainText = styled.div`
-  margin-bottom: 10px;
-  li {
-    margin-bottom: 0;
-  }
-`
-const OptionalHelp = styled.details`
-  margin-bottom: 10px;
-`
-const Summary = styled.summary`
-  user-select: none;
-  padding-bottom: 5px;
-  font-weight: 500;
-  &:focus {
-    outline: none !important;
-  }
-  &:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-`
-const Details = styled.div`
-  padding-left: 17px;
-`
-const Ul = styled.ul`
-  margin-bottom: 0;
-`
+import {
+  explainText,
+  optionalHelp,
+  summary,
+  details,
+  ul,
+} from './Explainer.module.css'
 
 export const Explainer = ({ name }) => (
-  <OptionalHelp>
-    <Summary>Infos und Anleitung</Summary>
-    <Details>
-      <ExplainText>
-        {`Es gibt einen Konflikt zwischen der aktuellen Version der ${name}
+  <details className={optionalHelp}>
+    <summary className={summary}>Infos und Anleitung</summary>
+    <div className={details}>
+      <div className={explainText}>
+        {`Es gibt einen Konflikt zwischen der aktuellen Version der/des ${name}
             und der unten angezeigten widersprüchlichen.`}
-      </ExplainText>
-      <ExplainText>
+      </div>
+      <div className={explainText}>
         Konflikte können entstehen, wenn:
-        <Ul>
+        <ul className={ul}>
           <li>
             zwei Personen
             <br /> oder eine Person an verschiedenen Geräten
@@ -47,28 +25,28 @@ export const Explainer = ({ name }) => (
             gleichzeitig <br />
             oder während mindestens eine der Personen offline ist
           </li>
-        </Ul>
-        {`...an derselben ${name} arbeiten.`}
-      </ExplainText>
-      <ExplainText>
+        </ul>
+        {`...an der-/demselben ${name} arbeiten.`}
+      </div>
+      <div className={explainText}>
         Es können rasch viele Versionen entstehen, weil vermehrung.ch nach jeder
         Eingabe in ein Feld eine neue Version speichert.
-      </ExplainText>
-      <ExplainText>
+      </div>
+      <div className={explainText}>
         {`vermehrung.ch hat den Konflikt erkannt und automatisch eine Version
             zum Gewinner erklärt. Das ist die "aktuelle" Version.`}
-      </ExplainText>
-      <ExplainText>
+      </div>
+      <div className={explainText}>
         vermehrung.ch weiss aber nicht, ob die aktuelle Version auch korrekt
         ist. Darum müssen Sie den Konflikt bereinigen:
-      </ExplainText>
-      <ul>
+      </div>
+      <ul className={ul}>
         <li>
           Passen Sie die aktuelle Version wenn nötig an und verwerfen Sie
           anschliessend die widersprüchliche
         </li>
         <li>Oder: Übernehmen Sie die widersprüchliche Version</li>
       </ul>
-    </Details>
-  </OptionalHelp>
+    </div>
+  </details>
 )
