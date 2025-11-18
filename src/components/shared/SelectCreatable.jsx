@@ -14,6 +14,8 @@ import {
   selectRow,
 } from './SelectCreatable.module.css'
 
+// leave this styled use due to css modules not able to nest classes
+// and different stylings existing for selects
 const StyledSelect = styled(Select)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
