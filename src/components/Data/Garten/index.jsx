@@ -20,7 +20,13 @@ export const Garten = observer(
     id = '99999999-9999-9999-9999-999999999999',
   }) => {
     const store = useContext(MobxStoreContext)
-    const { filter, online, db, initialDataQueried } = store
+    const {
+      filter,
+      online,
+      db,
+      initialDataQueried,
+      garten_initially_queried_count,
+    } = store
 
     // removing useMemo causes: Maximum update depth exceeded
     const observable = useMemo(
@@ -28,9 +34,22 @@ export const Garten = observer(
         showFilter ? $of(filter.garten)
         : initialDataQueried ? db.get('garten').findAndObserve(id)
         : $of({}),
-      [showFilter, filter.garten, id, initialDataQueried],
+      [
+        showFilter,
+        filter.garten,
+        id,
+        initialDataQueried,
+        garten_initially_queried_count,
+      ],
     )
     const row = useObservable(observable)
+
+    console.log('Garten', {
+      bemerkungen: row?.bemerkungen,
+      conflicts: row?._conflicts,
+      initialDataQueried,
+      garten_initially_queried_count,
+    })
 
     const [activeConflict, setActiveConflict] = useState(null)
     const conflictDisposalCallback = () => setActiveConflict(null)
@@ -70,6 +89,7 @@ export const Garten = observer(
                 activeConflict={activeConflict}
                 setActiveConflict={setActiveConflict}
                 showHistory={showHistory}
+                garten_initially_queried_count={garten_initially_queried_count}
               />
               <Allotment.Pane visible={paneIsSplit}>
                 {activeConflict ?
