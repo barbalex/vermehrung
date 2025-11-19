@@ -37,6 +37,8 @@ export const GartenForm = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, errors, unsetError, insertGvRev, db, user } = store
 
+    console.log('Garten.Form, Bemerkungen:', row.bemerkungen)
+
     useEffect(() => {
       unsetError('garten')
     }, [id, unsetError])

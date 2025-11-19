@@ -102,6 +102,33 @@ export const MobxStore = types
     teilzaehlung_initially_queried: types.optional(types.boolean, false),
     user_role_initially_queried: types.optional(types.boolean, false),
     zaehlung_initially_queried: types.optional(types.boolean, false),
+    ae_art_initially_queried_count: types.optional(types.number, 0),
+    art_initially_queried_count: types.optional(types.number, 0),
+    art_file_initially_queried_count: types.optional(types.number, 0),
+    art_qk_initially_queried_count: types.optional(types.number, 0),
+    av_initially_queried_count: types.optional(types.number, 0),
+    event_initially_queried_count: types.optional(types.number, 0),
+    garten_initially_queried_count: types.optional(types.number, 0),
+    garten_file_initially_queried_count: types.optional(types.number, 0),
+    gv_initially_queried_count: types.optional(types.number, 0),
+    herkunft_initially_queried_count: types.optional(types.number, 0),
+    herkunft_file_initially_queried_count: types.optional(types.number, 0),
+    kultur_initially_queried_count: types.optional(types.number, 0),
+    kultur_file_initially_queried_count: types.optional(types.number, 0),
+    kultur_option_initially_queried_count: types.optional(types.number, 0),
+    kultur_qk_initially_queried_count: types.optional(types.number, 0),
+    lieferung_initially_queried_count: types.optional(types.number, 0),
+    lieferung_file_initially_queried_count: types.optional(types.number, 0),
+    person_initially_queried_count: types.optional(types.number, 0),
+    person_file_initially_queried_count: types.optional(types.number, 0),
+    person_option_initially_queried_count: types.optional(types.number, 0),
+    sammel_lieferung_initially_queried_count: types.optional(types.number, 0),
+    sammlung_initially_queried_count: types.optional(types.number, 0),
+    sammlung_file_initially_queried_count: types.optional(types.number, 0),
+    teilkultur_initially_queried_count: types.optional(types.number, 0),
+    teilzaehlung_initially_queried_count: types.optional(types.number, 0),
+    user_role_initially_queried_count: types.optional(types.number, 0),
+    zaehlung_initially_queried_count: types.optional(types.number, 0),
     initiallyQuerying: types.optional(types.string, ''),
     /**
      * This is a queue of all queries
@@ -131,7 +158,8 @@ export const MobxStore = types
   }))
   .actions((self) => {
     reaction(
-      () => `${self.queuedQueries.size}/${self.shortTermOnline}`,
+      () =>
+        `${self.queuedQueries.size}/${self.shortTermOnline}/${self.ae_art_initially_queried_count}/${self.art_initially_queried_count}/${self.art_file_initially_queried_count}/${self.art_qk_initially_queried_count}/${self.av_initially_queried_count}/${self.event_initially_queried_count}/${self.garten_initially_queried_count}/${self.garten_file_initially_queried_count}/${self.gv_initially_queried_count}/${self.herkunft_initially_queried_count}/${self.herkunft_file_initially_queried_count}/${self.kultur_initially_queried_count}/${self.kultur_file_initially_queried_count}/${self.kultur_option_initially_queried_count}/${self.kultur_qk_initially_queried_count}/${self.lieferung_initially_queried_count}/${self.lieferung_file_initially_queried_count}/${self.person_initially_queried_count}/${self.person_file_initially_queried_count}/${self.person_option_initially_queried_count}/${self.sammel_lieferung_initially_queried_count}/${self.sammlung_initially_queried_count}/${self.sammlung_file_initially_queried_count}/${self.teilkultur_initially_queried_count}/${self.teilzaehlung_initially_queried_count}/${self.user_role_initially_queried_count}/${self.zaehlung_initially_queried_count}`,
       flow(function* () {
         /*console.log('Store, reaction, shortTermOnline:', {
           shortTermOnline: self.shortTermOnline,
@@ -164,11 +192,13 @@ export const MobxStore = types
           if (!mutation) throw new Error('keine Mutation gefunden für: ', name)
           let response
           // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
-          variables ?
-            (response = yield self.gqlClient
+          if (variables) {
+            response = yield self.gqlClient
               .mutation(mutation, JSON.parse(variables))
-              .toPromise())
-          : (response = yield self.gqlClient.mutation(mutation).toPromise())
+              .toPromise()
+          } else {
+            response = yield self.gqlClient.mutation(mutation).toPromise()
+          }
           if (response.error) {
             // TODO:
             // use urql difference between networkError and graphQLErrors
@@ -285,6 +315,8 @@ export const MobxStore = types
       },
       setInitiallyQueried({ table }) {
         self[`${table}_initially_queried`] = true
+        self[`${table}_initially_queried_count`] =
+          self[`${table}_initially_queried_count`] + 1
       },
       setDiffConflict(val) {
         self.diffConflict = val

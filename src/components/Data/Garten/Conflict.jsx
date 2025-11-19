@@ -89,6 +89,11 @@ export const GartenConflict = observer(
           toPgArray([rev, ...revRow._revisions])
         : toPgArray([rev])
 
+      console.log(
+        'Garten.Conflict.onClickAktuellUebernehmen, newObject:',
+        newObject,
+      )
+
       addQueuedQuery({
         name: 'mutateInsert_garten_rev_one',
         variables: JSON.stringify({
@@ -107,7 +112,12 @@ export const GartenConflict = observer(
       try {
         const model = await db.get('garten').find(revRow.garten_id)
         await model.removeConflict(revRow._rev)
-      } catch {}
+      } catch (error) {
+        console.log(
+          'Garten.Conflict.onClickAktuellUebernehmen, error removing conflict:',
+          error,
+        )
+      }
       conflictDisposalCallback()
       window.location.reload()
     }

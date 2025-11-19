@@ -760,6 +760,12 @@ export class Garten extends Model {
 
   @writer async removeConflict(_rev) {
     await this.update((row) => {
+      // console.log('dbModel.Garten.removeConflict', {
+      //   _rev,
+      //   row,
+      //   conflictsBeforeRemoving: row._conflicts,
+      //   conflictsAfterRemoving: this._conflicts.filter((r) => r !== _rev),
+      // })
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }

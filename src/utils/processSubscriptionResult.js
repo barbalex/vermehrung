@@ -54,6 +54,7 @@ export const processSubscriptionResult = async ({
     table,
     toUpdate: objectsToUpdate.length,
     toCreate: missingIds.length,
+    objectsToUpdate,
   })
 
   // use a timeout to stagger the imports
