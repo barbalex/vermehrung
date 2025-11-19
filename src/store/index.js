@@ -164,11 +164,13 @@ export const MobxStore = types
           if (!mutation) throw new Error('keine Mutation gefunden für: ', name)
           let response
           // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
-          variables ?
-            (response = yield self.gqlClient
+          if (variables) {
+            response = yield self.gqlClient
               .mutation(mutation, JSON.parse(variables))
-              .toPromise())
-          : (response = yield self.gqlClient.mutation(mutation).toPromise())
+              .toPromise()
+          } else {
+            response = yield self.gqlClient.mutation(mutation).toPromise()
+          }
           if (response.error) {
             // TODO:
             // use urql difference between networkError and graphQLErrors
