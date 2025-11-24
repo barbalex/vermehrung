@@ -88,3 +88,5 @@ assetlinks.json
 dist
 dist/
 dist/*
+
+git_stats.txt
