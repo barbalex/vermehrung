@@ -147,99 +147,101 @@ export const MobxStore = types
          * Also important: How to combine when online?
          * as long as same id is active?
          */
-        if (self.shortTermOnline) {
-          // execute operation
-          const query = self.queuedQueriesSorted[0]
-          //console.log('Store, reaction, shortTermOnline:', self.shortTermOnline)
-          if (!query) return
-          const {
-            name,
-            variables,
-            revertTable,
-            revertField,
-            revertId,
-            revertValue,
-          } = query
-          const mutation = mutations[name]
-          if (!mutation) throw new Error('keine Mutation gefunden für: ', name)
-          let response
-          // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
-          if (variables) {
-            response = yield self.gqlClient
-              .mutation(mutation, JSON.parse(variables))
-              .toPromise()
-          } else {
-            response = yield self.gqlClient.mutation(mutation).toPromise()
-          }
-          if (response.error) {
-            // TODO:
-            // use urql difference between networkError and graphQLErrors
-            console.log('operation reaction error:', response.error)
-            // TODO: if offline, return and set shortTermOffline
-            const lcMessage = response.error.message.toLowerCase()
-            // In case a conflict was caused by two EXACT SAME changes,
-            // this will bounce because of the same rev. We want to ignore this:
-            if (response.error.message.includes('JWT')) {
-              console.log('getting auth token due to jwt error')
-              return getAuthToken({ store: self })
-            } else if (
-              lcMessage.includes('uniqueness violation') &&
-              lcMessage.includes('_rev_id__rev_key')
-            ) {
-              console.log(
-                'There is a conflict with exact same changes - ingoring the error thrown',
-              )
-            } else if (
-              response.error?.graphQLErrors?.[0]?.extensions?.internal?.error
-                ?.status_code === '21000'
-            ) {
-              console.log('user sent same edit to soon again')
-            } else if (lcMessage.includes('unique-constraint')) {
-              let { message } = response.error
-              if (lcMessage.includes('single_art_herkunft_garden_active_idx')) {
-                message =
-                  'Pro Art, Herkunft und Garten darf nur eine Kultur aktiv sein (plus ein Zwischenlager). Offenbar gibt es schon eine aktive Kultur'
-              }
-              // do not add a notification: show this response.error below the field
-              self.setError({
-                path: `${revertTable}.${revertField}`,
-                value: message,
-              })
-              console.log('a unique constraint was violated')
-            } else if (response.error.message.includes('Failed to fetch')) {
-              console.log('network is failing')
-              self.setShortTermOnline(false)
-              return
-            } else {
-              // Move this operation to the end of the queue
-              // to prevent it from blocking other operations
-              self.deferQueuedQueryById(query.id)
-              self.setError({
-                path: `${revertTable}.${revertField}`,
-                value: response.error.message,
-              })
-              return self.addNotification({
-                title:
-                  'Eine Operation kann nicht in die Datenbank geschrieben werden',
-                message: response.error.message,
-                info: 'Bei der nächsten Synchronisierung wird wieder versucht, diese Operation auszuführen',
-                actionLabel: 'Operation löschen',
-                actionName: 'removeQueuedQueryById',
-                actionArgument: query.id,
-              })
+        if (!self.shortTermOnline) return
+
+        // execute operation
+        const query = self.queuedQueriesSorted[0]
+        //console.log('Store, reaction, shortTermOnline:', self.shortTermOnline)
+        if (!query) return
+
+        const {
+          name,
+          variables,
+          revertTable,
+          revertField,
+          revertId,
+          revertValue,
+        } = query
+        const mutation = mutations[name]
+        if (!mutation) throw new Error('keine Mutation gefunden für: ', name)
+
+        let response
+        // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
+        if (variables) {
+          response = yield self.gqlClient
+            .mutation(mutation, JSON.parse(variables))
+            .toPromise()
+        } else {
+          response = yield self.gqlClient.mutation(mutation).toPromise()
+        }
+        if (response.error) {
+          // TODO:
+          // use urql difference between networkError and graphQLErrors
+          console.log('operation reaction error:', response.error)
+          // TODO: if offline, return and set shortTermOffline
+          const lcMessage = response.error.message.toLowerCase()
+          // In case a conflict was caused by two EXACT SAME changes,
+          // this will bounce because of the same rev. We want to ignore this:
+          if (response.error.message.includes('JWT')) {
+            console.log('getting auth token due to jwt error')
+            return getAuthToken({ store: self })
+          } else if (
+            lcMessage.includes('uniqueness violation') &&
+            lcMessage.includes('_rev_id__rev_key')
+          ) {
+            console.log(
+              'There is a conflict with exact same changes - ingoring the error thrown',
+            )
+          } else if (
+            response.error?.graphQLErrors?.[0]?.extensions?.internal?.error
+              ?.status_code === '21000'
+          ) {
+            console.log('user sent same edit to soon again')
+          } else if (lcMessage.includes('unique-constraint')) {
+            let { message } = response.error
+            if (lcMessage.includes('single_art_herkunft_garden_active_idx')) {
+              message =
+                'Pro Art, Herkunft und Garten darf nur eine Kultur aktiv sein (plus ein Zwischenlager). Offenbar gibt es schon eine aktive Kultur'
             }
-            // revert change
-            self.updateModelValue({
-              table: revertTable,
-              id: revertId,
-              field: revertField,
-              value: revertValue,
+            // do not add a notification: show this response.error below the field
+            self.setError({
+              path: `${revertTable}.${revertField}`,
+              value: message,
+            })
+            console.log('a unique constraint was violated')
+          } else if (response.error.message.includes('Failed to fetch')) {
+            console.log('network is failing')
+            self.setShortTermOnline(false)
+            return
+          } else {
+            // Move this operation to the end of the queue
+            // to prevent it from blocking other operations
+            self.deferQueuedQueryById(query.id)
+            self.setError({
+              path: `${revertTable}.${revertField}`,
+              value: response.error.message,
+            })
+            return self.addNotification({
+              title:
+                'Eine Operation kann nicht in die Datenbank geschrieben werden',
+              message: response.error.message,
+              info: 'Bei der nächsten Synchronisierung wird wieder versucht, diese Operation auszuführen',
+              actionLabel: 'Operation löschen',
+              actionName: 'removeQueuedQueryById',
+              actionArgument: query.id,
             })
           }
-          // remove operation from queue
-          // use action because this is async
-          self.removeQueuedQueryById(query.id)
+          // revert change
+          self.updateModelValue({
+            table: revertTable,
+            id: revertId,
+            field: revertField,
+            value: revertValue,
+          })
         }
+        // remove operation from queue
+        // use action because this is async
+        self.removeQueuedQueryById(query.id)
       }),
       {
         // make sure retried in a minute
