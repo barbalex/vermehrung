@@ -13,7 +13,7 @@ services:
       - ./.env
     ports:
       # make the Postgres database accessible from outside the Docker container on port 5432
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
       - sik_data:/sik_data
@@ -21,16 +21,23 @@ services:
     command: postgres -c max_locks_per_transaction=2000
     logging:
       options:
-        max-size: '10m'
-        max-file: '3'
+        max-size: "10m"
+        max-file: "3"
     platform: linux/amd64
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   graphql:
-    image: 'hasura/graphql-engine:v2.48.4'
+    image: "hasura/graphql-engine:v2.48.4"
     container_name: v_graphql
     ports:
-      - '8080:8080'
+      - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+        restart: true
     restart: always
     env_file:
       - ./.env
