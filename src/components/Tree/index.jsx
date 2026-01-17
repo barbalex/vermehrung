@@ -5,7 +5,7 @@ import { interval, combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
-import AutoSizer from 'react-virtualized-auto-sizer'
+import { AutoSizer } from 'react-virtualized-auto-sizer'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { TreeSettings as Settings } from './Settings.jsx'
@@ -216,8 +216,8 @@ export const Tree = observer(() => {
       <div className={`tree-root ${container}`}>
         <ApFilterContainer />
         <Settings />
-        <AutoSizer>
-          {({ height, width }) => (
+        <AutoSizer
+          ChildComponent={({ height, width }) => (
             <List
               nodes={nodes}
               width={width}
@@ -225,7 +225,7 @@ export const Tree = observer(() => {
               userRole={userRole}
             />
           )}
-        </AutoSizer>
+        />
       </div>
     </ErrorBoundary>
   )
