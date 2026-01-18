@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const Datenschutz = () => (
   <>
     <h1>Datenschutz</h1>
-    <p className={dokuDate}>21.07.2020</p>
+    <p className={dokuStyles.dokuDate}>21.07.2020</p>
     <p>
       Weil eine Datenschutzvereinbarung nötig und rechtlich heikel ist, habe ich
       nachfolgend den Text aus einer Vorlage kopiert und leicht angepasst. Im
