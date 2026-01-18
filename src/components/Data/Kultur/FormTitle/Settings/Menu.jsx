@@ -12,7 +12,7 @@ import { Q } from '@nozbe/watermelondb'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
 
-import { title } from './Menu.module.css'
+import styles from './Menu.module.css'
 
 export const KulturSettingsMenu = observer(
   ({ anchorEl, setAnchorEl, kulturId }) => {
@@ -83,7 +83,7 @@ export const KulturSettingsMenu = observer(
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <div className={title}>Optionen für diese Kultur:</div>
+        <div className={styles.title}>Optionen für diese Kultur:</div>
         <MenuItem>
           <FormControlLabel
             value={tk === true ? 'true' : 'false'}
@@ -109,7 +109,7 @@ export const KulturSettingsMenu = observer(
             </IconButton>
           </div>
         </MenuItem>
-        <div className={title}>
+        <div className={styles.title}>
           Optionale Felder wählen (für alle Kulturen):
         </div>
         <MenuItem>
