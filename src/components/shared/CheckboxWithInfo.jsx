@@ -8,11 +8,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 import { Label } from './Label.jsx'
 
-import {
-  container,
-  formControl,
-  formControlLabel,
-} from './CheckboxWithInfo.module.css'
+import styles from './CheckboxWithInfo.module.css'
 
 export const CheckboxWithInfo = ({
   value = null,
@@ -24,13 +20,13 @@ export const CheckboxWithInfo = ({
   const onCheck = (e, val) => saveToDb(val)
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <FormControl
         component="fieldset"
         error={!!error}
         aria-describedby={`${label}ErrorText`}
         variant="standard"
-        className={formControl}
+        className={styles.formControl}
       >
         <FormGroup>
           <Label label={label} />
@@ -43,7 +39,7 @@ export const CheckboxWithInfo = ({
                 color="primary"
               />
             }
-            className={formControlLabel}
+            className={styles.formControlLabel}
           />
         </FormGroup>
         {!!error && (
