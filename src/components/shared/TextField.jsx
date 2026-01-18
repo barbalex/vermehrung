@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
-import { formControl } from './TextField.module.css'
+import styles from './TextField.module.css'
 
 export const TextField = ({
   value,
@@ -45,7 +45,7 @@ export const TextField = ({
       error={!!error}
       aria-describedby={`${label}ErrorText`}
       variant="standard"
-      className={formControl}
+      className={styles.formControl}
     >
       <InputLabel
         htmlFor={label}
