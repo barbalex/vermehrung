@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { FilterNumbers as Numbers } from './Numbers.jsx'
 
-import { container, input, filterIcon } from './index.module.css'
+import styles from './index.module.css'
 
 export const DokuFilter = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -16,7 +16,7 @@ export const DokuFilter = observer(() => {
   const onClickEmptyFilter = () => setDocFilter('')
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <Input
         id="filterInput"
         value={docFilter}
@@ -29,7 +29,7 @@ export const DokuFilter = observer(() => {
         variant="outlined"
         startAdornment={
           <InputAdornment position="start">
-            <FaFilter className={filterIcon} />
+            <FaFilter className={styles.filterIcon} />
           </InputAdornment>
         }
         endAdornment={
@@ -50,7 +50,7 @@ export const DokuFilter = observer(() => {
             />
           </InputAdornment>
         }
-        className={input}
+        className={styles.input}
       />
       <Numbers
         totalCount={docsCount}

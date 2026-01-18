@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from 'react-router'
 import IconButton from '@mui/material/IconButton'
 
 import UpSvg from '../../../svg/to_up.svg?react'
-import { container, title, symbols } from './index.module.css'
+import styles from './index.module.css'
 
 export const DocumentationFormTitle = () => {
   const navigate = useNavigate()
@@ -15,9 +15,9 @@ export const DocumentationFormTitle = () => {
   }
 
   return (
-    <div className={container}>
-      <div className={title}>Dokumentation</div>
-      <div className={symbols}>
+    <div className={styles.container}>
+      <div className={styles.title}>Dokumentation</div>
+      <div className={styles.symbols}>
         <IconButton
           title="zurück"
           onClick={onClickUp}

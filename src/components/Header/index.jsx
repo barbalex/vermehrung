@@ -7,7 +7,7 @@ import { HeaderHome as Home } from './Home.jsx'
 import { HeaderDoku as Doku } from './Doku/index.jsx'
 import { HeaderVermehrung as Vermehrung } from './Vermehrung/index.jsx'
 
-import { appBar } from './index.module.css'
+import styles from './index.module.css'
 
 const Header = () => {
   const { pathname } = useLocation()
@@ -18,7 +18,7 @@ const Header = () => {
     <ErrorBoundary>
       <AppBar
         position="static"
-        className={appBar}
+        className={styles.appBar}
       >
         <Toolbar>
           {isHome ?

@@ -9,7 +9,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../utils/constants.js'
 
-import { siteTitle, spacer, navButton } from './Home.module.css'
+import styles from './Home.module.css'
 
 export const HeaderHome = ({ location }) => {
   const { width, ref } = useResizeDetector()
@@ -43,17 +43,17 @@ export const HeaderHome = ({ location }) => {
               component={Link}
               to="/"
               title="Home"
-              className={siteTitle}
+              className={styles.siteTitle}
             >
               Vermehrung
             </Button>
           }
-          <div className={spacer} />
+          <div className={styles.spacer} />
           <Button
             variant="outlined"
             component={Link}
             to="/Dokumentation/"
-            className={navButton}
+            className={styles.navButton}
           >
             Dokumentation
           </Button>
@@ -61,7 +61,7 @@ export const HeaderHome = ({ location }) => {
             variant="outlined"
             component={Link}
             to="/Vermehrung/"
-            className={navButton}
+            className={styles.navButton}
           >
             Daten
           </Button>
