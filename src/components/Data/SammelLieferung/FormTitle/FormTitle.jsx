@@ -16,11 +16,7 @@ import { SammelLieferungNavButtons as NavButtons } from './NavButtons.jsx'
 import { SammelLieferungPrint as PrintButtons } from './PrintButtons.jsx'
 import { SammelLieferungAnleitung as Anleitung } from './Anleitung.jsx'
 
-import {
-  container,
-  title,
-  symbols,
-} from '../../Art/FormTitle/FormTitle.module.css'
+import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
 export const SammelLieferungFormTitle = observer(
   ({
@@ -65,11 +61,11 @@ export const SammelLieferungFormTitle = observer(
 
     return (
       <div
-        className={container}
+        className={artStyles.container}
         ref={ref}
       >
-        <div className={title}>Sammel-Lieferung</div>
-        <div className={symbols}>
+        <div className={artStyles.title}>Sammel-Lieferung</div>
+        <div className={artStyles.symbols}>
           {shownAsSammelLieferung && (
             <>
               <NavButtons />

@@ -11,7 +11,7 @@ import { updateSammelLieferung } from './updateLieferung.js'
 import { updateAllSammelLieferungen } from './updateAllLieferungen.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-import { titleRow, title } from './index.module.css'
+import styles from './index.module.css'
 
 const sammelLieferungFields = [
   'id',
@@ -103,8 +103,8 @@ export const SammelLieferungCopyMenu = observer(
           open={Boolean(anchorEl)}
           onClose={onClose}
         >
-          <div className={titleRow}>
-            <div className={title}>
+          <div className={styles.titleRow}>
+            <div className={styles.title}>
               Die Daten der Sammel-Lieferung kopieren:
             </div>
           </div>
