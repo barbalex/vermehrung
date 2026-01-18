@@ -16,13 +16,7 @@ import { tableFilter } from '../../../utils/tableFilter.js'
 import { teilkulturSort } from '../../../utils/teilkulturSort.js'
 import { constants } from '../../../utils/constants.js'
 
-import {
-  container,
-  titleContainer,
-  title,
-  titleSymbols,
-  fieldsContainer,
-} from '../Arten/index.module.css'
+import artStyles from '../Arten/index.module.css'
 
 export const Teilkulturen = observer(({ filter: showFilter = false }) => {
   const store = useContext(MobxStoreContext)
@@ -101,7 +95,7 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
   return (
     <ErrorBoundary>
       <div
-        className={container}
+        className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
         {showFilter ?
@@ -111,9 +105,9 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={titleContainer}>
-            <div className={title}>Teilkulturen</div>
-            <div className={titleSymbols}>
+        : <div className={artStyles.titleContainer}>
+            <div className={artStyles.title}>Teilkulturen</div>
+            <div className={artStyles.titleSymbols}>
               <IconButton
                 title={upTitle}
                 onClick={onClickUp}
@@ -136,7 +130,7 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
             </div>
           </div>
         }
-        <div className={fieldsContainer}>
+        <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
             rowCount={teilkulturs.length}
