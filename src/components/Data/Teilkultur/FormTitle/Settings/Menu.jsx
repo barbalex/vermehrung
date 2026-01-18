@@ -11,7 +11,7 @@ import { of as $of } from 'rxjs'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
 
-import { titleRow, title, info } from './Menu.module.css'
+import styles from './Menu.module.css'
 
 export const TeilkulturSettingsMenu = observer(
   ({ anchorEl, setAnchorEl, kulturId }) => {
@@ -56,8 +56,8 @@ export const TeilkulturSettingsMenu = observer(
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <div className={titleRow}>
-          <div className={title}>Felder für Teilkulturen wählen:</div>
+        <div className={styles.titleRow}>
+          <div className={styles.title}>Felder für Teilkulturen wählen:</div>
           <div>
             <IconButton
               aria-label="Anleitung öffnen"
@@ -84,7 +84,7 @@ export const TeilkulturSettingsMenu = observer(
             labelPlacement="end"
           />
         </MenuItem>
-        <div className={info}>
+        <div className={styles.info}>
           Zwingende Felder sind nicht aufgelistet.
           <br />
           Die Wahl gilt (nur) für diese Kultur.
