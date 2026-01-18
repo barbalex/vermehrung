@@ -7,8 +7,8 @@ import FormHelperText from '@mui/material/FormHelperText'
 
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 
-import { formControl } from './TextField.module.css'
-import { popoverContentRow } from './TextFieldWithInfo.module.css'
+import textFieldStyles from './TextField.module.css'
+import styles from './TextFieldWithInfo.module.css'
 
 export const TextFieldWithInfo = ({
   value: propsValue,
@@ -43,7 +43,7 @@ export const TextFieldWithInfo = ({
       error={!!error}
       aria-describedby={`${label}ErrorText`}
       variant="standard"
-      className={formControl}
+      className={textFieldStyles.formControl}
     >
       <InputLabel htmlFor={label}>{label}</InputLabel>
       <Input
@@ -58,7 +58,7 @@ export const TextFieldWithInfo = ({
         placeholder={hintText}
         endAdornment={
           <InfoWithPopover>
-            <div className={popoverContentRow}>{popover}</div>
+            <div className={styles.popoverContentRow}>{popover}</div>
           </InfoWithPopover>
         }
       />

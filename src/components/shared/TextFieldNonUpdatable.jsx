@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
-import { formControl } from './TextField.module.css'
+import textFieldStyles from './TextField.module.css'
 
 const inputProps = { tabIndex: -1 }
 
@@ -31,7 +31,7 @@ export const TextFieldNonUpdatable = ({
       fullWidth
       aria-describedby={`${label}-helper`}
       variant="standard"
-      className={formControl}
+      className={textFieldStyles.formControl}
     >
       <InputLabel
         htmlFor={label}

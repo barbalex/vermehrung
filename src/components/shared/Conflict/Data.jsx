@@ -7,7 +7,7 @@ import { toStringIfPossible } from '../../../utils/toStringIfPossible.js'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { Spinner } from '../Spinner.jsx'
 
-import { key } from './Data.module.css'
+import styles from './Data.module.css'
 
 // keep this styled usage because css modules
 // can't deal with child classes
@@ -67,7 +67,7 @@ export const Data = observer(({ dataArray, loading }) => {
         key={d.label}
         style={rowStyle}
       >
-        <div className={key}>{`${d.label}:`}</div>
+        <div className={styles.key}>{`${d.label}:`}</div>
         {showDiff ?
           <>
             {(diffSentences(inputB, inputA) ?? []).map((group) => (
