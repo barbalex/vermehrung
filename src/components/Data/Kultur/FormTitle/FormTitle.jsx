@@ -10,11 +10,7 @@ import { KulturDownload as Download } from './Download.jsx'
 import { KulturAnleitung as Anleitung } from './Anleitung.jsx'
 import { KulturNavButtons as NavButtons } from './NavButtons.jsx'
 
-import {
-  container,
-  title,
-  symbols,
-} from '../../Art/FormTitle/FormTitle.module.css'
+import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
 export const KulturFormTitle = ({
   row,
@@ -27,11 +23,11 @@ export const KulturFormTitle = ({
 
   return (
     <div
-      className={container}
+      className={artStyles.container}
       ref={ref}
     >
-      <div className={title}>Kultur</div>
-      <div className={symbols}>
+      <div className={artStyles.title}>Kultur</div>
+      <div className={artStyles.symbols}>
         <NavButtons row={row} />
         {width < 520 ?
           <Menu white={false}>

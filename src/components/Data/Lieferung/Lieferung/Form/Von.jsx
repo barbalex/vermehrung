@@ -12,11 +12,8 @@ import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFrom
 import { sammlungsSortedFromSammlungs } from '../../../../../utils/sammlungsSortedFromSammlungs.js'
 import { herkunftLabelFromHerkunft } from '../../../../../utils/herkunftLabelFromHerkunft.js'
 
-import {
-  herkunftClass,
-  herkunftLabelClass,
-} from './Von.module.css'
-import { title, titleRow,  } from './Wann.module.css'
+import vonStyles from './Von.module.css'
+import wannStyles from './Wann.module.css'
 
 export const LieferungVon = observer(
   ({ showFilter, row, saveToDb, ifNeeded, herkunft, herkunftQuelle }) => {
@@ -158,12 +155,12 @@ export const LieferungVon = observer(
     return (
       <>
         <div
-          className={titleRow}
+          className={wannStyles.titleRow}
           style={{
             backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
           }}
         >
-          <div className={title}>von</div>
+          <div className={wannStyles.title}>von</div>
         </div>
         {ifNeeded('von_sammlung_id') && (
           <Select
@@ -194,10 +191,10 @@ export const LieferungVon = observer(
           />
         )}
         <div
-          className={herkunftClass}
+          className={vonStyles.herkunftClass}
           style={{ ...(herkunft ? { color: '#c1c1c1' } : {}) }}
         >
-          <div className={herkunftLabelClass}>
+          <div className={vonStyles.herkunftLabelClass}>
             {herkunft ? `Herkunft (aus ${herkunftQuelle})` : 'Herkunft'}
           </div>
           {herkunftLabel}
