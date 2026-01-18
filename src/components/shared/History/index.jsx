@@ -10,15 +10,7 @@ import { Data } from '../Conflict/Data.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { constants } from '../../../utils/constants.js'
 
-import {
-  container,
-  title,
-  titleRow,
-  iconButton,
-  revClass,
-  buttonRow,
-  button,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const History = observer(
   ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
@@ -36,25 +28,25 @@ export const History = observer(
     }
 
     return (
-      <div className={container}>
-        <div className={titleRow}>
-          <h4 className={title}>
-            Historische Version<span className={revClass}>{rev}</span>
+      <div className={styles.container}>
+        <div className={styles.titleRow}>
+          <h4 className={styles.title}>
+            Historische Version<span className={styles.revClass}>{rev}</span>
           </h4>
           <IconButton
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
             onClick={openDocs}
             size="small"
-            className={iconButton}
+            className={styles.iconButton}
           >
             <IoMdInformationCircleOutline />
           </IconButton>
         </div>
         <Data dataArray={dataArray} />
-        <div className={buttonRow}>
+        <div className={styles.buttonRow}>
           <Button
-            className={button}
+            className={styles.button}
             onClick={onClickWiderspruchUebernehmen}
             variant="outlined"
             title="Diese Version wiederherstellen"
@@ -64,7 +56,7 @@ export const History = observer(
             {diffConflict ? 'grüne Werte wiederherstellen' : 'wiederherstellen'}
           </Button>
           <Button
-            className={button}
+            className={styles.button}
             onClick={onClickToggleDiff}
             variant="outlined"
             title={

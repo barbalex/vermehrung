@@ -9,7 +9,7 @@ import { Filter } from '../../components/Filter.jsx'
 import { Fallback } from '../../components/shared/Fallback.jsx'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary.jsx'
 
-import { container } from './Vermehrung.module.css'
+import styles from './Vermehrung.module.css'
 
 export const Vermehrung = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -42,7 +42,7 @@ export const Vermehrung = observer(() => {
 
   // need the key on Allotment or it would only render correctly on second render
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <Allotment key={`${treeWidth}/${formWidth}`}>
         <Allotment.Pane
           visible={treeWidth !== 0}
