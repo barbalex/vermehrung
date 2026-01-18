@@ -13,11 +13,7 @@ import { Menu } from '../../../shared/Menu.jsx'
 import { ZaehlungAnleitung as Anleitung } from './Anleitung.jsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 
-import {
-  container,
-  title,
-  symbols,
-} from '../../Art/FormTitle/FormTitle.module.css'
+import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
 export const ZaehlungFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
@@ -33,11 +29,11 @@ export const ZaehlungFormTitle = observer(
 
     return (
       <div
-        className={container}
+        className={artStyles.container}
         ref={ref}
       >
-        <div className={title}>Zählung</div>
-        <div className={symbols}>
+        <div className={artStyles.title}>Zählung</div>
+        <div className={artStyles.symbols}>
           <IconButton
             title="Zur Liste"
             onClick={onClickUp}
