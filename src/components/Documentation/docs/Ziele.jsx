@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const Ziele = () => (
   <>
     <h1>Ziele</h1>
-    <p className={dokuDate}>04.10.2019</p>
+    <p className={dokuStyles.dokuDate}>04.10.2019</p>
     <p>Die Ziele dienen als Grundlage:</p>
     <ul>
       <li>um Auftrag und Finanzierung zu begründen</li>
