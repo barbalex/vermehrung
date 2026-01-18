@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const Roadmap = () => (
   <>
     <h1>Roadmap</h1>
-    <p className={dokuDate}>04.07.2020</p>
+    <p className={dokuStyles.dokuDate}>04.07.2020</p>
     <p>
       vermehrung.ch ist (noch) in Entwicklung. Ziel ist, dass ab Juli 2020 damit
       gearbeitet wird.
