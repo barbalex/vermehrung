@@ -12,7 +12,7 @@ import { JesNo } from '../../../shared/JesNo.jsx'
 import { exists } from '../../../../utils/exists.js'
 import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.js'
 
-import { title, titleRow } from '../../Lieferung/Lieferung/Form/Wann.module.css'
+import wannStyles from '../../Lieferung/Lieferung/Form/Wann.module.css'
 
 export const SammelLieferungNach = observer(
   ({ showFilter, row, ifNeeded, saveToDb, herkunft }) => {
@@ -119,12 +119,12 @@ export const SammelLieferungNach = observer(
     return (
       <>
         <div
-          className={titleRow}
+          className={wannStyles.titleRow}
           style={{
             backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
           }}
         >
-          <div className={title}>nach</div>
+          <div className={wannStyles.title}>nach</div>
         </div>
         {ifNeeded('nach_kultur_id') && (
           <Select
