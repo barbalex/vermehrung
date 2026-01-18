@@ -1,10 +1,10 @@
-import { dokuDate } from '../../index.module.css'
+import dokuStyles from '../../index.module.css'
 import felderBlenden from './felderBlenden1.gif'
 
 export const FelderBlenden = () => (
   <>
     <h1>Felder ein- und ausblenden</h1>
-    <p className={dokuDate}>20.09.2019</p>
+    <p className={dokuStyles.dokuDate}>20.09.2019</p>
     <h3>Wieso</h3>
     <p>
       Nicht jeder erfasst dieselben Daten. Felder, die nicht verwendet werden,
