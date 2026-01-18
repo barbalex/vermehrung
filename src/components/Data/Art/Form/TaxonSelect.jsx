@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
-import { container, labelClass, errorClass } from './TaxonSelect.module.css'
+import styles from './TaxonSelect.module.css'
 
 // leave this styled use due to css modules not able to nest classes
 // and different stylings existing for selects
@@ -109,11 +109,11 @@ export const TaxonSelect = observer(
 
     return (
       <div
-        className={container}
+        className={styles.container}
         data-id="ae_id"
       >
         <div
-          className={labelClass}
+          className={styles.labelClass}
           style={{ fontSize: labelSize }}
         >
           Taxon
@@ -144,7 +144,9 @@ export const TaxonSelect = observer(
           menuPortalTarget={document.getElementById('root')}
           aria-label="Taxon"
         />
-        {saveToDbError && <div className={errorClass}>{saveToDbError}</div>}
+        {saveToDbError && (
+          <div className={styles.errorClass}>{saveToDbError}</div>
+        )}
       </div>
     )
   },

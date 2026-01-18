@@ -12,7 +12,7 @@ import { ArtForm as Form } from './Form/index.jsx'
 import { ArtHistory as History } from './History/index.jsx'
 import { useObservable } from '../../../utils/useObservable.js'
 
-import { container, splitPaneContainer } from './index.module.css'
+import styles from './index.module.css'
 
 export const Art = observer(
   ({
@@ -52,7 +52,7 @@ export const Art = observer(
     return (
       <ErrorBoundary>
         <div
-          className={container}
+          className={styles.container}
           style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
         >
           <FormTitle
@@ -62,7 +62,7 @@ export const Art = observer(
             setShowHistory={setShowHistory}
           />
           <div
-            className={splitPaneContainer}
+            className={styles.splitPaneContainer}
             style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
           >
             <Allotment key={`${activeConflict}/${showHistory}`}>
