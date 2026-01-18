@@ -11,7 +11,7 @@ import { TeilzaehlungenSettings as Settings } from './Settings.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByTk.js'
 
-import { titleRow, titleClass } from './index.module.css'
+import styles from './index.module.css'
 
 export const Teilzaehlungen = observer(({ zaehlung }) => {
   const store = useContext(MobxStoreContext)
@@ -58,8 +58,8 @@ export const Teilzaehlungen = observer(({ zaehlung }) => {
 
   return (
     <ErrorBoundary>
-      <div className={titleRow}>
-        <div className={titleClass}>{title}</div>
+      <div className={styles.titleRow}>
+        <div className={styles.titleClass}>{title}</div>
         <div>
           {kulturId && <Settings kulturId={kulturId} />}
           {showNew && (

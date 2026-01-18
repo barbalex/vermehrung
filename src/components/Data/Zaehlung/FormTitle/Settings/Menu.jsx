@@ -10,7 +10,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
 
-import { titleRow, title, info } from './Menu.module.css'
+import styles from './Menu.module.css'
 
 export const ZaehlungSettingsMenu = observer(
   ({ anchorEl, setAnchorEl, kulturId }) => {
@@ -52,8 +52,8 @@ export const ZaehlungSettingsMenu = observer(
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <div className={titleRow}>
-          <div className={title}>Felder für Zählungen wählen:</div>
+        <div className={styles.titleRow}>
+          <div className={styles.title}>Felder wählen:</div>
           <div>
             <IconButton
               aria-label="Anleitung öffnen"
@@ -61,7 +61,7 @@ export const ZaehlungSettingsMenu = observer(
               onClick={openSettingsDocs}
               size="large"
             >
-              <IoMdInformationCircleOutline />
+              <IoMdInformationCircleOutline className={styles.info} />
             </IconButton>
           </div>
         </div>
@@ -80,7 +80,7 @@ export const ZaehlungSettingsMenu = observer(
             labelPlacement="end"
           />
         </MenuItem>
-        <div className={info}>
+        <div className={styles.info}>
           Zwingende Felder sind nicht aufgelistet.
           <br />
           Die Wahl gilt (nur) für diese Kultur.

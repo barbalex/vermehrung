@@ -9,10 +9,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
-import {
-  titleRow,
-  title,
-} from '../../../Lieferung/Lieferung/FormTitle/Settings/Menu.module.css'
+import settingsStyles from '../../../Lieferung/Lieferung/FormTitle/Settings/Menu.module.css'
 
 export const SettingsSammelLieferungMenu = observer(
   ({ anchorEl, setAnchorEl }) => {
@@ -63,8 +60,10 @@ export const SettingsSammelLieferungMenu = observer(
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <div className={titleRow}>
-          <div className={title}>Optionen für Sammel-Lieferungen wählen:</div>
+        <div className={settingsStyles.titleRow}>
+          <div className={settingsStyles.title}>
+            Optionen für Sammel-Lieferungen wählen:
+          </div>
         </div>
         <MenuItem>
           <FormControlLabel
