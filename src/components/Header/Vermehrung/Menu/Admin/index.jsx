@@ -10,7 +10,7 @@ import gql from 'graphql-tag'
 
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
-import { menuItem } from '../Menu.module.css'
+import styles from '../Menu.module.css'
 
 // keep styled due to @mui
 const StyledOtherMenuItem = styled(MenuItem)`
@@ -89,7 +89,7 @@ export const HeaderAdminMenu = observer(
           aria-owns={anchorEl ? 'menu' : null}
           aria-haspopup="true"
           onClick={onClickExporte}
-          className={menuItem}
+          className={styles.menuItem}
         >
           Administration
           <FaChevronRight />

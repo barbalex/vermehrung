@@ -10,8 +10,8 @@ import { buildExceljsWorksheetsForLieferungenOfYear } from './buildExceljsWorksh
 import { buildExceljsWorksheetsForKulturBedarfsplanung } from './buildExceljsWorksheetsForKulturBedarfsplanung.js'
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
 
-import { menuItem } from '../Menu.module.css'
-import { firstMenuItem } from './index.module.css'
+import menuStyles from '../Menu.module.css'
+import styles from './index.module.css'
 
 export const HeaderExportMenu = observer(
   ({ setParentAnchorEl: setGrandParentAnchorEl }) => {
@@ -54,7 +54,7 @@ export const HeaderExportMenu = observer(
           aria-owns={anchorEl ? 'menu' : null}
           aria-haspopup="true"
           onClick={onClickExporte}
-          className={menuItem}
+          className={menuStyles.menuItem}
         >
           Exporte
           <FaChevronRight />
@@ -65,7 +65,7 @@ export const HeaderExportMenu = observer(
           open={Boolean(anchorEl)}
           onClose={onClose}
         >
-          <MenuItem className={firstMenuItem}>
+          <MenuItem className={styles.firstMenuItem}>
             <TextField
               label="Lieferungen des Jahrs:"
               onChange={onClickLieferungenDesJahrs}
