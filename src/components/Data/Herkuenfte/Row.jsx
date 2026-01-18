@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { herkunftLabelFromHerkunft } from '../../../utils/herkunftLabelFromHerkunft.js'
 
-import { container } from '../Arten/Row.module.css'
+import styles from '../Arten/Row.module.css'
 
 export const HerkunftRow = observer(({ style, index, rows }) => {
   const store = useContext(MobxStoreContext)
@@ -16,7 +16,7 @@ export const HerkunftRow = observer(({ style, index, rows }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       key={row.id}
       onClick={onClickRow}
       style={style}

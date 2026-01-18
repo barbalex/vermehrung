@@ -11,7 +11,7 @@ import { buildExceljsWorksheetsForTzSums } from './buildExceljsWorksheetsForTzSu
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-import { titleRow, title } from './index.module.css'
+import styles from './index.module.css'
 
 export const GartenDownload = observer(({ gartenId }) => {
   const store = useContext(MobxStoreContext)
@@ -70,8 +70,8 @@ export const GartenDownload = observer(({ gartenId }) => {
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <div className={titleRow}>
-          <div className={title}>herunterladen:</div>
+        <div className={styles.titleRow}>
+          <div className={styles.title}>herunterladen:</div>
         </div>
         <MenuItem onClick={onClickData}>{`(Roh-)Daten`}</MenuItem>
         <MenuItem
