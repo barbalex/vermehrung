@@ -15,7 +15,7 @@ import { avsSortByPerson } from '../../../../../utils/avsSortByPerson.js'
 import { personSort } from '../../../../../utils/personSort.js'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
 
-import { titleRow, title, aven, motionDiv } from './index.module.css'
+import styles from './index.module.css'
 
 export const Personen = observer(({ art }) => {
   const store = useContext(MobxStoreContext)
@@ -99,10 +99,10 @@ export const Personen = observer(({ art }) => {
       <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
-        className={titleRow}
+        className={styles.titleRow}
       >
         <div
-          className={title}
+          className={styles.title}
         >{`Mitarbeitende Personen (${avsSorted.length})`}</div>
         <div>
           <IconButton
@@ -120,11 +120,11 @@ export const Personen = observer(({ art }) => {
       <motion.div
         animate={anim}
         transition={{ type: 'just', duration: 0.2 }}
-        className={motionDiv}
+        className={styles.motionDiv}
       >
         {open && (
           <>
-            <div className={aven}>
+            <div className={styles.aven}>
               {avsSorted.map((av, index) => (
                 <Person
                   key={`${av.art_id}/${av.person_id}/${index}`}

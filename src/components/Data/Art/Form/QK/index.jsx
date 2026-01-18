@@ -15,7 +15,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
 
-import { titleRow, title, tabs, body } from './index.module.css'
+import styles from './index.module.css'
 
 export const QK = observer(({ artId }) => {
   const store = useContext(MobxStoreContext)
@@ -91,9 +91,9 @@ export const QK = observer(({ artId }) => {
       <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
-        className={titleRow}
+        className={styles.titleRow}
       >
-        <div className={title}>Qualitäts-Kontrollen</div>
+        <div className={styles.title}>Qualitäts-Kontrollen</div>
         <div>
           <IconButton
             aria-label="Anleitung öffnen"
@@ -127,7 +127,7 @@ export const QK = observer(({ artId }) => {
               indicatorColor="primary"
               textColor="primary"
               centered
-              className={tabs}
+              className={styles.tabs}
             >
               <Tab
                 label="ausführen"
@@ -142,7 +142,7 @@ export const QK = observer(({ artId }) => {
                 data-id="waehlen"
               />
             </Tabs>
-            <div className={body}>
+            <div className={styles.body}>
               {tab === 'qk' ?
                 <Qk
                   artId={artId}

@@ -8,7 +8,7 @@ import { Pflanzen } from './Pflanzen/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { constants } from '../../../../../utils/constants.js'
 
-import { titleRow, title } from './index.module.css'
+import styles from './index.module.css'
 
 export const Timeline = ({
   artId = '99999999-9999-9999-9999-999999999999',
@@ -46,9 +46,9 @@ export const Timeline = ({
       <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
-        className={titleRow}
+        className={styles.titleRow}
       >
-        <div className={title}>Zeit-Achse</div>
+        <div className={styles.title}>Zeit-Achse</div>
         <div>
           <IconButton
             aria-label="Anleitung öffnen"
