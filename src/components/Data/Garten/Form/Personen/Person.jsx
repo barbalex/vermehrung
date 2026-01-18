@@ -9,7 +9,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
 
-import { container, text, delIcon, menuTitle } from './Person.module.css'
+import styles from './Person.module.css'
 
 export const GartenPerson = observer(({ gv }) => {
   const store = useContext(MobxStoreContext)
@@ -32,8 +32,8 @@ export const GartenPerson = observer(({ gv }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <div className={text}>
+      <div className={styles.container}>
+        <div className={styles.text}>
           <div>{personLabel}</div>
         </div>
         <IconButton
@@ -42,7 +42,7 @@ export const GartenPerson = observer(({ gv }) => {
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
           onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-          className={delIcon}
+          className={styles.delIcon}
         >
           <FaTimes />
         </IconButton>
@@ -58,7 +58,7 @@ export const GartenPerson = observer(({ gv }) => {
             },
           }}
         >
-          <h3 className={menuTitle}>löschen?</h3>
+          <h3 className={styles.menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
         </Menu>
