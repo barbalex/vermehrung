@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import format from 'date-fns/format'
 
 import { personFullname } from '../../../../../utils/personFullname.js'
-import { row, datumClass, name, beschreibung, geplant } from './Row.module.css'
+import styles from './Row.module.css'
 
 export const TeilkulturEventRow = ({ event }) => {
   const [personName, setPersonName] = useState()
@@ -29,13 +29,13 @@ export const TeilkulturEventRow = ({ event }) => {
 
   return (
     <div
-      className={row}
+      className={styles.row}
       key={event.id}
     >
-      <div className={datumClass}>{datum}</div>
-      <div className={geplant}>{event?.geplant ? 'geplant' : ' '}</div>
-      <div className={name}>{personName ?? ' '}</div>
-      <div className={beschreibung}>{event?.beschreibung ?? ' '}</div>
+      <div className={styles.datumClass}>{datum}</div>
+      <div className={styles.geplant}>{event?.geplant ? 'geplant' : ' '}</div>
+      <div className={styles.name}>{personName ?? ' '}</div>
+      <div className={styles.beschreibung}>{event?.beschreibung ?? ' '}</div>
     </div>
   )
 }

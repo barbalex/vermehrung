@@ -7,7 +7,7 @@ import { teilzaehlungsSortByZaehlungTk } from '../../../../../utils/teilzaehlung
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { TeilkulturTeilzaehlung as Teilzaehlungen } from './Teilzaehlungen.jsx'
 
-import { titleRow, title, listContainer } from './index.module.css'
+import styles from './index.module.css'
 
 export const TeilkulturZaehlungen = observer(({ teilkultur }) => {
   const store = useContext(MobxStoreContext)
@@ -36,12 +36,12 @@ export const TeilkulturZaehlungen = observer(({ teilkultur }) => {
   return (
     <ErrorBoundary>
       <section
-        className={titleRow}
+        className={styles.titleRow}
         style={{ ...(teilzaehlungs.length ? { marginBottom: 10 } : {}) }}
       >
-        <div className={title}>Zählungen</div>
+        <div className={styles.title}>Zählungen</div>
       </section>
-      <div className={listContainer}>
+      <div className={styles.listContainer}>
         {teilzaehlungs.map((tz, i) => (
           <Teilzaehlungen
             key={tz.id}
