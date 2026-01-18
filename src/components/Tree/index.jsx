@@ -16,7 +16,7 @@ import { tableFilter } from '../../utils/tableFilter.js'
 import { notDeletedQuery } from '../../utils/notDeletedQuery.js'
 import { buildNodes } from './nodes/index.js'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const Tree = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -213,7 +213,7 @@ export const Tree = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={`tree-root ${container}`}>
+      <div className={`tree-root ${styles.container}`}>
         <ApFilterContainer />
         <Settings />
         <AutoSizer

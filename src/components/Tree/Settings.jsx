@@ -14,7 +14,7 @@ import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { constants } from '../../utils/constants.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import { container, titleRow, title, info } from './Settings.module.css'
+import styles from './Settings.module.css'
 
 export const TreeSettings = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -75,7 +75,7 @@ export const TreeSettings = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <IconButton
           aria-label="Ordner wählen"
           aria-owns={anchorEl ? 'long-menu' : null}
@@ -92,8 +92,8 @@ export const TreeSettings = observer(() => {
           open={Boolean(anchorEl)}
           onClose={onClose}
         >
-          <div className={titleRow}>
-            <div className={title}>Fakultative Ordner wählen:</div>
+          <div className={styles.titleRow}>
+            <div className={styles.title}>Fakultative Ordner wählen:</div>
             <div>
               <IconButton
                 aria-label="Anleitung öffnen"
@@ -180,7 +180,7 @@ export const TreeSettings = observer(() => {
               labelPlacement="end"
             />
           </MenuItem>
-          <div className={info}>
+          <div className={styles.info}>
             Für die Navigation zwingende Ordner sind nicht aufgelistet.
           </div>
         </Menu>
