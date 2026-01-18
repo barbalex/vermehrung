@@ -2,7 +2,7 @@
 import { RadioButtonGroup } from './RadioButtonGroup.jsx'
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 
-import { container } from './RadioButtonGroupWithInfo.module.css'
+import styles from './RadioButtonGroupWithInfo.module.css'
 
 export const RadioButtonGroupWithInfo = ({
   label,
@@ -13,7 +13,7 @@ export const RadioButtonGroupWithInfo = ({
   saveToDb,
   popover,
 }) => (
-  <div className={container}>
+  <div className={styles.container}>
     <RadioButtonGroup
       value={value}
       name={name}
