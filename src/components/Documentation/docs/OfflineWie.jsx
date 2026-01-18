@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const OfflineWie = () => (
   <>
     <h1>Offline: Wie es funktioniert</h1>
-    <p className={dokuDate}>18.12.2020</p>
+    <p className={dokuStyles.dokuDate}>18.12.2020</p>
     <p>
       Zuverlässige Offline-Fähigkeit ist schwer. Nachfolgend das für
       vermehrung.ch umgesetzte Konzept:
