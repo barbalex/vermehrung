@@ -5,13 +5,7 @@ import Button from '@mui/material/Button'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
-import {
-  container,
-  stringToCopyContainer,
-  guidContainer,
-  copyButtonContainer,
-  labelClass,
-} from './StringToCopy.module.css'
+import styles from './StringToCopy.module.css'
 
 export const StringToCopy = ({ text, label }) => {
   const [copied, setCopied] = useState(false)
@@ -25,11 +19,11 @@ export const StringToCopy = ({ text, label }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <div className={labelClass}>{label}</div>
-        <div className={stringToCopyContainer}>
-          <div className={guidContainer}>{text}</div>
-          <div className={copyButtonContainer}>
+      <div className={styles.container}>
+        <div className={styles.labelClass}>{label}</div>
+        <div className={styles.stringToCopyContainer}>
+          <div className={styles.guidContainer}>{text}</div>
+          <div className={styles.copyButtonContainer}>
             <CopyToClipboard
               text={text}
               onCopy={onCopy}

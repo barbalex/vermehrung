@@ -5,12 +5,7 @@ import styled from '@emotion/styled'
 
 import { Link } from './Link.jsx'
 
-import {
-  container,
-  labelClass,
-  errorClass,
-  selectRow,
-} from './index.module.css'
+import styles from './index.module.css'
 
 // leave this styled use as css modules can't deal with nested classes
 // and multiple selects are styled differently
@@ -125,9 +120,9 @@ export const Select = ({
   // })
 
   return (
-    <div className={container}>
-      {label && <div className={labelClass}>{label}</div>}
-      <div className={selectRow}>
+    <div className={styles.container}>
+      {label && <div className={styles.labelClass}>{label}</div>}
+      <div className={styles.selectRow}>
         <StyledSelect
           id={field}
           name={field}
@@ -149,7 +144,7 @@ export const Select = ({
         />
         {!!selectValue.link && <Link link={selectValue.link} />}
       </div>
-      {error && <div className={errorClass}>{error}</div>}
+      {error && <div className={styles.errorClass}>{error}</div>}
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
     </div>
   )

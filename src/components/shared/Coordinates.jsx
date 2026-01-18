@@ -31,15 +31,7 @@ import {
 } from '../../utils/wgs84LongIsValid.js'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-import {
-  formControl,
-  fieldContainer,
-  leftFormControl,
-  rowClass,
-  container,
-  buttonContainer,
-  menuTitle,
-} from './Coordinates.module.css'
+import styles from './Coordinates.module.css'
 
 export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
   const store = useContext(MobxStoreContext)
@@ -219,16 +211,16 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
   }
 
   return (
-    <div className={container}>
-      <div className={fieldContainer}>
+    <div className={styles.container}>
+      <div className={styles.fieldContainer}>
         {ga_lat_lng && (
-          <div className={rowClass}>
+          <div className={styles.rowClass}>
             <FormControl
               fullWidth
               error={!!wgs84LatError}
               aria-describedby={`${id}wgs84LatErrorText`}
               variant="standard"
-              className={leftFormControl}
+              className={styles.leftFormControl}
             >
               <InputLabel
                 htmlFor={`${id}wgs84_long`}
@@ -254,7 +246,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
               error={!!wgs84LongError}
               aria-describedby={`${id}wgs84LongErrorText`}
               variant="standard"
-              className={formControl}
+              className={styles.formControl}
             >
               <InputLabel
                 htmlFor={`${id}wgs84_lat`}
@@ -293,13 +285,13 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
             </FormControl>
           </div>
         )}
-        <div className={rowClass}>
+        <div className={styles.rowClass}>
           <FormControl
             fullWidth
             error={!!xError}
             aria-describedby={`${id}lv95XErrorText`}
             variant="standard"
-            className={leftFormControl}
+            className={styles.leftFormControl}
           >
             <InputLabel
               htmlFor={`${id}lv95_x`}
@@ -333,7 +325,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
             error={!!yError}
             aria-describedby={`${id}lv95YErrorText`}
             variant="standard"
-            className={formControl}
+            className={styles.formControl}
           >
             <InputLabel
               htmlFor={`${id}lv95_y`}
@@ -364,7 +356,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
           </FormControl>
         </div>
       </div>
-      <div className={buttonContainer}>
+      <div className={styles.buttonContainer}>
         <IconButton
           aria-label="Öffnen in map.geo.admin.ch"
           title="Öffnen in map.geo.admin.ch"
@@ -382,7 +374,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
           open={mapMenuOpen}
           onClose={() => setMapMenuAnchorEl(null)}
         >
-          <div className={menuTitle}>Öffnen in:</div>
+          <div className={styles.menuTitle}>Öffnen in:</div>
           <MenuItem onClick={onClickGeoAdmin}>map.geo.admin.ch</MenuItem>
           <MenuItem onClick={onClickMapsZhCh}>maps.zh.ch</MenuItem>
         </Menu>

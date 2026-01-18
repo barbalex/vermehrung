@@ -7,12 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { Link } from './Select/Link.jsx'
 
-import {
-  container,
-  labelClass,
-  errorClass,
-  selectRow,
-} from './SelectCreatable.module.css'
+import styles from './SelectCreatable.module.css'
 
 // leave this styled use due to css modules not able to nest classes
 // and different stylings existing for selects
@@ -125,9 +120,9 @@ export const SelectCreatable = observer(
       optionsToUse.find((o) => o.value === stateValue) || emptyValue
 
     return (
-      <div className={container}>
-        {label && <div className={labelClass}>{label}</div>}
-        <div className={selectRow}>
+      <div className={styles.container}>
+        {label && <div className={styles.labelClass}>{label}</div>}
+        <div className={styles.selectRow}>
           <StyledSelect
             id={field}
             name={field}
@@ -147,7 +142,7 @@ export const SelectCreatable = observer(
           />
           {!!selectValue.link && <Link link={selectValue.link} />}
         </div>
-        {error && <div className={errorClass}>{error}</div>}
+        {error && <div className={styles.errorClass}>{error}</div>}
       </div>
     )
   },
