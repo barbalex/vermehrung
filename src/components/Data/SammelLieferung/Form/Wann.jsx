@@ -9,11 +9,7 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { JesNo } from '../../../shared/JesNo.jsx'
 import { constants } from '../../../../utils/constants.js'
 
-import {
-  title,
-  titleRow,
-  fieldRow,
-} from '../../Lieferung/Lieferung/Form/Wann.module.css'
+import wannStyles from '../../Lieferung/Lieferung/Form/Wann.module.css'
 
 export const SammelLieferungWann = observer(
   ({ showFilter, row, ifNeeded, saveToDb }) => {
@@ -32,12 +28,12 @@ export const SammelLieferungWann = observer(
     return (
       <>
         <div
-          className={titleRow}
+          className={wannStyles.titleRow}
           style={{
             backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
           }}
         >
-          <div className={title}>wann</div>
+          <div className={wannStyles.title}>wann</div>
         </div>
         {ifNeeded('datum') && (
           <Date
@@ -50,7 +46,7 @@ export const SammelLieferungWann = observer(
           />
         )}
         {ifNeeded('geplant') && (
-          <div className={fieldRow}>
+          <div className={wannStyles.fieldRow}>
             {showFilter ?
               <JesNo
                 key={`${row.id}geplant`}

@@ -20,12 +20,8 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.js'
 
-import {
-  container,
-  caseConflictTitle,
-  rev,
-} from '../../Art/Form/index.module.css'
-import { fieldRow } from './index.module.css'
+import artStyles from '../../Art/Form/index.module.css'
+import styles from './index.module.css'
 
 export const ZaehlungForm = observer(
   ({
@@ -153,10 +149,10 @@ export const ZaehlungForm = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
+        <div className={artStyles.container}>
           {(activeConflict || showHistory) && (
-            <h4 className={caseConflictTitle}>
-              Aktuelle Version<span className={rev}>{row._rev}</span>
+            <h4 className={artStyles.caseConflictTitle}>
+              Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
             </h4>
           )}
           {showDeleted && (
@@ -200,7 +196,7 @@ export const ZaehlungForm = observer(
             saveToDb={saveToDb}
             error={errors?.zaehlung?.datum}
           />
-          <div className={fieldRow}>
+          <div className={styles.fieldRow}>
             {showFilter ?
               <JesNo
                 key={`${row.id}prognose`}
