@@ -15,7 +15,7 @@ import { ChooseKulturQk as Choose } from './Choose/index.jsx'
 import { constants } from '../../../../../utils/constants.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-import { titleRow, title, tabs, body } from './index.module.css'
+import styles from './index.module.css'
 
 export const KulturQkRouter = observer(({ kultur }) => {
   const store = useContext(MobxStoreContext)
@@ -93,9 +93,9 @@ export const KulturQkRouter = observer(({ kultur }) => {
       <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
-        className={titleRow}
+        className={styles.titleRow}
       >
-        <div className={title}>Qualitäts-Kontrollen</div>
+        <div className={styles.title}>Qualitäts-Kontrollen</div>
         <div>
           <IconButton
             aria-label="Anleitung öffnen"
@@ -129,7 +129,7 @@ export const KulturQkRouter = observer(({ kultur }) => {
               indicatorColor="primary"
               textColor="primary"
               centered
-              className={tabs}
+              className={styles.tabs}
             >
               <Tab
                 label="ausführen"
@@ -144,7 +144,7 @@ export const KulturQkRouter = observer(({ kultur }) => {
                 data-id="waehlen"
               />
             </Tabs>
-            <div className={body}>
+            <div className={styles.body}>
               {tab === 'qk' ?
                 <Qk
                   kultur={kultur}

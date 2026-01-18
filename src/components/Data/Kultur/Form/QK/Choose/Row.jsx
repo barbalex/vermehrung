@@ -5,7 +5,7 @@ import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
-import { row, check, titel, beschreibung } from './Row.module.css'
+import styles from './Row.module.css'
 
 export const ChooseKulturQkRow = observer(({ qk }) => {
   const store = useContext(MobxStoreContext)
@@ -54,16 +54,16 @@ export const ChooseKulturQkRow = observer(({ qk }) => {
   if (!kulturQkChoosen) return null
 
   return (
-    <div className={row}>
-      <div className={check}>
+    <div className={styles.row}>
+      <div className={styles.check}>
         <Checkbox
           checked={checked}
           onChange={onChange}
           color="primary"
         />
       </div>
-      <div className={titel}>{qk.titel}</div>
-      <div className={beschreibung}>{qk.beschreibung}</div>
+      <div className={styles.titel}>{qk.titel}</div>
+      <div className={styles.beschreibung}>{qk.beschreibung}</div>
     </div>
   )
 })
