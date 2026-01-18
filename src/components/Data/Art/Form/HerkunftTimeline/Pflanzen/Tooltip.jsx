@@ -1,14 +1,16 @@
 import { DateTime } from 'luxon'
 
-import { popup, pRow, pTitle, ereignis } from './Tooltip.module.css'
+import styles from './Tooltip.module.css'
 
 export const CustomTooltip = ({ payload, label, active }) => {
   if (active) {
     return (
-      <div className={popup}>
-        <div className={pTitle}>
+      <div className={styles.popup}>
+        <div className={styles.pTitle}>
           <div>{DateTime.fromSQL(label).toFormat('yyyy.LL.dd')}</div>
-          <div className={ereignis}>{payload?.[0]?.payload?.title ?? ''}</div>
+          <div className={styles.ereignis}>
+            {payload?.[0]?.payload?.title ?? ''}
+          </div>
         </div>
         {payload
           // Zählung and Bedarf are only used for the optics,
@@ -23,7 +25,7 @@ export const CustomTooltip = ({ payload, label, active }) => {
 
             return (
               <div
-                className={pRow}
+                className={styles.pRow}
                 key={`${label}${value}${i}`}
               >{`${label}: ${value}`}</div>
             )
