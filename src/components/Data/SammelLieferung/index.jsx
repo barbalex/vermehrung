@@ -13,7 +13,7 @@ import { SammelLieferungForm as Form } from './Form/index.jsx'
 import { SammelLieferungHistory as History } from './History/index.jsx'
 import { useObservable } from '../../../utils/useObservable.js'
 
-import { container, splitPaneContainer } from '../Art/index.module.css'
+import artStyles from '../Art/index.module.css'
 
 export const SammelLieferung = observer(
   ({
@@ -60,7 +60,7 @@ export const SammelLieferung = observer(
     return (
       <ErrorBoundary>
         <div
-          className={container}
+          className={artStyles.container}
           style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
         >
           <FormTitle
@@ -74,7 +74,7 @@ export const SammelLieferung = observer(
           />
           {printPreview ?
             <Lieferschein row={row} />
-          : <div className={splitPaneContainer}>
+          : <div className={artStyles.splitPaneContainer}>
               <Allotment key={`${activeConflict}/${showHistory}`}>
                 <Form
                   showFilter={showFilter}

@@ -7,7 +7,7 @@ import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { signup } from '../../../../../utils/signup.js'
 import { PersonKontoMenu as Menu } from './Menu.jsx'
 
-import { button } from './index.module.css'
+import styles from './index.module.css'
 
 export const PersonKonto = observer(({ row, asMenu }) => {
   const store = useContext(MobxStoreContext)
@@ -26,7 +26,7 @@ export const PersonKonto = observer(({ row, asMenu }) => {
 
     return (
       <Button
-        className={button}
+        className={styles.button}
         color="primary"
         onClick={createNewAccount}
       >
@@ -50,7 +50,7 @@ export const PersonKonto = observer(({ row, asMenu }) => {
   return (
     <>
       <Button
-        className={button}
+        className={styles.button}
         color="primary"
         onClick={(event) => setMenuAnchorEl(event.currentTarget)}
       >
