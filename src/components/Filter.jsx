@@ -18,7 +18,7 @@ import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../mobxStoreContext.js'
 import { Fallback } from './shared/Fallback.jsx'
 
-import { container, tabs, tab, titleRow, title } from './Filter.module.css'
+import styles from './Filter.module.css'
 
 export const Filter = observer(() => {
   const { activeForm: activeFormPassed } = useContext(MobxStoreContext)
@@ -77,10 +77,10 @@ export const Filter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <div className={titleRow}>
+      <div className={styles.container}>
+        <div className={styles.styles.titleRow}>
           <div
-            className={title}
+            className={styles.title}
             data-id="form-title"
           >
             {titleObject[activeTab]}
@@ -92,70 +92,70 @@ export const Filter = observer(() => {
             textColor="primary"
             variant="scrollable"
             scrollButtons="auto"
-            className={tabs}
+            className={styles.styles.tabs}
           >
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Art"
               value="art"
               data-id="art"
             />
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Herkunft"
               value="herkunft"
               data-id="herkunft"
             />
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Sammlung"
               value="sammlung"
               data-id="sammlung"
             />
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Garten"
               value="garten"
               data-id="garten"
             />
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Kultur"
               value="kultur"
               data-id="kultur"
             />
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Teilkultur"
               value="teilkultur"
               data-id="teilkultur"
             />
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Zählung"
               value="zaehlung"
               data-id="zaehlung"
             />
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Lieferung"
               value="lieferung"
               data-id="lieferung"
             />
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Sammel-Lieferung"
               value="sammel_lieferung"
               data-id="sammel_lieferung"
             />
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Event"
               value="event"
               data-id="event"
             />
             <Tab
-              className={tab}
+              className={styles.tab}
               label="Person"
               value="person"
               data-id="person"
