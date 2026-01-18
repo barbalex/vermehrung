@@ -10,7 +10,7 @@ import { TextField } from '../../../shared/TextField.jsx'
 import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.js'
 import { personSort } from '../../../../utils/personSort.js'
 
-import { title, titleRow } from '../../Lieferung/Lieferung/Form/Wann.module.css'
+import wannStyles from '../../Lieferung/Lieferung/Form/Wann.module.css'
 
 export const SammelLieferungWer = observer(
   ({ showFilter, ifNeeded, saveToDb, id }) => {
@@ -94,12 +94,12 @@ export const SammelLieferungWer = observer(
     return (
       <>
         <div
-          className={titleRow}
+          className={wannStyles.titleRow}
           style={{
             backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
           }}
         >
-          <div className={title}>wer</div>
+          <div className={wannStyles.title}>wer</div>
         </div>
         {ifNeeded('person_id') && (
           <Select

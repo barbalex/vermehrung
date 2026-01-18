@@ -16,11 +16,7 @@ import { SammelLieferungNach as Nach } from './Nach.jsx'
 import { SammelLieferungWann as Wann } from './Wann.jsx'
 import { SammelLieferungWer as Wer } from './Wer.jsx'
 
-import {
-  container,
-  caseConflictTitle,
-  rev,
-} from '../../Art/Form/index.module.css'
+import artStyles from '../../Art/Form/index.module.css'
 
 export const SammelLieferungForm = observer(
   ({
@@ -171,10 +167,10 @@ export const SammelLieferungForm = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
+        <div className={artStyles.container}>
           {(activeConflict || showHistory) && (
-            <h4 className={caseConflictTitle}>
-              Aktuelle Version<span className={rev}>{row._rev}</span>
+            <h4 className={artStyles.caseConflictTitle}>
+              Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
             </h4>
           )}
           {showDeleted && (
