@@ -13,11 +13,7 @@ import { Files } from '../../Files/index.jsx'
 import { Coordinates } from '../../../shared/Coordinates.jsx'
 import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 
-import {
-  container,
-  caseConflictTitle,
-  rev,
-} from '../../Art/Form/index.module.css'
+import artStyles from '../../Art/Form/index.module.css'
 
 export const HerkunftForm = observer(
   ({
@@ -117,10 +113,10 @@ export const HerkunftForm = observer(
     const showDeleted = filter.herkunft._deleted !== false || row?._deleted
 
     return (
-      <div className={container}>
+      <div className={artStyles.container}>
         {(activeConflict || showHistory) && (
-          <h4 className={caseConflictTitle}>
-            Aktuelle Version<span className={rev}>{row._rev}</span>
+          <h4 className={artStyles.caseConflictTitle}>
+            Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
           </h4>
         )}
         {showDeleted && (

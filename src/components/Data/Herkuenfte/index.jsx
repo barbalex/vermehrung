@@ -16,13 +16,7 @@ import { tableFilter } from '../../../utils/tableFilter.js'
 import { herkunftSort } from '../../../utils/herkunftSort.js'
 import { constants } from '../../../utils/constants.js'
 
-import {
-  container,
-  titleContainer,
-  title,
-  titleSymbols,
-  fieldsContainer,
-} from '../Arten/index.module.css'
+import artStyles from '../Arten/index.module.css'
 
 export const Herkuenfte = observer(({ filter: showFilter }) => {
   const store = useContext(MobxStoreContext)
@@ -107,7 +101,7 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <div
-        className={container}
+        className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
         {showFilter ?
@@ -117,9 +111,9 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={titleContainer}>
-            <div className={title}>Herkünfte</div>
-            <div className={titleSymbols}>
+        : <div className={artStyles.titleContainer}>
+            <div className={artStyles.title}>Herkünfte</div>
+            <div className={artStyles.titleSymbols}>
               <IconButton
                 title={upTitle}
                 onClick={onClickUp}
@@ -144,7 +138,7 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
             </div>
           </div>
         }
-        <div className={fieldsContainer}>
+        <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
             rowCount={herkunfts.length}
