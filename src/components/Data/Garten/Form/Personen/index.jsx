@@ -14,7 +14,7 @@ import { gvsSortByPerson } from '../../../../../utils/gvsSortByPerson.js'
 import { personSort } from '../../../../../utils/personSort.js'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
 
-import { titleRow, title, aven, motionDiv } from './index.module.css'
+import styles from './index.module.css'
 
 export const GartenPersonen = observer(({ garten }) => {
   const store = useContext(MobxStoreContext)
@@ -106,10 +106,10 @@ export const GartenPersonen = observer(({ garten }) => {
       <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
-        className={titleRow}
+        className={styles.titleRow}
       >
         <div
-          className={title}
+          className={styles.title}
         >{`Mitarbeitende Personen (${gvsSorted.length})`}</div>
         <div>
           <IconButton
@@ -127,11 +127,11 @@ export const GartenPersonen = observer(({ garten }) => {
       <motion.div
         animate={anim}
         transition={{ type: 'just', duration: 0.2 }}
-        className={motionDiv}
+        className={styles.motionDiv}
       >
         {open && (
           <>
-            <div className={aven}>
+            <div className={styles.aven}>
               {gvsSorted.map((gv, index) => (
                 <Person
                   key={`${gv.garten_id}/${gv.person_id}/${index}`}
