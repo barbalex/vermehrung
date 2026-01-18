@@ -247,7 +247,7 @@ export const TeilzaehlungForm = observer(
             />
           </div>
           {tz_andere_menge && (
-            <div className={other}>
+            <div className={styles.other}>
               <TextField
                 key={`${row.id}andere_menge`}
                 name="andere_menge"

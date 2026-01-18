@@ -9,12 +9,7 @@ import { TeilzaehlungConflict as Conflict } from './Conflict.jsx'
 import { TeilzaehlungForm as Form } from './Form/index.jsx'
 import { TeilzaehlungHistory as History } from './History/index.jsx'
 
-import {
-  container,
-  innerContainer,
-  splitPaneContainer,
-  topLine,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Teilzaehlung = observer(({ id, kulturId, index }) => {
   const store = useContext(MobxStoreContext)
@@ -59,9 +54,9 @@ export const Teilzaehlung = observer(({ id, kulturId, index }) => {
   if (online && (activeConflict || showHistory)) {
     return (
       <ErrorBoundary>
-        <div className={container}>
-          {!!index && <div className={topLine} />}
-          <div className={splitPaneContainer}>
+        <div className={styles.container}>
+          {!!index && <div className={styles.topLine} />}
+          <div className={styles.splitPaneContainer}>
             <Allotment key={`${activeConflict}/${showHistory}`}>
               <Form
                 id={id}
@@ -99,9 +94,9 @@ export const Teilzaehlung = observer(({ id, kulturId, index }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        {!!index && <div className={topLine} />}
-        <div className={innerContainer}>
+      <div className={styles.container}>
+        {!!index && <div className={styles.topLine} />}
+        <div className={styles.innerContainer}>
           <Form
             id={id}
             kulturId={kulturId}

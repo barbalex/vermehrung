@@ -10,12 +10,7 @@ import { constants } from '../../utils/constants.js'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { DocumentationFormTitle as FormTitle } from './FormTitle/index.jsx'
 
-import {
-  container,
-  splitPaneContainer,
-  dokuInnerContainer,
-  doku,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const articles = [
   {
@@ -81,26 +76,26 @@ export const Documentation = observer(() => {
       >
         {width < constants?.tree?.minimalWindowWidth ?
           path.length === 1 ?
-            <div className={container}>
+            <div className={styles.container}>
               <ArticleList articles={articles} />
             </div>
-          : <div className={container}>
-              <div className={doku}>
+          : <div className={styles.container}>
+              <div className={styles.doku}>
                 <FormTitle />
-                <div className={dokuInnerContainer}>
+                <div className={styles.dokuInnerContainer}>
                   <Outlet />
                 </div>
               </div>
             </div>
 
-        : <div className={splitPaneContainer}>
+        : <div className={styles.splitPaneContainer}>
             <Allotment>
               <Allotment.Pane preferredSize="22%">
                 <ArticleList articles={articles} />
               </Allotment.Pane>
-              <div className={doku}>
+              <div className={styles.doku}>
                 <FormTitle />
-                <div className={dokuInnerContainer}>
+                <div className={styles.dokuInnerContainer}>
                   <Outlet />
                 </div>
               </div>
