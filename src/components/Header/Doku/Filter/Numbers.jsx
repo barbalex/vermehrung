@@ -1,21 +1,16 @@
-import {
-  container,
-  innerContainer,
-  filtered,
-  total,
-} from './Numbers.module.css'
+import styles from './Numbers.module.css'
 
 export const FilterNumbers = ({ filteredCount, totalCount }) => (
-  <div className={container}>
-    <div className={innerContainer}>
+  <div className={styles.container}>
+    <div className={styles.innerContainer}>
       <div
-        className={filtered}
+        className={styles.filtered}
         title="gefilterte Anzahl"
       >
         {filteredCount}
       </div>
       <div
-        className={total}
+        className={styles.total}
         title="totale Anzahl"
       >
         {totalCount}
