@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const OpenSource = () => (
   <>
     <h1>Open Source</h1>
-    <p className={dokuDate}>15.06.2019</p>
+    <p className={dokuStyles.dokuDate}>15.06.2019</p>
     <p>
       vermehrung.ch wird von{' '}
       <a
