@@ -12,7 +12,7 @@ import { Q } from '@nozbe/watermelondb'
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../../utils/constants.js'
 
-import { titleRow, title, info } from './Menu.module.css'
+import styles from './Menu.module.css'
 
 export const LieferungSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
   const store = useContext(MobxStoreContext)
@@ -68,8 +68,8 @@ export const LieferungSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
       open={Boolean(anchorEl)}
       onClose={onClose}
     >
-      <div className={titleRow}>
-        <div className={title}>Optionen für Lieferungen wählen:</div>
+      <div className={styles.titleRow}>
+        <div className={styles.title}>Optionen für Lieferungen wählen:</div>
         <div>
           <IconButton
             aria-label="Anleitung öffnen"
@@ -111,7 +111,7 @@ export const LieferungSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
           labelPlacement="end"
         />
       </MenuItem>
-      <div className={info}>Die Wahl gilt für alle Lieferungen.</div>
+      <div className={styles.info}>Die Wahl gilt für alle Lieferungen.</div>
     </Menu>
   )
 })
