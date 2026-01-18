@@ -6,12 +6,7 @@ import Button from '@mui/material/Button'
 import { logout } from '../../utils/logout.js'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-import {
-  container,
-  buttonContainer,
-  button,
-  preWrapping,
-} from './ErrorBoundary.module.css'
+import styles from './ErrorBoundary.module.css'
 
 const onReload = () => window.location.reload(true)
 
@@ -22,25 +17,25 @@ export const RouterErrorBoundary = observer(({ children }) => {
   const onReset = () => logout({ store })
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <pre className={preWrapping}>{error.message}</pre>
-      <div className={buttonContainer}>
+      <pre className={styles.preWrapping}>{error.message}</pre>
+      <div className={styles.buttonContainer}>
         <Button
           variant="outlined"
           onClick={onReload}
           color="inherit"
-          className={button}
+          className={styles.button}
         >
           neu starten
         </Button>
       </div>
-      <div className={buttonContainer}>
+      <div className={styles.buttonContainer}>
         <Button
           variant="outlined"
           onClick={onReset}
           color="inherit"
-          className={button}
+          className={styles.button}
         >
           Cache leeren und neu starten (neue Anmeldung nötig)
         </Button>

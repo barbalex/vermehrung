@@ -23,36 +23,36 @@ export const FourOhFour = () => {
   return (
     <>
       <ErrorBoundary>
-        <div className={outerContainer}>
+        <div className={styles.outerContainer}>
           <ProgressiveImg
             src={image}
             placeholderSrc={placeholderSrc}
           />
-          <div className={scrollContainer}>
-            <div className={textContainer}>
+          <div className={styles.scrollContainer}>
+            <div className={styles.textContainer}>
               <Typography
                 align="center"
                 variant="h6"
-                className={pageTitle}
+                className={styles.pageTitle}
               >
                 Oh je
               </Typography>
             </div>
-            <div className={textContainer}>
+            <div className={styles.textContainer}>
               <Typography
                 align="center"
                 variant="h6"
-                className={text}
+                className={styles.text}
               >
                 Diese Seite ist nicht verfügbar
               </Typography>
             </div>
-            <div className={textContainer}>
+            <div className={styles.textContainer}>
               <Button
                 variant="outlined"
                 onClick={onClickBack}
                 color="inherit"
-                className={button}
+                className={styles.button}
               >
                 Zurück zur Startseite
               </Button>

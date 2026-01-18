@@ -11,18 +11,7 @@ import { isImageFile } from './isImageFile.js'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-import {
-  container,
-  img,
-  imgReplacement,
-  delIcon,
-  downloadIcon,
-  spacer,
-  dateiTypField,
-  dateiNameField,
-  beschreibungField,
-  menuTitle,
-} from './File.module.css'
+import styles from './File.module.css'
 
 export const File = observer(({ file, parent }) => {
   const store = useContext(MobxStoreContext)
@@ -52,14 +41,14 @@ export const File = observer(({ file, parent }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         {isImage ?
           <img
             src={`https://ucarecdn.com/${file.file_id}/-/resize/80x/-/quality/lightest/${file.name}`}
-            className={img}
+            className={styles.img}
           />
-        : <div className={imgReplacement}>...</div>}
-        <div className={dateiTypField}>
+        : <div className={styles.imgReplacement}>...</div>}
+        <div className={styles.dateiTypField}>
           <TextField
             key={`${file.id}fileMimeType`}
             name="fileMimeType"
@@ -71,8 +60,8 @@ export const File = observer(({ file, parent }) => {
             schrinkLabel
           />
         </div>
-        <div className={spacer} />
-        <div className={dateiNameField}>
+        <div className={styles.spacer} />
+        <div className={styles.dateiNameField}>
           <TextField
             key={`${file.id}name`}
             name="name"
@@ -84,8 +73,8 @@ export const File = observer(({ file, parent }) => {
             schrinkLabel
           />
         </div>
-        <div className={spacer} />
-        <div className={beschreibungField}>
+        <div className={styles.spacer} />
+        <div className={styles.beschreibungField}>
           <TextField
             key={`${file.id}beschreibung`}
             name="beschreibung"
@@ -100,7 +89,7 @@ export const File = observer(({ file, parent }) => {
         <IconButton
           title="herunterladen"
           onClick={onClickDownload}
-          className={downloadIcon}
+          className={styles.downloadIcon}
         >
           <FaDownload />
         </IconButton>
@@ -110,7 +99,7 @@ export const File = observer(({ file, parent }) => {
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
           onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-          className={delIcon}
+          className={styles.delIcon}
         >
           <FaTimes />
         </IconButton>
@@ -126,7 +115,7 @@ export const File = observer(({ file, parent }) => {
             },
           }}
         >
-          <h3 className={menuTitle}>löschen?</h3>
+          <h3 className={styles.menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
         </Menu>

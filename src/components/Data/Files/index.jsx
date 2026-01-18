@@ -15,14 +15,7 @@ import { fileSort } from '../../../utils/fileSort.js'
 import { mutations } from '../../../utils/mutations.js'
 import { useObservable } from '../../../utils/useObservable.js'
 
-import {
-  titleRow,
-  title,
-  buttons,
-  spacer,
-  lightboxButton,
-  content,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Files = observer(({ parentTable, parent }) => {
   const store = useContext(MobxStoreContext)
@@ -93,9 +86,9 @@ export const Files = observer(({ parentTable, parent }) => {
   if (!online) {
     return (
       <ErrorBoundary>
-        <section className={titleRow}>
-          <div className={title}>Dateien</div>
-          <div className={content}>Sorry, nur online verfügbar</div>
+        <section className={styles.titleRow}>
+          <div className={styles.title}>Dateien</div>
+          <div className={styles.content}>Sorry, nur online verfügbar</div>
         </section>
       </ErrorBoundary>
     )
@@ -104,11 +97,11 @@ export const Files = observer(({ parentTable, parent }) => {
   return (
     <ErrorBoundary>
       <section
-        className={titleRow}
+        className={styles.titleRow}
         style={{ ...(files.length ? { marginBottom: 15 } : {}) }}
       >
-        <div className={title}>Dateien</div>
-        <div className={buttons}>
+        <div className={styles.title}>Dateien</div>
+        <div className={styles.buttons}>
           <Uploader
             id="file"
             name="file"
@@ -120,7 +113,7 @@ export const Files = observer(({ parentTable, parent }) => {
               color="primary"
               variant="outlined"
               onClick={onClickLightboxButton}
-              className={lightboxButton}
+              className={styles.lightboxButton}
             >
               {lightboxIsOpen ?
                 'Galerie schliessen'
@@ -131,7 +124,7 @@ export const Files = observer(({ parentTable, parent }) => {
       </section>
       {lightboxIsOpen && (
         <>
-          <div className={spacer} />
+          <div className={styles.spacer} />
           <ImageGallery
             items={imageObjects}
             showPlayButton={false}
@@ -140,7 +133,7 @@ export const Files = observer(({ parentTable, parent }) => {
       )}
       {!!files.length && (
         <>
-          <div className={spacer} />
+          <div className={styles.spacer} />
           {files.map((file) => (
             <File
               key={file.file_id}
