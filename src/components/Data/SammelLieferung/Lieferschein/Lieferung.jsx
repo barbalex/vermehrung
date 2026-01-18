@@ -9,7 +9,7 @@ import { Q } from '@nozbe/watermelondb'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
 
-import { tableCell } from './Lieferung.module.css'
+import styles from './Lieferung.module.css'
 
 const Zeile = ({ value }) => <div>{value}</div>
 
@@ -78,9 +78,9 @@ export const LieferungForLieferschein = observer(({ lieferung: row }) => {
 
   return (
     <TableRow>
-      <TableCell className={tableCell}>{artLabel}</TableCell>
-      <TableCell className={tableCell}>{herkunftLabel}</TableCell>
-      <TableCell className={tableCell}>
+      <TableCell className={styles.tableCell}>{artLabel}</TableCell>
+      <TableCell className={styles.tableCell}>{herkunftLabel}</TableCell>
+      <TableCell className={styles.tableCell}>
         {wasArray.map((w, i) => (
           <Zeile
             key={i}
@@ -88,7 +88,7 @@ export const LieferungForLieferschein = observer(({ lieferung: row }) => {
           />
         ))}
       </TableCell>
-      <TableCell className={tableCell}>{bemerkungen}</TableCell>
+      <TableCell className={styles.tableCell}>{bemerkungen}</TableCell>
     </TableRow>
   )
 })
