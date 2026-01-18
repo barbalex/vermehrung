@@ -14,11 +14,7 @@ import KuDownSvg from '../../../../svg/to_ku_down.svg?react'
 import { HistoryButton } from '../../../shared/HistoryButton.jsx'
 import { Menu } from '../../../shared/Menu.jsx'
 
-import {
-  container,
-  title,
-  symbols,
-} from '../../Art/FormTitle/FormTitle.module.css'
+import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
 export const GartenFormTitle = observer(
   ({ row, rawRow, showHistory, setShowHistory, totalCount, filteredCount }) => {
@@ -37,11 +33,11 @@ export const GartenFormTitle = observer(
 
     return (
       <div
-        className={container}
+        className={artStyles.container}
         ref={ref}
       >
-        <div className={title}>Garten</div>
-        <div className={symbols}>
+        <div className={artStyles.title}>Garten</div>
+        <div className={artStyles.symbols}>
           <IconButton
             title="Zur Liste"
             onClick={onClickUp}
