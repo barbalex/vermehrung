@@ -26,12 +26,8 @@ import { exists } from '../../../../utils/exists.js'
 import { personSort } from '../../../../utils/personSort.js'
 import { herkunftSort } from '../../../../utils/herkunftSort.js'
 
-import {
-  container,
-  caseConflictTitle,
-  rev,
-} from '../../Art/Form/index.module.css'
-import { fieldRow } from './index.module.css'
+import artStyles from '../../Art/Form/index.module.css'
+import styles from './index.module.css'
 
 export const SammlungForm = observer(
   ({
@@ -251,10 +247,10 @@ export const SammlungForm = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
+        <div className={artStyles.container}>
           {(activeConflict || showHistory) && (
-            <h4 className={caseConflictTitle}>
-              Aktuelle Version<span className={rev}>{row._rev}</span>
+            <h4 className={artStyles.caseConflictTitle}>
+              Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
             </h4>
           )}
           {showDeleted && (
@@ -335,7 +331,7 @@ export const SammlungForm = observer(
             error={errors?.sammlung?.anzahl_pflanzen}
             type="number"
           />
-          <div className={fieldRow}>
+          <div className={styles.fieldRow}>
             <TextField
               key={`${row.id}gramm_samen`}
               name="gramm_samen"
@@ -355,7 +351,7 @@ export const SammlungForm = observer(
               type="text"
             />
           </div>
-          <div className={fieldRow}>
+          <div className={styles.fieldRow}>
             <TextField
               key={`${row.id}von_anzahl_individuen`}
               name="von_anzahl_individuen"
@@ -383,7 +379,7 @@ export const SammlungForm = observer(
               saveToDb={saveToDb}
             />
           )}
-          <div className={fieldRow}>
+          <div className={styles.fieldRow}>
             {showFilter ?
               <JesNo
                 key={`${row.id}geplant`}

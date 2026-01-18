@@ -12,7 +12,7 @@ import { SammlungConflict as Conflict } from './Conflict.jsx'
 import { SammlungHistory as History } from './History/index.jsx'
 import { useObservable } from '../../../utils/useObservable.js'
 
-import { container, splitPaneContainer } from '../Art/index.module.css'
+import artStyles from '../Art/index.module.css'
 
 export const Sammlung = observer(
   ({
@@ -53,7 +53,7 @@ export const Sammlung = observer(
     return (
       <ErrorBoundary>
         <div
-          className={container}
+          className={artStyles.container}
           style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
         >
           <FormTitle
@@ -62,7 +62,7 @@ export const Sammlung = observer(
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
-          <div className={splitPaneContainer}>
+          <div className={artStyles.splitPaneContainer}>
             <Allotment key={`${activeConflict}/${showHistory}`}>
               <Form
                 showFilter={showFilter}

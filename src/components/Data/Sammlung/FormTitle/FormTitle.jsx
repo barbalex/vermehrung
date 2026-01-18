@@ -14,11 +14,7 @@ import UpSvg from '../../../../svg/to_up.svg?react'
 import LiDownSvg from '../../../../svg/to_ausli_down.svg?react'
 import HeDownSvg from '../../../../svg/to_he_down.svg?react'
 
-import {
-  container,
-  title,
-  symbols,
-} from '../../Art/FormTitle/FormTitle.module.css'
+import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
 export const SammlungFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
@@ -43,11 +39,11 @@ export const SammlungFormTitle = observer(
 
     return (
       <div
-        className={container}
+        className={artStyles.container}
         ref={ref}
       >
-        <div className={title}>Sammlung</div>
-        <div className={symbols}>
+        <div className={artStyles.title}>Sammlung</div>
+        <div className={artStyles.symbols}>
           <IconButton
             title="Zur Sammlungs-Liste"
             onClick={onClickUp}
