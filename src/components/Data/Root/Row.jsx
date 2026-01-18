@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { tableFilter } from '../../../utils/tableFilter.js'
 
-import { container } from '../Arten/Row.module.css'
+import styles from '../Arten/Row.module.css'
 
 export const RootRow = observer(({ style, row }) => {
   const store = useContext(MobxStoreContext)
@@ -34,7 +34,7 @@ export const RootRow = observer(({ style, row }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       key={row.id}
       onClick={onClickRow}
       style={style}
