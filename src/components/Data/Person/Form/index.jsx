@@ -16,11 +16,7 @@ import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import { exists } from '../../../../utils/exists.js'
 import { userRoleSort } from '../../../../utils/userRoleSort.js'
 
-import {
-  container,
-  caseConflictTitle,
-  rev,
-} from '../../Art/Form/index.module.css'
+import artStyles from '../../Art/Form/index.module.css'
 
 export const PersonForm = observer(
   ({ showFilter, id, row, activeConflict, setActiveConflict, showHistory }) => {
@@ -93,10 +89,10 @@ export const PersonForm = observer(
     const showDeleted = filter.person._deleted !== false || row?._deleted
 
     return (
-      <div className={container}>
+      <div className={artStyles.container}>
         {(activeConflict || showHistory) && (
-          <h4 className={caseConflictTitle}>
-            Aktuelle Version<span className={rev}>{row._rev}</span>
+          <h4 className={artStyles.caseConflictTitle}>
+            Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
           </h4>
         )}
         {showDeleted && (
