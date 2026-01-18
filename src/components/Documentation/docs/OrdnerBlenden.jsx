@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const OrdnerBlenden = () => (
   <>
     <h1>Ordner ein- und ausblenden</h1>
-    <p className={dokuDate}>28.12.2019</p>
+    <p className={dokuStyles.dokuDate}>28.12.2019</p>
     <h3>Wieso</h3>
     <p>
       Nicht jeder nutzt alle Features. Features, die nicht verwendet werden,

@@ -1,11 +1,11 @@
 import { Link } from 'react-router'
 
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const TechnischeVoraussetzungen = () => (
   <>
     <h1>Technische Voraussetzungen</h1>
-    <p className={dokuDate}>20.05.2023</p>
+    <p className={dokuStyles.dokuDate}>20.05.2023</p>
     <p>
       Sie brauchen eine aktuelle Version eines modernen{' '}
       <strong>Browsers</strong>.<br />

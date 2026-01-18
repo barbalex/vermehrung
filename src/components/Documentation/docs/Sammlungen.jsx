@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const Sammlungen = () => (
   <>
     <h1>Sammlungen</h1>
-    <p className={dokuDate}>17.01.2020</p>
+    <p className={dokuStyles.dokuDate}>17.01.2020</p>
     <h3>Verortung</h3>
     <p>
       Im Gegensatz zur Herkunft (welche eine genetische Einheit abgrenzt),
