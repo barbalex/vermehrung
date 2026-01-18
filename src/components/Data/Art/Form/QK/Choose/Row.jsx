@@ -6,7 +6,7 @@ import { Q } from '@nozbe/watermelondb'
 
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 
-import { container, check, titel, beschreibung } from './Row.module.css'
+import styles from './Row.module.css'
 
 export const Row = observer(({ qk }) => {
   const store = useContext(MobxStoreContext)
@@ -53,17 +53,17 @@ export const Row = observer(({ qk }) => {
   }
 
   return (
-    <div className={container}>
-      <div className={check}>
+    <div className={styles.container}>
+      <div className={styles.check}>
         <Checkbox
           checked={checked}
           onChange={onChange}
           color="primary"
         />
       </div>
-      <div className={titel}>{qk?.titel}</div>
+      <div className={styles.titel}>{qk?.titel}</div>
       {!!qk?.beschreibung && (
-        <div className={beschreibung}>{qk?.beschreibung}</div>
+        <div className={styles.beschreibung}>{qk?.beschreibung}</div>
       )}
     </div>
   )

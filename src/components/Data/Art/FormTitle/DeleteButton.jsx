@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-import { title, titleRow } from './DeleteButton.module.css'
+import styles from './DeleteButton.module.css'
 
 export const DeleteButton = observer(({ row }) => {
   const store = useContext(MobxStoreContext)
@@ -50,8 +50,8 @@ export const DeleteButton = observer(({ row }) => {
         open={Boolean(anchorEl)}
         onClose={closeMenu}
       >
-        <div className={titleRow}>
-          <div className={title}>Wirklich löschen?</div>
+        <div className={styles.titleRow}>
+          <div className={styles.title}>Wirklich löschen?</div>
         </div>
         <MenuItem onClick={remove}>Ja, weg damit!</MenuItem>
         <MenuItem onClick={closeMenu}>Nein, abbrechen!</MenuItem>

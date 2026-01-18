@@ -25,7 +25,7 @@ import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import { herkunftLabelFromHerkunft } from '../../../../../../utils/herkunftLabelFromHerkunft.js'
 import { buildData } from './buildData.js'
 
-import { h4, noData, container } from './index.module.css'
+import styles from './index.module.css'
 
 export const Pflanzen = observer(({ artId, herkunft }) => {
   const store = useContext(MobxStoreContext)
@@ -57,9 +57,9 @@ export const Pflanzen = observer(({ artId, herkunft }) => {
   if (data && !data.length) {
     return (
       <>
-        <h4 className={h4}>{herkunftLabel}</h4>
+        <h4 className={styles.h4}>{herkunftLabel}</h4>
         <div
-          className={noData}
+          className={styles.noData}
         >{`Keine Daten für die Anzahl Pflanzen verfügbar`}</div>
       </>
     )
@@ -70,7 +70,7 @@ export const Pflanzen = observer(({ artId, herkunft }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       ref={ref}
     >
       <ErrorBoundary>
