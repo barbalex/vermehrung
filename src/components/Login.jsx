@@ -25,7 +25,7 @@ import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../mobxStoreContext.js'
 import { constants } from '../utils/constants.js'
 
-import { container, div, input, resetButton } from './Login.module.css'
+import styles from './Login.module.css'
 
 export const Login = observer(() => {
   const { db, firebaseAuth } = useContext(MobxStoreContext)
@@ -120,13 +120,13 @@ export const Login = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <Dialog
           aria-labelledby="dialog-title"
           open={true}
         >
           <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
-          <div className={div}>
+          <div className={styles.div}>
             <FormControl
               error={!!emailErrorText}
               fullWidth
@@ -136,7 +136,7 @@ export const Login = observer(() => {
               <InputLabel htmlFor="email">Email</InputLabel>
               <Input
                 id="email"
-                className={`user-email ${input}`}
+                className={`user-email ${styles.input}`}
                 defaultValue={email}
                 onBlur={onBlurEmail}
                 autoFocus
@@ -154,7 +154,7 @@ export const Login = observer(() => {
               <InputLabel htmlFor="passwort">Passwort</InputLabel>
               <Input
                 id="passwort"
-                className={`user-passwort ${input}`}
+                className={`user-passwort ${styles.input}`}
                 type={showPass ? 'text' : 'password'}
                 defaultValue={password}
                 onBlur={onBlurPassword}
@@ -188,7 +188,7 @@ export const Login = observer(() => {
               <Button
                 onClick={reset}
                 color="inherit"
-                className={resetButton}
+                className={styles.resetButton}
               >
                 {resetTitle}
               </Button>

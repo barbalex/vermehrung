@@ -24,7 +24,7 @@ import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import { buildData } from './buildData.js'
 
-import { container, noData } from './index.module.css'
+import styles from './index.module.css'
 
 export const Pflanzen = observer(({ artId }) => {
   const store = useContext(MobxStoreContext)
@@ -50,7 +50,9 @@ export const Pflanzen = observer(({ artId }) => {
 
   if (data && !data.length) {
     return (
-      <div className={noData}>Keine Daten verfügbar für Anzahl Pflanzen</div>
+      <div className={styles.noData}>
+        Keine Daten verfügbar für Anzahl Pflanzen
+      </div>
     )
   }
 
@@ -61,7 +63,7 @@ export const Pflanzen = observer(({ artId }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       ref={ref}
     >
       <ErrorBoundary>
