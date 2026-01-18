@@ -9,8 +9,8 @@ import { exists } from '../../../../../../utils/exists.js'
 import { useLieferungNachData } from './useData.jsx'
 import { LieferungAdd as Add } from './Add/index.jsx'
 
-import { title, titleRow } from '../Wann.module.css'
-import { selectRow } from './index.module.css'
+import wannStyles from '../Wann.module.css'
+import styles from './index.module.css'
 
 export const LieferungNach = observer(
   ({ showFilter, row, saveToDb, ifNeeded, herkunft }) => {
@@ -28,15 +28,15 @@ export const LieferungNach = observer(
     return (
       <>
         <div
-          className={titleRow}
+          className={wannStyles.titleRow}
           style={{
             backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
           }}
         >
-          <div className={title}>nach</div>
+          <div className={wannStyles.title}>nach</div>
         </div>
         {ifNeeded('nach_kultur_id') && (
-          <div className={selectRow}>
+          <div className={styles.selectRow}>
             <Select
               key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
               name="nach_kultur_id"

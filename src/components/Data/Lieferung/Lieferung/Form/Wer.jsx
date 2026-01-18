@@ -12,7 +12,7 @@ import { ConflictList } from '../../../../shared/ConflictList/index.jsx'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
 import { personSort } from '../../../../../utils/personSort.js'
 
-import { title, titleRow } from './Wann.module.css'
+import wannStyles from './Wann.module.css'
 
 export const LieferungWer = observer(
   ({
@@ -109,12 +109,12 @@ export const LieferungWer = observer(
     return (
       <>
         <div
-          className={titleRow}
+          className={wannStyles.titleRow}
           style={{
             backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
           }}
         >
-          <div className={title}>wer</div>
+          <div className={wannStyles.title}>wer</div>
         </div>
         {ifNeeded('person_id') && (
           <Select
