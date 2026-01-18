@@ -12,7 +12,7 @@ import { Q } from '@nozbe/watermelondb'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { constants } from '../../../../../utils/constants.js'
 
-import { titleRow, title, info } from './Menu.module.css'
+import styles from './Menu.module.css'
 
 export const GartenSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
   const store = useContext(MobxStoreContext)
@@ -84,8 +84,8 @@ export const GartenSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
       open={Boolean(anchorEl)}
       onClose={onClose}
     >
-      <div className={titleRow}>
-        <div className={title}>Felder für Gärten wählen:</div>
+      <div className={styles.titleRow}>
+        <div className={styles.title}>Felder für Gärten wählen:</div>
         <div>
           <IconButton
             aria-label="Anleitung öffnen"
@@ -202,7 +202,7 @@ export const GartenSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
           labelPlacement="end"
         />
       </MenuItem>
-      <div className={info}>
+      <div className={styles.info}>
         Zwingende Felder sind nicht aufgelistet.
         <br />
         Die Wahl gilt für alle Gärten.

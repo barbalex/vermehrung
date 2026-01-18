@@ -9,7 +9,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { GartenHistoryRow as Row } from './Row.jsx'
 
-import { container, errorContainer } from '../../Art/History/index.module.css'
+import artStyles from '../../Art/History/index.module.css'
 
 const gartenRevQuery = gql`
   query gartenRevForHistoryQuery($rev: [String!]) {
@@ -61,11 +61,11 @@ export const GartenHistory = observer(
     }
 
     if (error) {
-      return <div className={errorContainer}>{error.message}</div>
+      return <div className={styles.errorContainer}>{error.message}</div>
     }
 
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <Slider {...sliderSettings}>
           {revRows.map((r) => (
             <Row
