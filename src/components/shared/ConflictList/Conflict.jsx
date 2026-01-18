@@ -1,4 +1,4 @@
-import { conflictClass } from './Conflict.module.css'
+import styles from './Conflict.module.css'
 
 export const Conflict = ({ conflict, activeConflict, setActiveConflict }) => {
   const onClick = () =>
@@ -17,7 +17,7 @@ export const Conflict = ({ conflict, activeConflict, setActiveConflict }) => {
 
   return (
     <div
-      className={conflictClass}
+      className={styles.conflictClass}
       key={conflict}
       onClick={onClick}
       title={title}
