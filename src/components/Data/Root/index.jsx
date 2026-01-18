@@ -18,7 +18,7 @@ import { getShowSammlung } from '../../../utils/showSammlung.js'
 import { getShowTeilkultur } from '../../../utils/showTeilkultur.js'
 import { getShowZaehlung } from '../../../utils/showZaehlung.js'
 
-import { container, fieldsContainer } from './index.module.css'
+import styles from './index.module.css'
 
 export const Root = observer(({ filter: showFilter }) => {
   const store = useContext(MobxStoreContext)
@@ -214,10 +214,10 @@ export const Root = observer(({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <div
-        className={container}
+        className={styles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
-        <div className={fieldsContainer}>
+        <div className={styles.fieldsContainer}>
           {rows.map((row) => (
             <Row
               key={row.name}

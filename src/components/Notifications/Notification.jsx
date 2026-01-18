@@ -7,12 +7,7 @@ import { MdClose as CloseIcon } from 'react-icons/md'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-import {
-  container,
-  messageClass,
-  titleClass,
-  text,
-} from './Notification.module.css'
+import styles from './Notification.module.css'
 
 const colorMap = {
   error: '#D84315',
@@ -64,13 +59,13 @@ export const Notification = observer(({ notification: n }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       style={{ backgroundColor: color }}
     >
-      <div className={text}>
-        {!!title && <div className={titleClass}>{title}</div>}
-        <div className={messageClass}>{message}</div>
-        {!!info && <div className={messageClass}>{info}</div>}
+      <div className={styles.text}>
+        {!!title && <div className={styles.titleClass}>{title}</div>}
+        <div className={styles.messageClass}>{message}</div>
+        {!!info && <div className={styles.messageClass}>{info}</div>}
       </div>
       {!!actionName && !!actionLabel && (
         <Button
