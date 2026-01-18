@@ -6,15 +6,7 @@ import Button from '@mui/material/Button'
 import { logout } from '../../utils/logout.js'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-import {
-  container,
-  buttonContainer,
-  button,
-  details,
-  summary,
-  preWrapping,
-  pre,
-} from './ErrorBoundary.module.css'
+import styles from './ErrorBoundary.module.css'
 
 const onReload = () => window.location.reload(true)
 
@@ -30,29 +22,29 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   }*/
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <pre className={preWrapping}>{error.message}</pre>
-      <details className={details}>
-        <summary className={summary}>Mehr Informationen</summary>
-        <pre className={pre}>{componentStack}</pre>
+      <pre className={styles.preWrapping}>{error.message}</pre>
+      <details className={styles.details}>
+        <summary className={styles.summary}>Mehr Informationen</summary>
+        <pre className={styles.pre}>{componentStack}</pre>
       </details>
-      <div className={buttonContainer}>
+      <div className={styles.buttonContainer}>
         <Button
           variant="outlined"
           onClick={onReload}
           color="inherit"
-          className={button}
+          className={styles.button}
         >
           neu starten
         </Button>
       </div>
-      <div className={buttonContainer}>
+      <div className={styles.buttonContainer}>
         <Button
           variant="outlined"
           onClick={resetErrorBoundary}
           color="inherit"
-          className={button}
+          className={styles.button}
         >
           Cache leeren und neu starten (neue Anmeldung nötig)
         </Button>

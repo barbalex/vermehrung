@@ -9,7 +9,7 @@ import { Spinner } from '../../../../../../shared/Spinner.jsx'
 import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
 import { TeilzaehlungHistoryRow as Row } from './Row.jsx'
 
-import { container, errorContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const teilzaehlungRevQuery = gql`
   query teilzaehlungRevForHistoryQuery($rev: [String!]) {
@@ -63,11 +63,11 @@ export const TeilzaehlungHistory = observer(
     }
 
     if (error) {
-      return <div className={errorContainer}>{error.message}</div>
+      return <div className={styles.errorContainer}>{error.message}</div>
     }
 
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <Slider {...sliderSettings}>
           {revRows.map((r) => (
             <Row

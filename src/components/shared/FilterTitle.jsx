@@ -8,13 +8,7 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-import {
-  container,
-  titleRow,
-  filterNumbers,
-  deleteFilterIcon,
-  deleteFilterIcon2,
-} from './FilterTitle.module.css'
+import styles from './FilterTitle.module.css'
 
 export const FilterTitle = observer(
   ({ title, table, totalCount, filteredCount }) => {
@@ -27,9 +21,9 @@ export const FilterTitle = observer(
     const onEmptyTable = () => emptyTable({ table })
 
     return (
-      <div className={container}>
-        <div className={titleRow}>
-          <div className={filterNumbers}>
+      <div className={styles.container}>
+        <div className={styles.titleRow}>
+          <div className={styles.filterNumbers}>
             <span title="gefilterte Anzahl">{filteredCount}</span>/
             <span title="ungefilterte Anzahl">{totalCount}</span>
           </div>
@@ -40,7 +34,7 @@ export const FilterTitle = observer(
               onClick={onEmptyTable}
               size="medium"
             >
-              <DeleteFilterIconOutlined className={deleteFilterIcon2} />
+              <DeleteFilterIconOutlined className={styles.deleteFilterIcon2} />
             </IconButton>
           )}
           {filtered && (
@@ -48,7 +42,7 @@ export const FilterTitle = observer(
               aria-label="Alle Filter entfernen"
               title="Alle Filter entfernen"
               onClick={empty}
-              className={deleteFilterIcon}
+              className={styles.deleteFilterIcon}
             />
           )}
         </div>
