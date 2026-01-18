@@ -23,12 +23,8 @@ import { teilkulturSort } from '../../../../utils/teilkulturSort.js'
 import { personSort } from '../../../../utils/personSort.js'
 import { constants } from '../../../../utils/constants.js'
 
-import { fieldRow } from './index.module.css'
-import {
-  container,
-  caseConflictTitle,
-  rev,
-} from '../../Art/Form/index.module.css'
+import styles from './index.module.css'
+import artStyles from '../../Art/Form/index.module.css'
 
 export const EventForm = observer(
   ({
@@ -263,10 +259,10 @@ export const EventForm = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
+        <div className={artStyles.container}>
           {(activeConflict || showHistory) && (
-            <h4 className={caseConflictTitle}>
-              Aktuelle Version<span className={rev}>{row._rev}</span>
+            <h4 className={artStyles.caseConflictTitle}>
+              Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
             </h4>
           )}
           {showDeleted && (
@@ -346,7 +342,7 @@ export const EventForm = observer(
             />
           )}
           {(ev_geplant || showFilter) && (
-            <div className={fieldRow}>
+            <div className={styles.fieldRow}>
               {showFilter ?
                 <JesNo
                   key={`${row.id}geplant`}

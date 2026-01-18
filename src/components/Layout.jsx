@@ -16,7 +16,7 @@ const Notifications = lazy(async () => ({
 
 import Header from './Header/index.jsx'
 
-import { container } from './Layout.module.css'
+import styles from './Layout.module.css'
 
 export const Layout = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -37,7 +37,7 @@ export const Layout = observer(() => {
   }, [setSingleColumnView, singleColumnView, width])
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <Header />
       <Suspense fallback={<Fallback />}>
         <Outlet />
