@@ -7,7 +7,7 @@ import { Article } from './Article.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const ArticleList = observer(({ articles }) => {
   const store = useContext(MobxStoreContext)
@@ -20,7 +20,7 @@ export const ArticleList = observer(({ articles }) => {
   const { pathname } = useLocation()
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <List
         component="nav"
         dense
