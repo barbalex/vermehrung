@@ -12,7 +12,7 @@ import { KulturForm as Form } from './Form/index.jsx'
 import { KulturHistory as History } from './History/index.jsx'
 import { useObservable } from '../../../utils/useObservable.js'
 
-import { container, splitPaneContainer } from '../Art/index.module.css'
+import artStyles from '../Art/index.module.css'
 
 export const Kultur = observer(
   ({ filter: showFilter, id = '99999999-9999-9999-9999-999999999999' }) => {
@@ -49,7 +49,7 @@ export const Kultur = observer(
     return (
       <ErrorBoundary>
         <div
-          className={container}
+          className={artStyles.container}
           style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
         >
           <FormTitle
@@ -58,7 +58,7 @@ export const Kultur = observer(
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
-          <div className={splitPaneContainer}>
+          <div className={artStyles.splitPaneContainer}>
             <Allotment key={`${activeConflict}/${showHistory}`}>
               <Form
                 showFilter={showFilter}
