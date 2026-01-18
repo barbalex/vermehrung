@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const Konten = () => (
   <>
     <h1>Konten und Benutzerrechte</h1>
-    <p className={dokuDate}>30.06.2020</p>
+    <p className={dokuStyles.dokuDate}>30.06.2020</p>
     <h3>Begriffe</h3>
     <ul>
       <li>
