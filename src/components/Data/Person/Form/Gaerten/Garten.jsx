@@ -9,7 +9,7 @@ import { first as first$ } from 'rxjs/operators'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
-import { container, text, delIcon, menuTitle } from './Garten.module.css'
+import styles from './Garten.module.css'
 
 export const PersonGarten = observer(({ gv }) => {
   const store = useContext(MobxStoreContext)
@@ -44,8 +44,8 @@ export const PersonGarten = observer(({ gv }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <div className={text}>
+      <div className={styles.container}>
+        <div className={styles.text}>
           <div>{gartenLabel}</div>
         </div>
         <IconButton
@@ -54,7 +54,7 @@ export const PersonGarten = observer(({ gv }) => {
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
           onClick={onClickDeleteIcon}
-          className={delIcon}
+          className={styles.delIcon}
         >
           <FaTimes />
         </IconButton>
@@ -70,7 +70,7 @@ export const PersonGarten = observer(({ gv }) => {
             },
           }}
         >
-          <h3 className={menuTitle}>löschen?</h3>
+          <h3 className={styles.menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={onClose}>nein</MenuItem>
         </Menu>

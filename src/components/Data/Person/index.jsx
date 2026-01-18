@@ -11,7 +11,7 @@ import { PersonFormTitleChooser as FormTitle } from './FormTitle/index.jsx'
 import { PersonForm as Form } from './Form/index.jsx'
 import { PersonHistory as History } from './History/index.jsx'
 
-import { container, splitPaneContainer } from '../Art/index.module.css'
+import artStyles from '../Art/index.module.css'
 
 export const Person = observer(
   ({
@@ -61,7 +61,7 @@ export const Person = observer(
     return (
       <ErrorBoundary>
         <div
-          className={container}
+          className={artStyles.container}
           style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
         >
           <FormTitle
@@ -71,7 +71,7 @@ export const Person = observer(
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />
-          <div className={splitPaneContainer}>
+          <div className={artStyles.splitPaneContainer}>
             <Allotment key={`${activeConflict}/${showHistory}`}>
               <Form
                 showFilter={showFilter}
