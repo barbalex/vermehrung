@@ -1,11 +1,11 @@
 import { Link } from 'react-router'
 
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const ZeitachseFuerKulturen = () => (
   <>
     <h1>Zeit-Achse für Kulturen</h1>
-    <p className={dokuDate}>20.09.2019</p>
+    <p className={dokuStyles.dokuDate}>20.09.2019</p>
     <h3>Ziele</h3>
     <ul>
       <li>
