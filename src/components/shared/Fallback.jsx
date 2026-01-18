@@ -1,9 +1,9 @@
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { spinnerContainer } from './Fallback.module.css'
+import styles from './Fallback.module.css'
 
 export const Fallback = () => (
-  <div className={spinnerContainer}>
+  <div className={styles.spinnerContainer}>
     <CircularProgress />
   </div>
 )
