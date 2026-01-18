@@ -52,7 +52,7 @@ export const Garten = observer(
     return (
       <ErrorBoundary>
         <div
-          className={styles.container}
+          className={artStyles.container}
           style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
         >
           <FormTitle

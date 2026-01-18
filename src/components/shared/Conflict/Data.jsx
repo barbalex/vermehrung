@@ -29,7 +29,7 @@ const Row = styled.div`
   }
 `
 
-const styles = {
+const diffStyles = {
   added: {
     color: 'green',
   },
@@ -74,9 +74,9 @@ export const Data = observer(({ dataArray, loading }) => {
               <span
                 key={group.value}
                 style={
-                  group.added ? styles.added
+                  group.added ? diffStyles.added
                   : group.removed ?
-                    styles.removed
+                    diffStyles.removed
                   : {}
                 }
               >
