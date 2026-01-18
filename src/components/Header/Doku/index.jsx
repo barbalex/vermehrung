@@ -10,7 +10,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { DokuFilter } from './Filter/index.jsx'
 import { constants } from '../../../utils/constants.js'
 
-import { siteTitle, spacer, navButton } from './index.module.css'
+import styles from './index.module.css'
 
 export const HeaderDoku = () => {
   const { width, ref } = useResizeDetector()
@@ -39,18 +39,18 @@ export const HeaderDoku = () => {
               component={Link}
               to="/"
               title="Home"
-              className={siteTitle}
+              className={styles.siteTitle}
             >
               Vermehrung
             </Button>
           }
-          <div className={spacer} />
+          <div className={styles.spacer} />
           <DokuFilter />
           <Button
             variant="outlined"
             component={Link}
             to="/Vermehrung/"
-            className={navButton}
+            className={styles.navButton}
           >
             Daten
           </Button>
