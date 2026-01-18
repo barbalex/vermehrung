@@ -9,7 +9,7 @@ import { MobxStoreContext } from '../../../../../../../mobxStoreContext.js'
 import { LieferungAddTypeDialog as TypeDialog } from './TypeDialog.jsx'
 import { LieferungAddChooseDialog as ChooseDialog } from './ChooseDialog.jsx'
 
-import { button } from './index.module.css'
+import styles from './index.module.css'
 
 export const LieferungAdd = observer(({ disabled, lieferung, herkunft }) => {
   const store = useContext(MobxStoreContext)
@@ -59,7 +59,7 @@ export const LieferungAdd = observer(({ disabled, lieferung, herkunft }) => {
         onClick={add}
         size="large"
         disabled={disabled}
-        className={button}
+        className={styles.button}
       >
         <FaPlus />
       </IconButton>

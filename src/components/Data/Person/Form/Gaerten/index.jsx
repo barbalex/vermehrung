@@ -14,7 +14,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { gartensSortedFromGartens } from '../../../../../utils/gartensSortedFromGartens.js'
 import { gvsSortByGarten } from '../../../../../utils/gvsSortByGarten.js'
 
-import { titleRow, title, gvsClass, motionDiv } from './index.module.css'
+import styles from './index.module.css'
 
 export const PersonGaerten = observer(({ person }) => {
   const store = useContext(MobxStoreContext)
@@ -121,9 +121,11 @@ export const PersonGaerten = observer(({ person }) => {
       <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
-        className={titleRow}
+        className={styles.titleRow}
       >
-        <div className={title}>{`Mitarbeitend bei ${gvs.length} Gärten`}</div>
+        <div
+          className={styles.title}
+        >{`Mitarbeitend bei ${gvs.length} Gärten`}</div>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -140,11 +142,11 @@ export const PersonGaerten = observer(({ person }) => {
       <motion.div
         animate={anim}
         transition={{ type: 'just', duration: 0.2 }}
-        className={motionDiv}
+        className={styles.motionDiv}
       >
         {open && (
           <>
-            <div className={gvsClass}>
+            <div className={styles.gvsClass}>
               {gvs.map((gv, index) => (
                 <Garten
                   key={`${gv.person_id}/${gv.garten_id}/${index}`}

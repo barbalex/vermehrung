@@ -12,11 +12,7 @@ import { HistoryButton } from '../../../shared/HistoryButton.jsx'
 import { PersonKonto as KontoMenu } from './KontoMenu/index.jsx'
 import { PersonFormTitleNavButtons as NavButtons } from './NavButtons.jsx'
 
-import {
-  container,
-  title,
-  symbols,
-} from '../../Art/FormTitle/FormTitle.module.css'
+import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
 export const PersonFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
@@ -42,11 +38,11 @@ export const PersonFormTitle = observer(
 
     return (
       <div
-        className={container}
+        className={artStyles.container}
         ref={ref}
       >
-        <div className={title}>Person</div>
-        <div className={symbols}>
+        <div className={artStyles.title}>Person</div>
+        <div className={artStyles.symbols}>
           <NavButtons />
           {userRole?.name === 'manager' && (
             <>
