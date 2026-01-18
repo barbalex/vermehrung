@@ -4,7 +4,7 @@ import { first as first$ } from 'rxjs/operators'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
-import { container } from './Row.module.css'
+import styles from './Row.module.css'
 
 export const ArtRow = observer(({ style, index, rows }) => {
   const store = useContext(MobxStoreContext)
@@ -35,7 +35,7 @@ export const ArtRow = observer(({ style, index, rows }) => {
       key={row.id}
       onClick={onClickRow}
       style={style}
-      className={container}
+      className={styles.container}
     >
       <div>{label}</div>
     </div>

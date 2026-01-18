@@ -7,7 +7,7 @@ import { FilterNumbers } from '../../../shared/FilterNumbers.jsx'
 import { Menu } from '../../../shared/Menu.jsx'
 import { HistoryButton } from '../../../shared/HistoryButton.jsx'
 
-import { container, title, symbols } from './FormTitle.module.css'
+import styles from './FormTitle.module.css'
 
 export const FormTitle = ({
   row,
@@ -20,11 +20,11 @@ export const FormTitle = ({
 
   return (
     <div
-      className={container}
+      className={styles.container}
       ref={ref}
     >
-      <div className={title}>Art</div>
-      <div className={symbols}>
+      <div className={styles.title}>Art</div>
+      <div className={styles.symbols}>
         <NavButtons />
         <AddButton />
         <DeleteButton row={row} />
