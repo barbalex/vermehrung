@@ -12,7 +12,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { HeaderExportMenu as ExportMenu } from './Export/index.jsx'
 import { HeaderAdminMenu as AdminMenu } from './Admin/index.jsx'
 
-import { version } from './Menu.module.css'
+import styles from './Menu.module.css'
 
 export const HeaderHamburgerMenu = observer(
   ({ anchorEl: parentAnchorEl, setAnchorEl: setParentAnchorEl }) => {
@@ -118,7 +118,7 @@ export const HeaderHamburgerMenu = observer(
             labelPlacement="end"
           />
         </MenuItem>
-        <div className={version}>Version: 1.21.26 vom 17.1.2026</div>
+        <div className={styles.version}>Version: 1.21.26 vom 17.1.2026</div>
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von vermehrung.ch
         </MenuItem>

@@ -7,7 +7,7 @@ import { MdMenu } from 'react-icons/md'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { HeaderHamburgerMenu as Menu } from './Menu.jsx'
 
-import { icon } from './index.module.css'
+import styles from './index.module.css'
 
 export const HeaderHamburgerMenu = ({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -41,7 +41,7 @@ export const HeaderHamburgerMenu = ({ asMenu }) => {
         onClick={onClickMenu}
         size="large"
       >
-        <MdMenu className={icon} />
+        <MdMenu className={styles.icon} />
       </IconButton>
       <Menu
         anchorEl={anchorEl}

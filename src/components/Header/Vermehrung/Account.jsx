@@ -21,7 +21,7 @@ import { reloadData } from '../../../utils/reloadData.js'
 import { constants } from '../../../utils/constants.js'
 import { personFullname } from '../../../utils/personFullname.js'
 
-import { userIcon, button, riskyButton } from './Account.module.css'
+import styles from './Account.module.css'
 
 const Account = () => {
   const store = useContext(MobxStoreContext)
@@ -110,7 +110,7 @@ const Account = () => {
           onClick={onClickMenu}
           size="large"
         >
-          <UserIcon className={userIcon} />
+          <UserIcon className={styles.userIcon} />
         </IconButton>
         <Menu
           id="menu-appbar"
@@ -159,7 +159,7 @@ const Account = () => {
               color="primary"
               autoFocus
               variant="outlined"
-              className={button}
+              className={styles.button}
             >
               Ich bleibe angemeldet, um die ausstehenden Operationen nicht zu
               verlieren
@@ -171,7 +171,7 @@ const Account = () => {
               }}
               variant="outlined"
               startIcon={<FaExclamationCircle />}
-              className={riskyButton}
+              className={styles.riskyButton}
             >
               Ich will abmelden, obwohl ich die ausstehenden Operationen
               verliere
@@ -200,7 +200,7 @@ const Account = () => {
               color="primary"
               autoFocus
               variant="outlined"
-              className={button}
+              className={styles.button}
             >
               Ich verzichte, um die ausstehenden Operationen nicht zu verlieren
             </Button>
@@ -211,7 +211,7 @@ const Account = () => {
               }}
               variant="outlined"
               startIcon={<FaExclamationCircle />}
-              className={riskyButton}
+              className={styles.riskyButton}
             >
               Ich lade die Daten neu, obwohl ich die ausstehenden Operationen
               verliere

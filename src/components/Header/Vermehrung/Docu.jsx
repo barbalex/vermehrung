@@ -7,7 +7,7 @@ import { Link } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
-import { button } from './Docu.module.css'
+import styles from './Docu.module.css'
 
 export const HeaderDocu = observer(({ asMenu }) => {
   const store = useContext(MobxStoreContext)
@@ -44,7 +44,7 @@ export const HeaderDocu = observer(({ asMenu }) => {
       variant="outlined"
       component={Link}
       to="/Dokumentation/"
-      className={button}
+      className={styles.button}
     >
       Dokumentation
     </Button>

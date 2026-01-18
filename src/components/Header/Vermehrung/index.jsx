@@ -13,7 +13,7 @@ import { HeaderFilter as Filter } from './Filter.jsx'
 import { HeaderHome as Home } from './Home.jsx'
 import { Menu } from '../../shared/Menu.jsx'
 
-import { spacer } from './index.module.css'
+import styles from './index.module.css'
 
 // TODO: use media queries instead of resize detector?
 export const HeaderVermehrung = () => {
@@ -29,7 +29,7 @@ export const HeaderVermehrung = () => {
           <NavTree />
           {width < 509 ?
             <>
-              <div className={spacer} />
+              <div className={styles.spacer} />
               <Filter />
               <HeaderSearch />
               <Online />
@@ -43,7 +43,7 @@ export const HeaderVermehrung = () => {
           : width < 557 ?
             <>
               <Home />
-              <div className={spacer} />
+              <div className={styles.spacer} />
               <Filter />
               <HeaderSearch />
               <Online />
@@ -56,7 +56,7 @@ export const HeaderVermehrung = () => {
           : width < 605 ?
             <>
               <Home />
-              <div className={spacer} />
+              <div className={styles.spacer} />
               <Filter />
               <HeaderSearch />
               <Online />
@@ -68,7 +68,7 @@ export const HeaderVermehrung = () => {
             </>
           : <>
               <Home />
-              <div className={spacer} />
+              <div className={styles.spacer} />
               <Docu />
               <Filter />
               <HeaderSearch />
