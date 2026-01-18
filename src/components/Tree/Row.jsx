@@ -28,18 +28,7 @@ import {
   MenuItem,
 } from '../../utils/react-contextmenu/index.js'
 
-import {
-  nodeClass,
-  expandMoreIcon,
-  chevronRightIcon,
-  moreHorizIcon,
-  accountIcon,
-  symbolDiv,
-  symbolSpan,
-  textSpan,
-  menuSubtitle,
-  menuExplainerItem,
-} from './Row.module.css'
+import styles from './Row.module.css'
 
 export const TreeRow = observer(({ style, node, nodes, userRole }) => {
   const store = useContext(MobxStoreContext)
@@ -121,7 +110,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
     <>
       <ContextMenuTrigger id={`cm${node?.id}`}>
         <div
-          className={nodeClass}
+          className={styles.nodeClass}
           style={{
             paddingLeft: level * 17 - 10,
             color:
@@ -132,7 +121,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
         >
           {useSymbolIcon && (
             <div
-              className={symbolDiv}
+              className={styles.symbolDiv}
               onClick={onClickNodeSymbol}
               data-mobile={isMobile}
             >
@@ -145,11 +134,11 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                     width: nodeIsOpen ? 30 : 26,
                     color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
                   }}
-                  className={expandMoreIcon}
+                  className={styles.expandMoreIcon}
                 />
               )}
               {symbolIcon === 'chevronRight' && (
-                <ChevronRightIcon className={chevronRightIcon} />
+                <ChevronRightIcon className={styles.chevronRightIcon} />
               )}
               {symbolIcon === 'moreHoriz' && (
                 <MoreHorizIcon
@@ -158,7 +147,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                     height: nodeIsInActiveNodePath ? 26 : 22,
                     color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
                   }}
-                  className={moreHorizIcon}
+                  className={styles.moreHorizIcon}
                 />
               )}
             </div>
@@ -172,7 +161,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 fontSize: isMobile ? 32 : 28,
                 width: isMobile ? 12 : 9,
               }}
-              className={symbolSpan}
+              className={styles.symbolSpan}
             >
               {'-'}
             </span>
@@ -188,14 +177,14 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
               fontSize,
               fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
             }}
-            className={textSpan}
+            className={styles.textSpan}
           >
             {node?.label ?? '(kein Label)'}
           </span>
           {accountId && (
             <AccountIcon
               title="hat ein Konto"
-              className={accountIcon}
+              className={styles.accountIcon}
             />
           )}
         </div>
@@ -204,7 +193,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
         <ContextMenu id={`cm${node?.id}`}>
           <div className="react-contextmenu-title">{node?.menuTitle}</div>
           {node?.menuExplainerText && (
-            <MenuItem className={menuExplainerItem}>
+            <MenuItem className={styles.menuExplainerItem}>
               {node?.menuExplainerText}
             </MenuItem>
           )}
@@ -242,7 +231,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 userRole?.name === 'manager' &&
                 !accountId && (
                   <>
-                    <div className={`react-contextmenu-title ${menuSubtitle}`}>
+                    <div className={`react-contextmenu-title ${styles.menuSubtitle}`}>
                       Konto
                     </div>
                     <MenuItem onClick={onClickSignup}>neu</MenuItem>
@@ -253,7 +242,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 userRole?.name === 'manager' &&
                 accountId && (
                   <>
-                    <div className={`react-contextmenu-title ${menuSubtitle}`}>
+                    <div className={`react-contextmenu-title ${styles.menuSubtitle}`}>
                       Konto
                     </div>
                     <MenuItem onClick={onClickSetPassword}>
