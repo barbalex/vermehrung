@@ -24,12 +24,8 @@ import { constants } from '../../../../utils/constants.js'
 import { gartensSortedFromGartens } from '../../../../utils/gartensSortedFromGartens.js'
 import { herkunftSort } from '../../../../utils/herkunftSort.js'
 
-import {
-  container,
-  caseConflictTitle,
-  rev,
-} from '../../Art/Form/index.module.css'
-import { fieldRow } from './index.module.css'
+import artStyles from '../../Art/Form/index.module.css'
+import styles from './index.module.css'
 
 export const KulturForm = observer(
   ({
@@ -391,10 +387,10 @@ export const KulturForm = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
+        <div className={artStyles.container}>
           {(activeConflict || showHistory) && (
-            <h4 className={caseConflictTitle}>
-              Aktuelle Version<span className={rev}>{row._rev}</span>
+            <h4 className={artStyles.caseConflictTitle}>
+              Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
             </h4>
           )}
           {showDeleted && (
@@ -493,7 +489,7 @@ export const KulturForm = observer(
               }
             </>
           )}
-          <div className={fieldRow}>
+          <div className={styles.fieldRow}>
             <TextField
               key={`${row.id}von_anzahl_individuen`}
               name="von_anzahl_individuen"
