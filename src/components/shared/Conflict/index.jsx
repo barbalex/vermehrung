@@ -13,13 +13,7 @@ import { Explainer } from './Explainer.jsx'
 import { Data } from './Data.jsx'
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
-import {
-  container,
-  title,
-  revClass,
-  button,
-  buttonRow,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Conflict = observer(
   ({
@@ -39,22 +33,22 @@ export const Conflict = observer(
 
     if (error) {
       console.log('shared/Conflict/index.jsx error:', error)
-      return <div className={container}>{error.message}</div>
+      return <div className={styles.container}>{error.message}</div>
     }
 
     return (
-      <div className={container}>
-        <h4 className={title}>
-          Widersprüchliche Version<span className={revClass}>{rev}</span>
+      <div className={styles.container}>
+        <h4 className={styles.title}>
+          Widersprüchliche Version<span className={styles.revClass}>{rev}</span>
         </h4>
         <Explainer name={name} />
         <Data
           dataArray={dataArray}
           loading={loading}
         />
-        <div className={buttonRow}>
+        <div className={styles.buttonRow}>
           <Button
-            className={button}
+            className={styles.button}
             onClick={onClickAktuellUebernehmen}
             variant="outlined"
             title="Die widersprüchliche Version wird verworfen, die aktuelle beibehalten. Der Konflikt gilt als gelöst und erscheint nicht mehr"
@@ -66,7 +60,7 @@ export const Conflict = observer(
             : 'aktuelle Version übernehmen'}
           </Button>
           <Button
-            className={button}
+            className={styles.button}
             onClick={onClickWiderspruchUebernehmen}
             variant="outlined"
             title="Die widersprüchliche Version wird übernommen, die aktuelle verworfen. Der Konflikt gilt als gelöst und erscheint nicht mehr"
@@ -78,7 +72,7 @@ export const Conflict = observer(
             : 'widersprüchliche Version übernehmen'}
           </Button>
           <Button
-            className={button}
+            className={styles.button}
             onClick={onClickToggleDiff}
             variant="outlined"
             title={
@@ -92,7 +86,7 @@ export const Conflict = observer(
             {diffConflict ? 'nicht vergleichen' : 'vergleichen'}
           </Button>
           <Button
-            className={button}
+            className={styles.button}
             onClick={onClickSchliessen}
             variant="outlined"
             title="Die Spalte mit dem Konflikt wird geschlossen. Der Konflikt bleibt erhalten"
