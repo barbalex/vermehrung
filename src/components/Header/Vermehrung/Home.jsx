@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
-import { siteTitle } from './Home.module.css'
+import styles from './Home.module.css'
 
 export const HeaderHome = observer(({ asMenu }) => {
   const store = useContext(MobxStoreContext)
@@ -46,7 +46,7 @@ export const HeaderHome = observer(({ asMenu }) => {
       component={Link}
       to="/"
       title="Home"
-      className={siteTitle}
+      className={styles.siteTitle}
     >
       Vermehrung
     </Button>
