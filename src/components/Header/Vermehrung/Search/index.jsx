@@ -9,7 +9,7 @@ import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { buildOptions } from './buildOptions.js'
 
 import './index.css'
-import { container, select, searchIcon } from './index.module.css'
+import styles from './index.module.css'
 
 const formatOptionLabel = ({ label }, { inputValue }) => (
   <Highlighter
@@ -159,10 +159,10 @@ export const HeaderSearch = observer(() => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       ref={ref}
     >
-      {!singleColumnView && <FaSearch className={searchIcon} />}
+      {!singleColumnView && <FaSearch className={styles.searchIcon} />}
       <Select
         styles={customStyles}
         onChange={onChange}
@@ -176,7 +176,7 @@ export const HeaderSearch = observer(() => {
         isClearable
         spellCheck={false}
         aria-label="suchen"
-        className={select}
+        className={styles.select}
       />
     </div>
   )

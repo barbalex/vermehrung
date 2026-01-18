@@ -6,7 +6,7 @@ import { Label } from './Label.jsx'
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
-import { container, switchClass } from './ApFilter.module.css'
+import styles from './ApFilter.module.css'
 
 export const ApFilter = observer(({ color }) => {
   const store = useContext(MobxStoreContext)
@@ -16,7 +16,7 @@ export const ApFilter = observer(({ color }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <Label
           label="nur AP"
           color={color}
@@ -26,7 +26,7 @@ export const ApFilter = observer(({ color }) => {
           checked={apFilter}
           onChange={onChange}
           color="primary"
-          className={switchClass}
+          className={styles.switchClass}
         />
       </div>
     </ErrorBoundary>

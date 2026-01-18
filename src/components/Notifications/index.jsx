@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton'
 import { MdClose as CloseIcon } from 'react-icons/md'
 import { sortBy } from 'es-toolkit'
 
-import { container, iconButton } from './index.module.css'
+import styles from './index.module.css'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { Notification } from './Notification.jsx'
@@ -35,7 +35,7 @@ export const Notifications = observer(() => {
   if (notificationsSorted.length === 0) return null
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       {notificationsSorted.map((n) => (
         <Notification
           key={n.id}
@@ -51,7 +51,7 @@ export const Notifications = observer(() => {
           title="Alle Meldungen schliessen"
           size="small"
           edge="start"
-          className={iconButton}
+          className={styles.iconButton}
         >
           <CloseIcon />
         </IconButton>

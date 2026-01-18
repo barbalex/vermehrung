@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-import { value, icon, revertButton } from './QueuedQuery.module.css'
+import styles from './QueuedQuery.module.css'
 
 const valFromValue = (value) => {
   if (value === true) return 'wahr'
@@ -57,29 +57,29 @@ export const QueuedQuery = observer(({ qq, index }) => {
   return (
     <>
       <div
-        className={value}
+        className={styles.value}
         style={valueStyle}
       >{`${DateTime.fromMillis(time).toFormat('yyyy.LL.dd HH.mm.ss')}`}</div>
       <div
-        className={value}
+        className={styles.value}
         style={valueStyle}
       >
         {revertTable}
       </div>
       <div
-        className={value}
+        className={styles.value}
         style={valueStyle}
       >
         {revertId}
       </div>
       <div
-        className={value}
+        className={styles.value}
         style={valueStyle}
       >
         {isInsert ? 'neuer Datensatz' : revertField}
       </div>
       <div
-        className={value}
+        className={styles.value}
         style={valueStyle}
       >
         {isInsert ?
@@ -89,7 +89,7 @@ export const QueuedQuery = observer(({ qq, index }) => {
         : JSON.parse(revertValues)}
       </div>
       <div
-        className={value}
+        className={styles.value}
         style={valueStyle}
       >
         {isInsert ?
@@ -99,7 +99,7 @@ export const QueuedQuery = observer(({ qq, index }) => {
         : JSON.parse(newValue)}
       </div>
       <div
-        className={icon}
+        className={styles.icon}
         style={valueStyle}
       >
         <IconButton
@@ -107,7 +107,7 @@ export const QueuedQuery = observer(({ qq, index }) => {
           aria-label="widerrufen"
           onClick={onClickRevert}
           size="small"
-          className={revertButton}
+          className={styles.revertButton}
         >
           <FaUndoAlt />
         </IconButton>
