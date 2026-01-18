@@ -17,15 +17,7 @@ import { personFullname } from '../../../../utils/personFullname.js'
 import { ProgressiveImg } from '../../../shared/ProgressiveImg.tsx'
 import image from '../../../../images/toposLogo.png'
 
-import {
-  container,
-  pageContainer,
-  title,
-  headerRow,
-  haederLabel,
-  paper,
-  table,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Lieferschein = observer(({ row }) => {
   const store = useContext(MobxStoreContext)
@@ -88,7 +80,7 @@ export const Lieferschein = observer(({ row }) => {
     : '(Kein Datum erfasst)'
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <div className={`querformat printer-content ${pageContainer}`}>
         <ProgressiveImg
           src={image}
@@ -97,34 +89,34 @@ export const Lieferschein = observer(({ row }) => {
           width="500px"
           height="87px"
         />
-        <h3 className={title}>Lieferschein</h3>
-        <div className={headerRow}>
-          <div className={haederLabel}>Projekt:</div>
+        <h3 className={styles.title}>Lieferschein</h3>
+        <div className={styles.headerRow}>
+          <div className={styles.haederLabel}>Projekt:</div>
           <div>
             {
               'Zwischenvermehrung von seltenen und bedrohten Pflanzenarten im Kanton Zürich'
             }
           </div>
         </div>
-        <div className={headerRow}>
-          <div className={haederLabel}>von:</div>
+        <div className={styles.headerRow}>
+          <div className={styles.haederLabel}>von:</div>
           <div>{von}</div>
         </div>
-        <div className={headerRow}>
-          <div className={haederLabel}>an:</div>
+        <div className={styles.headerRow}>
+          <div className={styles.haederLabel}>an:</div>
           <div>{an}</div>
         </div>
-        <div className={headerRow}>
-          <div className={haederLabel}>am:</div>
+        <div className={styles.headerRow}>
+          <div className={styles.haederLabel}>am:</div>
           <div>{am}</div>
         </div>
         <Paper
           square
-          className={paper}
+          className={styles.paper}
         >
           <Table
             size="small"
-            className={table}
+            className={styles.table}
           >
             <TableHead>
               <TableRow>

@@ -15,7 +15,7 @@ import { constants } from '../../../../../../../utils/constants.js'
 import { zaehlungSort } from '../../../../../../../utils/zaehlungSort.js'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 
-import { titleRow, title, fieldClass, buttons } from './PrognoseMenu.module.css'
+import styles from './PrognoseMenu.module.css'
 
 export const PrognoseMenu = observer(
   ({ onClosePrognosis, anchorEl, setAnchorEl, teilzaehlung }) => {
@@ -134,8 +134,8 @@ export const PrognoseMenu = observer(
           open={Boolean(anchorEl)}
           onClose={onClosePrognosis}
         >
-          <div className={titleRow}>
-            <div className={title}>Bedarf für diese Teil-Zählung:</div>
+          <div className={styles.titleRow}>
+            <div className={styles.title}>Bedarf für diese Teil-Zählung:</div>
             <div>
               <IconButton
                 aria-label="Anleitung öffnen"
@@ -147,7 +147,7 @@ export const PrognoseMenu = observer(
               </IconButton>
             </div>
           </div>
-          <div className={fieldClass}>
+          <div className={styles.fieldClass}>
             <TextField
               key="jahr"
               name="jahr"
@@ -159,7 +159,7 @@ export const PrognoseMenu = observer(
               autoFocus
             />
           </div>
-          <div className={fieldClass}>
+          <div className={styles.fieldClass}>
             <TextField
               key="anzahl_auspflanzbereit"
               name="anzahl_auspflanzbereit"
@@ -170,7 +170,7 @@ export const PrognoseMenu = observer(
               type="number"
             />
           </div>
-          <div className={buttons}>
+          <div className={styles.buttons}>
             <Button
               onClick={onClickAbbrechen}
               color="inherit"
