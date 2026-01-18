@@ -20,18 +20,7 @@ import { PrognoseMenu } from './PrognoseMenu.jsx'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { exists } from '../../../../../../../utils/exists.js'
 
-import {
-  container,
-  teilkulturClass,
-  anzahl,
-  other,
-  auspflanzbereit,
-  last,
-  caseConflictTitle,
-  rev,
-  conflictListContainer,
-  deletedContainer,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const TeilzaehlungForm = observer(
   ({
@@ -182,14 +171,14 @@ export const TeilzaehlungForm = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
+        <div className={styles.container}>
           {(activeConflict || showHistory) && (
-            <h4 className={caseConflictTitle}>
-              Aktuelle Version<span className={rev}>{row._rev}</span>
+            <h4 className={styles.caseConflictTitle}>
+              Aktuelle Version<span className={styles.rev}>{row._rev}</span>
             </h4>
           )}
           {showDeleted && (
-            <div className={deletedContainer}>
+            <div className={styles.deletedContainer}>
               <Checkbox2States
                 key={`${row.id}_deleted`}
                 label="gelöscht"
@@ -201,7 +190,7 @@ export const TeilzaehlungForm = observer(
             </div>
           )}
           {tk && tz_teilkultur_id && (
-            <div className={teilkulturClass}>
+            <div className={styles.teilkulturClass}>
               <SelectCreatable
                 key={`${row.id}${row.teilkultur_id}teilkultur_id`}
                 row={row}
@@ -213,7 +202,7 @@ export const TeilzaehlungForm = observer(
               />
             </div>
           )}
-          <div className={anzahl}>
+          <div className={styles.anzahl}>
             <TextField
               key={`${row.id}anzahl_pflanzen`}
               labelWeight={700}
@@ -225,7 +214,7 @@ export const TeilzaehlungForm = observer(
               type="number"
             />
           </div>
-          <div className={anzahl}>
+          <div className={styles.anzahl}>
             <TextField
               key={`${row.id}anzahl_auspflanzbereit`}
               name="anzahl_auspflanzbereit"
@@ -236,7 +225,7 @@ export const TeilzaehlungForm = observer(
               type="number"
             />
           </div>
-          <div className={anzahl}>
+          <div className={styles.anzahl}>
             <TextField
               key={`${row.id}anzahl_mutterpflanzen`}
               name="anzahl_mutterpflanzen"
@@ -247,7 +236,7 @@ export const TeilzaehlungForm = observer(
               type="number"
             />
           </div>
-          <div className={anzahl}>
+          <div className={styles.anzahl}>
             <TextFieldNonUpdatable
               key={`${row.id}anzahl_jungpflanzen`}
               label="Anzahl Jungpflanzen"
@@ -272,7 +261,7 @@ export const TeilzaehlungForm = observer(
             </div>
           )}
           {tz_auspflanzbereit_beschreibung && (
-            <div className={auspflanzbereit}>
+            <div className={styles.auspflanzbereit}>
               <TextField
                 key={`${row.id}auspflanzbereit_beschreibung`}
                 name="auspflanzbereit_beschreibung"
@@ -286,7 +275,7 @@ export const TeilzaehlungForm = observer(
             </div>
           )}
           {tz_bemerkungen && (
-            <div className={last}>
+            <div className={styles.last}>
               <TextField
                 key={`${row.id}bemerkungen`}
                 name="bemerkungen"
@@ -335,7 +324,7 @@ export const TeilzaehlungForm = observer(
             )}
           </div>
           {online && row?._conflicts?.map && (
-            <div className={conflictListContainer}>
+            <div className={styles.conflictListContainer}>
               <ConflictList
                 conflicts={row._conflicts}
                 activeConflict={activeConflict}
