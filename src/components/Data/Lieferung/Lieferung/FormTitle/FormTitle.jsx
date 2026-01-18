@@ -14,11 +14,7 @@ import { Menu } from '../../../../shared/Menu.jsx'
 import UpSvg from '../../../../../svg/to_up.svg?react'
 import KuDownSvg from '../../../../../svg/to_ku_down.svg?react'
 
-import {
-  container,
-  title,
-  symbols,
-} from '../../../Art/FormTitle/FormTitle.module.css'
+import artStyles from '../../../Art/FormTitle/FormTitle.module.css'
 
 export const LieferungFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
@@ -44,11 +40,11 @@ export const LieferungFormTitle = observer(
 
     return (
       <div
-        className={container}
+        className={artStyles.container}
         ref={ref}
       >
-        <div className={title}>Lieferung</div>
-        <div className={symbols}>
+        <div className={artStyles.title}>Lieferung</div>
+        <div className={artStyles.symbols}>
           <IconButton
             title="Zur Liste"
             onClick={onClickUp}
