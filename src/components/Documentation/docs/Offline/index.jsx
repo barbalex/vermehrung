@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 
-import { dokuDate } from '../../index.module.css'
+import dokuStyles from '../../index.module.css'
 import one from './001.png'
 import two from './002.png'
 import three from './003.png'
@@ -12,7 +12,7 @@ import seven from './007.png'
 export const Offline = () => (
   <>
     <h1>Offline arbeiten</h1>
-    <p className={dokuDate}>29.01.2021</p>
+    <p className={dokuStyles.dokuDate}>29.01.2021</p>
     <h3>Wieso?</h3>
     <p>
       Nicht jeder Garten verfügt über WLAN. Nicht jedes Eingabegerät verfügt

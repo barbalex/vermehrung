@@ -1,13 +1,13 @@
 import { Link } from 'react-router'
 
-import { dokuDate } from '../../index.module.css'
+import dokuStyles from '../../index.module.css'
 import one from './001_button.png'
 import two from './002_version.png'
 
 export const History = () => (
   <>
     <h1>Daten-Historie</h1>
-    <p className={dokuDate}>11.09.2020</p>
+    <p className={dokuStyles.dokuDate}>11.09.2020</p>
     <p>
       Die Historisierung zeigt alle bisherigen Versionen eines Datensatzes an.
       Und sie ermöglicht, jeden dieser Zustände wieder herzustellen.

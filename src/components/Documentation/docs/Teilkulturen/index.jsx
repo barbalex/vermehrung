@@ -1,13 +1,13 @@
 import { Link } from 'react-router'
 
-import { dokuDate } from '../../index.module.css'
+import dokuStyles from '../../index.module.css'
 import teilkulturOption from './teilkultur_option.gif'
 import teilkulturNew from './teilkultur_new.gif'
 
 export const Teilkulturen = () => (
   <>
     <h1>Teil-Kulturen</h1>
-    <p className={dokuDate}>20.09.2019</p>
+    <p className={dokuStyles.dokuDate}>20.09.2019</p>
     <p>
       Grössere Gärten oder gärtnerische Betriebe organisieren ihre Kulturen oft
       in Untereinheiten, wie zum Beispiel: &quot;Beete&quot;,

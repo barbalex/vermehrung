@@ -1,10 +1,10 @@
-import { dokuDate } from '../../index.module.css'
+import dokuStyles from '../../index.module.css'
 import structure from './structure.png'
 
 export const Struktur = () => (
   <>
     <h1>Daten-Struktur</h1>
-    <p className={dokuDate}>20.01.2020</p>
+    <p className={dokuStyles.dokuDate}>20.01.2020</p>
     <p>
       <img
         src={structure}

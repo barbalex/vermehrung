@@ -1,10 +1,10 @@
-import { dokuDate } from '../../index.module.css'
+import dokuStyles from '../../index.module.css'
 import installieren from './installieren.webp'
 
 export const Pwa = () => (
   <>
     <h1>Progressive Web App</h1>
-    <p className={dokuDate}>22.10.2020</p>
+    <p className={dokuStyles.dokuDate}>22.10.2020</p>
     <p>
       vermehrung.ch ist eine{' '}
       <a href="https://developers.google.com/web/progressive-web-apps">
