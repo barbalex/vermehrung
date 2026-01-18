@@ -7,7 +7,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 import { toStringIfPossible } from '../../utils/toStringIfPossible.js'
-import { container, formControl, formLabel, radio } from './JesNo.module.css'
+import styles from './JesNo.module.css'
 
 const dataSource = [
   {
@@ -76,17 +76,17 @@ export const JesNo = ({
     : ''
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <FormControl
         component="fieldset"
         error={!!error}
         aria-describedby={`${label}ErrorText`}
         variant="standard"
-        className={formControl}
+        className={styles.formControl}
       >
         <FormLabel
           component="legend"
-          className={formLabel}
+          className={styles.formLabel}
         >
           {label}
         </FormLabel>
@@ -102,7 +102,7 @@ export const JesNo = ({
               control={
                 <Radio
                   color="primary"
-                  className={radio}
+                  className={styles.radio}
                 />
               }
               label={e.label}

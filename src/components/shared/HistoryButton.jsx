@@ -9,7 +9,7 @@ import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 import { useObservable } from '../../utils/useObservable.js'
 
-import { iconButton } from './HistoryButton.module.css'
+import styles from './HistoryButton.module.css'
 
 export const HistoryButton = observer(
   ({ asMenu, id, showHistory, setShowHistory, table }) => {
@@ -68,7 +68,7 @@ export const HistoryButton = observer(
           onClick={show}
           disabled={disabled}
           style={style}
-          className={iconButton}
+          className={styles.iconButton}
         >
           <FaHistory />
         </IconButton>

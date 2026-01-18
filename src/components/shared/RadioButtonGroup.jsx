@@ -9,7 +9,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 
 import { toStringIfPossible } from '../../utils/toStringIfPossible.js'
 
-import { formControl, formLabel, radio } from './RadioButtonGroup.module.css'
+import styles from './RadioButtonGroup.module.css'
 
 export const RadioButtonGroup = ({
   value: valuePassed,
@@ -78,11 +78,11 @@ export const RadioButtonGroup = ({
       error={!!error}
       aria-describedby={`${label}ErrorText`}
       variant="standard"
-      className={formControl}
+      className={styles.formControl}
     >
       <FormLabel
         component="legend"
-        className={formLabel}
+        className={styles.formLabel}
       >
         {label}
       </FormLabel>
@@ -98,7 +98,7 @@ export const RadioButtonGroup = ({
             control={
               <Radio
                 color="primary"
-                className={radio}
+                className={styles.radio}
               />
             }
             label={e.label}
