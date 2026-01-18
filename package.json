@@ -20,8 +20,6 @@
   "dependencies": {
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
-    "@fontsource/roboto": "5.2.9",
-    "@fontsource/roboto-mono": "5.2.8",
     "@mui/material": "7.3.7",
     "@nozbe/watermelondb": "0.28.0",
     "@urql/exchange-persisted": "5.0.1",

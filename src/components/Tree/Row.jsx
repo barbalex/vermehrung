@@ -181,7 +181,10 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
             node={node}
             onClick={onClickNode}
             style={{
-              fontFamily: node?.mono ? 'Roboto Mono' : 'Roboto',
+              fontFamily:
+                node?.mono ?
+                  'ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace'
+                : 'system-ui',
               fontSize,
               fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
             }}
