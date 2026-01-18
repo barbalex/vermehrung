@@ -9,7 +9,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { TeilkulturHistoryRow as Row } from './Row.jsx'
 
-import { container, errorContainer } from '../../Art/History/index.module.css'
+import artStyles from '../../Art/History/index.module.css'
 
 const teilkulturRevQuery = gql`
   query teilkulturRevForHistoryQuery($rev: [String!]) {
@@ -60,11 +60,11 @@ export const TeilkulturHistory = observer(
     }
 
     if (error) {
-      return <div className={errorContainer}>{error.message}</div>
+      return <div className={artStyles.errorContainer}>{error.message}</div>
     }
 
     return (
-      <div className={container}>
+      <div className={artStyles.container}>
         <Slider {...sliderSettings}>
           {revRows.map((r) => (
             <Row
