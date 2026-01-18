@@ -10,7 +10,7 @@ import { LieferungTitleChooser as FormTitle } from './FormTitle/index.jsx'
 import { LierferungForm as Form } from './Form/index.jsx'
 import { LieferungHistory as History } from './History/index.jsx'
 
-import { container, splitPaneContainer } from '../../Art/index.module.css'
+import artStyles from '../../Art/index.module.css'
 
 export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
   const store = useContext(MobxStoreContext)
@@ -37,7 +37,7 @@ export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
   return (
     <ErrorBoundary>
       <div
-        className={container}
+        className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
         <FormTitle
@@ -47,7 +47,7 @@ export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
           showHistory={showHistory}
           setShowHistory={setShowHistory}
         />
-        <div className={splitPaneContainer}>
+        <div className={artStyles.splitPaneContainer}>
           <Allotment key={`${activeConflict}/${showHistory}`}>
             <Form
               showFilter={showFilter}

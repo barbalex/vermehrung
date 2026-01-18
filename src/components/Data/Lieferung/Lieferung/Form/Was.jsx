@@ -12,7 +12,7 @@ import { TextField } from '../../../../shared/TextField.jsx'
 import { constants } from '../../../../../utils/constants.js'
 import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.js'
 
-import { title, titleRow, fieldRow } from './Wann.module.css'
+import wannStyles from './Wann.module.css'
 
 export const LieferungWas = observer(
   ({ showFilter, row, saveToDb, ifNeeded }) => {
@@ -76,12 +76,12 @@ export const LieferungWas = observer(
     return (
       <>
         <div
-          className={titleRow}
+          className={wannStyles.titleRow}
           style={{
             backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
           }}
         >
-          <div className={title}>was</div>
+          <div className={wannStyles.title}>was</div>
         </div>
         {ifNeeded('art_id') && (
           <Select
@@ -95,7 +95,7 @@ export const LieferungWas = observer(
             error={errors?.lieferung?.art_id}
           />
         )}
-        <div className={fieldRow}>
+        <div className={wannStyles.fieldRow}>
           {ifNeeded('anzahl_pflanzen') && (
             <TextField
               key={`${row.id}anzahl_pflanzen`}
@@ -119,7 +119,7 @@ export const LieferungWas = observer(
             />
           )}
         </div>
-        <div className={fieldRow}>
+        <div className={wannStyles.fieldRow}>
           {ifNeeded('gramm_samen') && (
             <TextField
               key={`${row.id}gramm_samen`}
@@ -144,7 +144,7 @@ export const LieferungWas = observer(
           )}
         </div>
         {ifNeeded('von_anzahl_individuen') && (
-          <div className={fieldRow}>
+          <div className={wannStyles.fieldRow}>
             <TextField
               key={`${row.id}von_anzahl_individuen`}
               name="von_anzahl_individuen"
