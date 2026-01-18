@@ -9,15 +9,7 @@ import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
 import { createMessageFunctions } from './createMessageFunctions.js'
 import { constants } from '../../../../../../utils/constants.js'
 
-import {
-  container,
-  paper,
-  title,
-  a,
-  row,
-  resultTitleClass,
-  formControl,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Qk = observer(({ artId, qkChoosens }) => {
   const store = useContext(MobxStoreContext)
@@ -69,11 +61,11 @@ export const Qk = observer(({ artId, qkChoosens }) => {
     : 'rechne...'
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <FormControl
         fullWidth
         variant="standard"
-        className={formControl}
+        className={styles.formControl}>
       >
         <InputLabel
           htmlFor="filter"
@@ -88,19 +80,19 @@ export const Qk = observer(({ artId, qkChoosens }) => {
           spellCheck={false}
         />
       </FormControl>
-      <div className={resultTitleClass}>{resultTitle}</div>
+      <div className={styles.resultTitleClass}>{resultTitle}</div>
       {messageGroupsFiltered.map((messageGroup) => (
         <Paper
           key={messageGroup.title}
           elevation={2}
-          className={paper}
+          className={styles.paper}
         >
           <div
-            className={title}
+            className={styles.title}
           >{`${messageGroup.title} (${messageGroup.messages.length})`}</div>
           {messageGroup.messages.map((m, i) => (
             <div
-              className={row}
+              className={styles.row}
               key={`${m.text}Index${i}`}
             >
               <p
@@ -110,7 +102,7 @@ export const Qk = observer(({ artId, qkChoosens }) => {
                   )
                 }
                 title="in neuem Fenster öffnen"
-                className={a}
+                className={styles.a}
               >
                 {m.text}
               </p>
