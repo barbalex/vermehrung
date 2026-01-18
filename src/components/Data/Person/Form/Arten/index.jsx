@@ -14,7 +14,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.js'
 import { avsSortByArt } from '../../../../../utils/avsSortByArt.js'
 
-import { titleRow, title, avsClass, motionDiv } from './index.module.css'
+import styles from './index.module.css'
 
 export const PersonArten = observer(({ person }) => {
   const store = useContext(MobxStoreContext)
@@ -97,9 +97,9 @@ export const PersonArten = observer(({ person }) => {
       <section
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
-        className={titleRow}
+        className={styles.titleRow}
       >
-        <div className={title}>{`Mitarbeitend bei ${avs.length} Arten`}</div>
+        <div className={styles.title}>{`Mitarbeitend bei ${avs.length} Arten`}</div>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -116,11 +116,11 @@ export const PersonArten = observer(({ person }) => {
       <motion.div
         animate={anim}
         transition={{ type: 'just', duration: 0.2 }}
-        className={motionDiv}
+        className={styles.motionDiv}
       >
         {open && (
           <>
-            <div className={avsClass}>
+            <div className={styles.avsClass}>
               {avs.map((av, index) => (
                 <Art
                   key={`${av.person_id}/${av.art_id}/${index}`}
