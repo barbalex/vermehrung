@@ -1,19 +1,13 @@
 import MenuItem from '@mui/material/MenuItem'
 
-import {
-  outerContainer,
-  container,
-  filtered,
-  total,
-  menuItem,
-} from './FilterNumbers.module.css'
+import styles from './FilterNumbers.module.css'
 
 export const FilterNumbers = ({ filteredCount, totalCount, asMenu }) => {
   if (asMenu) {
     return (
       <MenuItem
         dense
-        className={menuItem}
+        className={styles.menuItem}
       >
         <span title="gefilterte Anzahl">{filteredCount}</span>/
         <span title="totale Anzahl">{totalCount}</span>
@@ -22,16 +16,16 @@ export const FilterNumbers = ({ filteredCount, totalCount, asMenu }) => {
   }
 
   return (
-    <div className={outerContainer}>
-      <div className={container}>
+    <div className={styles.outerContainer}>
+      <div className={styles.container}>
         <div
-          className={filtered}
+          className={styles.filtered}
           title="gefilterte Anzahl"
         >
           {filteredCount}
         </div>
         <div
-          className={total}
+          className={styles.total}
           title="totale Anzahl"
         >
           {totalCount}

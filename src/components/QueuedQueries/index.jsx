@@ -10,17 +10,7 @@ import { MobxStoreContext } from '../../mobxStoreContext.js'
 import { QueuedQuery } from './QueuedQuery.jsx'
 import { constants } from '../../utils/constants.js'
 
-import {
-  titleRow,
-  title,
-  noOpsContainer,
-  container,
-  outerContainer,
-  queriesContainer,
-  heading,
-  revertHeading,
-  closeIcon,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const QueuedQueries = observer(() => {
   const store = useContext(MobxStoreContext)
@@ -40,9 +30,9 @@ export const QueuedQueries = observer(() => {
 
   if (!queuedQueries.size) {
     return (
-      <div className={container}>
-        <div className={titleRow}>
-          <h3 className={title}>Ausstehende Operationen</h3>
+      <div className={styles.container}>
+        <div className={styles.titleRow}>
+          <h3 className={styles.title}>Ausstehende Operationen</h3>
           <div>
             <IconButton
               aria-label={`Dokumentation zu "offline arbeiten" lesen`}
@@ -56,13 +46,13 @@ export const QueuedQueries = observer(() => {
               title="schliessen"
               aria-label="schliessen"
               onClick={onClickCloseIcon}
-              className={closeIcon}
+              className={styles.closeIcon}
             >
               <FaTimes />
             </IconButton>
           </div>
         </div>
-        <div className={noOpsContainer}>
+        <div className={styles.noOpsContainer}>
           Es gibt momentan keine pendenten Operationen
         </div>
       </div>
@@ -71,9 +61,9 @@ export const QueuedQueries = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <div className={titleRow}>
-          <h3 className={title}>Ausstehende Operationen</h3>
+      <div className={styles.container}>
+        <div className={styles.titleRow}>
+          <h3 className={styles.title}>Ausstehende Operationen</h3>
           <div>
             <IconButton
               aria-label="Anleitung öffnen"
@@ -87,21 +77,21 @@ export const QueuedQueries = observer(() => {
               title="schliessen"
               aria-label="schliessen"
               onClick={onClickCloseIcon}
-              className={closeIcon}
+              className={styles.closeIcon}
             >
               <FaTimes />
             </IconButton>
           </div>
         </div>
-        <div className={outerContainer}>
-          <div className={queriesContainer}>
-            <div className={heading}>Zeit</div>
-            <div className={heading}>Tabelle</div>
-            <div className={heading}>ID</div>
-            <div className={heading}>Feld / Operation</div>
-            <div className={heading}>vorher</div>
-            <div className={heading}>nachher</div>
-            <div className={revertHeading}>widerrufen</div>
+        <div className={styles.outerContainer}>
+          <div className={styles.queriesContainer}>
+            <div className={styles.heading}>Zeit</div>
+            <div className={styles.heading}>Tabelle</div>
+            <div className={styles.heading}>ID</div>
+            <div className={styles.heading}>Feld / Operation</div>
+            <div className={styles.heading}>vorher</div>
+            <div className={styles.heading}>nachher</div>
+            <div className={styles.revertHeading}>widerrufen</div>
             {[...queuedQueries.values()].reverse().map((qq, i) => (
               <QueuedQuery
                 key={qq.id}

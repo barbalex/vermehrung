@@ -4,12 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../mobxStoreContext.js'
 
-import {
-  container,
-  titleClass,
-  symbols,
-  filterNumbers,
-} from './FormTitle.module.css'
+import styles from './FormTitle.module.css'
 
 export const FormTitle = observer(
   ({ title, table, rowsLength, rowsFilteredLength, filter }) => {
@@ -19,13 +14,13 @@ export const FormTitle = observer(
     const titleText = filter ? `${title} Filter` : title
 
     return (
-      <div className={container}>
-        <div className={titleClass}>{titleText}</div>
+      <div className={styles.container}>
+        <div className={styles.titleClass}>{titleText}</div>
         {table && (
-          <div className={symbols}>
+          <div className={styles.symbols}>
             {(show || filtered) && (
               <div
-                className={filterNumbers}
+                className={styles.filterNumbers}
                 title="Anzahl gefiltert/total"
               >{`${rowsFilteredLength}/${rowsLength}`}</div>
             )}
