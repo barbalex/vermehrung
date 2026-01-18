@@ -17,14 +17,7 @@ import { artsSortedFromArts } from '../../../utils/artsSortedFromArts.js'
 import { constants } from '../../../utils/constants.js'
 import { ApFilter } from '../../shared/ApFilter.jsx'
 
-import {
-  container,
-  titleContainer,
-  title,
-  titleSymbols,
-  fieldsContainer,
-  apFilterContainer,
-} from './index.module.css'
+import artStyles from './index.module.css'
 
 export const Arten = observer(({ filter: showFilter }) => {
   const store = useContext(MobxStoreContext)
@@ -79,7 +72,7 @@ export const Arten = observer(({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <div
-        className={container}
+        className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
         {showFilter ?
@@ -89,10 +82,10 @@ export const Arten = observer(({ filter: showFilter }) => {
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={titleContainer}>
-            <div className={title}>Arten</div>
-            <div className={titleSymbols}>
-              <div className={apFilterContainer}>
+        : <div className={artStyles.titleContainer}>
+            <div className={artStyles.title}>Arten</div>
+            <div className={artStyles.titleSymbols}>
+              <div className={artStyles.apFilterContainer}>
                 <ApFilter />
               </div>
               <IconButton
@@ -117,7 +110,7 @@ export const Arten = observer(({ filter: showFilter }) => {
             </div>
           </div>
         }
-        <div className={fieldsContainer}>
+        <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
             rowCount={arts.length}
