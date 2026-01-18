@@ -1,11 +1,11 @@
 import { Link } from 'react-router'
 
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const SammelLieferungen = () => (
   <>
     <h1>Sammel-Lieferungen</h1>
-    <p className={dokuDate}>04.10.2019</p>
+    <p className={dokuStyles.dokuDate}>04.10.2019</p>
     <h3>1 Ziele</h3>
     <ul>
       <li>

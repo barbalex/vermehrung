@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import dokuStyles from '../index.module.css'
 
 export const Schnittstellen = () => (
   <>
     <h1>Schnittstellen</h1>
-    <p className={dokuDate}>15.06.2019</p>
+    <p className={dokuStyles.dokuDate}>15.06.2019</p>
     <p>
       Brauchen Sie in anderen Anwendungen Zugriff auf Ihre Daten in
       vermehrung.ch? Kein Problem: vermehrung.ch verfügt über eine öffentliche{' '}
