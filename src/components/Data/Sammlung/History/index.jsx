@@ -9,7 +9,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { SammlungHistoryRow as Row } from './Row.jsx'
 
-import { container, errorContainer } from '../../Art/History/index.module.css'
+import artStyles from '../../Art/History/index.module.css'
 
 const sammlungRevQuery = gql`
   query sammlungRevForHistoryQuery($rev: [String!]) {
@@ -66,11 +66,11 @@ export const SammlungHistory = observer(
     }
 
     if (error) {
-      return <div className={errorContainer}>{error.message}</div>
+      return <div className={artStyles.errorContainer}>{error.message}</div>
     }
 
     return (
-      <div className={container}>
+      <div className={artStyles.container}>
         <Slider {...sliderSettings}>
           {revRows.map((r) => (
             <Row
