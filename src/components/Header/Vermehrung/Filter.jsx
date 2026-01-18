@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxStoreContext } from '../../../mobxStoreContext.js'
 
-import { iconDiv } from './Filter.module.css'
+import { iconDiv, button, buttonActive } from './Filter.module.css'
 
 // tried to convert this to css modules
 // but mui somehow prevents the border of the button / iconButton from showing when showFilter is true
@@ -67,7 +67,9 @@ export const HeaderFilter = observer(() => {
   return (
     <StyledButton
       variant="outlined"
+      variant={showFilter ? 'outlined' : 'text'}
       onClick={onClickFilter}
+      className={`${button} ${showFilter ? buttonActive : ''}`}
     >
       Filter
       {filtered && (
