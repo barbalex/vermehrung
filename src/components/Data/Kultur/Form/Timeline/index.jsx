@@ -26,7 +26,7 @@ import { exists } from '../../../../../utils/exists.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { buildKulturTimelineData as buildData } from './buildData.js'
 
-import { container, titleRow, title, content } from './index.module.css'
+import styles from './index.module.css'
 
 export const KulturTimeline = ({ row }) => {
   const { width, ref } = useResizeDetector()
@@ -82,25 +82,25 @@ export const KulturTimeline = ({ row }) => {
   return (
     <section
       ref={ref}
-      className={container}
+      className={styles.container}
     >
       {!allData ?
         null
       : !row || !allData.length ?
         <ErrorBoundary>
-          <div className={titleRow}>
-            <div className={title}>Zeit-Achse</div>
-            <div className={content}>Sorry, keine Daten verfügbar</div>
+          <div className={styles.titleRow}>
+            <div className={styles.title}>Zeit-Achse</div>
+            <div className={styles.content}>Sorry, keine Daten verfügbar</div>
           </div>
         </ErrorBoundary>
       : <ErrorBoundary>
           <div
-            className={titleRow}
+            className={styles.titleRow}
             onClick={onClickToggle}
             title={open ? 'schliessen' : 'öffnen'}
             style={{ cursor: 'pointer' }}
           >
-            <div className={title}>Zeit-Achse</div>
+            <div className={styles.title}>Zeit-Achse</div>
             <div>
               <IconButton
                 aria-label="Anleitung öffnen"
