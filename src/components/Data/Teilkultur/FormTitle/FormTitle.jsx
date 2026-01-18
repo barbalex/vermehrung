@@ -13,11 +13,7 @@ import { HistoryButton } from '../../../shared/HistoryButton.jsx'
 import { Menu } from '../../../shared/Menu.jsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 
-import {
-  container,
-  title,
-  symbols,
-} from '../../Art/FormTitle/FormTitle.module.css'
+import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
 export const TeilkulturFormTitle = observer(
   ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
@@ -33,11 +29,11 @@ export const TeilkulturFormTitle = observer(
 
     return (
       <div
-        className={container}
+        className={artStyles.container}
         ref={ref}
       >
-        <div className={title}>Teilkultur</div>
-        <div className={symbols}>
+        <div className={artStyles.title}>Teilkultur</div>
+        <div className={artStyles.symbols}>
           <IconButton
             title="Zur Liste"
             onClick={onClickUp}

@@ -7,7 +7,7 @@ import { eventSort } from '../../../../../utils/eventSort.js'
 import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { TeilkulturEventRow as Row } from './Row.jsx'
 
-import { titleRow, title, rows } from './index.module.css'
+import styles from './index.module.css'
 
 export const TeilkulturEvents = observer(({ teilkultur }) => {
   const store = useContext(MobxStoreContext)
@@ -36,10 +36,10 @@ export const TeilkulturEvents = observer(({ teilkultur }) => {
 
   return (
     <ErrorBoundary>
-      <section className={titleRow}>
-        <div className={title}>Events</div>
+      <section className={styles.titleRow}>
+        <div className={styles.title}>Events</div>
       </section>
-      <div className={rows}>
+      <div className={styles.rows}>
         {events.map((ev, i) => (
           <Row
             key={ev.id}
