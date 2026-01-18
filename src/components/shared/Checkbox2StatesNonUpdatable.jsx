@@ -5,7 +5,7 @@ import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
-import { container, formLabel, checkbox } from './Checkbox2States.module.css'
+import checkboxStyles from './Checkbox2States.module.css'
 
 export const Checkbox2StatesNonUpdatable = ({
   label,
@@ -28,7 +28,7 @@ export const Checkbox2StatesNonUpdatable = ({
   const checked = stateValue === true
 
   return (
-    <div className={container}>
+    <div className={checkboxStyles.container}>
       <FormControl
         component="fieldset"
         error={!!message}
@@ -37,7 +37,7 @@ export const Checkbox2StatesNonUpdatable = ({
       >
         <FormLabel
           component="legend"
-          className={formLabel}
+          className={checkboxStyles.formLabel}
         >
           {label}
         </FormLabel>
@@ -46,7 +46,7 @@ export const Checkbox2StatesNonUpdatable = ({
           onClick={onClickButton}
           color="primary"
           checked={checked}
-          className={checkbox}
+          className={checkboxStyles.checkbox}
         />
         {!!message && (
           <FormHelperText id={`${label}MessageText`}>{message}</FormHelperText>

@@ -5,8 +5,8 @@ import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
-import { container, formLabel, checkbox } from './Checkbox2States.module.css'
-import { aside, asideCommentClass } from './Checkbox3States.module.css'
+import checkboxStyles from './Checkbox2States.module.css'
+import styles from './Checkbox3States.module.css'
 
 const Checkbox3States = ({
   label,
@@ -47,7 +47,7 @@ const Checkbox3States = ({
     : `(nach nächstem Klick 'Ja')`
 
   return (
-    <div className={container}>
+    <div className={checkboxStyles.container}>
       <FormControl
         component="fieldset"
         error={!!error}
@@ -56,7 +56,7 @@ const Checkbox3States = ({
       >
         <FormLabel
           component="legend"
-          className={formLabel}
+          className={checkboxStyles.formLabel}
         >
           {label}
         </FormLabel>
@@ -66,11 +66,11 @@ const Checkbox3States = ({
           color="primary"
           checked={checked}
           indeterminate={indeterminate}
-          className={checkbox}
+          className={checkboxStyles.checkbox}
         />
-        <div className={aside}>
+        <div className={styles.aside}>
           {asideText}
-          <span className={asideCommentClass}>{asideComment}</span>
+          <span className={styles.asideCommentClass}>{asideComment}</span>
         </div>
         {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
