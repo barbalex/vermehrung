@@ -78,7 +78,7 @@ export const Filter = observer(() => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <div className={styles.styles.titleRow}>
+        <div className={styles.titleRow}>
           <div
             className={styles.title}
             data-id="form-title"
@@ -92,7 +92,7 @@ export const Filter = observer(() => {
             textColor="primary"
             variant="scrollable"
             scrollButtons="auto"
-            className={styles.styles.tabs}
+            className={styles.tabs}
           >
             <Tab
               className={styles.tab}
