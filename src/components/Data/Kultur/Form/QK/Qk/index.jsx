@@ -66,7 +66,7 @@ export const KulturQk = observer(({ kultur, qkChoosens }) => {
       <FormControl
         fullWidth
         variant="standard"
-        className={styles.formControl}>
+        className={styles.formControl}
       >
         <InputLabel
           htmlFor="filter"
