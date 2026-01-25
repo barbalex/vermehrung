@@ -65,7 +65,7 @@ export const Qk = observer(({ artId, qkChoosens }) => {
       <FormControl
         fullWidth
         variant="standard"
-        className={styles.formControl}>
+        className={styles.formControl}
       >
         <InputLabel
           htmlFor="filter"
