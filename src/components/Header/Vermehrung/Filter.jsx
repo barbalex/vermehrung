@@ -66,7 +66,6 @@ export const HeaderFilter = observer(() => {
 
   return (
     <StyledButton
-      variant="outlined"
       variant={showFilter ? 'outlined' : 'text'}
       onClick={onClickFilter}
       className={`${styles.button} ${showFilter ? styles.buttonActive : ''}`}
