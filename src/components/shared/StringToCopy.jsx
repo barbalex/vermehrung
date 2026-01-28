@@ -1,6 +1,5 @@
 // seems not in use
 import { useState } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@mui/material/Button'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
@@ -24,17 +23,12 @@ export const StringToCopy = ({ text, label }) => {
         <div className={styles.stringToCopyContainer}>
           <div className={styles.guidContainer}>{text}</div>
           <div className={styles.copyButtonContainer}>
-            <CopyToClipboard
-              text={text}
-              onCopy={onCopy}
+            <Button
+              color="primary"
+              onClick={onCopy}
             >
-              <Button
-                color="primary"
-                onCopy={onCopy}
-              >
-                {copied ? `${label} kopiert` : `${label} kopieren`}
-              </Button>
-            </CopyToClipboard>
+              {copied ? `${label} kopiert` : `${label} kopieren`}
+            </Button>
           </div>
         </div>
       </div>
