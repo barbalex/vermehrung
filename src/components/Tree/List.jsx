@@ -28,16 +28,22 @@ export const TreeList = observer(
     // when loading on url, lastActiveNodeArray may not be set
     const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
     const nodeIndex = nodes.findIndex((node) => isEqual(node.url, urlToFocus))
+    
+    // Only scroll once on initial mount, not on every click
+    const hasScrolledRef = useRef(false)
+    const initialIndexRef = useRef(nodeIndex && nodeIndex > -1 ? nodeIndex : 0)
+    
     useEffect(() => {
-      if (nodeIndex > -1) {
-        listRef.current?.scrollToItem(nodeIndex)
+      if (!hasScrolledRef.current && nodeIndex > -1) {
+        hasScrolledRef.current = true
       }
-    }, [listRef, activeNode?.label, aNA, nodes, nodeIndex])
+    }, [nodeIndex])
 
     // using Virtuoso instead of react-virtualized because of white-space: normal on the tree rows
     // react-virtualized only supports predefined heights
     return (
       <Virtuoso
+        ref={listRef}
         style={{
           height: height - 5,
           width: width,
@@ -45,7 +51,7 @@ export const TreeList = observer(
           scrollbarWidth: 'thin',
         }}
         totalCount={nodes.length}
-        initialTopMostItemIndex={nodeIndex && nodeIndex > -1 ? nodeIndex : 0}
+        initialTopMostItemIndex={initialIndexRef.current}
         itemContent={(index) => (
           <TreeRow
             key={index}
