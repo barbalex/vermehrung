@@ -39,8 +39,8 @@ export const TreeList = observer(
     return (
       <Virtuoso
         style={{
-          height: `${height - 5}px`,
-          width: `${width}px`,
+          height: height - 5,
+          width: width,
           marginTop: 5,
           scrollbarWidth: 'thin',
         }}
