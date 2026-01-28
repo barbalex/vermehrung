@@ -1,6 +1,5 @@
 // seems not in use
 import { useState } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@mui/material/Button'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
@@ -10,6 +9,7 @@ import styles from './StringToCopyOnlyButton.module.css'
 export const StringToCopyOnlyButton = ({ text, label }) => {
   const [copied, setCopied] = useState(false)
   const onCopy = () => {
+    navigator.clipboard.writeText(text)
     setCopied(true)
     // can fire after component was unmounted...
     setTimeout(() => {
@@ -20,17 +20,12 @@ export const StringToCopyOnlyButton = ({ text, label }) => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <CopyToClipboard
-          text={text}
-          onCopy={onCopy}
+        <Button
+          color="primary"
+          onClick={onCopy}
         >
-          <Button
-            color="primary"
-            onCopy={onCopy}
-          >
-            {copied ? `${label} kopiert` : `${label} kopieren`}
-          </Button>
-        </CopyToClipboard>
+          {copied ? `${label} kopiert` : `${label} kopieren`}
+        </Button>
       </div>
     </ErrorBoundary>
   )
