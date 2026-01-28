@@ -217,7 +217,7 @@ export const Tree = observer(() => {
         <ApFilterContainer />
         <Settings />
         <AutoSizer
-          ChildComponent={({ height, width }) => (
+          renderProp={({ height, width }) => (
             <List
               nodes={nodes}
               width={width}
