@@ -17,6 +17,7 @@
 
 .selectRow {
   display: flex;
+  flex-wrap: nowrap;
   > div {
     width: 100%;
   }
