@@ -57,7 +57,7 @@ export const StyledSelect = styled(SelectComponent)`
   .react-select__menu-list {
     height: 130px;
     height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
-    /* make it open over titlerow (which needs to have z-index 1 to hide text scolling below it)*/
+    /* make it open over title-row (which needs to have z-index 1 to hide text scrolling below it)*/
     z-index: 2;
   }
 `
@@ -103,7 +103,7 @@ export const Select = ({
   const optionsToUse = loading && valuePassed ? loadingOptions : options
   const selectValue =
     optionsToUse.find((o) => o.value === (valuePassed ?? '')) || emptyValue
-  const styles = {
+  const selectStyles = {
     option: (styles, { data }) => ({
       ...styles,
       ...(data.inaktiv ? { color: 'rgba(0,0,0,0.35)' } : {}),
@@ -137,7 +137,7 @@ export const Select = ({
           maxheight={maxHeight}
           classNamePrefix="react-select"
           nocaret={noCaret}
-          styles={styles}
+          styles={selectStyles}
           // using portal because sticky headers would otherwise cover the dropdown
           menuPortalTarget={document.getElementById('root')}
           aria-label={label ?? ''}
