@@ -2,7 +2,7 @@
 FROM node:slim
 RUN apt-get update && apt-get install -y dumb-init
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 # Create app directory
 WORKDIR /usr/src/auth_app
