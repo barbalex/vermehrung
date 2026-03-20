@@ -1,12 +1,18 @@
-import react from '@vitejs/plugin-react'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
+import babel from '@rolldown/plugin-babel'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgrPlugin from 'vite-plugin-svgr'
-// import babel from 'vite-plugin-babel'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   server: { port: 5175 },
+  // cssMinify is needed due to an error in vite:
+  // https://github.com/vitejs/vite/issues/21911#issuecomment-4097280874
+  // TODO: remove this and uninstall esbuild when the issue is fixed
+  build: {
+    cssMinify: 'esbuild',
+  },
   plugins: [
     svgrPlugin({
       svgrOptions: {
@@ -74,10 +80,10 @@ export default defineConfig({
       jsxImportSource: '@emotion/react',
       babel: {
         plugins: [
-          'babel-plugin-react-compiler',
           ['@babel/plugin-proposal-decorators', { legacy: true }],
           ['@babel/plugin-proposal-class-properties', { loose: true }],
         ],
+        presets: [reactCompilerPreset()],
       },
     }),
   ],
