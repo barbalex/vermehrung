@@ -7,6 +7,8 @@ import svgrPlugin from 'vite-plugin-svgr'
 // https://vitejs.dev/config/
 export default defineConfig({
   server: { port: 5175 },
+  // experimentalDecorators: true,
+  // emitDecoratorMetadata: true,
   // cssMinify is needed due to an error in vite:
   // https://github.com/vitejs/vite/issues/21911#issuecomment-4097280874
   // TODO: remove this and uninstall esbuild when the issue is fixed
@@ -78,13 +80,13 @@ export default defineConfig({
     }),
     react({
       jsxImportSource: '@emotion/react',
-      babel: {
-        plugins: [
-          ['@babel/plugin-proposal-decorators', { legacy: true }],
-          ['@babel/plugin-proposal-class-properties', { loose: true }],
-        ],
-        presets: [reactCompilerPreset()],
-      },
+    }),
+    babel({
+      presets: [reactCompilerPreset()],
+      plugins: [
+        ['@babel/plugin-proposal-decorators', { legacy: true }],
+        ['@babel/plugin-proposal-class-properties', { loose: true }],
+      ],
     }),
   ],
   css: {
