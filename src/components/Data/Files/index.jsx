@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import ImageGallery from 'react-image-gallery'
-import 'react-image-gallery/styles/css/image-gallery.css'
 import Button from '@mui/material/Button'
 import { v1 as uuidv1 } from 'uuid'
 import { of as $of } from 'rxjs'
