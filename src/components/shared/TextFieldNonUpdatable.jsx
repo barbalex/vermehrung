@@ -43,7 +43,7 @@ export const TextFieldNonUpdatable = ({
         id={label}
         value={value || value === 0 ? value : ''}
         onChange={onChange}
-        inputProps={inputProps}
+        slotProps={{ input: inputProps }}
       />
       {!!error && (
         <FormHelperText id={`${label}-helper`}>{error}</FormHelperText>
