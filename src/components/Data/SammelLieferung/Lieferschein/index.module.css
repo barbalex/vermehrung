@@ -36,6 +36,7 @@
   @media print {
     height: 100%;
     width: 100%;
+    box-sizing: border-box;
 
     margin: 0 !important;
     padding: 0.5cm !important;
