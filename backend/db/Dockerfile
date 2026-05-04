@@ -1,6 +1,7 @@
 # https://registry.hub.docker.com/r/postgis/postgis/tags
 # on server is: 14-3.5
-# TODO: update live servers by creating a new server using current backup, 
+# TODO: 
+# update live servers by creating a new server using current backup, 
 # then pointing api.apflora.ch to the new server's IP on vercel, 
 # then recreating backups on the new server, and finally deleting the old server.
 FROM postgis/postgis:18-3.6
