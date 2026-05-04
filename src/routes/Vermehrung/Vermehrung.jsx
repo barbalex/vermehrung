@@ -40,10 +40,25 @@ export const Vermehrung = observer(() => {
   const minSizeTree = treeWidth < 30 ? treeWidth : 30
   const minSizeForm = formWidth < 30 ? formWidth : 30
 
+  // Compute pixel defaultSizes from window.innerWidth to avoid CLS:
+  // Allotment normally renders 50/50 first, then shifts to preferredSize after
+  // measuring the container — this produces a large layout shift (CLS 0.245).
+  // Passing defaultSizes in pixels lets Allotment position panes correctly on
+  // the very first paint.
+  const containerWidth = window.innerWidth
+  const treeSizePx =
+    treeWidth === 0 ? 0
+    : treeWidth === '100%' ? containerWidth
+    : Math.round((widthInPercentOfScreen / 100) * containerWidth)
+  const formSizePx = containerWidth - treeSizePx
+
   // need the key on Allotment or it would only render correctly on second render
   return (
     <div className={styles.container}>
-      <Allotment key={`${treeWidth}/${formWidth}`}>
+      <Allotment
+        key={`${treeWidth}/${formWidth}`}
+        defaultSizes={[treeSizePx, formSizePx]}
+      >
         <Allotment.Pane
           visible={treeWidth !== 0}
           preferredSize={treeWidth}
