@@ -108,4 +108,38 @@ export default defineConfig({
     // But inconsistentCjsInterop: true covers any other CJS packages in your dependencies that may have the same issue
     inconsistentCjsInterop: true,
   },
+  build: {
+    rolldownOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/firebase')) return 'vendor-firebase'
+          if (
+            id.includes('node_modules/@mui') ||
+            id.includes('node_modules/@emotion')
+          )
+            return 'vendor-mui'
+          if (
+            id.includes('node_modules/mobx') ||
+            id.includes('node_modules/mst-persist')
+          )
+            return 'vendor-mobx'
+          if (id.includes('node_modules/@nozbe/watermelondb'))
+            return 'vendor-watermelondb'
+          if (
+            id.includes('node_modules/urql') ||
+            id.includes('node_modules/@urql') ||
+            id.includes('node_modules/graphql')
+          )
+            return 'vendor-graphql'
+          if (
+            id.includes('node_modules/react/') ||
+            id.includes('node_modules/react-dom/') ||
+            id.includes('node_modules/react-router') ||
+            id.includes('node_modules/scheduler/')
+          )
+            return 'vendor-react'
+        },
+      },
+    },
+  },
 })
