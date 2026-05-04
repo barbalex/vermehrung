@@ -1,8 +1,8 @@
-import react from '@vitejs/plugin-react'
+import babel from '@rolldown/plugin-babel'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgrPlugin from 'vite-plugin-svgr'
-// import babel from 'vite-plugin-babel'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -72,13 +72,13 @@ export default defineConfig({
     }),
     react({
       jsxImportSource: '@emotion/react',
-      babel: {
-        plugins: [
-          'babel-plugin-react-compiler',
-          ['@babel/plugin-proposal-decorators', { legacy: true }],
-          ['@babel/plugin-proposal-class-properties', { loose: true }],
-        ],
-      },
+    }),
+    babel({
+      presets: [reactCompilerPreset()],
+      plugins: [
+        ['@babel/plugin-proposal-decorators', { legacy: true }],
+        ['@babel/plugin-proposal-class-properties', { loose: true }],
+      ],
     }),
   ],
   css: {
