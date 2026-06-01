@@ -28,11 +28,11 @@ export const TreeList = observer(
     // when loading on url, lastActiveNodeArray may not be set
     const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
     const nodeIndex = nodes.findIndex((node) => isEqual(node.url, urlToFocus))
-    
+
     // Only scroll once on initial mount, not on every click
     const hasScrolledRef = useRef(false)
     const initialIndexRef = useRef(nodeIndex && nodeIndex > -1 ? nodeIndex : 0)
-    
+
     useEffect(() => {
       if (!hasScrolledRef.current && nodeIndex > -1) {
         hasScrolledRef.current = true
@@ -45,8 +45,8 @@ export const TreeList = observer(
       <Virtuoso
         ref={listRef}
         style={{
-          height: height - 5,
-          width: width,
+          height: (height ?? 0) - 5,
+          width: width ?? 0,
           marginTop: 5,
           scrollbarWidth: 'thin',
         }}
