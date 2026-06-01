@@ -3,17 +3,39 @@ import { observer } from 'mobx-react-lite'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
-const Art = lazy(async () => ({ default: (await import('./Data/Art/index.jsx')).Art }))
-const Event = lazy(async () => ({ default: (await import('./Data/Event/index.jsx')).Event }))
-const Garten = lazy(async () => ({ default: (await import('./Data/Garten/index.jsx')).Garten }))
-const Herkunft = lazy(async () => ({ default: (await import('./Data/Herkunft/index.jsx')).Herkunft }))
-const Kultur = lazy(async () => ({ default: (await import('./Data/Kultur/index.jsx')).Kultur }))
-const Lieferung = lazy(async () => ({ default: (await import('./Data/Lieferung/index.jsx')).LieferungContainer }))
-const SammelLieferung = lazy(async () => ({ default: (await import('./Data/SammelLieferung/index.jsx')).SammelLieferung }))
-const Person = lazy(async () => ({ default: (await import('./Data/Person/index.jsx')).Person }))
-const Sammlung = lazy(async () => ({ default: (await import('./Data/Sammlung/index.jsx')).Sammlung }))
-const Teilkultur = lazy(async () => ({ default: (await import('./Data/Teilkultur/index.jsx')).Teilkultur }))
-const Zaehlung = lazy(async () => ({ default: (await import('./Data/Zaehlung/index.jsx')).Zaehlung }))
+const Art = lazy(async () => ({
+  default: (await import('./Data/Art/index.jsx')).Art,
+}))
+const Event = lazy(async () => ({
+  default: (await import('./Data/Event/index.jsx')).Event,
+}))
+const Garten = lazy(async () => ({
+  default: (await import('./Data/Garten/index.jsx')).Garten,
+}))
+const Herkunft = lazy(async () => ({
+  default: (await import('./Data/Herkunft/index.jsx')).Herkunft,
+}))
+const Kultur = lazy(async () => ({
+  default: (await import('./Data/Kultur/index.jsx')).Kultur,
+}))
+const Lieferung = lazy(async () => ({
+  default: (await import('./Data/Lieferung/index.jsx')).LieferungContainer,
+}))
+const SammelLieferung = lazy(async () => ({
+  default: (await import('./Data/SammelLieferung/index.jsx')).SammelLieferung,
+}))
+const Person = lazy(async () => ({
+  default: (await import('./Data/Person/index.jsx')).Person,
+}))
+const Sammlung = lazy(async () => ({
+  default: (await import('./Data/Sammlung/index.jsx')).Sammlung,
+}))
+const Teilkultur = lazy(async () => ({
+  default: (await import('./Data/Teilkultur/index.jsx')).Teilkultur,
+}))
+const Zaehlung = lazy(async () => ({
+  default: (await import('./Data/Zaehlung/index.jsx')).Zaehlung,
+}))
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 import { MobxStoreContext } from '../mobxStoreContext.js'
 import { Fallback } from './shared/Fallback.jsx'
