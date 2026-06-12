@@ -8,10 +8,16 @@ import { MobxStoreProvider } from './mobxStoreContext.js'
 import { initiateApp } from './utils/initiateApp.js'
 import { initiateDb } from './utils/initiateDb.js'
 import { Router } from './Router.jsx'
+import { version as appVersion } from '../package.json'
 
 export const App = () => {
   const [store, setStore] = useState(null)
   const [database, setDatabase] = useState(null)
+
+  useEffect(() => {
+    const baseTitle = 'Vermehrung'
+    document.title = `${baseTitle} ${appVersion}`
+  }, [])
 
   // console.log('App rendering')
 

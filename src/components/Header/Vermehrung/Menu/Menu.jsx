@@ -11,6 +11,7 @@ import { Q } from '@nozbe/watermelondb'
 import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { HeaderExportMenu as ExportMenu } from './Export/index.jsx'
 import { HeaderAdminMenu as AdminMenu } from './Admin/index.jsx'
+import { version as appVersion, versionDate } from '../../../../../package.json'
 
 import styles from './Menu.module.css'
 
@@ -118,7 +119,9 @@ export const HeaderHamburgerMenu = observer(
             labelPlacement="end"
           />
         </MenuItem>
-        <div className={styles.version}>Version: 1.21.46 vom 10.6.2026</div>
+        <div className={styles.version}>
+          Version: {appVersion} vom {versionDate}
+        </div>
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von vermehrung.ch
         </MenuItem>
