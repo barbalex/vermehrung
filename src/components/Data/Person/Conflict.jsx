@@ -56,7 +56,7 @@ export const PersonConflict = observer(
     setActiveConflict,
   }) => {
     const store = useContext(MobxStoreContext)
-    const { user, addNotification, addQueuedQuery, db, gqlClient } = store
+    const { user, addNotification, db, gqlClient } = store
 
     // need to use this query to ensure that the person's name is queried
     const [{ error, data, fetching }] = useQuery({
@@ -109,20 +109,21 @@ export const PersonConflict = observer(
           toPgArray([rev, ...revRow._revisions])
         : toPgArray([rev])
 
-      addQueuedQuery({
-        name: 'mutateInsert_person_rev_one',
-        variables: JSON.stringify({
+      const response = await gqlClient
+        .mutation(mutations.mutateInsert_person_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'person_rev_pkey',
             update_columns: ['id'],
           },
-        }),
-        revertTable: 'person',
-        revertId: revRow.person_id,
-        revertField: '_deleted',
-        revertValue: false,
-      })
+        })
+        .toPromise()
+      if (response.error) {
+        checkForOnlineError({ error: response.error, store })
+        return addNotification({
+          message: response.error.message,
+        })
+      }
       // remove conflict from model
       try {
         const model = await db.get('person').find(revRow.person_id)

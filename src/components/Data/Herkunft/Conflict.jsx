@@ -45,7 +45,7 @@ export const HerkunftConflict = observer(
     setActiveConflict,
   }) => {
     const store = useContext(MobxStoreContext)
-    const { user, addNotification, addQueuedQuery, db, gqlClient } = store
+    const { user, addNotification, db, gqlClient } = store
 
     const [{ error, data, fetching }] = useQuery({
       query: herkunftRevQuery,
@@ -90,29 +90,28 @@ export const HerkunftConflict = observer(
           toPgArray([rev, ...revRow._revisions])
         : toPgArray([rev])
 
-      addQueuedQuery({
-        name: 'mutateInsert_herkunft_rev_one',
-        variables: JSON.stringify({
+      const response = await gqlClient
+        .mutation(mutations.mutateInsert_herkunft_rev_one, {
           object: newObject,
           on_conflict: {
             constraint: 'herkunft_rev_pkey',
             update_columns: ['id'],
           },
-        }),
-        revertTable: 'herkunft',
-        revertId: revRow.herkunft_id,
-        revertField: '_deleted',
-        revertValue: false,
-      })
+        })
+        .toPromise()
+      if (response.error) {
+        checkForOnlineError({ error: response.error, store })
+        return addNotification({
+          message: response.error.message,
+        })
+      }
       // update model: remove this conflict
       try {
         const model = await db.get('herkunft').find(revRow.herkunft_id)
         await model.removeConflict(revRow._rev)
       } catch {}
-      setTimeout(() => {
-        conflictDisposalCallback()
-        window.location.reload()
-      })
+      conflictDisposalCallback()
+      window.location.reload()
     }
 
     const onClickWiderspruchUebernehmen = async () => {
