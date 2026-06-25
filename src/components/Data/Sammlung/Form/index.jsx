@@ -201,12 +201,6 @@ export const SammlungForm = observer(
     ])
     const { personWerte, herkunftWerte, artWerte } = dataState
 
-    // ensure that activeConflict is reset
-    // when changing dataset
-    useEffect(() => {
-      setActiveConflict(null)
-    }, [id, setActiveConflict])
-
     useEffect(() => {
       unsetError('sammlung')
     }, [id, unsetError])

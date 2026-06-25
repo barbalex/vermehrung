@@ -28,12 +28,6 @@ export const HerkunftForm = observer(
     const store = useContext(MobxStoreContext)
     const { filter, online, errors, setError, unsetError, db, user } = store
 
-    // ensure that activeConflict is reset
-    // when changing dataset
-    useEffect(() => {
-      setActiveConflict(null)
-    }, [id, setActiveConflict])
-
     const [dataState, setDataState] = useState({
       userPersonOption: undefined,
     })
