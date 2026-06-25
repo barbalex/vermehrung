@@ -1,0 +1,3 @@
+at http://localhost:5175/Vermehrung/Arten/c17e7fd0-b613-11ea-b3de-0242ac130004/Sammlungen/f6ddedf0-6f12-11f1-9a61-69caa7eafa32 there is a conflict with version 8-5be043521ce9700e36fc4d406af72e0d. I can now look at it and use the 'GRÜNE VERSION ÜBERNEHMEN' button to solve the conflict. Problem is: When I do that this version disappears for a short moment from the conflict list but on reloading the form re-appears same as before. this should not happen. I can think of two problems: 1. the new version is not written correctly 2. the trigger (/home/alex/Documents/GitHub/vermehrung/src/sql/createRevTriggers_sammlung.sql) is not working correctly
+
+---
