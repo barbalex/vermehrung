@@ -125,7 +125,6 @@ export const LieferungConflict = observer(
         await model.removeConflict(revRow._rev)
       } catch {}
       conflictDisposalCallback()
-      window.location.reload()
     }
 
     const onClickWiderspruchUebernehmen = async () => {
