@@ -76,7 +76,7 @@ export default defineConfig({
     babel({
       presets: [reactCompilerPreset()],
       plugins: [
-        ['@babel/plugin-proposal-decorators', { legacy: true }],
+        ['@babel/plugin-proposal-decorators', { version: 'legacy' }],
         ['@babel/plugin-proposal-class-properties', { loose: true }],
       ],
     }),
