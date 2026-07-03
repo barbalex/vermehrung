@@ -77,7 +77,7 @@ export const HeaderHamburgerMenu = observer(
     const onClose = () => setParentAnchorEl(null)
 
     const onClickUptime = () => {
-      window.open('https://uptime.vermehrung.ch')
+      window.open('https://uptime.gabriel-software.ch')
       setParentAnchorEl(null)
     }
 
