@@ -17,7 +17,8 @@
     "deploy_only": "firebase deploy --only hosting",
     "how-to-install-using-sfw": "sfw npm i",
     "ncu using cooldown": "ncu -c 5 -i",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
@@ -78,6 +79,7 @@
     "@eslint/compat": "2.1.0",
     "@eslint/eslintrc": "3.3.6",
     "@eslint/js": "10.0.1",
+    "@playwright/test": "1.62.1",
     "@rolldown/plugin-babel": "0.2.3",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",

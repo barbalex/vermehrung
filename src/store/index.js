@@ -59,6 +59,9 @@ export const hydratePersistedAtoms = async () => {
       })
     }),
   )
+  // let the queue observer know about hydrated queries immediately
+  // (instead of waiting for the first retry tick)
+  store.set(queueSizeAtom, store.get(queuedQueriesAtom).length)
 }
 
 export const store = createStore()

@@ -233,11 +233,10 @@ export const insertRev = async (table, args = {}) => {
     if (idAtomKey) {
       newObject[field] = store.get(idAtoms[idAtomKey])
     } else {
-      newObject[field] =
-        field === idField ? id : (fixedValue ?? undefined)
+      newObject[field] = field === idField ? id : (fixedValue ?? undefined)
     }
   }
-  newObject.changed = new window.Date().toISOString()
+  newObject.changed = new Date().toISOString()
   newObject.changed_by = email
   newObject._depth = _depth
   newObject._parent_rev = undefined
@@ -283,15 +282,15 @@ export const insertRev = async (table, args = {}) => {
     await db.batch(creates)
   })
 
-  const noNavigate =
-    config.noNavigateArg ? (args?.[config.noNavigateArg] ?? false) : false
+  const noNavigate = config.noNavigateArg
+    ? (args?.[config.noNavigateArg] ?? false)
+    : false
   const shouldNavigate = (config.navigate ?? true) && !noNavigate
   if (shouldNavigate) {
     const activeNodeArray = store.get(activeNodeArrayAtom)
     setTimeout(() => {
-      const newActiveNodeArray =
-        isUuid.v1(activeNodeArray.at(-1)) ?
-          // slice if last is uuid
+      const newActiveNodeArray = isUuid.v1(activeNodeArray.at(-1))
+        ? // slice if last is uuid
           [...activeNodeArray.slice(0, -1), id]
         : [...activeNodeArray, id]
       // update tree status

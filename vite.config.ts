@@ -7,6 +7,10 @@ import svgrPlugin from 'vite-plugin-svgr'
 // https://vitejs.dev/config/
 export default defineConfig({
   server: { port: 5175 },
+  // e2e/ contains Playwright tests, not vitest tests
+  test: {
+    exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**'],
+  },
   plugins: [
     svgrPlugin({
       svgrOptions: {
