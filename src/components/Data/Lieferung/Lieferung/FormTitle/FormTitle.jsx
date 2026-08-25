@@ -1,9 +1,12 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import { useResizeDetector } from 'react-resize-detector'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import {
+  activeNodeArrayAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../../../store/index.js'
 import { LieferungSettings as Settings } from './Settings/index.jsx'
 import { LieferungAddButton as AddButton } from './AddButton.jsx'
 import { LieferungDeleteButton as DeleteButton } from './DeleteButton.jsx'
@@ -16,87 +19,80 @@ import KuDownSvg from '../../../../../svg/to_ku_down.svg?react'
 
 import artStyles from '../../../Art/FormTitle/FormTitle.module.css'
 
-export const LieferungFormTitle = observer(
-  ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
-    const store = useContext(MobxStoreContext)
-    const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+export const LieferungFormTitle = ({
+  row,
+  totalCount,
+  filteredCount,
+  showHistory,
+  setShowHistory,
+}) => {
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
-    const { width, ref } = useResizeDetector()
+  const { width, ref } = useResizeDetector()
 
-    const onClickUp = () => {
-      removeOpenNode(activeNodeArray)
-      setActiveNodeArray(activeNodeArray.slice(0, -1))
-    }
+  const onClickUp = () => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }
 
-    const nachKulturId = row?.nach_kultur_id
-    const onClickToKultur = () =>
-      setActiveNodeArray([
-        ...activeNodeArray.filter((n) => n !== 'Kulturen'),
-        'Kulturen',
-        nachKulturId,
-      ])
-    // to kulturen is not implemented in nodes, so turned off
-    const showToKu = false && activeNodeArray[0] === 'Sammlungen'
+  const nachKulturId = row?.nach_kultur_id
+  const onClickToKultur = () =>
+    setActiveNodeArray([
+      ...activeNodeArray.filter((n) => n !== 'Kulturen'),
+      'Kulturen',
+      nachKulturId,
+    ])
+  // to kulturen is not implemented in nodes, so turned off
+  const showToKu = false && activeNodeArray[0] === 'Sammlungen'
 
-    return (
-      <div
-        className={artStyles.container}
-        ref={ref}
-      >
-        <div className={artStyles.title}>Lieferung</div>
-        <div className={artStyles.symbols}>
-          <IconButton
-            title="Zur Liste"
-            onClick={onClickUp}
-            size="large"
-          >
-            <UpSvg />
+  return (
+    <div className={artStyles.container} ref={ref}>
+      <div className={artStyles.title}>Lieferung</div>
+      <div className={artStyles.symbols}>
+        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+          <UpSvg />
+        </IconButton>
+        {showToKu && (
+          <IconButton title="Zur Kultur" onClick={onClickToKultur} size="large">
+            <KuDownSvg />
           </IconButton>
-          {showToKu && (
-            <IconButton
-              title="Zur Kultur"
-              onClick={onClickToKultur}
-              size="large"
-            >
-              <KuDownSvg />
-            </IconButton>
-          )}
-          <AddButton />
-          <DeleteButton row={row} />
-          {width < 520 ?
-            <Menu white={false}>
-              <HistoryButton
-                table="lieferung"
-                id={row.id}
-                showHistory={showHistory}
-                setShowHistory={setShowHistory}
-                asMenu
-              />
-              <Settings asMenu />
-              <Anleitung asMenu />
-              <FilterNumbers
-                filteredCount={filteredCount}
-                totalCount={totalCount}
-                asMenu
-              />
-            </Menu>
-          : <>
-              <HistoryButton
-                table="lieferung"
-                id={row.id}
-                showHistory={showHistory}
-                setShowHistory={setShowHistory}
-              />
-              <Settings />
-              <Anleitung />
-              <FilterNumbers
-                filteredCount={filteredCount}
-                totalCount={totalCount}
-              />
-            </>
-          }
-        </div>
+        )}
+        <AddButton />
+        <DeleteButton row={row} />
+        {width < 520 ? (
+          <Menu white={false}>
+            <HistoryButton
+              table="lieferung"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
+            <Settings asMenu />
+            <Anleitung asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
+          </Menu>
+        ) : (
+          <>
+            <HistoryButton
+              table="lieferung"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+            />
+            <Settings />
+            <Anleitung />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+            />
+          </>
+        )}
       </div>
-    )
-  },
-)
+    </div>
+  )
+}

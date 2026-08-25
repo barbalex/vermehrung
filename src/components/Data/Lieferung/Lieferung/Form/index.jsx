@@ -1,9 +1,16 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  errorsAtom,
+  filterLieferungAtom,
+  setFilterValue,
+  unsetError,
+  userAtom,
+} from '../../../../../store/index.js'
 import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
 import { JesNo } from '../../../../shared/JesNo.jsx'
 import { exists } from '../../../../../utils/exists.js'
@@ -17,239 +24,240 @@ import { LieferungWer as Wer } from './Wer.jsx'
 
 import artStyles from '../../../Art/Form/index.module.css'
 
-export const LierferungForm = observer(
-  ({
-    showFilter,
-    id,
-    row,
-    rawRow,
-    activeConflict,
-    setActiveConflict,
-    showHistory,
-  }) => {
-    const existsSammelLieferung = !!row?.sammel_lieferung_id
-    const store = useContext(MobxStoreContext)
+export const LierferungForm = ({
+  showFilter,
+  id,
+  row,
+  rawRow,
+  activeConflict,
+  setActiveConflict,
+  showHistory,
+}) => {
+  const existsSammelLieferung = !!row?.sammel_lieferung_id
 
-    const { errors, filter, unsetError, user, db } = store
+  const db = useAtomValue(dbAtom)
+  const user = useAtomValue(userAtom)
+  const errors = useAtomValue(errorsAtom)
+  const lieferungFilter = useAtomValue(filterLieferungAtom)
 
-    const [dataState, setDataState] = useState({
-      herkunft: undefined,
-      herkunftQuelle: undefined,
-      userPersonOption: undefined,
-      sammelLieferung: undefined,
-    })
-    useEffect(() => {
-      const userPersonOptionsObservable =
-        user.uid ?
-          db
-            .get('person_option')
-            .query(Q.on('person', Q.where('account_id', user.uid)))
-            .observeWithColumns(['li_show_sl_felder'])
-        : $of({})
-      const sLObservable =
-        row.sammel_lieferung ? row.sammel_lieferung.observe() : $of({})
-      const combinedObservables = combineLatest([
-        userPersonOptionsObservable,
-        sLObservable,
-      ])
-      const subscription = combinedObservables.subscribe(
-        async ([userPersonOptions, sammelLieferung]) => {
-          let vonSammlung
+  const [dataState, setDataState] = useState({
+    herkunft: undefined,
+    herkunftQuelle: undefined,
+    userPersonOption: undefined,
+    sammelLieferung: undefined,
+  })
+  useEffect(() => {
+    const userPersonOptionsObservable = user.uid
+      ? db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['li_show_sl_felder'])
+      : $of({})
+    const sLObservable = row.sammel_lieferung
+      ? row.sammel_lieferung.observe()
+      : $of({})
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable,
+      sLObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([userPersonOptions, sammelLieferung]) => {
+        let vonSammlung
+        try {
+          vonSammlung = await row.sammlung.fetch()
+        } catch {}
+        let vonSammlungHerkunft
+        try {
+          vonSammlungHerkunft = await vonSammlung.herkunft.fetch()
+        } catch {}
+
+        if (vonSammlungHerkunft) {
+          return setDataState({
+            herkunft: vonSammlungHerkunft,
+            herkunftQuelle: 'Sammlung',
+            userPersonOption: userPersonOptions?.[0],
+            sammelLieferung,
+          })
+        }
+
+        if (row.von_kultur_id) {
+          let vonKultur
           try {
-            vonSammlung = await row.sammlung.fetch()
+            vonKultur = await db.get('kultur').find(row.von_kultur_id)
           } catch {}
-          let vonSammlungHerkunft
+          let herkunftByVonKultur
           try {
-            vonSammlungHerkunft = await vonSammlung.herkunft.fetch()
+            herkunftByVonKultur = await vonKultur.herkunft.fetch()
           } catch {}
-
-          if (vonSammlungHerkunft) {
+          if (herkunftByVonKultur) {
             return setDataState({
-              herkunft: vonSammlungHerkunft,
-              herkunftQuelle: 'Sammlung',
+              herkunft: herkunftByVonKultur,
+              herkunftQuelle: 'von-Kultur',
               userPersonOption: userPersonOptions?.[0],
               sammelLieferung,
             })
           }
+        }
+        let nachKultur
+        try {
+          nachKultur = await db.get('kultur').find(row.nach_kultur_id)
+        } catch {}
+        let herkunftByNachKultur
+        try {
+          herkunftByNachKultur = await nachKultur.herkunft.fetch()
+        } catch {}
 
-          if (row.von_kultur_id) {
-            let vonKultur
-            try {
-              vonKultur = await db.get('kultur').find(row.von_kultur_id)
-            } catch {}
-            let herkunftByVonKultur
-            try {
-              herkunftByVonKultur = await vonKultur.herkunft.fetch()
-            } catch {}
-            if (herkunftByVonKultur) {
-              return setDataState({
-                herkunft: herkunftByVonKultur,
-                herkunftQuelle: 'von-Kultur',
-                userPersonOption: userPersonOptions?.[0],
-                sammelLieferung,
-              })
-            }
-          }
-          let nachKultur
-          try {
-            nachKultur = await db.get('kultur').find(row.nach_kultur_id)
-          } catch {}
-          let herkunftByNachKultur
-          try {
-            herkunftByNachKultur = await nachKultur.herkunft.fetch()
-          } catch {}
-
-          setDataState({
-            herkunft: herkunftByNachKultur,
-            herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
-            userPersonOption: userPersonOptions?.[0],
-            sammelLieferung,
-          })
-        },
-      )
-
-      return () => subscription?.unsubscribe?.()
-    }, [
-      db,
-      row.nach_kultur_id,
-      row.sammel_lieferung,
-      row.sammlung,
-      row.von_kultur_id,
-      row.von_sammlung_id,
-      user.uid,
-    ])
-    const { herkunft, herkunftQuelle, userPersonOption, sammelLieferung } =
-      dataState
-
-    const { li_show_sl_felder } = userPersonOption ?? {}
-
-    const ifNeeded = (field) => {
-      if (existsSammelLieferung && li_show_sl_felder) return true
-      if (
-        !exists(sammelLieferung?.[field]) ||
-        sammelLieferung?.[field] === false
-      ) {
-        return true
-      } else if (sammelLieferung?.[field] !== row[field]) {
-        return true
-      }
-      return false
-    }
-
-    const ifSomeNeeded = (fields) => fields.some((f) => ifNeeded(f))
-
-    useEffect(() => {
-      unsetError('lieferung')
-    }, [id, unsetError])
-
-    const saveToDb = (event) => {
-      const field = event.target.name
-      let value = ifIsNumericAsNumber(event.target.value)
-      if (event.target.value === undefined) value = null
-      if (event.target.value === '') value = null
-
-      if (showFilter) {
-        return filter.setValue({ table: 'lieferung', key: field, value })
-      }
-
-      // only update if value has changed
-      const previousValue = ifIsNumericAsNumber(row[field])
-      if (value === previousValue) return
-      row.edit({ field, value, store })
-    }
-
-    const showDeleted = filter.lieferung._deleted !== false || row?._deleted
-
-    // console.log('Lieferung, row:', row)
-
-    return (
-      <ErrorBoundary>
-        <div className={artStyles.container}>
-          {(activeConflict || showHistory) && (
-            <h4 className={artStyles.caseConflictTitle}>
-              Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
-            </h4>
-          )}
-          {showDeleted && (
-            <>
-              {showFilter ?
-                <JesNo
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.kultur?._deleted}
-                />
-              : <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.kultur?._deleted}
-                />
-              }
-            </>
-          )}
-          {ifSomeNeeded([
-            'art_id',
-            'anzahl_pflanzen',
-            'anzahl_auspflanzbereit',
-            'gramm_samen',
-            'andere_menge',
-            'von_anzahl_individuen',
-          ]) && (
-            <Was
-              showFilter={showFilter}
-              id={id}
-              row={row}
-              rawRow={rawRow}
-              saveToDb={saveToDb}
-              ifNeeded={ifNeeded}
-            />
-          )}
-          <Von
-            showFilter={showFilter}
-            id={id}
-            row={row}
-            rawRow={rawRow}
-            saveToDb={saveToDb}
-            ifNeeded={ifNeeded}
-            herkunft={herkunft}
-            herkunftQuelle={herkunftQuelle}
-          />
-          <Nach
-            showFilter={showFilter}
-            id={id}
-            row={row}
-            rawRow={rawRow}
-            saveToDb={saveToDb}
-            ifNeeded={ifNeeded}
-            herkunft={herkunft}
-          />
-          {ifSomeNeeded(['datum', 'geplant']) && (
-            <Wann
-              showFilter={showFilter}
-              id={id}
-              row={row}
-              rawRow={rawRow}
-              saveToDb={saveToDb}
-              ifNeeded={ifNeeded}
-            />
-          )}
-          {ifSomeNeeded(['person_id', 'bemerkungen']) && (
-            <Wer
-              showFilter={showFilter}
-              id={id}
-              saveToDb={saveToDb}
-              ifNeeded={ifNeeded}
-              activeConflict={activeConflict}
-              setActiveConflict={setActiveConflict}
-            />
-          )}
-        </div>
-      </ErrorBoundary>
+        setDataState({
+          herkunft: herkunftByNachKultur,
+          herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
+          userPersonOption: userPersonOptions?.[0],
+          sammelLieferung,
+        })
+      },
     )
-  },
-)
+
+    return () => subscription?.unsubscribe?.()
+  }, [
+    db,
+    row.nach_kultur_id,
+    row.sammel_lieferung,
+    row.sammlung,
+    row.von_kultur_id,
+    row.von_sammlung_id,
+    user.uid,
+  ])
+  const { herkunft, herkunftQuelle, userPersonOption, sammelLieferung } =
+    dataState
+
+  const { li_show_sl_felder } = userPersonOption ?? {}
+
+  const ifNeeded = (field) => {
+    if (existsSammelLieferung && li_show_sl_felder) return true
+    if (
+      !exists(sammelLieferung?.[field]) ||
+      sammelLieferung?.[field] === false
+    ) {
+      return true
+    } else if (sammelLieferung?.[field] !== row[field]) {
+      return true
+    }
+    return false
+  }
+
+  const ifSomeNeeded = (fields) => fields.some((f) => ifNeeded(f))
+
+  useEffect(() => {
+    unsetError('lieferung')
+  }, [id, unsetError])
+
+  const saveToDb = (event) => {
+    const field = event.target.name
+    let value = ifIsNumericAsNumber(event.target.value)
+    if (event.target.value === undefined) value = null
+    if (event.target.value === '') value = null
+
+    if (showFilter) {
+      return setFilterValue({ table: 'lieferung', key: field, value })
+    }
+
+    // only update if value has changed
+    const previousValue = ifIsNumericAsNumber(row[field])
+    if (value === previousValue) return
+    row.edit({ field, value })
+  }
+
+  const showDeleted = lieferungFilter._deleted !== false || row?._deleted
+
+  // console.log('Lieferung, row:', row)
+
+  return (
+    <ErrorBoundary>
+      <div className={artStyles.container}>
+        {(activeConflict || showHistory) && (
+          <h4 className={artStyles.caseConflictTitle}>
+            Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
+          </h4>
+        )}
+        {showDeleted && (
+          <>
+            {showFilter ? (
+              <JesNo
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.kultur?._deleted}
+              />
+            ) : (
+              <Checkbox2States
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.kultur?._deleted}
+              />
+            )}
+          </>
+        )}
+        {ifSomeNeeded([
+          'art_id',
+          'anzahl_pflanzen',
+          'anzahl_auspflanzbereit',
+          'gramm_samen',
+          'andere_menge',
+          'von_anzahl_individuen',
+        ]) && (
+          <Was
+            showFilter={showFilter}
+            id={id}
+            row={row}
+            rawRow={rawRow}
+            saveToDb={saveToDb}
+            ifNeeded={ifNeeded}
+          />
+        )}
+        <Von
+          showFilter={showFilter}
+          id={id}
+          row={row}
+          rawRow={rawRow}
+          saveToDb={saveToDb}
+          ifNeeded={ifNeeded}
+          herkunft={herkunft}
+          herkunftQuelle={herkunftQuelle}
+        />
+        <Nach
+          showFilter={showFilter}
+          id={id}
+          row={row}
+          rawRow={rawRow}
+          saveToDb={saveToDb}
+          ifNeeded={ifNeeded}
+          herkunft={herkunft}
+        />
+        {ifSomeNeeded(['datum', 'geplant']) && (
+          <Wann
+            showFilter={showFilter}
+            id={id}
+            row={row}
+            rawRow={rawRow}
+            saveToDb={saveToDb}
+            ifNeeded={ifNeeded}
+          />
+        )}
+        {ifSomeNeeded(['person_id', 'bemerkungen']) && (
+          <Wer
+            showFilter={showFilter}
+            id={id}
+            saveToDb={saveToDb}
+            ifNeeded={ifNeeded}
+            activeConflict={activeConflict}
+            setActiveConflict={setActiveConflict}
+          />
+        )}
+      </div>
+    </ErrorBoundary>
+  )
+}

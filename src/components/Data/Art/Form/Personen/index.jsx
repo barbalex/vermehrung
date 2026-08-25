@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { motion, useAnimation } from 'framer-motion'
@@ -7,7 +7,13 @@ import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 import { of as $of } from 'rxjs'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  errorsAtom,
+  filterPersonAtom,
+  unsetError,
+} from '../../../../../store/index.js'
+import { insertAvRev } from '../../../../../modules/insertRev.js'
 import { Person } from './Person.jsx'
 import { Select } from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
@@ -17,9 +23,10 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 
 import styles from './index.module.css'
 
-export const Personen = observer(({ art }) => {
-  const store = useContext(MobxStoreContext)
-  const { db, insertAvRev, errors, unsetError, filter } = store
+export const Personen = ({ art }) => {
+  const db = useAtomValue(dbAtom)
+  const errors = useAtomValue(errorsAtom)
+  const personFilter = useAtomValue(filterPersonAtom)
 
   useEffect(() => unsetError('av'), [art.id, unsetError])
 
@@ -47,27 +54,32 @@ export const Personen = observer(({ art }) => {
   })
   useEffect(() => {
     const delQuery =
-      filter.person?._deleted === false ? Q.where('_deleted', false)
-      : filter.person?._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      personFilter?._deleted === false
+        ? Q.where('_deleted', false)
+        : personFilter?._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const aktivQuery =
-      filter.person?.aktiv === false ? Q.where('aktiv', false)
-      : filter.person?.aktiv === true ? Q.where('aktiv', true)
-      : Q.or(
-          Q.where('aktiv', false),
-          Q.where('aktiv', true),
-          Q.where('aktiv', null),
-        )
+      personFilter?.aktiv === false
+        ? Q.where('aktiv', false)
+        : personFilter?.aktiv === true
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const personsObservable = db
       .get('person')
       .query(delQuery, aktivQuery)
       .observe()
-    const avsObservable =
-      art.avs ? art.avs.extend(Q.where('_deleted', false)).observe() : $of([])
+    const avsObservable = art.avs
+      ? art.avs.extend(Q.where('_deleted', false)).observe()
+      : $of([])
     const combinedObservables = combineLatest([
       personsObservable,
       avsObservable,
@@ -88,7 +100,7 @@ export const Personen = observer(({ art }) => {
       },
     )
     return () => subscription?.unsubscribe?.()
-  }, [art.avs, db, filter.person._deleted, filter.person.aktiv])
+  }, [art.avs, db, personFilter])
   const { avsSorted, personWerte } = dataState
 
   const saveToDb = (event) =>
@@ -111,9 +123,7 @@ export const Personen = observer(({ art }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ?
-              <FaChevronUp />
-            : <FaChevronDown />}
+            {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
@@ -126,10 +136,7 @@ export const Personen = observer(({ art }) => {
           <>
             <div className={styles.aven}>
               {avsSorted.map((av, index) => (
-                <Person
-                  key={`${av.art_id}/${av.person_id}/${index}`}
-                  av={av}
-                />
+                <Person key={`${av.art_id}/${av.person_id}/${index}`} av={av} />
               ))}
             </div>
             {!!personWerte.length && (
@@ -149,4 +156,4 @@ export const Personen = observer(({ art }) => {
       </motion.div>
     </ErrorBoundary>
   )
-})
+}

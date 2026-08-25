@@ -1,5 +1,5 @@
-import { useState, useContext, Suspense, lazy } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, Suspense, lazy } from 'react'
+import { useAtomValue } from 'jotai'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
@@ -37,21 +37,20 @@ const Zaehlung = lazy(async () => ({
   default: (await import('./Data/Zaehlung/index.jsx')).Zaehlung,
 }))
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
-import { MobxStoreContext } from '../mobxStoreContext.js'
+import { activeFormAtom } from '../store/index.js'
 import { Fallback } from './shared/Fallback.jsx'
 
 import styles from './Filter.module.css'
 
-export const Filter = observer(() => {
-  const { activeForm: activeFormPassed } = useContext(MobxStoreContext)
+export const Filter = () => {
+  const activeFormPassed = useAtomValue(activeFormAtom)
   // root is a possible value, but MUI wants one of the tabs
   const activeForm = activeFormPassed === 'root' ? 'art' : activeFormPassed
   // ensure list views are directed to correct filter
   // use exact match or garten will become gart
   // see: https://stackoverflow.com/a/447258/712005
-  const activeTabFromActiveForm =
-    activeForm ?
-      activeForm
+  const activeTabFromActiveForm = activeForm
+    ? activeForm
         .replace(/^events$/, 'event')
         .replace(/^herkuenfte$/, 'herkunft')
         .replace(/^gaerten$/, 'garten')
@@ -63,8 +62,8 @@ export const Filter = observer(() => {
         .replace(/^sammlungen$/, 'sammlung')
         .replace(/^teilkulturen$/, 'teilkultur')
         .replace(/^zaehlungen$/, 'zaehlung')
-      // fallback if no form is active
-    : 'art'
+    : // fallback if no form is active
+      'art'
   const [activeTab, setActiveTab] = useState(activeTabFromActiveForm)
 
   const onChangeTab = (event, value) => setActiveTab(value)
@@ -101,10 +100,7 @@ export const Filter = observer(() => {
     <ErrorBoundary>
       <div className={styles.container}>
         <div className={styles.titleRow}>
-          <div
-            className={styles.title}
-            data-id="form-title"
-          >
+          <div className={styles.title} data-id="form-title">
             {titleObject[activeTab]}
           </div>
           <Tabs
@@ -116,12 +112,7 @@ export const Filter = observer(() => {
             scrollButtons="auto"
             className={styles.tabs}
           >
-            <Tab
-              className={styles.tab}
-              label="Art"
-              value="art"
-              data-id="art"
-            />
+            <Tab className={styles.tab} label="Art" value="art" data-id="art" />
             <Tab
               className={styles.tab}
               label="Herkunft"
@@ -188,4 +179,4 @@ export const Filter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

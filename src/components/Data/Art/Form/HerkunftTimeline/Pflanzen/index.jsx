@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import {
   ComposedChart,
   Bar,
@@ -13,7 +14,6 @@ import {
   ResponsiveContainer,
   Scatter,
 } from 'recharts'
-import { observer } from 'mobx-react-lite'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { CustomTooltip } from './Tooltip.jsx'
@@ -21,15 +21,14 @@ import { LabelLieferung } from './LabelLieferung.jsx'
 import { LabelZaehlung } from './LabelZaehlung.jsx'
 import { CustomAxisTick } from './CustomAxisTick.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
-import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
+import { dbAtom } from '../../../../../../store/index.js'
 import { herkunftLabelFromHerkunft } from '../../../../../../utils/herkunftLabelFromHerkunft.js'
 import { buildData } from './buildData.js'
 
 import styles from './index.module.css'
 
-export const Pflanzen = observer(({ artId, herkunft }) => {
-  const store = useContext(MobxStoreContext)
-  const { db } = store
+export const Pflanzen = ({ artId, herkunft }) => {
+  const db = useAtomValue(dbAtom)
   const herkunftId = herkunft.id
 
   const { width, ref } = useResizeDetector()
@@ -69,29 +68,16 @@ export const Pflanzen = observer(({ artId, herkunft }) => {
   // https://github.com/recharts/recharts/issues/806
 
   return (
-    <div
-      className={styles.container}
-      ref={ref}
-    >
+    <div className={styles.container} ref={ref}>
       <ErrorBoundary>
         <h4>{herkunftLabel}</h4>
-        <ResponsiveContainer
-          width="99%"
-          height={450}
-        >
+        <ResponsiveContainer width="99%" height={450}>
           <ComposedChart
             data={data}
             margin={{ top: 25, right: 0, left: 0, bottom: 45 }}
           >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              horizontal={false}
-            />
-            <XAxis
-              dataKey="datum"
-              tick={CustomAxisTick}
-              interval={0}
-            />
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+            <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
             <YAxis
               label={{
                 value: 'Anzahl Pflanzen',
@@ -104,22 +90,20 @@ export const Pflanzen = observer(({ artId, herkunft }) => {
               fontSize={12}
             />
             <Tooltip content={<CustomTooltip />} />
-            {isNarrow ?
+            {isNarrow ? (
               <Legend
                 layout="horizontal"
                 align="center"
                 wrapperStyle={{ bottom: 0, fontSize: 12 }}
               />
-            : <Legend
+            ) : (
+              <Legend
                 layout="vertical"
                 align="right"
                 wrapperStyle={{ right: -10, bottom: 150, fontSize: 12 }}
               />
-            }
-            <ReferenceLine
-              y={0}
-              stroke="#000"
-            />
+            )}
+            <ReferenceLine y={0} stroke="#000" />
             <Bar
               dataKey="Sammlung"
               fill="orange"
@@ -175,4 +159,4 @@ export const Pflanzen = observer(({ artId, herkunft }) => {
       </ErrorBoundary>
     </div>
   )
-})
+}

@@ -1,23 +1,29 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  filterKulturAtom,
+  artIdInActiveNodeArrayAtom,
+  gartenIdInActiveNodeArrayAtom,
+} from '../../../../store/index.js'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { KulturFormTitle as FormTitle } from './FormTitle.jsx'
 import { tableFilter } from '../../../../utils/tableFilter.js'
 
-export const KulturFormTitleChooser = observer( ({
+export const KulturFormTitleChooser = ({
   row,
   rawRow,
   showFilter,
   showHistory,
   setShowHistory,
 }) => {
-  const store = useContext(MobxStoreContext)
-  const { artIdInActiveNodeArray, db, filter, gartenIdInActiveNodeArray } =
-    store
+  const db = useAtomValue(dbAtom)
+  const gartenIdInActiveNodeArray = useAtomValue(gartenIdInActiveNodeArrayAtom)
+  const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
+  const kulturFilter = useAtomValue(filterKulturAtom)
 
   const [countState, setCountState] = useState({
     totalCount: 0,
@@ -25,40 +31,43 @@ export const KulturFormTitleChooser = observer( ({
   })
 
   useEffect(() => {
-    const hierarchyQuery =
-      gartenIdInActiveNodeArray ?
-        [
+    const hierarchyQuery = gartenIdInActiveNodeArray
+      ? [
           Q.experimentalJoinTables(['garten']),
           Q.on('garten', 'id', gartenIdInActiveNodeArray),
         ]
-      : artIdInActiveNodeArray ?
-        [
-          Q.experimentalJoinTables(['art']),
-          Q.on('art', 'id', artIdInActiveNodeArray),
-        ]
-      : []
+      : artIdInActiveNodeArray
+        ? [
+            Q.experimentalJoinTables(['art']),
+            Q.on('art', 'id', artIdInActiveNodeArray),
+          ]
+        : []
     const collection = db.get('kultur')
     const kulturDelQuery =
-      filter.kultur._deleted === false ? Q.where('_deleted', false)
-      : filter.kultur._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      kulturFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : kulturFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const kulturAktivQuery =
-      filter.kultur.aktiv === false ? Q.where('aktiv', false)
-      : filter.kultur.aktiv === true ? Q.where('aktiv', true)
-      : Q.or(
-          Q.where('aktiv', false),
-          Q.where('aktiv', true),
-          Q.where('aktiv', null),
-        )
+      kulturFilter.aktiv === false
+        ? Q.where('aktiv', false)
+        : kulturFilter.aktiv === true
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const totalCountObservable = collection
       .query(kulturDelQuery, kulturAktivQuery, ...hierarchyQuery)
       .observeCount()
     const filteredCountObservable = collection
-      .query(...tableFilter({ store, table: 'kultur' }), ...hierarchyQuery)
+      .query(...tableFilter({ table: 'kultur' }), ...hierarchyQuery)
       .observeCount()
     const combinedObservables = combineLatest([
       totalCountObservable,
@@ -75,11 +84,7 @@ export const KulturFormTitleChooser = observer( ({
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
     // need to rerender if any of the values of kulturFilter changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(store.filter.kultur),
-    store,
-    filter.kultur._deleted,
-    filter.kultur.aktiv,
+    kulturFilter,
   ])
 
   const { totalCount, filteredCount } = countState
@@ -106,4 +111,3 @@ export const KulturFormTitleChooser = observer( ({
     />
   )
 }
-)

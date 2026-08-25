@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -8,88 +8,86 @@ import Checkbox from '@mui/material/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { of as $of } from 'rxjs'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import { dbAtom } from '../../../../../store/index.js'
 import { constants } from '../../../../../utils/constants.js'
 
 import styles from './Menu.module.css'
 
-export const TeilkulturSettingsMenu = observer(
-  ({ anchorEl, setAnchorEl, kulturId }) => {
-    const store = useContext(MobxStoreContext)
-    const { db } = store
+export const TeilkulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
+  const db = useAtomValue(dbAtom)
 
-    const [dataState, setDataState] = useState({ kulturOption: undefined })
-    const { kulturOption } = dataState
-    const { tk_bemerkungen } = kulturOption ?? {}
+  const [dataState, setDataState] = useState({ kulturOption: undefined })
+  const { kulturOption } = dataState
+  const { tk_bemerkungen } = kulturOption ?? {}
 
-    useEffect(() => {
-      const kOObservable =
-        kulturId ? db.get('kultur_option').findAndObserve(kulturId) : $of({})
-      const subscription = kOObservable.subscribe((kulturOption) =>
-        setDataState({ kulturOption }),
-      )
-
-      return () => subscription?.unsubscribe?.()
-    }, [db, kulturId])
-
-    const saveToDb = async (event) => {
-      const field = event.target.name
-      const value = event.target.value === 'false'
-      kulturOption.edit({ field, value, store })
-    }
-
-    const openSettingsDocs = () => {
-      setAnchorEl(null)
-      const url = `${constants?.getAppUri()}/Dokumentation/felder-blenden`
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-
-    const onClose = () => setAnchorEl(null)
-
-    return (
-      <Menu
-        id="long-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={onClose}
-      >
-        <div className={styles.titleRow}>
-          <div className={styles.title}>Felder für Teilkulturen wählen:</div>
-          <div>
-            <IconButton
-              aria-label="Anleitung öffnen"
-              title="Anleitung öffnen"
-              onClick={openSettingsDocs}
-              size="large"
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
-          </div>
-        </div>
-        <MenuItem>
-          <FormControlLabel
-            value={tk_bemerkungen === true ? 'true' : 'false'}
-            control={
-              <Checkbox
-                color="primary"
-                checked={tk_bemerkungen}
-                onClick={saveToDb}
-                name="tk_bemerkungen"
-              />
-            }
-            label="Bemerkungen"
-            labelPlacement="end"
-          />
-        </MenuItem>
-        <div className={styles.info}>
-          Zwingende Felder sind nicht aufgelistet.
-          <br />
-          Die Wahl gilt (nur) für diese Kultur.
-        </div>
-      </Menu>
+  useEffect(() => {
+    const kOObservable = kulturId
+      ? db.get('kultur_option').findAndObserve(kulturId)
+      : $of({})
+    const subscription = kOObservable.subscribe((kulturOption) =>
+      setDataState({ kulturOption }),
     )
-  },
-)
+
+    return () => subscription?.unsubscribe?.()
+  }, [db, kulturId])
+
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = event.target.value === 'false'
+    kulturOption.edit({ field, value })
+  }
+
+  const openSettingsDocs = () => {
+    setAnchorEl(null)
+    const url = `${constants?.getAppUri()}/Dokumentation/felder-blenden`
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
+    }
+    window.open(url)
+  }
+
+  const onClose = () => setAnchorEl(null)
+
+  return (
+    <Menu
+      id="long-menu"
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={onClose}
+    >
+      <div className={styles.titleRow}>
+        <div className={styles.title}>Felder für Teilkulturen wählen:</div>
+        <div>
+          <IconButton
+            aria-label="Anleitung öffnen"
+            title="Anleitung öffnen"
+            onClick={openSettingsDocs}
+            size="large"
+          >
+            <IoMdInformationCircleOutline />
+          </IconButton>
+        </div>
+      </div>
+      <MenuItem>
+        <FormControlLabel
+          value={tk_bemerkungen === true ? 'true' : 'false'}
+          control={
+            <Checkbox
+              color="primary"
+              checked={tk_bemerkungen}
+              onClick={saveToDb}
+              name="tk_bemerkungen"
+            />
+          }
+          label="Bemerkungen"
+          labelPlacement="end"
+        />
+      </MenuItem>
+      <div className={styles.info}>
+        Zwingende Felder sind nicht aufgelistet.
+        <br />
+        Die Wahl gilt (nur) für diese Kultur.
+      </div>
+    </Menu>
+  )
+}

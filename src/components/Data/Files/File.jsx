@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import { errorsAtom, unsetError } from '../../../store/index.js'
 import { TextField } from '../../shared/TextField.jsx'
 import { isImageFile } from './isImageFile.js'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
@@ -13,9 +13,8 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 import styles from './File.module.css'
 
-export const File = observer(({ file, parent }) => {
-  const store = useContext(MobxStoreContext)
-  const { errors, unsetError } = store
+export const File = ({ file, parent }) => {
+  const errors = useAtomValue(errorsAtom)
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -23,7 +22,7 @@ export const File = observer(({ file, parent }) => {
   useEffect(() => unsetError(`${parent}_file`), [file, parent, unsetError])
 
   // TODO: need to add delete to all file models
-  const onClickDelete = () => file.delete({ store })
+  const onClickDelete = () => file.delete()
   const onClickDownload = () =>
     window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`)
 
@@ -31,7 +30,7 @@ export const File = observer(({ file, parent }) => {
     const field = event.target.name
     const value = event.target.value || null
     // TODO: need to add edit to all file models
-    await file.edit({ field, value, store })
+    await file.edit({ field, value })
     unsetError(`${parent}_file`)
   }
 
@@ -42,12 +41,14 @@ export const File = observer(({ file, parent }) => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        {isImage ?
+        {isImage ? (
           <img
             src={`https://ucarecdn.com/${file.file_id}/-/resize/80x/-/quality/lightest/${file.name}`}
             className={styles.img}
           />
-        : <div className={styles.imgReplacement}>...</div>}
+        ) : (
+          <div className={styles.imgReplacement}>...</div>
+        )}
         <div className={styles.dateiTypField}>
           <TextField
             key={`${file.id}fileMimeType`}
@@ -122,4 +123,4 @@ export const File = observer(({ file, parent }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

@@ -1,18 +1,19 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
-
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  store,
+  activeNodeArrayAtom,
+  setActiveNodeArray,
+} from '../../../store/index.js'
 import { personLabelFromPerson } from '../../../utils/personLabelFromPerson.js'
 
 import styles from '../Arten/Row.module.css'
 
-export const PersonRow = observer(({ style, index, rows }) => {
-  const store = useContext(MobxStoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
-
+export const PersonRow = ({ style, index, rows }) => {
   const row = rows[index]
 
-  const onClickRow = () => setActiveNodeArray([...activeNodeArray, row.id])
+  const onClickRow = () => {
+    const activeNodeArray = store.get(activeNodeArrayAtom)
+    setActiveNodeArray([...activeNodeArray, row.id])
+  }
 
   return (
     <div
@@ -27,4 +28,4 @@ export const PersonRow = observer(({ style, index, rows }) => {
       <div>{personLabelFromPerson({ person: row })}</div>
     </div>
   )
-})
+}

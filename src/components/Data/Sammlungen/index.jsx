@@ -1,12 +1,22 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  activeNodeArrayAtom,
+  filterSammlungAtom,
+  artIdInActiveNodeArrayAtom,
+  herkunftIdInActiveNodeArrayAtom,
+  personIdInActiveNodeArrayAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../store/index.js'
+import { insertSammlungRev } from '../../../modules/insertRev.js'
 import { FilterTitle } from '../../shared/FilterTitle.jsx'
 import { SammlungRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -18,18 +28,15 @@ import { constants } from '../../../utils/constants.js'
 
 import artStyles from '../Arten/index.module.css'
 
-export const Sammlungen = observer(({ filter: showFilter = false }) => {
-  const store = useContext(MobxStoreContext)
-  const {
-    insertSammlungRev,
-    artIdInActiveNodeArray,
-    herkunftIdInActiveNodeArray,
-    personIdInActiveNodeArray,
-    db,
-    filter,
-  } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-  const { sammlung: sammlungFilter } = store.filter
+export const Sammlungen = ({ filter: showFilter = false }) => {
+  const db = useAtomValue(dbAtom)
+  const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
+  const herkunftIdInActiveNodeArray = useAtomValue(
+    herkunftIdInActiveNodeArrayAtom,
+  )
+  const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+  const sammlungFilter = useAtomValue(filterSammlungAtom)
 
   const [dataState, setDataState] = useState({ sammlungs: [], totalCount: 0 })
   useEffect(() => {
@@ -48,24 +55,20 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
     }
     const collection = db.get('sammlung')
     const sammlungDelQuery =
-      filter.sammlung._deleted === false ? Q.where('_deleted', false)
-      : filter.sammlung._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      sammlungFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : sammlungFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const countObservable = collection
       .query(sammlungDelQuery, ...hierarchyQuery)
       .observeCount()
     const dataObservable = collection
-      .query(
-        ...tableFilter({
-          table: 'sammlung',
-          store,
-        }),
-        ...hierarchyQuery,
-      )
+      .query(...tableFilter({ table: 'sammlung' }), ...hierarchyQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
 
     // so need to hackly use merge
@@ -84,15 +87,10 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
   }, [
     db,
     // need to rerender if any of the values of sammlungFilter changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(sammlungFilter),
-
     sammlungFilter,
     artIdInActiveNodeArray,
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
-    store,
-    filter.sammlung._deleted,
   ])
 
   const { sammlungs, totalCount } = dataState
@@ -123,21 +121,18 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
-        {showFilter ?
+        {showFilter ? (
           <FilterTitle
             title="Sammlung"
             table="sammlung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={artStyles.titleContainer}>
+        ) : (
+          <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Sammlungen</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton
-                title={upTitle}
-                onClick={onClickUp}
-                size="large"
-              >
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -154,7 +149,7 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        }
+        )}
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
@@ -166,4 +161,4 @@ export const Sammlungen = observer(({ filter: showFilter = false }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
@@ -7,7 +7,15 @@ import UpSvg from '../../../svg/to_up.svg?react'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  activeNodeArrayAtom,
+  apFilterAtom,
+  filterArtAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../store/index.js'
+import { insertArtRev } from '../../../modules/insertRev.js'
 import { FilterTitle } from '../../shared/FilterTitle.jsx'
 import { ArtRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -19,26 +27,28 @@ import { ApFilter } from '../../shared/ApFilter.jsx'
 
 import artStyles from './index.module.css'
 
-export const Arten = observer(({ filter: showFilter }) => {
-  const store = useContext(MobxStoreContext)
-  const { insertArtRev, db, filter, apFilter } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-  const { art: artFilter } = store.filter
+export const Arten = ({ filter: showFilter }) => {
+  const db = useAtomValue(dbAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+  const apFilter = useAtomValue(apFilterAtom)
+  const artFilter = useAtomValue(filterArtAtom)
 
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
     const collection = db.get('art')
     const delQuery =
-      filter.art._deleted === false ? Q.where('_deleted', false)
-      : filter.art._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      artFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : artFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const totalCountObservable = collection.query(delQuery).observeCount()
     const artsObservable = collection
-      .query(...tableFilter({ store, table: 'art', apFilter }))
+      .query(...tableFilter({ table: 'art', apFilter }))
       .observeWithColumns(['ae_id', 'set', 'apflora_ap', 'apflora_av'])
     const combinedObservables = combineLatest([
       totalCountObservable,
@@ -54,7 +64,7 @@ export const Arten = observer(({ filter: showFilter }) => {
     return () => subscription?.unsubscribe?.()
     // need to rerender if any of the values of herkunftFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db, ...Object.values(artFilter), artFilter, store, apFilter])
+  }, [db, artFilter, apFilter])
 
   const { arts, totalCount } = dataState
   const filteredCount = arts.length
@@ -75,24 +85,21 @@ export const Arten = observer(({ filter: showFilter }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
-        {showFilter ?
+        {showFilter ? (
           <FilterTitle
             title="Art"
             table="art"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={artStyles.titleContainer}>
+        ) : (
+          <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Arten</div>
             <div className={artStyles.titleSymbols}>
               <div className={artStyles.apFilterContainer}>
                 <ApFilter />
               </div>
-              <IconButton
-                title={upTitle}
-                onClick={onClickUp}
-                size="large"
-              >
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -109,7 +116,7 @@ export const Arten = observer(({ filter: showFilter }) => {
               />
             </div>
           </div>
-        }
+        )}
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
@@ -121,4 +128,4 @@ export const Arten = observer(({ filter: showFilter }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

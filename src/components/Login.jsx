@@ -1,5 +1,4 @@
-import { useState, useContext, useRef } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useRef } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogActions from '@mui/material/DialogActions'
@@ -22,14 +21,12 @@ import {
 } from 'firebase/auth'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
-import { MobxStoreContext } from '../mobxStoreContext.js'
+import { dbAtom, firebaseAuthAtom, store } from '../store/index.js'
 import { constants } from '../utils/constants.js'
 
 import styles from './Login.module.css'
 
-export const Login = observer(() => {
-  const { db, firebaseAuth } = useContext(MobxStoreContext)
-
+export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)
@@ -45,6 +42,8 @@ export const Login = observer(() => {
     email: emailPassed,
     password: passwordPassed,
   }) => {
+    const db = store.get(dbAtom)
+    const firebaseAuth = store.get(firebaseAuthAtom)
     // need to fetch values from ref
     // why? password-managers enter values but do not blur/change
     // if password-manager enters values and user clicks "Anmelden"
@@ -99,6 +98,7 @@ export const Login = observer(() => {
 
   const [resetTitle, setResetTitle] = useState('neues Passwort setzen')
   const reset = async () => {
+    const firebaseAuth = store.get(firebaseAuthAtom)
     if (!email) setEmailErrorText('Bitte Email-Adresse eingeben')
     setResetTitle('...')
     try {
@@ -121,10 +121,7 @@ export const Login = observer(() => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <Dialog
-          aria-labelledby="dialog-title"
-          open={true}
-        >
+        <Dialog aria-labelledby="dialog-title" open={true}>
           <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
           <div className={styles.div}>
             <FormControl
@@ -171,9 +168,7 @@ export const Login = observer(() => {
                       title={showPass ? 'verstecken' : 'anzeigen'}
                       size="large"
                     >
-                      {showPass ?
-                        <VisibilityOffIcon />
-                      : <VisibilityIcon />}
+                      {showPass ? <VisibilityOffIcon /> : <VisibilityIcon />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -193,10 +188,7 @@ export const Login = observer(() => {
                 {resetTitle}
               </Button>
             )}
-            <Button
-              color="primary"
-              onClick={fetchLogin}
-            >
+            <Button color="primary" onClick={fetchLogin}>
               anmelden
             </Button>
           </DialogActions>
@@ -204,4 +196,4 @@ export const Login = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

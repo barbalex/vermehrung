@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { motion, useAnimation } from 'framer-motion'
@@ -7,7 +7,8 @@ import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import { dbAtom, store, filterArtAtom } from '../../../../../store/index.js'
+import { insertAvRev } from '../../../../../modules/insertRev.js'
 import { PersonArt as Art } from './Art.jsx'
 import { Select } from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
@@ -16,9 +17,8 @@ import { avsSortByArt } from '../../../../../utils/avsSortByArt.js'
 
 import styles from './index.module.css'
 
-export const PersonArten = observer(({ person }) => {
-  const store = useContext(MobxStoreContext)
-  const { db, insertAvRev, filter } = store
+export const PersonArten = ({ person }) => {
+  const db = useAtomValue(dbAtom)
 
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [person])
@@ -48,14 +48,17 @@ export const PersonArten = observer(({ person }) => {
     const avsObservable = person.avs
       .extend(Q.where('_deleted', false))
       .observe()
+    const artFilter = store.get(filterArtAtom)
     const artDelQuery =
-      filter.art._deleted === false ? Q.where('_deleted', false)
-      : filter.art._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      artFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : artFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const artsObservable = db
       .get('art')
       .query(artDelQuery, Q.where('id', Q.notIn(avArtIds)))
@@ -99,7 +102,9 @@ export const PersonArten = observer(({ person }) => {
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
-        <div className={styles.title}>{`Mitarbeitend bei ${avs.length} Arten`}</div>
+        <div
+          className={styles.title}
+        >{`Mitarbeitend bei ${avs.length} Arten`}</div>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -107,9 +112,7 @@ export const PersonArten = observer(({ person }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ?
-              <FaChevronUp />
-            : <FaChevronDown />}
+            {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
@@ -122,10 +125,7 @@ export const PersonArten = observer(({ person }) => {
           <>
             <div className={styles.avsClass}>
               {avs.map((av, index) => (
-                <Art
-                  key={`${av.person_id}/${av.art_id}/${index}`}
-                  av={av}
-                />
+                <Art key={`${av.person_id}/${av.art_id}/${index}`} av={av} />
               ))}
             </div>
             {!!artWerte.length && (
@@ -145,4 +145,4 @@ export const PersonArten = observer(({ person }) => {
       </motion.div>
     </ErrorBoundary>
   )
-})
+}

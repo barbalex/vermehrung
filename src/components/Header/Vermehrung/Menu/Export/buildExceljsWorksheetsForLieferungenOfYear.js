@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { store, dbAtom } from '../../../../../store/index.js'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 
@@ -8,11 +9,8 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
 import { lieferungSort } from '../../../../../utils/lieferungSort.js'
 
-export const buildExceljsWorksheetsForLieferungenOfYear = async ({
-  store,
-  year,
-}) => {
-  const { db } = store
+export const buildExceljsWorksheetsForLieferungenOfYear = async ({ year }) => {
+  const db = store.get(dbAtom)
   const { Workbook } = await import('exceljs/dist/exceljs.min.js')
   const workbook = new Workbook()
 
@@ -160,5 +158,5 @@ export const buildExceljsWorksheetsForLieferungenOfYear = async ({
       data: lieferungsdata,
     })
   }
-  downloadExceljsWorkbook({ store, fileName: `Lieferungen_${year}`, workbook })
+  downloadExceljsWorkbook({ fileName: `Lieferungen_${year}`, workbook })
 }

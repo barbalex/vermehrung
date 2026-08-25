@@ -1,7 +1,9 @@
 import { isEqual } from 'es-toolkit'
 
-export const closeAllChildren = ({ node, store }) => {
-  const { setOpenNodes, openNodes } = store.tree
+import { store, openNodesAtom, setOpenNodes } from '../../store/index.js'
+
+export const closeAllChildren = ({ node }) => {
+  const openNodes = store.get(openNodesAtom)
 
   const newOpenNodes = openNodes.filter((n) => {
     const urlPartWithEqualLength = n.slice(0, node.url.length)

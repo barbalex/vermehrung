@@ -16,6 +16,7 @@ import { lieferungSort } from '../../../../utils/lieferungSort.js'
 import { personSort } from '../../../../utils/personSort.js'
 import { zaehlungSort } from '../../../../utils/zaehlungSort.js'
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
+import { store, dbAtom } from '../../../../store/index.js'
 
 const threshold = 0.2
 const distance = 1000 // ensure text in long labels is found
@@ -23,14 +24,14 @@ const distance = 1000 // ensure text in long labels is found
 const formatDateForSearch = (datum) =>
   datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
-export const buildOptions = async ({ store, cb, val }) => {
-  const { db } = store
+export const buildOptions = async ({ cb, val }) => {
+  const db = store.get(dbAtom)
 
   let arts = []
   try {
     arts = await db
       .get('art')
-      .query(...tableFilter({ store, table: 'art' }))
+      .query(...tableFilter({ table: 'art' }))
       .fetch()
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
@@ -39,7 +40,7 @@ export const buildOptions = async ({ store, cb, val }) => {
   try {
     events = await db
       .get('event')
-      .query(...tableFilter({ store, table: 'event' }))
+      .query(...tableFilter({ table: 'event' }))
       .fetch()
   } catch {}
   const eventsSorted = events.sort(eventSort)
@@ -48,7 +49,7 @@ export const buildOptions = async ({ store, cb, val }) => {
   try {
     gartens = await db
       .get('garten')
-      .query(...tableFilter({ store, table: 'garten' }))
+      .query(...tableFilter({ table: 'garten' }))
       .fetch()
   } catch {}
   const gartensSorted = await gartensSortedFromGartens(gartens)
@@ -57,7 +58,7 @@ export const buildOptions = async ({ store, cb, val }) => {
   try {
     herkunfts = await db
       .get('herkunft')
-      .query(...tableFilter({ store, table: 'herkunft' }))
+      .query(...tableFilter({ table: 'herkunft' }))
       .fetch()
   } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
@@ -66,7 +67,7 @@ export const buildOptions = async ({ store, cb, val }) => {
   try {
     kulturs = await db
       .get('kultur')
-      .query(...tableFilter({ store, table: 'kultur' }))
+      .query(...tableFilter({ table: 'kultur' }))
       .fetch()
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
@@ -75,7 +76,7 @@ export const buildOptions = async ({ store, cb, val }) => {
   try {
     lieferungs = await db
       .get('lieferung')
-      .query(...tableFilter({ store, table: 'lieferung' }))
+      .query(...tableFilter({ table: 'lieferung' }))
       .fetch()
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
@@ -84,7 +85,7 @@ export const buildOptions = async ({ store, cb, val }) => {
   try {
     persons = await db
       .get('person')
-      .query(...tableFilter({ store, table: 'person' }))
+      .query(...tableFilter({ table: 'person' }))
       .fetch()
   } catch {}
   const personsSorted = persons.sort(personSort)
@@ -93,7 +94,7 @@ export const buildOptions = async ({ store, cb, val }) => {
   try {
     sammlungs = await db
       .get('sammlung')
-      .query(...tableFilter({ store, table: 'sammlung' }))
+      .query(...tableFilter({ table: 'sammlung' }))
       .fetch()
   } catch {}
   const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
@@ -102,7 +103,7 @@ export const buildOptions = async ({ store, cb, val }) => {
   try {
     zaehlungs = await db
       .get('zaehlung')
-      .query(...tableFilter({ store, table: 'zaehlung' }))
+      .query(...tableFilter({ table: 'zaehlung' }))
       .fetch()
   } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)

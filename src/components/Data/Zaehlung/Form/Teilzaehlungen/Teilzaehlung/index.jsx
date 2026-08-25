@@ -1,9 +1,13 @@
-import { useState, useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { of as $of } from 'rxjs'
 import { Allotment } from 'allotment'
 
-import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
+import {
+  onlineAtom,
+  dbAtom,
+  initialDataQueriedAtom,
+} from '../../../../../../store/index.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { TeilzaehlungConflict as Conflict } from './Conflict.jsx'
 import { TeilzaehlungForm as Form } from './Form/index.jsx'
@@ -11,9 +15,10 @@ import { TeilzaehlungHistory as History } from './History/index.jsx'
 
 import styles from './index.module.css'
 
-export const Teilzaehlung = observer(({ id, kulturId, index }) => {
-  const store = useContext(MobxStoreContext)
-  const { online, db, initialDataQueried } = store
+export const Teilzaehlung = ({ id, kulturId, index }) => {
+  const online = useAtomValue(onlineAtom)
+  const db = useAtomValue(dbAtom)
+  const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
   // TODO: should I subscribe to this row to rerender on updates of history?
 
@@ -23,8 +28,9 @@ export const Teilzaehlung = observer(({ id, kulturId, index }) => {
     rawRow: undefined,
   })
   useEffect(() => {
-    const tzObservable =
-      initialDataQueried ? db.get('teilzaehlung').findAndObserve(id) : $of({})
+    const tzObservable = initialDataQueried
+      ? db.get('teilzaehlung').findAndObserve(id)
+      : $of({})
     const subscription = tzObservable.subscribe((newRow) => {
       setDataState({
         row: newRow,
@@ -67,7 +73,7 @@ export const Teilzaehlung = observer(({ id, kulturId, index }) => {
                 setShowHistory={setShowHistory}
               />
               <Allotment.Pane visible={paneIsSplit}>
-                {activeConflict ?
+                {activeConflict ? (
                   <Conflict
                     rev={activeConflict}
                     id={id}
@@ -77,13 +83,13 @@ export const Teilzaehlung = observer(({ id, kulturId, index }) => {
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
                   />
-                : showHistory ?
+                ) : showHistory ? (
                   <History
                     row={row}
                     rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
-                : null}
+                ) : null}
               </Allotment.Pane>
             </Allotment>
           </div>
@@ -109,4 +115,4 @@ export const Teilzaehlung = observer(({ id, kulturId, index }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

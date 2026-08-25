@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -9,22 +9,22 @@ import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { of as $of } from 'rxjs'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import { dbAtom } from '../../../../../store/index.js'
 import { constants } from '../../../../../utils/constants.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 import styles from './Settings.module.css'
 
-export const TeilzaehlungenSettings = observer(({ kulturId }) => {
-  const store = useContext(MobxStoreContext)
-  const { db } = store
+export const TeilzaehlungenSettings = ({ kulturId }) => {
+  const db = useAtomValue(dbAtom)
 
   const [dataState, setDataState] = useState({
     kulturOption: undefined,
   })
   useEffect(() => {
-    const kulturOptionObservable =
-      kulturId ? db.get('kultur_option').findAndObserve(kulturId) : $of({})
+    const kulturOptionObservable = kulturId
+      ? db.get('kultur_option').findAndObserve(kulturId)
+      : $of({})
     const subscription = kulturOptionObservable.subscribe(
       async (kulturOption) => {
         setDataState({ kulturOption })
@@ -45,7 +45,7 @@ export const TeilzaehlungenSettings = observer(({ kulturId }) => {
   const saveToDb = (event) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    kulturOption.edit({ field, value, store })
+    kulturOption.edit({ field, value })
   }
 
   const openSettingsDocs = () => {
@@ -166,4 +166,4 @@ export const TeilzaehlungenSettings = observer(({ kulturId }) => {
       }
     </ErrorBoundary>
   )
-})
+}

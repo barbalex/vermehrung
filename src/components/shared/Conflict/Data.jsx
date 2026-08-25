@@ -1,10 +1,9 @@
-import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import styled from '@emotion/styled'
 import { diffSentences } from 'diff'
-import { observer } from 'mobx-react-lite'
 
 import { toStringIfPossible } from '../../../utils/toStringIfPossible.js'
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import { diffConflictAtom } from '../../../store/index.js'
 import { Spinner } from '../Spinner.jsx'
 
 import styles from './Data.module.css'
@@ -38,9 +37,8 @@ const diffStyles = {
   },
 }
 
-export const Data = observer(({ dataArray, loading }) => {
-  const store = useContext(MobxStoreContext)
-  const { diffConflict } = store
+export const Data = ({ dataArray, loading }) => {
+  const diffConflict = useAtomValue(diffConflictAtom)
 
   if (loading) return <Spinner message="lade Daten" />
 
@@ -63,29 +61,29 @@ export const Data = observer(({ dataArray, loading }) => {
     }
 
     return (
-      <Row
-        key={d.label}
-        style={rowStyle}
-      >
+      <Row key={d.label} style={rowStyle}>
         <div className={styles.key}>{`${d.label}:`}</div>
-        {showDiff ?
+        {showDiff ? (
           <>
             {(diffSentences(inputB, inputA) ?? []).map((group) => (
               <span
                 key={group.value}
                 style={
-                  group.added ? diffStyles.added
-                  : group.removed ?
-                    diffStyles.removed
-                  : {}
+                  group.added
+                    ? diffStyles.added
+                    : group.removed
+                      ? diffStyles.removed
+                      : {}
                 }
               >
                 {group.value}
               </span>
             ))}
           </>
-        : <div>{inputB}</div>}
+        ) : (
+          <div>{inputB}</div>
+        )}
       </Row>
     )
   })
-})
+}

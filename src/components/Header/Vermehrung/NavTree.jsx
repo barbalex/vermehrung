@@ -1,16 +1,17 @@
-import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
-import { observer } from 'mobx-react-lite'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  showTreeInSingleColumnViewAtom,
+  singleColumnViewAtom,
+  setShowTreeInSingleColumnView,
+} from '../../../store/index.js'
 
-export const HeaderNavTree = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const {
-    setShowTreeInSingleColumnView,
-    showTreeInSingleColumnView,
-    singleColumnView,
-  } = store
+export const HeaderNavTree = () => {
+  const showTreeInSingleColumnView = useAtomValue(
+    showTreeInSingleColumnViewAtom,
+  )
+  const singleColumnView = useAtomValue(singleColumnViewAtom)
 
   const onClickTreeMenu = () =>
     setShowTreeInSingleColumnView(!showTreeInSingleColumnView)
@@ -23,9 +24,9 @@ export const HeaderNavTree = observer(() => {
       aria-label="Navigations-Baum öffnen"
       onClick={onClickTreeMenu}
       title={
-        showTreeInSingleColumnView ?
-          'Navigations-Baum schliessen'
-        : 'Navigations-Baum öffnen'
+        showTreeInSingleColumnView
+          ? 'Navigations-Baum schliessen'
+          : 'Navigations-Baum öffnen'
       }
       data-active={showTreeInSingleColumnView}
       style={showTreeInSingleColumnView ? { border: '1px solid #9762d9' } : {}}
@@ -79,4 +80,4 @@ export const HeaderNavTree = observer(() => {
       </svg>
     </IconButton>
   )
-})
+}

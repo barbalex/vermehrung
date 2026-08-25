@@ -1,12 +1,20 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  activeNodeArrayAtom,
+  filterTeilkulturAtom,
+  kulturIdInActiveNodeArrayAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../store/index.js'
+import { insertTeilkulturRev } from '../../../modules/insertRev.js'
 import { FilterTitle } from '../../shared/FilterTitle.jsx'
 import { TeilkulturRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -18,41 +26,39 @@ import { constants } from '../../../utils/constants.js'
 
 import artStyles from '../Arten/index.module.css'
 
-export const Teilkulturen = observer(({ filter: showFilter = false }) => {
-  const store = useContext(MobxStoreContext)
-  const { insertTeilkulturRev, kulturIdInActiveNodeArray, db, filter } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-  const { teilkultur: teilkulturFilter } = store.filter
+export const Teilkulturen = ({ filter: showFilter = false }) => {
+  const db = useAtomValue(dbAtom)
+  const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+  const teilkulturFilter = useAtomValue(filterTeilkulturAtom)
 
-  const [dataState, setDataState] = useState({ teilkulturs: [], totalCount: 0 })
+  const [dataState, setDataState] = useState({
+    teilkulturs: [],
+    totalCount: 0,
+  })
   useEffect(() => {
-    const hierarchyQuery =
-      kulturIdInActiveNodeArray ?
-        [
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
     const collection = db.get('teilkultur')
     const teilkulturDelQuery =
-      filter.teilkultur._deleted === false ? Q.where('_deleted', false)
-      : filter.teilkultur._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      teilkulturFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : teilkulturFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const countObservable = collection
       .query(teilkulturDelQuery, ...hierarchyQuery)
       .observeCount()
     const dataObservable = collection
-      .query(
-        ...tableFilter({
-          table: 'teilkultur',
-          store,
-        }),
-        ...hierarchyQuery,
-      )
+      .query(...tableFilter({ table: 'teilkultur' }), ...hierarchyQuery)
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
     const combinedObservables = combineLatest([countObservable, dataObservable])
     const subscription = combinedObservables.subscribe(
@@ -67,13 +73,9 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
     return () => subscription?.unsubscribe?.()
   }, [
     db,
-    // need to rerender if any of the values of teilkulturFilter changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(teilkulturFilter),
+    // need to rerun if any of the values of teilkulturFilter changes
     teilkulturFilter,
     kulturIdInActiveNodeArray,
-    store,
-    filter.teilkultur._deleted,
   ])
 
   const { teilkulturs, totalCount } = dataState
@@ -98,21 +100,18 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
-        {showFilter ?
+        {showFilter ? (
           <FilterTitle
             title="Teilkultur"
             table="teilkultur"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={artStyles.titleContainer}>
+        ) : (
+          <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Teilkulturen</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton
-                title={upTitle}
-                onClick={onClickUp}
-                size="large"
-              >
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -129,7 +128,7 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        }
+        )}
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
@@ -141,4 +140,4 @@ export const Teilkulturen = observer(({ filter: showFilter = false }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

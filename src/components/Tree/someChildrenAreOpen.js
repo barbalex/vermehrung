@@ -2,11 +2,11 @@ import { isEqual } from 'es-toolkit'
 
 import { isNodeOpen } from './isNodeOpen.js'
 
-export const someChildrenAreOpen = ({ store, nodes, url }) => {
+export const someChildrenAreOpen = ({ nodes, url }) => {
   if (!url) return false
 
   // return false if node itself is closed
-  if (!isNodeOpen({ store, url })) return false
+  if (!isNodeOpen({ url })) return false
 
   const childNodes = nodes.filter((n) => {
     if (!n.url) {
@@ -19,5 +19,5 @@ export const someChildrenAreOpen = ({ store, nodes, url }) => {
       isEqual(urlPartWithEqualLength, url) && n.url.length === url.length + 1
     )
   })
-  return childNodes.some((n) => isNodeOpen({ store, url: n.url }))
+  return childNodes.some((n) => isNodeOpen({ url: n.url }))
 }

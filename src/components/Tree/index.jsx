@@ -1,13 +1,28 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { interval, combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
 import { AutoSizer } from 'react-virtualized-auto-sizer'
 
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import {
+  dbAtom,
+  userAtom,
+  apFilterAtom,
+  activeNodeArrayAtom,
+  openNodesAtom,
+  filterArtAtom,
+  filterHerkunftAtom,
+  filterSammlungAtom,
+  filterGartenAtom,
+  filterKulturAtom,
+  filterTeilkulturAtom,
+  filterZaehlungAtom,
+  filterLieferungAtom,
+  filterEventAtom,
+  filterPersonAtom,
+} from '../../store/index.js'
 import { TreeSettings as Settings } from './Settings.jsx'
 import { ApFilterContainer } from './ApFilter.jsx'
 import { TreeList as List } from './List.jsx'
@@ -18,25 +33,22 @@ import { buildNodes } from './nodes/index.js'
 
 import styles from './index.module.css'
 
-export const Tree = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { db, user, apFilter } = store
-  const {
-    art: artFilter,
-    herkunft: herkunftFilter,
-    sammlung: sammlungFilter,
-    garten: gartenFilter,
-    kultur: kulturFilter,
-    teilkultur: teilkulturFilter,
-    zaehlung: zaehlungFilter,
-    lieferung: lieferungFilter,
-    // sammel_lieferung: sammelLieferungFilter,
-    event: eventFilter,
-    person: personFilter,
-  } = store.filter
-  const { activeNodeArray: aNAProxy, openNodes: openNodesProxy } = store.tree
-  const aNA = getSnapshot(aNAProxy)
-  const openNodes = getSnapshot(openNodesProxy)
+export const Tree = () => {
+  const db = useAtomValue(dbAtom)
+  const user = useAtomValue(userAtom)
+  const apFilter = useAtomValue(apFilterAtom)
+  const aNA = useAtomValue(activeNodeArrayAtom)
+  const openNodes = useAtomValue(openNodesAtom)
+  const artFilter = useAtomValue(filterArtAtom)
+  const herkunftFilter = useAtomValue(filterHerkunftAtom)
+  const sammlungFilter = useAtomValue(filterSammlungAtom)
+  const gartenFilter = useAtomValue(filterGartenAtom)
+  const kulturFilter = useAtomValue(filterKulturAtom)
+  const teilkulturFilter = useAtomValue(filterTeilkulturAtom)
+  const zaehlungFilter = useAtomValue(filterZaehlungAtom)
+  const lieferungFilter = useAtomValue(filterLieferungAtom)
+  const eventFilter = useAtomValue(filterEventAtom)
+  const personFilter = useAtomValue(filterPersonAtom)
 
   const [nodes, setNodes] = useState([])
   const [dataState, setDataState] = useState({
@@ -48,7 +60,6 @@ export const Tree = observer(() => {
   const buildMyNodes = async () => {
     //console.log('buildNodes building tree nodes')
     const nodes = await buildNodes({
-      store,
       userPersonOption,
       userRole,
     })
@@ -83,15 +94,15 @@ export const Tree = observer(() => {
     // need subscription to all tables that provokes treeBuild on next
     const artsObservable = db
       .get('art')
-      .query(...tableFilter({ store, table: 'art' }))
+      .query(...tableFilter({ table: 'art' }))
       .observeWithColumns(['ae_id'])
     const herkunftsObservable = db
       .get('herkunft')
-      .query(...tableFilter({ store, table: 'herkunft' }))
+      .query(...tableFilter({ table: 'herkunft' }))
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
     const sammlungsObservable = db
       .get('sammlung')
-      .query(...tableFilter({ store, table: 'sammlung' }))
+      .query(...tableFilter({ table: 'sammlung' }))
       .observeWithColumns([
         'art_id',
         'person_id',
@@ -101,11 +112,11 @@ export const Tree = observer(() => {
       ])
     const gartensObservable = db
       .get('garten')
-      .query(...tableFilter({ store, table: 'garten' }))
+      .query(...tableFilter({ table: 'garten' }))
       .observeWithColumns(['name', 'person_id'])
     const kultursObservable = db
       .get('kultur')
-      .query(...tableFilter({ store, table: 'kultur' }))
+      .query(...tableFilter({ table: 'kultur' }))
       .observeWithColumns([
         'art_id',
         'herkunft_id',
@@ -114,15 +125,15 @@ export const Tree = observer(() => {
       ])
     const teilkultursObservable = db
       .get('teilkultur')
-      .query(...tableFilter({ store, table: 'teilkultur' }))
+      .query(...tableFilter({ table: 'teilkultur' }))
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
     const zaehlungsObservable = db
       .get('zaehlung')
-      .query(...tableFilter({ store, table: 'zaehlung' }))
+      .query(...tableFilter({ table: 'zaehlung' }))
       .observeWithColumns(['datum', 'prognose'])
     const lieferungsObservable = db
       .get('lieferung')
-      .query(...tableFilter({ store, table: 'lieferung' }))
+      .query(...tableFilter({ table: 'lieferung' }))
       .observeWithColumns([
         'datum',
         'anzahl_pflanzen',
@@ -130,15 +141,15 @@ export const Tree = observer(() => {
       ])
     // const sammelLieferungsObservable = db
     //   .get('sammel_lieferung')
-    //   .query(...tableFilter({ store, table: 'sammel_lieferung' }))
+    //   .query(...tableFilter({ table: 'sammel_lieferung' }))
     //   .observeWithColumns(['datum', 'anzahl_pflanzen'])
     const eventsObservable = db
       .get('event')
-      .query(...tableFilter({ store, table: 'event' }))
+      .query(...tableFilter({ table: 'event' }))
       .observeWithColumns(['datum', 'beschreibung'])
     const personsObservable = db
       .get('person')
-      .query(...tableFilter({ store, table: 'person' }))
+      .query(...tableFilter({ table: 'person' }))
       .observeWithColumns(['vorname', 'name'])
     const kulturOptionsObservable = db
       .get('kultur_option')
@@ -170,7 +181,7 @@ export const Tree = observer(() => {
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [buildMyNodesDebounced, db, store, user.uid])
+  }, [buildMyNodesDebounced, db, user.uid])
 
   useEffect(() => {
     //console.log('Tree second useEffect ordering nodes build')
@@ -178,28 +189,16 @@ export const Tree = observer(() => {
   }, [
     buildMyNodesDebounced,
     // need to rebuild tree if any filter value changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(artFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(herkunftFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(sammlungFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(gartenFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(kulturFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(teilkulturFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(zaehlungFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(lieferungFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // ...Object.values(sammelLieferungFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(eventFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(personFilter),
+    artFilter,
+    herkunftFilter,
+    sammlungFilter,
+    gartenFilter,
+    kulturFilter,
+    teilkulturFilter,
+    zaehlungFilter,
+    lieferungFilter,
+    eventFilter,
+    personFilter,
     // need to rebuild tree on activeNodeArray changes
     aNA,
     // need to rebuild tree on openNodes changes
@@ -229,4 +228,4 @@ export const Tree = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

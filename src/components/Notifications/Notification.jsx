@@ -1,11 +1,14 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { css } from '@emotion/react'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import { MdClose as CloseIcon } from 'react-icons/md'
 
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import {
+  removeNotificationById,
+  removeQueuedQueryById,
+  updateModelValue,
+  updateModelValues,
+} from '../../store/index.js'
 
 import styles from './Notification.module.css'
 
@@ -16,9 +19,7 @@ const colorMap = {
   warning: 'orange',
 }
 
-export const Notification = observer(({ notification: n }) => {
-  const store = useContext(MobxStoreContext)
-  const { removeNotificationById } = store
+export const Notification = ({ notification: n }) => {
   const {
     title,
     message,
@@ -39,16 +40,19 @@ export const Notification = observer(({ notification: n }) => {
   const onClickClose = () => removeNotificationById(n.id)
 
   const onClickAction = () => {
-    store?.[actionName]?.(actionArgument ?? undefined)
+    // formerly: store?.[actionName]?.(actionArgument)
+    if (actionName === 'removeQueuedQueryById') {
+      removeQueuedQueryById(actionArgument ?? undefined)
+    }
     if (revertTable && revertId && revertField) {
-      store.updateModelValue({
+      updateModelValue({
         table: revertTable,
         id: revertId,
         field: revertField,
         value: revertValue,
       })
     } else if (revertTable && revertId && revertValues) {
-      store.updateModelValues({
+      updateModelValues({
         table: revertTable,
         id: revertId,
         values: JSON.parse(revertValues),
@@ -58,10 +62,7 @@ export const Notification = observer(({ notification: n }) => {
   }
 
   return (
-    <div
-      className={styles.container}
-      style={{ backgroundColor: color }}
-    >
+    <div className={styles.container} style={{ backgroundColor: color }}>
       <div className={styles.text}>
         {!!title && <div className={styles.titleClass}>{title}</div>}
         <div className={styles.messageClass}>{message}</div>
@@ -98,4 +99,4 @@ export const Notification = observer(({ notification: n }) => {
       </IconButton>
     </div>
   )
-})
+}

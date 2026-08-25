@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -12,23 +12,22 @@ import { Q } from '@nozbe/watermelondb'
 import { Qk } from './Qk/index.jsx'
 import { Choose } from './Choose/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import { dbAtom, userAtom } from '../../../../../store/index.js'
 import { constants } from '../../../../../utils/constants.js'
 
 import styles from './index.module.css'
 
-export const QK = observer(({ artId }) => {
-  const store = useContext(MobxStoreContext)
-  const { db, user } = store
+export const QK = ({ artId }) => {
+  const db = useAtomValue(dbAtom)
+  const user = useAtomValue(userAtom)
 
   const [tab, setTab] = useState('qk')
   const onChangeTab = (event, value) => setTab(value)
 
   const [dataState, setDataState] = useState({ qks: [], userPersonOption: {} })
   useEffect(() => {
-    const userPersonOptionsObservable =
-      user.uid ?
-        db
+    const userPersonOptionsObservable = user.uid
+      ? db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['art_qk_choosen'])
@@ -109,16 +108,11 @@ export const QK = observer(({ artId }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ?
-              <FaChevronUp />
-            : <FaChevronDown />}
+            {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
-      <motion.div
-        animate={anim}
-        transition={{ type: 'just', duration: 0.4 }}
-      >
+      <motion.div animate={anim} transition={{ type: 'just', duration: 0.4 }}>
         {open && (
           <>
             <Tabs
@@ -129,11 +123,7 @@ export const QK = observer(({ artId }) => {
               centered
               className={styles.tabs}
             >
-              <Tab
-                label="ausführen"
-                value="qk"
-                data-id="qk"
-              />
+              <Tab label="ausführen" value="qk" data-id="qk" />
               <Tab
                 label={`auswählen${
                   qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
@@ -143,16 +133,15 @@ export const QK = observer(({ artId }) => {
               />
             </Tabs>
             <div className={styles.body}>
-              {tab === 'qk' ?
-                <Qk
-                  artId={artId}
-                  qkChoosens={qkChoosens}
-                />
-              : <Choose qks={qks} />}
+              {tab === 'qk' ? (
+                <Qk artId={artId} qkChoosens={qkChoosens} />
+              ) : (
+                <Choose qks={qks} />
+              )}
             </div>
           </>
         )}
       </motion.div>
     </ErrorBoundary>
   )
-})
+}

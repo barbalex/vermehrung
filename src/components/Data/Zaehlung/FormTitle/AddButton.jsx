@@ -1,15 +1,10 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import { insertZaehlungRev } from '../../../../modules/insertRev.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-export const ZaehlungAddButton = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { insertZaehlungRev } = store
-
+export const ZaehlungAddButton = () => {
   return (
     <ErrorBoundary>
       <IconButton
@@ -22,4 +17,4 @@ export const ZaehlungAddButton = observer(() => {
       </IconButton>
     </ErrorBoundary>
   )
-})
+}

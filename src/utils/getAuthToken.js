@@ -1,21 +1,26 @@
 import axios from 'redaxios'
 import { throttle } from 'es-toolkit'
 
-export const getAuthToken = async ({ store }) => {
-  const {
-    addNotification,
-    setAuthorizing,
-    user,
-    online,
-    setOnline,
-    shortTermOnline,
-    setShortTermOnline,
-  } = store
+import {
+  store,
+  addNotification,
+  setAuthorizing,
+  userAtom,
+  onlineAtom,
+  shortTermOnlineAtom,
+  setOnline,
+  setShortTermOnline,
+} from '../store/index.js'
+
+export const getAuthToken = async () => {
+  const user = store.get(userAtom)
+  const online = store.get(onlineAtom)
+  const shortTermOnline = store.get(shortTermOnlineAtom)
   if (!user?.uid) {
     console.log('getAuthToken missing user.uid')
     const regetMe = () => {
       console.log('getAuthToken recalling itself')
-      getAuthToken({ store })
+      getAuthToken()
       setTimeout(() => {
         console.log('getAuthToken reloading window')
         window.location.reload(true)
@@ -71,7 +76,7 @@ export const getAuthToken = async ({ store }) => {
     // set token to localStorage so authLink picks it up on next db call
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-348492358
-    // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
+    // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859198
     //console.log('getAuthToken setting new token:', token)
     window.localStorage.setItem('token', token)
     // TODO: do i need to reload window here?

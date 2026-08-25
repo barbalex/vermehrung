@@ -1,30 +1,31 @@
-import { useContext, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
 import { FaMinus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import {
+  store,
+  activeNodeArrayAtom,
+  filterLieferungAtom,
+  setActiveNodeArray,
+  removeOpenNodeWithChildren,
+} from '../../../../../store/index.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 import artStyles from '../../../Art/FormTitle/DeleteButton.module.css'
 
-export const LieferungDeleteButton = observer(({ row }) => {
-  const store = useContext(MobxStoreContext)
-  const { filter } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
-    store.tree
-
+export const LieferungDeleteButton = ({ row }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = () => setAnchorEl(null)
   const onClickButton = (event) => setAnchorEl(event.currentTarget)
 
   const remove = () => {
-    row.delete({ store })
+    row.delete()
     setAnchorEl(null)
-    if (filter.lieferung._deleted === false) {
+    if (store.get(filterLieferungAtom)._deleted === false) {
       // need to remove openNode from openNodes
+      const activeNodeArray = store.get(activeNodeArrayAtom)
       removeOpenNodeWithChildren(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
     }
@@ -58,4 +59,4 @@ export const LieferungDeleteButton = observer(({ row }) => {
       </Menu>
     </ErrorBoundary>
   )
-})
+}

@@ -1,11 +1,15 @@
-import { useContext } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useQuery } from 'urql'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  addNotification,
+  dbAtom,
+  gqlClientAtom,
+  store,
+  userAtom,
+} from '../../../store/index.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
 import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
@@ -33,132 +37,132 @@ const artRevQuery = gql`
   }
 `
 
-export const ArtConflict = observer(
-  ({
-    id,
-    rev,
-    row,
-    conflictDisposalCallback,
-    conflictSelectionCallback,
-    setActiveConflict,
-  }) => {
-    const store = useContext(MobxStoreContext)
-    const { user, addNotification, db, gqlClient } = store
+export const ArtConflict = ({
+  id,
+  rev,
+  row,
+  conflictDisposalCallback,
+  conflictSelectionCallback,
+  setActiveConflict,
+}) => {
+  // need to use this query to ensure that the person's name is queried
+  const [{ error, data, fetching }] = useQuery({
+    query: artRevQuery,
+    variables: {
+      rev,
+      id,
+    },
+  })
+  error && checkForOnlineError({ error })
 
-    // need to use this query to ensure that the person's name is queried
-    const [{ error, data, fetching }] = useQuery({
-      query: artRevQuery,
-      variables: {
-        rev,
-        id,
-      },
-    })
-    error && checkForOnlineError({ error, store })
+  const revRow = data?.art_rev?.[0] ?? {}
 
-    const revRow = data?.art_rev?.[0] ?? {}
+  const dataArray = createDataArrayForRevComparison({ row, revRow })
 
-    const dataArray = createDataArrayForRevComparison({ row, revRow, store })
-
-    const onClickAktuellUebernehmen = async () => {
-      // build new object
-      const newDepth = revRow._depth + 1
-      const newObject = {
-        art_id: revRow.art_id,
-        ae_id: revRow.ae_id,
-        set: revRow.set,
-        apflora_av: revRow.apflora_av,
-        apflora_ap: revRow.apflora_ap,
-        _parent_rev: revRow._rev,
-        _depth: newDepth,
-        _deleted: true,
-      }
-      const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-      newObject._rev = rev
-      newObject.id = uuidv1()
-      newObject.changed = new window.Date().toISOString()
-      newObject.changed_by = user.email
-      newObject._revisions =
-        revRow._revisions ?
-          toPgArray([rev, ...revRow._revisions])
-        : toPgArray([rev])
-
-      const response = await gqlClient
-        .mutation(mutations.mutateInsert_art_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'art_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-      if (response.error) {
-        checkForOnlineError({ error: response.error, store })
-        return addNotification({
-          message: response.error.message,
-        })
-      }
-      // update model: remove this conflict
-      try {
-        const model = await db.get('art').find(revRow.art_id)
-        await model.removeConflict(revRow._rev)
-      } catch {}
-      conflictDisposalCallback()
+  const onClickAktuellUebernehmen = async () => {
+    const user = store.get(userAtom)
+    const gqlClient = store.get(gqlClientAtom)
+    const db = store.get(dbAtom)
+    // build new object
+    const newDepth = revRow._depth + 1
+    const newObject = {
+      art_id: revRow.art_id,
+      ae_id: revRow.ae_id,
+      set: revRow.set,
+      apflora_av: revRow.apflora_av,
+      apflora_ap: revRow.apflora_ap,
+      _parent_rev: revRow._rev,
+      _depth: newDepth,
+      _deleted: true,
     }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = revRow._revisions
+      ? toPgArray([rev, ...revRow._revisions])
+      : toPgArray([rev])
 
-    const onClickWiderspruchUebernehmen = async () => {
-      // need to attach to the winner, that is row
-      // otherwise risk to still have lower depth and thus loosing
-      const newDepth = row._depth + 1
-      const newObject = {
-        art_id: revRow.art_id,
-        ae_id: revRow.ae_id,
-        set: revRow.set,
-        apflora_av: revRow.apflora_av,
-        apflora_ap: revRow.apflora_ap,
-        _parent_rev: row._rev,
-        _depth: newDepth,
-        _deleted: revRow._deleted,
-      }
-      const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-      newObject._rev = rev
-      newObject.id = uuidv1()
-      newObject.changed = new window.Date().toISOString()
-      newObject.changed_by = user.email
-      newObject._revisions =
-        row._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
-      const response = await gqlClient
-        .mutation(mutations.mutateInsert_art_rev_one, {
-          object: newObject,
-          on_conflict: {
-            constraint: 'art_rev_pkey',
-            update_columns: ['id'],
-          },
-        })
-        .toPromise()
-      if (response.error) {
-        checkForOnlineError({ error: response.error, store })
-        return addNotification({
-          message: response.error.message,
-        })
-      }
-      // now we need to delete the previous conflict
-      onClickAktuellUebernehmen()
-      conflictSelectionCallback()
+    const response = await gqlClient
+      .mutation(mutations.mutateInsert_art_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'art_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error })
+      return addNotification({
+        message: response.error.message,
+      })
     }
+    // update model: remove this conflict
+    try {
+      const model = await db.get('art').find(revRow.art_id)
+      await model.removeConflict(revRow._rev)
+    } catch {}
+    conflictDisposalCallback()
+  }
 
-    const onClickSchliessen = () => setActiveConflict(null)
+  const onClickWiderspruchUebernehmen = async () => {
+    const user = store.get(userAtom)
+    const gqlClient = store.get(gqlClientAtom)
+    // need to attach to the winner, that is row
+    // otherwise risk to still have lower depth and thus loosing
+    const newDepth = row._depth + 1
+    const newObject = {
+      art_id: revRow.art_id,
+      ae_id: revRow.ae_id,
+      set: revRow.set,
+      apflora_av: revRow.apflora_av,
+      apflora_ap: revRow.apflora_ap,
+      _parent_rev: row._rev,
+      _depth: newDepth,
+      _deleted: revRow._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = row._revisions
+      ? toPgArray([rev, ...row._revisions])
+      : toPgArray([rev])
+    const response = await gqlClient
+      .mutation(mutations.mutateInsert_art_rev_one, {
+        object: newObject,
+        on_conflict: {
+          constraint: 'art_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+      .toPromise()
+    if (response.error) {
+      checkForOnlineError({ error: response.error })
+      return addNotification({
+        message: response.error.message,
+      })
+    }
+    // now we need to delete the previous conflict
+    onClickAktuellUebernehmen()
+    conflictSelectionCallback()
+  }
 
-    return (
-      <Conflict
-        name="Art"
-        rev={rev}
-        dataArray={dataArray}
-        fetching={fetching}
-        error={error}
-        onClickAktuellUebernehmen={onClickAktuellUebernehmen}
-        onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
-        onClickSchliessen={onClickSchliessen}
-      />
-    )
-  },
-)
+  const onClickSchliessen = () => setActiveConflict(null)
+
+  return (
+    <Conflict
+      name="Art"
+      rev={rev}
+      dataArray={dataArray}
+      fetching={fetching}
+      error={error}
+      onClickAktuellUebernehmen={onClickAktuellUebernehmen}
+      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
+      onClickSchliessen={onClickSchliessen}
+    />
+  )
+}

@@ -1,17 +1,22 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, useMemo } from 'react'
+import { atom, useAtomValue } from 'jotai'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  filterTableAtoms,
+  setActiveNodeArray,
+} from '../../../store/index.js'
 import { tableFilter } from '../../../utils/tableFilter.js'
 
 import styles from '../Arten/Row.module.css'
 
-export const RootRow = observer(({ style, row }) => {
-  const store = useContext(MobxStoreContext)
-  const { db } = store
-  const { setActiveNodeArray } = store.tree
-
-  const filter = store.filter?.[row.table] ?? {}
+export const RootRow = ({ style, row }) => {
+  const db = useAtomValue(dbAtom)
+  const filterAtom = useMemo(
+    () => filterTableAtoms[row.table] ?? atom({}),
+    [row.table],
+  )
+  const filter = useAtomValue(filterAtom)
 
   // query needs to be observable
   // without, on first login, count is (generally) not yet available
@@ -20,15 +25,14 @@ export const RootRow = observer(({ style, row }) => {
   useEffect(() => {
     const subscription = db
       .get(row.table)
-      .query(...tableFilter({ store, table: row.table }))
+      .query(...tableFilter({ table: row.table }))
       .observe()
       .subscribe((result) => {
         setCount(result.length)
       })
 
     return () => subscription?.unsubscribe?.()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db, row.table, store, ...Object.values(filter)])
+  }, [db, row.table, filter])
 
   const onClickRow = () => setActiveNodeArray(row.url)
 
@@ -42,4 +46,4 @@ export const RootRow = observer(({ style, row }) => {
       <div>{`${row.name} (${count})`}</div>
     </div>
   )
-})
+}

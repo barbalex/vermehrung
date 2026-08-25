@@ -1,4 +1,5 @@
 import { Q } from '@nozbe/watermelondb'
+import { store, dbAtom } from '../../../../../store/index.js'
 import { first as first$ } from 'rxjs/operators'
 
 import { addWorksheetToExceljsWorkbook } from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
@@ -11,12 +12,11 @@ import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFrom
  * that is why it receives a workbook and _can_ receive calledFromHigherUp
  */
 export const buildExceljsWorksheetsForDaten = async ({
-  store,
   garten_id,
   workbook,
   calledFromHigherUp,
 }) => {
-  const { db } = store
+  const db = store.get(dbAtom)
 
   // 1. Get Garten
   let garten
@@ -134,7 +134,6 @@ export const buildExceljsWorksheetsForDaten = async ({
     // because excel limits length of names and uuid is too long
     for (const [index, kultur_id] of [myKulturIds].entries()) {
       await buildExceljsWorksheetsForKultur({
-        store,
         kultur_id: kultur_id[0],
         kultur_name: index + 1,
         workbook,

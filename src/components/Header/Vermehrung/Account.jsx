@@ -1,4 +1,5 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
@@ -9,12 +10,18 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import { FaUserCircle as UserIcon, FaExclamationCircle } from 'react-icons/fa'
-import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 import { reload, sendPasswordResetEmail } from 'firebase/auth'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  store,
+  userAtom,
+  onlineAtom,
+  dbAtom,
+  queueSizeAtom,
+  firebaseAuthAtom,
+} from '../../../store/index.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { logout } from '../../../utils/logout.js'
 import { reloadData } from '../../../utils/reloadData.js'
@@ -24,14 +31,15 @@ import { personFullname } from '../../../utils/personFullname.js'
 import styles from './Account.module.css'
 
 const Account = () => {
-  const store = useContext(MobxStoreContext)
-  const { user, online, db, queuedQueries, firebaseAuth } = store
+  const user = useAtomValue(userAtom)
+  const online = useAtomValue(onlineAtom)
+  const db = useAtomValue(dbAtom)
+  const queueSize = useAtomValue(queueSizeAtom)
 
   const [userPerson, setUserPerson] = useState(undefined)
   useEffect(() => {
-    const userPersonObservable =
-      user.uid ?
-        db
+    const userPersonObservable = user.uid
+      ? db
           .get('person')
           .query(Q.where('account_id', user.uid))
           .observeWithColumns(['vorname', 'name'])
@@ -57,10 +65,10 @@ const Account = () => {
     setAnchorEl(null)
     // if exist pending operations
     // ask user if willing to loose them
-    if (queuedQueries.size) {
+    if (queueSize) {
       return setPendingOperationsDialogOpen(true)
     }
-    logout({ store })
+    logout()
   }
 
   const [reloadDataDialogOpen, setReloadDataDialogOpen] = useState(false)
@@ -68,10 +76,10 @@ const Account = () => {
     setAnchorEl(null)
     // if exist pending operations
     // ask user if willing to loose them
-    if (queuedQueries.size) {
+    if (queueSize) {
       return setReloadDataDialogOpen(true)
     }
-    reloadData({ store })
+    reloadData()
   }
 
   const { email } = user || {}
@@ -79,7 +87,7 @@ const Account = () => {
   const onClickResetPassword = async () => {
     setResetTitle('...')
     try {
-      await sendPasswordResetEmail(firebaseAuth, email, {
+      await sendPasswordResetEmail(store.get(firebaseAuthAtom), email, {
         url: `${constants?.getAppUri()}/Vermehrung`,
         handleCodeInApp: true,
       })
@@ -147,7 +155,7 @@ const Account = () => {
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               {`Beim Abmelden werden aus Datenschutzgründen alle lokalen Daten
-              entfernt. Es gibt noch ${queuedQueries.size} ausstehende
+              entfernt. Es gibt noch ${queueSize} ausstehende
               Operationen. Wenn Sie jetzt abmelden, gehen diese verloren.
               Vermutlich warten Sie besser, bis diese Operationen an den Server
               übermittelt wurden.`}
@@ -167,7 +175,7 @@ const Account = () => {
             <Button
               onClick={() => {
                 setPendingOperationsDialogOpen(false)
-                logout({ store })
+                logout()
               }}
               variant="outlined"
               startIcon={<FaExclamationCircle />}
@@ -188,7 +196,7 @@ const Account = () => {
           <DialogTitle id="alert-dialog-title">{'Wirklich?'}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {`Es gibt noch ${queuedQueries.size} ausstehende
+              {`Es gibt noch ${queueSize} ausstehende
               Operationen. Wenn Sie jetzt die Daten verwerfen und neu laden, gehen diese verloren.
               Vermutlich warten Sie besser, bis diese Operationen an den Server
               übermittelt wurden.`}
@@ -207,7 +215,7 @@ const Account = () => {
             <Button
               onClick={() => {
                 setReloadDataDialogOpen(false)
-                reloadData({ store })
+                reloadData()
               }}
               variant="outlined"
               startIcon={<FaExclamationCircle />}
@@ -223,4 +231,4 @@ const Account = () => {
   )
 }
 
-export default observer(Account)
+export default Account

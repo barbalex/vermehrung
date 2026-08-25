@@ -1,14 +1,15 @@
-import { upperFirst, camelCase } from 'es-toolkit'
+import { camelCase } from 'es-toolkit'
 import isUuid from 'is-uuid'
 
 import tableFromTitleHash from '../../utils/tableFromTitleHash.json'
 import { exists } from '../../utils/exists.js'
+import { store, dbAtom, setActiveNodeArray } from '../../store/index.js'
+import { insertRev } from '../../modules/insertRev.js'
 
-export const createNew = async ({ node, store }) => {
+export const createNew = async ({ node }) => {
   // get parent table, parent table id and table from url
   const { nodeType, url } = node
-  const { db } = store
-  const { setActiveNodeArray } = store.tree
+  const db = store.get(dbAtom)
 
   // get table and id from url
   let parentTableTitle = null
@@ -31,8 +32,9 @@ export const createNew = async ({ node, store }) => {
     }
     if (parentId && url.length > 3) {
       parentTableTitle = url.slice(-4)[0]
-      parentTable =
-        parentTableTitle ? tableFromTitleHash[parentTableTitle] : null
+      parentTable = parentTableTitle
+        ? tableFromTitleHash[parentTableTitle]
+        : null
     }
   } else if (nodeType === 'folder') {
     tableTitle = url.slice(-1)[0]
@@ -43,8 +45,9 @@ export const createNew = async ({ node, store }) => {
     }
     if (parentId && url.length > 2) {
       parentTableTitle = url.slice(-3)[0]
-      parentTable =
-        parentTableTitle ? tableFromTitleHash[parentTableTitle] : null
+      parentTable = parentTableTitle
+        ? tableFromTitleHash[parentTableTitle]
+        : null
     }
   }
   // foreign key to parent should exist if parentTable and it's id exist
@@ -115,7 +118,7 @@ export const createNew = async ({ node, store }) => {
 
   // delay insert to enable activeNodeArray to catch up
   setTimeout(() =>
-    store[`insert${upperFirst(camelCase(table))}Rev`]({
+    insertRev(table, {
       values: additionalValuesToSet,
     }),
   )

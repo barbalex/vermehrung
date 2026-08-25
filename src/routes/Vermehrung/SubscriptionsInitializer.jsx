@@ -1,14 +1,22 @@
-import { useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import gql from 'graphql-tag'
 
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import {
+  authorizingAtom,
+  userAtom,
+  gqlClientAtom,
+  wsReconnectCountAtom,
+} from '../../store/index.js'
 import { initializeSubscriptions } from '../../utils/initializeSubscriptions.js'
 
-export const SubscriptionsInitializer = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { authorizing, user, gqlClient } = store
-  const { wsReconnectCount } = store.tree
+export const SubscriptionsInitializer = () => {
+  const authorizing = useAtomValue(authorizingAtom)
+  const user = useAtomValue(userAtom)
+  const gqlClient = useAtomValue(gqlClientAtom)
+  // wsReconnectCount is made so a subscription can provoke re-subscription on error
+  // see initializeSubscriptions, unsubscribe.ae_art
+  const wsReconnectCount = useAtomValue(wsReconnectCountAtom)
 
   useEffect(() => {
     // console.log('vermehrung, subscription effect', {
@@ -48,7 +56,7 @@ export const SubscriptionsInitializer = observer(() => {
           // error not caught > user will get too much data
           // console.log('got user role, initializing subscriptions, data:', data)
           const userRole = data?.person?.[0]?.person_user_role?.name
-          unsubscribe = initializeSubscriptions({ store, userRole })
+          unsubscribe = initializeSubscriptions({ userRole })
         })
         .catch((error) => {
           console.log('error caught getting user role:', error)
@@ -59,9 +67,7 @@ export const SubscriptionsInitializer = observer(() => {
         Object.values(unsubscribe).forEach((value) => value?.unsubscribe?.())
       }
     }
-    // wsReconnectCount is made so a subscription can provoke re-subscription on error
-    // see initializeSubscriptions, unsubscribe.ae_art
-  }, [store, wsReconnectCount, authorizing, gqlClient, user?.uid])
+  }, [wsReconnectCount, authorizing, gqlClient, user?.uid])
 
   return null
-})
+}

@@ -1,54 +1,60 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { first as first$ } from 'rxjs/operators'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  store,
+  activeNodeArrayAtom,
+  setActiveNodeArray,
+  artIdInActiveNodeArrayAtom,
+  gartenIdInActiveNodeArrayAtom,
+} from '../../../store/index.js'
 
 import styles from '../Arten/Row.module.css'
 
-export const KulturRow = observer(({ style, index, rows }) => {
-  const store = useContext(MobxStoreContext)
-  const { artIdInActiveNodeArray, gartenIdInActiveNodeArray } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+export const KulturRow = ({ style, index, rows }) => {
+  const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
+  const gartenIdInActiveNodeArray = useAtomValue(gartenIdInActiveNodeArrayAtom)
 
   const row = rows[index]
 
   const [label, setLabel] = useState('')
   useEffect(() => {
     let isActive = true
-    artIdInActiveNodeArray ?
-      row.labelUnderArt
-        .pipe(first$())
-        .toPromise()
-        .then((label) => {
-          if (!isActive) return
+    artIdInActiveNodeArray
+      ? row.labelUnderArt
+          .pipe(first$())
+          .toPromise()
+          .then((label) => {
+            if (!isActive) return
 
-          setLabel(label)
-        })
-    : gartenIdInActiveNodeArray ?
-      row.labelUnderGarten
-        .pipe(first$())
-        .toPromise()
-        .then((label) => {
-          if (!isActive) return
+            setLabel(label)
+          })
+      : gartenIdInActiveNodeArray
+        ? row.labelUnderGarten
+            .pipe(first$())
+            .toPromise()
+            .then((label) => {
+              if (!isActive) return
 
-          setLabel(label)
-        })
-    : row.label
-        .pipe(first$())
-        .toPromise()
-        .then((label) => {
-          if (!isActive) return
+              setLabel(label)
+            })
+        : row.label
+            .pipe(first$())
+            .toPromise()
+            .then((label) => {
+              if (!isActive) return
 
-          setLabel(label)
-        })
+              setLabel(label)
+            })
 
     return () => {
       isActive = false
     }
   }, [artIdInActiveNodeArray, gartenIdInActiveNodeArray, row])
 
-  const onClickRow = () => setActiveNodeArray([...activeNodeArray, row.id])
+  const onClickRow = () =>
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), row.id])
 
   return (
     <div
@@ -63,4 +69,4 @@ export const KulturRow = observer(({ style, index, rows }) => {
       <div>{label}</div>
     </div>
   )
-})
+}

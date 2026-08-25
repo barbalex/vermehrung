@@ -1,4 +1,5 @@
 import { sum } from 'es-toolkit'
+import { store, dbAtom } from '../../../../store/index.js'
 import { Q } from '@nozbe/watermelondb'
 import { first as first$ } from 'rxjs/operators'
 
@@ -16,13 +17,12 @@ import { personFullname } from '../../../../utils/personFullname.js'
  * that is why it receives a workbook and _can_ receive calledFromHigherUp
  */
 export const buildExceljsWorksheetsForKultur = async ({
-  store,
   kultur_id,
   kultur_name,
   workbook,
   calledFromHigherUp,
 }) => {
-  const { db } = store
+  const db = store.get(dbAtom)
 
   // 1. Get Kultur
   if (!calledFromHigherUp) {
@@ -85,9 +85,8 @@ export const buildExceljsWorksheetsForKultur = async ({
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
   const zaehlungen = await Promise.all(
     zaehlungsSorted.map(async (z) => {
-      const tzs =
-        z.teilzaehlungs ?
-          await z.teilzaehlungs.extend(Q.where('_deleted', false))?.fetch()
+      const tzs = z.teilzaehlungs
+        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))?.fetch()
         : []
       const tzsSorted = await teilzaehlungsSortByTk(tzs)
       const newZ = {
@@ -135,8 +134,9 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (zaehlungen.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title:
-        calledFromHigherUp ? `Kultur_${kultur_name}_Zaehlungen` : 'Zaehlungen',
+      title: calledFromHigherUp
+        ? `Kultur_${kultur_name}_Zaehlungen`
+        : 'Zaehlungen',
       data: zaehlungen,
     })
   }
@@ -170,9 +170,8 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (teilzaehlungData.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title:
-        calledFromHigherUp ?
-          `Kultur_${kultur_name}_Teilzaehlungen`
+      title: calledFromHigherUp
+        ? `Kultur_${kultur_name}_Teilzaehlungen`
         : 'Teilzaehlungen',
       data: teilzaehlungData,
     })
@@ -340,9 +339,8 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (anlieferungData.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title:
-        calledFromHigherUp ?
-          `Kultur_${kultur_name}_Anlieferungen`
+      title: calledFromHigherUp
+        ? `Kultur_${kultur_name}_Anlieferungen`
         : 'Anlieferungen',
       data: anlieferungData,
     })
@@ -507,9 +505,8 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (auslieferungen.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title:
-        calledFromHigherUp ?
-          `Kultur_${kultur_name}_Auslieferungen`
+      title: calledFromHigherUp
+        ? `Kultur_${kultur_name}_Auslieferungen`
         : 'Auslieferungen',
       data: auslieferungen,
     })

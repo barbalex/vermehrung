@@ -1,10 +1,10 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { RootRow as Row } from './Row.jsx'
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import { dbAtom, userAtom, activeNodeArrayAtom } from '../../../store/index.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { getShowArt } from '../../../utils/showArt.js'
 import { getShowEvent } from '../../../utils/showEvent.js'
@@ -20,11 +20,10 @@ import { getShowZaehlung } from '../../../utils/showZaehlung.js'
 
 import styles from './index.module.css'
 
-export const Root = observer(({ filter: showFilter }) => {
-  const store = useContext(MobxStoreContext)
-  const { user, db } = store
-  const { activeNodeArray: activeNodeArrayRaw } = store.tree
-  const activeNodeArray = activeNodeArrayRaw.toJSON()
+export const Root = ({ filter: showFilter }) => {
+  const db = useAtomValue(dbAtom)
+  const user = useAtomValue(userAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
   const [dataState, setDataState] = useState({
     showArt: false,
@@ -56,9 +55,8 @@ export const Root = observer(({ filter: showFilter }) => {
 
   useEffect(
     () => {
-      const userPersonOptionsObservable =
-        user.uid ?
-          db
+      const userPersonOptionsObservable = user.uid
+        ? db
             .get('person_option')
             .query(Q.on('person', Q.where('account_id', user.uid)))
             .observeWithColumns([
@@ -69,9 +67,8 @@ export const Root = observer(({ filter: showFilter }) => {
               'tree_event',
             ])
         : $of([])
-      const userRoleObservable =
-        user.uid ?
-          db
+      const userRoleObservable = user.uid
+        ? db
             .get('user_role')
             .query(Q.on('person', Q.where('account_id', user.uid)))
             .observeWithColumns(['name'])
@@ -148,51 +145,51 @@ export const Root = observer(({ filter: showFilter }) => {
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value
   const rows = [
-    ...(showArt ?
-      [{ name: 'Arten', url: ['Arten'], table: 'art', sort: 1 }]
-    : []),
-    ...(showHerkunft ?
-      [{ name: 'Herkünfte', url: ['Herkuenfte'], table: 'herkunft', sort: 2 }]
-    : []),
-    ...(showSammlung ?
-      [
-        {
-          name: 'Sammlungen',
-          url: ['Sammlungen'],
-          table: 'sammlung',
-          sort: 3,
-        },
-      ]
-    : []),
-    ...(showGarten ?
-      [{ name: 'Gärten', url: ['Gaerten'], table: 'garten', sort: 4 }]
-    : []),
-    ...(showKultur ?
-      [{ name: 'Kulturen', url: ['Kulturen'], table: 'kultur', sort: 5 }]
-    : []),
-    ...(showTeilkultur ?
-      [
-        {
-          name: 'Teilkulturen',
-          url: ['Teilkulturen'],
-          table: 'teilkultur',
-          sort: 6,
-        },
-      ]
-    : []),
-    ...(showZaehlung ?
-      [{ name: 'Zählungen', url: ['Zaehlungen'], table: 'zaehlung', sort: 7 }]
-    : []),
-    ...(showLieferung ?
-      [
-        {
-          name: 'Lieferungen',
-          url: ['Lieferungen'],
-          table: 'lieferung',
-          sort: 8,
-        },
-      ]
-    : []),
+    ...(showArt
+      ? [{ name: 'Arten', url: ['Arten'], table: 'art', sort: 1 }]
+      : []),
+    ...(showHerkunft
+      ? [{ name: 'Herkünfte', url: ['Herkuenfte'], table: 'herkunft', sort: 2 }]
+      : []),
+    ...(showSammlung
+      ? [
+          {
+            name: 'Sammlungen',
+            url: ['Sammlungen'],
+            table: 'sammlung',
+            sort: 3,
+          },
+        ]
+      : []),
+    ...(showGarten
+      ? [{ name: 'Gärten', url: ['Gaerten'], table: 'garten', sort: 4 }]
+      : []),
+    ...(showKultur
+      ? [{ name: 'Kulturen', url: ['Kulturen'], table: 'kultur', sort: 5 }]
+      : []),
+    ...(showTeilkultur
+      ? [
+          {
+            name: 'Teilkulturen',
+            url: ['Teilkulturen'],
+            table: 'teilkultur',
+            sort: 6,
+          },
+        ]
+      : []),
+    ...(showZaehlung
+      ? [{ name: 'Zählungen', url: ['Zaehlungen'], table: 'zaehlung', sort: 7 }]
+      : []),
+    ...(showLieferung
+      ? [
+          {
+            name: 'Lieferungen',
+            url: ['Lieferungen'],
+            table: 'lieferung',
+            sort: 8,
+          },
+        ]
+      : []),
     // ...(showSammelLieferung ?
     //   [
     //     {
@@ -203,12 +200,12 @@ export const Root = observer(({ filter: showFilter }) => {
     //     },
     //   ]
     // : []),
-    ...(showEvent ?
-      [{ name: 'Events', url: ['Events'], table: 'event', sort: 10 }]
-    : []),
-    ...(showPerson ?
-      [{ name: 'Personen', url: ['Personen'], table: 'person', sort: 11 }]
-    : []),
+    ...(showEvent
+      ? [{ name: 'Events', url: ['Events'], table: 'event', sort: 10 }]
+      : []),
+    ...(showPerson
+      ? [{ name: 'Personen', url: ['Personen'], table: 'person', sort: 11 }]
+      : []),
   ]
 
   return (
@@ -219,13 +216,10 @@ export const Root = observer(({ filter: showFilter }) => {
       >
         <div className={styles.fieldsContainer}>
           {rows.map((row) => (
-            <Row
-              key={row.name}
-              row={row}
-            />
+            <Row key={row.name} row={row} />
           ))}
         </div>
       </div>
     </ErrorBoundary>
   )
-})
+}

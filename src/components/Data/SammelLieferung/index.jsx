@@ -1,9 +1,16 @@
-import { useContext, useState, useEffect, useMemo } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, useMemo } from 'react'
+import { useAtomValue } from 'jotai'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  isPrintAtom,
+  onlineAtom,
+  filterShowAtom,
+  filterSammelLieferungAtom,
+  initialDataQueriedAtom,
+} from '../../../store/index.js'
 import { Lieferschein } from './Lieferschein/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
@@ -15,97 +22,101 @@ import { useObservable } from '../../../utils/useObservable.js'
 
 import artStyles from '../Art/index.module.css'
 
-export const SammelLieferung = observer(
-  ({
-    filter: showFilter = false,
-    id = '99999999-9999-9999-9999-999999999999',
-    lieferung,
-  }) => {
-    const store = useContext(MobxStoreContext)
+export const SammelLieferung = ({
+  filter: showFilter = false,
+  id = '99999999-9999-9999-9999-999999999999',
+  lieferung,
+}) => {
+  const isPrint = useAtomValue(isPrintAtom)
+  const online = useAtomValue(onlineAtom)
+  const db = useAtomValue(dbAtom)
+  const filterShow = useAtomValue(filterShowAtom)
+  const sammelLieferungFilter = useAtomValue(filterSammelLieferungAtom)
+  const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
-    const { filter, isPrint, online, db, initialDataQueried } = store
+  // removing useMemo causes: Maximum update depth exceeded
+  const observable = useMemo(
+    () =>
+      showFilter
+        ? $of(sammelLieferungFilter)
+        : initialDataQueried
+          ? db.get('sammel_lieferung').findAndObserve(id)
+          : $of({}),
+    [db, sammelLieferungFilter, id, initialDataQueried, showFilter],
+  )
+  const row = useObservable(observable)
 
-    // removing useMemo causes: Maximum update depth exceeded
-    const observable = useMemo(
-      () =>
-        showFilter ? $of(filter.sammel_lieferung)
-        : initialDataQueried ? db.get('sammel_lieferung').findAndObserve(id)
-        : $of({}),
-      [db, filter.sammel_lieferung, id, initialDataQueried, showFilter],
-    )
-    const row = useObservable(observable)
+  const [activeConflict, setActiveConflict] = useState(null)
+  const conflictDisposalCallback = () => setActiveConflict(null)
+  const conflictSelectionCallback = () => setActiveConflict(null)
 
-    const [activeConflict, setActiveConflict] = useState(null)
-    const conflictDisposalCallback = () => setActiveConflict(null)
-    const conflictSelectionCallback = () => setActiveConflict(null)
+  // ensure that activeConflict is reset
+  // when changing dataset
+  useEffect(() => {
+    setActiveConflict(null)
+  }, [id])
 
-    // ensure that activeConflict is reset
-    // when changing dataset
-    useEffect(() => {
-      setActiveConflict(null)
-    }, [id])
+  // setting initial value like this is necessary
+  // because during printing page Vermehrung re-renders without tree
+  const [printPreview, setPrintPreview] = useState(isPrint && !printPreview)
 
-    // setting initial value like this is necessary
-    // because during printing page Vermehrung re-renders without tree
-    const [printPreview, setPrintPreview] = useState(isPrint && !printPreview)
+  const [showHistory, setShowHistory] = useState(false)
+  const historyTakeoverCallback = () => setShowHistory(null)
 
-    const [showHistory, setShowHistory] = useState(false)
-    const historyTakeoverCallback = () => setShowHistory(null)
+  if (!row || !Object.keys(row)?.length) return <Spinner />
+  if (!showFilter && filterShow) return null
 
-    if (!row || !Object.keys(row)?.length) return <Spinner />
-    if (!showFilter && filter.show) return null
+  const paneIsSplit = online && (activeConflict || showHistory)
 
-    const paneIsSplit = online && (activeConflict || showHistory)
-
-    return (
-      <ErrorBoundary>
-        <div
-          className={artStyles.container}
-          style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
-        >
-          <FormTitle
-            showFilter={showFilter}
-            row={row}
-            lieferung={lieferung}
-            printPreview={printPreview}
-            setPrintPreview={setPrintPreview}
-            showHistory={showHistory}
-            setShowHistory={setShowHistory}
-          />
-          {printPreview ?
-            <Lieferschein row={row} />
-          : <div className={artStyles.splitPaneContainer}>
-              <Allotment key={`${activeConflict}/${showHistory}`}>
-                <Form
-                  showFilter={showFilter}
-                  id={id}
-                  row={row}
-                  activeConflict={activeConflict}
-                  setActiveConflict={setActiveConflict}
-                  showHistory={showHistory}
-                />
-                <Allotment.Pane visible={paneIsSplit}>
-                  {activeConflict ?
-                    <Conflict
-                      rev={activeConflict}
-                      id={id}
-                      row={row}
-                      conflictDisposalCallback={conflictDisposalCallback}
-                      conflictSelectionCallback={conflictSelectionCallback}
-                      setActiveConflict={setActiveConflict}
-                    />
-                  : showHistory ?
-                    <History
-                      row={row}
-                      historyTakeoverCallback={historyTakeoverCallback}
-                    />
-                  : null}
-                </Allotment.Pane>
-              </Allotment>
-            </div>
-          }
-        </div>
-      </ErrorBoundary>
-    )
-  },
-)
+  return (
+    <ErrorBoundary>
+      <div
+        className={artStyles.container}
+        style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+      >
+        <FormTitle
+          showFilter={showFilter}
+          row={row}
+          lieferung={lieferung}
+          printPreview={printPreview}
+          setPrintPreview={setPrintPreview}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
+        {printPreview ? (
+          <Lieferschein row={row} />
+        ) : (
+          <div className={artStyles.splitPaneContainer}>
+            <Allotment key={`${activeConflict}/${showHistory}`}>
+              <Form
+                showFilter={showFilter}
+                id={id}
+                row={row}
+                activeConflict={activeConflict}
+                setActiveConflict={setActiveConflict}
+                showHistory={showHistory}
+              />
+              <Allotment.Pane visible={paneIsSplit}>
+                {activeConflict ? (
+                  <Conflict
+                    rev={activeConflict}
+                    id={id}
+                    row={row}
+                    conflictDisposalCallback={conflictDisposalCallback}
+                    conflictSelectionCallback={conflictSelectionCallback}
+                    setActiveConflict={setActiveConflict}
+                  />
+                ) : showHistory ? (
+                  <History
+                    row={row}
+                    historyTakeoverCallback={historyTakeoverCallback}
+                  />
+                ) : null}
+              </Allotment.Pane>
+            </Allotment>
+          </div>
+        )}
+      </div>
+    </ErrorBoundary>
+  )
+}

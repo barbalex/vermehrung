@@ -1,15 +1,12 @@
-import { useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import { useLocation } from 'react-router'
 
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import { setLastActiveNodeArray, setOpenNodes } from '../../store/index.js'
 import { getActiveNodeArrayFromPathname } from '../../utils/getActiveNodeArrayFromPathname.js'
 import { openNodesFromActiveNodeArray } from '../../utils/openNodesFromActiveNodeArray.js'
 
-export const OpenNodesSetter = observer(() => {
+export const OpenNodesSetter = () => {
   const { pathname } = useLocation()
-  const store = useContext(MobxStoreContext)
-  const { setLastActiveNodeArray, setOpenNodes } = store.tree
 
   const activeNodeArray = getActiveNodeArrayFromPathname(pathname)
 
@@ -24,4 +21,4 @@ export const OpenNodesSetter = observer(() => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return null
-})
+}

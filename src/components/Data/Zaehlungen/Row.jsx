@@ -1,15 +1,15 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
 import { first as first$ } from 'rxjs/operators'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  activeNodeArrayAtom,
+  setActiveNodeArray,
+  store,
+} from '../../../store/index.js'
 
 import styles from '../Arten/Row.module.css'
 
-export const ZaehlungRow = observer(({ style, index, rows }) => {
-  const store = useContext(MobxStoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
-
+export const ZaehlungRow = ({ style, index, rows }) => {
   const row = rows[index]
 
   const [label, setLabel] = useState('')
@@ -29,7 +29,8 @@ export const ZaehlungRow = observer(({ style, index, rows }) => {
     }
   }, [row.label])
 
-  const onClickRow = () => setActiveNodeArray([...activeNodeArray, row.id])
+  const onClickRow = () =>
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), row.id])
 
   return (
     <div
@@ -41,4 +42,4 @@ export const ZaehlungRow = observer(({ style, index, rows }) => {
       <div>{label}</div>
     </div>
   )
-})
+}

@@ -1,17 +1,15 @@
-import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import List from '@mui/material/List'
-import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 
 import { Article } from './Article.jsx'
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import { docFilterAtom } from '../../../store/index.js'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 
 import styles from './index.module.css'
 
-export const ArticleList = observer(({ articles }) => {
-  const store = useContext(MobxStoreContext)
-  const { docFilter } = store
+export const ArticleList = ({ articles }) => {
+  const docFilter = useAtomValue(docFilterAtom)
 
   const articlesFiltered = articles.filter(
     (node) => node.title?.toLowerCase?.()?.includes?.(docFilter) ?? true,
@@ -21,10 +19,7 @@ export const ArticleList = observer(({ articles }) => {
 
   return (
     <div className={styles.container}>
-      <List
-        component="nav"
-        dense
-      >
+      <List component="nav" dense>
         {articlesFiltered.map((node) => {
           const isOpen = pathname.includes(node.slug)
 
@@ -33,10 +28,7 @@ export const ArticleList = observer(({ articles }) => {
               <Article node={node} />
               {isOpen &&
                 (node.children ?? []).map((child) => (
-                  <Article
-                    node={child}
-                    key={child.slug}
-                  />
+                  <Article node={child} key={child.slug} />
                 ))}
             </div>
           )
@@ -45,4 +37,4 @@ export const ArticleList = observer(({ articles }) => {
       <IntoViewScroller />
     </div>
   )
-})
+}

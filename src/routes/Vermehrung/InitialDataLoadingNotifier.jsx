@@ -1,21 +1,24 @@
-import { useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import {
+  gettingAuthUserAtom,
+  initialDataQueriedAtom,
+  initiallyQueryingAtom,
+  userAtom,
+  onlineAtom,
+  addNotification,
+  removeNotificationById,
+  removeAllNotifications,
+} from '../../store/index.js'
 import { tableNames } from '../../utils/tableNames.js'
 
-export const InitialDataLoadingNotifier = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const {
-    gettingAuthUser,
-    initialDataQueried,
-    initiallyQuerying,
-    user,
-    online,
-    addNotification,
-    removeNotificationById,
-    removeAllNotifications,
-  } = store
+export const InitialDataLoadingNotifier = () => {
+  const gettingAuthUser = useAtomValue(gettingAuthUserAtom)
+  const initialDataQueried = useAtomValue(initialDataQueriedAtom)
+  const initiallyQuerying = useAtomValue(initiallyQueryingAtom)
+  const user = useAtomValue(userAtom)
+  const online = useAtomValue(onlineAtom)
 
   const existsUser = !!user?.uid
 
@@ -39,13 +42,11 @@ export const InitialDataLoadingNotifier = observer(() => {
       }
     }
   }, [
-    addNotification,
     existsUser,
     gettingAuthUser,
     initialDataQueried,
     initiallyQuerying,
     online,
-    removeNotificationById,
   ])
 
   // ensure all initial loading notifications are removed after 8s
@@ -55,7 +56,7 @@ export const InitialDataLoadingNotifier = observer(() => {
       console.log('initial data queried, removing all notifications')
       removeAllNotifications()
     }, 5000)
-  }, [removeAllNotifications, initialDataQueried])
+  }, [initialDataQueried])
 
   return null
-})
+}

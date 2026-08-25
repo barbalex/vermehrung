@@ -1,38 +1,35 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import {
+  activeNodeArrayAtom,
+  removeOpenNode,
+  setActiveNodeArray,
+  store,
+} from '../../../../store/index.js'
 import UpSvg from '../../../../svg/to_up.svg?react'
 import SaDownSvg from '../../../../svg/to_sa_down.svg?react'
 import GaDownSvg from '../../../../svg/to_ga_down.svg?react'
 import LiDownSvg from '../../../../svg/to_li_down.svg?react'
 
-export const PersonFormTitleNavButtons = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-
+export const PersonFormTitleNavButtons = () => {
   const onClickUp = () => {
+    const activeNodeArray = store.get(activeNodeArrayAtom)
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
   }
 
   const onClickToSammlungen = () =>
-    setActiveNodeArray([...activeNodeArray, 'Sammlungen'])
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Sammlungen'])
 
   const onClickToGaerten = () =>
-    setActiveNodeArray([...activeNodeArray, 'Gaerten'])
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Gaerten'])
 
   const onClickToLieferungen = () =>
-    setActiveNodeArray([...activeNodeArray, 'Lieferungen'])
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Lieferungen'])
 
   return (
     <>
-      <IconButton
-        title="Zur Liste"
-        onClick={onClickUp}
-        size="large"
-      >
+      <IconButton title="Zur Liste" onClick={onClickUp} size="large">
         <UpSvg />
       </IconButton>
       <IconButton
@@ -42,11 +39,7 @@ export const PersonFormTitleNavButtons = observer(() => {
       >
         <SaDownSvg />
       </IconButton>
-      <IconButton
-        title="Zu den Gärten"
-        onClick={onClickToGaerten}
-        size="large"
-      >
+      <IconButton title="Zu den Gärten" onClick={onClickToGaerten} size="large">
         <GaDownSvg />
       </IconButton>
       <IconButton
@@ -58,4 +51,4 @@ export const PersonFormTitleNavButtons = observer(() => {
       </IconButton>
     </>
   )
-})
+}

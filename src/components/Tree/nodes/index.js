@@ -1,6 +1,5 @@
 import { Q } from '@nozbe/watermelondb'
 
-import { getSnapshot } from 'mobx-state-tree'
 import { buildArtSammlungFolder } from './art/sammlung/folder.js'
 import { buildArtSammlung } from './art/sammlung/index.js'
 import { buildArtSammlungAuslieferungFolder } from './art/sammlung/auslieferung/folder.js'
@@ -37,6 +36,13 @@ import { buildArtKulturEventFolder } from './art/kultur/event/folder.js'
 import { buildArtKulturEvent } from './art/kultur/event/index.js'
 import { buildArtFolder } from './art/folder.js'
 import { buildArt } from './art/index.js'
+import {
+  dbAtom,
+  apFilterAtom,
+  openNodesAtom,
+  activeNodeArrayAtom,
+  removeOpenNodeWithChildren,
+} from '../../../store/index.js'
 import { buildHerkunftFolder } from './herkunft/folder.js'
 import { buildHerkunft } from './herkunft/index.js'
 import { buildHerkunftSammlungFolder } from './herkunft/sammlung/folder.js'
@@ -139,15 +145,11 @@ const compare = (a, b) => {
   return a - b
 }
 
-export const buildNodes = async ({ store, userPersonOption, userRole }) => {
-  const { db, apFilter } = store
-  const {
-    openNodes: openNodesRaw,
-    activeNodeArray: activeNodeArrayRaw,
-    removeOpenNodeWithChildren,
-  } = store.tree
-  const openNodes = getSnapshot(openNodesRaw)
-  const activeNodeArray = activeNodeArrayRaw.toJSON()
+export const buildNodes = async ({ userPersonOption, userRole }) => {
+  const db = store.get(dbAtom)
+  const apFilter = store.get(apFilterAtom)
+  const openNodes = store.get(openNodesAtom)
+  const activeNodeArray = store.get(activeNodeArrayAtom)
 
   const showArt = getShowArt({ userRole, activeNodeArray })
   const showEvent = getShowEvent({ userPersonOption, activeNodeArray })
@@ -278,7 +280,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   if (showArt) {
     const artQuery = db
       .get('art')
-      .query(...tableFilter({ store, table: 'art', apFilter }))
+      .query(...tableFilter({ table: 'art', apFilter }))
     const artCount = await artQuery.fetchCount()
     artFolderNodes = buildArtFolder({ count: artCount })
     const artFolderIsOpen = openNodes.some(
@@ -292,9 +294,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
       } catch {}
       const artsSorted = await artsSortedFromArts(arts)
       artNodes = await Promise.all(
-        artsSorted.map(
-          async (art, index) => await buildArt({ store, art, index }),
-        ),
+        artsSorted.map(async (art, index) => await buildArt({ art, index })),
       )
 
       // on to child nodes
@@ -317,7 +317,6 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
         const herkunftsQuery = art.herkunfts.extend(
           ...tableFilter({
             table: 'herkunft',
-            store,
           }),
         )
         const herkunftCount = await herkunftsQuery.fetchCount()
@@ -369,7 +368,6 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
             const artHerkunftsSammlungsQuery = herkunft.sammlungs.extend(
               ...tableFilter({
                 table: 'sammlung',
-                store,
               }),
               Q.experimentalJoinTables(['art']),
               Q.on('art', 'id', artId),
@@ -437,7 +435,6 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   sammlung.lieferungs.extend(
                     ...tableFilter({
                       table: 'lieferung',
-                      store,
                     }),
                     Q.experimentalJoinTables(['art']),
                     Q.on('art', 'id', artId),
@@ -502,7 +499,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
             const artHerkunftsKultursQuery = db
               .get('kultur')
               .query(
-                ...tableFilter({ store, table: 'kultur' }),
+                ...tableFilter({ table: 'kultur' }),
                 Q.experimentalJoinTables(['art']),
                 Q.on('art', 'id', artId),
                 Q.experimentalJoinTables(['herkunft']),
@@ -579,7 +576,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   let teilkulturs = []
                   try {
                     teilkulturs = await kultur.teilkulturs
-                      .extend(...tableFilter({ store, table: 'teilkultur' }))
+                      .extend(...tableFilter({ table: 'teilkultur' }))
                       .fetch()
                   } catch {}
                   artHerkunftKulturTeilkulturFolderNodes.push(
@@ -628,7 +625,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
                 // zaehlung nodes
                 const artHerkunftKulturZaehlungQuery = kultur.zaehlungs.extend(
-                  ...tableFilter({ store, table: 'zaehlung' }),
+                  ...tableFilter({ table: 'zaehlung' }),
                 )
                 const zaehlungsCount =
                   await artHerkunftKulturZaehlungQuery.fetchCount()
@@ -684,7 +681,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 let anlieferungs = []
                 try {
                   anlieferungs = await kultur.anlieferungs
-                    .extend(...tableFilter({ store, table: 'lieferung' }))
+                    .extend(...tableFilter({ table: 'lieferung' }))
                     .fetch()
                 } catch {}
                 artHerkunftKulturAnlieferungFolderNodes.push(
@@ -736,7 +733,6 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
                     .extend(
                       ...tableFilter({
                         table: 'lieferung',
-                        store,
                       }),
                     )
                     .fetch()
@@ -785,7 +781,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
                 // event nodes
                 const eventsQuery = kultur.events.extend(
-                  ...tableFilter({ store, table: 'event' }),
+                  ...tableFilter({ table: 'event' }),
                 )
                 const eventsCount = await eventsQuery.fetchCount()
                 artHerkunftKulturEventFolderNodes.push(
@@ -840,7 +836,6 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
         const sammlungsQuery = art.sammlungs.extend(
           ...tableFilter({
             table: 'sammlung',
-            store,
           }),
         )
         const sammlungCount = await sammlungsQuery.fetchCount()
@@ -895,7 +890,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
             let lieferungs = []
             try {
               lieferungs = await sammlung.lieferungs
-                .extend(...tableFilter({ store, table: 'lieferung' }))
+                .extend(...tableFilter({ table: 'lieferung' }))
                 .fetch()
             } catch {}
             artSammlungAuslieferungFolderNodes.push(
@@ -940,7 +935,6 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
         const artKulturQuery = art.kulturs.extend(
           ...tableFilter({
             table: 'kultur',
-            store,
           }),
         )
         const kulturCount = await artKulturQuery.fetchCount()
@@ -995,7 +989,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
               let teilkulturs = []
               try {
                 teilkulturs = await kultur.teilkulturs
-                  .extend(...tableFilter({ store, table: 'teilkultur' }))
+                  .extend(...tableFilter({ table: 'teilkultur' }))
                   .fetch()
               } catch {}
               artKulturTeilkulturFolderNodes.push(
@@ -1035,7 +1029,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
             // zaehlung nodes
             const artKulturZaehlungQuery = kultur.zaehlungs.extend(
-              ...tableFilter({ store, table: 'zaehlung' }),
+              ...tableFilter({ table: 'zaehlung' }),
             )
             const zaehlungsCount = await artKulturZaehlungQuery.fetchCount()
             artKulturZaehlungFolderNodes.push(
@@ -1082,7 +1076,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
             let anlieferungs = []
             try {
               anlieferungs = await kultur.anlieferungs
-                .extend(...tableFilter({ store, table: 'lieferung' }))
+                .extend(...tableFilter({ table: 'lieferung' }))
                 .fetch()
             } catch {}
             artKulturAnlieferungFolderNodes.push(
@@ -1126,7 +1120,6 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 .extend(
                   ...tableFilter({
                     table: 'lieferung',
-                    store,
                   }),
                 )
                 .fetch()
@@ -1167,7 +1160,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
             // event nodes
             const eventsQuery = kultur.events.extend(
-              ...tableFilter({ store, table: 'event' }),
+              ...tableFilter({ table: 'event' }),
             )
             const eventsCount = await eventsQuery.fetchCount()
             artKulturEventFolderNodes.push(
@@ -1217,7 +1210,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   if (showHerkunft) {
     const herkunftQuery = db
       .get('herkunft')
-      .query(...tableFilter({ store, table: 'herkunft' }))
+      .query(...tableFilter({ table: 'herkunft' }))
     const herkunftCount = await herkunftQuery.fetchCount()
     herkunftFolderNodes = buildHerkunftFolder({ count: herkunftCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Herkuenfte')) {
@@ -1245,7 +1238,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
         // 2.1 herkunft > sammlung
         const herkunftSammlungQuery = herkunft.sammlungs.extend(
-          ...tableFilter({ store, table: 'sammlung' }),
+          ...tableFilter({ table: 'sammlung' }),
         )
         const sammlungsCount = await herkunftSammlungQuery.fetchCount()
         herkunftSammlungFolderNodes.push(
@@ -1297,7 +1290,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
             let lieferungs = []
             try {
               lieferungs = await sammlung.lieferungs
-                .extend(...tableFilter({ store, table: 'lieferung' }))
+                .extend(...tableFilter({ table: 'lieferung' }))
                 .fetch()
             } catch {}
             herkunftSammlungAuslieferungFolderNodes.push(
@@ -1345,7 +1338,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   if (showSammlung) {
     const sammlungQuery = db
       .get('sammlung')
-      .query(...tableFilter({ store, table: 'sammlung' }))
+      .query(...tableFilter({ table: 'sammlung' }))
     const sammlungCount = await sammlungQuery.fetchCount()
     sammlungFolderNodes = buildSammlungFolder({ count: sammlungCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Sammlungen')) {
@@ -1406,7 +1399,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
         // 2.1 sammlung > auslieferung
         const sammlungLieferungQuery = sammlung.lieferungs.extend(
-          ...tableFilter({ store, table: 'lieferung' }),
+          ...tableFilter({ table: 'lieferung' }),
         )
         const sammlungLieferungCount = await sammlungLieferungQuery.fetchCount()
         sammlungAuslieferungFolderNodes.push(
@@ -1448,7 +1441,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   if (showGarten) {
     const gartenQuery = db
       .get('garten')
-      .query(...tableFilter({ store, table: 'garten' }))
+      .query(...tableFilter({ table: 'garten' }))
     const gartenCount = await gartenQuery.fetchCount()
     gartenFolderNodes = buildGartenFolder({ count: gartenCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Gaerten')) {
@@ -1475,7 +1468,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
         // 2.1 garten > kultur
         const gartenKulturQuery = garten.kulturs.extend(
-          ...tableFilter({ store, table: 'kultur' }),
+          ...tableFilter({ table: 'kultur' }),
         )
         const gartenKulturCount = await gartenKulturQuery.fetchCount()
         gartenKulturFolderNodes.push(
@@ -1536,7 +1529,6 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
                   .extend(
                     ...tableFilter({
                       table: 'teilkultur',
-                      store,
                     }),
                   )
                   .fetch()
@@ -1585,7 +1577,6 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 .extend(
                   ...tableFilter({
                     table: 'zaehlung',
-                    store,
                   }),
                 )
                 .fetch()
@@ -1630,7 +1621,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
             let anlieferungs = []
             try {
               anlieferungs = await kultur.anlieferungs
-                .extend(...tableFilter({ store, table: 'lieferung' }))
+                .extend(...tableFilter({ table: 'lieferung' }))
                 .fetch()
             } catch {}
             gartenKulturAnlieferungFolderNodes.push(
@@ -1673,7 +1664,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
             let auslieferungs = []
             try {
               auslieferungs = await kultur.auslieferungs
-                .extend(...tableFilter({ store, table: 'lieferung' }))
+                .extend(...tableFilter({ table: 'lieferung' }))
                 .fetch()
             } catch {}
             gartenKulturAuslieferungFolderNodes.push(
@@ -1714,7 +1705,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
             // garten > kultur > event
             const gartenKulturEventQuery = kultur.events.extend(
-              ...tableFilter({ store, table: 'event' }),
+              ...tableFilter({ table: 'event' }),
             )
             const gartenKulturEventCount =
               await gartenKulturEventQuery.fetchCount()
@@ -1765,7 +1756,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   if (showKultur) {
     const kulturQuery = db
       .get('kultur')
-      .query(...tableFilter({ store, table: 'kultur' }))
+      .query(...tableFilter({ table: 'kultur' }))
     const kulturCount = await kulturQuery.fetchCount()
     kulturFolderNodes = buildKulturFolder({ count: kulturCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Kulturen')) {
@@ -1797,7 +1788,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
         } catch {}
         if (kulturOption?.tk) {
           const kulturTeilkulturQuery = kultur.teilkulturs.extend(
-            ...tableFilter({ store, table: 'teilkultur' }),
+            ...tableFilter({ table: 'teilkultur' }),
           )
           const kulturTeilkulturCount = await kulturTeilkulturQuery.fetchCount()
           kulturTeilkulturFolderNodes.push(
@@ -1836,7 +1827,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
         // 2.1 kultur > zaehlung
         const kulturZaehlungQuery = kultur.zaehlungs.extend(
-          ...tableFilter({ store, table: 'zaehlung' }),
+          ...tableFilter({ table: 'zaehlung' }),
         )
         const kulturZaehlungCount = await kulturZaehlungQuery.fetchCount()
         kulturZaehlungFolderNodes.push(
@@ -1876,7 +1867,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
         // kultur > anlieferung
         const kulturAnlieferungQuery = kultur.anlieferungs.extend(
-          ...tableFilter({ store, table: 'lieferung' }),
+          ...tableFilter({ table: 'lieferung' }),
         )
         const kulturAnlieferungCount = await kulturAnlieferungQuery.fetchCount()
         kulturAnlieferungFolderNodes.push(
@@ -1913,7 +1904,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
         // kultur > auslieferung
         const kulturAuslieferungQuery = kultur.auslieferungs.extend(
-          ...tableFilter({ store, table: 'lieferung' }),
+          ...tableFilter({ table: 'lieferung' }),
         )
         const kulturAuslieferungCount =
           await kulturAuslieferungQuery.fetchCount()
@@ -1951,7 +1942,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
         // kultur > event
         const kulturEventQuery = kultur.events.extend(
-          ...tableFilter({ store, table: 'event' }),
+          ...tableFilter({ table: 'event' }),
         )
         const kulturEventCount = await kulturEventQuery.fetchCount()
         kulturEventFolderNodes.push(
@@ -1992,7 +1983,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   if (showTeilkultur) {
     const teilkulturQuery = db
       .get('teilkultur')
-      .query(...tableFilter({ store, table: 'teilkultur' }))
+      .query(...tableFilter({ table: 'teilkultur' }))
     const teilkulturCount = await teilkulturQuery.fetchCount()
     teilkulturFolderNodes = buildTeilkulturFolder({ count: teilkulturCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Teilkulturen')) {
@@ -2011,7 +2002,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   if (showZaehlung) {
     const zaehlungQuery = db
       .get('zaehlung')
-      .query(...tableFilter({ store, table: 'zaehlung' }))
+      .query(...tableFilter({ table: 'zaehlung' }))
     const zaehlungCount = await zaehlungQuery.fetchCount()
     zaehlungFolderNodes = buildZaehlungFolder({ count: zaehlungCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Zaehlungen')) {
@@ -2032,7 +2023,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   if (showLieferung) {
     const lieferungQuery = db
       .get('lieferung')
-      .query(...tableFilter({ store, table: 'lieferung' }))
+      .query(...tableFilter({ table: 'lieferung' }))
     const lieferungCount = await lieferungQuery.fetchCount()
     lieferungFolderNodes = buildLieferungFolder({ count: lieferungCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Lieferungen')) {
@@ -2051,7 +2042,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   // if (showSammelLieferung) {
   //   const sammelLieferungQuery = db
   //     .get('sammel_lieferung')
-  //     .query(...tableFilter({ store, table: 'sammel_lieferung' }))
+  //     .query(...tableFilter({ table: 'sammel_lieferung' }))
   //   const sammelLieferungCount = await sammelLieferungQuery.fetchCount()
   //   sammelLieferungFolderNodes = buildSammelLieferungFolder({
   //     count: sammelLieferungCount,
@@ -2092,7 +2083,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   //       let lieferungs = []
   //       try {
   //         lieferungs = await sammelLieferung.lieferungs
-  //           .extend(...tableFilter({ store, table: 'lieferung' }))
+  //           .extend(...tableFilter({ table: 'lieferung' }))
   //           .fetch()
   //       } catch {}
   //       const lieferungsSorted = lieferungs.sort(lieferungSort)
@@ -2130,9 +2121,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
   // 10 event
   if (showEvent) {
-    const eventQuery = db
-      .get('event')
-      .query(...tableFilter({ store, table: 'event' }))
+    const eventQuery = db.get('event').query(...tableFilter({ table: 'event' }))
     const eventCount = await eventQuery.fetchCount()
     eventFolderNodes = buildEventFolder({ count: eventCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Events')) {
@@ -2151,7 +2140,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
   if (showPerson) {
     const personQuery = db
       .get('person')
-      .query(...tableFilter({ store, table: 'person' }))
+      .query(...tableFilter({ table: 'person' }))
     const personCount = await personQuery.fetchCount()
     personFolderNodes = buildPersonFolder({ count: personCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Personen')) {
@@ -2176,7 +2165,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
         // person > sammlung
         const personSammlungQuery = person.sammlungs.extend(
-          ...tableFilter({ store, table: 'sammlung' }),
+          ...tableFilter({ table: 'sammlung' }),
         )
         const personSammlungCount = await personSammlungQuery.fetchCount()
         personSammlungFolderNodes.push(
@@ -2216,7 +2205,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
         // person > garten
         const personGartenQuery = person.gartens.extend(
-          ...tableFilter({ store, table: 'garten' }),
+          ...tableFilter({ table: 'garten' }),
         )
         const personGartenCount = await personGartenQuery.fetchCount()
         personGartenFolderNodes.push(
@@ -2269,7 +2258,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
             // person > garten > kultur nodes
             const gartenKulturQuery = garten.kulturs.extend(
-              ...tableFilter({ store, table: 'kultur' }),
+              ...tableFilter({ table: 'kultur' }),
             )
             const gartenKulturCount = await gartenKulturQuery.fetchCount()
             personGartenKulturFolderNodes.push(
@@ -2335,7 +2324,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
                 } catch {}
                 if (kulturOption?.tk) {
                   const teilkulturQuery = kultur.teilkulturs.extend(
-                    ...tableFilter({ store, table: 'teilkultur' }),
+                    ...tableFilter({ table: 'teilkultur' }),
                   )
                   const teilkulturCount = await teilkulturQuery.fetchCount()
                   personGartenKulturTeilkulturFolderNodes.push(
@@ -2389,7 +2378,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
                 // zaehlung nodes
                 const zaehlungQuery = kultur.zaehlungs.extend(
-                  ...tableFilter({ store, table: 'zaehlung' }),
+                  ...tableFilter({ table: 'zaehlung' }),
                 )
                 const zaehlungCount = await zaehlungQuery.fetchCount()
                 personGartenKulturZaehlungFolderNodes.push(
@@ -2443,7 +2432,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
                 // anlieferung nodes
                 const anlieferungQuery = kultur.anlieferungs.extend(
-                  ...tableFilter({ store, table: 'lieferung' }),
+                  ...tableFilter({ table: 'lieferung' }),
                 )
                 const anlieferungCount = await anlieferungQuery.fetchCount()
                 personGartenKulturAnlieferungFolderNodes.push(
@@ -2496,7 +2485,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
                 // auslieferung nodes
                 const auslieferungQuery = kultur.auslieferungs.extend(
-                  ...tableFilter({ store, table: 'lieferung' }),
+                  ...tableFilter({ table: 'lieferung' }),
                 )
                 const auslieferungCount = await auslieferungQuery.fetchCount()
                 personGartenKulturAuslieferungFolderNodes.push(
@@ -2549,7 +2538,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
                 // event nodes
                 const eventQuery = kultur.events.extend(
-                  ...tableFilter({ store, table: 'event' }),
+                  ...tableFilter({ table: 'event' }),
                 )
                 const eventCount = await eventQuery.fetchCount()
                 personGartenKulturEventFolderNodes.push(
@@ -2605,7 +2594,7 @@ export const buildNodes = async ({ store, userPersonOption, userRole }) => {
 
         // person > lieferung
         const personLieferungQuery = person.lieferungs.extend(
-          ...tableFilter({ store, table: 'lieferung' }),
+          ...tableFilter({ table: 'lieferung' }),
         )
         const personLieferungCount = await personLieferungQuery.fetchCount()
         personLieferungFolderNodes.push(

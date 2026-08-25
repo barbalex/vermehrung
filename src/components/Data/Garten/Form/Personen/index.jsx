@@ -1,12 +1,13 @@
-import { useState, useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import { dbAtom, filterPersonAtom } from '../../../../../store/index.js'
+import { insertGvRev } from '../../../../../modules/insertRev.js'
 import { GartenPerson as Person } from './Person.jsx'
 import { Select } from '../../../../shared/Select/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
@@ -16,9 +17,9 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 
 import styles from './index.module.css'
 
-export const GartenPersonen = observer(({ garten }) => {
-  const store = useContext(MobxStoreContext)
-  const { db, insertGvRev, filter } = store
+export const GartenPersonen = ({ garten }) => {
+  const db = useAtomValue(dbAtom)
+  const personFilter = useAtomValue(filterPersonAtom)
 
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [garten.id])
@@ -47,28 +48,31 @@ export const GartenPersonen = observer(({ garten }) => {
   })
   useEffect(() => {
     const delQuery =
-      filter.person._deleted === false ? Q.where('_deleted', false)
-      : filter.person._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      personFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : personFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const aktivQuery =
-      filter.person.aktiv === false ? Q.where('aktiv', false)
-      : filter.person.aktiv === true ? Q.where('aktiv', true)
-      : Q.or(
-          Q.where('aktiv', false),
-          Q.where('aktiv', true),
-          Q.where('aktiv', null),
-        )
+      personFilter.aktiv === false
+        ? Q.where('aktiv', false)
+        : personFilter.aktiv === true
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const personsObservable = db
       .get('person')
       .query(delQuery, aktivQuery)
       .observe()
-    const gvsObservable =
-      garten?.gvs ?
-        garten.gvs.extend(Q.where('_deleted', false)).observe()
+    const gvsObservable = garten?.gvs
+      ? garten.gvs.extend(Q.where('_deleted', false)).observe()
       : $of([])
     const combinedObservables = combineLatest([
       gvsObservable,
@@ -91,7 +95,7 @@ export const GartenPersonen = observer(({ garten }) => {
       },
     )
     return () => subscription?.unsubscribe?.()
-  }, [db, filter.person._deleted, filter.person.aktiv, garten?.gvs])
+  }, [db, personFilter, garten?.gvs])
   const { gvsSorted, personWerte } = dataState
 
   const saveToDb = (event) => {
@@ -118,9 +122,7 @@ export const GartenPersonen = observer(({ garten }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ?
-              <FaChevronUp />
-            : <FaChevronDown />}
+            {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
@@ -156,4 +158,4 @@ export const GartenPersonen = observer(({ garten }) => {
       </motion.div>
     </ErrorBoundary>
   )
-})
+}

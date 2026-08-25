@@ -1,28 +1,29 @@
-import { useState, useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { Q } from '@nozbe/watermelondb'
 
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { eventSort } from '../../../../../utils/eventSort.js'
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import { filterEventAtom } from '../../../../../store/index.js'
 import { TeilkulturEventRow as Row } from './Row.jsx'
 
 import styles from './index.module.css'
 
-export const TeilkulturEvents = observer(({ teilkultur }) => {
-  const store = useContext(MobxStoreContext)
-  const { filter } = store
+export const TeilkulturEvents = ({ teilkultur }) => {
+  const eventFilter = useAtomValue(filterEventAtom)
 
   const [events, setEvents] = useState([])
   useEffect(() => {
     const eventDelQuery =
-      filter.event._deleted === false ? Q.where('_deleted', false)
-      : filter.event._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      eventFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : eventFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const eventsObservable = teilkultur.events
       .extend(eventDelQuery)
       .observeWithColumns(['datum', 'beschreibung', 'geplant'])
@@ -32,7 +33,7 @@ export const TeilkulturEvents = observer(({ teilkultur }) => {
     })
 
     return () => subscription?.unsubscribe?.()
-  }, [filter.event._deleted, teilkultur.events])
+  }, [eventFilter._deleted, teilkultur.events])
 
   return (
     <ErrorBoundary>
@@ -41,12 +42,9 @@ export const TeilkulturEvents = observer(({ teilkultur }) => {
       </section>
       <div className={styles.rows}>
         {events.map((ev, i) => (
-          <Row
-            key={ev.id}
-            event={ev}
-          />
+          <Row key={ev.id} event={ev} />
         ))}
       </div>
     </ErrorBoundary>
   )
-})
+}

@@ -1,10 +1,12 @@
-import { useContext } from 'react'
 import { DateTime } from 'luxon'
-import { observer } from 'mobx-react-lite'
 import { FaUndoAlt } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import {
+  removeQueuedQueryById,
+  updateModelValue,
+  updateModelValues,
+} from '../../store/index.js'
 
 import styles from './QueuedQuery.module.css'
 
@@ -14,9 +16,7 @@ const valFromValue = (value) => {
   return value ?? '(leer)'
 }
 
-export const QueuedQuery = observer(({ qq, index }) => {
-  const store = useContext(MobxStoreContext)
-  const { removeQueuedQueryById } = store
+export const QueuedQuery = ({ qq, index }) => {
   const {
     id,
     time,
@@ -31,14 +31,14 @@ export const QueuedQuery = observer(({ qq, index }) => {
 
   const onClickRevert = () => {
     if (revertTable && revertId && revertField) {
-      store.updateModelValue({
+      updateModelValue({
         table: revertTable,
         id: revertId,
         field: revertField,
         value: revertValue,
       })
     } else if (revertTable && revertId && revertValues) {
-      store.updateModelValues({
+      updateModelValues({
         table: revertTable,
         id: revertId,
         values: JSON.parse(revertValues),
@@ -48,11 +48,11 @@ export const QueuedQuery = observer(({ qq, index }) => {
   }
 
   const valueStyle =
-    index === 0 ?
-      {
-        borderTop: '1px solid rgba(74,20,140,0.1)',
-      }
-    : {}
+    index === 0
+      ? {
+          borderTop: '1px solid rgba(74,20,140,0.1)',
+        }
+      : {}
 
   return (
     <>
@@ -60,48 +60,30 @@ export const QueuedQuery = observer(({ qq, index }) => {
         className={styles.value}
         style={valueStyle}
       >{`${DateTime.fromMillis(time).toFormat('yyyy.LL.dd HH.mm.ss')}`}</div>
-      <div
-        className={styles.value}
-        style={valueStyle}
-      >
+      <div className={styles.value} style={valueStyle}>
         {revertTable}
       </div>
-      <div
-        className={styles.value}
-        style={valueStyle}
-      >
+      <div className={styles.value} style={valueStyle}>
         {revertId}
       </div>
-      <div
-        className={styles.value}
-        style={valueStyle}
-      >
+      <div className={styles.value} style={valueStyle}>
         {isInsert ? 'neuer Datensatz' : revertField}
       </div>
-      <div
-        className={styles.value}
-        style={valueStyle}
-      >
-        {isInsert ?
-          ''
-        : revertField ?
-          valFromValue(revertValue)
-        : JSON.parse(revertValues)}
+      <div className={styles.value} style={valueStyle}>
+        {isInsert
+          ? ''
+          : revertField
+            ? valFromValue(revertValue)
+            : JSON.parse(revertValues)}
       </div>
-      <div
-        className={styles.value}
-        style={valueStyle}
-      >
-        {isInsert ?
-          ''
-        : revertField ?
-          valFromValue(newValue)
-        : JSON.parse(newValue)}
+      <div className={styles.value} style={valueStyle}>
+        {isInsert
+          ? ''
+          : revertField
+            ? valFromValue(newValue)
+            : JSON.parse(newValue)}
       </div>
-      <div
-        className={styles.icon}
-        style={valueStyle}
-      >
+      <div className={styles.icon} style={valueStyle}>
         <IconButton
           title="widerrufen"
           aria-label="widerrufen"
@@ -114,4 +96,4 @@ export const QueuedQuery = observer(({ qq, index }) => {
       </div>
     </>
   )
-})
+}

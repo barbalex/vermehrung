@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import { FaPlus } from 'react-icons/fa'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import { dbAtom } from '../../../../../store/index.js'
+import { insertTeilzaehlungRev } from '../../../../../modules/insertRev.js'
 import { TeilzaehlungenRows } from './TeilzaehlungenRows.jsx'
 import { TeilzaehlungenSettings as Settings } from './Settings.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
@@ -13,9 +14,8 @@ import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByT
 
 import styles from './index.module.css'
 
-export const Teilzaehlungen = observer(({ zaehlung }) => {
-  const store = useContext(MobxStoreContext)
-  const { insertTeilzaehlungRev, db } = store
+export const Teilzaehlungen = ({ zaehlung }) => {
+  const db = useAtomValue(dbAtom)
 
   const kulturId = zaehlung.kultur_id
 
@@ -24,12 +24,12 @@ export const Teilzaehlungen = observer(({ zaehlung }) => {
     kulturOption: undefined,
   })
   useEffect(() => {
-    const teilzaehlungsObservable =
-      zaehlung.teilzaehlungs ?
-        zaehlung.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
+    const teilzaehlungsObservable = zaehlung.teilzaehlungs
+      ? zaehlung.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
       : $of([])
-    const kulturOptionObservable =
-      kulturId ? db.get('kultur_option').find(kulturId) : $of({})
+    const kulturOptionObservable = kulturId
+      ? db.get('kultur_option').find(kulturId)
+      : $of({})
     const combinedObservables = combineLatest([
       teilzaehlungsObservable,
       kulturOptionObservable,
@@ -74,10 +74,7 @@ export const Teilzaehlungen = observer(({ zaehlung }) => {
           )}
         </div>
       </div>
-      <TeilzaehlungenRows
-        kulturId={kulturId}
-        teilzaehlungs={teilzaehlungs}
-      />
+      <TeilzaehlungenRows kulturId={kulturId} teilzaehlungs={teilzaehlungs} />
     </ErrorBoundary>
   )
-})
+}

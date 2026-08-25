@@ -1,105 +1,112 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  herkunftIdInActiveNodeArrayAtom,
+  personIdInActiveNodeArrayAtom,
+  artIdInActiveNodeArrayAtom,
+  filterSammlungAtom,
+} from '../../../../store/index.js'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { SammlungFormTitle as FormTitle } from './FormTitle.jsx'
 import { tableFilter } from '../../../../utils/tableFilter.js'
 
-export const SammlungFormTitleChooser = observer(
-  ({ row, rawRow, showFilter, showHistory, setShowHistory }) => {
-    const store = useContext(MobxStoreContext)
-    const {
-      herkunftIdInActiveNodeArray,
-      personIdInActiveNodeArray,
-      artIdInActiveNodeArray,
-      db,
-      filter,
-    } = store
+export const SammlungFormTitleChooser = ({
+  row,
+  rawRow,
+  showFilter,
+  showHistory,
+  setShowHistory,
+}) => {
+  const db = useAtomValue(dbAtom)
+  const herkunftIdInActiveNodeArray = useAtomValue(
+    herkunftIdInActiveNodeArrayAtom,
+  )
+  const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
+  const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
+  const sammlungFilter = useAtomValue(filterSammlungAtom)
 
-    const [countState, setCountState] = useState({
-      totalCount: 0,
-      filteredCount: 0,
-    })
-    useEffect(() => {
-      const hierarchyQuery =
-        artIdInActiveNodeArray ?
-          [
-            Q.experimentalJoinTables(['art']),
-            Q.on('art', 'id', artIdInActiveNodeArray),
-          ]
-        : herkunftIdInActiveNodeArray ?
-          [
+  const [countState, setCountState] = useState({
+    totalCount: 0,
+    filteredCount: 0,
+  })
+  useEffect(() => {
+    const hierarchyQuery = artIdInActiveNodeArray
+      ? [
+          Q.experimentalJoinTables(['art']),
+          Q.on('art', 'id', artIdInActiveNodeArray),
+        ]
+      : herkunftIdInActiveNodeArray
+        ? [
             Q.experimentalJoinTables(['herkunft']),
             Q.on('herkunft', 'id', herkunftIdInActiveNodeArray),
           ]
-        : personIdInActiveNodeArray ?
-          [
-            Q.experimentalJoinTables(['person']),
-            Q.on('person', 'id', personIdInActiveNodeArray),
-          ]
-        : []
-      const collection = db.get('sammlung')
-      const sammlungDelQuery =
-        filter.sammlung._deleted === false ? Q.where('_deleted', false)
-        : filter.sammlung._deleted === true ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
-      const totalCountObservable = collection
-        .query(sammlungDelQuery, ...hierarchyQuery)
-        .observeCount()
-      const filteredCountObservable = collection
-        .query(...tableFilter({ store, table: 'sammlung' }), ...hierarchyQuery)
-        .observeCount()
-      const combinedObservables = combineLatest([
-        totalCountObservable,
-        filteredCountObservable,
-      ])
-      const subscription = combinedObservables.subscribe(
-        ([totalCount, filteredCount]) =>
-          setCountState({ totalCount, filteredCount }),
-      )
-
-      return () => subscription?.unsubscribe?.()
-    }, [
-      db,
-      artIdInActiveNodeArray,
-      herkunftIdInActiveNodeArray,
-      personIdInActiveNodeArray,
-      // need to rerender if any of the values of sammlungFilter changes
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      ...Object.values(store.filter.sammlung),
-      store,
-      filter.sammlung._deleted,
+        : personIdInActiveNodeArray
+          ? [
+              Q.experimentalJoinTables(['person']),
+              Q.on('person', 'id', personIdInActiveNodeArray),
+            ]
+          : []
+    const collection = db.get('sammlung')
+    const sammlungDelQuery =
+      sammlungFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : sammlungFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
+    const totalCountObservable = collection
+      .query(sammlungDelQuery, ...hierarchyQuery)
+      .observeCount()
+    const filteredCountObservable = collection
+      .query(...tableFilter({ table: 'sammlung' }), ...hierarchyQuery)
+      .observeCount()
+    const combinedObservables = combineLatest([
+      totalCountObservable,
+      filteredCountObservable,
     ])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, filteredCount]) =>
+        setCountState({ totalCount, filteredCount }),
+    )
 
-    const { totalCount, filteredCount } = countState
+    return () => subscription?.unsubscribe?.()
+  }, [
+    db,
+    artIdInActiveNodeArray,
+    herkunftIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+    // need to rerender if any of the values of sammlungFilter changes
+    sammlungFilter,
+  ])
 
-    if (showFilter) {
-      return (
-        <FilterTitle
-          title="Sammlung"
-          table="sammlung"
-          totalCount={totalCount}
-          filteredCount={filteredCount}
-        />
-      )
-    }
+  const { totalCount, filteredCount } = countState
 
+  if (showFilter) {
     return (
-      <FormTitle
-        row={row}
-        rawRow={rawRow}
+      <FilterTitle
+        title="Sammlung"
+        table="sammlung"
         totalCount={totalCount}
         filteredCount={filteredCount}
-        showHistory={showHistory}
-        setShowHistory={setShowHistory}
       />
     )
-  },
-)
+  }
+
+  return (
+    <FormTitle
+      row={row}
+      rawRow={rawRow}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
+      showHistory={showHistory}
+      setShowHistory={setShowHistory}
+    />
+  )
+}

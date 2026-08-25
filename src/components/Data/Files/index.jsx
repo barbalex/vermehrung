@@ -1,11 +1,17 @@
-import { useContext, useState, useEffect, useMemo } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, useMemo } from 'react'
+import { useAtomValue } from 'jotai'
 import ImageGallery from 'react-image-gallery'
 import Button from '@mui/material/Button'
 import { v1 as uuidv1 } from 'uuid'
 import { of as $of } from 'rxjs'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  addNotification,
+  dbAtom,
+  gqlClientAtom,
+  onlineAtom,
+  store,
+} from '../../../store/index.js'
 import { Uploader } from '../../Uploader.jsx'
 import { File } from './File.jsx'
 import { isImageFile } from './isImageFile.js'
@@ -16,9 +22,8 @@ import { useObservable } from '../../../utils/useObservable.js'
 
 import styles from './index.module.css'
 
-export const Files = observer(({ parentTable, parent }) => {
-  const store = useContext(MobxStoreContext)
-  const { online, gqlClient, addNotification, db } = store
+export const Files = ({ parentTable, parent }) => {
+  const online = useAtomValue(onlineAtom)
 
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
@@ -33,6 +38,8 @@ export const Files = observer(({ parentTable, parent }) => {
   const onChangeUploader = async (file) => {
     if (file) {
       file.done(async (info) => {
+        const gqlClient = store.get(gqlClientAtom)
+        const db = store.get(dbAtom)
         const newObject = {
           id: uuidv1(),
           file_id: info.uuid,
@@ -114,9 +121,9 @@ export const Files = observer(({ parentTable, parent }) => {
               onClick={onClickLightboxButton}
               className={styles.lightboxButton}
             >
-              {lightboxIsOpen ?
-                'Galerie schliessen'
-              : 'Bilder in Galerie öffnen'}
+              {lightboxIsOpen
+                ? 'Galerie schliessen'
+                : 'Bilder in Galerie öffnen'}
             </Button>
           )}
         </div>
@@ -124,24 +131,17 @@ export const Files = observer(({ parentTable, parent }) => {
       {lightboxIsOpen && (
         <>
           <div className={styles.spacer} />
-          <ImageGallery
-            items={imageObjects}
-            showPlayButton={false}
-          />
+          <ImageGallery items={imageObjects} showPlayButton={false} />
         </>
       )}
       {!!files.length && (
         <>
           <div className={styles.spacer} />
           {files.map((file) => (
-            <File
-              key={file.file_id}
-              file={file}
-              parent={parent}
-            />
+            <File key={file.file_id} file={file} parent={parent} />
           ))}
         </>
       )}
     </ErrorBoundary>
   )
-})
+}

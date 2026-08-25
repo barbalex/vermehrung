@@ -1,95 +1,97 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  filterSammelLieferungAtom,
+  filterShowAtom,
+} from '../../../../store/index.js'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { SammelLieferungFormTitle as FormTitle } from './FormTitle.jsx'
 import { tableFilter } from '../../../../utils/tableFilter.js'
 
-export const SammelLieferungFormTitleChooser = observer(
-  ({
-    lieferung,
-    printPreview,
-    row,
-    rawRow,
-    setPrintPreview,
-    showFilter,
-    showHistory,
-    setShowHistory,
-  }) => {
-    const store = useContext(MobxStoreContext)
+export const SammelLieferungFormTitleChooser = ({
+  lieferung,
+  printPreview,
+  row,
+  rawRow,
+  setPrintPreview,
+  showFilter,
+  showHistory,
+  setShowHistory,
+}) => {
+  const db = useAtomValue(dbAtom)
+  const sammelLieferungFilter = useAtomValue(filterSammelLieferungAtom)
+  const filterShow = useAtomValue(filterShowAtom)
 
-    const { filter, db } = store
-
-    const [countState, setCountState] = useState({
-      totalCount: 0,
-      filteredCount: 0,
-    })
-    useEffect(() => {
-      const collection = db.get('sammel_lieferung')
-      const sammelLieferungDelQuery =
-        filter.sammel_lieferung._deleted === false ? Q.where('_deleted', false)
-        : filter.sammel_lieferung._deleted === true ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
-      const totalCountObservable = collection
-        .query(sammelLieferungDelQuery)
-        .observeCount()
-      const filteredCountObservable = collection
-        .query(...tableFilter({ store, table: 'sammel_lieferung' }))
-        .observeCount()
-      const combinedObservables = combineLatest([
-        totalCountObservable,
-        filteredCountObservable,
-      ])
-      const subscription = combinedObservables.subscribe(
-        ([totalCount, filteredCount]) =>
-          setCountState({ totalCount, filteredCount }),
-      )
-
-      return () => subscription?.unsubscribe?.()
-    }, [
-      db,
-      // need to rerender if any of the values of sammel_lieferungFilter changes
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      ...Object.values(store.filter.sammel_lieferung),
-      store,
-      filter.sammel_lieferung._deleted,
+  const [countState, setCountState] = useState({
+    totalCount: 0,
+    filteredCount: 0,
+  })
+  useEffect(() => {
+    const collection = db.get('sammel_lieferung')
+    const sammelLieferungDelQuery =
+      sammelLieferungFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : sammelLieferungFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
+    const totalCountObservable = collection
+      .query(sammelLieferungDelQuery)
+      .observeCount()
+    const filteredCountObservable = collection
+      .query(...tableFilter({ table: 'sammel_lieferung' }))
+      .observeCount()
+    const combinedObservables = combineLatest([
+      totalCountObservable,
+      filteredCountObservable,
     ])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, filteredCount]) =>
+        setCountState({ totalCount, filteredCount }),
+    )
 
-    const { totalCount, filteredCount } = countState
+    return () => subscription?.unsubscribe?.()
+  }, [
+    db,
+    // need to rerender if any of the values of sammelLieferungFilter changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    sammelLieferungFilter,
+  ])
 
-    if (!row || (!showFilter && filter.show)) return null
+  const { totalCount, filteredCount } = countState
 
-    if (showFilter) {
-      return (
-        <FilterTitle
-          title="Sammel-Lieferung"
-          table="sammel_lieferung"
-          totalCount={totalCount}
-          filteredCount={filteredCount}
-        />
-      )
-    }
+  if (!row || (!showFilter && filterShow)) return null
 
+  if (showFilter) {
     return (
-      <FormTitle
-        row={row}
-        rawRow={rawRow}
+      <FilterTitle
+        title="Sammel-Lieferung"
+        table="sammel_lieferung"
         totalCount={totalCount}
         filteredCount={filteredCount}
-        showFilter={showFilter}
-        lieferung={lieferung}
-        printPreview={printPreview}
-        setPrintPreview={setPrintPreview}
-        showHistory={showHistory}
-        setShowHistory={setShowHistory}
       />
     )
-  },
-)
+  }
+
+  return (
+    <FormTitle
+      row={row}
+      rawRow={rawRow}
+      totalCount={totalCount}
+      filteredCount={filteredCount}
+      showFilter={showFilter}
+      lieferung={lieferung}
+      printPreview={printPreview}
+      setPrintPreview={setPrintPreview}
+      showHistory={showHistory}
+      setShowHistory={setShowHistory}
+    />
+  )
+}

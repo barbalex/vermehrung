@@ -1,39 +1,37 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import { dbAtom } from '../../../../store/index.js'
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.js'
 
 import styles from './Lieferung.module.css'
 
 const Zeile = ({ value }) => <div>{value}</div>
 
-export const LieferungForLieferschein = observer(({ lieferung: row }) => {
-  const store = useContext(MobxStoreContext)
-  const { db } = store
+export const LieferungForLieferschein = ({ lieferung: row }) => {
+  const db = useAtomValue(dbAtom)
 
   const [dataState, setDataState] = useState({
     artLabel: '',
     herkunftLabel: '',
   })
   useEffect(() => {
-    const artObservable =
-      row.art_id ? db.get('art').findAndObserve(row.art_id) : $of({})
-    const vonKulturHerkunftObservable =
-      row.von_kultur_id ?
-        db
+    const artObservable = row.art_id
+      ? db.get('art').findAndObserve(row.art_id)
+      : $of({})
+    const vonKulturHerkunftObservable = row.von_kultur_id
+      ? db
           .get('herkunft')
           .query(Q.on('kultur', 'id', row.von_kultur_id))
           .observe()
       : $of({})
-    const vonSammlungHerkunftObservable =
-      row.von_sammlung_id ?
-        db
+    const vonSammlungHerkunftObservable = row.von_sammlung_id
+      ? db
           .get('herkunft')
           .query(Q.on('sammlung', 'id', row.von_sammlung_id))
           .observe()
@@ -49,14 +47,13 @@ export const LieferungForLieferschein = observer(({ lieferung: row }) => {
         try {
           artLabel = await art.label.pipe(first$()).toPromise()
         } catch {}
-        const herkunftLabel =
-          vonKulturHerkunft ?
-            herkunftLabelFromHerkunft({
+        const herkunftLabel = vonKulturHerkunft
+          ? herkunftLabelFromHerkunft({
               herkunft: vonKulturHerkunft,
             })
-          : vonSammlungHerkunft ?
-            herkunftLabelFromHerkunft({ herkunft: vonSammlungHerkunft })
-          : ''
+          : vonSammlungHerkunft
+            ? herkunftLabelFromHerkunft({ herkunft: vonSammlungHerkunft })
+            : ''
 
         setDataState({ artLabel, herkunftLabel })
       },
@@ -82,13 +79,10 @@ export const LieferungForLieferschein = observer(({ lieferung: row }) => {
       <TableCell className={styles.tableCell}>{herkunftLabel}</TableCell>
       <TableCell className={styles.tableCell}>
         {wasArray.map((w, i) => (
-          <Zeile
-            key={i}
-            value={w}
-          />
+          <Zeile key={i} value={w} />
         ))}
       </TableCell>
       <TableCell className={styles.tableCell}>{bemerkungen}</TableCell>
     </TableRow>
   )
-})
+}

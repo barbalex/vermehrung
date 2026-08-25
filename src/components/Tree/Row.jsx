@@ -1,14 +1,19 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import {
   MdAccountCircle as AccountIcon,
   MdChevronRight as ChevronRightIcon,
   MdExpandMore as ExpandMoreIcon,
   MdMoreHoriz as MoreHorizIcon,
 } from 'react-icons/md'
-import { observer } from 'mobx-react-lite'
 import { of as $of } from 'rxjs'
 
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import {
+  dbAtom,
+  activeNodeArrayAtom,
+  showTreeInSingleColumnViewAtom,
+  singleColumnViewAtom,
+} from '../../store/index.js'
 import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.js'
 import { isNodeOpen } from './isNodeOpen.js'
 import { someChildrenAreOpen } from './someChildrenAreOpen.js'
@@ -30,11 +35,13 @@ import {
 
 import styles from './Row.module.css'
 
-export const TreeRow = observer(({ style, node, nodes, userRole }) => {
-  const store = useContext(MobxStoreContext)
-
-  const { showTreeInSingleColumnView, singleColumnView, tree, db } = store
-  const { activeNodeArray, singleRowHeight } = tree
+export const TreeRow = ({ style, node, nodes, userRole }) => {
+  const db = useAtomValue(dbAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+  const showTreeInSingleColumnView = useAtomValue(
+    showTreeInSingleColumnViewAtom,
+  )
+  const singleColumnView = useAtomValue(singleColumnViewAtom)
 
   const isMobile = showTreeInSingleColumnView && singleColumnView
   let fontSize = node?.mono ? 15 : 16
@@ -44,7 +51,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
     node,
     activeNodeArray,
   })
-  const nodeIsOpen = isNodeOpen({ store, url: node?.url })
+  const nodeIsOpen = isNodeOpen({ url: node?.url })
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
@@ -70,9 +77,9 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
   useEffect(() => {
     if (!node) return
     const personObservable =
-      node?.nodeType === 'table' && node.table === 'person' && node.url ?
-        db.get('person').findAndObserve(node.url.at(-1))
-      : $of({})
+      node?.nodeType === 'table' && node.table === 'person' && node.url
+        ? db.get('person').findAndObserve(node.url.at(-1))
+        : $of({})
 
     const subscription = personObservable.subscribe((person) =>
       setPerson(person),
@@ -87,17 +94,16 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
     toggleNode({
       nodes,
       node,
-      store,
     })
 
-  const onClickNodeSymbol = () => toggleNodeSymbol({ node, store })
-  const onClickNeu = () => createNew({ node, store })
-  const onClickDelete = () => deleteDataset({ node, store })
-  const onClickSetPassword = () => setPassword({ store, person })
-  const onClickDeleteAccout = () => deleteAccount({ store, person })
-  const onClickSignup = () => signup({ store, person })
-  const onClickOpenAllChildren = () => openAllChildren({ node, store, nodes })
-  const onClickCloseAllChildren = () => closeAllChildren({ node, store })
+  const onClickNodeSymbol = () => toggleNodeSymbol({ node })
+  const onClickNeu = () => createNew({ node })
+  const onClickDelete = () => deleteDataset({ node })
+  const onClickSetPassword = () => setPassword({ person })
+  const onClickDeleteAccout = () => deleteAccount({ person })
+  const onClickSignup = () => signup({ person })
+  const onClickOpenAllChildren = () => openAllChildren({ node, nodes })
+  const onClickCloseAllChildren = () => closeAllChildren({ node })
 
   // for unknown reason this happens momentarily when new art is created
   if (!node?.url) return null
@@ -113,10 +119,11 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
           className={styles.nodeClass}
           style={{
             paddingLeft: level * 17 - 10,
-            color:
-              nodeIsInActiveNodePath ? '#D84315'
-              : inaktiv ? 'rgba(0, 0, 0, 0.35)'
-              : 'inherit',
+            color: nodeIsInActiveNodePath
+              ? '#D84315'
+              : inaktiv
+                ? 'rgba(0, 0, 0, 0.35)'
+                : 'inherit',
           }}
         >
           {useSymbolIcon && (
@@ -170,9 +177,8 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
             node={node}
             onClick={onClickNode}
             style={{
-              fontFamily:
-                node?.mono ?
-                  'ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace'
+              fontFamily: node?.mono
+                ? 'ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace'
                 : 'system-ui',
               fontSize,
               fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
@@ -182,10 +188,7 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
             {node?.label ?? '(kein Label)'}
           </span>
           {accountId && (
-            <AccountIcon
-              title="hat ein Konto"
-              className={styles.accountIcon}
-            />
+            <AccountIcon title="hat ein Konto" className={styles.accountIcon} />
           )}
         </div>
       </ContextMenuTrigger>
@@ -204,10 +207,9 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 <MenuItem onClick={onClickDelete}>löschen</MenuItem>
               )}
               {node?.nodeType === 'folder' &&
-                isNodeOpen({ store, url: node?.url }) && (
+                isNodeOpen({ url: node?.url }) && (
                   <>
                     {someChildrenAreOpen({
-                      store,
                       nodes,
                       url: node?.url,
                     }) && (
@@ -216,7 +218,6 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                       </MenuItem>
                     )}
                     {someChildrenAreClosed({
-                      store,
                       nodes,
                       url: node?.url,
                     }) && (
@@ -231,7 +232,9 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 userRole?.name === 'manager' &&
                 !accountId && (
                   <>
-                    <div className={`react-contextmenu-title ${styles.menuSubtitle}`}>
+                    <div
+                      className={`react-contextmenu-title ${styles.menuSubtitle}`}
+                    >
                       Konto
                     </div>
                     <MenuItem onClick={onClickSignup}>neu</MenuItem>
@@ -242,7 +245,9 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
                 userRole?.name === 'manager' &&
                 accountId && (
                   <>
-                    <div className={`react-contextmenu-title ${styles.menuSubtitle}`}>
+                    <div
+                      className={`react-contextmenu-title ${styles.menuSubtitle}`}
+                    >
                       Konto
                     </div>
                     <MenuItem onClick={onClickSetPassword}>
@@ -258,4 +263,4 @@ export const TreeRow = observer(({ style, node, nodes, userRole }) => {
       )}
     </>
   )
-})
+}

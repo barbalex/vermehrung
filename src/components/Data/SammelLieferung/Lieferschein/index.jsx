@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { DateTime } from 'luxon'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -10,8 +10,8 @@ import Paper from '@mui/material/Paper'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
+import { dbAtom } from '../../../../store/index.js'
 import { LieferungForLieferschein as Lieferung } from './Lieferung.jsx'
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
 import { lieferungSort } from '../../../../utils/lieferungSort.js'
 import { personFullname } from '../../../../utils/personFullname.js'
 import { ProgressiveImg } from '../../../shared/ProgressiveImg.tsx'
@@ -19,9 +19,8 @@ import image from '../../../../images/toposLogo.png'
 
 import styles from './index.module.css'
 
-export const Lieferschein = observer(({ row }) => {
-  const store = useContext(MobxStoreContext)
-  const { db } = store
+export const Lieferschein = ({ row }) => {
+  const db = useAtomValue(dbAtom)
 
   const [dataState, setDataState] = useState({
     lieferungs: [],
@@ -30,9 +29,8 @@ export const Lieferschein = observer(({ row }) => {
   })
   useEffect(() => {
     const lieferungsObservable = row.lieferungs.observe()
-    const vonKulturGartenObservable =
-      row.von_kultur_id ?
-        db
+    const vonKulturGartenObservable = row.von_kultur_id
+      ? db
           .get('garten')
           .query(
             Q.where('_deleted', false),
@@ -60,23 +58,20 @@ export const Lieferschein = observer(({ row }) => {
   }, [db, row.lieferungs, row.person, row.von_kultur_id])
   const { lieferungs, vonKulturGarten, person } = dataState
 
-  const von =
-    row.von_kultur_id ?
-      `${vonKulturGarten?.name ?? '(kein Name)'} (${
+  const von = row.von_kultur_id
+    ? `${vonKulturGarten?.name ?? '(kein Name)'} (${
         vonKulturGarten?.ort ?? 'kein Ort'
       })`
     : '(keine von-Kultur erfasst)'
 
-  const an =
-    row.person_id ?
-      `${personFullname(person) ?? '(kein Name)'} (${
+  const an = row.person_id
+    ? `${personFullname(person) ?? '(kein Name)'} (${
         person?.ort ?? 'kein Ort'
       })`
     : '(keine Person erfasst)'
 
-  const am =
-    row.datum ?
-      DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
+  const am = row.datum
+    ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
     : '(Kein Datum erfasst)'
 
   return (
@@ -110,14 +105,8 @@ export const Lieferschein = observer(({ row }) => {
           <div className={styles.haederLabel}>am:</div>
           <div>{am}</div>
         </div>
-        <Paper
-          square
-          className={styles.paper}
-        >
-          <Table
-            size="small"
-            className={styles.table}
-          >
+        <Paper square className={styles.paper}>
+          <Table size="small" className={styles.table}>
             <TableHead>
               <TableRow>
                 <TableCell>Art</TableCell>
@@ -128,10 +117,7 @@ export const Lieferschein = observer(({ row }) => {
             </TableHead>
             <TableBody>
               {lieferungs.map((l) => (
-                <Lieferung
-                  key={l.id}
-                  lieferung={l}
-                />
+                <Lieferung key={l.id} lieferung={l} />
               ))}
             </TableBody>
           </Table>
@@ -139,4 +125,4 @@ export const Lieferschein = observer(({ row }) => {
       </div>
     </div>
   )
-})
+}

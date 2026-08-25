@@ -1,9 +1,15 @@
 import axios from 'redaxios'
 
+import {
+  store,
+  addNotification,
+  onlineAtom,
+  setOnline,
+} from '../store/index.js'
 import { constants } from './constants.js'
 
-export const signup = async ({ person, store }) => {
-  const { addNotification, online, setOnline } = store
+export const signup = async ({ person }) => {
+  const online = store.get(onlineAtom)
 
   // fetch email of this person
   const email = person?.email
@@ -33,7 +39,7 @@ export const signup = async ({ person, store }) => {
   if (!online) {
     setOnline(true)
   }
-  store.addNotification({
+  addNotification({
     message: `Für ${email} wurde ein Konto erstellt`,
     type: 'success',
   })
@@ -42,5 +48,5 @@ export const signup = async ({ person, store }) => {
       message: `Keine Person mit id ${person.id} gefunden`,
     })
   }
-  person.edit({ field: 'account_id', value: res.data, store })
+  person.edit({ field: 'account_id', value: res.data })
 }

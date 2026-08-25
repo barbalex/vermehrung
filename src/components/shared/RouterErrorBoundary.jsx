@@ -1,20 +1,16 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useRouteError } from 'react-router'
 import Button from '@mui/material/Button'
 
 import { logout } from '../../utils/logout.js'
-import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 import styles from './ErrorBoundary.module.css'
 
 const onReload = () => window.location.reload(true)
 
-export const RouterErrorBoundary = observer(({ children }) => {
+export const RouterErrorBoundary = ({ children }) => {
   const error = useRouteError()
-  const store = useContext(MobxStoreContext)
 
-  const onReset = () => logout({ store })
+  const onReset = () => logout()
 
   return (
     <div className={styles.container}>
@@ -42,4 +38,4 @@ export const RouterErrorBoundary = observer(({ children }) => {
       </div>
     </div>
   )
-})
+}

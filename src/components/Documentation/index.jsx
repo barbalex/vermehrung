@@ -1,13 +1,17 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { useResizeDetector } from 'react-resize-detector'
 import { Allotment } from 'allotment'
-import { observer } from 'mobx-react-lite'
 import { Outlet, useLocation } from 'react-router'
 
 import { ArticleList } from './ArticleList/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../utils/constants.js'
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import {
+  docFilterAtom,
+  setDocsCount,
+  setDocsFilteredCount,
+} from '../../store/index.js'
 import { DocumentationFormTitle as FormTitle } from './FormTitle/index.jsx'
 
 import styles from './index.module.css'
@@ -51,10 +55,9 @@ const articles = [
   { title: 'Datenschutz', slug: 'datenschutz' },
 ]
 
-export const Documentation = observer(() => {
+export const Documentation = () => {
   const { pathname } = useLocation()
-  const store = useContext(MobxStoreContext)
-  const { docFilter, setDocsCount, setDocsFilteredCount } = store
+  const docFilter = useAtomValue(docFilterAtom)
 
   const { width, ref } = useResizeDetector()
 
@@ -70,16 +73,14 @@ export const Documentation = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div
-        ref={ref}
-        className="docs"
-      >
-        {width < constants?.tree?.minimalWindowWidth ?
-          path.length === 1 ?
+      <div ref={ref} className="docs">
+        {width < constants?.tree?.minimalWindowWidth ? (
+          path.length === 1 ? (
             <div className={styles.container}>
               <ArticleList articles={articles} />
             </div>
-          : <div className={styles.container}>
+          ) : (
+            <div className={styles.container}>
               <div className={styles.doku}>
                 <FormTitle />
                 <div className={styles.dokuInnerContainer}>
@@ -87,8 +88,9 @@ export const Documentation = observer(() => {
                 </div>
               </div>
             </div>
-
-        : <div className={styles.splitPaneContainer}>
+          )
+        ) : (
+          <div className={styles.splitPaneContainer}>
             <Allotment>
               <Allotment.Pane preferredSize="22%">
                 <ArticleList articles={articles} />
@@ -101,8 +103,8 @@ export const Documentation = observer(() => {
               </div>
             </Allotment>
           </div>
-        }
+        )}
       </div>
     </ErrorBoundary>
   )
-})
+}

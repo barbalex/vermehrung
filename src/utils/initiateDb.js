@@ -1,6 +1,7 @@
 import { Database } from '@nozbe/watermelondb'
 import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
 
+import { addNotification } from '../store/index.js'
 import { schema } from '../dbSchema/schema.js'
 import {
   AeArt,
@@ -34,7 +35,7 @@ import {
 } from '../dbModel.ts'
 import { migrations } from './migrations.js'
 
-export const initiateDb = (store) => {
+export const initiateDb = () => {
   const adapter = new LokiJSAdapter({
     schema,
     migrations, // optional migrations
@@ -52,14 +53,14 @@ export const initiateDb = (store) => {
     // Optional:
     onQuotaExceededError: () => {
       console.log('the browser ran out of disk space')
-      store.addNotification({
+      addNotification({
         message:
           'Es gibt nicht genug Speicherplatz auf der Festplatte bzw. dem Browser steht nicht genug zur Verfügung.',
       })
     },
     onSetUpError: () => {
       // Database failed to load -- offer the user to reload the app or log out
-      store.addNotification({
+      addNotification({
         message:
           'Die lokale Datenbank wurde nicht richtig initialisiert. Bitte laden Sie die App neu.',
       })

@@ -1,9 +1,10 @@
 import { sendPasswordResetEmail } from 'firebase/auth'
 
+import { store, addNotification, firebaseAuthAtom } from '../store/index.js'
 import { constants } from './constants.js'
 
-export const setPassword = async ({ store, person }) => {
-  const { addNotification, firebaseAuth } = store
+export const setPassword = async ({ person }) => {
+  const firebaseAuth = store.get(firebaseAuthAtom)
   // fetch email of this person
   const email = person?.email
   try {
@@ -16,7 +17,7 @@ export const setPassword = async ({ store, person }) => {
       message: error.message,
     })
   }
-  store.addNotification({
+  addNotification({
     message: `${email} erhält einen Link, um ein Passwort zu setzen`,
     type: 'success',
   })

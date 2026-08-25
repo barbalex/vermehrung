@@ -1,8 +1,8 @@
+import { addNotification } from '../../../../../store/index.js'
 import { updateSammelLieferung } from './updateLieferung.js'
 
 export const updateAllSammelLieferungen = async ({
   sammelLieferung,
-  store,
   field,
 }) => {
   // pass field to mark which field should be updated
@@ -15,7 +15,6 @@ export const updateAllSammelLieferungen = async ({
       updateSammelLieferung({
         lieferung,
         sammelLieferung,
-        store,
         field,
       })
     } catch (err) {
@@ -24,7 +23,7 @@ export const updateAllSammelLieferungen = async ({
     }
   }
   if (!error && lieferungs.length) {
-    store.addNotification({
+    addNotification({
       message: 'Alle Lieferungen aktualisiert',
       type: 'info',
     })
