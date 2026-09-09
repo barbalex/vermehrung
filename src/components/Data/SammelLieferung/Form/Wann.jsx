@@ -1,9 +1,8 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import { errorsAtom } from '../../../../store/index.js'
 import { DateField as Date } from '../../../shared/Date.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { JesNo } from '../../../shared/JesNo.jsx'
@@ -11,73 +10,75 @@ import { constants } from '../../../../utils/constants.js'
 
 import wannStyles from '../../Lieferung/Lieferung/Form/Wann.module.css'
 
-export const SammelLieferungWann = observer(
-  ({ showFilter, row, ifNeeded, saveToDb }) => {
-    const store = useContext(MobxStoreContext)
+export const SammelLieferungWann = ({
+  showFilter,
+  row,
+  ifNeeded,
+  saveToDb,
+}) => {
+  const errors = useAtomValue(errorsAtom)
 
-    const { errors } = store
-
-    const openPlanenDocs = () => {
-      const url = `${constants?.getAppUri()}/Dokumentation/planen`
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+  const openPlanenDocs = () => {
+    const url = `${constants?.getAppUri()}/Dokumentation/planen`
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
+  }
 
-    return (
-      <>
-        <div
-          className={wannStyles.titleRow}
-          style={{
-            backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
-          }}
-        >
-          <div className={wannStyles.title}>wann</div>
-        </div>
-        {ifNeeded('datum') && (
-          <Date
-            key={`${row.id}datum`}
-            name="datum"
-            label="Datum"
-            value={row.datum}
-            saveToDb={saveToDb}
-            error={errors?.sammel_lieferung?.datum}
-          />
-        )}
-        {ifNeeded('geplant') && (
-          <div className={wannStyles.fieldRow}>
-            {showFilter ?
-              <JesNo
-                key={`${row.id}geplant`}
-                label="Geplant"
-                name="geplant"
-                value={row.geplant}
-                saveToDb={saveToDb}
-                error={errors?.sammel_lieferung?.geplant}
-              />
-            : <Checkbox2States
-                key={`${row.id}geplant`}
-                label="Geplant"
-                name="geplant"
-                value={row.geplant}
-                saveToDb={saveToDb}
-                error={errors?.sammel_lieferung?.geplant}
-              />
-            }
-            <div>
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openPlanenDocs}
-                size="large"
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-            </div>
+  return (
+    <>
+      <div
+        className={wannStyles.titleRow}
+        style={{
+          backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
+        }}
+      >
+        <div className={wannStyles.title}>wann</div>
+      </div>
+      {ifNeeded('datum') && (
+        <Date
+          key={`${row.id}datum`}
+          name="datum"
+          label="Datum"
+          value={row.datum}
+          saveToDb={saveToDb}
+          error={errors?.sammel_lieferung?.datum}
+        />
+      )}
+      {ifNeeded('geplant') && (
+        <div className={wannStyles.fieldRow}>
+          {showFilter ? (
+            <JesNo
+              key={`${row.id}geplant`}
+              label="Geplant"
+              name="geplant"
+              value={row.geplant}
+              saveToDb={saveToDb}
+              error={errors?.sammel_lieferung?.geplant}
+            />
+          ) : (
+            <Checkbox2States
+              key={`${row.id}geplant`}
+              label="Geplant"
+              name="geplant"
+              value={row.geplant}
+              saveToDb={saveToDb}
+              error={errors?.sammel_lieferung?.geplant}
+            />
+          )}
+          <div>
+            <IconButton
+              aria-label="Anleitung öffnen"
+              title="Anleitung öffnen"
+              onClick={openPlanenDocs}
+              size="large"
+            >
+              <IoMdInformationCircleOutline />
+            </IconButton>
           </div>
-        )}
-      </>
-    )
-  },
-)
+        </div>
+      )}
+    </>
+  )
+}

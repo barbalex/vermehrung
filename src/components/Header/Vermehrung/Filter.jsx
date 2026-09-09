@@ -1,12 +1,17 @@
-import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import { RiFilterFill, RiFilterLine } from 'react-icons/ri'
 import { MdDeleteSweep as DeleteFilterIcon } from 'react-icons/md'
 import { styled } from '@mui/material/styles'
-import { observer } from 'mobx-react-lite'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  filterShowAtom,
+  filterFilteredAtom,
+  singleColumnViewAtom,
+  setFilterShow,
+  emptyFilter,
+} from '../../../store/index.js'
 
 import styles from './Filter.module.css'
 
@@ -23,18 +28,17 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
   margin-left: 10px;
 `
 
-export const HeaderFilter = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { filter, singleColumnView } = store
-  const { show: showFilter, setShow: setShowFilter, filtered, empty } = filter
+export const HeaderFilter = () => {
+  const showFilter = useAtomValue(filterShowAtom)
+  const filtered = useAtomValue(filterFilteredAtom)
+  const singleColumnView = useAtomValue(singleColumnViewAtom)
 
-  const onClickFilter = () => setShowFilter(!showFilter)
+  const onClickFilter = () => setFilterShow(!showFilter)
 
   if (singleColumnView) {
     const StyledIconButton = styled(IconButton)({
-      border:
-        showFilter ?
-          '1px solid rgba(255, 255, 255, 0.5)'
+      border: showFilter
+        ? '1px solid rgba(255, 255, 255, 0.5)'
         : '0 solid rgba(255, 255, 255, 0.5)',
       fontSize: '2rem',
       '&:hover': { borderWidth: 1 },
@@ -47,9 +51,7 @@ export const HeaderFilter = observer(() => {
         onClick={onClickFilter}
         title="Filter"
       >
-        {filtered ?
-          <RiFilterFill />
-        : <RiFilterLine />}
+        {filtered ? <RiFilterFill /> : <RiFilterLine />}
       </StyledIconButton>
     )
   }
@@ -78,7 +80,7 @@ export const HeaderFilter = observer(() => {
           title="Alle Filter entfernen"
           onClick={(e) => {
             e.stopPropagation()
-            empty()
+            emptyFilter()
           }}
         >
           <StyledDeleteFilterIcon />
@@ -86,4 +88,4 @@ export const HeaderFilter = observer(() => {
       )}
     </StyledButton>
   )
-})
+}

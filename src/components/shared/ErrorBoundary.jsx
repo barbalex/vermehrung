@@ -1,10 +1,7 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import Button from '@mui/material/Button'
 
 import { logout } from '../../utils/logout.js'
-import { MobxStoreContext } from '../../mobxStoreContext.js'
 
 import styles from './ErrorBoundary.module.css'
 
@@ -54,9 +51,7 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
 }
 
 export const ErrorBoundary = ({ children }) => {
-  const store = useContext(MobxStoreContext)
-
-  const onReset = () => logout({ store })
+  const onReset = () => logout()
 
   return (
     <ErrorBoundaryComponent

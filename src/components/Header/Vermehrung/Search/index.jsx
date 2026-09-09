@@ -1,30 +1,29 @@
-import { useContext, useRef } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useRef } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaSearch } from 'react-icons/fa'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import {
+  singleColumnViewAtom,
+  setActiveNodeArray,
+  setFilterShow,
+} from '../../../../store/index.js'
 import { buildOptions } from './buildOptions.js'
 
 import './index.css'
 import styles from './index.module.css'
 
 const formatOptionLabel = ({ label }, { inputValue }) => (
-  <Highlighter
-    searchWords={[inputValue]}
-    textToHighlight={label}
-  />
+  <Highlighter searchWords={[inputValue]} textToHighlight={label} />
 )
 const formatGroupLabel = (data) => <div>{data.label}</div>
 const noOptionsMessage = () => null
 const loadingMessage = () => null
 
-export const HeaderSearch = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { filter, singleColumnView } = store
-  const { setActiveNodeArray } = store.tree
+export const HeaderSearch = () => {
+  const singleColumnView = useAtomValue(singleColumnViewAtom)
 
   const onChange = (option) => {
     if (!option) return
@@ -71,12 +70,12 @@ export const HeaderSearch = observer(() => {
         // do nothing
       }
     }
-    filter.setShow(false)
+    setFilterShow(false)
     setActiveNodeArray(newActiveNodeArray)
   }
 
   const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
-    buildOptions({ store, cb, val })
+    buildOptions({ cb, val })
   }, 600)
   const loadOptions = (val, cb) => buildOptionsDebounced({ cb, val })
 
@@ -158,10 +157,7 @@ export const HeaderSearch = observer(() => {
   }
 
   return (
-    <div
-      className={styles.container}
-      ref={ref}
-    >
+    <div className={styles.container} ref={ref}>
       {!singleColumnView && <FaSearch className={styles.searchIcon} />}
       <Select
         styles={customStyles}
@@ -180,4 +176,4 @@ export const HeaderSearch = observer(() => {
       />
     </div>
   )
-})
+}

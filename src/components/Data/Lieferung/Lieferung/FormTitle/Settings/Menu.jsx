@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -9,22 +9,21 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
+import { dbAtom, userAtom } from '../../../../../../store/index.js'
 import { constants } from '../../../../../../utils/constants.js'
 
 import styles from './Menu.module.css'
 
-export const LieferungSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
-  const store = useContext(MobxStoreContext)
-  const { user, db } = store
+export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
+  const db = useAtomValue(dbAtom)
+  const user = useAtomValue(userAtom)
 
   const [dataState, setDataState] = useState({
     userPersonOption: {},
   })
   useEffect(() => {
-    const userPersonOptionsObservable =
-      user.uid ?
-        db
+    const userPersonOptionsObservable = user.uid
+      ? db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['li_show_sl_felder', 'li_show_sl'])
@@ -47,7 +46,7 @@ export const LieferungSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
   const saveToDb = (event) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    userPersonOption.edit({ field, value, store })
+    userPersonOption.edit({ field, value })
   }
 
   const openSettingsDocs = () => {
@@ -114,4 +113,4 @@ export const LieferungSettingsMenu = observer(({ anchorEl, setAnchorEl }) => {
       <div className={styles.info}>Die Wahl gilt für alle Lieferungen.</div>
     </Menu>
   )
-})
+}

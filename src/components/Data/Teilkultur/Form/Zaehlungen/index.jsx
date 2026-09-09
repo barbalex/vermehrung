@@ -1,17 +1,16 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { Q } from '@nozbe/watermelondb'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import { dbAtom } from '../../../../../store/index.js'
 import { teilzaehlungsSortByZaehlungTk } from '../../../../../utils/teilzaehlungsSortByZaehlungTk.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { TeilkulturTeilzaehlung as Teilzaehlungen } from './Teilzaehlungen.jsx'
 
 import styles from './index.module.css'
 
-export const TeilkulturZaehlungen = observer(({ teilkultur }) => {
-  const store = useContext(MobxStoreContext)
-  const { db } = store
+export const TeilkulturZaehlungen = ({ teilkultur }) => {
+  const db = useAtomValue(dbAtom)
 
   const [teilzaehlungs, setTeilzaehlungs] = useState([])
   useEffect(() => {
@@ -52,4 +51,4 @@ export const TeilkulturZaehlungen = observer(({ teilkultur }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

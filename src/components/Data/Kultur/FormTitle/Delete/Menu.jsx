@@ -1,25 +1,26 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import {
+  store,
+  activeNodeArrayAtom,
+  filterKulturAtom,
+  setActiveNodeArray,
+  removeOpenNodeWithChildren,
+} from '../../../../../store/index.js'
 
 import artStyles from '../../../Art/FormTitle/DeleteButton.module.css'
 
-export const KulturDeleteMenu = observer(({ row, anchorEl, setAnchorEl }) => {
-  const store = useContext(MobxStoreContext)
-  const { filter } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
-    store.tree
-
+export const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
   const closeMenu = () => setAnchorEl(null)
 
   const remove = async () => {
-    await row.delete({ store })
+    await row.delete()
     setAnchorEl(null)
-    if (filter.kultur.delete === false) {
+    const kulturFilter = store.get(filterKulturAtom)
+    if (kulturFilter.delete === false) {
       // need to remove openNode from openNodes
+      const activeNodeArray = store.get(activeNodeArrayAtom)
       removeOpenNodeWithChildren(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
     }
@@ -40,4 +41,4 @@ export const KulturDeleteMenu = observer(({ row, anchorEl, setAnchorEl }) => {
       <MenuItem onClick={closeMenu}>Nein, abbrechen!</MenuItem>
     </Menu>
   )
-})
+}

@@ -1,5 +1,5 @@
-import { useContext, lazy } from 'react'
-import { observer } from 'mobx-react-lite'
+import { lazy } from 'react'
+import { useAtomValue } from 'jotai'
 import isUuid from 'is-uuid'
 
 const Art = lazy(async () => ({
@@ -74,12 +74,11 @@ const Root = lazy(async () => ({
 const FourOhFour = lazy(async () => ({
   default: (await import('../../routes/404.jsx')).FourOhFour,
 }))
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import { activeFormAtom, activeNodeArrayAtom } from '../../store/index.js'
 
-export const Data = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { activeForm } = store
-  const { activeNodeArray } = store.tree
+export const Data = () => {
+  const activeForm = useAtomValue(activeFormAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
   const id = activeNodeArray.filter((e) => isUuid.v1(e)).at(-1)
 
@@ -133,4 +132,4 @@ export const Data = observer(() => {
     default:
       return <FourOhFour />
   }
-})
+}

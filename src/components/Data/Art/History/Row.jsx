@@ -1,21 +1,22 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { isEqual } from 'es-toolkit'
 
 import { History } from '../../../shared/History/index.jsx'
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import {
+  store,
+  userAtom,
+  addNotification,
+  dbAtom,
+  gqlClientAtom,
+} from '../../../../store/index.js'
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../../utils/toPgArray.js'
 import { mutations } from '../../../../utils/mutations.js'
 import { createDataArrayForRevComparison } from '../createDataArrayForRevComparison.js'
 
-export const Row = observer(({ row, revRow, historyTakeoverCallback }) => {
-  const store = useContext(MobxStoreContext)
-  const { user, addNotification, db, gqlClient } = store
-
-  const dataArray = createDataArrayForRevComparison({ row, revRow, store })
+export const Row = ({ row, revRow, historyTakeoverCallback }) => {
+  const dataArray = createDataArrayForRevComparison({ row, revRow })
 
   const onClickWiderspruchUebernehmen = async () => {
     // need to attach to the winner, that is row
@@ -35,10 +36,11 @@ export const Row = observer(({ row, revRow, historyTakeoverCallback }) => {
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom).email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    const response = await gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutations.mutateInsert_art_rev_one, {
         object: newObject,
         on_conflict: {
@@ -48,7 +50,7 @@ export const Row = observer(({ row, revRow, historyTakeoverCallback }) => {
       })
       .toPromise()
     if (response.error) {
-      checkForOnlineError({ error: response.error, store })
+      checkForOnlineError({ error: response.error })
       return addNotification({
         message: response.error.message,
       })
@@ -56,14 +58,16 @@ export const Row = observer(({ row, revRow, historyTakeoverCallback }) => {
     historyTakeoverCallback()
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions =
-      row._revisions ? [rev, ...row._revisions] : [rev]
+    newObjectForStore._revisions = row._revisions
+      ? [rev, ...row._revisions]
+      : [rev]
     // TODO: is this a good idea?
     newObjectForStore._conflicts = row._conflicts
     // for store: convert rev to winner
     newObjectForStore.id = row.id
     delete newObjectForStore.kultur_id
     // optimistically update store
+    const db = store.get(dbAtom)
     await db.write(async () => {
       await row.update((row) => {
         Object.entries(newObjectForStore).forEach(([key, value]) => {
@@ -84,4 +88,4 @@ export const Row = observer(({ row, revRow, historyTakeoverCallback }) => {
       onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
     />
   )
-})
+}

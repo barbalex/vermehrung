@@ -1,11 +1,9 @@
-import { useContext, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaDownload } from 'react-icons/fa'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { buildExceljsWorksheetsForDaten } from './buildExceljsWorksheetsForDaten.js'
 import { buildExceljsWorksheetsForTzSums } from './buildExceljsWorksheetsForTzSums.js'
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.js'
@@ -13,19 +11,15 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'
 
-export const GartenDownload = observer(({ gartenId }) => {
-  const store = useContext(MobxStoreContext)
-
+export const GartenDownload = ({ gartenId }) => {
   const onClickData = async () => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')
     const workbook = new Workbook()
     await buildExceljsWorksheetsForDaten({
-      store,
       garten_id: gartenId,
       workbook,
     })
     downloadExceljsWorkbook({
-      store,
       fileName: `Garten_${gartenId}_rohdaten`,
       workbook,
     })
@@ -36,12 +30,10 @@ export const GartenDownload = observer(({ gartenId }) => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')
     const workbook = new Workbook()
     await buildExceljsWorksheetsForTzSums({
-      store,
       garten_id: gartenId,
       workbook,
     })
     downloadExceljsWorkbook({
-      store,
       fileName: `Garten_${gartenId}_teilzaehlungen_summen`,
       workbook,
     })
@@ -80,4 +72,4 @@ export const GartenDownload = observer(({ gartenId }) => {
       </Menu>
     </ErrorBoundary>
   )
-})
+}

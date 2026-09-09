@@ -1,9 +1,16 @@
 import tableFromTitleHash from '../../utils/tableFromTitleHash.json'
 
-export const deleteDataset = async ({ node, store }) => {
-  const { db } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNodeWithChildren } =
-    store.tree
+import {
+  store,
+  dbAtom,
+  activeNodeArrayAtom,
+  setActiveNodeArray,
+  removeOpenNodeWithChildren,
+} from '../../store/index.js'
+
+export const deleteDataset = async ({ node }) => {
+  const db = store.get(dbAtom)
+  const activeNodeArray = store.get(activeNodeArrayAtom)
 
   // get table and id from url
   const title = node.url.slice(-2)[0]
@@ -16,7 +23,7 @@ export const deleteDataset = async ({ node, store }) => {
     me = await db.get(table).find(id)
   } catch {}
   if (!me?.delete) throw new Error(`Kein Modell für Tabelle ${table} gefunden`)
-  me.delete({ store })
+  me.delete()
   setActiveNodeArray(activeNodeArray.slice(0, -1))
   // need to remove openNode from openNodes
   removeOpenNodeWithChildren(node.url)

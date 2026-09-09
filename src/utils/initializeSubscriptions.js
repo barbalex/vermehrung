@@ -1,50 +1,56 @@
 import { processSubscriptionResult } from './processSubscriptionResult.js'
 import { removeOrtsangaben } from './removeOrtsangaben.js'
+import {
+  dbAtom,
+  gqlWsClientAtom,
+  lastUpdatedAtom,
+  incrementWsReconnectCount,
+} from '../store/index.js'
 
-export const initializeSubscriptions = ({ store, userRole }) => {
+export const initializeSubscriptions = ({ userRole }) => {
   const isNoGaertner = userRole !== 'gaertner'
   if (userRole === 'gaertner') {
     // need to remove some data for gaertner in case they had synced them earlier
     // implemented 2023.05.15
     // TODO: remove this in a year, 2024.06
-    removeOrtsangaben({ db: store.db })
+    removeOrtsangaben({ db: store.get(dbAtom) })
   }
   console.log('initializing subscriptions, userRole:', userRole)
 
   const {
-    ae_art_lastUpdated,
-    art_lastUpdated,
-    art_file_lastUpdated,
-    art_qk_lastUpdated,
-    av_lastUpdated,
-    event_lastUpdated,
-    garten_lastUpdated,
-    garten_file_lastUpdated,
-    gv_lastUpdated,
-    herkunft_lastUpdated,
-    herkunft_file_lastUpdated,
-    kultur_lastUpdated,
-    kultur_file_lastUpdated,
-    kultur_option_lastUpdated,
-    kultur_qk_lastUpdated,
-    lieferung_lastUpdated,
-    lieferung_file_lastUpdated,
-    person_lastUpdated,
-    person_file_lastUpdated,
-    person_option_lastUpdated,
-    sammel_lieferung_lastUpdated,
-    sammlung_lastUpdated,
-    sammlung_file_lastUpdated,
-    teilkultur_lastUpdated,
-    teilzaehlung_lastUpdated,
-    user_role_lastUpdated,
-    zaehlung_lastUpdated,
-  } = store
+    ae_art: ae_art_lastUpdated,
+    art: art_lastUpdated,
+    art_file: art_file_lastUpdated,
+    art_qk: art_qk_lastUpdated,
+    av: av_lastUpdated,
+    event: event_lastUpdated,
+    garten: garten_lastUpdated,
+    garten_file: garten_file_lastUpdated,
+    gv: gv_lastUpdated,
+    herkunft: herkunft_lastUpdated,
+    herkunft_file: herkunft_file_lastUpdated,
+    kultur: kultur_lastUpdated,
+    kultur_file: kultur_file_lastUpdated,
+    kultur_option: kultur_option_lastUpdated,
+    kultur_qk: kultur_qk_lastUpdated,
+    lieferung: lieferung_lastUpdated,
+    lieferung_file: lieferung_file_lastUpdated,
+    person: person_lastUpdated,
+    person_file: person_file_lastUpdated,
+    person_option: person_option_lastUpdated,
+    sammel_lieferung: sammel_lieferung_lastUpdated,
+    sammlung: sammlung_lastUpdated,
+    sammlung_file: sammlung_file_lastUpdated,
+    teilkultur: teilkultur_lastUpdated,
+    teilzaehlung: teilzaehlung_lastUpdated,
+    user_role: user_role_lastUpdated,
+    zaehlung: zaehlung_lastUpdated,
+  } = store.get(lastUpdatedAtom)
   const unsubscribe = {}
 
   // TODO:
   // resubscribe in a throttled way when _lastUpdated changes
-  unsubscribe.ae_art = store.gqlWsClient.subscribe(
+  unsubscribe.ae_art = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription AeArt($where: ae_art_bool_exp) {
@@ -64,7 +70,6 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.ae_art,
           table: 'ae_art',
-          store,
         })
       },
       error: (error) => {
@@ -73,12 +78,12 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         console.log('subscribeAeArt, onError:', error)
         // signOut()
         // need to retry
-        setTimeout(() => store.incrementWsReconnectCount(), 3000)
+        setTimeout(() => incrementWsReconnectCount(), 3000)
       },
       complete: () => console.log('resolved ae_art'),
     },
   )
-  unsubscribe.art = store.gqlWsClient.subscribe(
+  unsubscribe.art = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Art($where: art_bool_exp) {
@@ -107,14 +112,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.art,
           table: 'art',
-          store,
         })
       },
       error: (error) => console.log('subscribeArt, onError:', error),
       complete: () => console.log('resolved art'),
     },
   )
-  unsubscribe.art_file = store.gqlWsClient.subscribe(
+  unsubscribe.art_file = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription ArtFile($where: art_file_bool_exp) {
@@ -138,14 +142,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.art_file,
           table: 'art_file',
-          store,
         })
       },
       error: (error) => console.log('subscribeArtFile, onError:', error),
       complete: () => console.log('resolved art_file'),
     },
   )
-  unsubscribe.art_qk = store.gqlWsClient.subscribe(
+  unsubscribe.art_qk = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription ArtQk($where: art_qk_bool_exp) {
@@ -174,14 +177,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.art_qk,
           table: 'art_qk',
-          store,
         })
       },
       error: (error) => console.log('subscribeArtQk, onError:', error),
       complete: () => console.log('resolved art_qk'),
     },
   )
-  unsubscribe.av = store.gqlWsClient.subscribe(
+  unsubscribe.av = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Av($where: av_bool_exp) {
@@ -208,14 +210,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.av,
           table: 'av',
-          store,
         })
       },
       error: (error) => console.log('subscribeAv, onError:', error),
       complete: () => console.log('resolved av'),
     },
   )
-  unsubscribe.event = store.gqlWsClient.subscribe(
+  unsubscribe.event = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Event($where: event_bool_exp) {
@@ -246,14 +247,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.event,
           table: 'event',
-          store,
         })
       },
       error: (error) => console.log('subscribeEvent, onError:', error),
       complete: () => console.log('resolved event'),
     },
   )
-  unsubscribe.garten = store.gqlWsClient.subscribe(
+  unsubscribe.garten = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Garten($where: garten_bool_exp) {
@@ -290,14 +290,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.garten,
           table: 'garten',
-          store,
         })
       },
       error: (error) => console.log('subscribeGarten, onError:', error),
       complete: () => console.log('resolved garten'),
     },
   )
-  unsubscribe.garten_file = store.gqlWsClient.subscribe(
+  unsubscribe.garten_file = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription GartenFile($where: garten_file_bool_exp) {
@@ -321,14 +320,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.garten_file,
           table: 'garten_file',
-          store,
         })
       },
       error: (error) => console.log('subscribeGartenFile, onError:', error),
       complete: () => console.log('resolved garten_file'),
     },
   )
-  unsubscribe.gv = store.gqlWsClient.subscribe(
+  unsubscribe.gv = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Gv($where: gv_bool_exp) {
@@ -355,7 +353,6 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.gv,
           table: 'gv',
-          store,
         })
       },
       error: (error) => console.log('subscribeGv, onError:', error),
@@ -363,7 +360,7 @@ export const initializeSubscriptions = ({ store, userRole }) => {
     },
   )
   // TODO: if user role is gaertner, do not import: lokalname, wgs84_lat, wgs84_long, lv95_x, lv95_y
-  unsubscribe.herkunft = store.gqlWsClient.subscribe(
+  unsubscribe.herkunft = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Herkunft($where: herkunft_bool_exp) {
@@ -399,14 +396,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.herkunft,
           table: 'herkunft',
-          store,
         })
       },
       error: (error) => console.log('subscribeHerkunft, onError:', error),
       complete: () => console.log('resolved herkunft'),
     },
   )
-  unsubscribe.herkunft_file = store.gqlWsClient.subscribe(
+  unsubscribe.herkunft_file = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription HerkunftFile($where: herkunft_file_bool_exp) {
@@ -430,14 +426,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.herkunft_file,
           table: 'herkunft_file',
-          store,
         })
       },
       error: (error) => console.log('subscribeHerkunftFile, onError:', error),
       complete: () => console.log('resolved herkunft_file'),
     },
   )
-  unsubscribe.kultur = store.gqlWsClient.subscribe(
+  unsubscribe.kultur = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Kultur($where: kultur_bool_exp) {
@@ -470,14 +465,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.kultur,
           table: 'kultur',
-          store,
         })
       },
       error: (error) => console.log('subscribeKultur, onError:', error),
       complete: () => console.log('resolved kultur'),
     },
   )
-  unsubscribe.kultur_file = store.gqlWsClient.subscribe(
+  unsubscribe.kultur_file = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription KulturFile($where: kultur_file_bool_exp) {
@@ -501,14 +495,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.kultur_file,
           table: 'kultur_file',
-          store,
         })
       },
       error: (error) => console.log('subscribeKulturFile, onError:', error),
       complete: () => console.log('resolved kultur_file'),
     },
   )
-  unsubscribe.kultur_option = store.gqlWsClient.subscribe(
+  unsubscribe.kultur_option = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription KulturOption($where: kultur_option_bool_exp) {
@@ -542,14 +535,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.kultur_option,
           table: 'kultur_option',
-          store,
         })
       },
       error: (error) => console.log('subscribeKulturOption, onError:', error),
       complete: () => console.log('resolved kultur_option'),
     },
   )
-  unsubscribe.kultur_qk = store.gqlWsClient.subscribe(
+  unsubscribe.kultur_qk = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription KulturQk($where: kultur_qk_bool_exp) {
@@ -578,14 +570,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.kultur_qk,
           table: 'kultur_qk',
-          store,
         })
       },
       error: (error) => console.log('subscribeKulturQk, onError:', error),
       complete: () => console.log('resolved kultur_qk'),
     },
   )
-  unsubscribe.lieferung = store.gqlWsClient.subscribe(
+  unsubscribe.lieferung = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Lieferung($where: lieferung_bool_exp) {
@@ -625,14 +616,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.lieferung,
           table: 'lieferung',
-          store,
         })
       },
       error: (error) => console.log('subscribeLieferung, onError:', error),
       complete: () => console.log('resolved lieferung'),
     },
   )
-  unsubscribe.lieferung_file = store.gqlWsClient.subscribe(
+  unsubscribe.lieferung_file = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription LieferungFile($where: lieferung_file_bool_exp) {
@@ -656,14 +646,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.lieferung_file,
           table: 'lieferung_file',
-          store,
         })
       },
       error: (error) => console.log('subscribeLieferungFile, onError:', error),
       complete: () => console.log('resolved lieferung_file'),
     },
   )
-  unsubscribe.person = store.gqlWsClient.subscribe(
+  unsubscribe.person = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Person($where: person_bool_exp) {
@@ -706,14 +695,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.person,
           table: 'person',
-          store,
         })
       },
       error: (error) => console.log('subscribePerson, onError:', error),
       complete: () => console.log('resolved person'),
     },
   )
-  unsubscribe.person_file = store.gqlWsClient.subscribe(
+  unsubscribe.person_file = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription PersonFile($where: person_file_bool_exp) {
@@ -737,14 +725,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.person_file,
           table: 'person_file',
-          store,
         })
       },
       error: (error) => console.log('subscribePersonFile, onError:', error),
       complete: () => console.log('resolved person_file'),
     },
   )
-  unsubscribe.person_option = store.gqlWsClient.subscribe(
+  unsubscribe.person_option = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription PersonOption($where: person_option_bool_exp) {
@@ -792,14 +779,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.person_option,
           table: 'person_option',
-          store,
         })
       },
       error: (error) => console.log('subscribePersonOption, onError:', error),
       complete: () => console.log('resolved person_option'),
     },
   )
-  unsubscribe.sammel_lieferung = store.gqlWsClient.subscribe(
+  unsubscribe.sammel_lieferung = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription SammelLieferung($where: sammel_lieferung_bool_exp) {
@@ -836,7 +822,6 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.sammel_lieferung,
           table: 'sammel_lieferung',
-          store,
         })
       },
       error: (error) =>
@@ -844,7 +829,7 @@ export const initializeSubscriptions = ({ store, userRole }) => {
       complete: () => console.log('resolved sammel_lieferung'),
     },
   )
-  unsubscribe.sammlung = store.gqlWsClient.subscribe(
+  unsubscribe.sammlung = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Sammlung($where: sammlung_bool_exp) {
@@ -885,14 +870,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.sammlung,
           table: 'sammlung',
-          store,
         })
       },
       error: (error) => console.log('subscribeSammlung, onError:', error),
       complete: () => console.log('resolved sammlung'),
     },
   )
-  unsubscribe.sammlung_file = store.gqlWsClient.subscribe(
+  unsubscribe.sammlung_file = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription SammlungFile($where: sammlung_file_bool_exp) {
@@ -916,14 +900,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.sammlung_file,
           table: 'sammlung_file',
-          store,
         })
       },
       error: (error) => console.log('subscribeSammlungFile, onError:', error),
       complete: () => console.log('resolved sammlung_file'),
     },
   )
-  unsubscribe.teilkultur = store.gqlWsClient.subscribe(
+  unsubscribe.teilkultur = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Teilkultur($where: teilkultur_bool_exp) {
@@ -954,14 +937,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.teilkultur,
           table: 'teilkultur',
-          store,
         })
       },
       error: (error) => console.log('subscribeTeilkultur, onError:', error),
       complete: () => console.log('resolved teilkultur'),
     },
   )
-  unsubscribe.teilzaehlung = store.gqlWsClient.subscribe(
+  unsubscribe.teilzaehlung = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Teilzaehlung($where: teilzaehlung_bool_exp) {
@@ -994,14 +976,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.teilzaehlung,
           table: 'teilzaehlung',
-          store,
         })
       },
       error: (error) => console.log('subscribeTeilzaehlung, onError:', error),
       complete: () => console.log('resolved teilzaehlung'),
     },
   )
-  unsubscribe.user_role = store.gqlWsClient.subscribe(
+  unsubscribe.user_role = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription UserRole($where: user_role_bool_exp) {
@@ -1023,14 +1004,13 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.user_role,
           table: 'user_role',
-          store,
         })
       },
       error: (error) => console.log('subscribeUserRole, onError:', error),
       complete: () => console.log('resolved user_role'),
     },
   )
-  unsubscribe.zaehlung = store.gqlWsClient.subscribe(
+  unsubscribe.zaehlung = store.get(gqlWsClientAtom).subscribe(
     {
       query: `
         subscription Zaehlung($where: zaehlung_bool_exp) {
@@ -1059,7 +1039,6 @@ export const initializeSubscriptions = ({ store, userRole }) => {
         processSubscriptionResult({
           data: data.data.zaehlung,
           table: 'zaehlung',
-          store,
         })
       },
       error: (error) => console.log('subscribeZaehlung, onError:', error),

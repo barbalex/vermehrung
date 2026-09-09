@@ -1,12 +1,22 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  activeNodeArrayAtom,
+  filterKulturAtom,
+  artIdInActiveNodeArrayAtom,
+  gartenIdInActiveNodeArrayAtom,
+  herkunftIdInActiveNodeArrayAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../store/index.js'
+import { insertKulturRev } from '../../../modules/insertRev.js'
 import { FilterTitle } from '../../shared/FilterTitle.jsx'
 import { KulturRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -18,18 +28,15 @@ import { constants } from '../../../utils/constants.js'
 
 import artStyles from '../Arten/index.module.css'
 
-export const Kulturen = observer(({ filter: showFilter = false }) => {
-  const store = useContext(MobxStoreContext)
-  const {
-    artIdInActiveNodeArray,
-    db,
-    filter,
-    gartenIdInActiveNodeArray,
-    herkunftIdInActiveNodeArray,
-    insertKulturRev,
-  } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-  const { kultur: kulturFilter } = store.filter
+export const Kulturen = ({ filter: showFilter = false }) => {
+  const db = useAtomValue(dbAtom)
+  const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
+  const gartenIdInActiveNodeArray = useAtomValue(gartenIdInActiveNodeArrayAtom)
+  const herkunftIdInActiveNodeArray = useAtomValue(
+    herkunftIdInActiveNodeArrayAtom,
+  )
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+  const kulturFilter = useAtomValue(filterKulturAtom)
 
   const [dataState, setDataState] = useState({ kulturs: [], totalCount: 0 })
   useEffect(() => {
@@ -48,26 +55,30 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
     }
     const collection = db.get('kultur')
     const kulturDelQuery =
-      filter.kultur._deleted === false ? Q.where('_deleted', false)
-      : filter.kultur._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      kulturFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : kulturFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const kulturAktivQuery =
-      filter.kultur.aktiv === false ? Q.where('aktiv', false)
-      : filter.kultur.aktiv === true ? Q.where('aktiv', true)
-      : Q.or(
-          Q.where('aktiv', false),
-          Q.where('aktiv', true),
-          Q.where('aktiv', null),
-        )
+      kulturFilter.aktiv === false
+        ? Q.where('aktiv', false)
+        : kulturFilter.aktiv === true
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const countObservable = collection
       .query(kulturDelQuery, kulturAktivQuery, ...hierarchyQuery)
       .observeCount()
     const dataObservable = collection
-      .query(...tableFilter({ table: 'kultur', store }), ...hierarchyQuery)
+      .query(...tableFilter({ table: 'kultur' }), ...hierarchyQuery)
       .observeWithColumns([
         'art_id',
         'herkunft_id',
@@ -91,9 +102,6 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
     kulturFilter,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
-    store,
-    filter.kultur._deleted,
-    filter.kultur.aktiv,
     herkunftIdInActiveNodeArray,
   ])
 
@@ -122,21 +130,18 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
-        {showFilter ?
+        {showFilter ? (
           <FilterTitle
             title="Kultur"
             table="kultur"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={artStyles.titleContainer}>
+        ) : (
+          <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Kulturen</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton
-                title={upTitle}
-                onClick={onClickUp}
-                size="large"
-              >
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -153,7 +158,7 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        }
+        )}
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
@@ -165,4 +170,4 @@ export const Kulturen = observer(({ filter: showFilter = false }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

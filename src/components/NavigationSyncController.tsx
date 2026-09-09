@@ -1,26 +1,24 @@
-import { useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { isEqual } from 'es-toolkit'
 import { useLocation, useNavigate } from 'react-router'
 
-import { MobxStoreContext } from '../mobxStoreContext.js'
+import {
+  activeNodeArrayAtom,
+  setNavigate,
+  setActiveNodeArray,
+  setLastActiveNodeArray,
+  addOpenNode,
+} from '../store/index.js'
 import { getActiveNodeArrayFromPathname } from '../utils/getActiveNodeArrayFromPathname.js'
 
 // syncs activeNodeArray with browser navigation
-export const NavigationSyncController = observer(() => {
+export const NavigationSyncController = () => {
   const { pathname } = useLocation()
 
   const navigate = useNavigate()
 
-  const store = useContext(MobxStoreContext)
-  const { setNavigate } = store
-  const {
-    setActiveNodeArray,
-    activeNodeArray: aNARaw,
-    setLastActiveNodeArray,
-    addOpenNode,
-  } = store.tree
-  const aNA = aNARaw.slice()
+  const aNA = useAtomValue(activeNodeArrayAtom).slice()
 
   // enable navigating in store > set this as store value
   // (can't be passed when creating store yet)
@@ -35,7 +33,7 @@ export const NavigationSyncController = observer(() => {
       setLastActiveNodeArray(getActiveNodeArrayFromPathname(pathname))
     }
     // do not need to remove, see: https://stackoverflow.com/a/47997544/712005
-  }, [pathname, setLastActiveNodeArray])
+  }, [pathname])
 
   // need to update activeNodeArray on every navigation
   useEffect(() => {
@@ -54,7 +52,7 @@ export const NavigationSyncController = observer(() => {
     addOpenNode(aNA)
     // ensure last activeNodeArray is known
     setLastActiveNodeArray(aNA)
-  }, [aNA, addOpenNode, setLastActiveNodeArray])
+  }, [aNA])
 
   return null
-})
+}

@@ -1,6 +1,13 @@
 import { Q } from '@nozbe/watermelondb'
 import { isEqual } from 'es-toolkit'
 
+import {
+  store,
+  dbAtom,
+  setInitiallyQueried,
+  setLastUpdated,
+  setInitiallyQuerying,
+} from '../store/index.js'
 import { parseComplexFieldsForWm } from './parseComplexFieldsForWm.js'
 
 const stripTypename = (object) => {
@@ -13,10 +20,8 @@ const stripTypename = (object) => {
 export const processSubscriptionResult = async ({
   data: dataToCheck,
   table,
-  store,
 }) => {
-  const { db, setInitiallyQueried, setLastUpdated, setInitiallyQuerying } =
-    store
+  const db = store.get(dbAtom)
   if (!dataToCheck.length) {
     setInitiallyQueried({ table })
     return

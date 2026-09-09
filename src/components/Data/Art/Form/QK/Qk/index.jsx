@@ -1,19 +1,18 @@
-import { useState, useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import Paper from '@mui/material/Paper'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 
-import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
+import { dbAtom } from '../../../../../../store/index.js'
 import { createMessageFunctions } from './createMessageFunctions.js'
 import { constants } from '../../../../../../utils/constants.js'
 
 import styles from './index.module.css'
 
-export const Qk = observer(({ artId, qkChoosens }) => {
-  const store = useContext(MobxStoreContext)
-  const { db } = store
+export const Qk = ({ artId, qkChoosens }) => {
+  const db = useAtomValue(dbAtom)
 
   const [filter, setFilter] = useState('')
   const onChangeFilter = (event) => setFilter(event.target.value)
@@ -24,15 +23,15 @@ export const Qk = observer(({ artId, qkChoosens }) => {
     createMessageFunctions({
       artId,
       db,
-      store,
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
         qkChoosens
           .filter((qk) => !!messageFunctions[qk.name])
           .map(async (qk) => ({
             title: qk?.titel,
-            messages:
-              messageFunctions ? await messageFunctions[qk?.name]() : [],
+            messages: messageFunctions
+              ? await messageFunctions[qk?.name]()
+              : [],
           })),
       )
       if (!isActive) return
@@ -42,35 +41,26 @@ export const Qk = observer(({ artId, qkChoosens }) => {
     return () => {
       isActive = false
     }
-  }, [artId, db, qkChoosens, store])
+  }, [artId, db, qkChoosens])
 
-  const messageGroupsFiltered =
-    messageGroups ?
-      messageGroups.filter((messageGroup) => {
+  const messageGroupsFiltered = messageGroups
+    ? messageGroups.filter((messageGroup) => {
         if (!!filter && messageGroup?.title?.toLowerCase) {
           return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
         }
         return true
       })
     : []
-  const resultTitle =
-    messageGroups ?
-      `${messageGroupsFiltered.length} ${
+  const resultTitle = messageGroups
+    ? `${messageGroupsFiltered.length} ${
         messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
       }:`
     : 'rechne...'
 
   return (
     <div className={styles.container}>
-      <FormControl
-        fullWidth
-        variant="standard"
-        className={styles.formControl}
-      >
-        <InputLabel
-          htmlFor="filter"
-          shrink
-        >
+      <FormControl fullWidth variant="standard" className={styles.formControl}>
+        <InputLabel htmlFor="filter" shrink>
           nach Abschnitts-Titel filtern
         </InputLabel>
         <Input
@@ -82,19 +72,12 @@ export const Qk = observer(({ artId, qkChoosens }) => {
       </FormControl>
       <div className={styles.resultTitleClass}>{resultTitle}</div>
       {messageGroupsFiltered.map((messageGroup) => (
-        <Paper
-          key={messageGroup.title}
-          elevation={2}
-          className={styles.paper}
-        >
+        <Paper key={messageGroup.title} elevation={2} className={styles.paper}>
           <div
             className={styles.title}
           >{`${messageGroup.title} (${messageGroup.messages.length})`}</div>
           {messageGroup.messages.map((m, i) => (
-            <div
-              className={styles.row}
-              key={`${m.text}Index${i}`}
-            >
+            <div className={styles.row} key={`${m.text}Index${i}`}>
               <p
                 onClick={() =>
                   window.open(
@@ -115,4 +98,4 @@ export const Qk = observer(({ artId, qkChoosens }) => {
       )}
     </div>
   )
-})
+}

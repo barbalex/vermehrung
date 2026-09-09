@@ -1,21 +1,19 @@
-import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import { queuedQueriesAtom } from '../../store/index.js'
 import { QueuedQuery } from './QueuedQuery.jsx'
 import { constants } from '../../utils/constants.js'
 
 import styles from './index.module.css'
 
-export const QueuedQueries = observer(() => {
-  const store = useContext(MobxStoreContext)
+export const QueuedQueries = () => {
   const navigate = useNavigate()
-  const { queuedQueries } = store
+  const queuedQueries = useAtomValue(queuedQueriesAtom)
 
   // ISSUE: cant use navigate(-1) as that can navigate to same url and user has to click twice to go back
   const onClickCloseIcon = () => navigate('/Vermehrung')
@@ -28,7 +26,7 @@ export const QueuedQueries = observer(() => {
     window.open(url)
   }
 
-  if (!queuedQueries.size) {
+  if (!queuedQueries.length) {
     return (
       <div className={styles.container}>
         <div className={styles.titleRow}>
@@ -92,16 +90,12 @@ export const QueuedQueries = observer(() => {
             <div className={styles.heading}>vorher</div>
             <div className={styles.heading}>nachher</div>
             <div className={styles.revertHeading}>widerrufen</div>
-            {[...queuedQueries.values()].reverse().map((qq, i) => (
-              <QueuedQuery
-                key={qq.id}
-                qq={qq}
-                index={i}
-              />
+            {[...queuedQueries].reverse().map((qq, i) => (
+              <QueuedQuery key={qq.id} qq={qq} index={i} />
             ))}
           </div>
         </div>
       </div>
     </ErrorBoundary>
   )
-})
+}

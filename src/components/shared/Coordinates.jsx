@@ -1,4 +1,5 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -7,7 +8,6 @@ import IconButton from '@mui/material/IconButton'
 import { FaGlobeEurope } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { observer } from 'mobx-react-lite'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -29,13 +29,13 @@ import {
   isValid as wgs84LongIsValid,
   message as wgs84LongMessage,
 } from '../../utils/wgs84LongIsValid.js'
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import { dbAtom, userAtom } from '../../store/index.js'
 
 import styles from './Coordinates.module.css'
 
-export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
-  const store = useContext(MobxStoreContext)
-  const { user, db } = store
+export const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
+  const db = useAtomValue(dbAtom)
+  const user = useAtomValue(userAtom)
 
   const { id, lv95_x, lv95_y, wgs84_lat, wgs84_long } = row
 
@@ -43,9 +43,8 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
     userPersonOption: undefined,
   })
   useEffect(() => {
-    const userPersonOptionsObservable =
-      user.uid ?
-        db
+    const userPersonOptionsObservable = user.uid
+      ? db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['ga_lat_lng'])
@@ -222,10 +221,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
               variant="standard"
               className={styles.leftFormControl}
             >
-              <InputLabel
-                htmlFor={`${id}wgs84_long`}
-                shrink
-              >
+              <InputLabel htmlFor={`${id}wgs84_long`} shrink>
                 Längengrad
               </InputLabel>
               <Input
@@ -248,10 +244,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
               variant="standard"
               className={styles.formControl}
             >
-              <InputLabel
-                htmlFor={`${id}wgs84_lat`}
-                shrink
-              >
+              <InputLabel htmlFor={`${id}wgs84_lat`} shrink>
                 Breitengrad
               </InputLabel>
               <Input
@@ -293,10 +286,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
             variant="standard"
             className={styles.leftFormControl}
           >
-            <InputLabel
-              htmlFor={`${id}lv95_x`}
-              shrink
-            >
+            <InputLabel htmlFor={`${id}lv95_x`} shrink>
               X-Koordinate
             </InputLabel>
             <Input
@@ -327,10 +317,7 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
             variant="standard"
             className={styles.formControl}
           >
-            <InputLabel
-              htmlFor={`${id}lv95_y`}
-              shrink
-            >
+            <InputLabel htmlFor={`${id}lv95_y`} shrink>
               Y-Koordinate
             </InputLabel>
             <Input
@@ -381,4 +368,4 @@ export const Coordinates = observer(({ row, saveToDb: originalSaveToDb }) => {
       </div>
     </div>
   )
-})
+}

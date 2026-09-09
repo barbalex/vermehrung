@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -10,23 +10,22 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import { userAtom, dbAtom } from '../../store/index.js'
 import { constants } from '../../utils/constants.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 import styles from './Settings.module.css'
 
-export const TreeSettings = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { user, db } = store
+export const TreeSettings = () => {
+  const user = useAtomValue(userAtom)
+  const db = useAtomValue(dbAtom)
 
   const [dataState, setDataState] = useState({
     userPersonOption: undefined,
   })
   useEffect(() => {
-    const userPersonOptionsObservable =
-      user.uid ?
-        db
+    const userPersonOptionsObservable = user.uid
+      ? db
           ?.get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns([
@@ -58,7 +57,7 @@ export const TreeSettings = observer(() => {
   const saveToDb = (event) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    userPersonOption.edit({ field, value, store })
+    userPersonOption.edit({ field, value })
   }
   const openSettingsDocs = () => {
     setAnchorEl(null)
@@ -187,4 +186,4 @@ export const TreeSettings = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

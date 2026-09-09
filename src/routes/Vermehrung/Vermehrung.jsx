@@ -1,8 +1,15 @@
-import { useContext, Suspense } from 'react'
+import { Suspense } from 'react'
 import { Allotment } from 'allotment'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import {
+  activeFormAtom,
+  isPrintAtom,
+  singleColumnViewAtom,
+  showTreeInSingleColumnViewAtom,
+  widthInPercentOfScreenAtom,
+  filterShowAtom,
+} from '../../store/index.js'
 import { Tree } from '../../components/Tree/index.jsx'
 import { Data } from '../../components/Data/index.jsx'
 import { Filter } from '../../components/Filter.jsx'
@@ -11,25 +18,26 @@ import { ErrorBoundary } from '../../components/shared/ErrorBoundary.jsx'
 
 import styles from './Vermehrung.module.css'
 
-export const Vermehrung = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { activeForm, isPrint, singleColumnView, showTreeInSingleColumnView } =
-    store
-  const { widthInPercentOfScreen } = store.tree
+export const Vermehrung = () => {
+  const activeForm = useAtomValue(activeFormAtom)
+  const isPrint = useAtomValue(isPrintAtom)
+  const singleColumnView = useAtomValue(singleColumnViewAtom)
+  const showTreeInSingleColumnView = useAtomValue(
+    showTreeInSingleColumnViewAtom,
+  )
+  const widthInPercentOfScreen = useAtomValue(widthInPercentOfScreenAtom)
+  const showFilter = useAtomValue(filterShowAtom)
 
-  const showFilter = store.filter.show
-  let treeWidth =
-    singleColumnView ?
-      (!showTreeInSingleColumnView && activeForm) || showFilter ?
-        0
-        // if no form is active, show only tree
-      : '100%'
+  let treeWidth = singleColumnView
+    ? (!showTreeInSingleColumnView && activeForm) || showFilter
+      ? 0
+      : // if no form is active, show only tree
+        '100%'
     : `${widthInPercentOfScreen}%`
 
-  const formWidth =
-    singleColumnView ?
-      (!showTreeInSingleColumnView && activeForm) || showFilter ?
-        '100%'
+  const formWidth = singleColumnView
+    ? (!showTreeInSingleColumnView && activeForm) || showFilter
+      ? '100%'
       : 0
     : `${100 - widthInPercentOfScreen}%`
   // ensure tree is invisible when printing but still exists
@@ -47,9 +55,11 @@ export const Vermehrung = observer(() => {
   // the very first paint.
   const containerWidth = window.innerWidth
   const treeSizePx =
-    treeWidth === 0 ? 0
-    : treeWidth === '100%' ? containerWidth
-    : Math.round((widthInPercentOfScreen / 100) * containerWidth)
+    treeWidth === 0
+      ? 0
+      : treeWidth === '100%'
+        ? containerWidth
+        : Math.round((widthInPercentOfScreen / 100) * containerWidth)
   const formSizePx = containerWidth - treeSizePx
 
   // need the key on Allotment or it would only render correctly on second render
@@ -76,14 +86,10 @@ export const Vermehrung = observer(() => {
           minSize={minSizeForm}
         >
           <Suspense fallback={<Fallback />}>
-            <ErrorBoundary>
-              {showFilter ?
-                <Filter />
-              : <Data />}
-            </ErrorBoundary>
+            <ErrorBoundary>{showFilter ? <Filter /> : <Data />}</ErrorBoundary>
           </Suspense>
         </Allotment.Pane>
       </Allotment>
     </div>
   )
-})
+}

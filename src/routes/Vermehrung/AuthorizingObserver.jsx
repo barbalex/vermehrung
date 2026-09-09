@@ -1,11 +1,14 @@
-import { useEffect, useContext, useRef } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useRef } from 'react'
+import { useAtomValue } from 'jotai'
 
-import { MobxStoreContext } from '../../mobxStoreContext.js'
+import {
+  gettingAuthUserAtom,
+  addNotification,
+  removeNotificationById,
+} from '../../store/index.js'
 
-export const AuthorizingObserver = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { gettingAuthUser, addNotification, removeNotificationById } = store
+export const AuthorizingObserver = () => {
+  const gettingAuthUser = useAtomValue(gettingAuthUserAtom)
 
   const authorizingNotificationId = useRef(null)
 
@@ -22,7 +25,7 @@ export const AuthorizingObserver = observer(() => {
       removeNotificationById(authorizingNotificationId.current)
       authorizingNotificationId.current = undefined
     }
-  }, [addNotification, gettingAuthUser, removeNotificationById])
+  }, [gettingAuthUser])
 
   return null
-})
+}

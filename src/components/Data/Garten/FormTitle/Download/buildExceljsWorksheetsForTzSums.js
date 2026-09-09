@@ -1,4 +1,5 @@
 import { Q } from '@nozbe/watermelondb'
+import { store, dbAtom } from '../../../../../store/index.js'
 
 import { addWorksheetToExceljsWorkbook } from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
 import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByTk.js'
@@ -8,11 +9,10 @@ import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByT
  * that is why it receives a workbook and _can_ receive calledFromHigherUp
  */
 export const buildExceljsWorksheetsForTzSums = async ({
-  store,
   garten_id,
   workbook,
 }) => {
-  const { db } = store
+  const db = store.get(dbAtom)
 
   let teilzaehlungs = []
   try {

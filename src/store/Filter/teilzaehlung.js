@@ -1,36 +1,3 @@
-import { types } from 'mobx-state-tree'
-
-export const type = types.model({
-  id: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  zaehlung_id: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  teilkultur_id: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  anzahl_pflanzen: types.optional(types.maybeNull(types.number), null),
-  anzahl_auspflanzbereit: types.optional(types.maybeNull(types.number), null),
-  anzahl_mutterpflanzen: types.optional(types.maybeNull(types.number), null),
-  andere_menge: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  auspflanzbereit_beschreibung: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  bemerkungen: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  _deleted: types.optional(types.maybeNull(types.boolean), false),
-})
-
 export const initial = {
   id: null,
   zaehlung_id: null,

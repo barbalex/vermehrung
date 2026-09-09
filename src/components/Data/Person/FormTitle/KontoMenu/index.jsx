@@ -1,21 +1,17 @@
-import { useContext, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { signup } from '../../../../../utils/signup.js'
 import { PersonKontoMenu as Menu } from './Menu.jsx'
 
 import styles from './index.module.css'
 
-export const PersonKonto = observer(({ row, asMenu }) => {
-  const store = useContext(MobxStoreContext)
-
+export const PersonKonto = ({ row, asMenu }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null)
 
   const createNewAccount = () => {
-    signup({ store, person: row })
+    signup({ person: row })
     setMenuAnchorEl(null)
   }
 
@@ -63,4 +59,4 @@ export const PersonKonto = observer(({ row, asMenu }) => {
       />
     </>
   )
-})
+}

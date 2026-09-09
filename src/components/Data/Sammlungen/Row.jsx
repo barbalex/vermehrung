@@ -1,45 +1,53 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { first as first$ } from 'rxjs/operators'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  store,
+  herkunftIdInActiveNodeArrayAtom,
+  activeNodeArrayAtom,
+  setActiveNodeArray,
+} from '../../../store/index.js'
 
 import styles from '../Arten/Row.module.css'
 
-export const SammlungRow = observer(({ style, index, rows }) => {
-  const store = useContext(MobxStoreContext)
-  const { herkunftIdInActiveNodeArray } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+export const SammlungRow = ({ style, index, rows }) => {
+  const herkunftIdInActiveNodeArray = useAtomValue(
+    herkunftIdInActiveNodeArrayAtom,
+  )
 
   const row = rows[index]
 
   const [label, setLabel] = useState('')
   useEffect(() => {
     let isActive = true
-    herkunftIdInActiveNodeArray ?
-      row.labelUnderHerkunft
-        .pipe(first$())
-        .toPromise()
-        .then((label) => {
-          if (!isActive) return
+    herkunftIdInActiveNodeArray
+      ? row.labelUnderHerkunft
+          .pipe(first$())
+          .toPromise()
+          .then((label) => {
+            if (!isActive) return
 
-          setLabel(label)
-        })
-    : row.label
-        .pipe(first$())
-        .toPromise()
-        .then((label) => {
-          if (!isActive) return
+            setLabel(label)
+          })
+      : row.label
+          .pipe(first$())
+          .toPromise()
+          .then((label) => {
+            if (!isActive) return
 
-          setLabel(label)
-        })
+            setLabel(label)
+          })
 
     return () => {
       isActive = false
     }
   }, [herkunftIdInActiveNodeArray, row])
 
-  const onClickRow = () => setActiveNodeArray([...activeNodeArray, row.id])
+  const onClickRow = () => {
+    const activeNodeArray = store.get(activeNodeArrayAtom)
+    setActiveNodeArray([...activeNodeArray, row.id])
+  }
 
   return (
     <div
@@ -51,4 +59,4 @@ export const SammlungRow = observer(({ style, index, rows }) => {
       <div>{label}</div>
     </div>
   )
-})
+}

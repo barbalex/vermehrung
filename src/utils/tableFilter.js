@@ -1,12 +1,17 @@
 import { Q } from '@nozbe/watermelondb'
 import { camelCase } from 'es-toolkit'
 
+import {
+  store,
+  filterTableAtoms,
+  xxxIdInActiveNodeArrayAtoms,
+} from '../store/index.js'
 import { simpleTypes as types } from '../store/Filter/simpleTypes.js'
 import { exists } from './exists.js'
 
-export const tableFilter = ({ store, table, apFilter }) => {
+export const tableFilter = ({ table, apFilter }) => {
   if (!table) throw `no table passed`
-  const filter = store.filter[table]
+  const filter = store.get(filterTableAtoms[table])
   if (!filter) throw `no filter found for table ${table}`
 
   const filterEntries = Object.entries(filter).filter(([key, value]) =>
@@ -40,8 +45,10 @@ export const tableFilter = ({ store, table, apFilter }) => {
 
   // if a url is opened, a dataset should always show
   // even if it was filtered away
-  const tableIdInActiveNodeArray =
-    store[`${camelCase(table)}IdInActiveNodeArray`]
+  const idAtomKey = `${camelCase(table)}IdInActiveNodeArray`
+  const tableIdInActiveNodeArray = xxxIdInActiveNodeArrayAtoms[idAtomKey]
+    ? store.get(xxxIdInActiveNodeArrayAtoms[idAtomKey])
+    : undefined
   if (tableIdInActiveNodeArray) {
     return [
       Q.or(Q.where('id', tableIdInActiveNodeArray), Q.and(...filterArray)),

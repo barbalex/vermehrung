@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -9,7 +9,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
+import { dbAtom, userAtom } from '../../../../../store/index.js'
 import { KulturQk as Qk } from './Qk/index.jsx'
 import { ChooseKulturQk as Choose } from './Choose/index.jsx'
 import { constants } from '../../../../../utils/constants.js'
@@ -17,9 +17,9 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'
 
-export const KulturQkRouter = observer(({ kultur }) => {
-  const store = useContext(MobxStoreContext)
-  const { db, user } = store
+export const KulturQkRouter = ({ kultur }) => {
+  const db = useAtomValue(dbAtom)
+  const user = useAtomValue(userAtom)
 
   const [tab, setTab] = useState('qk')
   const onChangeTab = (event, value) => setTab(value)
@@ -31,9 +31,8 @@ export const KulturQkRouter = observer(({ kultur }) => {
   const { qks, userPersonOption } = dataState
 
   useEffect(() => {
-    const userPersonOptionsObservable =
-      user.uid ?
-        db
+    const userPersonOptionsObservable = user.uid
+      ? db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['kultur_qk_choosen'])
@@ -111,16 +110,11 @@ export const KulturQkRouter = observer(({ kultur }) => {
             onClick={onClickToggle}
             size="large"
           >
-            {open ?
-              <FaChevronUp />
-            : <FaChevronDown />}
+            {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
-      <motion.div
-        animate={anim}
-        transition={{ type: 'just', duration: 0.5 }}
-      >
+      <motion.div animate={anim} transition={{ type: 'just', duration: 0.5 }}>
         {open && (
           <>
             <Tabs
@@ -131,11 +125,7 @@ export const KulturQkRouter = observer(({ kultur }) => {
               centered
               className={styles.tabs}
             >
-              <Tab
-                label="ausführen"
-                value="qk"
-                data-id="qk"
-              />
+              <Tab label="ausführen" value="qk" data-id="qk" />
               <Tab
                 label={`auswählen${
                   qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
@@ -145,16 +135,15 @@ export const KulturQkRouter = observer(({ kultur }) => {
               />
             </Tabs>
             <div className={styles.body}>
-              {tab === 'qk' ?
-                <Qk
-                  kultur={kultur}
-                  qkChoosens={qkChoosens}
-                />
-              : <Choose qks={qks} />}
+              {tab === 'qk' ? (
+                <Qk kultur={kultur} qkChoosens={qkChoosens} />
+              ) : (
+                <Choose qks={qks} />
+              )}
             </div>
           </>
         )}
       </motion.div>
     </ErrorBoundary>
   )
-})
+}

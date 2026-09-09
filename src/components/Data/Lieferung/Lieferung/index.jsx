@@ -1,8 +1,8 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { Allotment } from 'allotment'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import { onlineAtom, filterShowAtom } from '../../../../store/index.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { LieferungConflict as Conflict } from './Conflict.jsx'
@@ -12,9 +12,9 @@ import { LieferungHistory as History } from './History/index.jsx'
 
 import artStyles from '../../Art/index.module.css'
 
-export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
-  const store = useContext(MobxStoreContext)
-  const { filter, online } = store
+export const Lieferung = ({ id, showFilter, row, rawRow }) => {
+  const online = useAtomValue(onlineAtom)
+  const filterShow = useAtomValue(filterShowAtom)
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
@@ -30,7 +30,7 @@ export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
   const historyTakeoverCallback = () => setShowHistory(null)
 
   if (!row) return <Spinner />
-  if (!showFilter && filter.show) return null
+  if (!showFilter && filterShow) return null
 
   const paneIsSplit = online && (activeConflict || showHistory)
 
@@ -59,7 +59,7 @@ export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
               showHistory={showHistory}
             />
             <Allotment.Pane visible={paneIsSplit}>
-              {activeConflict ?
+              {activeConflict ? (
                 <Conflict
                   rev={activeConflict}
                   id={id}
@@ -69,19 +69,19 @@ export const Lieferung = observer(({ id, showFilter, row, rawRow }) => {
                   conflictSelectionCallback={conflictSelectionCallback}
                   setActiveConflict={setActiveConflict}
                 />
-              : showHistory ?
+              ) : showHistory ? (
                 <History
                   row={row}
                   rawRow={rawRow}
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
-              : null}
+              ) : null}
             </Allotment.Pane>
           </Allotment>
         </div>
       </div>
     </ErrorBoundary>
   )
-})
+}
 
 export default Lieferung

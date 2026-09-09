@@ -1,8 +1,20 @@
-import localForage from 'localforage'
 import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import persist from 'mst-persist'
 
+import {
+  store,
+  hydratePersistedAtoms,
+  setUser,
+  setGettingAuthUser,
+  setFirebaseAuth,
+  setOnline,
+  setShortTermOnline,
+  getNavigate,
+  onlineAtom,
+  shortTermOnlineAtom,
+  userAtom,
+  activeNodeArrayAtom,
+} from '../store/index.js'
 import { getAuthToken } from './getAuthToken.js'
 import { isOnline } from './isOnline.js'
 
@@ -14,63 +26,11 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-export const recreatePersistedStore = async (store) => {
-  // console.log('recreatePersistedStore, store:', store)
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  let unregisterAuthObserver = () => {}
-  const {
-    setUser,
-    setGettingAuthUser,
-    online,
-    setFirebaseAuth,
-    setOnline,
-    shortTermOnline,
-    setShortTermOnline,
-  } = store
+export const recreatePersistedStore = async () => {
   window.store = store
-  // need to blacklist authorizing or mst-persist will set it to false
-  // and login form appears for a short moment until auth state changed
-  const blacklist = [
-    'authorizing',
-    'user',
-    'gqlWsClient',
-    'gettingAuthUser',
-    'online',
-    'shortTermOnline',
-    'errors',
-    'ae_art_initially_queried',
-    'art_initially_queried',
-    'art_file_initially_queried',
-    'art_qk_initially_queried',
-    'av_initially_queried',
-    'event_initially_queried',
-    'garten_initially_queried',
-    'garten_file_initially_queried',
-    'gv_initially_queried',
-    'herkunft_initially_queried',
-    'herkunft_file_initially_queried',
-    'kultur_initially_queried',
-    'kultur_file_initially_queried',
-    'kultur_option_initially_queried',
-    'kultur_qk_initially_queried',
-    'lieferung_initially_queried',
-    'lieferung_file_initially_queried',
-    'person_initially_queried',
-    'person_file_initially_queried',
-    'person_option_initially_queried',
-    'sammel_lieferung_initially_queried',
-    'sammlung_initially_queried',
-    'sammlung_file_initially_queried',
-    'teilkultur_initially_queried',
-    'teilzaehlung_initially_queried',
-    'user_role_initially_queried',
-    'zaehlung_initially_queried',
-  ]
-  await persist('store', store, {
-    storage: localForage,
-    jsonify: false,
-    blacklist,
-  })
+  // hydration runs in parallel to app boot: persisted state appears
+  // shortly after boot, a slow/blocked storage must not block booting
+  hydratePersistedAtoms()
   let fbApp
   // catch app already existing
   // https://stackoverflow.com/a/48686803/712005
@@ -81,27 +41,30 @@ export const recreatePersistedStore = async (store) => {
   }
   const auth = getAuth(fbApp)
   setFirebaseAuth(auth)
-  unregisterAuthObserver = onAuthStateChanged(auth, async (user) => {
+  const unregisterAuthObserver = onAuthStateChanged(auth, async (user) => {
     // BEWARE: this is called at least twice
     // https://stackoverflow.com/questions/37673616/firebase-android-onauthstatechanged-called-twice
-    if (store.user?.uid) return
+    if (store.get(userAtom)?.uid) return
     setUser(user)
     // set last activeNodeArray
     // only if top domain was visited
     // TODO:
     // without timeout and with timeout too low this errors before page Vermehrung logs
     const visitedTopDomain = window.location.pathname === '/'
-    if (!!user && visitedTopDomain && store?.navigate) {
+    if (!!user && visitedTopDomain && getNavigate()) {
       setTimeout(() => {
-        store.navigate?.(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
+        getNavigate()?.(
+          `/Vermehrung/${store.get(activeNodeArrayAtom).join('/')}`,
+        )
       }, 200)
     }
     const nowOnline = await isOnline()
-    if (nowOnline !== online) setOnline(nowOnline)
-    if (nowOnline !== shortTermOnline) setShortTermOnline(nowOnline)
+    if (nowOnline !== store.get(onlineAtom)) setOnline(nowOnline)
+    if (nowOnline !== store.get(shortTermOnlineAtom))
+      setShortTermOnline(nowOnline)
     if (nowOnline) {
       // console.log('recreatePersistedStore getting auth token')
-      await getAuthToken({ store })
+      await getAuthToken()
     }
     setGettingAuthUser(false)
   })

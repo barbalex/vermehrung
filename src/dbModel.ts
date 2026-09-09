@@ -35,6 +35,15 @@ import { sammlungLabelFromSammlungUnderHerkunft } from './utils/sammlungLabelFro
 import { zaehlungLabelFromZaehlung } from './utils/zaehlungLabelFromZaehlung.js'
 import { toPgArray } from './utils/toPgArray.js'
 import { deleteAccount } from './utils/deleteAccount.js'
+import {
+  store,
+  userAtom,
+  gqlClientAtom,
+  dbAtom,
+  addQueuedQuery,
+  addNotification,
+  unsetError,
+} from './store/index.js'
 import { updateAllSammelLieferungen } from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen.js'
 import {
   artFile as artFileFragment,
@@ -88,9 +97,7 @@ export class Herkunft extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`herkunft.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -116,11 +123,12 @@ export class Herkunft extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_herkunft_rev_one',
       variables: JSON.stringify({
@@ -150,10 +158,8 @@ export class Herkunft extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -260,9 +266,7 @@ export class Sammlung extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`sammlung.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -280,9 +284,9 @@ export class Sammlung extends Model {
         field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
       gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
       andere_menge:
-        field === 'andere_menge' ?
-          toStringIfPossible(value)
-        : this.andere_menge,
+        field === 'andere_menge'
+          ? toStringIfPossible(value)
+          : this.andere_menge,
       geplant: field === 'geplant' ? value : this.geplant,
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
@@ -296,11 +300,12 @@ export class Sammlung extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_sammlung_rev_one',
       variables: JSON.stringify({
@@ -331,10 +336,8 @@ export class Sammlung extends Model {
     })
   }
 
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -425,9 +428,7 @@ export class Lieferung extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`lieferung.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -449,14 +450,14 @@ export class Lieferung extends Model {
       anzahl_pflanzen:
         field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
       anzahl_auspflanzbereit:
-        field === 'anzahl_auspflanzbereit' ? value : (
-          this.anzahl_auspflanzbereit
-        ),
+        field === 'anzahl_auspflanzbereit'
+          ? value
+          : this.anzahl_auspflanzbereit,
       gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
       andere_menge:
-        field === 'andere_menge' ?
-          toStringIfPossible(value)
-        : this.andere_menge,
+        field === 'andere_menge'
+          ? toStringIfPossible(value)
+          : this.andere_menge,
       geplant: field === 'geplant' ? value : this.geplant,
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
@@ -486,11 +487,12 @@ export class Lieferung extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_lieferung_rev_one',
       variables: JSON.stringify({
@@ -522,10 +524,8 @@ export class Lieferung extends Model {
     return
   }
 
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 export class Art extends Model {
@@ -577,8 +577,7 @@ export class Art extends Model {
     })
   }
   // values is meant to enable updating multiple fields at once
-  @writer async edit({ field, value, values, store }) {
-    const { addQueuedQuery, user, unsetError } = store
+  @writer async edit({ field, value, values }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -610,11 +609,12 @@ export class Art extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     const queuedQuery = {
       name: 'mutateInsert_art_rev_one',
       variables: JSON.stringify({
@@ -671,10 +671,8 @@ export class Art extends Model {
     })
   }
 
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -763,9 +761,7 @@ export class Garten extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`garten.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -790,11 +786,12 @@ export class Garten extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_garten_rev_one',
       variables: JSON.stringify({
@@ -824,10 +821,8 @@ export class Garten extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -973,9 +968,7 @@ export class Kultur extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`kultur.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -1002,11 +995,12 @@ export class Kultur extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_kultur_rev_one',
       variables: JSON.stringify({
@@ -1036,10 +1030,8 @@ export class Kultur extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -1076,9 +1068,7 @@ export class Teilkultur extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`teilkultur.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -1101,11 +1091,12 @@ export class Teilkultur extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_teilkultur_rev_one',
       variables: JSON.stringify({
@@ -1135,10 +1126,8 @@ export class Teilkultur extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -1221,9 +1210,7 @@ export class Zaehlung extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`zaehlung.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -1244,11 +1231,12 @@ export class Zaehlung extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_zaehlung_rev_one',
       variables: JSON.stringify({
@@ -1278,10 +1266,8 @@ export class Zaehlung extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -1319,9 +1305,7 @@ export class Teilzaehlung extends Model {
   )
 
   @writer
-  async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  async edit({ field, value }) {
     unsetError(`teilzaehlung.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -1332,19 +1316,19 @@ export class Teilzaehlung extends Model {
       anzahl_pflanzen:
         field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
       anzahl_auspflanzbereit:
-        field === 'anzahl_auspflanzbereit' ? value : (
-          this.anzahl_auspflanzbereit
-        ),
+        field === 'anzahl_auspflanzbereit'
+          ? value
+          : this.anzahl_auspflanzbereit,
       anzahl_mutterpflanzen:
         field === 'anzahl_mutterpflanzen' ? value : this.anzahl_mutterpflanzen,
       andere_menge:
-        field === 'andere_menge' ?
-          toStringIfPossible(value)
-        : this.andere_menge,
+        field === 'andere_menge'
+          ? toStringIfPossible(value)
+          : this.andere_menge,
       auspflanzbereit_beschreibung:
-        field === 'auspflanzbereit_beschreibung' ?
-          toStringIfPossible(value)
-        : this.auspflanzbereit_beschreibung,
+        field === 'auspflanzbereit_beschreibung'
+          ? toStringIfPossible(value)
+          : this.auspflanzbereit_beschreibung,
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
       prognose_von_tz:
@@ -1359,11 +1343,12 @@ export class Teilzaehlung extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_teilzaehlung_rev_one',
       variables: JSON.stringify({
@@ -1394,10 +1379,8 @@ export class Teilzaehlung extends Model {
     })
     return
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -1476,9 +1459,7 @@ export class Person extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`person.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -1488,24 +1469,24 @@ export class Person extends Model {
       vorname: field === 'vorname' ? toStringIfPossible(value) : this.vorname,
       name: field === 'name' ? toStringIfPossible(value) : this.name,
       adresszusatz:
-        field === 'adresszusatz' ?
-          toStringIfPossible(value)
-        : this.adresszusatz,
+        field === 'adresszusatz'
+          ? toStringIfPossible(value)
+          : this.adresszusatz,
       strasse: field === 'strasse' ? toStringIfPossible(value) : this.strasse,
       plz: field === 'plz' ? value : this.plz,
       ort: field === 'ort' ? toStringIfPossible(value) : this.ort,
       telefon_privat:
-        field === 'telefon_privat' ?
-          toStringIfPossible(value)
-        : this.telefon_privat,
+        field === 'telefon_privat'
+          ? toStringIfPossible(value)
+          : this.telefon_privat,
       telefon_geschaeft:
-        field === 'telefon_geschaeft' ?
-          toStringIfPossible(value)
-        : this.telefon_geschaeft,
+        field === 'telefon_geschaeft'
+          ? toStringIfPossible(value)
+          : this.telefon_geschaeft,
       telefon_mobile:
-        field === 'telefon_mobile' ?
-          toStringIfPossible(value)
-        : this.telefon_mobile,
+        field === 'telefon_mobile'
+          ? toStringIfPossible(value)
+          : this.telefon_mobile,
       email: field === 'email' ? toStringIfPossible(value) : this.email,
       kein_email: field === 'kein_email' ? value : this.kein_email,
       bemerkungen:
@@ -1526,11 +1507,12 @@ export class Person extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_person_rev_one',
       variables: JSON.stringify({
@@ -1561,12 +1543,10 @@ export class Person extends Model {
     })
   }
 
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
     // delete firebase user
-    deleteAccount({ store, person: this })
+    deleteAccount({ person: this })
   }
 }
 
@@ -1634,9 +1614,8 @@ export class SammelLieferung extends Model {
         person = await lieferung.person?.fetch()
       } catch {}
       const personLabel = personLabelFromPerson({ person })
-      const datumLabel =
-        lieferung.datum ?
-          DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
+      const datumLabel = lieferung.datum
+        ? DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
         : `Kein Datum. ID: ${lieferung.id}`
       const von = gartenLabel ? `von: ${gartenLabel}` : ''
       const label = [datumLabel, von, personLabel].filter((e) => !!e).join('; ')
@@ -1650,8 +1629,9 @@ export class SammelLieferung extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError, db } = store
+  @writer async edit({ field, value }) {
+    const user = store.get(userAtom)
+    const db = store.get(dbAtom)
     let userPersonOption
     try {
       const userPersonOptions = await db
@@ -1680,14 +1660,14 @@ export class SammelLieferung extends Model {
       anzahl_pflanzen:
         field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
       anzahl_auspflanzbereit:
-        field === 'anzahl_auspflanzbereit' ? value : (
-          this.anzahl_auspflanzbereit
-        ),
+        field === 'anzahl_auspflanzbereit'
+          ? value
+          : this.anzahl_auspflanzbereit,
       gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
       andere_menge:
-        field === 'andere_menge' ?
-          toStringIfPossible(value)
-        : this.andere_menge,
+        field === 'andere_menge'
+          ? toStringIfPossible(value)
+          : this.andere_menge,
       geplant: field === 'geplant' ? value : this.geplant,
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
@@ -1701,11 +1681,12 @@ export class SammelLieferung extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_sammel_lieferung_rev_one',
       variables: JSON.stringify({
@@ -1745,17 +1726,14 @@ export class SammelLieferung extends Model {
         delete newSammelLieferung.sammel_lieferung_id
         updateAllSammelLieferungen({
           sammelLieferung: newSammelLieferung,
-          store,
           field,
         })
       }
     }, 50)
   }
 
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -1804,9 +1782,7 @@ export class Event extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`event.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -1816,9 +1792,9 @@ export class Event extends Model {
       teilkultur_id: field === 'teilkultur_id' ? value : this.teilkultur_id,
       person_id: field === 'person_id' ? value : this.person_id,
       beschreibung:
-        field === 'beschreibung' ?
-          toStringIfPossible(value)
-        : this.beschreibung,
+        field === 'beschreibung'
+          ? toStringIfPossible(value)
+          : this.beschreibung,
       geplant: field === 'geplant' ? value : this.geplant,
       datum: field === 'datum' ? value : this.datum,
       _parent_rev: this._rev,
@@ -1831,11 +1807,12 @@ export class Event extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_event_rev_one',
       variables: JSON.stringify({
@@ -1865,10 +1842,8 @@ export class Event extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -1916,9 +1891,7 @@ export class Av extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`av.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -1936,11 +1909,12 @@ export class Av extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_av_rev_one',
       variables: JSON.stringify({
@@ -1970,10 +1944,8 @@ export class Av extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -2024,9 +1996,7 @@ export class Gv extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`gv.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -2044,11 +2014,12 @@ export class Gv extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_gv_rev_one',
       variables: JSON.stringify({
@@ -2078,10 +2049,8 @@ export class Gv extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -2102,7 +2071,7 @@ export class ArtFile extends Model {
 
   @relation('art', 'art_id') art
 
-  @writer async edit({ field, value, store }) {
+  @writer async edit({ field, value }) {
     // extract only the needed keys
     const { id, art_id, file_id, file_mime_type, name, beschreibung, changed } =
       this
@@ -2135,11 +2104,12 @@ export class ArtFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2150,7 +2120,7 @@ export class ArtFile extends Model {
     })
     return
   }
-  @writer async delete({ store }) {
+  @writer async delete() {
     const mutation = gql`
       mutation delete_art_file($where: art_file_bool_exp!) {
         delete_art_file(where: $where) {
@@ -2163,11 +2133,12 @@ export class ArtFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2194,7 +2165,7 @@ export class GartenFile extends Model {
 
   @relation('garten', 'garten_id') garten
 
-  @writer async edit({ field, value, store }) {
+  @writer async edit({ field, value }) {
     // extract only the needed keys
     const {
       id,
@@ -2234,11 +2205,12 @@ export class GartenFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2249,7 +2221,7 @@ export class GartenFile extends Model {
     })
     return
   }
-  @writer async delete({ store }) {
+  @writer async delete() {
     const mutation = gql`
       mutation delete_garten_file($where: garten_file_bool_exp!) {
         delete_garten_file(where: $where) {
@@ -2262,11 +2234,12 @@ export class GartenFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2293,7 +2266,7 @@ export class HerkunftFile extends Model {
 
   @relation('herkunft', 'herkunft_id') herkunft
 
-  @writer async edit({ field, value, store }) {
+  @writer async edit({ field, value }) {
     // extract only the needed keys
     const {
       id,
@@ -2333,11 +2306,12 @@ export class HerkunftFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2348,7 +2322,7 @@ export class HerkunftFile extends Model {
     })
     return
   }
-  @writer async delete({ store }) {
+  @writer async delete() {
     const mutation = gql`
       mutation delete_herkunft_file($where: herkunft_file_bool_exp!) {
         delete_herkunft_file(where: $where) {
@@ -2361,11 +2335,12 @@ export class HerkunftFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2392,7 +2367,7 @@ export class KulturFile extends Model {
 
   @relation('kultur', 'kultur_id') kultur
 
-  @writer async edit({ field, value, store }) {
+  @writer async edit({ field, value }) {
     // extract only the needed keys
     const {
       id,
@@ -2432,11 +2407,12 @@ export class KulturFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2447,7 +2423,7 @@ export class KulturFile extends Model {
     })
     return
   }
-  @writer async delete({ store }) {
+  @writer async delete() {
     const mutation = gql`
       mutation delete_kultur_file($where: kultur_file_bool_exp!) {
         delete_kultur_file(where: $where) {
@@ -2460,11 +2436,12 @@ export class KulturFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2491,7 +2468,7 @@ export class LieferungFile extends Model {
 
   @relation('lieferung', 'lieferung_id') lieferung
 
-  @writer async edit({ field, value, store }) {
+  @writer async edit({ field, value }) {
     // extract only the needed keys
     const {
       id,
@@ -2531,11 +2508,12 @@ export class LieferungFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2546,7 +2524,7 @@ export class LieferungFile extends Model {
     })
     return
   }
-  @writer async delete({ store }) {
+  @writer async delete() {
     const mutation = gql`
       mutation delete_lieferung_file($where: lieferung_file_bool_exp!) {
         delete_lieferung_file(where: $where) {
@@ -2559,11 +2537,12 @@ export class LieferungFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2590,7 +2569,7 @@ export class PersonFile extends Model {
 
   @relation('person', 'person_id') person
 
-  @writer async edit({ field, value, store }) {
+  @writer async edit({ field, value }) {
     // extract only the needed keys
     const {
       id,
@@ -2630,11 +2609,12 @@ export class PersonFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2645,7 +2625,7 @@ export class PersonFile extends Model {
     })
     return
   }
-  @writer async delete({ store }) {
+  @writer async delete() {
     const mutation = gql`
       mutation delete_person_file($where: person_file_bool_exp!) {
         delete_person_file(where: $where) {
@@ -2658,11 +2638,12 @@ export class PersonFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2689,7 +2670,7 @@ export class SammlungFile extends Model {
 
   @relation('sammlung', 'sammlung_id') sammlung
 
-  @writer async edit({ field, value, store }) {
+  @writer async edit({ field, value }) {
     // extract only the needed keys
     const {
       id,
@@ -2729,11 +2710,12 @@ export class SammlungFile extends Model {
       _set: newObject,
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2744,7 +2726,7 @@ export class SammlungFile extends Model {
     })
     return
   }
-  @writer async delete({ store }) {
+  @writer async delete() {
     const mutation = gql`
       mutation delete_sammlung_file($where: sammlung_file_bool_exp!) {
         delete_sammlung_file(where: $where) {
@@ -2757,11 +2739,12 @@ export class SammlungFile extends Model {
     const variables = {
       where: { id: { _eq: this.id } },
     }
-    const response = await store.gqlClient
+    const response = await store
+      .get(gqlClientAtom)
       .mutation(mutation, variables)
       .toPromise()
     if (response.error) {
-      store.addNotification({
+      addNotification({
         message: response.error.message,
       })
       return console.log(response.error)
@@ -2793,9 +2776,7 @@ export class ArtQk extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`art_qk.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -2804,9 +2785,9 @@ export class ArtQk extends Model {
       name: field === 'name' ? toStringIfPossible(value) : this.name,
       titel: field === 'titel' ? toStringIfPossible(value) : this.titel,
       beschreibung:
-        field === 'beschreibung' ?
-          toStringIfPossible(value)
-        : this.beschreibung,
+        field === 'beschreibung'
+          ? toStringIfPossible(value)
+          : this.beschreibung,
       sort: field === 'sort' ? value : this.sort,
       _parent_rev: this._rev,
       _depth: newDepth,
@@ -2818,11 +2799,12 @@ export class ArtQk extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_art_qk_rev_one',
       variables: JSON.stringify({
@@ -2852,10 +2834,8 @@ export class ArtQk extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -2893,9 +2873,7 @@ export class KulturOption extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`kultur_option.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -2907,9 +2885,9 @@ export class KulturOption extends Model {
       tz_andere_menge:
         field === 'tz_andere_menge' ? value : this.tz_andere_menge,
       tz_auspflanzbereit_beschreibung:
-        field === 'tz_auspflanzbereit_beschreibung' ? value : (
-          this.tz_auspflanzbereit_beschreibung
-        ),
+        field === 'tz_auspflanzbereit_beschreibung'
+          ? value
+          : this.tz_auspflanzbereit_beschreibung,
       tz_bemerkungen: field === 'tz_bemerkungen' ? value : this.tz_bemerkungen,
       tk: field === 'tk' ? value : this.tk,
       tk_bemerkungen: field === 'tk_bemerkungen' ? value : this.tk_bemerkungen,
@@ -2928,11 +2906,12 @@ export class KulturOption extends Model {
     newObject.id = uuidv1()
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_kultur_option_rev_one',
       variables: JSON.stringify({
@@ -2962,10 +2941,8 @@ export class KulturOption extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -2991,9 +2968,7 @@ export class KulturQk extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`kultur_qk.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -3002,9 +2977,9 @@ export class KulturQk extends Model {
       name: field === 'name' ? toStringIfPossible(value) : this.name,
       titel: field === 'titel' ? toStringIfPossible(value) : this.titel,
       beschreibung:
-        field === 'beschreibung' ?
-          toStringIfPossible(value)
-        : this.beschreibung,
+        field === 'beschreibung'
+          ? toStringIfPossible(value)
+          : this.beschreibung,
       sort: field === 'sort' ? value : this.sort,
       _parent_rev: this._rev,
       _depth: newDepth,
@@ -3016,11 +2991,12 @@ export class KulturQk extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_kultur_qk_rev_one',
       variables: JSON.stringify({
@@ -3050,10 +3026,8 @@ export class KulturQk extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 
@@ -3105,9 +3079,7 @@ export class PersonOption extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value, store }) {
-    const { addQueuedQuery, user, unsetError } = store
-
+  @writer async edit({ field, value }) {
     unsetError(`person_option.${field}`)
     // first build the part that will be revisioned
     const newDepth = this._depth + 1
@@ -3134,9 +3106,9 @@ export class PersonOption extends Model {
         field === 'li_show_sl_felder' ? value : this.li_show_sl_felder,
       li_show_sl: field === 'li_show_sl' ? value : this.li_show_sl,
       sl_show_empty_when_next_to_li:
-        field === 'sl_show_empty_when_next_to_li' ? value : (
-          this.sl_show_empty_when_next_to_li
-        ),
+        field === 'sl_show_empty_when_next_to_li'
+          ? value
+          : this.sl_show_empty_when_next_to_li,
       sl_auto_copy_edits:
         field === 'sl_auto_copy_edits' ? value : this.sl_auto_copy_edits,
       tree_kultur: field === 'tree_kultur' ? value : this.tree_kultur,
@@ -3146,13 +3118,13 @@ export class PersonOption extends Model {
       tree_lieferung: field === 'tree_lieferung' ? value : this.tree_lieferung,
       tree_event: field === 'tree_event' ? value : this.tree_event,
       art_qk_choosen:
-        field === 'art_qk_choosen' ?
-          toPgArray(value)
-        : toPgArray(this.art_qk_choosen),
+        field === 'art_qk_choosen'
+          ? toPgArray(value)
+          : toPgArray(this.art_qk_choosen),
       kultur_qk_choosen:
-        field === 'kultur_qk_choosen' ?
-          toPgArray(value)
-        : toPgArray(this.kultur_qk_choosen),
+        field === 'kultur_qk_choosen'
+          ? toPgArray(value)
+          : toPgArray(this.kultur_qk_choosen),
       _parent_rev: this._rev,
       _depth: newDepth,
       _deleted: field === '_deleted' ? value : this._deleted,
@@ -3163,11 +3135,12 @@ export class PersonOption extends Model {
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = user.email
+    newObject.changed_by = store.get(userAtom)?.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions =
-      this._revisions ? toPgArray([rev, ...this._revisions]) : toPgArray([rev])
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
     addQueuedQuery({
       name: 'mutateInsert_person_option_rev_one',
       variables: JSON.stringify({
@@ -3197,10 +3170,8 @@ export class PersonOption extends Model {
       row._revisions = newRevisions
     })
   }
-  @writer async delete({ store }) {
-    await this.callWriter(() =>
-      this.edit({ field: '_deleted', value: true, store }),
-    )
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
 

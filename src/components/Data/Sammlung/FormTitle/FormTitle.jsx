@@ -1,9 +1,12 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import { useResizeDetector } from 'react-resize-detector'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import {
+  activeNodeArrayAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../../store/index.js'
 import { SammlungDeleteButton as DeleteButton } from './DeleteButton.jsx'
 import { SammlungAddButton as AddButton } from './AddButton.jsx'
 import { SammlungAnleitung as Anleitung } from './Anleitung.jsx'
@@ -16,93 +19,94 @@ import HeDownSvg from '../../../../svg/to_he_down.svg?react'
 
 import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
-export const SammlungFormTitle = observer(
-  ({ row, totalCount, filteredCount, showHistory, setShowHistory }) => {
-    const store = useContext(MobxStoreContext)
-    const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
+export const SammlungFormTitle = ({
+  row,
+  totalCount,
+  filteredCount,
+  showHistory,
+  setShowHistory,
+}) => {
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
-    const { width, ref } = useResizeDetector()
+  const { width, ref } = useResizeDetector()
 
-    const onClickUp = () => {
-      removeOpenNode(activeNodeArray)
-      setActiveNodeArray(activeNodeArray.slice(0, -1))
-    }
+  const onClickUp = () => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }
 
-    const onClickToLieferungen = () =>
-      setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen'])
+  const onClickToLieferungen = () =>
+    setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen'])
 
-    const onClickToHerkuenfte = () =>
-      setActiveNodeArray([...activeNodeArray, 'Herkuenfte'])
+  const onClickToHerkuenfte = () =>
+    setActiveNodeArray([...activeNodeArray, 'Herkuenfte'])
 
-    const showToHe = activeNodeArray[0] === 'Sammlungen'
-    const showToLi = activeNodeArray[0] !== 'Personen'
+  const showToHe = activeNodeArray[0] === 'Sammlungen'
+  const showToLi = activeNodeArray[0] !== 'Personen'
 
-    return (
-      <div
-        className={artStyles.container}
-        ref={ref}
-      >
-        <div className={artStyles.title}>Sammlung</div>
-        <div className={artStyles.symbols}>
+  return (
+    <div className={artStyles.container} ref={ref}>
+      <div className={artStyles.title}>Sammlung</div>
+      <div className={artStyles.symbols}>
+        <IconButton
+          title="Zur Sammlungs-Liste"
+          onClick={onClickUp}
+          size="large"
+        >
+          <UpSvg />
+        </IconButton>
+        {showToHe && (
           <IconButton
-            title="Zur Sammlungs-Liste"
-            onClick={onClickUp}
+            title="Zu den Herkünften dieser Sammlung"
+            onClick={onClickToHerkuenfte}
             size="large"
           >
-            <UpSvg />
+            <HeDownSvg />
           </IconButton>
-          {showToHe && (
-            <IconButton
-              title="Zu den Herkünften dieser Sammlung"
-              onClick={onClickToHerkuenfte}
-              size="large"
-            >
-              <HeDownSvg />
-            </IconButton>
-          )}
-          {showToLi && (
-            <IconButton
-              title="Zu den Aus-Lieferungen dieser Sammlung"
-              onClick={onClickToLieferungen}
-              size="large"
-            >
-              <LiDownSvg />
-            </IconButton>
-          )}
-          <AddButton />
-          <DeleteButton row={row} />
-          {width < 520 ?
-            <Menu white={false}>
-              <HistoryButton
-                table="sammlung"
-                id={row.id}
-                showHistory={showHistory}
-                setShowHistory={setShowHistory}
-                asMenu
-              />
-              <Anleitung asMenu />
-              <FilterNumbers
-                filteredCount={filteredCount}
-                totalCount={totalCount}
-                asMenu
-              />
-            </Menu>
-          : <>
-              <HistoryButton
-                table="sammlung"
-                id={row.id}
-                showHistory={showHistory}
-                setShowHistory={setShowHistory}
-              />
-              <Anleitung />
-              <FilterNumbers
-                filteredCount={filteredCount}
-                totalCount={totalCount}
-              />
-            </>
-          }
-        </div>
+        )}
+        {showToLi && (
+          <IconButton
+            title="Zu den Aus-Lieferungen dieser Sammlung"
+            onClick={onClickToLieferungen}
+            size="large"
+          >
+            <LiDownSvg />
+          </IconButton>
+        )}
+        <AddButton />
+        <DeleteButton row={row} />
+        {width < 520 ? (
+          <Menu white={false}>
+            <HistoryButton
+              table="sammlung"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
+            <Anleitung asMenu />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+              asMenu
+            />
+          </Menu>
+        ) : (
+          <>
+            <HistoryButton
+              table="sammlung"
+              id={row.id}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+            />
+            <Anleitung />
+            <FilterNumbers
+              filteredCount={filteredCount}
+              totalCount={totalCount}
+            />
+          </>
+        )}
       </div>
-    )
-  },
-)
+    </div>
+  )
+}

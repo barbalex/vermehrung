@@ -1,65 +1,58 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import { setIsPrint } from '../../../../store/index.js'
 
-export const SammelLieferungPrint = observer(
-  ({ printPreview, setPrintPreview, asMenu }) => {
-    const store = useContext(MobxStoreContext)
-    const { setIsPrint } = store
+export const SammelLieferungPrint = ({
+  printPreview,
+  setPrintPreview,
+  asMenu,
+}) => {
+  const showLieferschein = () => setPrintPreview(!printPreview)
 
-    const showLieferschein = () => setPrintPreview(!printPreview)
+  const printLieferschein = () => {
+    setIsPrint(true)
+    setTimeout(() => {
+      window.print()
+      setIsPrint(false)
+    })
+  }
 
-    const printLieferschein = () => {
-      setIsPrint(true)
-      setTimeout(() => {
-        window.print()
-        setIsPrint(false)
-      })
-    }
-
-    if (asMenu) {
-      return (
-        <>
-          <MenuItem onClick={showLieferschein}>
-            {printPreview ? 'Formular' : 'Lieferschein'}
-          </MenuItem>
-          {printPreview && (
-            <MenuItem onClick={printLieferschein}>
-              Lieferschein drucken
-            </MenuItem>
-          )}
-        </>
-      )
-    }
-
+  if (asMenu) {
     return (
       <>
+        <MenuItem onClick={showLieferschein}>
+          {printPreview ? 'Formular' : 'Lieferschein'}
+        </MenuItem>
         {printPreview && (
-          <IconButton
-            aria-label="Lieferschein drucken"
-            title="Lieferschein drucken"
-            onClick={printLieferschein}
-            size="large"
-          >
-            <MdPrint />
-          </IconButton>
+          <MenuItem onClick={printLieferschein}>Lieferschein drucken</MenuItem>
         )}
-        <IconButton
-          aria-label={printPreview ? 'Formular' : 'Lieferschein'}
-          title={printPreview ? 'Formular' : 'Lieferschein'}
-          onClick={showLieferschein}
-          size="large"
-        >
-          {printPreview ?
-            <FaEdit />
-          : <FaEnvelopeOpenText />}
-        </IconButton>
       </>
     )
-  },
-)
+  }
+
+  return (
+    <>
+      {printPreview && (
+        <IconButton
+          aria-label="Lieferschein drucken"
+          title="Lieferschein drucken"
+          onClick={printLieferschein}
+          size="large"
+        >
+          <MdPrint />
+        </IconButton>
+      )}
+      <IconButton
+        aria-label={printPreview ? 'Formular' : 'Lieferschein'}
+        title={printPreview ? 'Formular' : 'Lieferschein'}
+        onClick={showLieferschein}
+        size="large"
+      >
+        {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
+      </IconButton>
+    </>
+  )
+}

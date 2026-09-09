@@ -1,22 +1,27 @@
-import { getSnapshot } from 'mobx-state-tree'
 import { isEqual } from 'es-toolkit'
 
+import {
+  store,
+  activeNodeArrayAtom,
+  addNotification,
+  addOpenNode,
+  setActiveNodeArray,
+  setLastActiveNodeArray,
+  setFilterShow,
+} from '../../store/index.js'
 import { isNodeOpen } from './isNodeOpen.js'
 
-export const toggleNode = ({ node, nodes, store }) => {
-  const { addNotification } = store
-  const { addOpenNode, setLastActiveNodeArray } = store.tree
+export const toggleNode = ({ node, nodes }) => {
   if (!node.url) {
     console.log('passsed node has no url:', node)
     return addNotification({
       message: 'Fehler: Dem Knoten im Navigationsbaum fehlt die url',
     })
   }
-  const { setActiveNodeArray, activeNodeArray: aNAProxy } = store.tree
-  const aNA = getSnapshot(aNAProxy)
+  const aNA = store.get(activeNodeArrayAtom)
   const activeNode = nodes.find((n) => isEqual(n.url, aNA))
 
-  const nodeIsOpen = isNodeOpen({ store, url: node.url })
+  const nodeIsOpen = isNodeOpen({ url: node.url })
   if (!nodeIsOpen) {
     // node is closed
     // open it and make it the active node
@@ -40,5 +45,5 @@ export const toggleNode = ({ node, nodes, store }) => {
     setActiveNodeArray(newActiveNodeArray)
     setLastActiveNodeArray(node.url)
   }
-  store.filter.setShow(false)
+  setFilterShow(false)
 }

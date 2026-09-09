@@ -1,17 +1,11 @@
-import { types, destroy } from 'mobx-state-tree'
-import { reaction, flow } from 'mobx'
-import { sortBy } from 'es-toolkit'
+import { atom, createStore } from 'jotai'
+import { sortBy, isEqual } from 'es-toolkit'
+import localForage from 'localforage'
 import { v1 as uuidv1 } from 'uuid'
-import md5 from 'blueimp-md5'
-import { set } from 'es-toolkit/compat'
-import isUuid from 'is-uuid'
 
-import { Tree, defaultValue as defaultTree } from './Tree.js'
-import { Filter } from './Filter/types.js'
 import { initialFilterValues } from './Filter/initialValues.js'
-import { QueuedQuery } from './QueuedQuery.js'
-import { Notification } from './Notification.js'
-import { Errors, defaultValue as defaultErrors } from './Errors/index.js'
+import emptyValues from './Filter/emptyValues.js'
+import { emptyHash } from './Filter/emptyHash.js'
 
 import { activeFormFromActiveNodeArray } from '../utils/activeFormFromActiveNodeArray.js'
 import { artIdInUrl } from '../utils/artIdInUrl.js'
@@ -29,1487 +23,569 @@ import { sammlungIdInUrl } from '../utils/sammlungIdInUrl.js'
 import { kulturIdOfAnLieferungInUrl } from '../utils/kulturIdOfAnLieferungInUrl.js'
 import { kulturIdOfAusLieferungInUrl } from '../utils/kulturIdOfAusLieferungInUrl.js'
 import { zaehlungIdInUrl } from '../utils/zaehlungIdInUrl.js'
-import { getAuthToken } from '../utils/getAuthToken.js'
-import { mutations } from '../utils/mutations.js'
 
-export const MobxStore = types
-  .model({
-    tree: types.optional(Tree, defaultTree),
-    filter: types.optional(Filter, initialFilterValues),
-    apFilter: types.optional(types.boolean, true),
-    docFilter: types.optional(types.union(types.string, types.number), ''),
-    docsCount: types.maybeNull(types.number, null),
-    docsFilteredCount: types.maybeNull(types.number, null),
-    isPrint: types.optional(types.boolean, false),
-    singleColumnView: types.optional(types.boolean, false),
-    showTreeInSingleColumnView: types.optional(types.boolean, false),
-    online: types.optional(types.boolean, true),
-    shortTermOnline: types.optional(types.boolean, true),
-    // every table saves last updated timestamp in seconds since 1.1.1970
-    // why? so data to be updated can be efficiently extracted
-    // from the live queries
-    ae_art_lastUpdated: types.optional(types.number, 0),
-    art_lastUpdated: types.optional(types.number, 0),
-    art_file_lastUpdated: types.optional(types.number, 0),
-    art_qk_lastUpdated: types.optional(types.number, 0),
-    av_lastUpdated: types.optional(types.number, 0),
-    event_lastUpdated: types.optional(types.number, 0),
-    garten_lastUpdated: types.optional(types.number, 0),
-    garten_file_lastUpdated: types.optional(types.number, 0),
-    gv_lastUpdated: types.optional(types.number, 0),
-    herkunft_lastUpdated: types.optional(types.number, 0),
-    herkunft_file_lastUpdated: types.optional(types.number, 0),
-    kultur_lastUpdated: types.optional(types.number, 0),
-    kultur_file_lastUpdated: types.optional(types.number, 0),
-    kultur_option_lastUpdated: types.optional(types.number, 0),
-    kultur_qk_lastUpdated: types.optional(types.number, 0),
-    lieferung_lastUpdated: types.optional(types.number, 0),
-    lieferung_file_lastUpdated: types.optional(types.number, 0),
-    person_lastUpdated: types.optional(types.number, 0),
-    person_file_lastUpdated: types.optional(types.number, 0),
-    person_option_lastUpdated: types.optional(types.number, 0),
-    sammel_lieferung_lastUpdated: types.optional(types.number, 0),
-    sammlung_lastUpdated: types.optional(types.number, 0),
-    sammlung_file_lastUpdated: types.optional(types.number, 0),
-    teilkultur_lastUpdated: types.optional(types.number, 0),
-    teilzaehlung_lastUpdated: types.optional(types.number, 0),
-    user_role_lastUpdated: types.optional(types.number, 0),
-    zaehlung_lastUpdated: types.optional(types.number, 0),
-    ae_art_initially_queried: types.optional(types.boolean, false),
-    art_initially_queried: types.optional(types.boolean, false),
-    art_file_initially_queried: types.optional(types.boolean, false),
-    art_qk_initially_queried: types.optional(types.boolean, false),
-    av_initially_queried: types.optional(types.boolean, false),
-    event_initially_queried: types.optional(types.boolean, false),
-    garten_initially_queried: types.optional(types.boolean, false),
-    garten_file_initially_queried: types.optional(types.boolean, false),
-    gv_initially_queried: types.optional(types.boolean, false),
-    herkunft_initially_queried: types.optional(types.boolean, false),
-    herkunft_file_initially_queried: types.optional(types.boolean, false),
-    kultur_initially_queried: types.optional(types.boolean, false),
-    kultur_file_initially_queried: types.optional(types.boolean, false),
-    kultur_option_initially_queried: types.optional(types.boolean, false),
-    kultur_qk_initially_queried: types.optional(types.boolean, false),
-    lieferung_initially_queried: types.optional(types.boolean, false),
-    lieferung_file_initially_queried: types.optional(types.boolean, false),
-    person_initially_queried: types.optional(types.boolean, false),
-    person_file_initially_queried: types.optional(types.boolean, false),
-    person_option_initially_queried: types.optional(types.boolean, false),
-    sammel_lieferung_initially_queried: types.optional(types.boolean, false),
-    sammlung_initially_queried: types.optional(types.boolean, false),
-    sammlung_file_initially_queried: types.optional(types.boolean, false),
-    teilkultur_initially_queried: types.optional(types.boolean, false),
-    teilzaehlung_initially_queried: types.optional(types.boolean, false),
-    user_role_initially_queried: types.optional(types.boolean, false),
-    zaehlung_initially_queried: types.optional(types.boolean, false),
-    initiallyQuerying: types.optional(types.string, ''),
-    /**
-     * This is a queue of all queries
-     * When online they they are immediately executed by the reaction
-     * When offline they remain queued until connectivity is back
-     */
-    queuedQueries: types.map(QueuedQuery),
-    notifications: types.map(Notification),
-    // on startup need to wait with showing data
-    // until hasura claims have been added
-    // this is _after_ user is set so need another variable
-    gettingAuthUser: types.optional(types.boolean, true),
-    authorizing: types.optional(types.boolean, true),
-    errors: types.optional(Errors, defaultErrors),
-    diffConflict: types.optional(types.boolean, true),
-    // wsReconnectCount is made so a subscription can provoke re-subscription on error
-    // see initializeSubscriptions, unsubscribe.ae_art
-    wsReconnectCount: types.maybeNull(types.number, 0),
-  })
-  .volatile(() => ({
-    user: {},
-    firebaseAuth: null,
-    gqlWsClient: null,
-    db: null,
-    gqlClient: null,
-    navigate: undefined,
-  }))
-  .actions((self) => {
-    reaction(
-      () => `${self.queuedQueries.size}/${self.shortTermOnline}`,
-      flow(function* () {
-        /*console.log('Store, reaction, shortTermOnline:', {
-          shortTermOnline: self.shortTermOnline,
-          queuedQueriesSize: self.queuedQueries.size,
-        })*/
-        /**
-         * TODO:
-         * When new query is added
-         * check if same exists already
-         * then combine them into one
-         * Goal: reduce network traffic and revision numbers when many fields were updated
-         * Build new reaction for this that only depends on self.queuedQueries.length? (but must run first...)
-         * Also important: How to combine when online?
-         * as long as same id is active?
-         */
-        if (!self.shortTermOnline) return
+// Plain atoms with async hydration from localforage, mirroring the former
+// mst-persist behaviour: values are always readable synchronously (unlike
+// atomWithStorage with async storage, whose value is a Promise until
+// hydration completes), persisted state appears shortly after boot,
+// changes are written back as they happen.
+// Hydration is started once by initiateApp via hydratePersistedAtoms().
+const persistedAtoms = []
 
-        // execute operation
-        const query = self.queuedQueriesSorted[0]
-        //console.log('Store, reaction, shortTermOnline:', self.shortTermOnline)
-        if (!query) return
+const persistedAtom = (key, initialValue) => {
+  const baseAtom = atom(initialValue)
+  persistedAtoms.push({ key: `vermehrung:${key}`, baseAtom })
+  return baseAtom
+}
 
-        const {
-          name,
-          variables,
-          revertTable,
-          revertField,
-          revertId,
-          revertValue,
-        } = query
-        const mutation = mutations[name]
-        if (!mutation) throw new Error('keine Mutation gefunden für: ', name)
-
-        let response
-        // see: https://formidable.com/open-source/urql/docs/concepts/core-package/#one-off-queries-and-mutations
-        if (variables) {
-          response = yield self.gqlClient
-            .mutation(mutation, JSON.parse(variables))
-            .toPromise()
-        } else {
-          response = yield self.gqlClient.mutation(mutation).toPromise()
+export const hydratePersistedAtoms = async () => {
+  // hydrate in parallel and never let a slow/blocked storage
+  // keep the app from booting
+  await Promise.all(
+    persistedAtoms.map(async ({ key, baseAtom }) => {
+      try {
+        const stored = await localForage.getItem(key)
+        if (stored !== null && stored !== undefined) {
+          store.set(baseAtom, stored)
         }
-        if (response.error) {
-          // TODO:
-          // use urql difference between networkError and graphQLErrors
-          console.log('operation reaction error:', response.error)
-          // TODO: if offline, return and set shortTermOffline
-          const lcMessage = response.error.message.toLowerCase()
-          // In case a conflict was caused by two EXACT SAME changes,
-          // this will bounce because of the same rev. We want to ignore this:
-          if (response.error.message.includes('JWT')) {
-            console.log('getting auth token due to jwt error')
-            return getAuthToken({ store: self })
-          } else if (
-            lcMessage.includes('uniqueness violation') &&
-            lcMessage.includes('_rev_id__rev_key')
-          ) {
-            console.log(
-              'There is a conflict with exact same changes - ingoring the error thrown',
-            )
-          } else if (
-            response.error?.graphQLErrors?.[0]?.extensions?.internal?.error
-              ?.status_code === '21000'
-          ) {
-            console.log('user sent same edit to soon again')
-          } else if (lcMessage.includes('unique-constraint')) {
-            let { message } = response.error
-            if (lcMessage.includes('single_art_herkunft_garden_active_idx')) {
-              message =
-                'Pro Art, Herkunft und Garten darf nur eine Kultur aktiv sein (plus ein Zwischenlager). Offenbar gibt es schon eine aktive Kultur'
-            }
-            // do not add a notification: show this response.error below the field
-            self.setError({
-              path: `${revertTable}.${revertField}`,
-              value: message,
-            })
-            console.log('a unique constraint was violated')
-          } else if (response.error.message.includes('Failed to fetch')) {
-            console.log('network is failing')
-            self.setShortTermOnline(false)
-            return
-          } else {
-            // Move this operation to the end of the queue
-            // to prevent it from blocking other operations
-            self.deferQueuedQueryById(query.id)
-            self.setError({
-              path: `${revertTable}.${revertField}`,
-              value: response.error.message,
-            })
-            return self.addNotification({
-              title:
-                'Eine Operation kann nicht in die Datenbank geschrieben werden',
-              message: response.error.message,
-              info: 'Bei der nächsten Synchronisierung wird wieder versucht, diese Operation auszuführen',
-              actionLabel: 'Operation löschen',
-              actionName: 'removeQueuedQueryById',
-              actionArgument: query.id,
-            })
-          }
-          // revert change
-          self.updateModelValue({
-            table: revertTable,
-            id: revertId,
-            field: revertField,
-            value: revertValue,
-          })
-        }
-        // remove operation from queue
-        // use action because this is async
-        self.removeQueuedQueryById(query.id)
-      }),
-      {
-        // make sure retried in a minute
-        // https://github.com/mobxjs/mst-gql/issues/198#issuecomment-628083160
-        scheduler: (run) => {
-          run() // ensure it runs immediately if online
-          setInterval(run, 30000) // 30000 = thirty seconds
-        },
-        fireImmediately: true,
-      },
+      } catch (error) {
+        console.error(`hydratePersistedAtoms failed for ${key}:`, error)
+      }
+      // subscribe after hydration so the initial value is not written back
+      store.sub(baseAtom, () => {
+        localForage.setItem(key, store.get(baseAtom)).catch((error) => {
+          console.error(`persisting ${key} failed:`, error)
+        })
+      })
+    }),
+  )
+  // let the queue observer know about hydrated queries immediately
+  // (instead of waiting for the first retry tick)
+  store.set(queueSizeAtom, store.get(queuedQueriesAtom).length)
+}
+
+export const store = createStore()
+
+// every table tracks when it was last updated, in seconds since 1.1.1970
+// why? so data to be updated can be efficiently extracted
+// from the live queries
+export const tables = [
+  'ae_art',
+  'art',
+  'art_file',
+  'art_qk',
+  'av',
+  'event',
+  'garten',
+  'garten_file',
+  'gv',
+  'herkunft',
+  'herkunft_file',
+  'kultur',
+  'kultur_file',
+  'kultur_option',
+  'kultur_qk',
+  'lieferung',
+  'lieferung_file',
+  'person',
+  'person_file',
+  'person_option',
+  'sammel_lieferung',
+  'sammlung',
+  'sammlung_file',
+  'teilkultur',
+  'teilzaehlung',
+  'user_role',
+  'zaehlung',
+]
+
+// === simple flags ===
+export const apFilterAtom = persistedAtom('apFilter', true)
+export const docFilterAtom = persistedAtom('docFilter', '')
+export const docsCountAtom = persistedAtom('docsCount', null)
+export const docsFilteredCountAtom = persistedAtom('docsFilteredCount', null)
+export const isPrintAtom = persistedAtom('isPrint', false)
+export const singleColumnViewAtom = persistedAtom('singleColumnView', false)
+export const showTreeInSingleColumnViewAtom = persistedAtom(
+  'showTreeInSingleColumnView',
+  false,
+)
+export const diffConflictAtom = persistedAtom('diffConflict', true)
+export const initiallyQueryingAtom = persistedAtom('initiallyQuerying', '')
+export const wsReconnectCountAtom = persistedAtom('wsReconnectCount', 0)
+// online state is deliberately not persisted: it is redetermined on boot
+export const onlineAtom = atom(true)
+export const shortTermOnlineAtom = atom(true)
+// on startup need to wait with showing data
+// until hasura claims have been added
+// this is _after_ user is set so need another variable
+export const gettingAuthUserAtom = atom(true)
+export const authorizingAtom = atom(true)
+
+// === volatile singletons ===
+export const userAtom = atom({})
+export const firebaseAuthAtom = atom(null)
+export const gqlWsClientAtom = atom(null)
+export const dbAtom = atom(null)
+export const gqlClientAtom = atom(null)
+// navigate is never read reactively, so it is kept as a plain module value.
+// Storing a function in a jotai primitive atom would make jotai call it
+// (updater semantics, like React setState) when setting it
+let navigateFn
+export const setNavigate = (val) => {
+  navigateFn = val
+}
+export const getNavigate = () => navigateFn
+
+// === tree ===
+export const activeNodeArrayAtom = persistedAtom('tree:activeNodeArray', [])
+// lastActiveNodeArray is needed to keep the last clicked arrow known
+// so it does not jump
+export const lastActiveNodeArrayAtom = persistedAtom(
+  'tree:lastActiveNodeArray',
+  [],
+)
+export const openNodesAtom = persistedAtom('tree:openNodes', [])
+export const widthInPercentOfScreenAtom = persistedAtom(
+  'tree:widthInPercentOfScreen',
+  33,
+)
+
+export const singleRowHeightAtom = atom((get) => {
+  const isMobile =
+    get(showTreeInSingleColumnViewAtom) && get(singleColumnViewAtom)
+  return isMobile ? 30 : 23
+})
+
+export const addOpenNodes = (nodes) => {
+  // need set to ensure contained arrays are unique
+  const set = new Set(
+    [...store.get(openNodesAtom), ...nodes].map(JSON.stringify),
+  )
+  store.set(openNodesAtom, Array.from(set).map(JSON.parse))
+}
+
+export const addOpenNode = (url) => {
+  // add all parent nodes
+  const addedOpenNodes = []
+  for (let i = 1; i <= url.length; i++) {
+    addedOpenNodes.push(url.slice(0, i))
+  }
+  addOpenNodes(addedOpenNodes)
+}
+
+export const setOpenNodes = (val) => {
+  // need set to ensure contained arrays are unique
+  const set = new Set(val.map(JSON.stringify))
+  store.set(openNodesAtom, Array.from(set).map(JSON.parse))
+}
+
+export const removeOpenNode = (val) => {
+  store.set(
+    openNodesAtom,
+    store.get(openNodesAtom).filter((n) => !isEqual(n, val)),
+  )
+}
+
+export const removeOpenNodeWithChildren = (url) => {
+  store.set(
+    openNodesAtom,
+    store.get(openNodesAtom).filter((n) => {
+      const urlPartWithEqualLength = n.slice(0, url.length)
+      return !isEqual(urlPartWithEqualLength, url)
+    }),
+  )
+}
+
+export const setActiveNodeArray = (val, nonavigate) => {
+  store.set(activeNodeArrayAtom, val)
+  if (!nonavigate) {
+    getNavigate()?.(`/Vermehrung/${val.join('/')}`)
+    addOpenNode(val)
+  }
+}
+
+export const setLastActiveNodeArray = (val) => {
+  store.set(lastActiveNodeArrayAtom, val)
+}
+
+export const setWidthInPercentOfScreen = (val) => {
+  store.set(widthInPercentOfScreenAtom, val)
+}
+
+// === filter ===
+const filterTableNames = [
+  'art',
+  'event',
+  'garten',
+  'herkunft',
+  'kultur',
+  'kultur_option',
+  'lieferung',
+  'sammel_lieferung',
+  'person',
+  'sammlung',
+  'zaehlung',
+  'teilkultur',
+  'teilzaehlung',
+]
+
+export const filterShowAtom = persistedAtom('filter:show', false)
+
+export const filterTableAtoms = Object.fromEntries(
+  filterTableNames.map((table) => [
+    table,
+    persistedAtom(`filter:${table}`, initialFilterValues[table]),
+  ]),
+)
+export const filterArtAtom = filterTableAtoms.art
+export const filterEventAtom = filterTableAtoms.event
+export const filterGartenAtom = filterTableAtoms.garten
+export const filterHerkunftAtom = filterTableAtoms.herkunft
+export const filterKulturAtom = filterTableAtoms.kultur
+export const filterKulturOptionAtom = filterTableAtoms.kultur_option
+export const filterLieferungAtom = filterTableAtoms.lieferung
+export const filterSammelLieferungAtom = filterTableAtoms.sammel_lieferung
+export const filterPersonAtom = filterTableAtoms.person
+export const filterSammlungAtom = filterTableAtoms.sammlung
+export const filterZaehlungAtom = filterTableAtoms.zaehlung
+export const filterTeilkulturAtom = filterTableAtoms.teilkultur
+export const filterTeilzaehlungAtom = filterTableAtoms.teilzaehlung
+
+export const tableIsFilteredAtom = (table) =>
+  atom((get) => {
+    const empty = emptyHash[table]
+    return Object.entries(get(filterTableAtoms[table])).some(
+      ([key, value]) => value !== empty[key],
     )
-    return {
-      setApFilter(val) {
-        self.apFilter = val
-      },
-      setNavigate(val) {
-        return (self.navigate = val)
-      },
-      incrementWsReconnectCount() {
-        self.wsReconnectCount = self.wsReconnectCount + 1
-      },
-      setInitiallyQuerying(val) {
-        self.initiallyQuerying = val
-      },
-      setGqlClient(val) {
-        self.gqlClient = val
-      },
-      setDb(val) {
-        self.db = val
-      },
-      setLastUpdated({ table, val: valPassed }) {
-        // 1. enable not having to pass val
-        //    thus set standard value
-        // 2. substract some time to account for:
-        //    - server inserting winner
-        //    - live query fetching the data
-        //    too small value is bad (some data is never updated)
-        //    too large value not so (too much data is checked for update)
-        // 3. server sets seconds since 1.1.1970
-        //    Date.now is MILLIseconds since 1.1.1970
-        //    thus need to correct!
-        const standardVal = Date.now() / 1000 - 50
-        const val = valPassed ?? standardVal
-        self[`${table}_lastUpdated`] = val
-      },
-      setInitiallyQueried({ table }) {
-        self[`${table}_initially_queried`] = true
-      },
-      setDiffConflict(val) {
-        self.diffConflict = val
-      },
-      setShowTreeInSingleColumnView(val) {
-        self.showTreeInSingleColumnView = val
-      },
-      setSingleColumnView(val) {
-        self.singleColumnView = val
-      },
-      setDocsCount(val) {
-        self.docsCount = val
-      },
-      setDocsFilteredCount(val) {
-        self.docsFilteredCount = val
-      },
-      setError({ path, value }) {
-        set(self.errors, path, value)
-      },
-      unsetError(path) {
-        self.errors[path] = {}
-      },
-      setGqlWsClient(val) {
-        self.gqlWsClient = val
-      },
-      async updateModelValue({ table, id, field, value }) {
-        // used to revert offline operations if they fail
-        const { db } = self
-        // find model = row
-        let row
-        try {
-          row = db.get(table).find(id).fetch()
-        } catch {}
-        if (row) {
-          await db.write(async () => {
-            await row.update((row) => {
-              row[field] = value
-            })
-          })
-        }
-      },
-      async updateModelValues({ table, id, values }) {
-        // used to revert offline operations if they fail
-        const { db } = self
-        // find model = row
-        let row
-        try {
-          row = db.get(table).find(id).fetch()
-        } catch {}
-        await db.write(async () => {
-          await row.update((row) => {
-            Object.entries(values).forEach(([key, value]) => {
-              row[key] = value
-            })
-          })
-        })
-      },
-      removeQueuedQueryById(id) {
-        self.queuedQueries.delete(id)
-      },
-      addQueuedQuery(valPassed) {
-        const val = {
-          // set default values
-          id: uuidv1(),
-          time: Date.now(),
-          // overwrite with passed in ones:
-          ...valPassed,
-        }
-        self.queuedQueries.set(val.id, val)
-      },
-      deferQueuedQueryById(id) {
-        const query = self.queuedQueries.get(id)
-        query.time = Date.now()
-        self.queuedQueries.set(id, query)
-      },
-      addNotification(valPassed) {
-        // do not stack same messages
-        const notificationsWithSameMessage = Array.from(
-          self.notifications.values(),
-        ).filter((n) => n.message === valPassed.message)
-        if (notificationsWithSameMessage.length > 0) return
-
-        const val = {
-          // set default values
-          id: uuidv1(),
-          time: Date.now(),
-          duration: 10000, // standard value: 10000
-          dismissable: true,
-          allDismissable: true,
-          type: 'error',
-          // overwrite with passed in ones:
-          ...valPassed,
-        }
-        self.notifications.set(val.id, val)
-        // remove after duration
-        setTimeout(() => {
-          self.removeNotificationById(val.id)
-        }, val.duration)
-        return val.id
-      },
-      removeNotificationById(id) {
-        self.notifications.delete(id)
-      },
-      removeAllNotifications() {
-        self.notifications.clear()
-      },
-      async insertArtRev(args) {
-        const { user, addQueuedQuery } = self
-        const { activeNodeArray, setActiveNodeArray } = self.tree
-        const valuesPassed = args?.values ?? {}
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          art_id: id,
-          ae_id: undefined,
-          set: undefined,
-          apflora_av: undefined,
-          apflora_ap: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.art_id
-        delete newObjectForStore.art_id
-        addQueuedQuery({
-          name: 'mutateInsert_art_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'art_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'art',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('art')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-        setTimeout(() => {
-          const newActiveNodeArray =
-            isUuid.v1(activeNodeArray.at(-1)) ?
-              // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-        })
-      },
-      async insertAvRev(args) {
-        const { user, addQueuedQuery } = self
-        const valuesPassed = args?.values ?? {}
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          av_id: id,
-          art_id: undefined,
-          person_id: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.av_id
-        delete newObjectForStore.av_id
-        addQueuedQuery({
-          name: 'mutateInsert_av_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'av_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'av',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('av')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-      },
-      async insertEventRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          kulturIdInActiveNodeArray,
-          teilkulturIdInActiveNodeArray,
-        } = self
-
-        const valuesPassed = args?.values ?? {}
-        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
-        const activeNodeArray = aNaRaw.toJSON()
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          event_id: id,
-          // pass in possibly passed kultur_id or undefined
-          kultur_id: kulturIdInActiveNodeArray,
-          teilkultur_id: teilkulturIdInActiveNodeArray,
-          person_id: undefined,
-          beschreibung: undefined,
-          geplant: undefined,
-          datum: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.event_id
-        delete newObjectForStore.event_id
-        addQueuedQuery({
-          name: 'mutateInsert_event_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'event_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'event',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('event')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-        setTimeout(() => {
-          const newActiveNodeArray =
-            isUuid.v1(activeNodeArray.at(-1)) ?
-              // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-        })
-      },
-      async insertGartenRev(args) {
-        const { user, addQueuedQuery, personIdInActiveNodeArray } = self
-
-        const valuesPassed = args?.values ?? {}
-        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
-        const activeNodeArray = aNaRaw.toJSON()
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          garten_id: id,
-          name: undefined,
-          person_id: personIdInActiveNodeArray,
-          strasse: undefined,
-          plz: undefined,
-          ort: undefined,
-          geom_point: undefined,
-          aktiv: true,
-          bemerkungen: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.garten_id
-        delete newObjectForStore.garten_id
-        addQueuedQuery({
-          name: 'mutateInsert_garten_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'garten_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'garten',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('garten')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-        setTimeout(() => {
-          const newActiveNodeArray =
-            isUuid.v1(activeNodeArray.at(-1)) ?
-              // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-        })
-      },
-      async insertGvRev(args) {
-        const { user, addQueuedQuery } = self
-        const valuesPassed = args?.values ?? {}
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          gv_id: id,
-          garten_id: undefined,
-          person_id: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.gv_id
-        delete newObjectForStore.gv_id
-        addQueuedQuery({
-          name: 'mutateInsert_gv_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'gv_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'gv',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('gv')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-      },
-      async insertHerkunftRev(args) {
-        const { user, addQueuedQuery } = self
-
-        const valuesPassed = args?.values ?? {}
-        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
-        const activeNodeArray = aNaRaw.toJSON()
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          herkunft_id: id,
-          nr: undefined,
-          lokalname: undefined,
-          gemeinde: undefined,
-          kanton: undefined,
-          land: undefined,
-          geom_point: undefined,
-          bemerkungen: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert herkuft_rev to herkunft
-        newObjectForStore.id = newObjectForStore.herkunft_id
-        delete newObjectForStore.herkunft_id
-        addQueuedQuery({
-          name: 'mutateInsert_herkunft_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'herkunft_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'herkunft',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('herkunft')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-        setTimeout(() => {
-          const newActiveNodeArray =
-            isUuid.v1(activeNodeArray.at(-1)) ?
-              // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-        })
-      },
-      destroy(model) {
-        destroy(model)
-      },
-      async insertKulturRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          artIdInActiveNodeArray,
-          herkunftIdInActiveNodeArray,
-          gartenIdInActiveNodeArray,
-        } = self
-        const valuesPassed = args?.values ?? {}
-        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
-        const activeNodeArray = aNaRaw.toJSON()
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          kultur_id: id,
-          art_id: artIdInActiveNodeArray,
-          herkunft_id: herkunftIdInActiveNodeArray,
-          garten_id: gartenIdInActiveNodeArray,
-          zwischenlager: undefined,
-          erhaltungskultur: undefined,
-          von_anzahl_individuen: undefined,
-          bemerkungen: undefined,
-          aktiv: true,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.kultur_id
-        delete newObjectForStore.kultur_id
-        addQueuedQuery({
-          name: 'mutateInsert_kultur_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'kultur_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'kultur',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const kulturCollection = db.get('kultur')
-          const kulturOptionCollection = db.get('kultur_option')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            kulturCollection.prepareCreateFromDirtyRaw(newObjectForStore),
-            kulturOptionCollection.prepareCreateFromDirtyRaw({ id }),
-          ])
-        })
-        if (!args?.nonavigate === true) {
-          setTimeout(() => {
-            const newActiveNodeArray =
-              isUuid.v1(activeNodeArray.at(-1)) ?
-                // slice if last is uuid
-                [...activeNodeArray.slice(0, -1), id]
-              : [...activeNodeArray, id]
-            // update tree status
-            setActiveNodeArray(newActiveNodeArray)
-          })
-        }
-        return
-      },
-      async insertLieferungRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          artIdInActiveNodeArray,
-          personIdInActiveNodeArray,
-          sammelLieferungIdInActiveNodeArray,
-          sammlungIdInActiveNodeArray,
-          kulturIdOfAnLieferungInActiveNodeArray,
-          kulturIdOfAusLieferungInActiveNodeArray,
-        } = self
-
-        const valuesPassed = args?.values ?? {}
-        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
-        const activeNodeArray = aNaRaw.toJSON()
-
-        const kultur =
-          kulturIdOfAnLieferungInActiveNodeArray ?
-            self.kulturs?.get(kulturIdOfAnLieferungInActiveNodeArray)
-          : kulturIdOfAusLieferungInActiveNodeArray ?
-            self.kulturs?.get(kulturIdOfAusLieferungInActiveNodeArray)
-          : undefined
-        const artIdOfKultur = kultur?.artId
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          lieferung_id: id,
-          sammel_lieferung_id: sammelLieferungIdInActiveNodeArray,
-          art_id: artIdInActiveNodeArray ?? artIdOfKultur,
-          person_id: personIdInActiveNodeArray,
-          von_sammlung_id: sammlungIdInActiveNodeArray,
-          von_kultur_id: kulturIdOfAusLieferungInActiveNodeArray,
-          datum: undefined,
-          nach_kultur_id: kulturIdOfAnLieferungInActiveNodeArray,
-          nach_ausgepflanzt: undefined,
-          von_anzahl_individuen: undefined,
-          anzahl_pflanzen: undefined,
-          anzahl_auspflanzbereit: undefined,
-          gramm_samen: undefined,
-          andere_menge: undefined,
-          geplant: undefined,
-          bemerkungen: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.lieferung_id
-        delete newObjectForStore.lieferung_id
-        addQueuedQuery({
-          name: 'mutateInsert_lieferung_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'lieferung_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'lieferung',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('lieferung')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-        setTimeout(() => {
-          const newActiveNodeArray =
-            isUuid.v1(activeNodeArray.at(-1)) ?
-              // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-        })
-      },
-      async insertPersonRev(args) {
-        const { user, addQueuedQuery } = self
-        const { activeNodeArray, setActiveNodeArray } = self.tree
-
-        const valuesPassed = args?.values ?? {}
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          person_id: id,
-          nr: undefined,
-          vorname: undefined,
-          name: undefined,
-          adresszusatz: undefined,
-          strasse: undefined,
-          plz: undefined,
-          ort: undefined,
-          telefon_privat: undefined,
-          telefon_geschaeft: undefined,
-          telefon_mobile: undefined,
-          email: undefined,
-          kein_email: undefined,
-          bemerkungen: undefined,
-          account_id: undefined,
-          user_role_id: undefined,
-          kommerziell: undefined,
-          info: undefined,
-          aktiv: true,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.person_id
-        delete newObjectForStore.person_id
-        addQueuedQuery({
-          name: 'mutateInsert_person_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'person_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'person',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const personCollection = db.get('person')
-          const personOptionCollection = db.get('person_option')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            personCollection.prepareCreateFromDirtyRaw(newObjectForStore),
-            personOptionCollection.prepareCreateFromDirtyRaw({ id }),
-          ])
-        })
-        setTimeout(() => {
-          const newActiveNodeArray =
-            isUuid.v1(activeNodeArray.at(-1)) ?
-              // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-        })
-      },
-      async insertSammelLieferungRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          artIdInActiveNodeArray,
-          personIdInActiveNodeArray,
-          sammlungIdInActiveNodeArray,
-          kulturIdOfAnLieferungInActiveNodeArray,
-        } = self
-
-        const valuesPassed = args?.values ?? {}
-        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
-        const activeNodeArray = aNaRaw.toJSON()
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          sammel_lieferung_id: id,
-          art_id: artIdInActiveNodeArray,
-          person_id: personIdInActiveNodeArray,
-          von_sammlung_id: sammlungIdInActiveNodeArray,
-          von_kultur_id: kulturIdOfAnLieferungInActiveNodeArray,
-          datum: undefined,
-          nach_kultur_id: undefined,
-          nach_ausgepflanzt: undefined,
-          von_anzahl_individuen: undefined,
-          anzahl_pflanzen: undefined,
-          anzahl_auspflanzbereit: undefined,
-          gramm_samen: undefined,
-          andere_menge: undefined,
-          geplant: undefined,
-          bemerkungen: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.sammel_lieferung_id
-        delete newObjectForStore.sammel_lieferung_id
-        addQueuedQuery({
-          name: 'mutateInsert_sammel_lieferung_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'sammel_lieferung_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'sammel_lieferung',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('sammel_lieferung')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-        setTimeout(() => {
-          const newActiveNodeArray =
-            isUuid.v1(activeNodeArray.at(-1)) ?
-              // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-        })
-      },
-      async insertSammlungRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          artIdInActiveNodeArray,
-          herkunftIdInActiveNodeArray,
-          personIdInActiveNodeArray,
-        } = self
-
-        const valuesPassed = args?.values ?? {}
-        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
-        const activeNodeArray = aNaRaw.toJSON()
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          sammlung_id: id,
-          art_id: artIdInActiveNodeArray,
-          person_id: personIdInActiveNodeArray,
-          herkunft_id: herkunftIdInActiveNodeArray,
-          nr: undefined,
-          datum: undefined,
-          von_anzahl_individuen: undefined,
-          anzahl_pflanzen: undefined,
-          gramm_samen: undefined,
-          andere_menge: undefined,
-          geom_point: undefined,
-          geplant: undefined,
-          bemerkungen: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.sammlung_id
-        delete newObjectForStore.sammlung_id
-        addQueuedQuery({
-          name: 'mutateInsert_sammlung_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'sammlung_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'sammlung',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('sammlung')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-        setTimeout(() => {
-          const newActiveNodeArray =
-            isUuid.v1(activeNodeArray.at(-1)) ?
-              // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-        })
-      },
-      async insertTeilkulturRev(args) {
-        const { user, addQueuedQuery, kulturIdInActiveNodeArray } = self
-
-        const noNavigateInTree = args?.noNavigateInTree ?? false
-        const valuesPassed = args?.values ?? {}
-
-        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
-        const activeNodeArray = aNaRaw.toJSON()
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          teilkultur_id: id,
-          kultur_id: kulturIdInActiveNodeArray,
-          name: undefined,
-          ort1: undefined,
-          ort2: undefined,
-          ort3: undefined,
-          bemerkungen: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = id
-        delete newObjectForStore.teilkultur_id
-        addQueuedQuery({
-          name: 'mutateInsert_teilkultur_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'teilkultur_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'teilkultur',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('teilkultur')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-        if (!noNavigateInTree) {
-          setTimeout(() => {
-            const newActiveNodeArray =
-              isUuid.v1(activeNodeArray.at(-1)) ?
-                // slice if last is uuid
-                [...activeNodeArray.slice(0, -1), id]
-              : [...activeNodeArray, id]
-            // update tree status
-            setActiveNodeArray(newActiveNodeArray)
-          })
-        }
-        return id
-      },
-      async insertTeilzaehlungRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          zaehlungIdInActiveNodeArray,
-          teilkulturIdInActiveNodeArray,
-        } = self
-        const valuesPassed = args?.values ?? {}
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          teilzaehlung_id: id,
-          zaehlung_id: zaehlungIdInActiveNodeArray,
-          teilkultur_id: teilkulturIdInActiveNodeArray,
-          anzahl_pflanzen: undefined,
-          anzahl_auspflanzbereit: undefined,
-          anzahl_mutterpflanzen: undefined,
-          andere_menge: undefined,
-          auspflanzbereit_beschreibung: undefined,
-          bemerkungen: undefined,
-          prognose_von_tz: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.teilzaehlung_id
-        delete newObjectForStore.teilzaehlung_id
-        addQueuedQuery({
-          name: 'mutateInsert_teilzaehlung_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'teilzaehlung_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'teilzaehlung',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('teilzaehlung')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-      },
-      async insertZaehlungRev(args) {
-        const { user, addQueuedQuery, kulturIdInActiveNodeArray } = self
-        const valuesPassed = args?.values ?? {}
-
-        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
-        const activeNodeArray = aNaRaw.toJSON()
-
-        const id = uuidv1()
-        const _depth = 1
-        const newObject = {
-          zaehlung_id: id,
-          kultur_id: kulturIdInActiveNodeArray,
-          datum: undefined,
-          prognose: undefined,
-          bemerkungen: undefined,
-          changed: new window.Date().toISOString(),
-          changed_by: user.email,
-          _depth,
-          _parent_rev: undefined,
-          _deleted: false,
-          ...valuesPassed,
-        }
-        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
-        newObject._rev = rev
-        newObject.id = uuidv1()
-        const newObjectForStore = { ...newObject }
-        newObject._revisions = `{"${rev}"}`
-        newObjectForStore._revisions = JSON.stringify([rev])
-        // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.zaehlung_id
-        delete newObjectForStore.zaehlung_id
-        addQueuedQuery({
-          name: 'mutateInsert_zaehlung_rev_one',
-          variables: JSON.stringify({
-            object: newObject,
-            on_conflict: {
-              constraint: 'zaehlung_rev_pkey',
-              update_columns: ['id'],
-            },
-          }),
-          revertTable: 'zaehlung',
-          revertId: id,
-          revertField: '_deleted',
-          revertValue: true,
-          isInsert: true,
-        })
-        // optimistically update store
-        const { db } = self
-        await db.write(async () => {
-          const collection = db.get('zaehlung')
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([
-            collection.prepareCreateFromDirtyRaw(newObjectForStore),
-          ])
-        })
-        setTimeout(() => {
-          const newActiveNodeArray =
-            isUuid.v1(activeNodeArray.at(-1)) ?
-              // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-        })
-        return id
-      },
-      setOnline(val) {
-        self.online = val
-      },
-      setShortTermOnline(val) {
-        self.shortTermOnline = val
-      },
-      setFirebaseAuth(val) {
-        if (!self.firebaseAuth) {
-          self.firebaseAuth = val
-        }
-      },
-      setAuthorizing(val) {
-        if (val !== self.authorizing) {
-          self.authorizing = val
-        }
-      },
-      setGettingAuthUser(val) {
-        self.gettingAuthUser = val
-      },
-      setUser(val) {
-        self.user = val || {}
-      },
-      setIsPrint(val) {
-        self.isPrint = val
-      },
-      setDocFilter(val) {
-        self.docFilter = val
-      },
-    }
   })
-  .views((self) => ({
-    get initialDataQueried() {
-      return (
-        self.ae_art_initially_queried &&
-        self.art_initially_queried &&
-        self.art_file_initially_queried &&
-        self.art_qk_initially_queried &&
-        self.av_initially_queried &&
-        self.event_initially_queried &&
-        self.garten_initially_queried &&
-        self.garten_file_initially_queried &&
-        self.gv_initially_queried &&
-        self.herkunft_initially_queried &&
-        self.herkunft_file_initially_queried &&
-        self.kultur_initially_queried &&
-        self.kultur_file_initially_queried &&
-        self.kultur_option_initially_queried &&
-        self.kultur_qk_initially_queried &&
-        self.lieferung_initially_queried &&
-        self.lieferung_file_initially_queried &&
-        self.person_initially_queried &&
-        self.person_file_initially_queried &&
-        self.person_option_initially_queried &&
-        self.sammel_lieferung_initially_queried &&
-        self.sammlung_initially_queried &&
-        self.sammlung_file_initially_queried &&
-        self.teilkultur_initially_queried &&
-        self.teilzaehlung_initially_queried &&
-        self.user_role_initially_queried &&
-        self.zaehlung_initially_queried
-      )
-    },
-    get activeForm() {
-      return activeFormFromActiveNodeArray(self.tree.activeNodeArray)
-    },
-    get queuedQueriesSorted() {
-      return sortBy([...self.queuedQueries.values()], ['time'])
-    },
-    get artIdInActiveNodeArray() {
-      return artIdInUrl(self.tree.activeNodeArray)
-    },
-    get herkunftIdInActiveNodeArray() {
-      return herkunftIdInUrl(self.tree.activeNodeArray)
-    },
-    get gartenIdInActiveNodeArray() {
-      return gartenIdInUrl(self.tree.activeNodeArray)
-    },
-    get kulturIdInActiveNodeArray() {
-      return kulturIdInUrl(self.tree.activeNodeArray)
-    },
-    get anLieferungIdInActiveNodeArray() {
-      return anLieferungIdInUrl(self.tree.activeNodeArray)
-    },
-    get ausLieferungIdInActiveNodeArray() {
-      return ausLieferungIdInUrl(self.tree.activeNodeArray)
-    },
-    get lieferungIdInActiveNodeArray() {
-      return lieferungIdInUrl(self.tree.activeNodeArray)
-    },
-    get eventIdInActiveNodeArray() {
-      return eventIdInUrl(self.tree.activeNodeArray)
-    },
-    get teilkulturIdInActiveNodeArray() {
-      return teilkulturIdInUrl(self.tree.activeNodeArray)
-    },
-    get personIdInActiveNodeArray() {
-      return personIdInUrl(self.tree.activeNodeArray)
-    },
-    get sammelLieferungIdInActiveNodeArray() {
-      return sammelLieferungIdInUrl(self.tree.activeNodeArray)
-    },
-    get sammlungIdInActiveNodeArray() {
-      return sammlungIdInUrl(self.tree.activeNodeArray)
-    },
-    get kulturIdOfAnLieferungInActiveNodeArray() {
-      return kulturIdOfAnLieferungInUrl(self.tree.activeNodeArray)
-    },
-    get kulturIdOfAusLieferungInActiveNodeArray() {
-      return kulturIdOfAusLieferungInUrl(self.tree.activeNodeArray)
-    },
-    get zaehlungIdInActiveNodeArray() {
-      return zaehlungIdInUrl(self.tree.activeNodeArray)
-    },
-  }))
+
+export const filterFilteredAtom = atom((get) =>
+  filterTableNames.some((table) => get(tableIsFilteredAtom(table))),
+)
+
+export const setFilterValue = ({ table, key, value }) => {
+  const tableAtom = filterTableAtoms[table]
+  store.set(tableAtom, { ...store.get(tableAtom), [key]: value })
+}
+
+export const setFilterShow = (val) => {
+  store.set(filterShowAtom, val)
+}
+
+export const emptyFilterTable = ({ table }) => {
+  store.set(filterTableAtoms[table], emptyValues[table])
+}
+
+export const emptyFilter = () => {
+  filterTableNames.forEach((table) => {
+    store.set(filterTableAtoms[table], emptyValues[table])
+  })
+}
+
+// === errors ===
+// structure: error.table.field
+// need this because operations work on top level
+// so errors need to be managed there too
+export const defaultErrors = Object.fromEntries(
+  [
+    'art',
+    'event',
+    'garten',
+    'herkunft',
+    'kultur',
+    'lieferung',
+    'person',
+    'sammel_lieferung',
+    'sammlung',
+    'teilkultur',
+    'teilzaehlung',
+    'zaehlung',
+  ].map((table) => [table, {}]),
+)
+export const errorsAtom = atom(defaultErrors)
+
+export const setError = ({ path, value }) => {
+  const [table, field] = path.split('.')
+  const tableErrors = store.get(errorsAtom)[table] ?? {}
+  store.set(errorsAtom, {
+    ...store.get(errorsAtom),
+    [table]: { ...tableErrors, [field]: value },
+  })
+}
+
+export const unsetError = (path) => {
+  const [table, field] = path.split('.')
+  const errors = store.get(errorsAtom)
+  const tableErrors = errors[table] ?? {}
+  if (field) {
+    const { [field]: _removed, ...rest } = tableErrors
+    store.set(errorsAtom, { ...errors, [table]: rest })
+  } else {
+    store.set(errorsAtom, { ...errors, [table]: {} })
+  }
+}
+
+// === notifications ===
+export const notificationsAtom = atom([])
+
+export const removeNotificationById = (id) => {
+  store.set(
+    notificationsAtom,
+    store.get(notificationsAtom).filter((n) => n.id !== id),
+  )
+}
+
+export const addNotification = (valPassed) => {
+  // do not stack same messages
+  const notificationsWithSameMessage = store
+    .get(notificationsAtom)
+    .filter((n) => n.message === valPassed.message)
+  if (notificationsWithSameMessage.length > 0) return
+
+  const val = {
+    // set default values
+    id: uuidv1(),
+    time: Date.now(),
+    duration: 10000, // standard value: 10000
+    dismissable: true,
+    allDismissable: true,
+    type: 'error',
+    // overwrite with passed in ones:
+    ...valPassed,
+  }
+  store.set(notificationsAtom, [...store.get(notificationsAtom), val])
+  // remove after duration
+  setTimeout(() => {
+    removeNotificationById(val.id)
+  }, val.duration)
+  return val.id
+}
+
+export const removeAllNotifications = () => {
+  store.set(notificationsAtom, [])
+}
+
+// === queued queries ===
+/**
+ * This is a queue of all queries
+ * When online they are immediately executed by the observer
+ * When offline they remain queued until connectivity is back
+ */
+export const queuedQueriesAtom = persistedAtom('queuedQueries', [])
+export const retryTickAtom = atom(0)
+// the queue observer deliberately tracks only the SIZE of the queue
+// (plus online state and the retry tick), not its contents:
+// like the former MST reaction, deferring a failed query to the end
+// must not re-trigger execution - it waits for the next tick instead
+export const queueSizeAtom = atom(0)
+
+export const queuedQueriesSortedAtom = atom((get) =>
+  sortBy(get(queuedQueriesAtom), ['time']),
+)
+
+export const addQueuedQuery = (valPassed) => {
+  const val = {
+    // set default values
+    id: uuidv1(),
+    time: Date.now(),
+    // overwrite with passed in ones:
+    ...valPassed,
+  }
+  const queue = [...store.get(queuedQueriesAtom), val]
+  store.set(queuedQueriesAtom, queue)
+  store.set(queueSizeAtom, queue.length)
+}
+
+export const removeQueuedQueryById = (id) => {
+  const queue = store.get(queuedQueriesAtom).filter((q) => q.id !== id)
+  store.set(queuedQueriesAtom, queue)
+  store.set(queueSizeAtom, queue.length)
+}
+
+export const deferQueuedQueryById = (id) => {
+  store.set(
+    queuedQueriesAtom,
+    store
+      .get(queuedQueriesAtom)
+      .map((q) => (q.id === id ? { ...q, time: Date.now() } : q)),
+  )
+}
+
+// === watermarks ===
+export const lastUpdatedAtom = persistedAtom(
+  'lastUpdated',
+  Object.fromEntries(tables.map((table) => [table, 0])),
+)
+
+export const setLastUpdated = ({ table, val: valPassed }) => {
+  // 1. enable not having to pass val
+  //    thus set standard value
+  // 2. substract some time to account for:
+  //    - server inserting winner
+  //    - live query fetching the data
+  //    too small value is bad (some data is never updated)
+  //    too large value not so (too much data is checked for update)
+  // 3. server sets seconds since 1.1.1970
+  //    Date.now is MILLIseconds since 1.1.1970
+  //    thus need to correct!
+  const standardVal = Date.now() / 1000 - 50
+  const val = valPassed ?? standardVal
+  store.set(lastUpdatedAtom, { ...store.get(lastUpdatedAtom), [table]: val })
+}
+
+export const tableLastUpdated = (table) => store.get(lastUpdatedAtom)[table]
+
+// initially_queried flags are deliberately not persisted:
+// initial queries are re-run on every boot
+export const initiallyQueriedAtom = atom(
+  Object.fromEntries(tables.map((table) => [table, false])),
+)
+
+export const setInitiallyQueried = ({ table }) => {
+  store.set(initiallyQueriedAtom, {
+    ...store.get(initiallyQueriedAtom),
+    [table]: true,
+  })
+}
+
+export const tableInitiallyQueried = (table) =>
+  store.get(initiallyQueriedAtom)[table]
+
+export const initialDataQueriedAtom = atom((get) => {
+  const initiallyQueried = get(initiallyQueriedAtom)
+  return tables.every((table) => initiallyQueried[table])
+})
+
+// === setters for flags and volatiles ===
+export const setApFilter = (val) => store.set(apFilterAtom, val)
+export const setDocFilter = (val) => store.set(docFilterAtom, val)
+export const setDocsCount = (val) => store.set(docsCountAtom, val)
+export const setDocsFilteredCount = (val) =>
+  store.set(docsFilteredCountAtom, val)
+export const setIsPrint = (val) => store.set(isPrintAtom, val)
+export const setSingleColumnView = (val) => store.set(singleColumnViewAtom, val)
+export const setShowTreeInSingleColumnView = (val) =>
+  store.set(showTreeInSingleColumnViewAtom, val)
+export const setDiffConflict = (val) => store.set(diffConflictAtom, val)
+export const setInitiallyQuerying = (val) =>
+  store.set(initiallyQueryingAtom, val)
+export const incrementWsReconnectCount = () =>
+  store.set(wsReconnectCountAtom, (store.get(wsReconnectCountAtom) ?? 0) + 1)
+export const setOnline = (val) => store.set(onlineAtom, val)
+export const setShortTermOnline = (val) => store.set(shortTermOnlineAtom, val)
+export const setGettingAuthUser = (val) => store.set(gettingAuthUserAtom, val)
+export const setAuthorizing = (val) => store.set(authorizingAtom, val)
+export const setUser = (val) => store.set(userAtom, val || {})
+export const setFirebaseAuth = (val) => {
+  if (!store.get(firebaseAuthAtom)) {
+    store.set(firebaseAuthAtom, val)
+  }
+}
+export const setGqlClient = (val) => store.set(gqlClientAtom, val)
+export const setGqlWsClient = (val) => store.set(gqlWsClientAtom, val)
+export const setDb = (val) => store.set(dbAtom, val)
+
+// === revert helpers ===
+// used to revert offline operations if they fail
+export const updateModelValue = async ({ table, id, field, value }) => {
+  const db = store.get(dbAtom)
+  // find model = row
+  let row
+  try {
+    row = db.get(table).find(id).fetch()
+  } catch {}
+  if (row) {
+    await db.write(async () => {
+      await row.update((row) => {
+        row[field] = value
+      })
+    })
+  }
+}
+
+export const updateModelValues = async ({ table, id, values }) => {
+  const db = store.get(dbAtom)
+  // find model = row
+  let row
+  try {
+    row = db.get(table).find(id).fetch()
+  } catch {}
+  await db.write(async () => {
+    await row.update((row) => {
+      Object.entries(values).forEach(([key, value]) => {
+        row[key] = value
+      })
+    })
+  })
+}
+
+// === derived from activeNodeArray ===
+export const activeFormAtom = atom((get) =>
+  activeFormFromActiveNodeArray(get(activeNodeArrayAtom)),
+)
+export const artIdInActiveNodeArrayAtom = atom((get) =>
+  artIdInUrl(get(activeNodeArrayAtom)),
+)
+export const herkunftIdInActiveNodeArrayAtom = atom((get) =>
+  herkunftIdInUrl(get(activeNodeArrayAtom)),
+)
+export const gartenIdInActiveNodeArrayAtom = atom((get) =>
+  gartenIdInUrl(get(activeNodeArrayAtom)),
+)
+export const kulturIdInActiveNodeArrayAtom = atom((get) =>
+  kulturIdInUrl(get(activeNodeArrayAtom)),
+)
+export const anLieferungIdInActiveNodeArrayAtom = atom((get) =>
+  anLieferungIdInUrl(get(activeNodeArrayAtom)),
+)
+export const ausLieferungIdInActiveNodeArrayAtom = atom((get) =>
+  ausLieferungIdInUrl(get(activeNodeArrayAtom)),
+)
+export const lieferungIdInActiveNodeArrayAtom = atom((get) =>
+  lieferungIdInUrl(get(activeNodeArrayAtom)),
+)
+export const eventIdInActiveNodeArrayAtom = atom((get) =>
+  eventIdInUrl(get(activeNodeArrayAtom)),
+)
+export const teilkulturIdInActiveNodeArrayAtom = atom((get) =>
+  teilkulturIdInUrl(get(activeNodeArrayAtom)),
+)
+export const personIdInActiveNodeArrayAtom = atom((get) =>
+  personIdInUrl(get(activeNodeArrayAtom)),
+)
+export const sammelLieferungIdInActiveNodeArrayAtom = atom((get) =>
+  sammelLieferungIdInUrl(get(activeNodeArrayAtom)),
+)
+export const sammlungIdInActiveNodeArrayAtom = atom((get) =>
+  sammlungIdInUrl(get(activeNodeArrayAtom)),
+)
+export const kulturIdOfAnLieferungInActiveNodeArrayAtom = atom((get) =>
+  kulturIdOfAnLieferungInUrl(get(activeNodeArrayAtom)),
+)
+export const kulturIdOfAusLieferungInActiveNodeArrayAtom = atom((get) =>
+  kulturIdOfAusLieferungInUrl(get(activeNodeArrayAtom)),
+)
+export const zaehlungIdInActiveNodeArrayAtom = atom((get) =>
+  zaehlungIdInUrl(get(activeNodeArrayAtom)),
+)
+
+export const xxxIdInActiveNodeArrayAtoms = {
+  artIdInActiveNodeArray: artIdInActiveNodeArrayAtom,
+  herkunftIdInActiveNodeArray: herkunftIdInActiveNodeArrayAtom,
+  gartenIdInActiveNodeArray: gartenIdInActiveNodeArrayAtom,
+  kulturIdInActiveNodeArray: kulturIdInActiveNodeArrayAtom,
+  anLieferungIdInActiveNodeArray: anLieferungIdInActiveNodeArrayAtom,
+  ausLieferungIdInActiveNodeArray: ausLieferungIdInActiveNodeArrayAtom,
+  lieferungIdInActiveNodeArray: lieferungIdInActiveNodeArrayAtom,
+  eventIdInActiveNodeArray: eventIdInActiveNodeArrayAtom,
+  teilkulturIdInActiveNodeArray: teilkulturIdInActiveNodeArrayAtom,
+  personIdInActiveNodeArray: personIdInActiveNodeArrayAtom,
+  sammelLieferungIdInActiveNodeArray: sammelLieferungIdInActiveNodeArrayAtom,
+  sammlungIdInActiveNodeArray: sammlungIdInActiveNodeArrayAtom,
+  kulturIdOfAnLieferungInActiveNodeArray:
+    kulturIdOfAnLieferungInActiveNodeArrayAtom,
+  kulturIdOfAusLieferungInActiveNodeArray:
+    kulturIdOfAusLieferungInActiveNodeArrayAtom,
+  zaehlungIdInActiveNodeArray: zaehlungIdInActiveNodeArrayAtom,
+}

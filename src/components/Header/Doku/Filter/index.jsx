@@ -1,17 +1,22 @@
-import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import Input from '@mui/material/Input'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes, FaFilter } from 'react-icons/fa'
-import { observer } from 'mobx-react-lite'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import {
+  docFilterAtom,
+  setDocFilter,
+  docsCountAtom,
+  docsFilteredCountAtom,
+} from '../../../../store/index.js'
 import { FilterNumbers as Numbers } from './Numbers.jsx'
 
 import styles from './index.module.css'
 
-export const DokuFilter = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { docFilter, setDocFilter, docsCount, docsFilteredCount } = store
+export const DokuFilter = () => {
+  const docFilter = useAtomValue(docFilterAtom)
+  const docsCount = useAtomValue(docsCountAtom)
+  const docsFilteredCount = useAtomValue(docsFilteredCountAtom)
   const onChange = (e) => setDocFilter(e.target.value)
   const onClickEmptyFilter = () => setDocFilter('')
 
@@ -37,9 +42,9 @@ export const DokuFilter = observer(() => {
             position="end"
             onClick={onClickEmptyFilter}
             title={
-              docFilter ? 'Filter entfernen' : (
-                'Filter entfernen (keiner gesetzt)'
-              )
+              docFilter
+                ? 'Filter entfernen'
+                : 'Filter entfernen (keiner gesetzt)'
             }
           >
             <FaTimes
@@ -52,10 +57,7 @@ export const DokuFilter = observer(() => {
         }
         className={styles.input}
       />
-      <Numbers
-        totalCount={docsCount}
-        filteredCount={docsFilteredCount}
-      />
+      <Numbers totalCount={docsCount} filteredCount={docsFilteredCount} />
     </div>
   )
-})
+}

@@ -1,19 +1,15 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
 
 import styles from './Person.module.css'
 
-export const GartenPerson = observer(({ gv }) => {
-  const store = useContext(MobxStoreContext)
-
+export const GartenPerson = ({ gv }) => {
   const [personLabel, setPersonLabel] = useState(null)
   useEffect(() => {
     const personSubscription = gv.person
@@ -26,7 +22,7 @@ export const GartenPerson = observer(({ gv }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = () => gv.delete({ store })
+  const onClickDelete = () => gv.delete()
 
   if (!gv) return null
 
@@ -65,4 +61,4 @@ export const GartenPerson = observer(({ gv }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

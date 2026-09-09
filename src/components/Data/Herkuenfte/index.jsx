@@ -1,12 +1,21 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, last } from 'rxjs'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  activeNodeArrayAtom,
+  sammlungIdInActiveNodeArrayAtom,
+  artIdInActiveNodeArrayAtom,
+  filterHerkunftAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../store/index.js'
+import { insertHerkunftRev } from '../../../modules/insertRev.js'
 import { FilterTitle } from '../../shared/FilterTitle.jsx'
 import { HerkunftRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -18,50 +27,44 @@ import { constants } from '../../../utils/constants.js'
 
 import artStyles from '../Arten/index.module.css'
 
-export const Herkuenfte = observer(({ filter: showFilter }) => {
-  const store = useContext(MobxStoreContext)
-  const {
-    insertHerkunftRev,
-    sammlungIdInActiveNodeArray,
-    artIdInActiveNodeArray,
-    db,
-    filter,
-  } = store
-  const {
-    activeNodeArray: anaRaw,
-    setActiveNodeArray,
-    removeOpenNode,
-  } = store.tree
-  const activeNodeArray = anaRaw.toJSON()
+export const Herkuenfte = ({ filter: showFilter }) => {
+  const db = useAtomValue(dbAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+  const sammlungIdInActiveNodeArray = useAtomValue(
+    sammlungIdInActiveNodeArrayAtom,
+  )
+  const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
+  const herkunftFilter = useAtomValue(filterHerkunftAtom)
 
   const [dataState, setDataState] = useState({ herkunfts: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery =
-      sammlungIdInActiveNodeArray ?
-        [
+    const hierarchyQuery = sammlungIdInActiveNodeArray
+      ? [
           Q.experimentalJoinTables(['sammlung']),
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
         ]
-      : artIdInActiveNodeArray ?
-        [
-          Q.experimentalJoinTables(['sammlung']),
-          Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
-        ]
-      : []
+      : artIdInActiveNodeArray
+        ? [
+            Q.experimentalJoinTables(['sammlung']),
+            Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
+          ]
+        : []
     const collection = db.get('herkunft')
     const delQuery =
-      filter.herkunft._deleted === false ? Q.where('_deleted', false)
-      : filter.herkunft._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      herkunftFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : herkunftFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const countObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()
     const herkunftsObservable = collection
-      .query(...tableFilter({ store, table: 'herkunft' }), ...hierarchyQuery)
+      .query(...tableFilter({ table: 'herkunft' }), ...hierarchyQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
     const combinedObservables = combineLatest([
       countObservable,
@@ -73,13 +76,7 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [
-    db,
-    sammlungIdInActiveNodeArray,
-    store,
-    filter.herkunft._deleted,
-    artIdInActiveNodeArray,
-  ])
+  }, [db, sammlungIdInActiveNodeArray, herkunftFilter, artIdInActiveNodeArray])
 
   const { herkunfts, totalCount } = dataState
   const filteredCount = herkunfts.length
@@ -104,21 +101,18 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
-        {showFilter ?
+        {showFilter ? (
           <FilterTitle
             title="Herkunft"
             table="herkunft"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={artStyles.titleContainer}>
+        ) : (
+          <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Herkünfte</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton
-                title={upTitle}
-                onClick={onClickUp}
-                size="large"
-              >
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
               {showPlus && (
@@ -137,7 +131,7 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
               />
             </div>
           </div>
-        }
+        )}
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
@@ -149,4 +143,4 @@ export const Herkuenfte = observer(({ filter: showFilter }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

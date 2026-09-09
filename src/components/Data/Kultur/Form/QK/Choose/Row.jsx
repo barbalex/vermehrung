@@ -1,15 +1,15 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import Checkbox from '@mui/material/Checkbox'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { MobxStoreContext } from '../../../../../../mobxStoreContext.js'
+import { userAtom, dbAtom } from '../../../../../../store/index.js'
 import styles from './Row.module.css'
 
-export const ChooseKulturQkRow = observer(({ qk }) => {
-  const store = useContext(MobxStoreContext)
-  const { user, db } = store
+export const ChooseKulturQkRow = ({ qk }) => {
+  const user = useAtomValue(userAtom)
+  const db = useAtomValue(dbAtom)
 
   const [dataState, setDataState] = useState({
     userPersonOption: undefined,
@@ -18,9 +18,8 @@ export const ChooseKulturQkRow = observer(({ qk }) => {
   const { userPersonOption, kulturQkChoosen } = dataState
 
   useEffect(() => {
-    const userPersonOptionsObservable =
-      user.uid ?
-        db
+    const userPersonOptionsObservable = user.uid
+      ? db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['kultur_qk_choosen'])
@@ -34,20 +33,18 @@ export const ChooseKulturQkRow = observer(({ qk }) => {
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [db, user.uid])
+  }, [db, user])
 
   const checked = kulturQkChoosen.includes(qk.id)
 
   const onChange = () => {
-    const newValue =
-      event.target.checked ?
-        [...kulturQkChoosen, qk.id]
+    const newValue = event.target.checked
+      ? [...kulturQkChoosen, qk.id]
       : kulturQkChoosen.filter((id) => id !== qk.id)
 
     userPersonOption.edit({
       field: 'kultur_qk_choosen',
       value: newValue,
-      store,
     })
   }
 
@@ -56,14 +53,10 @@ export const ChooseKulturQkRow = observer(({ qk }) => {
   return (
     <div className={styles.row}>
       <div className={styles.check}>
-        <Checkbox
-          checked={checked}
-          onChange={onChange}
-          color="primary"
-        />
+        <Checkbox checked={checked} onChange={onChange} color="primary" />
       </div>
       <div className={styles.titel}>{qk.titel}</div>
       <div className={styles.beschreibung}>{qk.beschreibung}</div>
     </div>
   )
-})
+}

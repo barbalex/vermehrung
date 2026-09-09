@@ -1,15 +1,18 @@
 import axios from 'redaxios'
 
+import {
+  store,
+  addNotification,
+  onlineAtom,
+  shortTermOnlineAtom,
+  setOnline,
+  setShortTermOnline,
+} from '../store/index.js'
 import { constants } from './constants.js'
 
-export const deleteAccount = async ({ store, person }) => {
-  const {
-    addNotification,
-    online,
-    setOnline,
-    shortTermOnline,
-    setShortTermOnline,
-  } = store
+export const deleteAccount = async ({ person }) => {
+  const online = store.get(onlineAtom)
+  const shortTermOnline = store.get(shortTermOnlineAtom)
   // delete firebase user
   if (person?.account_id) {
     try {
@@ -41,7 +44,7 @@ export const deleteAccount = async ({ store, person }) => {
   // remove users account_id
   // but only if it exists
   if (person?.account_id) {
-    person.edit({ field: 'account_id', value: null, store })
+    person.edit({ field: 'account_id', value: null })
     return addNotification({
       message: `Das Benutzerkonto wurde entfernt`,
       type: 'info',

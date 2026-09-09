@@ -3,7 +3,11 @@ import { persistedExchange } from '@urql/exchange-persisted'
 import { createClient as createWsClient } from 'graphql-ws'
 
 import { constants } from './constants.js'
-import { MobxStore } from '../store/index.js'
+import {
+  setGqlClient,
+  setGqlWsClient,
+  setShortTermOnline,
+} from '../store/index.js'
 import { getAuthToken } from './getAuthToken.js'
 import { recreatePersistedStore } from './recreatePersistedStore.js'
 
@@ -12,7 +16,6 @@ const noToken =
 const getToken = () => window.localStorage.getItem('token') ?? noToken
 
 export const initiateApp = async () => {
-  const store = MobxStore.create()
   let token
   // enable gracefull restart: https://github.com/enisdenjo/graphql-ws#graceful-restart
   const createRestartableClient = (options) => {
@@ -47,13 +50,13 @@ export const initiateApp = async () => {
         },
         closed: () => {
           console.log('ws client disconnected')
-          //store.setShortTermOnline(false)
-          //store.incrementWsReconnectCount()
+          //setShortTermOnline(false)
+          //incrementWsReconnectCount()
           window.location.reload(true)
         },
         connected: () => {
           // console.log('ws client connected')
-          store.setShortTermOnline(true)
+          setShortTermOnline(true)
         },
       },
     })
@@ -77,14 +80,14 @@ export const initiateApp = async () => {
       onNonLazyError: async (error) => {
         console.log('gqlWsClient connectionCallback error:', error)
         if (error.toLowerCase().includes('jwt')) {
-          await getAuthToken({ store })
+          await getAuthToken()
           token = getToken()
           window.location.reload(true)
         }
       },
     })
   })()
-  store.setGqlWsClient(gqlWsClient)
+  setGqlWsClient(gqlWsClient)
   // need to renew header any time
   // solutions:
   // https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-307793837
@@ -110,13 +113,13 @@ export const initiateApp = async () => {
     },
     preferGetMethod: false,
   })
-  store.setGqlClient(gqlClient)
+  setGqlClient(gqlClient)
 
-  const unregisterAuthObserver = await recreatePersistedStore(store)
+  const unregisterAuthObserver = await recreatePersistedStore()
   const unregister = () => {
     unregisterAuthObserver()
     gqlWsClient.dispose()
   }
 
-  return { store, unregister }
+  return { unregister }
 }

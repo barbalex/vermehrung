@@ -1,12 +1,20 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  activeNodeArrayAtom,
+  kulturIdInActiveNodeArrayAtom,
+  filterEventAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../store/index.js'
+import { insertEventRev } from '../../../modules/insertRev.js'
 import { FilterTitle } from '../../shared/FilterTitle.jsx'
 import { EventRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -18,35 +26,36 @@ import { constants } from '../../../utils/constants.js'
 
 import artStyles from '../Arten/index.module.css'
 
-export const Events = observer(({ filter: showFilter = false }) => {
-  const store = useContext(MobxStoreContext)
-  const { insertEventRev, kulturIdInActiveNodeArray, db, filter } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-  const { event: eventFilter } = store.filter
+export const Events = ({ filter: showFilter = false }) => {
+  const db = useAtomValue(dbAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+  const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
+  const eventFilter = useAtomValue(filterEventAtom)
 
   const [dataState, setDataState] = useState({ events: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery =
-      kulturIdInActiveNodeArray ?
-        [
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
     const collection = db.get('event')
     const delQuery =
-      filter.event._deleted === false ? Q.where('_deleted', false)
-      : filter.event._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      eventFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : eventFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const countObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()
     const dataObservable = collection
-      .query(...tableFilter({ store, table: 'event' }), ...hierarchyQuery)
+      .query(...tableFilter({ table: 'event' }), ...hierarchyQuery)
       .observeWithColumns(['datum', 'beschreibung'])
     const combinedObservables = combineLatest([countObservable, dataObservable])
     const subscription = combinedObservables.subscribe(
@@ -61,13 +70,7 @@ export const Events = observer(({ filter: showFilter = false }) => {
     return () => subscription?.unsubscribe?.()
     // need to rerender if any of the values of eventFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    db,
-    kulturIdInActiveNodeArray,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(eventFilter),
-    eventFilter,
-  ])
+  }, [db, kulturIdInActiveNodeArray, eventFilter])
 
   const { events, totalCount } = dataState
   const filteredCount = events.length
@@ -91,21 +94,18 @@ export const Events = observer(({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
-        {showFilter ?
+        {showFilter ? (
           <FilterTitle
             title="Event"
             table="event"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={artStyles.titleContainer}>
+        ) : (
+          <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Events</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton
-                title={upTitle}
-                onClick={onClickUp}
-                size="large"
-              >
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -122,7 +122,7 @@ export const Events = observer(({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        }
+        )}
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
@@ -134,4 +134,4 @@ export const Events = observer(({ filter: showFilter = false }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

@@ -3,17 +3,22 @@
  * https://hasura.io/docs/1.0/graphql/core/api-reference/health.html
  */
 // eslint-disable-next-line no-unused-vars
-import { useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 
-import { MobxStoreContext } from '../mobxStoreContext.js'
+import {
+  onlineAtom,
+  shortTermOnlineAtom,
+  setOnline,
+  setShortTermOnline,
+} from '../store/index.js'
 import { isOnline } from '../utils/isOnline.js'
 
 const pollInterval = 5000
 
-export const ApiDetector = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { online, setOnline, shortTermOnline, setShortTermOnline } = store
+export const ApiDetector = () => {
+  const online = useAtomValue(onlineAtom)
+  const shortTermOnline = useAtomValue(shortTermOnlineAtom)
 
   useEffect(() => {
     let isActive = true
@@ -34,7 +39,7 @@ export const ApiDetector = observer(() => {
       isActive = false
       clearInterval(pollingId)
     }
-  }, [online, setOnline, setShortTermOnline, shortTermOnline])
+  }, [online, shortTermOnline])
 
   return null
-})
+}

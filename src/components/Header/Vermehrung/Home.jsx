@@ -1,25 +1,20 @@
-import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import { FaHome } from 'react-icons/fa'
 import { Link } from 'react-router'
-import { observer } from 'mobx-react-lite'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import { singleColumnViewAtom } from '../../../store/index.js'
 
 import styles from './Home.module.css'
 
-export const HeaderHome = observer(({ asMenu }) => {
-  const store = useContext(MobxStoreContext)
-  const { singleColumnView } = store
+export const HeaderHome = ({ asMenu }) => {
+  const singleColumnView = useAtomValue(singleColumnViewAtom)
 
   if (asMenu) {
     return (
-      <MenuItem
-        component={Link}
-        to="/"
-      >
+      <MenuItem component={Link} to="/">
         Home
       </MenuItem>
     )
@@ -51,4 +46,4 @@ export const HeaderHome = observer(({ asMenu }) => {
       Vermehrung
     </Button>
   )
-})
+}

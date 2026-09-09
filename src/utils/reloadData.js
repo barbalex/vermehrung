@@ -1,7 +1,9 @@
 import localForage from 'localforage'
 
-export const reloadData = async ({ store }) => {
-  const { db } = store
+import { store, dbAtom } from '../store/index.js'
+
+export const reloadData = async () => {
+  const db = store.get(dbAtom)
 
   await localForage.clear()
   await db.write(async () => db.unsafeResetDatabase())

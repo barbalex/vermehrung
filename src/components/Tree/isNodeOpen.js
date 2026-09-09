@@ -1,7 +1,9 @@
 import { isEqual } from 'es-toolkit'
 
-export const isNodeOpen = ({ store, url }) => {
-  const { openNodes } = store.tree
+import { store, openNodesAtom } from '../../store/index.js'
+
+export const isNodeOpen = ({ url }) => {
+  const openNodes = store.get(openNodesAtom)
   if (!url) return false
 
   return openNodes.some((n) => isEqual(n, url))

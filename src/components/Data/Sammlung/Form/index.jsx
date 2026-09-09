@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { combineLatest, of as $of } from 'rxjs'
@@ -7,7 +7,18 @@ import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 import { uniqBy } from 'es-toolkit'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import {
+  filterArtAtom,
+  filterHerkunftAtom,
+  filterPersonAtom,
+  filterSammlungAtom,
+  setFilterValue,
+  onlineAtom,
+  errorsAtom,
+  unsetError,
+  setError,
+  dbAtom,
+} from '../../../../store/index.js'
 import { Select } from '../../../shared/Select/index.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
 import { DateField as Date } from '../../../shared/Date.jsx'
@@ -29,404 +40,408 @@ import { herkunftSort } from '../../../../utils/herkunftSort.js'
 import artStyles from '../../Art/Form/index.module.css'
 import styles from './index.module.css'
 
-export const SammlungForm = observer(
-  ({
-    showFilter,
-    id,
-    row,
-    rawRow,
-    activeConflict,
-    setActiveConflict,
-    showHistory,
-  }) => {
-    const store = useContext(MobxStoreContext)
-    const { filter, online, errors, unsetError, setError, db } = store
+export const SammlungForm = ({
+  showFilter,
+  id,
+  row,
+  rawRow,
+  activeConflict,
+  setActiveConflict,
+  showHistory,
+}) => {
+  const artFilter = useAtomValue(filterArtAtom)
+  const herkunftFilter = useAtomValue(filterHerkunftAtom)
+  const personFilter = useAtomValue(filterPersonAtom)
+  const sammlungFilter = useAtomValue(filterSammlungAtom)
+  const online = useAtomValue(onlineAtom)
+  const errors = useAtomValue(errorsAtom)
+  const db = useAtomValue(dbAtom)
 
-    const [dataState, setDataState] = useState({
-      personWerte: [],
-      herkunftWerte: [],
-      artWerte: [],
-    })
-    useEffect(() => {
-      const personDelQuery =
-        filter.person._deleted === false ? Q.where('_deleted', false)
-        : filter.person._deleted === true ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
-      const personAktivQuery =
-        filter.person.aktiv === false ? Q.where('aktiv', false)
-        : filter.person.aktiv === true ? Q.where('aktiv', true)
-        : Q.or(
-            Q.where('aktiv', false),
-            Q.where('aktiv', true),
-            Q.where('aktiv', null),
-          )
-      const personsObservable = db
-        .get('person')
-        .query(personDelQuery, personAktivQuery)
-        .observeWithColumns(['vorname', 'name'])
-      const herkunftDelQuery =
-        filter.herkunft._deleted === false ? Q.where('_deleted', false)
-        : filter.herkunft._deleted === true ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
-      const herkunftsObservable = db
-        .get('herkunft')
-        .query(herkunftDelQuery)
-        .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-      const artDelQuery =
-        filter.art._deleted === false ? Q.where('_deleted', false)
-        : filter.art._deleted === true ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
-      const artsObservable = db
-        .get('art')
-        .query(artDelQuery)
-        .observeWithColumns(['ae_id'])
-      const sammlungDelQuery =
-        filter.sammlung._deleted === false ? Q.where('_deleted', false)
-        : filter.sammlung._deleted === true ? Q.where('_deleted', true)
-        : Q.or(
-            Q.where('_deleted', false),
-            Q.where('_deleted', true),
-            Q.where('_deleted', null),
-          )
-      const sammlungsNrCountObservable =
-        showFilter || !exists(row?.nr) ?
-          $of(0)
+  const [dataState, setDataState] = useState({
+    personWerte: [],
+    herkunftWerte: [],
+    artWerte: [],
+  })
+  useEffect(() => {
+    const personDelQuery =
+      personFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : personFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
+    const personAktivQuery =
+      personFilter.aktiv === false
+        ? Q.where('aktiv', false)
+        : personFilter.aktiv === true
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
+    const personsObservable = db
+      .get('person')
+      .query(personDelQuery, personAktivQuery)
+      .observeWithColumns(['vorname', 'name'])
+    const herkunftDelQuery =
+      herkunftFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : herkunftFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
+    const herkunftsObservable = db
+      .get('herkunft')
+      .query(herkunftDelQuery)
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+    const artDelQuery =
+      artFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : artFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
+    const artsObservable = db
+      .get('art')
+      .query(artDelQuery)
+      .observeWithColumns(['ae_id'])
+    const sammlungDelQuery =
+      sammlungFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : sammlungFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
+    const sammlungsNrCountObservable =
+      showFilter || !exists(row?.nr)
+        ? $of(0)
         : db
             .get('sammlung')
             .query(sammlungDelQuery, Q.where('nr', row.nr))
             .observeCount()
-      const combinedObservables = combineLatest([
-        sammlungsNrCountObservable,
-        personsObservable,
-        herkunftsObservable,
-        artsObservable,
-      ])
-      const subscription = combinedObservables.subscribe(
-        async ([nrCount, persons, herkunfts, arts]) => {
-          if (!showFilter && nrCount > 1) {
-            setError({
-              path: 'sammlung.nr',
-              value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
-            })
-          }
-          let person
-          try {
-            person = await row.person.fetch()
-          } catch {}
-          const personsIncludingChoosen = uniqBy(
-            [...persons, ...(person && !showFilter ? [person] : [])],
-            (e) => e.id,
-          )
-          const personWerte = personsIncludingChoosen
-            .sort(personSort)
-            .map((person) => ({
-              value: person.id,
-              label: personLabelFromPerson({ person }),
-              inaktiv: person.aktiv === false,
-              link: ['Personen', person.id],
-            }))
-          let herkunft
-          try {
-            herkunft = await row.herkunft.fetch()
-          } catch {}
-          const herkunftsIncludingChoosen = uniqBy(
-            [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
-            (e) => e.id,
-          )
-          const herkunftWerte = herkunftsIncludingChoosen
-            .sort(herkunftSort)
-            .map((herkunft) => ({
-              value: herkunft.id,
-              label: herkunftLabelFromHerkunft({ herkunft }),
-              link: ['Herkuenfte', herkunft.id],
-            }))
-          let art
-          try {
-            art = await row.art.fetch()
-          } catch {}
-          const artsIncludingChoosen = uniqBy(
-            [...arts, ...(art && !showFilter ? [art] : [])],
-            (e) => e.id,
-          )
-          const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
-          const artWerte = await Promise.all(
-            artsSorted.map(async (art) => {
-              let label = ''
-              try {
-                label = await art.label.pipe(first$()).toPromise()
-              } catch {}
-
-              return {
-                value: art.id,
-                label,
-                link: ['Arten', art.id],
-              }
-            }),
-          )
-
-          setDataState({
-            personWerte,
-            herkunftWerte,
-            artWerte,
-          })
-        },
-      )
-
-      return () => subscription?.unsubscribe?.()
-    }, [
-      db,
-      filter.art._deleted,
-      filter.herkunft,
-      filter.person._deleted,
-      filter.person.aktiv,
-      filter.sammlung._deleted,
-      row.art,
-      row.herkunft,
-      row.nr,
-      row.person,
-      setError,
-      showFilter,
+    const combinedObservables = combineLatest([
+      sammlungsNrCountObservable,
+      personsObservable,
+      herkunftsObservable,
+      artsObservable,
     ])
-    const { personWerte, herkunftWerte, artWerte } = dataState
+    const subscription = combinedObservables.subscribe(
+      async ([nrCount, persons, herkunfts, arts]) => {
+        if (!showFilter && nrCount > 1) {
+          setError({
+            path: 'sammlung.nr',
+            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
+          })
+        }
+        let person
+        try {
+          person = await row.person.fetch()
+        } catch {}
+        const personsIncludingChoosen = uniqBy(
+          [...persons, ...(person && !showFilter ? [person] : [])],
+          (e) => e.id,
+        )
+        const personWerte = personsIncludingChoosen
+          .sort(personSort)
+          .map((person) => ({
+            value: person.id,
+            label: personLabelFromPerson({ person }),
+            inaktiv: person.aktiv === false,
+            link: ['Personen', person.id],
+          }))
+        let herkunft
+        try {
+          herkunft = await row.herkunft.fetch()
+        } catch {}
+        const herkunftsIncludingChoosen = uniqBy(
+          [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
+          (e) => e.id,
+        )
+        const herkunftWerte = herkunftsIncludingChoosen
+          .sort(herkunftSort)
+          .map((herkunft) => ({
+            value: herkunft.id,
+            label: herkunftLabelFromHerkunft({ herkunft }),
+            link: ['Herkuenfte', herkunft.id],
+          }))
+        let art
+        try {
+          art = await row.art.fetch()
+        } catch {}
+        const artsIncludingChoosen = uniqBy(
+          [...arts, ...(art && !showFilter ? [art] : [])],
+          (e) => e.id,
+        )
+        const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
+        const artWerte = await Promise.all(
+          artsSorted.map(async (art) => {
+            let label = ''
+            try {
+              label = await art.label.pipe(first$()).toPromise()
+            } catch {}
 
-    useEffect(() => {
-      unsetError('sammlung')
-    }, [id, unsetError])
+            return {
+              value: art.id,
+              label,
+              link: ['Arten', art.id],
+            }
+          }),
+        )
 
-    const saveToDb = (event) => {
-      const field = event.target.name
-      let value = ifIsNumericAsNumber(event.target.value)
-      if (event.target.value === undefined) value = null
-      if (event.target.value === '') value = null
+        setDataState({
+          personWerte,
+          herkunftWerte,
+          artWerte,
+        })
+      },
+    )
 
-      if (showFilter) {
-        return filter.setValue({ table: 'sammlung', key: field, value })
-      }
+    return () => subscription?.unsubscribe?.()
+  }, [
+    db,
+    artFilter,
+    herkunftFilter,
+    personFilter,
+    sammlungFilter,
+    row.art,
+    row.herkunft,
+    row.nr,
+    row.person,
+    showFilter,
+  ])
+  const { personWerte, herkunftWerte, artWerte } = dataState
 
-      // only update if value has changed
-      const previousValue = ifIsNumericAsNumber(row[field])
-      if (value === previousValue) return
-      row.edit({ field, value, store })
+  useEffect(() => {
+    unsetError('sammlung')
+  }, [id])
+
+  const saveToDb = (event) => {
+    const field = event.target.name
+    let value = ifIsNumericAsNumber(event.target.value)
+    if (event.target.value === undefined) value = null
+    if (event.target.value === '') value = null
+
+    if (showFilter) {
+      return setFilterValue({ table: 'sammlung', key: field, value })
     }
 
-    const openPlanenDocs = () => {
-      const url = `${constants?.getAppUri()}/Dokumentation/planen`
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+    // only update if value has changed
+    const previousValue = ifIsNumericAsNumber(row[field])
+    if (value === previousValue) return
+    row.edit({ field, value })
+  }
+
+  const openPlanenDocs = () => {
+    const url = `${constants?.getAppUri()}/Dokumentation/planen`
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
+  }
 
-    const openGenVielfaldDocs = () => {
-      const url = `${constants?.getAppUri()}/Dokumentation/genetische-vielfalt`
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
+  const openGenVielfaldDocs = () => {
+    const url = `${constants?.getAppUri()}/Dokumentation/genetische-vielfalt`
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return window.open(url, '_blank', 'toolbar=no')
     }
+    window.open(url)
+  }
 
-    const showDeleted = filter.sammlung._deleted !== false || row?._deleted
+  const showDeleted = sammlungFilter._deleted !== false || row?._deleted
 
-    return (
-      <ErrorBoundary>
-        <div className={artStyles.container}>
-          {(activeConflict || showHistory) && (
-            <h4 className={artStyles.caseConflictTitle}>
-              Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
-            </h4>
-          )}
-          {showDeleted && (
-            <>
-              {showFilter ?
-                <JesNo
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.sammlung?._deleted}
-                />
-              : <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.sammlung?._deleted}
-                />
-              }
-            </>
-          )}
+  return (
+    <ErrorBoundary>
+      <div className={artStyles.container}>
+        {(activeConflict || showHistory) && (
+          <h4 className={artStyles.caseConflictTitle}>
+            Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
+          </h4>
+        )}
+        {showDeleted && (
+          <>
+            {showFilter ? (
+              <JesNo
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.sammlung?._deleted}
+              />
+            ) : (
+              <Checkbox2States
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.sammlung?._deleted}
+              />
+            )}
+          </>
+        )}
+        <TextField
+          key={`${row.id}nr`}
+          name="nr"
+          label="Nr."
+          value={row.nr}
+          saveToDb={saveToDb}
+          error={errors?.sammlung?.nr}
+          type="text"
+        />
+        <Select
+          key={`${row.id}${row.art_id}art_id`}
+          name="art_id"
+          value={row.art_id}
+          field="art_id"
+          label="Art"
+          options={artWerte}
+          saveToDb={saveToDb}
+          error={errors?.sammlung?.art_id}
+        />
+        <Select
+          key={`${row.id}${row.herkunft_id}herkunft_id`}
+          name="herkunft_id"
+          value={row.herkunft_id}
+          field="herkunft_id"
+          label="Herkunft"
+          options={herkunftWerte}
+          saveToDb={saveToDb}
+          error={errors?.sammlung?.herkunft_id}
+        />
+        <Select
+          key={`${row.id}${row.person_id}person_id`}
+          name="person_id"
+          value={row.person_id}
+          field="person_id"
+          label="Person"
+          options={personWerte}
+          saveToDb={saveToDb}
+          error={errors?.sammlung?.person_id}
+        />
+        <Date
+          key={`${row.id}datum`}
+          name="datum"
+          label="Datum"
+          value={row.datum}
+          saveToDb={saveToDb}
+          error={errors?.sammlung?.datum}
+        />
+        <TextField
+          key={`${row.id}anzahl_pflanzen`}
+          name="anzahl_pflanzen"
+          label="Anzahl Pflanzen"
+          value={row.anzahl_pflanzen}
+          saveToDb={saveToDb}
+          error={errors?.sammlung?.anzahl_pflanzen}
+          type="number"
+        />
+        <div className={styles.fieldRow}>
           <TextField
-            key={`${row.id}nr`}
-            name="nr"
-            label="Nr."
-            value={row.nr}
+            key={`${row.id}gramm_samen`}
+            name="gramm_samen"
+            label="Gramm Samen"
+            value={row.gramm_samen}
             saveToDb={saveToDb}
-            error={errors?.sammlung?.nr}
-            type="text"
-          />
-          <Select
-            key={`${row.id}${row.art_id}art_id`}
-            name="art_id"
-            value={row.art_id}
-            field="art_id"
-            label="Art"
-            options={artWerte}
-            saveToDb={saveToDb}
-            error={errors?.sammlung?.art_id}
-          />
-          <Select
-            key={`${row.id}${row.herkunft_id}herkunft_id`}
-            name="herkunft_id"
-            value={row.herkunft_id}
-            field="herkunft_id"
-            label="Herkunft"
-            options={herkunftWerte}
-            saveToDb={saveToDb}
-            error={errors?.sammlung?.herkunft_id}
-          />
-          <Select
-            key={`${row.id}${row.person_id}person_id`}
-            name="person_id"
-            value={row.person_id}
-            field="person_id"
-            label="Person"
-            options={personWerte}
-            saveToDb={saveToDb}
-            error={errors?.sammlung?.person_id}
-          />
-          <Date
-            key={`${row.id}datum`}
-            name="datum"
-            label="Datum"
-            value={row.datum}
-            saveToDb={saveToDb}
-            error={errors?.sammlung?.datum}
-          />
-          <TextField
-            key={`${row.id}anzahl_pflanzen`}
-            name="anzahl_pflanzen"
-            label="Anzahl Pflanzen"
-            value={row.anzahl_pflanzen}
-            saveToDb={saveToDb}
-            error={errors?.sammlung?.anzahl_pflanzen}
+            error={errors?.sammlung?.gramm_samen}
             type="number"
           />
-          <div className={styles.fieldRow}>
-            <TextField
-              key={`${row.id}gramm_samen`}
-              name="gramm_samen"
-              label="Gramm Samen"
-              value={row.gramm_samen}
-              saveToDb={saveToDb}
-              error={errors?.sammlung?.gramm_samen}
-              type="number"
-            />
-            <TextField
-              key={`${row.id}andere_menge`}
-              name="andere_menge"
-              label={`Andere Menge (z.B. "3 Zwiebeln")`}
-              value={row.andere_menge}
-              saveToDb={saveToDb}
-              error={errors?.sammlung?.andere_menge}
-              type="text"
-            />
-          </div>
-          <div className={styles.fieldRow}>
-            <TextField
-              key={`${row.id}von_anzahl_individuen`}
-              name="von_anzahl_individuen"
-              label="von Anzahl Individuen"
-              value={row.von_anzahl_individuen}
-              saveToDb={saveToDb}
-              error={errors?.sammlung?.von_anzahl_individuen}
-              type="number"
-            />
-            <div>
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openGenVielfaldDocs}
-                size="large"
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-            </div>
-          </div>
-          {!showFilter && (
-            <Coordinates
-              row={row}
-              rawRow={rawRow}
-              saveToDb={saveToDb}
-            />
-          )}
-          <div className={styles.fieldRow}>
-            {showFilter ?
-              <JesNo
-                key={`${row.id}geplant`}
-                label="Geplant"
-                name="geplant"
-                value={row.geplant}
-                saveToDb={saveToDb}
-                error={errors?.sammlung?.geplant}
-              />
-            : <Checkbox2States
-                key={`${row.id}geplant`}
-                label="Geplant"
-                name="geplant"
-                value={row.geplant}
-                saveToDb={saveToDb}
-                error={errors?.sammlung?.geplant}
-              />
-            }
-            <div>
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openPlanenDocs}
-                size="large"
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-            </div>
-          </div>
           <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
+            key={`${row.id}andere_menge`}
+            name="andere_menge"
+            label={`Andere Menge (z.B. "3 Zwiebeln")`}
+            value={row.andere_menge}
             saveToDb={saveToDb}
-            error={errors?.sammlung?.bemerkungen}
-            multiLine
+            error={errors?.sammlung?.andere_menge}
+            type="text"
           />
-          {online && !showFilter && row?._conflicts?.map && (
-            <ConflictList
-              conflicts={row._conflicts}
-              activeConflict={activeConflict}
-              setActiveConflict={setActiveConflict}
-            />
-          )}
-          {!showFilter && (
-            <Files
-              parentTable="sammlung"
-              parent={row}
-            />
-          )}
         </div>
-      </ErrorBoundary>
-    )
-  },
-)
+        <div className={styles.fieldRow}>
+          <TextField
+            key={`${row.id}von_anzahl_individuen`}
+            name="von_anzahl_individuen"
+            label="von Anzahl Individuen"
+            value={row.von_anzahl_individuen}
+            saveToDb={saveToDb}
+            error={errors?.sammlung?.von_anzahl_individuen}
+            type="number"
+          />
+          <div>
+            <IconButton
+              aria-label="Anleitung öffnen"
+              title="Anleitung öffnen"
+              onClick={openGenVielfaldDocs}
+              size="large"
+            >
+              <IoMdInformationCircleOutline />
+            </IconButton>
+          </div>
+        </div>
+        {!showFilter && (
+          <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
+        )}
+        <div className={styles.fieldRow}>
+          {showFilter ? (
+            <JesNo
+              key={`${row.id}geplant`}
+              label="Geplant"
+              name="geplant"
+              value={row.geplant}
+              saveToDb={saveToDb}
+              error={errors?.sammlung?.geplant}
+            />
+          ) : (
+            <Checkbox2States
+              key={`${row.id}geplant`}
+              label="Geplant"
+              name="geplant"
+              value={row.geplant}
+              saveToDb={saveToDb}
+              error={errors?.sammlung?.geplant}
+            />
+          )}
+          <div>
+            <IconButton
+              aria-label="Anleitung öffnen"
+              title="Anleitung öffnen"
+              onClick={openPlanenDocs}
+              size="large"
+            >
+              <IoMdInformationCircleOutline />
+            </IconButton>
+          </div>
+        </div>
+        <TextField
+          key={`${row.id}bemerkungen`}
+          name="bemerkungen"
+          label="Bemerkungen"
+          value={row.bemerkungen}
+          saveToDb={saveToDb}
+          error={errors?.sammlung?.bemerkungen}
+          multiLine
+        />
+        {online && !showFilter && row?._conflicts?.map && (
+          <ConflictList
+            conflicts={row._conflicts}
+            activeConflict={activeConflict}
+            setActiveConflict={setActiveConflict}
+          />
+        )}
+        {!showFilter && <Files parentTable="sammlung" parent={row} />}
+      </div>
+    </ErrorBoundary>
+  )
+}

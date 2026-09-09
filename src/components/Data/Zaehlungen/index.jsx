@@ -1,12 +1,20 @@
-import { useContext, useEffect, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  activeNodeArrayAtom,
+  dbAtom,
+  filterZaehlungAtom,
+  kulturIdInActiveNodeArrayAtom,
+  removeOpenNode,
+  setActiveNodeArray,
+} from '../../../store/index.js'
+import { insertZaehlungRev } from '../../../modules/insertRev.js'
 import { FilterTitle } from '../../shared/FilterTitle.jsx'
 import { ZaehlungRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -18,30 +26,31 @@ import { constants } from '../../../utils/constants.js'
 
 import artStyles from '../Arten/index.module.css'
 
-export const Zaehlungen = observer(({ filter: showFilter = false }) => {
-  const store = useContext(MobxStoreContext)
-  const { insertZaehlungRev, kulturIdInActiveNodeArray, db, filter } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-  const { zaehlung: zaehlungFilter } = store.filter
+export const Zaehlungen = ({ filter: showFilter = false }) => {
+  const db = useAtomValue(dbAtom)
+  const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+  const zaehlungFilter = useAtomValue(filterZaehlungAtom)
 
   const [dataState, setDataState] = useState({ zaehlungs: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery =
-      kulturIdInActiveNodeArray ?
-        [
+    const hierarchyQuery = kulturIdInActiveNodeArray
+      ? [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
     const collection = db.get('zaehlung')
     const zaehlungDelQuery =
-      filter.zaehlung._deleted === false ? Q.where('_deleted', false)
-      : filter.zaehlung._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      zaehlungFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : zaehlungFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const countObservable = collection
       .query(zaehlungDelQuery, ...hierarchyQuery)
       .observeCount()
@@ -49,7 +58,6 @@ export const Zaehlungen = observer(({ filter: showFilter = false }) => {
       .query(
         ...tableFilter({
           table: 'zaehlung',
-          store,
         }),
         ...hierarchyQuery,
       )
@@ -68,13 +76,9 @@ export const Zaehlungen = observer(({ filter: showFilter = false }) => {
     return () => subscription?.unsubscribe?.()
   }, [
     db,
-    // need to rerender if any of the values of zaehlungFilter changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(zaehlungFilter),
+    // need to rerun if any of the values of zaehlungFilter changes
     zaehlungFilter,
     kulturIdInActiveNodeArray,
-    store,
-    filter.zaehlung._deleted,
   ])
 
   const { zaehlungs, totalCount } = dataState
@@ -99,21 +103,18 @@ export const Zaehlungen = observer(({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
-        {showFilter ?
+        {showFilter ? (
           <FilterTitle
             title="Zählung"
             table="zaehlung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={artStyles.titleContainer}>
+        ) : (
+          <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Zählungen</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton
-                title={upTitle}
-                onClick={onClickUp}
-                size="large"
-              >
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -130,7 +131,7 @@ export const Zaehlungen = observer(({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        }
+        )}
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
@@ -142,4 +143,4 @@ export const Zaehlungen = observer(({ filter: showFilter = false }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

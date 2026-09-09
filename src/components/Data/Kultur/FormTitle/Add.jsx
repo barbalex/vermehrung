@@ -1,16 +1,11 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import { insertKulturRev } from '../../../../modules/insertRev.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-export const KulturAddButton = observer(({ asMenu }) => {
-  const store = useContext(MobxStoreContext)
-  const { insertKulturRev } = store
-
+export const KulturAddButton = ({ asMenu }) => {
   if (asMenu) {
     return <MenuItem onClick={insertKulturRev}>neue Kultur</MenuItem>
   }
@@ -27,4 +22,4 @@ export const KulturAddButton = observer(({ asMenu }) => {
       </IconButton>
     </ErrorBoundary>
   )
-})
+}

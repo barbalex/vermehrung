@@ -1,12 +1,23 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest } from 'rxjs'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  kulturIdInActiveNodeArrayAtom,
+  personIdInActiveNodeArrayAtom,
+  sammelLieferungIdInActiveNodeArrayAtom,
+  sammlungIdInActiveNodeArrayAtom,
+  filterLieferungAtom,
+  activeNodeArrayAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../store/index.js'
+import { insertLieferungRev } from '../../../modules/insertRev.js'
 import { FilterTitle } from '../../shared/FilterTitle.jsx'
 import { LieferungRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -19,19 +30,18 @@ import { constants } from '../../../utils/constants.js'
 
 import artStyles from '../Arten/index.module.css'
 
-export const Lieferungen = observer(({ filter: showFilter = false }) => {
-  const store = useContext(MobxStoreContext)
-  const {
-    db,
-    insertLieferungRev,
-    kulturIdInActiveNodeArray,
-    personIdInActiveNodeArray,
-    sammelLieferungIdInActiveNodeArray,
-    sammlungIdInActiveNodeArray,
-    filter,
-  } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-  const { lieferung: lieferungFilter } = store.filter
+export const Lieferungen = ({ filter: showFilter = false }) => {
+  const db = useAtomValue(dbAtom)
+  const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
+  const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
+  const sammelLieferungIdInActiveNodeArray = useAtomValue(
+    sammelLieferungIdInActiveNodeArrayAtom,
+  )
+  const sammlungIdInActiveNodeArray = useAtomValue(
+    sammlungIdInActiveNodeArrayAtom,
+  )
+  const lieferungFilter = useAtomValue(filterLieferungAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
   const [dataState, setDataState] = useState({ lieferungs: [], totalCount: 0 })
   useEffect(() => {
@@ -61,13 +71,15 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
     }
     const collection = db.get('lieferung')
     const lieferungDelQuery =
-      filter.lieferung._deleted === false ? Q.where('_deleted', false)
-      : filter.lieferung._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      lieferungFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : lieferungFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const countObservable = collection
       .query(lieferungDelQuery, ...hierarchyQuery)
       .observeCount()
@@ -75,7 +87,6 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
       .query(
         ...tableFilter({
           table: 'lieferung',
-          store,
         }),
         ...hierarchyQuery,
       )
@@ -95,7 +106,6 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
     db,
     // need to rerender if any of the values of lieferungFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(lieferungFilter),
     lieferungFilter,
     kulturIdInActiveNodeArray,
     personIdInActiveNodeArray,
@@ -105,8 +115,6 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
     // need to rerender if last element of activeNodeArray changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     activeNodeArray[activeNodeArray.length - 1],
-    store,
-    filter.lieferung._deleted,
   ])
 
   const { lieferungs, totalCount } = dataState
@@ -175,21 +183,18 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
-        {showFilter ?
+        {showFilter ? (
           <FilterTitle
             title="Lieferung"
             table="lieferung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={artStyles.titleContainer}>
+        ) : (
+          <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Lieferungen</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton
-                title={upTitle}
-                onClick={onClickUp}
-                size="large"
-              >
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
               <IconButton
@@ -206,7 +211,7 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        }
+        )}
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
@@ -218,4 +223,4 @@ export const Lieferungen = observer(({ filter: showFilter = false }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

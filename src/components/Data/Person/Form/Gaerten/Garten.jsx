@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -7,13 +6,10 @@ import MenuItem from '@mui/material/MenuItem'
 import { first as first$ } from 'rxjs/operators'
 
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
 import styles from './Garten.module.css'
 
-export const PersonGarten = observer(({ gv }) => {
-  const store = useContext(MobxStoreContext)
-
+export const PersonGarten = ({ gv }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
@@ -21,7 +17,7 @@ export const PersonGarten = observer(({ gv }) => {
   const onClickDeleteIcon = (event) => setDelMenuAnchorEl(event.currentTarget)
 
   const onClickDelete = () => {
-    gv.delete({ store })
+    gv.delete()
     setDelMenuAnchorEl(null)
   }
 
@@ -77,4 +73,4 @@ export const PersonGarten = observer(({ gv }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

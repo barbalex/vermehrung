@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -7,20 +6,17 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.js'
-import { MobxStoreContext } from '../../../../../mobxStoreContext.js'
 
 import styles from './Person.module.css'
 
-export const Person = observer(({ av }) => {
-  const store = useContext(MobxStoreContext)
-
+export const Person = ({ av }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClose = () => setDelMenuAnchorEl(null)
   const onClickDeleteIcon = (event) => setDelMenuAnchorEl(event.currentTarget)
   const onClickDelete = () => {
-    av.delete({ store })
+    av.delete()
     setDelMenuAnchorEl(null)
   }
 
@@ -70,4 +66,4 @@ export const Person = observer(({ av }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

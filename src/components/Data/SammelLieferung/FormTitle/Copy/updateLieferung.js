@@ -4,6 +4,12 @@ import { v1 as uuidv1 } from 'uuid'
 import { isEqual } from 'es-toolkit'
 
 import { toPgArray } from '../../../../../utils/toPgArray.js'
+import {
+  store as jotaiStore,
+  userAtom,
+  dbAtom,
+  addQueuedQuery,
+} from '../../../../../store/index.js'
 import { exists } from '../../../../../utils/exists.js'
 
 const lieferungRevFields = [
@@ -62,10 +68,10 @@ const lieferungFields = [
 export const updateSammelLieferung = async ({
   lieferung,
   sammelLieferung,
-  store,
   field,
 }) => {
-  const { addQueuedQuery, db, user } = store
+  const user = jotaiStore.get(userAtom)
+  const db = jotaiStore.get(dbAtom)
   console.log('updateLieferung, lieferung:', lieferung)
   // pass field to mark which field should be updated
   // even if it has value null
@@ -103,7 +109,7 @@ export const updateSammelLieferung = async ({
   delete newObject.__typename
   const depth = lfLastVersion._depth + 1
   newObject.changed = DateTime.local().toFormat('yyyy.LL.dd')
-  newObject.changed_by = user.email
+  newObject.changed_by = user?.email
   newObject._parent_rev = lfLastVersion._rev
   newObject._depth = depth
   const rev = `${depth}-${md5(JSON.stringify(newObject))}`
@@ -111,9 +117,8 @@ export const updateSammelLieferung = async ({
   const newObjectForStore = { ...newObject }
   // convert array to string as hasura does not support arrays yet
   // https://github.com/hasura/graphql-engine/pull/2243
-  newObject._revisions =
-    lfLastVersion._revisions ?
-      toPgArray([rev, ...lfLastVersion._revisions])
+  newObject._revisions = lfLastVersion._revisions
+    ? toPgArray([rev, ...lfLastVersion._revisions])
     : toPgArray([rev])
   addQueuedQuery({
     name: 'mutateInsert_lieferung_rev_one',
@@ -129,8 +134,9 @@ export const updateSammelLieferung = async ({
     revertValues: JSON.stringify(newObject),
   })
   // optimistically update store
-  newObjectForStore._revisions =
-    lfLastVersion._revisions ? [rev, ...lfLastVersion._revisions] : [rev]
+  newObjectForStore._revisions = lfLastVersion._revisions
+    ? [rev, ...lfLastVersion._revisions]
+    : [rev]
   newObjectForStore._conflicts = lfLastVersion._conflicts
   newObjectForStore.id = lfLastVersion.id
   delete newObjectForStore.lieferung_id

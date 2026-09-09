@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
@@ -10,7 +10,15 @@ import { FilterTitle } from '../../shared/FilterTitle.jsx'
 import { PersonRow as Row } from './Row.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.jsx'
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import {
+  dbAtom,
+  userAtom,
+  filterPersonAtom,
+  activeNodeArrayAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../store/index.js'
+import { insertPersonRev } from '../../../modules/insertRev.js'
 import UpSvg from '../../../svg/to_up.svg?react'
 import { tableFilter } from '../../../utils/tableFilter.js'
 import { personSort } from '../../../utils/personSort.js'
@@ -18,11 +26,11 @@ import { constants } from '../../../utils/constants.js'
 
 import artStyles from '../Arten/index.module.css'
 
-export const Personen = observer(({ filter: showFilter = false }) => {
-  const store = useContext(MobxStoreContext)
-  const { insertPersonRev, db, user, filter } = store
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-  const { person: personFilter } = store.filter
+export const Personen = ({ filter: showFilter = false }) => {
+  const db = useAtomValue(dbAtom)
+  const user = useAtomValue(userAtom)
+  const personFilter = useAtomValue(filterPersonAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
   const [dataState, setDataState] = useState({
     persons: [],
@@ -32,26 +40,30 @@ export const Personen = observer(({ filter: showFilter = false }) => {
   useEffect(() => {
     const collection = db.get('person')
     const personDelQuery =
-      filter.person._deleted === false ? Q.where('_deleted', false)
-      : filter.person._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+      personFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : personFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
     const personAktivQuery =
-      filter.person.aktiv === false ? Q.where('aktiv', false)
-      : filter.person.aktiv === true ? Q.where('aktiv', true)
-      : Q.or(
-          Q.where('aktiv', false),
-          Q.where('aktiv', true),
-          Q.where('aktiv', null),
-        )
+      personFilter.aktiv === false
+        ? Q.where('aktiv', false)
+        : personFilter.aktiv === true
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
     const countObservable = collection
       .query(personDelQuery, personAktivQuery)
       .observeCount()
     const dataObservable = collection
-      .query(...tableFilter({ table: 'person', store }))
+      .query(...tableFilter({ table: 'person' }))
       .observeWithColumns(['vorname', 'name'])
     const userRoleObservable = db
       .get('user_role')
@@ -75,7 +87,7 @@ export const Personen = observer(({ filter: showFilter = false }) => {
     return () => subscription?.unsubscribe?.()
     // need to rerender if any of the values of personFilter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db, ...Object.values(personFilter), personFilter, store])
+  }, [db, personFilter])
 
   const { persons, totalCount, userRole } = dataState
   const filteredCount = persons.length
@@ -96,21 +108,18 @@ export const Personen = observer(({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
       >
-        {showFilter ?
+        {showFilter ? (
           <FilterTitle
             title="Person"
             table="person"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        : <div className={artStyles.titleContainer}>
+        ) : (
+          <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Personen</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton
-                title={upTitle}
-                onClick={onClickUp}
-                size="large"
-              >
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
                 <UpSvg />
               </IconButton>
               {userRole?.name === 'manager' && (
@@ -129,7 +138,7 @@ export const Personen = observer(({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        }
+        )}
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}
@@ -141,4 +150,4 @@ export const Personen = observer(({ filter: showFilter = false }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

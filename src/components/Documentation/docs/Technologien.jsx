@@ -8,11 +8,7 @@ export const Technologien = () => (
     <p className={dokuStyles.dokuDate}>03.09.2020</p>
     <ul>
       <li>
-        <a
-          href="https://www.postgresql.org"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href="https://www.postgresql.org" target="_blank" rel="noreferrer">
           PostgreSQL
         </a>{' '}
         als Datenbank
@@ -42,29 +38,21 @@ export const Technologien = () => (
           GraphQL
         </a>{' '}
         als Daten-Schnittstelle, in Form von{' '}
-        <a
-          href="https://hasura.io"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href="https://hasura.io" target="_blank" rel="noreferrer">
           Hasura
         </a>
       </li>
       <li>
-        <a
-          href="https://mobx.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          MobX
+        <a href="https://jotai.org/" target="_blank" rel="noreferrer">
+          Jotai
         </a>
         ,{' '}
         <a
-          href="https://github.com/mobxjs/mobx-state-tree"
+          href="https://jotai.org/docs/extensions/effect"
           target="_blank"
           rel="noreferrer"
         >
-          MobX-State-Tree
+          jotai-effect
         </a>{' '}
         für app-seitigen &quot;Status&quot; und offline-fähige Warteschlangen
         für Operationen
@@ -80,11 +68,7 @@ export const Technologien = () => (
         für die Benutzeroberfläche
       </li>
       <li>
-        <a
-          href="https://vitejs.dev/"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href="https://vitejs.dev/" target="_blank" rel="noreferrer">
           Vite
         </a>{' '}
         als Entwicklungs-Umgebung

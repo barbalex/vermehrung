@@ -1,9 +1,13 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
 import IconButton from '@mui/material/IconButton'
 import { of as $of } from 'rxjs'
 
-import { MobxStoreContext } from '../../../../mobxStoreContext.js'
+import {
+  activeNodeArrayAtom,
+  removeOpenNode,
+  setActiveNodeArray,
+  store,
+} from '../../../../store/index.js'
 import ZaDownSvg from '../../../../svg/to_za_down.svg?react'
 import AnLiDownSvg from '../../../../svg/to_anli_down.svg?react'
 import AusLiDownSvg from '../../../../svg/to_ausli_down.svg?react'
@@ -11,36 +15,35 @@ import EvDownSvg from '../../../../svg/to_ev_down.svg?react'
 import TkDownSvg from '../../../../svg/to_tk_down.svg?react'
 import UpSvg from '../../../../svg/to_up.svg?react'
 
-export const KulturNavButtons = observer(({ row }) => {
-  const store = useContext(MobxStoreContext)
-  const { activeNodeArray, setActiveNodeArray, removeOpenNode } = store.tree
-
+export const KulturNavButtons = ({ row }) => {
   const onClickToKulturen = () => {
+    const activeNodeArray = store.get(activeNodeArrayAtom)
     removeOpenNode(activeNodeArray)
     setActiveNodeArray(activeNodeArray.slice(0, -1))
   }
 
   const onClickToZaehlungen = () =>
-    setActiveNodeArray([...activeNodeArray, 'Zaehlungen'])
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Zaehlungen'])
 
   const onClickToAnLieferungen = () =>
-    setActiveNodeArray([...activeNodeArray, 'An-Lieferungen'])
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), 'An-Lieferungen'])
 
   const onClickToAusLieferungen = () =>
-    setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen'])
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Aus-Lieferungen'])
 
   const onClickToEvents = () =>
-    setActiveNodeArray([...activeNodeArray, 'Events'])
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Events'])
 
   const onClickToTks = () =>
-    setActiveNodeArray([...activeNodeArray, 'Teilkulturen'])
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Teilkulturen'])
 
   const [dataState, setDataState] = useState({ kulturOption: undefined })
   const { kulturOption } = dataState
 
   useEffect(() => {
-    const kOObservable =
-      row.kultur_option ? row.kultur_option.observe() : $of({})
+    const kOObservable = row.kultur_option
+      ? row.kultur_option.observe()
+      : $of({})
     const subscription = kOObservable.subscribe((kulturOption) =>
       setDataState({ kulturOption }),
     )
@@ -87,13 +90,9 @@ export const KulturNavButtons = observer(({ row }) => {
       >
         <AusLiDownSvg />
       </IconButton>
-      <IconButton
-        title="Zu den Events"
-        onClick={onClickToEvents}
-        size="large"
-      >
+      <IconButton title="Zu den Events" onClick={onClickToEvents} size="large">
         <EvDownSvg />
       </IconButton>
     </>
   )
-})
+}

@@ -1,34 +1,3 @@
-import { types } from 'mobx-state-tree'
-
-export const type = types.model({
-  id: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  kultur_id: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  teilkultur_id: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  person_id: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  beschreibung: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  geplant: types.optional(types.maybeNull(types.boolean), null),
-  datum: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  _deleted: types.optional(types.maybeNull(types.boolean), false),
-})
-
 export const initial = {
   id: null,
   kultur_id: null,

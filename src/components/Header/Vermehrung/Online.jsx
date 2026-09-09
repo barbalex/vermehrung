@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import Badge from '@mui/material/Badge'
 import {
@@ -6,10 +6,9 @@ import {
   MdCloudOff as NetworkOff,
 } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 import { useLocation, useNavigate } from 'react-router'
 
-import { MobxStoreContext } from '../../../mobxStoreContext.js'
+import { onlineAtom, queueSizeAtom } from '../../../store/index.js'
 
 // keep this use of styled
 const StyledBadge = styled(Badge)`
@@ -18,17 +17,17 @@ const StyledBadge = styled(Badge)`
   }
 `
 
-export const Online = observer(() => {
-  const store = useContext(MobxStoreContext)
-  const { online, queuedQueries } = store
+export const Online = () => {
+  const online = useAtomValue(onlineAtom)
+  const queueSize = useAtomValue(queueSizeAtom)
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  const title =
-    online ? 'Sie sind online'
-    : queuedQueries.size ?
-      `Sie sind offline. ${queuedQueries.size} wartende Operationen`
-    : `Sie sind offline`
+  const title = online
+    ? 'Sie sind online'
+    : queueSize
+      ? `Sie sind offline. ${queueSize} wartende Operationen`
+      : `Sie sind offline`
 
   // TODO:
   // 1. add menu to link to info
@@ -49,15 +48,9 @@ export const Online = observer(() => {
       title={title}
       onClick={onClick}
     >
-      <StyledBadge
-        color="primary"
-        badgeContent={queuedQueries.size}
-        max={999}
-      >
-        {online ?
-          <NetworkOn />
-        : <NetworkOff />}
+      <StyledBadge color="primary" badgeContent={queueSize} max={999}>
+        {online ? <NetworkOn /> : <NetworkOff />}
       </StyledBadge>
     </IconButton>
   )
-})
+}
