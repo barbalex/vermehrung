@@ -83,7 +83,7 @@ export const TeilzaehlungForm = ({
       async ([teilkulturs, kulturOption, teilzaehlung]) => {
         let teilkultur
         try {
-          teilkultur = await row.teilkultur.fetch()
+          teilkultur = await row?.teilkultur.fetch()
         } catch {}
         const teilkultursIncludingChoosen = uniqBy(
           [...teilkulturs, ...(teilkultur ? [teilkultur] : [])],
