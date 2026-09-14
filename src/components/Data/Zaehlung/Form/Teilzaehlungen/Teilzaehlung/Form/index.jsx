@@ -81,10 +81,16 @@ export const TeilzaehlungForm = ({
     ])
     const subscription = combinedObservables.subscribe(
       async ([teilkulturs, kulturOption, teilzaehlung]) => {
+        // use the emitted teilzaehlung, not row from the closure:
+        // row is undefined until the first emission and reading it here
+        // makes the react compiler evaluate row.teilkultur during render
+        const teilkulturRelation = teilzaehlung?.teilkultur
         let teilkultur
-        try {
-          teilkultur = await row?.teilkultur.fetch()
-        } catch {}
+        if (teilkulturRelation) {
+          try {
+            teilkultur = await teilkulturRelation.fetch()
+          } catch {}
+        }
         const teilkultursIncludingChoosen = uniqBy(
           [...teilkulturs, ...(teilkultur ? [teilkultur] : [])],
           (e) => e.id,
@@ -101,15 +107,7 @@ export const TeilzaehlungForm = ({
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [
-    db,
-    teilkulturFilter,
-    id,
-    kulturId,
-    row?.teilkultur,
-    row?.teilkultur_id,
-    initialDataQueried,
-  ])
+  }, [db, teilkulturFilter, id, kulturId, initialDataQueried])
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -164,6 +162,11 @@ export const TeilzaehlungForm = ({
 
   const showDeleted = row?._deleted || teilzaehlungFilter._deleted !== false
 
+  // guard before row-dependent computations: row is undefined until the
+  // first db emission and the react compiler evaluates row-property
+  // dependencies during render
+  if (!row || !Object.keys(row ?? {})) return null
+
   const anzahl_jungpflanzen =
     exists(row?.anzahl_pflanzen) &&
     exists(row?.anzahl_auspflanzbereit) &&
@@ -172,8 +175,6 @@ export const TeilzaehlungForm = ({
         row?.anzahl_auspflanzbereit -
         row?.anzahl_mutterpflanzen
       : null
-
-  if (!row || !Object.keys(row ?? {})) return null
 
   return (
     <ErrorBoundary>
