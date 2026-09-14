@@ -107,6 +107,7 @@
   },
   "dev-comments": {
     "none": "right now",
-    "react-contextmenu": "2.14.0: has upstream dependency conflicts but is archived. Copied es6 code from dist folder into utils"
+    "react-contextmenu": "2.14.0: has upstream dependency conflicts but is archived. Copied es6 code from dist folder into utils",
+    "typescript": "6.0.3: stay until typescript-eslint supports TS 7.1's new API (typescript-eslint#10940); TS 7.0 lacks a programmatic API and breaks our eslint setup. tsconfig already prepared (esModuleInterop deprecation removed 9/2026)"
   }
 }
