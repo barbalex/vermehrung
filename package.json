@@ -42,7 +42,7 @@
     "graphql-tag": "2.12.7",
     "graphql-ws": "6.2.1",
     "is-uuid": "1.0.2",
-    "jotai": "2.20.2",
+    "jotai": "3.0.0",
     "jotai-effect": "2.4.1",
     "localforage": "1.10.0",
     "luxon": "3.7.2",
