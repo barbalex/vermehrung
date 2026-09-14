@@ -165,7 +165,7 @@ export const TeilzaehlungForm = ({
   // guard before row-dependent computations: row is undefined until the
   // first db emission and the react compiler evaluates row-property
   // dependencies during render
-  if (!row || !Object.keys(row ?? {})) return null
+  if (!row || !Object.keys(row ?? {}).length) return null
 
   const anzahl_jungpflanzen =
     exists(row?.anzahl_pflanzen) &&

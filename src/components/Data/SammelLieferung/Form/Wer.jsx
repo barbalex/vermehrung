@@ -101,7 +101,7 @@ export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
     initialDataQueried,
   ])
 
-  if (!row || !Object.keys(row ?? {})) return null
+  if (!row || !Object.keys(row ?? {}).length) return null
 
   return (
     <>

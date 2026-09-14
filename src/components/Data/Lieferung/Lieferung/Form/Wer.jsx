@@ -118,7 +118,7 @@ export const LieferungWer = ({
     showFilter,
   ])
 
-  if (!row || !Object.keys(row ?? {})) return null
+  if (!row || !Object.keys(row ?? {}).length) return null
 
   return (
     <>

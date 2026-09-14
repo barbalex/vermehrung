@@ -62,7 +62,7 @@ export const Person = ({
   const [showHistory, setShowHistory] = useState(false)
   const historyTakeoverCallback = () => setShowHistory(null)
 
-  if (!row || !Object.keys(row ?? {})) return <Spinner />
+  if (!row || !Object.keys(row ?? {}).length) return <Spinner />
   if (!showFilter && filterShow) return null
 
   const paneIsSplit = online && (activeConflict || showHistory)
