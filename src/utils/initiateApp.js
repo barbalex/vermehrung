@@ -3,12 +3,12 @@ import { persistedExchange } from '@urql/exchange-persisted'
 import { createClient as createWsClient } from 'graphql-ws'
 
 import { constants } from './constants.js'
+import { fetchWithTimeout } from './fetchWithTimeout.js'
 import {
   setGqlClient,
   setGqlWsClient,
   setShortTermOnline,
 } from '../store/index.js'
-import { getAuthToken } from './getAuthToken.js'
 import { recreatePersistedStore } from './recreatePersistedStore.js'
 
 const noToken =
@@ -16,7 +16,6 @@ const noToken =
 const getToken = () => window.localStorage.getItem('token') ?? noToken
 
 export const initiateApp = async () => {
-  let token
   // enable gracefull restart: https://github.com/enisdenjo/graphql-ws#graceful-restart
   const createRestartableClient = (options) => {
     let restartRequested = false
@@ -48,11 +47,12 @@ export const initiateApp = async () => {
             restart()
           }
         },
-        closed: () => {
-          console.log('ws client disconnected')
-          //setShortTermOnline(false)
-          //incrementWsReconnectCount()
-          window.location.reload(true)
+        closed: (event) => {
+          // just log: an abandoned lazy socket closes routinely after
+          // re-subscribing elsewhere. Reacting here (re-subscribe/reload)
+          // creates a close/resubscribe churn loop.
+          // Real failures surface on the subscription sinks
+          console.log('ws client disconnected', event?.code)
         },
         connected: () => {
           // console.log('ws client connected')
@@ -67,26 +67,21 @@ export const initiateApp = async () => {
     }
   }
 
-  const gqlWsClient = (() => {
-    token = getToken()
-
-    return createRestartableClient({
-      url: constants?.getGraphQlWsUri(),
-      connectionParams: {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+  const gqlWsClient = createRestartableClient({
+    url: constants?.getGraphQlWsUri(),
+    // must be a function so graphql-ws evaluates it per connection attempt:
+    // the token at boot is often stale (expired) or missing (logged out)
+    // while getAuthToken stores a fresh one before subscriptions connect
+    connectionParams: () => ({
+      headers: {
+        authorization: `Bearer ${getToken()}`,
       },
-      onNonLazyError: async (error) => {
-        console.log('gqlWsClient connectionCallback error:', error)
-        if (error.toLowerCase().includes('jwt')) {
-          await getAuthToken()
-          token = getToken()
-          window.location.reload(true)
-        }
-      },
-    })
-  })()
+    }),
+    onNonLazyError: (error) => {
+      // client is lazy: this only fires in non-lazy mode. Just log.
+      console.log('gqlWsClient connectionCallback error:', error)
+    },
+  })
   setGqlWsClient(gqlWsClient)
   // need to renew header any time
   // solutions:
@@ -94,6 +89,7 @@ export const initiateApp = async () => {
 
   const gqlClient = createClient({
     url: constants?.getGraphQlUri(),
+    fetch: (url, options) => fetchWithTimeout(url, options, 15000),
     exchanges: [
       // seems this is only needed if the backend does not support get queries
       // see: https://github.com/urql-graphql/urql/pull/3789

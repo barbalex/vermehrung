@@ -34,7 +34,19 @@ const persistedAtoms = []
 
 const persistedAtom = (key, initialValue) => {
   const baseAtom = atom(initialValue)
-  persistedAtoms.push({ key: `vermehrung:${key}`, baseAtom })
+  const entry = {
+    key: `vermehrung:${key}`,
+    baseAtom,
+    hydrated: false,
+    dirty: false,
+  }
+  // writes that happen before hydration completes must win over the
+  // persisted value: e.g. activeNodeArray is set from the url during boot
+  // and must not be clobbered by the older persisted value arriving late
+  store.sub(baseAtom, () => {
+    if (!entry.hydrated) entry.dirty = true
+  })
+  persistedAtoms.push(entry)
   return baseAtom
 }
 
@@ -42,15 +54,21 @@ export const hydratePersistedAtoms = async () => {
   // hydrate in parallel and never let a slow/blocked storage
   // keep the app from booting
   await Promise.all(
-    persistedAtoms.map(async ({ key, baseAtom }) => {
+    persistedAtoms.map(async (entry) => {
+      const { key, baseAtom } = entry
       try {
         const stored = await localForage.getItem(key)
-        if (stored !== null && stored !== undefined) {
+        if (!entry.dirty && stored !== null && stored !== undefined) {
           store.set(baseAtom, stored)
         }
       } catch (error) {
         console.error(`hydratePersistedAtoms failed for ${key}:`, error)
       }
+      // hydration is done for this atom: from now on writes are normal
+      // state changes (persisted by the subscription below), no longer
+      // reasons to skip hydration
+      entry.hydrated = true
+      entry.dirty = false
       // subscribe after hydration so the initial value is not written back
       store.sub(baseAtom, () => {
         localForage.setItem(key, store.get(baseAtom)).catch((error) => {

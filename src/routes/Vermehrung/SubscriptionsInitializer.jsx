@@ -19,11 +19,7 @@ export const SubscriptionsInitializer = () => {
   const wsReconnectCount = useAtomValue(wsReconnectCountAtom)
 
   useEffect(() => {
-    // console.log('vermehrung, subscription effect', {
-    //   authorizing,
-    //   userUid: user?.uid,
-    //   gqlClient,
-    // })
+    let isActive = true
     let unsubscribe
     if (!!user?.uid && !authorizing) {
       // need to fetch user to get role
@@ -32,37 +28,40 @@ export const SubscriptionsInitializer = () => {
       // would be much nicer if hasura simply passed null values
       // https://github.com/hasura/graphql-engine/issues/6541
       // inherited roles not working as they can not be added to existing users
-      // console.log('vermehrung, subscription effect, fetch user role')
-      gqlClient
-        .query(
-          gql`
-            query userRoleQuery($uid: String!) {
-              person(where: { account_id: { _eq: $uid } }) {
-                id
-                person_user_role {
-                  id
-                  name
+      // urql requests are neither retried nor timed out by default:
+      // a single stalled request would hang the boot forever. Retry!
+      const getUserRole = async () => {
+        while (isActive) {
+          try {
+            const { data, error } = await gqlClient.query(
+              gql`
+                query userRoleQuery($uid: String!) {
+                  person(where: { account_id: { _eq: $uid } }) {
+                    id
+                    person_user_role {
+                      id
+                      name
+                    }
+                  }
                 }
-              }
-            }
-          `,
-          { uid: user.uid },
-        )
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        .then(({ data, error }) => {
-          if (error) {
-            console.log('error getting user role:', error)
+              `,
+              { uid: user.uid },
+            )
+            if (error) throw error
+            return data?.person?.[0]?.person_user_role?.name
+          } catch (error) {
+            console.log('error getting user role, retrying:', error)
+            await new Promise((resolve) => setTimeout(resolve, 5000))
           }
-          // error not caught > user will get too much data
-          // console.log('got user role, initializing subscriptions, data:', data)
-          const userRole = data?.person?.[0]?.person_user_role?.name
-          unsubscribe = initializeSubscriptions({ userRole })
-        })
-        .catch((error) => {
-          console.log('error caught getting user role:', error)
-        })
+        }
+      }
+      getUserRole().then((userRole) => {
+        if (!isActive) return
+        unsubscribe = initializeSubscriptions({ userRole })
+      })
     }
     return function cleanup() {
+      isActive = false
       if (unsubscribe && Object.values(unsubscribe)) {
         Object.values(unsubscribe).forEach((value) => value?.unsubscribe?.())
       }

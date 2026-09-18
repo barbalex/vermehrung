@@ -1,11 +1,32 @@
 import { processSubscriptionResult } from './processSubscriptionResult.js'
 import { removeOrtsangaben } from './removeOrtsangaben.js'
+import { getAuthToken } from './getAuthToken.js'
 import {
+  store,
   dbAtom,
   gqlWsClientAtom,
   lastUpdatedAtom,
   incrementWsReconnectCount,
 } from '../store/index.js'
+
+// a failing subscription must provoke re-subscription, otherwise the initial
+// queries never complete and all forms wait forever.
+// throttled: errors often arrive in bursts
+let lastResubscribeAt = 0
+const onSubscriptionError = (table) => async (error) => {
+  console.log(`subscribe on table ${table}, onError:`, error)
+  const message = String(error?.message ?? error)
+  if (message.toLowerCase().includes('jwt')) {
+    // stale token: refresh it, then let SubscriptionsInitializer
+    // re-subscribe (it watches authorizing and wsReconnectCount)
+    await getAuthToken()
+    incrementWsReconnectCount()
+    return
+  }
+  if (Date.now() - lastResubscribeAt < 5000) return
+  lastResubscribeAt = Date.now()
+  setTimeout(() => incrementWsReconnectCount(), 3000)
+}
 
 export const initializeSubscriptions = ({ userRole }) => {
   const isNoGaertner = userRole !== 'gaertner'
@@ -72,14 +93,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'ae_art',
         })
       },
-      error: (error) => {
-        // if error.message contains JWT, do what?
-        // re-subscribe
-        console.log('subscribeAeArt, onError:', error)
-        // signOut()
-        // need to retry
-        setTimeout(() => incrementWsReconnectCount(), 3000)
-      },
+      error: onSubscriptionError('ae_art'),
       complete: () => console.log('resolved ae_art'),
     },
   )
@@ -114,7 +128,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'art',
         })
       },
-      error: (error) => console.log('subscribeArt, onError:', error),
+      error: onSubscriptionError('art'),
       complete: () => console.log('resolved art'),
     },
   )
@@ -144,7 +158,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'art_file',
         })
       },
-      error: (error) => console.log('subscribeArtFile, onError:', error),
+      error: onSubscriptionError('art_file'),
       complete: () => console.log('resolved art_file'),
     },
   )
@@ -179,7 +193,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'art_qk',
         })
       },
-      error: (error) => console.log('subscribeArtQk, onError:', error),
+      error: onSubscriptionError('art_qk'),
       complete: () => console.log('resolved art_qk'),
     },
   )
@@ -212,7 +226,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'av',
         })
       },
-      error: (error) => console.log('subscribeAv, onError:', error),
+      error: onSubscriptionError('av'),
       complete: () => console.log('resolved av'),
     },
   )
@@ -249,7 +263,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'event',
         })
       },
-      error: (error) => console.log('subscribeEvent, onError:', error),
+      error: onSubscriptionError('event'),
       complete: () => console.log('resolved event'),
     },
   )
@@ -292,7 +306,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'garten',
         })
       },
-      error: (error) => console.log('subscribeGarten, onError:', error),
+      error: onSubscriptionError('garten'),
       complete: () => console.log('resolved garten'),
     },
   )
@@ -322,7 +336,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'garten_file',
         })
       },
-      error: (error) => console.log('subscribeGartenFile, onError:', error),
+      error: onSubscriptionError('garten_file'),
       complete: () => console.log('resolved garten_file'),
     },
   )
@@ -355,7 +369,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'gv',
         })
       },
-      error: (error) => console.log('subscribeGv, onError:', error),
+      error: onSubscriptionError('gv'),
       complete: () => console.log('resolved gv'),
     },
   )
@@ -398,7 +412,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'herkunft',
         })
       },
-      error: (error) => console.log('subscribeHerkunft, onError:', error),
+      error: onSubscriptionError('herkunft'),
       complete: () => console.log('resolved herkunft'),
     },
   )
@@ -428,7 +442,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'herkunft_file',
         })
       },
-      error: (error) => console.log('subscribeHerkunftFile, onError:', error),
+      error: onSubscriptionError('herkunft_file'),
       complete: () => console.log('resolved herkunft_file'),
     },
   )
@@ -467,7 +481,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'kultur',
         })
       },
-      error: (error) => console.log('subscribeKultur, onError:', error),
+      error: onSubscriptionError('kultur'),
       complete: () => console.log('resolved kultur'),
     },
   )
@@ -497,7 +511,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'kultur_file',
         })
       },
-      error: (error) => console.log('subscribeKulturFile, onError:', error),
+      error: onSubscriptionError('kultur_file'),
       complete: () => console.log('resolved kultur_file'),
     },
   )
@@ -537,7 +551,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'kultur_option',
         })
       },
-      error: (error) => console.log('subscribeKulturOption, onError:', error),
+      error: onSubscriptionError('kultur_option'),
       complete: () => console.log('resolved kultur_option'),
     },
   )
@@ -572,7 +586,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'kultur_qk',
         })
       },
-      error: (error) => console.log('subscribeKulturQk, onError:', error),
+      error: onSubscriptionError('kultur_qk'),
       complete: () => console.log('resolved kultur_qk'),
     },
   )
@@ -618,7 +632,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'lieferung',
         })
       },
-      error: (error) => console.log('subscribeLieferung, onError:', error),
+      error: onSubscriptionError('lieferung'),
       complete: () => console.log('resolved lieferung'),
     },
   )
@@ -648,7 +662,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'lieferung_file',
         })
       },
-      error: (error) => console.log('subscribeLieferungFile, onError:', error),
+      error: onSubscriptionError('lieferung_file'),
       complete: () => console.log('resolved lieferung_file'),
     },
   )
@@ -697,7 +711,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'person',
         })
       },
-      error: (error) => console.log('subscribePerson, onError:', error),
+      error: onSubscriptionError('person'),
       complete: () => console.log('resolved person'),
     },
   )
@@ -727,7 +741,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'person_file',
         })
       },
-      error: (error) => console.log('subscribePersonFile, onError:', error),
+      error: onSubscriptionError('person_file'),
       complete: () => console.log('resolved person_file'),
     },
   )
@@ -781,7 +795,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'person_option',
         })
       },
-      error: (error) => console.log('subscribePersonOption, onError:', error),
+      error: onSubscriptionError('person_option'),
       complete: () => console.log('resolved person_option'),
     },
   )
@@ -824,8 +838,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'sammel_lieferung',
         })
       },
-      error: (error) =>
-        console.log('subscribeSammelLieferung, onError:', error),
+      error: onSubscriptionError('sammel_lieferung'),
       complete: () => console.log('resolved sammel_lieferung'),
     },
   )
@@ -872,7 +885,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'sammlung',
         })
       },
-      error: (error) => console.log('subscribeSammlung, onError:', error),
+      error: onSubscriptionError('sammlung'),
       complete: () => console.log('resolved sammlung'),
     },
   )
@@ -902,7 +915,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'sammlung_file',
         })
       },
-      error: (error) => console.log('subscribeSammlungFile, onError:', error),
+      error: onSubscriptionError('sammlung_file'),
       complete: () => console.log('resolved sammlung_file'),
     },
   )
@@ -939,7 +952,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'teilkultur',
         })
       },
-      error: (error) => console.log('subscribeTeilkultur, onError:', error),
+      error: onSubscriptionError('teilkultur'),
       complete: () => console.log('resolved teilkultur'),
     },
   )
@@ -978,7 +991,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'teilzaehlung',
         })
       },
-      error: (error) => console.log('subscribeTeilzaehlung, onError:', error),
+      error: onSubscriptionError('teilzaehlung'),
       complete: () => console.log('resolved teilzaehlung'),
     },
   )
@@ -1006,7 +1019,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'user_role',
         })
       },
-      error: (error) => console.log('subscribeUserRole, onError:', error),
+      error: onSubscriptionError('user_role'),
       complete: () => console.log('resolved user_role'),
     },
   )
@@ -1041,7 +1054,7 @@ export const initializeSubscriptions = ({ userRole }) => {
           table: 'zaehlung',
         })
       },
-      error: (error) => console.log('subscribeZaehlung, onError:', error),
+      error: onSubscriptionError('zaehlung'),
       complete: () => console.log('resolved zaehlung'),
     },
   )
