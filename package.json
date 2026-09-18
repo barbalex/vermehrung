@@ -64,7 +64,7 @@
     "recharts": "3.10.1",
     "redaxios": "0.5.1",
     "rxjs": "7.8.2",
-    "slick-carousel": "1.8.1",
+    "slick-carousel": "2.0.0",
     "uploadcare-widget": "3.24.0",
     "urql": "5.0.4",
     "use-debounce": "10.1.1",
