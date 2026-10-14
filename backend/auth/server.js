@@ -3,7 +3,9 @@
 
 const Hapi = require('@hapi/hapi')
 // see: https://firebase.google.com/docs/auth/admin/manage-users
-const admin = require('firebase-admin')
+// since firebase-admin v14 the modules are imported separately
+const { initializeApp, cert } = require('firebase-admin/app')
+const { getAuth } = require('firebase-admin/auth')
 const postgres = require('postgres')
 
 const serviceAccount = require('./config.js')
@@ -20,8 +22,8 @@ let firebaseInitializationError = null
 // Initialize the Firebase admin SDK with your service account credentials
 if (serviceAccount) {
   try {
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
+    initializeApp({
+      credential: cert(serviceAccount),
     })
   } catch (e) {
     firebaseInitializationError = e
@@ -59,7 +61,7 @@ async function start() {
 
       let user
       try {
-        user = await admin.auth().createUser({
+        user = await getAuth().createUser({
           email,
           password: 'initial-passwort-bitte-aendern',
         })
@@ -71,7 +73,7 @@ async function start() {
         const code = error.errorInfo.code
         if (code === 'auth/email-already-exists') {
           // Somehow the uid did not arrive in vermehrung.ch. Re-query this users uid
-          const existingUser = await admin.auth().getUserByEmail(email)
+          const existingUser = await getAuth().getUserByEmail(email)
           console.log(`returning uid of the existing user:`, existingUser.uid)
           return h.response(existingUser.uid).code(200)
         }
@@ -106,7 +108,7 @@ async function start() {
       }
 
       try {
-        await admin.auth().deleteUser(uid)
+        await getAuth().deleteUser(uid)
       } catch (error) {
         return h
           .response(`firebase deleteUser error: ${error.message}`)
@@ -169,8 +171,7 @@ async function start() {
             },
           }
 
-          return admin
-            .auth()
+          return getAuth()
             .setCustomUserClaims(uid, hasuraVariables)
             .then(() => {
               return h.response('user role and id set').code(200)
