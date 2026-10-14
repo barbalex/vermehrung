@@ -72,7 +72,7 @@ services:
         condition: service_healthy
         restart: true
       graphql:
-        condition: service_healthy
+        condition: service_started
         restart: true
     restart: always
     ports:
