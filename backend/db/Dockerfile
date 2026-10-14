@@ -1,10 +1,13 @@
 # https://registry.hub.docker.com/r/postgis/postgis/tags
-# on server is: 14-3.5
-# TODO: 
-# update live servers by creating a new server using current backup, 
-# then pointing api.apflora.ch to the new server's IP on vercel, 
-# then recreating backups on the new server, and finally deleting the old server.
+# 2026.10.14: live server still runs 14-3.5
+# new production server will run 18-3.6
 FROM postgis/postgis:18-3.6
+
+# init db from vermehrung.backup (only runs when no db detected)
+COPY ./init/ /docker-entrypoint-initdb.d/
+COPY ./vermehrung.backup /sik_data/vermehrung.backup
+
+RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
 
 # for using cron, see https://www.cloudsavvyit.com/9033/how-to-use-cron-with-your-docker-containers/
 
