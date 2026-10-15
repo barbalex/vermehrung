@@ -17,7 +17,6 @@ export const ZaehlungFormTitleChooser = ({
   rawRow,
   showFilter,
   showHistory,
-  setShowHistory,
 }) => {
   const db = useAtomValue(dbAtom)
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
@@ -88,7 +87,6 @@ export const ZaehlungFormTitleChooser = ({
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}
-      setShowHistory={setShowHistory}
     />
   )
 }

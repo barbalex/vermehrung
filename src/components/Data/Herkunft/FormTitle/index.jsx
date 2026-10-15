@@ -17,7 +17,6 @@ export const HerkunftFormTitleChooser = ({
   rawRow,
   showFilter,
   showHistory,
-  setShowHistory,
   activeConflict,
 }) => {
   const db = useAtomValue(dbAtom)
@@ -91,7 +90,6 @@ export const HerkunftFormTitleChooser = ({
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}
-      setShowHistory={setShowHistory}
       activeConflict={activeConflict}
     />
   )

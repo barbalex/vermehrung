@@ -19,7 +19,6 @@ export const SammlungFormTitleChooser = ({
   rawRow,
   showFilter,
   showHistory,
-  setShowHistory,
 }) => {
   const db = useAtomValue(dbAtom)
   const herkunftIdInActiveNodeArray = useAtomValue(
@@ -106,7 +105,6 @@ export const SammlungFormTitleChooser = ({
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}
-      setShowHistory={setShowHistory}
     />
   )
 }

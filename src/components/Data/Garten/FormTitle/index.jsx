@@ -12,13 +12,7 @@ import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { GartenFormTitle as FormTitle } from './FormTitle.jsx'
 import { tableFilter } from '../../../../utils/tableFilter.js'
 
-export const GartenFormTitle = ({
-  showFilter,
-  row,
-  rawRow,
-  showHistory,
-  setShowHistory,
-}) => {
+export const GartenFormTitle = ({ showFilter, row, rawRow, showHistory }) => {
   const db = useAtomValue(dbAtom)
   const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
   const gartenFilter = useAtomValue(filterGartenAtom)
@@ -97,7 +91,6 @@ export const GartenFormTitle = ({
       row={row}
       rawRow={rawRow}
       showHistory={showHistory}
-      setShowHistory={setShowHistory}
       totalCount={totalCount}
       filteredCount={filteredCount}
     />

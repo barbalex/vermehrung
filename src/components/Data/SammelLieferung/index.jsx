@@ -4,12 +4,16 @@ import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
 import {
+  activeNodeArrayAtom,
   dbAtom,
+  filterSammelLieferungAtom,
+  filterShowAtom,
+  getNavigate,
+  historyRevAtom,
+  initialDataQueriedAtom,
   isPrintAtom,
   onlineAtom,
-  filterShowAtom,
-  filterSammelLieferungAtom,
-  initialDataQueriedAtom,
+  store,
 } from '../../../store/index.js'
 import { Lieferschein } from './Lieferschein/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -60,8 +64,12 @@ export const SammelLieferung = ({
   // because during printing page Vermehrung re-renders without tree
   const [printPreview, setPrintPreview] = useState(isPrint && !printPreview)
 
-  const [showHistory, setShowHistory] = useState(false)
-  const historyTakeoverCallback = () => setShowHistory(null)
+  // history is url-driven: the url ends with '/histories/<rev>'
+  // which is not part of activeNodeArray
+  const historyRev = useAtomValue(historyRevAtom)
+  const showHistory = historyRev !== undefined
+  const historyTakeoverCallback = () =>
+    getNavigate()?.(`/Vermehrung/${store.get(activeNodeArrayAtom).join('/')}`)
 
   if (!row || !Object.keys(row)?.length) return <Spinner />
   if (!showFilter && filterShow) return null
@@ -81,7 +89,6 @@ export const SammelLieferung = ({
           printPreview={printPreview}
           setPrintPreview={setPrintPreview}
           showHistory={showHistory}
-          setShowHistory={setShowHistory}
         />
         {printPreview ? (
           <Lieferschein row={row} />

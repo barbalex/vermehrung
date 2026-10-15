@@ -18,7 +18,6 @@ export const KulturFormTitleChooser = ({
   rawRow,
   showFilter,
   showHistory,
-  setShowHistory,
 }) => {
   const db = useAtomValue(dbAtom)
   const gartenIdInActiveNodeArray = useAtomValue(gartenIdInActiveNodeArrayAtom)
@@ -107,7 +106,6 @@ export const KulturFormTitleChooser = ({
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}
-      setShowHistory={setShowHistory}
     />
   )
 }

@@ -12,13 +12,7 @@ import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { EventFormTitle as FormTitle } from './FormTitle.jsx'
 import { tableFilter } from '../../../../utils/tableFilter.js'
 
-export const EventFormTitle = ({
-  row,
-  rawRow,
-  showFilter,
-  showHistory,
-  setShowHistory,
-}) => {
+export const EventFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
   const db = useAtomValue(dbAtom)
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
   const eventFilter = useAtomValue(filterEventAtom)
@@ -88,7 +82,6 @@ export const EventFormTitle = ({
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}
-      setShowHistory={setShowHistory}
     />
   )
 }

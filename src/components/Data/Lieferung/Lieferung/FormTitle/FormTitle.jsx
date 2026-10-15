@@ -24,7 +24,6 @@ export const LieferungFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
-  setShowHistory,
 }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
@@ -65,7 +64,6 @@ export const LieferungFormTitle = ({
               table="lieferung"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
               asMenu
             />
             <Settings asMenu />
@@ -82,7 +80,6 @@ export const LieferungFormTitle = ({
               table="lieferung"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
             />
             <Settings />
             <Anleitung />

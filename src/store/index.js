@@ -227,6 +227,16 @@ export const setLastActiveNodeArray = (val) => {
   store.set(lastActiveNodeArrayAtom, val)
 }
 
+// === history in url ===
+// rev of the history revision in the url suffix '/histories/<rev>'
+// of the active form's url
+// the suffix is deliberately NOT part of activeNodeArray
+// because that is read positionally in many places
+// undefined: no history in url
+// true: '/histories' without rev
+export const historyRevAtom = atom(undefined)
+export const setHistoryRev = (val) => store.set(historyRevAtom, val)
+
 export const setWidthInPercentOfScreen = (val) => {
   store.set(widthInPercentOfScreenAtom, val)
 }

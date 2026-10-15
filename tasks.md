@@ -5,7 +5,3 @@ at http://localhost:5175/Vermehrung/Arten/c17e7fd0-b613-11ea-b3de-0242ac130004/S
 2026.10.14: 194.233.161.99 > 139.162.172.14
 
 ---
-
-login: correct as in apf2
-
-later same for ps?

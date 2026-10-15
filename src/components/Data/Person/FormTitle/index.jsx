@@ -13,7 +13,6 @@ export const PersonFormTitleChooser = ({
   row,
   rawRow,
   showHistory,
-  setShowHistory,
 }) => {
   const db = useAtomValue(dbAtom)
   const personFilter = useAtomValue(filterPersonAtom)
@@ -86,7 +85,6 @@ export const PersonFormTitleChooser = ({
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}
-      setShowHistory={setShowHistory}
     />
   )
 }

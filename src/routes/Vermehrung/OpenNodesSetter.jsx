@@ -3,12 +3,15 @@ import { useLocation } from 'react-router'
 
 import { setLastActiveNodeArray, setOpenNodes } from '../../store/index.js'
 import { getActiveNodeArrayFromPathname } from '../../utils/getActiveNodeArrayFromPathname.js'
+import { splitHistoriesFromActiveNodeArray } from '../../utils/splitHistoriesFromActiveNodeArray.js'
 import { openNodesFromActiveNodeArray } from '../../utils/openNodesFromActiveNodeArray.js'
 
 export const OpenNodesSetter = () => {
   const { pathname } = useLocation()
 
-  const activeNodeArray = getActiveNodeArrayFromPathname(pathname)
+  const { activeNodeArray } = splitHistoriesFromActiveNodeArray(
+    getActiveNodeArrayFromPathname(pathname),
+  )
 
   // on first render set openNodes
   // DO NOT add activeNodeArray to useEffet's dependency array or

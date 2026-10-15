@@ -5,12 +5,14 @@ import { useLocation, useNavigate } from 'react-router'
 
 import {
   activeNodeArrayAtom,
+  setHistoryRev,
   setNavigate,
   setActiveNodeArray,
   setLastActiveNodeArray,
   addOpenNode,
 } from '../store/index.js'
 import { getActiveNodeArrayFromPathname } from '../utils/getActiveNodeArrayFromPathname.js'
+import { splitHistoriesFromActiveNodeArray } from '../utils/splitHistoriesFromActiveNodeArray.js'
 
 // syncs activeNodeArray with browser navigation
 export const NavigationSyncController = () => {
@@ -30,7 +32,10 @@ export const NavigationSyncController = () => {
   // when user clicks back or foward button, need to set lastActiveNodeArray
   useEffect(() => {
     window.onpopstate = () => {
-      setLastActiveNodeArray(getActiveNodeArrayFromPathname(pathname))
+      const urlWithHistory = getActiveNodeArrayFromPathname(pathname)
+      const { activeNodeArray } =
+        splitHistoriesFromActiveNodeArray(urlWithHistory)
+      setLastActiveNodeArray(activeNodeArray)
     }
     // do not need to remove, see: https://stackoverflow.com/a/47997544/712005
   }, [pathname])
@@ -39,10 +44,15 @@ export const NavigationSyncController = () => {
   useEffect(() => {
     if (pathname.startsWith('/Dokumentation')) return
 
-    const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname(pathname)
+    const urlWithHistory = getActiveNodeArrayFromPathname(pathname)
+    const { activeNodeArray: activeNodeArrayFromUrl, historyRev } =
+      splitHistoriesFromActiveNodeArray(urlWithHistory)
+    setHistoryRev(historyRev)
 
     if (!isEqual(activeNodeArrayFromUrl, aNA)) {
-      setActiveNodeArray(activeNodeArrayFromUrl)
+      // when the url contains a histories suffix, do not navigate:
+      // navigating from the stripped activeNodeArray would remove it
+      setActiveNodeArray(activeNodeArrayFromUrl, !!historyRev)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])

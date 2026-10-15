@@ -24,7 +24,6 @@ export const SammlungFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
-  setShowHistory,
 }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
@@ -81,7 +80,6 @@ export const SammlungFormTitle = ({
               table="sammlung"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
               asMenu
             />
             <Anleitung asMenu />
@@ -97,7 +95,6 @@ export const SammlungFormTitle = ({
               table="sammlung"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
             />
             <Anleitung />
             <FilterNumbers

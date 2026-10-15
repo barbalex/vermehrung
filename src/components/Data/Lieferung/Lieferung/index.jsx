@@ -2,7 +2,14 @@ import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { Allotment } from 'allotment'
 
-import { onlineAtom, filterShowAtom } from '../../../../store/index.js'
+import {
+  activeNodeArrayAtom,
+  filterShowAtom,
+  getNavigate,
+  historyRevAtom,
+  onlineAtom,
+  store,
+} from '../../../../store/index.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { LieferungConflict as Conflict } from './Conflict.jsx'
@@ -26,8 +33,12 @@ export const Lieferung = ({ id, showFilter, row, rawRow }) => {
     setActiveConflict(null)
   }, [id])
 
-  const [showHistory, setShowHistory] = useState(false)
-  const historyTakeoverCallback = () => setShowHistory(null)
+  // history is url-driven: the url ends with '/histories/<rev>'
+  // which is not part of activeNodeArray
+  const historyRev = useAtomValue(historyRevAtom)
+  const showHistory = historyRev !== undefined
+  const historyTakeoverCallback = () =>
+    getNavigate()?.(`/Vermehrung/${store.get(activeNodeArrayAtom).join('/')}`)
 
   if (!row) return <Spinner />
   if (!showFilter && filterShow) return null
@@ -45,7 +56,6 @@ export const Lieferung = ({ id, showFilter, row, rawRow }) => {
           rawRow={rawRow}
           showFilter={showFilter}
           showHistory={showHistory}
-          setShowHistory={setShowHistory}
         />
         <div className={artStyles.splitPaneContainer}>
           <Allotment key={`${activeConflict}/${showHistory}`}>

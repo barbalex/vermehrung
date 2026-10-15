@@ -19,7 +19,6 @@ export const PersonFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
-  setShowHistory,
 }) => {
   const user = useAtomValue(userAtom)
   const db = useAtomValue(dbAtom)
@@ -58,7 +57,6 @@ export const PersonFormTitle = ({
               table="person"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
               asMenu
             />
             <KontoMenu row={row} asMenu />
@@ -74,7 +72,6 @@ export const PersonFormTitle = ({
               table="person"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
             />
             <KontoMenu row={row} />
             <FilterNumbers

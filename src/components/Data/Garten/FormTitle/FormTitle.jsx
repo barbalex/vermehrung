@@ -23,7 +23,6 @@ export const GartenFormTitle = ({
   row,
   rawRow,
   showHistory,
-  setShowHistory,
   totalCount,
   filteredCount,
 }) => {
@@ -63,7 +62,6 @@ export const GartenFormTitle = ({
               table="garten"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
               asMenu
             />
             <Settings asMenu />
@@ -79,7 +77,6 @@ export const GartenFormTitle = ({
               table="garten"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
             />
             <Settings />
             <FilterNumbers

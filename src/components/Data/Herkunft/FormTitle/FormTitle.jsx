@@ -24,7 +24,6 @@ export const HerkunftFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
-  setShowHistory,
   activeConflict,
 }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
@@ -74,7 +73,6 @@ export const HerkunftFormTitle = ({
               table="herkunft"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
               asMenu
             />
             <Anleitung asMenu />
@@ -91,7 +89,6 @@ export const HerkunftFormTitle = ({
               table="herkunft"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
             />
             <Anleitung />
             <Settings />

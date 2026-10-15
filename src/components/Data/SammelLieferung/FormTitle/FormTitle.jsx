@@ -32,7 +32,6 @@ export const SammelLieferungFormTitle = ({
   printPreview,
   setPrintPreview,
   showHistory,
-  setShowHistory,
 }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
@@ -89,7 +88,6 @@ export const SammelLieferungFormTitle = ({
                 table="sammel_lieferung"
                 id={row.id}
                 showHistory={showHistory}
-                setShowHistory={setShowHistory}
                 asMenu
               />
               {row.id && <Settings asMenu />}
@@ -112,7 +110,6 @@ export const SammelLieferungFormTitle = ({
                   table="sammel_lieferung"
                   id={row.id}
                   showHistory={showHistory}
-                  setShowHistory={setShowHistory}
                   asMenu
                 />
                 {row.id && <Settings asMenu />}
@@ -136,7 +133,6 @@ export const SammelLieferungFormTitle = ({
                 table="sammel_lieferung"
                 id={row.id}
                 showHistory={showHistory}
-                setShowHistory={setShowHistory}
               />
               <>
                 <Menu white={false}>
@@ -158,7 +154,6 @@ export const SammelLieferungFormTitle = ({
                 table="sammel_lieferung"
                 id={row.id}
                 showHistory={showHistory}
-                setShowHistory={setShowHistory}
               />
               {row.id && <Settings />}
               <>
@@ -180,7 +175,6 @@ export const SammelLieferungFormTitle = ({
                 table="sammel_lieferung"
                 id={row.id}
                 showHistory={showHistory}
-                setShowHistory={setShowHistory}
               />
               {row.id && <Settings />}
               <Anleitung />

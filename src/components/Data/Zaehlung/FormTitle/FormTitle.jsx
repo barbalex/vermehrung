@@ -23,7 +23,6 @@ export const ZaehlungFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
-  setShowHistory,
 }) => {
   const { width, ref } = useResizeDetector()
 
@@ -48,7 +47,6 @@ export const ZaehlungFormTitle = ({
               table="zaehlung"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
               asMenu
             />
             {row.kultur_id && <Settings kulturId={row.kultur_id} asMenu />}
@@ -65,7 +63,6 @@ export const ZaehlungFormTitle = ({
               table="zaehlung"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
             />
             {row.kultur_id && <Settings kulturId={row.kultur_id} />}
             <Anleitung />

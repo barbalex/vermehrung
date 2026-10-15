@@ -21,7 +21,6 @@ export const LieferungTitleChooser = ({
   rawRow,
   showFilter,
   showHistory,
-  setShowHistory,
 }) => {
   const db = useAtomValue(dbAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
@@ -145,7 +144,6 @@ export const LieferungTitleChooser = ({
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}
-      setShowHistory={setShowHistory}
     />
   )
 }

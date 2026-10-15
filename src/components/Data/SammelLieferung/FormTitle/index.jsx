@@ -20,7 +20,6 @@ export const SammelLieferungFormTitleChooser = ({
   setPrintPreview,
   showFilter,
   showHistory,
-  setShowHistory,
 }) => {
   const db = useAtomValue(dbAtom)
   const sammelLieferungFilter = useAtomValue(filterSammelLieferungAtom)
@@ -91,7 +90,6 @@ export const SammelLieferungFormTitleChooser = ({
       printPreview={printPreview}
       setPrintPreview={setPrintPreview}
       showHistory={showHistory}
-      setShowHistory={setShowHistory}
     />
   )
 }

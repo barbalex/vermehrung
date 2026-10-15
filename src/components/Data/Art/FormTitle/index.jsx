@@ -8,13 +8,7 @@ import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { FormTitle } from './FormTitle.jsx'
 import { tableFilter } from '../../../../utils/tableFilter.js'
 
-export const ArtFormTitle = ({
-  row,
-  rawRow,
-  showFilter,
-  showHistory,
-  setShowHistory,
-}) => {
+export const ArtFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
   const db = useAtomValue(dbAtom)
   const artFilter = useAtomValue(filterArtAtom)
 
@@ -74,7 +68,6 @@ export const ArtFormTitle = ({
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}
-      setShowHistory={setShowHistory}
     />
   )
 }

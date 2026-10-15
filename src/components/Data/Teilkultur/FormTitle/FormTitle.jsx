@@ -23,7 +23,6 @@ export const TeilkulturFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
-  setShowHistory,
 }) => {
   const { width, ref } = useResizeDetector()
 
@@ -48,7 +47,6 @@ export const TeilkulturFormTitle = ({
               table="teilkultur"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
               asMenu
             />
             <Settings kulturId={row.kultur_id} asMenu />
@@ -65,7 +63,6 @@ export const TeilkulturFormTitle = ({
               table="teilkultur"
               id={row.id}
               showHistory={showHistory}
-              setShowHistory={setShowHistory}
             />
             <Settings kulturId={row.kultur_id} />
             <Anleitung />

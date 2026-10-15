@@ -4,11 +4,15 @@ import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
 import {
+  activeNodeArrayAtom,
   dbAtom,
   filterHerkunftAtom,
   filterShowAtom,
+  getNavigate,
+  historyRevAtom,
   initialDataQueriedAtom,
   onlineAtom,
+  store,
 } from '../../../store/index.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
@@ -51,8 +55,12 @@ export const Herkunft = ({
     setActiveConflict(null)
   }, [id])
 
-  const [showHistory, setShowHistory] = useState(false)
-  const historyTakeoverCallback = () => setShowHistory(null)
+  // history is url-driven: the url ends with '/histories/<rev>'
+  // which is not part of activeNodeArray
+  const historyRev = useAtomValue(historyRevAtom)
+  const showHistory = historyRev !== undefined
+  const historyTakeoverCallback = () =>
+    getNavigate()?.(`/Vermehrung/${store.get(activeNodeArrayAtom).join('/')}`)
 
   if (!row || !Object.keys(row ?? {}).length) return <Spinner />
   if (!showFilter && filterShow) return null
@@ -69,7 +77,6 @@ export const Herkunft = ({
           row={row}
           showFilter={showFilter}
           showHistory={showHistory}
-          setShowHistory={setShowHistory}
           activeConflict={activeConflict}
         />
         <div className={artStyles.splitPaneContainer}>
