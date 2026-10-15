@@ -55,15 +55,15 @@ export const GartenHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   }
 
   if (error) {
-    return <div className={styles.errorContainer}>{error.message}</div>
+    return <div className={artStyles.errorContainer}>{error.message}</div>
   }
 
   return (
-    <div className={styles.container}>
+    <div className={artStyles.container}>
       <Slider {...sliderSettings}>
         {revRows.map((r) => (
           <Row
-            key={row._rev}
+            key={r._rev}
             revRow={r}
             row={row}
             rawRow={rawRow}

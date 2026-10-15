@@ -73,7 +73,7 @@ export const PersonHistory = ({ row, rawRow, historyTakeoverCallback }) => {
       <Slider {...sliderSettings}>
         {revRows.map((r) => (
           <Row
-            key={row._rev}
+            key={r._rev}
             revRow={r}
             row={row}
             rawRow={rawRow}
