@@ -23,7 +23,7 @@
   "dependencies": {
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
-    "@mui/material": "9.4.0",
+    "@mui/material": "9.5.0",
     "@nozbe/watermelondb": "0.28.0",
     "@urql/exchange-persisted": "5.0.1",
     "allotment": "1.20.5",
@@ -65,10 +65,10 @@
     "redaxios": "0.5.1",
     "rxjs": "7.8.2",
     "slick-carousel": "2.0.0",
-    "uploadcare-widget": "3.24.0",
+    "uploadcare-widget": "3.25.3",
     "urql": "5.0.4",
     "use-debounce": "10.1.1",
-    "uuid": "14.0.2"
+    "uuid": "14.0.3"
   },
   "devDependencies": {
     "@babel/eslint-parser": "8.0.7",
@@ -95,11 +95,11 @@
     "eslint-plugin-react-refresh": "0.5.7",
     "firebase-tools": "15.29.0",
     "globals": "17.13.0",
-    "prettier": "3.9.9",
+    "prettier": "3.9.10",
     "prismjs": "1.30.0",
     "tslint-config-prettier": "1.18.0",
     "typescript": "6.0.3",
-    "vite": "8.3.1",
+    "vite": "8.3.4",
     "vite-plugin-pwa": "2.0.0",
     "vite-plugin-svgr": "5.2.0",
     "vitest": "5.0.0",
