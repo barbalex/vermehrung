@@ -26,6 +26,7 @@ import {
 import { TreeSettings as Settings } from './Settings.jsx'
 import { ApFilterContainer } from './ApFilter.jsx'
 import { TreeList as List } from './List.jsx'
+import { TreeContextMenu } from './TreeContextMenu.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { tableFilter } from '../../utils/tableFilter.js'
 import { notDeletedQuery } from '../../utils/notDeletedQuery.js'
@@ -225,6 +226,7 @@ export const Tree = () => {
             />
           )}
         />
+        <TreeContextMenu />
       </div>
     </ErrorBoundary>
   )

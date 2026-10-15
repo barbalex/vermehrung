@@ -1,0 +1,63 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+  padding: 5px 0;
+  /* no idea why this is needed (was in the global styles before) */
+  margin-top: -70px;
+  font-size: 14px;
+  text-align: left;
+  background-color: rgb(66, 66, 66);
+  background-clip: padding-box;
+  border: 1px solid grey;
+  border-radius: 0.25rem;
+  outline: none;
+  color: white;
+  z-index: 1000;
+  font-family: system-ui;
+  transition: opacity 250ms ease;
+}
+
+.title {
+  color: #b3b3b3;
+  padding-left: 10px;
+  padding-right: 15px;
+  padding-bottom: 3px;
+}
+
+.title::after {
+  content: ':';
+}
+
+.subtitle {
+  color: #b3b3b3;
+  padding-left: 10px;
+  padding-right: 15px;
+  padding-bottom: 3px;
+  padding-top: 7px;
+}
+
+.subtitle::after {
+  content: ':';
+}
+
+.item {
+  display: inline-block;
+  padding: 3px 20px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: white;
+  text-align: inherit;
+  white-space: nowrap;
+  background: 0 0;
+  border: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.item:hover,
+.itemSelected {
+  color: #f57c00;
+  border-color: #0275d8;
+  text-decoration: none;
+}
