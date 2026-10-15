@@ -99,10 +99,16 @@ export const Login = () => {
   const [resetTitle, setResetTitle] = useState('neues Passwort setzen')
   const reset = async () => {
     const firebaseAuth = store.get(firebaseAuthAtom)
-    if (!email) setEmailErrorText('Bitte Email-Adresse eingeben')
+    // need to fetch value from ref
+    // why? password-managers enter values but do not blur/change
+    const emailToUse = email || emailInput.current.value
+    if (!emailToUse) {
+      setEmailErrorText('Bitte Email-Adresse eingeben')
+      return
+    }
     setResetTitle('...')
     try {
-      await sendPasswordResetEmail(firebaseAuth, email, {
+      await sendPasswordResetEmail(firebaseAuth, emailToUse, {
         url: `${constants?.getAppUri()}/Vermehrung`,
         handleCodeInApp: true,
       })
@@ -111,6 +117,7 @@ export const Login = () => {
       setTimeout(() => {
         setResetTitle('neues Passwort setzen')
       }, 5000)
+      return
     }
     setResetTitle('Email ist unterwegs!')
     setTimeout(() => {
@@ -179,15 +186,13 @@ export const Login = () => {
             </FormControl>
           </div>
           <DialogActions>
-            {!!email && (
-              <Button
-                onClick={reset}
-                color="inherit"
-                className={styles.resetButton}
-              >
-                {resetTitle}
-              </Button>
-            )}
+            <Button
+              onClick={reset}
+              color="inherit"
+              className={styles.resetButton}
+            >
+              {resetTitle}
+            </Button>
             <Button color="primary" onClick={fetchLogin}>
               anmelden
             </Button>
