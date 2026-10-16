@@ -1,6 +1,6 @@
 services:
   db:
-    image: db
+    image: vermehrung-db-dev
     build:
       context: ./db
     networks:

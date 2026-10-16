@@ -1,6 +1,6 @@
 services:
   db:
-    image: db
+    image: vermehrung-db
     build:
       context: ./db
     # specify container name to make it easier to run commands.
