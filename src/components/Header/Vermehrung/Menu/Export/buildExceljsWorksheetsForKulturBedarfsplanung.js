@@ -6,6 +6,7 @@ import { first as first$ } from 'rxjs/operators'
 
 import { addWorksheetToExceljsWorkbook } from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
 import { exists } from '../../../../../utils/exists.js'
+import { bedarfSort } from '../../../../../utils/bedarfSort.js'
 import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFromKulturs.js'
 import { zaehlungSort } from '../../../../../utils/zaehlungSort.js'
 import { lieferungSort } from '../../../../../utils/lieferungSort.js'
@@ -80,6 +81,41 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             )
             .fetch()) ?? []
       } catch {}
+
+      let bedarfe = []
+      try {
+        bedarfe =
+          (await db
+            .get('bedarf')
+            .query(
+              Q.where('_deleted', false),
+              Q.where('kultur_id', kultur.id),
+            )
+            .fetch()) ?? []
+      } catch {}
+      const bedarfeSorted = bedarfe.sort(bedarfSort)
+      const currentYear = new Date().getFullYear()
+      // multiple bedarf entries per year are possible: join them
+      const valuesByYear = (year, field) =>
+        bedarfeSorted
+          .filter((b) => b.jahr === year && exists(b[field]))
+          .map((b) => b[field])
+          .join('; ')
+      const bedarf_vorjahr = valuesByYear(currentYear - 1, 'beschreibung')
+      const bedarf_aktuelles_jahr = valuesByYear(
+        currentYear,
+        'beschreibung',
+      )
+      const bedarf_naechstes_jahr = valuesByYear(
+        currentYear + 1,
+        'beschreibung',
+      )
+      const bemerkungen_av = valuesByYear(currentYear, 'bemerkungen')
+      const neues_material_aktuelles_jahr = valuesByYear(
+        currentYear,
+        'neues_material',
+      )
+
       const ownZaehlungenSorted = ownZaehlungen.sort(zaehlungSort)
       const lastZaehlung = ownZaehlungenSorted[0]
       let lZTeilzaehlungs = []
@@ -282,7 +318,6 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         letzte_zaehlung_datum: lastZaehlung
           ? format(new Date(lastZaehlung.datum), 'yyyy.MM.dd')
           : '',
-        letzte_zaehlung_bedarf: lastZaehlung?.prognose ?? '',
         letzte_zaehlung_bemerkungen: lastZaehlung?.bemerkungen ?? '',
         letzte_zaehlung_anzahl_pflanzen: anzahl_pflanzen,
         letzte_zaehlung_anzahl_auspflanzbereit: anzahl_auspflanzbereit,
@@ -348,6 +383,11 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
           if (exists(l.andere_menge)) mengen.push(l.andere_menge)
           return `${format(new Date(l.datum), 'yyyy.MM.dd')}: ${mengen.join(', ')}`
         }).join('; '),
+        bedarf_vorjahr,
+        bedarf_aktuelles_jahr,
+        bedarf_naechstes_jahr,
+        bemerkungen_av,
+        neues_material_aktuelles_jahr,
       }
 
       return row
