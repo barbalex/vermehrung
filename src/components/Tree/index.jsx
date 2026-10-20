@@ -27,6 +27,7 @@ import { TreeSettings as Settings } from './Settings.jsx'
 import { ApFilterContainer } from './ApFilter.jsx'
 import { TreeList as List } from './List.jsx'
 import { TreeContextMenu } from './TreeContextMenu.jsx'
+import { ApFilterWarning } from './ApFilterWarning.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { tableFilter } from '../../utils/tableFilter.js'
 import { notDeletedQuery } from '../../utils/notDeletedQuery.js'
@@ -215,16 +216,19 @@ export const Tree = () => {
       <div className={`tree-root ${styles.container}`}>
         <ApFilterContainer />
         <Settings />
-        <AutoSizer
-          renderProp={({ height, width }) => (
-            <List
-              nodes={nodes}
-              width={width}
-              height={height}
-              userRole={userRole}
-            />
-          )}
-        />
+        <ApFilterWarning />
+        <div className={styles.listContainer}>
+          <AutoSizer
+            renderProp={({ height, width }) => (
+              <List
+                nodes={nodes}
+                width={width}
+                height={height}
+                userRole={userRole}
+              />
+            )}
+          />
+        </div>
         <TreeContextMenu />
       </div>
     </ErrorBoundary>

@@ -41,7 +41,6 @@ import {
   apFilterAtom,
   openNodesAtom,
   activeNodeArrayAtom,
-  removeOpenNodeWithChildren,
 } from '../../../store/index.js'
 import { buildHerkunftFolder } from './herkunft/folder.js'
 import { buildHerkunft } from './herkunft/index.js'
@@ -299,11 +298,6 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
         const artId = artNode[1]
         const art = artsSorted.find((a) => a.id === artId)
         if (!art) break
-        if (apFilter && !art.apflora_ap) {
-          // remove from openNodes
-          removeOpenNodeWithChildren(artNode)
-          break
-        }
 
         const artIndex = artNodes.findIndex((a) => a.id === artId)
 
