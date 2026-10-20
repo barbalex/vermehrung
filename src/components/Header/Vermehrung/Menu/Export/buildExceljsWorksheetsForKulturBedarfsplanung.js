@@ -254,18 +254,15 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
           : ''
 
       const row = {
-        id: kultur.id,
         label: kulturLabel,
         artname,
         set: art?.set,
         mitarbeitende: avsLabels.sort().join(', '),
         apflora_artverantwortlich: art?.apflora_av,
         aktionsplan_art: art?.apflora_ap,
-        herkunft_id: kultur.herkunft_id,
         herkunft_nr: herkunft?.nr ?? '',
         herkunft_gemeinde: herkunft?.gemeinde ?? '',
         herkunft_lokalname: herkunft?.lokalname ?? '',
-        garten_id: kultur.garten_id,
         garten_label,
         zwischenlager: kultur.zwischenlager,
         erhaltungskultur: kultur.erhaltungskultur,
