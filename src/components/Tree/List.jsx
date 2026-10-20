@@ -38,6 +38,13 @@ export const TreeList = ({
   useEffect(() => {
     if (!hasScrolledRef.current && nodeIndex > -1) {
       hasScrolledRef.current = true
+      // when loading on a url, nodes are built after this list has mounted:
+      // scroll the focused node into view as soon as it exists.
+      // center: rows have dynamic heights, so the position is only estimated
+      listRef.current?.scrollToIndex({
+        index: nodeIndex,
+        align: 'center',
+      })
     }
   }, [nodeIndex])
 
