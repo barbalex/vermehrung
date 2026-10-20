@@ -6,9 +6,6 @@ export const activeFormFromActiveNodeArray = (url) => {
   if (url.length === 1 && url[0] === 'Arten') {
     return 'arten'
   }
-  if (url.length === 1 && url[0] === 'Events') {
-    return 'events'
-  }
   if (url.length === 1 && url[0] === 'Gaerten') {
     return 'gaerten'
   }
@@ -61,9 +58,6 @@ export const activeFormFromActiveNodeArray = (url) => {
   if (url.length === 2 && url[0] === 'Zaehlungen') {
     return 'zaehlung'
   }
-  if (url.length === 2 && url[0] === 'Events') {
-    return 'event'
-  }
   if (url.length === 2 && url[0] === 'Personen') {
     return 'person'
   }
@@ -106,8 +100,8 @@ export const activeFormFromActiveNodeArray = (url) => {
   if (url.length === 3 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
     return 'sammlungen'
   }
-  if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Events') {
-    return 'events'
+  if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Bedarf') {
+    return 'bedarfe'
   }
   if (
     url.length === 3 &&
@@ -190,8 +184,8 @@ export const activeFormFromActiveNodeArray = (url) => {
   ) {
     return 'lieferung'
   }
-  if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Events') {
-    return 'event'
+  if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Bedarf') {
+    return 'bedarf'
   }
   if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Teilkulturen') {
     return 'teilkultur'
@@ -220,9 +214,9 @@ export const activeFormFromActiveNodeArray = (url) => {
     url.length === 5 &&
     url[0] === 'Arten' &&
     url[2] === 'Kulturen' &&
-    url[4] === 'Events'
+    url[4] === 'Bedarf'
   ) {
-    return 'events'
+    return 'bedarfe'
   }
   if (
     url.length === 5 &&
@@ -255,9 +249,9 @@ export const activeFormFromActiveNodeArray = (url) => {
     url.length === 5 &&
     url[0] === 'Gaerten' &&
     url[2] === 'Kulturen' &&
-    url[4] === 'Events'
+    url[4] === 'Bedarf'
   ) {
-    return 'events'
+    return 'bedarfe'
   }
   if (
     url.length === 5 &&
@@ -362,9 +356,9 @@ export const activeFormFromActiveNodeArray = (url) => {
     url.length === 6 &&
     url[0] === 'Arten' &&
     url[2] === 'Kulturen' &&
-    url[4] === 'Events'
+    url[4] === 'Bedarf'
   ) {
-    return 'event'
+    return 'bedarf'
   }
   if (
     url.length === 6 &&
@@ -394,9 +388,9 @@ export const activeFormFromActiveNodeArray = (url) => {
     url.length === 6 &&
     url[0] === 'Gaerten' &&
     url[2] === 'Kulturen' &&
-    url[4] === 'Events'
+    url[4] === 'Bedarf'
   ) {
-    return 'event'
+    return 'bedarf'
   }
   if (
     url.length === 6 &&
@@ -481,18 +475,18 @@ export const activeFormFromActiveNodeArray = (url) => {
     url[0] === 'Arten' &&
     url[2] === 'Herkuenfte' &&
     url[4] === 'Kulturen' &&
-    url[6] === 'Events'
+    url[6] === 'Bedarf'
   ) {
-    return 'events'
+    return 'bedarfe'
   }
   if (
     url.length === 7 &&
     url[0] === 'Sammlungen' &&
     url[2] === 'Aus-Lieferungen' &&
     url[4] === 'Kulturen' &&
-    url[6] === 'Events'
+    url[6] === 'Bedarf'
   ) {
-    return 'events'
+    return 'bedarfe'
   }
   if (
     url.length === 7 &&
@@ -526,9 +520,9 @@ export const activeFormFromActiveNodeArray = (url) => {
     url[0] === 'Personen' &&
     url[2] === 'Gaerten' &&
     url[4] === 'Kulturen' &&
-    url[6] === 'Events'
+    url[6] === 'Bedarf'
   ) {
-    return 'events'
+    return 'bedarfe'
   }
   if (
     url.length === 7 &&
@@ -616,9 +610,9 @@ export const activeFormFromActiveNodeArray = (url) => {
     url[0] === 'Arten' &&
     url[2] === 'Herkuenfte' &&
     url[4] === 'Kulturen' &&
-    url[6] === 'Events'
+    url[6] === 'Bedarf'
   ) {
-    return 'event'
+    return 'bedarf'
   }
   if (
     url.length === 8 &&
@@ -643,9 +637,9 @@ export const activeFormFromActiveNodeArray = (url) => {
     url[0] === 'Personen' &&
     url[2] === 'Gaerten' &&
     url[4] === 'Kulturen' &&
-    url[6] === 'Events'
+    url[6] === 'Bedarf'
   ) {
-    return 'event'
+    return 'bedarf'
   }
   if (
     url.length === 8 &&
@@ -679,9 +673,9 @@ export const activeFormFromActiveNodeArray = (url) => {
     url[0] === 'Sammlungen' &&
     url[2] === 'Aus-Lieferungen' &&
     url[4] === 'Kulturen' &&
-    url[6] === 'Events'
+    url[6] === 'Bedarf'
   ) {
-    return 'event'
+    return 'bedarf'
   }
   if (
     url.length === 8 &&

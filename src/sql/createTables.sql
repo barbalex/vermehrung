@@ -933,6 +933,76 @@ CREATE INDEX ON teilkultur_rev USING btree(_deleted);
 
 CREATE INDEX ON teilkultur_rev USING btree(_rev_at);
 
+DROP TABLE IF EXISTS bedarf CASCADE;
+
+CREATE TABLE bedarf(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  kultur_id uuid DEFAULT NULL REFERENCES kultur(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  person_id uuid DEFAULT NULL REFERENCES person(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  jahr integer DEFAULT NULL,
+  beschreibung text DEFAULT NULL,
+  bemerkungen text DEFAULT NULL,
+  neues_material text DEFAULT NULL,
+  changed timestamp DEFAULT now(),
+  changed_by text DEFAULT NULL,
+  _rev text DEFAULT NULL,
+  _rev_at decimal DEFAULT extract(epoch FROM now() at time zone 'utc'),
+  _parent_rev text DEFAULT NULL,
+  _revisions text[] DEFAULT NULL,
+  _depth integer DEFAULT 1,
+  _deleted boolean DEFAULT FALSE,
+  _conflicts text[] DEFAULT NULL
+);
+
+CREATE INDEX ON bedarf USING btree(id);
+
+CREATE INDEX ON bedarf USING btree(kultur_id);
+
+CREATE INDEX ON bedarf USING btree(person_id);
+
+CREATE INDEX ON bedarf USING btree(jahr);
+
+CREATE INDEX ON bedarf USING btree(beschreibung);
+
+CREATE INDEX ON bedarf USING btree(_deleted);
+
+CREATE INDEX ON bedarf USING btree(_rev_at);
+
+DROP TABLE IF EXISTS bedarf_rev CASCADE;
+
+CREATE TABLE bedarf_rev(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  bedarf_id uuid DEFAULT NULL,
+  kultur_id uuid DEFAULT NULL,
+  person_id uuid DEFAULT NULL,
+  jahr integer DEFAULT NULL,
+  beschreibung text DEFAULT NULL,
+  bemerkungen text DEFAULT NULL,
+  neues_material text DEFAULT NULL,
+  changed timestamp DEFAULT now(),
+  changed_by text DEFAULT NULL,
+  _rev text DEFAULT NULL,
+  _rev_at decimal DEFAULT extract(epoch FROM now() at time zone 'utc'),
+  _parent_rev text DEFAULT NULL,
+  _revisions text[] DEFAULT NULL,
+  _depth integer DEFAULT 1,
+  _deleted boolean DEFAULT FALSE
+);
+
+CREATE INDEX ON bedarf_rev USING btree(bedarf_id);
+
+CREATE INDEX ON bedarf_rev USING btree(id);
+
+CREATE INDEX ON bedarf_rev USING btree(_rev);
+
+CREATE INDEX ON bedarf_rev USING btree(_parent_rev);
+
+CREATE INDEX ON bedarf_rev USING btree(_depth);
+
+CREATE INDEX ON bedarf_rev USING btree(_deleted);
+
+CREATE INDEX ON bedarf_rev USING btree(_rev_at);
+
 DROP TABLE IF EXISTS event CASCADE;
 
 CREATE TABLE event(

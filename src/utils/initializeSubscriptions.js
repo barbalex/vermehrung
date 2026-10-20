@@ -44,6 +44,7 @@ export const initializeSubscriptions = ({ userRole }) => {
     art_file: art_file_lastUpdated,
     art_qk: art_qk_lastUpdated,
     av: av_lastUpdated,
+    bedarf: bedarf_lastUpdated,
     event: event_lastUpdated,
     garten: garten_lastUpdated,
     garten_file: garten_file_lastUpdated,
@@ -228,6 +229,43 @@ export const initializeSubscriptions = ({ userRole }) => {
       },
       error: onSubscriptionError('av'),
       complete: () => console.log('resolved av'),
+    },
+  )
+  unsubscribe.bedarf = store.get(gqlWsClientAtom).subscribe(
+    {
+      query: `
+        subscription Bedarf($where: bedarf_bool_exp) {
+          bedarf(where: $where) {
+            id
+            __typename
+            kultur_id
+            person_id
+            jahr
+            beschreibung
+            bemerkungen
+            neues_material
+            changed
+            changed_by
+            _rev
+            _parent_rev
+            _revisions
+            _depth
+            _conflicts
+            _deleted
+          }
+        }
+      `,
+      variables: { where: { _rev_at: { _gt: bedarf_lastUpdated } } },
+    },
+    {
+      next: (data) => {
+        processSubscriptionResult({
+          data: data.data.bedarf,
+          table: 'bedarf',
+        })
+      },
+      error: onSubscriptionError('bedarf'),
+      complete: () => console.log('resolved bedarf'),
     },
   )
   unsubscribe.event = store.get(gqlWsClientAtom).subscribe(

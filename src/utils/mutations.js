@@ -5,6 +5,7 @@ import {
   artFile,
   artQkRev,
   avRev,
+  bedarfRev,
   eventRev,
   gartenRev,
   gartenFile,
@@ -152,6 +153,17 @@ export const mutations = {
       }
     }
     ${sammelLieferungRev}
+  `,
+  mutateInsert_bedarf_rev_one: gql`
+    mutation insert_bedarf_rev_one(
+      $object: bedarf_rev_insert_input!
+      $on_conflict: bedarf_rev_on_conflict
+    ) {
+      insert_bedarf_rev_one(object: $object, on_conflict: $on_conflict) {
+        ...BedarfRevFields
+      }
+    }
+    ${bedarfRev}
   `,
   mutateInsert_event_rev_one: gql`
     mutation insert_event_rev_one(

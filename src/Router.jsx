@@ -79,6 +79,9 @@ const SammelLieferungen = lazy(async () => ({
 const Events = lazy(async () => ({
   default: (await import('./components/Documentation/docs/Events.jsx')).Events,
 }))
+const Bedarf = lazy(async () => ({
+  default: (await import('./components/Documentation/docs/Bedarf.jsx')).Bedarf,
+}))
 const FelderBlenden = lazy(async () => ({
   default: (
     await import('./components/Documentation/docs/FelderBlenden/index.jsx')
@@ -247,6 +250,10 @@ export const Router = () => {
           <Route
             path="events"
             element={<Events />}
+          />
+          <Route
+            path="bedarf"
+            element={<Bedarf />}
           />
           <Route
             path="felder-blenden"

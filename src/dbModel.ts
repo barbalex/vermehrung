@@ -24,6 +24,7 @@ import { toStringIfPossible } from './utils/toStringIfPossible.js'
 import { personLabelFromPerson } from './utils/personLabelFromPerson.js'
 import { gartenLabelFromGarten } from './utils/gartenLabelFromGarten.js'
 import { eventLabelFromEvent } from './utils/eventLabelFromEvent.js'
+import { bedarfLabelFromBedarf } from './utils/bedarfLabelFromBedarf.js'
 import { artLabelFromAeArt } from './utils/artLabelFromAeArt.js'
 import { lieferungLabelFromLieferung } from './utils/lieferungLabelFromLieferung.js'
 import { teilkulturLabelFromTeilkultur } from './utils/teilkulturLabelFromTeilkultur.js'
@@ -840,6 +841,7 @@ export class Kultur extends Model {
     teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
     zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
     event: { type: 'has_many', foreignKey: 'kultur_id' },
+    bedarf: { type: 'has_many', foreignKey: 'kultur_id' },
     kultur_option: { type: 'belongs_to', key: 'id' },
     kultur_file: { type: 'has_many', foreignKey: 'kultur_id' },
     qk_choosen: { type: 'has_many', foreignKey: 'kultur_id' },
@@ -866,6 +868,7 @@ export class Kultur extends Model {
   @children('teilkultur') teilkulturs
   @children('zaehlung') zaehlungs
   @children('event') events
+  @children('bedarf') bedarfs
   @children('kultur_file') files
   @children('qk_choosen') qk_choosens
   @relation('kultur_option', 'id') kultur_option
@@ -1396,6 +1399,7 @@ export class Person extends Model {
     lieferung: { type: 'has_many', foreignKey: 'person_id' },
     garten: { type: 'has_many', foreignKey: 'person_id' },
     event: { type: 'has_many', foreignKey: 'person_id' },
+    bedarf: { type: 'has_many', foreignKey: 'person_id' },
     person_file: { type: 'has_many', foreignKey: 'person_id' },
   }
 
@@ -1452,6 +1456,7 @@ export class Person extends Model {
   @children('lieferung') lieferungs
   @children('garten') gartens
   @children('event') events
+  @children('bedarf') bedarfs
   @children('person_file') files
 
   @writer async removeConflict(_rev) {
@@ -1732,6 +1737,119 @@ export class SammelLieferung extends Model {
     }, 50)
   }
 
+  @writer async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
+  }
+}
+
+export class Bedarf extends Model {
+  static table = 'bedarf'
+  static associations = {
+    kultur: { type: 'belongs_to', key: 'kultur_id' },
+    person: { type: 'belongs_to', key: 'person_id' },
+  }
+
+  @field('id') id
+  @field('kultur_id') kultur_id
+  @field('person_id') person_id
+  @field('jahr') jahr
+  @field('beschreibung') beschreibung
+  @field('bemerkungen') bemerkungen
+  @field('neues_material') neues_material
+  @field('changed') changed
+  @field('changed_by') changed_by
+  @field('_rev') _rev
+  @field('_parent_rev') _parent_rev
+  @json('_revisions', dontSanitize) _revisions
+  @field('_depth') _depth
+  @field('_deleted') _deleted
+  @json('_conflicts', dontSanitize) _conflicts
+
+  @relation('kultur', 'kultur_id') kultur
+  @relation('person', 'person_id') person
+
+  @lazy label = this.observe().pipe(
+    distinctUntilChanged(
+      (a, b) => a.jahr === b.jahr && a.beschreibung === b.beschreibung,
+    ),
+    map$((bedarf) =>
+      bedarfLabelFromBedarf({
+        bedarf,
+      }),
+    ),
+  )
+
+  @writer async removeConflict(_rev) {
+    await this.update((row) => {
+      row._conflicts = this._conflicts.filter((r) => r !== _rev)
+    })
+  }
+  @writer async edit({ field, value }) {
+    unsetError(`bedarf.${field}`)
+    // first build the part that will be revisioned
+    const newDepth = this._depth + 1
+    const newObject = {
+      bedarf_id: this.id,
+      kultur_id: field === 'kultur_id' ? value : this.kultur_id,
+      person_id: field === 'person_id' ? value : this.person_id,
+      jahr: field === 'jahr' ? value : this.jahr,
+      beschreibung:
+        field === 'beschreibung'
+          ? toStringIfPossible(value)
+          : this.beschreibung,
+      bemerkungen:
+        field === 'bemerkungen'
+          ? toStringIfPossible(value)
+          : this.bemerkungen,
+      neues_material:
+        field === 'neues_material'
+          ? toStringIfPossible(value)
+          : this.neues_material,
+      _parent_rev: this._rev,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : this._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = store.get(userAtom)?.email
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = this._revisions
+      ? toPgArray([rev, ...this._revisions])
+      : toPgArray([rev])
+    addQueuedQuery({
+      name: 'mutateInsert_bedarf_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'bedarf_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      revertTable: 'bedarf',
+      revertId: this.id,
+      revertField: field,
+      revertValue: this[field],
+      newValue: value,
+    })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    // optimistically update store
+    await this.update((row) => {
+      row[field] = value
+      row._depth = newObject._depth
+      row._rev = newObject._rev
+      row._parent_rev = newObject._parent_rev
+      row.changed = newObject.changed
+      row.changed_by = newObject.changed_by
+      row._revisions = newRevisions
+    })
+  }
   @writer async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }

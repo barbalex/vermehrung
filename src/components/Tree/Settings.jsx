@@ -33,7 +33,6 @@ export const TreeSettings = () => {
             'tree_teilkultur',
             'tree_zaehlung',
             'tree_lieferung',
-            'tree_event',
           ])
       : $of({})
     const subscription = userPersonOptionsObservable.subscribe(
@@ -51,7 +50,6 @@ export const TreeSettings = () => {
     tree_teilkultur,
     tree_zaehlung,
     tree_lieferung,
-    tree_event,
   } = userPersonOption ?? {}
 
   const saveToDb = (event) => {
@@ -161,21 +159,6 @@ export const TreeSettings = () => {
                 />
               }
               label="Lieferungen"
-              labelPlacement="end"
-            />
-          </MenuItem>
-          <MenuItem>
-            <FormControlLabel
-              value={tree_event === true ? 'true' : 'false'}
-              control={
-                <Checkbox
-                  color="primary"
-                  checked={tree_event}
-                  onClick={saveToDb}
-                  name="tree_event"
-                />
-              }
-              label="Events"
               labelPlacement="end"
             />
           </MenuItem>

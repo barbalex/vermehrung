@@ -11,7 +11,7 @@ import {
 import ZaDownSvg from '../../../../svg/to_za_down.svg?react'
 import AnLiDownSvg from '../../../../svg/to_anli_down.svg?react'
 import AusLiDownSvg from '../../../../svg/to_ausli_down.svg?react'
-import EvDownSvg from '../../../../svg/to_ev_down.svg?react'
+import BeDownSvg from '../../../../svg/to_be_down.svg?react'
 import TkDownSvg from '../../../../svg/to_tk_down.svg?react'
 import UpSvg from '../../../../svg/to_up.svg?react'
 
@@ -31,8 +31,8 @@ export const KulturNavButtons = ({ row }) => {
   const onClickToAusLieferungen = () =>
     setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Aus-Lieferungen'])
 
-  const onClickToEvents = () =>
-    setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Events'])
+  const onClickToBedarf = () =>
+    setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Bedarf'])
 
   const onClickToTks = () =>
     setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Teilkulturen'])
@@ -90,8 +90,12 @@ export const KulturNavButtons = ({ row }) => {
       >
         <AusLiDownSvg />
       </IconButton>
-      <IconButton title="Zu den Events" onClick={onClickToEvents} size="large">
-        <EvDownSvg />
+      <IconButton
+        title="Zum Bedarf"
+        onClick={onClickToBedarf}
+        size="large"
+      >
+        <BeDownSvg />
       </IconButton>
     </>
   )

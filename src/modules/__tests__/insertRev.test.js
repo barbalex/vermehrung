@@ -23,6 +23,15 @@ const tail = ['changed', 'changed_by', '_depth', '_parent_rev', '_deleted']
 const expectedFields = {
   art: ['art_id', 'ae_id', 'set', 'apflora_av', 'apflora_ap'],
   av: ['av_id', 'art_id', 'person_id'],
+  bedarf: [
+    'bedarf_id',
+    'kultur_id',
+    'person_id',
+    'jahr',
+    'beschreibung',
+    'bemerkungen',
+    'neues_material',
+  ],
   event: [
     'event_id',
     'kultur_id',

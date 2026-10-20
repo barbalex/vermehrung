@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
-import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
+import { FaRegTrashAlt } from 'react-icons/fa'
 import { Q } from '@nozbe/watermelondb'
 import { combineLatest, of as $of } from 'rxjs'
 import { uniqBy } from 'es-toolkit'
@@ -25,7 +25,6 @@ import { HistoryButton } from '../../../../../../shared/HistoryButton.jsx'
 import { ifIsNumericAsNumber } from '../../../../../../../utils/ifIsNumericAsNumber.js'
 import { teilkulturSort } from '../../../../../../../utils/teilkulturSort.js'
 import { teilkulturLabelFromTeilkultur } from '../../../../../../../utils/teilkulturLabelFromTeilkultur.js'
-import { PrognoseMenu } from './PrognoseMenu.jsx'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { exists } from '../../../../../../../utils/exists.js'
 
@@ -108,20 +107,6 @@ export const TeilzaehlungForm = ({
 
     return () => subscription?.unsubscribe?.()
   }, [db, teilkulturFilter, id, kulturId, initialDataQueried])
-
-  const [openPrognosis, setOpenPrognosis] = useState(false)
-  const [anchorEl, setAnchorEl] = useState(null)
-
-  const onClosePrognosis = (event, reason) => {
-    if (reason === 'escapeKeyDown') {
-      setAnchorEl(null)
-    }
-  }
-
-  const onClickPrognosis = (event) => {
-    setOpenPrognosis(true)
-    setAnchorEl(event.currentTarget)
-  }
 
   const {
     tk,
@@ -311,23 +296,6 @@ export const TeilzaehlungForm = ({
             >
               <FaRegTrashAlt />
             </IconButton>
-          )}
-          <IconButton
-            aria-label="Bedarf"
-            title={online ? 'Bedarf' : 'Bedarf (nur online verfügbar)'}
-            onClick={onClickPrognosis}
-            disabled={!online}
-            size="large"
-          >
-            <FaChartLine />
-          </IconButton>
-          {openPrognosis && (
-            <PrognoseMenu
-              onClosePrognosis={onClosePrognosis}
-              anchorEl={anchorEl}
-              setAnchorEl={setAnchorEl}
-              teilzaehlung={row}
-            />
           )}
         </div>
         {online && row?._conflicts?.map && (

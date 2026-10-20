@@ -126,6 +126,46 @@ export const avRev = gql`
     _deleted
   }
 `
+export const bedarf = gql`
+  fragment BedarfFields on bedarf {
+    id
+    __typename
+    kultur_id
+    person_id
+    jahr
+    beschreibung
+    bemerkungen
+    neues_material
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
+    _deleted
+  }
+`
+export const bedarfRev = gql`
+  fragment BedarfRevFields on bedarf_rev {
+    id
+    bedarf_id
+    __typename
+    kultur_id
+    person_id
+    jahr
+    beschreibung
+    bemerkungen
+    neues_material
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _deleted
+  }
+`
 export const event = gql`
   fragment EventFields on event {
     id

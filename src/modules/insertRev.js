@@ -31,6 +31,18 @@ const configs = {
     fields: [['av_id'], ['art_id'], ['person_id']],
     navigate: false,
   },
+  bedarf: {
+    idField: 'bedarf_id',
+    fields: [
+      ['bedarf_id'],
+      ['kultur_id', 'kulturIdInActiveNodeArray'],
+      ['person_id'],
+      ['jahr'],
+      ['beschreibung'],
+      ['bemerkungen'],
+      ['neues_material'],
+    ],
+  },
   event: {
     idField: 'event_id',
     fields: [
@@ -303,6 +315,7 @@ export const insertRev = async (table, args = {}) => {
 
 export const insertArtRev = (args) => insertRev('art', args)
 export const insertAvRev = (args) => insertRev('av', args)
+export const insertBedarfRev = (args) => insertRev('bedarf', args)
 export const insertEventRev = (args) => insertRev('event', args)
 export const insertGartenRev = (args) => insertRev('garten', args)
 export const insertGvRev = (args) => insertRev('gv', args)

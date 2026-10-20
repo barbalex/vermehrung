@@ -1,4 +1,5 @@
 import { simpleTypes as art } from './art.js'
+import { simpleTypes as bedarf } from './bedarf.js'
 import { simpleTypes as event } from './event.js'
 import { simpleTypes as garten } from './garten.js'
 import { simpleTypes as herkunft } from './herkunft.js'
@@ -13,6 +14,7 @@ import { simpleTypes as teilzaehlung } from './teilzaehlung.js'
 
 export const simpleTypes = {
   art,
+  bedarf,
   event,
   garten,
   herkunft,

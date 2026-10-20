@@ -6,6 +6,7 @@ import { first as first$ } from 'rxjs/operators'
 
 import { addWorksheetToExceljsWorkbook } from '../../../../../utils/addWorksheetToExceljsWorkbook.js'
 import { exists } from '../../../../../utils/exists.js'
+import { bedarfSort } from '../../../../../utils/bedarfSort.js'
 import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFromKulturs.js'
 import { zaehlungSort } from '../../../../../utils/zaehlungSort.js'
 import { lieferungSort } from '../../../../../utils/lieferungSort.js'
@@ -80,6 +81,41 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             )
             .fetch()) ?? []
       } catch {}
+
+      let bedarfe = []
+      try {
+        bedarfe =
+          (await db
+            .get('bedarf')
+            .query(
+              Q.where('_deleted', false),
+              Q.where('kultur_id', kultur.id),
+            )
+            .fetch()) ?? []
+      } catch {}
+      const bedarfeSorted = bedarfe.sort(bedarfSort)
+      const currentYear = new Date().getFullYear()
+      // multiple bedarf entries per year are possible: join them
+      const valuesByYear = (year, field) =>
+        bedarfeSorted
+          .filter((b) => b.jahr === year && exists(b[field]))
+          .map((b) => b[field])
+          .join('; ')
+      const bedarf_vorjahr = valuesByYear(currentYear - 1, 'beschreibung')
+      const bedarf_aktuelles_jahr = valuesByYear(
+        currentYear,
+        'beschreibung',
+      )
+      const bedarf_naechstes_jahr = valuesByYear(
+        currentYear + 1,
+        'beschreibung',
+      )
+      const bemerkungen_av = valuesByYear(currentYear, 'bemerkungen')
+      const neues_material_aktuelles_jahr = valuesByYear(
+        currentYear,
+        'neues_material',
+      )
+
       const ownZaehlungenSorted = ownZaehlungen.sort(zaehlungSort)
       const lastZaehlung = ownZaehlungenSorted[0]
       let lZTeilzaehlungs = []
@@ -148,7 +184,14 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
               Q.where('_deleted', false),
               Q.where('geplant', true),
               Q.where('datum', Q.notEq(null)),
-              Q.where('anzahl_pflanzen', Q.notEq(null)),
+              // Bedarf wird oft nicht in Pflanzen ausgedrückt, sondern in
+              // nicht zählbaren Werten wie «Samen», «Knöllchen», «Töpfe»
+              Q.or(
+                Q.where('anzahl_pflanzen', Q.notEq(null)),
+                Q.where('anzahl_auspflanzbereit', Q.notEq(null)),
+                Q.where('gramm_samen', Q.notEq(null)),
+                Q.where('andere_menge', Q.notEq(null)),
+              ),
             )
             .fetch()) ?? []
       } catch {}
@@ -254,18 +297,15 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
           : ''
 
       const row = {
-        id: kultur.id,
         label: kulturLabel,
         artname,
         set: art?.set,
         mitarbeitende: avsLabels.sort().join(', '),
         apflora_artverantwortlich: art?.apflora_av,
         aktionsplan_art: art?.apflora_ap,
-        herkunft_id: kultur.herkunft_id,
         herkunft_nr: herkunft?.nr ?? '',
         herkunft_gemeinde: herkunft?.gemeinde ?? '',
         herkunft_lokalname: herkunft?.lokalname ?? '',
-        garten_id: kultur.garten_id,
         garten_label,
         zwischenlager: kultur.zwischenlager,
         erhaltungskultur: kultur.erhaltungskultur,
@@ -278,7 +318,6 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         letzte_zaehlung_datum: lastZaehlung
           ? format(new Date(lastZaehlung.datum), 'yyyy.MM.dd')
           : '',
-        letzte_zaehlung_bedarf: lastZaehlung?.prognose ?? '',
         letzte_zaehlung_bemerkungen: lastZaehlung?.bemerkungen ?? '',
         letzte_zaehlung_anzahl_pflanzen: anzahl_pflanzen,
         letzte_zaehlung_anzahl_auspflanzbereit: anzahl_auspflanzbereit,
@@ -334,20 +373,21 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (auslSinceAnzahlJungpflanzen || 0) +
             (anlSinceAnzahlJungpflanzen || 0)
           : '',
-        auslieferungen_geplant: ownAusLieferungsGeplant
-          .map(
-            (l) =>
-              `${format(new Date(l.datum), 'yyyy.MM.dd')}: ${
-                l.anzahl_pflanzen ?? 0
-              } Pflanzen${
-                exists(l.anzahl_auspflanzbereit)
-                  ? `, ${l.anzahl_auspflanzbereit} auspflanzbereit`
-                  : ''
-              }${
-                exists(l.gramm_samen) ? `, ${l.gramm_samen} Gramm Samen` : ''
-              }${exists(l.andere_menge) ? `, ${l.andere_menge}` : ''}`,
-          )
-          .join('; '),
+        auslieferungen_geplant: ownAusLieferungsGeplant.map((l) => {
+          const mengen = []
+          if (exists(l.anzahl_pflanzen))
+            mengen.push(`${l.anzahl_pflanzen} Pflanzen`)
+          if (exists(l.anzahl_auspflanzbereit))
+            mengen.push(`${l.anzahl_auspflanzbereit} auspflanzbereit`)
+          if (exists(l.gramm_samen)) mengen.push(`${l.gramm_samen} Gramm Samen`)
+          if (exists(l.andere_menge)) mengen.push(l.andere_menge)
+          return `${format(new Date(l.datum), 'yyyy.MM.dd')}: ${mengen.join(', ')}`
+        }).join('; '),
+        bedarf_vorjahr,
+        bedarf_aktuelles_jahr,
+        bedarf_naechstes_jahr,
+        bemerkungen_av,
+        neues_material_aktuelles_jahr,
       }
 
       return row

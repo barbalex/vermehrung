@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  /* share the header row with the ap-filter switch and the settings icon
+     and end well left of them */
+  margin: 2px 104px 4px 8px;
+  min-height: 44px;
+  padding: 2px 2px 2px 8px;
+  background-color: #fff3e0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  border-radius: 4px;
+}
+
+.text {
+  flex: 1;
+}

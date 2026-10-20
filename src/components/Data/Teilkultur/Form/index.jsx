@@ -20,7 +20,6 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { JesNo } from '../../../shared/JesNo.jsx'
 import { ifIsNumericAsNumber } from '../../../../utils/ifIsNumericAsNumber.js'
 import { TeilkulturZaehlungen as Zaehlungen } from './Zaehlungen/index.jsx'
-import { TeilkulturEvents as Events } from './Events/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ConflictList } from '../../../shared/ConflictList/index.jsx'
 import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.js'
@@ -228,12 +227,7 @@ export const TeilkulturForm = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {!showFilter && row.kultur_id && (
-          <>
-            <Zaehlungen teilkultur={row} />
-            <Events teilkultur={row} />
-          </>
-        )}
+        {!showFilter && row.kultur_id && <Zaehlungen teilkultur={row} />}
       </div>
     </ErrorBoundary>
   )

@@ -1,4 +1,5 @@
 import { initial as art } from './art.js'
+import { initial as bedarf } from './bedarf.js'
 import { initial as event } from './event.js'
 import { initial as garten } from './garten.js'
 import { initial as herkunft } from './herkunft.js'
@@ -15,6 +16,7 @@ import { initial as teilzaehlung } from './teilzaehlung.js'
 export const initialFilterValues = {
   show: false,
   art,
+  bedarf,
   event,
   garten,
   herkunft,
