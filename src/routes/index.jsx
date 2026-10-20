@@ -71,8 +71,8 @@ export const Home = () => (
                 <p>So können Sammlungen und Aussetzungen geplant werden.</p>
               </Card>
               <Card className={styles.card}>
-                <h3 className={styles.cardTitle}>Events und Aufgaben</h3>
-                ...erleichtern Verwaltung und Dokumentation des Projekts.
+                <h3 className={styles.cardTitle}>Bedarf</h3>
+                {`Artverantwortliche melden pro Jahr und Kultur, wie viel Material sie benötigen.`}
               </Card>
               <Card className={styles.card}>
                 <h3 className={styles.cardTitle}>Personen</h3>

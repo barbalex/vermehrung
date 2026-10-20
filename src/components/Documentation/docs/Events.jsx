@@ -5,31 +5,14 @@ import dokuStyles from '../index.module.css'
 export const Events = () => (
   <>
     <h1>Events</h1>
-    <p className={dokuStyles.dokuDate}>28.01.2025</p>
-    <h3>Ziele</h3>
-    <ul>
-      <li>
-        <Link to="/Dokumentation/ziele">Projekt-Ziel</Link> 5: &quot;Wesentliche
-        Vorgänge sind dokumentiert.&quot;
-      </li>
-      <li>Aufgaben können geplant bzw. koordiniert werden</li>
-    </ul>
-    <h3>Umsetzung</h3>
+    <p className={dokuStyles.dokuDate}>20.10.2026</p>
+    <h3>Events wurden durch Bedarf ersetzt</h3>
     <p>
-      Für das Projekt wesentliche Vorgänge, die weder Sammlungen, noch
-      Vermehrung oder Lieferungen entsprechen, können als Events dokumentiert
-      werden.
-      <br />
+      Die Events wurden bis anhin ausschliesslich genutzt, um den Bedarf der
+      Artverantwortlichen zu erfassen. Deshalb wurden sie durch{" "}
+      <Link to="/Dokumentation/bedarf">Bedarf</Link>-Einträge ersetzt: Pro Jahr
+      und Kultur wird der Bedarf in einfachen Textfeldern erfasst.
     </p>
-    <p>
-      Auch als Events werden Aufgaben erfasst: Das sind einfach geplante Events.
-      Sind sie erledigt, wird das Attribut &quot;geplant&quot; entfernt. Und
-      schon sind sie dokumentiert.
-      <br />
-    </p>
-    <p>
-      Events planen ist &quot;opt-in&quot;. Damit das Feld &quot;geplant&quot;
-      verfügbar ist, muss man es bei den Optionen einschalten.
-    </p>
+    <p>Bestehende Events wurden in Bedarf-Einträge migriert.</p>
   </>
 )

@@ -20,8 +20,8 @@ import { buildArtHerkunftKulturAnlieferungFolder } from './art/herkunft/kultur/a
 import { buildArtHerkunftKulturAnlieferung } from './art/herkunft/kultur/anlieferung/index.js'
 import { buildArtHerkunftKulturAuslieferungFolder } from './art/herkunft/kultur/auslieferung/folder.js'
 import { buildArtHerkunftKulturAuslieferung } from './art/herkunft/kultur/auslieferung/index.js'
-import { buildArtHerkunftKulturEventFolder } from './art/herkunft/kultur/event/folder.js'
-import { buildArtHerkunftKulturEvent } from './art/herkunft/kultur/event/index.js'
+import { buildArtHerkunftKulturBedarfFolder } from './art/herkunft/kultur/bedarf/folder.js'
+import { buildArtHerkunftKulturBedarf } from './art/herkunft/kultur/bedarf/index.js'
 import { buildArtKulturFolder } from './art/kultur/folder.js'
 import { buildArtKultur } from './art/kultur/index.js'
 import { buildArtKulturTeilkulturFolder } from './art/kultur/teilkultur/folder.js'
@@ -32,8 +32,8 @@ import { buildArtKulturAnlieferungFolder } from './art/kultur/anlieferung/folder
 import { buildArtKulturAnlieferung } from './art/kultur/anlieferung/index.js'
 import { buildArtKulturAuslieferungFolder } from './art/kultur/auslieferung/folder.js'
 import { buildArtKulturAuslieferung } from './art/kultur/auslieferung/index.js'
-import { buildArtKulturEventFolder } from './art/kultur/event/folder.js'
-import { buildArtKulturEvent } from './art/kultur/event/index.js'
+import { buildArtKulturBedarfFolder } from './art/kultur/bedarf/folder.js'
+import { buildArtKulturBedarf } from './art/kultur/bedarf/index.js'
 import { buildArtFolder } from './art/folder.js'
 import { buildArt } from './art/index.js'
 import {
@@ -61,8 +61,8 @@ import { buildGartenKulturAnlieferungFolder } from './garten/kultur/anlieferung/
 import { buildGartenKulturAnlieferung } from './garten/kultur/anlieferung/index.js'
 import { buildGartenKulturAuslieferungFolder } from './garten/kultur/auslieferung/folder.js'
 import { buildGartenKulturAuslieferung } from './garten/kultur/auslieferung/index.js'
-import { buildGartenKulturEventFolder } from './garten/kultur/event/folder.js'
-import { buildGartenKulturEvent } from './garten/kultur/event/index.js'
+import { buildGartenKulturBedarfFolder } from './garten/kultur/bedarf/folder.js'
+import { buildGartenKulturBedarf } from './garten/kultur/bedarf/index.js'
 import { buildKulturFolder } from './kultur/folder.js'
 import { buildKultur } from './kultur/index.js'
 import { buildKulturTeilkulturFolder } from './kultur/teilkultur/folder.js'
@@ -73,8 +73,8 @@ import { buildKulturAuslieferungFolder } from './kultur/auslieferung/folder.js'
 import { buildKulturAuslieferung } from './kultur/auslieferung/index.js'
 import { buildKulturAnlieferungFolder } from './kultur/anlieferung/folder.js'
 import { buildKulturAnlieferung } from './kultur/anlieferung/index.js'
-import { buildKulturEventFolder } from './kultur/event/folder.js'
-import { buildKulturEvent } from './kultur/event/index.js'
+import { buildKulturBedarfFolder } from './kultur/bedarf/folder.js'
+import { buildKulturBedarf } from './kultur/bedarf/index.js'
 import { buildTeilkulturFolder } from './teilkultur/folder.js'
 import { buildTeilkultur } from './teilkultur/index.js'
 import { buildSammlungFolder } from './sammlung/folder.js'
@@ -87,8 +87,6 @@ import { buildZaehlungFolder } from './zaehlung/folder.js'
 import { buildZaehlung } from './zaehlung/index.js'
 import { buildLieferungFolder } from './lieferung/folder.js'
 import { buildLieferung } from './lieferung/index.js'
-import { buildEventFolder } from './event/folder.js'
-import { buildEvent } from './event/index.js'
 import { buildPersonFolder } from './person/folder.js'
 import { buildPerson } from './person/index.js'
 import { buildPersonGartenFolder } from './person/garten/folder.js'
@@ -99,8 +97,8 @@ import { buildPersonGartenKulturAnlieferungFolder } from './person/garten/kultur
 import { buildPersonGartenKulturAnlieferung } from './person/garten/kultur/anlieferung/index.js'
 import { buildPersonGartenKulturAuslieferungFolder } from './person/garten/kultur/auslieferung/folder.js'
 import { buildPersonGartenKulturAuslieferung } from './person/garten/kultur/auslieferung/index.js'
-import { buildPersonGartenKulturEventFolder } from './person/garten/kultur/event/folder.js'
-import { buildPersonGartenKulturEvent } from './person/garten/kultur/event/index.js'
+import { buildPersonGartenKulturBedarfFolder } from './person/garten/kultur/bedarf/folder.js'
+import { buildPersonGartenKulturBedarf } from './person/garten/kultur/bedarf/index.js'
 import { buildPersonGartenKulturTeilkulturFolder } from './person/garten/kultur/teilkultur/folder.js'
 import { buildPersonGartenKulturTeilkultur } from './person/garten/kultur/teilkultur/index.js'
 import { buildPersonGartenKulturZaehlungFolder } from './person/garten/kultur/zaehlung/folder.js'
@@ -117,7 +115,7 @@ import { herkunftSort } from '../../../utils/herkunftSort.js'
 import { teilkulturSort } from '../../../utils/teilkulturSort.js'
 import { zaehlungSort } from '../../../utils/zaehlungSort.js'
 import { lieferungSort } from '../../../utils/lieferungSort.js'
-import { eventSort } from '../../../utils/eventSort.js'
+import { bedarfSort } from '../../../utils/bedarfSort.js'
 import { personSort } from '../../../utils/personSort.js'
 import { artsSortedFromArts } from '../../../utils/artsSortedFromArts.js'
 import { kultursSortedFromKulturs } from '../../../utils/kultursSortedFromKulturs.js'
@@ -125,7 +123,6 @@ import { gartensSortedFromGartens } from '../../../utils/gartensSortedFromGarten
 import { sammlungsSortedFromSammlungs } from '../../../utils/sammlungsSortedFromSammlungs.js'
 import { tableFilter } from '../../../utils/tableFilter.js'
 import { getShowArt } from '../../../utils/showArt.js'
-import { getShowEvent } from '../../../utils/showEvent.js'
 import { getShowGarten } from '../../../utils/showGarten.js'
 import { getShowHerkunft } from '../../../utils/showHerkunft.js'
 import { getShowKultur } from '../../../utils/showKultur.js'
@@ -152,7 +149,6 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
   const activeNodeArray = store.get(activeNodeArrayAtom)
 
   const showArt = getShowArt({ userRole, activeNodeArray })
-  const showEvent = getShowEvent({ userPersonOption, activeNodeArray })
   const showGarten = getShowGarten()
   const showHerkunft = getShowHerkunft({ userRole, activeNodeArray })
   const showKultur = getShowKultur({ userPersonOption, activeNodeArray })
@@ -187,8 +183,8 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
   const artHerkunftKulturAnlieferungNodes = []
   const artHerkunftKulturAuslieferungFolderNodes = []
   const artHerkunftKulturAuslieferungNodes = []
-  const artHerkunftKulturEventFolderNodes = []
-  const artHerkunftKulturEventNodes = []
+  const artHerkunftKulturBedarfFolderNodes = []
+  const artHerkunftKulturBedarfNodes = []
   const artKulturFolderNodes = []
   const artKulturNodes = []
   const artKulturTeilkulturFolderNodes = []
@@ -199,8 +195,8 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
   const artKulturAnlieferungNodes = []
   const artKulturAuslieferungFolderNodes = []
   const artKulturAuslieferungNodes = []
-  const artKulturEventFolderNodes = []
-  const artKulturEventNodes = []
+  const artKulturBedarfFolderNodes = []
+  const artKulturBedarfNodes = []
   const artSammlungFolderNodes = []
   const artSammlungNodes = []
   const artSammlungAuslieferungFolderNodes = []
@@ -229,8 +225,8 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
   const gartenKulturAnlieferungNodes = []
   const gartenKulturAuslieferungFolderNodes = []
   const gartenKulturAuslieferungNodes = []
-  const gartenKulturEventFolderNodes = []
-  const gartenKulturEventNodes = []
+  const gartenKulturBedarfFolderNodes = []
+  const gartenKulturBedarfNodes = []
   let kulturFolderNodes = []
   let kulturNodes = []
   const kulturTeilkulturFolderNodes = []
@@ -241,16 +237,14 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
   const kulturAnlieferungNodes = []
   const kulturAuslieferungFolderNodes = []
   const kulturAuslieferungNodes = []
-  const kulturEventFolderNodes = []
-  const kulturEventNodes = []
+  const kulturBedarfFolderNodes = []
+  const kulturBedarfNodes = []
   let teilkulturFolderNodes = []
   let teilkulturNodes = []
   let zaehlungFolderNodes = []
   let zaehlungNodes = []
   let lieferungFolderNodes = []
   let lieferungNodes = []
-  let eventFolderNodes = []
-  let eventNodes = []
   let personFolderNodes = []
   let personNodes = []
   const personGartenFolderNodes = []
@@ -261,8 +255,8 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
   const personGartenKulturAnlieferungNodes = []
   const personGartenKulturAuslieferungFolderNodes = []
   const personGartenKulturAuslieferungNodes = []
-  const personGartenKulturEventFolderNodes = []
-  const personGartenKulturEventNodes = []
+  const personGartenKulturBedarfFolderNodes = []
+  const personGartenKulturBedarfNodes = []
   const personGartenKulturTeilkulturFolderNodes = []
   const personGartenKulturTeilkulturNodes = []
   const personGartenKulturZaehlungFolderNodes = []
@@ -779,23 +773,23 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
                   )
                 }
 
-                // event nodes
-                const eventsQuery = kultur.events.extend(
-                  ...tableFilter({ table: 'event' }),
+                // bedarf nodes
+                const bedarfsQuery = kultur.bedarfs.extend(
+                  ...tableFilter({ table: 'bedarf' }),
                 )
-                const eventsCount = await eventsQuery.fetchCount()
-                artHerkunftKulturEventFolderNodes.push(
-                  buildArtHerkunftKulturEventFolder({
+                const bedarfeCount = await bedarfsQuery.fetchCount()
+                artHerkunftKulturBedarfFolderNodes.push(
+                  buildArtHerkunftKulturBedarfFolder({
                     kulturId,
                     kulturIndex,
                     artId,
                     artIndex,
                     herkunft,
                     herkunftIndex,
-                    count: eventsCount,
+                    count: bedarfeCount,
                   }),
                 )
-                const artHerkunftKulturEventFolderIsOpen = openNodes.some(
+                const artHerkunftKulturBedarfFolderIsOpen = openNodes.some(
                   (n) =>
                     n.length === 7 &&
                     n[0] === 'Arten' &&
@@ -804,19 +798,19 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
                     n[3] === herkunftId &&
                     n[4] === 'Kulturen' &&
                     n[5] === kulturId &&
-                    n[6] === 'Events',
+                    n[6] === 'Bedarf',
                 )
-                if (artHerkunftKulturEventFolderIsOpen) {
-                  let events = []
+                if (artHerkunftKulturBedarfFolderIsOpen) {
+                  let bedarfe = []
                   try {
-                    events = await eventsQuery.fetch()
+                    bedarfe = await bedarfsQuery.fetch()
                   } catch {}
-                  const eventsSorted = events.sort(eventSort)
-                  const newArtHerkunftKulturEventNodes = eventsSorted.map(
-                    (event, eventIndex) =>
-                      buildArtHerkunftKulturEvent({
-                        event,
-                        eventIndex,
+                  const bedarfeSorted = bedarfe.sort(bedarfSort)
+                  const newArtHerkunftKulturBedarfNodes = bedarfeSorted.map(
+                    (bedarf, bedarfIndex) =>
+                      buildArtHerkunftKulturBedarf({
+                        bedarf,
+                        bedarfIndex,
                         kulturId,
                         kulturIndex,
                         artId,
@@ -825,7 +819,7 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
                         herkunftIndex,
                       }),
                   )
-                  artKulturEventNodes.push(...newArtHerkunftKulturEventNodes)
+                  artKulturBedarfNodes.push(...newArtHerkunftKulturBedarfNodes)
                 }
               }
             }
@@ -1158,47 +1152,47 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
               artKulturAuslieferungNodes.push(...newArtKulturAuslieferungNodes)
             }
 
-            // event nodes
-            const eventsQuery = kultur.events.extend(
-              ...tableFilter({ table: 'event' }),
+            // bedarf nodes
+            const bedarfsQuery = kultur.bedarfs.extend(
+              ...tableFilter({ table: 'bedarf' }),
             )
-            const eventsCount = await eventsQuery.fetchCount()
-            artKulturEventFolderNodes.push(
-              buildArtKulturEventFolder({
+            const bedarfeCount = await bedarfsQuery.fetchCount()
+            artKulturBedarfFolderNodes.push(
+              buildArtKulturBedarfFolder({
                 kulturId,
                 kulturIndex,
                 artId,
                 artIndex,
-                count: eventsCount,
+                count: bedarfeCount,
               }),
             )
-            const artKulturEventFolderIsOpen = openNodes.some(
+            const artKulturBedarfFolderIsOpen = openNodes.some(
               (n) =>
                 n.length === 5 &&
                 n[0] === 'Arten' &&
                 n[1] === artId &&
                 n[2] === 'Kulturen' &&
                 n[3] === kulturId &&
-                n[4] === 'Events',
+                n[4] === 'Bedarf',
             )
-            if (artKulturEventFolderIsOpen) {
-              let events = []
+            if (artKulturBedarfFolderIsOpen) {
+              let bedarfe = []
               try {
-                events = await eventsQuery.fetch()
+                bedarfe = await bedarfsQuery.fetch()
               } catch {}
-              const eventsSorted = events.sort(eventSort)
-              const newArtKulturEventNodes = eventsSorted.map(
-                (event, eventIndex) =>
-                  buildArtKulturEvent({
-                    event,
-                    eventIndex,
+              const bedarfeSorted = bedarfe.sort(bedarfSort)
+              const newArtKulturBedarfNodes = bedarfeSorted.map(
+                (bedarf, bedarfIndex) =>
+                  buildArtKulturBedarf({
+                    bedarf,
+                    bedarfIndex,
                     kulturId,
                     kulturIndex,
                     artId,
                     artIndex,
                   }),
               )
-              artKulturEventNodes.push(...newArtKulturEventNodes)
+              artKulturBedarfNodes.push(...newArtKulturBedarfNodes)
             }
           }
         }
@@ -1703,48 +1697,48 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
               )
             }
 
-            // garten > kultur > event
-            const gartenKulturEventQuery = kultur.events.extend(
-              ...tableFilter({ table: 'event' }),
+            // garten > kultur > bedarf
+            const gartenKulturBedarfQuery = kultur.bedarfs.extend(
+              ...tableFilter({ table: 'bedarf' }),
             )
-            const gartenKulturEventCount =
-              await gartenKulturEventQuery.fetchCount()
-            gartenKulturEventFolderNodes.push(
-              buildGartenKulturEventFolder({
+            const gartenKulturBedarfCount =
+              await gartenKulturBedarfQuery.fetchCount()
+            gartenKulturBedarfFolderNodes.push(
+              buildGartenKulturBedarfFolder({
                 kulturId,
                 kulturIndex,
                 gartenId,
                 gartenIndex,
-                count: gartenKulturEventCount,
+                count: gartenKulturBedarfCount,
               }),
             )
-            const gartenKulturEventFolderIsOpen = openNodes.some(
+            const gartenKulturBedarfFolderIsOpen = openNodes.some(
               (n) =>
                 n.length === 5 &&
                 n[0] === 'Gaerten' &&
                 n[1] === gartenId &&
                 n[2] === 'Kulturen' &&
                 n[3] === kulturId &&
-                n[4] === 'Events',
+                n[4] === 'Bedarf',
             )
-            if (gartenKulturEventFolderIsOpen) {
-              let events = []
+            if (gartenKulturBedarfFolderIsOpen) {
+              let bedarfe = []
               try {
-                events = await gartenKulturEventQuery.fetch()
+                bedarfe = await gartenKulturBedarfQuery.fetch()
               } catch {}
-              const eventsSorted = events.sort(eventSort)
-              const newGartenKulturEventNodes = eventsSorted.map(
-                (event, eventIndex) =>
-                  buildGartenKulturEvent({
-                    event,
-                    eventIndex,
+              const bedarfeSorted = bedarfe.sort(bedarfSort)
+              const newGartenKulturBedarfNodes = bedarfeSorted.map(
+                (bedarf, bedarfIndex) =>
+                  buildGartenKulturBedarf({
+                    bedarf,
+                    bedarfIndex,
                     kulturId,
                     kulturIndex,
                     gartenId,
                     gartenIndex,
                   }),
               )
-              gartenKulturEventNodes.push(...newGartenKulturEventNodes)
+              gartenKulturBedarfNodes.push(...newGartenKulturBedarfNodes)
             }
           }
         }
@@ -1940,40 +1934,40 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
           kulturAuslieferungNodes.push(...newKulturAuslieferungNodes)
         }
 
-        // kultur > event
-        const kulturEventQuery = kultur.events.extend(
-          ...tableFilter({ table: 'event' }),
+        // kultur > bedarf
+        const kulturBedarfQuery = kultur.bedarfs.extend(
+          ...tableFilter({ table: 'bedarf' }),
         )
-        const kulturEventCount = await kulturEventQuery.fetchCount()
-        kulturEventFolderNodes.push(
-          buildKulturEventFolder({
-            count: kulturEventCount,
+        const kulturBedarfCount = await kulturBedarfQuery.fetchCount()
+        kulturBedarfFolderNodes.push(
+          buildKulturBedarfFolder({
+            count: kulturBedarfCount,
             kulturIndex,
             kulturId,
           }),
         )
-        const kulturEventFolderIsOpen = openNodes.some(
+        const kulturBedarfFolderIsOpen = openNodes.some(
           (n) =>
             n.length === 3 &&
             n[0] === 'Kulturen' &&
             n[1] === kulturId &&
-            n[2] === 'Events',
+            n[2] === 'Bedarf',
         )
-        if (kulturEventFolderIsOpen) {
-          let events = []
+        if (kulturBedarfFolderIsOpen) {
+          let bedarfe = []
           try {
-            events = await kulturEventQuery.fetch()
+            bedarfe = await kulturBedarfQuery.fetch()
           } catch {}
-          const eventsSorted = events.sort(eventSort)
-          const newKulturEventNodes = eventsSorted.map((event, eventIndex) =>
-            buildKulturEvent({
-              event,
-              eventIndex,
+          const bedarfeSorted = bedarfe.sort(bedarfSort)
+          const newKulturBedarfNodes = bedarfeSorted.map((bedarf, bedarfIndex) =>
+            buildKulturBedarf({
+              bedarf,
+              bedarfIndex,
               kulturId,
               kulturIndex,
             }),
           )
-          kulturEventNodes.push(...newKulturEventNodes)
+          kulturBedarfNodes.push(...newKulturBedarfNodes)
         }
       }
     }
@@ -2118,23 +2112,6 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
   //     }
   //   }
   // }
-
-  // 10 event
-  if (showEvent) {
-    const eventQuery = db.get('event').query(...tableFilter({ table: 'event' }))
-    const eventCount = await eventQuery.fetchCount()
-    eventFolderNodes = buildEventFolder({ count: eventCount })
-    if (openNodes.some((n) => n.length === 1 && n[0] === 'Events')) {
-      let events = []
-      try {
-        events = await eventQuery.fetch()
-      } catch {}
-      const eventsSorted = events.sort(eventSort)
-      eventNodes = eventsSorted.map((event, index) =>
-        buildEvent({ event, index }),
-      )
-    }
-  }
 
   // 11 person
   if (showPerson) {
@@ -2536,23 +2513,23 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
                   )
                 }
 
-                // event nodes
-                const eventQuery = kultur.events.extend(
-                  ...tableFilter({ table: 'event' }),
+                // bedarf nodes
+                const bedarfsQuery = kultur.bedarfs.extend(
+                  ...tableFilter({ table: 'bedarf' }),
                 )
-                const eventCount = await eventQuery.fetchCount()
-                personGartenKulturEventFolderNodes.push(
-                  buildPersonGartenKulturEventFolder({
+                const bedarfeCount = await bedarfsQuery.fetchCount()
+                personGartenKulturBedarfFolderNodes.push(
+                  buildPersonGartenKulturBedarfFolder({
                     kulturId,
                     kulturIndex,
                     gartenId,
                     gartenIndex,
                     personId,
                     personIndex,
-                    count: eventCount,
+                    count: bedarfeCount,
                   }),
                 )
-                const personGartenKulturEventFolderIsOpen = openNodes.some(
+                const personGartenKulturBedarfFolderIsOpen = openNodes.some(
                   (n) =>
                     n.length === 7 &&
                     n[0] === 'Personen' &&
@@ -2561,20 +2538,20 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
                     n[3] === gartenId &&
                     n[4] === 'Kulturen' &&
                     n[5] === kulturId &&
-                    n[6] === 'Events',
+                    n[6] === 'Bedarf',
                 )
 
-                if (personGartenKulturEventFolderIsOpen) {
-                  let events = []
+                if (personGartenKulturBedarfFolderIsOpen) {
+                  let bedarfe = []
                   try {
-                    events = await eventQuery.fetch()
+                    bedarfe = await bedarfsQuery.fetch()
                   } catch {}
-                  const eventsSorted = events.sort(eventSort)
-                  const newPersonGartenKulturEventNodes = eventsSorted.map(
-                    (event, eventIndex) =>
-                      buildPersonGartenKulturEvent({
-                        event,
-                        eventIndex,
+                  const bedarfeSorted = bedarfe.sort(bedarfSort)
+                  const newPersonGartenKulturBedarfNodes = bedarfeSorted.map(
+                    (bedarf, bedarfIndex) =>
+                      buildPersonGartenKulturBedarf({
+                        bedarf,
+                        bedarfIndex,
                         kulturId,
                         kulturIndex,
                         gartenId,
@@ -2583,8 +2560,8 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
                         personIndex,
                       }),
                   )
-                  personGartenKulturEventNodes.push(
-                    ...newPersonGartenKulturEventNodes,
+                  personGartenKulturBedarfNodes.push(
+                    ...newPersonGartenKulturBedarfNodes,
                   )
                 }
               }
@@ -2659,8 +2636,8 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
     ...artHerkunftKulturAnlieferungNodes,
     ...artHerkunftKulturAuslieferungFolderNodes,
     ...artHerkunftKulturAuslieferungNodes,
-    ...artHerkunftKulturEventFolderNodes,
-    ...artHerkunftKulturEventNodes,
+    ...artHerkunftKulturBedarfFolderNodes,
+    ...artHerkunftKulturBedarfNodes,
     ...artKulturFolderNodes,
     ...artKulturNodes,
     ...artKulturTeilkulturFolderNodes,
@@ -2671,8 +2648,8 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
     ...artKulturAnlieferungNodes,
     ...artKulturAuslieferungFolderNodes,
     ...artKulturAuslieferungNodes,
-    ...artKulturEventFolderNodes,
-    ...artKulturEventNodes,
+    ...artKulturBedarfFolderNodes,
+    ...artKulturBedarfNodes,
     ...herkunftFolderNodes,
     ...herkunftNodes,
     ...herkunftSammlungFolderNodes,
@@ -2697,8 +2674,8 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
     ...gartenKulturAnlieferungNodes,
     ...gartenKulturAuslieferungFolderNodes,
     ...gartenKulturAuslieferungNodes,
-    ...gartenKulturEventFolderNodes,
-    ...gartenKulturEventNodes,
+    ...gartenKulturBedarfFolderNodes,
+    ...gartenKulturBedarfNodes,
     ...kulturFolderNodes,
     ...kulturNodes,
     ...kulturTeilkulturFolderNodes,
@@ -2709,16 +2686,14 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
     ...kulturAnlieferungNodes,
     ...kulturAuslieferungFolderNodes,
     ...kulturAuslieferungNodes,
-    ...kulturEventFolderNodes,
-    ...kulturEventNodes,
+    ...kulturBedarfFolderNodes,
+    ...kulturBedarfNodes,
     ...teilkulturFolderNodes,
     ...teilkulturNodes,
     ...zaehlungFolderNodes,
     ...zaehlungNodes,
     ...lieferungFolderNodes,
     ...lieferungNodes,
-    ...eventFolderNodes,
-    ...eventNodes,
     ...personFolderNodes,
     ...personNodes,
     ...personGartenFolderNodes,
@@ -2729,8 +2704,8 @@ export const buildNodes = async ({ userPersonOption, userRole }) => {
     ...personGartenKulturAnlieferungNodes,
     ...personGartenKulturAuslieferungFolderNodes,
     ...personGartenKulturAuslieferungNodes,
-    ...personGartenKulturEventFolderNodes,
-    ...personGartenKulturEventNodes,
+    ...personGartenKulturBedarfFolderNodes,
+    ...personGartenKulturBedarfNodes,
     ...personGartenKulturTeilkulturFolderNodes,
     ...personGartenKulturTeilkulturNodes,
     ...personGartenKulturZaehlungFolderNodes,

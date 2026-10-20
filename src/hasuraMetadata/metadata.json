@@ -2104,6 +2104,704 @@
           },
           {
             "table": {
+              "name": "bedarf",
+              "schema": "public"
+            },
+            "object_relationships": [
+              {
+                "name": "kultur",
+                "using": {
+                  "foreign_key_constraint_on": "kultur_id"
+                }
+              },
+              {
+                "name": "person",
+                "using": {
+                  "foreign_key_constraint_on": "person_id"
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "artverantwortlich",
+                "permission": {
+                  "check": {
+                    "_or": [
+                      {
+                        "kultur": {
+                          "garten": {
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kultur": {
+                          "art": {
+                            "avs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kultur_id": {
+                          "_is_null": true
+                        }
+                      }
+                    ]
+                  },
+                  "columns": [
+                    "id",
+                    "kultur_id",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "person_id",
+                    "beschreibung",
+                    "changed",
+                    "changed_by",
+                    "_rev",
+                    "_parent_rev",
+                    "_revisions",
+                    "_depth",
+                    "_conflicts",
+                    "_deleted",
+                    "_rev_at"
+                  ]
+                }
+              },
+              {
+                "role": "gaertner",
+                "permission": {
+                  "check": {
+                    "_or": [
+                      {
+                        "kultur_id": {
+                          "_is_null": true
+                        }
+                      },
+                      {
+                        "kultur": {
+                          "garten": {
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_conflicts",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ]
+                }
+              },
+              {
+                "role": "manager",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_conflicts",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ]
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "artverantwortlich",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_conflicts",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {
+                    "_or": [
+                      {
+                        "kultur": {
+                          "garten": {
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kultur": {
+                          "art": {
+                            "avs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kultur_id": {
+                          "_is_null": true
+                        }
+                      }
+                    ]
+                  },
+                  "allow_aggregations": true
+                }
+              },
+              {
+                "role": "gaertner",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_conflicts",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {
+                    "_or": [
+                      {
+                        "kultur_id": {
+                          "_is_null": true
+                        }
+                      },
+                      {
+                        "kultur": {
+                          "garten": {
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "allow_aggregations": true
+                }
+              },
+              {
+                "role": "manager",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_conflicts",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "artverantwortlich",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_conflicts",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {
+                    "_or": [
+                      {
+                        "kultur": {
+                          "garten": {
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kultur": {
+                          "art": {
+                            "avs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kultur_id": {
+                          "_is_null": true
+                        }
+                      }
+                    ]
+                  },
+                  "check": null
+                }
+              },
+              {
+                "role": "gaertner",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_conflicts",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {
+                    "_or": [
+                      {
+                        "kultur_id": {
+                          "_is_null": true
+                        }
+                      },
+                      {
+                        "kultur": {
+                          "garten": {
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "check": null
+                }
+              },
+              {
+                "role": "manager",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_conflicts",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {},
+                  "check": null
+                }
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "artverantwortlich",
+                "permission": {
+                  "filter": {
+                    "_or": [
+                      {
+                        "kultur": {
+                          "garten": {
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kultur": {
+                          "art": {
+                            "avs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "kultur_id": {
+                          "_is_null": true
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "role": "gaertner",
+                "permission": {
+                  "filter": {
+                    "_or": [
+                      {
+                        "kultur_id": {
+                          "_is_null": true
+                        }
+                      },
+                      {
+                        "kultur": {
+                          "garten": {
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "role": "manager",
+                "permission": {
+                  "filter": {}
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "bedarf_rev",
+              "schema": "public"
+            },
+            "insert_permissions": [
+              {
+                "role": "artverantwortlich",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "bedarf_id",
+                    "kultur_id",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "person_id",
+                    "beschreibung",
+                    "changed",
+                    "changed_by",
+                    "_rev",
+                    "_parent_rev",
+                    "_revisions",
+                    "_depth",
+                    "_deleted",
+                    "id",
+                    "_rev_at"
+                  ]
+                }
+              },
+              {
+                "role": "gaertner",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "bedarf_id",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ]
+                }
+              },
+              {
+                "role": "manager",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "bedarf_id",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ]
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "artverantwortlich",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "bedarf_id",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              },
+              {
+                "role": "gaertner",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "bedarf_id",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              },
+              {
+                "role": "manager",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "bedarf_id",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "artverantwortlich",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "bedarf_id",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {},
+                  "check": null
+                }
+              },
+              {
+                "role": "gaertner",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "bedarf_id",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {},
+                  "check": null
+                }
+              },
+              {
+                "role": "manager",
+                "permission": {
+                  "columns": [
+                    "_deleted",
+                    "jahr",
+                    "bemerkungen",
+                    "neues_material",
+                    "_depth",
+                    "_rev_at",
+                    "_revisions",
+                    "beschreibung",
+                    "changed_by",
+                    "_parent_rev",
+                    "_rev",
+                    "changed",
+                    "bedarf_id",
+                    "id",
+                    "kultur_id",
+                    "person_id"
+                  ],
+                  "filter": {},
+                  "check": null
+                }
+              }
+            ]
+          },
+          {
+            "table": {
               "name": "event",
               "schema": "public"
             },
@@ -4560,6 +5258,18 @@
                     "column": "kultur_id",
                     "table": {
                       "name": "zaehlung",
+                      "schema": "public"
+                    }
+                  }
+                }
+              },
+              {
+                "name": "bedarfs",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "kultur_id",
+                    "table": {
+                      "name": "bedarf",
                       "schema": "public"
                     }
                   }
@@ -9276,6 +9986,18 @@
                     "column": "person_id",
                     "table": {
                       "name": "sammlung",
+                      "schema": "public"
+                    }
+                  }
+                }
+              },
+              {
+                "name": "bedarfs",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "person_id",
+                    "table": {
+                      "name": "bedarf",
                       "schema": "public"
                     }
                   }

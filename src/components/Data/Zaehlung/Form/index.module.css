@@ -1,7 +1,0 @@
-.fieldRow {
-  display: flex;
-  justify-content: space-between;
-  > div > button {
-    margin-top: 8px;
-  }
-}

@@ -1,4 +1,5 @@
 import { empty as art } from './art.js'
+import { empty as bedarf } from './bedarf.js'
 import { empty as event } from './event.js'
 import { empty as garten } from './garten.js'
 import { empty as herkunft } from './herkunft.js'
@@ -15,6 +16,7 @@ import { empty as teilzaehlung } from './teilzaehlung.js'
 export default {
   show: false,
   art,
+  bedarf,
   event,
   garten,
   herkunft,

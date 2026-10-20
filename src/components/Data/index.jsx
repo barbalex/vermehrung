@@ -8,6 +8,12 @@ const Art = lazy(async () => ({
 const Arten = lazy(async () => ({
   default: (await import('./Arten/index.jsx')).Arten,
 }))
+const Bedarf = lazy(async () => ({
+  default: (await import('./Bedarf/index.jsx')).Bedarf,
+}))
+const Bedarfe = lazy(async () => ({
+  default: (await import('./Bedarfe/index.jsx')).Bedarfe,
+}))
 const Event = lazy(async () => ({
   default: (await import('./Event/index.jsx')).Event,
 }))
@@ -89,6 +95,10 @@ export const Data = () => {
       return <Art id={id} />
     case 'arten':
       return <Arten />
+    case 'bedarf':
+      return <Bedarf id={id} />
+    case 'bedarfe':
+      return <Bedarfe />
     case 'event':
       return <Event id={id} />
     case 'events':

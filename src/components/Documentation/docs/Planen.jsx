@@ -1,15 +1,16 @@
+import { Link } from 'react-router'
+
 import dokuStyles from '../index.module.css'
 
 export const Planen = () => (
   <>
     <h1>Planen</h1>
-    <p className={dokuStyles.dokuDate}>28.01.2025</p>
+    <p className={dokuStyles.dokuDate}>20.10.2026</p>
     <h3>Was</h3>
     <p>Die folgenden Vorgänge können geplant werden:</p>
     <ul>
       <li>Sammlungen</li>
       <li>Lieferungen</li>
-      <li>Events</li>
       <li>Zählungen</li>
     </ul>
     <h3>Wozu</h3>
@@ -38,19 +39,17 @@ export const Planen = () => (
         erwartet wird, zur geplanten Zeit über die geplante Menge zu verfügen
         (erwartetes Lager)
       </li>
-      <li>
-        Mit <strong>Events</strong> können Vorgänge geplant werden, die nicht
-        anders dargestellt werden (nicht Sammlung, Vermehrung oder Lieferung
-        sind) und nicht grafisch ausgewertet werden sollen.
-      </li>
     </ul>
     <h3>Wie</h3>
     <p>
-      In Sammlungen, Lieferungen und Events gibt es ein Feld
-      &quot;geplant&quot;.
+      In Sammlungen und Lieferungen gibt es ein Feld &quot;geplant&quot;.
       <br />
-      Zählungen werden (von der Artverantwortlichen/Projektleitung) als
-      &quot;Ziel&quot; oder (vom Gärtner) als &quot;Bedarf&quot; markiert.
+      Zählungen konnten bis anhin als &quot;Ziel&quot; bzw.
+      &quot;Bedarf&quot; markiert werden. Diese Möglichkeit wurde entfernt.
+      Bestehende Markierungen bleiben in Auswertungen sichtbar.
+      <br />
+      Der <Link to="/Dokumentation/bedarf">Bedarf</Link> wird neu pro Jahr und
+      Kultur in eigenen Bedarf-Einträgen erfasst.
       <br />
     </p>
   </>

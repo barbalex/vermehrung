@@ -86,7 +86,6 @@ export const Tree = () => {
         'tree_teilkultur',
         'tree_zaehlung',
         'tree_lieferung',
-        'tree_event',
       ])
     const userRoleObservable = db
       .get('user_role')

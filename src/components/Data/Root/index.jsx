@@ -7,7 +7,6 @@ import { RootRow as Row } from './Row.jsx'
 import { dbAtom, userAtom, activeNodeArrayAtom } from '../../../store/index.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { getShowArt } from '../../../utils/showArt.js'
-import { getShowEvent } from '../../../utils/showEvent.js'
 import { getShowGarten } from '../../../utils/showGarten.js'
 import { getShowHerkunft } from '../../../utils/showHerkunft.js'
 import { getShowKultur } from '../../../utils/showKultur.js'
@@ -27,7 +26,6 @@ export const Root = ({ filter: showFilter }) => {
 
   const [dataState, setDataState] = useState({
     showArt: false,
-    showEvent: false,
     showGarten: false,
     showHerkunft: false,
     showKultur: false,
@@ -41,7 +39,6 @@ export const Root = ({ filter: showFilter }) => {
 
   const {
     showArt,
-    showEvent,
     showGarten,
     showHerkunft,
     showKultur,
@@ -64,7 +61,6 @@ export const Root = ({ filter: showFilter }) => {
               'tree_teilkultur',
               'tree_zaehlung',
               'tree_lieferung',
-              'tree_event',
             ])
         : $of([])
       const userRoleObservable = user.uid
@@ -80,7 +76,6 @@ export const Root = ({ filter: showFilter }) => {
       const subscription = combinedObservables.subscribe(
         async ([[userPersonOption], [userRole]]) => {
           const sArt = getShowArt({ userRole, activeNodeArray })
-          const sEvent = getShowEvent({ userPersonOption, activeNodeArray })
           const sGarten = getShowGarten()
           const sHerkunft = getShowHerkunft({ userRole, activeNodeArray })
           const sKultur = getShowKultur({ userPersonOption, activeNodeArray })
@@ -105,7 +100,6 @@ export const Root = ({ filter: showFilter }) => {
 
           setDataState({
             showArt: sArt,
-            showEvent: sEvent,
             showGarten: sGarten,
             showHerkunft: sHerkunft,
             showKultur: sKultur,
@@ -127,8 +121,7 @@ export const Root = ({ filter: showFilter }) => {
     [
       db,
       showArt,
-      showEvent,
-      showGarten,
+        showGarten,
       showHerkunft,
       showKultur,
       showLieferung,
@@ -200,9 +193,6 @@ export const Root = ({ filter: showFilter }) => {
     //     },
     //   ]
     // : []),
-    ...(showEvent
-      ? [{ name: 'Events', url: ['Events'], table: 'event', sort: 10 }]
-      : []),
     ...(showPerson
       ? [{ name: 'Personen', url: ['Personen'], table: 'person', sort: 11 }]
       : []),
