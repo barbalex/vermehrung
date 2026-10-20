@@ -148,7 +148,14 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
               Q.where('_deleted', false),
               Q.where('geplant', true),
               Q.where('datum', Q.notEq(null)),
-              Q.where('anzahl_pflanzen', Q.notEq(null)),
+              // Bedarf wird oft nicht in Pflanzen ausgedrückt, sondern in
+              // nicht zählbaren Werten wie «Samen», «Knöllchen», «Töpfe»
+              Q.or(
+                Q.where('anzahl_pflanzen', Q.notEq(null)),
+                Q.where('anzahl_auspflanzbereit', Q.notEq(null)),
+                Q.where('gramm_samen', Q.notEq(null)),
+                Q.where('andere_menge', Q.notEq(null)),
+              ),
             )
             .fetch()) ?? []
       } catch {}
@@ -331,20 +338,16 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (auslSinceAnzahlJungpflanzen || 0) +
             (anlSinceAnzahlJungpflanzen || 0)
           : '',
-        auslieferungen_geplant: ownAusLieferungsGeplant
-          .map(
-            (l) =>
-              `${format(new Date(l.datum), 'yyyy.MM.dd')}: ${
-                l.anzahl_pflanzen ?? 0
-              } Pflanzen${
-                exists(l.anzahl_auspflanzbereit)
-                  ? `, ${l.anzahl_auspflanzbereit} auspflanzbereit`
-                  : ''
-              }${
-                exists(l.gramm_samen) ? `, ${l.gramm_samen} Gramm Samen` : ''
-              }${exists(l.andere_menge) ? `, ${l.andere_menge}` : ''}`,
-          )
-          .join('; '),
+        auslieferungen_geplant: ownAusLieferungsGeplant.map((l) => {
+          const mengen = []
+          if (exists(l.anzahl_pflanzen))
+            mengen.push(`${l.anzahl_pflanzen} Pflanzen`)
+          if (exists(l.anzahl_auspflanzbereit))
+            mengen.push(`${l.anzahl_auspflanzbereit} auspflanzbereit`)
+          if (exists(l.gramm_samen)) mengen.push(`${l.gramm_samen} Gramm Samen`)
+          if (exists(l.andere_menge)) mengen.push(l.andere_menge)
+          return `${format(new Date(l.datum), 'yyyy.MM.dd')}: ${mengen.join(', ')}`
+        }).join('; '),
       }
 
       return row
