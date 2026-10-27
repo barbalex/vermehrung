@@ -28,8 +28,6 @@ lets implement light/dark mode as we did for ae3 and ps: default is system setti
 
 ---
 
-documentation: lets remove Schnittstellen
-
 ---
 
 http://localhost:5176/Dokumentation/struktur/: use updated image extracted from /home/alex/Nextcloud/Gabriel Software/projekte/vermehrung/2026 10 20 structure.odp
