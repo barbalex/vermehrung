@@ -5,10 +5,16 @@
   background-color: var(--filter-bg);
 }
 
+/* the tabs sit on the orange title row in both themes: the theme's
+   primary color (light purple in dark mode) is unreadable on orange,
+   so all tabs and the indicator are white */
 .tabs {
-  [role='tab'][aria-selected='false'],
+  [role='tab'],
   svg {
     color: white !important;
+  }
+  span[class*='MuiTabs-indicator'] {
+    background-color: white;
   }
 }
 
