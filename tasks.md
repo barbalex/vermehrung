@@ -4,7 +4,14 @@
 
 ---
 
-nur ap filter: only applied in nav tree, not to list view to the right of it, when applied at https://vermehrung.ch/Vermehrung/ (Arten list view not opened)
+auth not working in dev: fetchWithTimeout.js:8  GET http://localhost:8080/person?account_id=eq.ogA6AUQKd5byQkU2BXetDxvSLZi1&select=id,user_role(name) 401 (Unauthorized)
+
+---
+
+uploading file test.txt fails with: Files-CqhrugV6.js:14 Uncaught RangeError: Offset is outside the bounds of the DataView
+    at DataView.prototype.getUint16 (<anonymous>)
+    at Files-CqhrugV6.js:14:5181
+    at r.onload (Files-CqhrugV6.js:14:4551)
 
 ---
 
