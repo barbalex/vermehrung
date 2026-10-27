@@ -9,3 +9,9 @@ this app is currently using a graphql api. I feel it would be simpler to just us
 lets implement light/dark mode as we did for ae3 and ps: default is system setting, a icon enables overriding it
 
 ---
+
+remove the react-image-gallery-v2 branch
+
+---
+
+documentation: the active document should be highlighted in the list on the left
