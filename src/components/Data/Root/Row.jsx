@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { atom, useAtomValue } from 'jotai'
 
 import {
+  apFilterAtom,
   dbAtom,
   filterTableAtoms,
   setActiveNodeArray,
@@ -12,6 +13,7 @@ import styles from '../Arten/Row.module.css'
 
 export const RootRow = ({ style, row }) => {
   const db = useAtomValue(dbAtom)
+  const apFilter = useAtomValue(apFilterAtom)
   const filterAtom = useMemo(
     () => filterTableAtoms[row.table] ?? atom({}),
     [row.table],
@@ -25,14 +27,21 @@ export const RootRow = ({ style, row }) => {
   useEffect(() => {
     const subscription = db
       .get(row.table)
-      .query(...tableFilter({ table: row.table }))
+      .query(
+        ...tableFilter({
+          table: row.table,
+          // like the tree and the art list view: the 'nur AP' filter
+          // applies to art only (apflora_ap exists on no other table)
+          apFilter: row.table === 'art' && apFilter,
+        }),
+      )
       .observe()
       .subscribe((result) => {
         setCount(result.length)
       })
 
     return () => subscription?.unsubscribe?.()
-  }, [db, row.table, filter])
+  }, [db, row.table, filter, apFilter])
 
   const onClickRow = () => setActiveNodeArray(row.url)
 
