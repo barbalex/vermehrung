@@ -27,6 +27,11 @@ export const Article = ({ node }) => {
       selected={active}
       divider
       id={slug}
+      sx={{
+        // same visual language for the active document as the nav tree
+        // uses for its active node
+        ...(active && { color: '#D84315', fontWeight: 700 }),
+      }}
       style={{ ...(isChild ? { paddingLeft: 35 } : {}) }}
     >
       <ListItemText onClick={onClickMenuItem}>
