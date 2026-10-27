@@ -5,3 +5,7 @@
 this app is currently using a graphql api. I feel it would be simpler to just use rest instead. does the current graphql implementation have any features, a simpler rest implementation could not offer? Do remember that the app is using graphql-ws.
 
 ---
+
+lets implement light/dark mode as we did for ae3 and ps: default is system setting, a icon enables overriding it
+
+---
