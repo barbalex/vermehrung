@@ -7,7 +7,7 @@
   margin: 2px 104px 4px 8px;
   min-height: 44px;
   padding: 2px 2px 2px 8px;
-  background-color: #fff3e0;
+  background-color: var(--filter-bg);
   font-size: 0.75rem;
   line-height: 1.4;
   border-radius: 4px;

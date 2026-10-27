@@ -7,6 +7,7 @@ import { Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
+import { ThemeChooser } from '../../shared/ThemeChooser.jsx'
 import { DokuFilter } from './Filter/index.jsx'
 import { constants } from '../../../utils/constants.js'
 
@@ -18,12 +19,9 @@ export const HeaderDoku = () => {
 
   return (
     <ErrorBoundary>
-      <AppBar
-        position="fixed"
-        ref={ref}
-      >
+      <AppBar position="fixed" ref={ref}>
         <Toolbar>
-          {mobile ?
+          {mobile ? (
             <IconButton
               color="inherit"
               aria-label="Home"
@@ -34,7 +32,8 @@ export const HeaderDoku = () => {
             >
               <FaHome />
             </IconButton>
-          : <Button
+          ) : (
+            <Button
               variant="outlined"
               component={Link}
               to="/"
@@ -43,7 +42,7 @@ export const HeaderDoku = () => {
             >
               Vermehrung
             </Button>
-          }
+          )}
           <div className={styles.spacer} />
           <DokuFilter />
           <Button
@@ -54,6 +53,7 @@ export const HeaderDoku = () => {
           >
             Daten
           </Button>
+          <ThemeChooser />
         </Toolbar>
       </AppBar>
     </ErrorBoundary>

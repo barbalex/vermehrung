@@ -5,7 +5,7 @@
 
 .labelClass {
   font-size: 12px !important;
-  color: rgb(0, 0, 0, 0.54);
+  color: var(--text-secondary);
   position: relative !important;
   transform: none !important;
 }
@@ -13,8 +13,8 @@
 .datePicker {
   width: 100%;
   padding: 0.25rem 0;
-  color: #495057;
-  background-color: #fff;
+  color: var(--text-secondary);
+  background-color: var(--surface);
   background-clip: padding-box;
   transition:
     border-color 0.15s ease-in-out,
@@ -29,8 +29,8 @@
   background-color: transparent;
   font-size: 1rem;
   &:focus {
-    color: #495057;
-    background-color: #fff;
+    color: var(--text-secondary);
+    background-color: var(--surface);
     outline: 0;
     border-bottom: 2px solid #4a148c;
     box-shadow: none;

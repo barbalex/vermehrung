@@ -20,7 +20,7 @@
 }
 
 .total {
-  border-top: 1px solid rgba(0, 0, 0, 0.54);
+  border-top: 1px solid var(--divider-strong);
   text-align: center;
 }
 

@@ -181,7 +181,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
     <ErrorBoundary>
       <div
         className={artStyles.container}
-        style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+        style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
         {showFilter ? (
           <FilterTitle

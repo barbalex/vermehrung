@@ -10,7 +10,7 @@
 /* exported as DokuDate = styled.p */
 .dokuDate {
   margin-bottom: 15px !important;
-  color: #b4b4b4;
+  color: var(--text-secondary);
   font-weight: 600;
 }
 

@@ -6,7 +6,7 @@
   flex-wrap: wrap;
   width: 100%;
   &:hover {
-    background-color: rgba(74, 20, 140, 0.03);
+    background-color: var(--hover-bg);
   }
 }
 

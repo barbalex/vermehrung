@@ -4,7 +4,7 @@
 }
 
 .herkunftLabelClass {
-  color: rgb(0, 0, 0, 0.54);
+  color: var(--text-secondary);
   font-size: 12px;
   padding-bottom: 2px;
 }

@@ -202,7 +202,7 @@ export const Root = ({ filter: showFilter }) => {
     <ErrorBoundary>
       <div
         className={styles.container}
-        style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+        style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
         <div className={styles.fieldsContainer}>
           {rows.map((row) => (

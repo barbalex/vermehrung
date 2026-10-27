@@ -1,4 +1,5 @@
 import { atom, createStore } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 import { sortBy, isEqual } from 'es-toolkit'
 import localForage from 'localforage'
 import { v1 as uuidv1 } from 'uuid'
@@ -135,6 +136,16 @@ export const initiallyQueryingAtom = persistedAtom('initiallyQuerying', '')
 // online state is deliberately not persisted: it is redetermined on boot
 export const onlineAtom = atom(true)
 export const shortTermOnlineAtom = atom(true)
+// theme mode: 'system' follows the OS prefers-color-scheme preference
+// (the default), 'light' and 'dark' force a mode. atomWithStorage reads
+// synchronously on init; index.html resolves the same storage key
+// before first paint so dark mode does not flash
+export const themeModeAtom = atomWithStorage(
+  'vermehrung:theme-mode',
+  'system',
+  undefined,
+  { getOnInit: true },
+)
 // on startup need to wait with showing data
 // until the api token with its claims has arrived
 // this is _after_ user is set so need another variable

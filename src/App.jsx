@@ -3,10 +3,10 @@ import DatabaseProvider from '@nozbe/watermelondb/react/DatabaseProvider'
 import { useAtomValue } from 'jotai'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
-import { materialTheme } from './utils/materialTheme.js'
+import { darkTheme, lightTheme } from './utils/materialTheme.js'
 import { initiateApp } from './utils/initiateApp.js'
 import { initiateDb } from './utils/initiateDb.js'
-import { apiClientAtom, dbAtom, setDb } from './store/index.js'
+import { apiClientAtom, dbAtom, setDb, themeModeAtom } from './store/index.js'
 import { Router } from './Router.jsx'
 import { QueuedQueriesObserver } from './components/QueuedQueriesObserver.jsx'
 import { version as appVersion } from '../package.json'
@@ -16,6 +16,34 @@ export const App = () => {
   const [initError, setInitError] = useState(null)
   const database = useAtomValue(dbAtom)
   const apiClient = useAtomValue(apiClientAtom)
+  const themeMode = useAtomValue(themeModeAtom)
+
+  // track the OS color-scheme preference so 'system' mode can follow it live
+  const [systemPrefersDark, setSystemPrefersDark] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches,
+  )
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const onChange = (event) => setSystemPrefersDark(event.matches)
+    mediaQuery.addEventListener('change', onChange)
+    return () => mediaQuery.removeEventListener('change', onChange)
+  }, [])
+
+  const isDark =
+    themeMode === 'dark' || (themeMode === 'system' && systemPrefersDark)
+
+  // mirror the resolved mode onto <html> so plain CSS (index.css, component
+  // modules) can define dark variants via [data-theme='dark'];
+  // index.html sets the same attribute before first paint
+  useEffect(() => {
+    document.documentElement.dataset.theme = isDark ? 'dark' : 'light'
+    document.documentElement.style.colorScheme = isDark ? 'dark' : 'light'
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', isDark ? '#121212' : '#2e0c58')
+  }, [isDark])
 
   useEffect(() => {
     const baseTitle = 'Vermehrung'
@@ -64,7 +92,7 @@ export const App = () => {
   return (
     <DatabaseProvider database={database}>
       <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={materialTheme}>
+        <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
           <QueuedQueriesObserver />
           <Suspense fallback={null}>
             <Router />

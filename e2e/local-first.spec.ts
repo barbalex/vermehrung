@@ -272,6 +272,9 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
   })
 
   await test.step('offline: the app boots from cached data', async () => {
+    // let Loki's autosave (500ms interval) commit the last writes
+    // before the reload discards the page
+    await page.waitForTimeout(1500)
     await setAppOffline(true)
     await page.reload()
     // no network at all - the cached rows still render

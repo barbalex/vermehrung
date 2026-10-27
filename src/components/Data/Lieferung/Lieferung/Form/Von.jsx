@@ -174,7 +174,7 @@ export const LieferungVon = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter ? '#ffe0b2' : 'rgba(248, 243, 254, 1)',
+          backgroundColor: showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>von</div>

@@ -5,10 +5,58 @@
   --sash-hover-size: 8px;
 }
 
+/*
+ * theme variables: light values here, dark variants on html[data-theme='dark'].
+ * html[data-theme] is set before first paint by the script in index.html and
+ * kept in sync by App.jsx, so dark mode does not flash
+ */
+:root {
+  --bg: #ffffff;
+  --text: rgba(0, 0, 0, 0.87);
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --surface: #ffffff;
+  /* lavender form fields */
+  --form-bg: var(--form-bg);
+  /* orange-ish filter tints */
+  --filter-bg: var(--filter-bg);
+  --filter-bg-alt: var(--filter-bg-alt);
+  --divider: #e8e8e8;
+  --divider-strong: rgba(0, 0, 0, 0.54);
+  /* hover rows */
+  --hover-bg: rgba(74, 20, 140, 0.03);
+  /* the home page cards sit on a photo */
+  --card-overlay-bg: rgba(255, 255, 255, 0.65);
+  --scrollbar-thumb: #4a148c;
+  --scrollbar-track: var(--form-bg);
+}
+
+html[data-theme='dark'] {
+  --bg: #121212;
+  --text: rgba(255, 255, 255, 0.87);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --surface: #1e1e1e;
+  --form-bg: #262033;
+  --filter-bg: #33261a;
+  --filter-bg-alt: #4a3826;
+  --divider: #3c3c3c;
+  --divider-strong: rgba(255, 255, 255, 0.5);
+  --hover-bg: rgba(255, 255, 255, 0.06);
+  --card-overlay-bg: rgba(30, 30, 30, 0.75);
+  --scrollbar-thumb: #9c4dcc;
+  --scrollbar-track: #1c1c1c;
+}
+
+html {
+  background: var(--bg);
+  color: var(--text);
+}
+
 body {
   margin: 0;
   font-family: system-ui;
   height: 100%;
+  background: inherit;
+  color: inherit;
 }
 
 html {
@@ -85,14 +133,14 @@ html {
 
 /* newer syntax for firefox */
 html {
-  scrollbar-color: #4a148c rgba(248, 243, 254, 1);
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   scrollbar-width: thin;
 }
 
 /* own syntax for webkit */
 ::-webkit-scrollbar {
   width: 12px;
-  background: rgba(255, 253, 231, 0.1);
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar:horizontal {

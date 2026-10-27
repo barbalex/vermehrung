@@ -5,7 +5,7 @@
 }
 
 .titleRow {
-  background-color: rgba(248, 243, 254, 1);
+  background-color: var(--form-bg);
   flex-shrink: 0;
   display: flex !important;
   height: var(--title-row-height);

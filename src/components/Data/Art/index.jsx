@@ -71,7 +71,7 @@ export const Art = ({
     <ErrorBoundary>
       <div
         className={styles.container}
-        style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+        style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
         <FormTitle
           row={row}
@@ -80,7 +80,7 @@ export const Art = ({
         />
         <div
           className={styles.splitPaneContainer}
-          style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+          style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
         >
           <Allotment key={`${activeConflict}/${showHistory}`}>
             <Form

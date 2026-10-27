@@ -10,7 +10,9 @@
 
 ---
 
-lets implement light/dark mode as we did for ae3 and ps: default is system setting, a icon enables overriding it
+---
+
+---
 
 ---
 

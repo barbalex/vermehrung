@@ -99,7 +99,7 @@ export const Herkuenfte = ({ filter: showFilter }) => {
     <ErrorBoundary>
       <div
         className={artStyles.container}
-        style={{ backgroundColor: showFilter ? '#fff3e0' : 'unset' }}
+        style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
         {showFilter ? (
           <FilterTitle

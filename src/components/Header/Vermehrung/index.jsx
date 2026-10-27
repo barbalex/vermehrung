@@ -3,6 +3,7 @@ import Toolbar from '@mui/material/Toolbar'
 import { useResizeDetector } from 'react-resize-detector'
 
 import Account from './Account.jsx'
+import { ThemeChooser } from '../../shared/ThemeChooser.jsx'
 import { HeaderHamburgerMenu as HamburgerMenu } from './Menu/index.jsx'
 import { Online } from './Online.jsx'
 import { HeaderSearch } from './Search/index.jsx'
@@ -21,26 +22,24 @@ export const HeaderVermehrung = () => {
 
   return (
     <ErrorBoundary>
-      <AppBar
-        position="fixed"
-        ref={ref}
-      >
+      <AppBar position="fixed" ref={ref}>
         <Toolbar>
           <NavTree />
-          {width < 509 ?
+          {width < 509 ? (
             <>
               <div className={styles.spacer} />
               <Filter />
               <HeaderSearch />
               <Online />
               <Account />
+              <ThemeChooser />
               <Menu>
                 <Home asMenu />
                 <Docu asMenu />
                 <HamburgerMenu asMenu />
               </Menu>
             </>
-          : width < 557 ?
+          ) : width < 557 ? (
             <>
               <Home />
               <div className={styles.spacer} />
@@ -48,12 +47,13 @@ export const HeaderVermehrung = () => {
               <HeaderSearch />
               <Online />
               <Account />
+              <ThemeChooser />
               <Menu>
                 <Docu asMenu />
                 <HamburgerMenu asMenu />
               </Menu>
             </>
-          : width < 605 ?
+          ) : width < 605 ? (
             <>
               <Home />
               <div className={styles.spacer} />
@@ -61,12 +61,14 @@ export const HeaderVermehrung = () => {
               <HeaderSearch />
               <Online />
               <Account />
+              <ThemeChooser />
               <HamburgerMenu />
               <Menu>
                 <Docu asMenu />
               </Menu>
             </>
-          : <>
+          ) : (
+            <>
               <Home />
               <div className={styles.spacer} />
               <Docu />
@@ -74,9 +76,10 @@ export const HeaderVermehrung = () => {
               <HeaderSearch />
               <Online />
               <Account />
+              <ThemeChooser />
               <HamburgerMenu />
             </>
-          }
+          )}
         </Toolbar>
       </AppBar>
     </ErrorBoundary>

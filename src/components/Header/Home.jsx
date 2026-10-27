@@ -7,6 +7,7 @@ import { Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+import { ThemeChooser } from '../shared/ThemeChooser.jsx'
 import { constants } from '../../utils/constants.js'
 
 import styles from './Home.module.css'
@@ -19,15 +20,13 @@ export const HeaderHome = ({ location }) => {
 
   return (
     <ErrorBoundary>
-      <AppBar
-        position="fixed"
-        ref={ref}
-      >
+      <AppBar position="fixed" ref={ref}>
         <Toolbar>
-          {mobile ?
-            isHome ?
+          {mobile ? (
+            isHome ? (
               <div />
-            : <IconButton
+            ) : (
+              <IconButton
                 color="inherit"
                 aria-label="Home"
                 component={Link}
@@ -37,8 +36,9 @@ export const HeaderHome = ({ location }) => {
               >
                 <FaHome />
               </IconButton>
-
-          : <Button
+            )
+          ) : (
+            <Button
               variant="outlined"
               component={Link}
               to="/"
@@ -47,7 +47,7 @@ export const HeaderHome = ({ location }) => {
             >
               Vermehrung
             </Button>
-          }
+          )}
           <div className={styles.spacer} />
           <Button
             variant="outlined"
@@ -65,6 +65,7 @@ export const HeaderHome = ({ location }) => {
           >
             Daten
           </Button>
+          <ThemeChooser />
         </Toolbar>
       </AppBar>
     </ErrorBoundary>
