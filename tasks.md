@@ -15,3 +15,15 @@ remove the react-image-gallery-v2 branch
 ---
 
 documentation: the active document should be highlighted in the list on the left
+
+---
+
+documentation: rename Events to Bedarf. Place it directly under Planen. And link from Planen to it ('Siehe auch...').
+
+---
+
+documentation: remove Schnittstellen
+
+---
+
+http://localhost:5176/Dokumentation/struktur/: use updated image
