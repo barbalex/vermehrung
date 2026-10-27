@@ -106,7 +106,7 @@ export const Select = ({
   const selectStyles = {
     option: (styles, { data }) => ({
       ...styles,
-      ...(data.inaktiv ? { color: 'rgba(0,0,0,0.35)' } : {}),
+      ...(data.inaktiv ? { color: 'var(--text-secondary)' } : {}),
     }),
     menuPortal: (base) => ({ ...base, zIndex: 9999 }),
   }

@@ -103,7 +103,7 @@ export const HeaderSearch = () => {
     }),
     option: (provided) => ({
       ...provided,
-      color: 'rgba(0,0,0,0.8)',
+      color: 'var(--text)',
       fontSize: '0.8em',
       paddingTop: '3px',
       paddingBottom: '3px',
@@ -117,7 +117,7 @@ export const HeaderSearch = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      color: 'rgba(0, 0, 0, 0.8)',
+      color: 'var(--text)',
       fontWeight: '700',
       userSelect: 'none',
       textTransform: 'none',

@@ -222,6 +222,20 @@ html {
   display: none !important;
 }
 
+/* react-select dropdowns: the header search and the form selects rely
+   on react-select's white default menu - give them a dark surface */
+html[data-theme='dark'] .react-select-search__menu,
+html[data-theme='dark'] .react-select__menu {
+  background-color: var(--surface) !important;
+}
+html[data-theme='dark'] .react-select-search__option--is-focused,
+html[data-theme='dark'] .react-select__option--is-focused {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+html[data-theme='dark'] .react-select__option--is-selected {
+  background-color: rgba(156, 77, 204, 0.35) !important;
+}
+
 /* react-slick */
 
 .slick-prev:before,
