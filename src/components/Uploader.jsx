@@ -37,6 +37,21 @@ export class Uploader extends Component {
     // capture file selections on the way in and stop empty files.
     // covers the file dialog; drag-and-drop of empty files still crashes
     // inside the widget, which merely stalls its dialog
+    this.messageTimer = null
+    // show the message where the widget shows its own dialog errors
+    this.showDialogMessage = (text) => {
+      const el = document.querySelector('.uploadcare--panel__message')
+      if (!el) return false
+      el.textContent = text
+      el.classList.remove('uploadcare--panel__message_hidden')
+      el.classList.add('uploadcare--error')
+      clearTimeout(this.messageTimer)
+      this.messageTimer = setTimeout(() => {
+        el.textContent = ''
+        el.classList.remove('uploadcare--error')
+      }, 5000)
+      return true
+    }
     this.blockEmptyFiles = (e) => {
       const input = e.target
       if (input?.type !== 'file') return
@@ -45,7 +60,10 @@ export class Uploader extends Component {
       e.preventDefault()
       e.stopImmediatePropagation()
       input.value = ''
-      addNotification({ message: 'Die Datei ist leer' })
+      if (!this.showDialogMessage('Die Datei ist leer')) {
+        // dialog not open/found: fall back to the app notification
+        addNotification({ message: 'Die Datei ist leer' })
+      }
     }
     document.addEventListener('change', this.blockEmptyFiles, true)
 
@@ -84,6 +102,7 @@ export class Uploader extends Component {
   }
 
   componentWillUnmount() {
+    clearTimeout(this.messageTimer)
     document.removeEventListener('change', this.blockEmptyFiles, true)
     if (this.dialog) {
       this.dialog.reject()
