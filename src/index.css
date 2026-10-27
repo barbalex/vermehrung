@@ -16,18 +16,20 @@
   --text-secondary: rgba(0, 0, 0, 0.6);
   --surface: #ffffff;
   /* lavender form fields */
-  --form-bg: var(--form-bg);
+  --form-bg: rgba(248, 243, 254, 1);
   /* orange-ish filter tints */
-  --filter-bg: var(--filter-bg);
-  --filter-bg-alt: var(--filter-bg-alt);
+  --filter-bg: #fff3e0;
+  --filter-bg-alt: #ffe0b2;
   --divider: #e8e8e8;
   --divider-strong: rgba(0, 0, 0, 0.54);
   /* hover rows */
   --hover-bg: rgba(74, 20, 140, 0.03);
+  /* lines between list rows */
+  --row-border: rgba(74, 20, 140, 0.2);
   /* the home page cards sit on a photo */
   --card-overlay-bg: rgba(255, 255, 255, 0.65);
   --scrollbar-thumb: #4a148c;
-  --scrollbar-track: var(--form-bg);
+  --scrollbar-track: rgba(248, 243, 254, 1);
 }
 
 html[data-theme='dark'] {
@@ -41,9 +43,14 @@ html[data-theme='dark'] {
   --divider: #3c3c3c;
   --divider-strong: rgba(255, 255, 255, 0.5);
   --hover-bg: rgba(255, 255, 255, 0.06);
+  --row-border: rgba(255, 255, 255, 0.15);
   --card-overlay-bg: rgba(30, 30, 30, 0.75);
   --scrollbar-thumb: #9c4dcc;
   --scrollbar-track: #1c1c1c;
+  /* the allotment separators are defined in the :root block above -
+   * dark values need their own override block */
+  --focus-border: rgba(186, 104, 200, 0.6);
+  --separator-border: rgba(255, 255, 255, 0.22);
 }
 
 html {

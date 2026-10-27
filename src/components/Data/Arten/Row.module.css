@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   min-height: var(--single-row-height);
-  border-bottom: 1px solid rgba(74, 20, 140, 0.2);
+  border-bottom: 1px solid var(--row-border);
   border-collapse: collapse;
   box-sizing: border-box;
   margin: -1px 0;
