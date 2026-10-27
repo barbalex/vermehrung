@@ -45,7 +45,7 @@ const poll = async () => {
     const since = store.get(lastUpdatedAtom)
     const result = await store
       .get(apiClientAtom)
-      .post('/rpc/sync', since)
+      .post('/rpc/sync', { p_since: since })
     // reaching the api means we are online
     if (!store.get(onlineAtom)) setOnline(true)
     setShortTermOnline(true)
