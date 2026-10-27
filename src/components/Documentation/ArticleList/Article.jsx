@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { FaChevronRight, FaChevronDown } from 'react-icons/fa'
@@ -11,7 +11,10 @@ export const Article = ({ node }) => {
 
   const onClickMenuItem = () => navigate(`${activeUrl}/`)
 
-  const pathname = window?.location?.pathname?.split('/').filter((a) => !!a)
+  // reactive location: the react compiler memoizes this component, a
+  // direct window.location read would never be re-evaluated on navigation
+  const { pathname: locationPathname } = useLocation()
+  const pathname = locationPathname?.split('/').filter((a) => !!a)
   const isParent = children?.length > 0
   const isChild = node?.level === 2
   const pathSplit = activeUrl.split('/').filter((a) => !!a)
