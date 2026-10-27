@@ -94,7 +94,7 @@ export const Datenschutz = () => (
         <br />
       </li>
       <li>
-        <strong>Website</strong> bezeichnet vermehrung.ch, erreichbar unter{' '}
+        <strong>Website</strong> bezeichnet{' '}
         <a
           href="https://vermehrung.ch"
           rel="external nofollow noopener noreferrer"
@@ -362,8 +362,8 @@ export const Datenschutz = () => (
     <h3>Übermittlung Ihrer personenbezogenen Daten</h3>
     <p>
       Ihre Informationen, einschliesslich personenbezogener Daten, werden am
-      Geschäftssitz des Unternehmens und an allen anderen Orten verarbeitet,
-      an denen die an der Verarbeitung beteiligten Parteien ansässig sind. Das
+      Geschäftssitz des Unternehmens und an allen anderen Orten verarbeitet, an
+      denen die an der Verarbeitung beteiligten Parteien ansässig sind. Das
       bedeutet, dass diese Informationen auf Computer ausserhalb Ihres Kantons,
       Landes oder anderer staatlicher Hoheitsgebiete übermittelt und dort
       gespeichert werden können, wo die Datenschutzgesetze von denen Ihrer
