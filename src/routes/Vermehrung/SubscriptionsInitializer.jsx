@@ -30,9 +30,9 @@ export const SubscriptionsInitializer = () => {
             const rows = await store
               .get(apiClientAtom)
               .get(
-                `/person?account_id=eq.${user.uid}&select=id,person_user_role(name)`,
+                `/person?account_id=eq.${user.uid}&select=id,user_role(name)`,
               )
-            const role = rows?.[0]?.person_user_role?.name
+            const role = rows?.[0]?.user_role?.name
             if (!role) {
               // no role: retry, the person might just have been created
               console.log('user has no role yet, retrying')
