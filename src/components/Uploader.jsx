@@ -62,20 +62,34 @@ export class Uploader extends Component {
       }, 5000)
       return true
     }
-    this.blockEmptyFiles = (e) => {
-      const input = e.target
-      if (input?.type !== 'file') return
-      const hasEmptyFile = [...(input.files ?? [])].some((f) => f.size === 0)
-      if (!hasEmptyFile) return
-      e.preventDefault()
-      e.stopImmediatePropagation()
-      input.value = ''
+    this.hasEmptyFile = (files) =>
+      [...(files ?? [])].some((f) => f.size === 0)
+    this.rejectEmptyFiles = () => {
       if (!this.showDialogMessage('Die Datei ist leer')) {
         // dialog not open/found: fall back to the app notification
         addNotification({ message: 'Die Datei ist leer' })
       }
     }
+    this.blockEmptyFiles = (e) => {
+      if (e.target?.type !== 'file') return
+      if (!this.hasEmptyFile(e.target.files)) return
+      e.preventDefault()
+      e.stopImmediatePropagation()
+      e.target.value = ''
+      this.rejectEmptyFiles()
+    }
     document.addEventListener('change', this.blockEmptyFiles, true)
+    // drag-and-drop bypasses the file input: the dialog's drop zone gets
+    // its own capture-phase guard (the widget itself crashes on the
+    // header of zero-byte files while building the preview)
+    this.blockEmptyDrops = (e) => {
+      if (!e.dataTransfer) return
+      if (!this.hasEmptyFile(e.dataTransfer.files)) return
+      e.preventDefault()
+      e.stopImmediatePropagation()
+      this.rejectEmptyFiles()
+    }
+    document.addEventListener('drop', this.blockEmptyDrops, true)
 
     const widget = uploadcare.Widget(this.uploader)
     // the widget crashes on zero-byte files when reading their magic
@@ -114,6 +128,7 @@ export class Uploader extends Component {
   componentWillUnmount() {
     clearTimeout(this.messageTimer)
     document.removeEventListener('change', this.blockEmptyFiles, true)
+    document.removeEventListener('drop', this.blockEmptyDrops, true)
     if (this.dialog) {
       this.dialog.reject()
     }
