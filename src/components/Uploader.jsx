@@ -32,6 +32,12 @@ window.UPLOADCARE_SECURE_EXPIRE = expire
 export class Uploader extends Component {
   componentDidMount() {
     const widget = uploadcare.Widget(this.uploader)
+    // the widget crashes on zero-byte files when reading their magic
+    // bytes for the preview (RangeError in DataView.getUint16) -
+    // reject them before it gets that far
+    widget.validators.push((fileInfo) => {
+      if (fileInfo.size === 0) return 'Die Datei ist leer'
+    })
     const { value, onChange, onUploadComplete } = this.props
 
     if (typeof value !== 'undefined') {
