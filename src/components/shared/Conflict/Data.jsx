@@ -15,7 +15,7 @@ const Row = styled.div`
   padding-top: 5px;
   padding-bottom: 5px;
 
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid var(--row-border);
   .Difference > del {
     background-color: rgb(201, 238, 211);
     text-decoration: none;
@@ -57,7 +57,7 @@ export const Data = ({ dataArray, loading }) => {
       diffConflict && !['geändert', 'geändert von'].includes(d.label)
     const isLast = index + 1 === dataArray.length
     const rowStyle = {
-      borderBottom: isLast ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
+      borderBottom: isLast ? '1px solid var(--row-border)' : 'none',
     }
 
     return (

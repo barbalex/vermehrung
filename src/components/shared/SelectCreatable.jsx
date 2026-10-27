@@ -13,7 +13,7 @@ import styles from './SelectCreatable.module.css'
 const StyledSelect = styled(Select)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
-    border-bottom-color: rgba(0, 0, 0, 0.1);
+    border-bottom-color: var(--input-underline);
     border-top: none;
     border-left: none;
     border-right: none;

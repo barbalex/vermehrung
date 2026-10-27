@@ -12,7 +12,7 @@ import styles from './index.module.css'
 export const StyledSelect = styled(SelectComponent)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
-    border-bottom-color: rgba(0, 0, 0, 0.1);
+    border-bottom-color: var(--input-underline);
     border-top: none;
     border-left: none;
     border-right: none;
@@ -24,7 +24,7 @@ export const StyledSelect = styled(SelectComponent)`
     border-bottom-width: 2px;
   }
   .react-select__control:focus-within {
-    border-bottom-color: #4a148c !important;
+    border-bottom-color: var(--icon-primary) !important;
     box-shadow: none;
   }
   .react-select__value-container {
