@@ -10,7 +10,8 @@ export const isOnline = async () => {
   // if we are on localhost, we are always online
   if (window?.location?.hostname === 'localhost') return true
 
-  // based on: https://hasura.io/docs/1.0/graphql/core/api-reference/health.html
+  // the api root doubles as the health endpoint: PostgREST serves
+  // the OpenApi spec there without authentication
   let res
   try {
     res = await fetchWithTimeout(constants?.getHealthUri(), {}, 5000)

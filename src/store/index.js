@@ -136,7 +136,7 @@ export const initiallyQueryingAtom = persistedAtom('initiallyQuerying', '')
 export const onlineAtom = atom(true)
 export const shortTermOnlineAtom = atom(true)
 // on startup need to wait with showing data
-// until hasura claims have been added
+// until the api token with its claims has arrived
 // this is _after_ user is set so need another variable
 export const gettingAuthUserAtom = atom(true)
 export const authorizingAtom = atom(true)

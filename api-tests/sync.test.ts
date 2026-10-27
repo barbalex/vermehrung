@@ -6,15 +6,14 @@ import {
   assertBackendAvailable,
   getTestPerson,
   getTestPersons,
-  hasura,
   mintToken,
   pgrst,
 } from './helpers.js'
 
 // The sync endpoint must return, per role:
 // - exactly the rows the role may see (same as a direct table request)
-// - the same field values Hasura delivered (the local-first store
-//   consumes them verbatim)
+// - geodata as GeoJSON with a crs member (the local-first store consumes
+//   it verbatim; st_asgeojson would truncate the coordinates)
 // - no gaertner-excluded herkunft columns
 
 describe('sync rpc', () => {
@@ -70,39 +69,53 @@ describe('sync rpc', () => {
     expect(Math.abs(Date.now() / 1000 - full.data.synced_at)).toBeLessThan(120)
   })
 
-  it('delivers the same herkunft field values as Hasura did', async () => {
+  it('delivers herkunft geodata as GeoJSON with the full field set', async () => {
     const person = await getTestPerson('manager')
     const token = mintToken('manager', person.id)
-
-    const hasuraRes = await hasura(
-      `query {
-        herkunft(where: {geom_point: {_is_null: false}}, limit: 3) {
-          id nr lokalname gemeinde kanton land bemerkungen geom_point lv95_x
-          lv95_y wgs84_lat wgs84_long changed changed_by _rev _parent_rev
-          _revisions _depth _conflicts _deleted
-        }
-      }`,
-      { role: 'manager', userId: person.id },
-    )
-    expect(hasuraRes.errors).toBeUndefined()
-    const hasuraRows: Json[] = hasuraRes.data.herkunft
 
     const syncRes = await pgrst('/rpc/sync', {
       method: 'POST',
       token,
       body: { p_since: { herkunft: 0 } },
     })
-    const byId = new Map(
-      (syncRes.data.herkunft as Json[]).map((r: Json) => [r.id, r]),
-    )
-    expect(hasuraRows.length).toBeGreaterThan(0)
-    for (const hasuraRow of hasuraRows) {
-      const syncRow = byId.get(hasuraRow.id)
-      expect(syncRow, `herkunft ${hasuraRow.id} present in sync`).toBeTruthy()
-      // field-by-field so a diff names the drifting field
-      for (const [field, value] of Object.entries(hasuraRow)) {
-        expect(syncRow[field], `herkunft.${field}`).toEqual(value)
-      }
+    expect(syncRes.status).toBe(200)
+    const rows = syncRes.data.herkunft as Json[]
+    const withGeom = rows.filter((r) => r.geom_point)
+    expect(withGeom.length).toBeGreaterThan(0)
+    // the field set the client's watermelon schema consumes
+    const expectedFields = [
+      'id',
+      'nr',
+      'lokalname',
+      'gemeinde',
+      'kanton',
+      'land',
+      'bemerkungen',
+      'geom_point',
+      'lv95_x',
+      'lv95_y',
+      'wgs84_lat',
+      'wgs84_long',
+      'changed',
+      'changed_by',
+      '_rev',
+      '_parent_rev',
+      '_revisions',
+      '_depth',
+      '_conflicts',
+      '_deleted',
+    ]
+    for (const row of withGeom.slice(0, 20)) {
+      expect(
+        Object.keys(row),
+        `herkunft ${row.id} field set`,
+      ).toEqual(expect.arrayContaining(expectedFields))
+      const geom = row.geom_point
+      // GeoJSON point with the crs member the app writes and reads back
+      expect(geom.type).toBe('Point')
+      expect(Array.isArray(geom.coordinates)).toBe(true)
+      expect(geom.coordinates).toHaveLength(2)
+      expect(geom.crs).toBeDefined()
     }
   })
 

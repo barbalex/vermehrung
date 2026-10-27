@@ -70,28 +70,6 @@ services:
         restart: true
     networks:
       - network
-  # hasura only remains for the migration period: the permission
-  # equivalence tests (npm run test:api) use it as the oracle.
-  # start with: docker compose -f backend-dev/docker-compose.yaml --profile migration up
-  graphql:
-    profiles:
-      - migration
-    image: "hasura/graphql-engine:v2.51.0"
-    container_name: v_graphql
-    ports:
-      - "8081:8080"
-    depends_on:
-      db:
-        condition: service_healthy
-        restart: true
-    restart: always
-    env_file:
-      - ./.env
-    command:
-      - graphql-engine
-      - serve
-    networks:
-      - network
 volumes:
   db_data:
   sik_data:

@@ -1,8 +1,8 @@
 import babel from '@rolldown/plugin-babel'
 import { defineConfig } from 'vitest/config'
 
-// api tests against the local backend (Hasura as oracle):
-//   docker compose -f backend-dev/docker-compose.yaml --profile migration up
+// api tests against the local backend:
+//   docker compose -f backend-dev/docker-compose.yaml up
 //   npm run test:api
 // deliberately separate from the default `npm test` run: these tests
 // may need docker + the local backend and must not run in CI.

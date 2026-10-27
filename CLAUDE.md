@@ -22,7 +22,7 @@ npx eslint .             # lint (no npm script is defined for it)
 ```
 
 - `npm test` runs the vitest suite under `src/**/__tests__/` (store persistence, queue observer, revision builders). CI (`npm ci && npm test && npm run build`) runs it on every PR/merge.
-- `npm run test:api` runs `api-tests/` against the **local backend**: it diffs every table/role/person between PostgREST and Hasura (the migration oracle), and tests the sync rpc + upsert write path. Start the backend with `docker compose -f backend-dev/docker-compose.yaml --profile migration up` first.
+- `npm run test:api` runs `api-tests/` against the **local backend**: it tests the sync rpc (row visibility per role, delta cursors, GeoJSON geodata, gaertner column exclusions) and the upsert write path. Start the backend with `docker compose -f backend-dev/docker-compose.yaml up` first. (The PostgREST-vs-Hasura equivalence oracle was removed with Hasura — see git history, `permissions.equivalence.test.ts`.)
 - `npm run test:e2e` runs `e2e/`: boot smoke tests plus `local-first.spec.ts`, a full browser scenario (login → initial sync → offline boot from cache → re-login) that pins the seams `test:api` cannot reach. It mocks firebase identity toolkit, the auth service `/token` and PostgREST via `page.route` — no backend and no real credentials are used. Offline is emulated by spoofing `navigator.onLine` and aborting backend routes (like production, where the service worker still serves assets).
 - `npm run build` deliberately skips `tsc`, so type errors do not fail the build. Run `npm run build_ts` (or `npx tsc`) to type-check. Note: `tsc` reports ~6.5k pre-existing errors (checkJs strict on plain JS) — compare against the baseline before/after your change rather than expecting zero.
 - Dependencies are pinned to exact versions (`.npmrc`: `save-exact=true`, `force=true`, `allow-git=none`). Bump with `ncu -c 5 -i` (the `-c 5` cooldown avoids brand-new releases).
@@ -34,10 +34,10 @@ This is a **local-first** app. Three concerns are split across the repo:
 
 ### 1. Backend (`backend/` — deployed separately, Docker Compose)
 - **Postgres/PostGIS** (`db/`): source of truth. The schema is versioned **in this repo** under `src/sql/` (`createTables.sql`, `createViews.sql`, `createRevTriggers_*.sql`, `createApiAccess.sql`, `createSyncFunction.sql`, `one-offs/`).
-- **PostgREST** v16.5 (`api`): exposes Postgres over REST, JWT-authenticated. Roles, column grants and row level security live in `src/sql/createApiAccess.sql` — **generated** from the former Hasura permissions by `tools/generate_api_access_sql.py` (regenerate after changing permissions; the Hasura metadata under `src/hasuraMetadata/` is the migration-time source and oracle).
+- **PostgREST** v16.5 (`api`): exposes Postgres over REST, JWT-authenticated. Roles, column grants and row level security live in `src/sql/createApiAccess.sql` — **generated** from the permission definitions in `src/hasuraMetadata/metadata.json` by `tools/generate_api_access_sql.py`. The directory name is historical (the JSON is Hasura's metadata format and the migration source); nothing Hasura runs anymore — regenerate with the tool after changing permissions.
 - **Auth** (`auth/`, Hapi + `firebase-admin`): `POST /token` verifies a Firebase ID token and returns the api JWT (HS256) carrying `role` + `user_id`.
 - **Caddy** (`caddy/`): reverse proxy / TLS termination (PostgREST handles CORS itself).
-- `backend-dev/docker-compose.yaml` runs `db` + `api` locally; the `--profile migration` flag additionally starts Hasura on :8081 (only for the api equivalence tests). `backend/docker-compose.yaml` (production) runs `db` + `auth` + `api` + `caddy`.
+- `backend-dev/docker-compose.yaml` runs `db` + `api` + `auth` locally. `backend/docker-compose.yaml` (production) runs `db` + `auth` + `api` + `caddy`.
 
 ### 2. Frontend (`src/` — this Vite app, hosted on Firebase Hosting)
 - **React 19** + **MUI 9** (Emotion; `jsxImportSource: '@emotion/react'`), **React Compiler** enabled, **jotai** for app/UI state.
@@ -60,7 +60,7 @@ Every editable row is versioned. Columns on each model: `_rev` (`"<depth>-<md5>"
 
 ## Local backend & debugging
 
-When the app runs on `localhost`, it talks to a **local PostgREST at `http://localhost:8080`**, decided in [src/utils/constants.js](src/utils/constants.js) (`hostname === 'localhost'` → `:8080`, else `api.vermehrung.ch`). The backend secrets live in `backend-dev/.env` / `backend/.env` (note: mixed line endings — strip `\r` when parsing them in scripts). Bring the backend up with `docker compose -f backend-dev/docker-compose.yaml up` (add `--profile migration` to also start Hasura on :8081 for `npm run test:api`).
+When the app runs on `localhost`, it talks to a **local PostgREST at `http://localhost:8080`**, decided in [src/utils/constants.js](src/utils/constants.js) (`hostname === 'localhost'` → `:8080`, else `api.vermehrung.ch`). The backend secrets live in `backend-dev/.env` / `backend/.env` (note: mixed line endings — strip `\r` when parsing them in scripts). Bring the backend up with `docker compose -f backend-dev/docker-compose.yaml up`.
 
 ## Navigation & code layout
 

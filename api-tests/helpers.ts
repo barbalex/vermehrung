@@ -3,10 +3,9 @@ import { readFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import path from 'node:path'
 
-// Shared harness for the api equivalence tests (npm run test:api).
+// Shared harness for the api tests (npm run test:api).
 // They run against the LOCAL backend started with:
-//   docker compose -f backend-dev/docker-compose.yaml --profile migration up
-// (the migration profile keeps Hasura alive as the permission oracle).
+//   docker compose -f backend-dev/docker-compose.yaml up
 
 const REPO_ROOT = path.resolve(__dirname, '..')
 const DEV_ENV_PATH = path.join(REPO_ROOT, 'backend-dev/.env')
@@ -28,9 +27,6 @@ const devEnv = parseEnv(DEV_ENV_PATH)
 
 export const config = {
   pgrstUri: process.env.PGRST_URI ?? 'http://localhost:8080',
-  hasuraUri:
-    process.env.HASURA_URI ?? 'http://localhost:8081/v1/graphql',
-  adminSecret: devEnv.HASURA_GRAPHQL_ADMIN_SECRET,
   jwtSecret: devEnv.PGRST_JWT_SECRET,
   postgresPassword: devEnv.POSTGRES_PASSWORD,
 }
@@ -106,29 +102,7 @@ export const pgrst = async (
   return { status: res.status, data }
 }
 
-// ---- Hasura (the oracle) ----
-
-export const hasura = async (
-  query: string,
-  impersonate?: { role: string; userId: string },
-): Promise<{ data?: Json; errors?: Json[] }> => {
-  const headers: Record<string, string> = {
-    'content-type': 'application/json',
-    'x-hasura-admin-secret': config.adminSecret,
-  }
-  if (impersonate) {
-    headers['x-hasura-role'] = impersonate.role
-    headers['x-hasura-user-id'] = impersonate.userId
-  }
-  const res = await fetch(config.hasuraUri, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({ query }),
-  })
-  return res.json()
-}
-
-// ---- db (docker exec psql, for transactional write tests) ----
+// ---- db (docker exec psql, for reading state and transactional writes) ----
 
 export const psql = (sql: string): string =>
   execFileSync(
@@ -154,6 +128,9 @@ export const psql = (sql: string): string =>
     { encoding: 'utf8', timeout: 30_000 },
   )
 
+const psqlJson = (sql: string): Json =>
+  JSON.parse(psql(`select coalesce(json_agg(t), '[]'::json) from (${sql}) t`))
+
 // ---- test persons ----
 
 export interface TestPerson {
@@ -168,32 +145,35 @@ let cachedPersons: TestPerson[] | null = null
 // so the permission filters actually have something to bite on
 export const getTestPersons = async (): Promise<TestPerson[]> => {
   if (cachedPersons) return cachedPersons
-  const result = await hasura(`query {
-    person(limit: 100000) { id person_user_role { name } }
-    gv(limit: 100000) { person_id }
-    av(limit: 100000) { person_id }
-    garten(limit: 100000) { person_id }
-  }`)
-  if (result.errors) throw new Error(`hasura: ${JSON.stringify(result.errors)}`)
-  const dataIds = new Set<string>()
-  for (const row of [...result.data.gv, ...result.data.av, ...result.data.garten]) {
-    if (row.person_id) dataIds.add(row.person_id)
-  }
+  const [persons, relations] = await Promise.all([
+    psqlJson(
+      `select p.id as id, r.name as role
+         from person p
+         join user_role r on r.id = p.user_role_id
+        where r.name in ('artverantwortlich', 'gaertner', 'manager')`,
+    ),
+    psqlJson(
+      `select distinct person_id from (
+         select person_id from gv where person_id is not null
+         union all select person_id from av where person_id is not null
+         union all select person_id from garten where person_id is not null
+       ) x`,
+    ),
+  ])
+  const dataIds = new Set<string>(relations.map((r: Json) => r.person_id))
   const byRole: Record<string, TestPerson[]> = {}
-  for (const p of result.data.person) {
-    const role = p.person_user_role?.name
-    if (!role || !(APP_ROLES as readonly string[]).includes(role)) continue
-    byRole[role] ??= []
-    byRole[role].push({ id: p.id, role, hasData: dataIds.has(p.id) })
+  for (const p of persons) {
+    byRole[p.role] ??= []
+    byRole[p.role].push({ id: p.id, role: p.role, hasData: dataIds.has(p.id) })
   }
-  const persons: TestPerson[] = []
+  const result: TestPerson[] = []
   for (const role of APP_ROLES) {
     const ofRole = byRole[role] ?? []
     ofRole.sort((a, b) => Number(b.hasData) - Number(a.hasData))
-    persons.push(...ofRole.slice(0, 5))
+    result.push(...ofRole.slice(0, 5))
   }
-  cachedPersons = persons
-  return persons
+  cachedPersons = result
+  return result
 }
 
 export const getTestPerson = async (role: AppRole): Promise<TestPerson> => {
@@ -204,82 +184,12 @@ export const getTestPerson = async (role: AppRole): Promise<TestPerson> => {
   return ofRole[0]
 }
 
-// ---- metadata ----
-
-export interface TableMetadata {
-  name: string
-  selectColumns: Record<string, string[]>
-  selectRoles: string[]
-}
-
-export const getMetadataTables = (): TableMetadata[] => {
-  const raw = JSON.parse(
-    readFileSync(
-      path.join(REPO_ROOT, 'src/hasuraMetadata/metadata.json'),
-      'utf8',
-    ),
-  )
-  return raw.metadata.sources[0].tables.map((t: Json) => {
-    const selectColumns: Record<string, string[]> = {}
-    for (const p of t.select_permissions ?? []) {
-      selectColumns[p.role] = p.permission.columns as string[]
-    }
-    return {
-      name: t.table.name,
-      selectColumns,
-      selectRoles: Object.keys(selectColumns),
-    }
-  })
-}
-
 export const assertBackendAvailable = async (): Promise<void> => {
   const message =
     'the local backend is not reachable - start it with:\n' +
-    '  docker compose -f backend-dev/docker-compose.yaml --profile migration up'
+    '  docker compose -f backend-dev/docker-compose.yaml up'
   const pgrstRes = await fetch(`${config.pgrstUri}/`, {
     signal: AbortSignal.timeout(3000),
   }).catch(() => null)
   if (!pgrstRes) throw new Error(message)
-  const hasuraRes = await fetch(`${config.hasuraUri.replace(/\/v1\/graphql$/, '/healthz')}`, {
-    signal: AbortSignal.timeout(3000),
-  }).catch(() => null)
-  if (!hasuraRes || !hasuraRes.ok) throw new Error(message)
-}
-
-// make sure the dev Hasura knows the CURRENT table set (its applied
-// metadata can lag behind src/hasuraMetadata/metadata.json)
-export const applyDevHasuraMetadata = async (): Promise<void> => {
-  const raw = JSON.parse(
-    readFileSync(
-      path.join(REPO_ROOT, 'src/hasuraMetadata/metadata.json'),
-      'utf8',
-    ),
-  )
-  const res = await fetch(config.hasuraUri, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-hasura-admin-secret': config.adminSecret,
-    },
-    body: JSON.stringify({
-      type: 'replace_metadata',
-      args: {
-        allow_inconsistent_metadata: false,
-        metadata: raw.metadata,
-        reload_remote_schemas: true,
-      },
-    }),
-  })
-  const body = await res.json().catch(() => null)
-  if (!res.ok || body?.error) {
-    throw new Error(`applying hasura metadata failed: ${JSON.stringify(body)}`)
-  }
-  // the schema cache refresh can lag behind the replace_metadata response:
-  // poll until a table only present in the current metadata resolves
-  for (let i = 0; i < 20; i++) {
-    const check = await hasura('query { bedarf(limit: 0) { id } }')
-    if (!check.errors) return
-    await new Promise((resolve) => setTimeout(resolve, 500))
-  }
-  throw new Error('hasura schema cache did not pick up bedarf after metadata apply')
 }
