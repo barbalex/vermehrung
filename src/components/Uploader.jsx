@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import uploadcare from 'uploadcare-widget'
 
+import { addNotification } from '../store/index.js'
 import { signature, expire } from '../utils/uploadcareSignature.js'
 
 window.UPLOADCARE_PUBLIC_KEY = import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY
@@ -31,6 +32,23 @@ window.UPLOADCARE_SECURE_EXPIRE = expire
 
 export class Uploader extends Component {
   componentDidMount() {
+    // uploadcare's dialog crashes reading the header of zero-byte files
+    // (RangeError in DataView.getUint16) before any validator runs -
+    // capture file selections on the way in and stop empty files.
+    // covers the file dialog; drag-and-drop of empty files still crashes
+    // inside the widget, which merely stalls its dialog
+    this.blockEmptyFiles = (e) => {
+      const input = e.target
+      if (input?.type !== 'file') return
+      const hasEmptyFile = [...(input.files ?? [])].some((f) => f.size === 0)
+      if (!hasEmptyFile) return
+      e.preventDefault()
+      e.stopImmediatePropagation()
+      input.value = ''
+      addNotification({ message: 'Die Datei ist leer' })
+    }
+    document.addEventListener('change', this.blockEmptyFiles, true)
+
     const widget = uploadcare.Widget(this.uploader)
     // the widget crashes on zero-byte files when reading their magic
     // bytes for the preview (RangeError in DataView.getUint16) -
@@ -66,6 +84,7 @@ export class Uploader extends Component {
   }
 
   componentWillUnmount() {
+    document.removeEventListener('change', this.blockEmptyFiles, true)
     if (this.dialog) {
       this.dialog.reject()
     }
