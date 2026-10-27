@@ -2,7 +2,7 @@
 2026.10.14: 194.233.161.99 > 139.162.172.14
 ---
 
-this app is currently using a graphql api. I feel it would be simpler to just use rest instead. does the current graphql implementation have any features, a simpler rest implementation could not offer? Do remember that the app is using graphql-ws.
+offline editing not working due to data not loading: 
 
 ---
 
