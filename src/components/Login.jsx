@@ -21,7 +21,7 @@ import {
 } from 'firebase/auth'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
-import { dbAtom, firebaseAuthAtom, store } from '../store/index.js'
+import { dbAtom, firebaseAuthAtom, resetSyncState, store } from '../store/index.js'
 import { constants } from '../utils/constants.js'
 
 import styles from './Login.module.css'
