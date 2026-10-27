@@ -28,6 +28,10 @@
   --row-border: rgba(74, 20, 140, 0.2);
   /* brand-colored icons on themed surfaces */
   --icon-primary: #4a148c;
+  /* resting underline of standard inputs, faint on purpose */
+  --input-underline: rgba(0, 0, 0, 0.1);
+  /* subtle hover overlay */
+  --hover-overlay: rgba(0, 0, 0, 0.1);
   /* the home page cards sit on a photo */
   --card-overlay-bg: rgba(255, 255, 255, 0.65);
   --scrollbar-thumb: #4a148c;
@@ -47,6 +51,8 @@ html[data-theme='dark'] {
   --hover-bg: rgba(255, 255, 255, 0.06);
   --row-border: rgba(255, 255, 255, 0.15);
   --icon-primary: #ba68c8;
+  --input-underline: rgba(255, 255, 255, 0.3);
+  --hover-overlay: rgba(255, 255, 255, 0.12);
   --card-overlay-bg: rgba(30, 30, 30, 0.75);
   --scrollbar-thumb: #9c4dcc;
   --scrollbar-track: #1c1c1c;
