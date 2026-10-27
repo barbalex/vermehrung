@@ -4,14 +4,18 @@
 
 ---
 
-auth not working in dev: fetchWithTimeout.js:8  GET http://localhost:8080/person?account_id=eq.ogA6AUQKd5byQkU2BXetDxvSLZi1&select=id,user_role(name) 401 (Unauthorized)
+auth not working in dev: fetchWithTimeout.js:8 GET http://localhost:8080/person?account_id=eq.ogA6AUQKd5byQkU2BXetDxvSLZi1&select=id,user_role(name) 401 (Unauthorized)
 
 ---
 
 uploading file test.txt fails with: Files-CqhrugV6.js:14 Uncaught RangeError: Offset is outside the bounds of the DataView
-    at DataView.prototype.getUint16 (<anonymous>)
-    at Files-CqhrugV6.js:14:5181
-    at r.onload (Files-CqhrugV6.js:14:4551)
+at DataView.prototype.getUint16 (<anonymous>)
+at Files-CqhrugV6.js:14:5181
+at r.onload (Files-CqhrugV6.js:14:4551)
+
+---
+
+One documented limitation: drag-and-dropping an empty file onto the dialog bypasses the file-input event and would still stall the widget's dialog — that's a bug inside the pinned uploadcare-widget@3.25.3 itself, and the clean fix is a widget upgrade, which I'd put on tomorrow's list rather than deploy day. Uploading empty files via drag-drop is about as degenerate as input gets.
 
 ---
 
