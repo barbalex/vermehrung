@@ -43,7 +43,7 @@ export const SammelLieferung = ({
     () =>
       showFilter
         ? $of(sammelLieferungFilter)
-        : initialDataQueried
+        : (initialDataQueried || !online)
           ? db.get('sammel_lieferung').findAndObserve(id)
           : $of({}),
     [db, sammelLieferungFilter, id, initialDataQueried, showFilter],

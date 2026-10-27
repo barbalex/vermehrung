@@ -5,6 +5,7 @@ import {
   store,
   hydratePersistedAtoms,
   setUser,
+  setAuthorizing,
   setGettingAuthUser,
   setFirebaseAuth,
   setOnline,
@@ -65,8 +66,26 @@ export const recreatePersistedStore = async () => {
     if (nowOnline) {
       // console.log('recreatePersistedStore getting auth token')
       await getAuthToken()
+    } else {
+      // booting offline: unblock the app so it works locally off the
+      // cached data. the role lookup in SubscriptionsInitializer keeps
+      // retrying and starts syncing once connectivity is back
+      setAuthorizing(false)
     }
     setGettingAuthUser(false)
+  })
+  // recover when connectivity returns: fetch an auth token (it retries
+  // with backoff), which flips authorizing and restarts the sync poller
+  // and the offline queue
+  window.addEventListener('online', () => {
+    setOnline(true)
+    setShortTermOnline(true)
+    if (!store.get(userAtom)?.uid) return
+    getAuthToken()
+  })
+  window.addEventListener('offline', () => {
+    setOnline(false)
+    setShortTermOnline(false)
   })
   return unregisterAuthObserver
 }

@@ -10,6 +10,7 @@ import {
   userAtom,
   activeNodeArrayAtom,
   filterLieferungAtom,
+  onlineAtom,
   initialDataQueriedAtom,
 } from '../../../store/index.js'
 import { Lieferung } from './Lieferung/index.jsx'
@@ -23,6 +24,7 @@ export const LieferungContainer = ({
   const user = useAtomValue(userAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const lieferungFilter = useAtomValue(filterLieferungAtom)
+  const online = useAtomValue(onlineAtom)
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
   let id = idPassed
@@ -51,7 +53,7 @@ export const LieferungContainer = ({
       : $of({})
     const lieferungObservable = showFilter
       ? $of(lieferungFilter)
-      : initialDataQueried
+      : (initialDataQueried || !online)
         ? db.get('lieferung').findAndObserve(id)
         : $of({})
     const combinedObservables = combineLatest([

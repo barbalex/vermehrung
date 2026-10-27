@@ -39,7 +39,7 @@ export const Teilkultur = ({
     () =>
       showFilter
         ? $of(teilkulturFilter)
-        : initialDataQueried
+        : (initialDataQueried || !online)
           ? db.get('teilkultur').findAndObserve(id)
           : $of({}),
     [db, teilkulturFilter, id, initialDataQueried, showFilter],

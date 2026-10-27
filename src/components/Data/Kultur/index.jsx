@@ -39,7 +39,7 @@ export const Kultur = ({
     () =>
       showFilter
         ? $of(kulturFilter)
-        : initialDataQueried
+        : (initialDataQueried || !online)
           ? db.get('kultur').findAndObserve(id)
           : $of({}),
     [db, kulturFilter, id, initialDataQueried, showFilter],

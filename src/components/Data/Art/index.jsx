@@ -39,7 +39,7 @@ export const Art = ({
     () =>
       showFilter
         ? $of(artFilter)
-        : initialDataQueried
+        : (initialDataQueried || !online)
           ? db.get('art').findAndObserve(id)
           : $of({}),
     [db, artFilter, id, initialDataQueried, showFilter],

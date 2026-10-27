@@ -39,7 +39,7 @@ export const Zaehlung = ({
     () =>
       showFilter
         ? $of(zaehlungFilter)
-        : initialDataQueried
+        : (initialDataQueried || !online)
           ? db.get('zaehlung').findAndObserve(id)
           : $of({}),
     [db, zaehlungFilter, id, initialDataQueried, showFilter],

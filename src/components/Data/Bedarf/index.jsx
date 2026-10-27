@@ -39,7 +39,7 @@ export const Bedarf = ({
     () =>
       showFilter
         ? $of(bedarfFilter)
-        : initialDataQueried
+        : (initialDataQueried || !online)
           ? db.get('bedarf').findAndObserve(id)
           : $of({}),
     [db, bedarfFilter, id, initialDataQueried, showFilter],
