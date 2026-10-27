@@ -1,53 +1,18 @@
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import gql from 'graphql-tag'
-import { useQuery } from 'urql'
 
 import {
   store,
   userAtom,
   addNotification,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
 } from '../../../store/index.js'
+import { useApiQuery } from '../../../utils/useApiQuery.js'
 import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
-import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
 import { createDataArrayForSammellieferungRevComparison as createDataArray } from './createDataArrayForRevComparison.js'
-
-const sammelLieferungRevQuery = gql`
-  query sammelLieferungRevForConflictQuery($id: uuid!, $rev: String!) {
-    sammel_lieferung_rev(
-      where: { sammel_lieferung_id: { _eq: $id }, _rev: { _eq: $rev } }
-    ) {
-      id
-      __typename
-      sammel_lieferung_id
-      art_id
-      person_id
-      von_sammlung_id
-      von_kultur_id
-      datum
-      nach_kultur_id
-      nach_ausgepflanzt
-      von_anzahl_individuen
-      anzahl_pflanzen
-      anzahl_auspflanzbereit
-      gramm_samen
-      andere_menge
-      geplant
-      bemerkungen
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
 
 export const SammelLieferungConflict = ({
   id,
@@ -58,22 +23,17 @@ export const SammelLieferungConflict = ({
   setActiveConflict,
 }) => {
   // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery({
-    query: sammelLieferungRevQuery,
-    variables: {
-      rev,
-      id,
-    },
-  })
+  const { error, data, fetching } = useApiQuery(
+    `/sammel_lieferung_rev?sammel_lieferung_id=eq.${id}&_rev=eq.${rev}&select=id,sammel_lieferung_id,art_id,person_id,von_sammlung_id,von_kultur_id,datum,nach_kultur_id,nach_ausgepflanzt,von_anzahl_individuen,anzahl_pflanzen,anzahl_auspflanzbereit,gramm_samen,andere_menge,geplant,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
+  )
   error && checkForOnlineError({ error })
 
-  const revRow = data?.sammel_lieferung_rev?.[0] ?? {}
+  const revRow = data?.[0] ?? {}
 
   const dataArray = createDataArray({ row, revRow })
 
   const onClickAktuellUebernehmen = async () => {
     const user = store.get(userAtom)
-    const gqlClient = store.get(gqlClientAtom)
     const db = store.get(dbAtom)
 
     // build new object
@@ -107,20 +67,15 @@ export const SammelLieferungConflict = ({
       ? toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_sammel_lieferung_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammel_lieferung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/sammel_lieferung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // remove conflict from model
     try {
@@ -134,8 +89,6 @@ export const SammelLieferungConflict = ({
 
   const onClickWiderspruchUebernehmen = async () => {
     const user = store.get(userAtom)
-    const gqlClient = store.get(gqlClientAtom)
-
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -167,20 +120,15 @@ export const SammelLieferungConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_sammel_lieferung_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammel_lieferung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/sammel_lieferung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

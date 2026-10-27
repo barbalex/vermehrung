@@ -7,12 +7,11 @@ import {
   userAtom,
   addNotification,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
   store,
 } from '../../../../store/index.js'
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../../utils/toPgArray.js'
-import { mutations } from '../../../../utils/mutations.js'
 import { createDataArrayForEventRevComparison } from '../createDataArrayForRevComparison.js'
 
 export const EventHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
@@ -45,21 +44,15 @@ export const EventHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
     //console.log('Event History', { row, revRow, newObject })
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutations.mutateInsert_event_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'event_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/event_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     historyTakeoverCallback()
     // do not stringify revisions for store

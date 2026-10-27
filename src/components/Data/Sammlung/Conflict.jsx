@@ -1,49 +1,18 @@
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import gql from 'graphql-tag'
-import { useQuery } from 'urql'
 
 import {
   store,
   userAtom,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
   addNotification,
 } from '../../../store/index.js'
+import { useApiQuery } from '../../../utils/useApiQuery.js'
 import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
-import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
 import { createDataArrayForSammlungRevComparison as createDataArray } from './createDataArrayForRevComparison.js'
-
-const sammlungRevQuery = gql`
-  query sammlungRevForConflictQuery($id: uuid!, $rev: String!) {
-    sammlung_rev(where: { sammlung_id: { _eq: $id }, _rev: { _eq: $rev } }) {
-      id
-      __typename
-      sammlung_id
-      art_id
-      person_id
-      herkunft_id
-      nr
-      datum
-      von_anzahl_individuen
-      anzahl_pflanzen
-      gramm_samen
-      andere_menge
-      geom_point
-      geplant
-      bemerkungen
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
 
 export const SammlungConflict = ({
   id,
@@ -54,16 +23,12 @@ export const SammlungConflict = ({
   setActiveConflict,
 }) => {
   // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery({
-    query: sammlungRevQuery,
-    variables: {
-      rev,
-      id,
-    },
-  })
+  const { error, data, fetching } = useApiQuery(
+    `/sammlung_rev?sammlung_id=eq.${id}&_rev=eq.${rev}&select=id,sammlung_id,art_id,person_id,herkunft_id,nr,datum,von_anzahl_individuen,anzahl_pflanzen,gramm_samen,andere_menge,geom_point,geplant,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
+  )
   error && checkForOnlineError({ error })
 
-  const revRow = data?.sammlung_rev?.[0] ?? {}
+  const revRow = data?.[0] ?? {}
 
   const dataArray = createDataArray({ row, revRow })
 
@@ -97,21 +62,15 @@ export const SammlungConflict = ({
       ? toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutations.mutateInsert_sammlung_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/sammlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // update model: remove this conflict
     try {
@@ -154,21 +113,15 @@ export const SammlungConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutations.mutateInsert_sammlung_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/sammlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

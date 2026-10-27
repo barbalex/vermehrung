@@ -7,8 +7,8 @@ import { of as $of } from 'rxjs'
 
 import {
   addNotification,
+  apiClientAtom,
   dbAtom,
-  gqlClientAtom,
   onlineAtom,
   store,
 } from '../../../store/index.js'
@@ -17,7 +17,6 @@ import { File } from './File.jsx'
 import { isImageFile } from './isImageFile.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { fileSort } from '../../../utils/fileSort.js'
-import { mutations } from '../../../utils/mutations.js'
 import { useObservable } from '../../../utils/useObservable.js'
 
 import styles from './index.module.css'
@@ -38,7 +37,6 @@ export const Files = ({ parentTable, parent }) => {
   const onChangeUploader = async (file) => {
     if (file) {
       file.done(async (info) => {
-        const gqlClient = store.get(gqlClientAtom)
         const db = store.get(dbAtom)
         const newObject = {
           id: uuidv1(),
@@ -53,22 +51,18 @@ export const Files = ({ parentTable, parent }) => {
           // which enables overriding watermelons own id
           await db.batch([collection.prepareCreateFromDirtyRaw(newObject)])
         })
-        // TODO: need to add mutations for all file-tables
-        const mutation = mutations[`mutateInsert_${parentTable}_file_one`]
-        const variables = {
-          object: newObject,
-          on_conflict: {
-            constraint: `${parentTable}_file_pkey`,
-            update_columns: ['id'],
-          },
-        }
-        const response = await gqlClient
-          .mutation(mutation, variables)
-          .toPromise()
-        if (response.error) {
-          console.log(response.error)
+        try {
+          await store
+            .get(apiClientAtom)
+            .post(
+              `/${parentTable}_file`,
+              newObject,
+              'resolution=merge-duplicates,return=minimal',
+            )
+        } catch (error) {
+          console.log(error)
           return addNotification({
-            message: response.error.message,
+            message: error.message,
           })
         }
       })

@@ -27,3 +27,11 @@ documentation: remove Schnittstellen
 ---
 
 http://localhost:5176/Dokumentation/struktur/: use updated image
+
+---
+
+translate to german: http://localhost:5176/Dokumentation/datenschutz/
+
+---
+
+does an 'abmelden und cache leeren' function exist and does it work correctly?

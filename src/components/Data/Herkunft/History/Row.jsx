@@ -6,13 +6,12 @@ import { History } from '../../../shared/History/index.jsx'
 import {
   store,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
   userAtom,
   addNotification,
 } from '../../../../store/index.js'
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../../utils/toPgArray.js'
-import { mutations } from '../../../../utils/mutations.js'
 import { createDataArrayForHerkunftRevComparison } from '../createDataArrayForRevComparison.js'
 
 export const HerkunftHistoryRow = ({
@@ -27,9 +26,7 @@ export const HerkunftHistoryRow = ({
 
   const onClickWiderspruchUebernehmen = async () => {
     const user = store.get(userAtom)
-    const db = store.get(dbAtom)
-    const gqlClient = store.get(gqlClientAtom)
-    // need to attach to the winner, that is row
+    const db = store.get(dbAtom)    // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
     const newObject = {
@@ -53,20 +50,15 @@ export const HerkunftHistoryRow = ({
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
     //console.log('Herkunft History', { row, revRow, newObject })
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_herkunft_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'herkunft_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/herkunft_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     historyTakeoverCallback()
     // do not stringify revisions for store

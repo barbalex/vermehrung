@@ -1,0 +1,35 @@
+-- 2026-10-27: migrate the api from Hasura to PostgREST
+--
+-- The api layer changes from Hasura (which connected as postgres and
+-- enforced the permissions from src/hasuraMetadata/metadata.json per
+-- request) to PostgREST, which relies on real database roles, column
+-- grants and row level security.
+--
+-- What to run on production (in order):
+--
+--   1. ensure the bedarf migration has run
+--      (2026-10-20_migrate_events_to_bedarf.sql, phases A and B)
+--
+--   2. apply the generated roles/grants/rls (idempotent):
+--        PGOPTIONS="-c app.password='<authenticator password from .env>'" \
+--          psql -f src/sql/createApiAccess.sql
+--
+--   3. apply the sync endpoint (idempotent):
+--        psql -f src/sql/createSyncFunction.sql
+--
+--   4. deploy the backend (auth service 1.1.0 mints PostgREST JWTs,
+--      compose runs PostgREST instead of Hasura, Caddyfile routes
+--      api.vermehrung.ch to it)
+--
+--   5. deploy the frontend (polls the new api)
+--
+-- Rollback: Hasura's permission enforcement is untouched by this change
+-- (it lives in metadata.json, not in the db), so pointing the frontend
+-- back at Hasura keeps working as long as the graphql service exists.
+-- The RLS policies are additive: the postgres role Hasura uses is the
+-- table owner and bypasses them.
+--
+-- After the migration period, remove:
+--   - the graphql service from backend-dev/docker-compose.yaml
+--   - src/hasuraMetadata/
+--   - the api equivalence tests (api-tests/)

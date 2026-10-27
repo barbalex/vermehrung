@@ -18,7 +18,6 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { DateTime } from 'luxon'
 import { first as first$ } from 'rxjs/operators'
-import gql from 'graphql-tag'
 
 import { toStringIfPossible } from './utils/toStringIfPossible.js'
 import { personLabelFromPerson } from './utils/personLabelFromPerson.js'
@@ -39,22 +38,13 @@ import { deleteAccount } from './utils/deleteAccount.js'
 import {
   store,
   userAtom,
-  gqlClientAtom,
+  apiClientAtom,
   dbAtom,
   addQueuedQuery,
   addNotification,
   unsetError,
 } from './store/index.js'
 import { updateAllSammelLieferungen } from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen.js'
-import {
-  artFile as artFileFragment,
-  gartenFile as gartenFileFragment,
-  herkunftFile as herkunftFileFragment,
-  kulturFile as kulturFileFragment,
-  lieferungFile as lieferungFileFragment,
-  personFile as personFileFragment,
-  sammlungFile as sammlungFileFragment,
-} from './utils/fragments.js'
 
 const dontSanitize = (val) => val
 /*const sanitizeArrayOfStrings = (val) =>
@@ -2204,33 +2194,15 @@ export class ArtFile extends Model {
       [field]: value,
       _rev_at: Date.now(),
     }
-    const mutation = gql`
-      mutation update_art_file(
-        $_inc: art_file_inc_input
-        $_set: art_file_set_input
-        $where: art_file_bool_exp!
-      ) {
-        update_art_file(_inc: $_inc, _set: $_set, where: $where) {
-          returning {
-            ...ArtFileFields
-          }
-        }
-      }
-      ${artFileFragment}
-    `
-    const variables = {
-      _set: newObject,
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store
+        .get(apiClientAtom)
+        .patch(`/art_file?id=eq.${this.id}`, newObject)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2239,27 +2211,13 @@ export class ArtFile extends Model {
     return
   }
   @writer async delete() {
-    const mutation = gql`
-      mutation delete_art_file($where: art_file_bool_exp!) {
-        delete_art_file(where: $where) {
-          returning {
-            id
-          }
-        }
-      }
-    `
-    const variables = {
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store.get(apiClientAtom).delete(`/art_file?id=eq.${this.id}`)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2305,33 +2263,15 @@ export class GartenFile extends Model {
       [field]: value,
       _rev_at: Date.now(),
     }
-    const mutation = gql`
-      mutation update_garten_file(
-        $_inc: garten_file_inc_input
-        $_set: garten_file_set_input
-        $where: garten_file_bool_exp!
-      ) {
-        update_garten_file(_inc: $_inc, _set: $_set, where: $where) {
-          returning {
-            ...GartenFileFields
-          }
-        }
-      }
-      ${gartenFileFragment}
-    `
-    const variables = {
-      _set: newObject,
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store
+        .get(apiClientAtom)
+        .patch(`/garten_file?id=eq.${this.id}`, newObject)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2340,27 +2280,13 @@ export class GartenFile extends Model {
     return
   }
   @writer async delete() {
-    const mutation = gql`
-      mutation delete_garten_file($where: garten_file_bool_exp!) {
-        delete_garten_file(where: $where) {
-          returning {
-            id
-          }
-        }
-      }
-    `
-    const variables = {
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store.get(apiClientAtom).delete(`/garten_file?id=eq.${this.id}`)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2406,33 +2332,15 @@ export class HerkunftFile extends Model {
       [field]: value,
       _rev_at: Date.now(),
     }
-    const mutation = gql`
-      mutation update_herkunft_file(
-        $_inc: herkunft_file_inc_input
-        $_set: herkunft_file_set_input
-        $where: herkunft_file_bool_exp!
-      ) {
-        update_herkunft_file(_inc: $_inc, _set: $_set, where: $where) {
-          returning {
-            ...HerkunftFileFields
-          }
-        }
-      }
-      ${herkunftFileFragment}
-    `
-    const variables = {
-      _set: newObject,
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store
+        .get(apiClientAtom)
+        .patch(`/herkunft_file?id=eq.${this.id}`, newObject)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2441,27 +2349,13 @@ export class HerkunftFile extends Model {
     return
   }
   @writer async delete() {
-    const mutation = gql`
-      mutation delete_herkunft_file($where: herkunft_file_bool_exp!) {
-        delete_herkunft_file(where: $where) {
-          returning {
-            id
-          }
-        }
-      }
-    `
-    const variables = {
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store.get(apiClientAtom).delete(`/herkunft_file?id=eq.${this.id}`)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2507,33 +2401,15 @@ export class KulturFile extends Model {
       [field]: value,
       _rev_at: Date.now(),
     }
-    const mutation = gql`
-      mutation update_kultur_file(
-        $_inc: kultur_file_inc_input
-        $_set: kultur_file_set_input
-        $where: kultur_file_bool_exp!
-      ) {
-        update_kultur_file(_inc: $_inc, _set: $_set, where: $where) {
-          returning {
-            ...KulturFileFields
-          }
-        }
-      }
-      ${kulturFileFragment}
-    `
-    const variables = {
-      _set: newObject,
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store
+        .get(apiClientAtom)
+        .patch(`/kultur_file?id=eq.${this.id}`, newObject)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2542,27 +2418,13 @@ export class KulturFile extends Model {
     return
   }
   @writer async delete() {
-    const mutation = gql`
-      mutation delete_kultur_file($where: kultur_file_bool_exp!) {
-        delete_kultur_file(where: $where) {
-          returning {
-            id
-          }
-        }
-      }
-    `
-    const variables = {
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store.get(apiClientAtom).delete(`/kultur_file?id=eq.${this.id}`)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2608,33 +2470,15 @@ export class LieferungFile extends Model {
       [field]: value,
       _rev_at: Date.now(),
     }
-    const mutation = gql`
-      mutation update_lieferung_file(
-        $_inc: lieferung_file_inc_input
-        $_set: lieferung_file_set_input
-        $where: lieferung_file_bool_exp!
-      ) {
-        update_lieferung_file(_inc: $_inc, _set: $_set, where: $where) {
-          returning {
-            ...LieferungFileFields
-          }
-        }
-      }
-      ${lieferungFileFragment}
-    `
-    const variables = {
-      _set: newObject,
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store
+        .get(apiClientAtom)
+        .patch(`/lieferung_file?id=eq.${this.id}`, newObject)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2643,27 +2487,13 @@ export class LieferungFile extends Model {
     return
   }
   @writer async delete() {
-    const mutation = gql`
-      mutation delete_lieferung_file($where: lieferung_file_bool_exp!) {
-        delete_lieferung_file(where: $where) {
-          returning {
-            id
-          }
-        }
-      }
-    `
-    const variables = {
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store.get(apiClientAtom).delete(`/lieferung_file?id=eq.${this.id}`)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2709,33 +2539,15 @@ export class PersonFile extends Model {
       [field]: value,
       _rev_at: Date.now(),
     }
-    const mutation = gql`
-      mutation update_person_file(
-        $_inc: person_file_inc_input
-        $_set: person_file_set_input
-        $where: person_file_bool_exp!
-      ) {
-        update_person_file(_inc: $_inc, _set: $_set, where: $where) {
-          returning {
-            ...PersonFileFields
-          }
-        }
-      }
-      ${personFileFragment}
-    `
-    const variables = {
-      _set: newObject,
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store
+        .get(apiClientAtom)
+        .patch(`/person_file?id=eq.${this.id}`, newObject)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2744,27 +2556,13 @@ export class PersonFile extends Model {
     return
   }
   @writer async delete() {
-    const mutation = gql`
-      mutation delete_person_file($where: person_file_bool_exp!) {
-        delete_person_file(where: $where) {
-          returning {
-            id
-          }
-        }
-      }
-    `
-    const variables = {
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store.get(apiClientAtom).delete(`/person_file?id=eq.${this.id}`)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()
@@ -2810,33 +2608,15 @@ export class SammlungFile extends Model {
       [field]: value,
       _rev_at: Date.now(),
     }
-    const mutation = gql`
-      mutation update_sammlung_file(
-        $_inc: sammlung_file_inc_input
-        $_set: sammlung_file_set_input
-        $where: sammlung_file_bool_exp!
-      ) {
-        update_sammlung_file(_inc: $_inc, _set: $_set, where: $where) {
-          returning {
-            ...SammlungFileFields
-          }
-        }
-      }
-      ${sammlungFileFragment}
-    `
-    const variables = {
-      _set: newObject,
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store
+        .get(apiClientAtom)
+        .patch(`/sammlung_file?id=eq.${this.id}`, newObject)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.update((row) => {
@@ -2845,27 +2625,13 @@ export class SammlungFile extends Model {
     return
   }
   @writer async delete() {
-    const mutation = gql`
-      mutation delete_sammlung_file($where: sammlung_file_bool_exp!) {
-        delete_sammlung_file(where: $where) {
-          returning {
-            id
-          }
-        }
-      }
-    `
-    const variables = {
-      where: { id: { _eq: this.id } },
-    }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutation, variables)
-      .toPromise()
-    if (response.error) {
+    try {
+      await store.get(apiClientAtom).delete(`/sammlung_file?id=eq.${this.id}`)
+    } catch (error) {
       addNotification({
-        message: response.error.message,
+        message: error.message,
       })
-      return console.log(response.error)
+      return console.log(error)
     }
     // updating server is done by calling code
     await this.destroyPermanently()

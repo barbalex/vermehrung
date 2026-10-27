@@ -8,11 +8,10 @@ import {
   userAtom,
   addNotification,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
 } from '../../../../store/index.js'
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../../utils/toPgArray.js'
-import { mutations } from '../../../../utils/mutations.js'
 import { createDataArrayForRevComparison } from '../createDataArrayForRevComparison.js'
 
 export const Row = ({ row, revRow, historyTakeoverCallback }) => {
@@ -39,21 +38,15 @@ export const Row = ({ row, revRow, historyTakeoverCallback }) => {
     newObject.changed_by = store.get(userAtom).email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutations.mutateInsert_art_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'art_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/art_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     historyTakeoverCallback()
     // do not stringify revisions for store

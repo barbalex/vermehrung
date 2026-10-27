@@ -20,10 +20,12 @@ const stripTypename = (object) => {
 export const processSubscriptionResult = async ({
   data: dataToCheck,
   table,
+  lastUpdatedValue,
 }) => {
   const db = store.get(dbAtom)
   if (!dataToCheck.length) {
     setInitiallyQueried({ table })
+    setLastUpdated({ table, val: lastUpdatedValue })
     return
   }
   setInitiallyQuerying(table)
@@ -98,5 +100,5 @@ export const processSubscriptionResult = async ({
       setInitiallyQueried({ table })
     }
   })
-  setLastUpdated({ table })
+  setLastUpdated({ table, val: lastUpdatedValue })
 }

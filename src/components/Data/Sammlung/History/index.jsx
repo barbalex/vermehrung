@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import gql from 'graphql-tag'
 import Slider from 'react-slick'
-import { useQuery } from 'urql'
+
+import { useApiQuery } from '../../../../utils/useApiQuery.js'
 
 import {
   activeNodeArrayAtom,
@@ -17,35 +17,6 @@ import { SammlungHistoryRow as Row } from './Row.jsx'
 
 import artStyles from '../../Art/History/index.module.css'
 
-const sammlungRevQuery = gql`
-  query sammlungRevForHistoryQuery($rev: [String!]) {
-    sammlung_rev(where: { _rev: { _in: $rev } }) {
-      id
-      __typename
-      sammlung_id
-      art_id
-      person_id
-      herkunft_id
-      nr
-      datum
-      von_anzahl_individuen
-      anzahl_pflanzen
-      gramm_samen
-      andere_menge
-      geom_point
-      geplant
-      bemerkungen
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
-
 const sliderSettings = {
   dots: false,
   infinite: false,
@@ -53,15 +24,13 @@ const sliderSettings = {
 
 export const SammlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const priorRevisions = row?._revisions?.slice(1) ?? []
-  const [{ error, data, fetching }] = useQuery({
-    query: sammlungRevQuery,
-    variables: {
-      rev: priorRevisions,
-    },
-  })
+  const revPath = priorRevisions.length
+    ? `/sammlung_rev?_rev=in.(${priorRevisions.join(',')})&select=id,sammlung_id,art_id,person_id,herkunft_id,nr,datum,von_anzahl_individuen,anzahl_pflanzen,gramm_samen,andere_menge,geom_point,geplant,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+    : null
+  const { error, data, fetching } = useApiQuery(revPath)
   error && checkForOnlineError({ error })
 
-  const revRowsUnsorted = data?.sammlung_rev ?? []
+  const revRowsUnsorted = data ?? []
   const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
   const historyRev = useAtomValue(historyRevAtom)

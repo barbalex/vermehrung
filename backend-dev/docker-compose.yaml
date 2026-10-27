@@ -17,7 +17,6 @@ services:
     volumes:
       - db_data:/var/lib/postgresql
       - sik_data:/sik_data
-    # hasura needs higher max_locks_per_transaction
     command: postgres -c max_locks_per_transaction=2000
     logging:
       options:
@@ -32,11 +31,36 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  # the api: PostgREST over the db, JWT-authenticated
+  # (roles, grants and row level security: src/sql/createApiAccess.sql)
+  api:
+    image: "postgrest/postgrest:v16.5"
+    container_name: v_api
+    ports:
+      - "8080:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_ROLE_CLAIM_KEY: .role
+    networks:
+      - network
+  # hasura only remains for the migration period: the permission
+  # equivalence tests (npm run test:api) use it as the oracle.
+  # start with: docker compose -f backend-dev/docker-compose.yaml --profile migration up
   graphql:
+    profiles:
+      - migration
     image: "hasura/graphql-engine:v2.51.0"
     container_name: v_graphql
     ports:
-      - "8080:8080"
+      - "8081:8080"
     depends_on:
       db:
         condition: service_healthy

@@ -17,7 +17,6 @@ services:
       - sik_data:/sik_data
       # keep the rclone config (nextcloud backup target) across container recreations
       - /root/backup/rclone.conf:/root/.config/rclone/rclone.conf:ro
-    # hasura needs higher max_locks_per_transaction
     command: postgres -c max_locks_per_transaction=2000
     logging:
       options:
@@ -46,13 +45,11 @@ services:
       db:
         condition: service_healthy
         restart: true
-      graphql:
-        condition: service_started
-  graphql:
-    image: "hasura/graphql-engine:v2.51.0"
-    container_name: v_graphql
-    ports:
-      - "8080:8080"
+  # the api: PostgREST over the db, JWT-authenticated
+  # (roles, grants and row level security: src/sql/createApiAccess.sql)
+  api:
+    image: "postgrest/postgrest:v16.5"
+    container_name: v_api
     depends_on:
       db:
         condition: service_healthy
@@ -60,9 +57,10 @@ services:
     restart: always
     env_file:
       - ./.env
-    command:
-      - graphql-engine
-      - serve
+    environment:
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_ROLE_CLAIM_KEY: .role
   caddy:
     # https://hub.docker.com/r/caddy/caddy/tags
     image: "caddy:2.11.7-alpine"
@@ -71,7 +69,10 @@ services:
       db:
         condition: service_healthy
         restart: true
-      graphql:
+      api:
+        condition: service_started
+        restart: true
+      auth:
         condition: service_started
         restart: true
     restart: always

@@ -1,49 +1,19 @@
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import gql from 'graphql-tag'
-import { useQuery } from 'urql'
 
 import {
   addNotification,
   addQueuedQuery,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
   store,
   userAtom,
 } from '../../../../../../store/index.js'
+import { useApiQuery } from '../../../../../../utils/useApiQuery.js'
 import { checkForOnlineError } from '../../../../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../../../../utils/toPgArray.js'
-import { mutations } from '../../../../../../utils/mutations.js'
 import { Conflict } from '../../../../../shared/Conflict/index.jsx'
 import { createDataArrayForTeilzaehlungRevComparison as createDataArray } from './createDataArrayForRevComparison.js'
-
-const teilzaehlungRevQuery = gql`
-  query teilzaehlungRevForConflictQuery($id: uuid!, $rev: String!) {
-    teilzaehlung_rev(
-      where: { teilzaehlung_id: { _eq: $id }, _rev: { _eq: $rev } }
-    ) {
-      id
-      __typename
-      teilzaehlung_id
-      zaehlung_id
-      teilkultur_id
-      anzahl_pflanzen
-      anzahl_auspflanzbereit
-      anzahl_mutterpflanzen
-      andere_menge
-      auspflanzbereit_beschreibung
-      bemerkungen
-      prognose_von_tz
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
 
 export const TeilzaehlungConflict = ({
   id,
@@ -54,16 +24,12 @@ export const TeilzaehlungConflict = ({
   setActiveConflict,
 }) => {
   // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery({
-    query: teilzaehlungRevQuery,
-    variables: {
-      rev,
-      id,
-    },
-  })
+  const { error, data, fetching } = useApiQuery(
+    `/teilzaehlung_rev?teilzaehlung_id=eq.${id}&_rev=eq.${rev}&select=id,teilzaehlung_id,zaehlung_id,teilkultur_id,anzahl_pflanzen,anzahl_auspflanzbereit,anzahl_mutterpflanzen,andere_menge,auspflanzbereit_beschreibung,bemerkungen,prognose_von_tz,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
+  )
   error && checkForOnlineError({ error })
 
-  const revRow = data?.teilzaehlung_rev?.[0] ?? {}
+  const revRow = data?.[0] ?? {}
 
   const dataArray = createDataArray({ row, revRow })
 
@@ -121,7 +87,6 @@ export const TeilzaehlungConflict = ({
 
   const onClickWiderspruchUebernehmen = async () => {
     const user = store.get(userAtom)
-    const gqlClient = store.get(gqlClientAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -148,20 +113,15 @@ export const TeilzaehlungConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_teilzaehlung_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'teilzaehlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/teilzaehlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

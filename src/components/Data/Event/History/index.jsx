@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import gql from 'graphql-tag'
 import Slider from 'react-slick'
-import { useQuery } from 'urql'
+
+import { useApiQuery } from '../../../../utils/useApiQuery.js'
 
 import {
   activeNodeArrayAtom,
@@ -17,29 +17,6 @@ import { EventHistoryRow as Row } from './Row.jsx'
 
 import artStyles from '../../Art/History/index.module.css'
 
-const eventRevQuery = gql`
-  query eventRevForHistoryQuery($rev: [String!]) {
-    event_rev(where: { _rev: { _in: $rev } }) {
-      id
-      __typename
-      event_id
-      kultur_id
-      teilkultur_id
-      person_id
-      beschreibung
-      geplant
-      datum
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
-
 const sliderSettings = {
   dots: false,
   infinite: false,
@@ -47,15 +24,13 @@ const sliderSettings = {
 
 export const EventHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const priorRevisions = row?._revisions?.slice(1) ?? []
-  const [{ error, data, fetching }] = useQuery({
-    query: eventRevQuery,
-    variables: {
-      rev: priorRevisions,
-    },
-  })
+  const revPath = priorRevisions.length
+    ? `/event_rev?_rev=in.(${priorRevisions.join(',')})&select=id,event_id,kultur_id,teilkultur_id,person_id,beschreibung,geplant,datum,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+    : null
+  const { error, data, fetching } = useApiQuery(revPath)
   error && checkForOnlineError({ error })
 
-  const revRowsUnsorted = data?.event_rev ?? []
+  const revRowsUnsorted = data ?? []
   const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
   const historyRev = useAtomValue(historyRevAtom)

@@ -6,13 +6,12 @@ import { History } from '../../../../../../shared/History/index.jsx'
 import {
   addNotification,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
   store,
   userAtom,
 } from '../../../../../../../store/index.js'
 import { checkForOnlineError } from '../../../../../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../../../../../utils/toPgArray.js'
-import { mutations } from '../../../../../../../utils/mutations.js'
 import { createDataArrayForTeilzaehlungRevComparison as createDataArray } from '../createDataArrayForRevComparison.js'
 
 export const TeilzaehlungHistoryRow = ({
@@ -24,7 +23,6 @@ export const TeilzaehlungHistoryRow = ({
 
   const onClickWiderspruchUebernehmen = async () => {
     const user = store.get(userAtom)
-    const gqlClient = store.get(gqlClientAtom)
     const db = store.get(dbAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
@@ -51,20 +49,15 @@ export const TeilzaehlungHistoryRow = ({
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])
     const newObjectForStore = { ...newObject }
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_teilzaehlung_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'teilzaehlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/teilzaehlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     historyTakeoverCallback()
     // do not stringify revisions for store

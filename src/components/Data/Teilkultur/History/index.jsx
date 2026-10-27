@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import gql from 'graphql-tag'
 import Slider from 'react-slick'
-import { useQuery } from 'urql'
+
+import { useApiQuery } from '../../../../utils/useApiQuery.js'
 
 import {
   activeNodeArrayAtom,
@@ -17,29 +17,6 @@ import { TeilkulturHistoryRow as Row } from './Row.jsx'
 
 import artStyles from '../../Art/History/index.module.css'
 
-const teilkulturRevQuery = gql`
-  query teilkulturRevForHistoryQuery($rev: [String!]) {
-    teilkultur_rev(where: { _rev: { _in: $rev } }) {
-      id
-      __typename
-      teilkultur_id
-      kultur_id
-      name
-      ort1
-      ort2
-      ort3
-      bemerkungen
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
-
 const sliderSettings = {
   dots: false,
   infinite: false,
@@ -47,15 +24,13 @@ const sliderSettings = {
 
 export const TeilkulturHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const priorRevisions = row?._revisions?.slice(1) ?? []
-  const [{ error, data, fetching }] = useQuery({
-    query: teilkulturRevQuery,
-    variables: {
-      rev: priorRevisions,
-    },
-  })
+  const revPath = priorRevisions.length
+    ? `/teilkultur_rev?_rev=in.(${priorRevisions.join(',')})&select=id,teilkultur_id,kultur_id,name,ort1,ort2,ort3,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+    : null
+  const { error, data, fetching } = useApiQuery(revPath)
   error && checkForOnlineError({ error })
 
-  const revRowsUnsorted = data?.teilkultur_rev ?? []
+  const revRowsUnsorted = data ?? []
   const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
   const historyRev = useAtomValue(historyRevAtom)

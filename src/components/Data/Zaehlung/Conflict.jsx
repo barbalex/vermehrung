@@ -1,41 +1,18 @@
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import gql from 'graphql-tag'
-import { useQuery } from 'urql'
 
 import {
   addNotification,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
   store,
   userAtom,
 } from '../../../store/index.js'
+import { useApiQuery } from '../../../utils/useApiQuery.js'
 import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
-import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
 import { createDataArrayForZaehlungRevComparison as createDataArray } from './createDataArrayForRevComparison.js'
-
-const zaehlungRevQuery = gql`
-  query zaehlungRevForConflictQuery($id: uuid!, $rev: String!) {
-    zaehlung_rev(where: { zaehlung_id: { _eq: $id }, _rev: { _eq: $rev } }) {
-      id
-      __typename
-      zaehlung_id
-      kultur_id
-      datum
-      prognose
-      bemerkungen
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
 
 export const ZaehlungConflict = ({
   id,
@@ -46,22 +23,17 @@ export const ZaehlungConflict = ({
   setActiveConflict,
 }) => {
   // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery({
-    query: zaehlungRevQuery,
-    variables: {
-      rev,
-      id,
-    },
-  })
+  const { error, data, fetching } = useApiQuery(
+    `/zaehlung_rev?zaehlung_id=eq.${id}&_rev=eq.${rev}&select=id,zaehlung_id,kultur_id,datum,prognose,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
+  )
   error && checkForOnlineError({ error })
 
-  const revRow = data?.zaehlung_rev?.[0] ?? {}
+  const revRow = data?.[0] ?? {}
 
   const dataArray = createDataArray({ row, revRow })
 
   const onClickAktuellUebernehmen = async () => {
     const user = store.get(userAtom)
-    const gqlClient = store.get(gqlClientAtom)
     const db = store.get(dbAtom)
     // build new object
     const newDepth = revRow._depth + 1
@@ -84,20 +56,15 @@ export const ZaehlungConflict = ({
       ? toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_zaehlung_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'zaehlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/zaehlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // update model: remove this conflict
     try {
@@ -109,7 +76,6 @@ export const ZaehlungConflict = ({
 
   const onClickWiderspruchUebernehmen = async () => {
     const user = store.get(userAtom)
-    const gqlClient = store.get(gqlClientAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -131,20 +97,15 @@ export const ZaehlungConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_zaehlung_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'zaehlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/zaehlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

@@ -1,44 +1,18 @@
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import { useQuery } from 'urql'
-import gql from 'graphql-tag'
 
 import {
   addNotification,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
   store,
   userAtom,
 } from '../../../store/index.js'
+import { useApiQuery } from '../../../utils/useApiQuery.js'
 import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
-import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
 import { createDataArrayForHerkunftRevComparison } from './createDataArrayForRevComparison.js'
-
-const herkunftRevQuery = gql`
-  query herkunftRevForConflictQuery($id: uuid!, $rev: String!) {
-    herkunft_rev(where: { herkunft_id: { _eq: $id }, _rev: { _eq: $rev } }) {
-      id
-      __typename
-      bemerkungen
-      gemeinde
-      geom_point
-      herkunft_id
-      kanton
-      land
-      lokalname
-      nr
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
 
 export const HerkunftConflict = ({
   rev,
@@ -47,16 +21,12 @@ export const HerkunftConflict = ({
   conflictSelectionCallback,
   setActiveConflict,
 }) => {
-  const [{ error, data, fetching }] = useQuery({
-    query: herkunftRevQuery,
-    variables: {
-      rev,
-      id: row.id,
-    },
-  })
+  const { error, data, fetching } = useApiQuery(
+    `/herkunft_rev?herkunft_id=eq.${row.id}&_rev=eq.${rev}&select=id,bemerkungen,gemeinde,geom_point,herkunft_id,kanton,land,lokalname,nr,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
+  )
   error && checkForOnlineError({ error })
 
-  const revRow = data?.herkunft_rev?.[0] ?? {}
+  const revRow = data?.[0] ?? {}
 
   const dataArray = createDataArrayForHerkunftRevComparison({
     row,
@@ -65,7 +35,6 @@ export const HerkunftConflict = ({
 
   const onClickAktuellUebernehmen = async () => {
     const user = store.get(userAtom)
-    const gqlClient = store.get(gqlClientAtom)
     const db = store.get(dbAtom)
     // build new object
     const newDepth = revRow._depth + 1
@@ -91,20 +60,15 @@ export const HerkunftConflict = ({
       ? toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_herkunft_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'herkunft_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/herkunft_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // update model: remove this conflict
     try {
@@ -116,7 +80,6 @@ export const HerkunftConflict = ({
 
   const onClickWiderspruchUebernehmen = async () => {
     const user = store.get(userAtom)
-    const gqlClient = store.get(gqlClientAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -141,20 +104,15 @@ export const HerkunftConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_herkunft_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'herkunft_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/herkunft_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

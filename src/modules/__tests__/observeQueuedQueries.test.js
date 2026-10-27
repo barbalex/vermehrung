@@ -13,7 +13,7 @@ import {
   queuedQueriesAtom,
   errorsAtom,
   notificationsAtom,
-  gqlClientAtom,
+  apiClientAtom,
   dbAtom,
   addQueuedQuery,
 } from '../../store/index.js'
@@ -27,7 +27,10 @@ const dbMock = {
 
 const buildQuery = (overrides = {}) => ({
   name: 'mutateInsert_art_rev_one',
-  variables: JSON.stringify({ object: { art_id: '1', _rev: '1-abc' } }),
+  variables: JSON.stringify({
+    object: { art_id: '1', _rev: '1-abc' },
+    on_conflict: { constraint: 'art_rev_pkey', update_columns: ['id'] },
+  }),
   revertTable: 'art',
   revertId: '1',
   revertField: 'name',
@@ -37,7 +40,7 @@ const buildQuery = (overrides = {}) => ({
 
 describe('observeQueuedQueries', () => {
   let unobserve
-  let mutationMock
+  let postMock
   let nextResponse
 
   beforeEach(() => {
@@ -49,12 +52,15 @@ describe('observeQueuedQueries', () => {
     store.set(shortTermOnlineAtom, true)
     store.set(dbAtom, dbMock)
 
-    nextResponse = { data: {} }
-    mutationMock = vi.fn(() => ({
-      toPromise: () =>
-        typeof nextResponse === 'function' ? nextResponse() : nextResponse,
-    }))
-    store.set(gqlClientAtom, { mutation: mutationMock })
+    // executeQueuedQuery awaits apiClient.post and normalizes thrown
+    // errors into { error: { message, status, code, isNetwork } }
+    nextResponse = null
+    postMock = vi.fn(async () => {
+      if (nextResponse === null) return
+      if (typeof nextResponse === 'function') return nextResponse()
+      throw nextResponse
+    })
+    store.set(apiClientAtom, { post: postMock })
 
     unobserve?.()
     unobserve = observeQueuedQueries()
@@ -67,13 +73,18 @@ describe('observeQueuedQueries', () => {
     addQueuedQuery(buildQuery({ id: 'b', time: 50 }))
 
     await vi.waitFor(() => {
-      expect(mutationMock).toHaveBeenCalled()
+      expect(postMock).toHaveBeenCalled()
     })
+    expect(postMock).toHaveBeenCalledWith(
+      '/art_rev',
+      { art_id: '1', _rev: '1-abc' },
+      'resolution=merge-duplicates,return=minimal',
+    )
     await vi.waitFor(() => {
       expect(store.get(queuedQueriesAtom)).toHaveLength(0)
     })
     expect(store.get(queuedQueriesAtom)).toEqual([])
-    expect(mutationMock).toHaveBeenCalledTimes(2)
+    expect(postMock).toHaveBeenCalledTimes(2)
   })
 
   it('does nothing while shortTermOnline is false', async () => {
@@ -81,12 +92,14 @@ describe('observeQueuedQueries', () => {
     addQueuedQuery(buildQuery())
     tickle()
     await new Promise((resolve) => setTimeout(resolve, 20))
-    expect(mutationMock).not.toHaveBeenCalled()
+    expect(postMock).not.toHaveBeenCalled()
     expect(store.get(queuedQueriesAtom)).toHaveLength(1)
   })
 
-  it('keeps the query and refreshes the auth token on JWT errors', async () => {
-    nextResponse = { error: { message: 'JWT expired' } }
+  it('keeps the query and refreshes the auth token on 401', async () => {
+    const jwtError = new Error('Could not verify JWT: JWT expired')
+    jwtError.status = 401
+    nextResponse = jwtError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
     await vi.waitFor(() => {
@@ -96,12 +109,11 @@ describe('observeQueuedQueries', () => {
   })
 
   it('reverts and removes the query on identical-rev uniqueness violations', async () => {
-    nextResponse = {
-      error: {
-        message:
-          'uniqueness violation _rev_id__rev_key constraint on table art_rev',
-      },
-    }
+    const uniqueRevError = new Error(
+      'duplicate key value violates unique constraint "_rev_id__rev_key"',
+    )
+    uniqueRevError.code = '23505'
+    nextResponse = uniqueRevError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
     await vi.waitFor(() => {
@@ -110,14 +122,11 @@ describe('observeQueuedQueries', () => {
   })
 
   it('reverts and removes the query on same-edit-too-soon (21000)', async () => {
-    nextResponse = {
-      error: {
-        message: 'some error',
-        graphQLErrors: [
-          { extensions: { internal: { error: { status_code: '21000' } } } },
-        ],
-      },
-    }
+    const cardinalityError = new Error(
+      'more than one row returned by a subquery used as an expression',
+    )
+    cardinalityError.code = '21000'
+    nextResponse = cardinalityError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
     await vi.waitFor(() => {
@@ -126,9 +135,11 @@ describe('observeQueuedQueries', () => {
   })
 
   it('sets a field error and removes the query on unique-constraint violations', async () => {
-    nextResponse = {
-      error: { message: 'unique-constraint violation on art' },
-    }
+    const uniqueError = new Error(
+      'duplicate key value violates unique constraint "art_pkey"',
+    )
+    uniqueError.code = '23505'
+    nextResponse = uniqueError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
     await vi.waitFor(() => {
@@ -138,12 +149,12 @@ describe('observeQueuedQueries', () => {
       expect(store.get(queuedQueriesAtom)).toHaveLength(0)
     })
     expect(store.get(errorsAtom).art.name).toBe(
-      'unique-constraint violation on art',
+      'duplicate key value violates unique constraint "art_pkey"',
     )
   })
 
   it('marks offline and keeps the query on fetch failures', async () => {
-    nextResponse = { error: { message: 'Failed to fetch' } }
+    nextResponse = new TypeError('Failed to fetch')
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
     await vi.waitFor(() => {
@@ -153,7 +164,9 @@ describe('observeQueuedQueries', () => {
   })
 
   it('defers unknown errors to the end of the queue and notifies', async () => {
-    nextResponse = { error: { message: 'Unexpected server error' } }
+    const serverError = new Error('Unexpected server error')
+    serverError.status = 500
+    nextResponse = serverError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
     await vi.waitFor(() => {
@@ -165,7 +178,7 @@ describe('observeQueuedQueries', () => {
     // ...and its time was bumped so it sorts last (deferred)
     expect(queue[0].time).toBeGreaterThan(100)
     expect(store.get(errorsAtom).art.name).toBe('Unexpected server error')
-    expect(mutationMock).toHaveBeenCalledTimes(1)
+    expect(postMock).toHaveBeenCalledTimes(1)
   })
 
   it('does not double-send while a query is in-flight', async () => {
@@ -177,15 +190,15 @@ describe('observeQueuedQueries', () => {
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
     await vi.waitFor(() => {
-      expect(mutationMock).toHaveBeenCalledTimes(1)
+      expect(postMock).toHaveBeenCalledTimes(1)
     })
     // re-trigger while the first send is still in-flight
     tickle()
     tickle()
     await new Promise((resolve) => setTimeout(resolve, 20))
-    expect(mutationMock).toHaveBeenCalledTimes(1)
+    expect(postMock).toHaveBeenCalledTimes(1)
 
-    resolveFirst({ data: {} })
+    resolveFirst()
     await vi.waitFor(() => {
       expect(store.get(queuedQueriesAtom)).toHaveLength(0)
     })
