@@ -26,6 +26,8 @@
   --hover-bg: rgba(74, 20, 140, 0.03);
   /* lines between list rows */
   --row-border: rgba(74, 20, 140, 0.2);
+  /* brand-colored icons on themed surfaces */
+  --icon-primary: #4a148c;
   /* the home page cards sit on a photo */
   --card-overlay-bg: rgba(255, 255, 255, 0.65);
   --scrollbar-thumb: #4a148c;
@@ -44,6 +46,7 @@ html[data-theme='dark'] {
   --divider-strong: rgba(255, 255, 255, 0.5);
   --hover-bg: rgba(255, 255, 255, 0.06);
   --row-border: rgba(255, 255, 255, 0.15);
+  --icon-primary: #ba68c8;
   --card-overlay-bg: rgba(30, 30, 30, 0.75);
   --scrollbar-thumb: #9c4dcc;
   --scrollbar-track: #1c1c1c;

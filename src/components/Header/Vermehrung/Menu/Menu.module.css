@@ -3,12 +3,12 @@
   justify-content: space-between !important;
   align-items: center !important;
   svg {
-    color: #4a148c;
+    color: var(--icon-primary);
   }
 }
 
 .version {
   padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--text-secondary);
   user-select: none;
 }
