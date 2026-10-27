@@ -60,7 +60,9 @@ services:
     environment:
       PGRST_DB_SCHEMAS: public
       PGRST_DB_ANON_ROLE: anon
-      PGRST_ROLE_CLAIM_KEY: .role
+      # JSONPath syntax - the old JSPath '.role' is deprecated
+      # (single quotes keep docker compose from touching the $)
+      PGRST_ROLE_CLAIM_KEY: '$.role'
   caddy:
     # https://hub.docker.com/r/caddy/caddy/tags
     image: "caddy:2.11.7-alpine"

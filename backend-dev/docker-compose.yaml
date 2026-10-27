@@ -48,7 +48,9 @@ services:
     environment:
       PGRST_DB_SCHEMAS: public
       PGRST_DB_ANON_ROLE: anon
-      PGRST_ROLE_CLAIM_KEY: .role
+      # JSONPath syntax - the old JSPath '.role' is deprecated
+      # (single quotes keep docker compose from touching the $)
+      PGRST_ROLE_CLAIM_KEY: '$.role'
     networks:
       - network
   # mints the local api tokens (same service as production, built
