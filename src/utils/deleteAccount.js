@@ -16,7 +16,7 @@ export const deleteAccount = async ({ person }) => {
   // delete firebase user
   if (person?.account_id) {
     try {
-      await axios.get(`${constants?.authUri}/delete-user/${person?.account_id}`)
+      await axios.get(`${constants?.getAuthUri()}/delete-user/${person?.account_id}`)
     } catch (error) {
       console.log(error)
       if (online) {

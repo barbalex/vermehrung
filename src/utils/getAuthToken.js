@@ -49,7 +49,7 @@ export const getAuthToken = async (
   }
   let res
   try {
-    res = await fetchWithTimeout(`${constants.authUri}/token`, {
+    res = await fetchWithTimeout(`${constants.getAuthUri()}/token`, {
       method: 'POST',
       headers: {
         authorization: `Bearer ${idToken}`,

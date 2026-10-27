@@ -51,6 +51,23 @@ services:
       PGRST_ROLE_CLAIM_KEY: .role
     networks:
       - network
+  # mints the local api tokens (same service as production, built
+  # from backend/auth - needs the FIREBASE_* and PGRST_* entries in .env)
+  auth:
+    build:
+      context: ../backend/auth
+    container_name: v_auth
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "7000:7000"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    networks:
+      - network
   # hasura only remains for the migration period: the permission
   # equivalence tests (npm run test:api) use it as the oracle.
   # start with: docker compose -f backend-dev/docker-compose.yaml --profile migration up

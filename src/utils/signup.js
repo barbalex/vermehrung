@@ -27,7 +27,7 @@ export const signup = async ({ person }) => {
   }
   let res
   try {
-    res = await axios.get(`${constants?.authUri}/create-user/${email}`)
+    res = await axios.get(`${constants?.getAuthUri()}/create-user/${email}`)
   } catch (error) {
     if (online) {
       setOnline(false)

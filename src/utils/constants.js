@@ -10,7 +10,12 @@ export const constants = {
     window?.location?.hostname === 'localhost' ?
       `http://${window.location.hostname}:8080/`
     : 'https://api.vermehrung.ch/',
-  authUri: 'https://auth.vermehrung.ch',
+  // in dev the auth service runs locally (backend-dev compose),
+  // minting tokens signed with the dev api's secret
+  getAuthUri: () =>
+    window?.location?.hostname === 'localhost' ?
+      `http://${window.location.hostname}:7000`
+    : 'https://auth.vermehrung.ch',
   getAppUri: () =>
     window?.location?.hostname === 'localhost' ?
       `http://${window.location.host}`
