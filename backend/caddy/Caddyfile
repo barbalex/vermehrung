@@ -5,10 +5,10 @@
   #acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
 }
 
+# PostgREST handles CORS (including OPTIONS preflight) itself
 api.vermehrung.ch {
   reverse_proxy * {
-    to v_graphql:8080
-    header_down Access-Control-Allow-Origin *
+    to v_api:3000
   }
 }
 

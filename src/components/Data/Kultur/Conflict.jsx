@@ -1,45 +1,18 @@
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import gql from 'graphql-tag'
-import { useQuery } from 'urql'
 
 import {
   store,
   userAtom,
   addNotification,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
 } from '../../../store/index.js'
+import { useApiQuery } from '../../../utils/useApiQuery.js'
 import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
-import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
 import { createDataArrayForKulturRevComparison } from './createDataArrayForRevComparison.js'
-
-const kulturRevQuery = gql`
-  query kulturRevForConflictQuery($id: uuid!, $rev: String!) {
-    kultur_rev(where: { kultur_id: { _eq: $id }, _rev: { _eq: $rev } }) {
-      id
-      __typename
-      kultur_id
-      art_id
-      herkunft_id
-      garten_id
-      zwischenlager
-      erhaltungskultur
-      von_anzahl_individuen
-      bemerkungen
-      aktiv
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
 
 export const KulturConflict = ({
   id,
@@ -50,16 +23,12 @@ export const KulturConflict = ({
   setActiveConflict,
 }) => {
   // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery({
-    query: kulturRevQuery,
-    variables: {
-      rev,
-      id,
-    },
-  })
+  const { error, data, fetching } = useApiQuery(
+    `/kultur_rev?kultur_id=eq.${id}&_rev=eq.${rev}&select=id,kultur_id,art_id,herkunft_id,garten_id,zwischenlager,erhaltungskultur,von_anzahl_individuen,bemerkungen,aktiv,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
+  )
   error && checkForOnlineError({ error })
 
-  const revRow = data?.kultur_rev?.[0] ?? {}
+  const revRow = data?.[0] ?? {}
 
   const dataArray = createDataArrayForKulturRevComparison({ row, revRow })
 
@@ -90,21 +59,15 @@ export const KulturConflict = ({
       ? toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutations.mutateInsert_kultur_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'kultur_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/kultur_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // update model: remove this conflict
     try {
@@ -141,21 +104,15 @@ export const KulturConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutations.mutateInsert_kultur_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'kultur_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/kultur_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

@@ -24,7 +24,7 @@ import {
   store,
   hydratePersistedAtoms,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
   shortTermOnlineAtom,
   queuedQueriesAtom,
   queueSizeAtom,
@@ -33,7 +33,6 @@ import {
   addQueuedQuery,
 } from '../index.js'
 import { observeQueuedQueries } from '../../modules/observeQueuedQueries.js'
-import { mutations } from '../../utils/mutations.js'
 
 const dbMock = {
   get: () => ({ find: () => ({ fetch: () => null }) }),
@@ -91,10 +90,8 @@ describe('persisted atoms', () => {
     storageData.set('vermehrung:queuedQueries', [
       buildQuery({ id: 'hydrated-1', time: 100 }),
     ])
-    const mutationMock = vi.fn(() => ({
-      toPromise: async () => ({ data: {} }),
-    }))
-    store.set(gqlClientAtom, { mutation: mutationMock })
+    const postMock = vi.fn(async () => null)
+    store.set(apiClientAtom, { post: postMock })
 
     await hydratePersistedAtoms()
     expect(store.get(queueSizeAtom)).toBe(1)
@@ -103,8 +100,12 @@ describe('persisted atoms', () => {
     await vi.waitFor(() => {
       expect(store.get(queuedQueriesAtom)).toHaveLength(0)
     })
-    expect(mutationMock).toHaveBeenCalledTimes(1)
-    expect(mutations.mutateInsert_art_rev_one).toBeDefined()
+    expect(postMock).toHaveBeenCalledTimes(1)
+    expect(postMock).toHaveBeenCalledWith(
+      '/art_rev',
+      { art_id: '1' },
+      'resolution=merge-duplicates,return=minimal',
+    )
     unobserve()
   })
 

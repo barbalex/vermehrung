@@ -1,17 +1,15 @@
 export const constants = {
   singleRowHeight: 48,
-  getGraphQlUri: () =>
+  getApiUri: () =>
     window?.location?.hostname === 'localhost' ?
-      `http://${window.location.hostname}:8080/v1/graphql`
-    : 'https://api.vermehrung.ch/v1/graphql',
-  getGraphQlWsUri: () =>
-    window?.location?.hostname === 'localhost' ?
-      `ws://${window.location.hostname}:8080/v1/graphql`
-    : 'wss://api.vermehrung.ch/v1/graphql',
+      `http://${window.location.hostname}:8080`
+    : 'https://api.vermehrung.ch',
+  // the api root doubles as the health endpoint (PostgREST serves the
+  // OpenApi spec there without authentication)
   getHealthUri: () =>
     window?.location?.hostname === 'localhost' ?
-      `http://${window.location.hostname}:8080/healthz`
-    : 'https://api.vermehrung.ch/healthz',
+      `http://${window.location.hostname}:8080/`
+    : 'https://api.vermehrung.ch/',
   authUri: 'https://auth.vermehrung.ch',
   getAppUri: () =>
     window?.location?.hostname === 'localhost' ?

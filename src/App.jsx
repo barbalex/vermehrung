@@ -1,13 +1,12 @@
 import { useEffect, useState, Suspense } from 'react'
 import DatabaseProvider from '@nozbe/watermelondb/react/DatabaseProvider'
 import { useAtomValue } from 'jotai'
-import { Provider as UrqlProvider } from 'urql'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
 import { materialTheme } from './utils/materialTheme.js'
 import { initiateApp } from './utils/initiateApp.js'
 import { initiateDb } from './utils/initiateDb.js'
-import { dbAtom, gqlClientAtom, setDb } from './store/index.js'
+import { apiClientAtom, dbAtom, setDb } from './store/index.js'
 import { Router } from './Router.jsx'
 import { QueuedQueriesObserver } from './components/QueuedQueriesObserver.jsx'
 import { version as appVersion } from '../package.json'
@@ -16,7 +15,7 @@ export const App = () => {
   const [initiated, setInitiated] = useState(false)
   const [initError, setInitError] = useState(null)
   const database = useAtomValue(dbAtom)
-  const gqlClient = useAtomValue(gqlClientAtom)
+  const apiClient = useAtomValue(apiClientAtom)
 
   useEffect(() => {
     const baseTitle = 'Vermehrung'
@@ -60,18 +59,16 @@ export const App = () => {
         App konnte nicht gestartet werden: {initError}
       </div>
     )
-  if (!initiated || !database || !gqlClient) return null
+  if (!initiated || !database || !apiClient) return null
 
   return (
     <DatabaseProvider database={database}>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={materialTheme}>
-          <UrqlProvider value={gqlClient}>
-            <QueuedQueriesObserver />
-            <Suspense fallback={null}>
-              <Router />
-            </Suspense>
-          </UrqlProvider>
+          <QueuedQueriesObserver />
+          <Suspense fallback={null}>
+            <Router />
+          </Suspense>
         </ThemeProvider>
       </StyledEngineProvider>
     </DatabaseProvider>

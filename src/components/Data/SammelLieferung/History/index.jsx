@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import gql from 'graphql-tag'
 import Slider from 'react-slick'
-import { useQuery } from 'urql'
+
+import { useApiQuery } from '../../../../utils/useApiQuery.js'
 
 import {
   activeNodeArrayAtom,
@@ -17,37 +17,6 @@ import { SammelLieferungHistoryRow as Row } from './Row.jsx'
 
 import artStyles from '../../Art/History/index.module.css'
 
-const sammelLieferungRevQuery = gql`
-  query sammelLieferungRevForHistoryQuery($rev: [String!]) {
-    sammel_lieferung_rev(where: { _rev: { _in: $rev } }) {
-      id
-      __typename
-      sammel_lieferung_id
-      art_id
-      person_id
-      von_sammlung_id
-      von_kultur_id
-      datum
-      nach_kultur_id
-      nach_ausgepflanzt
-      von_anzahl_individuen
-      anzahl_pflanzen
-      anzahl_auspflanzbereit
-      gramm_samen
-      andere_menge
-      geplant
-      bemerkungen
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
-
 const sliderSettings = {
   dots: false,
   infinite: false,
@@ -59,15 +28,13 @@ export const SammelLieferungHistory = ({
   historyTakeoverCallback,
 }) => {
   const priorRevisions = row?._revisions?.slice(1) ?? []
-  const [{ error, data, fetching }] = useQuery({
-    query: sammelLieferungRevQuery,
-    variables: {
-      rev: priorRevisions,
-    },
-  })
+  const revPath = priorRevisions.length
+    ? `/sammel_lieferung_rev?_rev=in.(${priorRevisions.join(',')})&select=id,sammel_lieferung_id,art_id,person_id,von_sammlung_id,von_kultur_id,datum,nach_kultur_id,nach_ausgepflanzt,von_anzahl_individuen,anzahl_pflanzen,anzahl_auspflanzbereit,gramm_samen,andere_menge,geplant,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+    : null
+  const { error, data, fetching } = useApiQuery(revPath)
   error && checkForOnlineError({ error })
 
-  const revRowsUnsorted = data?.sammel_lieferung_rev ?? []
+  const revRowsUnsorted = data ?? []
   const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
   const historyRev = useAtomValue(historyRevAtom)

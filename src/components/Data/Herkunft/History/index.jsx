@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import Slider from 'react-slick'
-import { useQuery } from 'urql'
+
+import { useApiQuery } from '../../../../utils/useApiQuery.js'
 
 import {
   activeNodeArrayAtom,
@@ -9,37 +10,12 @@ import {
   historyRevAtom,
   store,
 } from '../../../../store/index.js'
-import gql from 'graphql-tag'
 
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { HerkunftHistoryRow as Row } from './Row.jsx'
 
 import artStyles from '../../Art/History/index.module.css'
-
-const herkunftRevQuery = gql`
-  query herkunftRevForHistoryQuery($rev: [String!]) {
-    herkunft_rev(where: { _rev: { _in: $rev } }) {
-      id
-      __typename
-      bemerkungen
-      gemeinde
-      geom_point
-      herkunft_id
-      kanton
-      land
-      lokalname
-      nr
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
 
 const sliderSettings = {
   dots: false,
@@ -48,15 +24,13 @@ const sliderSettings = {
 
 export const HerkunftHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const priorRevisions = row?._revisions?.slice(1) ?? []
-  const [{ error, data, fetching }] = useQuery({
-    query: herkunftRevQuery,
-    variables: {
-      rev: priorRevisions,
-    },
-  })
+  const revPath = priorRevisions.length
+    ? `/herkunft_rev?_rev=in.(${priorRevisions.join(',')})&select=id,bemerkungen,gemeinde,geom_point,herkunft_id,kanton,land,lokalname,nr,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+    : null
+  const { error, data, fetching } = useApiQuery(revPath)
   error && checkForOnlineError({ error })
 
-  const revRowsUnsorted = data?.herkunft_rev ?? []
+  const revRowsUnsorted = data ?? []
   const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
   const historyRev = useAtomValue(historyRevAtom)

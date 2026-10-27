@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import gql from 'graphql-tag'
 import Slider from 'react-slick'
-import { useQuery } from 'urql'
+
+import { useApiQuery } from '../../../../utils/useApiQuery.js'
 
 import {
   activeNodeArrayAtom,
@@ -17,27 +17,6 @@ import { ZaehlungHistoryRow as Row } from './Row.jsx'
 
 import artStyles from '../../Art/History/index.module.css'
 
-const zaehlungRevQuery = gql`
-  query zaehlungRevForHistoryQuery($rev: [String!]) {
-    zaehlung_rev(where: { _rev: { _in: $rev } }) {
-      id
-      __typename
-      zaehlung_id
-      kultur_id
-      datum
-      prognose
-      bemerkungen
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
-
 const sliderSettings = {
   dots: false,
   infinite: false,
@@ -45,15 +24,13 @@ const sliderSettings = {
 
 export const ZaehlungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const priorRevisions = row?._revisions?.slice(1) ?? []
-  const [{ error, data, fetching }] = useQuery({
-    query: zaehlungRevQuery,
-    variables: {
-      rev: priorRevisions,
-    },
-  })
+  const revPath = priorRevisions.length
+    ? `/zaehlung_rev?_rev=in.(${priorRevisions.join(',')})&select=id,zaehlung_id,kultur_id,datum,prognose,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+    : null
+  const { error, data, fetching } = useApiQuery(revPath)
   error && checkForOnlineError({ error })
 
-  const revRowsUnsorted = data?.zaehlung_rev ?? []
+  const revRowsUnsorted = data ?? []
   const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
 
   const historyRev = useAtomValue(historyRevAtom)

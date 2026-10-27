@@ -6,21 +6,15 @@ export const Schnittstellen = () => (
     <p className={dokuStyles.dokuDate}>15.06.2019</p>
     <p>
       Brauchen Sie in anderen Anwendungen Zugriff auf Ihre Daten in
-      vermehrung.ch? Kein Problem: vermehrung.ch verfügt über eine öffentliche{' '}
-      <a
-        href="//github.com/facebook/graphql"
-        target="_blank"
-        rel="noreferrer"
-      >
-        GraphQL
+      vermehrung.ch? vermehrung.ch verfügt über eine öffentliche{' '}
+      <a href="//postgrest.org" target="_blank" rel="noreferrer">
+        PostgREST
       </a>
       -Schnittstelle.
       <br />
     </p>
     <p>
-      Diese Schnittstelle wird auch von vermehrung.ch selber benutzt. Es gibt
-      daher kaum eine Funktionalität, welche damit nicht möglich ist, solange
-      man mit passenden Benutzerrechten zugreift.
+      Diese Schnittstelle wird auch von vermehrung.ch selber benutzt.
       <br />
     </p>
     <p>

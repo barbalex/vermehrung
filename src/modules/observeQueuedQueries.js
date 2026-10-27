@@ -15,6 +15,7 @@ import {
 } from '../store/index.js'
 import { getAuthToken } from '../utils/getAuthToken.js'
 import { executeQueuedQuery } from './executeQueuedQuery.js'
+import { requestSyncSoon } from '../utils/syncPoller.js'
 
 // Guard: if a network send is already in-flight, skip this trigger.
 // Without this, rapid queue changes cause the same oldest query
@@ -55,15 +56,15 @@ export const observeQueuedQueries = () =>
     isProcessing = false
 
     if (response.error) {
-        // TODO:
-        // use urql difference between networkError and graphQLErrors
         console.log('operation observer error:', response.error)
-        const lcMessage = response.error.message.toLowerCase()
-        if (response.error.message.includes('JWT')) {
+        const { message, code, status, isNetwork } = response.error
+        const lcMessage = message.toLowerCase()
+        if (status === 401) {
+          // stale api token: fetch a fresh one, the query stays queued
           console.log('getting auth token due to jwt error')
           return getAuthToken()
         } else if (
-          lcMessage.includes('uniqueness violation') &&
+          code === '23505' &&
           lcMessage.includes('_rev_id__rev_key')
         ) {
           // In case a conflict was caused by two EXACT SAME changes,
@@ -71,24 +72,23 @@ export const observeQueuedQueries = () =>
           console.log(
             'There is a conflict with exact same changes - ingoring the error thrown',
           )
-        } else if (
-          response.error?.graphQLErrors?.[0]?.extensions?.internal?.error
-            ?.status_code === '21000'
-        ) {
+        } else if (code === '21000') {
+          // two identical revisions made the winning-revision subquery
+          // ambiguous: the same edit was already applied - ignore
           console.log('user sent same edit to soon again')
-        } else if (lcMessage.includes('unique-constraint')) {
-          let { message } = response.error
+        } else if (code === '23505' || lcMessage.includes('unique-constraint')) {
+          let errorText = message
           if (lcMessage.includes('single_art_herkunft_garden_active_idx')) {
-            message =
+            errorText =
               'Pro Art, Herkunft und Garten darf nur eine Kultur aktiv sein (plus ein Zwischenlager). Offenbar gibt es schon eine aktive Kultur'
           }
-          // do not add a notification: show this response.error below the field
+          // do not add a notification: show this error below the field
           setError({
             path: `${revertTable}.${revertField}`,
-            value: message,
+            value: errorText,
           })
           console.log('a unique constraint was violated')
-        } else if (response.error.message.includes('Failed to fetch')) {
+        } else if (isNetwork || lcMessage.includes('failed to fetch')) {
           console.log('network is failing')
           setShortTermOnline(false)
           return
@@ -98,12 +98,12 @@ export const observeQueuedQueries = () =>
           deferQueuedQueryById(query.id)
           setError({
             path: `${revertTable}.${revertField}`,
-            value: response.error.message,
+            value: message,
           })
           return addNotification({
             title:
               'Eine Operation kann nicht in die Datenbank geschrieben werden',
-            message: response.error.message,
+            message,
             info: 'Bei der nächsten Synchronisierung wird wieder versucht, diese Operation auszuführen',
             actionLabel: 'Operation löschen',
             actionName: 'removeQueuedQueryById',
@@ -120,4 +120,7 @@ export const observeQueuedQueries = () =>
     }
     // remove operation from queue
     removeQueuedQueryById(query.id)
+    // the rev triggers recomputed winning revisions and conflicts
+    // server-side - fetch them promptly
+    requestSyncSoon()
   }, store)

@@ -6,6 +6,7 @@ const Hapi = require('@hapi/hapi')
 // since firebase-admin v14 the modules are imported separately
 const { initializeApp, cert } = require('firebase-admin/app')
 const { getAuth } = require('firebase-admin/auth')
+const crypto = require('node:crypto')
 const postgres = require('postgres')
 
 const serviceAccount = require('./config.js')
@@ -16,10 +17,12 @@ const server = new Hapi.Server({
 })
 
 // TODO: check how to add db-url using v3
-const sql = postgres(process.env.HASURA_GRAPHQL_DATABASE_URL)
+const sql = postgres(
+  process.env.DATABASE_URL || process.env.HASURA_GRAPHQL_DATABASE_URL,
+)
 
 let firebaseInitializationError = null
-// Initialize the Firebase admin SDK with your service account credentials
+// Initialize the Firebase admin SDK with our service account credentials
 if (serviceAccount) {
   try {
     initializeApp({
@@ -28,6 +31,31 @@ if (serviceAccount) {
   } catch (e) {
     firebaseInitializationError = e
   }
+}
+
+// Mint the HS256 JWT PostgREST verifies (PGRST_JWT_SECRET).
+// Claims: PostgREST switches to the db role in `role` (PGRST_ROLE_CLAIM_KEY),
+// row level security reads `user_id` (app.current_user_id()).
+const signToken = (claims, secret, ttlSeconds) => {
+  const b64url = (buf) =>
+    Buffer.from(buf).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  const header = b64url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
+  const payload = b64url(
+    JSON.stringify({
+      ...claims,
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + ttlSeconds,
+    }),
+  )
+  const signature = crypto
+    .createHmac('sha256', secret)
+    .update(`${header}.${payload}`)
+    .digest()
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '')
+  return `${header}.${payload}.${signature}`
 }
 
 async function start() {
@@ -118,15 +146,14 @@ async function start() {
     },
   })
 
+  // exchanges a Firebase ID token for the JWT the api (PostgREST) accepts
   server.route({
-    method: 'GET',
-    path: '/add-hasura-claims/{uid}',
+    method: 'POST',
+    path: '/token',
     handler: async (req, h) => {
-      // Throw 500 if firebase is not configured
       if (!serviceAccount) {
         return h.response('Firebase not configured').code(500)
       }
-      // Check for errors initializing firebase SDK
       if (firebaseInitializationError) {
         console.log('firebaseInitializationError:', firebaseInitializationError)
         return h
@@ -135,58 +162,56 @@ async function start() {
           )
           .code(500)
       }
-
-      const { uid } = req.params
-      if (!uid) {
-        return h.response('no uid was passed').code(500)
+      const secret = process.env.PGRST_JWT_SECRET
+      if (!secret) {
+        return h.response('PGRST_JWT_SECRET is not configured').code(500)
+      }
+      const idToken = (req.headers.authorization || '').replace(/^Bearer /, '')
+      if (!idToken) {
+        return h.response('no bearer token was passed').code(401)
       }
 
-      // fetch id and user_role
-      return sql`select p.id, u.name as user_role from person p inner join user_role u on u.id = p.user_role_id where account_id = ${uid}`
-        .then((persons) => {
-          if (!persons) {
-            return h.response('Got no persons when querying db').code(500)
-          }
-          const person = persons[0]
-          if (!person) {
-            return h.response('Got no person when querying db').code(412)
-          }
-          const { id, user_role } = person
-          if (!id) {
-            return h.response('Got no person_id when querying db').code(412)
-          }
-          if (!user_role) {
-            return h
-              .response(
-                'Diese Person hat keine Rolle. Ohne Rolle ist eine Anmeldung nicht möglich.',
-              )
-              .code(412)
-          }
-          const hasuraVariables = {
-            'https://hasura.io/jwt/claims': {
-              'x-hasura-default-role': user_role,
-              'x-hasura-allowed-roles': [user_role],
-              // beware: hasura expects strings
-              'x-hasura-user-id': `${id?.toString?.() ?? id}`,
-            },
-          }
+      let decoded
+      try {
+        decoded = await getAuth().verifyIdToken(idToken)
+      } catch (error) {
+        return h.response(`invalid firebase token: ${error.message}`).code(401)
+      }
 
-          return getAuth()
-            .setCustomUserClaims(uid, hasuraVariables)
-            .then(() => {
-              return h.response('user role and id set').code(200)
-            })
-            .catch((adminError) => {
-              console.log('Error creating custom token:', adminError)
-              return h
-                .response(`Error creating custom token: ${adminError.message}`)
-                .code(500)
-            })
-        })
-        .catch((sqlError) => {
-          console.log('Error querying db:', sqlError)
-          return h.response(`Error querying db: ${sqlError.message}`).code(500)
-        })
+      let person
+      try {
+        const persons = await sql`select p.id, u.name as user_role from person p inner join user_role u on u.id = p.user_role_id where account_id = ${decoded.uid}`
+        person = persons[0]
+      } catch (sqlError) {
+        console.log('Error querying db:', sqlError)
+        return h.response(`Error querying db: ${sqlError.message}`).code(500)
+      }
+      if (!person) {
+        return h
+          .response(
+            'Für diesen Account existiert keine Person. Ohne Person ist eine Anmeldung nicht möglich.',
+          )
+          .code(412)
+      }
+      if (!person.user_role) {
+        return h
+          .response(
+            'Diese Person hat keine Rolle. Ohne Rolle ist eine Anmeldung nicht möglich.',
+          )
+          .code(412)
+      }
+
+      const token = signToken(
+        {
+          role: person.user_role,
+          user_id: person.id,
+          sub: decoded.uid,
+          email: decoded.email ?? null,
+        },
+        secret,
+        60 * 60 * 12,
+      )
+      return h.response({ token }).code(200)
     },
   })
   await server.start()

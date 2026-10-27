@@ -132,7 +132,6 @@ export const showTreeInSingleColumnViewAtom = persistedAtom(
 )
 export const diffConflictAtom = persistedAtom('diffConflict', true)
 export const initiallyQueryingAtom = persistedAtom('initiallyQuerying', '')
-export const wsReconnectCountAtom = persistedAtom('wsReconnectCount', 0)
 // online state is deliberately not persisted: it is redetermined on boot
 export const onlineAtom = atom(true)
 export const shortTermOnlineAtom = atom(true)
@@ -145,9 +144,8 @@ export const authorizingAtom = atom(true)
 // === volatile singletons ===
 export const userAtom = atom({})
 export const firebaseAuthAtom = atom(null)
-export const gqlWsClientAtom = atom(null)
 export const dbAtom = atom(null)
-export const gqlClientAtom = atom(null)
+export const apiClientAtom = atom(null)
 // navigate is never read reactively, so it is kept as a plain module value.
 // Storing a function in a jotai primitive atom would make jotai call it
 // (updater semantics, like React setState) when setting it
@@ -503,8 +501,6 @@ export const setShowTreeInSingleColumnView = (val) =>
 export const setDiffConflict = (val) => store.set(diffConflictAtom, val)
 export const setInitiallyQuerying = (val) =>
   store.set(initiallyQueryingAtom, val)
-export const incrementWsReconnectCount = () =>
-  store.set(wsReconnectCountAtom, (store.get(wsReconnectCountAtom) ?? 0) + 1)
 export const setOnline = (val) => store.set(onlineAtom, val)
 export const setShortTermOnline = (val) => store.set(shortTermOnlineAtom, val)
 export const setGettingAuthUser = (val) => store.set(gettingAuthUserAtom, val)
@@ -515,8 +511,7 @@ export const setFirebaseAuth = (val) => {
     store.set(firebaseAuthAtom, val)
   }
 }
-export const setGqlClient = (val) => store.set(gqlClientAtom, val)
-export const setGqlWsClient = (val) => store.set(gqlWsClientAtom, val)
+export const setApiClient = (val) => store.set(apiClientAtom, val)
 export const setDb = (val) => store.set(dbAtom, val)
 
 // === revert helpers ===

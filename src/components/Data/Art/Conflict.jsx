@@ -1,41 +1,18 @@
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import gql from 'graphql-tag'
-import { useQuery } from 'urql'
 
 import {
   addNotification,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
   store,
   userAtom,
 } from '../../../store/index.js'
+import { useApiQuery } from '../../../utils/useApiQuery.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
 import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
-import { mutations } from '../../../utils/mutations.js'
 import { createDataArrayForRevComparison } from './createDataArrayForRevComparison.js'
-
-const artRevQuery = gql`
-  query artRevForConflictQuery($id: uuid!, $rev: String!) {
-    art_rev(where: { art_id: { _eq: $id }, _rev: { _eq: $rev } }) {
-      id
-      __typename
-      art_id
-      ae_id
-      set
-      apflora_av
-      apflora_ap
-      changed
-      changed_by
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
 
 export const ArtConflict = ({
   id,
@@ -46,22 +23,17 @@ export const ArtConflict = ({
   setActiveConflict,
 }) => {
   // need to use this query to ensure that the person's name is queried
-  const [{ error, data, fetching }] = useQuery({
-    query: artRevQuery,
-    variables: {
-      rev,
-      id,
-    },
-  })
+  const { error, data, fetching } = useApiQuery(
+    `/art_rev?art_id=eq.${id}&_rev=eq.${rev}&select=id,art_id,ae_id,set,apflora_av,apflora_ap,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
+  )
   error && checkForOnlineError({ error })
 
-  const revRow = data?.art_rev?.[0] ?? {}
+  const revRow = data?.[0] ?? {}
 
   const dataArray = createDataArrayForRevComparison({ row, revRow })
 
   const onClickAktuellUebernehmen = async () => {
     const user = store.get(userAtom)
-    const gqlClient = store.get(gqlClientAtom)
     const db = store.get(dbAtom)
     // build new object
     const newDepth = revRow._depth + 1
@@ -84,20 +56,15 @@ export const ArtConflict = ({
       ? toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_art_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'art_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/art_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // update model: remove this conflict
     try {
@@ -109,7 +76,6 @@ export const ArtConflict = ({
 
   const onClickWiderspruchUebernehmen = async () => {
     const user = store.get(userAtom)
-    const gqlClient = store.get(gqlClientAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
@@ -131,20 +97,15 @@ export const ArtConflict = ({
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
-    const response = await gqlClient
-      .mutation(mutations.mutateInsert_art_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'art_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/art_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

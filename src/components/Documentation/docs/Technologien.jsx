@@ -5,7 +5,7 @@ import dokuStyles from '../index.module.css'
 export const Technologien = () => (
   <>
     <h1>Verwendete Technologien</h1>
-    <p className={dokuStyles.dokuDate}>03.09.2020</p>
+    <p className={dokuStyles.dokuDate}>27.10.2026</p>
     <ul>
       <li>
         <a href="https://www.postgresql.org" target="_blank" rel="noreferrer">
@@ -30,29 +30,14 @@ export const Technologien = () => (
         </Link>
       </li>
       <li>
-        <a
-          href="https://github.com/facebook/graphql"
-          target="_blank"
-          rel="noreferrer"
-        >
-          GraphQL
+        <a href="https://postgrest.org" target="_blank" rel="noreferrer">
+          PostgREST
         </a>{' '}
-        als Daten-Schnittstelle, in Form von{' '}
-        <a href="https://hasura.io" target="_blank" rel="noreferrer">
-          Hasura
-        </a>
+        als Daten-Schnittstelle
       </li>
       <li>
         <a href="https://jotai.org/" target="_blank" rel="noreferrer">
           Jotai
-        </a>
-        ,{' '}
-        <a
-          href="https://jotai.org/docs/extensions/effect"
-          target="_blank"
-          rel="noreferrer"
-        >
-          jotai-effect
         </a>{' '}
         für app-seitigen &quot;Status&quot; und offline-fähige Warteschlangen
         für Operationen

@@ -4,10 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import LinearProgress from '@mui/material/LinearProgress'
 import { FaChevronRight } from 'react-icons/fa'
 import styled from '@emotion/styled'
-import { useQuery, useClient } from 'urql'
-import gql from 'graphql-tag'
-
-import { store, dbAtom } from '../../../../../store/index.js'
+import { store, apiClientAtom, dbAtom } from '../../../../../store/index.js'
 
 import styles from '../Menu.module.css'
 
@@ -18,17 +15,6 @@ const StyledOtherMenuItem = styled(MenuItem)`
   }
 `
 
-const apfloraApQuery = gql`
-  query apfloraApForAdminQuery {
-    apflora_ap {
-      id
-      ae_id
-      ap
-      av
-    }
-  }
-`
-
 function delay(time) {
   return new Promise((resolve) => setTimeout(resolve, time))
 }
@@ -36,8 +22,6 @@ function delay(time) {
 export const HeaderAdminMenu = ({
   setParentAnchorEl: setGrandParentAnchorEl,
 }) => {
-  const client = useClient()
-
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickExporte = (event) => setAnchorEl(event.currentTarget)
 
@@ -47,8 +31,9 @@ export const HeaderAdminMenu = ({
 
     // fetch all art and apflora_ap
     const arts = await db.get('art').query().fetch()
-    const data = await client.query(apfloraApQuery).toPromise()
-    const apfloraAps = data.data.apflora_ap
+    const apfloraAps = await store
+      .get(apiClientAtom)
+      .get('/apflora_ap?select=id,ae_id,ap,av')
     for (const [index, art] of arts.entries()) {
       // find corresponding apflora_ap using ae_id
       const apfloraAp = apfloraAps.find(

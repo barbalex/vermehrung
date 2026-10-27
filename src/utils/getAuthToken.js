@@ -8,31 +8,28 @@ import {
   setOnline,
   setShortTermOnline,
 } from '../store/index.js'
+import { constants } from './constants.js'
 import { fetchWithTimeout } from './fetchWithTimeout.js'
 
-// subscriptions must not start before a fresh token was stored:
-// with a stale one every ws connection is rejected and the initial
-// queries never complete - all forms would wait forever
+// exchanges the Firebase ID token for the api JWT (auth service /token):
+// the api JWT carries the role and person id PostgREST and row level
+// security work with. Stored in localStorage, picked up by the api
+// client on every request.
+// Polling and the offline queue must not start before a fresh token was
+// stored: with a stale one every request is rejected - all forms would
+// wait forever.
 const retryMs = 5000
 const maxRetryMs = 60000
 
 // exponential backoff: be gentle with a struggling auth service
-const retry = (nextRetryMs) => {
-  setTimeout(() => getAuthToken(nextRetryMs), nextRetryMs)
+const retry = (nextRetryMs, forceRefresh = false) => {
+  setTimeout(() => getAuthToken(nextRetryMs, forceRefresh), nextRetryMs)
 }
 
-const hasHasuraClaims = (token) => {
-  try {
-    const payload = atob(
-      token.split('.')[1].replaceAll('-', '+').replaceAll('_', '/'),
-    )
-    return !!JSON.parse(payload)?.['https://hasura.io/jwt/claims']
-  } catch {
-    return false
-  }
-}
-
-export const getAuthToken = async (nextRetryMs = retryMs) => {
+export const getAuthToken = async (
+  nextRetryMs = retryMs,
+  forceRefresh = false,
+) => {
   const user = store.get(userAtom)
   if (!user?.uid) {
     // nothing to fetch without a user.
@@ -42,13 +39,25 @@ export const getAuthToken = async (nextRetryMs = retryMs) => {
     return
   }
   setAuthorizing(true)
+  let idToken
+  try {
+    idToken = await user.getIdToken(forceRefresh)
+  } catch (error) {
+    console.log('error from calling getting id token:', error)
+    addNotification({ message: error.message })
+    return retry(Math.min(nextRetryMs * 2, maxRetryMs))
+  }
   let res
   try {
-    res = await fetchWithTimeout(
-      `https://auth.vermehrung.ch/add-hasura-claims/${user.uid}`,
-    )
+    res = await fetchWithTimeout(`${constants.authUri}/token`, {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${idToken}`,
+        'content-type': 'application/json',
+      },
+    })
   } catch (error) {
-    console.log('error from getting claims from auth.vermehrung.ch:', error)
+    console.log('error getting api token from auth service:', error)
     if (store.get(onlineAtom)) {
       setOnline(false)
     }
@@ -60,8 +69,14 @@ export const getAuthToken = async (nextRetryMs = retryMs) => {
     })
     return retry(Math.min(nextRetryMs * 2, maxRetryMs))
   }
+  if (res?.status === 401) {
+    // the firebase token was stale (they expire after an hour and the
+    // sdk only refreshes them on demand): force a refresh and retry
+    console.log('auth service rejected the firebase token, refreshing')
+    return retry(Math.min(nextRetryMs * 2, maxRetryMs), true)
+  }
   if (res?.status !== 200) {
-    console.log('getAuthToken, got no new token')
+    console.log('getAuthToken, got no api token (status ' + res.status + ')')
     return retry(Math.min(nextRetryMs * 2, maxRetryMs))
   }
   if (!store.get(onlineAtom)) {
@@ -72,17 +87,17 @@ export const getAuthToken = async (nextRetryMs = retryMs) => {
   }
   let token
   try {
-    // only force a refresh when the cached token has no hasura claims;
-    // forcing on every boot hammers Firebase needlessly
-    token = await user.getIdToken(
-      !hasHasuraClaims(window.localStorage.getItem('token')),
-    )
+    const body = await res.json()
+    token = body?.token
   } catch (error) {
-    console.log('error from calling getting id token:', error)
-    addNotification({ message: error.message })
+    console.log('error parsing token response:', error)
     return retry(Math.min(nextRetryMs * 2, maxRetryMs))
   }
-  // set token to localStorage so the links pick it up on next call
+  if (!token) {
+    console.log('getAuthToken, response contained no token')
+    return retry(Math.min(nextRetryMs * 2, maxRetryMs))
+  }
+  // set token to localStorage so the api client picks it up on next call
   window.localStorage.setItem('token', token)
   setAuthorizing(false)
   return true

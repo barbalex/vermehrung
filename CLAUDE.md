@@ -15,11 +15,15 @@ npm run build_ts         # tsc && vite build  (run this to catch type errors)
 npm run serve            # vite preview (serve the production build locally)
 npm run deploy           # build + firebase deploy --only hosting  (production)
 npm run deploy_preview   # build + firebase hosting:channel:deploy preview
+npm test                 # vitest unit tests (CI runs these too)
+npm run test:api         # api equivalence tests — needs the local backend + docker (NOT in CI)
+npm run test:e2e         # Playwright boot smoke tests (no backend needed)
 npx eslint .             # lint (no npm script is defined for it)
 ```
 
-- There is **no test suite** — no test runner is configured. Do not claim one exists.
-- `npm run build` deliberately skips `tsc`, so type errors do not fail the build. Run `npm run build_ts` (or `npx tsc`) to type-check.
+- `npm test` runs the vitest suite under `src/**/__tests__/` (store persistence, queue observer, revision builders). CI (`npm ci && npm test && npm run build`) runs it on every PR/merge.
+- `npm run test:api` runs `api-tests/` against the **local backend**: it diffs every table/role/person between PostgREST and Hasura (the migration oracle), and tests the sync rpc + upsert write path. Start the backend with `docker compose -f backend-dev/docker-compose.yaml --profile migration up` first.
+- `npm run build` deliberately skips `tsc`, so type errors do not fail the build. Run `npm run build_ts` (or `npx tsc`) to type-check. Note: `tsc` reports ~6.5k pre-existing errors (checkJs strict on plain JS) — compare against the baseline before/after your change rather than expecting zero.
 - Dependencies are pinned to exact versions (`.npmrc`: `save-exact=true`, `force=true`, `allow-git=none`). Bump with `ncu -c 5 -i` (the `-c 5` cooldown avoids brand-new releases).
 - The GitHub Actions in `.github/workflows/` auto-deploy Firebase Hosting on PR (preview channel) and on merge to `master`.
 
@@ -28,23 +32,23 @@ npx eslint .             # lint (no npm script is defined for it)
 This is a **local-first** app. Three concerns are split across the repo:
 
 ### 1. Backend (`backend/` — deployed separately, Docker Compose)
-- **Postgres/PostGIS** (`db/`): source of truth. The schema + Hasura metadata are versioned **in this repo** under `src/sql/` (`createTables.sql`, `createViews.sql`, `createRevTriggers_*.sql`, `one-offs/`) and `src/hasuraMetadata/metadata.json`.
-- **Hasura** GraphQL Engine v2.48 (`graphql`): exposes Postgres over GraphQL (HTTP + WS), JWT-authenticated.
-- **Auth** (`auth/`, Hapi + `firebase-admin`): mints Hasura JWTs from Firebase Auth tokens.
-- **Caddy** (`caddy/`): reverse proxy / TLS termination.
-- `backend-dev/docker-compose.yaml` runs just `db` + `graphql` for local development; `backend/docker-compose.yaml` adds `auth` + `caddy`.
+- **Postgres/PostGIS** (`db/`): source of truth. The schema is versioned **in this repo** under `src/sql/` (`createTables.sql`, `createViews.sql`, `createRevTriggers_*.sql`, `createApiAccess.sql`, `createSyncFunction.sql`, `one-offs/`).
+- **PostgREST** v16.5 (`api`): exposes Postgres over REST, JWT-authenticated. Roles, column grants and row level security live in `src/sql/createApiAccess.sql` — **generated** from the former Hasura permissions by `tools/generate_api_access_sql.py` (regenerate after changing permissions; the Hasura metadata under `src/hasuraMetadata/` is the migration-time source and oracle).
+- **Auth** (`auth/`, Hapi + `firebase-admin`): `POST /token` verifies a Firebase ID token and returns the api JWT (HS256) carrying `role` + `user_id`.
+- **Caddy** (`caddy/`): reverse proxy / TLS termination (PostgREST handles CORS itself).
+- `backend-dev/docker-compose.yaml` runs `db` + `api` locally; the `--profile migration` flag additionally starts Hasura on :8081 (only for the api equivalence tests). `backend/docker-compose.yaml` (production) runs `db` + `auth` + `api` + `caddy`.
 
 ### 2. Frontend (`src/` — this Vite app, hosted on Firebase Hosting)
-- **React 19** + **MUI 9** (Emotion; `jsxImportSource: '@emotion/react'`), **React Compiler** enabled, **mobx-state-tree** for app/UI state.
-- **urql** + **graphql-ws** for GraphQL queries/subscriptions (client built in `src/utils/initiateApp.js`).
+- **React 19** + **MUI 9** (Emotion; `jsxImportSource: '@emotion/react'`), **React Compiler** enabled, **jotai** for app/UI state.
+- **apiClient** (`src/utils/apiClient.js`): thin fetch wrapper over PostgREST (auth header from localStorage, `Prefer:` handling for upserts).
 - **WatermelonDB** is the local-first store: models in `src/dbModel.ts`, schema in `src/dbSchema/`, instantiated over LokiJS/IndexedDB in `src/utils/initiateDb.js`. Migrations in `src/utils/migrations.js` — bump the schema version there whenever you change `src/dbSchema/*`.
 - Entry chain: `src/main.jsx` → `src/App.jsx` (wires all providers: `DatabaseProvider` → MUI theme → `MobxStoreProvider` → `UrqlProvider`) → `src/Router.jsx`.
 
 ### 3. The local-first data flow (the core of the app)
-The **UI reads from WatermelonDB, not from Hasura.** This is the most important thing to understand when debugging data:
+The **UI reads from WatermelonDB, not from the api.** This is the most important thing to understand when debugging data:
 
-- **Reads:** `src/utils/initializeSubscriptions.js` opens GraphQL subscriptions that push backend changes into WatermelonDB. Each table tracks a `*_lastUpdated` / `*_initially_queried` flag on the MST store. The UI can therefore **lag or drift from the backend** — query the backend directly for ground truth rather than trusting what the UI shows.
-- **Writes:** go through `@writer` methods on each WatermelonDB model in `src/dbModel.ts` (`edit`, `delete`, `removeConflict`). A write (a) optimistically updates the local WDB row and (b) enqueues a GraphQL mutation via `store.addQueuedQuery` (`src/store/QueuedQuery.js`). The queue drains to Hasura when online; offline edits queue and replay on reconnect.
+- **Reads:** `src/utils/syncPoller.js` polls `POST /rpc/sync` (every 5s, server-side watermark cursors in `lastUpdated`) and upserts changed rows into WatermelonDB via `processSubscriptionResult`. The poll doubles as the online check (`shortTermOnline`). The UI can therefore **lag or drift from the backend** — query the backend directly for ground truth rather than trusting what the UI shows.
+- **Writes:** go through `@writer` methods on each WatermelonDB model in `src/dbModel.ts` (`edit`, `delete`, `removeConflict`). A write (a) optimistically updates the local WDB row and (b) enqueues an upsert via `store.addQueuedQuery`. The queue (`src/modules/observeQueuedQueries.js`) drains to PostgREST (`POST /<table>_rev` with `Prefer: resolution=merge-duplicates`) when online; offline edits queue and replay on reconnect — replays of identical mutations are no-ops.
 
 ### 4. Revision & conflict system
 Every editable row is versioned. Columns on each model: `_rev` (`"<depth>-<md5>"`), `_parent_rev`, `_revisions` (pg text array of ancestor revs), `_depth`, `_deleted`, `_conflicts`.
@@ -55,7 +59,7 @@ Every editable row is versioned. Columns on each model: `_rev` (`"<depth>-<md5>"
 
 ## Local backend & debugging
 
-When the app runs on `localhost`, it talks to a **local Hasura at `http://localhost:8080/v1/graphql`**, decided in [src/utils/constants.js](src/utils/constants.js) (`hostname === 'localhost'` → `:8080`, else `api.vermehrung.ch`). **`.env.development`'s `HASURA_GRAPHQL_URL` points at prod and is misleading for local debugging** — the admin secret for the local backend lives in `backend-dev/.env` / `backend/.env`. Bring the backend up with `docker compose -f backend-dev/docker-compose.yaml up`.
+When the app runs on `localhost`, it talks to a **local PostgREST at `http://localhost:8080`**, decided in [src/utils/constants.js](src/utils/constants.js) (`hostname === 'localhost'` → `:8080`, else `api.vermehrung.ch`). The backend secrets live in `backend-dev/.env` / `backend/.env` (note: mixed line endings — strip `\r` when parsing them in scripts). Bring the backend up with `docker compose -f backend-dev/docker-compose.yaml up` (add `--profile migration` to also start Hasura on :8081 for `npm run test:api`).
 
 ## Navigation & code layout
 
@@ -69,6 +73,6 @@ When the app runs on `localhost`, it talks to a **local Hasura at `http://localh
 ## Conventions
 
 - Imports carry explicit extensions (`.js`/`.jsx`/`.ts`) — enforced by the eslint `import/extensions` rule. Note that `src/dbModel.ts` (TypeScript) is imported into `.js` files.
-- `src/dbModel.ts` is the one `.ts` file; the rest of the app is JSX/JS. `tsconfig` is `strict` with `checkJs`.
+- `src/dbModel.ts` is the one `.ts` src file; the rest of the app is JSX/JS (plus TypeScript in `api-tests/`). `tsconfig` is `strict` with `checkJs`.
 - CSS Modules use `camelCaseOnly` for class names (`vite.config.ts`).
 - `vite.config.ts` sets `legacy.inconsistentCjsInterop: true` to work around CJS-interop issues with `@nozbe/watermelondb/adapters/lokijs` under Vite 8.

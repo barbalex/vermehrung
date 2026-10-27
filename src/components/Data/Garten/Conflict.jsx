@@ -1,45 +1,18 @@
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
-import gql from 'graphql-tag'
-import { useQuery } from 'urql'
 
 import {
   store,
   userAtom,
   addNotification,
   dbAtom,
-  gqlClientAtom,
+  apiClientAtom,
 } from '../../../store/index.js'
+import { useApiQuery } from '../../../utils/useApiQuery.js'
 import { checkForOnlineError } from '../../../utils/checkForOnlineError.js'
 import { toPgArray } from '../../../utils/toPgArray.js'
-import { mutations } from '../../../utils/mutations.js'
 import { Conflict } from '../../shared/Conflict/index.jsx'
 import { createDataArrayForGartenRevComparison } from './createDataArrayForRevComparison.js'
-
-const gartenRevQuery = gql`
-  query gartenRevForConflictQuery($id: uuid!, $rev: String!) {
-    garten_rev(where: { garten_id: { _eq: $id }, _rev: { _eq: $rev } }) {
-      id
-      __typename
-      garten_id
-      name
-      strasse
-      plz
-      ort
-      geom_point
-      aktiv
-      bemerkungen
-      changed
-      changed_by
-      person_id
-      _rev
-      _parent_rev
-      _revisions
-      _depth
-      _deleted
-    }
-  }
-`
 
 export const GartenConflict = ({
   id,
@@ -49,16 +22,12 @@ export const GartenConflict = ({
   conflictSelectionCallback,
   setActiveConflict,
 }) => {
-  const [{ error, data, fetching }] = useQuery({
-    query: gartenRevQuery,
-    variables: {
-      rev,
-      id,
-    },
-  })
+  const { error, data, fetching } = useApiQuery(
+    `/garten_rev?garten_id=eq.${id}&_rev=eq.${rev}&select=id,garten_id,name,strasse,plz,ort,geom_point,aktiv,bemerkungen,changed,changed_by,person_id,_rev,_parent_rev,_revisions,_depth,_deleted`,
+  )
   error && checkForOnlineError({ error })
 
-  const revRow = data?.garten_rev?.[0] ?? {}
+  const revRow = data?.[0] ?? {}
 
   const dataArray = createDataArrayForGartenRevComparison({ row, revRow })
 
@@ -88,21 +57,15 @@ export const GartenConflict = ({
       ? toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutations.mutateInsert_garten_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'garten_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/garten_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // update model: remove this conflict
     try {
@@ -140,21 +103,15 @@ export const GartenConflict = ({
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
     //console.log('Garten Conflict', { row, revRow, newObject })
-    const response = await store
-      .get(gqlClientAtom)
-      .mutation(mutations.mutateInsert_garten_rev_one, {
-        object: newObject,
-        on_conflict: {
-          constraint: 'garten_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-      .toPromise()
-    if (response.error) {
-      checkForOnlineError({ error: response.error })
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/garten_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
       return addNotification({
-        message: response.error.message,
-      })
+        message: error.message,
+  })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()
