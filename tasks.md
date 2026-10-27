@@ -2,8 +2,6 @@
 2026.10.14: 194.233.161.99 > 139.162.172.14
 ---
 
-offline editing not working due to data not loading:
-
 ---
 
 nur ap filter: only applied in nav tree, not to list view to the right of it, when applied at https://vermehrung.ch/Vermehrung/ (Arten list view not opened)
