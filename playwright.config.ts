@@ -1,7 +1,8 @@
 import { defineConfig, devices } from '@playwright/test'
 
-// boot smoke tests: they run against the dev server without a backend.
-// unauthenticated flows only - no credentials are used
+// e2e tests run against the dev server without a backend: the boot
+// smoke tests use no credentials, the local-first scenario mocks
+// firebase, the auth service and PostgREST via page.route
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,

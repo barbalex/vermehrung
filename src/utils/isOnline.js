@@ -2,6 +2,11 @@ import { constants } from './constants.js'
 import { fetchWithTimeout } from './fetchWithTimeout.js'
 
 export const isOnline = async () => {
+  // the browser reports no connection: no point in fetching anything.
+  // must run before the localhost shortcut below: offline emulation
+  // (e2e) and dev machines without connectivity must still boot the
+  // app from local data instead of hammering failing requests
+  if (!window?.navigator?.onLine) return false
   // if we are on localhost, we are always online
   if (window?.location?.hostname === 'localhost') return true
 

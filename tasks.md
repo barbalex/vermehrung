@@ -6,7 +6,7 @@
 
 ---
 
-Still parked for tomorrow: the Playwright login/offline e2e scenario, the $.role claim-key syntax, and eventually retiring Hasura + src/hasuraMetadata/ once you're confident
+Still parked for tomorrow: the $.role claim-key syntax, and eventually retiring Hasura + src/hasuraMetadata/ once you're confident
 
 ---
 

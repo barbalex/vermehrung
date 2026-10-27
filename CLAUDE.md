@@ -17,12 +17,13 @@ npm run deploy           # build + firebase deploy --only hosting  (production)
 npm run deploy_preview   # build + firebase hosting:channel:deploy preview
 npm test                 # vitest unit tests (CI runs these too)
 npm run test:api         # api equivalence tests — needs the local backend + docker (NOT in CI)
-npm run test:e2e         # Playwright boot smoke tests (no backend needed)
+npm run test:e2e         # Playwright e2e: boot smoke + local-first scenario (no backend needed)
 npx eslint .             # lint (no npm script is defined for it)
 ```
 
 - `npm test` runs the vitest suite under `src/**/__tests__/` (store persistence, queue observer, revision builders). CI (`npm ci && npm test && npm run build`) runs it on every PR/merge.
 - `npm run test:api` runs `api-tests/` against the **local backend**: it diffs every table/role/person between PostgREST and Hasura (the migration oracle), and tests the sync rpc + upsert write path. Start the backend with `docker compose -f backend-dev/docker-compose.yaml --profile migration up` first.
+- `npm run test:e2e` runs `e2e/`: boot smoke tests plus `local-first.spec.ts`, a full browser scenario (login → initial sync → offline boot from cache → re-login) that pins the seams `test:api` cannot reach. It mocks firebase identity toolkit, the auth service `/token` and PostgREST via `page.route` — no backend and no real credentials are used. Offline is emulated by spoofing `navigator.onLine` and aborting backend routes (like production, where the service worker still serves assets).
 - `npm run build` deliberately skips `tsc`, so type errors do not fail the build. Run `npm run build_ts` (or `npx tsc`) to type-check. Note: `tsc` reports ~6.5k pre-existing errors (checkJs strict on plain JS) — compare against the baseline before/after your change rather than expecting zero.
 - Dependencies are pinned to exact versions (`.npmrc`: `save-exact=true`, `force=true`, `allow-git=none`). Bump with `ncu -c 5 -i` (the `-c 5` cooldown avoids brand-new releases).
 - The GitHub Actions in `.github/workflows/` auto-deploy Firebase Hosting on PR (preview channel) and on merge to `master`.
