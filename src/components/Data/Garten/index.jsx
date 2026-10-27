@@ -36,8 +36,13 @@ export const Garten = ({
 
   // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
-    () => ((initialDataQueried || !online) ? db.get('garten').findAndObserve(id) : $of({})),
-    [db, id, initialDataQueried],
+    () =>
+      showFilter
+        ? $of({})
+        : initialDataQueried || !online
+          ? db.get('garten').findAndObserve(id)
+          : $of({}),
+    [db, id, initialDataQueried, showFilter],
   )
   const observedRow = useObservable(observable)
   const row = showFilter ? gartenFilter : observedRow
