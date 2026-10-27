@@ -2,11 +2,15 @@
 2026.10.14: 194.233.161.99 > 139.162.172.14
 ---
 
-offline editing not working due to data not loading: 
+offline editing not working due to data not loading:
 
 ---
 
-nur ap filter: only applied in nav tree, not to list view to the right of it, when applied at https://vermehrung.ch/Vermehrung/ (Arten list view not opened) 
+nur ap filter: only applied in nav tree, not to list view to the right of it, when applied at https://vermehrung.ch/Vermehrung/ (Arten list view not opened)
+
+---
+
+Worth knowing for the pattern: today's three client-side bugs (embed name, p_since wrapper, cursor reset) were all in exactly the seams my test harness couldn't reach — the browser-boot and login paths that need a real Firebase session. The offline-boot fix and these two round out the local-first story; if you want, tomorrow we can add a Playwright offline scenario (context offline mode) to pin that path down permanently.
 
 ---
 
