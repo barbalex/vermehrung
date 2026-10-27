@@ -1,6 +1,7 @@
 import { lazy } from 'react'
 
 import {
+  Navigate,
   Route,
   createBrowserRouter,
   createRoutesFromElements,
@@ -75,9 +76,6 @@ const SammelLieferungen = lazy(async () => ({
   default: (
     await import('./components/Documentation/docs/SammelLieferungen.jsx')
   ).SammelLieferungen,
-}))
-const Events = lazy(async () => ({
-  default: (await import('./components/Documentation/docs/Events.jsx')).Events,
 }))
 const Bedarf = lazy(async () => ({
   default: (await import('./components/Documentation/docs/Bedarf.jsx')).Bedarf,
@@ -249,7 +247,7 @@ export const Router = () => {
           />
           <Route
             path="events"
-            element={<Events />}
+            element={<Navigate to="/Dokumentation/bedarf" replace />}
           />
           <Route
             path="bedarf"

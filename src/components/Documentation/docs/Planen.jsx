@@ -52,5 +52,8 @@ export const Planen = () => (
       Kultur in eigenen Bedarf-Einträgen erfasst.
       <br />
     </p>
+    <p>
+      Siehe auch: <Link to="/Dokumentation/bedarf">Bedarf</Link>...
+    </p>
   </>
 )
