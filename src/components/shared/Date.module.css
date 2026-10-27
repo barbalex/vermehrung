@@ -32,7 +32,7 @@
     color: var(--text-secondary);
     background-color: var(--surface);
     outline: 0;
-    border-bottom: 2px solid #4a148c;
+    border-bottom: 2px solid var(--icon-primary);
     box-shadow: none;
     background-color: transparent;
   }

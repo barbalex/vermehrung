@@ -9,7 +9,7 @@
     right: -1000%;
     left: -1000%;
     z-index: 1;
-    border-bottom: 1px solid rgba(74, 20, 140, 0.1);
+    border-bottom: 1px solid var(--row-border);
   }
   &:after {
     content: '';

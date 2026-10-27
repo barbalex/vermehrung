@@ -1,5 +1,5 @@
 .row {
-  border-bottom: thin solid rgba(74, 20, 140, 0.1);
+  border-bottom: thin solid var(--row-border);
   border-collapse: collapse;
   padding: 10px;
   display: flex;
