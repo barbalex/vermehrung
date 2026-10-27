@@ -2192,7 +2192,7 @@ export class ArtFile extends Model {
       beschreibung,
       changed,
       [field]: value,
-      _rev_at: Date.now(),
+      _rev_at: Date.now() / 1000,
     }
     try {
       await store
@@ -2261,7 +2261,7 @@ export class GartenFile extends Model {
       beschreibung,
       changed,
       [field]: value,
-      _rev_at: Date.now(),
+      _rev_at: Date.now() / 1000,
     }
     try {
       await store
@@ -2330,7 +2330,7 @@ export class HerkunftFile extends Model {
       beschreibung,
       changed,
       [field]: value,
-      _rev_at: Date.now(),
+      _rev_at: Date.now() / 1000,
     }
     try {
       await store
@@ -2399,7 +2399,7 @@ export class KulturFile extends Model {
       beschreibung,
       changed,
       [field]: value,
-      _rev_at: Date.now(),
+      _rev_at: Date.now() / 1000,
     }
     try {
       await store
@@ -2468,7 +2468,7 @@ export class LieferungFile extends Model {
       beschreibung,
       changed,
       [field]: value,
-      _rev_at: Date.now(),
+      _rev_at: Date.now() / 1000,
     }
     try {
       await store
@@ -2537,7 +2537,7 @@ export class PersonFile extends Model {
       beschreibung,
       changed,
       [field]: value,
-      _rev_at: Date.now(),
+      _rev_at: Date.now() / 1000,
     }
     try {
       await store
@@ -2606,7 +2606,7 @@ export class SammlungFile extends Model {
       beschreibung,
       changed,
       [field]: value,
-      _rev_at: Date.now(),
+      _rev_at: Date.now() / 1000,
     }
     try {
       await store

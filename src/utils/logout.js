@@ -1,7 +1,7 @@
 import localForage from 'localforage'
 import { signOut } from 'firebase/auth'
 
-import { store, dbAtom, firebaseAuthAtom } from '../store/index.js'
+import { store, dbAtom, firebaseAuthAtom, resetSyncState } from '../store/index.js'
 
 export const logout = async () => {
   console.log('logout called')
@@ -10,7 +10,8 @@ export const logout = async () => {
   console.log('LOGGING OUT')
   await signOut(firebaseAuth)
   await localForage.clear()
-  await db.write(async () => db.unsafeResetDatabase())
+  resetSyncState()
+    await db.write(async () => db.unsafeResetDatabase())
   window.localStorage.removeItem('token')
   window.location.reload(true)
 }

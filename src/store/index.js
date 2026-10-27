@@ -467,6 +467,20 @@ export const setLastUpdated = ({ table, val: valPassed }) => {
 
 export const tableLastUpdated = (table) => store.get(lastUpdatedAtom)[table]
 
+// reset the sync cursors and the initially-queried flags, e.g. when the
+// local database is wiped: the in-memory cursors would otherwise
+// survive the wipe and the next sync would deliver nothing
+export const resetSyncState = () => {
+  store.set(
+    lastUpdatedAtom,
+    Object.fromEntries(tables.map((table) => [table, 0])),
+  )
+  store.set(
+    initiallyQueriedAtom,
+    Object.fromEntries(tables.map((table) => [table, false])),
+  )
+}
+
 // initially_queried flags are deliberately not persisted:
 // initial queries are re-run on every boot
 export const initiallyQueriedAtom = atom(
