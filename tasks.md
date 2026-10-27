@@ -6,6 +6,10 @@ offline editing not working due to data not loading:
 
 ---
 
+nur ap filter: only applied in nav tree, not to list view to the right of it, when applied at https://vermehrung.ch/Vermehrung/ (Arten list view not opened) 
+
+---
+
 lets implement light/dark mode as we did for ae3 and ps: default is system setting, a icon enables overriding it
 
 ---
