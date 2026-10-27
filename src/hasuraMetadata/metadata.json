@@ -263,28 +263,6 @@
                 }
               }
             ],
-            "remote_relationships": [
-              {
-                "definition": {
-                  "to_remote_schema": {
-                    "lhs_fields": [
-                      "ae_id"
-                    ],
-                    "remote_field": {
-                      "allVVermehrungArtens": {
-                        "arguments": {
-                          "condition": {
-                            "id": "$ae_id"
-                          }
-                        }
-                      }
-                    },
-                    "remote_schema": "ae"
-                  }
-                },
-                "name": "arteigenschaften"
-              }
-            ],
             "insert_permissions": [
               {
                 "role": "artverantwortlich",
@@ -16381,16 +16359,6 @@
             },
             "use_prepared_statements": true
           }
-        }
-      }
-    ],
-    "remote_schemas": [
-      {
-        "name": "ae",
-        "definition": {
-          "url": "https://api.arteigenschaften.ch/graphql",
-          "timeout_seconds": 60,
-          "customization": {}
         }
       }
     ]
