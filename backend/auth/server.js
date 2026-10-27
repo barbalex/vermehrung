@@ -14,6 +14,16 @@ const serviceAccount = require('./config.js')
 const server = new Hapi.Server({
   host: '0.0.0.0',
   port: 7000,
+  // cors must be handled here: the browser sends a preflight OPTIONS for
+  // the /token POST (Authorization header), which hapi only answers when
+  // cors is configured. Caddy could only patch response headers - enough
+  // for the old header-less GETs, but it cannot answer a preflight.
+  // Authorization and Content-Type are in hapi's default allowed headers.
+  routes: {
+    cors: {
+      origin: ['*'],
+    },
+  },
 })
 
 // TODO: check how to add db-url using v3
