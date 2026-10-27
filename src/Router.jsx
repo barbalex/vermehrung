@@ -115,10 +115,6 @@ const FehlerMelden = lazy(async () => ({
   default: (await import('./components/Documentation/docs/FehlerMelden.jsx'))
     .FehlerMelden,
 }))
-const Schnittstellen = lazy(async () => ({
-  default: (await import('./components/Documentation/docs/Schnittstellen.jsx'))
-    .Schnittstellen,
-}))
 const Pwa = lazy(async () => ({
   default: (await import('./components/Documentation/docs/Pwa/index.jsx')).Pwa,
 }))
@@ -284,10 +280,6 @@ export const Router = () => {
           <Route
             path="fehler-ideen"
             element={<FehlerMelden />}
-          />
-          <Route
-            path="schnittstellen"
-            element={<Schnittstellen />}
           />
           <Route
             path="pwa"

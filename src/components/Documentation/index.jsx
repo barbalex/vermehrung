@@ -43,7 +43,6 @@ const articles = [
   { title: 'vermehrung erinnert sich', slug: 'gedaechtnis' },
   { title: 'Open Source', slug: 'open-source' },
   { title: 'Fehler, Ideen, Vorschläge melden', slug: 'fehler-ideen' },
-  { title: 'Schnittstellen', slug: 'schnittstellen' },
   { title: 'Progressive Web App', slug: 'pwa' },
   { title: 'Offline arbeiten', slug: 'offline' },
   { title: 'Offline: Wie es funktioniert', slug: 'offline-wie' },
