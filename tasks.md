@@ -8,6 +8,10 @@ auth not working in dev: fetchWithTimeout.js:8 GET http://localhost:8080/person?
 
 ---
 
+Still parked for tomorrow: the Playwright login/offline e2e scenario, the $.role claim-key syntax, an uploadcare-widget upgrade for the drag-drop edge, and eventually retiring Hasura + src/hasuraMetadata/ once you're confident
+
+---
+
 uploading file test.txt fails with: Files-CqhrugV6.js:14 Uncaught RangeError: Offset is outside the bounds of the DataView
 at DataView.prototype.getUint16 (<anonymous>)
 at Files-CqhrugV6.js:14:5181
