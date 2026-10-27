@@ -16,7 +16,7 @@
   min-width: 80px;
   margin-right: 10px;
   text-align: center;
-  color: rgba(0, 0, 0, 0.38);
+  color: var(--text-secondary);
   font-size: 1rem;
   padding-top: 19px;
 }
