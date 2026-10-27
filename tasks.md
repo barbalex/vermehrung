@@ -30,6 +30,3 @@ lets implement light/dark mode as we did for ae3 and ps: default is system setti
 
 ---
 
-lets translate the english part to german: http://localhost:5176/Dokumentation/datenschutz/
-
----
