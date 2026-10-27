@@ -38,17 +38,27 @@ export class Uploader extends Component {
     // covers the file dialog; drag-and-drop of empty files still crashes
     // inside the widget, which merely stalls its dialog
     this.messageTimer = null
-    // show the message where the widget shows its own dialog errors
+    this.dialogMessageEl = null
+    // show the message inside the dialog: an own element in the current
+    // tab, styled inline. the widget's own message element cannot be
+    // used - it is re-rendered and its content wiped by the widget
     this.showDialogMessage = (text) => {
-      const el = document.querySelector('.uploadcare--panel__message')
-      if (!el) return false
+      const container =
+        document.querySelector(
+          '.uploadcare--tab_current .uploadcare--tab__content',
+        ) ?? document.querySelector('.uploadcare--panel__content')
+      if (!container) return false
+      this.dialogMessageEl?.remove()
+      const el = document.createElement('div')
       el.textContent = text
-      el.classList.remove('uploadcare--panel__message_hidden')
-      el.classList.add('uploadcare--error')
+      el.style.cssText =
+        'color:#c62828;font-weight:600;padding:8px 16px;text-align:center;font-size:15px'
+      container.prepend(el)
+      this.dialogMessageEl = el
       clearTimeout(this.messageTimer)
       this.messageTimer = setTimeout(() => {
-        el.textContent = ''
-        el.classList.remove('uploadcare--error')
+        el.remove()
+        this.dialogMessageEl = null
       }, 5000)
       return true
     }
