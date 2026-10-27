@@ -70,7 +70,9 @@ export const processSubscriptionResult = async ({
     try {
       await db.write(async () => {
         if (objectsToUpdate.length || dataToCreateObjectsFrom.length) {
-          await db.batch(
+          // single array, not a spread: the initial sync imports > 10k
+          // rows per table and a spread would blow the call stack
+          await db.batch([
             ...objectsToUpdate.map((object) => {
               const thisObjectsData = dataToCheck.find(
                 (d) => d.id === object.id,
@@ -90,7 +92,7 @@ export const processSubscriptionResult = async ({
             ...dataToCreateObjectsFrom.map((d) =>
               collection.prepareCreateFromDirtyRaw(parseComplexFieldsForWm(d)),
             ),
-          )
+          ])
           setInitiallyQueried({ table })
         }
         setInitiallyQueried({ table })

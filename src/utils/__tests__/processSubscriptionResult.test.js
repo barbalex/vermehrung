@@ -41,7 +41,9 @@ const createDbMock = (existingRows) => {
         return { kind: 'create', raw }
       },
     }),
-    batch: async (...ops) => {
+    batch: async (...args) => {
+      // batch accepts both a single array of operations or a spread
+      const ops = Array.isArray(args[0]) ? args[0] : args
       ops.forEach((op) => {
         if (op.kind === 'create') return
         state.updated.push(op)
