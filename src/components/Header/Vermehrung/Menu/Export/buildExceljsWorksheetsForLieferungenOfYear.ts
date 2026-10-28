@@ -32,7 +32,7 @@ export const buildExceljsWorksheetsForLieferungenOfYear = async ({
     lieferungsSorted
       .filter((l) => {
         const lYear = l.datum ? DateTime.fromSQL(l.datum).toFormat('yyyy') : ''
-        return lYear == year
+        return lYear === String(year)
       })
       .map(async (l) => {
         let lieferungPerson

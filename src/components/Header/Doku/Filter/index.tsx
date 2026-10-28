@@ -23,7 +23,7 @@ export const DokuFilter = () => {
     preventDefault?: () => void
     stopPropagation?: () => void
     key?: string
-  }) => setDocFilter(e.target.value)
+  }) => setDocFilter(e.target.value as string)
   const onClickEmptyFilter = () => setDocFilter('')
 
   return (
@@ -37,7 +37,7 @@ export const DokuFilter = () => {
         autoCorrect="off"
         autoCapitalize="off"
         placeholder="Artikel filtern"
-        variant="outlined"
+        {...({ variant: "outlined" } as { variant?: string })}
         startAdornment={
           <InputAdornment position="start">
             <FaFilter className={styles.filterIcon} />

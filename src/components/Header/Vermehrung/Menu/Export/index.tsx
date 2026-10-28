@@ -24,7 +24,7 @@ export const HeaderExportMenu = ({
   const onClickLieferungenDesJahrs = (event: { target: { value: string } }) => {
     const year = event.target.value
     if (year.length === 4) {
-      buildExceljsWorksheetsForLieferungenOfYear({ year })
+      void buildExceljsWorksheetsForLieferungenOfYear({ year: Number(year) })
       setAnchorEl(null)
       setGrandParentAnchorEl(null)
     }

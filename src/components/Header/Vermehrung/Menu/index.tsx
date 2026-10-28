@@ -9,27 +9,29 @@ import { HeaderHamburgerMenu as Menu } from './Menu.tsx'
 
 import styles from './index.module.css'
 
-export const HeaderHamburgerMenu = ({ asMenu }) => {
+export const HeaderHamburgerMenu = ({
+  asMenu,
+}: {
+  asMenu?: boolean
+}) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
-  const onClickMenu = (event: {
-    target: { name?: string; value: unknown }
-    currentTarget?: HTMLElement
-    preventDefault?: () => void
-    stopPropagation?: () => void
-    key?: string
-  }) => setAnchorEl(event.currentTarget)
+  const onClickMenu = (event: { currentTarget: HTMLElement }) =>
+    setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (
       <>
         <MenuItem
-          aria-owns={anchorEl ? 'menu' : null}
+          aria-owns={anchorEl ? 'menu' : undefined}
           aria-haspopup="true"
           onClick={onClickMenu}
         >
           Menu
         </MenuItem>
-        <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+        <Menu
+          anchorEl={anchorEl ?? null}
+          setAnchorEl={setAnchorEl as (el: HTMLElement | null) => void}
+        />
       </>
     )
   }
@@ -38,7 +40,7 @@ export const HeaderHamburgerMenu = ({ asMenu }) => {
     <ErrorBoundary>
       <IconButton
         aria-label="Menu"
-        aria-owns={anchorEl ? 'menu' : null}
+        aria-owns={anchorEl ? 'menu' : undefined}
         aria-haspopup="true"
         title="Menu"
         onClick={onClickMenu}
@@ -46,7 +48,10 @@ export const HeaderHamburgerMenu = ({ asMenu }) => {
       >
         <MdMenu className={styles.icon} />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      <Menu
+          anchorEl={anchorEl ?? null}
+          setAnchorEl={setAnchorEl as (el: HTMLElement | null) => void}
+        />
     </ErrorBoundary>
   )
 }

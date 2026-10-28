@@ -36,15 +36,21 @@ const Account = () => {
   const db = useAtomValue(dbAtom)
   const queueSize = useAtomValue(queueSizeAtom)
 
-  const [userPerson, setUserPerson] = useState(undefined)
+  const [userPerson, setUserPerson] = useState<
+    import('../../../dbModel.ts').Person | undefined
+  >(undefined)
   useEffect(() => {
     const userPersonObservable = user.uid
       ? db
           ?.get<import('../../../dbModel.ts').Person>('person')
           .query(Q.where('account_id', user.uid))
           .observeWithColumns(['vorname', 'name'])
-      : $of({})
-    const subscription = userPersonObservable?.subscribe((result) => {
+      : $of<import('../../../dbModel.ts').Person[]>([])
+    const subscription = (
+      userPersonObservable as unknown as import('rxjs').Observable<
+        import('../../../dbModel.ts').Person[]
+      >
+    )?.subscribe((result) => {
       const userPerson = result?.[0]
       return setUserPerson(userPerson)
     })
@@ -93,7 +99,10 @@ const Account = () => {
   const onClickResetPassword = async () => {
     setResetTitle('...')
     try {
-      await sendPasswordResetEmail(store.get(firebaseAuthAtom), email, {
+      const firebaseAuth = store.get(firebaseAuthAtom)
+      if (!firebaseAuth) return
+      if (!email) return
+      await sendPasswordResetEmail(firebaseAuth, email, {
         url: `${constants?.getAppUri()}/Vermehrung`,
         handleCodeInApp: true,
       })
@@ -118,10 +127,12 @@ const Account = () => {
       <>
         <IconButton
           aria-label="Konto"
-          aria-owns={anchorEl ? 'long-menu' : null}
+          aria-owns={anchorEl ? 'long-menu' : undefined}
           aria-haspopup="true"
           title={`Konto und Daten verwalten`}
-          onClick={onClickMenu}
+          onClick={
+            onClickMenu as unknown as import("react").MouseEventHandler<HTMLButtonElement>
+          }
           size="large"
         >
           <UserIcon className={styles.userIcon} />

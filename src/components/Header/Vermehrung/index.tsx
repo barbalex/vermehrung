@@ -25,7 +25,7 @@ export const HeaderVermehrung = () => {
       <AppBar position="fixed" ref={ref}>
         <Toolbar>
           <NavTree />
-          {width < 509 ? (
+          {(width ?? 0) < 509 ? (
             <>
               <div className={styles.spacer} />
               <Filter />
@@ -39,7 +39,7 @@ export const HeaderVermehrung = () => {
                 <HamburgerMenu asMenu />
               </Menu>
             </>
-          ) : width < 557 ? (
+          ) : (width ?? 0) < 557 ? (
             <>
               <Home />
               <div className={styles.spacer} />
@@ -53,7 +53,7 @@ export const HeaderVermehrung = () => {
                 <HamburgerMenu asMenu />
               </Menu>
             </>
-          ) : width < 605 ? (
+          ) : (width ?? 0) < 605 ? (
             <>
               <Home />
               <div className={styles.spacer} />
