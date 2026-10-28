@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useMemo } from 'react'
 import { useAtomValue } from 'jotai'
 import ImageGallery from 'react-image-gallery'
 import Button from '@mui/material/Button'
-import { v1 as uuidv1 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 import { of as $of } from 'rxjs'
 
 import {
@@ -45,7 +45,7 @@ export const Files = ({ parentTable, parent }) => {
 
     const db = store.get(dbAtom)
     const newObject = {
-      id: uuidv1(),
+      id: uuidv7(),
       file_id: info.uuid,
       file_mime_type: info.mimeType,
       [`${parentTable}_id`]: parent.id,

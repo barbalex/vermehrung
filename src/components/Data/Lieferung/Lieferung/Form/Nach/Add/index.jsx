@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import { v1 as uuidv1 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { insertKulturRev } from '../../../../../../../modules/insertRev.js'
@@ -28,7 +28,7 @@ export const LieferungAdd = ({ disabled, lieferung, herkunft }) => {
     const gartenId = option.value
     setGardenDialogOpen(false)
     // erstellt die Kultur (mit: Art, Herkunft, aktiv = ja, Zwischenlager wie gewählt)
-    const id = uuidv1()
+    const id = uuidv7()
     await insertKulturRev({
       values: {
         kultur_id: id,

@@ -1,5 +1,5 @@
 import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import {
   store,
@@ -119,7 +119,7 @@ export const flushRow = async (table, id) => {
 
     const rev = `${newObject._depth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
+    newObject.id = uuidv7()
     newObject._rev = rev
     // do not revision the following fields as this leads to unwanted conflicts
     newObject.changed = new Date().toISOString()

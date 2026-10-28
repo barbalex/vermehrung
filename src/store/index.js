@@ -2,7 +2,7 @@ import { atom, createStore } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { sortBy, isEqual } from 'es-toolkit'
 import localForage from 'localforage'
-import { v1 as uuidv1 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import { initialFilterValues } from './Filter/initialValues.js'
 import emptyValues from './Filter/emptyValues.js'
@@ -387,7 +387,7 @@ export const addNotification = (valPassed) => {
 
   const val = {
     // set default values
-    id: uuidv1(),
+    id: uuidv7(),
     time: Date.now(),
     duration: 10000, // standard value: 10000
     dismissable: true,
@@ -429,7 +429,7 @@ export const queuedQueriesSortedAtom = atom((get) =>
 export const addQueuedQuery = (valPassed) => {
   const val = {
     // set default values
-    id: uuidv1(),
+    id: uuidv7(),
     time: Date.now(),
     // overwrite with passed in ones:
     ...valPassed,

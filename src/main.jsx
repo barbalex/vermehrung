@@ -17,6 +17,11 @@ import browserUpdate from 'browser-update'
 
 import { App } from './App.jsx'
 import { store } from './store/index.js'
+import { maybeWipeForIdMigration } from './utils/idMigration2026.js'
+
+// discard local data once for the uuidv7 id migration, before anything
+// reads or creates the local database
+await maybeWipeForIdMigration()
 
 registerLocale('de', de)
 setDefaultLocale('de')

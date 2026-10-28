@@ -1,5 +1,5 @@
 import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 import { isEqual } from 'es-toolkit'
 
 import { History } from '../../../../../../shared/History/index.jsx'
@@ -44,7 +44,7 @@ export const TeilzaehlungHistoryRow = ({
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
-    newObject.id = uuidv1()
+    newObject.id = uuidv7()
     newObject.changed = new window.Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = toPgArray([rev, ...row._revisions])

@@ -1,4 +1,4 @@
-import { v1 as uuidv1 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 import md5 from 'blueimp-md5'
 import isUuid from 'is-uuid'
 
@@ -238,7 +238,7 @@ export const insertRev = async (table, args = {}) => {
   const valuesPassed = args?.values ?? {}
   const email = store.get(userAtom)?.email
 
-  const id = uuidv1()
+  const id = uuidv7()
   const _depth = 1
   const newObject = {}
   for (const [field, idAtomKey, fixedValue] of fields) {
@@ -257,7 +257,7 @@ export const insertRev = async (table, args = {}) => {
 
   const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
   newObject._rev = rev
-  newObject.id = uuidv1()
+  newObject.id = uuidv7()
   const newObjectForStore = { ...newObject }
   newObject._revisions = `{"${rev}"}`
   newObjectForStore._revisions = JSON.stringify([rev])
