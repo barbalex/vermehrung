@@ -209,7 +209,7 @@ export const TreeRow = ({
     return entries
   }
   const openMenu = (x: number, y: number) => {
-    if (!['table', 'folder'].includes(node?.nodeType)) return
+    if (!['table', 'folder'].includes(node?.nodeType ?? '')) return
     openTreeContextMenu({
       id: nextMenuOpenId(),
       x,

@@ -13,7 +13,7 @@ export const buildKulturZaehlung = async ({
 }) => {
   let label = ''
   try {
-    label = await zaehlung.label.pipe(first$()).toPromise()
+    label = (await zaehlung.label.pipe(first$()).toPromise()) ?? ''
   } catch {}
 
   return {

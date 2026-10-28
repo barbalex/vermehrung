@@ -25,7 +25,7 @@ export const ApFilterWarning = () => {
       return
     }
     const subscription = db
-      .get('art')
+      ?.get<import('../../dbModel.ts').Art>('art')
       .findAndObserve(artIdInActiveNodeArray)
       .subscribe((art) => setArtIsNoAp(art?.apflora_ap === false))
 

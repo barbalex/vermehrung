@@ -53,7 +53,10 @@ export const Tree = () => {
   const personFilter = useAtomValue(filterPersonAtom)
 
   const [nodes, setNodes] = useState<import('./nodes/index.ts').TreeNode[]>([])
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    userPersonOption: import('../../dbModel.ts').PersonOption | undefined
+    userRole: import('../../dbModel.ts').UserRole | undefined
+  }>({
     userPersonOption: undefined,
     userRole: undefined,
   })
@@ -63,7 +66,7 @@ export const Tree = () => {
     //console.log('buildNodes building tree nodes')
     const nodes = await buildNodes({
       userPersonOption,
-      userRole,
+      userRole: (userRole as { name?: string } | undefined)?.name,
     })
     setNodes(nodes)
   }
@@ -172,9 +175,26 @@ export const Tree = () => {
       zaehlungsObservable,
       kulturOptionsObservable,
     ]).pipe(throttle(() => interval(100)))
-    const subscription = combinedObservables.subscribe(
+    type Observed = [
+      import('../../dbModel.ts').PersonOption[],
+      import('../../dbModel.ts').UserRole[],
+      import('../../dbModel.ts').Art[],
+      import('../../dbModel.ts').Event[],
+      import('../../dbModel.ts').Garten[],
+      import('../../dbModel.ts').Herkunft[],
+      import('../../dbModel.ts').Kultur[],
+      import('../../dbModel.ts').Lieferung[],
+      import('../../dbModel.ts').Person[],
+      import('../../dbModel.ts').Sammlung[],
+      import('../../dbModel.ts').Teilkultur[],
+      import('../../dbModel.ts').Zaehlung[],
+      import('../../dbModel.ts').KulturOption[],
+    ]
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<Observed>
+    ).subscribe(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      ([[userPersonOption], [userRole], ...rest]) => {
+      ([[userPersonOption], [userRole]]) => {
         //console.log('Tree data-useEffect ordering rebuild')
         setDataState({ userPersonOption, userRole })
         buildMyNodesDebounced()
@@ -224,7 +244,7 @@ export const Tree = () => {
                 nodes={nodes}
                 width={width}
                 height={height}
-                userRole={userRole}
+                userRole={(userRole as { name?: string } | undefined)?.name}
               />
             )}
           />

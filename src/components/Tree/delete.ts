@@ -18,11 +18,12 @@ export const deleteDataset = async ({ node }: { node: TreeNode }) => {
   const title = node.url.slice(-2)[0]
   const id = node.url.slice(-1)[0]
   if (!id) throw new Error(`Keine id gefunden`)
-  const table = tableFromTitleHash[title]
+  const table = tableFromTitleHash[title as keyof typeof tableFromTitleHash]
 
   let me
   try {
-    me = await db?.get(table).find(id)
+    me = (await db?.get(table).find(id as string)) as unknown as
+      { delete?: () => Promise<void> } | undefined
   } catch {}
   if (!me?.delete) throw new Error(`Kein Modell für Tabelle ${table} gefunden`)
   me.delete()

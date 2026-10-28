@@ -17,7 +17,7 @@ export const buildArtHerkunftKultur = async ({
 }) => {
   let label = ''
   try {
-    label = await kultur.labelUnderArt.pipe(first$()).toPromise()
+    label = (await kultur.labelUnderArt.pipe(first$()).toPromise()) ?? ''
   } catch {}
 
   return {

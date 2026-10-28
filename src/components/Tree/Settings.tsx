@@ -85,7 +85,7 @@ export const TreeSettings = () => {
       <div className={styles.container}>
         <IconButton
           aria-label="Ordner wählen"
-          aria-owns={anchorEl ? 'long-menu' : null}
+          aria-owns={anchorEl ? 'long-menu' : undefined}
           aria-haspopup="true"
           title="Ordner wählen"
           onClick={onClickConfig}
@@ -119,7 +119,9 @@ export const TreeSettings = () => {
                 <Checkbox
                   color="primary"
                   checked={tree_kultur ?? undefined}
-                  onClick={saveToDb}
+                  onClick={
+                    saveToDb as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+                  }
                   name="tree_kultur"
                 />
               }
@@ -134,7 +136,9 @@ export const TreeSettings = () => {
                 <Checkbox
                   color="primary"
                   checked={tree_teilkultur ?? undefined}
-                  onClick={saveToDb}
+                  onClick={
+                    saveToDb as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+                  }
                   name="tree_teilkultur"
                 />
               }
@@ -149,7 +153,9 @@ export const TreeSettings = () => {
                 <Checkbox
                   color="primary"
                   checked={tree_zaehlung ?? undefined}
-                  onClick={saveToDb}
+                  onClick={
+                    saveToDb as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+                  }
                   name="tree_zaehlung"
                 />
               }
@@ -164,7 +170,9 @@ export const TreeSettings = () => {
                 <Checkbox
                   color="primary"
                   checked={tree_lieferung ?? undefined}
-                  onClick={saveToDb}
+                  onClick={
+                    saveToDb as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+                  }
                   name="tree_lieferung"
                 />
               }

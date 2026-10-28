@@ -1,6 +1,6 @@
 import { lieferungLabelFromLieferung } from '../../../../utils/lieferungLabelFromLieferung.ts'
 
-export const buildLieferung = ({ lieferung, index }: { lieferung: import('../../../../dbModel.ts').Lieferung; index: string }) => ({
+export const buildLieferung = ({ lieferung, index }: { lieferung: import('../../../../dbModel.ts').Lieferung; index: number }) => ({
   nodeType: 'table',
   menuTitle: 'Lieferung',
   table: 'lieferung',

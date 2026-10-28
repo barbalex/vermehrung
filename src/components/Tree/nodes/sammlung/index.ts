@@ -1,9 +1,9 @@
 import { first as first$ } from 'rxjs/operators'
 
-export const buildSammlung = async ({ sammlung, index }) => {
+export const buildSammlung = async ({ sammlung, index }: { sammlung: import('../../../../dbModel.ts').Sammlung; index: number }) => {
   let label = ''
   try {
-    label = await sammlung.label.pipe(first$()).toPromise()
+    label = (await sammlung.label.pipe(first$()).toPromise()) ?? ''
   } catch {}
 
   return {

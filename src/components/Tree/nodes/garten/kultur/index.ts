@@ -13,7 +13,7 @@ export const buildGartenKultur = async ({
 }) => {
   let label = ''
   try {
-    label = await kultur.labelUnderGarten.pipe(first$()).toPromise()
+    label = (await kultur.labelUnderGarten.pipe(first$()).toPromise()) ?? ''
   } catch {}
 
   return {

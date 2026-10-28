@@ -2,7 +2,7 @@ import type { TreeNode } from './nodes/index.ts'
 
 import { isNodeOpen } from './isNodeOpen.ts'
 
-const allParentNodesAreOpen = ({ store, url: urlPassed }) => {
+const allParentNodesAreOpen = ({ url: urlPassed }: { url: string[] }) => {
   let parentUrls = []
   const node = [...urlPassed]
   for (let i = 1; i < node.length; i++) {
@@ -13,7 +13,7 @@ const allParentNodesAreOpen = ({ store, url: urlPassed }) => {
     (n) => !(n.length === 1 && n[0] === 'Projekte'),
   )
   if (parentUrls.length === 0) return true
-  return parentUrls.every((url) => isNodeOpen({ store, url }))
+  return parentUrls.every((url) => isNodeOpen({ url }))
 }
 
 export default allParentNodesAreOpen

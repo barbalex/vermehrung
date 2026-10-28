@@ -17,7 +17,7 @@ export const buildArtHerkunftSammlung = async ({
 }) => {
   let label = ''
   try {
-    label = await sammlung.label.pipe(first$()).toPromise()
+    label = (await sammlung.label.pipe(first$()).toPromise()) ?? ''
   } catch {}
 
   return {

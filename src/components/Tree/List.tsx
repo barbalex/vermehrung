@@ -34,9 +34,7 @@ export const TreeList = ({
   const aNA = useAtomValue(activeNodeArrayAtom)
   const lastActiveNodeArray = useAtomValue(lastActiveNodeArrayAtom)
 
-  const listRef = useRef<import('react-window').ListImperativeAPI | null>(
-    null,
-  )
+  const listRef = useRef<import('react-virtuoso').VirtuosoHandle | null>(null)
   // when loading on url, lastActiveNodeArray may not be set
   const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
   const nodeIndex = nodes.findIndex((node) => isEqual(node.url, urlToFocus))

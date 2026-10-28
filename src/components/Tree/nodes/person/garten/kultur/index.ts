@@ -17,7 +17,7 @@ export const buildPersonGartenKultur = async ({
 }) => {
   let label = ''
   try {
-    label = await kultur.label.pipe(first$()).toPromise()
+    label = (await kultur.label.pipe(first$()).toPromise()) ?? ''
   } catch {}
 
   return {

@@ -1,6 +1,6 @@
 import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.ts'
 
-export const buildPerson = ({ person, index }: { person: import('../../../../dbModel.ts').Person; index: string }) => ({
+export const buildPerson = ({ person, index }: { person: import('../../../../dbModel.ts').Person; index: number }) => ({
   nodeType: 'table',
   menuTitle: 'Person',
   table: 'person',

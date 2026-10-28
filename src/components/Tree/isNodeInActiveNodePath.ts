@@ -2,7 +2,13 @@ import { isEqual } from 'es-toolkit'
 
 import type { TreeNode } from './nodes/index.ts'
 
-export const isNodeInActiveNodePath = ({ node, activeNodeArray }) => {
+export const isNodeInActiveNodePath = ({
+  node,
+  activeNodeArray,
+}: {
+  node: TreeNode | null | undefined
+  activeNodeArray: string[] | undefined
+}) => {
   if (!node) return false
   if (!node.url) return false
   if (!activeNodeArray) return false

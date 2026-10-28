@@ -13,7 +13,7 @@ export const buildPersonGarten = async ({
 }) => {
   let label = ''
   try {
-    label = await garten.label.pipe(first$()).toPromise()
+    label = (await garten.label.pipe(first$()).toPromise()) ?? ''
   } catch {}
 
   return {

@@ -123,7 +123,7 @@ export const createNew = async ({ node }: { node: TreeNode }) => {
 
   // delay insert to enable activeNodeArray to catch up
   setTimeout(() =>
-    insertRev(table, {
+    insertRev(table as string, {
       values: additionalValuesToSet,
     }),
   )

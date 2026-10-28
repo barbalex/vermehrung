@@ -171,7 +171,7 @@ export const buildNodes = async ({
   userPersonOption,
   userRole,
 }: {
-  userPersonOption: Record<string, unknown> | null | undefined
+  userPersonOption: import('../../../dbModel.ts').PersonOption | null | undefined
   userRole: string | null | undefined
 }) => {
   const db = store.get(dbAtom)

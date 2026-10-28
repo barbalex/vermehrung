@@ -13,7 +13,7 @@ export const buildHerkunftSammlung = async ({
 }) => {
   let label = ''
   try {
-    label = await sammlung.labelUnderHerkunft.pipe(first$()).toPromise()
+    label = (await sammlung.labelUnderHerkunft.pipe(first$()).toPromise()) ?? ''
   } catch {}
 
   return {

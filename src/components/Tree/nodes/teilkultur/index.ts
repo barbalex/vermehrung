@@ -1,6 +1,6 @@
 import { teilkulturLabelFromTeilkultur } from '../../../../utils/teilkulturLabelFromTeilkultur.ts'
 
-export const buildTeilkultur = ({ teilkultur, index }: { teilkultur: import('../../../../dbModel.ts').Teilkultur; index: string }) => ({
+export const buildTeilkultur = ({ teilkultur, index }: { teilkultur: import('../../../../dbModel.ts').Teilkultur; index: number }) => ({
   nodeType: 'table',
   menuTitle: 'Teilkultur',
   table: 'teilkultur',
