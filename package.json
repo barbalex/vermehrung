@@ -1,14 +1,14 @@
 {
   "name": "vermehrung.ch",
   "description": "breeding endangered plant species",
-  "version": "1.24.18",
+  "version": "1.24.19",
   "versionDate": "28.10.2026",
   "license": "ISC",
   "type": "module",
   "scripts": {
     "build": "vite build",
     "build_ts": "tsc && vite build",
-    "deploy": "npm run build && firebase deploy --only hosting",
+    "deploy": "npm run bump && npm run build && firebase deploy --only hosting",
     "deploy_only": "firebase deploy --only hosting",
     "deploy_preview": "npm run build && firebase hosting:channel:deploy preview",
     "dev": "vite",
@@ -19,7 +19,8 @@
     "test:api": "vitest run --config vitest.config.api.ts",
     "test:e2e": "playwright test",
     "how-to-install-using-sfw": "sfw npm i",
-    "ncu using cooldown": "ncu -c 5 -i"
+    "ncu using cooldown": "ncu -c 5 -i",
+    "bump": "node tools/bumpVersion.mjs"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
