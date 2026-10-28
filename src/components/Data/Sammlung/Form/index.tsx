@@ -270,7 +270,9 @@ export const SammlungForm = ({
     }
 
     // only update if value has changed
-    const previousValue = ifIsNumericAsNumber(row[field])
+    const previousValue = ifIsNumericAsNumber(
+      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+    )
     if (value === previousValue) return
     row?.edit({ field, value })
   }

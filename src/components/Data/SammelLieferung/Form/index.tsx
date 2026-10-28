@@ -52,11 +52,14 @@ export const SammelLieferungForm = ({
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const sammelLieferungFilter = useAtomValue(filterSammelLieferungAtom)
 
-  const [dataState, setDataState] = useState({
-    herkunft: undefined,
+  const [dataState, setDataState] = useState<{
+  herkunft?: import('../../../../dbModel.ts').Herkunft
+  herkunftQuelle?: string
+  userPersonOption?: import('../../../../dbModel.ts').PersonOption
+}>({    herkunft: undefined,
     herkunftQuelle: undefined,
     userPersonOption: undefined,
-  })
+})
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
@@ -73,14 +76,14 @@ export const SammelLieferungForm = ({
         } catch {}
         let vonSammlungHerkunft
         try {
-          vonSammlungHerkunft = await vonSammlung?.herkunft.fetch()
+          vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
         } catch {}
 
         if (vonSammlungHerkunft) {
           return setDataState({
             herkunft: vonSammlungHerkunft,
             herkunftQuelle: 'Sammlung',
-            userPersonOption: userPersonOptions?.[0],
+            userPersonOption: (userPersonOptions as unknown as import('../../../../dbModel.ts').PersonOption[] | undefined)?.[0],
           })
         }
 
@@ -88,18 +91,18 @@ export const SammelLieferungForm = ({
           let vonKultur
           try {
             vonKultur = await db
-              ?.get('kultur')
+              ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
               .find(row?.von_kultur_id as string)
           } catch {}
           let herkunftByVonKultur
           try {
-            herkunftByVonKultur = await vonKultur?.herkunft.fetch()
+            herkunftByVonKultur = await vonKultur?.herkunft?.fetch()
           } catch {}
           if (herkunftByVonKultur) {
             return setDataState({
               herkunft: herkunftByVonKultur,
               herkunftQuelle: 'von-Kultur',
-              userPersonOption: userPersonOptions?.[0],
+              userPersonOption: (userPersonOptions as unknown as import('../../../../dbModel.ts').PersonOption[] | undefined)?.[0],
             })
           }
         }
@@ -117,7 +120,7 @@ export const SammelLieferungForm = ({
         setDataState({
           herkunft: herkunftByNachKultur,
           herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
-          userPersonOption: userPersonOptions?.[0],
+          userPersonOption: (userPersonOptions as unknown as import('../../../../dbModel.ts').PersonOption[] | undefined)?.[0],
         })
       },
     )
@@ -159,7 +162,9 @@ export const SammelLieferungForm = ({
     )
     if (event.target.value === undefined) value = null
     if (event.target.value === '') value = null
-    const previousValue = ifIsNumericAsNumber(row[field])
+    const previousValue = ifIsNumericAsNumber(
+      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+    )
 
     if (showFilter) {
       return setFilterValue({

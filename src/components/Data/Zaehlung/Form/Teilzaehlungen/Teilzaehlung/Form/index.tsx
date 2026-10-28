@@ -155,7 +155,9 @@ export const TeilzaehlungForm = ({
     )
     if (event.target.value === undefined) value = null
     if (event.target.value === '') value = null
-    const previousValue = ifIsNumericAsNumber(row[field])
+    const previousValue = ifIsNumericAsNumber(
+      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+    )
     // only update if value has changed
     if (value === previousValue) return
 

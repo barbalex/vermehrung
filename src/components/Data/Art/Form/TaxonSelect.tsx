@@ -70,10 +70,10 @@ export const TaxonSelect = ({
   modelFilter,
 }: {
   labelSize: string | number
-  art: import('../../../shared/types.ts').WmRow | null | undefined
+  art: import('../../../../dbModel.ts').Art | null | undefined
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
   error: string | boolean | null
-  modelFilter: Record<string, unknown> | null | undefined
+  modelFilter: (val: string) => { value: string; label: string }[]
 }) => {
   const db = useAtomValue(dbAtom)
 

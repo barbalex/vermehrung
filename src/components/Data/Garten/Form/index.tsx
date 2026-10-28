@@ -181,7 +181,9 @@ export const GartenForm = ({
     if (showFilter) {
       return setFilterValue({ table: 'garten', key: field as string, value })
     }
-    const previousValue = ifIsNumericAsNumber(row[field])
+    const previousValue = ifIsNumericAsNumber(
+      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+    )
     // only update if value has changed
     if (value === previousValue) return
     //console.log('Garten, will edit row:', { field, value })

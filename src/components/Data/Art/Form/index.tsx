@@ -48,7 +48,10 @@ export const ArtForm = ({
   const errors = useAtomValue(errorsAtom)
   const artFilter = useAtomValue(filterArtAtom)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    artsSorted: import('../../../../dbModel.ts').Art[]
+    aeArts: import('../../../../dbModel.ts').AeArt[]
+  }>({
     artsSorted: [],
     aeArts: [],
   })
@@ -69,8 +72,14 @@ export const ArtForm = ({
             )
     const artsObservable = db?.get('art').query(delQuery).observe()
     const combinedObservables = combineLatest([aeArtObservable, artsObservable])
-    const subscription = combinedObservables.subscribe(
-      async ([aeArts, arts]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../dbModel.ts').AeArt[],
+          import('../../../../dbModel.ts').Art[],
+        ]
+      >
+    ).subscribe(async ([aeArts, arts]) => {
         const artsSorted = await artsSortedFromArts(arts)
 
         setDataState({
@@ -107,7 +116,9 @@ export const ArtForm = ({
     }
 
     // only update if value has changed
-    const previousValue = ifIsNumericAsNumber(row[field])
+    const previousValue = ifIsNumericAsNumber(
+      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+    )
     if (value === previousValue) return
     row?.edit({ field, value })
   }
@@ -117,8 +128,8 @@ export const ArtForm = ({
     .filter((s) => !!s)
     .sort()
   const sets = [...new Set(setsUngrouped)]
-  const setValues = sets.map((s) => ({ value: s, label: s }))
-  const onCreateSet = ({ name }) => {
+  const setValues = sets.map((s) => ({ value: String(s), label: String(s) }))
+  const onCreateSet = ({ name }: { name: string }) => {
     const event = { target: { name: 'set', value: name } }
     saveToDb(event)
   }
@@ -127,16 +138,16 @@ export const ArtForm = ({
     .map((a) => a.ae_id)
     .filter((ae_id) => ae_id !== row?.ae_id)
 
-  const aeArtsFilter = (val) => {
+  const aeArtsFilter = (val: string) => {
     if (showFilter) {
       return aeArts
         .filter((a) => artsSorted.map((ar) => ar.ae_id).includes(a.id))
-        .filter((a) => a.name.toLowerCase().includes(val))
+        .filter((a) => (a.name ?? '').toLowerCase().includes(val))
     }
     if (val) {
       return aeArts
         .filter((a) => !aeArtIdsNotToShow.includes(a.id))
-        .filter((a) => a.name.toLowerCase().includes(val.toLowerCase()))
+        .filter((a) => (a.name ?? '').toLowerCase().includes(val.toLowerCase()))
     }
     return aeArts.filter((a) => !aeArtIdsNotToShow.includes(a.id))
   }

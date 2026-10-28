@@ -78,9 +78,19 @@ export const KulturForm = ({
   // TODO:
   // if art was choosen: remove gartens where this art has two kulturs for every herkunft?
   // if herkunft was choosen: remove gartens where this herkunft has two kulturs
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    gartenWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+    userPersonOption: import('../../../../dbModel.ts').PersonOption | undefined
+    artsToChoose: (string | null)[]
+    herkunftsToChoose: (string | null)[]
+  }>({
     gartenWerte: [],
-    userPersonOption: {},
+    userPersonOption: undefined,
     artsToChoose: [],
     herkunftsToChoose: [],
   })
@@ -142,13 +152,17 @@ export const KulturForm = ({
       gartenObservable,
       sammlungsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([userPersonOptions, gartens, garten, sammlungs]: [
-          import('../../../../dbModel.ts').PersonOption[],
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../dbModel.ts').PersonOption[] | undefined,
           import('../../../../dbModel.ts').Garten[],
-          never[],
+          import('../../../../dbModel.ts').Garten | undefined,
           import('../../../../dbModel.ts').Sammlung[],
-        ]) => {
+        ]
+      >
+    ).subscribe(
+      async ([userPersonOptions, gartens, garten, sammlungs]) => {
         const gartensSorted = await gartensSortedFromGartens(gartens)
         // need to show a choosen garten even if inactive but not if deleted
         const gartensIncludingChoosen = uniqBy(
@@ -159,7 +173,9 @@ export const KulturForm = ({
           gartensIncludingChoosen.map(async (garten) => {
             let label
             try {
-              label = await garten.label.pipe(first$()).toPromise()
+              label = await (garten as import('../../../../dbModel.ts').Garten).label
+              .pipe(first$())
+              .toPromise()
             } catch {}
 
             return {
@@ -171,7 +187,7 @@ export const KulturForm = ({
           }),
         )
         // only consider kulturen with both art and herkunft chosen
-        const thisGartenKulturs = []
+        const thisGartenKulturs: import('../../../../dbModel.ts').Kultur[] = []
         try {
           const kulturDelQuery =
             kulturFilter._deleted === false
@@ -203,7 +219,7 @@ export const KulturForm = ({
             .fetch()
         } catch {}
         const artHerkuenfte = uniqBy(
-          sammlungs?.map((a: import('../../../../dbModel.ts').Art) => ({
+          (sammlungs ?? []).map((a) => ({
             art_id: a.art_id,
             herkunft_id: a.herkunft_id,
           })),
@@ -326,7 +342,7 @@ export const KulturForm = ({
       .query(
         artDelQuery,
         Q.where('ae_id', Q.notEq(null)),
-        Q.where('id', Q.oneOf(artsToChoose)),
+        Q.where('id', Q.oneOf(artsToChoose.filter((v): v is string => !!v))),
       )
       .observe()
     const herkunftDelQuery =
@@ -341,14 +357,20 @@ export const KulturForm = ({
             )
     const herkunftsObservable = db
       ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
-      .query(herkunftDelQuery, Q.where('id', Q.oneOf(herkunftsToChoose)))
+      .query(herkunftDelQuery, Q.where('id', Q.oneOf(herkunftsToChoose.filter((v): v is string => !!v))))
       .observe()
     const combinedObservables = combineLatest([
       artsObservable,
       herkunftsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([arts, herkunfts]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../dbModel.ts').Art[],
+          import('../../../../dbModel.ts').Herkunft[],
+        ]
+      >
+    ).subscribe(async ([arts, herkunfts]) => {
         let art
         try {
           art = await row?.art.fetch()
@@ -416,7 +438,9 @@ export const KulturForm = ({
       return setFilterValue({ table: 'kultur', key: field as string, value })
     }
 
-    const previousValue = ifIsNumericAsNumber(row[field])
+    const previousValue = ifIsNumericAsNumber(
+      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+    )
     // only update if value has changed
     if (value === previousValue) return
     row?.edit({ field, value })
