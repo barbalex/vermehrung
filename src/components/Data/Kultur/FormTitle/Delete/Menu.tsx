@@ -11,7 +11,15 @@ import {
 
 import artStyles from '../../../Art/FormTitle/DeleteButton.module.css'
 
-export const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
+export const KulturDeleteMenu = ({
+  row,
+  anchorEl,
+  setAnchorEl,
+}: {
+  row: import('../../../../dbModel.ts').Kultur | null | undefined
+  anchorEl: HTMLElement | null | undefined
+  setAnchorEl: (el: HTMLElement | null) => void
+}) => {
   const closeMenu = () => setAnchorEl(null)
 
   const remove = async () => {

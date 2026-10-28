@@ -7,7 +7,7 @@ import { PersonKontoMenu as Menu } from './Menu.tsx'
 
 import styles from './index.module.css'
 
-export const PersonKonto = ({ row, asMenu }) => {
+export const PersonKonto = ({ row, asMenu }: { row?: Record<string, unknown> | null; asMenu?: boolean }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null)
 
   const createNewAccount = () => {

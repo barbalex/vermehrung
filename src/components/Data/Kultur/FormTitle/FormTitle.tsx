@@ -30,7 +30,7 @@ export const KulturFormTitle = ({
       <div className={artStyles.title}>Kultur</div>
       <div className={artStyles.symbols}>
         <NavButtons row={row} />
-        {width < 520 ? (
+        {(width ?? 0) < 520 ? (
           <Menu white={false}>
             <Add asMenu />
             <Delete asMenu row={row} />
@@ -49,7 +49,7 @@ export const KulturFormTitle = ({
               asMenu
             />
           </Menu>
-        ) : width < 567 ? (
+        ) : (width ?? 0) < 567 ? (
           <>
             <Add />
             <Delete row={row} />
@@ -70,7 +70,7 @@ export const KulturFormTitle = ({
               />
             </Menu>
           </>
-        ) : width < 613 ? (
+        ) : (width ?? 0) < 613 ? (
           <>
             <Add />
             <Delete row={row} />
@@ -91,7 +91,7 @@ export const KulturFormTitle = ({
               />
             </Menu>
           </>
-        ) : width < 660 ? (
+        ) : (width ?? 0) < 660 ? (
           <>
             <Add />
             <Delete row={row} />
@@ -111,7 +111,7 @@ export const KulturFormTitle = ({
               <Anleitung asMenu />
             </Menu>
           </>
-        ) : width < 703 ? (
+        ) : (width ?? 0) < 703 ? (
           <>
             <Add />
             <Delete row={row} />

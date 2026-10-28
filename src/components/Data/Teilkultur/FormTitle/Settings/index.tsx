@@ -6,7 +6,7 @@ import { FaCog } from 'react-icons/fa'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { TeilkulturSettingsMenu as Menu } from './Menu.tsx'
 
-export const TeilkulturSettings = ({ asMenu, kulturId }) => {
+export const TeilkulturSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kulturId?: string }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const onClickConfig = (event: {
     target: { name?: string; value: unknown }

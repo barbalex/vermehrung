@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { KulturDeleteMenu as Menu } from './Menu.tsx'
 
-export const KulturDeleteButton = ({ row, asMenu }) => {
+export const KulturDeleteButton = ({ row, asMenu }: { row?: Record<string, unknown> | null; asMenu?: boolean }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
 
   const onClickButton = (event: {
@@ -23,7 +23,7 @@ export const KulturDeleteButton = ({ row, asMenu }) => {
         <MenuItem
           aria-haspopup="true"
           onClick={onClickButton}
-          disabled={!!row._deleted}
+          disabled={!!row?._deleted}
         >
           Kultur löschen
         </MenuItem>
@@ -40,7 +40,7 @@ export const KulturDeleteButton = ({ row, asMenu }) => {
         aria-label="Kultur löschen"
         title="Kultur löschen"
         onClick={onClickButton}
-        disabled={!!row._deleted}
+        disabled={!!row?._deleted}
         size="large"
       >
         <FaMinus />

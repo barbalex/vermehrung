@@ -18,7 +18,7 @@ import UpSvg from '../../../../svg/to_up.svg?react'
 export const KulturNavButtons = ({
   row,
 }: {
-  row?: import('../../../shared/types.ts').WmRow | null | undefined
+  row?: import('../../../../dbModel.ts').Kultur | null | undefined
 }) => {
   const onClickToKulturen = () => {
     const activeNodeArray = store.get(activeNodeArrayAtom)
