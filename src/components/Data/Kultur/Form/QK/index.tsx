@@ -26,12 +26,12 @@ export const KulturQkRouter = ({
   const user = useAtomValue(userAtom)
 
   const [tab, setTab] = useState('qk')
-  const onChangeTab = (
-    event: import('../../../../../dbModel.ts').Event,
-    value,
-  ) => setTab(value)
+  const onChangeTab = (event: unknown, value: string) => setTab(value)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    qks: import('../../../../../dbModel.ts').KulturQk[]
+    userPersonOption: import('../../../../../dbModel.ts').PersonOption | undefined
+  }>({
     qks: [],
     userPersonOption: undefined,
   })
@@ -54,8 +54,12 @@ export const KulturQkRouter = ({
       userPersonOptionsObservable,
       kulturQksObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      ([userPersonOptions, qks]) => {
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../dbModel.ts').PersonOption[] | undefined,
+          import('../../../../../dbModel.ts').KulturQk[],
+        ]
+      >).subscribe(([userPersonOptions, qks]) => {
         setDataState({ qks, userPersonOption: userPersonOptions?.[0] })
       },
     )
@@ -63,7 +67,7 @@ export const KulturQkRouter = ({
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const qkChoosens = qks.filter((qk) =>
-    userPersonOption?.kultur_qk_choosen.includes(qk.id),
+    (userPersonOption?.kultur_qk_choosen ?? []).includes(qk.id),
   )
 
   const qkCount = qks.length
@@ -76,7 +80,7 @@ export const KulturQkRouter = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     const url = `${constants?.getAppUri()}/Dokumentation/qualitaets-kontrollen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
@@ -93,7 +97,7 @@ export const KulturQkRouter = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     if (open) {
       const was = open
       await anim.start({ opacity: 0 })
@@ -122,7 +126,7 @@ export const KulturQkRouter = ({
           <IconButton
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
-            onClick={openDocs}
+            onClick={openDocs as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
             size="large"
           >
             <IoMdInformationCircleOutline />
@@ -130,14 +134,14 @@ export const KulturQkRouter = ({
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle}
+            onClick={onClickToggle as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
             size="large"
           >
             {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
-      <motion.div animate={anim} transition={{ type: 'just', duration: 0.5 }}>
+      <motion.div animate={anim} transition={{ duration: 0.5 }}>
         {open && (
           <>
             <Tabs
@@ -159,7 +163,10 @@ export const KulturQkRouter = ({
             </Tabs>
             <div className={styles.body}>
               {tab === 'qk' ? (
-                <Qk kultur={kultur} qkChoosens={qkChoosens} />
+                <Qk
+                  kultur={kultur as unknown as import('../../../../../dbModel.ts').Kultur}
+                  qkChoosens={qkChoosens}
+                />
               ) : (
                 <Choose qks={qks} />
               )}

@@ -9,7 +9,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
-import { Qk } from './Qk/index.tsx'
+import { ArtQk as Qk } from './Qk/index.tsx'
 import { Choose } from './Choose/index.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { dbAtom, userAtom } from '../../../../../store/index.ts'
@@ -17,17 +17,21 @@ import { constants } from '../../../../../utils/constants.ts'
 
 import styles from './index.module.css'
 
-export const QK = ({ artId }) => {
+export const ArtQkWrapper = ({
+  artId,
+}: {
+  artId: string | undefined
+}) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 
   const [tab, setTab] = useState('qk')
-  const onChangeTab = (
-    event: import('../../../../../dbModel.ts').Event,
-    value,
-  ) => setTab(value)
+  const onChangeTab = (event: unknown, value: string) => setTab(value)
 
-  const [dataState, setDataState] = useState({ qks: [], userPersonOption: {} })
+  const [dataState, setDataState] = useState<{
+    qks: import('../../../../../dbModel.ts').ArtQk[]
+    userPersonOption: import('../../../../../dbModel.ts').PersonOption | undefined
+  }>({ qks: [], userPersonOption: undefined })
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
@@ -45,8 +49,14 @@ export const QK = ({ artId }) => {
       userPersonOptionsObservable,
       artQksObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      ([userPersonOptions, qks]) =>
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../dbModel.ts').PersonOption[] | undefined,
+          import('../../../../../dbModel.ts').ArtQk[],
+        ]
+      >
+    ).subscribe(([userPersonOptions, qks]) =>
         setDataState({
           qks,
           userPersonOption: userPersonOptions?.[0],
@@ -56,8 +66,13 @@ export const QK = ({ artId }) => {
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { qks, userPersonOption } = dataState
+  const userPersonOptionRecord = userPersonOption as unknown as
+    Record<string, unknown>
   const qkChoosens = qks.filter(
-    (qk) => userPersonOption?.art_qk_choosen?.includes?.(qk.id) ?? false,
+    (qk) =>
+      (userPersonOptionRecord?.art_qk_choosen as string[] | undefined)?.includes?.(
+        qk.id,
+      ) ?? false,
   )
 
   const qkCount = qks.length
@@ -70,7 +85,7 @@ export const QK = ({ artId }) => {
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     const url = `${constants?.getAppUri()}/Dokumentation/qualitaets-kontrollen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
@@ -87,7 +102,7 @@ export const QK = ({ artId }) => {
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     if (open) {
       const was = open
       await anim.start({ opacity: 0 })
@@ -116,7 +131,7 @@ export const QK = ({ artId }) => {
           <IconButton
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
-            onClick={openDocs}
+            onClick={openDocs as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
             size="large"
           >
             <IoMdInformationCircleOutline />
@@ -124,14 +139,16 @@ export const QK = ({ artId }) => {
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle}
+            onClick={
+              onClickToggle as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+            }
             size="large"
           >
             {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
-      <motion.div animate={anim} transition={{ type: 'just', duration: 0.4 }}>
+      <motion.div animate={anim} transition={{ duration: 0.4 }}>
         {open && (
           <>
             <Tabs
