@@ -77,7 +77,7 @@ export const Personen = ({ filter: showFilter = false }) => {
     const subscription = combinedObservables.subscribe(
       async ([totalCount, persons, [userRole]]) => {
         setDataState({
-          persons: persons.sort(personSort),
+          persons: persons?.sort(personSort),
           totalCount,
           userRole,
         })

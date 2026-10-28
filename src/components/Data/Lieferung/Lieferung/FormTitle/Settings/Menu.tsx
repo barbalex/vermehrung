@@ -95,7 +95,9 @@ export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
             <Checkbox
               color="primary"
               checked={li_show_sl}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="li_show_sl"
             />
           }
@@ -110,7 +112,9 @@ export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
             <Checkbox
               color="primary"
               checked={li_show_sl_felder}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="li_show_sl_felder"
             />
           }

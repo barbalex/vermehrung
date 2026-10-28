@@ -22,7 +22,7 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
     const kulturOptionObservable = db
       ?.get<import('../../../../../dbModel.ts').KulturOption>('kultur_option')
       .findAndObserve(kulturId)
-    const subscription = kulturOptionObservable.subscribe((kulturOption) =>
+    const subscription = kulturOptionObservable?.subscribe((kulturOption) =>
       setDataState({ kulturOption }),
     )
 
@@ -81,7 +81,9 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
             <Checkbox
               color="primary"
               checked={tk}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="tk"
             />
           }
@@ -96,7 +98,9 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
             <Checkbox
               color="primary"
               checked={ev_person_id}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="ev_person_id"
             />
           }
@@ -111,7 +115,9 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
             <Checkbox
               color="primary"
               checked={ev_datum}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="ev_datum"
             />
           }
@@ -126,7 +132,9 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
             <Checkbox
               color="primary"
               checked={ev_geplant}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="ev_geplant"
             />
           }

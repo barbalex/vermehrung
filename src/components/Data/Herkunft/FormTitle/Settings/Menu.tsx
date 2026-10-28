@@ -101,7 +101,9 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
             <Checkbox
               color="primary"
               checked={hk_kanton}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="hk_kanton"
             />
           }
@@ -116,7 +118,9 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
             <Checkbox
               color="primary"
               checked={hk_land}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="hk_land"
             />
           }
@@ -131,7 +135,9 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
             <Checkbox
               color="primary"
               checked={hk_geom_point}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="hk_geom_point"
             />
           }
@@ -146,7 +152,9 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
             <Checkbox
               color="primary"
               checked={hk_bemerkungen}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="hk_bemerkungen"
             />
           }

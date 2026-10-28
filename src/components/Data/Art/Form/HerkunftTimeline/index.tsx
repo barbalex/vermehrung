@@ -42,7 +42,7 @@ export const HerkunftTimeline = ({
     ])
     const subscription = combinedObservables.subscribe(
       ([sammlungs, herkunfts]) => {
-        const herkunftIds = uniq(sammlungs.map((s) => s.herkunft_id))
+        const herkunftIds = uniq(sammlungs?.map((s) => s.herkunft_id))
         const herkunftsSorted = herkunfts
           .filter((h) => herkunftIds.includes(h.id))
           .sort(herkunftSort)
@@ -80,7 +80,9 @@ export const HerkunftTimeline = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={onClickToggle}
+        onClick={
+                  onClickToggle as unknown as import('react').MouseEventHandler
+                }
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -98,7 +100,7 @@ export const HerkunftTimeline = ({
           </IconButton>
         </div>
       </section>
-      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
+      <motion.div animate={anim} transition={{ duration: 0.2 }}>
         {open &&
           herkunfts.map((herkunft) => (
             <Pflanzen key={herkunft.id} artId={artId} herkunft={herkunft} />

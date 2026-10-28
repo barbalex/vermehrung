@@ -102,7 +102,9 @@ export const KulturTimeline = ({
         <ErrorBoundary>
           <div
             className={styles.titleRow}
-            onClick={onClickToggle}
+            onClick={
+                  onClickToggle as unknown as import('react').MouseEventHandler
+                }
             title={open ? 'schliessen' : 'öffnen'}
             style={{ cursor: 'pointer' }}
           >
@@ -128,7 +130,7 @@ export const KulturTimeline = ({
           </div>
           <motion.div
             animate={anim}
-            transition={{ type: 'just', duration: 0.2 }}
+            transition={{ duration: 0.2 }}
           >
             {open && (
               <ResponsiveContainer width="99%" height={450}>

@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // window stub with a localStorage mock, set before module imports
-const { storageMap } = vi.hoisted(() => {
-  const storageMap = new Map()
-  globalThis.window = {
+const { storageMap } = vi.hoisted((): { storageMap: Map<string, string> } => {
+  const storageMap = new Map<string, string>()
+  ;(globalThis as unknown as { window: unknown }).window = {
     localStorage: {
-      getItem: (k) => (storageMap.has(k) ? storageMap.get(k) : null),
-      setItem: (k, v) => storageMap.set(k, v),
-      removeItem: (k) => storageMap.delete(k),
+      getItem: (k: string) => (storageMap.has(k) ? storageMap.get(k) : null),
+      setItem: (k: string, v: string) => storageMap.set(k, v),
+      removeItem: (k: string) => storageMap.delete(k),
     },
     document: undefined,
   }
@@ -33,9 +33,9 @@ import {
 
 const STORAGE_KEY = 'vermehrung:unflushed-revs'
 
-const buildDbForRow = (row) => ({
+const buildDbForRow = (row: unknown) => ({
   get: () => ({ find: () => Promise.resolve(row) }),
-  write: async (fn) => fn(),
+  write: async (fn: () => unknown) => fn(),
 })
 
 beforeEach(() => {
@@ -43,9 +43,12 @@ beforeEach(() => {
   store.set(userAtom, { uid: 'test-uid', email: 'test@example.com' })
   store.set(queuedQueriesAtom, [])
   store.set(queueSizeAtom, 0)
-  store.set(dbAtom, {
-    get: () => ({ find: () => ({ fetch: async () => undefined }) }),
-  })
+  store.set(
+    dbAtom,
+    {
+      get: () => ({ find: () => ({ fetch: async () => undefined }) }),
+    } as unknown as import('@nozbe/watermelondb').Database,
+  )
   storageMap.clear()
   __resetRevAggregationForTests()
 })
@@ -71,23 +74,36 @@ describe('revAggregation', () => {
       _revisions: ['1-a'],
       _depth: 1,
       _deleted: false,
-      update: async (fn) => fn(row),
-      database: { write: async (fn) => fn() },
+      update: async (fn: (r: unknown) => void) => fn(row),
+      database: { write: async (fn: () => unknown) => fn() },
     }
-    store.set(dbAtom, buildDbForRow(row))
+    store.set(
+      dbAtom,
+      buildDbForRow(row) as unknown as import('@nozbe/watermelondb').Database,
+    )
 
-    await Herkunft.prototype.edit.call(row, { field: 'nr', value: 'B' })
+    await (
+      Herkunft.prototype.edit as unknown as (
+        this: unknown,
+        args: { field: string; value: unknown },
+      ) => Promise<void>
+    ).call(row, { field: 'nr', value: 'B' })
     expect(store.get(queuedQueriesAtom)).toHaveLength(0)
     // further edits push the flush back
     await vi.advanceTimersByTimeAsync(4000)
-    await Herkunft.prototype.edit.call(row, { field: 'gemeinde', value: 'X' })
+    await (
+      Herkunft.prototype.edit as unknown as (
+        this: unknown,
+        args: { field: string; value: unknown },
+      ) => Promise<void>
+    ).call(row, { field: 'gemeinde', value: 'X' })
     await vi.advanceTimersByTimeAsync(4000)
     expect(store.get(queuedQueriesAtom)).toHaveLength(0)
     await vi.advanceTimersByTimeAsync(2000)
     await vi.waitFor(() => {
       expect(store.get(queuedQueriesAtom)).toHaveLength(1)
     })
-    const { object } = JSON.parse(store.get(queuedQueriesAtom)[0].variables)
+    const { object } = JSON.parse(store.get(queuedQueriesAtom)[0].variables as string)
     expect(object.nr).toBe('B')
     expect(object.gemeinde).toBe('X')
     expect(getUnflushedRevs()).toEqual({})
@@ -108,14 +124,22 @@ describe('revAggregation', () => {
       _revisions: ['1-a'],
       _depth: 1,
       _deleted: false,
-      update: async (fn) => fn(row),
-      database: { write: async (fn) => fn() },
+      update: async (fn: (r: unknown) => void) => fn(row),
+      database: { write: async (fn: () => unknown) => fn() },
     }
-    store.set(dbAtom, buildDbForRow(row))
-    await Herkunft.prototype.edit.call(row, { field: 'nr', value: 'B' })
+    store.set(
+      dbAtom,
+      buildDbForRow(row) as unknown as import('@nozbe/watermelondb').Database,
+    )
+    await (
+      Herkunft.prototype.edit as unknown as (
+        this: unknown,
+        args: { field: string; value: unknown },
+      ) => Promise<void>
+    ).call(row, { field: 'nr', value: 'B' })
     // no flush happened, but the registry survived in localStorage
     expect(store.get(queuedQueriesAtom)).toHaveLength(0)
-    expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY))).toEqual(
+    expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY) as string)).toEqual(
       getUnflushedRevs(),
     )
   })
@@ -140,16 +164,19 @@ describe('revAggregation', () => {
       _revisions: ['1-a'],
       _depth: 1,
       _deleted: false,
-      update: async (fn) => fn(row),
-      database: { write: async (fn) => fn() },
+      update: async (fn: (r: unknown) => void) => fn(row),
+      database: { write: async (fn: () => unknown) => fn() },
     }
-    store.set(dbAtom, buildDbForRow(row))
+    store.set(
+      dbAtom,
+      buildDbForRow(row) as unknown as import('@nozbe/watermelondb').Database,
+    )
 
     initRevAggregation()
     await vi.waitFor(() => {
       expect(store.get(queuedQueriesAtom)).toHaveLength(1)
     })
-    const { object } = JSON.parse(store.get(queuedQueriesAtom)[0].variables)
+    const { object } = JSON.parse(store.get(queuedQueriesAtom)[0].variables as string)
     // the revision was built from the row's current (surviving) state
     expect(object.nr).toBe('B')
     expect(getUnflushedRevs()).toEqual({})
@@ -170,18 +197,29 @@ describe('revAggregation', () => {
       _revisions: ['1-a'],
       _depth: 1,
       _deleted: false,
-      update: async (fn) => fn(rows.find((r) => r.id === id)),
-      database: { write: async (fn) => fn() },
+      update: async (fn: (r: unknown) => void): Promise<void> => {
+        fn(rows.find((r) => r.id === id))
+      },
+      database: { write: async (fn: () => unknown) => fn() },
     }))
     const db = {
       get: () => ({
-        find: (id) => Promise.resolve(rows.find((r) => r.id === id)),
+        find: (id: string) =>
+          Promise.resolve(rows.find((r) => r.id === id)),
       }),
-      write: async (fn) => fn(),
+      write: async (fn: () => unknown) => fn(),
     }
-    store.set(dbAtom, db)
+    store.set(
+      dbAtom,
+      db as unknown as import('@nozbe/watermelondb').Database,
+    )
     for (const row of rows) {
-      await Herkunft.prototype.edit.call(row, { field: 'nr', value: 'Z' })
+      await (
+      Herkunft.prototype.edit as unknown as (
+        this: unknown,
+        args: { field: string; value: unknown },
+      ) => Promise<void>
+    ).call(row, { field: 'nr', value: 'Z' })
     }
     // navigating ends the editing session
     initRevAggregation()
@@ -198,12 +236,15 @@ describe('revAggregation', () => {
   })
 
   it('a row deleted before the flush is skipped gracefully', async () => {
-    registerDirtyRev('herkunft', 'gone-1', 'nr', null)
-    store.set(dbAtom, {
-      get: () => ({
-        find: () => Promise.reject(new Error('not found')),
-      }),
-    })
+    registerDirtyRev('herkunft', 'gone-1', 'nr', undefined)
+    store.set(
+      dbAtom,
+      {
+        get: () => ({
+          find: () => Promise.reject(new Error('not found')),
+        }),
+      } as unknown as import('@nozbe/watermelondb').Database,
+    )
     await flushRow('herkunft', 'gone-1')
     expect(store.get(queuedQueriesAtom)).toHaveLength(0)
     expect(getUnflushedRevs()).toEqual({})

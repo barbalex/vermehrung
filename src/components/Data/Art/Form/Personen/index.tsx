@@ -128,7 +128,9 @@ export const Personen = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={onClickToggle}
+        onClick={
+                  onClickToggle as unknown as import('react').MouseEventHandler
+                }
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -148,7 +150,7 @@ export const Personen = ({
       </section>
       <motion.div
         animate={anim}
-        transition={{ type: 'just', duration: 0.2 }}
+        transition={{ duration: 0.2 }}
         className={styles.motionDiv}
       >
         {open && (

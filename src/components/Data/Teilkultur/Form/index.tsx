@@ -183,7 +183,7 @@ export const TeilkulturForm = ({
         <Select
           key={`${row?.id}${row?.kultur_id}kultur_id`}
           name="kultur_id"
-          value={row?.kultur_id}
+          value={row?.kultur_id ?? null}
           field="kultur_id"
           label="Kultur"
           options={kulturWerte}
@@ -194,7 +194,7 @@ export const TeilkulturForm = ({
           key={`${row?.id}name`}
           name="name"
           label="Name"
-          value={row?.name}
+          value={row?.name ?? null}
           saveToDb={saveToDb}
           error={errors?.teilkultur?.name as string | undefined}
         />
@@ -202,7 +202,7 @@ export const TeilkulturForm = ({
           key={`${row?.id}ort1`}
           name="ort1"
           label="Ort 1"
-          value={row?.ort1}
+          value={row?.ort1 ?? null}
           saveToDb={saveToDb}
           error={errors?.teilkultur?.ort1 as string | undefined}
         />
@@ -210,7 +210,7 @@ export const TeilkulturForm = ({
           key={`${row?.id}ort2`}
           name="ort2"
           label="Ort 2"
-          value={row?.ort2}
+          value={row?.ort2 ?? null}
           saveToDb={saveToDb}
           error={errors?.teilkultur?.ort2 as string | undefined}
         />
@@ -218,7 +218,7 @@ export const TeilkulturForm = ({
           key={`${row?.id}ort3`}
           name="ort3"
           label="Ort 3"
-          value={row?.ort3}
+          value={row?.ort3 ?? null}
           saveToDb={saveToDb}
           error={errors?.teilkultur?.ort3 as string | undefined}
         />
@@ -227,7 +227,7 @@ export const TeilkulturForm = ({
             key={`${row?.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen"
-            value={row?.bemerkungen}
+            value={row?.bemerkungen ?? null}
             saveToDb={saveToDb}
             error={errors?.teilkultur?.bemerkungen as string | undefined}
             multiline

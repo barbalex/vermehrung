@@ -194,7 +194,7 @@ export const SammelLieferungVon = ({
         <Select
           key={`${row?.id}${row?.von_sammlung_id}von_sammlung_id`}
           name="von_sammlung_id"
-          value={row?.von_sammlung_id}
+          value={row?.von_sammlung_id ?? null}
           field="von_sammlung_id"
           label={`Sammlung${
             exists(row?.art_id) ? ' (nur solche derselben Art)' : ''
@@ -210,7 +210,7 @@ export const SammelLieferungVon = ({
         <Select
           key={`${row?.id}${row?.von_kultur_id}von_kultur_id`}
           name="von_kultur_id"
-          value={row?.von_kultur_id}
+          value={row?.von_kultur_id ?? null}
           field="von_kultur_id"
           label={`Kultur${
             exists(row?.art_id) ? ' (nur solche derselben Art)' : ''

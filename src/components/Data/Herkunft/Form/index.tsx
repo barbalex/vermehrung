@@ -166,7 +166,7 @@ export const HerkunftForm = ({
         key={`${row?.id}nr`}
         name="nr"
         label="Nr"
-        value={row?.nr}
+        value={row?.nr ?? null}
         saveToDb={saveToDb}
         error={errors?.herkunft?.nr as string | undefined}
       />
@@ -174,7 +174,7 @@ export const HerkunftForm = ({
         key={`${row?.id}lokalname`}
         name="lokalname"
         label="Lokalname"
-        value={row?.lokalname}
+        value={row?.lokalname ?? null}
         saveToDb={saveToDb}
         error={errors?.herkunft?.lokalname as string | undefined}
       />
@@ -182,7 +182,7 @@ export const HerkunftForm = ({
         key={`${row?.id}gemeinde`}
         name="gemeinde"
         label="Gemeinde"
-        value={row?.gemeinde}
+        value={row?.gemeinde ?? null}
         saveToDb={saveToDb}
         error={errors?.herkunft?.gemeinde as string | undefined}
       />
@@ -191,7 +191,7 @@ export const HerkunftForm = ({
           key={`${row?.id}kanton`}
           name="kanton"
           label="Kanton"
-          value={row?.kanton}
+          value={row?.kanton ?? null}
           saveToDb={saveToDb}
           error={errors?.herkunft?.kanton as string | undefined}
         />
@@ -201,7 +201,7 @@ export const HerkunftForm = ({
           key={`${row?.id}land`}
           name="land"
           label="Land"
-          value={row?.land}
+          value={row?.land ?? null}
           saveToDb={saveToDb}
           error={errors?.herkunft?.land as string | undefined}
         />
@@ -214,7 +214,7 @@ export const HerkunftForm = ({
           key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           label="Bemerkungen"
-          value={row?.bemerkungen}
+          value={row?.bemerkungen ?? null}
           saveToDb={saveToDb}
           error={errors?.herkunft?.bemerkungen as string | undefined}
           multiLine

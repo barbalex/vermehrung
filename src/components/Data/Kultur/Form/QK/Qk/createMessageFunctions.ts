@@ -1,4 +1,4 @@
-import format from 'date-fns/format'
+import { format } from 'date-fns/format'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
 
@@ -24,7 +24,7 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
   const startNextYear = `${year + 1}-01-01`
   const now = new Date()
 
-  let events = []
+  let events: import('../../../../../../dbModel.ts').Event[] = []
   try {
     const eventDelQuery =
       filter.event._deleted === false
@@ -36,10 +36,11 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    events = await db?.get('event').query(eventDelQuery).fetch()
+    events = (await db
+      ?.get<import('../../../../../../dbModel.ts').Event>('event').query(eventDelQuery).fetch()) ?? []
   } catch {}
   const eventsSorted = events.sort(eventSort)
-  let kulturs = []
+  let kulturs: import('../../../../../../dbModel.ts').Kultur[] = []
   try {
     const kulturDelQuery =
       filter.kultur._deleted === false
@@ -61,13 +62,13 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
               Q.where('aktiv', true),
               Q.where('aktiv', null),
             )
-    kulturs = await db
-      .get('kultur')
+    kulturs = (await db
+      ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
-  let lieferungs = []
+  let lieferungs: import('../../../../../../dbModel.ts').Lieferung[] = []
   try {
     const lieferungDelQuery =
       filter.lieferung._deleted === false
@@ -79,10 +80,11 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    lieferungs = await db?.get('lieferung').query(lieferungDelQuery).fetch()
+    lieferungs = (await db
+      ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung').query(lieferungDelQuery).fetch()) ?? []
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
-  let teilkulturs = []
+  let teilkulturs: import('../../../../../../dbModel.ts').Teilkultur[] = []
   try {
     const teilkulturDelQuery =
       filter.teilkultur._deleted === false
@@ -94,10 +96,11 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    teilkulturs = await db?.get('teilkultur').query(teilkulturDelQuery).fetch()
+    teilkulturs = (await db
+      ?.get<import('../../../../../../dbModel.ts').Teilkultur>('teilkultur').query(teilkulturDelQuery).fetch()) ?? []
   } catch {}
   const teilkultursSorted = teilkulturs.sort(teilkulturSort)
-  let zaehlungs = []
+  let zaehlungs: import('../../../../../../dbModel.ts').Zaehlung[] = []
   try {
     const zaehlungDelQuery =
       filter.zaehlung._deleted === false
@@ -109,12 +112,14 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    zaehlungs = await db?.get('zaehlung').query(zaehlungDelQuery).fetch()
+    zaehlungs = (await db
+      ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung').query(zaehlungDelQuery).fetch()) ?? []
   } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
   let teilzaehlungs = []
   try {
-    teilzaehlungs = await db?.get('teilzaehlung').query(notDeletedQuery).fetch()
+    teilzaehlungs = (await db
+      ?.get<import('../../../../../../@nozbe/watermelondb').Model>('teilzaehlung').query(notDeletedQuery).fetch()) ?? []
   } catch {}
 
   return {
@@ -896,7 +901,7 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
             } catch {}
             let kulturLabel
             try {
-              kulturLabel = await kultur.label.pipe(first$()).toPromise()
+              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
             } catch {}
 
             return {
@@ -933,7 +938,7 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
             } catch {}
             let kulturLabel
             try {
-              kulturLabel = await kultur.label.pipe(first$()).toPromise()
+              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
             } catch {}
 
             return {

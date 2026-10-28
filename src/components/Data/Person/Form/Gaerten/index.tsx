@@ -134,7 +134,9 @@ export const PersonGaerten = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={onClickToggle}
+        onClick={
+                  onClickToggle as unknown as import('react').MouseEventHandler
+                }
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -154,7 +156,7 @@ export const PersonGaerten = ({
       </section>
       <motion.div
         animate={anim}
-        transition={{ type: 'just', duration: 0.2 }}
+        transition={{ duration: 0.2 }}
         className={styles.motionDiv}
       >
         {open && (
@@ -176,7 +178,7 @@ export const PersonGaerten = ({
                 options={gartenWerte}
                 saveToDb={saveToDb}
                 isClearable={false}
-                error={errors.garten_id}
+                error={errors.garten_id as string | undefined}
               />
             )}
           </>

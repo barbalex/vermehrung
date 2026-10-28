@@ -114,7 +114,9 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
                 <Checkbox
                   color="primary"
                   checked={tz_teilkultur_id}
-                  onClick={saveToDb}
+                  onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
                   name="tz_teilkultur_id"
                 />
               }
@@ -129,7 +131,9 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
                 <Checkbox
                   color="primary"
                   checked={tz_andere_menge}
-                  onClick={saveToDb}
+                  onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
                   name="tz_andere_menge"
                 />
               }
@@ -146,7 +150,9 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
                 <Checkbox
                   color="primary"
                   checked={tz_auspflanzbereit_beschreibung}
-                  onClick={saveToDb}
+                  onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
                   name="tz_auspflanzbereit_beschreibung"
                 />
               }
@@ -161,7 +167,9 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
                 <Checkbox
                   color="primary"
                   checked={tz_bemerkungen}
-                  onClick={saveToDb}
+                  onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
                   name="tz_bemerkungen"
                 />
               }

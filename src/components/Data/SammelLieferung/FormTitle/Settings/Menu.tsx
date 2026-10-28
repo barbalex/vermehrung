@@ -78,7 +78,9 @@ export const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
             <Checkbox
               color="primary"
               checked={sl_show_empty_when_next_to_li}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="sl_show_empty_when_next_to_li"
             />
           }
@@ -93,7 +95,9 @@ export const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
             <Checkbox
               color="primary"
               checked={sl_auto_copy_edits}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="sl_auto_copy_edits"
             />
           }

@@ -458,7 +458,7 @@ export const KulturForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors.kultur?._deleted}
+                error={errors.kultur?._deleted as string | undefined}
               />
             ) : (
               <Checkbox2States
@@ -467,7 +467,7 @@ export const KulturForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors.kultur?._deleted}
+                error={errors.kultur?._deleted as string | undefined}
               />
             )}
           </>
@@ -475,7 +475,7 @@ export const KulturForm = ({
         <Select
           key={`${row?.id}${art_id}art_id`}
           name="art_id"
-          value={art_id}
+          value={art_id ?? null}
           field="art_id"
           label="Art"
           options={artWerte}
@@ -485,7 +485,7 @@ export const KulturForm = ({
         <Select
           key={`${row?.id}${herkunft_id}herkunft_id`}
           name="herkunft_id"
-          value={herkunft_id}
+          value={herkunft_id ?? null}
           field="herkunft_id"
           label="Herkunft"
           options={herkunftWerte}
@@ -495,12 +495,12 @@ export const KulturForm = ({
         <Select
           key={`${row?.id}${row?.garten_id}garten_id`}
           name="garten_id"
-          value={row?.garten_id}
+          value={row?.garten_id ?? null}
           field="garten_id"
           label="Garten"
           options={gartenWerte}
           saveToDb={saveToDb}
-          error={errors.kultur?.garten_id}
+          error={errors.kultur?.garten_id as string | undefined}
         />
         {(ku_zwischenlager || !!row?.zwischenlager) && (
           <>
@@ -534,7 +534,7 @@ export const KulturForm = ({
                 name="erhaltungskultur"
                 value={row?.erhaltungskultur}
                 saveToDb={saveToDb}
-                error={errors.kultur?.erhaltungskultur}
+                error={errors.kultur?.erhaltungskultur as string | undefined}
               />
             ) : (
               <Checkbox2States
@@ -543,7 +543,7 @@ export const KulturForm = ({
                 name="erhaltungskultur"
                 value={row?.erhaltungskultur}
                 saveToDb={saveToDb}
-                error={errors.kultur?.erhaltungskultur}
+                error={errors.kultur?.erhaltungskultur as string | undefined}
               />
             )}
           </>
@@ -553,9 +553,9 @@ export const KulturForm = ({
             key={`${row?.id}von_anzahl_individuen`}
             name="von_anzahl_individuen"
             label="von Anzahl Individuen"
-            value={row?.von_anzahl_individuen}
+            value={row?.von_anzahl_individuen ?? null}
             saveToDb={saveToDb}
-            error={errors.kultur?.von_anzahl_individuen}
+            error={errors.kultur?.von_anzahl_individuen as string | undefined}
             type="number"
           />
           <div>
@@ -576,7 +576,7 @@ export const KulturForm = ({
             name="aktiv"
             value={row?.aktiv}
             saveToDb={saveToDb}
-            error={errors.kultur?.aktiv}
+            error={errors.kultur?.aktiv as string | undefined}
           />
         ) : (
           <Checkbox2States
@@ -585,16 +585,16 @@ export const KulturForm = ({
             name="aktiv"
             value={row?.aktiv}
             saveToDb={saveToDb}
-            error={errors.kultur?.aktiv}
+            error={errors.kultur?.aktiv as string | undefined}
           />
         )}
         <TextField
           key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           label="Bemerkungen"
-          value={row?.bemerkungen}
+          value={row?.bemerkungen ?? null}
           saveToDb={saveToDb}
-          error={errors.kultur?.bemerkungen}
+          error={errors.kultur?.bemerkungen as string | undefined}
           multiLine
         />
         {online && !showFilter && row?._conflicts?.map && (

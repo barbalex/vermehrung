@@ -56,7 +56,7 @@ export const LieferungAddChooseDialog = ({
       ?.get<import('../../../../../../../dbModel.ts').Garten>('garten')
       .query(gartenDelQuery, gartenAktivQuery)
       .observe()
-    const subscription = gartensObservable.subscribe(async (gartens) => {
+    const subscription = gartensObservable?.subscribe(async (gartens) => {
       // Zur Auswahl stehen Gärten, die noch nicht eine aktive Kultur dieser Art mit dieser Herkunft haben,
       // das je nach Wahl Zwischenlager ist oder nicht
       const gartensFiltered = []

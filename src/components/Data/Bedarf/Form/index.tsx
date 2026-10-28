@@ -256,7 +256,7 @@ export const BedarfForm = ({
         <Select
           key={`${row?.id}${row?.kultur_id}kultur_id`}
           name="kultur_id"
-          value={row?.kultur_id}
+          value={row?.kultur_id ?? null}
           field="kultur_id"
           label="Kultur"
           options={kulturWerte}
@@ -267,7 +267,7 @@ export const BedarfForm = ({
           key={`${row?.id}jahr`}
           name="jahr"
           label="Jahr"
-          value={row?.jahr}
+          value={row?.jahr ?? null}
           saveToDb={saveToDb}
           error={errors?.bedarf?.jahr as string | undefined}
           type="number"
@@ -276,7 +276,7 @@ export const BedarfForm = ({
           key={`${row?.id}beschreibung`}
           name="beschreibung"
           label="Beschreibung"
-          value={row?.beschreibung}
+          value={row?.beschreibung ?? null}
           saveToDb={saveToDb}
           error={errors?.bedarf?.beschreibung as string | undefined}
           multiline
@@ -285,7 +285,7 @@ export const BedarfForm = ({
           key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           label="Bemerkungen"
-          value={row?.bemerkungen}
+          value={row?.bemerkungen ?? null}
           saveToDb={saveToDb}
           error={errors?.bedarf?.bemerkungen as string | undefined}
           multiline
@@ -294,7 +294,7 @@ export const BedarfForm = ({
           key={`${row?.id}neues_material`}
           name="neues_material"
           label="Neues Material"
-          value={row?.neues_material}
+          value={row?.neues_material ?? null}
           saveToDb={saveToDb}
           error={errors?.bedarf?.neues_material as string | undefined}
           multiline
@@ -302,7 +302,7 @@ export const BedarfForm = ({
         <Select
           key={`${row?.id}${row?.person_id}person_id`}
           name="person_id"
-          value={row?.person_id}
+          value={row?.person_id ?? null}
           field="person_id"
           label="Wer"
           options={personWerte}

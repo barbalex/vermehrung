@@ -151,7 +151,7 @@ export const PersonForm = ({
       <Select
         key={`${row?.id}${row?.user_role_id}user_role_id`}
         name="user_role_id"
-        value={row?.user_role_id}
+        value={row?.user_role_id ?? null}
         field="user_role_id"
         label="Rolle"
         helperText={userRole?.comment || ' '}
@@ -163,7 +163,7 @@ export const PersonForm = ({
         key={`${row?.id}nr`}
         name="nr"
         label="Nr"
-        value={row?.nr}
+        value={row?.nr ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.nr as string | undefined}
       />
@@ -171,7 +171,7 @@ export const PersonForm = ({
         key={`${row?.id}vorname`}
         name="vorname"
         label="Vorname"
-        value={row?.vorname}
+        value={row?.vorname ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.vorname as string | undefined}
       />
@@ -179,7 +179,7 @@ export const PersonForm = ({
         key={`${row?.id}name`}
         name="name"
         label="Nachname"
-        value={row?.name}
+        value={row?.name ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.name as string | undefined}
       />
@@ -187,7 +187,7 @@ export const PersonForm = ({
         key={`${row?.id}adresszusatz`}
         name="adresszusatz"
         label="Adress-Zusatz"
-        value={row?.adresszusatz}
+        value={row?.adresszusatz ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.adresszusatz as string | undefined}
       />
@@ -195,7 +195,7 @@ export const PersonForm = ({
         key={`${row?.id}strasse`}
         name="strasse"
         label="Strasse"
-        value={row?.strasse}
+        value={row?.strasse ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.strasse as string | undefined}
       />
@@ -203,7 +203,7 @@ export const PersonForm = ({
         key={`${row?.id}plz`}
         name="plz"
         label="PLZ"
-        value={row?.plz}
+        value={row?.plz ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.plz as string | undefined}
         type="number"
@@ -212,7 +212,7 @@ export const PersonForm = ({
         key={`${row?.id}ort`}
         name="ort"
         label="Ort"
-        value={row?.ort}
+        value={row?.ort ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.ort as string | undefined}
       />
@@ -220,7 +220,7 @@ export const PersonForm = ({
         key={`${row?.id}telefon_privat`}
         name="telefon_privat"
         label="Telefon privat"
-        value={row?.telefon_privat}
+        value={row?.telefon_privat ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.telefon_privat as string | undefined}
       />
@@ -228,7 +228,7 @@ export const PersonForm = ({
         key={`${row?.id}telefon_geschaeft`}
         name="telefon_geschaeft"
         label="Telefon Geschäft"
-        value={row?.telefon_geschaeft}
+        value={row?.telefon_geschaeft ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.telefon_geschaeft as string | undefined}
       />
@@ -236,7 +236,7 @@ export const PersonForm = ({
         key={`${row?.id}telefon_mobile`}
         name="telefon_mobile"
         label="Telefon mobile"
-        value={row?.telefon_mobile}
+        value={row?.telefon_mobile ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.telefon_mobile as string | undefined}
       />
@@ -244,7 +244,7 @@ export const PersonForm = ({
         key={`${row?.id}email`}
         name="email"
         label="Email"
-        value={row?.email}
+        value={row?.email ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.email as string | undefined}
       />
@@ -328,7 +328,7 @@ export const PersonForm = ({
         key={`${row?.id}bemerkungen`}
         name="bemerkungen"
         label="Bemerkungen"
-        value={row?.bemerkungen}
+        value={row?.bemerkungen ?? null}
         saveToDb={saveToDb}
         error={errors?.person?.bemerkungen as string | undefined}
         multiLine

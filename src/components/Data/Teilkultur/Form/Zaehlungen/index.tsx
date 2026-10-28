@@ -25,7 +25,7 @@ export const TeilkulturZaehlungen = ({
         Q.on('zaehlung', Q.where('kultur_id', teilkultur?.kultur_id)),
       )
       .observeWithColumns(['datum', 'beschreibung', 'geplant'])
-    const subscription = teilzaehlungsObservable.subscribe(
+    const subscription = teilzaehlungsObservable?.subscribe(
       async (teilzaehlungs) => {
         const teilzaehlungsSorted =
           await teilzaehlungsSortByZaehlungTk(teilzaehlungs)

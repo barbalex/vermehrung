@@ -76,7 +76,9 @@ export const ZaehlungSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
             <Checkbox
               color="primary"
               checked={z_bemerkungen}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="z_bemerkungen"
             />
           }

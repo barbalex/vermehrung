@@ -196,7 +196,7 @@ export const ZaehlungForm = ({
         <Select
           key={`${row?.id}${row?.kultur_id}kultur_id`}
           name="kultur_id"
-          value={row?.kultur_id}
+          value={row?.kultur_id ?? null}
           field="kultur_id"
           label="Kultur"
           options={kulturWerte}
@@ -217,7 +217,7 @@ export const ZaehlungForm = ({
             key={`${row?.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen"
-            value={row?.bemerkungen}
+            value={row?.bemerkungen ?? null}
             saveToDb={saveToDb}
             error={errors?.zaehlung?.bemerkungen as string | undefined}
             multiLine

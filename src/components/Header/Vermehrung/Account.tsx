@@ -44,7 +44,7 @@ const Account = () => {
           .query(Q.where('account_id', user.uid))
           .observeWithColumns(['vorname', 'name'])
       : $of({})
-    const subscription = userPersonObservable.subscribe((result) => {
+    const subscription = userPersonObservable?.subscribe((result) => {
       const userPerson = result?.[0]
       return setUserPerson(userPerson)
     })

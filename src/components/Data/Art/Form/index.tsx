@@ -195,7 +195,7 @@ export const ArtForm = ({
           key={`${row?.id}apflora_av`}
           name="apflora_av"
           label="Artverantwortlich in AP Flora"
-          value={row?.apflora_av}
+          value={row?.apflora_av ?? null}
           saveToDb={saveToDb}
           error={errors?.art?.apflora_av as string | undefined}
         />

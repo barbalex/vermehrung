@@ -57,7 +57,7 @@ export const SammelLieferungFormTitle = ({
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['sl_auto_copy_edits'])
       : $of({})
-    const subscription = userPersonOptionsObservable.subscribe(
+    const subscription = userPersonOptionsObservable?.subscribe(
       ([userPersonOption]) => setUserPersonOption(userPersonOption),
     )
 

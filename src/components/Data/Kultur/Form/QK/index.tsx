@@ -111,7 +111,9 @@ export const KulturQkRouter = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={onClickToggle}
+        onClick={
+                  onClickToggle as unknown as import('react').MouseEventHandler
+                }
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >

@@ -81,7 +81,9 @@ export const TeilkulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
             <Checkbox
               color="primary"
               checked={tk_bemerkungen}
-              onClick={saveToDb}
+              onClick={
+                  saveToDb as unknown as import('react').MouseEventHandler
+                }
               name="tk_bemerkungen"
             />
           }

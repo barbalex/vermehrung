@@ -68,7 +68,9 @@ export const Teilzaehlung = ({ id, kulturId, index }) => {
                 id={id}
                 kulturId={kulturId}
                 activeConflict={activeConflict}
-                setActiveConflict={setActiveConflict}
+                setActiveConflict={
+                  setActiveConflict as unknown as never
+                }
                 showHistory={showHistory}
                 setShowHistory={setShowHistory}
               />
@@ -81,7 +83,9 @@ export const Teilzaehlung = ({ id, kulturId, index }) => {
                     rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
-                    setActiveConflict={setActiveConflict}
+                    setActiveConflict={
+                  setActiveConflict as unknown as never
+                }
                   />
                 ) : showHistory ? (
                   <History
@@ -107,7 +111,9 @@ export const Teilzaehlung = ({ id, kulturId, index }) => {
             id={id}
             kulturId={kulturId}
             activeConflict={activeConflict}
-            setActiveConflict={setActiveConflict}
+            setActiveConflict={
+                  setActiveConflict as unknown as never
+                }
             showHistory={showHistory}
             setShowHistory={setShowHistory}
           />

@@ -65,7 +65,9 @@ export const Lieferung = ({ id, showFilter, row, rawRow }) => {
               row={row}
               rawRow={rawRow}
               activeConflict={activeConflict}
-              setActiveConflict={setActiveConflict}
+              setActiveConflict={
+                  setActiveConflict as unknown as never
+                }
               showHistory={showHistory}
             />
             <Allotment.Pane visible={paneIsSplit}>
@@ -77,7 +79,9 @@ export const Lieferung = ({ id, showFilter, row, rawRow }) => {
                   rawRow={rawRow}
                   conflictDisposalCallback={conflictDisposalCallback}
                   conflictSelectionCallback={conflictSelectionCallback}
-                  setActiveConflict={setActiveConflict}
+                  setActiveConflict={
+                  setActiveConflict as unknown as never
+                }
                 />
               ) : showHistory ? (
                 <History

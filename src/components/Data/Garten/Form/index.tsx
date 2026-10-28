@@ -229,14 +229,14 @@ export const GartenForm = ({
         key={`${row?.id}name`}
         name="name"
         label="Name"
-        value={row?.name}
+        value={row?.name ?? null}
         saveToDb={saveToDb}
         error={errors?.garten?.name as string | undefined}
       />
       <Select
         key={`${row?.id}${row?.person_id}person_id`}
         name="person_id"
-        value={row?.person_id}
+        value={row?.person_id ?? null}
         field="person_id"
         label="Person"
         options={personWerte}
@@ -248,7 +248,7 @@ export const GartenForm = ({
           key={`${row?.id}strasse`}
           name="strasse"
           label="Strasse"
-          value={row?.strasse}
+          value={row?.strasse ?? null}
           saveToDb={saveToDb}
           error={errors?.garten?.strasse as string | undefined}
         />
@@ -258,7 +258,7 @@ export const GartenForm = ({
           key={`${row?.id}plz`}
           name="plz"
           label="PLZ"
-          value={row?.plz}
+          value={row?.plz ?? null}
           saveToDb={saveToDb}
           error={errors?.garten?.plz as string | undefined}
           type="number"
@@ -269,7 +269,7 @@ export const GartenForm = ({
           key={`${row?.id}ort`}
           name="ort"
           label="Ort"
-          value={row?.ort}
+          value={row?.ort ?? null}
           saveToDb={saveToDb}
           error={errors?.garten?.ort as string | undefined}
         />
@@ -305,7 +305,7 @@ export const GartenForm = ({
           key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           label="Bemerkungen"
-          value={row?.bemerkungen}
+          value={row?.bemerkungen ?? null}
           saveToDb={saveToDb}
           error={errors?.garten?.bemerkungen as string | undefined}
           multiLine

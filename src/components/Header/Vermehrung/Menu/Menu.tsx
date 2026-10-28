@@ -48,7 +48,7 @@ export const HeaderHamburgerMenu = ({
       ?.get<import('../../../../dbModel.ts').UserRole>('user_role')
       .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
       .observeWithColumns(['name'])
-    const subscription = userRoleObservable.subscribe(([userRole]) => {
+    const subscription = userRoleObservable?.subscribe(([userRole]) => {
       setUserRole(userRole)
     })
 

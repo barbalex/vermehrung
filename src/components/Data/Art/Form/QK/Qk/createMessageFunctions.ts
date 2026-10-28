@@ -1,4 +1,4 @@
-import format from 'date-fns/format'
+import { format } from 'date-fns/format'
 import { groupBy } from 'es-toolkit'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from '@nozbe/watermelondb'
@@ -18,7 +18,13 @@ import { zaehlungSort } from '../../../../../../utils/zaehlungSort.ts'
 import { personFullname } from '../../../../../../utils/personFullname.ts'
 import { store, filterTableAtoms } from '../../../../../../store/index.ts'
 
-export const createMessageFunctions = async ({ artId, db }) => {
+export const createMessageFunctions = async ({
+  artId,
+  db,
+}: {
+  artId: string
+  db: import('@nozbe/watermelondb').Database | null
+}) => {
   // snapshot of all table filters at call time
   const filter = Object.fromEntries(
     Object.keys(filterTableAtoms).map((table) => [
@@ -30,7 +36,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
 
-  let arts = []
+  let arts: import('../../../../../../dbModel.ts').Art[] = []
   try {
     const delQuery =
       filter.art?._deleted === false
@@ -42,16 +48,18 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    arts = await db?.get('art').query(delQuery).fetch()
+    arts = (await db
+      ?.get<import('../../../../../../dbModel.ts').Art>('art').query(delQuery).fetch()) ?? []
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
 
-  let avs
+  let avs: import('../../../../../../dbModel.ts').Av[] = []
   try {
-    avs = await db?.get('av').query(notDeletedQuery).fetch()
+    avs = (await db
+      ?.get<import('../../../../../../dbModel.ts').Av>('av').query(notDeletedQuery).fetch()) ?? []
   } catch {}
 
-  let herkunfts = []
+  let herkunfts: import('../../../../../../dbModel.ts').Herkunft[] = []
   try {
     const delQuery =
       filter.herkunft?._deleted === false
@@ -63,11 +71,12 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    herkunfts = await db?.get('herkunft').query(delQuery).fetch()
+    herkunfts = (await db
+      ?.get<import('../../../../../../dbModel.ts').Herkunft>('herkunft').query(delQuery).fetch()) ?? []
   } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
 
-  let kulturs = []
+  let kulturs: import('../../../../../../dbModel.ts').Kultur[] = []
   try {
     const delQuery =
       filter.kultur?._deleted === false
@@ -89,14 +98,14 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('aktiv', true),
               Q.where('aktiv', null),
             )
-    kulturs = await db
-      .get('kultur')
+    kulturs = (await db
+      ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
       .query(Q.where('art_id', Q.eq(artId)), delQuery, aktivQuery)
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
 
-  let lieferungs = []
+  let lieferungs: import('../../../../../../dbModel.ts').Lieferung[] = []
   try {
     const delQuery =
       filter.lieferung?._deleted === false
@@ -108,11 +117,12 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    lieferungs = await db?.get('lieferung').query(delQuery).fetch()
+    lieferungs = (await db
+      ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung').query(delQuery).fetch()) ?? []
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
 
-  let persons = []
+  let persons: import('../../../../../../dbModel.ts').Person[] = []
   try {
     const delQuery =
       filter.person?._deleted === false
@@ -134,11 +144,12 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('aktiv', true),
               Q.where('aktiv', null),
             )
-    persons = await db?.get('person').query(delQuery, aktivQuery).fetch()
+    persons = (await db
+      ?.get<import('../../../../../../dbModel.ts').Person>('person').query(delQuery, aktivQuery).fetch()) ?? []
   } catch {}
   const personsSorted = persons.sort(personSort)
 
-  let sammlungsOfArt = []
+  let sammlungsOfArt: import('../../../../../../dbModel.ts').Sammlung[] = []
   try {
     const delQuery =
       filter.sammlung?._deleted === false
@@ -150,15 +161,15 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    sammlungsOfArt = await db
-      .get('sammlung')
+    sammlungsOfArt = (await db
+      ?.get<import('../../../../../../dbModel.ts').Sammlung>('sammlung')
       .query(delQuery, Q.on('art', 'id', artId))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const sammlungsOfArtSorted =
     await sammlungsSortedFromSammlungs(sammlungsOfArt)
 
-  let zaehlungsOfArt = []
+  let zaehlungsOfArt: import('../../../../../../dbModel.ts').Zaehlung[] = []
   try {
     const delQuery =
       filter.zaehlung?._deleted === false
@@ -170,28 +181,28 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    zaehlungsOfArt = await db
-      .get('zaehlung')
+    zaehlungsOfArt = (await db
+      ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
       .query(
         Q.experimentalNestedJoin('kultur', 'art'),
         Q.on('kultur', Q.on('art', 'id', artId)),
         delQuery,
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const zaehlungsOfArtSorted = zaehlungsOfArt.sort(zaehlungSort)
 
-  let teilzaehlungsOfArt = []
+  let teilzaehlungsOfArt: import('../../../../../../dbModel.ts').Teilzaehlung[] = []
   try {
-    teilzaehlungsOfArt = await db
-      .get('teilzaehlung')
+    teilzaehlungsOfArt = (await db
+      ?.get<import('../../../../../../@nozbe/watermelondb').Model>('teilzaehlung')
       .query(
         Q.experimentalNestedJoin('zaehlung', 'kultur'),
         Q.experimentalNestedJoin('kultur', 'art'),
         Q.on('zaehlung', Q.on('kultur', Q.on('art', 'id', artId))),
         Q.where('_deleted', false),
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
 
   let teilkultursOfArt = []
@@ -206,14 +217,14 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    teilkultursOfArt = await db
-      .get('teilkultur')
+    teilkultursOfArt = (await db
+      ?.get<import('../../../../../../dbModel.ts').Teilkultur>('teilkultur')
       .query(
         Q.experimentalNestedJoin('kultur', 'art'),
         Q.on('kultur', Q.on('art', 'id', artId)),
         delQuery,
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const teilkultursOfArtSorted = teilkultursOfArt.sort(teilkulturSort)
 
@@ -229,14 +240,14 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    eventsOfArt = await db
-      .get('event')
+    eventsOfArt = (await db
+      ?.get<import('../../../../../../dbModel.ts').Event>('event')
       .query(
         Q.experimentalNestedJoin('kultur', 'art'),
         Q.on('kultur', Q.on('art', 'id', artId)),
         delQuery,
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const eventsOfArtSorted = eventsOfArt.sort(eventSort)
 
@@ -247,7 +258,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
         personsSorted.filter(
           (p: import('../../../../../../dbModel.ts').Person) => exists(p.nr),
         ),
-        (h) => h.nr,
+        (h) => h.nr ?? '',
       )
       return Object.values(pGroupedByNr)
         .filter((v) => v.length > 1)
@@ -329,7 +340,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
     sammlungsWithNonUniqueNr: async () => {
       const sGroupedByNr = groupBy(
         sammlungsOfArtSorted.filter((s) => s.art_id === artId),
-        (h) => h.nr,
+        (h) => h.nr ?? '',
       )
       return await Promise.all(
         Object.values(sGroupedByNr)
@@ -452,12 +463,12 @@ export const createMessageFunctions = async ({ artId, db }) => {
           }),
       ),
     gartensAllKultursInactive: async () => {
-      let kulturs = []
+      let kulturs: import('../../../../../../dbModel.ts').Kultur[] = []
       try {
-        kulturs = await db
-          .get('kultur')
+        kulturs = (await db
+          ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
           .query(Q.where('art_id', Q.eq(artId)), Q.where('_deleted', false))
-          .fetch()
+          .fetch()) ?? []
       } catch {}
 
       const gartenIds = kulturs
@@ -469,18 +480,18 @@ export const createMessageFunctions = async ({ artId, db }) => {
 
       let gartens = []
       try {
-        gartens = await db
-          .get('garten')
+        gartens = (await db
+          ?.get<import('../../../../../../dbModel.ts').Garten>('garten')
           .query(
             Q.where('_deleted', false),
             Q.where('aktiv', true),
             Q.where('id', Q.oneOf(uniqueGartenIds)),
           )
-          .fetch()
+          .fetch()) ?? []
       } catch {}
       const gartensOfArt = await gartensSortedFromGartens(gartens)
       const filterPromiseArray = gartensOfArt.map(async (g) => {
-        let kulturs = []
+        let kulturs: import('../../../../../../dbModel.ts').Kultur[] = []
         try {
           kulturs = await g.kulturs.extend(Q.where('_deleted', false)).fetch()
         } catch {}
@@ -629,7 +640,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
                 Q.where('_deleted', null),
               )
       const zaehlungs = await db
-        .get('zaehlung')
+        ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
         .query(
           Q.experimentalNestedJoin('kultur', 'art'),
           Q.on('kultur', Q.on('art', 'id', artId)),
@@ -640,7 +651,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
         .fetch()
 
       return await Promise.all(
-        zaehlungs.map(
+        zaehlungs?.map(
           async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
             let kultur
             try {
@@ -673,15 +684,15 @@ export const createMessageFunctions = async ({ artId, db }) => {
                   Q.where('_deleted', true),
                   Q.where('_deleted', null),
                 )
-        zaehlungs = await db
-          .get('zaehlung')
+        zaehlungs = (await db
+          ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
           .query(
             Q.experimentalNestedJoin('kultur', 'art'),
             Q.on('kultur', Q.on('art', 'id', artId)),
             delQuery,
             Q.where('datum', Q.notEq(null)),
           )
-          .fetch()
+          .fetch()) ?? []
       } catch {}
 
       return await Promise.all(
@@ -872,8 +883,8 @@ export const createMessageFunctions = async ({ artId, db }) => {
                     Q.where('_deleted', true),
                     Q.where('_deleted', null),
                   )
-          zaehlungsOfArt = await db
-            .get('zaehlung')
+          zaehlungsOfArt = (await db
+            ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
             .query(
               Q.experimentalNestedJoin('kultur', 'art'),
               Q.on('kultur', Q.on('art', 'id', artId)),
@@ -881,7 +892,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.on('kultur', Q.on('kultur_option', 'tk', true)),
               delQuery,
             )
-            .fetch()
+            .fetch()) ?? []
         } catch {}
         const zaehlungsOfArtSorted = zaehlungsOfArt.sort(zaehlungSort)
         return await Promise.all(

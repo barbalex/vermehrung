@@ -1,13 +1,14 @@
+import type { Database } from '@nozbe/watermelondb'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // window stub with a localStorage mock, set before module imports
-const { storageMap } = vi.hoisted(() => {
-  const storageMap = new Map()
-  globalThis.window = {
+const { storageMap } = vi.hoisted((): { storageMap: Map<string, string> } => {
+  const storageMap = new Map<string, string>()
+  ;(globalThis as unknown as { window: unknown }).window = {
     localStorage: {
-      getItem: (k) => (storageMap.has(k) ? storageMap.get(k) : null),
-      setItem: (k, v) => storageMap.set(k, v),
-      removeItem: (k) => storageMap.delete(k),
+      getItem: (k: string) => (storageMap.has(k) ? storageMap.get(k) : null),
+      setItem: (k: string, v: string) => storageMap.set(k, v),
+      removeItem: (k: string) => storageMap.delete(k),
     },
     document: undefined,
   }
@@ -32,8 +33,8 @@ import { flushRow, getUnflushedRevs } from '../modules/revAggregation.ts'
 // and editing session is queued when the row is flushed.
 // The @writer decorator only needs this.database.write(fn)
 
-const buildFakeRow = (db) => {
-  const row = {
+const buildFakeRow = (db: unknown) => {
+  const row: Record<string, unknown> = {
     id: 'herk-1',
     nr: 'Nr 1',
     lokalname: null,
@@ -47,19 +48,23 @@ const buildFakeRow = (db) => {
     _revisions: ['1-aaa'],
     _depth: 3,
     _deleted: false,
-    update: async (fn) => {
+    update: async (fn: (r: unknown) => void) => {
       fn(row)
     },
-    callWriter: (fn) => fn(),
-    edit(args) {
+    callWriter: (fn: () => unknown) => fn(),
+    edit(args: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
       return Herkunft.prototype.edit.call(row, args)
     },
     database: {
-      write: async (fn) => fn(),
+      write: async (fn: () => unknown) => fn(),
     },
   }
-  db.get = () => ({ find: () => Promise.resolve(row) })
-  db.write = async (fn) => fn()
+  ;(db as { get: () => unknown }).get = () => ({
+    find: () => Promise.resolve(row),
+  })
+  ;(db as { write: (fn: () => unknown) => unknown }).write = async (
+    fn: () => unknown,
+  ) => fn()
   return row
 }
 
@@ -80,7 +85,10 @@ beforeEach(() => {
 describe('Herkunft.edit + flushRow', () => {
   it('updates the row immediately without queueing a revision', async () => {
     const db = buildDb()
-    store.set(dbAtom, db)
+    store.set(
+    dbAtom,
+    db as unknown as Database,
+  )
     const row = buildFakeRow(db)
     setError({ path: 'herkunft.nr', value: 'Fehler' })
 
@@ -120,7 +128,10 @@ describe('Herkunft.edit + flushRow', () => {
 
   it('flushing builds one revision from the current row state', async () => {
     const db = buildDb()
-    store.set(dbAtom, db)
+    store.set(
+    dbAtom,
+    db as unknown as Database,
+  )
     const row = buildFakeRow(db)
 
     await Herkunft.prototype.edit.call(row, { field: 'nr', value: 'Nr 2' })
@@ -137,7 +148,9 @@ describe('Herkunft.edit + flushRow', () => {
     expect(query.revertTable).toBe('herkunft')
     expect(query.revertId).toBe('herk-1')
 
-    const { object, on_conflict } = JSON.parse(query.variables)
+    const { object, on_conflict } = JSON.parse(
+      query.variables as string,
+    ) as { object: Record<string, unknown>; on_conflict: Record<string, unknown> }
     expect(on_conflict.constraint).toBe('herkunft_rev_pkey')
     // the revision captures BOTH edits
     expect(object.herkunft_id).toBe('herk-1')
@@ -176,17 +189,31 @@ describe('Herkunft.edit + flushRow', () => {
 
   it('reverting with the queued info restores the pre-flush values', async () => {
     const db = buildDb()
-    store.set(dbAtom, db)
-    const row = buildFakeRow(db)
-    await Herkunft.prototype.edit.call(row, { field: 'nr', value: 'Nr 2' })
+    store.set(
+    dbAtom,
+    db as unknown as Database,
+  )
+    const row: Record<string, unknown> = buildFakeRow(db)
+    await (
+      Herkunft.prototype.edit as unknown as (
+        this: unknown,
+        args: { field: string; value: unknown },
+      ) => Promise<void>
+    ).call(row, { field: 'nr', value: 'Nr 2' })
     await flushRow('herkunft', 'herk-1')
     const query = store.get(queuedQueriesAtom)[0]
 
     // the drain engine reverts via updateModelValues on failure
-    await row.update((r) => {
-      Object.entries(query.revertValues).forEach(([key, value]) => {
-        r[key] = value
-      })
+    await (
+      row.update as unknown as (
+        cb: (r: Record<string, unknown>) => void,
+      ) => Promise<void>
+    )((r) => {
+      Object.entries(query.revertValues as Record<string, unknown>).forEach(
+        ([key, value]) => {
+          r[key] = value
+        },
+      )
     })
     expect(row.nr).toBe('Nr 1')
     expect(row.gemeinde).toBe('Zürich')
@@ -194,15 +221,22 @@ describe('Herkunft.edit + flushRow', () => {
 
   it('deleting sets _deleted locally and flushes it into the revision', async () => {
     const db = buildDb()
-    store.set(dbAtom, db)
-    const row = buildFakeRow(db)
+    store.set(
+    dbAtom,
+    db as unknown as Database,
+  )
+    const row: Record<string, unknown> = buildFakeRow(db)
 
-    await Herkunft.prototype.delete.call(row)
+    await (
+      Herkunft.prototype.delete as unknown as (this: unknown) => Promise<void>
+    ).call(row)
     expect(row._deleted).toBe(true)
     expect(store.get(queuedQueriesAtom)).toHaveLength(0)
 
     await flushRow('herkunft', 'herk-1')
-    const { object } = JSON.parse(store.get(queuedQueriesAtom)[0].variables)
+    const { object } = JSON.parse(
+      store.get(queuedQueriesAtom)[0].variables as string,
+    ) as { object: Record<string, unknown> }
     expect(object._deleted).toBe(true)
   })
 })

@@ -58,7 +58,9 @@ export const Timeline = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={onClickToggle}
+        onClick={
+                  onClickToggle as unknown as import('react').MouseEventHandler
+                }
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -82,7 +84,7 @@ export const Timeline = ({
           </IconButton>
         </div>
       </section>
-      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
+      <motion.div animate={anim} transition={{ duration: 0.2 }}>
         {open && <Pflanzen key={artId} artId={artId} />}
       </motion.div>
     </ErrorBoundary>

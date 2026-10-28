@@ -73,7 +73,7 @@ const emptyValue = {
 
 export interface SelectOption {
   value: string | number | null
-  label: string
+  label: string | undefined
   inaktiv?: boolean
   link?: string[]
 }

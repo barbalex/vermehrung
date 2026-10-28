@@ -90,7 +90,9 @@ export const Zaehlung = ({
                 id={id}
                 row={row}
                 activeConflict={activeConflict}
-                setActiveConflict={setActiveConflict}
+                setActiveConflict={
+                  setActiveConflict as unknown as never
+                }
                 showHistory={showHistory}
               />
               <Allotment.Pane visible={paneIsSplit}>
@@ -101,7 +103,9 @@ export const Zaehlung = ({
                     row={row}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
-                    setActiveConflict={setActiveConflict}
+                    setActiveConflict={
+                  setActiveConflict as unknown as never
+                }
                   />
                 ) : showHistory ? (
                   <History

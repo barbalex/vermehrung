@@ -159,7 +159,7 @@ export const SammelLieferungNach = ({
         <Select
           key={`${row?.id}${row?.nach_kultur_id}nach_kultur_id`}
           name="nach_kultur_id"
-          value={row?.nach_kultur_id}
+          value={row?.nach_kultur_id ?? null}
           field="nach_kultur_id"
           label={`Kultur${
             exists(row?.art_id)
