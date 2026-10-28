@@ -26,7 +26,7 @@ export const GartenFormTitle = ({
   totalCount,
   filteredCount,
 }: {
-  row: import('../../../../dbModel.ts').Garten | null | undefined
+  row?: import('../../../../dbModel.ts').Garten | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   showHistory: boolean
   totalCount: number

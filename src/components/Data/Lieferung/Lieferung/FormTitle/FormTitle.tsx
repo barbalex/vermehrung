@@ -25,7 +25,7 @@ export const LieferungFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../../../dbModel.ts').Lieferung | null | undefined
+  row?: import('../../../../../dbModel.ts').Lieferung | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean

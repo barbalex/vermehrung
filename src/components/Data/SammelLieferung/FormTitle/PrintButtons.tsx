@@ -12,7 +12,7 @@ export const SammelLieferungPrint = ({
 }: {
   printPreview: boolean
   setPrintPreview: (val: unknown) => void
-  asMenu: boolean
+  asMenu?: boolean
 }) => {
   const showLieferschein = () => setPrintPreview(!printPreview)
 

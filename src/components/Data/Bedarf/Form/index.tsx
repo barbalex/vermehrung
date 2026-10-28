@@ -129,7 +129,10 @@ export const BedarfForm = ({
       personsObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([kulturs, persons]) => {
+      async ([kulturs, persons]: [
+          import('../../../../dbModel.ts').Kultur[],
+          import('../../../../dbModel.ts').Person[],
+        ]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         let kultur
         try {

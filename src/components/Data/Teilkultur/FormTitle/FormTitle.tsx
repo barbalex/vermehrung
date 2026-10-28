@@ -24,7 +24,7 @@ export const TeilkulturFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../../dbModel.ts').Teilkultur | null | undefined
+  row?: import('../../../../dbModel.ts').Teilkultur | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean

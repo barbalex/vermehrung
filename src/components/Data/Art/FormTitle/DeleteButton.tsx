@@ -18,7 +18,7 @@ import styles from './DeleteButton.module.css'
 export const DeleteButton = ({
   row,
 }: {
-  row: import('../../../shared/types.ts').WmRow | null | undefined
+  row?: import('../../../shared/types.ts').WmRow | null | undefined
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const closeMenu = () => setAnchorEl(null)

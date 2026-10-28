@@ -6,7 +6,7 @@ import { FaCog } from 'react-icons/fa'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { GartenSettingsMenu as Menu } from './Menu.tsx'
 
-export const GartenSettings = ({ asMenu }: { asMenu: boolean }) => {
+export const GartenSettings = ({ asMenu }: { asMenu?: boolean }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const onClickConfig = (event: {
     target: { name?: string; value: unknown }

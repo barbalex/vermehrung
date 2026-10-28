@@ -143,7 +143,12 @@ export const KulturForm = ({
       sammlungsObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([userPersonOptions, gartens, garten, sammlungs]) => {
+      async ([userPersonOptions, gartens, garten, sammlungs]: [
+          import('../../../../dbModel.ts').PersonOption[],
+          import('../../../../dbModel.ts').Garten[],
+          never[],
+          import('../../../../dbModel.ts').Sammlung[],
+        ]) => {
         const gartensSorted = await gartensSortedFromGartens(gartens)
         // need to show a choosen garten even if inactive but not if deleted
         const gartensIncludingChoosen = uniqBy(

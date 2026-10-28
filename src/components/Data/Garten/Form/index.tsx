@@ -112,7 +112,12 @@ export const GartenForm = ({
       gvsObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([userPersonOptions, persons, person, gvs]) => {
+      async ([userPersonOptions, persons, person, gvs]: [
+          import('../../../../dbModel.ts').PersonOption[],
+          import('../../../../dbModel.ts').Person[],
+          Record<string, unknown> | undefined,
+          never[],
+        ]) => {
         // need to show a choosen person even if inactive but not if deleted
         const personsIncludingChoosen = uniqBy(
           [...persons, ...(person?.id && !showFilter ? [person] : [])],

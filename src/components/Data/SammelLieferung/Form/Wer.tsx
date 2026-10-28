@@ -66,7 +66,10 @@ export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
       rowObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([persons, row]) => {
+      async ([persons, row]: [
+          import('../../../../dbModel.ts').Person[],
+          import('../../../../dbModel.ts').SammelLieferung | undefined,
+        ]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         let person
         try {

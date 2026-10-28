@@ -33,7 +33,7 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (!calledFromHigherUp) {
     let kultur: import('../../../../dbModel.ts').Kultur | undefined
     try {
-      kultur = await db?.get('kultur').find(kultur_id)
+      kultur = await db?.get<import('../../../../dbModel.ts').Kultur>('kultur').find(kultur_id)
     } catch {}
     let art
     try {
@@ -84,7 +84,7 @@ export const buildExceljsWorksheetsForKultur = async ({
   }
   // 2. Get Zählungen
   const zaehlungs = await db
-    .get('zaehlung')
+    .get<import('../../../../dbModel.ts').Zaehlung>('zaehlung')
     .query(Q.where('_deleted', false), Q.where('kultur_id', kultur_id))
     .fetch()
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
@@ -147,7 +147,7 @@ export const buildExceljsWorksheetsForKultur = async ({
   }
   // 3. Get Teil-Zählungen
   const teilzaehlungs = await db
-    .get('teilzaehlung')
+    .get<import('../../../../dbModel.ts').Teilzaehlung>('teilzaehlung')
     .query(
       Q.where('_deleted', false),
       Q.on('zaehlung', Q.where('kultur_id', kultur_id)),
@@ -183,7 +183,7 @@ export const buildExceljsWorksheetsForKultur = async ({
   }
   // 4. Get An-Lieferungen
   const anlieferungs = await db
-    .get('lieferung')
+    .get<import('../../../../dbModel.ts').Lieferung>('lieferung')
     .query(Q.where('_deleted', false), Q.where('nach_kultur_id', kultur_id))
     .fetch()
   const lieferungsSorted = anlieferungs.sort(lieferungSort)
@@ -195,19 +195,19 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let artName
       try {
-        artName = await art.label.pipe(first$()).toPromise()
+        artName = await art?.label.pipe(first$()).toPromise()
       } catch {}
       let aeArt
       try {
-        aeArt = await art.ae_art.fetch()
+        aeArt = await art?.ae_art.fetch()
       } catch {}
       let lieferungPerson
       try {
         lieferungPerson = await l.person.fetch()
       } catch {}
-      let vonSammlung
+      let vonSammlung: import('../../../../dbModel.ts').Sammlung | undefined
       try {
-        vonSammlung = await db?.get('sammlung').find(l.von_sammlung_id)
+        vonSammlung = await db?.get<import('../../../../dbModel.ts').Sammlung>('sammlung').find(l.von_sammlung_id)
       } catch {}
       let vonSammlungPerson
       try {
@@ -217,9 +217,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       try {
         vonSammlungHerkunft = await vonSammlung?.herkunft.fetch()
       } catch {}
-      let vonKultur
+      let vonKultur: import('../../../../dbModel.ts').Kultur | undefined
       try {
-        vonKultur = await db?.get('kultur').find(l.von_kultur_id)
+        vonKultur = await db?.get<import('../../../../dbModel.ts').Kultur>('kultur').find(l.von_kultur_id)
       } catch {}
       let vonKulturGarten
       try {
@@ -229,9 +229,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       try {
         vonKulturHerkunft = await vonKultur?.herkunft.fetch()
       } catch {}
-      let nachKultur
+      let nachKultur: import('../../../../dbModel.ts').Kultur | undefined
       try {
-        nachKultur = await db?.get('kultur').find(l.nach_kultur_id)
+        nachKultur = await db?.get<import('../../../../dbModel.ts').Kultur>('kultur').find(l.nach_kultur_id)
       } catch {}
       let nachKulturGarten
       try {
@@ -354,7 +354,7 @@ export const buildExceljsWorksheetsForKultur = async ({
   let auslieferungs = []
   try {
     auslieferungs = await db
-      .get('lieferung')
+      .get<import('../../../../dbModel.ts').Lieferung>('lieferung')
       .query(Q.where('_deleted', false), Q.where('von_kultur_id', kultur_id))
       .fetch()
   } catch {}
@@ -377,9 +377,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       try {
         lieferungPerson = await l.person.fetch()
       } catch {}
-      let vonSammlung
+      let vonSammlung: import('../../../../dbModel.ts').Sammlung | undefined
       try {
-        vonSammlung = await db?.get('sammlung').find(l.von_sammlung_id)
+        vonSammlung = await db?.get<import('../../../../dbModel.ts').Sammlung>('sammlung').find(l.von_sammlung_id)
       } catch {}
       let vonSammlungPerson
       try {
@@ -389,9 +389,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       try {
         vonSammlungHerkunft = await vonSammlung?.herkunft.fetch()
       } catch {}
-      let vonKultur
+      let vonKultur: import('../../../../dbModel.ts').Kultur | undefined
       try {
-        vonKultur = await db?.get('kultur').find(l.von_kultur_id)
+        vonKultur = await db?.get<import('../../../../dbModel.ts').Kultur>('kultur').find(l.von_kultur_id)
       } catch {}
       let vonKulturGarten
       try {
@@ -401,9 +401,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       try {
         vonKulturHerkunft = await vonKultur?.herkunft.fetch()
       } catch {}
-      let nachKultur
+      let nachKultur: import('../../../../dbModel.ts').Kultur | undefined
       try {
-        nachKultur = await db?.get('kultur').find(l.nach_kultur_id)
+        nachKultur = await db?.get<import('../../../../dbModel.ts').Kultur>('kultur').find(l.nach_kultur_id)
       } catch {}
       let nachKulturGarten
       try {
@@ -520,16 +520,16 @@ export const buildExceljsWorksheetsForKultur = async ({
   let events = []
   try {
     events = await db
-      .get('event')
+      .get<import('../../../../dbModel.ts').Event>('event')
       .query(Q.where('_deleted', false), Q.where('kultur_id', kultur_id))
       .fetch()
   } catch {}
   const eventsSorted = events.sort(eventSort)
   const eventsData = await Promise.all(
     eventsSorted.map(async (e) => {
-      let teilkultur
+      let teilkultur: import('../../../../dbModel.ts').Teilkultur | undefined
       try {
-        teilkultur = await db?.get('teilkultur').find(e.teilkultur_id)
+        teilkultur = await db?.get<import('../../../../dbModel.ts').Teilkultur>('teilkultur').find(e.teilkultur_id)
       } catch {}
       let person
       try {

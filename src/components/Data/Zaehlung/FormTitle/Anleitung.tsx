@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.ts'
 
-export const ZaehlungAnleitung = ({ asMenu }: { asMenu: boolean }) => {
+export const ZaehlungAnleitung = ({ asMenu }: { asMenu?: boolean }) => {
   const openZaehlungDocs = () => {
     const url = `${constants?.getAppUri()}/Dokumentation/zaehlungen`
     if (window.matchMedia('(display-mode: standalone)').matches) {

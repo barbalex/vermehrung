@@ -19,7 +19,7 @@ export const KulturFormTitleChooser = ({
   showFilter,
   showHistory,
 }: {
-  row: import('../../../../dbModel.ts').Kultur | null | undefined
+  row?: import('../../../../dbModel.ts').Kultur | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   showFilter: boolean
   showHistory: boolean

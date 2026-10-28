@@ -18,7 +18,7 @@ export const KulturFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../../dbModel.ts').Kultur | null | undefined
+  row?: import('../../../../dbModel.ts').Kultur | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean

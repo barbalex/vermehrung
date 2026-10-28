@@ -22,7 +22,7 @@ export const BedarfFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../../dbModel.ts').Bedarf | null | undefined
+  row?: import('../../../../dbModel.ts').Bedarf | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean

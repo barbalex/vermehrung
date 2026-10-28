@@ -19,9 +19,9 @@ export const buildExceljsWorksheetsForDaten = async ({
   const db = store.get(dbAtom)
 
   // 1. Get Garten
-  let garten
+  let garten: import('../../../../../dbModel.ts').Garten | undefined
   try {
-    garten = await db?.get('garten').find(garten_id)
+    garten = await db?.get<import('../../../../../dbModel.ts').Garten>('garten').find(garten_id)
   } catch {}
   let person
   try {
@@ -58,7 +58,7 @@ export const buildExceljsWorksheetsForDaten = async ({
   let kultursOfGarten = []
   try {
     kultursOfGarten = await db
-      .get('kultur')
+      .get<import('../../../../../dbModel.ts').Kultur>('kultur')
       .query(
         Q.where('_deleted', false),
         Q.where('aktiv', true),

@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { insertKulturRev } from '../../../../modules/insertRev.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-export const KulturAddButton = ({ asMenu }: { asMenu: boolean }) => {
+export const KulturAddButton = ({ asMenu }: { asMenu?: boolean }) => {
   if (asMenu) {
     return <MenuItem onClick={insertKulturRev}>neue Kultur</MenuItem>
   }

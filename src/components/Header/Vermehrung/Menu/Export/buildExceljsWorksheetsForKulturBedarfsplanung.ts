@@ -22,7 +22,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
   try {
     kulturs =
       (await db
-        ?.get('kultur')
+        ?.get<import('../../../../../dbModel.ts').Kultur>('kultur')
         .query(
           Q.where('_deleted', false),
           Q.where('aktiv', true),
@@ -74,7 +74,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         ownZaehlungen =
           (await db
-            ?.get('zaehlung')
+            ?.get<import('../../../../../dbModel.ts').Zaehlung>('zaehlung')
             .query(
               Q.where('_deleted', false),
               Q.where('kultur_id', kultur.id),
@@ -88,7 +88,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         bedarfe =
           (await db
-            ?.get('bedarf')
+            ?.get<import('../../../../../dbModel.ts').Bedarf>('bedarf')
             .query(Q.where('_deleted', false), Q.where('kultur_id', kultur.id))
             .fetch()) ?? []
       } catch {}
@@ -165,7 +165,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         lieferungs =
           (await db
-            ?.get('lieferung')
+            ?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
             .query(
               Q.where('_deleted', false),
               Q.where('geplant', false),
@@ -180,7 +180,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         lieferungsGeplant =
           (await db
-            ?.get('lieferung')
+            ?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
             .query(
               Q.where('_deleted', false),
               Q.where('geplant', true),

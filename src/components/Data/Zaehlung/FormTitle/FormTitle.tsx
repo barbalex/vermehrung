@@ -24,7 +24,7 @@ export const ZaehlungFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../../dbModel.ts').Zaehlung | null | undefined
+  row?: import('../../../../dbModel.ts').Zaehlung | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean

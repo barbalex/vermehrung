@@ -26,7 +26,7 @@ export const HerkunftFormTitle = ({
   showHistory,
   activeConflict,
 }: {
-  row: import('../../../../dbModel.ts').Herkunft | null | undefined
+  row?: import('../../../../dbModel.ts').Herkunft | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean

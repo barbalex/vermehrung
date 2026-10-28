@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.ts'
 
-export const SammlungAnleitung = ({ asMenu }: { asMenu: boolean }) => {
+export const SammlungAnleitung = ({ asMenu }: { asMenu?: boolean }) => {
   const openSammlungDocs = () => {
     const url = `${constants?.getAppUri()}/Dokumentation/sammlungen`
     if (window.matchMedia('(display-mode: standalone)').matches) {

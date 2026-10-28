@@ -84,7 +84,10 @@ export const LieferungWer = ({
       rowObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([persons, row]) => {
+      async ([persons, row]: [
+          import('../../../../../dbModel.ts').Person[],
+          import('../../../../../dbModel.ts').Lieferung | undefined,
+        ]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         let person
         try {

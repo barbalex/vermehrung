@@ -20,7 +20,7 @@ export const PersonFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../../dbModel.ts').Person | null | undefined
+  row?: import('../../../../dbModel.ts').Person | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean

@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.ts'
 
-export const HerkunftAnleitung = ({ asMenu }: { asMenu: boolean }) => {
+export const HerkunftAnleitung = ({ asMenu }: { asMenu?: boolean }) => {
   const openHerkunftDocs = () => {
     const url = `${constants?.getAppUri()}/Dokumentation/herkuenfte`
     if (window.matchMedia('(display-mode: standalone)').matches) {

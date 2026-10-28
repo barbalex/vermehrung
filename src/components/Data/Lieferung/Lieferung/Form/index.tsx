@@ -71,7 +71,10 @@ export const LierferungForm = ({
       sLObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([userPersonOptions, sammelLieferung]) => {
+      async ([userPersonOptions, sammelLieferung]: [
+          Record<string, unknown> | undefined,
+          Record<string, unknown> | undefined,
+        ]) => {
         let vonSammlung
         try {
           vonSammlung = await row?.sammlung.fetch()

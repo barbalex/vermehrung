@@ -77,7 +77,10 @@ export const LieferungVon = ({
       sammlungsObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([kulturs, sammlungs]) => {
+      async ([kulturs, sammlungs]: [
+          import('../../../../../dbModel.ts').Kultur[],
+          import('../../../../../dbModel.ts').Sammlung[],
+        ]) => {
         const herkunftLabel =
           herkunftLabelFromHerkunft({ herkunft }) ??
           '(verfügbar, wenn Sammlung oder Kultur gewählt)'

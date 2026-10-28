@@ -90,7 +90,11 @@ export const TeilkulturForm = ({
       kulturOptionObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([kulturs, kultur, kulturOption]) => {
+      async ([kulturs, kultur, kulturOption]: [
+          import('../../../../dbModel.ts').Kultur | undefined,
+          import('../../../../dbModel.ts').KulturOption | undefined,
+          import('../../../../dbModel.ts').KulturOption | undefined,
+        ]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         const kultursIncludingChoosen = uniqBy(
           [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],

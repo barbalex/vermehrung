@@ -86,7 +86,11 @@ export const TeilzaehlungForm = ({
       tzObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([teilkulturs, kulturOption, teilzaehlung]) => {
+      async ([teilkulturs, kulturOption, teilzaehlung]: [
+          import('../../../../../../../dbModel.ts').Teilkultur | undefined,
+          import('../../../../../../../dbModel.ts').KulturOption | undefined,
+          import('../../../../../../../dbModel.ts').Teilzaehlung | undefined,
+        ]) => {
         // use the emitted teilzaehlung, not row from the closure:
         // row is undefined until the first emission and reading it here
         // makes the react compiler evaluate row.teilkultur during render

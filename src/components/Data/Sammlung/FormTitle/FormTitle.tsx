@@ -25,7 +25,7 @@ export const SammlungFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../../dbModel.ts').Sammlung | null | undefined
+  row?: import('../../../../dbModel.ts').Sammlung | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean

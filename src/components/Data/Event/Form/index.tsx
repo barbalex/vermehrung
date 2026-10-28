@@ -157,7 +157,12 @@ export const EventForm = ({
       kulturOptionObservable,
     ])
     const subscription = combinedObservables.subscribe(
-      async ([kulturs, teilkulturs, persons, kulturOption]) => {
+      async ([kulturs, teilkulturs, persons, kulturOption]: [
+          import('../../../../dbModel.ts').Kultur[],
+          import('../../../../dbModel.ts').Teilkultur[],
+          import('../../../../dbModel.ts').Person | undefined,
+          import('../../../../dbModel.ts').KulturOption | undefined,
+        ]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         let kultur
         try {

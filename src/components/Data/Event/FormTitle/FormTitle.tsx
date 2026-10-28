@@ -24,7 +24,7 @@ export const EventFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../../dbModel.ts').Event | null | undefined
+  row?: import('../../../../dbModel.ts').Event | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean
