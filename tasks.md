@@ -26,8 +26,6 @@ What makes this more challenging are the _rev tables that need to be migrated as
 
 ---
 
-in dark mode: text in dropdown fields is way too hard to read. Please make it as white as in the other fields
-
 ---
 
 ---
