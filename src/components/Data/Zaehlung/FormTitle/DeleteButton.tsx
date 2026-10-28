@@ -18,7 +18,7 @@ import artStyles from '../../Art/FormTitle/DeleteButton.module.css'
 export const ZaehlungDeleteButton = ({
   row,
 }: {
-  row?: import('../../../shared/types.ts').WmRow | null | undefined
+  row?: import('../../../../dbModel.ts').Zaehlung | null | undefined
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
 

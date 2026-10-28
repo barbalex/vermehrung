@@ -10,7 +10,7 @@ export const EventAddButton = () => {
       <IconButton
         aria-label="neuer Event"
         title="neuer Event"
-        onClick={insertEventRev}
+        onClick={() => void insertEventRev({})}
         size="large"
       >
         <FaPlus />

@@ -10,7 +10,7 @@ export const TeilkulturAddButton = () => {
       <IconButton
         aria-label="neue Teilkultur"
         title="neue Teilkultur"
-        onClick={insertTeilkulturRev}
+        onClick={() => void insertTeilkulturRev({})}
         size="large"
       >
         <FaPlus />

@@ -10,7 +10,7 @@ export const ZaehlungAddButton = () => {
       <IconButton
         aria-label="neue Zählung"
         title="neue Zählung"
-        onClick={insertZaehlungRev}
+        onClick={() => void insertZaehlungRev({})}
         size="large"
       >
         <FaPlus />

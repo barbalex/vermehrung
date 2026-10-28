@@ -10,7 +10,7 @@ export const SammelLieferungAddButton = () => {
       <IconButton
         aria-label="neue Sammel-Lieferung"
         title="neue Sammel-Lieferung"
-        onClick={insertSammelLieferungRev}
+        onClick={() => void insertSammelLieferungRev({})}
         size="large"
       >
         <FaPlus />

@@ -20,7 +20,7 @@ export const LieferungContainer = ({
   filter: showFilter = false,
   id: idPassed,
 }: {
-  filter: boolean
+  filter?: boolean
   id: string | undefined
 }) => {
   const db = useAtomValue(dbAtom)

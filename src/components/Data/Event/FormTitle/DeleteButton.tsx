@@ -18,7 +18,7 @@ import artStyles from '../../Art/FormTitle/DeleteButton.module.css'
 export const EventDeleteButton = ({
   row,
 }: {
-  row?: import('../../../shared/types.ts').WmRow | null | undefined
+  row?: import('../../../../dbModel.ts').Event | null | undefined
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const closeMenu = () => setAnchorEl(null)

@@ -1295,6 +1295,7 @@ export class Event extends Model {
   @json('_conflicts', dontSanitize) _conflicts!: string[] | null
 
   @relation('kultur', 'kultur_id') kultur!: Relation<Kultur>
+  @relation('teilkultur', 'teilkultur_id') teilkultur!: Relation<Teilkultur>
   @relation('person', 'person_id') person!: Relation<Person>
 
   @lazy label: Observable<string> = this.observe().pipe(

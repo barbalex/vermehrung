@@ -31,7 +31,7 @@ export const SammelLieferung = ({
   id = '99999999-9999-9999-9999-999999999999',
   lieferung,
 }: {
-  filter: boolean
+  filter?: boolean
   id: string | undefined
   lieferung: import('../../shared/types.ts').WmRow | null | undefined
 }) => {

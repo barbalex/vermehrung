@@ -27,7 +27,7 @@ export const Person = ({
   filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
 }: {
-  filter: boolean
+  filter?: boolean
   id: string | undefined
 }) => {
   const personFilter = useAtomValue(filterPersonAtom)

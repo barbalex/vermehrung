@@ -10,7 +10,7 @@ export const AddButton = () => {
       <IconButton
         aria-label="neue Art"
         title="neue Art"
-        onClick={insertArtRev}
+        onClick={() => void insertArtRev({})}
         size="large"
       >
         <FaPlus />

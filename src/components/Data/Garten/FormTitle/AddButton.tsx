@@ -10,7 +10,7 @@ export const GartenAddButton = () => {
       <IconButton
         aria-label="neuer Garten"
         title="neuer Garten"
-        onClick={insertGartenRev}
+        onClick={() => void insertGartenRev({})}
         size="large"
       >
         <FaPlus />

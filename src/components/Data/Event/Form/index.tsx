@@ -68,7 +68,12 @@ export const EventForm = ({
 
   const kulturId = row?.kultur_id
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    kulturWerte: { value: string; label: string | undefined; inaktiv?: boolean; link?: string[] }[]
+    teilkulturWerte: { value: string; label: string | undefined; inaktiv?: boolean; link?: string[] }[]
+    personWerte: { value: string; label: string | undefined; inaktiv?: boolean; link?: string[] }[]
+    kulturOption: import('../../../../dbModel.ts').KulturOption | undefined
+  }>({
     kulturWerte: [],
     teilkulturWerte: [],
     personWerte: [],
@@ -156,13 +161,14 @@ export const EventForm = ({
       personsObservable,
       kulturOptionObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([kulturs, teilkulturs, persons, kulturOption]: [
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [
           import('../../../../dbModel.ts').Kultur[],
           import('../../../../dbModel.ts').Teilkultur[],
-          import('../../../../dbModel.ts').Person | undefined,
+          import('../../../../dbModel.ts').Person[],
           import('../../../../dbModel.ts').KulturOption | undefined,
-        ]) => {
+        ]
+      >).subscribe(async ([kulturs, teilkulturs, persons, kulturOption]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         let kultur
         try {
@@ -270,7 +276,10 @@ export const EventForm = ({
       return setFilterValue({ table: 'event', key: field as string, value })
     }
 
-    const previousValue = ifIsNumericAsNumber((row as unknown as Record<string, unknown>)?.[field as string])
+    const previousValue = ifIsNumericAsNumber(
+      (row as unknown as Record<string, unknown>)?.[field as string] as
+        string | number,
+    )
     // only update if value has changed
     if (value === previousValue) return
     row?.edit({ field, value })
@@ -283,7 +292,11 @@ export const EventForm = ({
     window.open(url)
   }
 
-  const onCreateNewTeilkultur = async ({ name }) => {
+  const onCreateNewTeilkultur = async ({
+    name,
+  }: {
+    name: string
+  }) => {
     const teilkultur_id = await insertTeilkulturRev({
       noNavigateInTree: true,
       values: {
@@ -355,9 +368,13 @@ export const EventForm = ({
           name="beschreibung"
           label="Beschreibung"
           value={row?.beschreibung ?? null}
-          saveToDb={saveToDb}
+          saveToDb={
+            saveToDb as unknown as (
+              e: { target: { name?: string; value: unknown } },
+            ) => void
+          }
           error={errors?.event?.beschreibung as string | undefined}
-          multiline
+          multiLine
         />
         {(ev_person_id || showFilter) && (
           <Select
@@ -376,7 +393,7 @@ export const EventForm = ({
             key={`${row?.id}datum`}
             name="datum"
             label="Datum"
-            value={row?.datum}
+            value={row?.datum ?? null}
             saveToDb={saveToDb}
             error={errors?.event?.datum as string | undefined}
           />

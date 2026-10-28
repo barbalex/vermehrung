@@ -88,7 +88,7 @@ export const Data = () => {
 
   const id = activeNodeArray.filter((e) => isId(e)).at(-1)
 
-  switch (activeForm) {
+  switch (activeForm as string | null) {
     case 'root':
       return <Root />
     case 'art':

@@ -10,7 +10,7 @@ export const HerkunftAddButton = () => {
       <IconButton
         aria-label="neue Herkunft"
         title="neue Herkunft"
-        onClick={insertHerkunftRev}
+        onClick={() => void insertHerkunftRev({})}
         size="large"
       >
         <FaPlus />
