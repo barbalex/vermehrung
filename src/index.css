@@ -197,6 +197,18 @@ html[data-theme='dark'] {
   --uc-font-family: system-ui, sans-serif;
 }
 
+/* react-select text colors: react-select's defaults are near-black,
+   unreadable on dark surfaces. the header search sets its own colors
+   via inline styles (it sits on the purple app bar) */
+.react-select__single-value,
+.react-select__input,
+.react-select__input input {
+  color: var(--text);
+}
+.react-select__placeholder {
+  color: var(--text-secondary);
+}
+
 /* react-select dropdowns: the header search and the form selects rely
    on react-select's white default menu - give them a dark surface */
 html[data-theme='dark'] .react-select-search__menu,
