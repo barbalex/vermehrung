@@ -1,0 +1,73 @@
+/**
+ * needed to place list in own component
+ * because ref did not work when this was included in it's parent
+ * listRef.current was always null
+ */
+import { useEffect, useRef } from 'react'
+import { useAtomValue } from 'jotai'
+import { isEqual } from 'es-toolkit'
+import { Virtuoso } from 'react-virtuoso'
+
+import {
+  activeNodeArrayAtom,
+  lastActiveNodeArrayAtom,
+} from '../../store/index.ts'
+import { TreeRow } from './Row.tsx'
+
+export const TreeList = ({
+  _scrollableNodeRef,
+  _contentNodeRef,
+  width,
+  height,
+  nodes,
+  userRole,
+}) => {
+  const aNA = useAtomValue(activeNodeArrayAtom)
+  const lastActiveNodeArray = useAtomValue(lastActiveNodeArrayAtom)
+
+  const listRef = useRef(null)
+  // when loading on url, lastActiveNodeArray may not be set
+  const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
+  const nodeIndex = nodes.findIndex((node) => isEqual(node.url, urlToFocus))
+
+  // Only scroll once on initial mount, not on every click
+  const hasScrolledRef = useRef(false)
+  const initialIndexRef = useRef(nodeIndex && nodeIndex > -1 ? nodeIndex : 0)
+
+  useEffect(() => {
+    if (!hasScrolledRef.current && nodeIndex > -1) {
+      hasScrolledRef.current = true
+      // when loading on a url, nodes are built after this list has mounted:
+      // scroll the focused node into view as soon as it exists.
+      // center: rows have dynamic heights, so the position is only estimated
+      listRef.current?.scrollToIndex({
+        index: nodeIndex,
+        align: 'center',
+      })
+    }
+  }, [nodeIndex])
+
+  // using Virtuoso instead of react-virtualized because of white-space: normal on the tree rows
+  // react-virtualized only supports predefined heights
+  return (
+    <Virtuoso
+      ref={listRef}
+      style={{
+        height: (height ?? 0) - 5,
+        width: width ?? 0,
+        marginTop: 5,
+        scrollbarWidth: 'thin',
+      }}
+      totalCount={nodes.length}
+      initialTopMostItemIndex={initialIndexRef.current}
+      itemContent={(index) => (
+        <TreeRow
+          key={index}
+          node={nodes[index]}
+          nodes={nodes}
+          userRole={userRole}
+        />
+      )}
+    />
+  )
+}

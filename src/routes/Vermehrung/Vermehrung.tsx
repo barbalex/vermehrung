@@ -1,0 +1,95 @@
+import { Suspense } from 'react'
+import { Allotment } from 'allotment'
+import { useAtomValue } from 'jotai'
+
+import {
+  activeFormAtom,
+  isPrintAtom,
+  singleColumnViewAtom,
+  showTreeInSingleColumnViewAtom,
+  widthInPercentOfScreenAtom,
+  filterShowAtom,
+} from '../../store/index.ts'
+import { Tree } from '../../components/Tree/index.tsx'
+import { Data } from '../../components/Data/index.tsx'
+import { Filter } from '../../components/Filter.tsx'
+import { Fallback } from '../../components/shared/Fallback.tsx'
+import { ErrorBoundary } from '../../components/shared/ErrorBoundary.tsx'
+
+import styles from './Vermehrung.module.css'
+
+export const Vermehrung = () => {
+  const activeForm = useAtomValue(activeFormAtom)
+  const isPrint = useAtomValue(isPrintAtom)
+  const singleColumnView = useAtomValue(singleColumnViewAtom)
+  const showTreeInSingleColumnView = useAtomValue(
+    showTreeInSingleColumnViewAtom,
+  )
+  const widthInPercentOfScreen = useAtomValue(widthInPercentOfScreenAtom)
+  const showFilter = useAtomValue(filterShowAtom)
+
+  let treeWidth = singleColumnView
+    ? (!showTreeInSingleColumnView && activeForm) || showFilter
+      ? 0
+      : // if no form is active, show only tree
+        '100%'
+    : `${widthInPercentOfScreen}%`
+
+  const formWidth = singleColumnView
+    ? (!showTreeInSingleColumnView && activeForm) || showFilter
+      ? '100%'
+      : 0
+    : `${100 - widthInPercentOfScreen}%`
+  // ensure tree is invisible when printing but still exists
+  // (caused errors to render form without tree while printing)
+  if (isPrint) {
+    treeWidth = 0
+  }
+  const minSizeTree = treeWidth < 30 ? treeWidth : 30
+  const minSizeForm = formWidth < 30 ? formWidth : 30
+
+  // Compute pixel defaultSizes from window.innerWidth to avoid CLS:
+  // Allotment normally renders 50/50 first, then shifts to preferredSize after
+  // measuring the container — this produces a large layout shift (CLS 0.245).
+  // Passing defaultSizes in pixels lets Allotment position panes correctly on
+  // the very first paint.
+  const containerWidth = window.innerWidth
+  const treeSizePx =
+    treeWidth === 0
+      ? 0
+      : treeWidth === '100%'
+        ? containerWidth
+        : Math.round((widthInPercentOfScreen / 100) * containerWidth)
+  const formSizePx = containerWidth - treeSizePx
+
+  // need the key on Allotment or it would only render correctly on second render
+  return (
+    <div className={styles.container}>
+      <Allotment
+        key={`${treeWidth}/${formWidth}`}
+        defaultSizes={[treeSizePx, formSizePx]}
+      >
+        <Allotment.Pane
+          visible={treeWidth !== 0}
+          preferredSize={treeWidth}
+          minSize={minSizeTree}
+        >
+          <Suspense fallback={<Fallback />}>
+            <ErrorBoundary>
+              <Tree />
+            </ErrorBoundary>
+          </Suspense>
+        </Allotment.Pane>
+        <Allotment.Pane
+          visible={formWidth !== 0}
+          preferredSize={formWidth}
+          minSize={minSizeForm}
+        >
+          <Suspense fallback={<Fallback />}>
+            <ErrorBoundary>{showFilter ? <Filter /> : <Data />}</ErrorBoundary>
+          </Suspense>
+        </Allotment.Pane>
+      </Allotment>
+    </div>
+  )
+}

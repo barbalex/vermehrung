@@ -1,0 +1,141 @@
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest, of as $of } from 'rxjs'
+import { uniqBy } from 'es-toolkit'
+
+import {
+  errorsAtom,
+  dbAtom,
+  filterSammelLieferungAtom,
+  filterPersonAtom,
+  initialDataQueriedAtom,
+} from '../../../../store/index.ts'
+import { Select } from '../../../shared/Select/index.tsx'
+import { TextField } from '../../../shared/TextField.tsx'
+import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.ts'
+import { personSort } from '../../../../utils/personSort.ts'
+
+import wannStyles from '../../Lieferung/Lieferung/Form/Wann.module.css'
+
+export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
+  const errors = useAtomValue(errorsAtom)
+  const db = useAtomValue(dbAtom)
+  const sammelLieferungFilter = useAtomValue(filterSammelLieferungAtom)
+  const personFilter = useAtomValue(filterPersonAtom)
+  const initialDataQueried = useAtomValue(initialDataQueriedAtom)
+
+  const [dataState, setDataState] = useState({
+    personWerte: [],
+    row: undefined,
+  })
+  const { row, personWerte } = dataState
+
+  useEffect(() => {
+    const rowObservable = showFilter
+      ? $of(sammelLieferungFilter)
+      : initialDataQueried
+        ? db.get('sammel_lieferung').findAndObserve(id)
+        : $of({})
+    const personDelQuery =
+      personFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : personFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
+    const personAktivQuery =
+      personFilter.aktiv === false
+        ? Q.where('aktiv', false)
+        : personFilter.aktiv === true
+          ? Q.where('aktiv', true)
+          : Q.or(
+              Q.where('aktiv', false),
+              Q.where('aktiv', true),
+              Q.where('aktiv', null),
+            )
+    const personsObservable = db
+      .get('person')
+      .query(personDelQuery, personAktivQuery)
+      .observeWithColumns(['name', 'vorname'])
+    const combinedObservables = combineLatest([
+      personsObservable,
+      rowObservable,
+    ])
+    const subscription = combinedObservables.subscribe(
+      async ([persons, row]) => {
+        // need to show a choosen kultur even if inactive but not if deleted
+        let person
+        try {
+          person = await row.person.fetch()
+        } catch {}
+        const personsIncludingChoosen = uniqBy(
+          [...persons, ...(person && !showFilter ? [person] : [])],
+          (e) => e.id,
+        )
+        const personWerte = personsIncludingChoosen
+          .sort(personSort)
+          .map((el) => ({
+            value: el.id,
+            label: personLabelFromPerson({ person: el }),
+            inaktiv: el.aktiv === false,
+            link: ['Personen', el.id],
+          }))
+
+        setDataState({ personWerte, row })
+      },
+    )
+
+    return () => subscription?.unsubscribe?.()
+  }, [
+    db,
+    sammelLieferungFilter,
+    personFilter,
+    id,
+    row,
+    row?.person_id,
+    showFilter,
+    initialDataQueried,
+  ])
+
+  if (!row || !Object.keys(row ?? {}).length) return null
+
+  return (
+    <>
+      <div
+        className={wannStyles.titleRow}
+        style={{
+          backgroundColor: showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
+        }}
+      >
+        <div className={wannStyles.title}>wer</div>
+      </div>
+      {ifNeeded('person_id') && (
+        <Select
+          key={`${row.id}person_id`}
+          name="person_id"
+          value={row.person_id}
+          field="person_id"
+          label="Person"
+          options={personWerte}
+          saveToDb={saveToDb}
+          error={errors?.sammel_lieferung?.person_id}
+        />
+      )}
+      {ifNeeded('bemerkungen') && (
+        <TextField
+          key={`${row.id}bemerkungen`}
+          name="bemerkungen"
+          label="Bemerkungen"
+          value={row.bemerkungen}
+          saveToDb={saveToDb}
+          error={errors?.sammel_lieferung?.bemerkungen}
+          multiLine
+        />
+      )}
+    </>
+  )
+}

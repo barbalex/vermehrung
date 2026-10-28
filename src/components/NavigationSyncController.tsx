@@ -10,9 +10,9 @@ import {
   setActiveNodeArray,
   setLastActiveNodeArray,
   addOpenNode,
-} from '../store/index.js'
-import { getActiveNodeArrayFromPathname } from '../utils/getActiveNodeArrayFromPathname.js'
-import { splitHistoriesFromActiveNodeArray } from '../utils/splitHistoriesFromActiveNodeArray.js'
+} from '../store/index.ts'
+import { getActiveNodeArrayFromPathname } from '../utils/getActiveNodeArrayFromPathname.ts'
+import { splitHistoriesFromActiveNodeArray } from '../utils/splitHistoriesFromActiveNodeArray.ts'
 
 // syncs activeNodeArray with browser navigation
 export const NavigationSyncController = () => {

@@ -8,7 +8,7 @@ import {
   getTestPersons,
   mintToken,
   pgrst,
-} from './helpers.js'
+} from './helpers.ts'
 
 // The sync endpoint must return, per role:
 // - exactly the rows the role may see (same as a direct table request)

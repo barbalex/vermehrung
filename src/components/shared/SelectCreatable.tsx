@@ -1,0 +1,143 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react'
+import Select from 'react-select/creatable'
+import styled from '@emotion/styled'
+
+import { setFilterValue } from '../../store/index.ts'
+import { Link } from './Select/Link.tsx'
+
+import styles from './SelectCreatable.module.css'
+
+// leave this styled use due to css modules not able to nest classes
+// and different stylings existing for selects
+const StyledSelect = styled(Select)`
+  .react-select__control {
+    background-color: rgba(0, 0, 0, 0) !important;
+    border-bottom-color: var(--input-underline);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    min-height: 36px !important;
+    height: 36px !important;
+  }
+  .react-select__control:hover {
+    border-bottom-width: 2px;
+  }
+  .react-select__control:focus-within {
+    border-bottom-color: rgba(28, 80, 31, 1) !important;
+    box-shadow: none;
+  }
+  .react-select__value-container {
+    padding-left: 0;
+  }
+  .react-select__indicators {
+    @media print {
+      display: none;
+    }
+  }
+  .react-select__clear-indicator {
+    /* ability to hide caret when not enough space */
+    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
+  }
+  .react-select__dropdown-indicator {
+    /* ability to hide caret when not enough space */
+    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
+  }
+  .react-select__indicator-separator {
+    /* ability to hide caret when not enough space */
+    width: ${(props) => (props.nocaret ? '0' : '1px')};
+  }
+  input {
+    @media print {
+      padding-top: 3px;
+      padding-bottom: 0;
+    }
+  }
+  .react-select__menu,
+  .react-select__menu-list {
+    height: 130px;
+    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    /* make it open over titlerow (which needs to have z-index 1 to hide text scolling below it)*/
+    z-index: 2;
+  }
+`
+
+const emptyValue = {
+  value: '',
+  label: '',
+}
+
+export const SelectCreatable = ({
+  field = '',
+  label,
+  row,
+  showFilter,
+  table,
+  error,
+  options,
+  loading = false,
+  maxHeight = null,
+  noCaret = false,
+  onCreateNew,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  callback = () => {},
+  formatCreateLabel = (val) => `"${val}" als neue Teilkultur aufnehmen`,
+}) => {
+  const [stateValue, setStateValue] = useState(row[field])
+  useEffect(() => {
+    setStateValue(row[field])
+  }, [])
+
+  const onChange = (option, actionMeta) => {
+    // if action is create-option
+    // need to create new dataset
+    if (actionMeta.action === 'create-option') {
+      // 1. create new dataset
+      onCreateNew({ name: option.label })
+      return
+    }
+    const newValue = option ? option.value : null
+    setStateValue(newValue)
+
+    if (showFilter) {
+      setFilterValue({ table, key: field, value: newValue })
+    } else {
+      row.edit({ field, value: newValue })
+    }
+    callback()
+  }
+
+  // show ... while options are loading
+  const loadingOptions = [{ value: stateValue, label: '...' }]
+  const optionsToUse = loading && stateValue ? loadingOptions : options
+  const selectValue =
+    optionsToUse.find((o) => o.value === stateValue) || emptyValue
+
+  return (
+    <div className={styles.container}>
+      {label && <div className={styles.labelClass}>{label}</div>}
+      <div className={styles.selectRow}>
+        <StyledSelect
+          id={field}
+          name={field}
+          value={selectValue}
+          options={optionsToUse}
+          onChange={onChange}
+          hideSelectedOptions
+          placeholder=""
+          isClearable
+          isSearchable
+          noOptionsMessage={() => '(keine)'}
+          maxheight={maxHeight}
+          classNamePrefix="react-select"
+          nocaret={noCaret}
+          formatCreateLabel={formatCreateLabel}
+          aria-label={label ?? ''}
+        />
+        {!!selectValue.link && <Link link={selectValue.link} />}
+      </div>
+      {error && <div className={styles.errorClass}>{error}</div>}
+    </div>
+  )
+}

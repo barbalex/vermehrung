@@ -3,8 +3,8 @@ import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
 import { Database } from '@nozbe/watermelondb'
 
 import { Art, ArtFile } from '../src/dbModel.ts'
-import { schema } from '../src/dbSchema/schema.js'
-import { migrations } from '../src/utils/migrations.js'
+import { schema } from '../src/dbSchema/schema.ts'
+import { migrations } from '../src/utils/migrations.ts'
 
 // reproduces the Files upload write with a real watermelon db
 describe('file write', () => {

@@ -1,0 +1,152 @@
+import md5 from 'blueimp-md5'
+import { DateTime } from 'luxon'
+import { v7 as uuidv7 } from 'uuid'
+import { isEqual } from 'es-toolkit'
+
+import { toPgArray } from '../../../../../utils/toPgArray.ts'
+import {
+  store as jotaiStore,
+  userAtom,
+  dbAtom,
+  addQueuedQuery,
+} from '../../../../../store/index.ts'
+import { exists } from '../../../../../utils/exists.ts'
+
+const lieferungRevFields = [
+  'id',
+  'lieferung_id',
+  'sammel_lieferung_id',
+  'art_id',
+  'person_id',
+  'von_sammlung_id',
+  'von_kultur_id',
+  'datum',
+  'nach_kultur_id',
+  'nach_ausgepflanzt',
+  'von_anzahl_individuen',
+  'anzahl_pflanzen',
+  'anzahl_auspflanzbereit',
+  'gramm_samen',
+  'andere_menge',
+  'geplant',
+  'bemerkungen',
+  'changed',
+  'changed_by',
+  '_rev',
+  '_parent_rev',
+  '_revisions',
+  '_depth',
+  '_deleted',
+]
+const lieferungFields = [
+  'id',
+  'sammel_lieferung_id',
+  'art_id',
+  'person_id',
+  'von_sammlung_id',
+  'von_kultur_id',
+  'datum',
+  'nach_kultur_id',
+  'nach_ausgepflanzt',
+  'von_anzahl_individuen',
+  'anzahl_pflanzen',
+  'anzahl_auspflanzbereit',
+  'gramm_samen',
+  'andere_menge',
+  'geplant',
+  'bemerkungen',
+  'changed',
+  'changed_by',
+  '_rev',
+  '_parent_rev',
+  '_revisions',
+  '_depth',
+  '_conflicts',
+  '_deleted',
+]
+
+export const updateSammelLieferung = async ({
+  lieferung,
+  sammelLieferung,
+  field,
+}) => {
+  const user = jotaiStore.get(userAtom)
+  const db = jotaiStore.get(dbAtom)
+  console.log('updateLieferung, lieferung:', lieferung)
+  // pass field to mark which field should be updated
+  // even if it has value null
+  const newValuesFromSl = Object.fromEntries(
+    Object.entries(sammelLieferung)
+      .filter(
+        // only accept lieferung's fields
+
+        ([key]) => lieferungRevFields.includes(key),
+      )
+      // only update with existing values
+
+      .filter(([key, val]) => {
+        if (field) return key === field
+        return exists(val)
+      }),
+  )
+  // need to query existing object to get revisions
+  const lfLastVersion = lieferung
+  const oldValuesFromL = Object.fromEntries(
+    Object.entries(lfLastVersion).filter(
+      // only accept lieferung's fields
+
+      ([key]) => lieferungFields.includes(key),
+    ),
+  )
+  const newObject = {
+    ...oldValuesFromL,
+    ...newValuesFromSl,
+    id: uuidv7(),
+    lieferung_id: lieferung.id,
+    sammel_lieferung_id: sammelLieferung.id,
+  }
+  delete newObject._conflicts
+  delete newObject.__typename
+  const depth = lfLastVersion._depth + 1
+  newObject.changed = DateTime.local().toFormat('yyyy.LL.dd')
+  newObject.changed_by = user?.email
+  newObject._parent_rev = lfLastVersion._rev
+  newObject._depth = depth
+  const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+  newObject._rev = rev
+  const newObjectForStore = { ...newObject }
+  // convert array to string as hasura does not support arrays yet
+  // https://github.com/hasura/graphql-engine/pull/2243
+  newObject._revisions = lfLastVersion._revisions
+    ? toPgArray([rev, ...lfLastVersion._revisions])
+    : toPgArray([rev])
+  addQueuedQuery({
+    name: 'mutateInsert_lieferung_rev_one',
+    variables: JSON.stringify({
+      object: newObject,
+      on_conflict: {
+        constraint: 'lieferung_rev_pkey',
+        update_columns: ['id'],
+      },
+    }),
+    revertTable: 'lieferung',
+    revertId: lieferung.id,
+    revertValues: JSON.stringify(newObject),
+  })
+  // optimistically update store
+  newObjectForStore._revisions = lfLastVersion._revisions
+    ? [rev, ...lfLastVersion._revisions]
+    : [rev]
+  newObjectForStore._conflicts = lfLastVersion._conflicts
+  newObjectForStore.id = lfLastVersion.id
+  delete newObjectForStore.lieferung_id
+  await db.write(async () => {
+    await lieferung.update((row) => {
+      Object.entries(newObjectForStore).forEach(([key, value]) => {
+        if (!isEqual(value, row[key])) {
+          row[key] = value
+        }
+      })
+    })
+  })
+}

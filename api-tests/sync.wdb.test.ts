@@ -4,11 +4,11 @@ import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
 import { Database, Model, Q } from '@nozbe/watermelondb'
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { store, dbAtom, lastUpdatedAtom, initiallyQueriedAtom } from '../src/store/index.js'
-import { processSubscriptionResult } from '../src/utils/processSubscriptionResult.js'
+import { store, dbAtom, lastUpdatedAtom, initiallyQueriedAtom } from '../src/store/index.ts'
+import { processSubscriptionResult } from '../src/utils/processSubscriptionResult.ts'
 import * as models from '../src/dbModel.ts'
-import { migrations } from '../src/utils/migrations.js'
-import { schema } from '../src/dbSchema/schema.js'
+import { migrations } from '../src/utils/migrations.ts'
+import { schema } from '../src/dbSchema/schema.ts'
 
 // Reproduces the full client path for the tree's option gating with a REAL
 // WatermelonDB: import real prod sync rows for person + person_option,

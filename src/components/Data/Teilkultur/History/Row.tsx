@@ -1,0 +1,87 @@
+import md5 from 'blueimp-md5'
+import { v7 as uuidv7 } from 'uuid'
+import { isEqual } from 'es-toolkit'
+
+import { History } from '../../../shared/History/index.tsx'
+import {
+  userAtom,
+  addNotification,
+  dbAtom,
+  apiClientAtom,
+  store,
+} from '../../../../store/index.ts'
+import { checkForOnlineError } from '../../../../utils/checkForOnlineError.ts'
+import { toPgArray } from '../../../../utils/toPgArray.ts'
+import { createDataArrayForTeilkulturRevComparison as createDataArray } from '../createDataArrayForRevComparison.ts'
+
+export const TeilkulturHistoryRow = ({
+  row,
+  revRow,
+  historyTakeoverCallback,
+}) => {
+  const dataArray = createDataArray({ row, revRow })
+
+  const onClickWiderspruchUebernehmen = async () => {
+    // need to attach to the winner, that is row
+    // otherwise risk to still have lower depth and thus loosing
+    const newDepth = row._depth + 1
+    const newObject = {
+      teilkultur_id: revRow.teilkultur_id,
+      kultur_id: revRow.kultur_id,
+      name: revRow.name,
+      ort1: revRow.ort1,
+      ort2: revRow.ort2,
+      ort3: revRow.ort3,
+      bemerkungen: revRow.bemerkungen,
+      _parent_rev: row._rev,
+      _depth: newDepth,
+      _deleted: revRow._deleted,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv7()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = store.get(userAtom).email
+    newObject._revisions = toPgArray([rev, ...row._revisions])
+    const newObjectForStore = { ...newObject }
+    try {
+    await store
+      .get(apiClientAtom)
+      .post('/teilkultur_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+  } catch (error) {
+          checkForOnlineError({ error: error })
+      return addNotification({
+        message: error.message,
+  })
+    }
+    historyTakeoverCallback()
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = row._revisions
+      ? [rev, ...row._revisions]
+      : [rev]
+    // TODO: is this a good idea?
+    newObjectForStore._conflicts = row._conflicts
+    // for store: convert rev to winner
+    newObjectForStore.id = row.id
+    delete newObjectForStore.teilkultur_id
+    // optimistically update store
+    await store.get(dbAtom).write(async () => {
+      await row.update((row) => {
+        Object.entries(newObjectForStore).forEach(([key, value]) => {
+          if (!isEqual(value, row[key])) {
+            row[key] = value
+          }
+        })
+      })
+    })
+  }
+
+  return (
+    <History
+      rev={revRow._rev}
+      dataArray={dataArray}
+      onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
+    />
+  )
+}

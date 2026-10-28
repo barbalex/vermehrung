@@ -1,0 +1,38 @@
+import {
+  store,
+  activeNodeArrayAtom,
+  addNotification,
+  addOpenNode,
+  setActiveNodeArray,
+  removeOpenNodeWithChildren,
+  setLastActiveNodeArray,
+  setFilterShow,
+} from '../../store/index.ts'
+import { isNodeOpen } from './isNodeOpen.ts'
+import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.ts'
+
+export const toggleNodeSymbol = ({ node }) => {
+  if (!node.url) {
+    console.log('passsed node has no url:', node)
+    return addNotification({
+      message: 'Fehler: Dem Knoten im Navigationsbaum fehlt die url',
+    })
+  }
+
+  setFilterShow(false)
+  // TODO: tell user if childrenCount is 0 he can create
+  if (isNodeOpen({ url: node.url })) {
+    removeOpenNodeWithChildren(node.url)
+    const activeNodeArray = store.get(activeNodeArrayAtom)
+    if (isNodeInActiveNodePath({ node, activeNodeArray })) {
+      // when a user closes a folder in the active node path
+      // the active node should swith to the node's parent
+      const newActiveNodeArray = [...node.url]
+      newActiveNodeArray.pop()
+      setActiveNodeArray(newActiveNodeArray)
+    }
+  } else {
+    addOpenNode(node.url)
+  }
+  setLastActiveNodeArray(node.url)
+}

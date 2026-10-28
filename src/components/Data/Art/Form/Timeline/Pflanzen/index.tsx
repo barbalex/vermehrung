@@ -1,0 +1,154 @@
+ 
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
+import {
+  ComposedChart,
+  Bar,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ReferenceLine,
+  ResponsiveContainer,
+  Scatter,
+} from 'recharts'
+import { useResizeDetector } from 'react-resize-detector'
+
+import { CustomTooltip } from './Tooltip.tsx'
+import { LabelLieferung } from './LabelLieferung.tsx'
+import { LabelZaehlung } from './LabelZaehlung.tsx'
+import { CustomAxisTick } from './CustomAxisTick.tsx'
+import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.tsx'
+import { dbAtom } from '../../../../../../store/index.ts'
+import { buildData } from './buildData.ts'
+
+import styles from './index.module.css'
+
+export const Pflanzen = ({ artId }) => {
+  const db = useAtomValue(dbAtom)
+
+  const { width, ref } = useResizeDetector()
+  const isNarrow = width < 1100
+
+  const [data, setData] = useState(null)
+  useEffect(() => {
+    let isActive = true
+    buildData({ db, artId }).then((data) => {
+      if (!isActive) return
+
+      setData(data)
+    })
+    return () => {
+      isActive = false
+    }
+  }, [artId, db])
+
+  if (!data) return null
+
+  if (data && !data.length) {
+    return (
+      <div className={styles.noData}>
+        Keine Daten verfügbar für Anzahl Pflanzen
+      </div>
+    )
+  }
+
+  // need to disable animation or labels will not show on first render
+  // https://github.com/recharts/recharts/issues/806
+
+  // console.log('Pflanzen, data:', data)
+
+  return (
+    <div className={styles.container} ref={ref}>
+      <ErrorBoundary>
+        <ResponsiveContainer width="99%" height={450}>
+          <ComposedChart
+            data={data}
+            margin={{ top: 35, right: 0, left: 0, bottom: 45 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+            <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
+            <YAxis
+              label={{
+                value: 'Anzahl Pflanzen',
+                angle: -90,
+                position: 'insideLeft',
+                offset: 15,
+                fontSize: 14,
+                fontWeight: 700,
+              }}
+              fontSize={12}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            {isNarrow ? (
+              <Legend
+                layout="horizontal"
+                align="center"
+                wrapperStyle={{ bottom: 0, fontSize: 12 }}
+              />
+            ) : (
+              <Legend
+                layout="vertical"
+                align="right"
+                wrapperStyle={{ right: -10, bottom: 150, fontSize: 12 }}
+              />
+            )}
+            <ReferenceLine y={0} stroke="#000" />
+            <Bar
+              dataKey="Sammlung"
+              fill="orange"
+              label={<LabelLieferung />}
+              isAnimationActive={false}
+            />
+            <Bar
+              dataKey="Sammlung geplant"
+              fill="yellow"
+              label={<LabelLieferung />}
+              isAnimationActive={false}
+            />
+            <Bar
+              dataKey="Auspflanzung"
+              fill="#016526"
+              label={<LabelLieferung />}
+              isAnimationActive={false}
+            />
+            <Bar
+              dataKey="Auspflanzung geplant"
+              fill="#9cffc0"
+              label={<LabelLieferung />}
+              isAnimationActive={false}
+            />
+            <Line
+              type="monotone"
+              connectNulls={true}
+              dataKey="Anzahl berechnet"
+              stroke="#4a148c"
+              strokeWidth={3}
+              label={<LabelZaehlung />}
+              isAnimationActive={false}
+              dot={false}
+            />
+            <Scatter
+              dataKey="Zählung"
+              stroke="#4a148c"
+              fill="#4a148c"
+              // fill white makes legend go completely white...
+              //fill="white"
+              strokeWidth={3}
+              isAnimationActive={false}
+            ></Scatter>
+            <Scatter
+              dataKey="Bedarf"
+              stroke="#e0e0ff"
+              fill="#e0e0ff"
+              strokeWidth={3}
+              isAnimationActive={false}
+            ></Scatter>
+          </ComposedChart>
+        </ResponsiveContainer>
+      </ErrorBoundary>
+    </div>
+  )
+}

@@ -1,0 +1,226 @@
+import { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
+import { FaPlus } from 'react-icons/fa'
+import IconButton from '@mui/material/IconButton'
+import { List } from 'react-window'
+import { Q } from '@nozbe/watermelondb'
+import { combineLatest } from 'rxjs'
+
+import {
+  dbAtom,
+  kulturIdInActiveNodeArrayAtom,
+  personIdInActiveNodeArrayAtom,
+  sammelLieferungIdInActiveNodeArrayAtom,
+  sammlungIdInActiveNodeArrayAtom,
+  filterLieferungAtom,
+  activeNodeArrayAtom,
+  setActiveNodeArray,
+  removeOpenNode,
+} from '../../../store/index.ts'
+import { insertLieferungRev } from '../../../modules/insertRev.ts'
+import { FilterTitle } from '../../shared/FilterTitle.tsx'
+import { LieferungRow as Row } from './Row.tsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
+import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
+import { exists } from '../../../utils/exists.ts'
+import UpSvg from '../../../svg/to_up.svg?react'
+import { tableFilter } from '../../../utils/tableFilter.ts'
+import { lieferungSort } from '../../../utils/lieferungSort.ts'
+import { constants } from '../../../utils/constants.ts'
+
+import artStyles from '../Arten/index.module.css'
+
+export const Lieferungen = ({ filter: showFilter = false }) => {
+  const db = useAtomValue(dbAtom)
+  const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
+  const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
+  const sammelLieferungIdInActiveNodeArray = useAtomValue(
+    sammelLieferungIdInActiveNodeArrayAtom,
+  )
+  const sammlungIdInActiveNodeArray = useAtomValue(
+    sammlungIdInActiveNodeArrayAtom,
+  )
+  const lieferungFilter = useAtomValue(filterLieferungAtom)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+
+  const [dataState, setDataState] = useState({ lieferungs: [], totalCount: 0 })
+  useEffect(() => {
+    let kulturOnField = 'von_kultur_id'
+    const hierarchyQuery = []
+    if (kulturIdInActiveNodeArray) {
+      const lastAnAElement = activeNodeArray[activeNodeArray.length - 1]
+      if (lastAnAElement === 'An-Lieferungen') kulturOnField = 'nach_kultur_id'
+      // this should get kulturen connected by von_kultur_id or nach_kultur_id
+      // depending on activeNodeArray[last] being 'An-Lieferung' or 'Aus-Lieferung'
+      // Q.on did not work because only one association can be declared per table
+      hierarchyQuery.push(Q.where(kulturOnField, kulturIdInActiveNodeArray))
+    }
+    if (sammelLieferungIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['sammel_lieferung']))
+      hierarchyQuery.push(
+        Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
+      )
+    }
+    if (personIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['person']))
+      hierarchyQuery.push(Q.on('person', 'id', personIdInActiveNodeArray))
+    }
+    if (sammlungIdInActiveNodeArray) {
+      hierarchyQuery.push(Q.experimentalJoinTables(['sammlung']))
+      hierarchyQuery.push(Q.on('sammlung', 'id', sammlungIdInActiveNodeArray))
+    }
+    const collection = db.get('lieferung')
+    const lieferungDelQuery =
+      lieferungFilter._deleted === false
+        ? Q.where('_deleted', false)
+        : lieferungFilter._deleted === true
+          ? Q.where('_deleted', true)
+          : Q.or(
+              Q.where('_deleted', false),
+              Q.where('_deleted', true),
+              Q.where('_deleted', null),
+            )
+    const countObservable = collection
+      .query(lieferungDelQuery, ...hierarchyQuery)
+      .observeCount()
+    const dataObservable = collection
+      .query(
+        ...tableFilter({
+          table: 'lieferung',
+        }),
+        ...hierarchyQuery,
+      )
+      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+    const combinedObservables = combineLatest([countObservable, dataObservable])
+    const subscription = combinedObservables.subscribe(
+      ([totalCount, lieferungs]) => {
+        setDataState({
+          lieferungs: lieferungs.sort(lieferungSort),
+          totalCount,
+        })
+      },
+    )
+
+    return () => subscription?.unsubscribe?.()
+  }, [
+    db,
+    // need to rerender if any of the values of lieferungFilter changes
+     
+    lieferungFilter,
+    kulturIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+    sammelLieferungIdInActiveNodeArray,
+    sammlungIdInActiveNodeArray,
+    activeNodeArray,
+    // need to rerender if last element of activeNodeArray changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    activeNodeArray[activeNodeArray.length - 1],
+  ])
+
+  const { lieferungs, totalCount } = dataState
+  const filteredCount = lieferungs.length
+
+  const add = async () => {
+    const isSammelLieferung =
+      activeNodeArray.length >= 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
+    if (isSammelLieferung) {
+      const slId = activeNodeArray[1]
+      let sl
+      try {
+        sl = await db.get('sammel_lieferung').find(slId)
+      } catch {}
+      const additionalValuesToSet = {}
+
+      const entries = Object.entries(sl)
+        .filter(
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ([key, value]) =>
+            !key.startsWith('_') &&
+            ![
+              'lieferungs',
+              'kulturByNachKulturId',
+              'kulturByVonKulturId',
+              'person',
+              'sammlung',
+            ].includes(key),
+        )
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .filter(([key, value]) => exists(value))
+      for (const [key, value] of entries) {
+        const keyToUse = key === 'id' ? 'sammel_lieferung_id' : key
+        additionalValuesToSet[keyToUse] = value
+      }
+      additionalValuesToSet.sammel_lieferung_id = slId
+      return insertLieferungRev({
+        values: additionalValuesToSet,
+      })
+    }
+    insertLieferungRev()
+  }
+
+  const onClickUp = () => {
+    removeOpenNode(activeNodeArray)
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }
+
+  let upTitle = 'Eine Ebene höher'
+  if (activeNodeArray[0] === 'Lieferungen') {
+    upTitle = 'Zu allen Listen'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Kulturen') {
+    upTitle = 'Zur Kultur'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Sammlungen') {
+    upTitle = 'Zur Sammlung'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Sammel-Lieferungen') {
+    upTitle = 'Zur Sammel-Lieferung'
+  }
+
+  return (
+    <ErrorBoundary>
+      <div
+        className={artStyles.container}
+        style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
+      >
+        {showFilter ? (
+          <FilterTitle
+            title="Lieferung"
+            table="lieferung"
+            totalCount={totalCount}
+            filteredCount={filteredCount}
+          />
+        ) : (
+          <div className={artStyles.titleContainer}>
+            <div className={artStyles.title}>Lieferungen</div>
+            <div className={artStyles.titleSymbols}>
+              <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <UpSvg />
+              </IconButton>
+              <IconButton
+                aria-label="neue Lieferung"
+                title="neue Lieferung"
+                onClick={add}
+                size="large"
+              >
+                <FaPlus />
+              </IconButton>
+              <FilterNumbers
+                filteredCount={filteredCount}
+                totalCount={totalCount}
+              />
+            </div>
+          </div>
+        )}
+        <div className={artStyles.fieldsContainer}>
+          <List
+            rowComponent={Row}
+            rowCount={lieferungs.length}
+            rowHeight={constants.singleRowHeight}
+            rowProps={{ rows: lieferungs }}
+          />
+        </div>
+      </div>
+    </ErrorBoundary>
+  )
+}

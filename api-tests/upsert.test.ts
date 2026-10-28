@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-import { assertBackendAvailable, getTestPerson, mintToken, pgrst, psql } from './helpers.js'
+import { assertBackendAvailable, getTestPerson, mintToken, pgrst, psql } from './helpers.ts'
 
 // The write path:
 // 1. http upsert semantics (Prefer: resolution=merge-duplicates) - this is

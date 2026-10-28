@@ -16,28 +16,28 @@ import {
 import { DateTime } from 'luxon'
 import { first as first$ } from 'rxjs/operators'
 
-import { personLabelFromPerson } from './utils/personLabelFromPerson.js'
-import { gartenLabelFromGarten } from './utils/gartenLabelFromGarten.js'
-import { eventLabelFromEvent } from './utils/eventLabelFromEvent.js'
-import { bedarfLabelFromBedarf } from './utils/bedarfLabelFromBedarf.js'
-import { artLabelFromAeArt } from './utils/artLabelFromAeArt.js'
-import { lieferungLabelFromLieferung } from './utils/lieferungLabelFromLieferung.js'
-import { teilkulturLabelFromTeilkultur } from './utils/teilkulturLabelFromTeilkultur.js'
-import { kulturLabelFromKultur } from './utils/kulturLabelFromKultur.js'
-import { kulturLabelFromKulturUnderArt } from './utils/kulturLabelFromKulturUnderArt.js'
-import { kulturLabelFromKulturUnderGarten } from './utils/kulturLabelFromKulturUnderGarten.js'
-import { sammlungLabelFromSammlung } from './utils/sammlungLabelFromSammlung.js'
-import { sammlungLabelFromSammlungUnderHerkunft } from './utils/sammlungLabelFromSammlungUnderHerkunft.js'
-import { zaehlungLabelFromZaehlung } from './utils/zaehlungLabelFromZaehlung.js'
-import { deleteAccount } from './utils/deleteAccount.js'
-import { registerDirtyRev } from './modules/revAggregation.js'
+import { personLabelFromPerson } from './utils/personLabelFromPerson.ts'
+import { gartenLabelFromGarten } from './utils/gartenLabelFromGarten.ts'
+import { eventLabelFromEvent } from './utils/eventLabelFromEvent.ts'
+import { bedarfLabelFromBedarf } from './utils/bedarfLabelFromBedarf.ts'
+import { artLabelFromAeArt } from './utils/artLabelFromAeArt.ts'
+import { lieferungLabelFromLieferung } from './utils/lieferungLabelFromLieferung.ts'
+import { teilkulturLabelFromTeilkultur } from './utils/teilkulturLabelFromTeilkultur.ts'
+import { kulturLabelFromKultur } from './utils/kulturLabelFromKultur.ts'
+import { kulturLabelFromKulturUnderArt } from './utils/kulturLabelFromKulturUnderArt.ts'
+import { kulturLabelFromKulturUnderGarten } from './utils/kulturLabelFromKulturUnderGarten.ts'
+import { sammlungLabelFromSammlung } from './utils/sammlungLabelFromSammlung.ts'
+import { sammlungLabelFromSammlungUnderHerkunft } from './utils/sammlungLabelFromSammlungUnderHerkunft.ts'
+import { zaehlungLabelFromZaehlung } from './utils/zaehlungLabelFromZaehlung.ts'
+import { deleteAccount } from './utils/deleteAccount.ts'
+import { registerDirtyRev } from './modules/revAggregation.ts'
 import {
   store,
   userAtom,
   apiClientAtom,
   addNotification,
   unsetError,
-} from './store/index.js'
+} from './store/index.ts'
 
 const dontSanitize = (val) => val
 /*const sanitizeArrayOfStrings = (val) =>
