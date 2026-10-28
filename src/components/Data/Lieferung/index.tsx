@@ -21,7 +21,7 @@ export const LieferungContainer = ({
   id: idPassed,
 }: {
   filter?: boolean
-  id: string | undefined
+  id?: string | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)

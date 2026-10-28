@@ -37,7 +37,7 @@ export const ZaehlungForm = ({
   showHistory,
 }: {
   showFilter: boolean
-  id: string | undefined
+  id?: string | undefined
   row: import('../../../../dbModel.ts').Zaehlung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null

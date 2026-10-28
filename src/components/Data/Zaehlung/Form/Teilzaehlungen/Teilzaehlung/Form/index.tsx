@@ -38,7 +38,7 @@ export const TeilzaehlungForm = ({
   showHistory,
   setShowHistory,
 }: {
-  id: string | undefined
+  id?: string | undefined
   kulturId: string | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void

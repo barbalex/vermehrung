@@ -29,7 +29,7 @@ export const Kultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }: {
   filter?: boolean
-  id: string | undefined
+  id?: string | undefined
 }) => {
   const kulturFilter = useAtomValue(filterKulturAtom)
   const filterShow = useAtomValue(filterShowAtom)

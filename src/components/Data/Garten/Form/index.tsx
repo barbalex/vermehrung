@@ -40,7 +40,7 @@ export const GartenForm = ({
   showHistory,
 }: {
   showFilter: boolean
-  id: string | undefined
+  id?: string | undefined
   row: import('../../../../dbModel.ts').Garten | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null

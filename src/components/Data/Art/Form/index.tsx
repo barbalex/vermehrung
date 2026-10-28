@@ -37,7 +37,7 @@ export const ArtForm = ({
   showHistory,
 }: {
   activeConflict: string | null
-  id: string | undefined
+  id?: string | undefined
   row: import('../../../../dbModel.ts').Art | null | undefined
   setActiveConflict: (val: unknown) => void
   showFilter: boolean

@@ -32,7 +32,7 @@ export const SammelLieferung = ({
   lieferung,
 }: {
   filter?: boolean
-  id: string | undefined
+  id?: string | undefined
   lieferung: import('../../shared/types.ts').WmRow | null | undefined
 }) => {
   const isPrint = useAtomValue(isPrintAtom)

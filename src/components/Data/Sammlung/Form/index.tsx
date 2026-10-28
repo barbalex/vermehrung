@@ -50,7 +50,7 @@ export const SammlungForm = ({
   showHistory,
 }: {
   showFilter: boolean
-  id: string | undefined
+  id?: string | undefined
   row: import('../../../../dbModel.ts').Sammlung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null

@@ -49,7 +49,7 @@ export const KulturForm = ({
   showHistory,
 }: {
   showFilter: boolean
-  id: string | undefined
+  id?: string | undefined
   row: import('../../../../dbModel.ts').Kultur | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null

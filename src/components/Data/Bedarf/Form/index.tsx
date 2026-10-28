@@ -38,7 +38,7 @@ export const BedarfForm = ({
   showHistory,
 }: {
   showFilter: boolean
-  id: string | undefined
+  id?: string | undefined
   row: import('../../../../dbModel.ts').Bedarf | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null

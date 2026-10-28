@@ -35,7 +35,7 @@ export const PersonForm = ({
   showHistory,
 }: {
   showFilter: boolean
-  id: string | undefined
+  id?: string | undefined
   row: import('../../../../dbModel.ts').Person | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void

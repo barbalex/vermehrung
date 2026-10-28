@@ -47,7 +47,7 @@ export const EventForm = ({
   showHistory,
 }: {
   showFilter: boolean
-  id: string | undefined
+  id?: string | undefined
   row: import('../../../../dbModel.ts').Event | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null

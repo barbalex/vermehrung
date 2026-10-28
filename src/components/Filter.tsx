@@ -74,7 +74,7 @@ export const Filter = () => {
     herkunft: <Herkunft filter />,
     garten: <Garten filter />,
     kultur: <Kultur filter />,
-    lieferung: <Lieferung filter />,
+    lieferung: <Lieferung filter lieferung={undefined} />,
     sammel_lieferung: <SammelLieferung filter />,
     person: <Person filter />,
     sammlung: <Sammlung filter />,

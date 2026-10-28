@@ -35,7 +35,7 @@ export const TeilkulturForm = ({
   showHistory,
 }: {
   showFilter: boolean
-  id: string | undefined
+  id?: string | undefined
   row: import('../../../../dbModel.ts').Teilkultur | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void

@@ -28,7 +28,7 @@ export const SammelLieferungNach = ({
 }: {
   showFilter: boolean
   row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
-  ifNeeded: boolean
+  ifNeeded: (field: string) => boolean
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
   herkunft: import('../../../shared/types.ts').WmRow | null | undefined
 }) => {
@@ -76,20 +76,22 @@ export const SammelLieferungNach = ({
       kultursObservable,
       sammlungsObservable,
     ])
-    const subscription = combinedObservables.subscribe(async ([kulturs]) => {
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [import('../../../../dbModel.ts').Kultur[]]
+      >).subscribe(async ([kulturs]) => {
       const kultursFiltered = kulturs
         // show only kulturen of art_id
-        .filter((k: import('../../../../dbModel.ts').Kultur) => {
+        .filter((k) => {
           if (row?.art_id) return k.art_id === row.art_id
           return true
         })
         // show only kulturen with same herkunft
-        .filter((k: import('../../../../dbModel.ts').Kultur) => {
+        .filter((k) => {
           if (herkunft?.id) return k.herkunft_id === herkunft.id
           return true
         })
         // shall not be delivered to same kultur it came from
-        .filter((k: import('../../../../dbModel.ts').Kultur) => {
+        .filter((k) => {
           if (
             row?.von_kultur_id &&
             row?.von_kultur_id !== row?.nach_kultur_id
@@ -107,7 +109,7 @@ export const SammelLieferungNach = ({
         (e) => e.id,
       )
       const kultursSorted = await kultursSortedFromKulturs(
-        kultursIncludingChoosen,
+        kultursIncludingChoosen as unknown as import('../../../../dbModel.ts').Kultur[],
       )
       const nachKulturWerte = await Promise.all(
         kultursSorted.map(async (el) => {

@@ -30,7 +30,7 @@ export const SammelLieferungVon = ({
 }: {
   showFilter: boolean
   row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
-  ifNeeded: boolean
+  ifNeeded: (field: string) => boolean
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
   herkunft: import('../../../shared/types.ts').WmRow | null | undefined
   herkunftQuelle: Record<string, unknown> | null | undefined
@@ -78,25 +78,31 @@ export const SammelLieferungVon = ({
     ])
     const subscription = combinedObservables.subscribe(
       async ([kulturs, sammlungs]: [
-          import('../../../../dbModel.ts').Sammlung[],
+          import('../../../../dbModel.ts').Kultur[],
           import('../../../../dbModel.ts').Sammlung[],
         ]) => {
         const herkunftLabel =
-          herkunftLabelFromHerkunft({ herkunft }) ??
-          '(verfügbar, wenn Sammlung oder Kultur gewählt)'
+          herkunftLabelFromHerkunft({
+            herkunft: herkunft as unknown as {
+              id?: string | null
+              nr?: string | null
+              lokalname?: string | null
+              gemeinde?: string | null
+            },
+          }) ?? '(verfügbar, wenn Sammlung oder Kultur gewählt)'
         const kultursFiltered = kulturs
           // show only kulturen of art_id
-          .filter((k: import('../../../../dbModel.ts').Kultur) => {
+          .filter((k) => {
             if (row?.art_id) return k.art_id === row.art_id
             return true
           })
           // show only kulturen with same herkunft
-          .filter((k: import('../../../../dbModel.ts').Kultur) => {
+          .filter((k) => {
             if (herkunft) return k?.herkunft_id === herkunft.id
             return true
           })
           // shall not be delivered to same kultur it came from
-          .filter((k: import('../../../../dbModel.ts').Kultur) => {
+          .filter((k) => {
             if (
               row?.nach_kultur_id &&
               row?.von_kultur_id !== row?.nach_kultur_id
@@ -134,7 +140,7 @@ export const SammelLieferungVon = ({
         let sammlung
         try {
           sammlung = await db
-            ?.get('sammlung')
+            ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
             .find(row?.von_sammlung_id as string)
         } catch {}
         const sammlungsIncludingChoosen = uniqBy(
