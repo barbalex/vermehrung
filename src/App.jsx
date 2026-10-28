@@ -5,6 +5,7 @@ import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
 import { darkTheme, lightTheme } from './utils/materialTheme.js'
 import { initiateApp } from './utils/initiateApp.js'
+import { initRevAggregation } from './modules/revAggregation.js'
 import { initiateDb } from './utils/initiateDb.js'
 import { apiClientAtom, dbAtom, setDb, themeModeAtom } from './store/index.js'
 import { Router } from './Router.jsx'
@@ -68,6 +69,9 @@ export const App = () => {
         unregister = unregisterReturned
         const db = initiateDb()
         setDb(db)
+        // flush revisions that never made it into one (crash, closed
+        // tab) before the sync starts pulling server state
+        initRevAggregation()
         setInitiated(true)
         // console.log('App, effect after initating app', { db })
       })

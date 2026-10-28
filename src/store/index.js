@@ -544,9 +544,11 @@ export const setDb = (val) => store.set(dbAtom, val)
 export const updateModelValue = async ({ table, id, field, value }) => {
   const db = store.get(dbAtom)
   // find model = row
+  // (find returns a promise - .fetch() on it always threw, which made
+  // the queue's revert path a silent no-op until now)
   let row
   try {
-    row = db.get(table).find(id).fetch()
+    row = await db.get(table).find(id)
   } catch {}
   if (row) {
     await db.write(async () => {
@@ -559,18 +561,20 @@ export const updateModelValue = async ({ table, id, field, value }) => {
 
 export const updateModelValues = async ({ table, id, values }) => {
   const db = store.get(dbAtom)
-  // find model = row
+  // find model = row (find returns a promise)
   let row
   try {
-    row = db.get(table).find(id).fetch()
+    row = await db.get(table).find(id)
   } catch {}
-  await db.write(async () => {
-    await row.update((row) => {
-      Object.entries(values).forEach(([key, value]) => {
-        row[key] = value
+  if (row) {
+    await db.write(async () => {
+      await row.update((row) => {
+        Object.entries(values).forEach(([key, value]) => {
+          row[key] = value
+        })
       })
     })
-  })
+  }
 }
 
 // === derived from activeNodeArray ===

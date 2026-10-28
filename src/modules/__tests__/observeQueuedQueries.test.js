@@ -21,7 +21,7 @@ import { observeQueuedQueries } from '../observeQueuedQueries.js'
 
 // minimal WatermelonDB stand-in: finds no rows, so reverts are no-ops
 const dbMock = {
-  get: () => ({ find: () => ({ fetch: () => null }) }),
+  get: () => ({ find: () => Promise.resolve(null) }),
   write: async (fn) => fn(),
 }
 

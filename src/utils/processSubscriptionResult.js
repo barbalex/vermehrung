@@ -9,6 +9,7 @@ import {
   setInitiallyQuerying,
 } from '../store/index.js'
 import { parseComplexFieldsForWm } from './parseComplexFieldsForWm.js'
+import { isUnflushedRev } from '../modules/revAggregation.js'
 
 const stripTypename = (object) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -54,6 +55,10 @@ export const processSubscriptionResult = async ({
   )
   // only if remote changed after local
   const objectsToUpdate = objectsOfToUpdate.filter((o) => {
+    // never overwrite rows with unflushed local edits: their revision
+    // has not reached the server yet, so the sync data is stale for
+    // them. the flush + the following sync reconcile the row
+    if (isUnflushedRev(table, o.id)) return false
     const dat = stripTypename(dataToCheck.find((d) => d.id === o.id))
     return !Object.entries(dat).every(([key, value]) => isEqual(value, o[key]))
   })

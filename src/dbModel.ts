@@ -14,12 +14,9 @@ import {
   distinctUntilKeyChanged,
   map as map$,
 } from 'rxjs/operators'
-import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 import { DateTime } from 'luxon'
 import { first as first$ } from 'rxjs/operators'
 
-import { toStringIfPossible } from './utils/toStringIfPossible.js'
 import { personLabelFromPerson } from './utils/personLabelFromPerson.js'
 import { gartenLabelFromGarten } from './utils/gartenLabelFromGarten.js'
 import { eventLabelFromEvent } from './utils/eventLabelFromEvent.js'
@@ -33,14 +30,13 @@ import { kulturLabelFromKulturUnderGarten } from './utils/kulturLabelFromKulturU
 import { sammlungLabelFromSammlung } from './utils/sammlungLabelFromSammlung.js'
 import { sammlungLabelFromSammlungUnderHerkunft } from './utils/sammlungLabelFromSammlungUnderHerkunft.js'
 import { zaehlungLabelFromZaehlung } from './utils/zaehlungLabelFromZaehlung.js'
-import { toPgArray } from './utils/toPgArray.js'
 import { deleteAccount } from './utils/deleteAccount.js'
+import { registerDirtyRev } from './modules/revAggregation.js'
 import {
   store,
   userAtom,
   apiClientAtom,
   dbAtom,
-  addQueuedQuery,
   addNotification,
   unsetError,
 } from './store/index.js'
@@ -88,65 +84,23 @@ export class Herkunft extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`herkunft.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      herkunft_id: this.id,
-      nr: field === 'nr' ? toStringIfPossible(value) : this.nr,
-      lokalname:
-        field === 'lokalname' ? toStringIfPossible(value) : this.lokalname,
-      gemeinde:
-        field === 'gemeinde' ? toStringIfPossible(value) : this.gemeinde,
-      kanton: field === 'kanton' ? toStringIfPossible(value) : this.kanton,
-      land: field === 'land' ? toStringIfPossible(value) : this.land,
-      geom_point: field === 'geom_point' ? value : this.geom_point,
-      bemerkungen:
-        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_herkunft_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'herkunft_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'herkunft',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`herkunft.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('herkunft', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -257,73 +211,23 @@ export class Sammlung extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`sammlung.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      sammlung_id: this.id,
-      art_id: field === 'art_id' ? value : this.art_id,
-      person_id: field === 'person_id' ? value : this.person_id,
-      herkunft_id: field === 'herkunft_id' ? value : this.herkunft_id,
-      nr: field === 'nr' ? toStringIfPossible(value) : this.nr,
-      geom_point: field === 'geom_point' ? value : this.geom_point,
-      datum: field === 'datum' ? value : this.datum,
-      von_anzahl_individuen:
-        field === 'von_anzahl_individuen' ? value : this.von_anzahl_individuen,
-      anzahl_pflanzen:
-        field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
-      gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
-      andere_menge:
-        field === 'andere_menge'
-          ? toStringIfPossible(value)
-          : this.andere_menge,
-      geplant: field === 'geplant' ? value : this.geplant,
-      bemerkungen:
-        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_sammlung_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'sammlung',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`sammlung.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('sammlung', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
 
@@ -419,100 +323,24 @@ export class Lieferung extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
+    }
     unsetError(`lieferung.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      lieferung_id: this.id,
-      sammel_lieferung_id:
-        field === 'sammel_lieferung_id' ? value : this.sammel_lieferung_id,
-      art_id: field === 'art_id' ? value : this.art_id,
-      person_id: field === 'person_id' ? value : this.person_id,
-      von_sammlung_id:
-        field === 'von_sammlung_id' ? value : this.von_sammlung_id,
-      von_kultur_id: field === 'von_kultur_id' ? value : this.von_kultur_id,
-      datum: field === 'datum' ? value : this.datum,
-      nach_kultur_id: field === 'nach_kultur_id' ? value : this.nach_kultur_id,
-      nach_ausgepflanzt:
-        field === 'nach_ausgepflanzt' ? value : this.nach_ausgepflanzt,
-      von_anzahl_individuen:
-        field === 'von_anzahl_individuen' ? value : this.von_anzahl_individuen,
-      anzahl_pflanzen:
-        field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
-      anzahl_auspflanzbereit:
-        field === 'anzahl_auspflanzbereit'
-          ? value
-          : this.anzahl_auspflanzbereit,
-      gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
-      andere_menge:
-        field === 'andere_menge'
-          ? toStringIfPossible(value)
-          : this.andere_menge,
-      geplant: field === 'geplant' ? value : this.geplant,
-      bemerkungen:
-        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
-    }
-    // catch some edge cases,
-    // ensure data makes sense
-    // and enable updates to use a single mutation
-    if (field === 'nach_kultur_id' && newObject.nach_ausgepflanzt === true) {
-      newObject.nach_ausgepflanzt = false
-    }
-    if (field === 'nach_ausgepflanzt' && newObject.nach_kultur_id) {
-      newObject.nach_kultur_id = null
-    }
-    if (field === 'von_kultur_id' && newObject.von_sammlung_id) {
-      newObject.von_sammlung_id = null
-    }
-    if (field === 'von_sammlung_id' && newObject.von_kultur_id) {
-      newObject.von_kultur_id = null
-    }
-    // revision
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_lieferung_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'lieferung_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'lieferung',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('lieferung', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
-    return
   }
 
   @writer async delete() {
@@ -568,97 +396,23 @@ export class Art extends Model {
     })
   }
   // values is meant to enable updating multiple fields at once
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
   @writer async edit({ field, value, values }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
-
     unsetError(`art.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      art_id: this.id,
-      ae_id: this.ae_id,
-      set: this.set,
-      apflora_av: this.apflora_av,
-      apflora_ap: this.apflora_ap,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: this._deleted,
-    }
-    if (field) {
-      newObject[field] = value
-    }
-    if (values) {
-      Object.entries(values).forEach(([key, value]) => {
-        newObject[key] = value
-      })
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    const queuedQuery = {
-      name: 'mutateInsert_art_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'art_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'art',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    }
-    if (field) {
-      queuedQuery.revertField = field
-      queuedQuery.revertValue = this[field]
-      queuedQuery.newValue = value
-    }
-    if (values) {
-      queuedQuery.revertValues = JSON.stringify(newObject)
-    }
-    addQueuedQuery({
-      name: 'mutateInsert_art_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'art_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'art',
-      revertId: this.id,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('art', this.id, field, this)
     // optimistically update store
-
     await this.update((row) => {
-      if (field) row[field] = value
-      if (values) {
-        Object.entries(values).forEach(([key, value]) => {
-          row[key] = value
-        })
-      }
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
 
@@ -752,64 +506,23 @@ export class Garten extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`garten.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      garten_id: this.id,
-      name: field === 'name' ? toStringIfPossible(value) : this.name,
-      person_id: field === 'person_id' ? value : this.person_id,
-      strasse: field === 'strasse' ? toStringIfPossible(value) : this.strasse,
-      plz: field === 'plz' ? value : this.plz,
-      ort: field === 'ort' ? toStringIfPossible(value) : this.ort,
-      geom_point: field === 'geom_point' ? value : this.geom_point,
-      aktiv: field === 'aktiv' ? value : this.aktiv,
-      bemerkungen:
-        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_garten_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'garten_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'garten',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`garten.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('garten', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -961,66 +674,23 @@ export class Kultur extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`kultur.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      kultur_id: this.id,
-      art_id: field === 'art_id' ? value : this.art_id,
-      herkunft_id: field === 'herkunft_id' ? value : this.herkunft_id,
-      garten_id: field === 'garten_id' ? value : this.garten_id,
-      zwischenlager: field === 'zwischenlager' ? value : this.zwischenlager,
-      erhaltungskultur:
-        field === 'erhaltungskultur' ? value : this.erhaltungskultur,
-      von_anzahl_individuen:
-        field === 'von_anzahl_individuen' ? value : this.von_anzahl_individuen,
-      bemerkungen:
-        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
-      aktiv: field === 'aktiv' ? value : this.aktiv,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_kultur_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'kultur_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'kultur',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`kultur.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('kultur', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -1061,62 +731,23 @@ export class Teilkultur extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`teilkultur.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      teilkultur_id: this.id,
-      kultur_id: field === 'kultur_id' ? value : this.kultur_id,
-      name: field === 'name' ? toStringIfPossible(value) : this.name,
-      ort1: field === 'ort1' ? toStringIfPossible(value) : this.ort1,
-      ort2: field === 'ort2' ? toStringIfPossible(value) : this.ort2,
-      ort3: field === 'ort3' ? toStringIfPossible(value) : this.ort3,
-      bemerkungen:
-        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_teilkultur_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'teilkultur_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'teilkultur',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`teilkultur.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('teilkultur', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -1203,60 +834,23 @@ export class Zaehlung extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`zaehlung.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      zaehlung_id: this.id,
-      kultur_id: field === 'kultur_id' ? value : this.kultur_id,
-      datum: field === 'datum' ? value : this.datum,
-      prognose: field === 'prognose' ? value : this.prognose,
-      bemerkungen:
-        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_zaehlung_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'zaehlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'zaehlung',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`zaehlung.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('zaehlung', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -1297,80 +891,24 @@ export class Teilzaehlung extends Model {
     map$((teilkultur) => teilkulturLabelFromTeilkultur({ teilkultur })),
   )
 
-  @writer
-  async edit({ field, value }) {
-    unsetError(`teilzaehlung.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      teilzaehlung_id: this.id,
-      zaehlung_id: field === 'zaehlung_id' ? value : this.zaehlung_id,
-      teilkultur_id: field === 'teilkultur_id' ? value : this.teilkultur_id,
-      anzahl_pflanzen:
-        field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
-      anzahl_auspflanzbereit:
-        field === 'anzahl_auspflanzbereit'
-          ? value
-          : this.anzahl_auspflanzbereit,
-      anzahl_mutterpflanzen:
-        field === 'anzahl_mutterpflanzen' ? value : this.anzahl_mutterpflanzen,
-      andere_menge:
-        field === 'andere_menge'
-          ? toStringIfPossible(value)
-          : this.andere_menge,
-      auspflanzbereit_beschreibung:
-        field === 'auspflanzbereit_beschreibung'
-          ? toStringIfPossible(value)
-          : this.auspflanzbereit_beschreibung,
-      bemerkungen:
-        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
-      prognose_von_tz:
-        field === 'prognose_von_tz' ? value : this.prognose_von_tz,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_teilzaehlung_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'teilzaehlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'teilzaehlung',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`teilzaehlung.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('teilzaehlung', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
-    return
   }
   @writer async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
@@ -1454,87 +992,23 @@ export class Person extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`person.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      person_id: this.id,
-      nr: field === 'nr' ? toStringIfPossible(value) : this.nr,
-      vorname: field === 'vorname' ? toStringIfPossible(value) : this.vorname,
-      name: field === 'name' ? toStringIfPossible(value) : this.name,
-      adresszusatz:
-        field === 'adresszusatz'
-          ? toStringIfPossible(value)
-          : this.adresszusatz,
-      strasse: field === 'strasse' ? toStringIfPossible(value) : this.strasse,
-      plz: field === 'plz' ? value : this.plz,
-      ort: field === 'ort' ? toStringIfPossible(value) : this.ort,
-      telefon_privat:
-        field === 'telefon_privat'
-          ? toStringIfPossible(value)
-          : this.telefon_privat,
-      telefon_geschaeft:
-        field === 'telefon_geschaeft'
-          ? toStringIfPossible(value)
-          : this.telefon_geschaeft,
-      telefon_mobile:
-        field === 'telefon_mobile'
-          ? toStringIfPossible(value)
-          : this.telefon_mobile,
-      email: field === 'email' ? toStringIfPossible(value) : this.email,
-      kein_email: field === 'kein_email' ? value : this.kein_email,
-      bemerkungen:
-        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
-      account_id:
-        field === 'account_id' ? toStringIfPossible(value) : this.account_id,
-      user_role_id: field === 'user_role_id' ? value : this.user_role_id,
-      kommerziell: field === 'kommerziell' ? value : this.kommerziell,
-      info: field === 'info' ? value : this.info,
-      aktiv: field === 'aktiv' ? value : this.aktiv,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_person_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'person_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'person',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`person.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('person', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
 
@@ -1624,107 +1098,24 @@ export class SammelLieferung extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    const user = store.get(userAtom)
-    const db = store.get(dbAtom)
-    let userPersonOption
-    try {
-      const userPersonOptions = await db
-        .get('person_option')
-        .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
-        .fetch()
-      if (userPersonOptions?.[0]) userPersonOption = userPersonOptions[0]
-    } catch {}
-
-    unsetError(`sammel_lieferung.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      sammel_lieferung_id: this.id,
-      art_id: field === 'art_id' ? value : this.art_id,
-      person_id: field === 'person_id' ? value : this.person_id,
-      von_sammlung_id:
-        field === 'von_sammlung_id' ? value : this.von_sammlung_id,
-      von_kultur_id: field === 'von_kultur_id' ? value : this.von_kultur_id,
-      datum: field === 'datum' ? value : this.datum,
-      nach_kultur_id: field === 'nach_kultur_id' ? value : this.nach_kultur_id,
-      nach_ausgepflanzt:
-        field === 'nach_ausgepflanzt' ? value : this.nach_ausgepflanzt,
-      von_anzahl_individuen:
-        field === 'von_anzahl_individuen' ? value : this.von_anzahl_individuen,
-      anzahl_pflanzen:
-        field === 'anzahl_pflanzen' ? value : this.anzahl_pflanzen,
-      anzahl_auspflanzbereit:
-        field === 'anzahl_auspflanzbereit'
-          ? value
-          : this.anzahl_auspflanzbereit,
-      gramm_samen: field === 'gramm_samen' ? value : this.gramm_samen,
-      andere_menge:
-        field === 'andere_menge'
-          ? toStringIfPossible(value)
-          : this.andere_menge,
-      geplant: field === 'geplant' ? value : this.geplant,
-      bemerkungen:
-        field === 'bemerkungen' ? toStringIfPossible(value) : this.bemerkungen,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_sammel_lieferung_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammel_lieferung_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'sammel_lieferung',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`sammel_lieferung.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('sammel_lieferung', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
-    const sl_auto_copy_edits = userPersonOption?.sl_auto_copy_edits
-    setTimeout(() => {
-      // copy to all lieferungen
-      if (sl_auto_copy_edits) {
-        const newSammelLieferung = {
-          ...newObject,
-          id: newObject.sammel_lieferung_id,
-        }
-        delete newSammelLieferung.sammel_lieferung_id
-        updateAllSammelLieferungen({
-          sammelLieferung: newSammelLieferung,
-          field,
-        })
-      }
-    }, 50)
   }
 
   @writer async delete() {
@@ -1774,70 +1165,23 @@ export class Bedarf extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`bedarf.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      bedarf_id: this.id,
-      kultur_id: field === 'kultur_id' ? value : this.kultur_id,
-      person_id: field === 'person_id' ? value : this.person_id,
-      jahr: field === 'jahr' ? value : this.jahr,
-      beschreibung:
-        field === 'beschreibung'
-          ? toStringIfPossible(value)
-          : this.beschreibung,
-      bemerkungen:
-        field === 'bemerkungen'
-          ? toStringIfPossible(value)
-          : this.bemerkungen,
-      neues_material:
-        field === 'neues_material'
-          ? toStringIfPossible(value)
-          : this.neues_material,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_bedarf_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'bedarf_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'bedarf',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`bedarf.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('bedarf', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -1890,64 +1234,23 @@ export class Event extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`event.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      event_id: this.id,
-      kultur_id: field === 'kultur_id' ? value : this.kultur_id,
-      teilkultur_id: field === 'teilkultur_id' ? value : this.teilkultur_id,
-      person_id: field === 'person_id' ? value : this.person_id,
-      beschreibung:
-        field === 'beschreibung'
-          ? toStringIfPossible(value)
-          : this.beschreibung,
-      geplant: field === 'geplant' ? value : this.geplant,
-      datum: field === 'datum' ? value : this.datum,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_event_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'event_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'event',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`event.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('event', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -1999,57 +1302,23 @@ export class Av extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`av.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      av_id: this.id,
-      art_id: field === 'art_id' ? value : this.art_id,
-      person_id: field === 'person_id' ? value : this.person_id,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_av_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'av_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'av',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`av.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('av', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -2104,57 +1373,23 @@ export class Gv extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`gv.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      gv_id: this.id,
-      garten_id: field === 'garten_id' ? value : this.garten_id,
-      person_id: field === 'person_id' ? value : this.person_id,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_gv_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'gv_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'gv',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`gv.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('gv', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -2660,62 +1895,23 @@ export class ArtQk extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`art_qk.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      art_qk_id: this.id,
-      name: field === 'name' ? toStringIfPossible(value) : this.name,
-      titel: field === 'titel' ? toStringIfPossible(value) : this.titel,
-      beschreibung:
-        field === 'beschreibung'
-          ? toStringIfPossible(value)
-          : this.beschreibung,
-      sort: field === 'sort' ? value : this.sort,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_art_qk_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'art_qk_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'art_qk',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`art_qk.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('art_qk', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -2757,72 +1953,23 @@ export class KulturOption extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`kultur_option.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      kultur_id: this.id,
-      z_bemerkungen: field === 'z_bemerkungen' ? value : this.z_bemerkungen,
-      tz_teilkultur_id:
-        field === 'tz_teilkultur_id' ? value : this.tz_teilkultur_id,
-      tz_andere_menge:
-        field === 'tz_andere_menge' ? value : this.tz_andere_menge,
-      tz_auspflanzbereit_beschreibung:
-        field === 'tz_auspflanzbereit_beschreibung'
-          ? value
-          : this.tz_auspflanzbereit_beschreibung,
-      tz_bemerkungen: field === 'tz_bemerkungen' ? value : this.tz_bemerkungen,
-      tk: field === 'tk' ? value : this.tk,
-      tk_bemerkungen: field === 'tk_bemerkungen' ? value : this.tk_bemerkungen,
-      ev_teilkultur_id:
-        field === 'ev_teilkultur_id' ? value : this.ev_teilkultur_id,
-      ev_geplant: field === 'ev_geplant' ? value : this.ev_geplant,
-      ev_person_id: field === 'ev_person_id' ? value : this.ev_person_id,
-      ev_datum: field === 'ev_datum' ? value : this.ev_datum,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_kultur_option_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'kultur_option_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'kultur_option',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // create optimistic winner for store
-    // do not stringify revisions as _this_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
-    // optimistically update
+    unsetError(`kultur_option.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('kultur_option', this.id, field, this)
+    // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -2852,62 +1999,23 @@ export class KulturQk extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`kultur_qk.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      kultur_qk_id: this.id,
-      name: field === 'name' ? toStringIfPossible(value) : this.name,
-      titel: field === 'titel' ? toStringIfPossible(value) : this.titel,
-      beschreibung:
-        field === 'beschreibung'
-          ? toStringIfPossible(value)
-          : this.beschreibung,
-      sort: field === 'sort' ? value : this.sort,
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_kultur_qk_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'kultur_qk_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'kultur_qk',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`kultur_qk.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('kultur_qk', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
@@ -2963,95 +2071,23 @@ export class PersonOption extends Model {
       row._conflicts = this._conflicts.filter((r) => r !== _rev)
     })
   }
-  @writer async edit({ field, value }) {
-    unsetError(`person_option.${field}`)
-    // first build the part that will be revisioned
-    const newDepth = this._depth + 1
-    const newObject = {
-      person_id: this.id,
-      ar_name_deutsch:
-        field === 'ar_name_deutsch' ? value : this.ar_name_deutsch,
-      ga_strasse: field === 'ga_strasse' ? value : this.ga_strasse,
-      ga_plz: field === 'ga_plz' ? value : this.ga_plz,
-      ga_ort: field === 'ga_ort' ? value : this.ga_ort,
-      ga_geom_point: field === 'ga_geom_point' ? value : this.ga_geom_point,
-      ga_lat_lng: field === 'ga_lat_lng' ? value : this.ga_lat_lng,
-      ga_aktiv: field === 'ga_aktiv' ? value : this.ga_aktiv,
-      ga_bemerkungen: field === 'ga_bemerkungen' ? value : this.ga_bemerkungen,
-      hk_kanton: field === 'hk_kanton' ? value : this.hk_kanton,
-      hk_land: field === 'hk_land' ? value : this.hk_land,
-      hk_bemerkungen: field === 'hk_bemerkungen' ? value : this.hk_bemerkungen,
-      hk_geom_point: field === 'hk_geom_point' ? value : this.hk_geom_point,
-      ku_zwischenlager:
-        field === 'ku_zwischenlager' ? value : this.ku_zwischenlager,
-      ku_erhaltungskultur:
-        field === 'ku_erhaltungskultur' ? value : this.ku_erhaltungskultur,
-      li_show_sl_felder:
-        field === 'li_show_sl_felder' ? value : this.li_show_sl_felder,
-      li_show_sl: field === 'li_show_sl' ? value : this.li_show_sl,
-      sl_show_empty_when_next_to_li:
-        field === 'sl_show_empty_when_next_to_li'
-          ? value
-          : this.sl_show_empty_when_next_to_li,
-      sl_auto_copy_edits:
-        field === 'sl_auto_copy_edits' ? value : this.sl_auto_copy_edits,
-      tree_kultur: field === 'tree_kultur' ? value : this.tree_kultur,
-      tree_teilkultur:
-        field === 'tree_teilkultur' ? value : this.tree_teilkultur,
-      tree_zaehlung: field === 'tree_zaehlung' ? value : this.tree_zaehlung,
-      tree_lieferung: field === 'tree_lieferung' ? value : this.tree_lieferung,
-      tree_event: field === 'tree_event' ? value : this.tree_event,
-      art_qk_choosen:
-        field === 'art_qk_choosen'
-          ? toPgArray(value)
-          : toPgArray(this.art_qk_choosen),
-      kultur_qk_choosen:
-        field === 'kultur_qk_choosen'
-          ? toPgArray(value)
-          : toPgArray(this.kultur_qk_choosen),
-      _parent_rev: this._rev,
-      _depth: newDepth,
-      _deleted: field === '_deleted' ? value : this._deleted,
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  @writer async edit({ field, value, values }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
     }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    // DO NOT include id in rev - or revs with same data will conflict
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    // do not revision the following fields as this leads to unwanted conflicts
-    newObject.changed = new window.Date().toISOString()
-    newObject.changed_by = store.get(userAtom)?.email
-    // convert to string as hasura does not support arrays yet
-    // https://github.com/hasura/graphql-engine/pull/2243
-    newObject._revisions = this._revisions
-      ? toPgArray([rev, ...this._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_person_option_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'person_option_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      revertTable: 'person_option',
-      revertId: this.id,
-      revertField: field,
-      revertValue: this[field],
-      newValue: value,
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    const newRevisions = this._revisions ? [rev, ...this._revisions] : [rev]
+    unsetError(`person_option.${field}`)
+    const changes = values ?? { [field]: value }
+    registerDirtyRev('person_option', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
-      row[field] = value
-      row._depth = newObject._depth
-      row._rev = newObject._rev
-      row._parent_rev = newObject._parent_rev
-      row.changed = newObject.changed
-      row.changed_by = newObject.changed_by
-      row._revisions = newRevisions
+      Object.entries(changes).forEach(([key, val]) => {
+        row[key] = val
+      })
+      row.changed = new Date().toISOString()
+      row.changed_by = store.get(userAtom)?.email
     })
   }
   @writer async delete() {
