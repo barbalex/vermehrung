@@ -34,7 +34,7 @@ export const NavigationSyncController = () => {
     window.onpopstate = () => {
       const urlWithHistory = getActiveNodeArrayFromPathname(pathname)
       const { activeNodeArray } =
-        splitHistoriesFromActiveNodeArray(urlWithHistory)
+        splitHistoriesFromActiveNodeArray(urlWithHistory as string[])
       setLastActiveNodeArray(activeNodeArray)
     }
     // do not need to remove, see: https://stackoverflow.com/a/47997544/712005
@@ -46,7 +46,7 @@ export const NavigationSyncController = () => {
 
     const urlWithHistory = getActiveNodeArrayFromPathname(pathname)
     const { activeNodeArray: activeNodeArrayFromUrl, historyRev } =
-      splitHistoriesFromActiveNodeArray(urlWithHistory)
+      splitHistoriesFromActiveNodeArray(urlWithHistory as string[])
     setHistoryRev(historyRev)
 
     if (!isEqual(activeNodeArrayFromUrl, aNA)) {

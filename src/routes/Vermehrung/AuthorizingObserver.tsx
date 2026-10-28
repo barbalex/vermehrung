@@ -10,7 +10,7 @@ import {
 export const AuthorizingObserver = () => {
   const gettingAuthUser = useAtomValue(gettingAuthUserAtom)
 
-  const authorizingNotificationId = useRef(null)
+  const authorizingNotificationId = useRef<string | undefined>(undefined)
 
   useEffect(() => {
     if (gettingAuthUser && !authorizingNotificationId.current) {

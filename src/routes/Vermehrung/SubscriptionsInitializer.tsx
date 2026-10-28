@@ -27,11 +27,11 @@ export const SubscriptionsInitializer = () => {
       const getUserRole = async () => {
         while (isActive) {
           try {
-            const rows = await store
+            const rows = (await store
               .get(apiClientAtom)
-              .get(
+              ?.get(
                 `/person?account_id=eq.${user.uid}&select=id,user_role(name)`,
-              )
+              )) as { user_role?: { name?: string } }[] | null
             const role = rows?.[0]?.user_role?.name
             if (!role) {
               // no role: retry, the person might just have been created
@@ -42,7 +42,7 @@ export const SubscriptionsInitializer = () => {
             return role
           } catch (error) {
             console.log('error getting user role, retrying:', error)
-            if (error.status === 401) {
+            if ((error as { status?: number }).status === 401) {
               await getAuthToken()
             }
             await new Promise((resolve) => setTimeout(resolve, 5000))
@@ -54,7 +54,8 @@ export const SubscriptionsInitializer = () => {
         if (userRole === 'gaertner') {
           // need to remove some data for gaertner in case they had
           // synced them earlier
-          removeOrtsangaben({ db: store.get(dbAtom) })
+          const db = store.get(dbAtom)
+          if (db) removeOrtsangaben({ db })
         }
         startSyncPoller()
       })

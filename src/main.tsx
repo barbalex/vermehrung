@@ -48,7 +48,7 @@ registerSW({ immediate: true })
 // dev aid: surface uncaught errors that would otherwise only appear
 // in the console (React unmounts the whole tree on uncaught render errors)
 if (import.meta.env.DEV) {
-  const showError = (text) => {
+  const showError = (text: string) => {
     const div = document.createElement('div')
     div.id = 'dev-error-overlay'
     div.style.cssText =
@@ -67,6 +67,7 @@ if (import.meta.env.DEV) {
 }
 
 const container = document.getElementById('root')
+if (!container) throw new Error('root element not found')
 const root = createRoot(container)
 
 root.render(

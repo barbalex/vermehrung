@@ -4,7 +4,14 @@ import ListItemText from '@mui/material/ListItemText'
 import { FaChevronRight, FaChevronDown } from 'react-icons/fa'
 import { isEqual } from 'es-toolkit'
 
-export const Article = ({ node }) => {
+export interface ArticleNode {
+  slug: string
+  title?: string | null
+  level?: number
+  children?: ArticleNode[]
+}
+
+export const Article = ({ node }: { node: ArticleNode }) => {
   const navigate = useNavigate()
   const { slug, title, children } = node
   const activeUrl = `/Dokumentation/${slug}`
@@ -15,7 +22,7 @@ export const Article = ({ node }) => {
   // direct window.location read would never be re-evaluated on navigation
   const { pathname: locationPathname } = useLocation()
   const pathname = locationPathname?.split('/').filter((a) => !!a)
-  const isParent = children?.length > 0
+  const isParent = (children?.length ?? 0) > 0
   const isChild = node?.level === 2
   const pathSplit = activeUrl.split('/').filter((a) => !!a)
   const isParentOpen = pathSplit[1] === pathname[1]

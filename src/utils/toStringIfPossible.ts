@@ -8,6 +8,5 @@ export const toStringIfPossible = (
   if (val === null) return val
   if (val === undefined) return val
   if (typeof val === 'object') return JSON.stringify(val)
-  if ((val as object).toString) return String(val)
-  return val
+  return String(val)
 }

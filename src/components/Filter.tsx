@@ -66,9 +66,9 @@ export const Filter = () => {
       'art'
   const [activeTab, setActiveTab] = useState(activeTabFromActiveForm)
 
-  const onChangeTab = (event, value) => setActiveTab(value)
+  const onChangeTab = (event: unknown, value: string) => setActiveTab(value)
 
-  const formObject = {
+  const formObject: Record<string, import('react').ReactElement> = {
     art: <Art filter />,
     event: <Event filter />,
     herkunft: <Herkunft filter />,
@@ -82,7 +82,7 @@ export const Filter = () => {
     zaehlung: <Zaehlung filter />,
   }
   const form = formObject[activeTab]
-  const titleObject = {
+  const titleObject: Record<string, string> = {
     art: 'Art Filter',
     event: 'Event Filter',
     garten: 'Garten Filter',

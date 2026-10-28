@@ -23,7 +23,7 @@ export const InitialDataLoadingNotifier = () => {
   const existsUser = !!user?.uid
 
   useEffect(() => {
-    let id
+    let id: string | undefined
     if (existsUser && !gettingAuthUser && online && !initialDataQueried) {
       id = addNotification({
         message: `lade Daten für offline-Nutzung (${tableNames(

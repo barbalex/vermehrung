@@ -14,7 +14,7 @@ import { version as appVersion } from '../package.json'
 
 export const App = () => {
   const [initiated, setInitiated] = useState(false)
-  const [initError, setInitError] = useState(null)
+  const [initError, setInitError] = useState<string | null>(null)
   const database = useAtomValue(dbAtom)
   const apiClient = useAtomValue(apiClientAtom)
   const themeMode = useAtomValue(themeModeAtom)
@@ -27,7 +27,8 @@ export const App = () => {
   )
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const onChange = (event) => setSystemPrefersDark(event.matches)
+    const onChange = (event: { matches: boolean }) =>
+      setSystemPrefersDark(event.matches)
     mediaQuery.addEventListener('change', onChange)
     return () => mediaQuery.removeEventListener('change', onChange)
   }, [])
@@ -60,7 +61,7 @@ export const App = () => {
   // but docs?
   useEffect(() => {
     let isActive = true
-    let unregister
+    let unregister: (() => void) | undefined
     // console.log('App initiating')
     initiateApp()
       .then(({ unregister: unregisterReturned }) => {

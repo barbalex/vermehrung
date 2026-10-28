@@ -5,9 +5,11 @@ import MenuItem from '@mui/material/MenuItem'
 import { insertKulturRev } from '../../../modules/insertRev.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
-const KulturAddButton = ({ asMenu }) => {
+const KulturAddButton = ({ asMenu }: { asMenu?: boolean }) => {
   if (asMenu) {
-    return <MenuItem onClick={ainsertKulturRevd}>neue Kultur</MenuItem>
+    return (
+      <MenuItem onClick={() => void insertKulturRev({})}>neue Kultur</MenuItem>
+    )
   }
 
   return (
@@ -15,7 +17,7 @@ const KulturAddButton = ({ asMenu }) => {
       <IconButton
         aria-label="neue Kultur"
         title="neue Kultur"
-        onClick={insertKulturRev}
+        onClick={() => void insertKulturRev({})}
         size="large"
       >
         <FaPlus />

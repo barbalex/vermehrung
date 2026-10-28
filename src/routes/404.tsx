@@ -7,6 +7,8 @@ import image from '../images/puls_vulg_2500.webp'
 import placeholderSrc from '../images/puls_vulg_500.webp' // TODO: build small placeholder
 import { ProgressiveImg } from '../components/shared/ProgressiveImg.tsx'
 
+import styles from './404.module.css'
+
 export const FourOhFour = () => {
   const navigate = useNavigate()
   const onClickBack = () => navigate('/')

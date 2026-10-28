@@ -10,7 +10,7 @@ export const OpenNodesSetter = () => {
   const { pathname } = useLocation()
 
   const { activeNodeArray } = splitHistoriesFromActiveNodeArray(
-    getActiveNodeArrayFromPathname(pathname),
+    getActiveNodeArrayFromPathname(pathname) as string[],
   )
 
   // on first render set openNodes

@@ -45,8 +45,8 @@ export const Vermehrung = () => {
   if (isPrint) {
     treeWidth = 0
   }
-  const minSizeTree = treeWidth < 30 ? treeWidth : 30
-  const minSizeForm = formWidth < 30 ? formWidth : 30
+  const minSizeTree = Number(treeWidth) < 30 ? Number(treeWidth) : 30
+  const minSizeForm = Number(formWidth) < 30 ? Number(formWidth) : 30
 
   // Compute pixel defaultSizes from window.innerWidth to avoid CLS:
   // Allotment normally renders 50/50 first, then shifts to preferredSize after

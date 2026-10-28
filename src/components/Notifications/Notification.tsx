@@ -19,7 +19,17 @@ const colorMap = {
   warning: 'orange',
 }
 
-export const Notification = ({ notification: n }) => {
+export const Notification = ({
+  notification: n,
+}: {
+  notification: import('../../store/index.ts').Notification & {
+    revertTable?: string
+    revertId?: string
+    revertField?: string
+    revertValue?: unknown
+    revertValues?: Record<string, unknown>
+  }
+}) => {
   const {
     title,
     message,
@@ -35,27 +45,29 @@ export const Notification = ({ notification: n }) => {
     type,
   } = n
 
-  const color = colorMap[type] ?? 'error'
+  const color = colorMap[type as keyof typeof colorMap] ?? 'error'
 
   const onClickClose = () => removeNotificationById(n.id)
 
   const onClickAction = () => {
     // formerly: store?.[actionName]?.(actionArgument)
     if (actionName === 'removeQueuedQueryById') {
-      removeQueuedQueryById(actionArgument ?? undefined)
+      if (actionArgument) removeQueuedQueryById(actionArgument)
     }
     if (revertTable && revertId && revertField) {
       updateModelValue({
-        table: revertTable,
-        id: revertId,
-        field: revertField,
+        table: revertTable as import('../../store/index.ts').TableName,
+        id: revertId as string,
+        field: revertField as string,
         value: revertValue,
       })
     } else if (revertTable && revertId && revertValues) {
       updateModelValues({
-        table: revertTable,
-        id: revertId,
-        values: JSON.parse(revertValues),
+        table: revertTable as import('../../store/index.ts').TableName,
+        id: revertId as string,
+        values: (typeof revertValues === 'string'
+          ? JSON.parse(revertValues)
+          : revertValues) as Record<string, unknown>,
       })
     }
     removeNotificationById(n.id)

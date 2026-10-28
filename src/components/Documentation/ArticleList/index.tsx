@@ -8,7 +8,13 @@ import { IntoViewScroller } from './IntoViewScroller.tsx'
 
 import styles from './index.module.css'
 
-export const ArticleList = ({ articles }) => {
+import type { ArticleNode } from './Article.tsx'
+
+export const ArticleList = ({
+  articles,
+}: {
+  articles: ArticleNode[]
+}) => {
   const docFilter = useAtomValue(docFilterAtom)
 
   const articlesFiltered = articles.filter(
@@ -27,7 +33,7 @@ export const ArticleList = ({ articles }) => {
             <div key={node.slug}>
               <Article node={node} />
               {isOpen &&
-                (node.children ?? []).map((child) => (
+                (node.children ?? []).map((child: ArticleNode) => (
                   <Article node={child} key={child.slug} />
                 ))}
             </div>

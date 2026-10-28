@@ -33,14 +33,17 @@ export const Login = () => {
   const [emailErrorText, setEmailErrorText] = useState('')
   const [passwordErrorText, setPasswordErrorText] = useState('')
 
-  const emailInput = useRef(null)
-  const passwordInput = useRef(null)
+  const emailInput = useRef<HTMLInputElement | null>(null)
+  const passwordInput = useRef<HTMLInputElement | null>(null)
 
   // callbacks pass email or password
   // because state is not up to date yet
   const fetchLogin = async ({
     email: emailPassed,
     password: passwordPassed,
+  }: {
+    email?: string
+    password?: string
   }) => {
     const db = store.get(dbAtom)
     const firebaseAuth = store.get(firebaseAuthAtom)
@@ -48,31 +51,29 @@ export const Login = () => {
     // why? password-managers enter values but do not blur/change
     // if password-manager enters values and user clicks "Anmelden"
     // it will not work without previous blurring
-    const emailToUse = emailPassed || email || emailInput.current.value
+    const emailToUse =
+      emailPassed || email || emailInput.current?.value || ''
     const passwordToUse =
-      passwordPassed || password || passwordInput.current.value
+      passwordPassed || password || passwordInput.current?.value || ''
     // do everything to clean up so no data is left
-    await signOut(firebaseAuth)
+    if (firebaseAuth) await signOut(firebaseAuth)
     await localForage.clear()
     window.localStorage.removeItem('token')
     resetSyncState()
-    await db.write(async () => db.unsafeResetDatabase())
+    if (db) await db.write(async () => db.unsafeResetDatabase())
     setTimeout(async () => {
       try {
-        await signInWithEmailAndPassword(
-          firebaseAuth,
-          emailToUse,
-          passwordToUse,
-        )
+        if (!firebaseAuth) return
+        await signInWithEmailAndPassword(firebaseAuth, emailToUse, passwordToUse)
       } catch (error) {
-        setEmailErrorText(error.message)
-        return setPasswordErrorText(error.message)
+        setEmailErrorText((error as Error).message)
+        return setPasswordErrorText((error as Error).message)
       }
       // 2020.12.19 trying to go without reloading
       //setTimeout(() => window.location.reload(true))
     })
   }
-  const onBlurEmail = (e) => {
+  const onBlurEmail = (e: { target: { value: string } }) => {
     setEmailErrorText('')
     const email = e.target.value
     setEmail(email)
@@ -82,7 +83,7 @@ export const Login = () => {
       fetchLogin({ email })
     }
   }
-  const onBlurPassword = (e) => {
+  const onBlurPassword = (e: { target: { value: string } }) => {
     setPasswordErrorText('')
     const password = e.target.value
     setPassword(password)
@@ -92,23 +93,30 @@ export const Login = () => {
       fetchLogin({ password })
     }
   }
-  const onKeyPressEmail = (e) => e.key === 'Enter' && onBlurEmail(e)
-  const onKeyPressPassword = (e) => e.key === 'Enter' && onBlurPassword(e)
+  const onKeyPressEmail = (e: { key: string; target: { value: string } }) =>
+    e.key === 'Enter' && onBlurEmail(e)
+  const onKeyPressPassword = (e: {
+    key: string
+    target: { value: string }
+  }) =>
+    e.key === 'Enter' && onBlurPassword(e)
   const onClickShowPass = () => setShowPass(!showPass)
-  const onMouseDownShowPass = (e) => e.preventDefault()
+  const onMouseDownShowPass = (e: { preventDefault: () => void }) =>
+    e.preventDefault()
 
   const [resetTitle, setResetTitle] = useState('neues Passwort setzen')
   const reset = async () => {
     const firebaseAuth = store.get(firebaseAuthAtom)
     // need to fetch value from ref
     // why? password-managers enter values but do not blur/change
-    const emailToUse = email || emailInput.current.value
+    const emailToUse = email || emailInput.current?.value
     if (!emailToUse) {
       setEmailErrorText('Bitte Email-Adresse eingeben')
       return
     }
     setResetTitle('...')
     try {
+      if (!firebaseAuth) return
       await sendPasswordResetEmail(firebaseAuth, emailToUse, {
         url: `${constants?.getAppUri()}/Vermehrung`,
         handleCodeInApp: true,
@@ -145,7 +153,9 @@ export const Login = () => {
                 defaultValue={email}
                 onBlur={onBlurEmail}
                 autoFocus
-                onKeyPress={onKeyPressEmail}
+                onKeyPress={
+          onKeyPressEmail as unknown as import('react').KeyboardEventHandler
+        }
                 inputRef={emailInput}
               />
               <FormHelperText id="emailHelper">{emailErrorText}</FormHelperText>
@@ -163,7 +173,9 @@ export const Login = () => {
                 type={showPass ? 'text' : 'password'}
                 defaultValue={password}
                 onBlur={onBlurPassword}
-                onKeyPress={onKeyPressPassword}
+                onKeyPress={
+          onKeyPressPassword as unknown as import('react').KeyboardEventHandler
+        }
                 autoComplete="current-password"
                 autoCorrect="off"
                 spellCheck="false"
@@ -194,7 +206,7 @@ export const Login = () => {
             >
               {resetTitle}
             </Button>
-            <Button color="primary" onClick={fetchLogin}>
+            <Button color="primary" onClick={() => void fetchLogin({})}>
               anmelden
             </Button>
           </DialogActions>

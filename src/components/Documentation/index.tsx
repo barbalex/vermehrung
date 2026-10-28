@@ -73,7 +73,7 @@ export const Documentation = () => {
   return (
     <ErrorBoundary>
       <div ref={ref} className="docs">
-        {width < constants?.tree?.minimalWindowWidth ? (
+        {(width ?? 0) < (constants?.tree?.minimalWindowWidth ?? 0) ? (
           path.length === 1 ? (
             <div className={styles.container}>
               <ArticleList articles={articles} />

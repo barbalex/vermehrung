@@ -34,7 +34,7 @@ export const Ziele = () => (
       <li>Wesentliche Vorgänge sind dokumentiert</li>
     </ol>
     <h3>Priorität 2: Voraussetzungen, um die Haupt-Ziele zu erreichen</h3>
-    <ol start="6">
+    <ol start={6}>
       <li>Effiziente, quell-nahe Erfassung und Nutzung</li>
       <li>
         MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte
@@ -53,7 +53,7 @@ export const Ziele = () => (
       <li>Qualitätskontrollen erhöhen die Qualität der Arbeit</li>
     </ol>
     <h3>Priorität 3: zusätzliche Ziele</h3>
-    <ol start="12">
+    <ol start={12}>
       <li>Lieferungen auswerten um zu sehen, wer erfolgreich vermehrt</li>
       <li>Vermehrungs-Methodik auswerten</li>
     </ol>

@@ -1,12 +1,17 @@
 import { useEffect, useRef } from 'react'
 import md5 from 'blueimp-md5'
-import { FileUploaderRegular, defineLocale } from '@uploadcare/react-uploader'
+import {
+  FileUploaderRegular,
+  defineLocale,
+} from '@uploadcare/react-uploader'
 import '@uploadcare/react-uploader/core.css'
 
 import { addNotification } from '../store/index.ts'
 import { locale } from './Uploader/locale.ts'
 
-defineLocale('de', locale)
+// the hand-maintained german translation lags the library's key set
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+defineLocale('de', locale as any)
 
 const secret = import.meta.env.UPLOADCARE_SECRET_KEY
 
@@ -26,19 +31,22 @@ const secureUploadsSignatureResolver = () => {
 // dialog and drag-and-drop onto the drop zone
 const useEmptyFileGuard = () => {
   useEffect(() => {
-    const hasEmptyFile = (files) => [...(files ?? [])].some((f) => f.size === 0)
+    const hasEmptyFile = (files: FileList | null) =>
+      Array.from(files ?? []).some((f) => f.size === 0)
     const reject = () => addNotification({ message: 'Die Datei ist leer' })
-    const blockEmptyFiles = (e) => {
-      if (e.target?.type !== 'file') return
-      if (!hasEmptyFile(e.target.files)) return
+    const blockEmptyFiles = (e: Event) => {
+      const target = e.target as HTMLInputElement | null
+      if (target?.type !== 'file') return
+      if (!hasEmptyFile(target.files)) return
       e.preventDefault()
       e.stopImmediatePropagation()
-      e.target.value = ''
+      target.value = ''
       reject()
     }
-    const blockEmptyDrops = (e) => {
-      if (!e.dataTransfer) return
-      if (!hasEmptyFile(e.dataTransfer.files)) return
+    const blockEmptyDrops = (e: Event) => {
+      const dropEvent = e as DragEvent
+      if (!dropEvent.dataTransfer) return
+      if (!hasEmptyFile(dropEvent.dataTransfer.files)) return
       e.preventDefault()
       e.stopImmediatePropagation()
       reject()
@@ -55,9 +63,16 @@ const useEmptyFileGuard = () => {
 // the uploader follows the OS color scheme by default - App.jsx sets
 // uc-dark/uc-light on <html> so it follows the app theme instead, and
 // the brand purple comes from the --uc-primary overrides in index.css
-export const Uploader = ({ onFileUploadSuccess, onFileUploadFailed }) => {
+export const Uploader = ({
+  onFileUploadSuccess,
+  onFileUploadFailed,
+}: {
+  onFileUploadSuccess: (info: unknown) => void
+  onFileUploadFailed: (info: unknown) => void
+}) => {
   useEmptyFileGuard()
-  const apiRef = useRef(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const apiRef = useRef<any>(null)
 
   // the summary modal ("1 Datei hochgeladen") expects the user to click
   // 'Abgeschlossen', and the finished upload stays in the list - so the
@@ -65,6 +80,7 @@ export const Uploader = ({ onFileUploadSuccess, onFileUploadFailed }) => {
   // the modal after a beat and clear the list, like the old widget did
   const onCommonUploadSuccess = () => {
     setTimeout(() => {
+      // getAPI is not part of the published types but exists at runtime
       const api = apiRef.current?.getAPI?.()
       api?.doneFlow?.()
       api?.removeAllFiles?.()
@@ -78,7 +94,8 @@ export const Uploader = ({ onFileUploadSuccess, onFileUploadFailed }) => {
       pubkey={import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY}
       ctxName="vermehrung"
       multiple={false}
-      effects="crop"
+      // 'effects' is a valid uploadcare config key the react types lag behind
+      {...({ effects: 'crop' } as { effects?: string })}
       imageShrink="2400x1600"
       removeCopyright
       localeName="de"
