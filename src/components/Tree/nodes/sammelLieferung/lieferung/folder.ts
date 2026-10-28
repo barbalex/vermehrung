@@ -2,6 +2,10 @@ export const buildSammelLieferungLieferungFolder = ({
   children,
   sammelLieferungIndex,
   sammelLieferungId,
+}: {
+  children: unknown[]
+  sammelLieferungIndex: number
+  sammelLieferungId: string
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Lieferungen',

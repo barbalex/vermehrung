@@ -21,7 +21,7 @@ export const buildExceljsWorksheetsForDaten = async ({
   // 1. Get Garten
   let garten
   try {
-    garten = await db.get('garten').find(garten_id)
+    garten = await db?.get('garten').find(garten_id)
   } catch {}
   let person
   try {

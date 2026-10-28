@@ -69,7 +69,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
       hierarchyQuery.push(Q.experimentalJoinTables(['sammlung']))
       hierarchyQuery.push(Q.on('sammlung', 'id', sammlungIdInActiveNodeArray))
     }
-    const collection = db.get('lieferung')
+    const collection = db?.get('lieferung')
     const lieferungDelQuery =
       lieferungFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -127,7 +127,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
       const slId = activeNodeArray[1]
       let sl
       try {
-        sl = await db.get('sammel_lieferung').find(slId)
+        sl = await db?.get('sammel_lieferung').find(slId)
       } catch {}
       const additionalValuesToSet = {}
 

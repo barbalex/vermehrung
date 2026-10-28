@@ -9,6 +9,15 @@ export const buildPersonGartenKulturAuslieferung = ({
   gartenIndex,
   personId,
   personIndex,
+}: {
+  lieferung: import('../../../../../../../dbModel.ts').Lieferung
+  lieferungIndex: number
+  kulturId: string
+  kulturIndex: number
+  gartenId: string
+  gartenIndex: number
+  personId: string
+  personIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Aus-Lieferung',

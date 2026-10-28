@@ -4,6 +4,12 @@ export const buildArtKulturAuslieferungFolder = ({
   artId,
   artIndex,
   children,
+}: {
+  kulturId: string
+  kulturIndex: number
+  artId: string
+  artIndex: number
+  children: unknown[]
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Aus-Lieferungen',

@@ -22,6 +22,13 @@ export const TeilzaehlungConflict = ({
   conflictDisposalCallback,
   conflictSelectionCallback,
   setActiveConflict,
+}: {
+  id: string | undefined
+  rev: string | boolean | null
+  row: import('../../../../../shared/types.ts').Zaehlung | null | undefined
+  conflictDisposalCallback: () => void
+  conflictSelectionCallback: () => void
+  setActiveConflict: (val: unknown) => void
 }) => {
   // need to use this query to ensure that the person's name is queried
   const { error, data, fetching } = useApiQuery(
@@ -38,7 +45,7 @@ export const TeilzaehlungConflict = ({
     const db = store.get(dbAtom)
     // build new object
     const newDepth = revRow._depth + 1
-    const newObject = {
+    const newObject: Record<string, unknown> = {
       teilzaehlung_id: revRow.teilzaehlung_id,
       zaehlung_id: revRow.zaehlung_id,
       teilkultur_id: revRow.teilkultur_id,
@@ -56,7 +63,7 @@ export const TeilzaehlungConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv7()
-    newObject.changed = new window.Date().toISOString()
+    newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = revRow._revisions
       ? toPgArray([rev, ...revRow._revisions])
@@ -78,7 +85,7 @@ export const TeilzaehlungConflict = ({
     })
     // update model: remove this conflict
     try {
-      const model = await db.get('teilzaehlung').find(revRow.teilzaehlung_id)
+      const model = await db?.get('teilzaehlung').find(revRow.teilzaehlung_id as string)
       await model.removeConflict(revRow._rev)
     } catch {}
     conflictDisposalCallback()
@@ -89,8 +96,8 @@ export const TeilzaehlungConflict = ({
     const user = store.get(userAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = row._depth + 1
-    const newObject = {
+    const newDepth = row?._depth + 1
+    const newObject: Record<string, unknown> = {
       teilzaehlung_id: revRow.teilzaehlung_id,
       zaehlung_id: revRow.zaehlung_id,
       teilkultur_id: revRow.teilkultur_id,
@@ -101,26 +108,26 @@ export const TeilzaehlungConflict = ({
       auspflanzbereit_beschreibung: revRow.auspflanzbereit_beschreibung,
       bemerkungen: revRow.bemerkungen,
       prognose_von_tz: revRow.prognose_von_tz,
-      _parent_rev: row._rev,
+      _parent_rev: row?._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv7()
-    newObject.changed = new window.Date().toISOString()
+    newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row._revisions
+    newObject._revisions = row?._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
     try {
     await store
       .get(apiClientAtom)
-      .post('/teilzaehlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+      ?.post('/teilzaehlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
   } catch (error) {
           checkForOnlineError({ error: error })
       return addNotification({
-        message: error.message,
+        message: (error as Error).message,
   })
     }
     // now we need to delete the previous conflict

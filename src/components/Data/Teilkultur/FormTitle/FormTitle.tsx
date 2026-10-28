@@ -23,6 +23,11 @@ export const TeilkulturFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
+}: {
+  row: import('../../../shared/types.ts').Teilkultur | null | undefined
+  totalCount: number
+  filteredCount: number
+  showHistory: boolean
 }) => {
   const { width, ref } = useResizeDetector()
 

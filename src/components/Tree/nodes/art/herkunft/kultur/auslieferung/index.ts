@@ -9,6 +9,15 @@ export const buildArtHerkunftKulturAuslieferung = ({
   herkunftIndex,
   artId,
   artIndex,
+}: {
+  lieferung: import('../../../../../../../dbModel.ts').Lieferung
+  lieferungIndex: number
+  kulturId: string
+  kulturIndex: number
+  herkunft: import('../../../../../../../dbModel.ts').Herkunft
+  herkunftIndex: number
+  artId: string
+  artIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Auslieferung',

@@ -18,6 +18,11 @@ export const KulturFormTitleChooser = ({
   rawRow,
   showFilter,
   showHistory,
+}: {
+  row: import('../../../shared/types.ts').Kultur | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  showFilter: boolean
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const gartenIdInActiveNodeArray = useAtomValue(gartenIdInActiveNodeArrayAtom)
@@ -41,7 +46,7 @@ export const KulturFormTitleChooser = ({
             Q.on('art', 'id', artIdInActiveNodeArray),
           ]
         : []
-    const collection = db.get('kultur')
+    const collection = db?.get('kultur')
     const kulturDelQuery =
       kulturFilter._deleted === false
         ? Q.where('_deleted', false)

@@ -17,7 +17,7 @@ import { avsSortByArt } from '../../../../../utils/avsSortByArt.ts'
 
 import styles from './index.module.css'
 
-export const PersonArten = ({ person }) => {
+export const PersonArten = ({ person }: { person: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   const db = useAtomValue(dbAtom)
 
   const [errors, setErrors] = useState({})

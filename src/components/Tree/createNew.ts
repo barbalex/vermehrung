@@ -61,7 +61,7 @@ export const createNew = async ({ node }) => {
     // need to get art_id from kultur and set it
     let kultur
     try {
-      kultur = await db.get('kultur').find(parentId)
+      kultur = await db?.get('kultur').find(parentId)
     } catch {}
     additionalValuesToSet.art_id = kultur?.art_id
   }
@@ -71,14 +71,14 @@ export const createNew = async ({ node }) => {
     // need to get art_id from sammlung and set itconst kultur = parentId
     let sammlung
     try {
-      sammlung = await db.get('sammlung').find(parentId)
+      sammlung = await db?.get('sammlung').find(parentId)
     } catch {}
     additionalValuesToSet.art_id = sammlung?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
     let sammelLieferung
     try {
-      sammelLieferung = await db.get('sammel_lieferung').find(parentId)
+      sammelLieferung = await db?.get('sammel_lieferung').find(parentId)
     } catch {}
     if (!sammelLieferung) return console.log('no sammelLieferung found!')
     const entries = Object.entries(sammelLieferung)

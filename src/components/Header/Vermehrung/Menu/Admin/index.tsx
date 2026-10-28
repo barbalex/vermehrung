@@ -30,10 +30,10 @@ export const HeaderAdminMenu = ({
     const db = store.get(dbAtom)
 
     // fetch all art and apflora_ap
-    const arts = await db.get('art').query().fetch()
+    const arts = await db?.get('art').query().fetch()
     const apfloraAps = await store
       .get(apiClientAtom)
-      .get('/apflora_ap?select=id,ae_id,ap,av')
+      ?.get('/apflora_ap?select=id,ae_id,ap,av')
     for (const [index, art] of arts.entries()) {
       // find corresponding apflora_ap using ae_id
       const apfloraAp = apfloraAps.find(

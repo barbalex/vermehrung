@@ -4,6 +4,10 @@ export const buildSammlungHerkunft = ({
   herkunft,
   sammlungId,
   sammlungIndex,
+}: {
+  herkunft: import('../../../../../dbModel.ts').Herkunft
+  sammlungId: string
+  sammlungIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Herkunft',

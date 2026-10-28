@@ -9,7 +9,7 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 
 import styles from './Person.module.css'
 
-export const Person = ({ av }) => {
+export const Person = ({ av }: { av: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 

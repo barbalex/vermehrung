@@ -15,7 +15,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import artStyles from '../../Art/FormTitle/DeleteButton.module.css'
 
-export const EventDeleteButton = ({ row }) => {
+export const EventDeleteButton = ({ row }: { row: import('../../../shared/types.ts').WmRow | null | undefined }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = () => setAnchorEl(null)
   const onClickButton = (event) => setAnchorEl(event.currentTarget)

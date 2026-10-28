@@ -38,7 +38,7 @@ export const Personen = ({ filter: showFilter = false }) => {
     userRole: undefined,
   })
   useEffect(() => {
-    const collection = db.get('person')
+    const collection = db?.get('person')
     const personDelQuery =
       personFilter._deleted === false
         ? Q.where('_deleted', false)

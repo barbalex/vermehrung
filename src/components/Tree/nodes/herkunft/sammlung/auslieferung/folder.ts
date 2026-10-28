@@ -4,6 +4,12 @@ export const buildHerkunftSammlungAuslieferungFolder = ({
   herkunftId,
   herkunftIndex,
   children,
+}: {
+  sammlungId: string
+  sammlungIndex: number
+  herkunftId: string
+  herkunftIndex: number
+  children: unknown[]
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Aus-Lieferungen',

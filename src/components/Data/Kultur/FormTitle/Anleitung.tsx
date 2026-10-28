@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.ts'
 
-export const KulturAnleitung = ({ asMenu }) => {
+export const KulturAnleitung = ({ asMenu }: { asMenu: boolean }) => {
   const openKulturDocs = () => {
     const url = `${constants?.getAppUri()}/Dokumentation/kulturen`
     if (window.matchMedia('(display-mode: standalone)').matches) {

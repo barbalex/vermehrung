@@ -9,6 +9,15 @@ export const buildPersonGartenKulturBedarf = ({
   gartenIndex,
   personId,
   personIndex,
+}: {
+  bedarf: import('../../../../../../../dbModel.ts').Bedarf
+  bedarfIndex: number
+  kulturId: string
+  kulturIndex: number
+  gartenId: string
+  gartenIndex: number
+  personId: string
+  personIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Bedarf',

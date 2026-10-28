@@ -27,6 +27,9 @@ import artStyles from '../Art/index.module.css'
 export const Kultur = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
+}: {
+  filter: boolean
+  id: string | undefined
 }) => {
   const kulturFilter = useAtomValue(filterKulturAtom)
   const filterShow = useAtomValue(filterShowAtom)
@@ -40,7 +43,7 @@ export const Kultur = ({
       showFilter
         ? $of(kulturFilter)
         : (initialDataQueried || !online)
-          ? db.get('kultur').findAndObserve(id)
+          ? db?.get('kultur').findAndObserve(id)
           : $of({}),
     [db, kulturFilter, id, initialDataQueried, online, showFilter],
   )

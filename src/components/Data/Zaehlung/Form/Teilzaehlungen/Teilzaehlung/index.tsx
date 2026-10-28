@@ -29,7 +29,7 @@ export const Teilzaehlung = ({ id, kulturId, index }) => {
   })
   useEffect(() => {
     const tzObservable = initialDataQueried
-      ? db.get('teilzaehlung').findAndObserve(id)
+      ? db?.get('teilzaehlung').findAndObserve(id)
       : $of({})
     const subscription = tzObservable.subscribe((newRow) => {
       setDataState({

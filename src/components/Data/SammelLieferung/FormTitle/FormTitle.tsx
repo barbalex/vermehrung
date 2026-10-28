@@ -32,6 +32,15 @@ export const SammelLieferungFormTitle = ({
   printPreview,
   setPrintPreview,
   showHistory,
+}: {
+  showFilter: boolean
+  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  totalCount: number
+  filteredCount: number
+  lieferung: import('../../../shared/types.ts').WmRow | null | undefined
+  printPreview: boolean
+  setPrintPreview: (val: unknown) => void
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)

@@ -43,7 +43,7 @@ export const Teilkulturen = ({ filter: showFilter = false }) => {
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db.get('teilkultur')
+    const collection = db?.get('teilkultur')
     const teilkulturDelQuery =
       teilkulturFilter._deleted === false
         ? Q.where('_deleted', false)

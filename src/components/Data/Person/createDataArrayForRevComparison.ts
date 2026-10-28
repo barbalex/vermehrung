@@ -1,6 +1,9 @@
 export const createDataArrayForPersonRevComparison = ({
   row: rowPassed,
   revRow,
+}: {
+  row: import('../../shared/types.ts').WmRow | null | undefined
+  revRow: import('../../shared/types.ts').WmRow | null | undefined
 }) => {
   // need to use raw values here
   const row = rowPassed._raw

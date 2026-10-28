@@ -5,6 +5,11 @@ export const buildSammelLieferungLieferung = ({
   lieferungIndex,
   sammelLieferungId,
   sammelLieferungIndex,
+}: {
+  lieferung: import('../../../../../dbModel.ts').Lieferung
+  lieferungIndex: number
+  sammelLieferungId: string
+  sammelLieferungIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Lieferung',

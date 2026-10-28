@@ -9,7 +9,7 @@ import { TeilkulturTeilzaehlung as Teilzaehlungen } from './Teilzaehlungen.tsx'
 
 import styles from './index.module.css'
 
-export const TeilkulturZaehlungen = ({ teilkultur }) => {
+export const TeilkulturZaehlungen = ({ teilkultur }: { teilkultur: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   const db = useAtomValue(dbAtom)
 
   const [teilzaehlungs, setTeilzaehlungs] = useState([])

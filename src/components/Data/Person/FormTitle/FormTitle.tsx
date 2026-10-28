@@ -19,6 +19,11 @@ export const PersonFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
+}: {
+  row: import('../../../shared/types.ts').Person | null | undefined
+  totalCount: number
+  filteredCount: number
+  showHistory: boolean
 }) => {
   const user = useAtomValue(userAtom)
   const db = useAtomValue(dbAtom)

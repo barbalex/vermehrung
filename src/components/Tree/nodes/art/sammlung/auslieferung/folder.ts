@@ -4,6 +4,12 @@ export const buildArtSammlungAuslieferungFolder = ({
   artId,
   artIndex,
   children,
+}: {
+  sammlungId: string
+  sammlungIndex: number
+  artId: string
+  artIndex: number
+  children: unknown[]
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Lieferungen',

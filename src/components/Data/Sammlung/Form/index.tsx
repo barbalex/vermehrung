@@ -48,6 +48,14 @@ export const SammlungForm = ({
   activeConflict,
   setActiveConflict,
   showHistory,
+}: {
+  showFilter: boolean
+  id: string | undefined
+  row: import('../../../shared/types.ts').Sammlung | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  activeConflict: string | null
+  setActiveConflict: (val: unknown) => void
+  showHistory: boolean
 }) => {
   const artFilter = useAtomValue(filterArtAtom)
   const herkunftFilter = useAtomValue(filterHerkunftAtom)
@@ -267,7 +275,7 @@ export const SammlungForm = ({
       <div className={artStyles.container}>
         {(activeConflict || showHistory) && (
           <h4 className={artStyles.caseConflictTitle}>
-            Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
+            Aktuelle Version<span className={artStyles.rev}>{row?._rev}</span>
           </h4>
         )}
         {showDeleted && (
@@ -435,7 +443,7 @@ export const SammlungForm = ({
         />
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList
-            conflicts={row._conflicts}
+            conflicts={row?._conflicts}
             activeConflict={activeConflict}
             setActiveConflict={setActiveConflict}
           />

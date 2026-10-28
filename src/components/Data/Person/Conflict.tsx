@@ -21,6 +21,13 @@ export const PersonConflict = ({
   conflictDisposalCallback,
   conflictSelectionCallback,
   setActiveConflict,
+}: {
+  id: string | undefined
+  rev: string | boolean | null
+  row: import('../../shared/types.ts').Person | null | undefined
+  conflictDisposalCallback: () => void
+  conflictSelectionCallback: () => void
+  setActiveConflict: (conflict: string | null) => void
 }) => {
   // need to use this query to ensure that the person's name is queried
   const { error, data, fetching } = useApiQuery(
@@ -28,7 +35,7 @@ export const PersonConflict = ({
   )
     if (error) checkForOnlineError({ error })
 
-  const revRow = data?.[0] ?? {}
+  const revRow = ((data as import('../../shared/types.ts').RevRow[] | null)?.[0] ?? {}) as import('../../shared/types.ts').RevRow
 
   const dataArray = createDataArray({ row, revRow })
 
@@ -36,8 +43,8 @@ export const PersonConflict = ({
     const user = store.get(userAtom)
     const db = store.get(dbAtom)
     // build new object
-    const newDepth = revRow._depth + 1
-    const newObject = {
+    const newDepth = ((revRow._depth as number) ?? 0) + 1
+    const newObject: Record<string, unknown> = {
       person_id: revRow.person_id,
       nr: revRow.nr,
       vorname: revRow.vorname,
@@ -64,26 +71,26 @@ export const PersonConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv7()
-    newObject.changed = new window.Date().toISOString()
+    newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
     newObject._revisions = revRow._revisions
-      ? toPgArray([rev, ...revRow._revisions])
+      ? toPgArray([rev, ...(revRow._revisions as string[])])
       : toPgArray([rev])
 
     try {
     await store
       .get(apiClientAtom)
-      .post('/person_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+      ?.post('/person_rev', newObject, 'resolution=merge-duplicates,return=minimal')
   } catch (error) {
           checkForOnlineError({ error: error })
       return addNotification({
-        message: error.message,
+        message: (error as Error).message,
   })
     }
     // remove conflict from model
     try {
-      const model = await db.get('person').find(revRow.person_id)
-      await model.removeConflict(revRow._rev)
+      const model = (await db?.get('person').find(revRow.person_id as string)) as unknown as import('../../shared/types.ts').WmRow | undefined
+      await model?.removeConflict?.(revRow._rev ?? '')
     } catch {}
     conflictDisposalCallback()
   }
@@ -92,8 +99,8 @@ export const PersonConflict = ({
     const user = store.get(userAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = row._depth + 1
-    const newObject = {
+    const newDepth = (((row?._depth as number) ?? 0)) + 1
+    const newObject: Record<string, unknown> = {
       person_id: revRow.person_id,
       nr: revRow.nr,
       vorname: revRow.vorname,
@@ -113,26 +120,26 @@ export const PersonConflict = ({
       kommerziell: revRow.kommerziell,
       info: revRow.info,
       aktiv: revRow.aktiv,
-      _parent_rev: row._rev,
+      _parent_rev: row?._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv7()
-    newObject.changed = new window.Date().toISOString()
+    newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row._revisions
-      ? toPgArray([rev, ...row._revisions])
+    newObject._revisions = row?._revisions
+      ? toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
       : toPgArray([rev])
     try {
     await store
       .get(apiClientAtom)
-      .post('/person_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+      ?.post('/person_rev', newObject, 'resolution=merge-duplicates,return=minimal')
   } catch (error) {
           checkForOnlineError({ error: error })
       return addNotification({
-        message: error.message,
+        message: (error as Error).message,
   })
     }
     // now we need to delete the previous conflict
@@ -148,7 +155,7 @@ export const PersonConflict = ({
       rev={rev}
       dataArray={dataArray}
       fetching={fetching}
-      error={error}
+      error={error as Error | null}
       onClickAktuellUebernehmen={onClickAktuellUebernehmen}
       onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
       onClickSchliessen={onClickSchliessen}

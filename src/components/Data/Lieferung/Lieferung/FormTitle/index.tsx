@@ -21,6 +21,11 @@ export const LieferungTitleChooser = ({
   rawRow,
   showFilter,
   showHistory,
+}: {
+  row: import('../../../../shared/types.ts').Lieferung | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  showFilter: boolean
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
@@ -65,7 +70,7 @@ export const LieferungTitleChooser = ({
                     Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
                   ]
                 : []
-    const collection = db.get('lieferung')
+    const collection = db?.get('lieferung')
     const lieferungDelQuery =
       lieferungFilter._deleted === false
         ? Q.where('_deleted', false)

@@ -24,6 +24,11 @@ export const LieferungFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
+}: {
+  row: import('../../../../shared/types.ts').Lieferung | null | undefined
+  totalCount: number
+  filteredCount: number
+  showHistory: boolean
 }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 

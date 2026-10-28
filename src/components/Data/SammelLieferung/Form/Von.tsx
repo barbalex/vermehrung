@@ -27,6 +27,13 @@ export const SammelLieferungVon = ({
   saveToDb,
   herkunft,
   herkunftQuelle,
+}: {
+  showFilter: boolean
+  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  ifNeeded: boolean
+  saveToDb: (event: { target: { name?: string; value: unknown } }) => void
+  herkunft: import('../../../shared/types.ts').WmRow | null | undefined
+  herkunftQuelle: Record<string, unknown> | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const errors = useAtomValue(errorsAtom)
@@ -60,7 +67,7 @@ export const SammelLieferungVon = ({
               Q.where('_deleted', null),
             )
     // BEWARE: need to include inactive kulturs, persons
-    const kultursObservable = db.get('kultur').query(kulturDelQuery).observe()
+    const kultursObservable = db?.get('kultur').query(kulturDelQuery).observe()
     const sammlungsObservable = db
       .get('sammlung')
       .query(sammlungDelQuery)
@@ -97,7 +104,7 @@ export const SammelLieferungVon = ({
           })
         let kultur
         try {
-          kultur = await db.get('kultur').find(row.von_kultur_id)
+          kultur = await db?.get('kultur').find(row.von_kultur_id as string)
         } catch {}
         const kultursIncludingChoosen = uniqBy(
           [...kultursFiltered, ...(kultur && !showFilter ? [kultur] : [])],
@@ -123,7 +130,7 @@ export const SammelLieferungVon = ({
         )
         let sammlung
         try {
-          sammlung = await db.get('sammlung').find(row.von_sammlung_id)
+          sammlung = await db?.get('sammlung').find(row.von_sammlung_id as string)
         } catch {}
         const sammlungsIncludingChoosen = uniqBy(
           [...sammlungs, ...(sammlung && !showFilter ? [sammlung] : [])],

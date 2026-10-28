@@ -2,6 +2,10 @@ export const buildSammlungAuslieferungFolder = ({
   count,
   sammlungIndex,
   sammlungId,
+}: {
+  count: number
+  sammlungIndex: number
+  sammlungId: string
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Aus-Lieferungen',

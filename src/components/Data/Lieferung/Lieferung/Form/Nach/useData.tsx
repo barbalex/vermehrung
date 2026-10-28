@@ -12,6 +12,12 @@ export const useLieferungNachData = ({
   herkunft,
   db,
   filter,
+}: {
+  showFilter: boolean
+  row: import('../../../../../shared/types.ts').Lieferung | null | undefined
+  herkunft: import('../../../../../shared/types.ts').WmRow | null | undefined
+  db: import('@nozbe/watermelondb').Database | null
+  filter: boolean
 }) => {
   const [dataState, setDataState] = useState({ nachKulturWerte: [] })
 
@@ -25,7 +31,7 @@ export const useLieferungNachData = ({
           Q.where('_deleted', null),
         )
     // BEWARE: need to include inactive kulturs
-    const kultursObservable = db.get('kultur').query(kulturDelQuery).observe()
+    const kultursObservable = db?.get('kultur').query(kulturDelQuery).observe()
     const sammlungDelQuery =
       filter.sammlung._deleted === false ? Q.where('_deleted', false)
       : filter.sammlung._deleted === true ? Q.where('_deleted', true)
@@ -66,7 +72,7 @@ export const useLieferungNachData = ({
         })
       let kultur
       try {
-        kultur = await db.get('kultur').find(row.von_kultur_id)
+        kultur = await db?.get('kultur').find(row.von_kultur_id as string)
       } catch {}
       const kultursIncludingChoosen = uniqBy(
         [...kultursFiltered, ...(kultur && !showFilter ? [kultur] : [])],

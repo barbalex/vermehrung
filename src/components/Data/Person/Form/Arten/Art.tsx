@@ -9,7 +9,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
 import styles from './Art.module.css'
 
-export const PersonArt = ({ av }) => {
+export const PersonArt = ({ av }: { av: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 

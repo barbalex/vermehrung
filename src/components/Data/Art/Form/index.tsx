@@ -35,6 +35,13 @@ export const ArtForm = ({
   setActiveConflict,
   showFilter,
   showHistory,
+}: {
+  activeConflict: string | null
+  id: string | undefined
+  row: import('../../../shared/types.ts').Art | null | undefined
+  setActiveConflict: (val: unknown) => void
+  showFilter: boolean
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const online = useAtomValue(onlineAtom)
@@ -60,7 +67,7 @@ export const ArtForm = ({
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    const artsObservable = db.get('art').query(delQuery).observe()
+    const artsObservable = db?.get('art').query(delQuery).observe()
     const combinedObservables = combineLatest([aeArtObservable, artsObservable])
     const subscription = combinedObservables.subscribe(
       async ([aeArts, arts]) => {
@@ -133,7 +140,7 @@ export const ArtForm = ({
       <div className={styles.container}>
         {(activeConflict || showHistory) && (
           <h4 className={styles.caseConflictTitle}>
-            Aktuelle Version<span className={styles.rev}>{row._rev}</span>
+            Aktuelle Version<span className={styles.rev}>{row?._rev}</span>
           </h4>
         )}
         {showDeleted && (
@@ -207,7 +214,7 @@ export const ArtForm = ({
         )}
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList
-            conflicts={row._conflicts}
+            conflicts={row?._conflicts}
             activeConflict={activeConflict}
             setActiveConflict={setActiveConflict}
           />

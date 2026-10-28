@@ -2,6 +2,10 @@ export const buildPersonLieferungFolder = ({
   count,
   personIndex,
   personId,
+}: {
+  count: number
+  personIndex: number
+  personId: string
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Lieferungen',

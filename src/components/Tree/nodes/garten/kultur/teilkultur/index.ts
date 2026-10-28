@@ -7,6 +7,13 @@ export const buildGartenKulturTeilkultur = ({
   kulturIndex,
   gartenId,
   gartenIndex,
+}: {
+  teilkultur: import('../../../../../../dbModel.ts').Teilkultur
+  teilkulturIndex: number
+  kulturId: string
+  kulturIndex: number
+  gartenId: string
+  gartenIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Teilkultur',

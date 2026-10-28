@@ -20,6 +20,14 @@ export const SammelLieferungFormTitleChooser = ({
   setPrintPreview,
   showFilter,
   showHistory,
+}: {
+  lieferung: import('../../../shared/types.ts').WmRow | null | undefined
+  printPreview: boolean
+  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  setPrintPreview: (val: unknown) => void
+  showFilter: boolean
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const sammelLieferungFilter = useAtomValue(filterSammelLieferungAtom)
@@ -30,7 +38,7 @@ export const SammelLieferungFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const collection = db.get('sammel_lieferung')
+    const collection = db?.get('sammel_lieferung')
     const sammelLieferungDelQuery =
       sammelLieferungFilter._deleted === false
         ? Q.where('_deleted', false)

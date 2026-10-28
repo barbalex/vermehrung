@@ -36,7 +36,7 @@ const sammelLieferungFields = [
   '_deleted',
 ]
 
-export const SammelLieferungCopyMenu = ({ sammelLieferung, lieferung }) => {
+export const SammelLieferungCopyMenu = ({ sammelLieferung, lieferung }: { sammelLieferung: import('../../../../shared/types.ts').WmRow | null | undefined; lieferung: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   //console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })
 
   const [anchorEl, setAnchorEl] = useState(null)

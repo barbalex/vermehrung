@@ -4,6 +4,12 @@ export const buildArtKulturZaehlungFolder = ({
   artId,
   artIndex,
   count,
+}: {
+  kulturId: string
+  kulturIndex: number
+  artId: string
+  artIndex: number
+  count: number
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Zählungen',

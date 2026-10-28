@@ -53,7 +53,7 @@ export const Kulturen = ({ filter: showFilter = false }) => {
       hierarchyQuery.push(Q.experimentalJoinTables(['herkunft']))
       hierarchyQuery.push(Q.on('herkunft', 'id', herkunftIdInActiveNodeArray))
     }
-    const collection = db.get('kultur')
+    const collection = db?.get('kultur')
     const kulturDelQuery =
       kulturFilter._deleted === false
         ? Q.where('_deleted', false)

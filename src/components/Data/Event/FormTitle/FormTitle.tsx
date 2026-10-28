@@ -23,6 +23,11 @@ export const EventFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
+}: {
+  row: import('../../../shared/types.ts').Event | null | undefined
+  totalCount: number
+  filteredCount: number
+  showHistory: boolean
 }) => {
   const { width, ref } = useResizeDetector()
 

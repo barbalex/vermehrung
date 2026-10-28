@@ -98,7 +98,7 @@ export const updateSammelLieferung = async ({
       ([key]) => lieferungFields.includes(key),
     ),
   )
-  const newObject = {
+  const newObject: Record<string, unknown> = {
     ...oldValuesFromL,
     ...newValuesFromSl,
     id: uuidv7(),
@@ -140,7 +140,7 @@ export const updateSammelLieferung = async ({
   newObjectForStore._conflicts = lfLastVersion._conflicts
   newObjectForStore.id = lfLastVersion.id
   delete newObjectForStore.lieferung_id
-  await db.write(async () => {
+  await db?.write(async () => {
     await lieferung.update((row) => {
       Object.entries(newObjectForStore).forEach(([key, value]) => {
         if (!isEqual(value, row[key])) {

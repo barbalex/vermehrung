@@ -17,6 +17,11 @@ export const TeilkulturFormTitleChooser = ({
   rawRow,
   showFilter,
   showHistory,
+}: {
+  row: import('../../../shared/types.ts').Teilkultur | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  showFilter: boolean
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
@@ -33,7 +38,7 @@ export const TeilkulturFormTitleChooser = ({
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db.get('teilkultur')
+    const collection = db?.get('teilkultur')
     const teilkulturDelQuery =
       teilkulturFilter._deleted === false
         ? Q.where('_deleted', false)

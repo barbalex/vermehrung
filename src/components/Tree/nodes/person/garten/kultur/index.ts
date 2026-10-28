@@ -7,6 +7,13 @@ export const buildPersonGartenKultur = async ({
   gartenIndex,
   personId,
   personIndex,
+}: {
+  kultur: import('../../../../../../dbModel.ts').Kultur
+  kulturIndex: number
+  gartenId: string
+  gartenIndex: number
+  personId: string
+  personIndex: number
 }) => {
   let label = ''
   try {

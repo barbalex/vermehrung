@@ -27,6 +27,9 @@ import artStyles from '../Art/index.module.css'
 export const Event = ({
   filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
+}: {
+  filter: boolean
+  id: string | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const online = useAtomValue(onlineAtom)
@@ -40,7 +43,7 @@ export const Event = ({
       showFilter
         ? $of(eventFilter)
         : (initialDataQueried || !online)
-          ? db.get('event').findAndObserve(id)
+          ? db?.get('event').findAndObserve(id)
           : $of({}),
     [db, eventFilter, id, initialDataQueried, online, showFilter],
   )

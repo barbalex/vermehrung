@@ -27,6 +27,9 @@ import artStyles from '../Art/index.module.css'
 export const Herkunft = ({
   filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
+}: {
+  filter: boolean
+  id: string | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const online = useAtomValue(onlineAtom)
@@ -40,7 +43,7 @@ export const Herkunft = ({
       showFilter
         ? $of(herkunftFilter)
         : (initialDataQueried || !online)
-          ? db.get('herkunft').findAndObserve(id)
+          ? db?.get('herkunft').findAndObserve(id)
           : $of({}),
     [db, herkunftFilter, id, initialDataQueried, online, showFilter],
   )

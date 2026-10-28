@@ -5,6 +5,11 @@ export const buildSammlungAuslieferung = ({
   lieferungIndex,
   sammlungId,
   sammlungIndex,
+}: {
+  lieferung: import('../../../../../dbModel.ts').Lieferung
+  lieferungIndex: number
+  sammlungId: string
+  sammlungIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Aus-Lieferung',

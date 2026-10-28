@@ -17,6 +17,13 @@ export const LieferungAddChooseDialog = ({
   kulturType,
   lieferung,
   herkunft,
+}: {
+  open: boolean
+  onClose: () => void
+  onChange: (event: unknown) => void
+  kulturType: string
+  lieferung: import('../../../../../../shared/types.ts').WmRow | null | undefined
+  herkunft: import('../../../../../../shared/types.ts').WmRow | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const gartenFilter = useAtomValue(filterGartenAtom)

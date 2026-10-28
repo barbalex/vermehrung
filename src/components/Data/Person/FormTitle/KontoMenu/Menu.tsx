@@ -9,6 +9,11 @@ export const PersonKontoMenu = ({
   menuAnchorEl,
   setMenuAnchorEl,
   asMenu,
+}: {
+  row: import('../../../../shared/types.ts').Person | null | undefined
+  menuAnchorEl: HTMLElement | null
+  setMenuAnchorEl: (val: unknown) => void
+  asMenu: boolean
 }) => {
   const menuOpen = Boolean(menuAnchorEl)
 

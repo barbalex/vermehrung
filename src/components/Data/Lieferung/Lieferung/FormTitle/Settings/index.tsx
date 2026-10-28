@@ -6,7 +6,7 @@ import { FaCog } from 'react-icons/fa'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.tsx'
 import { LieferungSettingsMenu as Menu } from './Menu.tsx'
 
-export const LieferungSettings = ({ asMenu }) => {
+export const LieferungSettings = ({ asMenu }: { asMenu: boolean }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickConfig = (event) => setAnchorEl(event.currentTarget)
 

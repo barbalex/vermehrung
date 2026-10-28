@@ -28,7 +28,7 @@ export const EventFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db.get('event')
+    const collection = db?.get('event')
     const dventDelQuery =
       eventFilter._deleted === false
         ? Q.where('_deleted', false)

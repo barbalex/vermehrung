@@ -7,6 +7,13 @@ export const buildArtHerkunftSammlung = async ({
   herkunftIndex,
   artId,
   artIndex,
+}: {
+  sammlung: import('../../../../../../dbModel.ts').Sammlung
+  sammlungIndex: number
+  herkunft: import('../../../../../../dbModel.ts').Herkunft
+  herkunftIndex: number
+  artId: string
+  artIndex: number
 }) => {
   let label = ''
   try {

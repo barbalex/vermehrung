@@ -5,6 +5,11 @@ export const buildPersonGarten = async ({
   index,
   personId,
   personIndex,
+}: {
+  garten: import('../../../../../dbModel.ts').Garten
+  index: number
+  personId: string
+  personIndex: number
 }) => {
   let label = ''
   try {

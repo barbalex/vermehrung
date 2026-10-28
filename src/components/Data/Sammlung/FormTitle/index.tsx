@@ -19,6 +19,11 @@ export const SammlungFormTitleChooser = ({
   rawRow,
   showFilter,
   showHistory,
+}: {
+  row: import('../../../shared/types.ts').Sammlung | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  showFilter: boolean
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const herkunftIdInActiveNodeArray = useAtomValue(
@@ -49,7 +54,7 @@ export const SammlungFormTitleChooser = ({
               Q.on('person', 'id', personIdInActiveNodeArray),
             ]
           : []
-    const collection = db.get('sammlung')
+    const collection = db?.get('sammlung')
     const sammlungDelQuery =
       sammlungFilter._deleted === false
         ? Q.where('_deleted', false)

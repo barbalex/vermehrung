@@ -101,7 +101,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
     allLieferungsDone.map(async (l) => {
       let vonKultur
       try {
-        vonKultur = await db.get('kultur').find(l.von_kultur_id)
+        vonKultur = await db?.get('kultur').find(l.von_kultur_id)
       } catch {}
 
       return vonKultur?.herkunft_id === herkunftId
@@ -130,7 +130,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
     allLieferungsPlanned.map(async (l) => {
       let vonKultur
       try {
-        vonKultur = await db.get('kultur').find(l?.von_kultur_id)
+        vonKultur = await db?.get('kultur').find(l?.von_kultur_id)
       } catch {}
 
       return vonKultur?.herkunft_id === herkunftId

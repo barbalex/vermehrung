@@ -22,6 +22,12 @@ export const LieferungNach = ({
   saveToDb,
   ifNeeded,
   herkunft,
+}: {
+  showFilter: boolean
+  row: import('../../../../../shared/types.ts').Lieferung | null | undefined
+  saveToDb: (event: { target: { name?: string; value: unknown } }) => void
+  ifNeeded: boolean
+  herkunft: import('../../../../../shared/types.ts').WmRow | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const errors = useAtomValue(errorsAtom)

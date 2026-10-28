@@ -17,7 +17,7 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 
 import styles from './index.module.css'
 
-export const GartenPersonen = ({ garten }) => {
+export const GartenPersonen = ({ garten }: { garten: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   const db = useAtomValue(dbAtom)
   const personFilter = useAtomValue(filterPersonAtom)
 

@@ -40,7 +40,7 @@ export const Gaerten = ({ filter: showFilter = false }) => {
           Q.on('person', 'id', personIdInActiveNodeArray),
         ]
       : []
-    const collection = db.get('garten')
+    const collection = db?.get('garten')
     const delQuery =
       gartenFilter._deleted === false
         ? Q.where('_deleted', false)

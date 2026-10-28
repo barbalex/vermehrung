@@ -2,6 +2,10 @@ export const buildKulturAnlieferungFolder = ({
   count,
   kulturIndex,
   kulturId,
+}: {
+  count: number
+  kulturIndex: number
+  kulturId: string
 }) => ({
   nodeType: 'folder',
   menuTitle: 'An-Lieferungen',

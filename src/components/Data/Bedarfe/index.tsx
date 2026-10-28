@@ -43,7 +43,7 @@ export const Bedarfe = ({ filter: showFilter = false }) => {
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db.get('bedarf')
+    const collection = db?.get('bedarf')
     const delQuery =
       bedarfFilter._deleted === false
         ? Q.where('_deleted', false)

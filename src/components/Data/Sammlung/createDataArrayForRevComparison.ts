@@ -1,6 +1,9 @@
 import { DateTime } from 'luxon'
 
-export const createDataArrayForSammlungRevComparison = ({ row, revRow }) => [
+export const createDataArrayForSammlungRevComparison = ({ row, revRow }: {
+  row: Record<string, unknown> | null | undefined
+  revRow: Record<string, unknown> | null | undefined
+}) => [
   {
     valueInRow: row.art_id,
     valueInRev: revRow.art_id,
@@ -51,8 +54,8 @@ export const createDataArrayForSammlungRevComparison = ({ row, revRow }) => [
     label: 'Andere Menge',
   },
   {
-    valueInRow: row?.geom_point?.coordinates,
-    valueInRev: revRow?.geom_point?.coordinates,
+    valueInRow: (row?.geom_point as { coordinates?: unknown } | undefined)?.coordinates,
+    valueInRev: (revRow?.geom_point as { coordinates?: unknown } | undefined)?.coordinates,
     label: 'Längen- und Breitengrad',
   },
   {

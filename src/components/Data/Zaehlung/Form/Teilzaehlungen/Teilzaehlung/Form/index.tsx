@@ -37,6 +37,13 @@ export const TeilzaehlungForm = ({
   setActiveConflict,
   showHistory,
   setShowHistory,
+}: {
+  id: string | undefined
+  kulturId: string | null | undefined
+  activeConflict: string | null
+  setActiveConflict: (val: unknown) => void
+  showHistory: boolean
+  setShowHistory: (val: unknown) => void
 }) => {
   const errors = useAtomValue(errorsAtom)
   const online = useAtomValue(onlineAtom)
@@ -68,10 +75,10 @@ export const TeilzaehlungForm = ({
       .query(teilkulturDelQuery, Q.where('kultur_id', kulturId))
       .observeWithColumns(['name'])
     const kulturOptionObservable = kulturId
-      ? db.get('kultur_option').findAndObserve(kulturId)
+      ? db?.get('kultur_option').findAndObserve(kulturId)
       : $of(null)
     const tzObservable = initialDataQueried
-      ? db.get('teilzaehlung').findAndObserve(id)
+      ? db?.get('teilzaehlung').findAndObserve(id)
       : $of({})
     const combinedObservables = combineLatest([
       teilkultursObservable,
@@ -166,7 +173,7 @@ export const TeilzaehlungForm = ({
       <div className={styles.container}>
         {(activeConflict || showHistory) && (
           <h4 className={styles.caseConflictTitle}>
-            Aktuelle Version<span className={styles.rev}>{row._rev}</span>
+            Aktuelle Version<span className={styles.rev}>{row?._rev}</span>
           </h4>
         )}
         {showDeleted && (
@@ -301,7 +308,7 @@ export const TeilzaehlungForm = ({
         {online && row?._conflicts?.map && (
           <div className={styles.conflictListContainer}>
             <ConflictList
-              conflicts={row._conflicts}
+              conflicts={row?._conflicts}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
             />

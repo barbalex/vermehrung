@@ -22,7 +22,7 @@ export const TeilkulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
 
   useEffect(() => {
     const kOObservable = kulturId
-      ? db.get('kultur_option').findAndObserve(kulturId)
+      ? db?.get('kultur_option').findAndObserve(kulturId)
       : $of({})
     const subscription = kOObservable.subscribe((kulturOption) =>
       setDataState({ kulturOption }),

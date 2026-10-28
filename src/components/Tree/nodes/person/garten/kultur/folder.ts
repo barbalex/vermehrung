@@ -4,6 +4,12 @@ export const buildPersonGartenKulturFolder = ({
   personId,
   personIndex,
   count,
+}: {
+  gartenId: string
+  gartenIndex: number
+  personId: string
+  personIndex: number
+  count: number
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Kulturen',

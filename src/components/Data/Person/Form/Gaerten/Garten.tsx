@@ -9,7 +9,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
 import styles from './Garten.module.css'
 
-export const PersonGarten = ({ gv }) => {
+export const PersonGarten = ({ gv }: { gv: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 

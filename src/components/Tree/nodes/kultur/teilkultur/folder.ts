@@ -2,6 +2,10 @@ export const buildKulturTeilkulturFolder = ({
   count,
   kulturIndex,
   kulturId,
+}: {
+  count: number
+  kulturIndex: number
+  kulturId: string
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Teilkulturen',

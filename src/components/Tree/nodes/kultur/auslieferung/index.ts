@@ -5,6 +5,11 @@ export const buildKulturAuslieferung = ({
   lieferungIndex,
   kulturId,
   kulturIndex,
+}: {
+  lieferung: import('../../../../../dbModel.ts').Lieferung
+  lieferungIndex: number
+  kulturId: string
+  kulturIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Aus-Lieferung',

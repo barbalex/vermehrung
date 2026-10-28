@@ -5,6 +5,11 @@ export const buildKulturBedarf = ({
   bedarfIndex,
   kulturId,
   kulturIndex,
+}: {
+  bedarf: import('../../../../../dbModel.ts').Bedarf
+  bedarfIndex: number
+  kulturId: string
+  kulturIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Bedarf',

@@ -205,8 +205,8 @@ export const apiClientAtom = atom<ApiClient | null>(null)
 // navigate is never read reactively, so it is kept as a plain module value.
 // Storing a function in a jotai primitive atom would make jotai call it
 // (updater semantics, like React setState) when setting it
-let navigateFn: ((to: string) => void) | undefined
-export const setNavigate = (val: (to: string) => void) => {
+let navigateFn: ((to: string, options?: unknown) => void) | undefined
+export const setNavigate = (val: (to: string, options?: unknown) => void) => {
   navigateFn = val
 }
 export const getNavigate = () => navigateFn

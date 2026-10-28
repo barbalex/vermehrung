@@ -15,6 +15,11 @@ export const SammelLieferungWann = ({
   row,
   ifNeeded,
   saveToDb,
+}: {
+  showFilter: boolean
+  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  ifNeeded: boolean
+  saveToDb: (event: { target: { name?: string; value: unknown } }) => void
 }) => {
   const errors = useAtomValue(errorsAtom)
 

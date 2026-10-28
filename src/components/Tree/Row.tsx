@@ -78,7 +78,7 @@ export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
     if (!node) return
     const personObservable =
       node?.nodeType === 'table' && node.table === 'person' && node.url
-        ? db.get('person').findAndObserve(node.url.at(-1))
+        ? db?.get('person').findAndObserve(node.url.at(-1))
         : $of({})
 
     const subscription = personObservable.subscribe((person) =>

@@ -26,6 +26,9 @@ import artStyles from '../Art/index.module.css'
 export const Person = ({
   filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
+}: {
+  filter: boolean
+  id: string | undefined
 }) => {
   const personFilter = useAtomValue(filterPersonAtom)
   const filterShow = useAtomValue(filterShowAtom)
@@ -41,7 +44,7 @@ export const Person = ({
     const personObservable = showFilter
       ? $of(personFilter)
       : (initialDataQueried || !online)
-        ? db.get('person').findAndObserve(id)
+        ? db?.get('person').findAndObserve(id)
         : $of({})
     const subscription = personObservable.subscribe((newRow) => {
       setDataState({

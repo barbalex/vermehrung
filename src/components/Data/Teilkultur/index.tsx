@@ -27,6 +27,9 @@ import artStyles from '../Art/index.module.css'
 export const Teilkultur = ({
   filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
+}: {
+  filter: boolean
+  id: string | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const online = useAtomValue(onlineAtom)
@@ -40,7 +43,7 @@ export const Teilkultur = ({
       showFilter
         ? $of(teilkulturFilter)
         : (initialDataQueried || !online)
-          ? db.get('teilkultur').findAndObserve(id)
+          ? db?.get('teilkultur').findAndObserve(id)
           : $of({}),
     [db, teilkulturFilter, id, initialDataQueried, online, showFilter],
   )

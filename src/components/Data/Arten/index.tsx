@@ -35,7 +35,7 @@ export const Arten = ({ filter: showFilter }) => {
 
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
-    const collection = db.get('art')
+    const collection = db?.get('art')
     const delQuery =
       artFilter._deleted === false
         ? Q.where('_deleted', false)

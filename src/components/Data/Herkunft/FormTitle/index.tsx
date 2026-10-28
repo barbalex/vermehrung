@@ -18,6 +18,12 @@ export const HerkunftFormTitleChooser = ({
   showFilter,
   showHistory,
   activeConflict,
+}: {
+  row: import('../../../shared/types.ts').Herkunft | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  showFilter: boolean
+  showHistory: boolean
+  activeConflict: string | null
 }) => {
   const db = useAtomValue(dbAtom)
   const sammlungIdInActiveNodeArray = useAtomValue(
@@ -36,7 +42,7 @@ export const HerkunftFormTitleChooser = ({
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
         ]
       : []
-    const collection = db.get('herkunft')
+    const collection = db?.get('herkunft')
     const delQuery =
       herkunftFilter._deleted === false
         ? Q.where('_deleted', false)

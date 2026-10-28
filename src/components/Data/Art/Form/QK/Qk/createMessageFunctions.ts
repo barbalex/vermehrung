@@ -42,13 +42,13 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    arts = await db.get('art').query(delQuery).fetch()
+    arts = await db?.get('art').query(delQuery).fetch()
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
 
   let avs
   try {
-    avs = await db.get('av').query(notDeletedQuery).fetch()
+    avs = await db?.get('av').query(notDeletedQuery).fetch()
   } catch {}
 
   let herkunfts = []
@@ -63,7 +63,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    herkunfts = await db.get('herkunft').query(delQuery).fetch()
+    herkunfts = await db?.get('herkunft').query(delQuery).fetch()
   } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
 
@@ -108,7 +108,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    lieferungs = await db.get('lieferung').query(delQuery).fetch()
+    lieferungs = await db?.get('lieferung').query(delQuery).fetch()
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
 
@@ -134,7 +134,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
               Q.where('aktiv', true),
               Q.where('aktiv', null),
             )
-    persons = await db.get('person').query(delQuery, aktivQuery).fetch()
+    persons = await db?.get('person').query(delQuery, aktivQuery).fetch()
   } catch {}
   const personsSorted = persons.sort(personSort)
 

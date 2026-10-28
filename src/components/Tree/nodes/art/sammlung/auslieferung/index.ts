@@ -7,6 +7,13 @@ export const buildArtSammlungAuslieferung = ({
   sammlungIndex,
   artId,
   artIndex,
+}: {
+  lieferung: import('../../../../../../dbModel.ts').Lieferung
+  lieferungIndex: number
+  sammlungId: string
+  sammlungIndex: number
+  artId: string
+  artIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Lieferung',

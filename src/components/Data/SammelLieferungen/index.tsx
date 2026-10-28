@@ -35,7 +35,7 @@ export const SammelLieferungen = ({ filter: showFilter = false }) => {
     totalCount: 0,
   })
   useEffect(() => {
-    const collection = db.get('sammel_lieferung')
+    const collection = db?.get('sammel_lieferung')
     const sammelLieferungDelQuery =
       sammelLieferungFilter._deleted === false
         ? Q.where('_deleted', false)

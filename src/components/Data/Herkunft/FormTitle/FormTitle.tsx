@@ -25,6 +25,12 @@ export const HerkunftFormTitle = ({
   filteredCount,
   showHistory,
   activeConflict,
+}: {
+  row: import('../../../shared/types.ts').Herkunft | null | undefined
+  totalCount: number
+  filteredCount: number
+  showHistory: boolean
+  activeConflict: string | null
 }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 

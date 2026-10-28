@@ -38,6 +38,14 @@ export const GartenForm = ({
   activeConflict,
   setActiveConflict,
   showHistory,
+}: {
+  showFilter: boolean
+  id: string | undefined
+  row: import('../../../shared/types.ts').Garten | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  activeConflict: string | null
+  setActiveConflict: (val: unknown) => void
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
@@ -185,7 +193,7 @@ export const GartenForm = ({
     <div className={artStyles.container}>
       {(activeConflict || showHistory) && (
         <h4 className={artStyles.caseConflictTitle}>
-          Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
+          Aktuelle Version<span className={artStyles.rev}>{row?._rev}</span>
         </h4>
       )}
       {showDeleted && (
@@ -299,7 +307,7 @@ export const GartenForm = ({
       )}
       {online && !showFilter && row?._conflicts?.map && (
         <ConflictList
-          conflicts={row._conflicts}
+          conflicts={row?._conflicts}
           activeConflict={activeConflict}
           setActiveConflict={setActiveConflict}
         />

@@ -9,6 +9,15 @@ export const buildArtHerkunftSammlungAuslieferung = ({
   herkunftIndex,
   artId,
   artIndex,
+}: {
+  lieferung: import('../../../../../../../dbModel.ts').Lieferung
+  lieferungIndex: number
+  sammlung: import('../../../../../../../dbModel.ts').Sammlung
+  sammlungIndex: number
+  herkunft: import('../../../../../../../dbModel.ts').Herkunft
+  herkunftIndex: number
+  artId: string
+  artIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Lieferung',

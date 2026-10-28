@@ -23,6 +23,11 @@ export const ZaehlungFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
+}: {
+  row: import('../../../shared/types.ts').Zaehlung | null | undefined
+  totalCount: number
+  filteredCount: number
+  showHistory: boolean
 }) => {
   const { width, ref } = useResizeDetector()
 

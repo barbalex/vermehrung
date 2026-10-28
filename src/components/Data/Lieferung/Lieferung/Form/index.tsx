@@ -32,6 +32,14 @@ export const LierferungForm = ({
   activeConflict,
   setActiveConflict,
   showHistory,
+}: {
+  showFilter: boolean
+  id: string | undefined
+  row: import('../../../../shared/types.ts').Lieferung | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  activeConflict: string | null
+  setActiveConflict: (val: unknown) => void
+  showHistory: boolean
 }) => {
   const existsSammelLieferung = !!row?.sammel_lieferung_id
 
@@ -83,7 +91,7 @@ export const LierferungForm = ({
         if (row.von_kultur_id) {
           let vonKultur
           try {
-            vonKultur = await db.get('kultur').find(row.von_kultur_id)
+            vonKultur = await db?.get('kultur').find(row.von_kultur_id as string)
           } catch {}
           let herkunftByVonKultur
           try {
@@ -100,7 +108,7 @@ export const LierferungForm = ({
         }
         let nachKultur
         try {
-          nachKultur = await db.get('kultur').find(row.nach_kultur_id)
+          nachKultur = await db?.get('kultur').find(row.nach_kultur_id as string)
         } catch {}
         let herkunftByNachKultur
         try {
@@ -175,7 +183,7 @@ export const LierferungForm = ({
       <div className={artStyles.container}>
         {(activeConflict || showHistory) && (
           <h4 className={artStyles.caseConflictTitle}>
-            Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
+            Aktuelle Version<span className={artStyles.rev}>{row?._rev}</span>
           </h4>
         )}
         {showDeleted && (

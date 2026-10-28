@@ -7,6 +7,13 @@ export const buildArtHerkunftKultur = async ({
   herkunftIndex,
   artId,
   artIndex,
+}: {
+  kultur: import('../../../../../../dbModel.ts').Kultur
+  kulturIndex: number
+  herkunft: import('../../../../../../dbModel.ts').Herkunft
+  herkunftIndex: number
+  artId: string
+  artIndex: number
 }) => {
   let label = ''
   try {

@@ -30,7 +30,7 @@ export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
       : $of({})
     const kulturOptionObservable = kulturId
-      ? db.get('kultur_option').findAndObserve(kulturId)
+      ? db?.get('kultur_option').findAndObserve(kulturId)
       : $of({})
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,

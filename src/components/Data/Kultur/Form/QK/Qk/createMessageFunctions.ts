@@ -36,7 +36,7 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    events = await db.get('event').query(eventDelQuery).fetch()
+    events = await db?.get('event').query(eventDelQuery).fetch()
   } catch {}
   const eventsSorted = events.sort(eventSort)
   let kulturs = []
@@ -79,7 +79,7 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    lieferungs = await db.get('lieferung').query(lieferungDelQuery).fetch()
+    lieferungs = await db?.get('lieferung').query(lieferungDelQuery).fetch()
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
   let teilkulturs = []
@@ -94,7 +94,7 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    teilkulturs = await db.get('teilkultur').query(teilkulturDelQuery).fetch()
+    teilkulturs = await db?.get('teilkultur').query(teilkulturDelQuery).fetch()
   } catch {}
   const teilkultursSorted = teilkulturs.sort(teilkulturSort)
   let zaehlungs = []
@@ -109,12 +109,12 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    zaehlungs = await db.get('zaehlung').query(zaehlungDelQuery).fetch()
+    zaehlungs = await db?.get('zaehlung').query(zaehlungDelQuery).fetch()
   } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
   let teilzaehlungs = []
   try {
-    teilzaehlungs = await db.get('teilzaehlung').query(notDeletedQuery).fetch()
+    teilzaehlungs = await db?.get('teilzaehlung').query(notDeletedQuery).fetch()
   } catch {}
 
   return {

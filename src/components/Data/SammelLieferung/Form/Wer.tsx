@@ -35,7 +35,7 @@ export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
     const rowObservable = showFilter
       ? $of(sammelLieferungFilter)
       : initialDataQueried
-        ? db.get('sammel_lieferung').findAndObserve(id)
+        ? db?.get('sammel_lieferung').findAndObserve(id)
         : $of({})
     const personDelQuery =
       personFilter._deleted === false

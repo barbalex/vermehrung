@@ -5,6 +5,11 @@ export const buildKulturTeilkultur = ({
   teilkulturIndex,
   kulturId,
   kulturIndex,
+}: {
+  teilkultur: import('../../../../../dbModel.ts').Teilkultur
+  teilkulturIndex: number
+  kulturId: string
+  kulturIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Teilkultur',

@@ -27,6 +27,9 @@ import artStyles from '../Art/index.module.css'
 export const Garten = ({
   filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
+}: {
+  filter: boolean
+  id: string | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const online = useAtomValue(onlineAtom)
@@ -40,7 +43,7 @@ export const Garten = ({
       showFilter
         ? $of({})
         : initialDataQueried || !online
-          ? db.get('garten').findAndObserve(id)
+          ? db?.get('garten').findAndObserve(id)
           : $of({}),
     [db, id, initialDataQueried, online, showFilter],
   )

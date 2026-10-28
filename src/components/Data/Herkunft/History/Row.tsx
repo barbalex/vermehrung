@@ -18,6 +18,10 @@ export const HerkunftHistoryRow = ({
   row,
   revRow,
   historyTakeoverCallback,
+}: {
+  row: import('../../../shared/types.ts').Herkunft | null | undefined
+  revRow: import('../../../shared/types.ts').WmRow | null | undefined
+  historyTakeoverCallback: () => void
 }) => {
   const dataArray = createDataArrayForHerkunftRevComparison({
     row,
@@ -28,8 +32,8 @@ export const HerkunftHistoryRow = ({
     const user = store.get(userAtom)
     const db = store.get(dbAtom)    // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = row._depth + 1
-    const newObject = {
+    const newDepth = ((row?._depth as number) ?? 0) + 1
+    const newObject: Record<string, unknown> = {
       herkunft_id: revRow.herkunft_id,
       nr: revRow.nr,
       lokalname: revRow.lokalname,
@@ -38,42 +42,42 @@ export const HerkunftHistoryRow = ({
       land: revRow.land,
       geom_point: revRow.geom_point,
       bemerkungen: revRow.bemerkungen,
-      _parent_rev: row._rev,
+      _parent_rev: row?._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv7()
-    newObject.changed = new window.Date().toISOString()
+    newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = toPgArray([rev, ...row._revisions])
+    newObject._revisions = toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
     const newObjectForStore = { ...newObject }
     //console.log('Herkunft History', { row, revRow, newObject })
     try {
     await store
       .get(apiClientAtom)
-      .post('/herkunft_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+      ?.post('/herkunft_rev', newObject, 'resolution=merge-duplicates,return=minimal')
   } catch (error) {
           checkForOnlineError({ error: error })
       return addNotification({
-        message: error.message,
+        message: (error as Error).message,
   })
     }
     historyTakeoverCallback()
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = row._revisions
-      ? [rev, ...row._revisions]
+    newObjectForStore._revisions = row?._revisions
+      ? [rev, ...((row?._revisions as string[]) ?? [])]
       : [rev]
     // TODO: is this a good idea?
-    newObjectForStore._conflicts = row._conflicts
+    newObjectForStore._conflicts = row?._conflicts
     // for store: convert rev to winner
     newObjectForStore.id = row.id
     delete newObjectForStore.herkunft_id
     // optimistically update store
-    await db.write(async () => {
-      await row.update((row) => {
+    await db?.write(async () => {
+      await row.update((row: Record<string, unknown>) => {
         Object.entries(newObjectForStore).forEach(([key, value]) => {
           if (!isEqual(value, row[key])) {
             row[key] = value

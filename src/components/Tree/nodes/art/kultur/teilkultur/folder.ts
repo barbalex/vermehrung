@@ -4,6 +4,12 @@ export const buildArtKulturTeilkulturFolder = ({
   artId,
   artIndex,
   children,
+}: {
+  kulturId: string
+  kulturIndex: number
+  artId: string
+  artIndex: number
+  children: unknown[]
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Teilkulturen',

@@ -33,6 +33,13 @@ export const PersonForm = ({
   activeConflict,
   setActiveConflict,
   showHistory,
+}: {
+  showFilter: boolean
+  id: string | undefined
+  row: import('../../../shared/types.ts').Person | null | undefined
+  activeConflict: string | null
+  setActiveConflict: (val: unknown) => void
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const online = useAtomValue(onlineAtom)
@@ -51,7 +58,7 @@ export const PersonForm = ({
             .get('person')
             .query(Q.where('_deleted', false), Q.where('nr', row.nr))
             .observeCount()
-    const userRolesObservable = db.get('user_role').query().observe()
+    const userRolesObservable = db?.get('user_role').query().observe()
     const userRoleObservable = row.user_role
       ? row.user_role.observe()
       : $of(null)
@@ -109,7 +116,7 @@ export const PersonForm = ({
     <div className={artStyles.container}>
       {(activeConflict || showHistory) && (
         <h4 className={artStyles.caseConflictTitle}>
-          Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
+          Aktuelle Version<span className={artStyles.rev}>{row?._rev}</span>
         </h4>
       )}
       {showDeleted && (
@@ -322,7 +329,7 @@ export const PersonForm = ({
       />
       {online && !showFilter && row?._conflicts?.map && (
         <ConflictList
-          conflicts={row._conflicts}
+          conflicts={row?._conflicts}
           activeConflict={activeConflict}
           setActiveConflict={setActiveConflict}
         />

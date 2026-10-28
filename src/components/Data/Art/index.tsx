@@ -27,6 +27,9 @@ import styles from './index.module.css'
 export const Art = ({
   filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
+}: {
+  filter: boolean
+  id: string | undefined
 }) => {
   const artFilter = useAtomValue(filterArtAtom)
   const filterShow = useAtomValue(filterShowAtom)
@@ -40,7 +43,7 @@ export const Art = ({
       showFilter
         ? $of(artFilter)
         : (initialDataQueried || !online)
-          ? db.get('art').findAndObserve(id)
+          ? db?.get('art').findAndObserve(id)
           : $of({}),
     [db, artFilter, id, initialDataQueried, online, showFilter],
   )

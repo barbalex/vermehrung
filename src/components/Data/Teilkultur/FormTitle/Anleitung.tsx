@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.ts'
 
-export const TeilkulturAnleitung = ({ asMenu }) => {
+export const TeilkulturAnleitung = ({ asMenu }: { asMenu: boolean }) => {
   const openTeilkulturDocs = () => {
     const url = `${constants?.getAppUri()}/Dokumentation/teilkulturen`
     if (window.matchMedia('(display-mode: standalone)').matches) {

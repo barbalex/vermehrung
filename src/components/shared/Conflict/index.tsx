@@ -27,7 +27,9 @@ export const Conflict = ({
   name: string
   rev?: string | boolean | null
   dataArray: { label: string; valueInRow: unknown; valueInRev: unknown }[]
-  loading: boolean
+  dataArrayKey?: string
+  loading?: boolean
+  fetching?: boolean
   error?: { message?: string } | null
   onClickAktuellUebernehmen: () => void
   onClickWiderspruchUebernehmen: () => void

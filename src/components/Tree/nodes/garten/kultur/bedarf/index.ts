@@ -7,6 +7,13 @@ export const buildGartenKulturBedarf = ({
   kulturIndex,
   gartenId,
   gartenIndex,
+}: {
+  bedarf: import('../../../../../../dbModel.ts').Bedarf
+  bedarfIndex: number
+  kulturId: string
+  kulturIndex: number
+  gartenId: string
+  gartenIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Bedarf',

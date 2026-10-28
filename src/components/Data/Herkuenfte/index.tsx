@@ -49,7 +49,7 @@ export const Herkuenfte = ({ filter: showFilter }) => {
             Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
           ]
         : []
-    const collection = db.get('herkunft')
+    const collection = db?.get('herkunft')
     const delQuery =
       herkunftFilter._deleted === false
         ? Q.where('_deleted', false)

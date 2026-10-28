@@ -19,6 +19,9 @@ import { SammelLieferung } from '../SammelLieferung/index.tsx'
 export const LieferungContainer = ({
   filter: showFilter = false,
   id: idPassed,
+}: {
+  filter: boolean
+  id: string | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
@@ -54,7 +57,7 @@ export const LieferungContainer = ({
     const lieferungObservable = showFilter
       ? $of(lieferungFilter)
       : (initialDataQueried || !online)
-        ? db.get('lieferung').findAndObserve(id)
+        ? db?.get('lieferung').findAndObserve(id)
         : $of({})
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,

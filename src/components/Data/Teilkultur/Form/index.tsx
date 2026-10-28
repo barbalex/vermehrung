@@ -33,6 +33,13 @@ export const TeilkulturForm = ({
   activeConflict,
   setActiveConflict,
   showHistory,
+}: {
+  showFilter: boolean
+  id: string | undefined
+  row: import('../../../shared/types.ts').Teilkultur | null | undefined
+  activeConflict: string | null
+  setActiveConflict: (val: unknown) => void
+  showHistory: boolean
 }) => {
   const kulturFilter = useAtomValue(filterKulturAtom)
   const teilkulturFilter = useAtomValue(filterTeilkulturAtom)
@@ -75,7 +82,7 @@ export const TeilkulturForm = ({
       .observe()
     const kulturObservable = row.kultur ? row.kultur.observe() : $of({})
     const kulturOptionObservable = row.kultur_id
-      ? db.get('kultur_option').findAndObserve(row.kultur_id)
+      ? db?.get('kultur_option').findAndObserve(row.kultur_id)
       : $of(null)
     const combinedObservables = combineLatest([
       kultursObservable,
@@ -141,7 +148,7 @@ export const TeilkulturForm = ({
       <div className={artStyles.container}>
         {(activeConflict || showHistory) && (
           <h4 className={artStyles.caseConflictTitle}>
-            Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
+            Aktuelle Version<span className={artStyles.rev}>{row?._rev}</span>
           </h4>
         )}
         {showDeleted && (
@@ -222,7 +229,7 @@ export const TeilkulturForm = ({
         )}
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList
-            conflicts={row._conflicts}
+            conflicts={row?._conflicts}
             activeConflict={activeConflict}
             setActiveConflict={setActiveConflict}
           />

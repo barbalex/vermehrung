@@ -28,7 +28,7 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (!calledFromHigherUp) {
     let kultur
     try {
-      kultur = await db.get('kultur').find(kultur_id)
+      kultur = await db?.get('kultur').find(kultur_id)
     } catch {}
     let art
     try {
@@ -202,7 +202,7 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonSammlung
       try {
-        vonSammlung = await db.get('sammlung').find(l.von_sammlung_id)
+        vonSammlung = await db?.get('sammlung').find(l.von_sammlung_id)
       } catch {}
       let vonSammlungPerson
       try {
@@ -214,7 +214,7 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonKultur
       try {
-        vonKultur = await db.get('kultur').find(l.von_kultur_id)
+        vonKultur = await db?.get('kultur').find(l.von_kultur_id)
       } catch {}
       let vonKulturGarten
       try {
@@ -226,7 +226,7 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let nachKultur
       try {
-        nachKultur = await db.get('kultur').find(l.nach_kultur_id)
+        nachKultur = await db?.get('kultur').find(l.nach_kultur_id)
       } catch {}
       let nachKulturGarten
       try {
@@ -374,7 +374,7 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonSammlung
       try {
-        vonSammlung = await db.get('sammlung').find(l.von_sammlung_id)
+        vonSammlung = await db?.get('sammlung').find(l.von_sammlung_id)
       } catch {}
       let vonSammlungPerson
       try {
@@ -386,7 +386,7 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonKultur
       try {
-        vonKultur = await db.get('kultur').find(l.von_kultur_id)
+        vonKultur = await db?.get('kultur').find(l.von_kultur_id)
       } catch {}
       let vonKulturGarten
       try {
@@ -398,7 +398,7 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let nachKultur
       try {
-        nachKultur = await db.get('kultur').find(l.nach_kultur_id)
+        nachKultur = await db?.get('kultur').find(l.nach_kultur_id)
       } catch {}
       let nachKulturGarten
       try {
@@ -524,7 +524,7 @@ export const buildExceljsWorksheetsForKultur = async ({
     eventsSorted.map(async (e) => {
       let teilkultur
       try {
-        teilkultur = await db.get('teilkultur').find(e.teilkultur_id)
+        teilkultur = await db?.get('teilkultur').find(e.teilkultur_id)
       } catch {}
       let person
       try {

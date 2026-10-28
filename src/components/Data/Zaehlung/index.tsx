@@ -27,6 +27,9 @@ import artStyles from '../Art/index.module.css'
 export const Zaehlung = ({
   filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
+}: {
+  filter: boolean
+  id: string | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const online = useAtomValue(onlineAtom)
@@ -40,7 +43,7 @@ export const Zaehlung = ({
       showFilter
         ? $of(zaehlungFilter)
         : (initialDataQueried || !online)
-          ? db.get('zaehlung').findAndObserve(id)
+          ? db?.get('zaehlung').findAndObserve(id)
           : $of({}),
     [db, zaehlungFilter, id, initialDataQueried, online, showFilter],
   )

@@ -55,7 +55,7 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   }
 
   if (error) {
-    return <div className={artStyles.errorContainer}>{error.message}</div>
+    return <div className={artStyles.errorContainer}>{(error as Error).message}</div>
   }
 
   return (
@@ -74,7 +74,7 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
       >
         {revRows.map((r) => (
           <Row
-            key={row._rev}
+            key={row?._rev}
             revRow={r}
             row={row}
             rawRow={rawRow}

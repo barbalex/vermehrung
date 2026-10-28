@@ -5,6 +5,11 @@ export const buildKulturZaehlung = async ({
   zaehlungIndex,
   kulturId,
   kulturIndex,
+}: {
+  zaehlung: import('../../../../../dbModel.ts').Zaehlung
+  zaehlungIndex: number
+  kulturId: string
+  kulturIndex: number
 }) => {
   let label = ''
   try {

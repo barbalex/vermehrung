@@ -25,6 +25,12 @@ export const GartenFormTitle = ({
   showHistory,
   totalCount,
   filteredCount,
+}: {
+  row: import('../../../shared/types.ts').Garten | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  showHistory: boolean
+  totalCount: number
+  filteredCount: number
 }) => {
   const { width, ref } = useResizeDetector()
 

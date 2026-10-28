@@ -7,7 +7,7 @@ import { Q } from '@nozbe/watermelondb'
 import { userAtom, dbAtom } from '../../../../../../store/index.ts'
 import styles from './Row.module.css'
 
-export const ChooseKulturQkRow = ({ qk }) => {
+export const ChooseKulturQkRow = ({ qk }: { qk: import('../../../../../shared/types.ts').WmRow | null | undefined }) => {
   const user = useAtomValue(userAtom)
   const db = useAtomValue(dbAtom)
 

@@ -45,6 +45,14 @@ export const EventForm = ({
   activeConflict,
   setActiveConflict,
   showHistory,
+}: {
+  showFilter: boolean
+  id: string | undefined
+  row: import('../../../shared/types.ts').Event | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  activeConflict: string | null
+  setActiveConflict: (val: unknown) => void
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const online = useAtomValue(onlineAtom)
@@ -140,7 +148,7 @@ export const EventForm = ({
       .query(personDelQuery, personAktivQuery)
       .observeWithColumns(['vorname', 'name'])
     const kulturOptionObservable = row?.kultur_id
-      ? db.get('kultur_option').findAndObserve(row.kultur_id)
+      ? db?.get('kultur_option').findAndObserve(row.kultur_id)
       : $of({})
     const combinedObservables = combineLatest([
       kultursObservable,
@@ -280,7 +288,7 @@ export const EventForm = ({
       <div className={artStyles.container}>
         {(activeConflict || showHistory) && (
           <h4 className={artStyles.caseConflictTitle}>
-            Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
+            Aktuelle Version<span className={artStyles.rev}>{row?._rev}</span>
           </h4>
         )}
         {showDeleted && (
@@ -395,7 +403,7 @@ export const EventForm = ({
         )}
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList
-            conflicts={row._conflicts}
+            conflicts={row?._conflicts}
             activeConflict={activeConflict}
             setActiveConflict={setActiveConflict}
           />

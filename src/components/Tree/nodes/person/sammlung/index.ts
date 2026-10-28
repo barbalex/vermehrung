@@ -5,6 +5,11 @@ export const buildPersonSammlung = async ({
   index,
   personId,
   personIndex,
+}: {
+  sammlung: import('../../../../../dbModel.ts').Sammlung
+  index: number
+  personId: string
+  personIndex: number
 }) => {
   let label = ''
   try {

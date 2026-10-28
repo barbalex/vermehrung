@@ -14,7 +14,15 @@ import { checkForOnlineError } from '../../../../utils/checkForOnlineError.ts'
 import { toPgArray } from '../../../../utils/toPgArray.ts'
 import { createDataArrayForGartenRevComparison } from '../createDataArrayForRevComparison.ts'
 
-export const GartenHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
+export const GartenHistoryRow = ({
+  row,
+  revRow,
+  historyTakeoverCallback,
+}: {
+  row: import('../../../shared/types.ts').Garten | null | undefined
+  revRow: import('../../../shared/types.ts').RevRow | null | undefined
+  historyTakeoverCallback?: () => void
+}) => {
   const dataArray = createDataArrayForGartenRevComparison({
     row,
     revRow,
@@ -25,8 +33,8 @@ export const GartenHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
     const db = store.get(dbAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = row._depth + 1
-    const newObject = {
+    const newDepth = ((row?._depth as number) ?? 0) + 1
+    const newObject: Record<string, unknown> = {
       garten_id: revRow.garten_id,
       name: revRow.name,
       person_id: revRow.person_id,
@@ -36,42 +44,42 @@ export const GartenHistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
       geom_point: revRow.geom_point,
       aktiv: revRow.aktiv,
       bemerkungen: revRow.bemerkungen,
-      _parent_rev: row._rev,
+      _parent_rev: row?._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv7()
-    newObject.changed = new window.Date().toISOString()
+    newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = toPgArray([rev, ...row._revisions])
+    newObject._revisions = toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
     const newObjectForStore = { ...newObject }
     //console.log('Kultur History', { row, revRow, newObject })
     try {
     await store
       .get(apiClientAtom)
-      .post('/garten_rev', newObject, 'resolution=merge-duplicates,return=minimal')
+      ?.post('/garten_rev', newObject, 'resolution=merge-duplicates,return=minimal')
   } catch (error) {
           checkForOnlineError({ error: error })
       return addNotification({
-        message: error.message,
+        message: (error as Error).message,
   })
     }
     historyTakeoverCallback()
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = row._revisions
-      ? [rev, ...row._revisions]
+    newObjectForStore._revisions = row?._revisions
+      ? [rev, ...((row?._revisions as string[]) ?? [])]
       : [rev]
     // TODO: is this a good idea?
-    newObjectForStore._conflicts = row._conflicts
+    newObjectForStore._conflicts = row?._conflicts
     // for store: convert rev to winner
     newObjectForStore.id = row.id
     delete newObjectForStore.garten_id
     // optimistically update store
-    await db.write(async () => {
-      await row.update((row) => {
+    await db?.write(async () => {
+      await row.update((row: Record<string, unknown>) => {
         Object.entries(newObjectForStore).forEach(([key, value]) => {
           if (!isEqual(value, row[key])) {
             row[key] = value

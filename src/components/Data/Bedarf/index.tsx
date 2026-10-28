@@ -27,6 +27,9 @@ import artStyles from '../Art/index.module.css'
 export const Bedarf = ({
   filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
+}: {
+  filter: boolean
+  id: string | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const online = useAtomValue(onlineAtom)
@@ -40,7 +43,7 @@ export const Bedarf = ({
       showFilter
         ? $of(bedarfFilter)
         : (initialDataQueried || !online)
-          ? db.get('bedarf').findAndObserve(id)
+          ? db?.get('bedarf').findAndObserve(id)
           : $of({}),
     [db, bedarfFilter, id, initialDataQueried, online, showFilter],
   )

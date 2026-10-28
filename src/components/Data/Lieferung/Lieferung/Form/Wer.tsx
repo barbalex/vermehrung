@@ -28,6 +28,13 @@ export const LieferungWer = ({
   ifNeeded,
   activeConflict,
   setActiveConflict,
+}: {
+  showFilter: boolean
+  id: string | undefined
+  saveToDb: (event: { target: { name?: string; value: unknown } }) => void
+  ifNeeded: boolean
+  activeConflict: string | null
+  setActiveConflict: (val: unknown) => void
 }) => {
   const errors = useAtomValue(errorsAtom)
   const online = useAtomValue(onlineAtom)
@@ -46,7 +53,7 @@ export const LieferungWer = ({
     const rowObservable = showFilter
       ? $of(lieferungFilter)
       : initialDataQueried
-        ? db.get('lieferung').findAndObserve(id)
+        ? db?.get('lieferung').findAndObserve(id)
         : $of({})
     const personDelQuery =
       personFilter._deleted === false
@@ -155,7 +162,7 @@ export const LieferungWer = ({
       )}
       {online && !showFilter && !!row?._conflicts?.map && (
         <ConflictList
-          conflicts={row._conflicts}
+          conflicts={row?._conflicts}
           activeConflict={activeConflict}
           setActiveConflict={setActiveConflict}
         />

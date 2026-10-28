@@ -19,7 +19,7 @@ import image from '../../../../images/toposLogo.png'
 
 import styles from './index.module.css'
 
-export const Lieferschein = ({ row }) => {
+export const Lieferschein = ({ row }: { row: import('../../../shared/types.ts').WmRow | null | undefined }) => {
   const db = useAtomValue(dbAtom)
 
   const [dataState, setDataState] = useState({

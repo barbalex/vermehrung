@@ -22,22 +22,30 @@ const sliderSettings = {
   infinite: false,
 }
 
-export const TeilkulturHistory = ({ row, rawRow, historyTakeoverCallback }) => {
-  const priorRevisions = row?._revisions?.slice(1) ?? []
+export const TeilkulturHistory = ({
+  row,
+  rawRow,
+  historyTakeoverCallback,
+}: {
+  row: import('../../../shared/types.ts').Teilkultur | null | undefined
+  rawRow?: unknown
+  historyTakeoverCallback?: () => void
+}) => {
+  const priorRevisions = (row?._revisions as { slice?: unknown } | undefined)?.slice(1) ?? []
   const revPath = priorRevisions.length
     ? `/teilkultur_rev?_rev=in.(${priorRevisions.join(',')})&select=id,teilkultur_id,kultur_id,name,ort1,ort2,ort3,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
     : null
   const { error, data, fetching } = useApiQuery(revPath)
     if (error) checkForOnlineError({ error })
 
-  const revRowsUnsorted = data ?? []
-  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
+  const revRowsUnsorted = (data ?? []) as import('../../../shared/types.ts').RevRow[]
+  const revRows = revRowsUnsorted.sort((a, b) => (b._depth ?? 0) - (a._depth ?? 0))
 
   const historyRev = useAtomValue(historyRevAtom)
 
   // replace: sliding should not create a browser history entry per revision
-  const navigateToRev = (rev) => {
-    const url = [...store.get(activeNodeArrayAtom), 'histories', rev]
+  const navigateToRev = (rev: string | true | null | undefined) => {
+    const url = [...store.get(activeNodeArrayAtom), 'histories', rev as string]
     getNavigate()?.(`/Vermehrung/${url.join('/')}`, { replace: true })
   }
 
@@ -55,7 +63,7 @@ export const TeilkulturHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   }
 
   if (error) {
-    return <div className={artStyles.errorContainer}>{error.message}</div>
+    return <div className={artStyles.errorContainer}>{(error as Error).message}</div>
   }
 
   return (
@@ -66,7 +74,7 @@ export const TeilkulturHistory = ({ row, rawRow, historyTakeoverCallback }) => {
       <Slider
         key={historyRev}
         initialSlide={indexOfRev > -1 ? indexOfRev : 0}
-        afterChange={(index) => {
+        afterChange={(index: number) => {
           const rev = revRows[index]?._rev
           if (rev && rev !== historyRev) navigateToRev(rev)
         }}

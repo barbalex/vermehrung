@@ -2,6 +2,10 @@ export const buildPersonSammlungFolder = ({
   count,
   personIndex,
   personId,
+}: {
+  count: number
+  personIndex: number
+  personId: string
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Sammlungen',

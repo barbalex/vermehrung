@@ -68,6 +68,12 @@ export const TaxonSelect = ({
   saveToDb,
   error: saveToDbError,
   modelFilter,
+}: {
+  labelSize: string | number
+  art: import('../../../shared/types.ts').WmRow | null | undefined
+  saveToDb: (event: { target: { name?: string; value: unknown } }) => void
+  error: string | boolean | null
+  modelFilter: Record<string, unknown> | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
 
@@ -77,7 +83,7 @@ export const TaxonSelect = ({
   })
   useEffect(() => {
     const observable = art.ae_id
-      ? db.get('ae_art').findAndObserve(art.ae_id)
+      ? db?.get('ae_art').findAndObserve(art.ae_id)
       : $of({})
     const subscription = observable.subscribe((record) =>
       setStateValue({

@@ -8,6 +8,10 @@ export const KulturTooltip = ({
   payload: payloadPassed = [],
   label,
   active,
+}: {
+  payload: Record<string, unknown>
+  label: string
+  active: boolean
 }) => {
   // filter out zählung information if ereignis is not zählung
   const payload = [

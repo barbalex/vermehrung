@@ -1,6 +1,9 @@
 import { DateTime } from 'luxon'
 
-export const createDataArrayForZaehlungRevComparison = ({ row, revRow }) => [
+export const createDataArrayForZaehlungRevComparison = ({ row, revRow }: {
+  row: Record<string, unknown> | null | undefined
+  revRow: Record<string, unknown> | null | undefined
+}) => [
   {
     valueInRow: row.kultur_id,
     valueInRev: revRow.kultur_id,

@@ -5,6 +5,11 @@ export const buildArtSammlung = async ({
   sammlungIndex,
   artId,
   artIndex,
+}: {
+  sammlung: import('../../../../../dbModel.ts').Sammlung
+  sammlungIndex: number
+  artId: string
+  artIndex: number
 }) => {
   let label = ''
   try {

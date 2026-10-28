@@ -30,6 +30,10 @@ export const SammelLieferung = ({
   filter: showFilter = false,
   id = '99999999-9999-9999-9999-999999999999',
   lieferung,
+}: {
+  filter: boolean
+  id: string | undefined
+  lieferung: import('../../shared/types.ts').WmRow | null | undefined
 }) => {
   const isPrint = useAtomValue(isPrintAtom)
   const online = useAtomValue(onlineAtom)
@@ -44,7 +48,7 @@ export const SammelLieferung = ({
       showFilter
         ? $of(sammelLieferungFilter)
         : (initialDataQueried || !online)
-          ? db.get('sammel_lieferung').findAndObserve(id)
+          ? db?.get('sammel_lieferung').findAndObserve(id)
           : $of({}),
     [db, sammelLieferungFilter, id, initialDataQueried, online, showFilter],
   )

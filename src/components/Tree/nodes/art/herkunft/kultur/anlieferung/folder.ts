@@ -6,6 +6,14 @@ export const buildArtHerkunftKulturAnlieferungFolder = ({
   artId,
   artIndex,
   count,
+}: {
+  kulturId: string
+  kulturIndex: number
+  herkunft: import('../../../../../../../dbModel.ts').Herkunft
+  herkunftIndex: number
+  artId: string
+  artIndex: number
+  count: number
 }) => ({
   nodeType: 'folder',
   menuTitle: 'An-Lieferungen',

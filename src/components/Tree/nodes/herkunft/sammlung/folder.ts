@@ -2,6 +2,10 @@ export const buildHerkunftSammlungFolder = ({
   count,
   herkunftIndex,
   herkunftId,
+}: {
+  count: number
+  herkunftIndex: number
+  herkunftId: string
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Sammlungen',

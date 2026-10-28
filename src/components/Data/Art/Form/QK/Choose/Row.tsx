@@ -8,7 +8,7 @@ import { dbAtom, userAtom } from '../../../../../../store/index.ts'
 
 import styles from './Row.module.css'
 
-export const Row = ({ qk }) => {
+export const Row = ({ qk }: { qk: import('../../../../../shared/types.ts').WmRow | null | undefined }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 

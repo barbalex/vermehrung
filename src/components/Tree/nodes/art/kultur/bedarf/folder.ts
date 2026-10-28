@@ -4,6 +4,12 @@ export const buildArtKulturBedarfFolder = ({
   artId,
   artIndex,
   count,
+}: {
+  kulturId: string
+  kulturIndex: number
+  artId: string
+  artIndex: number
+  count: number
 }) => ({
   nodeType: 'folder',
   menuTitle: 'Bedarf',

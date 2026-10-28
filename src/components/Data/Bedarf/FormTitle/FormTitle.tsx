@@ -21,6 +21,11 @@ export const BedarfFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
+}: {
+  row: import('../../../shared/types.ts').Bedarf | null | undefined
+  totalCount: number
+  filteredCount: number
+  showHistory: boolean
 }) => {
   const { width, ref } = useResizeDetector()
 

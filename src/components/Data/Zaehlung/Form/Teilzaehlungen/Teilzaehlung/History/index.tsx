@@ -17,6 +17,10 @@ export const TeilzaehlungHistory = ({
   row,
   rawRow,
   historyTakeoverCallback,
+}: {
+  row: import('../../../../../../shared/types.ts').Zaehlung | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  historyTakeoverCallback: () => void
 }) => {
   const priorRevisions = row?._revisions?.slice(1) ?? []
   const revPath = priorRevisions.length
@@ -33,7 +37,7 @@ export const TeilzaehlungHistory = ({
   }
 
   if (error) {
-    return <div className={styles.errorContainer}>{error.message}</div>
+    return <div className={styles.errorContainer}>{(error as Error).message}</div>
   }
 
   return (
@@ -41,7 +45,7 @@ export const TeilzaehlungHistory = ({
       <Slider {...sliderSettings}>
         {revRows.map((r) => (
           <Row
-            key={row._rev}
+            key={row?._rev}
             revRow={r}
             row={row}
             rawRow={rawRow}

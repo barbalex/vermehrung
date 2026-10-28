@@ -7,6 +7,13 @@ export const buildGartenKulturAnlieferung = ({
   kulturIndex,
   gartenId,
   gartenIndex,
+}: {
+  lieferung: import('../../../../../../dbModel.ts').Lieferung
+  lieferungIndex: number
+  kulturId: string
+  kulturIndex: number
+  gartenId: string
+  gartenIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'An-Lieferung',

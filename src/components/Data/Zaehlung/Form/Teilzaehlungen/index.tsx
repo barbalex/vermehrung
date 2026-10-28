@@ -14,7 +14,7 @@ import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByT
 
 import styles from './index.module.css'
 
-export const Teilzaehlungen = ({ zaehlung }) => {
+export const Teilzaehlungen = ({ zaehlung }: { zaehlung: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   const db = useAtomValue(dbAtom)
 
   const kulturId = zaehlung.kultur_id
@@ -28,7 +28,7 @@ export const Teilzaehlungen = ({ zaehlung }) => {
       ? zaehlung.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
       : $of([])
     const kulturOptionObservable = kulturId
-      ? db.get('kultur_option').find(kulturId)
+      ? db?.get('kultur_option').find(kulturId)
       : $of({})
     const combinedObservables = combineLatest([
       teilzaehlungsObservable,

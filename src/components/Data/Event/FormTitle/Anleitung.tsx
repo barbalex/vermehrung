@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { constants } from '../../../../utils/constants.ts'
 
-export const EventAnleitung = ({ asMenu }) => {
+export const EventAnleitung = ({ asMenu }: { asMenu: boolean }) => {
   const openEventdDocs = () => {
     const url = `${constants?.getAppUri()}/Dokumentation/events`
     if (window.matchMedia('(display-mode: standalone)').matches) {

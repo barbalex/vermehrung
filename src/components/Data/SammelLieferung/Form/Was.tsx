@@ -32,7 +32,7 @@ export const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    const artsObservable = db.get('art').query(artDelQuery).observe()
+    const artsObservable = db?.get('art').query(artDelQuery).observe()
     const combinedObservables = combineLatest([artsObservable])
     const subscription = combinedObservables.subscribe(async ([arts]) => {
       let art

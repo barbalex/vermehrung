@@ -17,6 +17,11 @@ export const ZaehlungFormTitleChooser = ({
   rawRow,
   showFilter,
   showHistory,
+}: {
+  row: import('../../../shared/types.ts').Zaehlung | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  showFilter: boolean
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
@@ -33,7 +38,7 @@ export const ZaehlungFormTitleChooser = ({
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db.get('zaehlung')
+    const collection = db?.get('zaehlung')
     const zaehlungDelQuery =
       zaehlungFilter._deleted === false
         ? Q.where('_deleted', false)

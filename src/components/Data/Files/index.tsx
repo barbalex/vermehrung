@@ -44,14 +44,14 @@ export const Files = ({ parentTable, parent }) => {
     uploadedUuids.current.push(info.uuid)
 
     const db = store.get(dbAtom)
-    const newObject = {
+    const newObject: Record<string, unknown> = {
       id: uuidv7(),
       file_id: info.uuid,
       file_mime_type: info.mimeType,
       [`${parentTable}_id`]: parent.id,
       name: info.name,
     }
-    await db.write(async () => {
+    await db?.write(async () => {
       const collection = db.get(`${parentTable}_file`)
       // using batch because can create from raw
       // which enables overriding watermelons own id
@@ -60,7 +60,7 @@ export const Files = ({ parentTable, parent }) => {
     try {
       await store
         .get(apiClientAtom)
-        .post(
+        ?.post(
           `/${parentTable}_file`,
           newObject,
           'resolution=merge-duplicates,return=minimal',
@@ -68,7 +68,7 @@ export const Files = ({ parentTable, parent }) => {
     } catch (error) {
       console.log(error)
       return addNotification({
-        message: error.message,
+        message: (error as Error).message,
       })
     }
   }

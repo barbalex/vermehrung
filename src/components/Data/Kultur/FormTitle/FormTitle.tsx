@@ -17,6 +17,11 @@ export const KulturFormTitle = ({
   totalCount,
   filteredCount,
   showHistory,
+}: {
+  row: import('../../../shared/types.ts').Kultur | null | undefined
+  totalCount: number
+  filteredCount: number
+  showHistory: boolean
 }) => {
   const { width, ref } = useResizeDetector()
 

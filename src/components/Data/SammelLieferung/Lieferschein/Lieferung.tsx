@@ -22,7 +22,7 @@ export const LieferungForLieferschein = ({ lieferung: row }) => {
   })
   useEffect(() => {
     const artObservable = row.art_id
-      ? db.get('art').findAndObserve(row.art_id)
+      ? db?.get('art').findAndObserve(row.art_id)
       : $of({})
     const vonKulturHerkunftObservable = row.von_kultur_id
       ? db

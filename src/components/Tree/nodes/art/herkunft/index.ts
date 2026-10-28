@@ -5,6 +5,11 @@ export const buildArtHerkunft = async ({
   herkunftIndex,
   artId,
   artIndex,
+}: {
+  herkunft: import('../../../../../dbModel.ts').Herkunft
+  herkunftIndex: number
+  artId: string
+  artIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Herkunft',

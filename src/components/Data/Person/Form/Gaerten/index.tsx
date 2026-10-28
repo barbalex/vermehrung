@@ -17,7 +17,7 @@ import { gvsSortByGarten } from '../../../../../utils/gvsSortByGarten.ts'
 
 import styles from './index.module.css'
 
-export const PersonGaerten = ({ person }) => {
+export const PersonGaerten = ({ person }: { person: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   const db = useAtomValue(dbAtom)
   const gartenFilter = useAtomValue(filterGartenAtom)
 

@@ -5,6 +5,11 @@ export const buildPersonLieferung = ({
   index,
   personId,
   personIndex,
+}: {
+  lieferung: import('../../../../../dbModel.ts').Lieferung
+  index: number
+  personId: string
+  personIndex: number
 }) => ({
   nodeType: 'table',
   menuTitle: 'Lieferung',

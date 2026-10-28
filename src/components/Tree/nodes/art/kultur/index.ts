@@ -5,6 +5,11 @@ export const buildArtKultur = async ({
   kulturIndex,
   artId,
   artIndex,
+}: {
+  kultur: import('../../../../../dbModel.ts').Kultur
+  kulturIndex: number
+  artId: string
+  artIndex: number
 }) => {
   let label = ''
   try {

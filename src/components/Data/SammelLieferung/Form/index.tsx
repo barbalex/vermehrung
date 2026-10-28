@@ -36,6 +36,14 @@ export const SammelLieferungForm = ({
   activeConflict,
   setActiveConflict,
   showHistory,
+}: {
+  showFilter: boolean
+  id: string | undefined
+  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  activeConflict: string | null
+  setActiveConflict: (val: unknown) => void
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const online = useAtomValue(onlineAtom)
@@ -79,7 +87,7 @@ export const SammelLieferungForm = ({
         if (row.von_kultur_id) {
           let vonKultur
           try {
-            vonKultur = await db.get('kultur').find(row.von_kultur_id)
+            vonKultur = await db?.get('kultur').find(row.von_kultur_id as string)
           } catch {}
           let herkunftByVonKultur
           try {
@@ -95,7 +103,7 @@ export const SammelLieferungForm = ({
         }
         let nachKultur
         try {
-          nachKultur = await db.get('kultur').find(row.nach_kultur_id)
+          nachKultur = await db?.get('kultur').find(row.nach_kultur_id as string)
         } catch {}
         let herkunftByNachKultur
         try {
@@ -178,7 +186,7 @@ export const SammelLieferungForm = ({
       <div className={artStyles.container}>
         {(activeConflict || showHistory) && (
           <h4 className={artStyles.caseConflictTitle}>
-            Aktuelle Version<span className={artStyles.rev}>{row._rev}</span>
+            Aktuelle Version<span className={artStyles.rev}>{row?._rev}</span>
           </h4>
         )}
         {showDeleted && (
@@ -260,7 +268,7 @@ export const SammelLieferungForm = ({
         )}
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList
-            conflicts={row._conflicts}
+            conflicts={row?._conflicts}
             activeConflict={activeConflict}
             setActiveConflict={setActiveConflict}
           />

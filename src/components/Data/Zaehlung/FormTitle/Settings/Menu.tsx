@@ -17,7 +17,7 @@ export const ZaehlungSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
 
   const [kulturOption, setKulturOption] = useState()
   useEffect(() => {
-    const kOObservable = db.get('kultur_option').findAndObserve(kulturId)
+    const kOObservable = db?.get('kultur_option').findAndObserve(kulturId)
     const subscription = kOObservable.subscribe((kulturOption) =>
       setKulturOption(kulturOption),
     )

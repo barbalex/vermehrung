@@ -60,7 +60,7 @@ export const Login = () => {
     await localForage.clear()
     window.localStorage.removeItem('token')
     resetSyncState()
-    if (db) await db.write(async () => db.unsafeResetDatabase())
+    if (db) await db?.write(async () => db.unsafeResetDatabase())
     setTimeout(async () => {
       try {
         if (!firebaseAuth) return

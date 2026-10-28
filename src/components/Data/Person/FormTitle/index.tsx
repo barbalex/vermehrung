@@ -13,6 +13,11 @@ export const PersonFormTitleChooser = ({
   row,
   rawRow,
   showHistory,
+}: {
+  showFilter: boolean
+  row: import('../../../shared/types.ts').Person | null | undefined
+  rawRow: Record<string, unknown> | null | undefined
+  showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const personFilter = useAtomValue(filterPersonAtom)
@@ -22,7 +27,7 @@ export const PersonFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const collection = db.get('person')
+    const collection = db?.get('person')
     const personDelQuery =
       personFilter._deleted === false
         ? Q.where('_deleted', false)

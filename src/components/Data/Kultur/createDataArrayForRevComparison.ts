@@ -1,4 +1,7 @@
-export const createDataArrayForKulturRevComparison = ({ row, revRow }) => [
+export const createDataArrayForKulturRevComparison = ({ row, revRow }: {
+  row: Record<string, unknown> | null | undefined
+  revRow: Record<string, unknown> | null | undefined
+}) => [
   {
     valueInRow: row.art_id,
     valueInRev: revRow.art_id,

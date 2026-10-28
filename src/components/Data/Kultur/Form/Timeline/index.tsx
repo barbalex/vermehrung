@@ -28,7 +28,7 @@ import { buildKulturTimelineData as buildData } from './buildData.ts'
 
 import styles from './index.module.css'
 
-export const KulturTimeline = ({ row }) => {
+export const KulturTimeline = ({ row }: { row: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   const { width, ref } = useResizeDetector()
   // TODO: calc runs on every render of kultur
   // need to only run when open

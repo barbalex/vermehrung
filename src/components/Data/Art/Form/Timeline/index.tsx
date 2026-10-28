@@ -12,6 +12,8 @@ import styles from './index.module.css'
 
 export const Timeline = ({
   artId = '99999999-9999-9999-9999-999999999999',
+}: {
+  artId: string | null | undefined
 }) => {
   const [open, setOpen] = useState(false)
 

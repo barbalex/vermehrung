@@ -23,7 +23,7 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
   })
   useEffect(() => {
     const kulturOptionObservable = kulturId
-      ? db.get('kultur_option').findAndObserve(kulturId)
+      ? db?.get('kultur_option').findAndObserve(kulturId)
       : $of({})
     const subscription = kulturOptionObservable.subscribe(
       async (kulturOption) => {
