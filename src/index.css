@@ -179,47 +179,22 @@ html {
   background: rgba(0, 0, 0, 0);
 }
 
-/* uploadcare */
-.uploadcare--button {
-  background-color: #4a148c !important;
-  background: #4a148c !important;
-  border: 1px solid #4a148c !important;
-  color: white !important;
+/* uploadcare uploader: brand colors + the app's font. the light/dark
+   scheme comes from the uc-light/uc-dark class App.jsx sets on <html>
+   (the uploader would otherwise follow the OS preference) */
+:root,
+html[data-theme='light'] {
+  --uc-primary: #4a148c;
+  --uc-primary-hover: #6a1fb5;
+  --uc-primary-foreground: white;
 }
-.uploadcare--button:focus {
-  outline: 2px solid rgba(74, 20, 140, 0.5) !important;
+html[data-theme='dark'] {
+  --uc-primary: #ba68c8;
+  --uc-primary-hover: #d0a3da;
+  --uc-primary-foreground: #1c0f2d;
 }
-.uploadcare--button:hover {
-  background: rgba(74, 20, 140, 0.8) !important;
-  border-color: rgba(74, 20, 140, 0.8) !important;
-  color: white !important;
-}
-.uploadcare--widget__button,
-.uploadcare--widget__button:active,
-.uploadcare--widget__button:focus {
-  background: none !important;
-  color: black !important;
-  outline: none !important;
-}
-.uploadcare--widget__button,
-.uploadcare--widget__button:focus {
-  color: #4a148c !important;
-  font-size: 0.875rem !important;
-  line-height: 24.5px !important;
-  font-weight: 500 !important;
-  border-radius: 4px !important;
-  padding: 5px 16px !important;
-}
-.uploadcare--widget__button:hover {
-  color: #4a148c !important;
-  font-size: 0.875rem !important;
-  line-height: 24.5px !important;
-  font-weight: 500 !important;
-  background-color: rgba(74, 20, 140, 0.08) !important;
-}
-.uploadcare--powered-by,
-.uploadcare--powered-by__link {
-  display: none !important;
+:root {
+  --uc-font-family: system-ui, sans-serif;
 }
 
 /* react-select dropdowns: the header search and the form selects rely

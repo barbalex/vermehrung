@@ -1,173 +1,76 @@
-import { Component } from 'react'
-import uploadcare from 'uploadcare-widget'
+import { useEffect } from 'react'
+import md5 from 'blueimp-md5'
+import { FileUploaderRegular, defineLocale } from '@uploadcare/react-uploader'
+import '@uploadcare/react-uploader/core.css'
 
 import { addNotification } from '../store/index.js'
-import { signature, expire } from '../utils/uploadcareSignature.js'
+import { locale } from './Uploader/locale.js'
 
-window.UPLOADCARE_PUBLIC_KEY = import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY
-window.UPLOADCARE_LOCALE = 'de'
-window.UPLOADCARE_TABS =
-  'file camera url gdrive gphotos dropbox onedrive box instagram'
-window.UPLOADCARE_EFFECTS = 'crop'
-window.UPLOADCARE_IMAGE_SHRINK = '2056x2056'
-window.UPLOADCARE_IMAGES_ONLY = true
-window.UPLOADCARE_PREVIEW_STEP = true
-window.UPLOADCARE_IMAGES_ONLY = false
-window.UPLOADCARE_LOCALE_TRANSLATIONS = {
-  buttons: {
-    choose: {
-      files: {
-        one: 'Neue Datei hochladen',
-        other: 'Neue Dateien hochladen',
-      },
-      images: {
-        one: 'Neues Bild hochladen',
-        other: 'Neue Bilder hochladen',
-      },
-    },
-  },
+defineLocale('de', locale)
+
+const secret = import.meta.env.UPLOADCARE_SECRET_KEY
+
+// a fresh signature per upload. the old widget computed it once on page
+// load, so uploads failed after the signature expired 30 minutes in
+const secureUploadsSignatureResolver = () => {
+  const expire = Math.round(new Date().getTime() / 1000) + 60 * 30
+  return Promise.resolve({
+    secureSignature: md5(`${secret}${expire}`),
+    secureExpire: String(expire),
+  })
 }
-window.UPLOADCARE_SECURE_SIGNATURE = signature
-window.UPLOADCARE_SECURE_EXPIRE = expire
 
-export class Uploader extends Component {
-  componentDidMount() {
-    // uploadcare's dialog crashes reading the header of zero-byte files
-    // (RangeError in DataView.getUint16) before any validator runs -
-    // capture file selections on the way in and stop empty files.
-    // covers the file dialog; drag-and-drop of empty files still crashes
-    // inside the widget, which merely stalls its dialog
-    this.messageTimer = null
-    this.dialogMessageEl = null
-    // show the message inside the dialog: an own element in the current
-    // tab, styled inline. the widget's own message element cannot be
-    // used - it is re-rendered and its content wiped by the widget
-    this.showDialogMessage = (text) => {
-      const container =
-        document.querySelector(
-          '.uploadcare--tab_current .uploadcare--tab__content',
-        ) ?? document.querySelector('.uploadcare--panel__content')
-      if (!container) return false
-      this.dialogMessageEl?.remove()
-      const el = document.createElement('div')
-      el.textContent = text
-      el.style.cssText =
-        'color:#c62828;font-weight:600;padding:8px 16px;text-align:center;font-size:15px'
-      container.prepend(el)
-      this.dialogMessageEl = el
-      clearTimeout(this.messageTimer)
-      this.messageTimer = setTimeout(() => {
-        el.remove()
-        this.dialogMessageEl = null
-      }, 5000)
-      return true
-    }
-    this.hasEmptyFile = (files) =>
-      [...(files ?? [])].some((f) => f.size === 0)
-    this.rejectEmptyFiles = () => {
-      if (!this.showDialogMessage('Die Datei ist leer')) {
-        // dialog not open/found: fall back to the app notification
-        addNotification({ message: 'Die Datei ist leer' })
-      }
-    }
-    this.blockEmptyFiles = (e) => {
+// upload care's uploader crashes reading the header of zero-byte files
+// (RangeError in DataView.getUint16) before anything else runs - capture
+// file selections on the way in and stop empty files: both the file
+// dialog and drag-and-drop onto the drop zone
+const useEmptyFileGuard = () => {
+  useEffect(() => {
+    const hasEmptyFile = (files) => [...(files ?? [])].some((f) => f.size === 0)
+    const reject = () => addNotification({ message: 'Die Datei ist leer' })
+    const blockEmptyFiles = (e) => {
       if (e.target?.type !== 'file') return
-      if (!this.hasEmptyFile(e.target.files)) return
+      if (!hasEmptyFile(e.target.files)) return
       e.preventDefault()
       e.stopImmediatePropagation()
       e.target.value = ''
-      this.rejectEmptyFiles()
+      reject()
     }
-    document.addEventListener('change', this.blockEmptyFiles, true)
-    // drag-and-drop bypasses the file input: the dialog's drop zone gets
-    // its own capture-phase guard (the widget itself crashes on the
-    // header of zero-byte files while building the preview)
-    this.blockEmptyDrops = (e) => {
+    const blockEmptyDrops = (e) => {
       if (!e.dataTransfer) return
-      if (!this.hasEmptyFile(e.dataTransfer.files)) return
+      if (!hasEmptyFile(e.dataTransfer.files)) return
       e.preventDefault()
       e.stopImmediatePropagation()
-      this.rejectEmptyFiles()
+      reject()
     }
-    document.addEventListener('drop', this.blockEmptyDrops, true)
-
-    const widget = uploadcare.Widget(this.uploader)
-    // the widget crashes on zero-byte files when reading their magic
-    // bytes for the preview (RangeError in DataView.getUint16) -
-    // reject them before it gets that far
-    widget.validators.push((fileInfo) => {
-      if (fileInfo.size === 0) return 'Die Datei ist leer'
-    })
-    const { value, onChange, onUploadComplete } = this.props
-
-    if (typeof value !== 'undefined') {
-      widget.value(value)
+    document.addEventListener('change', blockEmptyFiles, true)
+    document.addEventListener('drop', blockEmptyDrops, true)
+    return () => {
+      document.removeEventListener('change', blockEmptyFiles, true)
+      document.removeEventListener('drop', blockEmptyDrops, true)
     }
-    if (typeof onChange === 'function') {
-      widget.onChange((files) => {
-        if (files) {
-          this.files =
-            this.files && this.files.files ? this.files.files() : [this.files]
-        } else {
-          this.files = null
-        }
+  }, [])
+}
 
-        onChange(files)
-      })
-    }
-    if (typeof onUploadComplete === 'function') {
-      widget.onUploadComplete(onUploadComplete)
-    }
-    widget.onDialogOpen((dialog) => (this.dialog = dialog))
-    // reset widget after upload
-    widget.onUploadComplete(function () {
-      widget.value(null)
-    })
-  }
+// the uploader follows the OS color scheme by default - App.jsx sets
+// uc-dark/uc-light on <html> so it follows the app theme instead, and
+// the brand purple comes from the --uc-primary overrides in index.css
+export const Uploader = ({ onFileUploadSuccess, onFileUploadFailed }) => {
+  useEmptyFileGuard()
 
-  componentWillUnmount() {
-    clearTimeout(this.messageTimer)
-    document.removeEventListener('change', this.blockEmptyFiles, true)
-    document.removeEventListener('drop', this.blockEmptyDrops, true)
-    if (this.dialog) {
-      this.dialog.reject()
-    }
-    if (this.files) {
-      uploadcare.jQuery.when.apply(null, this.files).cancel()
-    }
-
-    const widgetElement = uploadcare
-      .jQuery(this.uploader)
-      .next('.uploadcare--widget')
-    const widget = widgetElement.data('uploadcareWidget')
-
-    if (widget && widget.inputElement === this.uploader) {
-      widgetElement.remove()
-    }
-  }
-
-  getInputAttributes() {
-    const attributes = Object.assign({}, this.props)
-
-    delete attributes.value
-    delete attributes.onChange
-    delete attributes.onUploadComplete
-
-    return attributes
-  }
-
-  render() {
-    const attributes = this.getInputAttributes()
-
-    return (
-      <input
-        type="hidden"
-        ref={(input) => (this.uploader = input)}
-        data-image-shrink="2400x1600"
-        //data-multiple="true"
-        //data-multiple-min="1"
-        {...attributes}
-      />
-    )
-  }
+  return (
+    <FileUploaderRegular
+      className="uploader"
+      pubkey={import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY}
+      ctxName="vermehrung"
+      multiple={false}
+      effects="crop"
+      imageShrink="2400x1600"
+      removeCopyright
+      localeName="de"
+      secureUploadsSignatureResolver={secureUploadsSignatureResolver}
+      onFileUploadSuccess={onFileUploadSuccess}
+      onFileUploadFailed={onFileUploadFailed}
+    />
+  )
 }

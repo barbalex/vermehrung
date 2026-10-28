@@ -40,6 +40,9 @@ export const App = () => {
   useEffect(() => {
     document.documentElement.dataset.theme = isDark ? 'dark' : 'light'
     document.documentElement.style.colorScheme = isDark ? 'dark' : 'light'
+    // the uploadcare uploader picks its scheme from the OS otherwise
+    document.documentElement.classList.toggle('uc-dark', isDark)
+    document.documentElement.classList.toggle('uc-light', !isDark)
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute('content', isDark ? '#121212' : '#2e0c58')

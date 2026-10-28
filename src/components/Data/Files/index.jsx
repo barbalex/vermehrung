@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import { useAtomValue } from 'jotai'
 import ImageGallery from 'react-image-gallery'
 import Button from '@mui/material/Button'
@@ -34,39 +34,48 @@ export const Files = ({ parentTable, parent }) => {
   const files = useObservable(observable) ?? []
   files?.sort?.(fileSort)
 
-  const onChangeUploader = async (file) => {
-    if (file) {
-      file.done(async (info) => {
-        const db = store.get(dbAtom)
-        const newObject = {
-          id: uuidv1(),
-          file_id: info.uuid,
-          file_mime_type: info.mimeType,
-          [`${parentTable}_id`]: parent.id,
-          name: info.name,
-        }
-        await db.write(async () => {
-          const collection = db.get(`${parentTable}_file`)
-          // using batch because can create from raw
-          // which enables overriding watermelons own id
-          await db.batch([collection.prepareCreateFromDirtyRaw(newObject)])
-        })
-        try {
-          await store
-            .get(apiClientAtom)
-            .post(
-              `/${parentTable}_file`,
-              newObject,
-              'resolution=merge-duplicates,return=minimal',
-            )
-        } catch (error) {
-          console.log(error)
-          return addNotification({
-            message: error.message,
-          })
-        }
+  // the uploader fires the success event repeatedly for the same file
+  const uploadedUuids = useRef([])
+
+  const onFileUploadSuccess = async (info) => {
+    if (!info) return
+    if (uploadedUuids.current.includes(info.uuid)) return
+    uploadedUuids.current.push(info.uuid)
+
+    const db = store.get(dbAtom)
+    const newObject = {
+      id: uuidv1(),
+      file_id: info.uuid,
+      file_mime_type: info.mimeType,
+      [`${parentTable}_id`]: parent.id,
+      name: info.name,
+    }
+    await db.write(async () => {
+      const collection = db.get(`${parentTable}_file`)
+      // using batch because can create from raw
+      // which enables overriding watermelons own id
+      await db.batch([collection.prepareCreateFromDirtyRaw(newObject)])
+    })
+    try {
+      await store
+        .get(apiClientAtom)
+        .post(
+          `/${parentTable}_file`,
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      console.log(error)
+      return addNotification({
+        message: error.message,
       })
     }
+  }
+
+  const onFileUploadFailed = (info) => {
+    addNotification({
+      message: `Hochladen von ${info?.name ?? 'Datei'} fehlgeschlagen`,
+    })
   }
 
   const images = files.filter((f) => isImageFile(f))
@@ -103,10 +112,8 @@ export const Files = ({ parentTable, parent }) => {
         <div className={styles.title}>Dateien</div>
         <div className={styles.buttons}>
           <Uploader
-            id="file"
-            name="file"
-            onChange={onChangeUploader}
-            content="test"
+            onFileUploadSuccess={onFileUploadSuccess}
+            onFileUploadFailed={onFileUploadFailed}
           />
           {!!images.length && (
             <Button

@@ -26,6 +26,7 @@
     "@emotion/styled": "11.14.1",
     "@mui/material": "9.5.0",
     "@nozbe/watermelondb": "0.28.0",
+    "@uploadcare/react-uploader": "1.17.0",
     "allotment": "1.20.6",
     "blueimp-md5": "2.19.0",
     "browser-update": "3.3.63",
@@ -62,7 +63,6 @@
     "redaxios": "0.5.1",
     "rxjs": "7.8.2",
     "slick-carousel": "2.0.0",
-    "uploadcare-widget": "3.25.3",
     "use-debounce": "10.1.1",
     "uuid": "14.0.3"
   },
