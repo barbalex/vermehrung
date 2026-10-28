@@ -13,8 +13,7 @@ import { empty as zaehlung } from './zaehlung.ts'
 import { empty as teilkultur } from './teilkultur.ts'
 import { empty as teilzaehlung } from './teilzaehlung.ts'
 
-export default {
-  show: false,
+const emptyValues: Record<string, Record<string, unknown>> = {
   art,
   bedarf,
   event,
@@ -30,3 +29,5 @@ export default {
   teilkultur,
   teilzaehlung,
 }
+
+export default emptyValues

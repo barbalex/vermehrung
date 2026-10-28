@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 
 import { personLabelFromPerson } from './personLabelFromPerson.ts'
+import type { AeArtRow, HerkunftRow, PersonRow, SammlungRow } from './rowTypes.ts'
 
 export const sammlungLabelFromSammlung = ({
   sammlung,
@@ -8,6 +9,12 @@ export const sammlungLabelFromSammlung = ({
   ae_art,
   person,
   herkunft,
+}: {
+  sammlung: SammlungRow
+  art: unknown
+  ae_art: AeArtRow
+  person: PersonRow
+  herkunft: HerkunftRow
 }) => {
   const artLabel = art ? (ae_art?.name ?? '(Art ohne Name)') : '(keine Art)'
   const personLabel = personLabelFromPerson({ person })

@@ -5,11 +5,18 @@ import {
   store,
   filterTableAtoms,
   xxxIdInActiveNodeArrayAtoms,
+  type TableName,
 } from '../store/index.ts'
 import { simpleTypes as types } from '../store/Filter/simpleTypes.ts'
 import { exists } from './exists.ts'
 
-export const tableFilter = ({ table, apFilter }) => {
+export const tableFilter = ({
+  table,
+  apFilter,
+}: {
+  table: TableName
+  apFilter?: boolean
+}) => {
   if (!table) throw `no table passed`
   const filter = store.get(filterTableAtoms[table])
   if (!filter) throw `no filter found for table ${table}`
@@ -26,17 +33,19 @@ export const tableFilter = ({ table, apFilter }) => {
     const type = types[table][key] ?? 'string'
     //console.log('tableFilter', { key, filterValue, type })
     if (type === 'string' && filterValue) {
-      if (filterValue?.toString()?.toLowerCase()) {
-        return Q.where(
-          key,
-          Q.like(
-            `%${Q.sanitizeLikeString(filterValue?.toString()?.toLowerCase())}%`,
-          ),
-        )
+      const value = String(filterValue).toLowerCase()
+      if (value) {
+        return Q.where(key, Q.like(`%${Q.sanitizeLikeString(value)}%`))
       }
-      return Q.where(key, Q.like(`%${Q.sanitizeLikeString(filterValue)}%`))
+      return Q.where(
+        key,
+        Q.like(`%${Q.sanitizeLikeString(String(filterValue))}%`),
+      )
     }
-    return Q.where(key, Q.eq(filterValue))
+    return Q.where(
+      key,
+      Q.eq(filterValue as string | number | boolean | null),
+    )
   })
 
   if (apFilter) {

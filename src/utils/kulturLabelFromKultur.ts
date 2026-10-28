@@ -1,4 +1,5 @@
 import { personFullname } from './personFullname.ts'
+import type { AeArtRow, GartenRow, HerkunftRow, KulturRow, PersonRow } from './rowTypes.ts'
 
 export const kulturLabelFromKultur = ({
   kultur,
@@ -7,6 +8,13 @@ export const kulturLabelFromKultur = ({
   art,
   aeArt,
   herkunft,
+}: {
+  kultur: KulturRow
+  garten: GartenRow
+  gartenPerson: PersonRow
+  art: unknown
+  aeArt: AeArtRow
+  herkunft: HerkunftRow
 }) => {
   if (!kultur) return ''
 

@@ -12,7 +12,7 @@ import { simpleTypes as zaehlung } from './zaehlung.ts'
 import { simpleTypes as teilkultur } from './teilkultur.ts'
 import { simpleTypes as teilzaehlung } from './teilzaehlung.ts'
 
-export const simpleTypes = {
+export const simpleTypes: Record<string, Record<string, string>> = {
   art,
   bedarf,
   event,

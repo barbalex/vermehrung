@@ -8,10 +8,10 @@ export const logout = async () => {
   const db = store.get(dbAtom)
   const firebaseAuth = store.get(firebaseAuthAtom)
   console.log('LOGGING OUT')
-  await signOut(firebaseAuth)
+  if (firebaseAuth) await signOut(firebaseAuth)
   await localForage.clear()
   resetSyncState()
-    await db.write(async () => db.unsafeResetDatabase())
+  if (db) await db.write(async () => db.unsafeResetDatabase())
   window.localStorage.removeItem('token')
   window.location.reload(true)
 }

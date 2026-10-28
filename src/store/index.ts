@@ -1,8 +1,10 @@
-import { atom, createStore } from 'jotai'
+import { atom, createStore, type Atom, type PrimitiveAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { sortBy, isEqual } from 'es-toolkit'
 import localForage from 'localforage'
 import { v7 as uuidv7 } from 'uuid'
+import type { Database, Model } from '@nozbe/watermelondb'
+import type { Auth } from 'firebase/auth'
 
 import { initialFilterValues } from './Filter/initialValues.ts'
 import emptyValues from './Filter/emptyValues.ts'
@@ -25,6 +27,35 @@ import { sammlungIdInUrl } from '../utils/sammlungIdInUrl.ts'
 import { kulturIdOfAnLieferungInUrl } from '../utils/kulturIdOfAnLieferungInUrl.ts'
 import { kulturIdOfAusLieferungInUrl } from '../utils/kulturIdOfAusLieferungInUrl.ts'
 import { zaehlungIdInUrl } from '../utils/zaehlungIdInUrl.ts'
+import type { ApiClient } from '../utils/apiTypes.ts'
+
+/** the user as the app uses it: the firebase auth user, loosely */
+export interface User {
+  uid?: string | null
+  email?: string | null
+  /** the firebase auth user object is stored as-is */
+  getIdToken?: (forceRefresh?: boolean) => Promise<string>
+  [key: string]: unknown
+}
+
+export interface Notification {
+  id: string
+  message: string
+  title?: string
+  time: number
+  /** ms until auto-removal */
+  duration: number
+  dismissable: boolean
+  allDismissable: boolean
+  type: 'error' | 'info' | 'success' | 'warning'
+}
+
+/** a mutation waiting to be sent to the api, see observeQueuedQueries */
+export interface QueuedQuery {
+  id: string
+  time: number
+  [key: string]: unknown
+}
 
 // Plain atoms with async hydration from localforage, mirroring the former
 // mst-persist behaviour: values are always readable synchronously (unlike
@@ -32,13 +63,18 @@ import { zaehlungIdInUrl } from '../utils/zaehlungIdInUrl.ts'
 // hydration completes), persisted state appears shortly after boot,
 // changes are written back as they happen.
 // Hydration is started once by initiateApp via hydratePersistedAtoms().
-const persistedAtoms = []
+const persistedAtoms: {
+  key: string
+  baseAtom: PrimitiveAtom<unknown>
+  hydrated: boolean
+  dirty: boolean
+}[] = []
 
-const persistedAtom = (key, initialValue) => {
-  const baseAtom = atom(initialValue)
+const persistedAtom = <T,>(key: string, initialValue: T): PrimitiveAtom<T> => {
+  const baseAtom = atom<T>(initialValue)
   const entry = {
     key: `vermehrung:${key}`,
-    baseAtom,
+    baseAtom: baseAtom as PrimitiveAtom<unknown>,
     hydrated: false,
     dirty: false,
   }
@@ -118,13 +154,18 @@ export const tables = [
   'teilzaehlung',
   'user_role',
   'zaehlung',
-]
+] as const
+
+export type TableName = (typeof tables)[number]
 
 // === simple flags ===
 export const apFilterAtom = persistedAtom('apFilter', true)
 export const docFilterAtom = persistedAtom('docFilter', '')
-export const docsCountAtom = persistedAtom('docsCount', null)
-export const docsFilteredCountAtom = persistedAtom('docsFilteredCount', null)
+export const docsCountAtom = persistedAtom<number | null>('docsCount', null)
+export const docsFilteredCountAtom = persistedAtom<number | null>(
+  'docsFilteredCount',
+  null,
+)
 export const isPrintAtom = persistedAtom('isPrint', false)
 export const singleColumnViewAtom = persistedAtom('singleColumnView', false)
 export const showTreeInSingleColumnViewAtom = persistedAtom(
@@ -153,28 +194,31 @@ export const gettingAuthUserAtom = atom(true)
 export const authorizingAtom = atom(true)
 
 // === volatile singletons ===
-export const userAtom = atom({})
-export const firebaseAuthAtom = atom(null)
-export const dbAtom = atom(null)
-export const apiClientAtom = atom(null)
+export const userAtom = atom<User>({})
+export const firebaseAuthAtom = atom<Auth | null>(null)
+export const dbAtom = atom<Database | null>(null)
+export const apiClientAtom = atom<ApiClient | null>(null)
 // navigate is never read reactively, so it is kept as a plain module value.
 // Storing a function in a jotai primitive atom would make jotai call it
 // (updater semantics, like React setState) when setting it
-let navigateFn
-export const setNavigate = (val) => {
+let navigateFn: ((to: string) => void) | undefined
+export const setNavigate = (val: (to: string) => void) => {
   navigateFn = val
 }
 export const getNavigate = () => navigateFn
 
 // === tree ===
-export const activeNodeArrayAtom = persistedAtom('tree:activeNodeArray', [])
+export const activeNodeArrayAtom = persistedAtom<string[]>(
+  'tree:activeNodeArray',
+  [],
+)
 // lastActiveNodeArray is needed to keep the last clicked arrow known
 // so it does not jump
-export const lastActiveNodeArrayAtom = persistedAtom(
+export const lastActiveNodeArrayAtom = persistedAtom<string[]>(
   'tree:lastActiveNodeArray',
   [],
 )
-export const openNodesAtom = persistedAtom('tree:openNodes', [])
+export const openNodesAtom = persistedAtom<string[][]>('tree:openNodes', [])
 export const widthInPercentOfScreenAtom = persistedAtom(
   'tree:widthInPercentOfScreen',
   33,
@@ -186,15 +230,15 @@ export const singleRowHeightAtom = atom((get) => {
   return isMobile ? 30 : 23
 })
 
-export const addOpenNodes = (nodes) => {
+export const addOpenNodes = (nodes: string[][]) => {
   // need set to ensure contained arrays are unique
   const set = new Set(
-    [...store.get(openNodesAtom), ...nodes].map(JSON.stringify),
+    [...store.get(openNodesAtom), ...nodes].map((n) => JSON.stringify(n)),
   )
-  store.set(openNodesAtom, Array.from(set).map(JSON.parse))
+  store.set(openNodesAtom, Array.from(set).map((n) => JSON.parse(n) as string[]))
 }
 
-export const addOpenNode = (url) => {
+export const addOpenNode = (url: string[]) => {
   // add all parent nodes
   const addedOpenNodes = []
   for (let i = 1; i <= url.length; i++) {
@@ -203,20 +247,20 @@ export const addOpenNode = (url) => {
   addOpenNodes(addedOpenNodes)
 }
 
-export const setOpenNodes = (val) => {
+export const setOpenNodes = (val: string[][]) => {
   // need set to ensure contained arrays are unique
-  const set = new Set(val.map(JSON.stringify))
-  store.set(openNodesAtom, Array.from(set).map(JSON.parse))
+  const set = new Set(val.map((n) => JSON.stringify(n)))
+  store.set(openNodesAtom, Array.from(set).map((n) => JSON.parse(n) as string[]))
 }
 
-export const removeOpenNode = (val) => {
+export const removeOpenNode = (val: string[]) => {
   store.set(
     openNodesAtom,
     store.get(openNodesAtom).filter((n) => !isEqual(n, val)),
   )
 }
 
-export const removeOpenNodeWithChildren = (url) => {
+export const removeOpenNodeWithChildren = (url: string[]) => {
   store.set(
     openNodesAtom,
     store.get(openNodesAtom).filter((n) => {
@@ -226,7 +270,7 @@ export const removeOpenNodeWithChildren = (url) => {
   )
 }
 
-export const setActiveNodeArray = (val, nonavigate) => {
+export const setActiveNodeArray = (val: string[], nonavigate?: boolean) => {
   store.set(activeNodeArrayAtom, val)
   if (!nonavigate) {
     getNavigate()?.(`/Vermehrung/${val.join('/')}`)
@@ -234,7 +278,7 @@ export const setActiveNodeArray = (val, nonavigate) => {
   }
 }
 
-export const setLastActiveNodeArray = (val) => {
+export const setLastActiveNodeArray = (val: string[]) => {
   store.set(lastActiveNodeArrayAtom, val)
 }
 
@@ -245,10 +289,11 @@ export const setLastActiveNodeArray = (val) => {
 // because that is read positionally in many places
 // undefined: no history in url
 // true: '/histories' without rev
-export const historyRevAtom = atom(undefined)
-export const setHistoryRev = (val) => store.set(historyRevAtom, val)
+export const historyRevAtom = atom<string | true | undefined>(undefined)
+export const setHistoryRev = (val: string | true | undefined) =>
+  store.set(historyRevAtom, val)
 
-export const setWidthInPercentOfScreen = (val) => {
+export const setWidthInPercentOfScreen = (val: number) => {
   store.set(widthInPercentOfScreenAtom, val)
 }
 
@@ -268,11 +313,14 @@ const filterTableNames = [
   'zaehlung',
   'teilkultur',
   'teilzaehlung',
-]
+] as const
 
 export const filterShowAtom = persistedAtom('filter:show', false)
 
-export const filterTableAtoms = Object.fromEntries(
+export const filterTableAtoms: Record<
+  string,
+  PrimitiveAtom<Record<string, unknown>>
+> = Object.fromEntries(
   filterTableNames.map((table) => [
     table,
     persistedAtom(`filter:${table}`, initialFilterValues[table]),
@@ -293,7 +341,7 @@ export const filterZaehlungAtom = filterTableAtoms.zaehlung
 export const filterTeilkulturAtom = filterTableAtoms.teilkultur
 export const filterTeilzaehlungAtom = filterTableAtoms.teilzaehlung
 
-export const tableIsFilteredAtom = (table) =>
+export const tableIsFilteredAtom = (table: string) =>
   atom((get) => {
     const empty = emptyHash[table]
     return Object.entries(get(filterTableAtoms[table])).some(
@@ -305,16 +353,24 @@ export const filterFilteredAtom = atom((get) =>
   filterTableNames.some((table) => get(tableIsFilteredAtom(table))),
 )
 
-export const setFilterValue = ({ table, key, value }) => {
+export const setFilterValue = ({
+  table,
+  key,
+  value,
+}: {
+  table: string
+  key: string
+  value: unknown
+}) => {
   const tableAtom = filterTableAtoms[table]
   store.set(tableAtom, { ...store.get(tableAtom), [key]: value })
 }
 
-export const setFilterShow = (val) => {
+export const setFilterShow = (val: boolean) => {
   store.set(filterShowAtom, val)
 }
 
-export const emptyFilterTable = ({ table }) => {
+export const emptyFilterTable = ({ table }: { table: string }) => {
   store.set(filterTableAtoms[table], emptyValues[table])
 }
 
@@ -344,10 +400,16 @@ export const defaultErrors = Object.fromEntries(
     'teilzaehlung',
     'zaehlung',
   ].map((table) => [table, {}]),
-)
+) as Record<string, Record<string, unknown>>
 export const errorsAtom = atom(defaultErrors)
 
-export const setError = ({ path, value }) => {
+export const setError = ({
+  path,
+  value,
+}: {
+  path: string
+  value: unknown
+}) => {
   const [table, field] = path.split('.')
   const tableErrors = store.get(errorsAtom)[table] ?? {}
   store.set(errorsAtom, {
@@ -356,7 +418,7 @@ export const setError = ({ path, value }) => {
   })
 }
 
-export const unsetError = (path) => {
+export const unsetError = (path: string) => {
   const [table, field] = path.split('.')
   const errors = store.get(errorsAtom)
   const tableErrors = errors[table] ?? {}
@@ -369,23 +431,25 @@ export const unsetError = (path) => {
 }
 
 // === notifications ===
-export const notificationsAtom = atom([])
+export const notificationsAtom = atom<Notification[]>([])
 
-export const removeNotificationById = (id) => {
+export const removeNotificationById = (id: string) => {
   store.set(
     notificationsAtom,
     store.get(notificationsAtom).filter((n) => n.id !== id),
   )
 }
 
-export const addNotification = (valPassed) => {
+export const addNotification = (
+  valPassed: Partial<Notification> & { message: string },
+) => {
   // do not stack same messages
   const notificationsWithSameMessage = store
     .get(notificationsAtom)
     .filter((n) => n.message === valPassed.message)
   if (notificationsWithSameMessage.length > 0) return
 
-  const val = {
+  const val: Notification = {
     // set default values
     id: uuidv7(),
     time: Date.now(),
@@ -414,7 +478,10 @@ export const removeAllNotifications = () => {
  * When online they are immediately executed by the observer
  * When offline they remain queued until connectivity is back
  */
-export const queuedQueriesAtom = persistedAtom('queuedQueries', [])
+export const queuedQueriesAtom = persistedAtom<QueuedQuery[]>(
+  'queuedQueries',
+  [],
+)
 export const retryTickAtom = atom(0)
 // the queue observer deliberately tracks only the SIZE of the queue
 // (plus online state and the retry tick), not its contents:
@@ -426,8 +493,8 @@ export const queuedQueriesSortedAtom = atom((get) =>
   sortBy(get(queuedQueriesAtom), ['time']),
 )
 
-export const addQueuedQuery = (valPassed) => {
-  const val = {
+export const addQueuedQuery = (valPassed: Partial<QueuedQuery>) => {
+  const val: QueuedQuery = {
     // set default values
     id: uuidv7(),
     time: Date.now(),
@@ -439,13 +506,13 @@ export const addQueuedQuery = (valPassed) => {
   store.set(queueSizeAtom, queue.length)
 }
 
-export const removeQueuedQueryById = (id) => {
+export const removeQueuedQueryById = (id: string) => {
   const queue = store.get(queuedQueriesAtom).filter((q) => q.id !== id)
   store.set(queuedQueriesAtom, queue)
   store.set(queueSizeAtom, queue.length)
 }
 
-export const deferQueuedQueryById = (id) => {
+export const deferQueuedQueryById = (id: string) => {
   store.set(
     queuedQueriesAtom,
     store
@@ -455,12 +522,24 @@ export const deferQueuedQueryById = (id) => {
 }
 
 // === watermarks ===
-export const lastUpdatedAtom = persistedAtom(
+const initialLastUpdated = () =>
+  Object.fromEntries(tables.map((table) => [table, 0])) as Record<
+    TableName,
+    number
+  >
+
+export const lastUpdatedAtom = persistedAtom<Record<TableName, number>>(
   'lastUpdated',
-  Object.fromEntries(tables.map((table) => [table, 0])),
+  initialLastUpdated(),
 )
 
-export const setLastUpdated = ({ table, val: valPassed }) => {
+export const setLastUpdated = ({
+  table,
+  val: valPassed,
+}: {
+  table: TableName
+  val?: number
+}) => {
   // 1. enable not having to pass val
   //    thus set standard value
   // 2. substract some time to account for:
@@ -473,39 +552,44 @@ export const setLastUpdated = ({ table, val: valPassed }) => {
   //    thus need to correct!
   const standardVal = Date.now() / 1000 - 50
   const val = valPassed ?? standardVal
-  store.set(lastUpdatedAtom, { ...store.get(lastUpdatedAtom), [table]: val })
+  store.set(lastUpdatedAtom, {
+    ...store.get(lastUpdatedAtom),
+    [table]: val,
+  } as Record<TableName, number>)
 }
 
-export const tableLastUpdated = (table) => store.get(lastUpdatedAtom)[table]
+export const tableLastUpdated = (table: TableName) =>
+  store.get(lastUpdatedAtom)[table]
 
 // reset the sync cursors and the initially-queried flags, e.g. when the
 // local database is wiped: the in-memory cursors would otherwise
 // survive the wipe and the next sync would deliver nothing
 export const resetSyncState = () => {
-  store.set(
-    lastUpdatedAtom,
-    Object.fromEntries(tables.map((table) => [table, 0])),
-  )
+  store.set(lastUpdatedAtom, initialLastUpdated())
   store.set(
     initiallyQueriedAtom,
-    Object.fromEntries(tables.map((table) => [table, false])),
+    Object.fromEntries(
+      tables.map((table) => [table, false]),
+    ) as Record<TableName, boolean>,
   )
 }
 
 // initially_queried flags are deliberately not persisted:
 // initial queries are re-run on every boot
-export const initiallyQueriedAtom = atom(
-  Object.fromEntries(tables.map((table) => [table, false])),
+export const initiallyQueriedAtom = atom<Record<TableName, boolean>>(
+  Object.fromEntries(
+    tables.map((table) => [table, false]),
+  ) as Record<TableName, boolean>,
 )
 
-export const setInitiallyQueried = ({ table }) => {
+export const setInitiallyQueried = ({ table }: { table: TableName }) => {
   store.set(initiallyQueriedAtom, {
     ...store.get(initiallyQueriedAtom),
     [table]: true,
   })
 }
 
-export const tableInitiallyQueried = (table) =>
+export const tableInitiallyQueried = (table: TableName) =>
   store.get(initiallyQueriedAtom)[table]
 
 export const initialDataQueriedAtom = atom((get) => {
@@ -514,35 +598,50 @@ export const initialDataQueriedAtom = atom((get) => {
 })
 
 // === setters for flags and volatiles ===
-export const setApFilter = (val) => store.set(apFilterAtom, val)
-export const setDocFilter = (val) => store.set(docFilterAtom, val)
-export const setDocsCount = (val) => store.set(docsCountAtom, val)
-export const setDocsFilteredCount = (val) =>
+export const setApFilter = (val: boolean) => store.set(apFilterAtom, val)
+export const setDocFilter = (val: string) => store.set(docFilterAtom, val)
+export const setDocsCount = (val: number | null) => store.set(docsCountAtom, val)
+export const setDocsFilteredCount = (val: number | null) =>
   store.set(docsFilteredCountAtom, val)
-export const setIsPrint = (val) => store.set(isPrintAtom, val)
-export const setSingleColumnView = (val) => store.set(singleColumnViewAtom, val)
-export const setShowTreeInSingleColumnView = (val) =>
+export const setIsPrint = (val: boolean) => store.set(isPrintAtom, val)
+export const setSingleColumnView = (val: boolean) =>
+  store.set(singleColumnViewAtom, val)
+export const setShowTreeInSingleColumnView = (val: boolean) =>
   store.set(showTreeInSingleColumnViewAtom, val)
-export const setDiffConflict = (val) => store.set(diffConflictAtom, val)
-export const setInitiallyQuerying = (val) =>
+export const setDiffConflict = (val: boolean) => store.set(diffConflictAtom, val)
+export const setInitiallyQuerying = (val: string) =>
   store.set(initiallyQueryingAtom, val)
-export const setOnline = (val) => store.set(onlineAtom, val)
-export const setShortTermOnline = (val) => store.set(shortTermOnlineAtom, val)
-export const setGettingAuthUser = (val) => store.set(gettingAuthUserAtom, val)
-export const setAuthorizing = (val) => store.set(authorizingAtom, val)
-export const setUser = (val) => store.set(userAtom, val || {})
-export const setFirebaseAuth = (val) => {
+export const setOnline = (val: boolean) => store.set(onlineAtom, val)
+export const setShortTermOnline = (val: boolean) =>
+  store.set(shortTermOnlineAtom, val)
+export const setGettingAuthUser = (val: boolean) =>
+  store.set(gettingAuthUserAtom, val)
+export const setAuthorizing = (val: boolean) => store.set(authorizingAtom, val)
+export const setUser = (val: User | null) => store.set(userAtom, val || {})
+export const setFirebaseAuth = (val: Auth | null) => {
   if (!store.get(firebaseAuthAtom)) {
     store.set(firebaseAuthAtom, val)
   }
 }
-export const setApiClient = (val) => store.set(apiClientAtom, val)
-export const setDb = (val) => store.set(dbAtom, val)
+export const setApiClient = (val: ApiClient | null) =>
+  store.set(apiClientAtom, val)
+export const setDb = (val: Database | null) => store.set(dbAtom, val)
 
 // === revert helpers ===
 // used to revert offline operations if they fail
-export const updateModelValue = async ({ table, id, field, value }) => {
+export const updateModelValue = async ({
+  table,
+  id,
+  field,
+  value,
+}: {
+  table: TableName
+  id: string
+  field: string
+  value: unknown
+}) => {
   const db = store.get(dbAtom)
+  if (!db) return
   // find model = row
   // (find returns a promise - .fetch() on it always threw, which made
   // the queue's revert path a silent no-op until now)
@@ -552,15 +651,24 @@ export const updateModelValue = async ({ table, id, field, value }) => {
   } catch {}
   if (row) {
     await db.write(async () => {
-      await row.update((row) => {
-        row[field] = value
+      await row.update((rowToSet: Model) => {
+        ;(rowToSet as unknown as Record<string, unknown>)[field] = value
       })
     })
   }
 }
 
-export const updateModelValues = async ({ table, id, values }) => {
+export const updateModelValues = async ({
+  table,
+  id,
+  values,
+}: {
+  table: TableName
+  id: string
+  values: Record<string, unknown>
+}) => {
   const db = store.get(dbAtom)
+  if (!db) return
   // find model = row (find returns a promise)
   let row
   try {
@@ -568,9 +676,9 @@ export const updateModelValues = async ({ table, id, values }) => {
   } catch {}
   if (row) {
     await db.write(async () => {
-      await row.update((row) => {
+      await row.update((rowToSet: Model) => {
         Object.entries(values).forEach(([key, value]) => {
-          row[key] = value
+          ;(rowToSet as unknown as Record<string, unknown>)[key] = value
         })
       })
     })
@@ -630,7 +738,10 @@ export const zaehlungIdInActiveNodeArrayAtom = atom((get) =>
   zaehlungIdInUrl(get(activeNodeArrayAtom)),
 )
 
-export const xxxIdInActiveNodeArrayAtoms = {
+export const xxxIdInActiveNodeArrayAtoms: Record<
+  string,
+  Atom<string | undefined>
+> = {
   artIdInActiveNodeArray: artIdInActiveNodeArrayAtom,
   herkunftIdInActiveNodeArray: herkunftIdInActiveNodeArrayAtom,
   gartenIdInActiveNodeArray: gartenIdInActiveNodeArrayAtom,

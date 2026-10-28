@@ -2,10 +2,16 @@ import { useEffect, useState } from 'react'
 
 import { store, apiClientAtom } from '../store/index.ts'
 
+export interface ApiQueryState {
+  data: unknown
+  error: unknown
+  fetching: boolean
+}
+
 // minimal replacement for urql's useQuery for the one-off api reads
 // (history revisions, conflict revisions). Pass null to skip fetching.
-export const useApiQuery = (path) => {
-  const [state, setState] = useState({
+export const useApiQuery = (path: string | null): ApiQueryState => {
+  const [state, setState] = useState<ApiQueryState>({
     data: null,
     error: null,
     fetching: !!path,
@@ -24,7 +30,7 @@ export const useApiQuery = (path) => {
     let isActive = true
     store
       .get(apiClientAtom)
-      .get(path)
+      ?.get(path)
       .then((data) => {
         if (isActive) setState({ data, error: null, fetching: false })
       })

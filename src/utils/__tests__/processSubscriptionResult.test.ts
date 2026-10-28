@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
+import type { Database } from '@nozbe/watermelondb'
 
 import {
   store,
@@ -6,59 +7,61 @@ import {
   lastUpdatedAtom,
   initiallyQueriedAtom,
   initiallyQueryingAtom,
+  type TableName,
 } from '../../store/index.ts'
 import { processSubscriptionResult } from '../processSubscriptionResult.ts'
+import type { Row } from '../apiTypes.ts'
 
-const createRow = (raw) => ({
-  id: raw.id,
+const createRow = (raw: Row) => ({
   ...raw,
-  prepareUpdate(fn) {
+  id: raw.id,
+  prepareUpdate(fn: (row: unknown) => void) {
     fn(this)
-    return { kind: 'update', row: this }
+    return { kind: 'update' as const, row: this }
   },
 })
 
 // minimal WatermelonDB stand-in: keeps existing rows, records creates
-const createDbMock = (existingRows) => {
+const createDbMock = (existingRows: Record<string, Row[]>) => {
   const state = {
     existingRows,
-    created: [],
-    updated: [],
+    created: [] as Row[],
+    updated: [] as unknown[],
     writeCalls: 0,
   }
   const db = {
     state,
-    write: async (fn) => {
+    write: async (fn: () => Promise<unknown>) => {
       state.writeCalls++
       return fn()
     },
-    get: (table) => ({
+    get: (table: string) => ({
       query: () => ({
         fetch: async () => state.existingRows[table] ?? [],
       }),
-      prepareCreateFromDirtyRaw: (raw) => {
-        state.created.push(raw)
-        return { kind: 'create', raw }
+      prepareCreateFromDirtyRaw: (raw: Record<string, unknown>) => {
+        state.created.push(raw as Row)
+        return { kind: 'create' as const, raw }
       },
     }),
-    batch: async (...args) => {
+    batch: async (...args: unknown[]) => {
       // batch accepts both a single array of operations or a spread
-      const ops = Array.isArray(args[0]) ? args[0] : args
+      const ops = (Array.isArray(args[0]) ? args[0] : args) as { kind?: string }[]
       ops.forEach((op) => {
         if (op.kind === 'create') return
         state.updated.push(op)
       })
     },
   }
-  return db
+  return db as unknown as Database & { state: typeof state }
 }
 
 const flushTimers = () => new Promise((resolve) => setTimeout(resolve, 10))
 
 describe('processSubscriptionResult', () => {
   beforeEach(() => {
-    store.set(lastUpdatedAtom, { art: 0 })
-    store.set(initiallyQueriedAtom, { art: false })
+    store.set(lastUpdatedAtom, { art: 0 } as Record<TableName, number>)
+    store.set(initiallyQueriedAtom, { art: false } as Record<TableName, boolean>)
     store.set(initiallyQueryingAtom, '')
   })
 

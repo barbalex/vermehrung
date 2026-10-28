@@ -11,6 +11,7 @@ import {
 } from '../store/index.ts'
 import { getAuthToken } from './getAuthToken.ts'
 import { processSubscriptionResult } from './processSubscriptionResult.ts'
+import { ApiError, type Row, type SyncResult } from './apiTypes.ts'
 
 // replaces the 28 graphql live subscriptions: polls the /rpc/sync
 // endpoint, which returns the rows changed per table since the
@@ -23,12 +24,12 @@ const MAX_BACKOFF_MS = 60000
 // from slightly before the server watermark the sync reported
 const WATERMARK_SAFETY_S = 5
 
-let timer = null
+let timer: ReturnType<typeof setTimeout> | null = null
 let polling = false
 let stopped = true
 let backoffMs = 0
 
-const scheduleNext = (delay) => {
+const scheduleNext = (delay: number) => {
   if (!timer) timer = setTimeout(poll, delay)
 }
 
@@ -36,16 +37,21 @@ const poll = async () => {
   timer = null
   if (stopped || polling) return
 
-  if (!store.get(userAtom)?.uid || store.get(authorizingAtom)) {
+  const apiClient = store.get(apiClientAtom)
+  if (
+    !apiClient ||
+    !store.get(userAtom)?.uid ||
+    store.get(authorizingAtom)
+  ) {
     return scheduleNext(POLL_INTERVAL_MS)
   }
 
   polling = true
   try {
     const since = store.get(lastUpdatedAtom)
-    const result = await store
-      .get(apiClientAtom)
-      .post('/rpc/sync', { p_since: since })
+    const result = await apiClient.post<SyncResult>('/rpc/sync', {
+      p_since: since,
+    })
     // reaching the api means we are online
     if (!store.get(onlineAtom)) setOnline(true)
     setShortTermOnline(true)
@@ -53,14 +59,14 @@ const poll = async () => {
     const watermark = result.synced_at - WATERMARK_SAFETY_S
     for (const table of tables) {
       await processSubscriptionResult({
-        data: result[table] ?? [],
+        data: (result[table] ?? []) as unknown as Row[],
         table,
         lastUpdatedValue: watermark,
       })
     }
   } catch (error) {
     console.log('sync poll failed:', error)
-    if (error.status === 401) {
+    if ((error as ApiError).status === 401) {
       // stale token: get a fresh one, then poll again soon
       await getAuthToken()
       backoffMs = POLL_INTERVAL_MS
@@ -82,7 +88,7 @@ export const startSyncPoller = () => {
 
 export const stopSyncPoller = () => {
   stopped = true
-  clearTimeout(timer)
+  if (timer) clearTimeout(timer)
   timer = null
 }
 
@@ -90,7 +96,7 @@ export const stopSyncPoller = () => {
 // winning revisions and conflicts server-side, fetch them promptly
 export const requestSyncSoon = () => {
   if (stopped || polling) return
-  clearTimeout(timer)
+  if (timer) clearTimeout(timer)
   timer = null
   scheduleNext(200)
 }

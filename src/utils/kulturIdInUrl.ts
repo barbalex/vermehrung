@@ -1,6 +1,6 @@
 import { isId } from './isId.ts'
 
-export const kulturIdInUrl = (url) => {
+export const kulturIdInUrl = (url: string[]) => {
   if (url.includes('Kulturen')) {
     const indexOfId = url.indexOf('Kulturen') + 1
     if (url.length > indexOfId) {

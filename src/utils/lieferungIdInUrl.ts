@@ -1,6 +1,6 @@
 import { isId } from './isId.ts'
 
-export const lieferungIdInUrl = (url) => {
+export const lieferungIdInUrl = (url: string[]) => {
   if (url.includes('Lieferungen')) {
     const indexOfId = url.indexOf('Lieferungen') + 1
     if (url.length > indexOfId) {

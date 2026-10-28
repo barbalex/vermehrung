@@ -1,8 +1,15 @@
+import type { AeArtRow, HerkunftRow, KulturRow } from './rowTypes.ts'
+
 export const kulturLabelFromKulturUnderGarten = ({
   kultur,
   art,
   aeArt,
   herkunft,
+}: {
+  kultur: KulturRow
+  art: unknown
+  aeArt: AeArtRow
+  herkunft: HerkunftRow
 }) => {
   if (!kultur) return ''
 

@@ -1,4 +1,5 @@
 import { Q } from '@nozbe/watermelondb'
+import type { Model } from '@nozbe/watermelondb'
 import { isEqual } from 'es-toolkit'
 
 import {
@@ -7,12 +8,13 @@ import {
   setInitiallyQueried,
   setLastUpdated,
   setInitiallyQuerying,
+  type TableName,
 } from '../store/index.ts'
 import { parseComplexFieldsForWm } from './parseComplexFieldsForWm.ts'
 import { isUnflushedRev } from '../modules/revAggregation.ts'
+import type { Row } from './apiTypes.ts'
 
-const stripTypename = (object) => {
-   
+const stripTypename = (object: Row): Row => {
   const { __typename, ...rest } = object
   return rest
 }
@@ -22,8 +24,13 @@ export const processSubscriptionResult = async ({
   data: dataToCheck,
   table,
   lastUpdatedValue,
+}: {
+  data: Row[]
+  table: TableName
+  lastUpdatedValue?: number
 }) => {
   const db = store.get(dbAtom)
+  if (!db) return
   if (!dataToCheck.length) {
     setInitiallyQueried({ table })
     setLastUpdated({ table, val: lastUpdatedValue })
@@ -34,14 +41,14 @@ export const processSubscriptionResult = async ({
   const collection = db.get(table)
   const incomingIds = dataToCheck.map((d) => d.id)
 
-  let objectsOfToUpdate = []
+  let objectsOfToUpdate: Model[] = []
   try {
     objectsOfToUpdate = await db
       .get(table)
       .query(Q.where('id', Q.oneOf(incomingIds)))
       .fetch()
   } catch {}
-  let objectsOfIncoming = []
+  let objectsOfIncoming: Model[] = []
   try {
     objectsOfIncoming = await db
       .get(table)
@@ -59,8 +66,10 @@ export const processSubscriptionResult = async ({
     // has not reached the server yet, so the sync data is stale for
     // them. the flush + the following sync reconcile the row
     if (isUnflushedRev(table, o.id)) return false
-    const dat = stripTypename(dataToCheck.find((d) => d.id === o.id))
-    return !Object.entries(dat).every(([key, value]) => isEqual(value, o[key]))
+    const dat = stripTypename(dataToCheck.find((d) => d.id === o.id) ?? { id: '' })
+    return !Object.entries(dat).every(([key, value]) =>
+      isEqual(value, (o as unknown as Record<string, unknown>)[key]),
+    )
   })
   console.log('processSubscriptionResult:', {
     table,
@@ -79,23 +88,25 @@ export const processSubscriptionResult = async ({
           // rows per table and a spread would blow the call stack
           await db.batch([
             ...objectsToUpdate.map((object) => {
-              const thisObjectsData = dataToCheck.find(
-                (d) => d.id === object.id,
-              )
+              const thisObjectsData =
+                dataToCheck.find((d) => d.id === object.id) ?? {}
 
-              return object.prepareUpdate((ob) => {
+              return object.prepareUpdate((ob: Model) => {
                 Object.keys(thisObjectsData)
                   .filter((key) => !['id', '__typename'].includes(key))
                   .forEach((key) => {
-                    if (!isEqual(ob[key], thisObjectsData[key])) {
-                      ob[key] = thisObjectsData[key]
+                    const obRecord = ob as unknown as Record<string, unknown>
+                    if (!isEqual(obRecord[key], thisObjectsData[key])) {
+                      obRecord[key] = thisObjectsData[key]
                     }
                   })
               })
             }),
             // prepareCreateFromDirtyRaw replaces watermelon's id with vermehrung's
             ...dataToCreateObjectsFrom.map((d) =>
-              collection.prepareCreateFromDirtyRaw(parseComplexFieldsForWm(d)),
+              collection.prepareCreateFromDirtyRaw(
+                parseComplexFieldsForWm(d as Record<string, unknown>),
+              ),
             ),
           ])
           setInitiallyQueried({ table })

@@ -13,8 +13,7 @@ import { initial as zaehlung } from './zaehlung.ts'
 import { initial as teilkultur } from './teilkultur.ts'
 import { initial as teilzaehlung } from './teilzaehlung.ts'
 
-export const initialFilterValues = {
-  show: false,
+export const initialFilterValues: Record<string, Record<string, unknown>> = {
   art,
   bedarf,
   event,

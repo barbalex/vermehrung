@@ -13,7 +13,7 @@ import { empty as zaehlung } from './zaehlung.ts'
 import { empty as teilkultur } from './teilkultur.ts'
 import { empty as teilzaehlung } from './teilzaehlung.ts'
 
-export const emptyHash = {
+export const emptyHash: Record<string, Record<string, unknown>> = {
   art,
   bedarf,
   event,

@@ -3,18 +3,23 @@ import { sendPasswordResetEmail } from 'firebase/auth'
 import { store, addNotification, firebaseAuthAtom } from '../store/index.ts'
 import { constants } from './constants.ts'
 
-export const setPassword = async ({ person }) => {
+export const setPassword = async ({
+  person,
+}: {
+  person: { email?: string | null } | null
+}) => {
   const firebaseAuth = store.get(firebaseAuthAtom)
   // fetch email of this person
   const email = person?.email
   try {
-    await sendPasswordResetEmail(firebaseAuth, email, {
+    if (!firebaseAuth) return
+    await sendPasswordResetEmail(firebaseAuth, email ?? undefined, {
       url: `${constants?.getAppUri()}/Vermehrung`,
       handleCodeInApp: true,
     })
   } catch (error) {
     addNotification({
-      message: error.message,
+      message: (error as Error).message,
     })
   }
   addNotification({

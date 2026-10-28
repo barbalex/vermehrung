@@ -1,1 +1,2 @@
-export const exists = (val) => val !== undefined && val !== null && val !== ''
+export const exists = <T>(val: T | null | undefined): val is T =>
+  val !== undefined && val !== null && val !== ''

@@ -1,21 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import type { Database } from '@nozbe/watermelondb'
 
 // in-memory localforage; prefilled per test to simulate a previous session
-const storageData = new Map()
+const storageData = new Map<string, unknown>()
 vi.mock('localforage', () => ({
   default: {
-    getItem: async (key) =>
+    getItem: async (key: string) =>
       storageData.has(key) ? storageData.get(key) : null,
-    setItem: async (key, value) => {
+    setItem: async (key: string, value: unknown) => {
       storageData.set(key, value)
     },
-    removeItem: async (key) => {
+    removeItem: async (key: string) => {
       storageData.delete(key)
     },
   },
 }))
 
-vi.mock('../../utils/getAuthToken.js', () => ({
+vi.mock('../../utils/getAuthToken.ts', () => ({
   getAuthToken: vi.fn(async () => true),
 }))
 
@@ -35,10 +36,10 @@ import { observeQueuedQueries } from '../../modules/observeQueuedQueries.ts'
 
 const dbMock = {
   get: () => ({ find: () => ({ fetch: () => null }) }),
-  write: async (fn) => fn(),
+  write: async (fn: () => unknown) => fn(),
 }
 
-const buildQuery = (overrides = {}) => ({
+const buildQuery = (overrides: Record<string, unknown> = {}) => ({
   name: 'mutateInsert_art_rev_one',
   variables: JSON.stringify({ object: { art_id: '1' } }),
   revertTable: 'art',
@@ -55,7 +56,7 @@ beforeEach(() => {
   store.set(queueSizeAtom, 0)
   store.set(notificationsAtom, [])
   store.set(shortTermOnlineAtom, true)
-  store.set(dbAtom, dbMock)
+  store.set(dbAtom, dbMock as unknown as Database)
 })
 
 describe('persisted atoms', () => {
@@ -90,7 +91,7 @@ describe('persisted atoms', () => {
       buildQuery({ id: 'hydrated-1', time: 100 }),
     ])
     const postMock = vi.fn(async () => null)
-    store.set(apiClientAtom, { post: postMock })
+    store.set(apiClientAtom, { post: postMock } as unknown as import('../../utils/apiTypes.ts').ApiClient)
 
     await hydratePersistedAtoms()
     expect(store.get(queueSizeAtom)).toBe(1)
@@ -114,7 +115,9 @@ describe('persisted atoms', () => {
     addQueuedQuery(buildQuery({ id: 'new-1' }))
     await new Promise((resolve) => setTimeout(resolve, 10))
 
-    const persisted = storageData.get('vermehrung:queuedQueries')
+    const persisted = storageData.get(
+      'vermehrung:queuedQueries',
+    ) as { id: string }[]
     expect(persisted).toHaveLength(1)
     expect(persisted[0].id).toBe('new-1')
   })

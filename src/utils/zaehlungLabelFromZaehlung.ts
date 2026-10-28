@@ -1,8 +1,15 @@
 import { DateTime } from 'luxon'
 
 import { exists } from './exists.ts'
+import type { TeilzaehlungRow, ZaehlungRow } from './rowTypes.ts'
 
-export const zaehlungLabelFromZaehlung = ({ zaehlung, teilzaehlungs }) => {
+export const zaehlungLabelFromZaehlung = ({
+  zaehlung,
+  teilzaehlungs,
+}: {
+  zaehlung: ZaehlungRow
+  teilzaehlungs: TeilzaehlungRow[]
+}) => {
   const datumLabel =
     zaehlung.datum ?
       DateTime.fromSQL(zaehlung.datum).toFormat('yyyy.LL.dd')

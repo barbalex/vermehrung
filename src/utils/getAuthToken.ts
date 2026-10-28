@@ -22,12 +22,12 @@ const retryMs = 5000
 const maxRetryMs = 60000
 
 // exponential backoff: be gentle with a struggling auth service
-const retry = (nextRetryMs, forceRefresh = false) => {
+const retry = (nextRetryMs: number, forceRefresh = false) => {
   setTimeout(() => getAuthToken(nextRetryMs, forceRefresh), nextRetryMs)
 }
 
 export const getAuthToken = async (
-  nextRetryMs = retryMs,
+  nextRetryMs: number = retryMs,
   forceRefresh = false,
 ) => {
   const user = store.get(userAtom)
@@ -41,10 +41,10 @@ export const getAuthToken = async (
   setAuthorizing(true)
   let idToken
   try {
-    idToken = await user.getIdToken(forceRefresh)
+    idToken = await user.getIdToken?.(forceRefresh)
   } catch (error) {
     console.log('error from calling getting id token:', error)
-    addNotification({ message: error.message })
+    addNotification({ message: (error as Error).message })
     return retry(Math.min(nextRetryMs * 2, maxRetryMs))
   }
   let res
