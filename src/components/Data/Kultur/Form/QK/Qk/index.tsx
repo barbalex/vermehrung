@@ -11,7 +11,13 @@ import { dbAtom } from '../../../../../../store/index.ts'
 
 import styles from './index.module.css'
 
-export const KulturQk = ({ kultur, qkChoosens }) => {
+export const KulturQk = ({
+  kultur,
+  qkChoosens,
+}: {
+  kultur: import('../../../../../../dbModel.ts').Kultur | null | undefined
+  qkChoosens: import('../../../../../../dbModel.ts').KulturQk[] | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
 
   const [filter, setFilter] = useState('')
@@ -21,24 +27,30 @@ export const KulturQk = ({ kultur, qkChoosens }) => {
     preventDefault?: () => void
     stopPropagation?: () => void
     key?: string
-  }) => setFilter(event.target.value)
+  }) => setFilter(event.target.value as string)
 
   const [messageGroups, setMessageGroups] = useState<
-    { messages: { message: string }[] }[] | null
+    { title: string; messages: { url: string[]; text: string }[] }[] | null
   >(null)
   useEffect(() => {
     let isActive = true
     createKulturMessageFunctions({
-      kulturId: kultur.id,
+      kulturId: kultur?.id ?? '',
       db,
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
-        qkChoosens
-          .filter((qk) => !!messageFunctions[qk.name])
+        (qkChoosens ?? [])
+          .filter((qk) =>
+            !!messageFunctions[qk.name as keyof typeof messageFunctions],
+          )
           .map(async (qk) => ({
-            title: qk?.titel,
+            title: qk?.titel ?? '',
             messages: messageFunctions
-              ? await messageFunctions[qk?.name]()
+              ? await (
+                  messageFunctions[
+                    qk?.name as keyof typeof messageFunctions
+                  ] as () => Promise<{ url: string[]; text: string }[]>
+                )()
               : [],
           })),
       )
@@ -50,7 +62,7 @@ export const KulturQk = ({ kultur, qkChoosens }) => {
     return () => {
       isActive = false
     }
-  }, [kultur.id, qkChoosens, db])
+  }, [kultur?.id, qkChoosens, db])
 
   const messageGroupsFiltered = messageGroups
     ? messageGroups.filter((messageGroup) => {
