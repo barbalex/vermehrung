@@ -26,10 +26,7 @@ const server = new Hapi.Server({
   },
 })
 
-// TODO: check how to add db-url using v3
-const sql = postgres(
-  process.env.DATABASE_URL || process.env.HASURA_GRAPHQL_DATABASE_URL,
-)
+const sql = postgres(process.env.DATABASE_URL)
 
 let firebaseInitializationError = null
 // Initialize the Firebase admin SDK with our service account credentials
